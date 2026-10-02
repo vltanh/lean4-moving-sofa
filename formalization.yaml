@@ -1,0 +1,242 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Optimality of Gerver's sofa (Baek 2024), formalized in Lean 4"
+  description: >-
+    The moving sofa problem (Moser 1966) asks for the largest area of a connected planar shape that
+    can be moved around the right-angled corner of a hallway of unit width. Gerver (1992) constructed
+    a sofa of area 2.21953..., which Romik (2018) described by an explicit system of equations, and
+    conjectured that it is optimal. Jineon Baek (arXiv:2411.19826, 2024) proved that Gerver's sofa
+    has the maximum area. This repository formalizes Baek's entire proof in Lean 4 with Mathlib. The
+    Challenge states, in Mathlib's vocabulary only: Romik's system of equations has exactly one
+    solution with phi in [0.039, 0.04] and theta in [0.68, 0.69], so Gerver's sofa is well defined;
+    Gerver's sofa has area between 2.2192 and 2.2199; and Gerver's sofa is a moving sofa whose area
+    is at least the area of every moving sofa. Every numbered result of the paper is proved. This
+    includes Theorem 8.4.1, on the structure of Gerver's sofa, which the paper states without proof
+    and which is proved here from Romik's equations by rigorous interval arithmetic. It also includes
+    the results the paper takes from the literature: Schneider's area formula for planar convex
+    bodies, and the existence and uniqueness of the solution of Romik's system, which Romik asserts
+    without proof. Only Lean's three standard axioms are used. An accompanying audit (REPORT.md) checks
+    the paper against its LaTeX source. Two statements of the paper are false as written: Definition
+    3.2.5, which makes Proposition 3.3.5 and Lemma 3.4.2 false, and one direction of
+    Proposition 5.1.4. The proof of Theorem 6.1.2 is invalid as written. The audit also records
+    smaller gaps and slips. Every result survives in its intended form, and the main theorem holds.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.MG", "math.OC"]
+  msc2020: ["49Q10", "52A10", "52A38", "52A40", "68V20"]
+
+sources:
+  - title: "Optimality of Gerver's Sofa"
+    authors:
+      - "Jineon Baek"
+    id: "arXiv:2411.19826v1"
+    type: paper
+    location: "https://arxiv.org/abs/2411.19826v1"
+    relationship: formalizes
+    note: >-
+      The formalization follows version 1 of the preprint (the only version), audited against its
+      LaTeX source. Statements that are false or meaningless as printed are formalized in their
+      intended form; REPORT.md (Sections 3 and 6) lists every correction.
+    author_endorsement: not-contacted
+  - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
+    authors:
+      - "Dan Romik"
+    id: "doi:10.1080/10586458.2016.1270858"
+    type: paper
+    location: "Experimental Mathematics 27 (2018), no. 3, 316-330; arXiv:1606.08111"
+    relationship: background
+    note: >-
+      Gerver's sofa is defined, in the paper and in the Challenge, from Romik's rotation path,
+      Equations (25)-(44) and (8). Romik solves his system numerically and asserts without proof that
+      the solution is unique. The existence of the solution, and its uniqueness in the box
+      phi in [0.039, 0.04], theta in [0.68, 0.69], are proved here (MovingSofa/External/Romik.lean).
+    author_endorsement: not-contacted
+  - title: "On Moving a Sofa around a Corner"
+    authors:
+      - "Joseph L. Gerver"
+    id: "doi:10.1007/BF02414066"
+    type: paper
+    location: "Geometriae Dedicata 42 (1992), no. 3, 267-283"
+    relationship: background
+    note: >-
+      Constructs the sofa and conjectures its optimality. The paper quotes Gerver's Theorem 1 for
+      context and cites his Theorem 2 in the proof of Theorem 6.1.2, which is proved here from
+      Romik's equations instead (REPORT.md, E12).
+    author_endorsement: not-contacted
+  - title: "Convex Bodies: The Brunn-Minkowski Theory (2nd edition)"
+    authors:
+      - "Rolf Schneider"
+    id: "doi:10.1017/CBO9781139003858"
+    type: book
+    location: "Encyclopedia of Mathematics and Its Applications 151, Cambridge University Press, 2013"
+    relationship: background
+    note: >-
+      The paper cites several facts from this book. The area formula |K| = (1/2) int h_K d sigma_K
+      (Remark 5.1.2, Eq. (5.19)) is proved in MovingSofa/External/AreaFormula.lean. The other cited
+      facts, such as the weak convergence of surface area measures (the paper's Theorem 4.1.3), are
+      proved where they are used or taken from Mathlib (REPORT.md, Section 2).
+    author_endorsement: n/a
+  - title: "Problem 66-11, Moving Furniture Through a Hallway"
+    authors:
+      - "Leo Moser"
+    type: paper
+    location: "SIAM Review 8 (1966), no. 3, 381"
+    relationship: background
+    note: "The origin of the moving sofa problem; context only."
+    author_endorsement: n/a
+
+related_formalizations:
+  - id: "https://github.com/RuifengCao/sofa-formal"
+    relationship: independent
+    note: >-
+      An earlier independent Lean 4 formalization of the same paper. This repository was developed
+      without consulting it and shares no code with it.
+  - id: "https://github.com/deancureton/MovingSofa"
+    relationship: independent
+    note: >-
+      An earlier independent Lean 4 formalization of the same paper, written by AI coding agents
+      directed by Dean Cureton. This repository was developed without consulting it and shares no
+      code with it.
+
+status:
+  scope: >-
+    Formalized: every numbered result of Chapters 1-8 of the paper, the main theorem (Theorem 1.1.1),
+    and the existence and uniqueness of Gerver's parameters in the stated box. Also formalized: the
+    results from the literature that the proofs use (Schneider's area formula, the solution of
+    Romik's system, the weak convergence of surface area measures, Blaschke selection via Mathlib),
+    and Theorem 8.4.1, which the paper states without proof. The paper's statements that are false
+    or meaningless as printed (REPORT.md, E1, E3, E6, E7, E9, E11, E13, E20, E22, E24, E25) are
+    formalized in their intended form; no result is weakened. Not formalized, because the
+    formalization does not use them: the Jordan curve theorem and the area enclosed by a Jordan curve
+    (Theorems 7.2.1, 7.2.3, Proposition 7.2.7), whose uses are replaced by direct area computations;
+    Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
+    surface area measure is defined directly and the properties the paper uses are proved; the
+    quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose content the paper reproves in Chapter 3;
+    and the remarks and figures.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: agent
+      models: ["Claude Opus 5.5 (claude-opus-5-5)"]
+      framework: "Claude Code (Anthropic)"
+      tool_setup: >-
+        Claude Code 2.1.285, with one coordinating agent and 19 sub-agents of the same model (at most
+        13 running at once), each sub-agent owning a group of files. The work followed the
+        formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit cbdedac):
+        statements first, then proofs, verification, cleanup and the audit. The agents had a Lean 4 and Lake toolchain, a local Mathlib checkout,
+        Python with NumPy, SciPy, SymPy and mpmath for the numerics, and the paper's arXiv LaTeX
+        source. Two Lean files of interval arithmetic are generated by Python scripts kept in the
+        repository (scripts/romik, scripts/area).
+      cost:
+        wall_time: >-
+          about 3 hours 50 minutes of elapsed time to the audited formalization (2026-10-01 22:38 to
+          2026-10-02 02:28, US Central Time), with about 19 hours of sub-agent working time; the
+          Palomar packaging came afterwards
+        spend_usd: "not tracked"
+        hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
+      prompting_notes: >-
+        One instruction, to formalize arXiv:2411.19826 following the formalize-math-paper skill, and
+        later approvals: of the correction of Proposition 5.1.4, of publishing the repository, and of
+        packaging it for Palomar. The coordinating agent wrote the statements, split the proofs among
+        sub-agents by chapter, reviewed and integrated every result, and wrote the audit.
+  spend_usd: "not tracked"
+  notes: >-
+    All Lean code, the numerical verification scripts and the audit were written by Claude Opus 5.5
+    in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this repository.
+    Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
+    only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
+    pair.
+
+fidelity:
+  divergences: >-
+    (1) Corrections of the paper's statements, each the minimal change that makes the statement true
+    and each explained in the docstring of the corresponding declaration:
+    Definition 2.3.9 ("x-axis" for "y-axis"); Proposition 2.2.2 (the missing "-1" in Q^-);
+    Proposition 2.5.4 (the exchanges a<->c, b<->d, W<->Z, and K for K^m on the right); Definition
+    3.2.5 (the fan F_omega for P_omega); Proposition 3.3.1 (2) (the bottom normals omega + pi, 3 pi/2);
+    Lemma 4.2.4 (omega in [arcsec 2.2, pi/2)); Proposition 5.1.4 (integrable instead of bounded
+    density; proposition5_1_4_as_stated_false refutes the printed version); Proposition 6.2.2
+    (argument pi/2 - t); Lemmas 6.5.3 and 6.5.5 (ranges [0, pi/2] and (0, pi/2]); Lemma 8.1.7 (4)
+    (phi^L for phi^R); Definition 8.3.3 (pi + phi^R for pi/2 + phi^R); Lemma 8.3.6 (3) (evaluation at
+    pi/2); Theorem 8.4.3 (2) (B(t3) for D(t3)); Proposition 8.4.4 (4) (shifted by pi/2).
+    (2) Readings: the plane is R x R and area is Lebesgue measure; a rigid motion is a continuous
+    angle and translation, with the angle 0 at time 0 (equivalent to a continuous curve in SE(2) by
+    lifting); the one-dimensional Hausdorff measure, used only for subsets of lines, is the length
+    along the line; the surface area measure sigma_K is the Lebesgue-Stieltjes measure of
+    t -> <v_K^+(t), v_t> + int_0^t h_K, a 2 pi-periodic measure on R; Hausdorff distance of convex
+    bodies is sup_t |h_K(t) - h_L(t)|; Chapter 8 is stated for a parameter phi in [0.039, 0.04]
+    standing for Gerver's angle; Theorem 8.4.1 (2), which the paper states as a Jordan-region
+    statement, is stated as what the paper uses (the boundary curves and the area of the niche),
+    and the proof shows that the niche is exactly the region below these curves; the measurability
+    claim of Theorem 7.4.1 is read on [a, b].
+    (3) Results about Gerver's sofa are stated for every solution of Romik's system in the box
+    phi in [0.039, 0.04], theta in [0.68, 0.69] (the paper quotes phi in [0.039, 0.040]); the box
+    contains exactly one solution.
+    (4) Some hypotheses of the paper's statements are not needed and are omitted, which makes those
+    Lean statements more general (REPORT.md, Section 5).
+    (5) Several proofs follow different routes from the paper's, without changing the statements:
+    direct area computations instead of Jordan curves and Green's theorem; slicing instead of the
+    Brunn-Minkowski inequality in Theorem 8.1.1 (1); proofs of Lemma 8.1.7 (2), (4) and Theorem 8.2.4
+    that do not use N(K) in K, which the cap space K^i does not provide; Theorems 6.1.2 and 8.4.1 from
+    Romik's equations. REPORT.md, Section 6 lists them.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "Claude Opus 5.5 sub-agents, separate from the proving agents: a statement-fidelity review against the LaTeX source, and an audit of the paper's findings against the LaTeX source"
+  notes: >-
+    No human has reviewed the proofs, the statements or the audit. Before any proof was written, a
+    separate agent reviewed every statement against the paper's LaTeX source. Every statement change
+    after that was compared with the original statements by script (stmt_diff), and each one is
+    documented. Every finding about the paper was checked against the LaTeX source, and every
+    numerical claim was recomputed by script. Lean's kernel checks the proofs; Comparator checks
+    that the Solution proves the Challenge's statements with the standard axioms only.
+
+alignment:
+  namespace: "MovingSofaChallenge"
+  statements:
+    - source: "Definition 8.1.2 (Gerver's sofa, from Romik's system), existence of the parameters"
+      lean: "MovingSofaChallenge.gerver_params_exists"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Romik's system (27)-(44) has a solution with phi in [0.039, 0.04] and theta in [0.68, 0.69].
+        Romik finds it numerically; the paper uses it to define Gerver's sofa.
+    - source: "Definition 8.1.2, uniqueness of the parameters"
+      lean: "MovingSofaChallenge.gerver_params_unique"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        The solution in the box is unique, so Gerver's sofa is well defined. Romik asserts uniqueness
+        without proof; the paper relies on it.
+    - source: "Introduction (Section 1.1), the display |G| = 2.2195... (label eqn:area-bounds)"
+      lean: "MovingSofaChallenge.gerver_sofa_area"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        The area of the shape defined from Romik's parameters lies in [2.2192, 2.2199], consistent
+        with Gerver's value 2.21953.... This identifies the Challenge's definition with Gerver's sofa.
+    - source: "Theorem 1.1.1 (thm:main)"
+      lean: "MovingSofaChallenge.gerver_sofa_optimal"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Gerver's sofa is a moving sofa (a nonempty, connected, closed set moved by a continuous rigid
+        motion from the horizontal to the vertical side of the hallway L, inside L), and every moving
+        sofa has area at most the area of Gerver's sofa. The paper's moving sofas are translates of
+        subsets of H_L, and its rigid motions are continuous curves in SE(2) starting at a
+        translation; Challenge.lean's docstring explains the equivalent formulation used.
+
+acknowledgements: >-
+  Mathlib and the Lean toolchain (Lean 4, Lake, Comparator). The audit used the arXiv LaTeX source of
+  arXiv:2411.19826v1.

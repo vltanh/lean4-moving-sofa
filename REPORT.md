@@ -19,14 +19,15 @@ Status of the formalization:
     (Section 2).
 - Theorem 8.4.1 (the structure of Gerver's sofa), which the paper states without proof, is proved
   from Romik's equations by interval arithmetic ([`MovingSofa/Gerver/`](MovingSofa/Gerver)).
-- `lake build` succeeds. The only `sorry`s are the three statements of [`Challenge.lean`](Challenge.lean), which are
+- `lake build` succeeds. The only `sorry`s are the four statements of [`Challenge.lean`](Challenge.lean), which are
   `sorry` by design and proved in [`Solution.lean`](Solution.lean). There is no `axiom`, `admit`, `native_decide` or
   `implemented_by`.
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the library, every paper result and the
   Challenge theorems depend only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). It also lists the
   results from prior work that each paper result uses (Section 7).
 - [`Challenge.lean`](Challenge.lean) restates Theorem 1.1.1, together with the existence and uniqueness of Gerver's
-  parameters, using Mathlib's vocabulary only. [`Solution.lean`](Solution.lean) proves these statements from the
+  parameters and the area of Gerver's sofa (between 2.2192 and 2.2199), using Mathlib's vocabulary
+  only. [`Solution.lean`](Solution.lean) proves these statements from the
   library, and `lake comparator` accepts the solution.
 - Statements of the paper that are false as printed are formalized in their intended form; Section 6
   lists every such correction. No result had to be weakened.
@@ -527,7 +528,7 @@ results whose proofs use results from prior work are these; no other result uses
 
 | Result | Lean | Results from prior work used |
 | --- | --- | --- |
-| Theorem 1.1.1 | [`theorem1_1_1`](MovingSofa/Main.lean#L307) | [`area_eq_half_integral_supp`](MovingSofa/External/AreaFormula.lean#L592), [`GerverParams.romik_exists`](MovingSofa/External/Romik.lean#L387) |
+| Theorem 1.1.1 | [`theorem1_1_1`](MovingSofa/Main.lean#L318) | [`area_eq_half_integral_supp`](MovingSofa/External/AreaFormula.lean#L592), [`GerverParams.romik_exists`](MovingSofa/External/Romik.lean#L387) |
 | Theorem 7.1.3 | [`theorem7_1_3`](MovingSofa/Convex/ConvexDomain.lean#L296), [`theorem7_1_3_quadratic`](MovingSofa/Convex/ConvexDomain.lean#L332) | [`area_eq_half_integral_supp`](MovingSofa/External/AreaFormula.lean#L592) |
 | Lemma 7.3.5 | [`lemma7_3_5`](MovingSofa/Convex/ConvexCurve.lean#L1830) | [`area_eq_half_integral_supp`](MovingSofa/External/AreaFormula.lean#L592) |
 | Theorem 8.1.1 (2) | [`theorem8_1_1_balanced`](MovingSofa/Main.lean#L34) | [`GerverParams.romik_exists`](MovingSofa/External/Romik.lean#L387) |
