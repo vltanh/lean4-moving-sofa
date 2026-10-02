@@ -1,6 +1,8 @@
 module
 
 public import MovingSofa.Optimality.Variation
+public import MovingSofa.Gerver.Structure
+public import MovingSofa.Gerver.Romik
 public import Mathlib.MeasureTheory.Integral.DivergenceTheorem
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.DerivIntegrable
@@ -72,7 +74,8 @@ theorem theorem8_4_1_monotone {P : GerverParams} (hP : P.IsSolution) (hbox : P.I
     IsMonotoneSofa (gerverSofa P) (π / 2) ∧
       ∀ t ∈ Icc 0 (π / 2), aK P.cap t = P.curveA t ∧ cK P.cap t = P.curveC t ∧
         innerCorner P.cap t = P.path t := by
-  sorry
+  have h := gv_monotone hP (GerverParams.romik_bounds hP hbox)
+  exact ⟨h.1, fun t ht => h.2 t ht⟩
 
 /-- **Theorem 8.4.1** (2), as used by the paper (see the module docstring): the curves `𝐁`,
 `𝐱|_{[t_1, t_4]}`, `𝐃` lie on the boundary of the niche, with matching endpoints
@@ -93,7 +96,9 @@ theorem theorem8_4_1_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
 theorem theorem8_4_1_walls {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Icc (P.tPt 3) (P.tPt 5), P.curveB t ∈ wallBVec P.cap t) ∧
       ∀ t ∈ Icc (P.tPt 0) (P.tPt 2), P.curveD t ∈ wallDVec P.cap t := by
-  sorry
+  have h := gv_walls hP (GerverParams.romik_bounds hP hbox)
+  simp only [GerverParams.tPt]
+  exact h
 
 /-- **Theorem 8.4.1** (4): `𝐁'(t)` is a negative multiple of `v_t` and `𝐃'(t)` a positive multiple of
 `u_t`, on the open phases where these curves are differentiable. -/
@@ -102,7 +107,9 @@ theorem theorem8_4_1_tangents {P : GerverParams} (hP : P.IsSolution) (hbox : P.I
         ∃ c < (0 : ℝ), HasDerivAt P.curveB (c • vvec t) t) ∧
       ∀ t ∈ Ioo (P.tPt 0) (P.tPt 2), t ≠ P.tPt 1 →
         ∃ c > (0 : ℝ), HasDerivAt P.curveD (c • uvec t) t := by
-  sorry
+  have h := gv_tangents hP (GerverParams.romik_bounds hP hbox)
+  simp only [GerverParams.tPt]
+  exact h
 
 /-- **Theorem 8.4.2** (`thm:gerver-odes`): Romik's balancing ODEs on the open phases. -/
 theorem theorem8_4_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
@@ -121,13 +128,15 @@ theorem theorem8_4_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
       (∀ t ∈ Ioo (P.tPt 4) (P.tPt 5),
         dot (deriv P.curveA t) (vvec t) = dot (-deriv P.curveB t) (vvec t) ∧
         dot (-deriv P.curveC t) (uvec t) = 0) := by
-  sorry
+  have h := gv_odes hP (GerverParams.romik_bounds hP hbox)
+  simp only [GerverParams.tPt]
+  exact h
 
 /-- **Theorem 6.1.2** (`thm:injectivity-gerver`). The cap of Gerver's sofa satisfies the injectivity
 condition. -/
 theorem theorem6_1_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     SatisfiesInjectivity P.cap := by
-  sorry
+  exact gv_injectivity hP (GerverParams.romik_bounds hP hbox)
 
 /-- Gerver's sofa has area at least `2.2` (its area is `2.2195…`; Romik, Section 8 of the companion
 package). -/
