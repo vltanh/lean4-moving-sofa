@@ -18,6 +18,7 @@ import all MovingSofa.Convex.ConvexCurve
 import all MovingSofa.Convex.ConvexDomain
 import all MovingSofa.Convex.CurveArea
 import all MovingSofa.Convex.Mamikon
+import all MovingSofa.Convex.QuadraticEquality
 import all MovingSofa.External.AreaFormula
 import all MovingSofa.External.AreaFormula.Param
 import all MovingSofa.External.Romik
@@ -48,9 +49,11 @@ import all MovingSofa.Monotone.MonotoneSofa
 import all MovingSofa.Monotone.SupportingHallway
 import all MovingSofa.Optimality.Concavity
 import all MovingSofa.Optimality.Domain
+import all MovingSofa.Optimality.Equality
 import all MovingSofa.Optimality.UpperBound
 import all MovingSofa.Optimality.Variation
 import all MovingSofa.Sofa.Defs
+import all MovingSofa.Tests.Equality
 import all Solution
 
 /-!

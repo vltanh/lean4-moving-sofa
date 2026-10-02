@@ -90,4 +90,11 @@ example {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (gm_sofaArea_cap hP hbox)
   exact h.2 (1 / 2) (by constructor <;> norm_num)
 
+/-- The converse characterization is usable without a geometric uniqueness assumption. -/
+example {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (x : LTriple P.φ)
+    (hd : (lDomain P.φ).dirDeriv (upperQL P.φ) (gerverTriple hP hbox) x = 0)
+    (hm : MamikonSegmentEquality P.φ (gerverTriple hP hbox) x (1 / 2)) :
+    upperQL P.φ x = upperQL P.φ (gerverTriple hP hbox) :=
+  (upperQL_eq_gerver_iff hP hbox x).2 ⟨hd, hm⟩
+
 end MovingSofa.EqualityTests

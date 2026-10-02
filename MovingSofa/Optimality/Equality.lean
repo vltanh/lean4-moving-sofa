@@ -9,8 +9,9 @@ public import MovingSofa.Convex.QuadraticEquality
 This module begins the uniqueness argument, rather than asserting uniqueness of the shape.
 A competing maximizer of `upperQL` has zero first variation at Gerver's triple, and every
 Minkowski segment joining it to Gerver's triple saturates all three Mamikon convexity
-inequalities separately. The final lemmas apply these conditions to caps in `𝒦^i` that attain
-Gerver's sofa area.
+inequalities separately. At the midpoint these equalities, together with zero first variation,
+are also sufficient for equality of `upperQL` values. The final lemmas apply the necessary
+conditions to caps in `𝒦^i` that attain Gerver's sofa area.
 
 What remains is geometric rigidity of these equality cases, modulo the relevant rigid
 motions, and equality in the reductions from arbitrary moving sofas to caps. In particular,
@@ -35,12 +36,12 @@ structure MamikonSegmentEquality (φ : ℝ) (x y : LTriple φ) (c : ℝ) : Prop 
   left : mamikonL φ ((lDomain φ).comb c x y).1.2.2.1 =
     (1 - c) * mamikonL φ x.1.2.2.1 + c * mamikonL φ y.1.2.2.1
 
-/-- If two triples maximize `upperQL`, the three Mamikon convexity gaps vanish individually
-along their entire segment. This is the equality case of the proof of Theorem 8.3.8. -/
-theorem mamikonSegmentEquality_of_isMax {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
-    {x y : LTriple φ} (hmax : ∀ z, upperQL φ z ≤ upperQL φ x)
-    (hxy : upperQL φ y = upperQL φ x) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
-    MamikonSegmentEquality φ x y c := by
+/-- Equality in concavity of `upperQL` is equivalent to equality in each of the three
+Mamikon convexity inequalities. This does not require the endpoints to be maximizers. -/
+theorem mamikonSegmentEquality_iff {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
+    (x y : LTriple φ) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
+    MamikonSegmentEquality φ x y c ↔
+      upperQL φ ((lDomain φ).comb c x y) = (1 - c) * upperQL φ x + c * upperQL φ y := by
   obtain ⟨-, cS, -, cR, -, cL⟩ := lemma8_3_3 hφ
   have hLin := lemma8_3_7 hφ
   set z := (lDomain φ).comb c x y with hz
@@ -82,20 +83,37 @@ theorem mamikonSegmentEquality_of_isMax {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (1 - c) * mamikonL φ x.1.2.2.1 + c * mamikonL φ y.1.2.2.1 := by
     rw [hD]
     exact cL x.1.2.2 y.1.2.2 c hc
-  have hflat : upperQL φ z = (1 - c) * upperQL φ x + c * upperQL φ y := by
-    have h := (lDomain φ).eq_on_segment_of_isMax (theorem8_3_8 hφ) hmax hxy hc
-    change upperQL φ z = upperQL φ x at h
-    rw [h, hxy]
-    ring
-  rw [hQ, hQ, hQ] at hflat
-  change MamikonSegmentEquality φ x y c
   constructor
-  · change mamikonS φ z.1.1.1 = _
+  · intro h
+    have hS := h.middle
+    have hR := h.right
+    have hL := h.left
+    change mamikonS φ z.1.1.1 = _ at hS
+    change mamikonR φ z.1.2.1.1 = _ at hR
+    change mamikonL φ z.1.2.2.1 = _ at hL
+    change upperQL φ z = (1 - c) * upperQL φ x + c * upperQL φ y
+    rw [hQ, hQ, hQ]
     linarith
-  · change mamikonR φ z.1.2.1.1 = _
-    linarith
-  · change mamikonL φ z.1.2.2.1 = _
-    linarith
+  · intro hflat
+    change upperQL φ z = (1 - c) * upperQL φ x + c * upperQL φ y at hflat
+    rw [hQ, hQ, hQ] at hflat
+    constructor
+    · change mamikonS φ z.1.1.1 = _
+      linarith
+    · change mamikonR φ z.1.2.1.1 = _
+      linarith
+    · change mamikonL φ z.1.2.2.1 = _
+      linarith
+
+/-- If two triples maximize `upperQL`, the three Mamikon convexity gaps vanish individually
+along their entire segment. This is the equality case of the proof of Theorem 8.3.8. -/
+theorem mamikonSegmentEquality_of_isMax {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
+    {x y : LTriple φ} (hmax : ∀ z, upperQL φ z ≤ upperQL φ x)
+    (hxy : upperQL φ y = upperQL φ x) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
+    MamikonSegmentEquality φ x y c := by
+  apply (mamikonSegmentEquality_iff hφ x y hc).2
+  rw [(lDomain φ).eq_on_segment_of_isMax (theorem8_3_8 hφ) hmax hxy hc, hxy]
+  ring
 
 /-- Corollary 8.5.8 in the bundled-triple vocabulary. -/
 theorem upperQL_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -127,6 +145,26 @@ theorem gerver_mamikonSegmentEquality {P : GerverParams} (hP : P.IsSolution) (hb
     {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
     MamikonSegmentEquality P.φ (gerverTriple hP hbox) x c :=
   mamikonSegmentEquality_of_isMax (gm_φ_mem_Ioo hP hbox) (upperQL_le_gerver hP hbox) hx hc
+
+/-- An exact analytic characterization of the maximizing triples: zero first variation and
+vanishing of the three midpoint Mamikon gaps. Geometric rigidity is not assumed here. -/
+theorem upperQL_eq_gerver_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    (x : LTriple P.φ) :
+    upperQL P.φ x = upperQL P.φ (gerverTriple hP hbox) ↔
+      (lDomain P.φ).dirDeriv (upperQL P.φ) (gerverTriple hP hbox) x = 0 ∧
+        MamikonSegmentEquality P.φ (gerverTriple hP hbox) x (1 / 2) := by
+  have hφ := gm_φ_mem_Ioo hP hbox
+  have hhalf : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := by constructor <;> norm_num
+  constructor
+  · intro hx
+    exact ⟨gerver_dirDeriv_eq_zero_of_upperQL_eq hP hbox hx,
+      gerver_mamikonSegmentEquality hP hbox hx hhalf⟩
+  · rintro ⟨hderiv, hmid⟩
+    apply ((lDomain P.φ).eq_iff_dirDeriv_eq_zero_and_midpoint_eq
+      (proposition8_2_1 hφ) (theorem8_3_8 hφ) (upperQL_le_gerver hP hbox)).2
+    refine ⟨hderiv, ?_⟩
+    have h := (mamikonSegmentEquality_iff hφ (gerverTriple hP hbox) x hhalf).1 hmid
+    linarith
 
 /-- The canonical extension of a cap in `𝒦^i` to a triple in `𝓛`. -/
 noncomputable def kiExtensionTriple {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
