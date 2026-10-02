@@ -1,0 +1,187 @@
+
+/-! ### Trigonometric polynomials and their integrals -/
+
+/-- The coefficients of `F(t) = P(t) + Q(t) c + R(t) s` with `P(0) = 0`, `deg P ≤ 5` and
+`deg Q, deg R ≤ 2`. -/
+structure ga_TP where
+  p1 : ℝ
+  p2 : ℝ
+  p3 : ℝ
+  p4 : ℝ
+  p5 : ℝ
+  q0 : ℝ
+  q1 : ℝ
+  q2 : ℝ
+  r0 : ℝ
+  r1 : ℝ
+  r2 : ℝ
+
+namespace ga_TP
+
+variable (K : ga_TP)
+
+/-- The function `F(t, c, s) = P(t) + Q(t) c + R(t) s` (Horner form). -/
+def F (t c s : ℝ) : ℝ :=
+  t * (K.p1 + t * (K.p2 + t * (K.p3 + t * (K.p4 + t * K.p5)))) + (K.q0 + t * (K.q1 + t * K.q2)) * c
+    + (K.r0 + t * (K.r1 + t * K.r2)) * s
+
+/-- The derivative of `t ↦ F(t, cos t, sin t)`. -/
+def dF (t c s : ℝ) : ℝ :=
+  (K.p1 + t * (2 * K.p2 + t * (3 * K.p3 + t * (4 * K.p4 + t * (5 * K.p5)))))
+    + (K.q1 + 2 * K.q2 * t + (K.r0 + t * (K.r1 + t * K.r2))) * c
+    + (K.r1 + 2 * K.r2 * t - (K.q0 + t * (K.q1 + t * K.q2))) * s
+
+/-- The zero trigonometric polynomial. -/
+def zero : ga_TP := ⟨0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0⟩
+
+lemma hasDerivAt (t : ℝ) :
+    HasDerivAt (fun t => K.F t (cos t) (sin t)) (K.dF t (cos t) (sin t)) t := by
+  have e : (fun t => K.F t (cos t) (sin t)) = fun t => K.p1 * t + K.p2 * t ^ 2 + K.p3 * t ^ 3
+      + K.p4 * t ^ 4 + K.p5 * t ^ 5 + (K.q0 + K.q1 * t + K.q2 * t ^ 2) * cos t
+      + (K.r0 + K.r1 * t + K.r2 * t ^ 2) * sin t := by
+    funext t; simp only [F]; ring
+  rw [e]
+  have hq : HasDerivAt (fun t => K.q0 + K.q1 * t + K.q2 * t ^ 2) (K.q1 * 1 + K.q2 * (2 * t)) t := by
+    have := (((hasDerivAt_id' t).const_mul K.q1).const_add K.q0).add
+      ((hasDerivAt_pow 2 t).const_mul K.q2)
+    convert this using 1; push_cast; ring
+  have hr : HasDerivAt (fun t => K.r0 + K.r1 * t + K.r2 * t ^ 2) (K.r1 * 1 + K.r2 * (2 * t)) t := by
+    have := (((hasDerivAt_id' t).const_mul K.r1).const_add K.r0).add
+      ((hasDerivAt_pow 2 t).const_mul K.r2)
+    convert this using 1; push_cast; ring
+  have := (((((((hasDerivAt_id' t).const_mul K.p1).add ((hasDerivAt_pow 2 t).const_mul K.p2)).add
+    ((hasDerivAt_pow 3 t).const_mul K.p3)).add ((hasDerivAt_pow 4 t).const_mul K.p4)).add
+    ((hasDerivAt_pow 5 t).const_mul K.p5)).add (hq.mul (hasDerivAt_cos t))).add
+    (hr.mul (hasDerivAt_sin t))
+  convert this using 1
+  simp only [dF]; push_cast; ring
+
+lemma continuous_dF : Continuous (fun t => K.dF t (cos t) (sin t)) := by
+  unfold dF; fun_prop
+
+/-- `∫_a^b F' = F(b) - F(a)`. -/
+lemma integral (a b : ℝ) :
+    ∫ t in a..b, K.dF t (cos t) (sin t) = K.F b (cos b) (sin b) - K.F a (cos a) (sin a) :=
+  intervalIntegral.integral_eq_sub_of_hasDerivAt (fun t _ => K.hasDerivAt t)
+    (K.continuous_dF.intervalIntegrable a b)
+
+lemma zero_F (t c s : ℝ) : zero.F t c s = 0 := by simp only [F, zero]; ring
+
+end ga_TP
+
+/-! ### The curve area of a curve that is `C¹` on an interval -/
+
+/-- If `Z` agrees on `[a, b]` with a curve `G` that has a continuous derivative `G'`, then
+`𝒥(Z|[a, b]) = ½ ∫_a^b G × G'`. -/
+lemma ga_curveArea_eq {Z G G' : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a < b)
+    (hG : ∀ t, HasDerivAt G (G' t) t) (hG' : Continuous G') (hZ : ∀ t ∈ Icc a b, Z t = G t) :
+    curveArea Z a b = (1 / 2) * ∫ t in a..b, cross (G t) (G' t) := by
+  have hGc : ContDiff ℝ 1 G := by
+    rw [contDiff_one_iff_deriv]
+    refine ⟨fun t => (hG t).differentiableAt, ?_⟩
+    have : deriv G = G' := funext fun t => (hG t).deriv
+    rw [this]; exact hG'
+  have hZc : ContDiffOn ℝ 1 Z (Icc a b) := hGc.contDiffOn.congr hZ
+  rw [curveArea_eq_integral hab.le hZc]
+  congr 1
+  apply intervalIntegral.integral_congr
+  intro t ht
+  rw [uIcc_of_le hab.le] at ht
+  have hd : HasDerivWithinAt Z (G' t) (Icc a b) t :=
+    (hG t).hasDerivWithinAt.congr hZ (hZ t ht)
+  simp only
+  rw [hd.derivWithin (uniqueDiffOn_Icc hab t ht), hZ t ht]
+
+/-- A curve that agrees on `[a, b]` with a curve with continuous derivative is in `C^BV[a, b]`. -/
+lemma ga_isCBV_of_eqOn {Z G G' : ℝ → ℝ × ℝ} {a b : ℝ}
+    (hG : ∀ t, HasDerivAt G (G' t) t) (hG' : Continuous G') (hZ : ∀ t ∈ Icc a b, Z t = G t) :
+    IsCBV Z a b := by
+  have hGc : Continuous G := continuous_iff_continuousAt.2 fun t => (hG t).continuousAt
+  refine ⟨hGc.continuousOn.congr hZ, ?_⟩
+  rcases le_or_gt a b with hab | hab
+  · obtain ⟨M, hM⟩ := isCompact_Icc.exists_bound_of_continuousOn (hG'.continuousOn (s := Icc a b))
+    have hlip : LipschitzOnWith M.toNNReal G (Icc a b) :=
+      (convex_Icc a b).lipschitzOnWith_of_nnnorm_hasDerivWithin_le
+        (fun t _ => (hG t).hasDerivWithinAt) (fun t ht => by
+          rw [← NNReal.coe_le_coe, coe_nnnorm]
+          exact (hM t ht).trans (Real.le_coe_toNNReal M))
+    have hbv : BoundedVariationOn G (Icc a b) := by
+      have := hlip.locallyBoundedVariationOn a b ⟨le_rfl, hab⟩ ⟨hab, le_rfl⟩
+      rwa [inter_self] at this
+    unfold BoundedVariationOn
+    rwa [eVariationOn.eq_of_eqOn hZ]
+  · rw [Icc_eq_empty (not_le.2 hab)]
+    unfold BoundedVariationOn
+    rw [eVariationOn.subsingleton _ subsingleton_empty]
+    exact ENNReal.zero_ne_top
+
+/-- `C^BV` is stable under concatenation. -/
+lemma ga_isCBV_append {Z : ℝ → ℝ × ℝ} {a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c)
+    (h₁ : IsCBV Z a b) (h₂ : IsCBV Z b c) : IsCBV Z a c := by
+  refine ⟨?_, ?_⟩
+  · rw [← Icc_union_Icc_eq_Icc hab hbc]
+    exact h₁.1.union_of_isClosed h₂.1 isClosed_Icc isClosed_Icc
+  · have := eVariationOn.Icc_add_Icc Z (s := univ) hab hbc (mem_univ b)
+    simp only [univ_inter] at this
+    unfold BoundedVariationOn
+    rw [← this]
+    exact ENNReal.add_ne_top.2 ⟨h₁.2, h₂.2⟩
+
+/-- `C^BV` is stable under restriction. -/
+lemma ga_isCBV_mono {Z : ℝ → ℝ × ℝ} {a b a' b' : ℝ} (h : IsCBV Z a b) (ha : a ≤ a')
+    (hb : b' ≤ b) : IsCBV Z a' b' :=
+  ⟨h.1.mono (Icc_subset_Icc ha hb), h.2.mono (Icc_subset_Icc ha hb)⟩
+
+/-- Splitting the curve area functional at two points. -/
+lemma ga_split_three {Z : ℝ → ℝ × ℝ} {a b c d : ℝ} (hab : a ≤ b) (hbc : b ≤ c) (hcd : c ≤ d)
+    (h : IsCBV Z a d) :
+    curveArea Z a d = curveArea Z a b + curveArea Z b c + curveArea Z c d := by
+  rw [proposition7_2_6 hab (hbc.trans hcd) h,
+    proposition7_2_6 hbc hcd (ga_isCBV_mono h hab le_rfl), add_assoc]
+
+/-- Splitting the curve area functional at four points. -/
+lemma ga_split_five {Z : ℝ → ℝ × ℝ} {a b c d e f : ℝ} (hab : a ≤ b) (hbc : b ≤ c) (hcd : c ≤ d)
+    (hde : d ≤ e) (hef : e ≤ f) (h : IsCBV Z a f) :
+    curveArea Z a f = curveArea Z a b + curveArea Z b c + curveArea Z c d + curveArea Z d e
+      + curveArea Z e f := by
+  have h₁ := ga_isCBV_mono h hab le_rfl
+  have h₂ := ga_isCBV_mono h₁ hbc le_rfl
+  rw [proposition7_2_6 hab (hbc.trans (hcd.trans (hde.trans hef))) h,
+    proposition7_2_6 hbc (hcd.trans (hde.trans hef)) h₁, ga_split_three hcd hde hef h₂]
+  ring
+
+/-! ### Cross products in the rotating frame -/
+
+lemma ga_cross_A (Φ : gs_Phase) (t : ℝ) :
+    cross (Φ.A t) (Φ.ρA t • vvec t) = Φ.ρA t * (Φ.w₁ t + 1 + Φ.κ.1 * cos t + Φ.κ.2 * sin t) := by
+  simp only [gs_Phase.A, rot, cross, vvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+    Prod.smul_snd, smul_eq_mul]
+  linear_combination (Φ.ρA t * (Φ.w₁ t + 1)) * sin_sq_add_cos_sq t
+
+lemma ga_cross_B (Φ : gs_Phase) (t : ℝ) :
+    cross (Φ.B t) ((Φ.ρA t - 1) • vvec t) =
+      (Φ.ρA t - 1) * (Φ.w₁ t + Φ.κ.1 * cos t + Φ.κ.2 * sin t) := by
+  simp only [gs_Phase.B, rot, cross, vvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+    Prod.smul_snd, smul_eq_mul]
+  linear_combination ((Φ.ρA t - 1) * Φ.w₁ t) * sin_sq_add_cos_sq t
+
+lemma ga_cross_C (Φ : gs_Phase) (t : ℝ) :
+    cross (Φ.C t) (-Φ.ρC t • uvec t) = Φ.ρC t * (Φ.w₂ t + 1 - Φ.κ.1 * sin t + Φ.κ.2 * cos t) := by
+  simp only [gs_Phase.C, rot, cross, uvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+    Prod.smul_snd, smul_eq_mul]
+  linear_combination (Φ.ρC t * (Φ.w₂ t + 1)) * sin_sq_add_cos_sq t
+
+lemma ga_cross_D (Φ : gs_Phase) (t : ℝ) :
+    cross (Φ.D t) ((1 - Φ.ρC t) • uvec t) =
+      (1 - Φ.ρC t) * (-Φ.w₂ t + Φ.κ.1 * sin t - Φ.κ.2 * cos t) := by
+  simp only [gs_Phase.D, rot, cross, uvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+    Prod.smul_snd, smul_eq_mul]
+  linear_combination (-(1 - Φ.ρC t) * Φ.w₂ t) * sin_sq_add_cos_sq t
+
+lemma ga_cross_X (Φ : gs_Phase) (t : ℝ) :
+    cross (Φ.X t) (Φ.X' t) = Φ.w₁ t * Φ.β t - Φ.w₂ t * Φ.α t
+      + Φ.α t * (Φ.κ.1 * sin t - Φ.κ.2 * cos t) + Φ.β t * (Φ.κ.1 * cos t + Φ.κ.2 * sin t) := by
+  simp only [gs_Phase.X, gs_Phase.X', rot, cross, uvec, vvec, Prod.fst_add, Prod.snd_add,
+    Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
+  linear_combination (Φ.w₁ t * Φ.β t - Φ.w₂ t * Φ.α t) * sin_sq_add_cos_sq t
+
