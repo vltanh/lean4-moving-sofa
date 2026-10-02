@@ -58,7 +58,7 @@ lemma inj_fK_sub_ge {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) {t
   have h1 := corollary6_4_4 hK
   have h5 := (proposition6_4_5 hcap h1).1
   rw [fK, fK, ← (h5 t ht).2, ← (h5 0 ⟨le_rfl, by positivity⟩).2,
-    fPlus_sub_fPlus hKc le_rfl ht.1 ht.2.le]
+    fPlus_sub_fPlus hKc ht.1]
   have hσ := inj_sigma_Ioc_le hK le_rfl ht.1 ht.2
   have e : ∫ u in (0 : ℝ)..t, m0 (gK K u) =
       (∫ u in (0 : ℝ)..t, gPlus K u) - ∫ u in (0 : ℝ)..t, k0 (gPlus K u) := by
@@ -76,7 +76,7 @@ lemma inj_gK_eq_fK_mirror {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
   have h1m := corollary6_4_4 hm
   have hs : π / 2 - t ∈ Ico 0 (π / 2) := ⟨by linarith [ht.2], by linarith [ht.1]⟩
   rw [gK, ((proposition6_4_5 hcap h1).2 t ht).2, fK,
-    ← ((proposition6_4_5 hm.2.1 h1m).1 _ hs).2, (proposition6_2_2 hcap ⟨hs.1, hs.2.le⟩).1,
+    ← ((proposition6_4_5 hm.2.1 h1m).1 _ hs).2, (proposition6_2_2 (K := K)).1,
     sub_sub_cancel]
 
 /-- **Theorem 6.5.1** (`thm:leg-length-bounds`). For a balanced maximum cap, `f_K` is absolutely
@@ -151,7 +151,7 @@ theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
       rw [hIoc, measure_union (by simp) (measurableSet_singleton t),
         ENNReal.toReal_add measure_Ioo_lt_top.ne (by rw [← Icc_self]; exact measure_Icc_lt_top.ne),
         sigmaAt]
-    have hFP := fPlus_sub_fPlus hKc le_rfl h0.le ht.2
+    have hFP := fPlus_sub_fPlus hKc h0.le
     rcases eq_or_lt_of_le ht.2 with hπt | hπt
     · -- `t = π/2`: `f_K(π/2) = f_K⁻(π/2) = f_K⁺(π/2) + σ_K(π/2)`
       have hfm : fK K t = fPlus K t + sigmaAt K t := by
@@ -342,7 +342,7 @@ theorem lemma6_5_3 {c : ℝ} (hc : c ∈ Icc 0 (2 / 3)) {x : ℝ} (hx : x ∈ Ic
 /-- **Lemma 6.5.4** (`lem:operator-monotonicity`). `𝓕` is monotone on nonnegative continuous
 functions on `[0, π/2]`. -/
 theorem lemma6_5_4 {f g : ℝ → ℝ} (hf : ContinuousOn f (Icc 0 (π / 2)))
-    (hg : ContinuousOn g (Icc 0 (π / 2))) (hf0 : ∀ x ∈ Icc 0 (π / 2), 0 ≤ f x)
+    (hg : ContinuousOn g (Icc 0 (π / 2)))
     (hfg : ∀ x ∈ Icc 0 (π / 2), f x ≤ g x) : ∀ x ∈ Icc 0 (π / 2), lowerOp f x ≤ lowerOp g x := by
   intro x hx
   have hmaps : MapsTo (fun u : ℝ => π / 2 - u) (uIcc 0 x) (Icc 0 (π / 2)) := by
@@ -388,7 +388,7 @@ theorem lemma6_5_5 {x : ℝ} (hx : x ∈ Ioc 0 (π / 2)) : 1 < lowerSeq 11 x := 
       have hj0 : ∀ z ∈ Icc (0 : ℝ) (π / 2), 0 ≤ jFun (((m : ℝ) - 1) / 12) z :=
         fun z _ => le_trans hc.1 (le_max_right _ _)
       have h1 := lemma6_5_3 hc hy
-      have h2 := lemma6_5_4 (hjc _).continuousOn (inj_continuous_lowerSeq m).continuousOn hj0 ih'
+      have h2 := lemma6_5_4 (hjc _).continuousOn (inj_continuous_lowerSeq m).continuousOn ih'
         y hy
       have h3 : lowerOp (lowerSeq m) y ≤ lowerSeq (m + 1) y := le_max_right _ _
       have e : ((m : ℝ) - 1) / 12 + 1 / 12 = (((m + 1 : ℕ) : ℝ) - 1) / 12 := by push_cast; ring

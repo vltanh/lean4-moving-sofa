@@ -115,7 +115,7 @@ lemma inj_gMinus_eq (K : Set (ℝ × ℝ)) (t : ℝ) :
 
 /-- **Proposition 6.2.1** (`pro:cap-tangent-arm-length`). `y_K(t) = A_K^±(t) + f_K^±(t) v_t` and
 `y_K(t) = C_K^±(t) + g_K^±(t) u_t`. -/
-theorem proposition6_2_1 {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} (ht : t ∈ Icc 0 (π / 2)) :
+theorem proposition6_2_1 {K : Set (ℝ × ℝ)} {t : ℝ} :
     outerCorner K t = aPlus K t + fPlus K t • vvec t ∧
       outerCorner K t = aMinus K t + fMinus K t • vvec t ∧
       outerCorner K t = cPlus K t + gPlus K t • uvec t ∧
@@ -147,13 +147,13 @@ lemma inj_dot_mirror_uvec (w : ℝ × ℝ) (t : ℝ) :
 
 /-- **Proposition 6.2.2** (`pro:cap-tangent-arm-mirror`), with `t` replaced by `π/2 - t` on the right
 (see the module docstring). -/
-theorem proposition6_2_2 {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} (ht : t ∈ Icc 0 (π / 2)) :
+theorem proposition6_2_2 {K : Set (ℝ × ℝ)} {t : ℝ} :
     fPlus (mirrorCap K (π / 2)) t = gMinus K (π / 2 - t) ∧
       fMinus (mirrorCap K (π / 2)) t = gPlus K (π / 2 - t) ∧
       gPlus (mirrorCap K (π / 2)) t = fMinus K (π / 2 - t) ∧
       gMinus (mirrorCap K (π / 2)) t = fPlus K (π / 2 - t) := by
-  have hy := (proposition2_5_4_hallway hK t).2.2.1
-  have hv := proposition2_5_4_vertices hK t
+  have hy := (proposition2_5_4_hallway (K := K) (ω := π / 2) t).2.2.1
+  have hv := proposition2_5_4_vertices (K := K) (ω := π / 2) t
   refine ⟨?_, ?_, ?_, ?_⟩
   · rw [fPlus, hy, hv.1, inj_mirror_sub, inj_dot_mirror_vvec, gMinus]
   · rw [fMinus, hy, hv.2.1, inj_mirror_sub, inj_dot_mirror_vvec, gPlus]
@@ -198,7 +198,7 @@ lemma inj_hasDerivWithinAt_innerCorner {K : Set (ℝ × ℝ)} {s : Set ℝ} {t :
 
 /-- **Theorem 6.2.3** (`thm:inner-corner-deriv`), right derivatives at `t ∈ [0, π/2)`:
 `∂⁺y_K(t) = -f_K⁺(t) u_t + g_K⁺(t) v_t` and `∂⁺x_K(t) = -(f_K⁺(t) - 1) u_t + (g_K⁺(t) - 1) v_t`. -/
-theorem theorem6_2_3_right {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} (ht : t ∈ Ico 0 (π / 2)) :
+theorem theorem6_2_3_right {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} :
     HasDerivWithinAt (outerCorner K) (-fPlus K t • uvec t + gPlus K t • vvec t) (Ici t) t ∧
       HasDerivWithinAt (innerCorner K) (-(fPlus K t - 1) • uvec t + (gPlus K t - 1) • vvec t)
         (Ici t) t := by
@@ -223,7 +223,7 @@ theorem theorem6_2_3_right {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : �
   ext <;> simp <;> ring
 
 /-- **Theorem 6.2.3**, left derivatives at `t ∈ (0, π/2]`, with `f_K⁻` and `g_K⁻`. -/
-theorem theorem6_2_3_left {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} (ht : t ∈ Ioc 0 (π / 2)) :
+theorem theorem6_2_3_left {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} :
     HasDerivWithinAt (outerCorner K) (-fMinus K t • uvec t + gMinus K t • vvec t) (Iic t) t ∧
       HasDerivWithinAt (innerCorner K) (-(fMinus K t - 1) • uvec t + (gMinus K t - 1) • vvec t)
         (Iic t) t := by
@@ -248,7 +248,7 @@ theorem theorem6_2_3_left {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : �
   ext <;> simp <;> ring
 
 /-- **Lemma 6.2.4** (`lem:arm-length-convolution`). `g_K⁺(t) = ∫_{(t, t+π/2]} sin(u - t) σ_K(du)`. -/
-theorem lemma6_2_4 {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} (ht : t ∈ Icc 0 (π / 2)) :
+theorem lemma6_2_4 {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} :
     gPlus K t = ∫ u in Ioc t (t + π / 2), sin (u - t) ∂(sigma K) := by
   have hKc : IsConvexBody K := hK.2.1
   have hvc : Continuous vvec := (continuous_sin.neg).prodMk continuous_cos
@@ -295,7 +295,7 @@ lemma inj_dot_vplus_vvec_eq (K : Set (ℝ × ℝ)) (t : ℝ) :
   rw [sigmaFun]; ring
 
 lemma inj_continuous_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : Continuous (supp K) :=
-  continuous_supp hK.2.1 hK.1
+  continuous_supp hK.2.1
 
 lemma inj_continuous_primitive_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     Continuous fun t => ∫ s in (0 : ℝ)..t, supp K s :=
@@ -467,9 +467,8 @@ theorem theorem6_2_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
       Measure.restrict_restrict measurableSet_Ioc, inter_self]
 
 /-- The integrated form of Theorem 6.2.5:
-`f_K⁺(b) - f_K⁺(a) = ∫_a^b g_K⁺ - σ_K((a, b])` for `0 ≤ a ≤ b ≤ π/2`. -/
-theorem fPlus_sub_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b)
-    (hb : b ≤ π / 2) :
+`f_K⁺(b) - f_K⁺(a) = ∫_a^b g_K⁺ - σ_K((a, b])` for `a ≤ b`. -/
+theorem fPlus_sub_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a ≤ b) :
     fPlus K b - fPlus K a = (∫ t in a..b, gPlus K t) - (sigma K (Ioc a b)).toReal :=
   inj_fPlus_sub_fPlus hK hab
 

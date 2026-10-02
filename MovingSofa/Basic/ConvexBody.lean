@@ -113,7 +113,7 @@ lemma supp_mono {S T : Set (ℝ × ℝ)} (hST : S ⊆ T) (hS : S.Nonempty) (hT :
 lemma supp_add_two_pi (S : Set (ℝ × ℝ)) (t : ℝ) : supp S (t + 2 * π) = supp S t := by
   simp [supp, uvec_add_two_pi]
 
-lemma continuous_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) (hne : S.Nonempty) :
+lemma continuous_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) :
     Continuous (supp S) := by
   -- the supremum of a jointly continuous family over a compact set is continuous (`hne` is not
   -- needed)

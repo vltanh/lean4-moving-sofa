@@ -310,7 +310,7 @@ lemma inj_countable_atoms (K : Set (ℝ × ℝ)) : Set.Countable {x : ℝ | sigm
 /-- **Lemma 6.4.2** (`lem:leg-convergence`). If polygon caps `K_n` (rotation angle `π/2`) converge to a
 cap `K` in the Hausdorff distance, then `∫_0^{π/2} |g_{K_n}⁺ - g_K⁺| → 0`. -/
 theorem lemma6_4_2 {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
-    (hΘ : ∀ n, (Θs n).ω = π / 2) (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) (hK : IsCap K (π / 2))
+    (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) (hK : IsCap K (π / 2))
     (hlim : HausdorffTendsto Ks K) :
     Tendsto (fun n => ∫ t in (0 : ℝ)..(π / 2), |gPlus (Ks n) t - gPlus K t|) atTop (𝓝 0) := by
   have hKc : IsConvexBody K := hK.2.1
@@ -754,7 +754,7 @@ lemma inj_limit_Ioo_bound {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
       (𝓝 (∫ u in a'..b, k0 (gPlus K u))) := by
     have h1 : Tendsto (fun i => ∫ u in a'..b, k0 (gPlus (Ks i) u)) atTop
         (𝓝 (∫ u in a'..b, k0 (gPlus K u))) := by
-      have hL := lemma6_4_2 (Θs := fun i => rightAngleSet (k i)) (fun i => rfl)
+      have hL := lemma6_4_2 (Θs := fun i => rightAngleSet (k i))
         (fun i => (hKs' i).1) hcap hlim
       rw [tendsto_iff_norm_sub_tendsto_zero]
       refine squeeze_zero (fun i => norm_nonneg _) (fun i => ?_) hL
@@ -1083,12 +1083,12 @@ theorem proposition6_4_6_deriv {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) (h
     intro t ht
     rcases eq_or_lt_of_le ht.2 with htπ | htπ
     · have ht0 : 0 < t := by rw [htπ]; positivity
-      have hl := theorem6_2_3_left hK ⟨ht0, ht.2⟩
+      have hl := theorem6_2_3_left hK (t := t)
       have hg : gK K t = gMinus K t := (h5c t ⟨ht0, ht.2⟩).2
       have hsub : Icc 0 (π / 2) ⊆ Iic t := fun x hx => by rw [htπ]; exact hx.2
       rw [show fK K t = fMinus K t from rfl, hg]
       exact ⟨hl.2.mono hsub, hl.1.mono hsub⟩
-    · have hr := theorem6_2_3_right hK ⟨ht.1, htπ⟩
+    · have hr := theorem6_2_3_right hK (t := t)
       have hf : fK K t = fPlus K t := (h5a t ⟨ht.1, htπ⟩).2.symm
       have hsub : Icc 0 (π / 2) ⊆ Ici t ∨ 0 < t := by
         rcases eq_or_lt_of_le ht.1 with ht0 | ht0
@@ -1097,7 +1097,7 @@ theorem proposition6_4_6_deriv {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) (h
       rcases hsub with hsub | ht0
       · rw [hf, show gK K t = gPlus K t from rfl]
         exact ⟨hr.2.mono hsub, hr.1.mono hsub⟩
-      · have hl := theorem6_2_3_left hK ⟨ht0, ht.2⟩
+      · have hl := theorem6_2_3_left hK (t := t)
         have hg : gPlus K t = gMinus K t := (h5c t ⟨ht0, ht.2⟩).2
         have hf' : fPlus K t = fMinus K t := (h5a t ⟨ht.1, htπ⟩).2
         rw [← hf', ← hg] at hl

@@ -373,7 +373,7 @@ lemma ms_isMovement_monotonization {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω �
       (fun s => -rot (-(s * ω)) ((supp S (s * ω) - 1) • uvec (s * ω) +
         (supp S (s * ω + π / 2) - 1) • vvec (s * ω))) := by
   have hcpt := ms_isCompact_of_isMovingSofaWithAngle hS
-  have hsupp := continuous_supp hcpt hS.2.1.nonempty
+  have hsupp := continuous_supp hcpt
   refine ⟨by fun_prop, ?_, by simp, by simp, ?_, ?_, ?_⟩
   · have : Continuous fun s : ℝ => -rot (-(s * ω)) ((supp S (s * ω) - 1) • uvec (s * ω) +
         (supp S (s * ω + π / 2) - 1) • vvec (s * ω)) := by

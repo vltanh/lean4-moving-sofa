@@ -533,7 +533,7 @@ lemma mpc_niche_eventually {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {K : Set (�
   have hq2' : dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1 := hq2
   set f : ℝ → ℝ := fun s => supp K s - 1 - dot p (uvec s) with hf
   set g : ℝ → ℝ := fun s => supp K (s + π / 2) - 1 - dot p (uvec (s + π / 2)) with hg
-  have hsc := continuous_supp hK.2.1 hK.1
+  have hsc := continuous_supp hK.2.1
   have hfc : Continuous f := by
     simp only [hf, dot, uvec]
     exact (hsc.sub continuous_const).sub (by fun_prop)

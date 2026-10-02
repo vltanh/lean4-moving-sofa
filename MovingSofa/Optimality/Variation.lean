@@ -248,8 +248,8 @@ lemma opt_J_iota {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K Ks : Set (ℝ × �
   obtain ⟨hφ0, hφ4⟩ := hφ
   have hab : φ < π / 2 - φ := by linarith
   have hb : π / 2 - φ < π / 2 := by linarith
-  have hcK := continuous_supp hK.1.2.1.2.1 hK.1.2.1.1
-  have hcKs := continuous_supp hKs.1.2.1.2.1 hKs.1.2.1.1
+  have hcK := continuous_supp hK.1.2.1.2.1
+  have hcKs := continuous_supp hKs.1.2.1.2.1
   have hdc := opt_inj_deriv_continuousOn hK.2.1.2.1 hφ0 hb
   set G : ℝ → ℝ := fun t => (supp Ks t - supp K t) * iFun K t with hG
   have hL : opt_J Ks K φ (π / 2 - φ) - opt_J K K φ (π / 2 - φ) =
@@ -413,7 +413,7 @@ noncomputable def opt_H (K : Set (ℝ × ℝ)) (t : ℝ) : ℝ := ∫ s in (0 : 
 
 lemma opt_H_hasDerivAt {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     HasDerivAt (opt_H K) (supp K t) t := by
-  have hs := continuous_supp hK.2.1 hK.1
+  have hs := continuous_supp hK.2.1
   exact intervalIntegral.integral_hasDerivAt_right (hs.intervalIntegrable 0 t)
     hs.measurable.stronglyMeasurable.stronglyMeasurableAtFilter hs.continuousAt
 
@@ -464,8 +464,8 @@ lemma opt_supp_ibp {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
     ∫ t in Ioc a b, supp K₁ t ∂(sigma K₂) =
       supp K₁ b * opt_g K₂ b - supp K₁ a * opt_g K₂ a - (∫ t in a..b, opt_g K₁ t * opt_g K₂ t) +
         ∫ t in a..b, supp K₁ t * supp K₂ t := by
-  have hs₁ := continuous_supp h₁.2.1 h₁.1
-  have hs₂ := continuous_supp h₂.2.1 h₂.1
+  have hs₁ := continuous_supp h₁.2.1
+  have hs₂ := continuous_supp h₂.2.1
   obtain ⟨C₁, hC₁⟩ := opt_g_bound h₁
   obtain ⟨C₂, hC₂⟩ := opt_g_bound h₂
   have hHc : Continuous (opt_H K₂) :=
@@ -509,7 +509,7 @@ lemma opt_supp_ibp_Ioo {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁)
     ∫ t in Ioo a b, supp K₁ t ∂(sigma K₂) =
       supp K₁ b * opt_gm K₂ b - supp K₁ a * opt_g K₂ a - (∫ t in a..b, opt_g K₁ t * opt_g K₂ t) +
         ∫ t in a..b, supp K₁ t * supp K₂ t := by
-  have hs₁ := continuous_supp h₁.2.1 h₁.1
+  have hs₁ := continuous_supp h₁.2.1
   have hI : IntegrableOn (supp K₁) (Icc a b) (sigma K₂) :=
     hs₁.continuousOn.integrableOn_compact isCompact_Icc
   have h := opt_supp_ibp h₁ h₂ hab.le
@@ -560,8 +560,8 @@ lemma opt_Bs_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
     opt_Bs S ((1 - c) • K₁ + c • K₂) ((1 - c) • K₁ + c • K₂) =
       (1 - c) * ((1 - c) * opt_Bs S K₁ K₁ + c * opt_Bs S K₂ K₁) +
         c * ((1 - c) * opt_Bs S K₁ K₂ + c * opt_Bs S K₂ K₂) := by
-  have hs₁ := continuous_supp h₁.2.1 h₁.1
-  have hs₂ := continuous_supp h₂.2.1 h₂.1
+  have hs₁ := continuous_supp h₁.2.1
+  have hs₂ := continuous_supp h₂.2.1
   have hI : ∀ (f : ℝ → ℝ), Continuous f → ∀ (μ : Measure ℝ) [IsLocallyFiniteMeasure μ],
       Integrable f (μ.restrict S) := fun f hf μ _ =>
     (hf.continuousOn.integrableOn_compact (μ := μ) isCompact_Icc).mono_set hS
@@ -570,10 +570,11 @@ lemma opt_Bs_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
   have hcomb : Continuous (fun t => (1 - c) * supp K₁ t + c * supp K₂ t) := by fun_prop
   simp only [opt_Bs]
   rw [opt_sigma_comb h₁ h₂ hc, Measure.restrict_add, Measure.restrict_smul, Measure.restrict_smul,
-    integral_add_measure ((hI _ (continuous_supp (isConvexBody_comb h₁ h₂ hc).2.1
-      (isConvexBody_comb h₁ h₂ hc).1) _).smul_measure ENNReal.ofReal_ne_top)
-      ((hI _ (continuous_supp (isConvexBody_comb h₁ h₂ hc).2.1
-      (isConvexBody_comb h₁ h₂ hc).1) _).smul_measure ENNReal.ofReal_ne_top),
+    integral_add_measure
+      ((hI _ (continuous_supp (isConvexBody_comb (c := c) h₁ h₂).2.1) _).smul_measure
+        ENNReal.ofReal_ne_top)
+      ((hI _ (continuous_supp (isConvexBody_comb (c := c) h₁ h₂).2.1) _).smul_measure
+        ENNReal.ofReal_ne_top),
     integral_smul_measure, integral_smul_measure, ENNReal.toReal_ofReal hc1,
     ENNReal.toReal_ofReal hc0]
   simp only [supp_comb h₁ h₂ hc, smul_eq_mul]
@@ -692,8 +693,8 @@ theorem theorem8_5_1 : kiDomain.IsQuadratic (fun K => area K.1.1) ∧
     simp only [opt_Bs]
     ring
   rw [opt_dirDeriv_eq hd, opt_Bs_symm K.2 Ks.2]
-  have hs := continuous_supp K.1.2.2.1 K.1.2.1
-  have hss := continuous_supp Ks.1.2.2.1 Ks.1.2.1
+  have hs := continuous_supp K.1.2.2.1
+  have hss := continuous_supp Ks.1.2.2.1
   have hcap := K.2.1
   have e1 := opt_Ico_eq_Icc hcap hss Ks.2.1.2.2.2.2.2.1
   have e2 := opt_Ico_eq_Icc hcap hs K.2.1.2.2.2.2.2.1
@@ -706,12 +707,12 @@ theorem theorem8_5_1 : kiDomain.IsQuadratic (fun K => area K.1.1) ∧
 /-- **Theorem 8.5.2** (`thm:convex-curve-area-variation`). For `a < b < a + π`, `𝒥(𝐮_K^{a,b})` is
 quadratic on `𝒦` with directional derivative
 `∫_{(a,b)} (h_{K*} - h_K) dσ_K + [𝒥(v_K⁻(b), v_{K*}⁻(b)) - 𝒥(v_K⁺(a), v_{K*}⁺(a))]`. -/
-theorem theorem8_5_2 {a b : ℝ} (hab : a < b) (hb : b < a + π) :
+theorem theorem8_5_2 {a b : ℝ} (hab : a < b) :
     convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) ∧
       ∀ K Ks : ConvexBodySet, convexBodyDomain.dirDeriv (fun K => convexCurveArea K.1 a b) K Ks =
         (∫ t in Ioo a b, (supp Ks.1 t - supp K.1 t) ∂(sigma K.1)) +
           (segArea (vminus K.1 b) (vminus Ks.1 b) - segArea (vplus K.1 a) (vplus Ks.1 a)) := by
-  refine ⟨theorem7_3_2_quadratic hab hb, fun K Ks => ?_⟩
+  refine ⟨theorem7_3_2_quadratic, fun K Ks => ?_⟩
   have hd : HasDerivWithinAt (fun c => convexCurveArea (convexBodyDomain.comb c K Ks).1 a b)
       (opt_Bs (Ioo a b) Ks.1 K.1 / 2 + opt_Bs (Ioo a b) K.1 Ks.1 / 2 -
         2 * (opt_Bs (Ioo a b) K.1 K.1 / 2)) (Icc 0 1) 0 := by
@@ -726,8 +727,8 @@ theorem theorem8_5_2 {a b : ℝ} (hab : a < b) (hb : b < a + π) :
     ring
   rw [opt_dirDeriv_eq hd]
   have hanti := opt_bilin_antisymm K.2 Ks.2 hab
-  have hs := continuous_supp K.2.2.1 K.2.1
-  have hss := continuous_supp Ks.2.2.1 Ks.2.1
+  have hs := continuous_supp K.2.2.1
+  have hss := continuous_supp Ks.2.2.1
   rw [integral_sub ((hss.continuousOn.integrableOn_compact isCompact_Icc).mono_set
       Ioo_subset_Icc_self) ((hs.continuousOn.integrableOn_compact isCompact_Icc).mono_set
       Ioo_subset_Icc_self)]
@@ -1002,7 +1003,6 @@ theorem theorem8_5_6 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) (x xs : LTriple φ
         (segArea (yD φ x.1.2.2.1) (yD φ xs.1.2.2.1) -
           segArea (vplus x.1.2.2.1 (3 * π / 2)) (vplus xs.1.2.2.1 (3 * π / 2)))) (Icc 0 1) 0 := by
     have hT := theorem8_5_2 (a := 3 * π / 2) (b := 3 * π / 2 + (π / 2 - φ)) (by linarith)
-      (by linarith)
     have h := opt_quadratic_differentiableWithinAt hT.1 x.1.2.2 xs.1.2.2
     rw [hT.2] at h
     exact opt_hasDerivWithinAt_comp (x := x) (xs := xs)
@@ -1071,7 +1071,7 @@ theorem theorem8_5_6 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) (x xs : LTriple φ
       ((∫ t in Ioo (π + φ) (3 * π / 2), (supp xs.1.2.1.1 t - supp x.1.2.1.1 t) ∂(sigma x.1.2.1.1)) +
         (segArea (vminus x.1.2.1.1 (3 * π / 2)) (vminus xs.1.2.1.1 (3 * π / 2)) -
           segArea (xB φ x.1.2.1.1) (xB φ xs.1.2.1.1))) (Icc 0 1) 0 := by
-    have hT := theorem8_5_2 (a := π + φ) (b := 3 * π / 2) (by linarith) (by linarith)
+    have hT := theorem8_5_2 (a := π + φ) (b := 3 * π / 2) (by linarith)
     have h := opt_quadratic_differentiableWithinAt hT.1 x.1.2.1 xs.1.2.1
     rw [hT.2] at h
     exact opt_hasDerivWithinAt_comp (x := x) (xs := xs)

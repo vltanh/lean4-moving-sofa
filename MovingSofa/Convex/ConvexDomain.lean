@@ -168,7 +168,7 @@ abbrev ConvexBodySet : Type := {K : Set (ℝ × ℝ) // IsConvexBody K}
 
 /-- The Minkowski combination `(1 - λ) K₁ + λ K₂` of convex bodies is a convex body. -/
 theorem isConvexBody_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h₂ : IsConvexBody K₂)
-    {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) : IsConvexBody ((1 - c) • K₁ + c • K₂) :=
+    {c : ℝ} : IsConvexBody ((1 - c) • K₁ + c • K₂) :=
   ⟨h₁.1.smul_set.add h₂.1.smul_set, (h₁.2.1.smul (1 - c)).add (h₂.2.1.smul c),
     (h₁.2.2.smul (1 - c)).add (h₂.2.2.smul c)⟩
 
@@ -196,7 +196,7 @@ theorem supp_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
 open Classical in
 /-- The barycentric operation `c_λ(K₁, K₂) = (1 - λ) K₁ + λ K₂` on convex bodies. -/
 noncomputable def convexBodyComb (c : ℝ) (K₁ K₂ : ConvexBodySet) : ConvexBodySet :=
-  if hc : c ∈ Icc (0 : ℝ) 1 then ⟨(1 - c) • K₁.1 + c • K₂.1, isConvexBody_comb K₁.2 K₂.2 hc⟩ else K₁
+  if c ∈ Icc (0 : ℝ) 1 then ⟨(1 - c) • K₁.1 + c • K₂.1, isConvexBody_comb K₁.2 K₂.2⟩ else K₁
 
 /-- **Theorem 7.1.1** (`thm:convex-body-space`). The planar convex bodies form a convex domain under
 Minkowski combinations: `K ↦ h_K` embeds them into the vector space of functions `ℝ → ℝ`. -/
@@ -255,7 +255,7 @@ lemma cvx_vminus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : Convex
 
 /-- **Theorem 7.1.2** (2): for `a < b < a + π`, the vertices `v_K^±(a)` and `v_K(a, b)` are
 convex-linear in `K`. -/
-theorem theorem7_1_2_vertices (a b : ℝ) (hab : a < b) (hb : b < a + π) :
+theorem theorem7_1_2_vertices (a b : ℝ) :
     convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vplus K.1 a) ∧
       convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vminus K.1 a) ∧
       convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vint K.1 a b) :=
@@ -266,9 +266,9 @@ lemma cvx_sigmaFun_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : Conv
     sigmaFun (convexBodyComb c K₁ K₂).1 t =
       (1 - c) * sigmaFun K₁.1 t + c * sigmaFun K₂.1 t := by
   have hi₁ : IntervalIntegrable (supp K₁.1) volume 0 t :=
-    (continuous_supp K₁.2.2.1 K₁.2.1).intervalIntegrable _ _
+    (continuous_supp K₁.2.2.1).intervalIntegrable _ _
   have hi₂ : IntervalIntegrable (supp K₂.1) volume 0 t :=
-    (continuous_supp K₂.2.2.1 K₂.2.1).intervalIntegrable _ _
+    (continuous_supp K₂.2.2.1).intervalIntegrable _ _
   simp only [sigmaFun, cvx_vplus_comb hc, cvx_supp_convexBodyComb hc, dot_add_left,
     dot_smul_left]
   rw [intervalIntegral.integral_add (hi₁.const_mul _) (hi₂.const_mul _),
@@ -310,7 +310,7 @@ lemma cvx_integral_supp_sigma_bilin {X : Set ℝ} (hXb : Bornology.IsBounded X) 
       have := hR hx
       rw [Metric.mem_closedBall, Real.dist_eq, sub_zero] at this
       exact ⟨by linarith [neg_abs_le x], by linarith [le_abs_self x]⟩
-    exact ((continuous_supp K₁.2.2.1 K₁.2.1).integrableOn_Icc).mono_set hsub
+    exact ((continuous_supp K₁.2.2.1).integrableOn_Icc).mono_set hsub
   constructor
   · intro K₁ c hc v w
     show ∫ t in X, supp K₁.1 t ∂(sigma (convexBodyComb c v w).1) =

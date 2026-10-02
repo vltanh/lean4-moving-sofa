@@ -129,7 +129,7 @@ private lemma sa_bv_of_lipschitz {F : Type*} [PseudoEMetricSpace F] {f : ℝ →
 /-! ### The support function and the vertex -/
 
 private lemma sa_continuous_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : Continuous (supp K) :=
-  continuous_supp hK.2.1 hK.1
+  continuous_supp hK.2.1
 
 private lemma sa_vplus_mem {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) : vplus K t ∈ K :=
   (vplus_mem_edge hK t).1
@@ -522,8 +522,7 @@ private lemma sa_Ioc_inter_Ioc (a b c d : ℝ) : Ioc c d ∩ Ioc a b = Ioc (max 
 
 /-- **Theorem 5.2.2** (`thm:boundary-measure`). For `a < b ≤ a + 2π`, `d v_K⁺(t) = v_t σ_K` as
 measures on the half-open interval `(a, b]`. (The bound `b ≤ a + 2π` is not needed.) -/
-theorem theorem5_2_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
-    (hb : b ≤ a + 2 * π) :
+theorem theorem5_2_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) :
     (lsMeasure (vplus K) a b).restrict (Ioc a b) =
       ((sigma K).restrict (Ioc a b)).withDensityᵥ vvec := by
   have hBV := lemma5_2_1 hK a b

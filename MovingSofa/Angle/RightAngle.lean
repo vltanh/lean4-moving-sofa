@@ -753,13 +753,13 @@ lemma ang_dot_mirror (ω s : ℝ) (p : ℝ × ℝ) :
   rw [show ω + π / 2 - s = (π / 2 + ω) - s by ring, cos_sub, sin_sub]
   ring
 
-lemma ang_mirror_mem_qMinus {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCap K ω) {p : ℝ × ℝ}
+lemma ang_mirror_mem_qMinus {K : Set (ℝ × ℝ)} {ω t : ℝ} {p : ℝ × ℝ}
     (hp : p ∈ qMinus (mirrorCap K ω) t) : mirror ω p ∈ qMinus K (ω - t) := by
   rw [proposition2_2_2_qMinus] at hp ⊢
   obtain ⟨h1, h2⟩ := hp
   have h1' : dot p (uvec t) < supp (mirrorCap K ω) t - 1 := h1
   have h2' : dot p (uvec (t + π / 2)) < supp (mirrorCap K ω) (t + π / 2) - 1 := h2
-  rw [proposition2_5_4_supp hK] at h1' h2'
+  rw [proposition2_5_4_supp] at h1' h2'
   refine ⟨?_, ?_⟩
   · show dot (mirror ω p) (uvec (ω - t)) < supp K (ω - t) - 1
     rw [ang_dot_mirror, show ω + π / 2 - (ω - t) = t + π / 2 by ring]
@@ -821,16 +821,16 @@ theorem theorem4_2_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ico arcsec2
       subset_closure h3⟩
   · -- the mirror image of `K` has `h(0) = h_K(ω + π/2)`
     have h' : dMin ω + cOmega ω ≤ supp (mirrorCap K ω) 0 := by
-      rw [proposition2_5_4_supp hcap, sub_zero]; exact h
+      rw [proposition2_5_4_supp, sub_zero]; exact h
     -- `w_{K^m}° = z_K° ≤ σ_K(ω) = σ_{K^m}(π/2)` by Theorem 4.1.4
     have hw' : wedgeGapWInf (mirrorCap K ω) ω ≤ sigmaAt (mirrorCap K ω) (π / 2) := by
-      rw [ang_wedgeGapWInf_mirror hcap, ang_sigmaAt_mirror hcap, show ω + π / 2 - π / 2 = ω by ring]
+      rw [ang_wedgeGapWInf_mirror, ang_sigmaAt_mirror hcap, show ω + π / 2 - π / 2 = ω by ring]
       exact (theorem4_1_4 hK hω2).2
     obtain ⟨h1, h2, h3⟩ :=
       ang_consumed_of_supp_zero hω (proposition2_5_4_isCap hcap) hw' h'
-    have m1 := ang_mirror_mem_qMinus hcap h1
-    have m2 := ang_mirror_mem_qMinus hcap h2
-    have m3 := ang_mirror_mem_qMinus hcap h3
+    have m1 := ang_mirror_mem_qMinus h1
+    have m2 := ang_mirror_mem_qMinus h2
+    have m3 := ang_mirror_mem_qMinus h3
     obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hω0, hω.2⟩
     rw [hP1, ang_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
     rw [hP2, ang_mirror_smul, ang_mirror_vvec, ← hP1] at m3
@@ -1068,7 +1068,7 @@ theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S
   have hτc : Continuous τf := by rw [hτf]; fun_prop
   have hec : Continuous e := by
     rw [he]
-    exact continuous_const.prodMk ((continuous_supp hSc hSne).comp (by fun_prop))
+    exact continuous_const.prodMk ((continuous_supp hSc).comp (by fun_prop))
   have hτmaps : MapsTo τf (Icc 0 1) (Icc 0 1) := fun s _ =>
     ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩
   have hτ0 : τf 0 = 0 := by simp only [hτf]; norm_num

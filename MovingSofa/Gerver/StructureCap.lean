@@ -899,7 +899,7 @@ lemma gs_intervalIntegrable_rC' (a b : ℝ) :
 /-! ### The distribution function of `σ_{K_G}` -/
 
 lemma gs_continuous_supp_K (hP : P.IsSolution) (hB : P.Bounds) : Continuous (supp P.gs_K) :=
-  continuous_supp (gs_isConvexBody_K hP hB).2.1 (gs_isConvexBody_K hP hB).1
+  continuous_supp (gs_isConvexBody_K hP hB).2.1
 
 lemma gs_hasDerivAt_primitive (hP : P.IsSolution) (hB : P.Bounds) (t : ℝ) :
     HasDerivAt (fun u => ∫ x in (0 : ℝ)..u, supp P.gs_K x) (supp P.gs_K t) t :=

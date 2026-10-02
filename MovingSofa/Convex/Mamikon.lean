@@ -189,7 +189,7 @@ lemma cvx_supp_primitive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a t : ℝ
       (cvx_measurable_suppDeriv hK).aestronglyMeasurable
       (Eventually.of_forall hC)).intervalIntegrable
   rw [intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hat
-    (continuous_supp hK.2.1 hK.1).continuousOn
+    (continuous_supp hK.2.1).continuousOn
     (fun s _ => (hasDerivWithinAt_supp_right hK s).mono Ioi_subset_Ici_self) hint]
   abel
 

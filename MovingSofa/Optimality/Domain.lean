@@ -302,7 +302,7 @@ lemma opt_comb_isCap (h₁ : IsCap K₁ (π / 2)) (h₂ : IsCap K₂ (π / 2)) (
   set M := (1 - c) • K₁ + c • K₂ with hM
   have hcb₁ := h₁.2.1
   have hcb₂ := h₂.2.1
-  have hMcb : IsConvexBody M := isConvexBody_comb hcb₁ hcb₂ hc
+  have hMcb : IsConvexBody M := isConvexBody_comb hcb₁ hcb₂
   have sM : ∀ t, supp M t = (1 - c) * supp K₁ t + c * supp K₂ t := supp_comb hcb₁ hcb₂ hc
   have e2 : supp M (π / 2) = 1 := by rw [sM, h₁.2.2.2.1, h₂.2.2.2.1]; ring
   have e3 : supp M (3 * π / 2) = 0 := by rw [sM, h₁.2.2.2.2.2.1, h₂.2.2.2.2.2.1]; ring
@@ -470,7 +470,7 @@ lemma opt_comb_area (h₁ : IsCap K₁ (π / 2)) (h₂ : IsCap K₂ (π / 2)) (h
   set M := (1 - c) • K₁ + c • K₂ with hM
   have hcb₁ := h₁.2.1
   have hcb₂ := h₂.2.1
-  have hMcb : IsConvexBody M := isConvexBody_comb hcb₁ hcb₂ hc
+  have hMcb : IsConvexBody M := isConvexBody_comb hcb₁ hcb₂
   have hc0 := hc.1
   have hc1 : 0 ≤ 1 - c := sub_nonneg.mpr hc.2
   have hslice : ∀ y : ℝ, ENNReal.ofReal (1 - c) * volume ((fun x : ℝ => (x, y)) ⁻¹' K₁) +
@@ -574,8 +574,8 @@ theorem proposition8_1_2 {φ : ℝ} {K₁ B₁ D₁ K₂ B₂ D₂ : Set (ℝ ×
   have sD := supp_comb hD₁ hD₂ hc
   have hc0 := hc.1
   have hc1 : 0 ≤ 1 - c := sub_nonneg.mpr hc.2
-  refine ⟨theorem8_1_1_convex hK₁ hK₂ hc, isConvexBody_comb hB₁ hB₂ hc,
-    isConvexBody_comb hD₁ hD₂ hc, Set.add_subset_add (Set.smul_set_mono hBK₁) (Set.smul_set_mono hBK₂),
+  refine ⟨theorem8_1_1_convex hK₁ hK₂ hc, isConvexBody_comb hB₁ hB₂,
+    isConvexBody_comb hD₁ hD₂, Set.add_subset_add (Set.smul_set_mono hBK₁) (Set.smul_set_mono hBK₂),
     Set.add_subset_add (Set.smul_set_mono hDK₁) (Set.smul_set_mono hDK₂), ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro t ht
     rw [sK, sB]

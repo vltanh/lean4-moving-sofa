@@ -79,7 +79,7 @@ lemma af_exists_dot_eq_supp (hK : IsConvexBody K) {q : ℝ × ℝ} (hq : q ∈ K
     lt_of_le_of_ne (dot_le_supp hK.2.1 hq t) (fun h => hcon ⟨t, h⟩)
   set g : ℝ → ℝ := fun t => supp K t - dot q (uvec t) with hg_def
   have hg : Continuous g :=
-    (continuous_supp hK.2.1 hK.1).sub (by unfold dot uvec; fun_prop)
+    (continuous_supp hK.2.1).sub (by unfold dot uvec; fun_prop)
   have hgper : Periodic g (2 * π) := fun t => by
     simp only [hg_def, supp_add_two_pi, uvec_add_two_pi]
   obtain ⟨t₀, -, hmin⟩ :=
@@ -338,7 +338,7 @@ noncomputable def af_height (K : Set (ℝ × ℝ)) (c : ℝ × ℝ) (y : ℝ) : 
 /-- `t ↦ h_K(t) - c · u_t` is continuous. -/
 lemma af_continuous_supp_sub (hK : IsConvexBody K) (c : ℝ × ℝ) :
     Continuous fun t => supp K t - dot c (uvec t) :=
-  (continuous_supp hK.2.1 hK.1).sub (by unfold dot uvec; fun_prop)
+  (continuous_supp hK.2.1).sub (by unfold dot uvec; fun_prop)
 
 lemma af_measurable_height (hK : IsConvexBody K) (hP : 0 < af_perim K) (c : ℝ × ℝ) :
     Measurable (af_height K c) :=
@@ -591,7 +591,7 @@ end AreaFormulaProof
 /-- `|K| = ½ ∫_{[0, 2π)} h_K dσ_K` for every planar convex body `K`. -/
 theorem area_eq_half_integral_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     area K = (1 / 2) * ∫ t in Ico 0 (2 * π), supp K t ∂(sigma K) := by
-  have hsupp : Continuous (supp K) := continuous_supp hK.2.1 hK.1
+  have hsupp : Continuous (supp K) := continuous_supp hK.2.1
   have hper : supp K (2 * π) = supp K 0 := by
     have := supp_add_two_pi K 0
     rwa [zero_add] at this

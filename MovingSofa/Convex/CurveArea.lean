@@ -480,7 +480,7 @@ theorem proposition7_2_4 (p q : ℝ × ℝ) : curveArea (fun s => p + s • (q -
   · intro t _
     simp [smul_sub]
 
-theorem proposition7_2_4_line {p q : ℝ × ℝ} {t h d : ℝ} (hp : p ∈ line t h) (hq : q ∈ line t h)
+theorem proposition7_2_4_line {p q : ℝ × ℝ} {t h d : ℝ} (hp : p ∈ line t h)
     (hd : q - p = d • vvec t) : segArea p q = h * d / 2 := by
   have hq' : q = p + d • vvec t := by rw [← hd]; abel
   simp only [line, Set.mem_ofPred_eq] at hp
@@ -496,7 +496,7 @@ theorem proposition7_2_5 {p q : ℝ × ℝ} {t : ℝ} (hp : p ∈ line t 0) (hq 
       simp only [line, Set.mem_ofPred_eq] at hp hq
       rw [dot_sub_left, hp, hq, sub_zero]
     conv_lhs => rw [eq_dot_uvec_smul_add (q - p) t, h0, zero_smul, zero_add]
-  rw [proposition7_2_4_line hp hq hd]
+  rw [proposition7_2_4_line hp hd]
   ring
 
 /-- **Proposition 7.2.6** (`pro:curve-area-functional-additive`). The curve area functional is

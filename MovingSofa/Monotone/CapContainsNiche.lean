@@ -274,7 +274,7 @@ theorem proposition2_5_1 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       intro t ht
       exact lt_of_le_of_ne (hK.dot_le hzK t) (fun h => hz (mem_iUnion₂.2 ⟨t, ht, hzK, h⟩))
     have hcont : Continuous fun t => supp K t - dot z (uvec t) := by
-      have := continuous_supp hK.isCompact hK.nonempty
+      have := continuous_supp hK.isCompact
       have hu : Continuous uvec := by unfold uvec; fun_prop
       exact this.sub (cn_continuous_dot.comp (continuous_const.prodMk hu))
     obtain ⟨t0, ht0, hmin⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := ω + π / 2)).exists_isMinOn
@@ -617,12 +617,11 @@ theorem proposition2_5_4_isCap {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
       · rfl
       · ext p; simp only [halfMinus, mem_ofPred_eq, uvec_add_two_pi]
 
-theorem proposition2_5_4_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t : ℝ) :
+theorem proposition2_5_4_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     supp (mirrorCap K ω) t = supp K (ω + π / 2 - t) := by
-  -- true for every set `K` (the hypothesis `hK` is not needed)
   exact cn_supp_mirror ω t K
 
-theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t : ℝ) :
+theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     suppHallway (mirrorCap K ω) t = mirror ω '' suppHallway K (ω - t) ∧
       innerCorner (mirrorCap K ω) t = mirror ω (innerCorner K (ω - t)) ∧
       outerCorner (mirrorCap K ω) t = mirror ω (outerCorner K (ω - t)) ∧
@@ -632,7 +631,6 @@ theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K
       wallD (mirrorCap K ω) t = mirror ω '' wallB K (ω - t) ∧
       wedgeW (mirrorCap K ω) t = mirror ω (wedgeZ K ω (ω - t)) ∧
       wedgeZ (mirrorCap K ω) ω t = mirror ω (wedgeW K (ω - t)) := by
-  -- true for every set `K` (the hypothesis `hK` is not needed)
   refine ⟨cn_suppHallway_mirror K ω t, cn_innerCorner_mirror K ω t, cn_outerCorner_mirror K ω t,
     ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [mirrorCap, wallA, cn_image_hallwayMap_mirror, cn_swap_aL]; rfl
@@ -649,33 +647,31 @@ theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K
     · simp [vvec]; ring
     · simp [vvec]; ring
 
-theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t : ℝ) :
+theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     aPlus (mirrorCap K ω) t = mirror ω (cMinus K (ω - t)) ∧
       aMinus (mirrorCap K ω) t = mirror ω (cPlus K (ω - t)) ∧
       cPlus (mirrorCap K ω) t = mirror ω (aMinus K (ω - t)) ∧
       cMinus (mirrorCap K ω) t = mirror ω (aPlus K (ω - t)) := by
-  -- true for every set `K` (the hypothesis `hK` is not needed)
   simp only [aPlus, aMinus, cPlus, cMinus, mirrorCap, cn_vplus_mirror, cn_vminus_mirror,
     show ω - t + π / 2 = ω + π / 2 - t by ring, show ω + π / 2 - (t + π / 2) = ω - t by ring,
     and_self]
 
-theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t : ℝ) :
+theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     wedgeGapW (mirrorCap K ω) t = wedgeGapZ K ω (ω - t) ∧
       wedgeGapZ (mirrorCap K ω) ω t = wedgeGapW K (ω - t) := by
-  obtain ⟨-, -, -, -, -, -, -, hW, hZ⟩ := proposition2_5_4_hallway hK t
-  obtain ⟨-, hA0, -, -⟩ := proposition2_5_4_vertices hK 0
-  obtain ⟨-, -, hCω, -⟩ := proposition2_5_4_vertices hK ω
+  obtain ⟨-, -, -, -, -, -, -, hW, hZ⟩ := proposition2_5_4_hallway (K := K) (ω := ω) t
+  obtain ⟨-, hA0, -, -⟩ := proposition2_5_4_vertices (K := K) (ω := ω) 0
+  obtain ⟨-, -, hCω, -⟩ := proposition2_5_4_vertices (K := K) (ω := ω) ω
   constructor
   · rw [wedgeGapW, wedgeGapZ, hA0, hW, ← cn_mirror_sub, cn_dot_mirror_uvec, sub_zero, sub_zero,
       ← uvec_add_pi_div_two]
   · rw [wedgeGapW, wedgeGapZ, hCω, hZ, ← cn_mirror_sub, cn_dot_mirror_vvec, sub_self,
       show ω + π / 2 - ω = 0 + π / 2 by ring, vvec_add_pi_div_two, dot_neg_right, neg_neg]
 
-theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t : ℝ) :
+theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     upperBoundary (mirrorCap K ω) ω = mirror ω '' upperBoundary K ω ∧
       wedge (mirrorCap K ω) ω t = mirror ω '' wedge K ω (ω - t) ∧
       niche (mirrorCap K ω) ω = mirror ω '' niche K ω := by
-  -- true for every set `K` (the hypothesis `hK` is not needed)
   refine ⟨?_, ?_, ?_⟩
   · ext p
     rw [cn_mem_mirror_image]
@@ -707,7 +703,7 @@ theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω
 private lemma cn_leftLim_sigmaFun {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (d : ℝ) :
     Function.leftLim (sigmaFun K) d =
       dot (vminus K d) (vvec d) + ∫ s in (0 : ℝ)..d, supp K s := by
-  have hcont : Continuous (supp K) := continuous_supp hK.2.1 hK.1
+  have hcont : Continuous (supp K) := continuous_supp hK.2.1
   apply leftLim_eq_of_tendsto
   have h1 : Filter.Tendsto (vplus K) (nhdsWithin d (Iio d)) (nhds (vminus K d)) :=
     tendsto_vplus_left hK d
@@ -723,7 +719,7 @@ theorem proposition2_5_4_sigma {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
     sigma (mirrorCap K ω) = (sigma K).map (fun s => ω + π / 2 - s) := by
   have hKc := hK.isConvexBody
   have hK'c := (proposition2_5_4_isCap hK).isConvexBody
-  have hcont : Continuous (supp K) := continuous_supp hK.isCompact hK.nonempty
+  have hcont : Continuous (supp K) := continuous_supp hK.isCompact
   have hint : ∀ a b, IntervalIntegrable (supp K) MeasureTheory.volume a b :=
     fun a b => hcont.intervalIntegrable a b
   -- the distribution function of `σ_{K^m}` in terms of the left limits of that of `σ_K`
@@ -1264,7 +1260,7 @@ private lemma cn_isMovement {K S : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω
       (fun s => (1 - supp K (ω * s), 1 - supp K (ω * s + π / 2))) where
   continuousOn_angle := by fun_prop
   continuousOn_shift := by
-    have hc := continuous_supp hK.isCompact hK.nonempty
+    have hc := continuous_supp hK.isCompact
     exact (Continuous.prodMk (continuous_const.sub (hc.comp (continuous_const.mul continuous_id)))
       (continuous_const.sub (hc.comp ((continuous_const.mul continuous_id).add
         continuous_const)))).continuousOn

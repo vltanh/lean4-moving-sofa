@@ -232,7 +232,7 @@ lemma opt_tangentParam_mono {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : �
 lemma opt_tangentParam_dot_continuousOn {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t a b : ℝ}
     (ha : t - π < a) (hb : b ≤ t) :
     ContinuousOn (fun s => dot (tangentParam K t s) (vvec t)) (Icc a b) := by
-  have hsupp := continuous_supp hK.2.1 hK.1
+  have hsupp := continuous_supp hK.2.1
   intro s hs
   rcases lt_or_eq_of_le (hs.2.trans hb) with hst | hst
   · have hS : 0 < sin (t - s) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [hs.1])
@@ -306,7 +306,7 @@ theorem theorem8_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t a b : ℝ} 
     ring
 
 /-- **Theorem 8.3.2** (`thm:tangent-line-param-linear`). `𝐥_K^t|_{[a,b]}` is convex-linear in `K`. -/
-theorem theorem8_3_2 {t a b : ℝ} (ha : t - π < a) (hab : a ≤ b) (hb : b ≤ t)
+theorem theorem8_3_2 {t a b : ℝ} (hab : a ≤ b) (hb : b ≤ t)
     (K₁ K₂ : ConvexBodySet) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (s : ℝ) (hs : s ∈ Icc a b) :
     tangentParam (convexBodyComb c K₁ K₂).1 t s =
       (1 - c) • tangentParam K₁.1 t s + c • tangentParam K₂.1 t s := by
@@ -314,7 +314,7 @@ theorem theorem8_3_2 {t a b : ℝ} (ha : t - π < a) (hab : a ≤ b) (hb : b ≤
   have hst : s ≤ t := hs.2.trans hb
   rcases lt_or_eq_of_le hst with h | h
   · simp only [tangentParam, h, ↓reduceIte]
-    exact (theorem7_1_2_vertices s t h (by linarith [hs.1])).2.2 c hc K₁ K₂
+    exact (theorem7_1_2_vertices s t).2.2 c hc K₁ K₂
   · rw [h]
     simp only [tangentParam, lt_irrefl, ↓reduceIte]
     exact opt_vminus_linear t c hc K₁ K₂
@@ -399,7 +399,7 @@ lemma opt_mamikon_tangent {t a b : ℝ} (hab : a < b) (hb : b < a + π) (ha : t 
       simp only [tangentParam, lt_irrefl, ↓reduceIte]
       exact dot_vminus_uvec K.1 s
   · intro K₁ K₂ c hc s hs
-    exact theorem8_3_2 ha hab.le hbt K₁ K₂ hc s hs
+    exact theorem8_3_2 hab.le hbt K₁ K₂ hc s hs
 
 /-- Mamikon's area with the outer corner is convex and quadratic. -/
 lemma opt_mamikon_outer {a b : ℝ} (hab : a < b) (hb : b < a + π) :
@@ -823,7 +823,7 @@ lemma opt_sigmaStieltjes_apply (hK : IsConvexBody K) (t : ℝ) :
 /-- `σ_K((π, 3π/2)) = 0` for a cap. -/
 lemma opt_cap_sigma_Ioo_left (hK : IsCap K (π / 2)) : sigma K (Ioo π (3 * π / 2)) = 0 := by
   have hcb := hK.2.1
-  have hsupp := continuous_supp hcb.2.1 hcb.1
+  have hsupp := continuous_supp hcb.2.1
   have hconst : ∀ t ∈ Ico π (3 * π / 2), sigmaFun K t = sigmaFun K π := by
     intro t ht
     have hv : ∀ s ∈ Ico π (3 * π / 2), vplus K s = (-supp K π, 0) := by
@@ -859,7 +859,7 @@ lemma opt_cap_sigma_Ioo_left (hK : IsCap K (π / 2)) : sigma K (Ioo π (3 * π /
 lemma opt_cap_sigma_Ioo_right (hK : IsCap K (π / 2)) :
     sigma K (Ioo (3 * π / 2) (2 * π)) = 0 := by
   have hcb := hK.2.1
-  have hsupp := continuous_supp hcb.2.1 hcb.1
+  have hsupp := continuous_supp hcb.2.1
   have hconst : ∀ t ∈ Ico (3 * π / 2) (2 * π), sigmaFun K t = sigmaFun K (3 * π / 2) := by
     intro t ht
     have hv : ∀ s ∈ Ico (3 * π / 2) (2 * π), vplus K s = (supp K 0, 0) := by
@@ -925,7 +925,7 @@ lemma opt_area_eq_cca {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × 
   have hcap := hK.1
   have hcb := hcap.2.1
   have h1 := hK.2.1.1
-  have hf := continuous_supp hcb.2.1 hcb.1
+  have hf := continuous_supp hcb.2.1
   set σ := sigma K with hσ
   have hint : ∀ a b : ℝ, IntegrableOn (supp K) (Icc a b) σ := fun a b =>
     hf.continuousOn.integrableOn_compact isCompact_Icc

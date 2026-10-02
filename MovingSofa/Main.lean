@@ -153,13 +153,13 @@ theorem theorem8_5_7 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (xs
   set gB : ℝ → ℝ := fun t => suppBreve xs.1.2.1.1 t - suppBreve (rightBody P.φ P.cap) t with hgB
   set gD : ℝ → ℝ := fun t => suppBreve xs.1.2.2.1 t - suppBreve (leftBody P.φ P.cap) t with hgD
   have hfc : Continuous f :=
-    (continuous_supp hKs.2.1 hKs.1).sub (continuous_supp hK.2.1 hK.1)
+    (continuous_supp hKs.2.1).sub (continuous_supp hK.2.1)
   have hgBc : Continuous gB :=
-    ((continuous_supp hBs.2.1 hBs.1).comp (continuous_id.add continuous_const)).sub
-      ((continuous_supp hB.2.1 hB.1).comp (continuous_id.add continuous_const))
+    ((continuous_supp hBs.2.1).comp (continuous_id.add continuous_const)).sub
+      ((continuous_supp hB.2.1).comp (continuous_id.add continuous_const))
   have hgDc : Continuous gD :=
-    ((continuous_supp hDs.2.1 hDs.1).comp (continuous_id.add continuous_const)).sub
-      ((continuous_supp hD.2.1 hD.1).comp (continuous_id.add continuous_const))
+    ((continuous_supp hDs.2.1).comp (continuous_id.add continuous_const)).sub
+      ((continuous_supp hD.2.1).comp (continuous_id.add continuous_const))
   set Sι := Icc P.φ (π / 2 - P.φ) ∪ Icc (P.φ + π / 2) (π - P.φ) with hSι
   set ι := (iota P.cap).restrict Sι
   set β := (sigmaBreve (rightBody P.φ P.cap)).restrict (Ico (π / 2 - P.θ) (π / 2))

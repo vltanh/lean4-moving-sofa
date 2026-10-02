@@ -127,11 +127,11 @@ lemma opt_outerCorner_linear (t : ℝ) :
 
 lemma opt_vplus_linear (a : ℝ) :
     convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vplus K.1 a) :=
-  (theorem7_1_2_vertices a (a + 1) (by linarith) (by linarith [two_le_pi])).1
+  (theorem7_1_2_vertices a (a + 1)).1
 
 lemma opt_vminus_linear (a : ℝ) :
     convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vminus K.1 a) :=
-  (theorem7_1_2_vertices a (a + 1) (by linarith) (by linarith [two_le_pi])).2.1
+  (theorem7_1_2_vertices a (a + 1)).2.1
 
 /-! #### Regularity of the support function and of `𝐱_K`, `𝐲_K` -/
 
@@ -222,7 +222,7 @@ lemma opt_outerCorner_eq_frame (K : Set (ℝ × ℝ)) (t : ℝ) :
 
 lemma opt_innerCorner_continuous {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     Continuous (innerCorner K) := by
-  have hs := continuous_supp hK.2.1 hK.1
+  have hs := continuous_supp hK.2.1
   have : innerCorner K = fun t => (supp K t - 1) • uvec t + (supp K (t + π / 2) - 1) • vvec t :=
     funext (proposition2_2_2_innerCorner K)
   rw [this]
@@ -231,7 +231,7 @@ lemma opt_innerCorner_continuous {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
 
 lemma opt_outerCorner_continuous {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     Continuous (outerCorner K) := by
-  have hs := continuous_supp hK.2.1 hK.1
+  have hs := continuous_supp hK.2.1
   have : outerCorner K = fun t => supp K t • uvec t + supp K (t + π / 2) • vvec t :=
     funext (proposition2_2_2_outerCorner K)
   rw [this]
@@ -471,7 +471,7 @@ theorem proposition8_2_1 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) : (lDomain φ)
     opt_isQuadratic_comp (opt_projK_linear φ) theorem7_1_3_quadratic
   have t2 : (lDomain φ).IsQuadratic
       (fun x => convexCurveArea x.1.2.2.1 (3 * π / 2) (3 * π / 2 + (π / 2 - φ))) :=
-    opt_isQuadratic_comp (opt_projD_linear φ) (theorem7_3_2_quadratic (by linarith) (by linarith))
+    opt_isQuadratic_comp (opt_projD_linear φ) (theorem7_3_2_quadratic)
   have t3 : (lDomain φ).IsQuadratic (fun x => segArea (yD φ x.1.2.2.1) (xLeft φ x.1.1.1)) :=
     opt_isQuadratic_segArea
       (opt_isConvexLinear_comp (f := fun x : LTriple φ => x.1.2.2)
@@ -494,7 +494,7 @@ theorem proposition8_2_1 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) : (lDomain φ)
         (g := fun K : ConvexBodySet => vplus K.1 (π + φ))
         (opt_projB_linear φ) (opt_vplus_linear _))
   have t6 : (lDomain φ).IsQuadratic (fun x => convexCurveArea x.1.2.1.1 (π + φ) (3 * π / 2)) :=
-    opt_isQuadratic_comp (opt_projB_linear φ) (theorem7_3_2_quadratic (by linarith) (by linarith))
+    opt_isQuadratic_comp (opt_projB_linear φ) (theorem7_3_2_quadratic)
   exact opt_isQuadratic_add (opt_isQuadratic_add (opt_isQuadratic_sub
     (opt_isQuadratic_add (opt_isQuadratic_add t1 t2) t3) t4) t5) t6
 

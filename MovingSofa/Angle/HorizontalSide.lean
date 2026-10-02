@@ -308,7 +308,7 @@ lemma ang_cos_pos_of_mem_Icc {ω t : ℝ} (hω : ω < π / 2) (ht : t ∈ Icc 0 
 
 lemma ang_continuousOn_wedgeGapW {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ω : ℝ}
     (hω : ω < π / 2) : ContinuousOn (wedgeGapW K) (Icc 0 ω) := by
-  have hcont := continuous_supp hK.2.1 hK.1
+  have hcont := continuous_supp hK.2.1
   have : wedgeGapW K = fun t => supp K 0 - (supp K t - 1) / cos t :=
     funext (ang_wedgeGapW_eq K)
   rw [this]
@@ -337,7 +337,7 @@ lemma ang_wedgeGapWInf_le_supp_zero {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCa
   have hω0 := hK.1.1
   have hcos := ang_cos_pos_of_cap hK.1 hω
   have hcont : ContinuousAt (fun t => supp K 0 - (supp K t - 1) / cos t) ω :=
-    continuousAt_const.sub (((continuous_supp hcb.2.1 hcb.1).continuousAt.sub
+    continuousAt_const.sub (((continuous_supp hcb.2.1).continuousAt.sub
       continuousAt_const).div continuous_cos.continuousAt hcos.ne')
   have hval : supp K 0 - (supp K ω - 1) / cos ω = supp K 0 := by rw [hK.2.2.1]; simp
   have htend : Tendsto (wedgeGapW K) (𝓝[<] ω) (𝓝 (supp K 0)) := by
@@ -362,7 +362,7 @@ lemma ang_cos_sub_pos_of_mem_Icc {ω t : ℝ} (hω : ω < π / 2) (ht : t ∈ Ic
 
 lemma ang_continuousOn_wedgeGapZ {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ω : ℝ}
     (hω : ω < π / 2) : ContinuousOn (wedgeGapZ K ω) (Icc 0 ω) := by
-  have hcont := continuous_supp hK.2.1 hK.1
+  have hcont := continuous_supp hK.2.1
   have : wedgeGapZ K ω = fun t => supp K (ω + π / 2) - (supp K (t + π / 2) - 1) / cos (ω - t) :=
     funext (ang_wedgeGapZ_eq K ω)
   rw [this]
@@ -393,7 +393,7 @@ lemma ang_wedgeGapZInf_le_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   have hcos := ang_cos_pos_of_cap hK.1 hω
   have hcont : ContinuousAt
       (fun t => supp K (ω + π / 2) - (supp K (t + π / 2) - 1) / cos (ω - t)) 0 :=
-    continuousAt_const.sub ((((continuous_supp hcb.2.1 hcb.1).comp
+    continuousAt_const.sub ((((continuous_supp hcb.2.1).comp
       (continuous_id.add continuous_const)).continuousAt.sub continuousAt_const).div
       (continuous_cos.comp (continuous_const.sub continuous_id)).continuousAt
       (by simpa using hcos.ne'))
@@ -633,12 +633,12 @@ def ang_IooReflect (ω : ℝ) : Ioo (0 : ℝ) ω ≃ Ioo (0 : ℝ) ω where
   left_inv t := by ext; simp
   right_inv t := by ext; simp
 
-lemma ang_wedgeGapWInf_mirror {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
+lemma ang_wedgeGapWInf_mirror {K : Set (ℝ × ℝ)} {ω : ℝ} :
     wedgeGapWInf (mirrorCap K ω) ω = wedgeGapZInf K ω := by
   unfold wedgeGapWInf wedgeGapZInf
   calc ⨅ t : Ioo 0 ω, wedgeGapW (mirrorCap K ω) t
       = ⨅ t : Ioo 0 ω, wedgeGapZ K ω (ang_IooReflect ω t) := by
-        congr 1; ext t; exact (proposition2_5_4_gaps hK t).1
+        congr 1; ext t; exact (proposition2_5_4_gaps (K := K) (ω := ω) t).1
     _ = ⨅ t : Ioo 0 ω, wedgeGapZ K ω t :=
         (ang_IooReflect ω).iInf_comp (g := fun s : Ioo 0 ω => wedgeGapZ K ω s)
 
@@ -973,8 +973,8 @@ lemma ang_tendsto_sigmaFun {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)
   have h0 : Tendsto (fun n => hausdorffDist (Ks n) K * |t - 0|) atTop (𝓝 0) := by
     simpa using hlim.mul_const |t - 0|
   refine squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) h0
-  have hc1 := continuous_supp (hKs n).2.1 (hKs n).1
-  have hc2 := continuous_supp hK.2.1 hK.1
+  have hc1 := continuous_supp (hKs n).2.1
+  have hc2 := continuous_supp hK.2.1
   rw [← intervalIntegral.integral_sub (hc1.intervalIntegrable _ _) (hc2.intervalIntegrable _ _)]
   refine intervalIntegral.norm_integral_le_of_norm_le_const fun s _ => ?_
   rw [Real.norm_eq_abs]
@@ -1108,8 +1108,8 @@ lemma ang_tendsto_integral_supp {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ ×
   have h0 : Tendsto (fun n => hausdorffDist (Ks n) K * |b - a|) atTop (𝓝 0) := by
     simpa using hlim.mul_const |b - a|
   refine squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) h0
-  have hc1 := continuous_supp (hKs n).2.1 (hKs n).1
-  have hc2 := continuous_supp hK.2.1 hK.1
+  have hc1 := continuous_supp (hKs n).2.1
+  have hc2 := continuous_supp hK.2.1
   rw [← intervalIntegral.integral_sub (hc1.intervalIntegrable _ _) (hc2.intervalIntegrable _ _)]
   refine intervalIntegral.norm_integral_le_of_norm_le_const fun s _ => ?_
   rw [Real.norm_eq_abs]

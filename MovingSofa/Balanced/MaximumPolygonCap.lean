@@ -2022,7 +2022,7 @@ lemma mpc_mirror_polycap {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonC
       intro r
       rw [← mpc_dot_mirror, mpc_mirror_mirror]
     have hsK : ∀ r, supp (mirrorCap K Θ.ω) r = supp K (Θ.ω + π / 2 - r) :=
-      proposition2_5_4_supp hK.1
+      proposition2_5_4_supp
     constructor
     · rintro ⟨s, hs, hqs⟩
       refine ⟨Θ.ω - s, mpc_mem_mirror_angles.1 hs, ?_⟩

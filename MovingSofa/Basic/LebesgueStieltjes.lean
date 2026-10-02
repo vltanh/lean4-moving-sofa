@@ -300,7 +300,7 @@ theorem lemma5_1_3 {f g : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     (hfr : ∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x)
     (hgr : ∀ x ∈ Ico a b, ContinuousWithinAt g (Ici x) x)
     (hcont : ContinuousOn f (Icc a b) ∨ ContinuousOn g (Icc a b))
-    {X : Set ℝ} (hX : MeasurableSet X) (hXab : X ⊆ Icc a b) :
+    {X : Set ℝ} (hXab : X ⊆ Icc a b) :
     lsMeasure (fun t => f t * g t) a b X =
       (∫ᵛ t in X, g t ∂• lsMeasure f a b) + (∫ᵛ t in X, f t ∂• lsMeasure g a b) := by
   have hF := sa_boundedVariationOn_clampFun hab hf

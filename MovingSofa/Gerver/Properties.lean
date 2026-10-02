@@ -1410,7 +1410,7 @@ lemma gm_sigma_Ioc {C : Set (ℝ × ℝ)} (hC : IsConvexBody C) {ψ a b : ℝ} (
   set F : ℝ → ℝ := fun t => sigmaFun C (t + ψ) with hF
   set I : ℝ → ℝ := fun t => ∫ s in (0 : ℝ)..(t + ψ), supp C s with hI
   set G : ℝ → ℝ := fun t => dot (γ t) (vvec (t + ψ)) + I t with hG
-  have hcs : Continuous (supp C) := continuous_supp hC.2.1 hC.1
+  have hcs : Continuous (supp C) := continuous_supp hC.2.1
   have hId : ∀ t, HasDerivAt I (supp C (t + ψ)) t := fun t =>
     ((hcs.integral_hasStrictDerivAt 0 (t + ψ)).hasDerivAt).comp_add_const t ψ
   have hIc : Continuous I := continuous_iff_continuousAt.2 fun t => (hId t).continuousAt
@@ -2145,7 +2145,7 @@ lemma gm_convexCurveArea_B : convexCurveArea (rightBody P.φ P.cap) (π + P.φ) 
   have hB := gm_isConvexBody_B hP hbox
   have hc2 : π / 2 - P.θ < π / 2 := (gm_c_lt_d hP).trans (gm_d_lt hP)
   have hcont : Continuous (suppBreve (rightBody P.φ P.cap)) :=
-    (continuous_supp hB.2.1 hB.1).comp (continuous_id.add continuous_const)
+    (continuous_supp hB.2.1).comp (continuous_id.add continuous_const)
   unfold convexCurveArea
   congr 1
   have h1 : ∫ t in Ioo (π + P.φ) (3 * π / 2), supp (rightBody P.φ P.cap) t
@@ -2176,7 +2176,7 @@ lemma gm_convexCurveArea_D :
   have hD := gm_isConvexBody_D hP hbox
   have hθ0 := gm_θ_pos hP
   have hcont : Continuous (suppBreve (leftBody P.φ P.cap)) :=
-    (continuous_supp hD.2.1 hD.1).comp (continuous_id.add continuous_const)
+    (continuous_supp hD.2.1).comp (continuous_id.add continuous_const)
   unfold convexCurveArea
   congr 1
   have h1 : ∫ t in Ioo (3 * π / 2) (3 * π / 2 + (π / 2 - P.φ)), supp (leftBody P.φ P.cap) t

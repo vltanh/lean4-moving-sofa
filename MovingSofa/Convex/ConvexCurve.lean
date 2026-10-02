@@ -602,7 +602,7 @@ lemma cvx_lsMeasure_vplus_restrict_Ioo {K : Set (ℝ × ℝ)} (hK : IsConvexBody
       (Filter.Eventually.of_forall cvx_norm_vvec_le)
   have e : Ioo a b = Ioo a b ∩ Ioc a b := (inter_eq_left.2 Ioo_subset_Ioc_self).symm
   conv_lhs => rw [e, ← VectorMeasure.restrict_restrict _ measurableSet_Ioo measurableSet_Ioc]
-  rw [theorem5_2_2 hK hab hb', cvx_withDensityᵥ_restrict hvi measurableSet_Ioo,
+  rw [theorem5_2_2 hK hab, cvx_withDensityᵥ_restrict hvi measurableSet_Ioo,
     Measure.restrict_restrict measurableSet_Ioo, ← e]
 
 /-- `½ ∫_{(a,b)} p_{K₁} × dv_{K₂}⁺ = ½ ∫_{(a,b)} h_{K₁} dσ_{K₂}` for a selection `p_{K₁}(t)` of the
@@ -1170,7 +1170,7 @@ lemma cvxArc_curveArea (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL 
   rw [setIntegral_congr_fun measurableSet_Ioo hpt, integral_const_mul]
   have e : Ioo (0 : ℝ) 1 = cvxArcθ K a b ⁻¹' univ ∩ Ioo 0 1 := by simp
   rw [e, cvxArcθ, cvx_integral_comp_cvxQuantile (L := cvxArcL K a b) hab rfl hLpos
-    (continuous_supp hK.2.1 hK.1) MeasurableSet.univ, univ_inter, smul_eq_mul, ← mul_assoc,
+    (continuous_supp hK.2.1) MeasurableSet.univ, univ_inter, smul_eq_mul, ← mul_assoc,
     mul_inv_cancel₀ hLpos.ne', one_mul, ← cvx_sigma_eq_measure]
 
 /-- If the arc degenerates to a point, it carries no surface area measure. -/
@@ -1248,7 +1248,7 @@ theorem theorem7_3_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (h
 
 
 /-- **Theorem 7.3.2**, last claim: `𝒥(𝐮_K^{a,b})` is quadratic in `K`. -/
-theorem theorem7_3_2_quadratic {a b : ℝ} (hab : a < b) (hb : b < a + π) :
+theorem theorem7_3_2_quadratic {a b : ℝ} :
     convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) := by
   have hbil := cvx_integral_supp_sigma_bilin (X := Ioo a b) (Metric.isBounded_Ioo _ _)
   refine ⟨fun K₁ K₂ => convexCurveBilin K₁.1 K₂.1 a b, ⟨?_, ?_⟩, fun K => rfl⟩
@@ -1340,7 +1340,7 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
     · rintro rfl
       exact ⟨vplus_mem_edge hK b, by simp [convexCurve]⟩
   · have hint : ∀ s ⊆ Icc a c, IntegrableOn (supp K) s (sigma K) := fun s hs =>
-      ((continuous_supp hK.2.1 hK.1).integrableOn_Icc).mono_set hs
+      ((continuous_supp hK.2.1).integrableOn_Icc).mono_set hs
     have hsplit : Ioo a c = Ioo a b ∪ {b} ∪ Ioo b c := by
       ext t
       simp only [mem_Ioo, mem_union, mem_singleton_iff]
@@ -1355,7 +1355,7 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
         · exact ⟨hab, hbc⟩
         · exact ⟨hab.trans h1, h2⟩
     have hseg : segArea (vminus K b) (vplus K b) = supp K b * sigmaAt K b / 2 :=
-      proposition7_2_4_line (vminus_mem_edge hK b).2 (vplus_mem_edge hK b).2
+      proposition7_2_4_line (vminus_mem_edge hK b).2
         (by rw [(proposition2_1_2 hK b).2]; abel)
     simp only [convexCurveArea]
     rw [hsplit, setIntegral_union (Set.disjoint_left.2 fun t ht ht' => by
@@ -1453,7 +1453,7 @@ lemma cvx_sigmaFun_eq_of_vplus_const (hL : IsConvexBody L) {x y : ℝ} (hxy : x 
     (hp : ∀ t ∈ Icc x y, vplus L t = p) : sigmaFun L y = sigmaFun L x := by
   have hsupp : ∀ t ∈ Icc x y, supp L t = dot p (uvec t) := fun t ht => by
     rw [← hp t ht, dot_vplus_uvec]
-  have hc := continuous_supp hL.2.1 hL.1
+  have hc := continuous_supp hL.2.1
   have hint : ∫ s in x..y, supp L s = dot p (vvec x) - dot p (vvec y) := by
     rw [intervalIntegral.integral_congr (g := fun s => dot p (uvec s)) (fun t ht => by
       rw [uIcc_of_le hxy] at ht; exact hsupp t ht),
@@ -1559,7 +1559,7 @@ lemma cvx_integral_Ico_eq_Ioc (hK : IsConvexBody K) (hL : IsConvexBody L) :
     ∫ t in Ico 0 (2 * π), supp L t ∂(sigma K) = ∫ t in Ioc 0 (0 + 2 * π), supp L t ∂(sigma K) := by
   have h2π : (0 : ℝ) < 2 * π := by positivity
   have hint : IntegrableOn (supp L) (Icc 0 (2 * π)) (sigma K) :=
-    (continuous_supp hL.2.1 hL.1).integrableOn_Icc
+    (continuous_supp hL.2.1).integrableOn_Icc
   rw [zero_add, ← Ioo_insert_left h2π, ← Ioo_union_right h2π, insert_eq,
     setIntegral_union (Set.disjoint_left.2 fun t ht ht' => by
       rw [mem_singleton_iff] at ht; rw [ht] at ht'; exact lt_irrefl _ ht'.1)
@@ -1644,8 +1644,8 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
     intro t ht
     rw [← dot_vplus_uvec K' t, hvab t ht, dot_vplus_uvec]
   have hres : (sigma K').restrict (Ioo a b) = (sigma K).restrict (Ioo a b) := by
-    have hc := continuous_supp hK.2.1 hK.1
-    have hc' := continuous_supp hK'.2.1 hK'.1
+    have hc := continuous_supp hK.2.1
+    have hc' := continuous_supp hK'.2.1
     refine cvx_sigma_restrict_Ioo_eq hK hK' hab (sigmaFun K' a - sigmaFun K a) fun t ht => ?_
     have hI : ∫ s in a..t, supp K' s = ∫ s in a..t, supp K s :=
       intervalIntegral.integral_congr fun s hs => by
@@ -1657,7 +1657,7 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
     ring
   -- the area
   have hint : ∀ X : Set ℝ, X ⊆ Icc (t' - π) (t' + π) → IntegrableOn (supp K') X (sigma K') :=
-    fun X hX => ((continuous_supp hK'.2.1 hK'.1).integrableOn_Icc).mono_set hX
+    fun X hX => ((continuous_supp hK'.2.1).integrableOn_Icc).mono_set hX
   have hae : Ioc (t' - π) (t' + π) =ᵐ[sigma K'] Ioo a b ∪ {t' + π} := by
     refine ae_eq_set.2 ⟨?_, ?_⟩
     · refine measure_mono_null (fun t ht => ?_) (measure_union_null hz1 hz2)
@@ -1692,7 +1692,7 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
   have hsupp' : supp K' (t' + π) = c := by
     rw [← dot_vplus_uvec K' (t' + π), hvp]; exact hp₁
   have hseg' : segArea (vminus K b) (vplus K a) = c * sigmaAt K' (t' + π) / 2 :=
-    proposition7_2_4_line hp₂ hp₁ (by rw [hσ]; abel)
+    proposition7_2_4_line hp₂ (by rw [hσ]; abel)
   rw [hseg', hsupp', convexCurveArea, measureReal_def, smul_eq_mul, sigmaAt]
   ring
 
