@@ -1,90 +1,116 @@
-# Toward uniqueness of the optimal moving sofa
+# Uniqueness of the optimal moving sofa: research record
 
-## Scope
+## Target and current status
 
-The existing `theorem1_1_1` proves optimality of Gerver's sofa.
-`GerverParams.romik_unique` proves uniqueness of Romik's parameters in their box.
-Neither statement says that every area-maximizing moving sofa is congruent to
-Gerver's sofa. The equality-case development is a step toward that separate goal;
-it does not assert geometric uniqueness or introduce a uniqueness axiom.
+The target is equality of SHAPES: every closed connected moving sofa S with
+area equal to Gerver's sofa G should satisfy U(S)=G for some Euclidean isometry U.
+Equality modulo null sets or uniqueness of Romik's parameter solution is not enough.
 
-## Equality cases now available
+The research notes now contain a **candidate full pen-and-paper proof**:
+[start with note 08](uniqueness/08-candidate-uniqueness-proof.md).
+It is not independently reviewed or formalized. In particular, the substantial
+extensions of the polygon variational argument in notes 05 and 06 remain the
+highest-priority targets for adversarial checking. Full shape uniqueness is NOT
+claimed as a kernel-checked result of this repository.
 
-Import `MovingSofa.Optimality.Equality` to use the new results.
+The work after commit `865eb1f` is paper-first. Positive results, failed
+approaches, and repairs are committed separately. These research commits use
+`[skip ci]`; CI is not used as a runner. No further Lean declarations, axioms,
+challenge changes, or workflow changes were made in this paper-research phase.
 
-For a quadratic functional `f` on a convex domain, with midpoint `m`,
-`ConvexDomain.quadratic_deficit_identity` proves the exact identity
+## Paper notes
+
+| Note | Contribution and status |
+| --- | --- |
+| [01: Mamikon equality](uniqueness/01-mamikon-equality.md) | Square-gap identity and complete first-order equality kernels, including nonsmooth support functions. |
+| [02: Cap rigidity](uniqueness/02-cap-rigidity.md) | Paper proof that equality in the four cap terms forces a horizontal translation. |
+| [03: Obstructions](uniqueness/03-global-reduction-obstructions.md) | Counterexamples to invalid compactness and equal-area set arguments; conditional set-recovery lemma. |
+| [04: Penalized selection](uniqueness/04-penalized-selection.md) | Abstract selection theorem for a specified maximizer and a mesh-scale penalty estimate. |
+| [05: Right-angle extension](uniqueness/05-right-angle-selection.md) | Proposed extension of the surface-measure and injectivity argument to every maximizing right-angle cap. |
+| [06: Shape-preserving angle reduction](uniqueness/06-shape-preserving-angle.md) | Proposed endpoint-balance argument that retains the specified sofa when obtaining a right-angle motion. |
+| [07: Regular closedness](uniqueness/07-regular-closedness.md) | Paper proof of G=closure(interior G) from the existing envelope facts, without a new numerical bound. |
+| [08: Candidate full proof](uniqueness/08-candidate-uniqueness-proof.md) | Assembly of the arguments, retaining an actual containment of the original sofa through every step. |
+| [09: Adversarial review](uniqueness/09-adversarial-review.md) | A further perturbation counterexample, repairs, logical checks, and remaining uncertainty. |
+
+These are mathematical research notes, not automatically validated theorem
+statements. No alternative noncongruent maximizing sofa has been constructed.
+
+## Main mathematical progress
+
+Let f=h_K-h_{C(G)} be the support-function difference. Equality in a tangent
+Mamikon term with target normal T gives
 
 ```text
-f(x) - f(y) = -Df(x; y) + 4 * (f(m) - (f(x) + f(y)) / 2).
+sin(T-t) f'(t) + cos(T-t) f(t) = f(T)
+f(t) = f(T) cos(T-t) + C sin(T-t).
 ```
 
-For a concave functional maximized at `x`, both terms on the right are
-nonnegative. Equality of endpoint values therefore forces both a zero first
-variation and a zero midpoint gap. The converse holds as well. This is stronger
-than the nonpositive-variation condition used to prove maximality.
-
-For `upperQL`, the proof of Theorem 8.3.8 decomposes the concavity gap into three
-convexity gaps for `mamikonS`, `mamikonR`, and `mamikonL`:
+Equality in the outer-corner term gives f'(t)=f(t+pi/2). Matching the four cap
+intervals in the order 4,3,2,1, using f(pi/2)=0, forces
 
 ```text
-Q(c(x,y)) - ((1-c) Q(x) + c Q(y))
-  = ((1-c) S(x) + c S(y) - S(c(x,y)))
-  + ((1-c) R(x) + c R(y) - R(c(x,y)))
-  + ((1-c) L(x) + c L(y) - L(c(x,y))).
+f(t)=a cos t  for every t in [0,pi].
 ```
 
-The new `mamikonSegmentEquality_iff` extracts the equality case: the left-hand
-gap vanishes exactly when all three nonnegative right-hand gaps vanish.
-`MamikonSegmentEquality` records the three equalities separately.
+The lower support function is determined by the bottom segment, so this
+identifies the entire cap as C(G)+(a,0). The difficulty beyond this short
+rigidity argument is ensuring that the cap belongs to the PARTICULAR original
+maximizing sofa. The proposed solution is penalized polygon approximation,
+not the false claim that every continuum maximum is a limit of exact discrete
+maxima. Notes 05-06 retain and control its first-variation errors.
 
-Consequently, `upperQL_eq_gerver_iff` characterizes every competing triple with
-Gerver's `upperQL` value by zero first variation at Gerver's triple and
-`MamikonSegmentEquality` at the midpoint. Moreover,
-`gerver_mamikonSegmentEquality` gives these equalities at every parameter in
-`[0,1]`, and `upperQL_eq_gerver_on_segment` gives an entire segment of maximizers.
-These are statements about functional values, not equality of triples.
+The resulting candidate chain is:
 
-The link to sofa area is not assumed: `ki_upperQL_eq_gerver_of_sofaArea_eq`
-uses the existing two bounding steps to prove it for the canonical extension
-`kiExtensionTriple` of a cap in `IsKi`. The resulting
-`ki_maximizer_equality_conditions` supplies zero first variation and all three
-Mamikon equalities whenever that cap's `sofaArea` is Gerver's area.
-
-## Remaining geometric proof obligations
-
-1. Analyze equality in the Mamikon convexity proof, especially `theorem7_4_2`,
-   to derive constraints on the cap's support function. Equality of the three
-   scalar functional gaps is not yet equality of support functions. In
-   particular, the four terms inside `mamikonS` still need their own equality
-   analysis.
-2. Prove rigidity of those constraints with an explicit normalization or up to
-   the appropriate rigid motions. The target should identify the cap/sofa;
-   strict concavity of the entire auxiliary-triple representation must not be
-   assumed without proof.
-3. Connect an arbitrary maximizing moving sofa to these cap conditions while
-   preserving enough geometry to recover the original sofa. The current proof
-   of `gm_area_le` compares areas with selected maximizing caps; equality of
-   those numbers alone does not identify the original sets. The balancing,
-   rotation, monotonicity, and final set-recovery steps need their own equality
-   arguments.
-
-These obligations are not added as unproved Lean declarations.
-
-## Validation
-
-Run the existing checks:
-
-```sh
-lake build
-lake env lean scripts/Audit.lean
-python3 scripts/linkify_docs.py --check
-python3 scripts/check_md_tables.py README.md REPORT.md
+```text
+original optimal sofa
+  subset its own monotonization
+  -> a rotated copy of that same monotonization with right-angle motion
+  subset its right-angle monotonization
+  = a congruent copy of G.
 ```
 
-`MovingSofa.Tests.Equality` is included in the default library build. It tests
-`f(x) = -x^2`, where a zero first variation does not imply equality of values;
-a constant functional, which genuinely has distinct maximizers; the exact
-deficit identity and equality characterization; and the Gerver-cap application.
-The axiom audit explicitly imports all three new Lean modules. The existing
-challenge statements, optimality proofs, and axiom allowlist are unchanged.
+Regular-closedness of G then turns containment plus equal area into exact set
+equality. Notes 03 and 09 explain why weaker shortcuts fail.
+
+## Existing Lean equality cases
+
+The earlier commit `865eb1f4e936a976d1405cb59f7a83ffc00fe32b` contains the Lean
+equality-case foundation. Import `MovingSofa.Optimality.Equality` to use it.
+That development does not itself prove geometric uniqueness.
+
+For a quadratic functional f with midpoint m,
+`ConvexDomain.quadratic_deficit_identity` proves
+
+```text
+f(x)-f(y) = -Df(x;y) + 4*(f(m)-(f(x)+f(y))/2).
+```
+
+For a concave functional maximized at x, both terms on the right are
+nonnegative. Equality of endpoint values is equivalent to zero first variation
+and zero midpoint gap.
+
+For `upperQL`, `mamikonSegmentEquality_iff` extracts the three separate
+convexity equalities for `mamikonS`, `mamikonR`, and `mamikonL`.
+`upperQL_eq_gerver_iff` characterizes triples with Gerver's objective value by
+zero first variation and those midpoint equalities. The corresponding segment
+results hold at every parameter in [0,1].
+
+`ki_upperQL_eq_gerver_of_sofaArea_eq` and
+`ki_maximizer_equality_conditions` connect these equalities to an `IsKi` cap
+attaining Gerver's sofa area. They do not assume that equality for the auxiliary
+objective follows merely from stationarity.
+
+## Verification boundary
+
+The earlier Lean modules and their seven regression examples were checked at
+`865eb1f`; that historical check does NOT verify the new paper arguments.
+The tests include -x^2 (stationarity alone is insufficient), a constant
+functional with distinct maximizers, the deficit identity, the equality
+characterization, and the Gerver-cap application. The existing axiom audit
+imports those modules. The original optimality proofs and axiom allowlist are
+unchanged.
+
+The next mathematical review should focus on the uniform approximation and
+endpoint perturbation claims in notes 05-06 before translating the candidate
+proof into Lean. The smaller cap-rigidity and regular-closedness arguments can
+be checked independently of those extensions.
