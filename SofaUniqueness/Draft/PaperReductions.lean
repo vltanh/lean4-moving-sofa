@@ -4,19 +4,19 @@ public import MovingSofa.Optimality.Equality
 public import SofaUniqueness.Draft.CapKernel
 public import SofaUniqueness.Draft.CapGeometry
 public import SofaUniqueness.Draft.Selection
+public import SofaUniqueness.Draft.AngleExtension
 public import SofaUniqueness.SquareGap
 
 /-!
 # UNCOMPILED, INCOMPLETE DRAFT: formal boundaries of the paper reductions
 
-The six `sorry`s in this file are substantive outstanding formalization work,
-not presumed library results. Each is assigned a stable obligation ID. They
-must be discharged before any downstream theorem is called a Lean proof.
-The final target does not receive these statements as extra hypotheses.
+Five admissions remain in this file: P1, P2, P3, P4, P6. P5 now has an explicit
+proof through `AngleExtension.lean`, exposing the two pinned inequalities used
+by the existing geometric argument. All new scripts remain uncompiled.
 
 The old balanced-maximizer theorems are deliberately not applied to an
 arbitrary specified maximizer. That invalid shortcut would lose the original
-sofa and is the central reason these obligations are needed.
+sofa and is the central reason the remaining obligations are needed.
 -/
 
 @[expose] public section
@@ -135,20 +135,13 @@ theorem pinnedBounds_of_isMaxCap {K : Set Plane} {ω : ℝ}
     (hω : ω ∈ Ioo 0 (π / 2)) (hK : IsMaxCap ω K) : PinnedBounds ω K := by
   sorry
 
-/-- DRAFT-P5: the explicit shape-preserving angular extension.
-
-First prove the two-threshold estimates from note 19 (not the false uniform
-11/10 threshold in note 18), place its fixed triangle in the OPEN niche, and
-bound widths on [omega,pi/2]. Concatenate the support-positioned strip rotation,
-a translation within the convex horizontal side, and the original motion.
-A temporary reflection used to choose an extent is transferred back first.
-The conclusion concerns THIS S, not an unrelated maximizing sofa.
--/
+/-- P5: the specified sofa admits the additional motion. The complete script
+is in `AngleExtension.lean`; balancedness is not used or inferred. -/
 theorem right_angle_motion_of_pinned {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Ico arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S) (hpin : PinnedBounds ω (capOf S ω)) :
     ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
-  sorry
+  exact right_angle_motion_of_pinned_bounds hS hω harea hpin.1 hpin.2
 
 /-- DRAFT-P6: regular-closedness of the concrete library Gerver sofa.
 
