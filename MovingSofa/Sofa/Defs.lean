@@ -16,6 +16,14 @@ supporting hallway), 2.3.1–2.3.11 (strips, rotation angle, standard position, 
 continuous translation `c`; by path lifting in `SO(2)`, every continuous curve in `SE(2)` has this
 form. The *rotation angle* of the movement is the clockwise angle `ω = θ(0) - θ(1)`; we normalise
 `θ(0) = 0`.
+
+**Two presentations, no generated source copy.** The pair-coordinate hallway and unbundled
+moving-sofa predicate have kernel names `MovingSofa.Paper.hallway` and
+`MovingSofa.Paper.IsMovingSofa`. The two `export` commands below are name-resolution aliases,
+not new constants. They retain the historical spelling in paper-only modules and reserve the
+actual names `MovingSofa.hallway` and `MovingSofa.IsMovingSofa` for the formal-conjectures
+Euclidean-space presentation. Modules using both presentations must qualify the paper names.
+The mathematical definitions, motion convention and quantifiers are unchanged.
 -/
 
 @[expose] public section
@@ -32,8 +40,14 @@ def horizSide : Set (ℝ × ℝ) := {p | p.1 ≤ 1 ∧ 0 ≤ p.2 ∧ p.2 ≤ 1}
 /-- The vertical side `V_L = [0, 1] × (-∞, 1]` of the hallway. -/
 def vertSide : Set (ℝ × ℝ) := {p | 0 ≤ p.1 ∧ p.1 ≤ 1 ∧ p.2 ≤ 1}
 
+namespace Paper
+
 /-- The hallway `L = H_L ∪ V_L` (Definition 1.1.1, `def:hallway`). -/
 def hallway : Set (ℝ × ℝ) := horizSide ∪ vertSide
+
+end Paper
+
+export Paper (hallway)
 
 /-! ### Moving sofas (Definition 1.1.2) and their rotation angle (Definition 2.3.3) -/
 
@@ -46,7 +60,7 @@ structure IsMovement (S : Set (ℝ × ℝ)) (ω : ℝ) (θ : ℝ → ℝ) (c : �
   angle_zero : θ 0 = 0
   angle_one : θ 1 = -ω
   start : ∀ p ∈ S, rot (θ 0) p + c 0 ∈ horizSide
-  inside : ∀ s ∈ Icc (0 : ℝ) 1, ∀ p ∈ S, rot (θ s) p + c s ∈ hallway
+  inside : ∀ s ∈ Icc (0 : ℝ) 1, ∀ p ∈ S, rot (θ s) p + c s ∈ Paper.hallway
   finish : ∀ p ∈ S, rot (θ 1) p + c 1 ∈ vertSide
 
 /-- `S` is a moving sofa admitting a movement with rotation angle `ω`
@@ -54,9 +68,15 @@ structure IsMovement (S : Set (ℝ × ℝ)) (ω : ℝ) (θ : ℝ → ℝ) (c : �
 def IsMovingSofaWithAngle (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
   IsClosed S ∧ IsConnected S ∧ ∃ θ c, IsMovement S ω θ c
 
+namespace Paper
+
 /-- A moving sofa (Definition 1.1.2, `def:moving-sofa`): a nonempty, connected and closed set that
 can be moved inside `L` by a continuous rigid motion from `H_L` to `V_L`. -/
 def IsMovingSofa (S : Set (ℝ × ℝ)) : Prop := ∃ ω, IsMovingSofaWithAngle S ω
+
+end Paper
+
+export Paper (IsMovingSofa)
 
 /-! ### Strips, standard position and the parallelogram (§2.3) -/
 
@@ -64,7 +84,7 @@ def IsMovingSofa (S : Set (ℝ × ℝ)) : Prop := ∃ ω, IsMovingSofaWithAngle 
 def hStrip : Set (ℝ × ℝ) := {p | 0 ≤ p.2 ∧ p.2 ≤ 1}
 
 /-- The vertical strip `V = [0, 1] × ℝ` (Definition 2.3.2). -/
-def vStrip : Set (ℝ × ℝ) := {p | 0 ≤ p.1 ∧ p.1 ≤ 1}
+def vStrip : Set (ℝ × ℝ)) := {p | 0 ≤ p.1 ∧ p.1 ≤ 1}
 
 /-- The rotated vertical strip `V_ω = R_ω(V)` (Definition 2.3.2). -/
 def vStripRot (ω : ℝ) : Set (ℝ × ℝ) := rot ω '' vStrip
@@ -108,7 +128,7 @@ noncomputable def hallwayMap (S : Set (ℝ × ℝ)) (t : ℝ) (p : ℝ × ℝ) :
   rot t p + (supp S t - 1) • uvec t + (supp S (t + π / 2) - 1) • vvec t
 
 /-- The supporting hallway `L_S(t) = f_{S,t}(L)` (Definition 2.2.2). -/
-def suppHallway (S : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := hallwayMap S t '' hallway
+def suppHallway (S : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := hallwayMap S t '' Paper.hallway
 
 /-- The inner corner `x_S(t) = f_{S,t}(x_L)` (Definition 2.2.3, `def:rotating-hallway-parts`). -/
 noncomputable def innerCorner (S : Set (ℝ × ℝ)) (t : ℝ) : ℝ × ℝ := hallwayMap S t xL
