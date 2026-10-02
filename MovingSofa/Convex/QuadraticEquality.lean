@@ -36,7 +36,10 @@ theorem quadratic_deficit_identity (hq : D.IsQuadratic f) (x y : V) :
   obtain ⟨g, hg, hfg⟩ := hq
   have hf : f = fun v => g v v := funext hfg
   have hhalf : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := by constructor <;> norm_num
-  rw [hf, lemma7_1_4 D hg, cvx_bilin_comb D hg x y hhalf]
+  rw [hf, lemma7_1_4 D hg]
+  change g x x - g y y = -(g x y + g y x - 2 * g x x) +
+    4 * (g (D.comb (1 / 2) x y) (D.comb (1 / 2) x y) - (g x x + g y y) / 2)
+  rw [cvx_bilin_comb D hg x y hhalf]
   ring
 
 /-- A concave quadratic functional lies below its first-order affine approximation. -/
