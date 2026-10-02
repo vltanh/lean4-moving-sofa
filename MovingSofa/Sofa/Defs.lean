@@ -84,7 +84,7 @@ export Paper (IsMovingSofa)
 def hStrip : Set (ℝ × ℝ) := {p | 0 ≤ p.2 ∧ p.2 ≤ 1}
 
 /-- The vertical strip `V = [0, 1] × ℝ` (Definition 2.3.2). -/
-def vStrip : Set (ℝ × ℝ)) := {p | 0 ≤ p.1 ∧ p.1 ≤ 1}
+def vStrip : Set (ℝ × ℝ) := {p | 0 ≤ p.1 ∧ p.1 ≤ 1}
 
 /-- The rotated vertical strip `V_ω = R_ω(V)` (Definition 2.3.2). -/
 def vStripRot (ω : ℝ) : Set (ℝ × ℝ) := rot ω '' vStrip
@@ -132,7 +132,7 @@ def suppHallway (S : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := hallwayMa
 
 /-- The inner corner `x_S(t) = f_{S,t}(x_L)` (Definition 2.2.3, `def:rotating-hallway-parts`). -/
 noncomputable def innerCorner (S : Set (ℝ × ℝ)) (t : ℝ) : ℝ × ℝ := hallwayMap S t xL
-/-- The outer corner `y_S(t) = f_{S,t}(y_L)`. -/
+/-- The outer corner `y_S(t) = f_{S,t}(y_L)` (Definition 2.2.3). -/
 noncomputable def outerCorner (S : Set (ℝ × ℝ)) (t : ℝ) : ℝ × ℝ := hallwayMap S t yL
 /-- The outer wall `a_S(t) = f_{S,t}(a_L)`. -/
 def wallA (S : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := hallwayMap S t '' aL
