@@ -8,7 +8,7 @@ public import Mathlib.Analysis.Real.Pi.Bounds
 /-!
 # Interval arithmetic for the parameters of Gerver's sofa
 
-Helper lemmas for the numerical part of `MovingSofa.Gerver.Romik`:
+Helper lemmas for the numerical part of `MovingSofa.External.Romik`:
 
 * elementary interval arithmetic (`rom_iv_add`, `rom_iv_mul`, …): each lemma derives an enclosure
   `x ∘ y ∈ [L, U]` from enclosures of `x` and `y` and rational side conditions on the endpoints,

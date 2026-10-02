@@ -19,7 +19,11 @@ import all MovingSofa.Convex.ConvexDomain
 import all MovingSofa.Convex.CurveArea
 import all MovingSofa.Convex.Mamikon
 import all MovingSofa.External.AreaFormula
-import all MovingSofa.External.AreaFormulaParam
+import all MovingSofa.External.AreaFormula.Param
+import all MovingSofa.External.Romik
+import all MovingSofa.External.Romik.Calc
+import all MovingSofa.External.Romik.Fix
+import all MovingSofa.External.Romik.Num
 import all MovingSofa.Gerver.AreaBounds
 import all MovingSofa.Gerver.Bounds
 import all MovingSofa.Gerver.Defs
@@ -29,10 +33,6 @@ import all MovingSofa.Gerver.Frame
 import all MovingSofa.Gerver.Niche
 import all MovingSofa.Gerver.NicheBounds
 import all MovingSofa.Gerver.Properties
-import all MovingSofa.Gerver.Romik
-import all MovingSofa.Gerver.RomikCalc
-import all MovingSofa.Gerver.RomikFix
-import all MovingSofa.Gerver.RomikNum
 import all MovingSofa.Gerver.Structure
 import all MovingSofa.Gerver.StructureCap
 import all MovingSofa.Injectivity.ArmLengths
@@ -59,7 +59,7 @@ import all Solution
 Run with `lake env lean scripts/Audit.lean` after `lake build`.
 
 For every numbered result of the paper, this prints the axioms it depends on and the results from
-prior work (`MovingSofa/External/` and `MovingSofa/Gerver/Romik.lean`) that its proof uses. It then checks every declaration
+prior work (`MovingSofa/External/`) that its proof uses. It then checks every declaration
 of the library and the theorems that Palomar's comparator checks. The run fails if any of them
 depends on an axiom other than Lean's standard `propext`, `Classical.choice` and `Quot.sound` (a
 `sorry` shows up as the axiom `sorryAx`). Its table of results is the source of the report's
@@ -78,7 +78,7 @@ open Lean Elab Command
 
 namespace Audit
 
-/-- The results from prior work, proved in `MovingSofa/External/` and `MovingSofa/Gerver/Romik.lean`, with a short label. Their
+/-- The results from prior work, proved in `MovingSofa/External/`, with a short label. Their
 proofs are not searched: the traversal stops at them. -/
 meta def externalResults : List (String × Name) :=
   [("Schneider, Remark 5.1.2: |K| = ½∫ h_K dσ_K", ``MovingSofa.area_eq_half_integral_supp),
@@ -93,6 +93,12 @@ meta def paperResults : List (String × Name) :=
    ("Thm 1.5.2", ``MovingSofa.theorem1_5_2),
    ("Thm 1.7.1", ``MovingSofa.theorem1_7_1),
    ("Prop 2.1.2", ``MovingSofa.proposition2_1_2),
+   ("Thm 2.1.3 (vint left)", ``MovingSofa.tendsto_vint_left),
+   ("Thm 2.1.3 (vint right)", ``MovingSofa.tendsto_vint_right),
+   ("Thm 2.1.3 (vminus left)", ``MovingSofa.tendsto_vminus_left),
+   ("Thm 2.1.3 (vminus right)", ``MovingSofa.tendsto_vminus_right),
+   ("Thm 2.1.3 (vplus left)", ``MovingSofa.tendsto_vplus_left),
+   ("Thm 2.1.3 (vplus right)", ``MovingSofa.tendsto_vplus_right),
    ("Prop 2.2.1", ``MovingSofa.proposition2_2_1),
    ("Prop 2.2.2 (hallway)", ``MovingSofa.proposition2_2_2_hallway),
    ("Prop 2.2.2 (innerCorner)", ``MovingSofa.proposition2_2_2_innerCorner),
@@ -180,6 +186,7 @@ meta def paperResults : List (String × Name) :=
    ("Lemma 5.1.2", ``MovingSofa.lemma5_1_2),
    ("Lemma 5.1.3", ``MovingSofa.lemma5_1_3),
    ("Prop 5.1.4", ``MovingSofa.proposition5_1_4),
+   ("Prop 5.1.4 (as stated false)", ``MovingSofa.proposition5_1_4_as_stated_false),
    ("Prop 5.1.4 (deriv)", ``MovingSofa.proposition5_1_4_deriv),
    ("Lemma 5.2.1", ``MovingSofa.lemma5_2_1),
    ("Thm 5.2.2", ``MovingSofa.theorem5_2_2),

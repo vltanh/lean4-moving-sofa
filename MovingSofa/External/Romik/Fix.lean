@@ -1,16 +1,16 @@
 module
 
-public import MovingSofa.Gerver.RomikNum
+public import MovingSofa.External.Romik.Num
 public import Mathlib.Analysis.Calculus.MeanValue
 public import Mathlib.Topology.MetricSpace.Contracting
 
 /-!
 # The zero of the reduced system for Gerver's sofa
 
-`rom_Hz (φ, θ) = 0` is the reduced form of Romik's system (see `MovingSofa.Gerver.Romik`). With a
+`rom_Hz (φ, θ) = 0` is the reduced form of Romik's system (see `MovingSofa.External.Romik`). With a
 rational matrix `M ≈ DH(z*)⁻¹`, the map `G(z) = z - M H(z)` (`rom_Gz`) satisfies
 `|∂G_i/∂z_j| ≤ (0.03, 0.012; 0.3, 0.16)` on the box `[0.039, 0.04] × [0.68, 0.69]` (interval
-arithmetic in `MovingSofa.Gerver.RomikNum`), so it is a `1/2`-contraction there for the sup metric.
+arithmetic in `MovingSofa.External.Romik.Num`), so it is a `1/2`-contraction there for the sup metric.
 Hence `H` has at most one zero in the box (`rom_zero_unique`), and Banach's fixed point theorem on
 the square of radius `10⁻¹⁰` around `(φ₀, θ₀) = (0.0391773648, 0.6813015094)`, where the residual
 `M H(φ₀, θ₀)` is below `2 · 10⁻¹¹`, gives a zero there (`rom_exists_zero`).

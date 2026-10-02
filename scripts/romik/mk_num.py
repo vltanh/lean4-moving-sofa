@@ -17,7 +17,7 @@ tiny_names = ['rom_K', 'rom_D', 'rom_β₀', 'rom_N', 'rom_a₁', 'rom_b₁', 'r
 
 HEADER = '''module
 
-public import MovingSofa.Gerver.RomikCalc
+public import MovingSofa.External.Romik.Calc
 
 /-!
 # The reduced system for the parameters of Gerver's sofa
@@ -27,7 +27,7 @@ is self-contained. It defines, as polynomials in the "atoms"
 `φ, θ, c = cos φ, s = sin φ, C = cos θ, S = sin θ, p = π`:
 
 * the reduced system `H = (rom_H1, rom_H2)` whose zeros in the box are the angles `(φ, θ)` of the
-  solutions of Romik's system (see `MovingSofa.Gerver.Romik`), and its partial derivatives;
+  solutions of Romik's system (see `MovingSofa.External.Romik`), and its partial derivatives;
 * the Newton-type map `G(z) = z - M H(z)` (`rom_G1`, `rom_G2`, with `M ≈ DH(z*)⁻¹`) and its partial
   derivatives;
 * the linear parameters `a₁, b₁, b₂, c₁, κ_{j}` of a solution as functions of the atoms.
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     rest, txtt = gen_regime('tiny', tiny_names, tiny_atoms, TD)
     out.append(txtt)
     out.append(FOOTER)
-    open(__import__('os').path.join(__import__('os').path.dirname(__file__), '..', '..', 'MovingSofa', 'Gerver', 'RomikNum.lean'), 'w').write(wrap_text('\n'.join(out)))
+    open(__import__('os').path.join(__import__('os').path.dirname(__file__), '..', '..', 'MovingSofa', 'External', 'Romik', 'Num.lean'), 'w').write(wrap_text('\n'.join(out)))
     for n in box_names[-4:]: print(n, fmt(res[n][0]), fmt(res[n][1]))
     for n in z0_names[-2:]: print(n, fmt(res0[n][0]), fmt(res0[n][1]))
     for n in tiny_names: print(n, fmt(rest[n][0]), fmt(rest[n][1]))

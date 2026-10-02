@@ -2,7 +2,7 @@ module
 
 public import MovingSofa.Optimality.Variation
 public import MovingSofa.Gerver.Structure
-public import MovingSofa.Gerver.Romik
+public import MovingSofa.External.Romik
 public import MovingSofa.Gerver.Niche
 public import Mathlib.MeasureTheory.Integral.DivergenceTheorem
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus

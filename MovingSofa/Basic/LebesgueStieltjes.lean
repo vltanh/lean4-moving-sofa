@@ -7,6 +7,9 @@ public import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
 import Mathlib.Analysis.Calculus.FDeriv.Measurable
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Lebesgue–Stieltjes measures (§5.1)
@@ -447,5 +450,72 @@ theorem proposition5_1_4_deriv {f r : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     have := sa_sub_eq_integral_of_lsMeasure_eq hab hf hfr hri h ⟨hy.1.le, hy.2.le⟩
     linarith
   exact (hd.const_add (f a)).congr_of_eventuallyEq heq
+
+/-- **Proposition 5.1.4 as the paper states it is false.** With a *bounded* density, the direction
+(1) ⇒ (2) fails: `f(t) = ∫₀ᵗ x^(-1/2) dx = 2√t` on `[0, 1]` is absolutely continuous, right-continuous
+and of bounded variation, but `df` has no bounded density. `proposition5_1_4` is the corrected
+statement, with an integrable density. -/
+theorem proposition5_1_4_as_stated_false :
+    ¬ (∀ (f : ℝ → ℝ) (a b : ℝ), a ≤ b → BoundedVariationOn f (Icc a b) →
+      (∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x) →
+      (AbsolutelyContinuousOnInterval f a b ↔
+        ∃ r : ℝ → ℝ, Measurable r ∧ (∃ C, ∀ t, |r t| ≤ C) ∧
+          lsMeasure f a b = (volume.restrict (Icc a b)).withDensityᵥ r)) := by
+  intro H
+  let f : ℝ → ℝ := fun t => ∫ x in (0 : ℝ)..t, x ^ (-(1 / 2) : ℝ)
+  have hint : ∀ a b : ℝ, IntervalIntegrable (fun x : ℝ => x ^ (-(1 / 2) : ℝ)) volume a b :=
+    fun a b => intervalIntegral.intervalIntegrable_rpow' (by norm_num)
+  have hac : AbsolutelyContinuousOnInterval f 0 1 :=
+    (hint 0 1).absolutelyContinuousOnInterval_intervalIntegral left_mem_uIcc
+  have hbv : BoundedVariationOn f (Icc 0 1) := by
+    have := hac.boundedVariationOn
+    rwa [uIcc_of_le zero_le_one] at this
+  have hcont : Continuous f := intervalIntegral.continuous_primitive hint 0
+  have hval : ∀ t, 0 ≤ t → f t = 2 * Real.sqrt t := by
+    intro t ht
+    simp only [f]
+    rw [integral_rpow (Or.inl (by norm_num)), Real.zero_rpow (by norm_num), Real.sqrt_eq_rpow]
+    norm_num
+    ring
+  obtain ⟨r, hrm, ⟨C, hC⟩, h⟩ := (H f 0 1 zero_le_one hbv
+    (fun x _ => hcont.continuousWithinAt)).1 hac
+  have hri : IntegrableOn r (Icc 0 1) :=
+    Measure.integrableOn_of_bounded (by simp) hrm.aestronglyMeasurable
+      (M := C) (Eventually.of_forall (fun t => by simpa using hC t))
+  have key : ∀ t ∈ Icc (0 : ℝ) 1, f t - f 0 = ∫ x in (0 : ℝ)..t, r x := by
+    intro t ht
+    rw [← lsMeasure_Ioc zero_le_one ht hbv (fun x _ => hcont.continuousWithinAt), h,
+      withDensityᵥ_apply hri measurableSet_Ioc, Measure.restrict_restrict measurableSet_Ioc,
+      intervalIntegral.integral_of_le ht.1,
+      inter_eq_left.2 (Ioc_subset_Icc_self.trans (Icc_subset_Icc_right ht.2))]
+  have hle : ∀ t ∈ Icc (0 : ℝ) 1, ∫ x in (0 : ℝ)..t, r x ≤ C * t := by
+    intro t ht
+    have hii : IntervalIntegrable r volume 0 t :=
+      (intervalIntegrable_iff_integrableOn_Icc_of_le ht.1).2
+        (hri.mono_set (Icc_subset_Icc_right ht.2))
+    have := intervalIntegral.integral_mono_on ht.1 hii
+      ((continuous_const : Continuous (fun _ : ℝ => C)).intervalIntegrable (μ := volume) 0 t)
+      (fun x _ => (le_abs_self _).trans (hC x))
+    simpa [mul_comm] using this
+  set D := |C| + 1 with hDdef
+  have hD : 0 < D := by positivity
+  have hD1 : 1 ≤ D := by have := abs_nonneg C; linarith
+  set u := (2 * D)⁻¹ with hu
+  have hu0 : 0 < u := by positivity
+  have hDu : D * u = 1 / 2 := by rw [hu]; field_simp
+  have ht1 : u ^ 2 ≤ 1 := by
+    have : u ≤ 1 := by
+      rw [hu]; apply inv_le_one_of_one_le₀; linarith
+    nlinarith
+  have hsq : Real.sqrt (u ^ 2) = u := Real.sqrt_sq hu0.le
+  have h1 := key (u ^ 2) ⟨by positivity, ht1⟩
+  have h2 := hle (u ^ 2) ⟨by positivity, ht1⟩
+  rw [hval _ (by positivity), hval 0 le_rfl, hsq, Real.sqrt_zero] at h1
+  have h3 : 2 * u ≤ C * u ^ 2 := by linarith
+  have h4 : C * u ^ 2 ≤ |C| * u ^ 2 := by
+    apply mul_le_mul_of_nonneg_right (le_abs_self C) (by positivity)
+  have h5 : |C| * u ^ 2 < D * u ^ 2 := by
+    apply mul_lt_mul_of_pos_right (by linarith) (by positivity)
+  nlinarith
 
 end MovingSofa

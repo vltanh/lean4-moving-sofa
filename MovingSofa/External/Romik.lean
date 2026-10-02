@@ -2,7 +2,7 @@ module
 
 public import MovingSofa.Gerver.Defs
 public import MovingSofa.Gerver.Bounds
-public import MovingSofa.Gerver.RomikFix
+public import MovingSofa.External.Romik.Fix
 
 /-!
 # Existence and uniqueness of the parameters of Gerver's sofa
@@ -20,14 +20,14 @@ all the parameters from the two angles: `a₁ = N/D`, `b₁ = β₀ - a₁ sin �
 `c₁ = π/2 - 2 - 2 b₁`, and the continuity conditions give `κ₂, κ₃` and `κ₄ = (2 κ₃₁ - κ₂₁, κ₂₂)`,
 `κ₅ = (2 κ₃₁ - 1 + a₁, 1/4)` (`rom_eq_mk`: a solution in the box equals `rom_mk φ θ`). The first
 contact condition then reads `U + b₁ V = 0` (`rom_mk_contact1_iff`), i.e.
-`H(φ, θ) = D (U + b₁ V) = 0` for the explicit system `H` of `MovingSofa.Gerver.RomikNum`.
+`H(φ, θ) = D (U + b₁ V) = 0` for the explicit system `H` of `MovingSofa.External.Romik.Num`.
 Conversely, for every zero of `H` in the box, `rom_mk φ θ` satisfies all of Romik's equations
 (`rom_mk_isSolution`): the remaining derivative conditions and the second contact condition follow
 from the left-right symmetry, as Romik says (they are polynomial identities in the explicit
 parameters).
 
 **Numerics.** `H` has a unique zero in the box, which lies within `10⁻¹⁰` of
-`(0.0391773648, 0.6813015094)` (`MovingSofa.Gerver.RomikFix`: a Newton-type map is a contraction on
+`(0.0391773648, 0.6813015094)` (`MovingSofa.External.Romik.Fix`: a Newton-type map is a contraction on
 the box, by interval arithmetic). This gives `romik_exists` and `romik_unique`, and the enclosures
 `rom_phi_mem`, `rom_theta_mem`, `rom_a1_mem`, … and `romik_bounds` of the parameters.
 -/

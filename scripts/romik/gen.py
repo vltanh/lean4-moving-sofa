@@ -1,4 +1,4 @@
-"""Generator for the interval-arithmetic and derivative proofs of MovingSofa/Gerver/Romik*.lean."""
+"""Generator for the interval-arithmetic and derivative proofs of MovingSofa/External/Romik*.lean."""
 from fractions import Fraction as Fr
 import math, itertools
 import sympy as sp

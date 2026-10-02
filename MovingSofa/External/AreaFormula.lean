@@ -1,7 +1,7 @@
 module
 
 public import MovingSofa.Basic.SurfaceArea
-public import MovingSofa.External.AreaFormulaParam
+public import MovingSofa.External.AreaFormula.Param
 public import Mathlib.MeasureTheory.Function.Jacobian
 public import Mathlib.Analysis.Convex.Measure
 public import Mathlib.Analysis.Normed.Affine.AddTorsorBases
@@ -18,7 +18,7 @@ Theorem 7.1.3). This file proves it for the surface area measure `σ_K` of `Basi
 ## Proof
 
 We use the arc-length parametrization `γ` of `∂K` and the normal angle `τ(y)` at arc length `y`
-from `External/AreaFormulaParam.lean`: `γ` is Lipschitz, `γ(y) · u_{τ(y)} = h_K(τ(y))`, `γ' = v_τ`
+from `External/AreaFormula/Param.lean`: `γ` is Lipschitz, `γ(y) · u_{τ(y)} = h_K(τ(y))`, `γ' = v_τ`
 outside the countable set of discontinuities of `τ`, and `τ` pushes the Lebesgue measure forward to
 `σ_K`.
 

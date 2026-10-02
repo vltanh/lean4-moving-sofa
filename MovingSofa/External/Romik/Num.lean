@@ -1,6 +1,6 @@
 module
 
-public import MovingSofa.Gerver.RomikCalc
+public import MovingSofa.External.Romik.Calc
 
 /-!
 # The reduced system for the parameters of Gerver's sofa
@@ -11,7 +11,7 @@ is self-contained. It defines, as polynomials in the "atoms"
 `φ, θ, c = cos φ, s = sin φ, C = cos θ, S = sin θ, p = π`:
 
 * the reduced system `H = (rom_H1, rom_H2)` whose zeros in the box are the angles `(φ, θ)` of the
-  solutions of Romik's system (see `MovingSofa.Gerver.Romik`), and its partial derivatives;
+  solutions of Romik's system (see `MovingSofa.External.Romik`), and its partial derivatives;
 * the Newton-type map `G(z) = z - M H(z)` (`rom_G1`, `rom_G2`, with `M ≈ DH(z*)⁻¹`) and its partial
   derivatives;
 * the linear parameters `a₁, b₁, b₂, c₁, κ_{j}` of a solution as functions of the atoms.

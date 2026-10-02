@@ -1,7 +1,7 @@
 module
 
 public import MovingSofa.Gerver.Properties
-public import MovingSofa.Gerver.Romik
+public import MovingSofa.External.Romik
 
 /-!
 # Optimality of Gerver's sofa
