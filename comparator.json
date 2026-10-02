@@ -1,0 +1,12 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "MovingSofaChallenge.gerver_params_exists",
+    "MovingSofaChallenge.gerver_params_unique",
+    "MovingSofaChallenge.gerver_sofa_optimal"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
