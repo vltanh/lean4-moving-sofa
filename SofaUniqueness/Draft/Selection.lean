@@ -31,10 +31,10 @@ theorem selection_penalty_bound
     (hselect : An recovery - λ * P recovery ≤ An chosen - λ * P chosen) :
     P chosen ≤ P recovery + e / λ := by
   have hmul : λ * P chosen ≤ λ * P recovery + e := by linarith
-  apply (le_div_iff₀ hλ).mp
-  calc
-    P chosen * λ ≤ λ * P recovery + e := by nlinarith [hmul]
-    _ = (P recovery + e / λ) * λ := by field_simp; ring
+  have hdiv : P chosen - P recovery ≤ e / λ := by
+    apply (le_div_iff₀ hλ).mpr
+    nlinarith [hmul]
+  linarith
 
 /-- Vanishing approximation error relative to lambda forces vanishing penalty.
 No unpenalized argmax-selection assertion is used. -/
