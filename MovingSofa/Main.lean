@@ -302,6 +302,17 @@ lemma gm_area_le {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) {S : Se
   have e8 := gm_sofaArea_cap hP hbox
   linarith
 
+/-- Gerver's sofa has area `2.219…` (the introduction's display `eqn:area-bounds`,
+`|G| = 2.2195⋯`): its area lies in `[2.2192, 2.2199]`. -/
+theorem gerverSofa_area_mem {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    area (gerverSofa P) ∈ Icc (2.2192 : ℝ) 2.2199 :=
+  GerverParams.gv_area_mem hP (GerverParams.romik_bounds hP hbox)
+
+/-- Gerver's sofa has finite area. -/
+theorem gerverSofa_volume_ne_top {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    volume (gerverSofa P) ≠ ⊤ :=
+  GerverParams.gv_volume_ne_top hP (GerverParams.romik_bounds hP hbox)
+
 /-- **Theorem 1.1.1** (`thm:main`). Gerver's sofa attains the maximum area of a moving sofa: it is a
 moving sofa, and every moving sofa has area at most that of Gerver's sofa. -/
 theorem theorem1_1_1 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :

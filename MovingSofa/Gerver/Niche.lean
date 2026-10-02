@@ -499,4 +499,48 @@ theorem gv_area (hP : P.IsSolution) (hB : P.Bounds) : 2.2 ≤ area (gerverSofa P
   rw [harea, hcap, hniche]
   linarith [ga_area_lower hP hB]
 
+/-- The area of Gerver's sofa as the combination of curve area functionals bounded in
+`MovingSofa.Gerver.AreaBounds`: the area of the cap minus the area of its niche. -/
+theorem gv_area_eq (hP : P.IsSolution) (hB : P.Bounds) :
+    area (gerverSofa P) = curveArea (contactA P.path) 0 (π / 2) + curveArea (contactC P.path) 0 (π / 2)
+      + segArea (contactA P.path (π / 2)) (contactC P.path 0)
+      - curveArea P.path P.φ (π / 2 - P.φ)
+      + curveArea (contactB P.path) (π / 2 - P.θ) (π / 2)
+      + curveArea (contactD P.path) 0 P.θ := by
+  have hK := gs_isConvexBody_K hP hB
+  have hcapK := (gs_monotone_K hP hB).2
+  have hN : niche P.gs_K (π / 2) ⊆ P.gs_K := gs_niche_subset hP hB
+  have hNm : MeasurableSet (niche P.gs_K (π / 2)) := by
+    rw [← hcapK, gn_niche_eq hP hB]; exact gn_measurableSet_envNiche _
+  have hKfin : volume P.gs_K ≠ ⊤ := hK.2.1.measure_lt_top.ne
+  have hNfin : volume (niche P.gs_K (π / 2)) ≠ ⊤ := ne_top_of_le_ne_top hKfin (measure_mono hN)
+  have harea : area (gerverSofa P) = area P.gs_K - area (niche P.gs_K (π / 2)) := by
+    rw [gs_gerverSofa_eq hP hB, area, measure_sdiff hN hNm.nullMeasurableSet hNfin,
+      ENNReal.toReal_sub_of_le (measure_mono hN) hKfin]
+    rfl
+  have hcap := gv_cap_area hP hB
+  have hniche := (gv_niche hP hB).2.2.2.2.2.2.2
+  rw [hcapK] at hcap hniche
+  rw [harea, hcap, hniche]
+  ring
+
+/-- **The area of Gerver's sofa** is `2.219…`: it lies in `[2.2192, 2.2199]` (Gerver's and Romik's
+value is `2.21953…`). -/
+theorem gv_area_mem (hP : P.IsSolution) (hB : P.Bounds) :
+    area (gerverSofa P) ∈ Icc (2.2192 : ℝ) 2.2199 := by
+  rw [gv_area_eq hP hB]
+  have h1 := ga_curveArea_A_mem hP hB
+  have h2 := ga_curveArea_C_mem hP hB
+  have h3 := ga_segArea_mem hP hB
+  have h4 := ga_curveArea_x_mem hP hB
+  have h5 := ga_curveArea_B_mem hP hB
+  have h6 := ga_curveArea_D_mem hP hB
+  constructor <;> linarith [h1.1, h1.2, h2.1, h2.2, h3.1, h3.2, h4.1, h4.2, h5.1, h5.2, h6.1, h6.2]
+
+/-- Gerver's sofa has finite area: it lies in the compact cap `K_G`. -/
+theorem gv_volume_ne_top (hP : P.IsSolution) (hB : P.Bounds) : volume (gerverSofa P) ≠ ⊤ := by
+  have hK := gs_isConvexBody_K hP hB
+  rw [gs_gerverSofa_eq hP hB]
+  exact ne_top_of_le_ne_top hK.2.1.measure_lt_top.ne (measure_mono sdiff_subset)
+
 end MovingSofa.GerverParams

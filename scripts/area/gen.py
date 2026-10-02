@@ -750,8 +750,8 @@ def emit_tail(seg):
 
 if __name__ == '__main__' and 'emit' in sys.argv:
     out = sys.argv[sys.argv.index('emit') + 1]
-    parts = [open('tpl_head.lean').read(), open('iv.lean').read(), open('tpl_generic.lean').read(),
-             open('tpl_phase.lean').read(), emit_params(), emit_phases()]
+    parts = [open('tpl_head.lean.in').read(), open('iv.lean.in').read(), open('tpl_generic.lean.in').read(),
+             open('tpl_phase.lean.in').read(), emit_params(), emit_phases()]
     tail, bounds, s = emit_tail(emit_seg())
     parts.append(tail)
     import re

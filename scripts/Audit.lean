@@ -291,6 +291,7 @@ meta def paperResults : List (String × Name) :=
 meta def solutionResults : List Name :=
   [``MovingSofaChallenge.gerver_params_exists,
    ``MovingSofaChallenge.gerver_params_unique,
+   ``MovingSofaChallenge.gerver_sofa_area,
    ``MovingSofaChallenge.gerver_sofa_optimal]
 
 /-- Lean's standard axioms. -/

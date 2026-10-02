@@ -37,8 +37,10 @@ and `v_t = (-sin t, cos t)`. Gerver's sofa is the shape
 the solutions with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`, and state that there is exactly one.
 
 **The theorems.** `gerver_params_exists` and `gerver_params_unique`: Romik's system has exactly one
-solution in this range, so Gerver's sofa is well defined. `gerver_sofa_optimal`: Gerver's sofa is a
-moving sofa, and every moving sofa has area at most the area of Gerver's sofa.
+solution in this range, so Gerver's sofa is well defined. `gerver_sofa_area`: its area is `2.219…`
+(between `2.2192` and `2.2199`), which identifies the shape with the sofa of area `2.21953…` that
+Gerver found. `gerver_sofa_optimal`: Gerver's sofa is a moving sofa, and every moving sofa has area at
+most the area of Gerver's sofa.
 -/
 
 @[expose] public section
@@ -163,6 +165,12 @@ theorem gerver_params_exists : ∃ P : GerverParams, P.IsSolution ∧ P.InBox :=
 /-- Romik's system has at most one solution in the stated range. -/
 theorem gerver_params_unique (P Q : GerverParams) (hP : P.IsSolution) (hPb : P.InBox)
     (hQ : Q.IsSolution) (hQb : Q.InBox) : P = Q := by
+  sorry
+
+/-- Gerver's sofa has area `2.219…`: between `2.2192` and `2.2199`. (Gerver's and Romik's value is
+`2.21953…`.) -/
+theorem gerver_sofa_area (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ENNReal.ofReal 2.2192 ≤ volume (gerverSofa P) ∧ volume (gerverSofa P) ≤ ENNReal.ofReal 2.2199 := by
   sorry
 
 /-- **Theorem 1.1.1.** Gerver's sofa is a moving sofa, and every moving sofa has area at most the area

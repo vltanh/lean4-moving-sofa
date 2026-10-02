@@ -174,6 +174,17 @@ theorem gerver_params_unique (P Q : GerverParams) (hP : P.IsSolution) (hPb : P.I
   subst h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 h15 h16 h17
   rfl
 
+/-- Gerver's sofa has area `2.219…`: between `2.2192` and `2.2199`. (Gerver's and Romik's value is
+`2.21953…`.) -/
+theorem gerver_sofa_area (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ENNReal.ofReal 2.2192 ≤ volume (gerverSofa P) ∧ volume (gerverSofa P) ≤ ENNReal.ofReal 2.2199 := by
+  have hP' := (GerverParams.toLib_isSolution P).2 hP
+  have hb' := (GerverParams.toLib_inBox P).2 hPb
+  have h := MovingSofa.gerverSofa_area_mem hP' hb'
+  have hfin := MovingSofa.gerverSofa_volume_ne_top hP' hb'
+  rw [gerverSofa_eq, ← ENNReal.ofReal_toReal hfin]
+  exact ⟨ENNReal.ofReal_le_ofReal h.1, ENNReal.ofReal_le_ofReal h.2⟩
+
 /-- **Theorem 1.1.1.** Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
 of Gerver's sofa. -/
 theorem gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
