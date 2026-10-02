@@ -93,17 +93,18 @@ sources:
     author_endorsement: n/a
 
 related_formalizations:
-  - id: "https://github.com/RuifengCao/sofa-formal"
-    relationship: independent
-    note: >-
-      An earlier independent Lean 4 formalization of the same paper. This repository was developed
-      without consulting it and shares no code with it.
   - id: "https://github.com/deancureton/MovingSofa"
-    relationship: independent
+    relationship: other
     note: >-
-      An earlier independent Lean 4 formalization of the same paper, written by AI coding agents
-      directed by Dean Cureton. This repository was developed without consulting it and shares no
-      code with it.
+      An earlier Lean 4 formalization of the same paper, written by AI coding agents directed by
+      Dean Cureton. It proves the formal-conjectures statement sofaConstant = volume gerversSofa,
+      with Gerver's description of the sofa and vendored libraries. The README compares the two.
+  - id: "https://github.com/RuifengCao/sofa-formal"
+    relationship: other
+    note: >-
+      An earlier Lean 4 formalization of the same paper. It proves the formal-conjectures statement
+      sofaConstant = volume gerversSofa, with Gerver's description of the sofa. The README compares
+      the two.
 
 status:
   scope: >-
