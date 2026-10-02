@@ -3,6 +3,7 @@ module
 public import MovingSofa.Optimality.Variation
 public import MovingSofa.Gerver.Structure
 public import MovingSofa.Gerver.Romik
+public import MovingSofa.Gerver.Niche
 public import Mathlib.MeasureTheory.Integral.DivergenceTheorem
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.DerivIntegrable
@@ -89,7 +90,9 @@ theorem theorem8_4_1_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
       (P.curveD (P.tPt 0)).2 = 0 ∧ (P.curveB (P.tPt 5)).2 = 0 ∧
       area (niche P.cap (π / 2)) = curveArea P.path (P.tPt 1) (P.tPt 4) -
         curveArea P.curveB (P.tPt 3) (P.tPt 5) - curveArea P.curveD (P.tPt 0) (P.tPt 2) := by
-  sorry
+  have h := gv_niche hP (GerverParams.romik_bounds hP hbox)
+  simp only [GerverParams.tPt]
+  exact h
 
 /-- **Theorem 8.4.1** (3): `b⃗_K(t)` passes through `𝐁(t)` for `t ∈ [t_3, t_5]`, and `d⃗_K(t)` through
 `𝐃(t)` for `t ∈ [t_0, t_2]`. -/
@@ -142,7 +145,7 @@ theorem theorem6_1_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
 package). -/
 theorem gerverSofa_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     2.2 ≤ area (gerverSofa P) := by
-  sorry
+  exact gv_area hP (GerverParams.romik_bounds hP hbox)
 
 open Filter Topology
 open scoped ContDiff ENNReal Interval
