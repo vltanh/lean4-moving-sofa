@@ -147,11 +147,12 @@ def IsMonotoneSofa (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
 def ClosedInDirection (X : Set (ℝ × ℝ)) (v : ℝ × ℝ) : Prop :=
   ∀ x ∈ X, ∀ c : ℝ, 0 ≤ c → x + c • v ∈ X
 
-/-- The left side of a line `l(t, h)` that is not parallel to the `y`-axis: the closed half-plane
-bounded by it containing `-N u_0` for large `N` (Definition 2.3.9, `def:line-half-plane-directions`). -/
+/-- The left side of a line `l(t, h)` that is not parallel to the `x`-axis: the closed half-plane
+bounded by it containing `-N u_0` for large `N` (Definition 2.3.9, `def:line-half-plane-directions`;
+the paper says "`y`-axis", but `±N u_0` lie on the same side of a horizontal line). -/
 def leftSide (t h : ℝ) : Set (ℝ × ℝ) := if 0 < cos t then halfMinus t h else halfPlus t h
 
-/-- The right side of a line `l(t, h)` not parallel to the `y`-axis (Definition 2.3.9). -/
+/-- The right side of a line `l(t, h)` not parallel to the `x`-axis (Definition 2.3.9). -/
 def rightSide (t h : ℝ) : Set (ℝ × ℝ) := if 0 < cos t then halfPlus t h else halfMinus t h
 
 /-- The convex set `𝓒(S) = P_ω ∩ ⋂_{t ∈ [0, ω]} Q_S⁺(t)` (Definition 2.3.10, `def:cap-sofa`). -/

@@ -526,7 +526,7 @@ private lemma cb_coef_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.No
       rw [← cb_dot_uvec_left]; exact dot_le_supp hK hP.1 s)
   rwa [dot_vminus_uvec] at h
 
-/-- **Theorem `thm:limits-converging-to-vertex`** (right limits). For a convex body `K` and an angle
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits. For a convex body `K` and an angle
 `t`, the vertices `v_K^±(s)` and the intersections `v_K(t, s)` converge to `v_K⁺(t)` as `s → t⁺`.
 In particular `v_K⁺` is right-continuous. -/
 theorem tendsto_vplus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
@@ -546,7 +546,7 @@ theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ
   · refine (cb_coef_right hK.2.1 hK.1 t).congr (fun s => ?_)
     simp [vint, dot_add_left, dot_smul_left]
 
-/-- **Theorem `thm:limits-converging-to-vertex`** (left limits). -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits. -/
 theorem tendsto_vplus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vplus K) (𝓝[<] t) (𝓝 (vminus K t)) := by
   exact cb_tendsto_left hK.2.1 hK.1 t (vplus_mem_edge hK)
