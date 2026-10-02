@@ -11,7 +11,7 @@ maxSynthPendingDepth = 3
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "master"
+rev = "v4.35.0-rc3"
 
 [[lean_lib]]
 name = "MovingSofa"
