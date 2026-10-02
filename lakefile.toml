@@ -1,0 +1,24 @@
+name = "MovingSofa"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["MovingSofa", "Challenge", "Solution"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "master"
+
+[[lean_lib]]
+name = "MovingSofa"
+globs = ["MovingSofa.+"]
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"
