@@ -130,7 +130,12 @@ def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
 /-- Moving sofas in the Challenge's vocabulary are moving sofas of the library. -/
 theorem isMovingSofa_iff (S : Set (ℝ × ℝ)) : IsMovingSofa S ↔ MovingSofa.IsMovingSofa S := by
-  sorry
+  constructor
+  · rintro ⟨hc, hconn, θ, c, h1, h2, h3, h4, h5, h6⟩
+    exact ⟨-θ 1, hc, hconn, θ, c, ⟨h1, h2, h3, (neg_neg _).symm, h4, h5, h6⟩⟩
+  · rintro ⟨w, hc, hconn, θ, c, hm⟩
+    exact ⟨hc, hconn, θ, c, hm.continuousOn_angle, hm.continuousOn_shift, hm.angle_zero, hm.start,
+      hm.inside, hm.finish⟩
 
 /-- The library's version of a parameter tuple. -/
 def GerverParams.toLib (P : GerverParams) : MovingSofa.GerverParams :=
@@ -140,30 +145,42 @@ def GerverParams.toLib (P : GerverParams) : MovingSofa.GerverParams :=
 def GerverParams.ofLib (P : MovingSofa.GerverParams) : GerverParams :=
   ⟨P.φ, P.θ, P.a₁, P.a₂, P.b₁, P.b₂, P.c₁, P.c₂, P.d₁, P.d₂, P.e₁, P.e₂, P.κ₁, P.κ₂, P.κ₃, P.κ₄, P.κ₅⟩
 
-theorem GerverParams.toLib_isSolution (P : GerverParams) : P.toLib.IsSolution ↔ P.IsSolution := by
-  sorry
+theorem GerverParams.toLib_isSolution (P : GerverParams) : P.toLib.IsSolution ↔ P.IsSolution :=
+  Iff.rfl
 
-theorem GerverParams.toLib_inBox (P : GerverParams) : P.toLib.InBox ↔ P.InBox := by
-  sorry
+theorem GerverParams.toLib_inBox (P : GerverParams) : P.toLib.InBox ↔ P.InBox :=
+  Iff.rfl
 
-theorem gerverSofa_eq (P : GerverParams) : gerverSofa P = MovingSofa.gerverSofa P.toLib := by
-  sorry
+theorem gerverSofa_eq (P : GerverParams) : gerverSofa P = MovingSofa.gerverSofa P.toLib :=
+  rfl
 
 /-! ### The theorems -/
 
 /-- Romik's system has a solution in the stated range. -/
 theorem gerver_params_exists : ∃ P : GerverParams, P.IsSolution ∧ P.InBox := by
-  sorry
+  obtain ⟨P, hP, hb⟩ := MovingSofa.definition8_1_2_exists
+  exact ⟨GerverParams.ofLib P, (GerverParams.toLib_isSolution _).1 hP,
+    (GerverParams.toLib_inBox _).1 hb⟩
 
 /-- Romik's system has at most one solution in the stated range. -/
 theorem gerver_params_unique (P Q : GerverParams) (hP : P.IsSolution) (hPb : P.InBox)
     (hQ : Q.IsSolution) (hQb : Q.InBox) : P = Q := by
-  sorry
+  have h := MovingSofa.definition8_1_2_unique ((GerverParams.toLib_isSolution P).2 hP)
+    ((GerverParams.toLib_inBox P).2 hPb) ((GerverParams.toLib_isSolution Q).2 hQ)
+    ((GerverParams.toLib_inBox Q).2 hQb)
+  cases P; cases Q
+  simp only [GerverParams.toLib, MovingSofa.GerverParams.mk.injEq] at h
+  obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17⟩ := h
+  subst h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 h15 h16 h17
+  rfl
 
 /-- **Theorem 1.1.1.** Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
 of Gerver's sofa. -/
 theorem gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
     IsMovingSofa (gerverSofa P) ∧ ∀ S, IsMovingSofa S → volume S ≤ volume (gerverSofa P) := by
-  sorry
+  have h := MovingSofa.theorem1_1_1 ((GerverParams.toLib_isSolution P).2 hP)
+    ((GerverParams.toLib_inBox P).2 hPb)
+  rw [gerverSofa_eq, isMovingSofa_iff]
+  exact ⟨h.1, fun S hS => h.2 S ((isMovingSofa_iff S).1 hS)⟩
 
 end MovingSofaChallenge
