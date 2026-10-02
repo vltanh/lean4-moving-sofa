@@ -50,7 +50,7 @@ theorem theorem8_1_1_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InB
 /-- The triple `(K, B_K, D_K)` of Gerver's sofa lies in `𝓛`. -/
 theorem gerver_inL {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     InL P.φ P.cap (rightBody P.φ P.cap) (leftBody P.φ P.cap) :=
-  theorem8_1_8 hbox.1 (theorem8_1_1_gerver hP hbox) (gm_niche_subset hP hbox)
+  theorem8_1_8 hbox.1 (theorem8_1_1_gerver hP hbox)
 
 /-- Gerver's triple as an element of `𝓛`. -/
 noncomputable def gerverTriple {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) : LTriple P.φ :=
@@ -296,9 +296,8 @@ lemma gm_area_le {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) {S : Se
     have := theorem2_5_10 hSK.1
     rwa [hcapK] at this
   have hKi := theorem8_1_1_balanced hK
-  have hN := theorem3_5_4 hK
-  have e5 := theorem8_2_4 hbox.1 hKi hN
-  have e6 := corollary8_5_8 hP hbox (theorem8_1_8 hbox.1 hKi hN)
+  have e5 := theorem8_2_4 hbox.1 hKi
+  have e6 := corollary8_5_8 hP hbox (theorem8_1_8 hbox.1 hKi)
   have e7 := theorem8_4_6 hP hbox
   have e8 := gm_sofaArea_cap hP hbox
   linarith

@@ -498,10 +498,9 @@ theorem proposition8_2_1 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) : (lDomain φ)
   exact opt_isQuadratic_add (opt_isQuadratic_add (opt_isQuadratic_sub
     (opt_isQuadratic_add (opt_isQuadratic_add t1 t2) t3) t4) t5) t6
 
-/-- **Lemma 8.2.2** (`lem:cap-left-right-tail`). For `K ∈ 𝒦^i` with `𝒩(K) ⊆ K`, `B = B_K`, `D = D_K`:
+/-- **Lemma 8.2.2** (`lem:cap-left-right-tail`). For `K ∈ 𝒦^i`, `B = B_K`, `D = D_K`:
 `|𝒩(K) ∩ H̆_K^R| ≥ 𝒥(X_B, W_K^R) - 𝒥(𝐛_B)` and `|𝒩(K) ∩ H̆_K^L| ≥ 𝒥(Z_K^L, Y_D) - 𝒥(𝐝_D)`. -/
-theorem lemma8_2_2 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K)
-    (hN : niche K (π / 2) ⊆ K) :
+theorem lemma8_2_2 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     segArea (xB φ (rightBody φ K)) (wRight φ K) - convexCurveArea (rightBody φ K) (π + φ) (3 * π / 2) ≤
         area (niche K (π / 2) ∩ hRight φ K) ∧
       segArea (zLeft φ K) (yD φ (leftBody φ K)) -
@@ -512,9 +511,10 @@ theorem lemma8_2_2 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (�
   have hc : 0 < cos φ := by linarith
   have hcap := hK.1
   have hφ' : φ ∈ Ioo 0 (π / 4) := ⟨hφ0, hφ4⟩
-  obtain ⟨-, hBcb, hDcb, hBK, hDK, -, eB1, eB2, -, eD1, eD2⟩ := theorem8_1_8 hφ hK hN
+  obtain ⟨-, hBcb, hDcb, hBK, hDK, -, eB1, eB2, -, eD1, eD2⟩ := theorem8_1_8 hφ hK
   have hfin : ∀ S ⊆ niche K (π / 2), MeasureTheory.volume S ≠ ⊤ := fun S hS =>
-    ((MeasureTheory.measure_mono (hS.trans hN)).trans_lt hcap.2.1.2.1.measure_lt_top).ne
+    ne_top_of_le_ne_top (nef_niche_isBounded hcap).measure_lt_top.ne
+      (MeasureTheory.measure_mono hS)
   have hW := (lemma8_1_5 hφ hK).1.1.1
   have hZ := (lemma8_1_5 hφ hK).2.1.1
   constructor
@@ -1181,17 +1181,17 @@ theorem lemma8_2_3 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (�
     exact (opt_l823_numerics (B := B) hτpos hH0 hwX hzX hwz).2.2.2.2.2.2
   linarith
 
-/-- **Theorem 8.2.4** (`thm:upper-bound-q`). For `K ∈ 𝒦^i` with `𝒩(K) ⊆ K`,
-`𝒜(K) ≤ 𝒬(K, B_K, D_K)`. -/
-theorem theorem8_2_4 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K)
-    (hN : niche K (π / 2) ⊆ K) :
+/-- **Theorem 8.2.4** (`thm:upper-bound-q`). For `K ∈ 𝒦^i`, `𝒜(K) ≤ 𝒬(K, B_K, D_K)`.
+(The decomposition of `𝒩(K)` uses `𝒩(K) ∩ H̆_K^R ∩ H̆_K^L = ∅`, `opt_niche_hRight_hLeft`; the paper
+derives it from Lemma 8.1.4, which needs `𝒩(K) ⊆ K`.) -/
+theorem theorem8_2_4 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     sofaArea (π / 2) K ≤ upperQ φ K (rightBody φ K) (leftBody φ K) := by
   obtain ⟨hφ0, hφ4, hs4, hc9, hs0⟩ := opt_phi_bounds hφ
   have hc : 0 < cos φ := by linarith
   have hpi := two_le_pi
   have hcap := hK.1
-  obtain ⟨-, hBcb, hDcb, hBK, hDK, -, eB1, eB2, -, eD1, eD2⟩ := theorem8_1_8 hφ hK hN
-  have h22 := lemma8_2_2 hφ hK hN
+  obtain ⟨-, hBcb, hDcb, hBK, hDK, -, eB1, eB2, -, eD1, eD2⟩ := theorem8_1_8 hφ hK
+  have h22 := lemma8_2_2 hφ hK
   have h23 := lemma8_2_3 hφ hK
   set N := niche K (π / 2) with hNdef
   set B := rightBody φ K with hBdef
@@ -1200,7 +1200,8 @@ theorem theorem8_2_4 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (
   have hRm : MeasurableSet (hRight φ K) := (opt_halfPlus_isClosed _ _).measurableSet
   have hLm : MeasurableSet (hLeft φ K) := (opt_halfPlus_isClosed _ _).measurableSet
   have hfin : ∀ S ⊆ N, MeasureTheory.volume S ≠ ⊤ := fun S hS =>
-    ((MeasureTheory.measure_mono (hS.trans hN)).trans_lt hcap.2.1.2.1.measure_lt_top).ne
+    ne_top_of_le_ne_top (nef_niche_isBounded hcap).measure_lt_top.ne
+      (MeasureTheory.measure_mono hS)
   have hdecomp : area N = area (N ∩ hRight φ K) + area (N ∩ hLeft φ K) +
       area ((N \ hRight φ K) \ hLeft φ K) := by
     unfold area
@@ -1214,7 +1215,7 @@ theorem theorem8_2_4 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (
       · rintro ⟨⟨h1, -⟩, h3⟩; exact ⟨h1, h3⟩
       · rintro ⟨h1, h3⟩
         refine ⟨⟨h1, fun h2 => ?_⟩, h3⟩
-        exact Set.disjoint_left.mp (lemma8_1_4 hφ hK) ⟨hN h1, h2⟩ ⟨hN h1, h3⟩
+        exact Set.disjoint_left.mp (opt_niche_hRight_hLeft hφ hK) ⟨h1, h2⟩ h3
     rw [e3] at e2
     rw [← e1, ← e2, ENNReal.toReal_add (hfin _ inter_subset_left)
       (ENNReal.add_ne_top.mpr ⟨hfin _ inter_subset_left, hfin _ (sdiff_subset.trans sdiff_subset)⟩),
