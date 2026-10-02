@@ -22,3 +22,9 @@ name = "Challenge"
 
 [[lean_lib]]
 name = "Solution"
+
+# Kept opt-in until local elaboration and the separate axiom audit pass.
+# This namespace does not collide with FormalConjectures.Wikipedia.MovingSofa.
+[[lean_lib]]
+name = "SofaUniqueness"
+globs = ["SofaUniqueness.+"]
