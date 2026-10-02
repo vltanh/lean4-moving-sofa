@@ -77,15 +77,25 @@ structure Valid : Prop where
   dd₁ : ∀ t, HasDerivAt Φ.w₁' (Φ.w₁'' t) t
   dd₂ : ∀ t, HasDerivAt Φ.w₂' (Φ.w₂'' t) t
 
+/-- The rotation path of the phase, `𝐱(t) = R_t (w₁ t, w₂ t) + κ`. -/
 noncomputable def X (t : ℝ) : ℝ × ℝ := rot t (Φ.w₁ t, Φ.w₂ t) + Φ.κ
+/-- `α = ⟨𝐱', u_t⟩ = w₁' - w₂`. -/
 def α (t : ℝ) : ℝ := Φ.w₁' t - Φ.w₂ t
+/-- `β = ⟨𝐱', v_t⟩ = w₂' + w₁`. -/
 def β (t : ℝ) : ℝ := Φ.w₂' t + Φ.w₁ t
+/-- The derivative `𝐱'(t) = α u_t + β v_t`. -/
 noncomputable def X' (t : ℝ) : ℝ × ℝ := Φ.α t • uvec t + Φ.β t • vvec t
+/-- `ρ_A = w₁'' + w₁ + 1`, with `𝐀' = ρ_A v_t`. -/
 def ρA (t : ℝ) : ℝ := Φ.w₁'' t + Φ.w₁ t + 1
+/-- `ρ_C = w₂'' + w₂ + 1`, with `𝐂' = -ρ_C u_t`. -/
 def ρC (t : ℝ) : ℝ := Φ.w₂'' t + Φ.w₂ t + 1
+/-- The contact curve `𝐀 = 𝐱 + α v + u` of the phase. -/
 noncomputable def A (t : ℝ) : ℝ × ℝ := rot t (Φ.w₁ t + 1, Φ.w₁' t) + Φ.κ
+/-- The contact curve `𝐁 = 𝐱 + α v` of the phase. -/
 noncomputable def B (t : ℝ) : ℝ × ℝ := rot t (Φ.w₁ t, Φ.w₁' t) + Φ.κ
+/-- The contact curve `𝐂 = 𝐱 - β u + v` of the phase. -/
 noncomputable def C (t : ℝ) : ℝ × ℝ := rot t (-Φ.w₂' t, Φ.w₂ t + 1) + Φ.κ
+/-- The contact curve `𝐃 = 𝐱 - β u` of the phase. -/
 noncomputable def D (t : ℝ) : ℝ × ℝ := rot t (-Φ.w₂' t, Φ.w₂ t) + Φ.κ
 
 end gs_Phase
@@ -204,7 +214,8 @@ lemma gs_pw_eq₂ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t 
 lemma gs_pw_eq₃ (hO : gs_Ord P) {t : ℝ} (ht₁ : P.θ ≤ t)
     (ht₂ : t ≤ π / 2 - P.θ) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₃ t := by
   unfold gs_pw
-  rw [ite_eq_right (not_lt.2 (hO.φ_lt_θ.le.trans ht₁)), ite_eq_right (not_lt.2 ht₁), ite_eq_left ht₂]
+  rw [ite_eq_right (not_lt.2 (hO.φ_lt_θ.le.trans ht₁)), ite_eq_right (not_lt.2 ht₁),
+    ite_eq_left ht₂]
 
 lemma gs_pw_eq₄ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t : ℝ}
     (ht₁ : π / 2 - P.θ ≤ t) (ht₂ : t ≤ π / 2 - P.φ) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₄ t := by
@@ -220,7 +231,8 @@ lemma gs_pw_eq₅ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t 
   unfold gs_pw
   have h0 : π / 2 - P.θ < t := hO.lt_φ'.trans_le ht₁
   have h1 : P.θ ≤ t := (hO.θ_lt.trans h0).le
-  rw [ite_eq_right (not_lt.2 (hO.φ_lt_θ.le.trans h1)), ite_eq_right (not_lt.2 h1), ite_eq_right (not_le.2 h0)]
+  rw [ite_eq_right (not_lt.2 (hO.φ_lt_θ.le.trans h1)), ite_eq_right (not_lt.2 h1),
+    ite_eq_right (not_le.2 h0)]
   rcases ht₁.lt_or_eq with h | rfl
   · rw [ite_eq_right (not_le.2 h)]
   · rw [ite_eq_left le_rfl, hm.2.2.2]
