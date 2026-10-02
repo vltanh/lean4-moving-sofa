@@ -136,11 +136,12 @@ Lean's kernel checks every one of them.
   - one checked every finding about the paper against the LaTeX source for the audit.
 
   The coordinating agent wrote the statements, divided the work, checked and integrated every result,
-  and wrote the documents. It also resumed finished sub-agents six times for follow-up work.
+  and wrote the documents. It also resumed finished sub-agents three times for follow-up work.
 - **Time.** About 3 hours 50 minutes of elapsed time, from 2026-10-01 22:38 to 2026-10-02 02:28 (US
-  Central Time), up to the audited formalization (commit `59b35c2`). The sub-agents worked about 19
-  hours in total, with about 11 million tokens and 2,900 tool calls. Preparing the Palomar submission
-  came afterwards.
+  Central Time), up to the audited formalization (commit `59b35c2`). The sub-agents worked about 18
+  hours in total. All agents together made 3,135 tool calls (2,704 of them by sub-agents), generated
+  7.5 million output tokens and read 21 million input tokens, plus 1.2 billion tokens from the prompt
+  cache. Preparing the Palomar submission came afterwards.
 
 ## Building
 

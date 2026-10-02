@@ -140,7 +140,7 @@ automation:
       cost:
         wall_time: >-
           about 3 hours 50 minutes of elapsed time to the audited formalization (2026-10-01 22:38 to
-          2026-10-02 02:28, US Central Time), with about 19 hours of sub-agent working time; the
+          2026-10-02 02:28, US Central Time), with about 18 hours of sub-agent working time; the
           Palomar packaging came afterwards
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
