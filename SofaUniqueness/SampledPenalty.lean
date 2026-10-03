@@ -38,7 +38,8 @@ theorem sampledPenalty_nonneg (s : Finset ι) (w target f : ι → ℝ)
 theorem sample_sq_le_penalty (s : Finset ι) (w target f : ι → ℝ)
     (hw : ∀ i ∈ s, 0 ≤ w i) {i : ι} (hi : i ∈ s) :
     w i * (f i - target i) ^ 2 ≤ sampledPenalty s w target f := by
-  sorry
+  exact Finset.single_le_sum (f := fun j => w j * (f j - target j) ^ 2)
+    (fun j hj => mul_nonneg (hw j hj) (sq_nonneg _)) hi
 
 /-- A uniform error in the sampled supports bounds the recovery penalty. -/
 theorem sampledPenalty_le (s : Finset ι) (w target f : ι → ℝ)
@@ -57,7 +58,20 @@ changes of the actual support, as needed after pinned-strip normalization. -/
 theorem abs_square_increment_le {a b c η r : ℝ}
     (hη : 0 ≤ η) (hr : 0 ≤ r) (ha : |a - c| ≤ η) (hab : |b - a| ≤ r) :
     |(b - c) ^ 2 - (a - c) ^ 2| ≤ 2 * η * r + r ^ 2 := by
-  sorry
+  have hid : (b - c) ^ 2 - (a - c) ^ 2 = 2 * (a - c) * (b - a) + (b - a) ^ 2 := by ring
+  rw [hid]
+  calc
+    |2 * (a - c) * (b - a) + (b - a) ^ 2|
+        ≤ |2 * (a - c) * (b - a)| + |(b - a) ^ 2| := abs_add_le _ _
+    _ = 2 * |a - c| * |b - a| + (b - a) ^ 2 := by
+      rw [abs_mul, abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2),
+        abs_of_nonneg (sq_nonneg (b - a))]
+    _ ≤ 2 * η * r + r ^ 2 := by
+      have hp := mul_le_mul ha hab (abs_nonneg _) hη
+      have hsq : (b - a) ^ 2 ≤ r ^ 2 := by
+        rw [← sq_abs (b - a)]
+        exact pow_le_pow_left₀ (abs_nonneg _) hab 2
+      nlinarith
 
 /-- Uniform changes of the sampled actual supports control the whole penalty.
 The estimate has an explicit quadratic remainder. -/

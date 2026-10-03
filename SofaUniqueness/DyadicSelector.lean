@@ -70,12 +70,36 @@ def dyadicSamples (n : ℕ) : SupportSamples (dyadicAngleSet ω hω n) where
 theorem dyadic_level_mass (m : ℕ) :
     (∑ i : ↥(dyadicAngleSet ω hω m).angles × Fin 2,
       dyadicLevelWeight ω hω m) = (1 / 2 : ℝ) ^ (m + 1) := by
-  sorry
+  classical
+  have hcard : ((dyadicAngleSet ω hω m).angles.card : ℝ) ≠ 0 := by
+    exact_mod_cast ne_of_gt (Finset.card_pos.mpr (dyadicAngleSet ω hω m).nonempty)
+  rw [Finset.sum_const, Finset.card_univ, Fintype.card_prod, Fintype.card_coe,
+    Fintype.card_fin, nsmul_eq_mul]
+  unfold dyadicLevelWeight
+  push_cast
+  field_simp
 
 /-- Exact finite geometric mass. -/
 theorem dyadic_totalWeight (n : ℕ) :
     (dyadicSamples ω hω n).totalWeight = 1 - (1 / 2 : ℝ) ^ (n + 1) := by
-  sorry
+  classical
+  have hlevels : (dyadicSamples ω hω n).totalWeight =
+      ∑ m : Fin (n + 1), (1 / 2 : ℝ) ^ (m.1 + 1) := by
+    change (∑ i : DyadicSampleIndex ω hω n, dyadicLevelWeight ω hω i.1.1) = _
+    rw [Fintype.sum_sigma]
+    apply Finset.sum_congr rfl
+    intro m _
+    exact dyadic_level_mass ω hω m.1
+  have hgeom : ∀ r : ℕ,
+      (∑ m ∈ Finset.range r, (1 / 2 : ℝ) ^ (m + 1)) = 1 - (1 / 2 : ℝ) ^ r := by
+    intro r
+    induction r with
+    | zero => simp
+    | succ r ih =>
+      rw [Finset.sum_range_succ, ih, pow_succ]
+      ring
+  rw [hlevels, Fin.sum_univ_eq_sum_range (fun m => (1 / 2 : ℝ) ^ (m + 1)) (n + 1)]
+  exact hgeom (n + 1)
 
 theorem dyadic_totalWeight_le_one (n : ℕ) : (dyadicSamples ω hω n).totalWeight ≤ 1 := by
   rw [dyadic_totalWeight]
@@ -95,14 +119,24 @@ theorem persistent_sample_first {m n : ℕ} (hmn : m ≤ n) {t : ℝ}
     (ht : t ∈ (dyadicAngleSet ω hω m).angles) (target K : Set (ℝ × ℝ)) :
     dyadicLevelWeight ω hω m * (supp K t - supp target t) ^ 2 ≤
       dyadicPenalty ω hω n target K := by
-  sorry
+  let i : DyadicSampleIndex ω hω n := ⟨⟨m, by omega⟩, ⟨⟨t, ht⟩, 0⟩⟩
+  have h := (dyadicSamples ω hω n).sample_bound target K i
+  have hn : (dyadicSamples ω hω n).normal i = t := by
+    simp only [dyadicSamples, i, Fin.val_zero, Nat.cast_zero, zero_mul, add_zero]
+  rw [hn] at h
+  exact h
 
 /-- The shifted dyadic sample has the same persistent weight. -/
 theorem persistent_sample_second {m n : ℕ} (hmn : m ≤ n) {t : ℝ}
     (ht : t ∈ (dyadicAngleSet ω hω m).angles) (target K : Set (ℝ × ℝ)) :
     dyadicLevelWeight ω hω m * (supp K (t + π / 2) - supp target (t + π / 2)) ^ 2 ≤
       dyadicPenalty ω hω n target K := by
-  sorry
+  let i : DyadicSampleIndex ω hω n := ⟨⟨m, by omega⟩, ⟨⟨t, ht⟩, 1⟩⟩
+  have h := (dyadicSamples ω hω n).sample_bound target K i
+  have hn : (dyadicSamples ω hω n).normal i = t + π / 2 := by
+    simp only [dyadicSamples, i, Fin.val_one, Nat.cast_one, one_mul]
+  rw [hn] at h
+  exact h
 
 /-- Exact recovery: no rate of approximation is needed for this penalty. -/
 theorem dyadicPenalty_recovery_zero {target : Set (ℝ × ℝ)} (hK : IsCap target ω) (n : ℕ) :
@@ -119,7 +153,14 @@ theorem dyadic_recovery_ge {target : Set (ℝ × ℝ)} (hK : IsCap target ω) (n
 theorem dyadicPenalty_le_uniform (n : ℕ) (target K : Set (ℝ × ℝ)) {η : ℝ}
     (hη : 0 ≤ η) (hclose : ∀ t, |supp K t - supp target t| ≤ η) :
     dyadicPenalty ω hω n target K ≤ η ^ 2 := by
-  sorry
+  have h := (dyadicSamples ω hω n).penalty_le target K hη
+    (fun i => hclose ((dyadicSamples ω hω n).normal i))
+  have hmass := mul_le_mul_of_nonneg_right (dyadic_totalWeight_le_one ω hω n) (sq_nonneg η)
+  calc dyadicPenalty ω hω n target K
+      = (dyadicSamples ω hω n).penalty target K := rfl
+    _ ≤ (dyadicSamples ω hω n).totalWeight * η ^ 2 := h
+    _ ≤ 1 * η ^ 2 := hmass
+    _ = η ^ 2 := one_mul _
 
 /-- Summing the weights of the actual polygon normals loses no multiplicity. -/
 theorem dyadic_normalWeight_sum_le_one (n : ℕ) :

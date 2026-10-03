@@ -51,7 +51,13 @@ theorem selection_penalty_tendsto
     (hrec : Tendsto (fun n => P (recovery n)) atTop (𝓝 0))
     (herr : Tendsto (fun n => err n / weight n) atTop (𝓝 0)) :
     Tendsto (fun n => P (chosen n)) atTop (𝓝 0) := by
-  sorry
+  have hb : ∀ n, P (chosen n) ≤ P (recovery n) + err n / weight n := by
+    intro n
+    exact selection_penalty_bound A (An n) P target (chosen n) (recovery n)
+      (hweight n) (hmax n) (hupper n) (hrecovery n) (hselect n)
+  have hlim : Tendsto (fun n => P (recovery n) + err n / weight n) atTop (𝓝 0) := by
+    simpa using hrec.add herr
+  exact squeeze_zero (fun n => hnonneg (chosen n)) hb hlim
 
 /-- An isolated-zero penalty identifies every convergent subsequence once its
 penalties tend to zero. Compactness is responsible for supplying subsequences. -/

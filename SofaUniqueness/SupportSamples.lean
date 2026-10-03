@@ -72,8 +72,9 @@ theorem atNormal_eq_zero_of_not_mem {t : ℝ} (ht : t ∉ Θ.diamond) : S.atNorm
 /-- One positively weighted support sample is bounded by the whole penalty. -/
 theorem sample_bound (target K : Set (ℝ × ℝ)) (i : S.Index) :
     S.weight i * (supp K (S.normal i) - supp target (S.normal i)) ^ 2 ≤
-      S.penalty target K := by
-  sorry
+      S.penalty target K :=
+  sample_sq_le_penalty Finset.univ S.weight (fun i => supp target (S.normal i))
+    (fun i => supp K (S.normal i)) (fun i _ => S.weight_nonneg i) (Finset.mem_univ i)
 
 /-- A bound on all sampled support differences controls the penalty. -/
 theorem penalty_le (target K : Set (ℝ × ℝ)) {η : ℝ} (hη : 0 ≤ η)
@@ -84,7 +85,12 @@ theorem penalty_le (target K : Set (ℝ × ℝ)) {η : ℝ} (hη : 0 ≤ η)
 /-- The recovery penalty vanishes identically, at every finite mesh. -/
 theorem penalty_recovery_zero {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.ω) :
     S.penalty target (polyCap Θ target) = 0 := by
-  sorry
+  unfold penalty sampledPenalty
+  apply Finset.sum_eq_zero
+  intro i _
+  dsimp only
+  rw [nef_supp_polyCap hK (nef_diamond_subset_capAngles Θ (S.normal_mem i)), sub_self]
+  simp
 
 /-- Therefore the recovery objective already has the full continuum value. -/
 theorem recovery_objective_ge {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.ω) :
