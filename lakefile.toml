@@ -1,7 +1,7 @@
 name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["MovingSofa", "Challenge", "Solution"]
+defaultTargets = ["MovingSofa", "SofaUniqueness", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -23,10 +23,12 @@ name = "Challenge"
 [[lean_lib]]
 name = "Solution"
 
-# Source-only uniqueness development remains opt-in.
+# The uniqueness of Gerver's sofa: the modules that the final theorem imports.
+# The other files under SofaUniqueness/ (the formal-conjectures adapter and earlier
+# drafts) are not part of this library and are not built.
 [[lean_lib]]
 name = "SofaUniqueness"
-globs = ["SofaUniqueness.+"]
+roots = ["SofaUniqueness.Draft.ShapeUniqueness"]
 
 # No source exporter or external reference-proof dependency is needed.
 # The exact upstream Gerver-reference proof is tracked separately: the

@@ -54,6 +54,44 @@ import all MovingSofa.Optimality.UpperBound
 import all MovingSofa.Optimality.Variation
 import all MovingSofa.Sofa.Defs
 import all MovingSofa.Tests.Equality
+import all SofaUniqueness.CapApproximation
+import all SofaUniqueness.CurvatureLimit
+import all SofaUniqueness.CurvatureRegularity
+import all SofaUniqueness.Draft.AngleExtension
+import all SofaUniqueness.Draft.CapGeometry
+import all SofaUniqueness.Draft.CapKernel
+import all SofaUniqueness.Draft.PaperReductions
+import all SofaUniqueness.Draft.Rigid
+import all SofaUniqueness.Draft.Selection
+import all SofaUniqueness.Draft.ShapeUniqueness
+import all SofaUniqueness.DyadicSelector
+import all SofaUniqueness.EnvelopeBounds
+import all SofaUniqueness.FloatingVariation
+import all SofaUniqueness.GerverRegularClosed
+import all SofaUniqueness.GerverStrictHeight
+import all SofaUniqueness.InjectivityFromCurvature
+import all SofaUniqueness.MamikonCapKernel
+import all SofaUniqueness.MamikonDisplacement
+import all SofaUniqueness.MirrorMaximality
+import all SofaUniqueness.MirroredCurvature
+import all SofaUniqueness.PinnedGeometry
+import all SofaUniqueness.PinnedLimit
+import all SofaUniqueness.PinnedVariation
+import all SofaUniqueness.PolygonArms
+import all SofaUniqueness.PolygonCurvature
+import all SofaUniqueness.PolygonMeasureBounds
+import all SofaUniqueness.PolygonPenalty
+import all SofaUniqueness.PolygonSelection
+import all SofaUniqueness.RegularClosedEnvelope
+import all SofaUniqueness.SampledPenalty
+import all SofaUniqueness.SelectedCaps
+import all SofaUniqueness.SelectedCurvature
+import all SofaUniqueness.SetRecovery
+import all SofaUniqueness.SquareGap
+import all SofaUniqueness.SupportKernelEquations
+import all SofaUniqueness.SupportSamples
+import all SofaUniqueness.TangentEquality
+import all SofaUniqueness.VariationDefect
 import all Solution
 
 /-!
@@ -290,6 +328,21 @@ meta def paperResults : List (String × Name) :=
    ("Thm 8.5.7", ``MovingSofa.theorem8_5_7),
    ("Cor 8.5.8", ``MovingSofa.corollary8_5_8)]
 
+/-- The uniqueness of Gerver's sofa (`SofaUniqueness/`): the theorem and the propositions of its
+argument, `docs/uniqueness/20-complete-paper-proof.md`. -/
+meta def uniquenessResults : List (String × Name) :=
+  [("Uniqueness theorem", ``SofaUniqueness.Draft.image_eq_gerver_of_volume_eq),
+   ("Uniqueness: maximizers are congruent", ``SofaUniqueness.Draft.globalMax_congruent),
+   ("Uniqueness: Prop 1", ``SofaUniqueness.exists_selectedCapSequence),
+   ("Uniqueness: Prop 2 (floating)", ``SofaUniqueness.floating_defect_le),
+   ("Uniqueness: Prop 2 (pinned)", ``SofaUniqueness.pinned_defect_le),
+   ("Uniqueness: Prop 3 (curvature)", ``SofaUniqueness.Draft.curvatureBounds_of_isMaxCap),
+   ("Uniqueness: Prop 3 (injectivity)", ``SofaUniqueness.Draft.isKi_of_maximal_area),
+   ("Uniqueness: Prop 4 (pinned bounds)", ``SofaUniqueness.Draft.pinnedBounds_of_isMaxCap),
+   ("Uniqueness: Prop 4 (right-angle motion)", ``SofaUniqueness.Draft.right_angle_motion_of_pinned),
+   ("Uniqueness: Prop 5", ``SofaUniqueness.Draft.ki_sofa_eq_gerver_translate),
+   ("Uniqueness: Prop 6", ``SofaUniqueness.Draft.regularClosed_gerver)]
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``MovingSofaChallenge.gerver_params_exists,
@@ -300,8 +353,9 @@ meta def solutionResults : List Name :=
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
-/-- Whether `m` is a module of the library. -/
-meta def isLibraryModule (m : Name) : Bool := (`MovingSofa).isPrefixOf m
+/-- Whether `m` is a module of the library (Baek's paper, and the uniqueness of Gerver's sofa). -/
+meta def isLibraryModule (m : Name) : Bool :=
+  (`MovingSofa).isPrefixOf m || (`SofaUniqueness).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
@@ -358,7 +412,7 @@ elab "#audit" : command => do
   let mut deps : NameMap (Array Name) := {}
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
-  for (label, n) in paperResults do
+  for (label, n) in paperResults ++ uniquenessResults do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n
