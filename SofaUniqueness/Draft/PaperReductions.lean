@@ -85,7 +85,11 @@ def CurvatureBounds (K : Set Plane) : Prop :=
 /-- Positivity of a right-angle maximum follows from an existing competitor. -/
 theorem sofaArea_pos_of_isMaxCap {K : Set Plane}
     (hK : IsMaxCap (π / 2) K) : 0 < sofaArea (π / 2) K := by
-  sorry
+  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
+  have hcompare := hK.2 P.cap (GerverParams.gm_isCap hP hbox)
+  rw [GerverParams.gm_sofaArea_cap hP hbox] at hcompare
+  have hG := gerverSofa_area hP hbox
+  linarith
 
 /-- P2: both curvature bounds for this cap, including the two outer endpoints. -/
 theorem curvatureBounds_of_isMaxCap {K : Set Plane}
@@ -136,6 +140,18 @@ theorem ki_sofa_eq_gerver_translate {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set Plane} (hK : IsKi K)
     (heq : sofaArea (π / 2) K = area (gerverSofa P)) :
     ∃ a : ℝ, K \ niche K (π / 2) = Rigid.translate (a, 0) '' gerverSofa P := by
-  sorry
+  have hmid := (ki_maximizer_equality_conditions hP hbox hK heq).2
+    (1 / 2) (by constructor <;> norm_num)
+  have hker := capKernel_of_mamikon_midpoint (GerverParams.gm_φ_mem_Ioo hP hbox)
+    (gerverTriple hP hbox) (kiExtensionTriple hbox.1 hK) hmid
+  change CapKernel P.φ (fun t => supp K t - supp P.cap t) at hker
+  let a := -(supp K π - supp P.cap π)
+  have hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp P.cap t = a * cos t :=
+    hker.eq_horizontal_translation (GerverParams.gm_φ_mem_Ioo hP hbox)
+  refine ⟨a, ?_⟩
+  have hGset : gerverSofa P = P.cap \ niche P.cap (π / 2) :=
+    theorem2_4_3 (GerverParams.gm_isMonotone hP hbox)
+  rw [hGset]
+  exact sofa_eq_translate_of_upper_support hK.1 (GerverParams.gm_isCap hP hbox) a hsupp
 
 end SofaUniqueness.Draft

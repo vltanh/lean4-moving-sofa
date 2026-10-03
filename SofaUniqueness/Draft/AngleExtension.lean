@@ -30,7 +30,52 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     ∃ t ∈ Ioo 0 ω, (0, 0) ∈ closure (qMinus K t) ∧
       oPt ω - vvec 0 ∈ closure (qMinus K t) ∧
       oPt ω - uvec ω ∈ closure (qMinus K t) := by
-  sorry
+  obtain ⟨hc, hc5, hs, hs1, h4⟩ := ang_omega_facts hω
+  have hω0 : 0 ≤ ω := by linarith [pi_pos]
+  have hω2 := hω.2
+  have hlarge : dMin ω + cOmega ω ≤ supp K 0 ∨
+      dMin ω + cOmega ω ≤ supp K (ω + π / 2) := by
+    by_contra h
+    rw [not_or, not_le, not_le] at h
+    obtain ⟨h1, h2⟩ := h
+    have hsub : K ⊆ clippedRegion ω (dMin ω) := by
+      intro p hp
+      refine ⟨⟨ang_cap_subset_para hcap hp, ?_⟩, ?_⟩
+      · exact (dot_le_supp hcap.2.1.2.1 hp 0).trans h1.le
+      · exact (dot_le_supp hcap.2.1.2.1 hp (ω + π / 2)).trans h2.le
+    have hfin : volume (clippedRegion ω (dMin ω)) ≠ ⊤ :=
+      ne_top_of_le_ne_top ENNReal.ofReal_ne_top
+        ((measure_mono fun p hp => hp.1.1).trans (ang_volume_para_le hc))
+    have hKR : area K ≤ area (clippedRegion ω (dMin ω)) :=
+      ENNReal.toReal_mono hfin (measure_mono hsub)
+    have hn : 0 ≤ area (niche K ω) := ENNReal.toReal_nonneg
+    have hclip := lemma4_2_2 hω
+    unfold sofaArea at harea
+    linarith
+  rcases hlarge with h | h
+  · obtain ⟨h1, h2, h3⟩ := ang_consumed_of_supp_zero hω hcap hw h
+    exact ⟨π / 2 - ω, ⟨by linarith, by linarith⟩,
+      subset_closure h1, subset_closure h2, subset_closure h3⟩
+  · have h' : dMin ω + cOmega ω ≤ supp (mirrorCap K ω) 0 := by
+      rw [proposition2_5_4_supp, sub_zero]
+      exact h
+    have hw' : wedgeGapWInf (mirrorCap K ω) ω ≤
+        sigmaAt (mirrorCap K ω) (π / 2) := by
+      rw [ang_wedgeGapWInf_mirror, ang_sigmaAt_mirror hcap,
+        show ω + π / 2 - π / 2 = ω by ring]
+      exact hz
+    obtain ⟨h1, h2, h3⟩ :=
+      ang_consumed_of_supp_zero hω (proposition2_5_4_isCap hcap) hw' h'
+    have m1 := ang_mirror_mem_qMinus h1
+    have m2 := ang_mirror_mem_qMinus h2
+    have m3 := ang_mirror_mem_qMinus h3
+    obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hω0, hω.2⟩
+    rw [hP1, ang_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
+    rw [hP2, ang_mirror_smul, ang_mirror_vvec, ← hP1] at m3
+    have hm0 : mirror ω ((0 : ℝ), (0 : ℝ)) = (0, 0) := by simp [mirror]
+    rw [hm0] at m1
+    exact ⟨ω - (π / 2 - ω), ⟨by linarith, by linarith⟩,
+      subset_closure m1, subset_closure m3, subset_closure m2⟩
 
 /-- A motion with angle `ω` extends to a right-angle motion whenever the SAME
 sofa has width at most one in all additional directions. -/
