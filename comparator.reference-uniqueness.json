@@ -1,0 +1,35 @@
+{
+  "challenge_module": "SofaSubmission.ChallengeUniqueness",
+  "solution_module": "SofaSubmission.Final",
+  "theorem_names": [
+    "MovingSofa.GerversSofa.ABφθSpec.existsUnique",
+    "MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+  ],
+  "definition_names": [
+    "Module.orientedEuclideanSpaceFinTwo",
+    "fact_finrank_euclideanSpace_fin_two",
+    "MovingSofa.horizontalHallway",
+    "MovingSofa.verticalHallway",
+    "MovingSofa.hallway",
+    "MovingSofa.IsMovingSofa",
+    "MovingSofa.rotateTranslate",
+    "MovingSofa.sofaOfRotateTranslatePath",
+    "MovingSofa.GerversSofa.ABφθSpec",
+    "MovingSofa.GerversSofa.A",
+    "MovingSofa.GerversSofa.B",
+    "MovingSofa.GerversSofa.φ",
+    "MovingSofa.GerversSofa.θ",
+    "MovingSofa.GerversSofa.r",
+    "MovingSofa.GerversSofa.x",
+    "MovingSofa.GerversSofa.y",
+    "MovingSofa.GerversSofa.p",
+    "MovingSofa.gerversSofa",
+    "MovingSofa.sofaConstant"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

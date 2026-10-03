@@ -7,8 +7,8 @@ public import SofaUniqueness.ReferenceEquations
 
 These arguments use elementary differentiation and the four defining equations,
 not interval-certificate evaluation. They apply to the full upstream domain,
-including its initially non-strict inequalities. They do not yet localize its
-interior roots to the small box used by the paper's parameter theorem.
+including its initially non-strict inequalities. The later analytic localization
+and residual-separation modules use these nondegenerate bounds.
 
 The source is uncompiled. No existence or global root-uniqueness assertion is
 introduced as an assumption or as an admitted declaration.
@@ -47,7 +47,6 @@ theorem Spec.phi_pos {A B φ θ : ℝ} (h : Spec A B φ θ) : 0 < φ := by
   have hstrict : StrictMonoOn f (Icc 0 θ) := by
     apply strictMonoOn_of_deriv_pos (convex_Icc 0 θ)
     · exact fun t _ => (hf' t).continuousAt.continuousWithinAt
-    · exact fun t _ => (hf' t).differentiableAt.differentiableWithinAt
     · intro t ht
       rw [interior_Icc] at ht
       rw [(hf' t).deriv]
@@ -87,7 +86,7 @@ theorem Spec.phi_lt_theta {A B φ θ : ℝ} (h : Spec A B φ θ) : φ < θ := by
     exfalso
     linarith
 
-/-- Nondegeneracy that is available without the rejected global localization. -/
+/-- Nondegeneracy on the original full domain. -/
 theorem Spec.strict_order {A B φ θ : ℝ} (h : Spec A B φ θ) :
     0 < φ ∧ φ < θ ∧ θ ≤ π / 4 :=
   ⟨h.phi_pos, h.phi_lt_theta, h.2.2.1⟩
