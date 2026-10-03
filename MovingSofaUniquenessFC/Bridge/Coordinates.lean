@@ -73,11 +73,13 @@ theorem coordinates_measurePreserving :
 
 @[simp] theorem point_coordinates_image (s : Set Point) :
     point '' (coordinates '' s) = s := by
-  sorry
+  rw [Set.image_image]
+  simp only [point_coordinates, Set.image_id']
 
 @[simp] theorem coordinates_point_image (s : Set CoordinatePlane) :
     coordinates '' (point '' s) = s := by
-  sorry
+  rw [Set.image_image]
+  simp only [coordinates_point, Set.image_id']
 
 theorem volume_coordinates_image (s : Set Point) :
     volume (coordinates '' s) = volume s := by

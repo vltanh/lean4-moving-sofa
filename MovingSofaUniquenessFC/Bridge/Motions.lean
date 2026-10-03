@@ -64,7 +64,66 @@ theorem paper_with_initial_to_canonical {s : Set Point}
     (hS : MovingSofaOptimality.IsMovingSofa (coordinates '' s))
     (hinitial : s ⊆ MovingSofa.horizontalHallway) :
     ∃ m, MovingSofa.IsMovingSofa s m := by
-  sorry
+  obtain ⟨ω, hclosed, hconnected, θ, c, hm⟩ := hS
+  have hsclosed : IsClosed s := by
+    simpa only [point_coordinates_image] using point_image_closed hclosed
+  have hsconnected : IsConnected s := by
+    simpa only [point_coordinates_image] using
+      hconnected.image _ point_continuous.continuousOn
+  have hθ : Continuous (fun t : I => θ t) :=
+    hm.continuousOn_angle.comp_continuous continuous_subtype_val (fun t => t.property)
+  have hc : Continuous (fun t : I => c t) :=
+    hm.continuousOn_shift.comp_continuous continuous_subtype_val (fun t => t.property)
+  let τ : I → I := fun t =>
+    ⟨max 0 (2 * (t : ℝ) - 1), le_max_left _ _,
+      max_le zero_le_one (by linarith [t.property.2])⟩
+  let lam : I → ℝ := fun t => min (2 * (t : ℝ)) 1
+  have hτ : Continuous τ := by unfold τ; fun_prop
+  have hlam : Continuous lam := by unfold lam; fun_prop
+  have hlambounds (t : I) : 0 ≤ lam t ∧ lam t ≤ 1 :=
+    ⟨le_min (by linarith [t.property.1]) zero_le_one, min_le_right _ _⟩
+  have hτ0 : τ 0 = (0 : I) := by apply Subtype.ext; norm_num [τ]
+  have hτ1 : τ 1 = (1 : I) := by apply Subtype.ext; norm_num [τ]
+  have hlam0 : lam 0 = 0 := by norm_num [lam]
+  have hlam1 : lam 1 = 1 := by norm_num [lam]
+  let m : I → Motion := fun t => realization (θ (τ t), lam t • c (τ t))
+  have hmcont : Continuous m :=
+    realization_continuous.comp ((hθ.comp hτ).prodMk (hlam.smul (hc.comp hτ)))
+  have hformula (t : I) (p : Point) :
+      coordinates (m t p) = MovingSofaOptimality.rot (θ (τ t)) (coordinates p) +
+        lam t • c (τ t) := realization_coordinates _ _
+  have hmzero : m 0 = AffineIsometryEquiv.refl ℝ Point := by
+    apply AffineIsometryEquiv.ext
+    intro p
+    apply coordinates_injective
+    rw [hformula]
+    simp [hτ0, hlam0, hm.angle_zero, MovingSofaOptimality.rot_zero]
+  refine ⟨m, hsconnected, hsclosed, hmcont, hmzero, hinitial, ?_, ?_⟩
+  · rintro t _ ⟨p, hp, rfl⟩
+    apply (coordinates_mem_hallway _).mp
+    rw [hformula]
+    by_cases ht : (t : ℝ) ≤ 1 / 2
+    · have hτt : τ t = (0 : I) := by
+        apply Subtype.ext
+        simp only [τ]
+        exact max_eq_left (by linarith)
+      rw [hτt, Set.Icc.coe_zero, hm.angle_zero, MovingSofaOptimality.rot_zero]
+      left
+      have hstart := hm.start (coordinates p) ⟨p, hp, rfl⟩
+      rw [hm.angle_zero, MovingSofaOptimality.rot_zero] at hstart
+      have hfirst : coordinates p ∈ MovingSofaOptimality.horizSide :=
+        (coordinates_mem_horizontal p).mpr (hinitial hp)
+      have h := MovingSofaOptimality.ang_horizSide_combo
+        (p := coordinates p) (a := (0 : CoordinatePlane)) (b := c 0)
+        (by simpa using hfirst) hstart (hlambounds t).1 (hlambounds t).2
+      simpa only [smul_zero, zero_add] using h
+    · have hlamt : lam t = 1 := min_eq_right (by linarith [not_le.mp ht])
+      rw [hlamt, one_smul]
+      exact hm.inside (τ t) (τ t).property (coordinates p) ⟨p, hp, rfl⟩
+  · rintro _ ⟨p, hp, rfl⟩
+    apply (coordinates_mem_vertical _).mp
+    rw [hformula, hτ1, hlam1, one_smul]
+    exact hm.finish (coordinates p) ⟨p, hp, rfl⟩
 
 /-- Exact relationship between the two definitions on a specified Euclidean set.
 The initial-placement condition is necessary and has not been suppressed. -/
@@ -113,6 +172,17 @@ def paperConstant : ℝ≥0∞ :=
 /-- Both presentations define precisely the same extremal value.
 This theorem is independent of the uniqueness conjecture and Gerver's formulas. -/
 theorem sofaConstant_eq_paperConstant : MovingSofa.sofaConstant = paperConstant := by
-  sorry
+  apply le_antisymm
+  · unfold MovingSofa.sofaConstant
+    refine iSup_le fun s => iSup_le fun hs => ?_
+    rw [← volume_coordinates_image s]
+    exact le_iSup₂ (f := fun (S : Set CoordinatePlane)
+      (_ : MovingSofaOptimality.IsMovingSofa S) => volume S)
+      (coordinates '' s) (canonical_to_paper hs)
+  · unfold paperConstant
+    refine iSup_le fun S => iSup_le fun hS => ?_
+    obtain ⟨s, hs, hvol⟩ := paper_to_canonical hS
+    rw [← hvol]
+    exact MovingSofa.Canonical.volume_le_constant hs
 
 end MovingSofaUniquenessFC.Bridge

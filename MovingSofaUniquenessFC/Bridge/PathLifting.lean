@@ -36,7 +36,15 @@ def firstDirection (e : Motion) : Circle :=
     simpa [Complex.normSq_apply, pow_two] using (column_laws e).1⟩
 
 theorem firstDirection_continuous : Continuous firstDirection := by
-  sorry
+  have hx := continuous_linear_eval basisX
+  have h0 : Continuous (fun e : Motion => leftColumn e 0) := by
+    unfold leftColumn
+    fun_prop
+  have h1 : Continuous (fun e : Motion => leftColumn e 1) := by
+    unfold leftColumn
+    fun_prop
+  apply Continuous.subtype_mk
+  exact Complex.equivRealProdCLM.symm.continuous.comp (h0.prodMk h1)
 
 /-- Lift a continuous identity-start path into rotations and translations.
 The conclusion uses the paper's explicit coordinate rotation. -/
@@ -45,7 +53,36 @@ theorem real_angle_lift (m : I → Motion) (hm : Continuous m)
     ∃ (θ : I → ℝ) (c : I → CoordinatePlane), Continuous θ ∧ Continuous c ∧
       θ 0 = 0 ∧ c 0 = 0 ∧ ∀ t p,
         coordinates (m t p) = MovingSofaOptimality.rot (θ t) (coordinates p) + c t := by
-  sorry
+  let γ : C(I, Circle) :=
+    ⟨fun t => firstDirection (m t), firstDirection_continuous.comp hm⟩
+  have hlin (p : Point) : (AffineIsometryEquiv.refl ℝ Point).linearIsometryEquiv p = p := by
+    rw [linear_apply_eq_sub]
+    simp
+  have hγ0 : γ 0 = Circle.exp 0 := by
+    change firstDirection (m 0) = Circle.exp 0
+    rw [hzero, Circle.exp_zero]
+    apply Circle.ext
+    simp [firstDirection, leftColumn, basisX, hlin, Complex.ext_iff]
+  obtain ⟨θ, hθ, hθ0⟩ := Circle.isCoveringMap_exp.exists_path_lifts γ 0 hγ0
+  refine ⟨θ, fun t => coordinates (m t 0), θ.continuous,
+    coordinates_continuous.comp ((continuous_motion_eval 0).comp hm),
+    hθ0, ?_, ?_⟩
+  · change coordinates (m 0 0) = 0
+    rw [hzero]
+    rfl
+  · intro t p
+    have hexp : Circle.exp (θ t) = firstDirection (m t) := congrFun hθ t
+    have hc : leftColumn (m t) 0 = cos (θ t) := by
+      have h := congrArg (fun z : Circle => Complex.re (z : ℂ)) hexp
+      simp only [Circle.coe_exp, Complex.exp_ofReal_mul_I_re] at h
+      exact h.symm
+    have hs : leftColumn (m t) 1 = sin (θ t) := by
+      have h := congrArg (fun z : Circle => Complex.im (z : ℂ)) hexp
+      simp only [Circle.coe_exp, Complex.exp_ofReal_mul_I_im] at h
+      exact h.symm
+    rw [MovingSofaUniquenessFC.affineIsometry_apply_eq,
+      linear_eq_euclideanRotate (determinant_eq_one_on_path m hm hzero t) hc hs p,
+      coordinates_add, euclideanRotate_coordinates]
 
 /-- A constant identity path is compatible with the required normalization. -/
 theorem identity_has_zero_angle :

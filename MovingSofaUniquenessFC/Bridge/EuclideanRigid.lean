@@ -108,7 +108,14 @@ theorem realization_toContinuousAffineMap (ac : ℝ × CoordinatePlane) :
       (ContinuousAffineMap.decompHomeomorph ℝ Point Point).symm
         (point ac.2, cos ac.1 • (ContinuousLinearMap.id ℝ Point) +
           sin ac.1 • quarterTurn) := by
-  sorry
+  ext p : 1
+  apply coordinates_injective
+  change coordinates (realization ac p) = _
+  rw [realization_coordinates,
+    ContinuousAffineMap.decompHomeomorph_symm_apply]
+  change MovingSofaOptimality.rot ac.1 (coordinates p) + ac.2 =
+    coordinates ((cos ac.1 • p + sin ac.1 • quarterTurn p) + point ac.2)
+  ext <;> simp [MovingSofaOptimality.rot, coordinates, quarterTurn, point] <;> ring
 
 /-- Continuity uses precisely the canonical model's induced topology. -/
 theorem realization_continuous : Continuous realization := by

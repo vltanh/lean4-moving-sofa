@@ -90,7 +90,8 @@ theorem mem_vertical_iff (p : ℝ²) :
 /-- The supremum bounds every actual competitor without any finiteness premise. -/
 theorem volume_le_constant {s : Set ℝ²} (hs : ∃ m, IsMovingSofa s m) :
     volume s ≤ sofaConstant := by
-  sorry
+  unfold sofaConstant
+  exact le_iSup₂ (f := fun (s : Set ℝ²) (_ : ∃ m, IsMovingSofa s m) => volume s) s hs
 
 /-- The motion structure includes nonemptiness through connectedness. -/
 theorem nonempty {s : Set ℝ²} (hs : ∃ m, IsMovingSofa s m) : s.Nonempty := by

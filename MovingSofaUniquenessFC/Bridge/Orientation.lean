@@ -35,7 +35,10 @@ def determinant (e : Motion) : ℝ :=
 
 /-- Evaluation is continuous for the model's declared induced topology. -/
 theorem continuous_motion_eval (p : Point) : Continuous (fun e : Motion => e p) := by
-  sorry
+  have h : Continuous (fun e : Motion =>
+      e.toAffineIsometry.toContinuousAffineMap) := continuous_induced_dom
+  have h2 : Continuous (fun f : Point →ᴬ[ℝ] Point => f p) := continuous_eval_const p
+  exact h2.comp h
 
 theorem linear_apply_eq_sub (e : Motion) (p : Point) :
     e.linearIsometryEquiv p = e p - e 0 := by
@@ -53,7 +56,21 @@ theorem column_laws (e : Motion) :
     (leftColumn e 0) ^ 2 + (leftColumn e 1) ^ 2 = 1 ∧
     (rightColumn e 0) ^ 2 + (rightColumn e 1) ^ 2 = 1 ∧
     leftColumn e 0 * rightColumn e 0 + leftColumn e 1 * rightColumn e 1 = 0 := by
-  sorry
+  have hx : (leftColumn e 0) ^ 2 + (leftColumn e 1) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => r ^ 2) (e.linearIsometryEquiv.norm_map basisX)
+    rw [norm_sq_coordinates, norm_sq_coordinates] at h
+    simpa [leftColumn, basisX] using h
+  have hy : (rightColumn e 0) ^ 2 + (rightColumn e 1) ^ 2 = 1 := by
+    have h := congrArg (fun r : ℝ => r ^ 2) (e.linearIsometryEquiv.norm_map basisY)
+    rw [norm_sq_coordinates, norm_sq_coordinates] at h
+    simpa [rightColumn, basisY] using h
+  have hsum : (leftColumn e 0 + rightColumn e 0) ^ 2 +
+      (leftColumn e 1 + rightColumn e 1) ^ 2 = 2 := by
+    have h := congrArg (fun r : ℝ => r ^ 2)
+      (e.linearIsometryEquiv.norm_map (basisX + basisY))
+    rw [e.linearIsometryEquiv.map_add, norm_sq_coordinates, norm_sq_coordinates] at h
+    simpa [leftColumn, rightColumn, basisX, basisY, one_add_one_eq_two] using h
+  exact ⟨hx, hy, by nlinarith⟩
 
 /-- The determinant cannot vanish: its square is one. -/
 theorem determinant_sq (e : Motion) : determinant e ^ 2 = 1 := by
@@ -77,7 +94,24 @@ theorem determinant_continuous : Continuous determinant := by
 theorem determinant_eq_one_on_path (m : I → Motion) (hm : Continuous m)
     (hzero : m 0 = AffineIsometryEquiv.refl ℝ Point) (t : I) :
     determinant (m t) = 1 := by
-  sorry
+  have hd0 : determinant (m 0) = 1 := by
+    have hlin (p : Point) : (AffineIsometryEquiv.refl ℝ Point).linearIsometryEquiv p = p := by
+      rw [linear_apply_eq_sub]
+      simp
+    rw [hzero]
+    norm_num [determinant, leftColumn, rightColumn, hlin, basisX, basisY]
+  have hc := determinant_continuous.comp hm
+  have hpos : 0 < determinant (m t) := by
+    by_contra h
+    have hle : determinant (m t) ≤ 0 := le_of_not_gt h
+    obtain ⟨u, hu⟩ := intermediate_value_univ t 0 hc
+      (show (0 : ℝ) ∈ Icc (determinant (m t)) (determinant (m 0)) from
+        ⟨hle, by rw [hd0]; norm_num⟩)
+    have hs := determinant_sq (m u)
+    rw [show determinant (m u) = 0 from hu] at hs
+    norm_num at hs
+  have hs := determinant_sq (m t)
+  nlinarith
 
 /-- For determinant +1, the second column is the first column rotated by pi/2. -/
 theorem rightColumn_of_determinant_one {e : Motion} (he : determinant e = 1) :
