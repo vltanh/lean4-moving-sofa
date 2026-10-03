@@ -395,6 +395,8 @@ printed, the left side is σ_{D_K} on (π, π + θ], which is 0. Slip in the sta
 - Proposition 7.2.4, proof (`22/10:125`): s for d. Proposition 7.2.6: the proof is truncated (the claim,
   additivity of the integral, is immediate). Proposition 7.2.7 (`22/10:169`): "clockwise" for
   "counterclockwise". Theorem 7.2.1 (`22/10:14`): ∂U = ∂V = X for Γ.
+- Lemma 7.3.1, proof (`22/20:52`): v_K⁺(a) − v_K⁻(b) = αv_a + βv_b for v_K⁻(b) − v_K⁺(a) = αv_a + βv_b,
+  which is the vector τv_{t′}.
 - Theorem 7.4.1, proof (`22/30:48`): αu_t for αv_t (the result is unaffected).
 - Lemma 8.1.6, proof (`25/03:179`): the spanning directions u_t, −v_t for −u_t, v_t.
 - Definition 8.3.3 (`25/10:60`): ℛ_B uses π/2 + φ^R; it should be π + φ^R (with π/2 + φ^R both the curve
@@ -427,7 +429,7 @@ omit them, so they are more general than the paper's.
 | Theorem 6.2.3 | t ∈ [0, π/2) (right derivatives); t ∈ (0, π/2] (left derivatives) | [`theorem6_2_3_right`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L201), [`theorem6_2_3_left`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L226) |
 | Lemma 6.2.4 | t ∈ [0, π/2] | [`lemma6_2_4`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L251) |
 | Lemma 6.4.2 | the polygon caps K_n have rotation angle π/2 | [`lemma6_4_2`](MovingSofaOptimality/Injectivity/LimitIneq.lean#L312) |
-| Lemma 6.5.4 | f ≥ 0 (only g ≥ 0 is needed) | [`lemma6_5_4`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L344) |
+| Lemma 6.5.4 | f ≥ 0 and g ≥ 0 (the codomain ℝ≥0) | [`lemma6_5_4`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L344) holds for all continuous f ≤ g |
 | Theorem 7.1.2 (2) | a < b < a + π, for the vertices v_K^±(a), v_K(a, b) | [`theorem7_1_2_vertices`](MovingSofaOptimality/Convex/ConvexDomain.lean#L258) |
 | Proposition 7.2.4 | q ∈ l(t, h) (it follows from p ∈ l(t, h) and q − p = d v_t) | [`proposition7_2_4_line`](MovingSofaOptimality/Convex/CurveArea.lean#L483) |
 | Theorem 7.3.2, last claim | a < b < a + π, for the quadraticity of 𝒥(𝐮_K^{a,b}) | [`theorem7_3_2_quadratic`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1251) |
@@ -544,9 +546,9 @@ enters only through Definition 8.1.2.
 
 ## 8. Not formalized
 
-- **Theorems 7.2.1 and 7.2.3, Proposition 7.2.7, and Definitions 7.2.1–7.2.3 and 7.2.7:** the Jordan
-  curve theorem, the area enclosed by a Jordan curve, and the orientation of Jordan arcs. The
-  formalization replaces every use by a direct area computation (Section 6).
+- **Theorems 7.2.1 and 7.2.3, Proposition 7.2.7, and Definitions 7.2.1–7.2.3, 7.2.7 and 7.2.9:** the
+  Jordan curve theorem, the area enclosed by a Jordan curve, and the orientation and concatenation of
+  Jordan arcs. The formalization replaces every use by a direct area computation (Section 6).
 - **Theorem 2.1.1** (Schneider's Theorem 4.2.3, cited) is not stated in its 𝓗¹ form. The surface area
   measure is defined directly, and the properties the paper uses are proved (Section 2).
 - **Theorem 1.3.1** quotes Gerver's Theorem 1 for orientation; the paper reproves its content in

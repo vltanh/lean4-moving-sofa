@@ -11,7 +11,7 @@ proves that the system has at most one solution (`spec_unique`), by elementary i
 `Spec` is a copy of `ABφθSpec`: `ChallengeDefs`, which defines `ABφθSpec`, uses this result.
 
 The angles determine `A` and `B` (`Spec.coefficients`). Every solution has `0 < φ < θ` and
-`φ < 1/20` (`Spec.phi_lt_twentieth`). On that triangle the third equation `F`, with `A` and `B`
+`φ < 1/20` (`Spec.phi_lt_twentieth`). On that strip the third equation `F`, with `A` and `B`
 expressed through the angles, decreases strictly in `φ` and increases in `θ`, while
 `H = G + (9/10) F`, with `G` the second equation, decreases in `φ` and strictly in `θ`. So two
 solutions have the same `θ`, and then the same `φ`.
@@ -891,10 +891,10 @@ theorem separatingResidual_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
   ring
 
 /-!
-## Bounds on the triangle `0 ≤ φ ≤ 1/20`, `φ ≤ θ ≤ π/4`
+## Bounds on the strip `0 ≤ φ ≤ 1/20`, `φ ≤ θ ≤ π/4`
 
 Elementary bounds on the sines and cosines, on `A` and `B`, and on the other quantities of the
-derivatives, on the whole triangle (`smallBounds`).
+derivatives, on the whole strip (`smallBounds`).
 -/
 
 def baseNumerator (t : ℝ) : ℝ := (t - 1) * cos t - sin t + 1
@@ -979,7 +979,7 @@ structure SmallBounds (φ θ : ℝ) : Prop where
   frame_mem : frameDen φ θ ∈ Icc (9 / 10 : ℝ) 1
   remainder_pos : 0 < remainder φ θ
 
-/-- The bounds of `SmallBounds` hold on the whole triangle. -/
+/-- The bounds of `SmallBounds` hold on the whole strip. -/
 theorem smallBounds {φ θ : ℝ} (hp0 : 0 ≤ φ) (hp1 : φ ≤ 1 / 20)
     (ho : φ ≤ θ) (ht : θ ≤ π / 4) : SmallBounds φ θ := by
   obtain ⟨hs0, hsc, hc0, hcc, hts0, htc0, hsum⟩ := triangle_trig hp0 ho ht
@@ -1051,7 +1051,7 @@ theorem smallBounds {φ θ : ℝ} (hp0 : 0 ≤ φ) (hp1 : φ ≤ 1 / 20)
 /-!
 ## The signs of the partial derivatives
 
-On the triangle, `∂F/∂φ ≤ -2/3`, `0 ≤ (∂F/∂θ)/C ≤ 1/2`, `∂G/∂φ ≤ 3/5` and `(∂G/∂θ)/C ≤ -2/3`, where
+On the strip, `∂F/∂φ ≤ -2/3`, `0 ≤ (∂F/∂θ)/C ≤ 1/2`, `∂G/∂φ ≤ 3/5` and `(∂G/∂θ)/C ≤ -2/3`, where
 `C > 0`. So `H` decreases in `φ` and strictly in `θ` (`separating_signs`).
 -/
 

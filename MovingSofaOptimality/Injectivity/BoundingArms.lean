@@ -339,8 +339,8 @@ theorem lemma6_5_3 {c : ℝ} (hc : c ∈ Icc 0 (2 / 3)) {x : ℝ} (hx : x ∈ Ic
         nlinarith [sq_nonneg (x + 1 - π / 2 - 2 / 3), sq_nonneg (c - (5 / 3 - π / 2))]
       linarith
 
-/-- **Lemma 6.5.4** (`lem:operator-monotonicity`). `𝓕` is monotone on nonnegative continuous
-functions on `[0, π/2]`. -/
+/-- **Lemma 6.5.4** (`lem:operator-monotonicity`). `𝓕` is monotone on continuous functions on
+`[0, π/2]`; the paper also asks them to be nonnegative, which is not needed. -/
 theorem lemma6_5_4 {f g : ℝ → ℝ} (hf : ContinuousOn f (Icc 0 (π / 2)))
     (hg : ContinuousOn g (Icc 0 (π / 2)))
     (hfg : ∀ x ∈ Icc 0 (π / 2), f x ≤ g x) : ∀ x ∈ Icc 0 (π / 2), lowerOp f x ≤ lowerOp g x := by

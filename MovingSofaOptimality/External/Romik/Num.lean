@@ -11,7 +11,8 @@ is self-contained. It defines, as polynomials in the "atoms"
 `φ, θ, c = cos φ, s = sin φ, C = cos θ, S = sin θ, p = π`:
 
 * the reduced system `H = (rom_H1, rom_H2)` whose zeros in the box are the angles `(φ, θ)` of the
-  solutions of Romik's system (see `MovingSofaOptimality.External.Romik`), and its partial derivatives;
+  solutions of Romik's system (see `MovingSofaOptimality.External.Romik`), and its partial
+  derivatives;
 * the Newton-type map `G(z) = z - M H(z)` (`rom_G1`, `rom_G2`, with `M ≈ DH(z*)⁻¹`) and its partial
   derivatives;
 * the linear parameters `a₁, b₁, b₂, c₁, κ_{j}` of a solution as functions of the atoms.
@@ -167,11 +168,11 @@ noncomputable def rom_G2φ (φ θ c s C S p : ℝ) : ℝ :=
 noncomputable def rom_G2θ (φ θ c s C S p : ℝ) : ℝ :=
   (1 + ((2.7218 * (rom_H1θ φ θ c s C S p)) - (0.6267 * (rom_H2θ φ θ c s C S p))))
 
-/-- The first component of `M H`. -/
+/-- The first component of `-M H(z) = G(z) - z`. -/
 noncomputable def rom_MH1 (φ θ c s C S p : ℝ) : ℝ :=
   ((0.1481 * (rom_H1 φ θ c s C S p)) + (0.2886 * (rom_H2 φ θ c s C S p)))
 
-/-- The second component of `M H`. -/
+/-- The second component of `-M H(z) = G(z) - z`. -/
 noncomputable def rom_MH2 (φ θ c s C S p : ℝ) : ℝ :=
   ((2.7218 * (rom_H1 φ θ c s C S p)) - (0.6267 * (rom_H2 φ θ c s C S p)))
 
