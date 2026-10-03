@@ -78,7 +78,7 @@ theorem capKernel_of_mamikonS_eq {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (Or.inr ⟨le_rfl, le_rfl⟩)
       K₀ K₁ hK₀.1 hK₁.1 hK₀.2.1.1 hK₁.2.1.1 hc e₄
 
-/-- P1 in the existing bundled-triple vocabulary. -/
+/-- The cap kernel (Proposition 5) in the bundled-triple vocabulary of the library. -/
 theorem capKernel_of_triple_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) (h : MamikonSegmentEquality φ x y (1 / 2)) :
     CapKernel φ (fun t => supp y.1.1.1 t - supp x.1.1.1 t) := by

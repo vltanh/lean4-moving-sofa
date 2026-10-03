@@ -73,7 +73,7 @@ branch-and-bound certificate. The alternative inspected GerverSofaLean release
 also describes decision-kernel replay. These sources cannot be treated as
 meeting the stricter ban merely because their axiom reports may be standard.
 The dependency and prototype final import were removed from the active tree.
-See [note 21](../../docs/uniqueness/21-reference-dependency-audit.md).
+See [note 21](../docs/uniqueness/21-reference-dependency-audit.md).
 
 Work already written toward a replacement:
 

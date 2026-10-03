@@ -12,7 +12,8 @@ public import MovingSofaUniqueness.Curvature.MirroredCurvature
 /-!
 # Variational reductions for the specified maximizing sofa
 
-The six reductions P1-P6 of the uniqueness argument. The curvature and pinned
+The steps of the uniqueness argument (`docs/uniqueness/20-complete-paper-proof.md`) that reduce
+it to the optimality library: Propositions 3 to 6 of that note. The curvature and pinned
 bounds use polygons converging to the specified cap, not a different cap selected
 by a balanced-maximizer existence theorem.
 
@@ -63,7 +64,8 @@ theorem isMaxCap_of_area_eq {P : GerverParams} (hP : P.IsSolution) (hbox : P.InB
   rw [heq]
   exact cap_area_le_gerver hP hbox hC
 
-/-- P1: all four zero Mamikon gaps yield the endpoint-safe support kernel. -/
+/-- Proposition 5 (first step): all four zero Mamikon gaps yield the endpoint-safe support
+kernel. -/
 theorem capKernel_of_mamikon_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) (h : MamikonSegmentEquality φ x y (1 / 2)) :
     CapKernel φ (fun t => supp y.1.1.1 t - supp x.1.1.1 t) := by
@@ -82,13 +84,14 @@ theorem sofaArea_pos_of_isMaxCap {K : Set Plane}
   have hG := gerverSofa_area hP hbox
   linarith
 
-/-- P2: both curvature bounds for this cap, including the two outer endpoints. -/
+/-- Proposition 3, inequality (16): both curvature bounds for this cap, including the two outer
+endpoints. -/
 theorem curvatureBounds_of_isMaxCap {K : Set Plane}
     (hK : IsMaxCap (π / 2) K) : CurvatureBounds K := by
   exact MovingSofaUniqueness.curvature_of_maximal_positive hK.1
     (sofaArea_pos_of_isMaxCap hK) hK.2
 
-/-- P3: both curvature bounds imply injectivity of this same cap. -/
+/-- Proposition 3, from (16) to (18): both curvature bounds imply injectivity of this same cap. -/
 theorem injectivity_of_curvatureBounds {K : Set Plane}
     (hK : IsCap K (π / 2)) (hbound : CurvatureBounds K) : SatisfiesInjectivity K := by
   exact MovingSofaUniqueness.injectivity_of_curvature hK hbound.1 hbound.2
@@ -107,21 +110,22 @@ theorem isKi_of_maximal_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
 def PinnedBounds (ω : ℝ) (K : Set Plane) : Prop :=
   wedgeGapWInf K ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K ω ≤ sigmaAt K ω
 
-/-- P4: pinned-strip variation and fixed-atom limits for a positive maximizer.
+/-- Proposition 4, inequalities (19): pinned-strip variation and fixed-atom limits for a positive
+maximizer.
 The positivity premise is discharged by the Gerver-area equality at the caller. -/
 theorem pinnedBounds_of_isMaxCap {K : Set Plane} {ω : ℝ}
     (hω : ω ∈ Ioo 0 (π / 2)) (hK : IsMaxCap ω K)
     (hpositive : 0 < sofaArea ω K) : PinnedBounds ω K := by
   exact MovingSofaUniqueness.pinned_bounds_of_maximal_positive hω hK.1 hpositive hK.2
 
-/-- P5: the specified sofa admits the additional motion from its pinned bounds. -/
+/-- Proposition 4: the specified sofa admits the additional motion from its pinned bounds. -/
 theorem right_angle_motion_of_pinned {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Ico arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S) (hpin : PinnedBounds ω (capOf S ω)) :
     ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
   exact right_angle_motion_of_pinned_bounds hS hω harea hpin.1 hpin.2
 
-/-- P6: regular-closedness for the actual library Gerver sofa. -/
+/-- Proposition 6: Gerver's sofa is the closure of its interior. -/
 theorem regularClosed_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     closure (interior (gerverSofa P)) = gerverSofa P := by
   exact MovingSofaUniqueness.gerver_regularClosed hP hbox

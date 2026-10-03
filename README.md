@@ -36,12 +36,12 @@ right-angled corner of a hallway of unit width. Jineon Baek, *Optimality of Gerv
 definitions (the hallway, moving sofas, Romik's parameters and Gerver's sofa), so that it can be read
 without the rest of the repository. [`Solution.lean`](Solution.lean) proves them from the library.
 
-- [`gerver_params_exists`](Challenge.lean#L162) and [`gerver_params_unique`](Challenge.lean#L166): Romik's system of equations (27)–(44) has exactly
+- [`gerver_params_exists`](Challenge.lean#L166) and [`gerver_params_unique`](Challenge.lean#L170): Romik's system of equations (27)–(44) has exactly
   one solution with φ ∈ [0.039, 0.04] and θ ∈ [0.68, 0.69]. So Gerver's sofa, the shape of the rotation
   path these parameters define, is well defined.
-- [`gerver_sofa_area`](Challenge.lean#L172): Gerver's sofa has area between 2.2192 and 2.2199. Gerver's value is 2.21953…;
+- [`gerver_sofa_area`](Challenge.lean#L176): Gerver's sofa has area between 2.2192 and 2.2199. Gerver's value is 2.21953…;
   this ties the shape defined from Romik's parameters to the sofa Gerver found.
-- [`gerver_sofa_optimal`](Challenge.lean#L178): Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
+- [`gerver_sofa_optimal`](Challenge.lean#L182): Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
   of Gerver's sofa (Theorem 1.1.1).
 
 [`comparator.json`](comparator.json) configures Lake's Comparator, which checks in a sandbox that [`Solution.lean`](Solution.lean) proves

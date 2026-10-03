@@ -94,7 +94,7 @@ theorem arms_strict_of_curvature {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   exact (lemma6_5_5 ⟨by linarith [ht.2], by linarith [ht.1]⟩).trans_le
     (hseq.2 t ⟨ht.1, ht.2.le⟩)
 
-/-- P3: the specified cap satisfies all three injectivity conditions.
+/-- Proposition 3: the specified cap satisfies all three injectivity conditions.
 No global maximality or balancedness hypothesis is present. -/
 theorem injectivity_of_curvature {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (hfirst : FirstCurvatureBound K) (hsecond : SecondCurvatureBound K) :

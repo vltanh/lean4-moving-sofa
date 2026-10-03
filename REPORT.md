@@ -19,7 +19,7 @@ Status of the formalization:
     (Section 2).
 - Theorem 8.4.1 (the structure of Gerver's sofa), which the paper states without proof, is proved
   from Romik's equations by interval arithmetic ([`MovingSofaOptimality/Gerver/`](MovingSofaOptimality/Gerver)).
-- `lake build` succeeds. The only `sorry`s are the four statements of [`Challenge.lean`](Challenge.lean), which are
+- `lake build` succeeds. The only `sorry`s are the statements of [`Challenge.lean`](Challenge.lean), which are
   `sorry` by design and proved in [`Solution.lean`](Solution.lean). There is no `axiom`, `admit`, `native_decide` or
   `implemented_by`.
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the library, every paper result and the
@@ -28,7 +28,8 @@ Status of the formalization:
 - [`Challenge.lean`](Challenge.lean) restates Theorem 1.1.1, together with the existence and uniqueness of Gerver's
   parameters and the area of Gerver's sofa (between 2.2192 and 2.2199), using Mathlib's vocabulary
   only. [`Solution.lean`](Solution.lean) proves these statements from the
-  library, and `lake comparator` accepts the solution.
+  library, and `lake comparator` accepts the solution. The Challenge also states the uniqueness of
+  the optimal sofa, which is not a result of the paper; the README describes it.
 - Statements of the paper that are false as printed are formalized in their intended form; Section 6
   lists every such correction. No result had to be weakened.
 
