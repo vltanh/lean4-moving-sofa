@@ -129,15 +129,17 @@ We have proved the angle-extension lemma from (4.1), independently of global opt
 
 ## 4.2 A general regular-closedness criterion
 
-**Lemma 4.1 (continuous lower envelope).** Let C be a compact convex set with nonempty interior, contained in y in [0,1]. Suppose C contains I times [0,1], where I=[a,b] and a<b. Let H:I->[0,1] be continuous, with {x in (a,b):H(x)<1} dense in I. Suppose a niche N has vertical sections [0,H(x)) for x in I and is empty outside I. Then G=C minus N satisfies
+**Lemma 4.1 (continuous lower envelope).** Let C be a compact convex set with nonempty interior, contained in y in [0,1]. Suppose C contains I times [0,1], where I=[a,b] and a<b. Let H:I->[0,1] be continuous, with H(a)=H(b)=0 and with {x in (a,b):H(x)<1} dense in I. Suppose a niche N has vertical sections [0,H(x)) for x in I and is empty outside I. Then G=C minus N satisfies
 
 \[
 G=\overline{\operatorname{int}G}.                          \tag{4.6}
 \]
 
-**Proof.** The niche is relatively open in C and G is closed. Take (x,y) in G with x in I. Choose interior abscissas x_n->x with H(x_n)<1. By continuity H(x_n)->H(x)<=y<=1, so choose H(x_n)<y_n<1 with y_n->y. Each (x_n,y_n) is an interior point of G: it lies in the interior of the rectangle and strictly above the continuous lower graph. If x lies outside I, a neighborhood misses the niche; density of the interior of the full-dimensional convex set C supplies interior approximations there. This proves G is contained in the closure of its interior; closedness gives the reverse inclusion. \(\square\)
+**Proof.** Extend H to the real line by zero outside I. The endpoint hypotheses make this extension continuous. Within C, the niche is the strict subgraph y<H(x), so it is relatively open and G is closed. Take (x,y) in G with x in I. Choose interior abscissas x_n->x with H(x_n)<1. By continuity H(x_n)->H(x)<=y<=1, so choose H(x_n)<y_n<1 with y_n->y. Each (x_n,y_n) is an interior point of G: it lies in the interior of the rectangle and strictly above the continuous lower graph. If x lies outside I, a neighborhood misses the niche; density of the interior of the full-dimensional convex set C supplies interior approximations there. This proves G is contained in the closure of its interior; closedness gives the reverse inclusion. \(\square\)
 
-For the concrete Gerver construction, the retained envelope facts give this situation. Its successive inner contact/path arcs form a continuous graph. The side contact arcs have height strictly below one; on the central path a height-one point must have zero vertical derivative. Writing x'=a(t)u_t+b(t)v_t, with a<0<b, this would require -a(t)/b(t)=cot t. The first side is nondecreasing and the second strictly decreasing, so there is at most one such point. Hence H<1 on a dense set. The bounding top segment and the cap's downward closure supply the rectangle.
+**Endpoint audit.** The zero endpoint condition cannot be dropped from this formulation. For C=[-1,2] times [0,1], I=[0,1], and H identically 1/2, the sequence (-1/n,1/4) lies in C minus N but converges to the removed point (0,1/4). The complement is not even closed. The actual Gerver envelope has the required zero endpoint heights.
+
+For the concrete Gerver construction, the retained envelope facts give this situation. Its successive inner contact/path arcs form a continuous graph with zero endpoint heights. The side contact arcs have height strictly below one; on the central path a height-one point must have zero vertical derivative. Writing x'=a(t)u_t+b(t)v_t, with a<0<b, this would require -a(t)/b(t)=cot t. The first side is nondecreasing and the second strictly decreasing, so there is at most one such point. Hence H<1 on a dense set. The bounding top segment and the cap's downward closure supply the rectangle.
 
 The geometric identification of those arcs and their derivative signs is retained from the concrete Gerver analysis; Lemma 4.1 is the topological deduction. No assertion about the topology of an arbitrary competitor is added.
 
