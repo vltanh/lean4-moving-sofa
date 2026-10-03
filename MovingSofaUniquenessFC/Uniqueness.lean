@@ -12,14 +12,14 @@ presentation, with explicit `MovingSofa.Paper` kernel names for the colliding
 hallway and moving-sofa predicates. No source relocation or generation is used.
 
 The generic reference set G needs its actual moving-sofa and optimality facts.
-They are explicit inputs, not postulated global instances. For upstream's
-concrete Gerver formula these inputs still need a source integration meeting
-the requested prohibition on decision-kernel certificate evaluation. See note 21.
-The generic theorem must not be reported as completion of that exact endpoint.
+They are explicit inputs, not postulated global instances. For the exact
+upstream reference, `SofaSubmission.ReferenceFacts` now derives those facts
+from the independent concrete parameter/path/set correspondence. `Final`
+instantiates this API with that literal reference. The generic theorem alone
+must not be confused with having supplied the concrete-reference facts.
 
-P1-P6 and the motion bridges now have written proof bodies. The entire source
-remains uncompiled: successful elaboration, an admission-free elaborated
-dependency graph, and Palomar acceptance have not been established.
+All scripts remain uncompiled: successful elaboration, an admission-free
+elaborated dependency graph, and Palomar acceptance have not been established.
 -/
 
 @[expose] public section
