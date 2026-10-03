@@ -28,13 +28,7 @@ variable {s t : Set X}
 /-- A closed set whose complement in `t` is null contains the interior of `t`. -/
 theorem interior_subset_of_null_sdiff (hs : IsClosed s) (hnull : μ (t \ s) = 0) :
     interior t ⊆ s := by
-  classical
-  intro x hx
-  by_contra hxs
-  have hopen : IsOpen (interior t \ s) := isOpen_interior.inter hs.isOpen_compl
-  have hne : μ (interior t \ s) ≠ 0 := hopen.measure_ne_zero μ ⟨x, hx, hxs⟩
-  apply hne
-  exact measure_mono_null (fun y hy => ⟨interior_subset hy.1, hy.2⟩) hnull
+  sorry
 
 /-- Closedness upgrades containment of the interior to containment of its closure. -/
 theorem closure_interior_subset_of_null_sdiff (hs : IsClosed s)

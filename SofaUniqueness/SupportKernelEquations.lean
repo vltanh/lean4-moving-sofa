@@ -102,50 +102,7 @@ theorem tangentKernel_of_equation {f f' : ℝ → ℝ} {a b T : ℝ}
     (heq : ∀ t ∈ Ioo a b,
       sin (T - t) * f' t + cos (T - t) * f t = f T) :
     TangentKernel f a b T := by
-  let q : ℝ → ℝ := fun t => (f t - f T * cos (T - t)) / sin (T - t)
-  have hspos (t : ℝ) (ht : t ∈ Ioo a b) : 0 < sin (T - t) :=
-    sin_pos_of_pos_of_lt_pi (by linarith [ht.2]) (by linarith [ht.1])
-  have hqd : ∀ t ∈ Ioo a b, HasDerivAt q 0 t := by
-    intro t ht
-    have hsne := (hspos t ht).ne'
-    have hu : HasDerivAt (fun s : ℝ => T - s) (-1) t := by
-      simpa using (hasDerivAt_id t).const_sub T
-    have hcos := hu.cos
-    have hsin := hu.sin
-    have hnum : (f' t - f T * sin (T - t)) * sin (T - t) +
-        (f t - f T * cos (T - t)) * cos (T - t) = 0 := by
-      calc
-        _ = (sin (T - t) * f' t + cos (T - t) * f t) -
-            f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) := by ring
-        _ = 0 := by rw [heq t ht, sin_sq_add_cos_sq]; ring
-    have hquot := ((hd t ht).sub (hcos.const_mul (f T))).div hsin hsne
-    convert hquot using 1
-    field_simp [hsne]
-    nlinarith [hnum]
-  obtain ⟨C, hC⟩ := isOpen_Ioo.exists_is_const_of_deriv_eq_zero
-    (convex_Ioo a b).isPreconnected
-    (fun t ht => (hqd t ht).differentiableAt.differentiableWithinAt)
-    (fun t ht => (hqd t ht).deriv)
-  have hsol : ∀ t ∈ Ioo a b, f t = f T * cos (T - t) + C * sin (T - t) := by
-    intro t ht
-    have h := hC t ht
-    change (f t - f T * cos (T - t)) / sin (T - t) = C at h
-    have hmul := (div_eq_iff (hspos t ht).ne').mp h
-    linarith
-  have hclosed : IsClosed {t : ℝ | f t = f T * cos (T - t) + C * sin (T - t)} :=
-    isClosed_eq hf (by fun_prop)
-  have hfull : ∀ t ∈ Icc a b, f t = f T * cos (T - t) + C * sin (T - t) := by
-    have h := closure_minimal (fun t ht => hsol t ht) hclosed
-    rw [closure_Ioo hab] at h
-    exact h
-  refine ⟨f T * cos T + C * sin T, f T * sin T - C * cos T, ?_, ?_⟩
-  · intro t ht
-    rw [hfull t ht]
-    simp only [cos_sub, sin_sub]
-    ring
-  · calc
-      f T = f T * (sin T ^ 2 + cos T ^ 2) := by rw [sin_sq_add_cos_sq, mul_one]
-      _ = _ := by ring
+  sorry
 
 /-- The middle equation integrates to the form consumed by `CapKernel`. -/
 theorem integrated_middle_equation {f : ℝ → ℝ} {a b L : ℝ}

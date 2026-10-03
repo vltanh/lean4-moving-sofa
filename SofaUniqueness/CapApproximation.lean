@@ -29,57 +29,7 @@ theorem niche_subset_box {K : Set (ℝ × ℝ)} {ω R : ℝ}
     (hK : IsCap K ω) (hR : 0 ≤ R)
     (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) :
     niche K ω ⊆ Icc (-R) R ×ˢ Icc 0 (2 * R) := by
-  have hcb := hK.2.1
-  rintro p ⟨⟨_, hfy⟩, hquad⟩
-  have hy₀ : 0 ≤ p.2 := by
-    simpa only [halfPlus, mem_ofPred_eq, nef_dot_uvec_pi_div_two] using hfy
-  obtain ⟨t, ht, hp⟩ := mem_iUnion₂.mp hquad
-  have hcos : 0 < cos t :=
-    cos_pos_of_mem_Ioo ⟨by linarith [ht.1, pi_pos], ht.2.trans_le hK.1.2⟩
-  have hsin : 0 < sin t := sin_pos_of_pos_of_lt_pi ht.1
-    (by linarith [ht.2, hK.1.2, pi_pos])
-  have hsupA : supp K t ≤ R * cos t + 1 := by
-    apply nef_supp_le hcb.1
-    intro q hq
-    obtain ⟨hx, hy⟩ := hbox hq
-    simp only [dot, uvec]
-    nlinarith [sin_le_one t]
-  have hsupC : supp K (t + π / 2) ≤ R * sin t + 1 := by
-    apply nef_supp_le hcb.1
-    intro q hq
-    obtain ⟨hx, hy⟩ := hbox hq
-    rw [uvec_add_pi_div_two]
-    simp only [dot, vvec]
-    nlinarith [cos_le_one t]
-  rw [proposition2_2_2_qMinus] at hp
-  have hpa : dot p (uvec t) < R * cos t := by
-    have h : dot p (uvec t) < supp K t - 1 := hp.1
-    linarith
-  have hpc : dot p (vvec t) < R * sin t := by
-    have h : dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1 := hp.2
-    rw [uvec_add_pi_div_two] at h
-    linarith
-  have hx₁ : p.1 < R := by
-    simp only [dot, uvec] at hpa
-    nlinarith
-  have hx₀ : -R < p.1 := by
-    simp only [dot, vvec] at hpc
-    nlinarith
-  have hyid : p.2 = sin t * dot p (uvec t) + cos t * dot p (vvec t) := by
-    simp only [dot, uvec, vvec]
-    linear_combination (-p.2) * sin_sq_add_cos_sq t
-  have hylt : p.2 < 2 * R * (sin t * cos t) := by
-    rw [hyid]
-    have h₁ := mul_lt_mul_of_pos_left hpa hsin
-    have h₂ := mul_lt_mul_of_pos_left hpc hcos
-    nlinarith
-  have hprod : sin t * cos t ≤ 1 := by
-    have h := mul_le_mul (sin_le_one t) (cos_le_one t) hcos.le zero_le_one
-    simpa only [one_mul] using h
-  have hy₁ : p.2 ≤ 2 * R := by
-    have h := mul_le_mul_of_nonneg_left hprod (show 0 ≤ 2 * R by positivity)
-    linarith
-  exact ⟨⟨hx₀.le, hx₁.le⟩, hy₀, hy₁⟩
+  sorry
 
 /-- The same rectangle bounds every sampled niche of a cap in the box. -/
 theorem polyNiche_subset_box {Θ : AngleSet} {K : Set (ℝ × ℝ)} {R : ℝ}
@@ -133,21 +83,7 @@ theorem eqOn_of_dyadic_eq {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {f g : ℝ → ℝ} (hf : Continuous f) (hg : Continuous g)
     (heq : ∀ m, ∀ t ∈ (dyadicAngleSet ω hω m).angles, f t = g t) :
     EqOn f g (Icc 0 ω) := by
-  let E : Set ℝ := {t | f t = g t}
-  have hE : IsClosed E := isClosed_eq hf hg
-  have hI : Ioo 0 ω ⊆ E := by
-    intro t ht
-    have htE : t ∈ closure E := by
-      apply Metric.mem_closure_iff.mpr
-      intro ε hε
-      obtain ⟨m, s, hs, hst⟩ := mpc_dyadic_dense hω ht hε
-      refine ⟨s, heq m s hs, ?_⟩
-      rw [Real.dist_eq, abs_sub_comm]
-      exact hst
-    rwa [hE.closure_eq] at htE
-  have hclosure := closure_minimal hI hE
-  rw [closure_Ioo hω.1.ne'] at hclosure
-  exact hclosure
+  sorry
 
 /-- Upper supports and the standard lower strips determine the entire cap. -/
 theorem caps_eq_of_upper_supports {ω : ℝ} {K L : Set (ℝ × ℝ)}
@@ -176,18 +112,6 @@ theorem caps_eq_of_dyadic_supports {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {K L : Set (ℝ × ℝ)} (hK : IsCap K ω) (hL : IsCap L ω)
     (heq : ∀ m, ∀ t ∈ (dyadicAngleSet ω hω m).angles,
       supp K t = supp L t ∧ supp K (t + π / 2) = supp L (t + π / 2)) : K = L := by
-  have hfirst := eqOn_of_dyadic_eq hω (continuous_supp hK.2.1.2.1)
-    (continuous_supp hL.2.1.2.1) (fun m t ht => (heq m t ht).1)
-  have hsecond := eqOn_of_dyadic_eq hω
-    ((continuous_supp hK.2.1.2.1).comp (continuous_id.add continuous_const))
-    ((continuous_supp hL.2.1.2.1).comp (continuous_id.add continuous_const))
-    (fun m t ht => (heq m t ht).2)
-  apply caps_eq_of_upper_supports hK hL
-  intro t ht
-  rcases ht with ht | ht
-  · exact hfirst ht
-  · have h := hsecond (show t - π / 2 ∈ Icc (0 : ℝ) ω by
-      constructor <;> linarith [ht.1, ht.2])
-    simpa only [sub_add_cancel] using h
+  sorry
 
 end SofaUniqueness

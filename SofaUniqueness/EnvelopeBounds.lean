@@ -27,16 +27,7 @@ variable {x : ℝ → ℝ × ℝ} {α β ρA ρC : ℝ → ℝ}
 theorem envelope_endpoint_order (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     (envD x β 0).1 < (x t₄).1 ∧ (x t₄).1 < (x t₁).1 ∧
       (x t₁).1 < (envB x α (π / 2)).1 := by
-  obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
-  have hd := env_D₁_strictMono h
-    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : (0 : ℝ) < t₂)
-  rw [h.D_t₂] at hd
-  have hx := env_x₁_strictAnti h
-    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : t₁ < t₄)
-  have hb := env_B₁_strictMono h
-    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : t₃ < π / 2)
-  rw [h.B_t₃] at hb
-  exact ⟨hd, hx, hb⟩
+  sorry
 
 theorem envelope_isCompact (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     IsCompact (envCurve t₁ t₂ t₃ t₄ x α β) := by

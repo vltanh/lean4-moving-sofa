@@ -37,8 +37,7 @@ theorem integrable_sq_sub
     (hg : Integrable (fun x => (g x) ^ 2) μ)
     (hfg : Integrable (fun x => f x * g x) μ) :
     Integrable (fun x => (f x - g x) ^ 2) μ := by
-  apply ((hf.add hg).sub (hfg.const_mul 2)).congr
-  exact Eventually.of_forall fun x => by ring
+  sorry
 
 /-- Expanding the integral of a squared difference. -/
 theorem integral_sq_sub
@@ -48,14 +47,7 @@ theorem integral_sq_sub
     (∫ x, (f x - g x) ^ 2 ∂μ) =
       (∫ x, (f x) ^ 2 ∂μ) + (∫ x, (g x) ^ 2 ∂μ) -
         2 * (∫ x, f x * g x ∂μ) := by
-  calc
-    (∫ x, (f x - g x) ^ 2 ∂μ) =
-        ∫ x, (f x) ^ 2 + (g x) ^ 2 - 2 * (f x * g x) ∂μ := by
-      apply integral_congr_ae
-      exact Eventually.of_forall fun x => by ring
-    _ = _ := by
-      rw [integral_sub (hf.add hg) (hfg.const_mul 2), integral_add hf hg]
-      simp only [integral_const_mul]
+  sorry
 
 /-- Expanding a squared affine combination before integrating. The identity is
 valid for every real `c`, not only for convex coefficients. -/
@@ -67,18 +59,7 @@ theorem integral_sq_combo (c : ℝ)
       (1 - c) ^ 2 * (∫ x, (f x) ^ 2 ∂μ) +
         (2 * c * (1 - c)) * (∫ x, f x * g x ∂μ) +
         c ^ 2 * (∫ x, (g x) ^ 2 ∂μ) := by
-  calc
-    (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ) =
-        ∫ x, (1 - c) ^ 2 * (f x) ^ 2 +
-          (2 * c * (1 - c)) * (f x * g x) + c ^ 2 * (g x) ^ 2 ∂μ := by
-      apply integral_congr_ae
-      exact Eventually.of_forall fun x => by ring
-    _ = _ := by
-      rw [integral_add
-        ((hf.const_mul ((1 - c) ^ 2)).add (hfg.const_mul (2 * c * (1 - c))))
-        (hg.const_mul (c ^ 2)),
-        integral_add (hf.const_mul ((1 - c) ^ 2)) (hfg.const_mul (2 * c * (1 - c)))]
-      simp only [integral_const_mul]
+  sorry
 
 /-- Exact square-gap identity. At the midpoint the coefficient is `1/8`. -/
 theorem halfSquareIntegral_combo_gap (c : ℝ)

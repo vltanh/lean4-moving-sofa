@@ -105,59 +105,6 @@ theorem exists_selectedCapSequence {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hpositive : 0 < sofaArea ω target)
     (hmax : ∀ C, IsCap C ω → sofaArea ω C ≤ sofaArea ω target) :
     Nonempty (SelectedCapSequence ω hω target) := by
-  classical
-  choose Ks hKs using fun n => exists_dyadic_penalizedMax hω hK hpositive n
-  obtain ⟨R, hR, hbox⟩ := selected_sequence_bounded hω hK hpositive Ks hKs
-  have hKsc : ∀ n, IsConvexBody (Ks n) := fun n => (hKs n).1.1.2.1
-  obtain ⟨L, hL, _, φ, hφ, hlim⟩ := mpc_blaschke hKsc
-    (isCompact_Icc.prod isCompact_Icc) hbox
-  have hpoly : ∀ n, IsPolygonCap (dyadicAngleSet ω hω (φ n)) (Ks (φ n)) :=
-    fun n => (hKs (φ n)).1
-  have hLcap : IsCap L ω := mpc_limit_isCap hω (fun _ => rfl) hpoly hL hlim
-  have hupper := dyadic_objective_limsup hω hφ hpoly hL hlim hR (fun n => hbox (φ n))
-  have hPzero : Tendsto (fun n => dyadicPenalty ω hω (φ n) target (Ks (φ n)))
-      atTop (𝓝 0) := by
-    apply penalty_tendsto_zero_of_objective
-      (fun n => polyArea (dyadicAngleSet ω hω (φ n)) (Ks (φ n)))
-      (fun n => dyadicPenalty ω hω (φ n) target (Ks (φ n)))
-      (sofaArea ω target) (sofaArea ω L)
-    · exact fun n => dyadicPenalty_nonneg ω hω (φ n) target (Ks (φ n))
-    · exact fun n => selected_objective_ge hω hK (hKs (φ n))
-    · exact hmax L hLcap
-    · exact hupper
-  have hsame : L = target := by
-    apply caps_eq_of_dyadic_supports hω hLcap hK
-    intro m t ht
-    have hcoef : 0 < dyadicLevelWeight ω hω m := dyadicLevelWeight_pos ω hω m
-    have hlarge : ∀ᶠ n in atTop, m ≤ φ n := hφ.tendsto_atTop.eventually_ge_atTop m
-    have hsupport := mpc_supp_tendsto hL (fun n => hKsc (φ n)) hlim
-    have hfirstLim : Tendsto (fun n => dyadicLevelWeight ω hω m *
-        (supp (Ks (φ n)) t - supp target t) ^ 2) atTop
-        (𝓝 (dyadicLevelWeight ω hω m * (supp L t - supp target t) ^ 2)) :=
-      ((hsupport t).sub_const (supp target t)).pow 2 |>.const_mul (dyadicLevelWeight ω hω m)
-    have hsecondLim : Tendsto (fun n => dyadicLevelWeight ω hω m *
-        (supp (Ks (φ n)) (t + π / 2) - supp target (t + π / 2)) ^ 2) atTop
-        (𝓝 (dyadicLevelWeight ω hω m * (supp L (t + π / 2) - supp target (t + π / 2)) ^ 2)) :=
-      ((hsupport (t + π / 2)).sub_const (supp target (t + π / 2))).pow 2
-        |>.const_mul (dyadicLevelWeight ω hω m)
-    have hfirst : dyadicLevelWeight ω hω m * (supp L t - supp target t) ^ 2 ≤ 0 := by
-      apply le_of_tendsto_of_tendsto hfirstLim hPzero
-      filter_upwards [hlarge] with n hn
-      exact persistent_sample_first ω hω hn ht target (Ks (φ n))
-    have hsecond : dyadicLevelWeight ω hω m *
-        (supp L (t + π / 2) - supp target (t + π / 2)) ^ 2 ≤ 0 := by
-      apply le_of_tendsto_of_tendsto hsecondLim hPzero
-      filter_upwards [hlarge] with n hn
-      exact persistent_sample_second ω hω hn ht target (Ks (φ n))
-    constructor
-    · have hsq : (supp L t - supp target t) ^ 2 = 0 := by
-        nlinarith [sq_nonneg (supp L t - supp target t)]
-      exact sub_eq_zero.mp (sq_eq_zero_iff.mp hsq)
-    · have hsq : (supp L (t + π / 2) - supp target (t + π / 2)) ^ 2 = 0 := by
-        nlinarith [sq_nonneg (supp L (t + π / 2) - supp target (t + π / 2))]
-      exact sub_eq_zero.mp (sq_eq_zero_iff.mp hsq)
-  refine ⟨⟨φ, hφ, fun n => Ks (φ n), fun n => hKs (φ n), R, hR,
-    fun n => hbox (φ n), ?_⟩⟩
-  simpa only [hsame] using hlim
+  sorry
 
 end SofaUniqueness

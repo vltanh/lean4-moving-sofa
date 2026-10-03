@@ -108,32 +108,7 @@ theorem maximizer_contained_in_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
     (hS : MovingSofa.Paper.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
     ∃ g : Rigid, g '' S ⊆ gerverSofa P := by
-  have harea : area S = area (gerverSofa P) := congrArg ENNReal.toReal heq
-  have h22 : (2.2 : ℝ) ≤ area S := by rw [harea]; exact gerverSofa_area hP hbox
-  obtain ⟨ω, hω, hSω⟩ := theorem1_5_1 hS h22
-  have hωpos : ω ∈ Ioc 0 (π / 2) := ⟨gm_arcsec22_pos.trans_le hω.1, hω.2⟩
-  obtain ⟨v₀, T, hT, hST, hTarea⟩ := maximal_envelope hP hbox hωpos hSω harea
-  obtain ⟨a, hrot⟩ := maximal_monotone_has_right_angle hP hbox hT hω hTarea
-  have hrotArea : area (rot a '' T) = area (gerverSofa P) := by
-    rw [gm_area_rot, hTarea]
-  obtain ⟨v₁, U, hU, hTU, hUarea⟩ :=
-    maximal_envelope hP hbox pi_div_two_mem_Ioc hrot hrotArea
-  obtain ⟨b, hUG⟩ := right_angle_monotone_eq_gerver hP hbox hU hUarea
-  let g₀ := (Rigid.translate v₀).trans (Rigid.rotate a)
-  let g₁ := g₀.trans (Rigid.translate v₁)
-  have hSU : g₁ '' S ⊆ U := by
-    rw [show g₁ = ((Rigid.translate v₀).trans (Rigid.rotate a)).trans
-      (Rigid.translate v₁) from rfl, Rigid.trans_image, Rigid.trans_image, coe_rotate]
-    exact (Set.image_mono (Set.image_mono hST)).trans hTU
-  let unshift := Rigid.translate (-b, 0)
-  refine ⟨g₁.trans unshift, ?_⟩
-  rw [Rigid.trans_image]
-  intro p hp
-  obtain ⟨q, hq, rfl⟩ := hp
-  have hqU := hSU hq
-  rw [hUG] at hqU
-  obtain ⟨r, hr, rfl⟩ := hqU
-  simpa [unshift, Rigid.translate_apply] using hr
+  sorry
 
 /-- Recover the original closed set, not only its area or its monotone envelope. -/
 theorem image_eq_gerver_of_volume_eq {P : GerverParams}

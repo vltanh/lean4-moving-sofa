@@ -45,8 +45,7 @@ theorem pinned_corner_dot {Θ : AngleSet} {s : ℝ}
 /-- The common origin makes every upper support nonnegative. -/
 theorem pinned_support_nonneg {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) (s : ℝ) : 0 ≤ supp K s := by
-  have h := dot_le_supp hK.1.2.1.2.1 (ang_cap_origin_mem hK.1 hω) s
-  simpa only [dot_zero_left] using h
+  sorry
 
 /-- Contracting toward the common top corner produces points of the moved
 assigned cap. The statement covers both distinct pinned normals. -/
@@ -55,41 +54,7 @@ theorem pinned_contract_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
     {p : ℝ × ℝ} (hp : p ∈ K) :
     (1 - ε) • p + ε • oPt Θ.ω ∈ floatingCap Θ K t ε := by
-  classical
-  have ho := mpc_oPt_mem hK hω
-  have hcombo : (1 - ε) • p + ε • oPt Θ.ω ∈ K :=
-    hK.1.2.1.2.2 hp ho (by linarith [hε.2]) hε.1 (by ring)
-  change _ ∈ capH Θ (Function.update (supp K) t (supp K t + ε))
-  rw [mpc_mem_capH]
-  refine ⟨?_, ?_, ?_⟩
-  · intro s hs
-    have h := dot_le_supp hK.1.2.1.2.1 hcombo s
-    by_cases hst : s = t
-    · subst s
-      rw [Function.update_self]
-      linarith [hε.1]
-    · rw [Function.update_of_ne hst]
-      exact h
-  · by_cases hst : Θ.ω = t
-    · rw [hst, Function.update_self, pinned_support_value hK ht]
-      have hp0 : 0 ≤ dot p (uvec t) := by
-        rw [← hst]
-        exact (mpc_cap_nonneg hK.1 hp).2
-      rw [dot_add_left, dot_smul_left, dot_smul_left, pinned_corner_dot ht]
-      nlinarith [hε.2]
-    · rw [Function.update_of_ne hst, hK.1.2.2.1]
-      have h := (mpc_cap_nonneg hK.1 hcombo).2
-      simpa only [sub_self] using h
-  · by_cases hst : π / 2 = t
-    · rw [hst, Function.update_self, pinned_support_value hK ht]
-      have hp0 : 0 ≤ dot p (uvec t) := by
-        rw [← hst, mpc_dot_uvec_pi_div_two]
-        exact (mpc_cap_nonneg hK.1 hp).1
-      rw [dot_add_left, dot_smul_left, dot_smul_left, pinned_corner_dot ht]
-      nlinarith [hε.2]
-    · rw [Function.update_of_ne hst, hK.1.2.2.2.1]
-      have h := (mpc_cap_nonneg hK.1 hcombo).1
-      simpa only [sub_self, mpc_dot_uvec_pi_div_two] using h
+  sorry
 
 /-- Contracting the moved assigned cap toward the common origin by
 1/(1+epsilon) puts it back in the original cap. -/
@@ -98,41 +63,7 @@ theorem pinned_div_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : 0 ≤ ε)
     {p : ℝ × ℝ} (hp : p ∈ floatingCap Θ K t ε) :
     (1 / (1 + ε)) • p ∈ K := by
-  classical
-  have hden : 0 < 1 + ε := by linarith
-  change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-  rw [mpc_mem_capH] at hp
-  rw [mpc_polycap_mem_iff hK]
-  refine ⟨?_, ?_, ?_⟩
-  · intro s hs
-    have hu := hp.1 s hs
-    rw [dot_smul_left, one_div, inv_mul_eq_div, div_le_iff₀ hden]
-    by_cases hst : s = t
-    · subst s
-      rw [Function.update_self, pinned_support_value hK ht] at hu
-      rw [pinned_support_value hK ht]
-      nlinarith
-    · rw [Function.update_of_ne hst] at hu
-      have hnonneg := pinned_support_nonneg hK hω s
-      nlinarith
-  · have hlo : 0 ≤ dot p (uvec Θ.ω) := by
-      have h := hp.2.1
-      by_cases hst : Θ.ω = t
-      · rw [hst, Function.update_self, pinned_support_value hK ht] at h ⊢
-        linarith
-      · rw [Function.update_of_ne hst, hK.1.2.2.1] at h
-        linarith
-    rw [dot_smul_left]
-    exact mul_nonneg (by positivity) hlo
-  · have hlo : 0 ≤ dot p (uvec (π / 2)) := by
-      have h := hp.2.2
-      by_cases hst : π / 2 = t
-      · rw [hst, Function.update_self, pinned_support_value hK ht] at h ⊢
-        linarith
-      · rw [Function.update_of_ne hst, hK.1.2.2.2.1] at h
-        linarith
-    rw [dot_smul_left]
-    exact mul_nonneg (by positivity) hlo
+  sorry
 
 /-- A bounded-support consequence of the structured contraction sandwich.
 It is independent of the number or spacing of polygon normals. -/
@@ -141,27 +72,7 @@ theorem pinned_raw_support_bound {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
     (hR : 0 ≤ R) (hsupp : ∀ s, |supp K s| ≤ R) (s : ℝ) :
     |supp (floatingCap Θ K t ε) s - supp K s| ≤ 2 * R * ε := by
-  have hcpt : IsCompact (floatingCap Θ K t ε) := mpc_isCompact_capH Θ _
-  obtain ⟨q, hq, hqs⟩ := exists_dot_eq_supp hK.1.2.1.2.1 hK.1.2.1.1 s
-  have hmem := pinned_contract_mem hK hω ht hε hq
-  have hne : (floatingCap Θ K t ε).Nonempty := ⟨_, hmem⟩
-  have hupper : supp (floatingCap Θ K t ε) s ≤ (1 + ε) * supp K s := by
-    apply nef_supp_le hne
-    intro p hp
-    have h := dot_le_supp hK.1.2.1.2.1 (pinned_div_mem hK hω ht hε.1 hp) s
-    rw [dot_smul_left, one_div, inv_mul_eq_div, div_le_iff₀ (by linarith : 0 < 1 + ε)] at h
-    nlinarith
-  have hlower := dot_le_supp hcpt hmem s
-  rw [dot_add_left, dot_smul_left, dot_smul_left, hqs] at hlower
-  have ho := mpc_oPt_mem hK hω
-  have hodot : -R ≤ dot (oPt Θ.ω) (uvec s) := by
-    have h := dot_le_supp hK.1.2.1.2.1 ho (s + π)
-    rw [mpc_dot_uvec_add_pi] at h
-    have hb := (abs_le.mp (hsupp (s + π))).2
-    linarith
-  have hKs := abs_le.mp (hsupp s)
-  rw [abs_le]
-  constructor <;> nlinarith [hε.1]
+  sorry
 
 /-- An actual width-one translated cap fitting between the assigned two strip
 bounds has exactly those two supports: there is no hidden strip slack. -/

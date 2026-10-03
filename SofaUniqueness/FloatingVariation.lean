@@ -75,14 +75,7 @@ theorem floatingCap_support_bounds {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (htω : t ≠ Θ.ω) (htL : t ≠ π / 2) (hε : 0 ≤ ε) (hs : s ∈ Θ.diamond) :
     supp K s ≤ supp (floatingCap Θ K t ε) s ∧
       supp (floatingCap Θ K t ε) s ≤ Function.update (supp K) t (supp K t + ε) s := by
-  have hC := floatingCap_polygon hK htω htL hε
-  constructor
-  · exact supp_mono (subset_floatingCap hK htω htL hε) hK.1.2.1.2.1 hC.1.2.1.2.1 s
-  · apply nef_supp_le hC.1.2.1.1
-    intro p hp
-    change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-    rw [mpc_mem_capH] at hp
-    exact hp.1 s hs
+  sorry
 
 /-- No unsampled-direction estimate is necessary for this selector. -/
 theorem floatingCap_support_other {Θ : AngleSet} {K : Set (ℝ × ℝ)}
