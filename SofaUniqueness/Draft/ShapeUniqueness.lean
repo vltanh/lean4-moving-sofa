@@ -3,13 +3,16 @@ module
 public import SofaUniqueness.Draft.PaperReductions
 
 /-!
-# UNCOMPILED DRAFT: assemble the library shape-uniqueness theorem
+# Assemble shape uniqueness in the paper coordinates
 
-There are no new admissions in this module, but its theorems depend on the six
-explicit admissions P1-P6 in PaperReductions. This is NOT a completed Lean proof.
-
-Both monotonizations apply to the actual selected set. Balanced maximizer
+Both monotonizations apply to the actual starting set. Balanced-maximizer
 existence supplies only the global numerical bound in `cap_area_le_gerver`.
+The positive-area premise needed for the pinned selection is proved from
+Gerver's established lower bound, not added to the final theorem.
+
+The historical `Draft` namespace is retained for source compatibility. These
+are uncompiled proof scripts; their elaboration and axiom closure have not
+been checked by executing Lean.
 -/
 
 @[expose] public section
@@ -19,9 +22,10 @@ open Set Real MeasureTheory MovingSofa
 
 namespace SofaUniqueness.Draft
 
-/-- Global maximality among library moving sofas, in exact ENNReal volume. -/
+/-- Global maximality in the paper presentation, in exact ENNReal volume. -/
 def IsGlobalMax (S : Set Plane) : Prop :=
-  IsMovingSofa S ∧ ∀ T, IsMovingSofa T → volume T ≤ volume S
+  MovingSofa.Paper.IsMovingSofa S ∧
+    ∀ T, MovingSofa.Paper.IsMovingSofa T → volume T ≤ volume S
 
 private theorem coe_translate (v : Plane) :
     (Rigid.translate v : Plane → Plane) = fun p => p + v := by
@@ -38,7 +42,7 @@ theorem standard_of_monotone {S : Set Plane} {ω : ℝ}
   obtain ⟨hω, T, hT, hstd, rfl⟩ := hS
   exact (theorem2_3_2 hω hT hstd).2.1
 
-/-- Translate the specified sofa, then take its OWN monotonization. -/
+/-- Translate the specified sofa, then take its own monotonization. -/
 theorem maximal_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (heq : area S = area (gerverSofa P)) :
@@ -57,7 +61,7 @@ theorem maximal_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   rw [Rigid.area_image, heq] at hlower
   exact ⟨v, T, hmono, hTm.2.2, le_antisymm hupper hlower⟩
 
-/-- The OWN cap of a monotone sofa of Gerver's area is a global cap maximizer. -/
+/-- The own cap of a monotone sofa of Gerver's area maximizes cap area. -/
 theorem own_cap_isMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hS : IsMonotoneSofa S ω)
     (heq : area S = area (gerverSofa P)) : IsMaxCap ω (capOf S ω) := by
@@ -66,8 +70,8 @@ theorem own_cap_isMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   rw [theorem2_5_10 hS]
   exact heq
 
-/-- The right-angle case is already a valid motion; the strict smaller-angle
-case uses the new pinned inequalities for this cap. -/
+/-- The right-angle case needs no extension. In the smaller-angle case the
+new pinned estimates apply to this same positive-area cap. -/
 theorem maximal_monotone_has_right_angle {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Icc arcsec22 (π / 2))
@@ -77,7 +81,11 @@ theorem maximal_monotone_has_right_angle {P : GerverParams}
   · refine ⟨0, ?_⟩
     simpa [rot_zero, hright] using moving_of_monotone hS
   · have hmax := own_cap_isMax hP hbox hS heq
-    have hpin := pinnedBounds_of_isMaxCap ⟨hS.1.1, hsmall⟩ hmax
+    have hpositive : 0 < sofaArea ω (capOf S ω) := by
+      rw [theorem2_5_10 hS, heq]
+      have hG := gerverSofa_area hP hbox
+      linarith
+    have hpin := pinnedBounds_of_isMaxCap ⟨hS.1.1, hsmall⟩ hmax hpositive
     apply right_angle_motion_of_pinned hS ⟨hω.1, hsmall⟩ _ hpin
     rw [heq]
     exact gerverSofa_area hP hbox
@@ -95,10 +103,10 @@ theorem right_angle_monotone_eq_gerver {P : GerverParams}
     (isKi_of_maximal_area hP hbox hcap hvalue) hvalue
   exact ⟨a, (theorem2_4_3 hT).trans ha⟩
 
-/-- Keep the whole containment chain before using regular-closedness. -/
+/-- Keep the full containment chain before applying regular-closedness. -/
 theorem maximizer_contained_in_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
-    (hS : IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
+    (hS : MovingSofa.Paper.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
     ∃ g : Rigid, g '' S ⊆ gerverSofa P := by
   have harea : area S = area (gerverSofa P) := congrArg ENNReal.toReal heq
   have h22 : (2.2 : ℝ) ≤ area S := by rw [harea]; exact gerverSofa_area hP hbox
@@ -127,10 +135,10 @@ theorem maximizer_contained_in_gerver {P : GerverParams}
   obtain ⟨r, hr, rfl⟩ := hqU
   simpa [unshift, Rigid.translate_apply] using hr
 
-/-- DRAFT theorem: depends on P1-P6, despite having no admission in this body. -/
+/-- Recover the original closed set, not only its area or its monotone envelope. -/
 theorem image_eq_gerver_of_volume_eq {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
-    (hS : IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
+    (hS : MovingSofa.Paper.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
     ∃ g : Rigid, g '' S = gerverSofa P := by
   obtain ⟨g, hsub⟩ := maximizer_contained_in_gerver hP hbox hS heq
   have hclosed : IsClosed S := by
@@ -139,16 +147,14 @@ theorem image_eq_gerver_of_volume_eq {P : GerverParams}
   exact ⟨g, g.recover hclosed hsub (regularClosed_gerver hP hbox)
     (gerverSofa_volume_ne_top hP hbox) heq⟩
 
-/-- A library maximizer has the same volume as the library Gerver witness. -/
+/-- A paper maximizer has the volume of the library's concrete Gerver witness. -/
 theorem globalMax_volume_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane} (hS : IsGlobalMax S) :
     volume S = volume (gerverSofa P) := by
   have hG := theorem1_1_1 hP hbox
   exact le_antisymm (hG.2 S hS.1) (hS.2 _ hG.1)
 
-/-- This is the API used by the upstream adapter. It avoids comparing two
-unrelated explicit formulas for Gerver's sofa: both maxima use the same internal
-witness, and the two rigid maps are composed. -/
+/-- Any two global maximizers are congruent via the same internal Gerver witness. -/
 theorem globalMax_congruent {S T : Set Plane}
     (hS : IsGlobalMax S) (hT : IsGlobalMax T) : ∃ g : Rigid, S = g '' T := by
   obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
