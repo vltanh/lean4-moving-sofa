@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="971" height="308" viewBox="0 0 971 308" role="img" aria-label="The pinned sandwich for ε = 0.15: the cap K (blue), the cap K' after the strip at π/2 has moved up by ε (green), the smaller copy (1 - ε)K + ε o_ω (dotted), which lies in K', and the larger copy (1 + ε)K (dashed), which contains K'">
+<title>The pinned sandwich for ε = 0.15: the cap K (blue), the cap K' after the strip at π/2 has moved up by ε (green), the smaller copy (1 - ε)K + ε o_ω (dotted), which lies in K', and the larger copy (1 + ε)K (dashed), which contains K'</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="587.6,239.0 578.8,204.5 567.5,183.9 551.5,166.7 399.4,69.0 218.6,69.0 195.8,74.8 175.2,86.1 149.2,110.4 349.5,239.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="623.3,239.0 613.2,199.3 600.2,175.6 581.8,155.8 406.9,43.5 199.0,43.5 172.8,50.2 149.1,63.1 119.1,91.1 349.5,239.0" fill="none" stroke="#1f2937" stroke-width="1.3" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<polygon points="581.1,213.5 578.8,204.5 567.5,183.9 551.5,166.7 359.7,43.5 318.5,43.5 195.8,74.8 175.2,86.1 149.2,110.4 309.8,213.5" fill="none" stroke="#16a34a" stroke-width="2.0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="559.4,213.5 551.9,184.2 542.3,166.6 528.7,152.0 399.4,69.0 245.7,69.0 226.4,73.9 208.8,83.5 186.7,104.2 357.0,213.5" fill="none" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<circle cx="349.5" cy="239.0" r="3.2" fill="#1f2937"/>
+<text x="349.5" y="264.5" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">O</text>
+<circle cx="399.4" cy="69.0" r="3.2" fill="#1f2937"/>
+<text x="416.4" y="57.1" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">o<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+<polygon points="766.0,72.4 820.4,72.4 820.4,48.6 766.0,48.6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="837.4" y="60.5" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">K</text>
+<polygon points="766.0,120.0 820.4,120.0 820.4,96.2 766.0,96.2" fill="none" stroke="#16a34a" stroke-width="2.0" fill-opacity="1" stroke-linejoin="round"/>
+<text x="837.4" y="108.1" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">K′</text>
+<polygon points="766.0,167.6 820.4,167.6 820.4,143.8 766.0,143.8" fill="none" stroke="#1f2937" stroke-width="1.3" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<text x="837.4" y="155.7" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">(1 + ε)K</text>
+<polygon points="766.0,215.2 820.4,215.2 820.4,191.4 766.0,191.4" fill="none" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<text x="837.4" y="203.3" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">(1 − ε)K + εo<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+</svg>

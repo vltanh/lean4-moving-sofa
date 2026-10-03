@@ -1,6 +1,6 @@
 # Uniqueness of Gerver's sofa: complete paper argument
 
-> **Status.** This argument is formalized in Lean in [`MovingSofaUniqueness/`](../../MovingSofaUniqueness): the proof compiles with no
+> **Status.** This argument is formalized in Lean in [`MovingSofaUniqueness/`](../../../MovingSofaUniqueness): the proof compiles with no
 > `sorry` and only Lean's standard axioms. [`docs/UNIQUENESS.md`](../UNIQUENESS.md) lists the Lean form of each
 > proposition and the places where the formal proof takes a different route. The "Verification
 > boundary" paragraph below describes the state before the formalization.

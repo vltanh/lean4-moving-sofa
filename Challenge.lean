@@ -9,7 +9,7 @@ Statements of record, in Mathlib's vocabulary only, in three groups.
 
 * `Baek`: the definitions of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), the
   paper's main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions, which the
-  paper does not prove (the argument is in `docs/uniqueness/20-complete-paper-proof.md`).
+  paper does not prove (the argument is in `docs/archive/uniqueness/20-complete-paper-proof.md`).
 * `FormalConjectures.MovingSofa`: the definitions and statements of Google DeepMind's
   formal-conjectures, including its uniqueness statement, which it lists as open.
 * `Bridge`: the two sets of definitions describe the same objects. Formal-conjectures' statements

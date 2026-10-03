@@ -300,7 +300,7 @@ meta def paperResults : List (String × Name) :=
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
 /-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/uniqueness/20-complete-paper-proof.md`; and the bridge to formal-conjectures'
+argument, `docs/archive/uniqueness/20-complete-paper-proof.md`; and the bridge to formal-conjectures'
 definitions (`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),

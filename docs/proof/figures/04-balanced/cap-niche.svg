@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="709" height="260" viewBox="0 0 709 260" role="img" aria-label="A polygon cap K with rotation angle ω = 1.2 and angle set Θ = {0.4, 0.8}, in blue, inside the dashed parallelogram P_ω; its polygon niche, in orange, is the part of the fan F_ω (above the two dark half-lines from O) inside the quadrants below the inner corners x_K(0.4) and x_K(0.8)">
+<title>A polygon cap K with rotation angle ω = 1.2 and angle set Θ = {0.4, 0.8}, in blue, inside the dashed parallelogram P_ω; its polygon niche, in orange, is the part of the fan F_ω (above the two dark half-lines from O) inside the quadrants below the inner corners x_K(0.4) and x_K(0.8)</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="342.5,195.0 668.1,195.0 364.6,77.0 39.0,77.0" fill="none" stroke="#9ca3af" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="5 4"/>
+<line x1="342.5" y1="195.0" x2="690.6" y2="195.0" stroke="#374151" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="342.5" y1="195.0" x2="18.0" y2="68.8" stroke="#374151" stroke-width="2.2" stroke-linecap="round"/>
+<polygon points="170.1,128.0 342.5,195.0 527.5,195.0 506.4,145.2 484.0,123.4 364.6,77.0 236.5,77.0 207.8,89.2" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="342.5,195.0 399.4,195.0 378.3,145.2 349.6,157.3 327.2,135.6 289.5,174.4" fill="#ffedd5" stroke="#ea580c" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="378.3" y1="145.2" x2="399.4" y2="195.0" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<line x1="378.3" y1="145.2" x2="299.7" y2="178.4" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="378.3" cy="145.2" r="3.2" fill="#ea580c"/>
+<line x1="327.2" y1="135.6" x2="388.4" y2="195.0" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<line x1="327.2" y1="135.6" x2="289.5" y2="174.4" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="327.2" cy="135.6" r="3.2" fill="#ea580c"/>
+<text x="420.8" y="129.8" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle" font-style="italic">x<tspan dy="4.5" font-size="10.2">K</tspan><tspan dy="-4.5">(0.4)</tspan></text>
+<text x="284.7" y="119.1" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle" font-style="italic">x<tspan dy="4.5" font-size="10.2">K</tspan><tspan dy="-4.5">(0.8)</tspan></text>
+<circle cx="342.5" cy="195.0" r="3.0" fill="#1f2937"/>
+<text x="342.5" y="218.6" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">O</text>
+<circle cx="364.6" cy="77.0" r="3.0" fill="#1f2937"/>
+<text x="378.8" y="56.9" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">o<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+<text x="454.6" y="110.0" font-size="18" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic">K</text>
+<text x="619.8" y="173.8" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle" font-style="italic">P<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+<text x="631.6" y="53.4" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="middle" dominant-baseline="middle" font-style="italic">F<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+</svg>

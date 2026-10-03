@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="706" height="317" viewBox="0 0 706 317" role="img" aria-label="A long polygon cap K for Θ = {π/4} and ω = π/2, the trapezoid between the lines y = 0 and y = 1 with sides x = y − 1 and x = 9 − y, in blue, and its wedge below the inner corner x_K(π/4), in orange: the polygon niche is the whole wedge, in the fan y ≥ 0; the parallelogram P_ω, the strip below the dashed line, keeps only its darker lower part">
+<title>A long polygon cap K for Θ = {π/4} and ω = π/2, the trapezoid between the lines y = 0 and y = 1 with sides x = y − 1 and x = 9 − y, in blue, and its wedge below the inner corner x_K(π/4), in orange: the polygon niche is the whole wedge, in the fan y ≥ 0; the parallelogram P_ω, the strip below the dashed line, keeps only its darker lower part</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="18.0" y1="277.5" x2="687.6" y2="277.5" stroke="#374151" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="18.0" y1="215.5" x2="687.6" y2="215.5" stroke="#374151" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="6 4"/>
+<polygon points="39.7,277.5 659.7,277.5 597.7,215.5 101.7,215.5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="510.0,215.5 349.7,55.2 189.4,215.5" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="5 4"/>
+<polygon points="572.0,277.5 510.0,215.5 189.4,215.5 127.4,277.5" fill="#fdba74" stroke="#ea580c" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<circle cx="349.7" cy="55.2" r="3.4" fill="#ea580c"/>
+<text x="349.7" y="38.5" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle" font-style="italic">x<tspan dy="4.5" font-size="10.2">K</tspan><tspan dy="-4.5">(π/4)</tspan></text>
+<text x="138.9" y="239.1" font-size="17" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic">K</text>
+<text x="49.0" y="200.0" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="middle" dominant-baseline="middle" font-style="italic">P<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+</svg>

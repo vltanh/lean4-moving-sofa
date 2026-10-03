@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="372" viewBox="0 0 720 372" role="img" aria-label="The chain of the proof of the main theorem, from top to bottom: the area of a moving sofa S is at most the sofa area functional A(K) of a balanced maximum cap K, at most Q(K, B_K, D_K), at most the value of Q at Gerver's triple, which equals the area 2.2195... of Gerver's sofa G; each step names the property used">
+<title>The chain of the proof of the main theorem, from top to bottom: the area of a moving sofa S is at most the sofa area functional A(K) of a balanced maximum cap K, at most Q(K, B_K, D_K), at most the value of Q at Gerver's triple, which equals the area 2.2195... of Gerver's sofa G; each step names the property used</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="28.0,10.0 264.0,10.0 264.0,46.0 28.0,46.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="146.0" y="29.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">|S|</text>
+<text x="146.0" y="68.5" font-size="20" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">≤</text>
+<line x1="276.0" y1="67.5" x2="304.0" y2="67.5" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="312.0" y="59.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">K: a balanced maximum cap with rotation angle π/2</text>
+<text x="312.0" y="76.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">(Chapters 3 to 5)</text>
+<polygon points="28.0,89.0 264.0,89.0 264.0,125.0 28.0,125.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="146.0" y="108.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">A(K) = |K| − |N(K)|</text>
+<text x="146.0" y="147.5" font-size="20" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">≤</text>
+<line x1="276.0" y1="146.5" x2="304.0" y2="146.5" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="312.0" y="138.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">K satisfies the injectivity condition (Chapter 7);</text>
+<text x="312.0" y="155.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">Q bounds the sofa area functional (Section 9.2)</text>
+<polygon points="28.0,168.0 264.0,168.0 264.0,204.0 28.0,204.0" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="146.0" y="187.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">Q(K, B<tspan dy="4.8" font-size="10.9">K</tspan><tspan dy="-4.8">, D</tspan><tspan dy="4.8" font-size="10.9">K</tspan><tspan dy="-4.8">)</tspan></text>
+<text x="146.0" y="226.5" font-size="20" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">≤</text>
+<line x1="276.0" y1="225.5" x2="304.0" y2="225.5" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="312.0" y="217.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">Q is concave (Section 9.3), and its directional</text>
+<text x="312.0" y="234.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">derivatives at Gerver's triple are ≤ 0 (Section 9.4)</text>
+<polygon points="28.0,247.0 264.0,247.0 264.0,283.0 28.0,283.0" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="146.0" y="266.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">Q(K<tspan dy="4.8" font-size="10.9">G</tspan><tspan dy="-4.8">, B</tspan><tspan dy="4.8" font-size="10.9">G</tspan><tspan dy="-4.8">, D</tspan><tspan dy="4.8" font-size="10.9">G</tspan><tspan dy="-4.8">)</tspan></text>
+<text x="146.0" y="305.5" font-size="20" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">=</text>
+<line x1="276.0" y1="304.5" x2="304.0" y2="304.5" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="312.0" y="296.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">the bound is attained at Gerver's sofa</text>
+<text x="312.0" y="313.5" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">(Chapter 10)</text>
+<polygon points="28.0,326.0 264.0,326.0 264.0,362.0 28.0,362.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="146.0" y="345.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">|G| = 2.2195…</text>
+</svg>

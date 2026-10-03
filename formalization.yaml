@@ -50,17 +50,17 @@ sources:
       intended form; REPORT.md (Sections 3 and 6) lists every correction.
     author_endorsement: not-contacted
   - title: "Uniqueness of Gerver's sofa: complete paper argument"
-    id: "docs/uniqueness/20-complete-paper-proof.md"
+    id: "docs/archive/uniqueness/20-complete-paper-proof.md"
     type: other
-    location: "https://github.com/vltanh/lean4-moving-sofa/blob/15ad9a495f05a97ea5a25ef1e4efca96d4ffe3e8/docs/uniqueness/20-complete-paper-proof.md"
+    location: "https://github.com/vltanh/lean4-moving-sofa/blob/02af5017769d67982a217596b4ad97a10f4f180d/docs/uniqueness/20-complete-paper-proof.md"
     relationship: formalizes
     note: >-
       An informal proof that every moving sofa with the area of Gerver's sofa is congruent to it,
       written by ChatGPT Pro 6 (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
-      before it in docs/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
+      before it in docs/archive/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
       does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
-      its six propositions; docs/UNIQUENESS.md lists the Lean form of each step and the places
-      where the formal proof takes a different route.
+      its six propositions; docs/proof/ (Chapters 11 and 12) gives the proof with the Lean form of
+      each step and the places where the formal proof takes a different route.
     author_endorsement: n/a
   - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
     authors:
@@ -125,13 +125,14 @@ related_formalizations:
     note: >-
       An earlier Lean 4 formalization of the same paper, written by AI coding agents directed by
       Dean Cureton. It proves the formal-conjectures statement sofaConstant = volume gerversSofa,
-      with Gerver's description of the sofa and vendored libraries. The README compares the two.
+      with Gerver's description of the sofa and vendored libraries. docs/prior-work.md compares the
+      two.
   - id: "https://github.com/RuifengCao/sofa-formal"
     relationship: other
     note: >-
       An earlier Lean 4 formalization of the same paper. It proves the formal-conjectures statement
-      sofaConstant = volume gerversSofa, with Gerver's description of the sofa. The README compares
-      the two.
+      sofaConstant = volume gerversSofa, with Gerver's description of the sofa. docs/prior-work.md
+      compares the two.
 
 status:
   scope: >-
@@ -149,7 +150,7 @@ status:
     quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose content the paper reproves in Chapter 3;
     and the remarks and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
     motions (MovingSofaUniqueness/), with the theorem and the six propositions of
-    docs/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
+    docs/archive/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
     estimate of note 17, which the theorem does not use. Also formalized: the bridge between
     formal-conjectures' definitions and Baek's (MovingSofaBridge/): the two notions of moving sofa,
     the two optimal areas and the two Gerver's sofas agree, and Gerver's four constants are unique on
@@ -209,7 +210,7 @@ automation:
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
       tool_setup: >-
-        Wrote the informal uniqueness proof (docs/uniqueness/, notes 01-20) and a Lean draft of it
+        Wrote the informal uniqueness proof (docs/archive/uniqueness/, notes 01-20) and a Lean draft of it
         without a Lean compiler, and a draft of the connection with formal-conjectures' definitions,
         in pull request #1 (151 commits on 2026-10-02, 15:01 to 22:43 US Central Time). The draft's
         statements compiled after porting; 54 proofs of the uniqueness draft and 78 of the connection
@@ -261,7 +262,7 @@ fidelity:
     Romik's equations. REPORT.md, Section 6 lists them.
     (6) The uniqueness: "U(S) = G for a Euclidean isometry U" is formalized with U a rotation about
     the origin followed by a translation, which is stronger. Some proofs take different routes from
-    note 20 (docs/UNIQUENESS.md): the selection uses a fixed penalty on persistent dyadic support
+    note 20 (docs/proof/, Chapters 11 and 12): the selection uses a fixed penalty on persistent dyadic support
     samples instead of a vanishing continuous penalty; the selection needs the cap to have positive
     area, which is proved where it is used; the arm inequalities come from the lower sequence of
     Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of
@@ -326,7 +327,7 @@ alignment:
         sofa has area at most the area of Gerver's sofa. The paper's moving sofas are translates of
         subsets of H_L, and its rigid motions are continuous curves in SE(2) starting at a
         translation; Challenge.lean's docstring explains the equivalent formulation used.
-    - source: "Uniqueness of Gerver's sofa, docs/uniqueness/20-complete-paper-proof.md, Theorem (not a result of Baek's paper)"
+    - source: "Uniqueness of Gerver's sofa, docs/archive/uniqueness/20-complete-paper-proof.md, Theorem (not a result of Baek's paper)"
       lean: "Baek.gerver_sofa_unique"
       module: "Challenge"
       status: "proved"

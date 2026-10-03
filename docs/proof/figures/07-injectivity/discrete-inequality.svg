@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="535" height="433" viewBox="0 0 535 433" role="img" aria-label="The supporting hallway L(t) of the polygon cap drawn upright, with the polygon niche shaded orange. Near the corner x(t), the inner wall b(t) runs above the line d(t - δ) down to p: that part lies in R. Further down it crosses the quadrant Q⁻(t - δ), and then runs between the lines b(t - δ) and b(t + δ) from B₋ to B₊: that part lies in S. The side of the niche on b(t), thick, is the union of the two parts">
+<title>The supporting hallway L(t) of the polygon cap drawn upright, with the polygon niche shaded orange. Near the corner x(t), the inner wall b(t) runs above the line d(t - δ) down to p: that part lies in R. Further down it crosses the quadrant Q⁻(t - δ), and then runs between the lines b(t - δ) and b(t + δ) from B₋ to B₊: that part lies in S. The side of the niche on b(t), thick, is the union of the two parts</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="18.0,214.0 280.5,214.0 280.5,415.2 455.5,415.2 455.5,39.0 18.0,39.0" fill="#f3f4f6" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="447.0,415.2 455.5,394.6 455.5,333.0 436.3,286.7 207.8,58.2 161.5,39.0 99.9,39.0 18.0,72.9 18.0,115.9 317.4,415.2" fill="#dbeafe" stroke="none" stroke-width="0" fill-opacity="0.6" stroke-linejoin="round"/>
+<polygon points="309.5,289.7 108.6,206.5 275.1,373.0" fill="#fed7aa" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="280.5,214.0 116.1,214.0 280.5,378.4" fill="#fed7aa" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="204.8,185.0 121.5,219.4 288.0,385.9" fill="#fed7aa" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="18.0" y1="115.9" x2="317.4" y2="415.2" stroke="#9ca3af" stroke-width="1.2" stroke-linecap="round"/>
+<polyline points="18.0,39.0 455.5,39.0 455.5,415.2" fill="none" stroke="#374151" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="18.0,214.0 280.5,214.0 280.5,415.2" fill="none" stroke="#374151" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="516.7" y1="375.6" x2="18.0" y2="169.0" stroke="#9333ea" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="7 4"/>
+<line x1="257.5" y1="415.3" x2="422.1" y2="18.0" stroke="#9333ea" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 3"/>
+<line x1="516.7" y1="55.7" x2="18.0" y2="262.3" stroke="#16a34a" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="7 4"/>
+<line x1="300.1" y1="415.3" x2="135.6" y2="18.0" stroke="#16a34a" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 3"/>
+<line x1="280.5" y1="277.7" x2="280.5" y2="214.0" stroke="#ea580c" stroke-width="5.0" stroke-linecap="round"/>
+<line x1="280.5" y1="367.8" x2="280.5" y2="359.8" stroke="#ea580c" stroke-width="5.0" stroke-linecap="round"/>
+<circle cx="280.5" cy="277.7" r="3.4" fill="#1f2937"/>
+<circle cx="280.5" cy="214.0" r="3.4" fill="#1f2937"/>
+<circle cx="280.5" cy="359.8" r="3.4" fill="#1f2937"/>
+<circle cx="280.5" cy="367.8" r="3.4" fill="#1f2937"/>
+<text x="301.5" y="274.2" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">p</text>
+<text x="310.2" y="194.8" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">x(t)</text>
+<text x="301.5" y="347.6" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">B<tspan dy="4.5" font-size="10.2">−</tspan></text>
+<text x="301.5" y="381.8" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">B<tspan dy="4.5" font-size="10.2">+</tspan></text>
+<text x="263.0" y="245.5" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="end" dominant-baseline="middle">in R</text>
+<text x="263.0" y="364.5" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="end" dominant-baseline="middle">in S</text>
+<text x="196.5" y="284.0" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle">𝒩<tspan dy="4.5" font-size="10.2">Θ</tspan><tspan dy="-4.5">(K)</tspan></text>
+<text x="32.0" y="146.2" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#9333ea" text-anchor="start" dominant-baseline="middle" font-style="italic">d(t − δ)</text>
+<text x="436.1" y="30.2" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#9333ea" text-anchor="start" dominant-baseline="middle" font-style="italic">b(t − δ)</text>
+<text x="32.0" y="239.6" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="start" dominant-baseline="middle" font-style="italic">d(t + δ)</text>
+<text x="149.6" y="30.2" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="start" dominant-baseline="middle" font-style="italic">b(t + δ)</text>
+<text x="270.0" y="401.3" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="end" dominant-baseline="middle" font-style="italic">b(t)</text>
+<text x="91.5" y="193.0" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="middle" dominant-baseline="middle" font-style="italic">d(t)</text>
+</svg>

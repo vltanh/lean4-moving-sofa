@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="667" height="280" viewBox="0 0 667 280" role="img" aria-label="The balancing move: a polygon sofa whose side s+ on the outer wall of the hallway L_{π/6} (thick green) is longer than its sides s− on the inner wall (thick orange). Pushing the hallway outwards by ε, to the dashed walls, gains the green strip and loses the orange one">
+<title>The balancing move: a polygon sofa whose side s+ on the outer wall of the hallway L_{π/6} (thick green) is longer than its sides s− on the inner wall (thick orange). Pushing the hallway outwards by ε, to the dashed walls, gains the green strip and loses the orange one</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="18.0" y1="205.5" x2="649.3" y2="205.5" stroke="#374151" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="18.0" y1="80.5" x2="649.3" y2="80.5" stroke="#374151" stroke-width="2.0" stroke-linecap="round"/>
+<polygon points="157.7,205.5 207.7,176.7 261.8,83.0 315.8,114.2 363.4,86.7 411.0,169.2 473.9,205.5 576.3,205.5 504.2,80.5 124.2,80.5 116.2,85.2 46.7,205.5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8" fill-opacity="1.0" stroke-linejoin="round"/>
+<polygon points="504.2,80.5 576.3,205.5 590.8,205.5 524.2,90.2 507.4,80.5" fill="#dcfce7" stroke="#16a34a" stroke-width="0.8" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="363.4,86.7 411.0,169.2 432.7,181.7 374.2,80.5" fill="#ffedd5" stroke="#ea580c" stroke-width="0.8" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="598.0" y1="243.0" x2="482.5" y2="43.0" stroke="#16a34a" stroke-width="1.0" stroke-linecap="round"/>
+<line x1="453.6" y1="243.0" x2="338.2" y2="43.0" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round"/>
+<line x1="612.4" y1="243.0" x2="496.9" y2="43.0" stroke="#16a34a" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="5 4"/>
+<line x1="468.1" y1="243.0" x2="352.6" y2="43.0" stroke="#ea580c" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="5 4"/>
+<line x1="576.3" y1="205.5" x2="504.2" y2="80.5" stroke="#16a34a" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="363.4" y1="86.7" x2="411.0" y2="169.2" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="548.9" y1="138.0" x2="594.4" y2="111.8" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="614.9" y="104.3" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">εu</text>
+<text x="507.8" y="161.8" font-size="17" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="middle" dominant-baseline="middle" font-style="italic">s<tspan dy="-5.2" font-size="10.2">+</tspan></text>
+<text x="358.0" y="144.8" font-size="17" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle" font-style="italic">s<tspan dy="-5.2" font-size="10.2">−</tspan></text>
+<text x="155.5" y="136.8" font-size="17" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic">S<tspan dy="4.5" font-size="10.2">Θ</tspan></text>
+</svg>

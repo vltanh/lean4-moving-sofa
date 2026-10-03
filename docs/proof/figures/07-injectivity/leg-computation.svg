@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="552" height="393" viewBox="0 0 552 393" role="img" aria-label="The supporting hallway L(t) of a polygon cap drawn upright, with the walls c(t - δ) and d(t - δ) of the hallway at the previous angle, dashed. The line d(t - δ) meets the inner wall b(t) at p and the wall d(t) at q, and c(t - δ) meets c(t) at the vertex r = C⁻(t). The segment from p to the corner x(t) is the part of the inner wall above d(t - δ); it is the side of the right triangle p q x(t) opposite to the angle δ at q">
+<title>The supporting hallway L(t) of a polygon cap drawn upright, with the walls c(t - δ) and d(t - δ) of the hallway at the previous angle, dashed. The line d(t - δ) meets the inner wall b(t) at p and the wall d(t) at q, and c(t - δ) meets c(t) at the vertex r = C⁻(t). The segment from p to the corner x(t) is the part of the inner wall above d(t - δ); it is the side of the right triangle p q x(t) opposite to the angle δ at q</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="18.0,266.5 280.5,266.5 280.5,375.0 455.5,375.0 455.5,91.5 18.0,91.5" fill="#f3f4f6" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="451.1,375.0 436.3,339.2 207.8,110.7 161.5,91.5 99.9,91.5 18.0,125.4 18.0,168.4 224.6,375.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="0.45" stroke-linejoin="round"/>
+<polyline points="18.0,91.5 455.5,91.5 455.5,375.0" fill="none" stroke="#374151" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="18.0,266.5 280.5,266.5 280.5,375.0" fill="none" stroke="#374151" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="534.3" y1="245.9" x2="18.0" y2="32.1" stroke="#9333ea" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="6 4"/>
+<line x1="388.6" y1="375.0" x2="18.0" y2="221.5" stroke="#9333ea" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="6 4"/>
+<polygon points="280.5,330.2 126.7,266.5 280.5,266.5" fill="#ffedd5" stroke="none" stroke-width="0" fill-opacity="0.9" stroke-linejoin="round"/>
+<line x1="280.5" y1="330.2" x2="280.5" y2="266.5" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
+<polyline points="268.2,266.5 268.2,278.8 280.5,278.8" fill="none" stroke="#1f2937" stroke-width="1.0" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="161.5" y1="91.5" x2="455.5" y2="91.5" stroke="#16a34a" stroke-width="4.0" stroke-linecap="round"/>
+<text x="323.2" y="68.8" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="middle" dominant-baseline="middle" font-style="italic">g⁻(t)</text>
+<circle cx="280.5" cy="330.2" r="3.8" fill="#1f2937"/>
+<text x="303.2" y="333.7" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">p</text>
+<circle cx="126.7" cy="266.5" r="3.8" fill="#1f2937"/>
+<text x="121.4" y="243.8" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">q</text>
+<circle cx="161.5" cy="91.5" r="3.8" fill="#1f2937"/>
+<text x="144.0" y="65.2" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">r = C⁻(t)</text>
+<circle cx="280.5" cy="266.5" r="3.8" fill="#1f2937"/>
+<text x="315.5" y="249.0" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">x(t)</text>
+<circle cx="455.5" cy="91.5" r="3.8" fill="#1f2937"/>
+<text x="485.2" y="70.5" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">y(t)</text>
+<polyline points="178.4,287.9 178.8,286.9 179.2,285.8 179.6,284.7 180.0,283.6 180.3,282.5 180.7,281.4 180.9,280.2 181.2,279.1 181.5,278.0 181.7,276.9 181.9,275.7 182.1,274.6 182.2,273.4 182.4,272.3 182.5,271.1 182.6,270.0 182.6,268.8 182.7,267.7 182.7,266.5" fill="none" stroke="#1f2937" stroke-width="1.0" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="203.9" y="281.9" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">δ</text>
+<text x="294.5" y="362.8" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="start" dominant-baseline="middle" font-style="italic">b(t)</text>
+<text x="79.3" y="243.8" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="middle" dominant-baseline="middle" font-style="italic">d(t)</text>
+<text x="79.3" y="68.8" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="middle" dominant-baseline="middle" font-style="italic">c(t)</text>
+<text x="469.5" y="135.2" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#374151" text-anchor="start" dominant-baseline="middle" font-style="italic">a(t)</text>
+<text x="39.0" y="197.0" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#9333ea" text-anchor="start" dominant-baseline="middle" font-style="italic">d(t − δ)</text>
+<text x="469.5" y="203.5" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#9333ea" text-anchor="start" dominant-baseline="middle" font-style="italic">c(t − δ)</text>
+<text x="61.8" y="140.5" font-size="18" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic">K</text>
+</svg>

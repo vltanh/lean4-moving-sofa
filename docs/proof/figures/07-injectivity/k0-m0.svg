@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="572" height="399" viewBox="0 0 572 399" role="img" aria-label="The graphs of k₀(x) = max(|x - 1|, (|x - 1| + 1)/2) and m₀(x) = x - k₀(x) for x from 0 to 3, with the diagonal x dashed. The function m₀ is nondecreasing and piecewise linear, through (0, -1), (2/3, 0), (1, 1/2) and (2, 1), and constant after 2; k₀ has its minimum 1/2 at x = 1">
+<title>The graphs of k₀(x) = max(|x - 1|, (|x - 1| + 1)/2) and m₀(x) = x - k₀(x) for x from 0 to 3, with the diagonal x dashed. The function m₀ is nondecreasing and piecewise linear, through (0, -1), (2/3, 0), (1, 1/2) and (2, 1), and constant after 2; k₀ has its minimum 1/2 at x = 1</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="64.5" y1="314.3" x2="486.1" y2="314.3" stroke="#e5e7eb" stroke-width="1" stroke-linecap="round" stroke-dasharray="3 4"/>
+<line x1="64.5" y1="230.4" x2="486.1" y2="230.4" stroke="#e5e7eb" stroke-width="1" stroke-linecap="round" stroke-dasharray="3 4"/>
+<line x1="64.5" y1="146.6" x2="486.1" y2="146.6" stroke="#e5e7eb" stroke-width="1" stroke-linecap="round" stroke-dasharray="3 4"/>
+<line x1="64.5" y1="62.7" x2="486.1" y2="62.7" stroke="#e5e7eb" stroke-width="1" stroke-linecap="round" stroke-dasharray="3 4"/>
+<polyline points="64.5,146.6 205.0,188.5 345.6,146.6 486.1,62.7" fill="none" stroke="#9333ea" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="64.5,314.3 205.0,188.5 345.6,146.6 486.1,146.6" fill="none" stroke="#ea580c" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="64.5,230.4 373.7,45.9" fill="none" stroke="#9ca3af" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 4"/>
+<line x1="64.5" y1="331.1" x2="486.1" y2="331.1" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<line x1="64.5" y1="331.1" x2="64.5" y2="45.9" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<line x1="64.5" y1="331.1" x2="64.5" y2="334.8" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="64.5" y="343.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">0</text>
+<line x1="158.2" y1="331.1" x2="158.2" y2="334.8" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="158.2" y="343.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">2/3</text>
+<line x1="205.0" y1="331.1" x2="205.0" y2="334.8" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="205.0" y="343.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">1</text>
+<line x1="345.6" y1="331.1" x2="345.6" y2="334.8" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="345.6" y="343.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">2</text>
+<line x1="486.1" y1="331.1" x2="486.1" y2="334.8" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="486.1" y="343.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">3</text>
+<line x1="64.5" y1="314.3" x2="60.8" y2="314.3" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="58.3" y="314.3" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">−1</text>
+<line x1="64.5" y1="230.4" x2="60.8" y2="230.4" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="58.3" y="230.4" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">0</text>
+<line x1="64.5" y1="188.5" x2="60.8" y2="188.5" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="58.3" y="188.5" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">1/2</text>
+<line x1="64.5" y1="146.6" x2="60.8" y2="146.6" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="58.3" y="146.6" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">1</text>
+<line x1="64.5" y1="62.7" x2="60.8" y2="62.7" stroke="#9ca3af" stroke-width="1" stroke-linecap="round"/>
+<text x="58.3" y="62.7" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">2</text>
+<text x="493.5" y="331.1" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">x</text>
+<circle cx="64.5" cy="314.3" r="3.4" fill="#ea580c"/>
+<circle cx="205.0" cy="188.5" r="3.4" fill="#ea580c"/>
+<circle cx="345.6" cy="146.6" r="3.4" fill="#ea580c"/>
+<circle cx="158.2" cy="230.4" r="3.4" fill="#ea580c"/>
+<circle cx="205.0" cy="188.5" r="3.4" fill="#9333ea"/>
+<text x="407.4" y="84.9" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#9333ea" text-anchor="middle" dominant-baseline="middle" font-style="italic">k<tspan dy="4.5" font-size="10.2">0</tspan><tspan dy="-4.5">(x)</tspan></text>
+<text x="422.9" y="162.1" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="middle" dominant-baseline="middle" font-style="italic">m<tspan dy="4.5" font-size="10.2">0</tspan><tspan dy="-4.5">(x)</tspan></text>
+<text x="383.0" y="45.9" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="start" dominant-baseline="middle" font-style="italic">x</text>
+</svg>

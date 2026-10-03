@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1011" height="404" viewBox="0 0 1011 404" role="img" aria-label="A diagram of the twelve theorems of the Challenge in three rows: Baek's five above, formal-conjectures' four in the middle, the bridge's three below. Arrows lead from a theorem to the theorems of formal-conjectures whose proofs in Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the second and the third, and gerversSofa_eq to all three; a dashed arrow leads from ABφθSpec.existsUnique, which defines Gerver's constants, to gerversSofa_eq. gerver_params_unique and gerver_sofa_area have no arrows">
+<title>A diagram of the twelve theorems of the Challenge in three rows: Baek's five above, formal-conjectures' four in the middle, the bridge's three below. Arrows lead from a theorem to the theorems of formal-conjectures whose proofs in Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the second and the third, and gerversSofa_eq to all three; a dashed arrow leads from ABφθSpec.existsUnique, which defines Gerver's constants, to gerversSofa_eq. gerver_params_unique and gerver_sofa_area have no arrows</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="491.8" y1="101.7" x2="307.8" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="689.6" y1="101.7" x2="418.2" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="606.8" y1="320.7" x2="418.2" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="363.0" y1="320.7" x2="307.8" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="491.8" y1="101.7" x2="551.6" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="689.6" y1="101.7" x2="662.0" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="855.2" y1="320.7" x2="662.0" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="363.0" y1="320.7" x2="551.6" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="491.8" y1="101.7" x2="800.0" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="689.6" y1="101.7" x2="855.2" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="892.0" y1="101.7" x2="910.4" y2="185.4" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="606.8" y1="320.7" x2="855.2" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="855.2" y1="320.7" x2="910.4" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="363.0" y1="320.7" x2="800.0" y2="237.0" stroke="#16a34a" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="119.2" y1="234.2" x2="270.5" y2="338.2" stroke="#9ca3af" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+<rect x="15.7" y="63.1" width="179.4" height="38.6" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+<text x="105.4" y="82.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerver_params_unique</text>
+<rect x="208.9" y="63.1" width="179.4" height="38.6" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+<text x="298.6" y="82.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerver_sofa_area</text>
+<rect x="402.1" y="63.1" width="179.4" height="38.6" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+<text x="491.8" y="82.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerver_params_exists</text>
+<rect x="599.9" y="63.1" width="179.4" height="38.6" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+<text x="689.6" y="82.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerver_sofa_optimal</text>
+<rect x="802.3" y="63.1" width="179.4" height="38.6" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+<text x="892.0" y="82.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerver_sofa_unique</text>
+<rect x="6.5" y="188.2" width="225.4" height="46.0" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4"/>
+<text x="119.2" y="203.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">GerversSofa.</text>
+<text x="119.2" y="219.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">ABφθSpec.existsUnique</text>
+<rect x="250.3" y="188.2" width="225.4" height="46.0" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4"/>
+<text x="363.0" y="203.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">isMovingSofa_</text>
+<text x="363.0" y="219.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerversSofa</text>
+<rect x="494.1" y="188.2" width="225.4" height="46.0" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4"/>
+<text x="606.8" y="203.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">sofaConstant_eq_</text>
+<text x="606.8" y="219.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">volume_gerversSofa</text>
+<rect x="742.5" y="188.2" width="225.4" height="46.0" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.4"/>
+<text x="855.2" y="203.4" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">volume_eq_sofaConstant_iff_</text>
+<text x="855.2" y="219.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">congruent_gerversSofa</text>
+<rect x="273.3" y="320.7" width="179.4" height="38.6" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.4"/>
+<text x="363.0" y="340.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">gerversSofa_eq</text>
+<rect x="517.1" y="320.7" width="179.4" height="38.6" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.4"/>
+<text x="606.8" y="340.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">isMovingSofa_iff</text>
+<rect x="765.5" y="320.7" width="179.4" height="38.6" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.4"/>
+<text x="855.2" y="340.0" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">sofaConstant_eq</text>
+<text x="18.0" y="45.6" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="start" dominant-baseline="middle">Baek</text>
+<text x="18.0" y="171.6" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle">FormalConjectures.MovingSofa</text>
+<text x="18.0" y="303.2" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="start" dominant-baseline="middle">Bridge</text>
+</svg>

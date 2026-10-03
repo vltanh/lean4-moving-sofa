@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="632" height="621" viewBox="0 0 632 621" role="img" aria-label="Gerver's balancing argument breaking connectedness, in three rows for c = 0.1, 0 and −0.2: the hallway L_{π/6} is pushed along u, its inner corner (orange dot) rises to the line y = 1 and beyond, and the quadrant below it (light orange) cuts the polygon sofa into two pieces">
+<title>Gerver's balancing argument breaking connectedness, in three rows for c = 0.1, 0 and −0.2: the hallway L_{π/6} is pushed along u, its inner corner (orange dot) rises to the line y = 1 and beyond, and the quadrant below it (light orange) cuts the polygon sofa into two pieces</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="18.0" y1="185.6" x2="613.9" y2="185.6" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<line x1="18.0" y1="67.6" x2="613.9" y2="67.6" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<polygon points="149.9,185.6 408.8,185.6 344.1,73.5" fill="#ffedd5" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="149.9,185.6 197.0,158.4 248.1,69.9 299.2,99.4 344.1,73.5 389.0,151.3 448.4,185.6 545.1,185.6 476.9,67.6 118.3,67.6 110.7,72.0 45.1,185.6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="545.1" y1="185.6" x2="476.9" y2="67.6" stroke="#16a34a" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="344.1" y1="73.5" x2="389.0" y2="151.3" stroke="#ea580c" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="344.1" y1="73.5" x2="379.5" y2="134.8" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<line x1="344.1" y1="73.5" x2="282.8" y2="108.9" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="344.1" cy="73.5" r="3.2" fill="#ea580c"/>
+<text x="29.8" y="39.2" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">c = 0.1</text>
+<line x1="18.0" y1="376.7" x2="613.9" y2="376.7" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<line x1="18.0" y1="258.7" x2="613.9" y2="258.7" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<polygon points="149.9,376.7 422.4,376.7 354.3,258.7 354.3,258.7" fill="#ffedd5" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="149.9,376.7 197.0,349.5 248.1,261.1 299.2,290.6 354.3,258.7 409.4,354.2 448.4,376.7 558.7,376.7 495.8,267.8 480.0,258.7 118.3,258.7 110.7,263.1 45.1,376.7" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="558.7" y1="376.7" x2="495.8" y2="267.8" stroke="#16a34a" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="354.3" y1="258.7" x2="409.4" y2="354.2" stroke="#ea580c" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="354.3" y1="258.7" x2="389.7" y2="320.0" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<line x1="354.3" y1="258.7" x2="293.0" y2="294.1" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="354.3" cy="258.7" r="3.2" fill="#ea580c"/>
+<text x="29.8" y="230.4" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">c = 0</text>
+<line x1="18.0" y1="567.9" x2="613.9" y2="567.9" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<line x1="18.0" y1="449.9" x2="613.9" y2="449.9" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+<polygon points="149.9,567.9 449.7,567.9 381.6,449.9 354.3,449.9" fill="#ffedd5" stroke="none" stroke-width="0" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="149.9,567.9 197.0,540.7 248.1,452.2 299.2,481.7 354.3,449.9 118.3,449.9 110.7,454.3 45.1,567.9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="449.7,567.9 585.9,567.9 536.7,482.6 480.0,449.9 381.6,449.9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6" fill-opacity="1" stroke-linejoin="round"/>
+<line x1="585.9" y1="567.9" x2="536.7" y2="482.6" stroke="#16a34a" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="381.6" y1="449.9" x2="449.7" y2="567.9" stroke="#ea580c" stroke-width="3.6" stroke-linecap="round"/>
+<line x1="374.7" y1="438.1" x2="410.1" y2="499.4" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<line x1="374.7" y1="438.1" x2="313.4" y2="473.5" stroke="#ea580c" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="374.7" cy="438.1" r="3.2" fill="#ea580c"/>
+<text x="29.8" y="421.6" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle">c = −0.2</text>
+</svg>

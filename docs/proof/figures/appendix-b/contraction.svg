@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="452" height="463" viewBox="0 0 452 463" role="img" aria-label="The square T of radius r = 10⁻¹⁰ about z0 = (0.0391773648, 0.6813015094), in units of r. The interval bounds on the partial derivatives of G put its image in the dashed green rectangle around G(z0), inside the square; the true image is a speck of diameter below 0.001 r around the zero z* of H (orange dot)">
+<title>The square T of radius r = 10⁻¹⁰ about z0 = (0.0391773648, 0.6813015094), in units of r. The interval bounds on the partial derivatives of G put its image in the dashed green rectangle around G(z0), inside the square; the true image is a speck of diameter below 0.001 r around the zero z* of H (orange dot)</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="66.0,378.0 386.0,378.0 386.0,58.0 66.0,58.0" fill="#f9fafb" stroke="#1f2937" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="203.4,319.2 216.9,319.2 216.9,172.0 203.4,172.0" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" fill-opacity="1" stroke-linejoin="round" stroke-dasharray="5 3"/>
+<polygon points="210.1,245.7 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.6 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7 210.1,245.7" fill="#ea580c" stroke="#ea580c" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
+<circle cx="226.0" cy="218.0" r="3.4" fill="#1f2937"/>
+<text x="238.8" y="208.4" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">z<tspan dy="4.5" font-size="10.2">0</tspan></text>
+<circle cx="210.1" cy="245.6" r="3.0" fill="#ea580c"/>
+<text x="226.1" y="264.8" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle" font-style="italic">z*</text>
+<text x="210.1" y="157.6" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#16a34a" text-anchor="middle" dominant-baseline="middle" font-style="italic">contains G(T)</text>
+<line x1="66.0" y1="378.0" x2="66.0" y2="384.4" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="66.0" y="397.2" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">-1</text>
+<line x1="66.0" y1="378.0" x2="59.6" y2="378.0" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="53.2" y="378.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">-1</text>
+<line x1="226.0" y1="378.0" x2="226.0" y2="384.4" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="226.0" y="397.2" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">0</text>
+<line x1="66.0" y1="218.0" x2="59.6" y2="218.0" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="53.2" y="218.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">0</text>
+<line x1="386.0" y1="378.0" x2="386.0" y2="384.4" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="386.0" y="397.2" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">1</text>
+<line x1="66.0" y1="58.0" x2="59.6" y2="58.0" stroke="#1f2937" stroke-width="1" stroke-linecap="round"/>
+<text x="53.2" y="58.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle">1</text>
+<text x="226.0" y="426.0" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">(φ − φ<tspan dy="4.5" font-size="10.2">0</tspan>) / r</text>
+<text x="66.0" y="37.2" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">(θ − θ<tspan dy="4.5" font-size="10.2">0</tspan>) / r</text>
+</svg>

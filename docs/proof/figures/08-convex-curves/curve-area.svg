@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="704" height="510" viewBox="0 0 704 510" role="img" aria-label="A convex body K, the convex hull of an ellipse and a point P, and the arc u_K^{a,b} of its boundary from v_K^+(a) to v_K^-(b), drawn thick; it runs along the ellipse, an edge, the corner P, a second edge and the ellipse again. The region swept by the segment from the origin O to a point moving along the arc is shaded; its two darker triangles are the contributions of the edges. A supporting line l_K(t) and its distance h_K(t) from O are marked">
+<title>A convex body K, the convex hull of an ellipse and a point P, and the arc u_K^{a,b} of its boundary from v_K^+(a) to v_K^-(b), drawn thick; it runs along the ellipse, an edge, the corner P, a second edge and the ellipse again. The region swept by the segment from the origin O to a point moving along the arc is shaded; its two darker triangles are the contributions of the edges. A supporting line l_K(t) and its distance h_K(t) from O are marked</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="256.7,130.5 232.5,136.9 210.6,144.4 188.8,153.7 169.0,164.0 150.6,175.7 142.3,181.9 134.2,188.5 127.0,195.1 120.0,202.1 113.9,209.0 108.2,216.2 103.0,223.8 98.6,231.2 94.6,239.0 91.4,246.5 88.7,254.4 86.5,262.6 85.0,270.7 84.2,278.7 84.0,287.1 84.5,295.1 85.6,303.2 87.3,311.3 89.6,319.1 92.6,327.0 96.1,334.6 100.3,342.4 105.1,349.9 110.3,357.1 116.3,364.4 122.7,371.3 130.0,378.4 137.6,385.0 154.1,397.3 172.2,408.4 192.6,418.7 214.9,427.8 237.3,435.1 261.9,441.3 286.8,445.8 313.0,448.8 338.2,450.2 363.6,450.0 388.6,448.3 414.6,445.0 439.1,440.2 456.0,435.9 473.2,430.6 490.4,424.3 505.9,417.5 521.0,410.0 534.3,402.2 546.9,393.8 559.1,384.3 570.1,374.5 579.8,364.3 588.1,353.9 595.4,342.8 601.4,331.7 606.0,320.4 609.4,308.5 611.4,296.8 612.0,287.9 611.8,279.1 610.9,270.2 609.3,261.6 606.9,253.0 603.6,244.1 599.7,235.5 595.1,227.2 590.6,220.2 585.3,213.1 480.0,79.1" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<polygon points="348.0,285.3 604.7,246.8 601.3,238.9 597.3,231.0 592.7,223.3 587.4,215.8 480.0,79.1 256.1,130.6 238.3,135.2 216.2,142.3 195.4,150.7 175.7,160.3 157.7,170.9" fill="#ffedd5" stroke="none" stroke-width="0" fill-opacity="0.95" stroke-linejoin="round"/>
+<polygon points="348.0,285.3 584.9,212.5 480.0,79.1" fill="#fdba74" stroke="none" stroke-width="0" fill-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="348.0,285.3 480.0,79.1 256.7,130.5" fill="#fdba74" stroke="none" stroke-width="0" fill-opacity="0.9" stroke-linejoin="round"/>
+<line x1="348.0" y1="285.3" x2="602.5" y2="241.4" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="599.8" y2="235.8" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="596.8" y2="230.1" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="593.3" y2="224.4" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="589.4" y2="218.5" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="232.1" y2="137.0" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="209.9" y2="144.7" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="190.1" y2="153.1" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="172.8" y2="161.9" stroke="#ea580c" stroke-width="0.7" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="584.9" y2="212.5" stroke="#ea580c" stroke-width="0.9" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="256.7" y2="130.5" stroke="#ea580c" stroke-width="0.9" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="480.0" y2="79.1" stroke="#ea580c" stroke-width="0.9" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="604.7" y2="246.8" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="157.7" y2="170.9" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+<polyline points="604.7,246.8 601.3,238.9 597.3,231.0 592.7,223.3 587.4,215.8 480.0,79.1 256.1,130.6 238.3,135.2 216.2,142.3 195.4,150.7 175.7,160.3 157.7,170.9" fill="none" stroke="#2563eb" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="620.6" y1="257.9" x2="449.4" y2="40.1" stroke="#1f2937" stroke-width="1.0" stroke-linecap="round"/>
+<line x1="348.0" y1="285.3" x2="529.8" y2="142.4" stroke="#1f2937" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="4 3"/>
+<circle cx="529.8" cy="142.4" r="2.4" fill="#1f2937"/>
+<text x="443.4" y="40.1" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle" font-style="italic">l<tspan dy="4.2" font-size="9.5">K</tspan><tspan dy="-4.2">(t</tspan><tspan dy="4.2" font-size="9.5">1</tspan><tspan dy="-4.2">)</tspan></text>
+<text x="476.9" y="212.7" font-size="14" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">h<tspan dy="4.2" font-size="9.5">K</tspan><tspan dy="-4.2">(t</tspan><tspan dy="4.2" font-size="9.5">1</tspan><tspan dy="-4.2">)</tspan></text>
+<circle cx="348.0" cy="285.3" r="3" fill="#1f2937"/>
+<text x="359.5" y="310.1" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">O</text>
+<circle cx="604.7" cy="246.8" r="3.2" fill="#2563eb"/>
+<circle cx="157.7" cy="170.9" r="3.2" fill="#2563eb"/>
+<circle cx="480.0" cy="79.1" r="3.2" fill="#2563eb"/>
+<text x="627.0" y="255.1" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">v<tspan dy="4.5" font-size="10.2">K</tspan><tspan dx="-5.1" dy="-10.2" font-size="10.2">+</tspan><tspan dy="5.7">(a)</tspan></text>
+<text x="137.9" y="192.4" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="end" dominant-baseline="middle" font-style="italic">v<tspan dy="4.5" font-size="10.2">K</tspan><tspan dx="-5.1" dy="-10.2" font-size="10.2">−</tspan><tspan dy="5.7">(b)</tspan></text>
+<text x="496.5" y="69.2" font-size="15" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">P</text>
+<text x="438.7" y="404.1" font-size="18" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic">K</text>
+<text x="595.5" y="112.1" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#2563eb" text-anchor="middle" dominant-baseline="middle" font-style="italic"><tspan font-weight="bold" font-style="normal">u</tspan><tspan dy="4.5" font-size="10.2">K</tspan><tspan dx="-5.1" dy="-10.2" font-size="10.2">a,b</tspan></text>
+</svg>

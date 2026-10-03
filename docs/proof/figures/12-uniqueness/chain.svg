@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="501" height="651" viewBox="0 0 501 651" role="img" aria-label="The proof of the uniqueness theorem as a chain of five boxes: a moving sofa S with the area of G; a translate of S inside its monotonization T; the rotated copy inside R_a T, which moves with angle π/2; a rigid image of S inside the monotonization U, which is a horizontal translate of G; and finally g(S) = G">
+<title>The proof of the uniqueness theorem as a chain of five boxes: a moving sofa S with the area of G; a translate of S inside its monotonization T; the rotated copy inside R_a T, which moves with angle π/2; a rigid image of S inside the monotonization U, which is a horizontal translate of G; and finally g(S) = G</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polygon points="33.0,110.0 428.0,110.0 428.0,38.0 33.0,38.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="50.0" y="62.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">S</text>
+<text x="50.0" y="91.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#4b5563" text-anchor="start" dominant-baseline="middle">a moving sofa with |S| = |G|</text>
+<line x1="228.0" y1="112.0" x2="228.0" y2="164.0" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="243.0" y="139.0" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle">translate by v<tspan dy="4.5" font-size="10.2">0</tspan>, monotonize</text>
+<polygon points="33.0,240.0 428.0,240.0 428.0,168.0 33.0,168.0" fill="#ffffff" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="50.0" y="192.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">S + v<tspan dy="4.5" font-size="10.2">0</tspan> ⊆ T</text>
+<text x="50.0" y="221.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#4b5563" text-anchor="start" dominant-baseline="middle">T monotone of angle ω, |T| = |G|, its cap maximizes A<tspan dy="4.5" font-size="10.2">ω</tspan></text>
+<line x1="228.0" y1="242.0" x2="228.0" y2="294.0" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="243.0" y="269.0" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle">rotate by a (a = 0 if ω = π/2)</text>
+<polygon points="33.0,370.0 428.0,370.0 428.0,298.0 33.0,298.0" fill="#ffffff" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="50.0" y="322.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">R<tspan dy="4.5" font-size="10.2">a</tspan>(S + v<tspan dy="4.5" font-size="10.2">0</tspan>) ⊆ R<tspan dy="4.5" font-size="10.2">a</tspan>T</text>
+<text x="50.0" y="351.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#4b5563" text-anchor="start" dominant-baseline="middle">R<tspan dy="4.5" font-size="10.2">a</tspan>T moves with angle π/2</text>
+<line x1="228.0" y1="372.0" x2="228.0" y2="424.0" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="243.0" y="399.0" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle">translate by v<tspan dy="4.5" font-size="10.2">1</tspan>, monotonize</text>
+<polygon points="33.0,500.0 428.0,500.0 428.0,428.0 33.0,428.0" fill="#ffffff" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="50.0" y="452.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">g<tspan dy="4.5" font-size="10.2">1</tspan>(S) ⊆ U = G + (b, 0)</text>
+<text x="50.0" y="481.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#4b5563" text-anchor="start" dominant-baseline="middle">U monotone of angle π/2, |U| = |G|</text>
+<line x1="228.0" y1="502.0" x2="228.0" y2="554.0" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="243.0" y="529.0" font-size="13" font-family="Georgia, 'Times New Roman', serif" fill="#ea580c" text-anchor="start" dominant-baseline="middle">translate by (−b, 0)</text>
+<polygon points="33.0,630.0 428.0,630.0 428.0,558.0 33.0,558.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4" fill-opacity="1" stroke-linejoin="round"/>
+<text x="50.0" y="582.0" font-size="16" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="start" dominant-baseline="middle" font-style="italic">g(S) = G</text>
+<text x="50.0" y="611.0" font-size="12.5" font-family="Georgia, 'Times New Roman', serif" fill="#4b5563" text-anchor="start" dominant-baseline="middle">g(S) ⊆ G, |g(S)| = |G|, G is the closure of its interior</text>
+</svg>

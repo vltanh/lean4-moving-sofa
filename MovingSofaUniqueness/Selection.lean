@@ -11,7 +11,7 @@ differences between their support function and `K`'s at dyadic sample normals of
 most one. The polygon circumscribed about `K` has penalty zero, and two orthogonal samples keep the
 maximizers in a bounded box, so the maximizers exist (`exists_penalizedMax`) and a subsequence
 converges to `K` (`exists_selectedCapSequence`). This is Proposition 1 of
-`docs/uniqueness/20-complete-paper-proof.md`, with a fixed penalty on persistent samples in place of
+`docs/archive/uniqueness/20-complete-paper-proof.md`, with a fixed penalty on persistent samples in place of
 the note's vanishing penalty.
 -/
 

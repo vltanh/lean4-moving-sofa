@@ -10,7 +10,7 @@ public import MovingSofaUniqueness.RegularClosed
 
 Every moving sofa `S` with the area of Gerver's sofa `G` is mapped onto `G` by a rotation about the
 origin followed by a translation (`image_eq_gerver_of_volume_eq`). The proof assembles the
-propositions of `docs/uniqueness/20-complete-paper-proof.md`:
+propositions of `docs/archive/uniqueness/20-complete-paper-proof.md`:
 
 1. By Baek's Theorem 1.5.1, `S` moves with a rotation angle `ω ∈ [arcsec(11/5), π/2]`. A translate
    of `S` lies in its monotonization, a monotone sofa `T` of the same area (`maximal_envelope`),
