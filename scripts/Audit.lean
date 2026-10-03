@@ -347,7 +347,8 @@ meta def solutionResults : List Name :=
   [``MovingSofaChallenge.gerver_params_exists,
    ``MovingSofaChallenge.gerver_params_unique,
    ``MovingSofaChallenge.gerver_sofa_area,
-   ``MovingSofaChallenge.gerver_sofa_optimal]
+   ``MovingSofaChallenge.gerver_sofa_optimal,
+   ``MovingSofaChallenge.gerver_sofa_unique]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]

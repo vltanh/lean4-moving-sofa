@@ -1,12 +1,14 @@
 module
 
 public import MovingSofaOptimality.Main
+public import MovingSofaUniqueness.Main
 
 /-!
 # Solution: the main results, proved from the development
 
 This module restates the definitions and theorems of `Challenge.lean` verbatim, in the namespace
-`MovingSofaChallenge`, and proves the theorems from the library `MovingSofaOptimality`. The bridge lemmas
+`MovingSofaChallenge`, and proves the theorems from the libraries `MovingSofaOptimality` (Baek's paper)
+and `MovingSofaUniqueness` (the uniqueness of the optimal sofa). The bridge lemmas
 `isMovingSofa_iff`, `GerverParams.toLib_isSolution`, `GerverParams.toLib_inBox` and
 `gerverSofa_eq` translate between the two vocabularies.
 -/
@@ -193,5 +195,15 @@ theorem gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBo
     ((GerverParams.toLib_inBox P).2 hPb)
   rw [gerverSofa_eq, isMovingSofa_iff]
   exact ⟨h.1, fun S hS => h.2 S ((isMovingSofa_iff S).1 hS)⟩
+
+/-- **Uniqueness.** Every moving sofa with the area of Gerver's sofa is congruent to Gerver's sofa: a
+rotation about the origin followed by a translation maps it onto Gerver's sofa. -/
+theorem gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) (S : Set (ℝ × ℝ))
+    (hS : IsMovingSofa S) (harea : volume S = volume (gerverSofa P)) :
+    ∃ (θ : ℝ) (v : ℝ × ℝ), (fun p => rot θ p + v) '' S = gerverSofa P := by
+  obtain ⟨g, hg⟩ := MovingSofaUniqueness.image_eq_gerver_of_volume_eq
+    ((GerverParams.toLib_isSolution P).2 hP) ((GerverParams.toLib_inBox P).2 hPb)
+    ((isMovingSofa_iff S).1 hS) (by rw [← gerverSofa_eq]; exact harea)
+  exact ⟨g.angle, g.shift, by rw [gerverSofa_eq]; exact hg⟩
 
 end MovingSofaChallenge

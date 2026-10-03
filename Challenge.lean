@@ -6,10 +6,11 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 public import Mathlib.Topology.Connected.Basic
 
 /-!
-# The moving sofa problem: Gerver's sofa has maximum area
+# The moving sofa problem: Gerver's sofa has maximum area, and is the only such sofa
 
-Statement of record of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), Theorem 1.1.1,
-in Mathlib's vocabulary only.
+Statements of record, in Mathlib's vocabulary only, of Jineon Baek, *Optimality of Gerver's Sofa*
+(arXiv:2411.19826v1), Theorem 1.1.1, and of the uniqueness of the optimal sofa up to rigid motions,
+which that paper does not prove (the argument is in `docs/uniqueness/20-complete-paper-proof.md`).
 
 **The plane** is `ℝ × ℝ`, and the area of a set is its Lebesgue measure `volume`.
 
@@ -40,7 +41,10 @@ the solutions with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`, and state t
 solution in this range, so Gerver's sofa is well defined. `gerver_sofa_area`: its area is `2.219…`
 (between `2.2192` and `2.2199`), which identifies the shape with the sofa of area `2.21953…` that
 Gerver found. `gerver_sofa_optimal`: Gerver's sofa is a moving sofa, and every moving sofa has area at
-most the area of Gerver's sofa.
+most the area of Gerver's sofa. `gerver_sofa_unique`: every moving sofa with the area of Gerver's sofa
+is congruent to it, as a set: a rotation `R_θ` about the origin followed by a translation by a vector
+`v` maps it exactly onto Gerver's sofa. So Gerver's sofa is, up to rigid motions, the only moving sofa
+of maximum area.
 -/
 
 @[expose] public section
@@ -177,6 +181,13 @@ theorem gerver_sofa_area (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) 
 of Gerver's sofa. -/
 theorem gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
     IsMovingSofa (gerverSofa P) ∧ ∀ S, IsMovingSofa S → volume S ≤ volume (gerverSofa P) := by
+  sorry
+
+/-- **Uniqueness.** Every moving sofa with the area of Gerver's sofa is congruent to Gerver's sofa: a
+rotation about the origin followed by a translation maps it onto Gerver's sofa. -/
+theorem gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) (S : Set (ℝ × ℝ))
+    (hS : IsMovingSofa S) (harea : volume S = volume (gerverSofa P)) :
+    ∃ (θ : ℝ) (v : ℝ × ℝ), (fun p => rot θ p + v) '' S = gerverSofa P := by
   sorry
 
 end MovingSofaChallenge

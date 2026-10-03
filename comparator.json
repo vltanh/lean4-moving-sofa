@@ -5,7 +5,8 @@
     "MovingSofaChallenge.gerver_params_exists",
     "MovingSofaChallenge.gerver_params_unique",
     "MovingSofaChallenge.gerver_sofa_area",
-    "MovingSofaChallenge.gerver_sofa_optimal"
+    "MovingSofaChallenge.gerver_sofa_optimal",
+    "MovingSofaChallenge.gerver_sofa_unique"
   ],
   "definition_names": [],
   "permitted_axioms": [
