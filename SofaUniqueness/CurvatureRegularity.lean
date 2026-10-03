@@ -75,13 +75,29 @@ theorem interval_mass_le_integral {μ : Measure ℝ} {J : Set ℝ} {k : ℝ → 
 
 theorem intervalIntegrable_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
     IntervalIntegrable (fPlus K) volume a b := by
-  sorry
+  have hh : IntervalIntegrable (fun t => supp K (t + π / 2)) volume a b :=
+    ((inj_continuous_supp hK).comp
+      (continuous_id.add (continuous_const (y := π / 2)))).intervalIntegrable a b
+  have hd : IntervalIntegrable (fun t => dot (vplus K t) (vvec t)) volume a b := by
+    simpa only [add_zero] using inj_intervalIntegrable_dvplus hK 0 a b
+  have e : fPlus K = fun t => supp K (t + π / 2) - dot (vplus K t) (vvec t) :=
+    funext (inj_fPlus_eq K)
+  rw [e]
+  exact hh.sub hd
 
 /-- Integral of the first arm, before replacing its endpoint convention. -/
 theorem integral_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
     (∫ t in a..b, fPlus K t) =
       (∫ t in (a + π / 2)..(b + π / 2), supp K t) - (supp K b - supp K a) := by
-  sorry
+  have hh : IntervalIntegrable (fun t => supp K (t + π / 2)) volume a b :=
+    ((inj_continuous_supp hK).comp
+      (continuous_id.add (continuous_const (y := π / 2)))).intervalIntegrable a b
+  have hd : IntervalIntegrable (fun t => dot (vplus K t) (vvec t)) volume a b := by
+    simpa only [add_zero] using inj_intervalIntegrable_dvplus hK 0 a b
+  have e : fPlus K = fun t => supp K (t + π / 2) - dot (vplus K t) (vvec t) :=
+    funext (inj_fPlus_eq K)
+  rw [e, intervalIntegral.integral_sub hh hd,
+    intervalIntegral.integral_comp_add_right (supp K), ← inj_supp_sub_supp hK a b]
 
 /-- Integrated second-arm identity, valid for arbitrary convex bodies. -/
 theorem gPlus_sub_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a ≤ b) :
@@ -113,7 +129,11 @@ theorem integral_fPlus_eq_fK {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
 
 /-- The bottom-left endpoint fixes the terminal value of the second arm. -/
 theorem gK_end {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) : gK K (π / 2) = 1 := by
-  sorry
+  have h := inj_fK_zero (proposition2_5_4_isCap hK)
+  have he := (proposition6_2_2 (K := K) (t := 0)).2.1
+  change fMinus (mirrorCap K (π / 2)) 0 = 1 at h
+  have h' : gPlus K (π / 2) = 1 := by simpa only [sub_zero] using he.symm.trans h
+  exact h'
 
 /-- Integrated lower bound for the first arm on the endpoint-safe half interval. -/
 theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
@@ -142,6 +162,43 @@ theorem second_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) (hbound : SecondCurvatureBound K) {t : ℝ}
     (ht : t ∈ Ioc 0 (π / 2)) :
     (∫ u in t..(π / 2), m0 (fK K u)) ≤ gK K t - 1 := by
-  sorry
+  have hfc := (proposition6_4_6_continuous hK h1).2.2.1
+  have hfint : IntervalIntegrable (fK K) volume t (π / 2) := by
+    apply ContinuousOn.intervalIntegrable
+    rw [uIcc_of_le ht.2]
+    exact hfc.mono (Icc_subset_Icc ht.1.le le_rfl)
+  have hkint : IntervalIntegrable (fun u => k0 (fK K u)) volume t (π / 2) := by
+    apply ContinuousOn.intervalIntegrable
+    rw [uIcc_of_le ht.2]
+    exact inj_continuous_k0.comp_continuousOn
+      (hfc.mono (Icc_subset_Icc ht.1.le le_rfl))
+  have hshift : IntervalIntegrable (fun u => k0 (fMinus K (u - π / 2)))
+      volume (t + π / 2) π := by
+    apply ContinuousOn.intervalIntegrable
+    apply inj_continuous_k0.comp_continuousOn
+    apply hfc.comp (continuous_id.sub continuous_const).continuousOn
+    intro u hu
+    rw [uIcc_of_le (by linarith [ht.2])] at hu
+    show u - π / 2 ∈ Icc 0 (π / 2)
+    constructor <;> linarith [hu.1, hu.2, ht.1]
+  have hsub : Ioc (t + π / 2) π ⊆ Ioc (π / 2) π := by
+    intro u hu
+    exact ⟨by linarith [hu.1, ht.1], hu.2⟩
+  have hb := interval_mass_le_integral (by linarith [ht.2]) hsub hbound
+    hshift (fun u => inj_k0_nonneg _)
+  change (sigma K (Ioc (t + π / 2) π)).toReal ≤
+    ∫ u in (t + π / 2)..π, k0 (fK K (u - π / 2)) at hb
+  rw [intervalIntegral.integral_comp_sub_right (fun u => k0 (fK K u)),
+    add_sub_cancel_right, show π - π / 2 = π / 2 by ring] at hb
+  have he := gPlus_sub_gPlus hK.2.1 ht.2
+  rw [show π / 2 + π / 2 = π by ring,
+    integral_fPlus_eq_fK hK h1 ht.1.le ht.2 le_rfl] at he
+  change gK K (π / 2) - gK K t = _ at he
+  rw [gK_end hK] at he
+  have hi : (∫ u in t..(π / 2), m0 (fK K u)) =
+      (∫ u in t..(π / 2), fK K u) - ∫ u in t..(π / 2), k0 (fK K u) := by
+    simp only [m0]
+    exact intervalIntegral.integral_sub hfint hkint
+  linarith
 
 end SofaUniqueness

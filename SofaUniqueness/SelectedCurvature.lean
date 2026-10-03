@@ -112,6 +112,77 @@ theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hpositive : 0 < sofaArea (π / 2) K)
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
     FirstCurvatureBound K := by
-  sorry
+  classical
+  obtain ⟨seq⟩ := exists_selectedCapSequence pi_div_two_mem_Ioc hK hpositive hmax
+  let Ks := seq.cap
+  let k := seq.index
+  have hpoly : ∀ n, IsPolygonCap (rightAngleSet (k n)) (Ks n) := fun n => (seq.selected n).1
+  have hc : ∀ n, IsConvexBody (Ks n) := fun n => (hpoly n).1.2.1
+  let η : ℕ → ℝ := fun n => hausdorffDist (Ks n) K
+  have hη : ∀ n, 0 ≤ η n := fun n => ang_hausdorffDist_nonneg (hc n) hK.2.1
+  have hηlim : Tendsto η atTop (𝓝 0) := seq.tends
+  let D := 2 * seq.radius + 2
+  have hD : 0 ≤ D := by dsimp [D]; linarith [seq.radius_nonneg]
+  have hdiam : ∀ n, ∀ p ∈ Ks n, ∀ q ∈ Ks n, norm2 (p - q) ≤ D :=
+    fun n => diameter_le_box seq.radius_nonneg (seq.boxed n)
+  have hsupp : ∀ n t, |supp (Ks n) t| ≤ seq.radius + 1 :=
+    fun n t => abs_supp_le_box (hc n) seq.radius_nonneg (seq.boxed n) t
+  have hgbound : ∀ n t, gPlus (Ks n) t ≤ D := by
+    intro n t
+    have h := inj_gPlus_le_width (hc n) t
+    have h₀ := (abs_le.mp (hsupp n t)).2
+    have h₁ := (abs_le.mp (hsupp n (t + π))).2
+    dsimp [D]
+    linarith
+  have hkbound : ∀ n u, k0 (gPlus (Ks n) u) ≤ D + 1 := by
+    intro n u
+    have h := inj_k0_le (gPlus (Ks n) u)
+    rw [abs_of_nonneg (inj_arm_nonneg (hc n) u).2.2.1] at h
+    linarith [hgbound n u]
+  let sample n := dyadicSamples (π / 2) pi_div_two_mem_Ioc (k n)
+  let e (n : ℕ) (t : ℝ) := 2 * η n * (sample n).atNormal t
+  have he : ∀ n t, 0 ≤ e n t := by
+    intro n t
+    have h₀ := hη n
+    have h₁ := (sample n).atNormal_nonneg t
+    dsimp [e]
+    positivity
+  have hlocal : ∀ n t, t ∈ insert 0 ((rightAngleSet (k n)).angles : Set ℝ) →
+      sigmaAt (Ks n) t ≤ k0 (gPlus (Ks n) t) * stepSize (k n) +
+        (D + 4) * stepSize (k n) ^ 2 + e n t := by
+    intro n t ht
+    rcases ht with rfl | ht
+    · rw [inj_sigmaAt_eq_zero (hc n) (inj_polygon_vplus_zero (hpoly n))]
+      have h₀ := inj_k0_nonneg (gPlus (Ks n) 0)
+      have h₁ := inj_stepSize_pos (k n)
+      have h₂ := he n 0
+      positivity
+    · have htI := (rightAngleSet (k n)).subset t ht
+      have htL : t < π / 2 := htI.2
+      have hdefect := floating_defect_le (sample n) (seq.selected n)
+        (Or.inl (Or.inl ht)) (ne_of_lt htL) (ne_of_lt htL) (hη n)
+        (fun i => ang_abs_supp_sub_le_hausdorffDist (hc n) hK.2.1 ((sample n).normal i))
+      change sigmaAt (Ks n) t - tau (rightAngleSet (k n)) (Ks n) t ≤
+        2 * η n * (sample n).atNormal t at hdefect
+      apply polygon_curvature_with_defect (hpoly n) ht hD (hgbound n t) (he n t)
+      dsimp [e]
+      linarith
+  have hsum : ∀ n, polygonGridError (k n) (e n) ≤ 2 * η n :=
+    fun n => sampled_grid_error_le (sample n) (hη n)
+      (dyadic_totalWeight_le_one (π / 2) pi_div_two_mem_Ioc (k n))
+  let A := 2 * (D + 1) + π / 2 * ((D + 4) + D)
+  let error : ℕ → ℝ := fun n => A * stepSize (k n) + 2 * η n
+  have herr : Tendsto error atTop (𝓝 0) := by
+    have h₀ := (selected_stepSize_tendsto seq.index_strict).const_mul A
+    have h₁ := hηlim.const_mul 2
+    simpa [error] using h₀.add h₁
+  apply firstCurvature_of_polygon_errors hpoly hK seq.tends error herr
+  intro n a b ha hab hab' hb
+  have h := polygon_Ioo_with_errors (hpoly n) hD
+    (show 0 ≤ D + 4 by linarith) (show 0 ≤ D + 1 by linarith) (hdiam n)
+    (fun u _ => hkbound n u) (e n) (fun t _ => he n t) (hlocal n) ha hab' hb
+  have hsum' := hsum n
+  dsimp [error, A]
+  linarith
 
 end SofaUniqueness
