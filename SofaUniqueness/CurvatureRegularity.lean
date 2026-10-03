@@ -21,13 +21,11 @@ open Real Set MeasureTheory Filter MovingSofa
 
 namespace SofaUniqueness
 
-/-- First-quadrant curvature bound, including the atom at zero. -/
 def FirstCurvatureBound (K : Set (ℝ × ℝ)) : Prop :=
   (sigma K).restrict (Ico 0 (π / 2)) ≤
     (volume.restrict (Ico 0 (π / 2))).withDensity
       (fun t => ENNReal.ofReal (k0 (gPlus K t)))
 
-/-- Second-quadrant curvature bound, including the atom at pi. -/
 def SecondCurvatureBound (K : Set (ℝ × ℝ)) : Prop :=
   (sigma K).restrict (Ioc (π / 2) π) ≤
     (volume.restrict (Ioc (π / 2) π)).withDensity
@@ -140,7 +138,8 @@ theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   have hb := interval_mass_le_integral ht.1 hsub hbound
     (inj_intervalIntegrable_k0_gPlus hK.2.1 0 t) (fun u => inj_k0_nonneg _)
   have he := inj_fPlus_sub_fPlus hK.2.1 ht.1
-  have hf := (proposition6_4_5 hK h1).1
+  have hf (u : ℝ) (hu : u ∈ Ico 0 (π / 2)) : fPlus K u = fMinus K u :=
+    ((proposition6_4_5 hK h1).1 u hu).2
   rw [hf t ht, hf 0 ⟨le_rfl, by positivity⟩] at he
   change fK K t - fK K 0 = _ at he
   rw [inj_fK_zero hK] at he
