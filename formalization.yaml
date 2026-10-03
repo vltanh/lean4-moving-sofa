@@ -51,8 +51,8 @@ sources:
     author_endorsement: not-contacted
   - title: "Uniqueness of Gerver's sofa: complete paper argument"
     id: "docs/uniqueness/20-complete-paper-proof.md"
-    type: original-proof
-    location: "https://github.com/vltanh/lean4-moving-sofa/blob/main/docs/uniqueness/20-complete-paper-proof.md"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/blob/15ad9a495f05a97ea5a25ef1e4efca96d4ffe3e8/docs/uniqueness/20-complete-paper-proof.md"
     relationship: formalizes
     note: >-
       An informal proof that every moving sofa with the area of Gerver's sofa is congruent to it,

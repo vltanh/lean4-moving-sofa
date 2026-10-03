@@ -70,6 +70,9 @@ def load_locations():
     locations, preferred = {}, {}
     for ilean in sorted(BUILD.rglob('*.ilean')):
         data = json.loads(ilean.read_text(encoding='utf-8'))
+        # A restored build cache keeps the outputs of deleted modules; skip them.
+        if not (ROOT / module_file(data['module'])).is_file():
+            continue
         # The preferred module's declarations win over restatements elsewhere.
         target = preferred if data['module'] == PREFERRED_MODULE else locations
         for name, ranges in data.get('decls', {}).items():
