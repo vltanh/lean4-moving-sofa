@@ -190,7 +190,7 @@ automation:
           time from ChatGPT Pro's draft to the documented proof (2026-10-02 21:55 to 22:56), with
           about 0.9 hours of sub-agent working time. Connection with formal-conjectures: about 1 hour
           (2026-10-02 23:05 to 2026-10-03 00:02), with about 1.3 hours of sub-agent working time.
-          Consolidation: about 1 hour 15 minutes (2026-10-03 07:48 to 09:03), with about 0.4 hours of
+          Consolidation: about 1 hour 5 minutes (2026-10-03 07:48 to 08:53), with about 0.4 hours of
           sub-agent working time
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"

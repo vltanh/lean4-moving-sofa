@@ -294,10 +294,10 @@ reorganized the uniqueness and bridge libraries:
   statements from Baek's through them;
 - the Challenge's namespaces became `Baek`, `Bridge` and `FormalConjectures.MovingSofa`;
 - one sub-agent rewrote the documentation of the uniqueness modules, leaving their code unchanged.
-- **Time.** About 1 hour 15 minutes of elapsed time, on 2026-10-03 from 07:48 to 09:03 (US Central
-  Time). The sub-agent worked about 0.4 hours. All agents together made about 230 tool calls,
-  generated 0.4 million output tokens and read 1.4 million input tokens, plus 85 million tokens from
-  the prompt cache.
+- **Time.** About 1 hour 5 minutes of elapsed time, on 2026-10-03 from 07:48 to 08:53 (US Central
+  Time), up to the documented result (commit `3ddca13`). The sub-agent worked about 0.4 hours. All
+  agents together made 221 tool calls (61 of them by the sub-agent), generated 0.4 million output
+  tokens and read 1.4 million input tokens, plus 86 million tokens from the prompt cache.
 
 ## Building
 
