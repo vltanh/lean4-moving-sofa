@@ -52,12 +52,13 @@ theorem ofPaper_eq4 {P : GerverParams} (hP : P.IsSolution) :
   unfold eq4 ofPaper
   nlinarith
 
-/-- The third reference equation follows by canceling a1 in the frame equations. -/
+/-- Cancel a1 using the two frame equations and the unit-circle identity. -/
 theorem ofPaper_eq3 {P : GerverParams} (hP : P.IsSolution) :
     eq3 (ofPaper P).A (ofPaper P).B P.φ P.θ = 0 := by
   obtain ⟨hs, hc⟩ := ofPaper_frame hP
   unfold eq3
-  linear_combination cos P.φ * hs - sin P.φ * hc
+  linear_combination sin P.φ * hc - cos P.φ * hs +
+    (1 / 2 : ℝ) * (sin_sq_add_cos_sq P.φ)
 
 /-- Reconstruction of the paper coefficients does not need the contact equations. -/
 theorem ofPaper_coefficients {P : GerverParams} (hP : P.IsSolution) :
@@ -66,8 +67,8 @@ theorem ofPaper_coefficients {P : GerverParams} (hP : P.IsSolution) :
   obtain ⟨hs, hc⟩ := ofPaper_frame hP
   have ha : (ofPaper P).a1 = P.a₁ := by
     unfold Data.a1
-    linear_combination (sin P.φ * hs + cos P.φ * hc -
-      2 * P.a₁ * (sin_sq_add_cos_sq P.φ)) / 2
+    linear_combination P.a₁ * (sin_sq_add_cos_sq P.φ) -
+      (sin P.φ / 2) * hs - (cos P.φ / 2) * hc
   have hb : (ofPaper P).b1 = P.b₁ := by simp only [Data.b1, ofPaper]; ring
   have hb' : (ofPaper P).b2 = P.b₂ := by simp only [Data.b2, hb, ofPaper]; ring
   obtain ⟨_, _, _, _, _, _, _, hc₂, _, _, _, _, _, _, hd23, _⟩ := hP
@@ -92,6 +93,15 @@ theorem ofPaper_toPaper {P : GerverParams} (hP : P.IsSolution) :
   have hb' : D.b2 = P.b₂ := hcoef.2.2.1
   have hc' : D.toPaper.c₁ = P.c₁ := hcoef.2.2.2.1
   have hc'' : D.toPaper.c₂ = P.c₂ := hcoef.2.2.2.2
+  have hd' : D.toPaper.d₁ = P.d₁ := by
+    simpa only [Data.toPaper, hb] using hd₁.symm
+  have hd'' : D.toPaper.d₂ = P.d₂ := by
+    simpa only [Data.toPaper, hb, hb'] using hd₂.symm
+  have he' : D.toPaper.e₁ = P.e₁ := by
+    simpa only [Data.toPaper, ha] using he₁.symm
+  have he'' : D.toPaper.e₂ = P.e₂ := by
+    simp only [Data.toPaper, he₂, ha₂]
+    norm_num
   have hk1 : D.k1 = P.κ₁ := by
     ext <;> simp only [Data.k1, ha] <;> linarith
   have hw1 : (P.a₁ * cos P.φ + P.a₂ * sin P.φ - 1,
@@ -102,35 +112,35 @@ theorem ofPaper_toPaper {P : GerverParams} (hP : P.IsSolution) :
       P.φ / 2 - P.b₁ - 1) = (D.B - 1 / 2, (D.A - 1) / 2) := by
     ext <;> simp only [D, ofPaper] <;> ring
   have hk2 : D.k2 = P.κ₂ := by
-    unfold GerverParams.x₁ GerverParams.x₂ at h12
-    rw [hw1, hw2, rot_add_vec] at h12
+    have hmatch := h12
+    unfold GerverParams.x₁ GerverParams.x₂ at hmatch
+    rw [hw1, hw2, rot_add_vec] at hmatch
     change D.k1 + rot P.φ (-D.B / 2, 1 / 4) = P.κ₂
     rw [hk1]
-    have hh := congrArg (fun q => q - rot P.φ (D.B - 1 / 2, (D.A - 1) / 2)) h12
-    simpa only [add_sub_cancel_left, add_sub_cancel_right] using hh
+    have hh := congrArg (fun q => q - rot P.φ (D.B - 1 / 2, (D.A - 1) / 2)) hmatch
+    convert hh using 1 <;> abel
   have hX1 : D.toPaper.x₁ = P.x₁ := by
     funext t
     simp only [GerverParams.x₁, Data.toPaper, ha, hk1, ha₂]
   have hX2 : D.toPaper.x₂ = P.x₂ := by
     funext t
     simp only [GerverParams.x₂, Data.toPaper, hb, hb', hk2]
-  have hdr := ofPaper_eq4 hP
   have hw3 : (-P.θ ^ 2 / 4 + P.b₁ * P.θ + P.b₂,
       P.θ / 2 - P.b₁ - 1) = (P.c₁ - P.θ, P.c₂ + P.θ) +
         (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2) := by
-    have hdc := rom_rot_inj (by
-      simpa only [(rom_hasDerivAt_x₂ P P.θ).deriv,
-        (rom_hasDerivAt_x₃ P P.θ).deriv] using hd23)
-    have hx := congrArg Prod.fst hdc
-    have hy := congrArg Prod.snd hdc
+    have hdc := hd23
+    rw [(rom_hasDerivAt_x₂ _ _).deriv, (rom_hasDerivAt_x₃ _ _).deriv] at hdc
+    have hx := congrArg Prod.fst (rom_rot_inj hdc)
+    have hy := congrArg Prod.snd (rom_rot_inj hdc)
     ext <;> simp only [Prod.fst_add, Prod.snd_add, D, ofPaper] <;> linarith
   have hk3 : D.k3 = P.κ₃ := by
-    unfold GerverParams.x₂ GerverParams.x₃ at h23
-    rw [hw3, rot_add_vec] at h23
+    have hmatch := h23
+    unfold GerverParams.x₂ GerverParams.x₃ at hmatch
+    rw [hw3, rot_add_vec] at hmatch
     change D.k2 + rot P.θ (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2) = P.κ₃
     rw [hk2]
-    have hh := congrArg (fun q => q - rot P.θ (P.c₁ - P.θ, P.c₂ + P.θ)) h23
-    simpa only [add_sub_cancel_left, add_sub_cancel_right] using hh
+    have hh := congrArg (fun q => q - rot P.θ (P.c₁ - P.θ, P.c₂ + P.θ)) hmatch
+    convert hh using 1 <;> abel
   have hX3 : D.toPaper.x₃ = P.x₃ := by
     funext t
     change rot t (D.toPaper.c₁ - t, D.toPaper.c₂ + t) + D.k3 = _
@@ -138,10 +148,10 @@ theorem ofPaper_toPaper {P : GerverParams} (hP : P.IsSolution) :
     rfl
   have hD23 : D.toPaper.x₂ D.θ = D.toPaper.x₃ D.θ := by
     rw [hX2, hX3]
-    exact hP.2.2.2.2.2.2.2.2.2.2.2.2.2.1
+    exact h23
   have hD12 : D.toPaper.x₁ D.φ = D.toPaper.x₂ D.φ := by
     rw [hX1, hX2]
-    exact hP.2.2.2.2.2.2.2.2.2.2.2.1
+    exact h12
   have hD34 : D.toPaper.x₃ (π / 2 - D.θ) = D.toPaper.x₄ (π / 2 - D.θ) := by
     rw [Data.x3_reflection, Data.x4_reflection, hD23]
   have hk4 : D.toPaper.κ₄ = P.κ₄ := by
@@ -149,10 +159,12 @@ theorem ofPaper_toPaper {P : GerverParams} (hP : P.IsSolution) :
       rw [← hD34, hX3]
       exact h34
     unfold GerverParams.x₄ at hh
-    simpa only [Data.toPaper, hb, hb', hd₁, hd₂, add_right_inj] using hh
+    rw [hd', hd''] at hh
+    exact add_left_cancel hh
   have hX4 : D.toPaper.x₄ = P.x₄ := by
     funext t
-    simp only [GerverParams.x₄, Data.toPaper, hb, hb', hk4, hd₁, hd₂]
+    unfold GerverParams.x₄
+    rw [hd', hd'', hk4]
   have hD45 : D.toPaper.x₄ (π / 2 - D.φ) = D.toPaper.x₅ (π / 2 - D.φ) := by
     rw [Data.x4_reflection, Data.x5_reflection, hD12]
   have hk5 : D.toPaper.κ₅ = P.κ₅ := by
@@ -160,24 +172,21 @@ theorem ofPaper_toPaper {P : GerverParams} (hP : P.IsSolution) :
       rw [← hD45, hX4]
       exact h45
     unfold GerverParams.x₅ at hh
-    simpa only [Data.toPaper, ha, he₁, he₂, ha₂, neg_neg, add_right_inj] using hh
+    rw [he', he''] at hh
+    exact add_left_cancel hh
   have hfields :
       D.toPaper.φ = P.φ ∧ D.toPaper.θ = P.θ ∧ D.toPaper.a₁ = P.a₁ ∧
       D.toPaper.a₂ = P.a₂ ∧ D.toPaper.b₁ = P.b₁ ∧ D.toPaper.b₂ = P.b₂ ∧
       D.toPaper.c₁ = P.c₁ ∧ D.toPaper.c₂ = P.c₂ ∧ D.toPaper.d₁ = P.d₁ ∧
       D.toPaper.d₂ = P.d₂ ∧ D.toPaper.e₁ = P.e₁ ∧ D.toPaper.e₂ = P.e₂ ∧
       D.toPaper.κ₁ = P.κ₁ ∧ D.toPaper.κ₂ = P.κ₂ ∧ D.toPaper.κ₃ = P.κ₃ ∧
-      D.toPaper.κ₄ = P.κ₄ ∧ D.toPaper.κ₅ = P.κ₅ := by
-    refine ⟨rfl, rfl, ha, ha₂.symm, hb, hb', hc', hc'', ?_, ?_, ?_, ?_, hk1, hk2, hk3, hk4, hk5⟩
-    · simpa only [Data.toPaper, hb] using hd₁.symm
-    · simpa only [Data.toPaper, hb, hb'] using hd₂.symm
-    · simpa only [Data.toPaper, ha] using he₁.symm
-    · simp only [Data.toPaper, he₂, ha₂]
-      norm_num
+      D.toPaper.κ₄ = P.κ₄ ∧ D.toPaper.κ₅ = P.κ₅ :=
+    ⟨rfl, rfl, ha, ha₂.symm, hb, hb', hc', hc'', hd', hd'', he', he'', hk1, hk2, hk3, hk4, hk5⟩
+  change D.toPaper = P
   generalize hQ : D.toPaper = Q at hfields ⊢
   cases P
   cases Q
-  simp_all only [GerverParams.mk.injEq]
+  simpa only [GerverParams.mk.injEq] using hfields
 
 /-- A paper solution in its certified box gives an actual full-domain reference solution. -/
 theorem ofPaper_valid {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
@@ -186,8 +195,8 @@ theorem ofPaper_valid {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
   have hback : D.toPaper = P := ofPaper_toPaper hP
   have herror := Data.contact_error D
   rw [hback] at herror
-  have hc : P.x₂ P.φ = contactB P.x₄ (π / 2 - P.θ) :=
-    hP.2.2.2.2.2.2.2.2.2.2.2.1.symm.trans hP.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.1
+  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, h12, _, _, _, _, _, _, _, hcontact, _⟩ := hP
+  have hc : P.x₂ P.φ = contactB P.x₄ (π / 2 - P.θ) := h12.symm.trans hcontact
   rw [hc, sub_self] at herror
   have h1 := congrArg Prod.snd herror
   have h2 := congrArg Prod.fst herror
