@@ -240,9 +240,9 @@ Opus 5.5 (Anthropic, model `claude-opus-5-5`), running in Claude Code 2.1.285.
 ### Proving uniqueness
 
 - **The argument and the Lean draft.** ChatGPT Pro 6 (OpenAI) wrote the informal proof
-  ([note 20](docs/uniqueness/20-complete-paper-proof.md) and the notes before it) and a Lean draft of it, without a compiler, in 147
-  commits from 2026-10-02 15:01 to 22:39 (US Central Time), in pull request #1 of this repository. Its
-  effort was not recorded.
+  ([note 20](docs/uniqueness/20-complete-paper-proof.md) and the notes before it), a Lean draft of it, and a draft of the connection with
+  formal-conjectures, all without a compiler, in 151 commits from 2026-10-02 15:01 to 22:43 (US
+  Central Time), in pull request #1 of this repository. Its effort was not recorded.
 - **The compiled proof.** Claude Opus 5.5 (model `claude-opus-5-5`), running in Claude Code 2.1.287,
   with the same skill (version 1.3.0), made the draft compile and completed it:
   - It checked every module of the draft and replaced the 54 proofs that did not compile by `sorry`;
@@ -257,6 +257,24 @@ Opus 5.5 (Anthropic, model `claude-opus-5-5`), running in Claude Code 2.1.285.
   about 0.9 hours in total. All agents together made 607 tool calls (400 of them by sub-agents),
   generated 0.5 million output tokens and read 1.7 million input tokens, plus 105 million tokens from
   the prompt cache.
+
+### Connecting to formal-conjectures
+
+Claude Opus 5.5 (model `claude-opus-5-5`), in the same Claude Code session, ported ChatGPT Pro 6's draft
+of the connection to the repository's layout and completed it:
+
+- Every statement compiled after renaming and a few fixes; the 78 proofs that did not compile were
+  replaced by `sorry`.
+- Seven sub-agents, each owning a group of files, proved those 78 again, starting from the draft's
+  proofs. An eighth checked every inequality and derivative formula of the analytic argument
+  numerically and compared the definitions with formal-conjectures' file, and a ninth cleaned up the
+  documentation and the warnings. At most eight ran at the same time.
+- The coordinating agent moved the definitions of the Challenge into [`ChallengeDefs.lean`](ChallengeDefs.lean), so that
+  Comparator can check formal-conjectures' statements, and wrote the documents.
+- **Time.** About 1 hour of elapsed time, from 2026-10-02 23:05 to 2026-10-03 00:02 (US Central Time),
+  up to the documented proof (commit `dc408ab`). The sub-agents worked about 1.3 hours in total. All
+  agents together made 561 tool calls (444 of them by sub-agents), generated 0.6 million output tokens
+  and read 1.7 million input tokens, plus 129 million tokens from the prompt cache.
 
 ## Building
 
