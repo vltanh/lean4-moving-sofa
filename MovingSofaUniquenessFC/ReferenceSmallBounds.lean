@@ -24,20 +24,50 @@ def baseNumerator (t : ℝ) : ℝ := (t - 1) * cos t - sin t + 1
 def numeratorMajorant (t : ℝ) : ℝ := t ^ 2 / 2 - t ^ 3 / 3
 
 theorem baseNumerator_deriv (t : ℝ) :
-    HasDerivAt baseNumerator ((1 - t) * sin t) t := by
-  sorry
+    HasDerivAt baseNumerator ((1 - t) * sin t) t :=
+  (((((hasDerivAt_id' t).sub_const 1).mul (hasDerivAt_cos t)).sub
+    (hasDerivAt_sin t)).add_const 1).congr_deriv (by ring)
 
 theorem numeratorMajorant_deriv (t : ℝ) :
-    HasDerivAt numeratorMajorant (t * (1 - t)) t := by
-  sorry
+    HasDerivAt numeratorMajorant (t * (1 - t)) t :=
+  (((hasDerivAt_pow 2 t).div_const 2).sub
+    ((hasDerivAt_pow 3 t).div_const 3)).congr_deriv (by norm_num; ring)
 
 theorem baseNumerator_le_majorant {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 4 / 5) :
     baseNumerator t ≤ numeratorMajorant t := by
-  sorry
+  have hd (u : ℝ) : HasDerivAt (fun u => numeratorMajorant u - baseNumerator u)
+      ((1 - u) * (u - sin u)) u := by
+    apply ((numeratorMajorant_deriv u).sub (baseNumerator_deriv u)).congr_deriv
+    ring
+  have hm : MonotoneOn (fun u => numeratorMajorant u - baseNumerator u) (Icc 0 t) := by
+    apply monotoneOn_of_deriv_nonneg (convex_Icc _ _)
+    · exact fun u _ => (hd u).continuousAt.continuousWithinAt
+    · exact fun u _ => (hd u).differentiableAt.differentiableWithinAt
+    · intro u hu
+      rw [interior_Icc] at hu
+      rw [(hd u).deriv]
+      exact mul_nonneg (by linarith [hu.2]) (sub_nonneg.mpr (sin_le hu.1.le))
+  have h : numeratorMajorant 0 - baseNumerator 0 ≤ numeratorMajorant t - baseNumerator t :=
+    hm ⟨le_rfl, ht0⟩ ⟨ht0, le_rfl⟩ ht0
+  have h0 : numeratorMajorant 0 - baseNumerator 0 = 0 := by
+    norm_num [numeratorMajorant, baseNumerator]
+  linarith
 
 theorem baseNumerator_le {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 4 / 5) :
     baseNumerator t ≤ 3 / 20 := by
-  sorry
+  have hm : MonotoneOn numeratorMajorant (Icc 0 (4 / 5)) := by
+    apply monotoneOn_of_deriv_nonneg (convex_Icc _ _)
+    · exact fun u _ => (numeratorMajorant_deriv u).continuousAt.continuousWithinAt
+    · exact fun u _ => (numeratorMajorant_deriv u).differentiableAt.differentiableWithinAt
+    · intro u hu
+      rw [interior_Icc] at hu
+      rw [(numeratorMajorant_deriv u).deriv]
+      exact mul_nonneg hu.1.le (by linarith [hu.2])
+  have h : numeratorMajorant t ≤ numeratorMajorant (4 / 5) :=
+    hm ⟨ht0, ht1⟩ ⟨by norm_num, le_rfl⟩ ht1
+  have h45 : numeratorMajorant (4 / 5) = 56 / 375 := by norm_num [numeratorMajorant]
+  have hbase := baseNumerator_le_majorant ht0 ht1
+  linarith
 
 theorem num_nonneg {φ θ : ℝ} (hφ : 0 ≤ φ) (ho : φ ≤ θ) (ht : θ ≤ π / 4) :
     0 ≤ num φ θ := by

@@ -84,7 +84,10 @@ theorem reconstructedA_phi_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
 
 theorem reconstructedA_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun t => reconstructedA φ t) (remainder φ θ * sin θ / den φ θ) θ := by
-  sorry
+  apply ((num_theta_deriv φ θ).div (den_theta_deriv φ θ) hD).congr_deriv
+  unfold remainder reconstructedA
+  field_simp
+  ring
 
 theorem reconstructedB_phi_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun p => reconstructedB p θ)
@@ -104,7 +107,14 @@ theorem reconstructedB_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
 
 theorem firstResidual_phi_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun p => firstResidual p θ) (firstPhi φ θ) φ := by
-  sorry
+  have hd := (((reconstructedA_phi_deriv φ θ hD).mul (hasDerivAt_cos φ)).sub
+    (((reconstructedB_phi_deriv φ θ hD).add_const 1).mul (hasDerivAt_sin φ))).add
+      (((hasDerivAt_cos φ).sub_const 1).div_const 2)
+  apply hd.congr_deriv
+  unfold firstPhi
+  field_simp
+  unfold den
+  ring
 
 theorem firstResidual_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun t => firstResidual φ t)
@@ -118,12 +128,33 @@ theorem firstResidual_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
 
 theorem secondResidual_phi_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun p => secondResidual p θ) (secondPhi φ θ) φ := by
-  sorry
+  have ha := reconstructedA_phi_deriv φ θ hD
+  have hb := reconstructedB_phi_deriv φ θ hD
+  have hr : HasDerivAt (fun p => remainder p θ)
+      (-(3 * reconstructedA φ θ * sin φ / den φ θ)) φ :=
+    ((ha.const_sub 1).sub ((hasDerivAt_id φ).const_sub θ)).congr_deriv (by ring)
+  have hd := ((((hr.const_mul (-3)).mul_const (sin θ)).add
+    ((ha.sub_const 1).mul (hasDerivAt_sin φ))).add
+    (((hb.const_mul 2).const_sub 1).mul (hasDerivAt_cos φ))).add_const (3 * cos θ)
+  apply hd.congr_deriv
+  unfold secondPhi armCoefficient
+  ring
 
 theorem secondResidual_theta_deriv (φ θ : ℝ) (hD : den φ θ ≠ 0) :
     HasDerivAt (fun t => secondResidual φ t)
       (remainder φ θ * secondThetaFactor φ θ) θ := by
-  sorry
+  have ha := reconstructedA_theta_deriv φ θ hD
+  have hb := reconstructedB_theta_deriv φ θ hD
+  have hr : HasDerivAt (fun t => remainder φ t)
+      (-remainder φ θ * sin θ / den φ θ - 1) θ :=
+    ((ha.const_sub 1).sub ((hasDerivAt_id θ).sub_const φ)).congr_deriv (by ring)
+  have hd := ((((hr.const_mul (-3)).mul (hasDerivAt_sin θ)).add
+    ((ha.sub_const 1).mul_const (sin φ))).add
+    (((hb.const_mul 2).const_sub 1).mul_const (cos φ))).add
+      ((hasDerivAt_cos θ).const_mul 3)
+  apply hd.congr_deriv
+  unfold secondThetaFactor armCoefficient
+  ring
 
 /-- A denominator-free form of the last derivative factor. -/
 theorem secondThetaFactor_identity (φ θ : ℝ) (hD : den φ θ ≠ 0) :
