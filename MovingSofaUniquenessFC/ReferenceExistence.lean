@@ -13,7 +13,6 @@ steps prove exactly the four-constant existence-and-uniqueness proposition
 used to define the formal-conjectures reference.
 
 No upstream placeholder is imported. No root certificate is evaluated.
-The scripts have not been compiled.
 -/
 
 @[expose] public section
@@ -47,8 +46,9 @@ theorem Data.eq_ofPaper {D : Data} (hD : D.Valid) {P : GerverParams}
   cases D
   simp_all only [ofPaper]
 
-/-- The reference equations now imply the previously missing strict upper
-angle bound, by equality with the existing paper witness. -/
+/-- The reference equations imply the strict upper angle bound, which
+`Data.toPaper_isSolution` takes as a hypothesis, by equality with the paper
+witness. -/
 theorem Data.theta_lt_pi_div_four {D : Data} (hD : D.Valid) : D.θ < π / 4 := by
   obtain ⟨P, hP, hbox⟩ := romik_exists
   rw [Data.eq_ofPaper hD hP hbox]

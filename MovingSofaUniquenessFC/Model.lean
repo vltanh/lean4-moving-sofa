@@ -8,19 +8,19 @@ public import Mathlib
 The hallway definitions, affine-isometry topology, `IsMovingSofa` structure,
 and sofa constant are the formal-conjectures definitions, with their original
 names, types, field order, and mathematical bodies. This file imports Mathlib
-only, not the paper implementation or an upstream file containing admissions.
+only, not the paper formalization or the upstream file, which contains `sorry`
+placeholders.
 
 Source: google-deepmind/formal-conjectures,
 `FormalConjectures/Wikipedia/MovingSofa.lean`, Git blob
 `59b6ed7eb42e11b208b09539c245da4d3f11ed00` (Apache-2.0,
 Copyright 2026 The Formal Conjectures Authors).
 
-The concrete Gerver constants and theorems are deliberately not postulated here.
-This model is shared by the publication bridge and the submission development.
-The manuscript's pair-coordinate presentation remains available with its
-explicit `MovingSofa.Paper` kernel names. No source exporter is involved.
-
-This module and its clients are uncompiled source drafts.
+The concrete Gerver constants and the theorems about them are not part of
+this file. The paper's pair-coordinate presentation is the library
+`MovingSofaOptimality`; its `MovingSofaOptimality.IsMovingSofa` and
+`MovingSofaOptimality.hallway` do not collide with the names `MovingSofa.*`
+defined here.
 -/
 
 @[expose] public section

@@ -27,34 +27,11 @@ namespace MovingSofaUniquenessFC
 open MovingSofaUniqueness
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 /-- Decompose an affine isometry into its linear isometry and a translation. -/
 theorem affineIsometry_apply_eq (e : E ≃ᵃⁱ[ℝ] E) (x : E) :
     e x = e.linearIsometryEquiv x + e 0 := by
   simpa only [vadd_eq_add, add_zero] using e.map_vadd (0 : E) x
-
-/-- The canonical volume is preserved by every affine isometry, including
-orientation-reversing ones. -/
-theorem affineIsometry_measurePreserving (e : E ≃ᵃⁱ[ℝ] E) :
-    MeasurePreserving e (volume : Measure E) volume := by
-  have hp : MeasurePreserving (fun x : E => e.linearIsometryEquiv x + e 0)
-      (volume : Measure E) volume :=
-    (measurePreserving_add_right (volume : Measure E) (e 0)).comp
-      e.linearIsometryEquiv.measurePreserving
-  have he : (fun x : E => e.linearIsometryEquiv x + e 0) = e := by
-    funext x
-    exact (affineIsometry_apply_eq e x).symm
-  rwa [he] at hp
-
-/-- This image-volume identity is valid even for nonmeasurable sets: the
-measurable equivalence allows the embedding version of the preimage formula. -/
-theorem volume_image_affineIsometry (e : E ≃ᵃⁱ[ℝ] E) (s : Set E) :
-    volume (e '' s) = volume s := by
-  have h := (affineIsometry_measurePreserving e).measure_preimage_emb
-    e.toHomeomorph.toMeasurableEquiv.measurableEmbedding (e '' s)
-  rw [Set.preimage_image_eq s e.injective] at h
-  exact h.symm
 
 /-- Affine isometries preserve closedness. -/
 theorem isClosed_image_affineIsometry (e : E ≃ᵃⁱ[ℝ] E) {s : Set E}
@@ -83,6 +60,30 @@ theorem eq_image_symm_of_image_eq (e : E ≃ᵃⁱ[ℝ] E) {s G : Set E}
     rw [← heq] at hy
     rcases hy with ⟨z, hz, rfl⟩
     simpa only [e.symm_apply_apply] using hz
+
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
+/-- The canonical volume is preserved by every affine isometry, including
+orientation-reversing ones. -/
+theorem affineIsometry_measurePreserving (e : E ≃ᵃⁱ[ℝ] E) :
+    MeasurePreserving e (volume : Measure E) volume := by
+  have hp : MeasurePreserving (fun x : E => e.linearIsometryEquiv x + e 0)
+      (volume : Measure E) volume :=
+    (measurePreserving_add_right (volume : Measure E) (e 0)).comp
+      e.linearIsometryEquiv.measurePreserving
+  have he : (fun x : E => e.linearIsometryEquiv x + e 0) = e := by
+    funext x
+    exact (affineIsometry_apply_eq e x).symm
+  rwa [he] at hp
+
+/-- This image-volume identity is valid even for nonmeasurable sets: the
+measurable equivalence allows the embedding version of the preimage formula. -/
+theorem volume_image_affineIsometry (e : E ≃ᵃⁱ[ℝ] E) (s : Set E) :
+    volume (e '' s) = volume s := by
+  have h := (affineIsometry_measurePreserving e).measure_preimage_emb
+    e.toHomeomorph.toMeasurableEquiv.measurableEmbedding (e '' s)
+  rw [Set.preimage_image_eq s e.injective] at h
+  exact h.symm
 
 /-- A closed set contained, after isometry, in a regular-closed set of the same
 finite volume is exactly an isometric copy of that set. -/

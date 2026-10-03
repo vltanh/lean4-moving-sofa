@@ -9,13 +9,13 @@ The motion model and supremum are those of formal-conjectures (Formal
 Conjectures Authors, Apache-2.0), copied as mathematical definitions rather
 than imported from the local proof. The Challenge imports only Mathlib.
 
-This is the shared uniqueness statement proved by the current source draft.
-It does not replace the exact upstream statement naming its concrete
-`gerversSofa`; that separate fixture is in `ChallengeUniqueness.lean`.
+This is the shared uniqueness statement; `MovingSofa.Canonical.maximizers_congruent`
+in `Final.lean` proves it. It does not replace the exact upstream statement
+naming its concrete `gerversSofa`; that separate fixture is in
+`ChallengeUniqueness.lean`.
 
 The single placeholder is the independent challenge statement. It is not
-imported by `SofaSubmission.Final` or any of its proof dependencies.
-Comparator has not been run.
+imported by `MovingSofaUniquenessFC.Final` or any of its proof dependencies.
 -/
 
 @[expose] public section

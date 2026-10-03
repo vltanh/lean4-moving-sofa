@@ -10,9 +10,8 @@ the two remaining phase junctions follow from an explicit reflection. Thus
 this conversion does not call the global shape-uniqueness theorem, a numerical
 root finder, or an assertion that the two Gerver constructions are the same.
 
-The strict upper angle bound is stated explicitly. `Valid` alone currently
-supplies only `theta <= pi/4`; no global localization is hidden here.
-Uncompiled Lean source.
+The strict upper angle bound is stated explicitly. In this module `Valid`
+alone supplies only `theta <= pi/4`; no global localization is hidden here.
 -/
 
 @[expose] public section

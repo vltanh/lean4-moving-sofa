@@ -8,15 +8,12 @@ public import Mathlib.Topology.Algebra.ContinuousAffineMap.Topology
 
 The target asks for an affine isometry, not for a particular construction of
 that isometry. We construct the usual rotation matrix directly on Euclidean
-space. This removes the former B2 obligation concerning Mathlib's oriented
-rotation: its coordinate formula is now definitional, and preservation of the
-Euclidean norm is proved algebraically.
+space instead of using Mathlib's oriented rotation, so its coordinate formula
+is definitional; preservation of the Euclidean norm is proved algebraically.
 
 Continuity is proved into the exact induced topology used by the canonical
-motion model, using the value at zero and the continuous linear part. This
-also removes B3 without replacing that topology by pointwise convergence.
-
-All scripts are uncompiled. No admissions or external evaluation occur here.
+motion model, using the value at zero and the continuous linear part, without
+replacing that topology by pointwise convergence.
 -/
 
 @[expose] public section
@@ -96,7 +93,8 @@ def quarterTurn : Point →L[ℝ] Point where
   toFun p := !₂[-p 1, p 0]
   map_add' p q := by
     ext i
-    fin_cases i <;> simp <;> ring
+    fin_cases i <;> simp
+    ring
   map_smul' a p := by
     ext i
     fin_cases i <;> simp
@@ -144,7 +142,7 @@ theorem congruent_of_coordinates {s t : Set Point} (g : MovingSofaUniqueness.Rig
     congr 1
     funext p
     apply coordinates_injective
-    simp only [Function.comp_apply, coordinates_point, realizeRigid_coordinates]
+    simp only [coordinates_point, realizeRigid_coordinates]
   have hp := congrArg (fun u : Set CoordinatePlane => point '' u) h
   rw [point_coordinates_image, he] at hp
   exact hp

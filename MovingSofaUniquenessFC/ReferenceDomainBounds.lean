@@ -8,9 +8,8 @@ public import MovingSofaUniquenessFC.ReferenceBoundary
 The first localization step uses the original equations and nonnegativity,
 not a checked list of excluded boxes. In particular every reference solution
 has `phi < 1/2`. This keeps the later derivative comparison away from the
-ill-conditioned corner `phi = theta = pi/4`.
-
-Uncompiled source. No numerical certificate evaluation is used.
+ill-conditioned corner `phi = theta = pi/4`. No numerical certificate
+evaluation is used.
 -/
 
 @[expose] public section
@@ -44,8 +43,8 @@ theorem triangle_trig {φ θ : ℝ} (hφ : 0 ≤ φ) (horder : φ ≤ θ)
     nlinarith
   exact ⟨hpSin, hpc, hpCos, hcOrder, htSin, htCos, hsum⟩
 
-theorem offset_nonneg {φ θ : ℝ} (hφ : 0 ≤ φ) (horder : φ ≤ θ)
-    (hθ : θ ≤ π / 4) : 0 ≤ offset φ θ := by
+theorem offset_nonneg {φ θ : ℝ} (horder : φ ≤ θ) (hθ : θ ≤ π / 4) :
+    0 ≤ offset φ θ := by
   unfold offset
   have hδ : 0 ≤ θ - φ := sub_nonneg.mpr horder
   nlinarith [sq_nonneg (θ - φ)]
@@ -53,7 +52,7 @@ theorem offset_nonneg {φ θ : ℝ} (hφ : 0 ≤ φ) (horder : φ ≤ θ)
 /-- The fourth equation and the domain imply B >= A. -/
 theorem Spec.A_le_B {A B φ θ : ℝ} (h : Spec A B φ θ) : A ≤ B := by
   obtain ⟨hp, ho, ht, hA, hB, h1, h2, h3, h4⟩ := spec_iff.mp h
-  have hoff := offset_nonneg hp ho ht
+  have hoff := offset_nonneg ho ht
   have he := eliminate_eq4 A B φ θ
   rw [h4] at he
   have hslope : 1 ≤ slope φ θ := by unfold slope; linarith

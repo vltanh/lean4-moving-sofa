@@ -9,7 +9,7 @@ The bounds here imply F_phi <= -2/3, 0 <= F_theta/C <= 1/2,
 G_phi <= 3/5, and G_theta/C <= -2/3, where C = 1-A-(theta-phi)>0.
 Consequently H = G + (9/10) F is nonincreasing in phi and strictly decreasing
 in theta. These inequalities are proved on the entire localized triangle,
-not assumed at a selected root. Uncompiled source.
+not assumed at a selected root.
 -/
 
 @[expose] public section

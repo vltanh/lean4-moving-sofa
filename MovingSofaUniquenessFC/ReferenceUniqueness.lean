@@ -14,7 +14,6 @@ have different theta coordinates; strict phi monotonicity finishes.
 
 No small-box uniqueness theorem, root-search certificate, or uniqueness of
 sofa shapes is used in this argument. Existence is a separate theorem.
-Uncompiled source.
 -/
 
 @[expose] public section
@@ -24,10 +23,8 @@ open Set Real
 
 namespace MovingSofaUniquenessFC.Reference
 
--- `hb0` belongs to the fixed statement; the proof does not need it.
-set_option linter.unusedVariables false in
 private theorem first_horizontal {b θ : ℝ}
-    (hb0 : 0 ≤ b) (hb1 : b ≤ 1 / 20) (hbθ : b ≤ θ) (hθ : θ ≤ π / 4) :
+    (hb1 : b ≤ 1 / 20) (hbθ : b ≤ θ) (hθ : θ ≤ π / 4) :
     StrictAntiOn (fun p => firstResidual p θ) (Icc 0 b) := by
   have hd : ∀ p ∈ Icc 0 b,
       HasDerivAt (fun p => firstResidual p θ) (firstPhi p θ) p := by
@@ -41,10 +38,8 @@ private theorem first_horizontal {b θ : ℝ}
     have h := (smallBounds hp.1.le (hp.2.le.trans hb1) (hp.2.le.trans hbθ) hθ).firstPhi_le
     linarith
 
--- `hφθ` belongs to the fixed statement; the proof does not need it.
-set_option linter.unusedVariables false in
-private theorem first_vertical {φ : ℝ} (hφ0 : 0 ≤ φ) (hφ1 : φ ≤ 1 / 20)
-    (hφθ : φ ≤ π / 4) : MonotoneOn (firstResidual φ) (Icc φ (π / 4)) := by
+private theorem first_vertical {φ : ℝ} (hφ0 : 0 ≤ φ) (hφ1 : φ ≤ 1 / 20) :
+    MonotoneOn (firstResidual φ) (Icc φ (π / 4)) := by
   have hd : ∀ t ∈ Icc φ (π / 4), HasDerivAt (firstResidual φ)
       (remainder φ t * firstThetaFactor φ t) t := by
     intro t ht
@@ -59,10 +54,8 @@ private theorem first_vertical {φ : ℝ} (hφ0 : 0 ≤ φ) (hφ1 : φ ≤ 1 / 2
     have b := smallBounds hφ0 hφ1 ht.1.le ht.2.le
     exact mul_nonneg b.remainder_pos.le b.firstThetaFactor_bounds.1
 
--- `hb0` belongs to the fixed statement; the proof does not need it.
-set_option linter.unusedVariables false in
 private theorem separating_horizontal {b θ : ℝ}
-    (hb0 : 0 ≤ b) (hb1 : b ≤ 1 / 20) (hbθ : b ≤ θ) (hθ : θ ≤ π / 4) :
+    (hb1 : b ≤ 1 / 20) (hbθ : b ≤ θ) (hθ : θ ≤ π / 4) :
     AntitoneOn (fun p => separatingResidual p θ) (Icc 0 b) := by
   have hd : ∀ p ∈ Icc 0 b, HasDerivAt (fun p => separatingResidual p θ)
       (secondPhi p θ + (9 / 10) * firstPhi p θ) p := by
@@ -77,10 +70,8 @@ private theorem separating_horizontal {b θ : ℝ}
     rw [(hd p ⟨hp.1.le, hp.2.le⟩).deriv]
     exact (smallBounds hp.1.le (hp.2.le.trans hb1) (hp.2.le.trans hbθ) hθ).separating_signs.1
 
--- `hφθ` belongs to the fixed statement; the proof does not need it.
-set_option linter.unusedVariables false in
-private theorem separating_vertical {φ : ℝ} (hφ0 : 0 ≤ φ) (hφ1 : φ ≤ 1 / 20)
-    (hφθ : φ ≤ π / 4) : StrictAntiOn (separatingResidual φ) (Icc φ (π / 4)) := by
+private theorem separating_vertical {φ : ℝ} (hφ0 : 0 ≤ φ) (hφ1 : φ ≤ 1 / 20) :
+    StrictAntiOn (separatingResidual φ) (Icc φ (π / 4)) := by
   have hd : ∀ t ∈ Icc φ (π / 4), HasDerivAt (separatingResidual φ)
       (remainder φ t * (secondThetaFactor φ t + (9 / 10) * firstThetaFactor φ t)) t := by
     intro t ht
@@ -107,22 +98,22 @@ private theorem not_theta_lt {A B φ θ A' B' φ' θ' : ℝ}
   obtain ⟨hF, hH⟩ := h.residuals_zero
   obtain ⟨hF', hH'⟩ := h'.residuals_zero
   have hFgrow : 0 ≤ firstResidual φ θ' := by
-    have hh := first_vertical hp0 hp1 (hpθ.trans ht1)
+    have hh := first_vertical hp0 hp1
       ⟨hpθ, ht1⟩ ⟨hpθ.trans htt.le, ht'1⟩ htt.le
     rwa [hF] at hh
   have hpp : φ ≤ φ' := by
     by_contra hn
     have hlt : φ' < φ := lt_of_not_ge hn
     have hh : firstResidual φ θ' < firstResidual φ' θ' :=
-      first_horizontal hp0 hp1 (hpθ.trans htt.le) ht'1 ⟨hp'0, hlt.le⟩ ⟨hp0, le_rfl⟩ hlt
+      first_horizontal hp1 (hpθ.trans htt.le) ht'1 ⟨hp'0, hlt.le⟩ ⟨hp0, le_rfl⟩ hlt
     rw [hF'] at hh
     linarith
   have hHshrink : separatingResidual φ θ' < 0 := by
-    have hh := separating_vertical hp0 hp1 (hpθ.trans ht1)
+    have hh := separating_vertical hp0 hp1
       ⟨hpθ, ht1⟩ ⟨hpθ.trans htt.le, ht'1⟩ htt
     rwa [hH] at hh
   have hHphi : separatingResidual φ' θ' ≤ separatingResidual φ θ' :=
-    separating_horizontal hp'0 hp'1 hp'θ ht'1 ⟨hp0, hpp⟩ ⟨hp'0, le_rfl⟩ hpp
+    separating_horizontal hp'1 hp'θ ht'1 ⟨hp0, hpp⟩ ⟨hp'0, le_rfl⟩ hpp
   rw [hH'] at hHphi
   linarith
 
@@ -132,10 +123,9 @@ theorem angles_unique {A B φ θ A' B' φ' θ' : ℝ}
   have ht : θ = θ' := le_antisymm (le_of_not_gt (not_theta_lt h' h))
     (le_of_not_gt (not_theta_lt h h'))
   subst θ'
-  have hb0 : 0 ≤ max φ φ' := le_max_of_le_left h.phi_pos.le
   have hb1 : max φ φ' ≤ 1 / 20 := max_le h.phi_lt_twentieth.le h'.phi_lt_twentieth.le
   have hbθ : max φ φ' ≤ θ := max_le h.phi_lt_theta.le h'.phi_lt_theta.le
-  have ha := first_horizontal hb0 hb1 hbθ h.2.2.1
+  have ha := first_horizontal hb1 hbθ h.2.2.1
   have heq : firstResidual φ θ = firstResidual φ' θ :=
     h.residuals_zero.1.trans h'.residuals_zero.1.symm
   exact ⟨ha.injOn ⟨h.phi_pos.le, le_max_left _ _⟩

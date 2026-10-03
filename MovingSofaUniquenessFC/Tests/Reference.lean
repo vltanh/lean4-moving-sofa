@@ -5,13 +5,12 @@ public import MovingSofaUniquenessFC.Final
 /-!
 # Exact-reference interface examples
 
-These examples record the intended types and dependency directions. They have
-NOT been executed. Their presence is not a report of successful elaboration,
-passed tests, a source-wide tactic scan, or a computed axiom audit.
+These examples record the intended types and dependency directions.
 
 No independent Challenge module is imported: all dependencies are the actual
-solution modules. In particular parameter existence is not a statement axiom,
-and the concrete-reference equality is independent of sofa shape uniqueness.
+solution modules. In particular parameter existence is not taken from a
+Challenge statement, and the concrete-reference equality is independent of sofa
+shape uniqueness.
 -/
 
 @[expose] public section

@@ -9,10 +9,7 @@ public import MovingSofaUniquenessFC.Extremal
 The concrete reference set has already been identified with the paper Gerver
 construction. Its moving-sofa and optimality facts are derived here, rather
 than imported from the upstream catalog's solved-result placeholders.
-These facts do not use the new shape-uniqueness argument.
-
-Uncompiled source: the absence of deliberate admissions is not a report of
-successful elaboration or a computed axiom audit.
+These facts do not use the shape-uniqueness theorem of `MovingSofaUniqueness`.
 -/
 
 @[expose] public section

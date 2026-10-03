@@ -13,7 +13,7 @@ This supplies a two-variable order argument without an implicit-function
 choice or a numerically checked Jacobian determinant.
 
 This module proves only the displayed identities and derivatives. Their sign
-bounds are proved separately. All source is uncompiled.
+bounds are proved separately.
 -/
 
 @[expose] public section

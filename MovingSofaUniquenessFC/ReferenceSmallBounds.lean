@@ -6,10 +6,9 @@ public import MovingSofaUniquenessFC.ReferenceResiduals
 # Uniform bounds on the analytically localized angle triangle
 
 The only transcendental estimates are the elementary bounds for sine and
-cosine and pi < 16/5. The numerator bound is obtained by integrating a signed
-derivative comparison in the ordinary fundamental calculus sense, not by
+cosine and 3 < pi < 16/5. The numerator bound is obtained by integrating a
+signed derivative comparison in the ordinary fundamental calculus sense, not by
 running a root-search certificate. The inequalities are deliberately loose.
-Uncompiled source.
 -/
 
 @[expose] public section
@@ -140,7 +139,7 @@ theorem smallBounds {φ θ : ℝ} (hp0 : 0 ≤ φ) (hp1 : φ ≤ 1 / 20)
   have hA1 : reconstructedA φ θ ≤ 4 / 25 := by
     apply (div_le_iff₀ hDpos).mpr
     linarith
-  have hoff0 := offset_nonneg hp0 ho ht
+  have hoff0 := offset_nonneg ho ht
   have hoffLow : (7 / 10 : ℝ) ≤ offset φ θ := by
     unfold offset
     have hδ := sub_nonneg.mpr ho

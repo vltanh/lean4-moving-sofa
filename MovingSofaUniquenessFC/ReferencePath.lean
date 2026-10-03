@@ -11,7 +11,6 @@ translation x(t). Thus R_t p(t)=x(t), not p(t)=x(t).
 
 This module proves equality of the sets with the two special endpoint
 hallways retained. It does not use the uniqueness theorem for moving sofas.
-All scripts remain uncompiled.
 -/
 
 @[expose] public section

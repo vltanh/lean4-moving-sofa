@@ -5,16 +5,16 @@ public import MovingSofaUniquenessFC.Bridge.PathLifting
 /-!
 # Equivalence of the two moving-sofa presentations
 
-The canonical model requires an identity-start motion, so a given set must
-already lie in the horizontal hallway. The paper model permits an initial
-translation. Their exact relationship is stated in `canonical_iff_paper`.
-For arbitrary paper sofas, `paper_to_canonical_placement` returns the actual
-translation, not merely an unrelated sofa with the same area.
+The canonical model `MovingSofa.IsMovingSofa` requires an identity-start
+motion, so a given set must already lie in the horizontal hallway. The paper
+model `MovingSofaOptimality.IsMovingSofa` permits an initial translation. Their
+exact relationship is stated in `canonical_iff_paper`. For arbitrary paper
+sofas, `paper_to_canonical_placement` returns the actual translation, not
+merely an unrelated sofa with the same area.
 
-All three former bridge admissions have explicit scripts in the imported
-coordinate, Euclidean-rigid, orientation, and path-lifting modules. The present
-module uses no uniqueness theorem or concrete Gerver-parameter facts.
-Uncompiled; no admissions in this module or its bridge prerequisites.
+The proofs build on the imported coordinate, Euclidean-rigid, orientation, and
+path-lifting modules. The present module uses no uniqueness theorem or concrete
+Gerver-parameter facts.
 -/
 
 @[expose] public section

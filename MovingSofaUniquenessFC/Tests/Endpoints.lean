@@ -4,16 +4,12 @@ public import MovingSofaUniquenessFC.Final
 public import MovingSofaUniquenessFC.ReferenceBoundary
 
 /-!
-# Unexecuted endpoint and integration regressions
+# Endpoint and integration regressions
 
 These are Lean examples, not external tests or numerical certificates. They
-have not been elaborated or run. They check the intended source interfaces:
-reflection includes normal pi, the pinned positivity premise is explicit at
-its local interface, and neither smoothness nor injectivity is an input to
-canonical shape uniqueness.
-
-The exact upstream concrete-reference theorem is deliberately not asserted as
-an example while its stricter source integration remains unfinished.
+check the intended interfaces: reflection includes normal pi, the pinned
+positivity premise is explicit at its local interface, and neither smoothness
+nor injectivity is an input to canonical shape uniqueness.
 -/
 
 @[expose] public section

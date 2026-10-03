@@ -10,11 +10,10 @@ public import Mathlib.Topology.Homotopy.Lifting
 The first column is a continuous circle-valued path. Mathlib's covering-map
 path lifting theorem supplies a continuous REAL angle starting at zero.
 The determinant argument in `Orientation` determines the second column, and
-hence the entire affine map. This replaces the former admitted bridge B1.
+hence the entire affine map.
 
 Unlike a pointwise choice of `arg`, the path lift remains continuous across
 the negative real axis and supports paths with arbitrary winding number.
-The scripts are uncompiled, but there are no admitted statements in this file.
 -/
 
 @[expose] public section
@@ -86,10 +85,10 @@ theorem real_angle_lift (m : I → Motion) (hm : Continuous m)
 
 /-- A constant identity path is compatible with the required normalization. -/
 theorem identity_has_zero_angle :
-    ∀ t : I, ∀ p : Point,
+    ∀ _t : I, ∀ p : Point,
       coordinates ((AffineIsometryEquiv.refl ℝ Point) p) =
         MovingSofaOptimality.rot (0 : ℝ) (coordinates p) + (0 : CoordinatePlane) := by
-  intro t p
+  intro _ p
   simp [MovingSofaOptimality.rot_zero]
 
 end MovingSofaUniquenessFC.Bridge

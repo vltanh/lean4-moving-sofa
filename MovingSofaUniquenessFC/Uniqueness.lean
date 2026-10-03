@@ -6,20 +6,18 @@ public import MovingSofaUniqueness.Main
 /-!
 # One Euclidean uniqueness API for the paper and upstream motion model
 
-The canonical definitions come from `SofaSubmission.Model`, which imports only
-Mathlib. The actual paper modules are imported directly in their pair-coordinate
-presentation, with explicit `MovingSofa.Paper` kernel names for the colliding
-hallway and moving-sofa predicates. No source relocation or generation is used.
+The canonical definitions come from `MovingSofaUniquenessFC.Model`, which
+imports only Mathlib. The paper's modules are imported directly in their
+pair-coordinate presentation; their hallway and moving-sofa predicates are
+`MovingSofaOptimality.hallway` and `MovingSofaOptimality.IsMovingSofa`, distinct
+from formal-conjectures' `MovingSofa.hallway` and `MovingSofa.IsMovingSofa`.
 
 The generic reference set G needs its actual moving-sofa and optimality facts.
-They are explicit inputs, not postulated global instances. For the exact
-upstream reference, `SofaSubmission.ReferenceFacts` now derives those facts
-from the independent concrete parameter/path/set correspondence. `Final`
-instantiates this API with that literal reference. The generic theorem alone
-must not be confused with having supplied the concrete-reference facts.
-
-All scripts remain uncompiled: successful elaboration, an admission-free
-elaborated dependency graph, and Palomar acceptance have not been established.
+They are explicit inputs, not global instances. For the exact upstream
+reference, `MovingSofaUniquenessFC.ReferenceFacts` derives those facts from the
+independent concrete parameter/path/set correspondence. `Final` instantiates
+this API with that literal reference. The generic theorem alone must not be
+confused with having supplied the concrete-reference facts.
 -/
 
 @[expose] public section

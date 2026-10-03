@@ -8,8 +8,8 @@ public import MovingSofaUniquenessFC.ReferenceDomainBounds
 All derivatives in this module are explicit. The global phi comparison uses
 an auxiliary derivative whose theta derivative is a sum of nonpositive terms,
 with one strictly negative term. This avoids a grid certificate for that sign.
-The bound `phi <= 1/2` is sufficient and was proved for every solution in
-`ReferenceDomainBounds`. Uncompiled source.
+The bound `phi <= 1/2` suffices; `ReferenceDomainBounds` proves it for every
+solution.
 -/
 
 @[expose] public section

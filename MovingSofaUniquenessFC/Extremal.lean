@@ -3,18 +3,16 @@ module
 public import MovingSofaUniquenessFC.Bridge.Motions
 
 /-!
-# The same extremal problem in the publication and submission models
+# The same extremal problem in the paper and formal-conjectures models
 
-This module uses the canonical Euclidean motion model and the paper development
-in one Lean environment. No source export, namespace rewriting, upstream theorem
-placeholder, or shape-uniqueness result is used here.
+This module uses formal-conjectures' canonical Euclidean motion model together
+with the paper development `MovingSofaOptimality`. No upstream theorem
+placeholder or shape-uniqueness result is used here.
 
 The exact ENNReal supremum equals the volume of each of the paper's Gerver
 witnesses. Consequently the canonical supremum is finite and attained, and
 being a canonical maximizer is equivalent to being a maximizer in the paper
 presentation after taking coordinates.
-
-Uncompiled source. The proofs in this module introduce no admissions.
 -/
 
 @[expose] public section

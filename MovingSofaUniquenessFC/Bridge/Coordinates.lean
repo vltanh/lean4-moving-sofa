@@ -6,12 +6,12 @@ public import MovingSofaUniqueness.Rigid
 /-!
 # One coordinate bridge for the paper and formal-conjectures presentations
 
-Both sets of definitions coexist in this ordinary Lean module. The paper's
-kernel names are qualified explicitly; no source relocation, textual insertion,
-or runtime generation is required. The map is a homeomorphism and preserves
-Lebesgue volume. It is not an isometry for the ordinary product norm.
-
-Uncompiled proof scripts; no admitted statements in this module.
+Both sets of definitions coexist in this module. The paper's definitions live
+in the namespace `MovingSofaOptimality` (for example
+`MovingSofaOptimality.hallway`) and formal-conjectures' in `MovingSofa` (for
+example `MovingSofa.hallway`), so their names do not collide. The coordinate map
+is a homeomorphism and preserves Lebesgue volume. It is not an isometry for the
+ordinary product norm.
 -/
 
 @[expose] public section

@@ -9,7 +9,7 @@ Integrating the paper contact derivative recovers the reference's X and Y.
 Reflection recovers the opposite outer contact. The equality
 `2*k3.x = 4*X(0)-2`, which is needed in the reference path, follows from
 its second equation; it is not inferred from an illustration or a numerical
-approximation. Uncompiled source.
+approximation.
 -/
 
 @[expose] public section
@@ -104,7 +104,8 @@ theorem contactC_integral_coordinates {D : Data} (hD : D.Valid) (t : ℝ) :
 theorem contactA_integral_coordinates {D : Data} (hD : D.Valid) (t : ℝ) :
     contactA D.toPaper.path t = (D.boundaryX (π / 2 - t), D.boundaryY (π / 2 - t)) := by
   rw [contactA_reflection hD, contactC_integral_coordinates hD]
-  ext <;> simp only [reflect] <;> ring
+  ext <;> simp only [reflect]
+  ring
 
 theorem boundaryY_zero {D : Data} (hD : D.Valid) : D.boundaryY 0 = 1 := by
   have h := congrArg Prod.snd (contactC_integral_coordinates hD 0)

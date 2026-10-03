@@ -6,20 +6,17 @@ public import MovingSofaUniquenessFC.ReferenceFacts
 /-!
 # Shared and exact-reference moving-sofa uniqueness endpoints
 
-The same core proof supplies the reference-independent publication theorem,
-the corollary for the paper's Gerver construction, and the EXACT upstream
-`volume_eq_sofaConstant_iff_congruent_gerversSofa` declaration.
+The same core proof supplies the reference-independent theorem
+`MovingSofa.Canonical.maximizers_congruent`, the corollary for the paper's
+Gerver construction, and the EXACT upstream declaration
+`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`.
 
-The concrete-reference dependencies are now local ordinary Lean modules:
-`ReferenceDefs` proves the full four-constant specification analytically;
-`Bridge/ReferenceShape` proves equality with the paper Gerver set in
-coordinates; `ReferenceFacts` derives the actual motion and optimal volume.
-No Challenge placeholder or rejected decision-kernel certificate is imported.
+The concrete reference is handled by three modules: `ReferenceDefs` proves
+existence and uniqueness of the four constants on their full domain
+analytically; `Bridge/ReferenceShape` proves equality with the paper Gerver set
+in coordinates; `ReferenceFacts` derives the actual motion and optimal volume.
+No Challenge placeholder or decision-kernel certificate is imported.
 The parameter/path correspondence does not depend on shape uniqueness.
-
-All source remains uncompiled. Explicit proof bodies are not a report of
-successful elaboration, a dependency audit, Comparator success, independent
-kernel verification, or Palomar acceptance. No such execution was performed.
 -/
 
 @[expose] public section

@@ -11,9 +11,12 @@ Definitions are from FormalConjectures/Wikipedia/MovingSofa.lean, Git blob
 RuifengCao/sofa-formal's SofaSubmission/Challenge.lean.
 
 This Challenge deliberately does not import the solution or its dependencies.
-Its two proof placeholders belong to the independent statement environment:
-parameter existence/uniqueness and the target theorem. The solution environment
-provides both as proved declarations; no Challenge module is imported there.
+Its three proof placeholders belong to the independent statement environment:
+parameter existence and uniqueness, `one_le_sofaConstant`, and the target
+theorem. The solution proves the first and the last
+(`MovingSofa.GerversSofa.ABφθSpec.existsUnique` in `ReferenceDefs.lean`,
+`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa` in `Final.lean`)
+and imports no Challenge module.
 
 The target concerns the original connected closed set and its actual planar
 volume. No smoothness, injectivity, regular-closedness, balancedness, or

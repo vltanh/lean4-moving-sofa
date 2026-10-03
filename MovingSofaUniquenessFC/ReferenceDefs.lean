@@ -17,9 +17,6 @@ The theorem supplying that choice is proved, not imported from a Challenge
 placeholder or from a decision-kernel certificate. The integral definitions,
 branch inequalities, translation-before-rotation convention, and special
 endpoint hallways are retained.
-
-This module is ordinary source shared by the publication and submission
-endpoints. It requires no source exporter. It has not been compiled.
 -/
 
 @[expose] public section

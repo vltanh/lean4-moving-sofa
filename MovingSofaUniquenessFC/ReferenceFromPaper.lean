@@ -10,8 +10,6 @@ shape uniqueness or global uniqueness of either parameter system. The
 reference contact-error identity then recovers equations one and two.
 Nonnegativity of the two coefficients is supplied by the paper's already
 proved parameter enclosures only at the final `ofPaper_valid` step.
-
-Uncompiled source.
 -/
 
 @[expose] public section

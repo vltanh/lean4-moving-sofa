@@ -9,9 +9,6 @@ These arguments use elementary differentiation and the four defining equations,
 not interval-certificate evaluation. They apply to the full upstream domain,
 including its initially non-strict inequalities. The later analytic localization
 and residual-separation modules use these nondegenerate bounds.
-
-The source is uncompiled. No existence or global root-uniqueness assertion is
-introduced as an assumption or as an admitted declaration.
 -/
 
 @[expose] public section
@@ -42,7 +39,8 @@ theorem Spec.phi_pos {A B φ θ : ℝ} (h : Spec A B φ θ) : 0 < φ := by
   let f : ℝ → ℝ := fun t => (t - 1) * cos t - sin t + 1
   have hf' (t : ℝ) : HasDerivAt f ((1 - t) * sin t) t := by
     convert (((((hasDerivAt_id t).sub_const 1).mul (hasDerivAt_cos t)).sub
-      (hasDerivAt_sin t)).add_const 1) using 1 <;> dsimp [f] <;> ring
+      (hasDerivAt_sin t)).add_const 1) using 1 <;> dsimp [f]
+    ring
   have hθone : θ < 1 := by linarith [pi_lt_four]
   have hstrict : StrictMonoOn f (Icc 0 θ) := by
     apply strictMonoOn_of_deriv_pos (convex_Icc 0 θ)

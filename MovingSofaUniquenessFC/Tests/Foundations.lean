@@ -8,13 +8,9 @@ import Mathlib
 /-!
 # Regression examples for the uniqueness foundations
 
-These examples belong to the opt-in `SofaUniqueness` build. They are source-level
-regression tests until an actual Lean build has been run; their presence alone
-is not a claim of validation.
-
 The final example has the affine-isometry type required by formal-conjectures,
-but retains the explicit geometric containment hypothesis. It does not assert
-that the upstream open theorem has been filled.
+but retains the explicit geometric containment hypothesis of
+`volume_eq_iff_congruent_of_containment`.
 -/
 
 @[expose] public section

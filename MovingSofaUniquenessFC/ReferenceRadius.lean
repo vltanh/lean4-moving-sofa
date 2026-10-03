@@ -10,7 +10,6 @@ The reference uses left-hand values at its four junctions; the convenient
 right derivative of the paper contact curve uses right-hand values. These
 functions are proved equal almost everywhere, not incorrectly pointwise.
 Integrability is proved before applying the fundamental theorem of calculus.
-All scripts are uncompiled.
 -/
 
 @[expose] public section

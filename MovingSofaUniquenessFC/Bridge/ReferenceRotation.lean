@@ -7,13 +7,12 @@ public import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
 /-!
 # The actual oriented rotation used in the upstream concrete reference
 
-Constructing an arbitrary Euclidean isometry was sufficient for transporting
-motions, but not for identifying the specific reference's `rotateTranslate`.
-Here the sign of its canonical orientation is proved from the determinant of
-the standard orthonormal basis. Its right-angle rotation sends e0 to e1 and
-e1 to -e0; therefore its coordinate matrix is exactly the paper rotation.
-
-No orientation correspondence is postulated. Uncompiled source.
+Constructing an arbitrary Euclidean isometry (`EuclideanRigid`) suffices for
+transporting motions, but not for identifying the specific reference's
+`rotateTranslate`. Here the sign of its canonical orientation is proved from
+the determinant of the standard orthonormal basis. Its right-angle rotation
+sends e0 to e1 and e1 to -e0; therefore its coordinate matrix is exactly the
+paper rotation.
 -/
 
 @[expose] public section

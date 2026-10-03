@@ -8,11 +8,10 @@ public import Mathlib.Topology.Order.IntermediateValue
 # Orientation of an identity-start planar isometry path
 
 The sign of the two-by-two determinant is obtained from continuity and the
-intermediate value theorem. No pointwise choice of an angle, discontinuous
-argument function, or unproved orientation instance is used.
+intermediate value theorem. No pointwise choice of an angle or discontinuous
+argument function is used.
 
 The proofs use only the Euclidean norm, linearity, and elementary real algebra.
-They are uncompiled source drafts and contain no admissions.
 -/
 
 @[expose] public section

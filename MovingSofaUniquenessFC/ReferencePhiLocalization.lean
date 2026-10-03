@@ -10,8 +10,8 @@ combines the global `phi < 1/2` exclusion, the explicit phi derivative, and a
 single vertical comparison at phi = 1/20. All scalar estimates are displayed
 as real inequalities proved from elementary sine/cosine bounds.
 
-No recursively evaluated interval certificate or decision tactic is involved.
-Uncompiled source.
+No recursively evaluated interval certificate or `decide`-style tactic is
+involved.
 -/
 
 @[expose] public section
@@ -47,7 +47,7 @@ theorem cut_frame_bounds {θ : ℝ} (hl : (1 / 20 : ℝ) ≤ θ) (hu : θ ≤ π
   have hp := mul_le_mul hk1 hshi hs0 (by norm_num : (0 : ℝ) ≤ 11 / 8)
   have hz : sin (1 / 20) * (1 + offset (1 / 20) θ) ≤ (1 / 20) * 3 := by
     apply mul_le_mul hshi (by linarith)
-    · exact add_nonneg zero_le_one (offset_nonneg (by norm_num) hl hu)
+    · exact add_nonneg zero_le_one (offset_nonneg hl hu)
     · norm_num
   constructor
   · unfold frameDen

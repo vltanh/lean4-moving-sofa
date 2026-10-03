@@ -17,7 +17,7 @@ translation AFTER rotating. `shape_eq_of_rotated_path` proves the exact
 conversion, including the initial hallway; merely equating the two paths
 without rotating the translation would be wrong.
 
-Uncompiled source. No decision procedure or external proof script is used.
+No decision procedure or external proof script is used.
 -/
 
 @[expose] public section

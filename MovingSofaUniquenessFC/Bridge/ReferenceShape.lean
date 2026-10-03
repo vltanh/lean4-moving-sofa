@@ -11,8 +11,6 @@ including the orientation, the before-rotation translation, every interior
 hallway, and both endpoint hallways. The result is equality with the paper
 Gerver set after the canonical coordinate identification, not just congruence
 or equality of volume. No sofa-uniqueness theorem is imported or used.
-
-All proof scripts are uncompiled.
 -/
 
 @[expose] public section

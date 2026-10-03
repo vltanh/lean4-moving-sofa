@@ -15,9 +15,7 @@ All algebra is proved with explicit identities and ordinary proof-producing
 tactics. This is preparatory work for the exact-reference integration, NOT a
 proof that the two reduced equations have a unique zero on their whole domain.
 In particular there is no replacement of global uniqueness by small-box
-uniqueness, and no chosen upstream constants are postulated here.
-
-Uncompiled source; no Lean or CI execution has been performed.
+uniqueness, and no upstream constants are chosen here.
 -/
 
 @[expose] public section
@@ -45,7 +43,7 @@ def eq2 (A B φ θ : ℝ) : ℝ :=
   A * (3 * sin θ + sin φ) - 2 * B * cos φ +
     3 * (θ - φ - 1) * sin θ + 3 * cos θ - sin φ + cos φ
 
-def eq3 (A B φ θ : ℝ) : ℝ :=
+def eq3 (A B φ _θ : ℝ) : ℝ :=
   A * cos φ - (sin φ + 1 / 2 - cos φ / 2 + B * sin φ)
 
 def eq4 (A B φ θ : ℝ) : ℝ :=

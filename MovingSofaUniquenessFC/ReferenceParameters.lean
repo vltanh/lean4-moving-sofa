@@ -14,7 +14,7 @@ the second is exactly its fourth equation. The two contact equations are handled
 in `ReferenceSolution`.
 
 No global root-localization or chosen-reference theorem is assumed. All proofs
-are uncompiled source and use ordinary algebraic proof terms.
+use ordinary algebraic proof terms.
 -/
 
 @[expose] public section
