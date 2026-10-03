@@ -9,26 +9,21 @@ and results of the first part, [`MovingSofaOptimality/`](../MovingSofaOptimality
 Every moving sofa whose area equals the area of Gerver's sofa is mapped onto Gerver's sofa, as a set,
 by a rotation about the origin followed by a translation.
 
-- [`gerver_sofa_unique`](../Challenge.lean#L335) in [`Challenge.lean`](../Challenge.lean) states it in Mathlib's vocabulary, and
-  [`Solution.lean`](../Solution.lean) proves it; Comparator checks the pair, with the four theorems of Baek's paper and
-  formal-conjectures' four statements.
-- In the library ([`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean)):
-  - [`image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L142): the theorem, for the library's moving sofas and Gerver's sofa;
-  - [`volume_eq_gerver_iff`](../MovingSofaUniqueness/Main.lean#L178): a moving sofa has the area of Gerver's sofa if and only if a
-    rigid motion maps it onto Gerver's sofa;
-  - [`isGlobalMax_iff`](../MovingSofaUniqueness/Main.lean#L188): the moving sofas of maximum area are exactly the moving sofas that a
-    rigid motion maps onto Gerver's sofa;
-  - [`globalMax_congruent`](../MovingSofaUniqueness/Main.lean#L161) and [`exists_globalMax_unique_up_to_rigid`](../MovingSofaUniqueness/Main.lean#L200): a moving sofa of maximum
-    area exists, and any two are congruent.
-- A [`Rigid`](../MovingSofaUniqueness/Rigid.lean#L25) map is a rotation by an angle about the origin followed by a translation;
-  [`Rigid.norm2_sub`](../MovingSofaUniqueness/Rigid.lean#L80) shows that it preserves Euclidean distances. The conclusion is an equality
-  of sets, not an equality up to a null set.
-- The characterization of the maximizers keeps the hypothesis that the set is a moving sofa: a moving
-  sofa starts in the horizontal side of the hallway, so a rigid image of Gerver's sofa, rotated by a
-  right angle for example, need not be one.
+- [`Baek.gerver_sofa_unique`](../Challenge.lean#L351) in [`Challenge.lean`](../Challenge.lean) states it in Mathlib's vocabulary, with the
+  definitions of Baek's paper, and [`Solution.lean`](../Solution.lean) proves it; Comparator checks the pair.
+- In the library, [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L233) states it for the library's moving
+  sofas and Gerver's sofa. A [`MovingSofaUniqueness.Rigid`](../MovingSofaUniqueness/Rigid.lean) map is a rotation by an angle about the
+  origin followed by a translation. The conclusion is an equality of sets, not an equality up to a null
+  set.
+- With Baek's theorem, it says that the moving sofas of maximum area are exactly the moving sofas that
+  a rotation and a translation map onto Gerver's sofa. Not every rigid image of Gerver's sofa is a
+  moving sofa: a moving sofa starts in the horizontal side of the hallway.
+- Formal-conjectures' statement of the uniqueness,
+  [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../Challenge.lean#L396), follows from it
+  through the bridge of [`docs/BRIDGE.md`](BRIDGE.md).
 
 `lake build` compiles the proof with no `sorry`, and [`scripts/Audit.lean`](../scripts/Audit.lean) checks that every
-declaration of both libraries uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
+declaration uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 
 ## Where the argument comes from
 
@@ -60,17 +55,20 @@ rigid image of S is all of G.
 | Note 20 | Statement | Lean |
 | --- | --- | --- |
 | Inputs 1–5 | Baek's Theorems 1.1.1 and 1.5.1, Proposition 2.3.1, Theorems 2.3.2, 2.4.1–2.4.3, 2.5.10 and 3.5.2–3.5.6, Lemmas 3.4.5–3.4.8, Chapters 6–8, and the structure of G | [`MovingSofaOptimality`](../MovingSofaOptimality) |
-| Proposition 1 | polygon caps converging to a specified maximizer of A_ω, each maximizing a penalized finite objective | [`exists_selectedCapSequence`](../MovingSofaUniqueness/Selection/SelectedCaps.lean#L100), from [`exists_penalizedMax`](../MovingSofaUniqueness/Selection/PolygonSelection.lean#L118) |
-| Proposition 2 | the variation defects of the selected polygons, (11) and (12) | [`floating_defect_le`](../MovingSofaUniqueness/Variation/FloatingVariation.lean#L121), [`pinned_defect_le`](../MovingSofaUniqueness/Variation/PinnedVariation.lean#L25) |
-| Proposition 3 | every maximizing right-angle cap satisfies the injectivity condition | [`isKi_of_maximal_area`](../MovingSofaUniqueness/Reductions.lean#L99), from [`curvatureBounds_of_isMaxCap`](../MovingSofaUniqueness/Reductions.lean#L89) (the bounds (16)) and [`injectivity_of_curvatureBounds`](../MovingSofaUniqueness/Reductions.lean#L95) |
-| Proposition 4 | the specified maximizing monotone sofa has a right-angle motion | [`pinnedBounds_of_isMaxCap`](../MovingSofaUniqueness/Reductions.lean#L116) (the bounds (19)) and [`right_angle_motion_of_pinned`](../MovingSofaUniqueness/Reductions.lean#L122), from [`consumed_of_pinned`](../MovingSofaUniqueness/AngleExtension.lean#L23) |
-| Proposition 5 | a maximizing cap in 𝒦^i is Gerver's cap up to a horizontal translation | [`ki_sofa_eq_gerver_translate`](../MovingSofaUniqueness/Reductions.lean#L134), from [`ki_maximizer_equality_conditions`](../MovingSofaUniqueness/Rigidity/EqualityConditions.lean#L194), [`capKernel_of_triple_midpoint`](../MovingSofaUniqueness/Rigidity/MamikonCapKernel.lean#L82) and [`CapKernel.eq_horizontal_translation`](../MovingSofaUniqueness/Rigidity/CapKernel.lean#L51) |
-| Proposition 6 | G is the closure of its interior | [`regularClosed_gerver`](../MovingSofaUniqueness/Reductions.lean#L129), from [`gerver_regularClosed`](../MovingSofaUniqueness/RegularClosed/GerverRegularClosed.lean#L29) |
-| Proof of the theorem | the containment chain and the recovery of S | [`maximizer_contained_in_gerver`](../MovingSofaUniqueness/Main.lean#L106), [`image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L142), with [`eq_of_subset_of_measure_eq`](../MovingSofaUniqueness/SetRecovery.lean#L57) |
+| Proposition 1 | polygon caps converging to a specified maximizer of A_ω, each maximizing a penalized finite objective | [`MovingSofaUniqueness.exists_selectedCapSequence`](../MovingSofaUniqueness/Selection.lean#L956), from [`MovingSofaUniqueness.exists_penalizedMax`](../MovingSofaUniqueness/Selection.lean#L556) |
+| Proposition 2 | the variation defects of the selected polygons, (11) and (12) | [`MovingSofaUniqueness.floating_defect_le`](../MovingSofaUniqueness/Variation.lean#L284), [`MovingSofaUniqueness.pinned_defect_le`](../MovingSofaUniqueness/Variation.lean#L599) |
+| Proposition 3 | every maximizing right-angle cap satisfies the injectivity condition | [`MovingSofaUniqueness.isKi_of_maximal_area`](../MovingSofaUniqueness/Main.lean#L88), from [`MovingSofaUniqueness.curvature_of_maximal_positive`](../MovingSofaUniqueness/Curvature.lean#L1470) (the bounds (16)) and [`MovingSofaUniqueness.injectivity_of_curvature`](../MovingSofaUniqueness/Curvature.lean#L708) |
+| Proposition 4 | the specified maximizing monotone sofa has a right-angle motion | [`MovingSofaUniqueness.maximal_monotone_has_right_angle`](../MovingSofaUniqueness/Main.lean#L164), from [`MovingSofaUniqueness.pinned_bounds_of_maximal_positive`](../MovingSofaUniqueness/Variation.lean#L831) (the bounds (19)) and [`MovingSofaUniqueness.right_angle_motion_of_pinned_bounds`](../MovingSofaUniqueness/AngleExtension.lean#L185) |
+| Proposition 5 | a maximizing cap in 𝒦^i is Gerver's cap up to a horizontal translation | [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../MovingSofaUniqueness/Main.lean#L103), from [`MovingSofaUniqueness.ki_maximizer_equality_conditions`](../MovingSofaUniqueness/Rigidity.lean#L881), [`MovingSofaUniqueness.capKernel_of_triple_midpoint`](../MovingSofaUniqueness/Rigidity.lean#L974) and [`MovingSofaUniqueness.CapKernel.eq_horizontal_translation`](../MovingSofaUniqueness/Rigidity.lean#L197) |
+| Proposition 6 | G is the closure of its interior | [`MovingSofaUniqueness.gerver_regularClosed`](../MovingSofaUniqueness/RegularClosed.lean#L349) |
+| Proof of the theorem | the containment chain and the recovery of S | [`MovingSofaUniqueness.maximizer_contained_in_gerver`](../MovingSofaUniqueness/Main.lean#L196), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L233), with [`MovingSofaUniqueness.eq_of_subset_of_measure_eq`](../MovingSofaUniqueness/Rigid.lean#L59) |
 
-The directories of [`MovingSofaUniqueness/`](../MovingSofaUniqueness) follow the propositions: `Selection` (Proposition 1), `Variation`
-(Proposition 2 and the pinned bounds of Proposition 4), `Curvature` (Proposition 3), `AngleExtension.lean`
-(Proposition 4), `Rigidity` (Proposition 5) and `RegularClosed` (Proposition 6).
+The modules of [`MovingSofaUniqueness/`](../MovingSofaUniqueness) follow the propositions:
+[`Selection.lean`](../MovingSofaUniqueness/Selection.lean) (Proposition 1), [`Variation.lean`](../MovingSofaUniqueness/Variation.lean) (Proposition 2 and the pinned
+bounds (19)), [`Curvature.lean`](../MovingSofaUniqueness/Curvature.lean) (Proposition 3), [`AngleExtension.lean`](../MovingSofaUniqueness/AngleExtension.lean) (Proposition 4),
+[`Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean) (Proposition 5) and [`RegularClosed.lean`](../MovingSofaUniqueness/RegularClosed.lean) (Proposition 6);
+[`Rigid.lean`](../MovingSofaUniqueness/Rigid.lean) holds the rigid maps and the recovery of a set from its area, and
+[`Main.lean`](../MovingSofaUniqueness/Main.lean) assembles the theorem.
 
 ## How the formalization differs from note 20
 
@@ -90,29 +88,24 @@ documentation:
   instead of using note 20's maximum-deficit argument. This gives the strict inequalities that the
   injectivity condition needs.
 - **Regular closedness (Proposition 6).** Gerver's rotation path stays strictly below the top of the
-  cap (`GerverStrictHeight.lean`), which removes note 20's case of a single height-one contact.
+  cap ([`MovingSofaOptimality.GerverParams.path_snd_lt_one`](../MovingSofaUniqueness/RegularClosed.lean#L36)), which removes note 20's case of a single height-one
+  contact.
 
 ## What the formalization found
 
 - **In the argument:** no gap. The 54 proofs of ChatGPT Pro's Lean draft that did not compile failed
   for reasons of Lean: lemma names and argument orders, changes of Mathlib's API, implicit arguments,
   and tactics that did not close their goals.
-- **In the draft's statements:** five helper lemmas of `MamikonDisplacement.lean` were false as
-  written. Their hypotheses were declared as section variables that the statements do not mention,
+- **In the draft's statements:** five helper lemmas on the displacement functions of Mamikon's formula
+  (now in [`Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean)) were false as written. Their hypotheses were declared as section variables that the statements do not mention,
   so Lean omitted them, and the lemmas claimed their conclusions for an arbitrary curve. The
   hypotheses are now included; the lemmas' callers already supplied them.
 - **Review of the statements:** a separate agent compared the statements with note 20 and found no
-  weakening, no vacuous definition and no hidden assumption. It suggested the equivalences and the
-  isometry lemma above, which were then added.
+  weakening, no vacuous definition and no hidden assumption.
 
 ## Not formalized
 
 - The quantitative stability estimate of [note 17](uniqueness/17-quantitative-cap-rigidity.md): the uniqueness theorem does not need it.
-
-Formal-conjectures' form of the theorem, [`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../Challenge.lean#L353),
-whose moving sofas live in `EuclideanSpace ℝ (Fin 2)` with motions starting at the identity and whose
-Gerver's sofa is defined from Gerver's four constants, is proved in the third part of the
-repository, [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC), from the theorem here.
 
 ## The notes
 
@@ -132,7 +125,7 @@ repository, [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC), from the the
 | [17](uniqueness/17-quantitative-cap-rigidity.md) | A quantitative form of cap rigidity (not formalized) |
 | [18](uniqueness/18-failed-uniform-angle-threshold.md), [19](uniqueness/19-exact-angle-reduction.md) | A failed uniform angle threshold, and the exact angle reduction |
 | [20](uniqueness/20-complete-paper-proof.md) | **The proof**: the inputs from Baek's paper, six propositions and the theorem |
-| [21](uniqueness/21-reference-dependency-audit.md), [22](uniqueness/22-reference-correspondence.md) | The correspondence with formal-conjectures' definitions, formalized in [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC) |
+| [21](uniqueness/21-reference-dependency-audit.md), [22](uniqueness/22-reference-correspondence.md) | The correspondence with formal-conjectures' definitions, formalized in [`MovingSofaBridge/`](../MovingSofaBridge) ([`docs/BRIDGE.md`](BRIDGE.md)) |
 
 The notes are ChatGPT Pro's working record. Statements in them about the state of the Lean code
 ("uncompiled", "admissions") describe the draft and are out of date.

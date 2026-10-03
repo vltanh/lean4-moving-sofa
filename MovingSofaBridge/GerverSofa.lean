@@ -35,6 +35,7 @@ section
 
 variable (D : GerverConstants)
 
+/-- Formal-conjectures' radius `GerversSofa.r`, for the constants `D`. -/
 def radius (t : ℝ) : ℝ :=
   if t ≤ D.φ then 1 / 2
   else if t ≤ D.θ then (1 + D.A + t - D.φ) / 2
@@ -43,12 +44,15 @@ def radius (t : ℝ) : ℝ :=
     D.B - (π / 2 - t - D.φ) * (1 + D.A) / 2 - (π / 2 - t - D.φ) ^ 2 / 4
   else 0
 
+/-- Formal-conjectures' `GerversSofa.y`, for the constants `D`. -/
 def boundaryY (t : ℝ) : ℝ :=
   ∫ s in t..π / 2 - D.φ, D.radius s * sin s
 
+/-- Formal-conjectures' `GerversSofa.x`, for the constants `D`. -/
 def boundaryX (t : ℝ) : ℝ :=
   1 - ∫ s in t..π / 2 - D.φ, D.radius s * cos s
 
+/-- Formal-conjectures' rotation path `GerversSofa.p`, for the constants `D`, in coordinates. -/
 def prePath (t : ℝ) : ℝ × ℝ :=
   (if t ≤ D.φ then cos t - 1
    else D.boundaryX (π / 2 - t) * cos t +
@@ -159,12 +163,15 @@ theorem rightRadius_mul_integrable (D : GerverConstants) {w : ℝ → ℝ} (hw :
   apply intervalIntegrable_ite measurableSet_Iio
   · exact ((continuous_const.mul hw)).intervalIntegrable a b
   · apply intervalIntegrable_ite measurableSet_Iio
-    · exact ((by fun_prop : Continuous fun t : ℝ => (1 + D.A + t - D.φ) / 2).mul hw).intervalIntegrable a b
+    · exact ((by fun_prop : Continuous fun t : ℝ => (1 + D.A + t - D.φ) / 2).mul
+        hw).intervalIntegrable a b
     · apply intervalIntegrable_ite measurableSet_Iio
-      · exact ((by fun_prop : Continuous fun t : ℝ => D.A + t - D.φ).mul hw).intervalIntegrable a b
+      · exact ((by fun_prop : Continuous fun t : ℝ => D.A + t - D.φ).mul
+          hw).intervalIntegrable a b
       · apply intervalIntegrable_ite measurableSet_Iio
         · exact ((by fun_prop : Continuous fun t : ℝ =>
-            D.B - (π / 2 - t - D.φ) * (1 + D.A) / 2 - (π / 2 - t - D.φ) ^ 2 / 4).mul hw).intervalIntegrable a b
+            D.B - (π / 2 - t - D.φ) * (1 + D.A) / 2 - (π / 2 - t - D.φ) ^ 2 / 4).mul
+              hw).intervalIntegrable a b
         · simp
 
 theorem integral_radius_eq_rightRadius (D : GerverConstants) (w : ℝ → ℝ) (a b : ℝ) :
@@ -449,7 +456,8 @@ private theorem stdBasis_expansion (q : Point) :
 theorem rightAngleRotation_coordinates (q : Point) :
     coordinates (EuclideanGeometry.o.rightAngleRotation q) = (-(q 1), q 0) := by
   conv_lhs => rw [stdBasis_expansion q]
-  rw [map_add, map_smul, map_smul, rightAngleRotation_stdBasis_zero, rightAngleRotation_stdBasis_one]
+  rw [map_add, map_smul, map_smul, rightAngleRotation_stdBasis_zero,
+    rightAngleRotation_stdBasis_one]
   ext <;> simp [coordinates, stdBasis, EuclideanSpace.basisFun_apply]
 
 /-- The rotations of the standard orientation of `ℝ²` are the rotations of coordinates. -/
@@ -501,12 +509,12 @@ private theorem mem_rotateTranslate_image_iff (t : ℝ) (q : Point)
 /-- Membership in formal-conjectures' Gerver's sofa, in coordinates. -/
 theorem mem_gerversSofa_iff (q : Point) :
     q ∈ MovingSofa.gerversSofa ↔ coordinates q ∈ gerverConstants.shape := by
-  have hH := mem_rotateTranslate_image_iff 0 q MovingSofa.horizontalHallway MovingSofaOptimality.horizSide
-    coordinates_mem_horizontal
-  have hV := mem_rotateTranslate_image_iff (π / 2) q MovingSofa.verticalHallway MovingSofaOptimality.vertSide
-    coordinates_mem_vertical
-  have hL := fun t => mem_rotateTranslate_image_iff t q MovingSofa.hallway MovingSofaOptimality.hallway
-    coordinates_mem_hallway
+  have hH := mem_rotateTranslate_image_iff 0 q MovingSofa.horizontalHallway
+    MovingSofaOptimality.horizSide coordinates_mem_horizontal
+  have hV := mem_rotateTranslate_image_iff (π / 2) q MovingSofa.verticalHallway
+    MovingSofaOptimality.vertSide coordinates_mem_vertical
+  have hL := fun t => mem_rotateTranslate_image_iff t q MovingSofa.hallway
+    MovingSofaOptimality.hallway coordinates_mem_hallway
   simp only [MovingSofa.gerversSofa, MovingSofa.sofaOfRotateTranslatePath,
     GerverConstants.shape, GerverConstants.shapeFromPrePath, mem_inter_iff, mem_iInter] at ⊢
   constructor

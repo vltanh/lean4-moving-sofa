@@ -3,12 +3,14 @@ module
 public import MovingSofaOptimality.Angle.RightAngle
 
 /-!
-# Shape-preserving angular extension from the two pinned inequalities
+# Proposition 4: the pinned bounds give a right-angle motion
 
-This generalizes the existing proofs of Theorems 4.2.5 and 1.5.2 by exposing
-exactly the pinned-edge hypotheses that they use. In particular no balanced
-maximum cap is substituted for the specified sofa. All geometry below comes
-from the existing, non-maximality-dependent lemmas in `Angle.RightAngle`.
+Let `S` be a monotone sofa of rotation angle `ω ∈ [arcsec(11/5), π/2)` and area at least `11/5`,
+whose cap `K` satisfies the pinned bounds (19) of note 20. Then the points `O`, `o_ω - v_0` and
+`o_ω - u_ω` lie in the closure of one inner quadrant `Q_K⁻(t)` of `K` (`consumed_of_pinned`), so
+`S` has width at most one in every direction `u_t` with `t ∈ [ω, π/2]`, and a rotated copy of `S`
+has a right-angle motion (`right_angle_motion_of_width`, `right_angle_motion_of_pinned_bounds`).
+This is Proposition 4 of note 20; the geometry is that of Baek's Theorems 4.2.5 and 1.5.2.
 -/
 
 @[expose] public section
@@ -18,8 +20,9 @@ open Real Set MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The consumed triangle conclusion requires the pinned inequalities, not
-balancedness of the cap. -/
+/-- For `ω ∈ [arcsec(11/5), π/2)`, a cap of sofa area at least `11/5` with the pinned bounds (19)
+has an inner quadrant `Q_K⁻(t)`, `t ∈ (0, ω)`, whose closure contains `O`, `o_ω - v_0` and
+`o_ω - u_ω`. -/
 theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     (hω : ω ∈ Ico arcsec22 (π / 2)) (hcap : IsCap K ω)
     (harea : (2.2 : ℝ) ≤ sofaArea ω K)
@@ -75,8 +78,8 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     exact ⟨ω - (π / 2 - ω), ⟨by linarith, by linarith⟩,
       subset_closure m1, subset_closure m3, subset_closure m2⟩
 
-/-- A motion with angle `ω` extends to a right-angle motion whenever the SAME
-sofa has width at most one in all additional directions. -/
+/-- If a moving sofa of angle `ω < π/2` has width at most one in every direction `u_t` with
+`t ∈ [ω, π/2]`, a rotated copy of it has a right-angle motion. -/
 theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) (hω : ω < π / 2)
     (hwidth : ∀ p ∈ S, ∀ q ∈ S, ∀ t ∈ Icc ω (π / 2),
@@ -177,8 +180,8 @@ theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ}
       zero_add, one_smul]
     exact hm.finish q hq
 
-/-- The specified monotone sofa extends to a right-angle motion from pinned
-bounds on its own cap. No balancedness assumption is used. -/
+/-- A monotone sofa of angle `ω ∈ [arcsec(11/5), π/2)` and area at least `11/5`, whose cap satisfies
+the pinned bounds (19), has a rotated copy with a right-angle motion. -/
 theorem right_angle_motion_of_pinned_bounds {S : Set (ℝ × ℝ)} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Ico arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S)

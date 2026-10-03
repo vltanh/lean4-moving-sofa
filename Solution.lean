@@ -153,7 +153,8 @@ private theorem sofaConstant_eq_volume_baek (P : Baek.GerverParams) (hP : P.IsSo
     (le_iSup₂ (f := fun (S : Set (ℝ × ℝ)) (_ : Baek.IsMovingSofa S) => volume S) _ h.1)
 
 /-- The two Gerver's sofas have the same area: `Bridge.gerversSofa_eq`. -/
-private theorem volume_gerversSofa_eq_baek (P : Baek.GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+private theorem volume_gerversSofa_eq_baek (P : Baek.GerverParams) (hP : P.IsSolution)
+    (hPb : P.InBox) :
     volume gerversSofa = volume (Baek.gerverSofa P) := by
   rw [← Bridge.gerversSofa_eq P hP hPb]
   exact (MovingSofaBridge.volume_coordinates_image gerversSofa).symm

@@ -32,6 +32,8 @@ section
 
 variable (D : GerverConstants)
 
+/-! The coefficients and translations of the first three phases of the path. -/
+
 def a1 : ℝ := ((D.A + 1 / 2) * sin D.φ + (D.B + 1) * cos D.φ) / 2
 
 def b1 : ℝ := (D.φ - 1 - D.A) / 2
@@ -44,6 +46,7 @@ def k2 : ℝ × ℝ := D.k1 + rot D.φ (-D.B / 2, 1 / 4)
 
 def k3 : ℝ × ℝ := D.k2 + rot D.θ (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2)
 
+/-- Romik's parameters rebuilt from Gerver's four constants. -/
 def toRomik : GerverParams where
   φ := D.φ
   θ := D.θ
@@ -97,16 +100,19 @@ section
 /-- The reflection about the vertical line through the middle of the path. -/
 def reflect (D : GerverConstants) (q : ℝ × ℝ) : ℝ × ℝ := (2 * D.k3.1 - q.1, q.2)
 
+/-- The fifth phase is the reflection of the first. -/
 theorem x5_reflection (D : GerverConstants) (t : ℝ) :
     D.toRomik.x₅ (π / 2 - t) = D.reflect (D.toRomik.x₁ t) := by
   ext <;> simp only [toRomik, GerverParams.x₅, GerverParams.x₁, reflect, k1,
     rot, sin_pi_div_two_sub, cos_pi_div_two_sub, Prod.fst_add, Prod.snd_add] <;> ring
 
+/-- The fourth phase is the reflection of the second. -/
 theorem x4_reflection (D : GerverConstants) (t : ℝ) :
     D.toRomik.x₄ (π / 2 - t) = D.reflect (D.toRomik.x₂ t) := by
   ext <;> simp only [toRomik, GerverParams.x₄, GerverParams.x₂, reflect,
     rot, sin_pi_div_two_sub, cos_pi_div_two_sub, Prod.fst_add, Prod.snd_add] <;> ring
 
+/-- The third phase is its own reflection. -/
 theorem x3_reflection (D : GerverConstants) (t : ℝ) :
     D.toRomik.x₃ (π / 2 - t) = D.reflect (D.toRomik.x₃ t) := by
   ext <;> simp only [toRomik, GerverParams.x₃, reflect,

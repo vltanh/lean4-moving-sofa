@@ -10,20 +10,21 @@ right-angled corner of a hallway of unit width. Jineon Baek, *Optimality of Gerv
 - **optimality:** Baek's whole proof, with the results it takes from the literature, and the structure
   of Gerver's sofa (Theorem 8.4.1), which the paper states without proof;
 - **uniqueness:** every moving sofa with the area of Gerver's sofa is congruent to it. So Gerver's sofa
-  is, up to rigid motions, the only moving sofa of maximum area. Baek's paper does not prove this, and
-  Google DeepMind's formal-conjectures lists it as an open problem. The argument was written by ChatGPT
-  Pro 6 (OpenAI) for this repository and has not been peer reviewed; Lean's kernel checks every step of
-  the formal proof;
-- **formal-conjectures' statements:** the same two results with the definitions of Google DeepMind's
-  formal-conjectures, including its statement of the uniqueness, which it lists as open.
+  is, up to rigid motions, the only moving sofa of maximum area. Baek's paper does not prove this. The
+  argument was written by ChatGPT Pro 6 (OpenAI) for this repository and has not been peer reviewed;
+  Lean's kernel checks every step of the formal proof;
+- **the bridge to formal-conjectures:** Google DeepMind's formal-conjectures states the problem with
+  definitions of its own. They describe the same moving sofas, the same optimal area and the same
+  Gerver's sofa as Baek's, so formal-conjectures' statements follow from the first two results,
+  including its statement of the uniqueness, which it lists as open.
 
 ## The three parts
 
-| Part | Content | State |
-| --- | --- | --- |
-| [`MovingSofaOptimality/`](MovingSofaOptimality) | the formalization of Baek's paper, audited in [`REPORT.md`](REPORT.md) | complete |
-| [`MovingSofaUniqueness/`](MovingSofaUniqueness) | the uniqueness of Gerver's sofa, in the definitions of [`MovingSofaOptimality`](MovingSofaOptimality); described in [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md) | complete |
-| [`MovingSofaUniquenessFC/`](MovingSofaUniquenessFC) | formal-conjectures' statements, proved from the first two parts through the definitions of [formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean); described in [`MovingSofaUniquenessFC/README.md`](MovingSofaUniquenessFC/README.md) | complete |
+| Part | Content |
+| --- | --- |
+| [`MovingSofaOptimality/`](MovingSofaOptimality) | the formalization of Baek's paper, audited in [`REPORT.md`](REPORT.md) |
+| [`MovingSofaUniqueness/`](MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions; described in [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md) |
+| [`MovingSofaBridge/`](MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's; described in [`docs/BRIDGE.md`](docs/BRIDGE.md) |
 
 [`Challenge.lean`](Challenge.lean) states the main results of the three parts in Mathlib's vocabulary, and
 [`Solution.lean`](Solution.lean) proves them.
@@ -33,13 +34,13 @@ right-angled corner of a hallway of unit width. Jineon Baek, *Optimality of Gerv
 ### Optimality
 
 - **All numbered results of the paper** (Chapters 1–8), proved along the paper's arguments, and the
-  main theorem, Theorem 1.1.1 ([`theorem1_1_1`](MovingSofaOptimality/Main.lean#L318)). Where the paper's statements contain slips, the
+  main theorem, Theorem 1.1.1 ([`MovingSofaOptimality.theorem1_1_1`](MovingSofaOptimality/Main.lean#L318)). Where the paper's statements contain slips, the
   intended statements are proved. [`REPORT.md`](REPORT.md) lists every correction; no result had to be weakened.
 - **The cited results used in proofs:**
-  - Schneider's area formula \|K\| = ½ ∫ h_K dσ_K for planar convex bodies ([`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L592),
+  - Schneider's area formula \|K\| = ½ ∫ h_K dσ_K for planar convex bodies ([`MovingSofaOptimality.area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L592),
     in [`MovingSofaOptimality/External/`](MovingSofaOptimality/External));
   - the existence and uniqueness of the solution of Romik's system of equations that defines Gerver's
-    sofa ([`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L387), [`GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L393), also in [`MovingSofaOptimality/External/`](MovingSofaOptimality/External));
+    sofa ([`MovingSofaOptimality.GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L387), [`MovingSofaOptimality.GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L393), also in [`MovingSofaOptimality/External/`](MovingSofaOptimality/External));
   - the facts the paper cites from convex geometry and measure theory, which are proved where they
     are used or come from Mathlib.
 - **The structure of Gerver's sofa** (Theorem 8.4.1, and with it Theorems 6.1.2 and 8.4.2), and its area,
@@ -48,68 +49,72 @@ right-angled corner of a hallway of unit width. Jineon Baek, *Optimality of Gerv
 ### Uniqueness
 
 - **The theorem:** a moving sofa whose area equals that of Gerver's sofa is mapped onto Gerver's sofa,
-  as a set, by a rotation about the origin followed by a translation ([`image_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L142)).
-- **Equivalent forms:** a moving sofa has the area of Gerver's sofa if and only if a rigid motion maps
-  it onto Gerver's sofa ([`volume_eq_gerver_iff`](MovingSofaUniqueness/Main.lean#L178)); the moving sofas of maximum area are exactly the
-  moving sofas that a rigid motion maps onto Gerver's sofa ([`isGlobalMax_iff`](MovingSofaUniqueness/Main.lean#L188)); a maximum exists and
-  any two are congruent ([`globalMax_congruent`](MovingSofaUniqueness/Main.lean#L161), [`exists_globalMax_unique_up_to_rigid`](MovingSofaUniqueness/Main.lean#L200)).
+  as a set, by a rotation about the origin followed by a translation
+  ([`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L233)).
 - **The proof** monotonizes the sofa, extends its motion to a right angle, shows that the cap of the
   resulting sofa satisfies Baek's injectivity condition, and then uses the equality case of Baek's upper
   bound to identify it with Gerver's cap; regular closedness of Gerver's sofa recovers the original set.
-  [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md) maps each step of the informal proof, [note 20](docs/uniqueness/20-complete-paper-proof.md), to Lean.
+  The library has one module per proposition of the informal proof, [note 20](docs/uniqueness/20-complete-paper-proof.md);
+  [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md) maps each step to Lean.
 
-### Formal-conjectures' statements
+### The bridge to formal-conjectures
 
 [formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean)
-defines moving sofas in `EuclideanSpace ℝ (Fin 2)`, with motions that are continuous paths of affine
-isometries starting at the identity, the sofa constant as the supremum of their areas, and Gerver's
-sofa from Gerver's four constants A, B, φ, θ through a rotation path defined by integrals. With these
-definitions, [`MovingSofaUniquenessFC`](MovingSofaUniquenessFC) proves:
+places moving sofas in `EuclideanSpace ℝ (Fin 2)` and moves them by continuous paths of affine
+isometries that start at the identity; it defines the sofa constant as the supremum of their areas, and
+Gerver's sofa from Gerver's four constants through a rotation path defined by integrals. Baek's paper
+places them in `ℝ × ℝ`, moves them by a continuous rotation angle and translation, and takes Gerver's
+sofa from Romik's 22 parameters. The bridge proves that, read in the coordinates `(p 0, p 1)`, the two
+describe the same objects:
 
-- `MovingSofa.GerversSofa.ABφθSpec.existsUnique`: Gerver's system has exactly one solution, proved
-  analytically, without numerical certificates;
-- [`MovingSofa.isMovingSofa_gerversSofa`](Challenge.lean#L345) and [`MovingSofa.sofaConstant_eq_volume_gerversSofa`](Challenge.lean#L349): Gerver's
-  sofa is a moving sofa and its area is the sofa constant (marked solved in formal-conjectures);
-- [`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](Challenge.lean#L353): a moving sofa has area the sofa
-  constant if and only if an isometry maps Gerver's sofa onto it (marked open in formal-conjectures).
+- [`Bridge.isMovingSofa_iff`](Challenge.lean#L363): a set is a moving sofa of formal-conjectures if and only if it lies in the
+  horizontal side of the hallway and its coordinates form a moving sofa of Baek's;
+- [`Bridge.sofaConstant_eq`](Challenge.lean#L371): the sofa constant is the supremum of the areas of Baek's moving sofas;
+- [`Bridge.gerversSofa_eq`](Challenge.lean#L379): formal-conjectures' Gerver's sofa is Baek's, in coordinates. Along the way,
+  formal-conjectures' Gerver's constants are proved unique on their whole domain by elementary
+  inequalities, without numerical certificates ([`MovingSofaBridge.GerverConstants.spec_unique`](MovingSofaBridge/GerverConstants.lean#L1283)).
 
-The proof shows that the two notions of moving sofa agree, that the two descriptions of Gerver's sofa
-give the same set, and then transports the first two parts;
-[`MovingSofaUniquenessFC/README.md`](MovingSofaUniquenessFC/README.md) describes it.
+The bridge uses no result about optimal sofas. [`Solution.lean`](Solution.lean) then derives formal-conjectures'
+statements from Baek's in a few lines each. [`docs/BRIDGE.md`](docs/BRIDGE.md) describes the proof.
 
 ### Status
 
-`lake build` succeeds, and the only `sorry`s are the nine statements of [`Challenge.lean`](Challenge.lean). There are
-no `axiom`s, and [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the three libraries uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
-[`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). Run it with `lake env lean scripts/Audit.lean`; it also prints, for
-each result of the paper and each step of the uniqueness proof, the results from prior work that its
-proof uses.
+`lake build` succeeds, and the only `sorry`s are the twelve statements of [`Challenge.lean`](Challenge.lean). There
+are no `axiom`s, and [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the three libraries uses only
+[`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). Run it with `lake env lean scripts/Audit.lean`; it also prints, for
+each result of the paper, each step of the uniqueness proof and each bridge theorem, the results from
+prior work that its proof uses.
 
 ## The main results
 
 [`Challenge.lean`](Challenge.lean) states the results in Mathlib's vocabulary only, with its own copies of the
-definitions (the hallway, moving sofas, Romik's parameters and Gerver's sofa, and formal-conjectures'
-definitions), so that it can be read without the rest of the repository. The definitions are a verbatim
-copy of [`ChallengeDefs.lean`](ChallengeDefs.lean), which the libraries and [`Solution.lean`](Solution.lean) use, and
-`scripts/sync_challenge_defs.py --check` checks the copy. [`Solution.lean`](Solution.lean) proves the theorems from the
-libraries.
+definitions, so that it can be read without the rest of the repository. It has three namespaces, one
+per set of definitions and one for the bridge:
 
-- [`gerver_params_exists`](Challenge.lean#L313) and [`gerver_params_unique`](Challenge.lean#L317): Romik's system of equations (27)–(44) has exactly
-  one solution with φ ∈ [0.039, 0.04] and θ ∈ [0.68, 0.69]. So Gerver's sofa, the shape of the rotation
-  path these parameters define, is well defined.
-- [`gerver_sofa_area`](Challenge.lean#L323): Gerver's sofa has area between 2.2192 and 2.2199. Gerver's value is 2.21953…;
-  this ties the shape defined from Romik's parameters to the sofa Gerver found.
-- [`gerver_sofa_optimal`](Challenge.lean#L329): Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
-  of Gerver's sofa (Baek's Theorem 1.1.1).
-- [`gerver_sofa_unique`](Challenge.lean#L335): every moving sofa with the area of Gerver's sofa is mapped onto Gerver's sofa
-  by a rotation about the origin followed by a translation.
-- Formal-conjectures' four statements, with its definitions: `MovingSofa.GerversSofa.ABφθSpec.existsUnique`,
-  [`MovingSofa.isMovingSofa_gerversSofa`](Challenge.lean#L345), [`MovingSofa.sofaConstant_eq_volume_gerversSofa`](Challenge.lean#L349) and
-  [`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](Challenge.lean#L353). The only change to its definitions is
-  an explicit name for its anonymous topology instance on `E(2)`.
+- `Baek`, the definitions of Baek's paper (the hallway, moving sofas, Romik's parameters and Gerver's
+  sofa):
+  - [`Baek.gerver_params_exists`](Challenge.lean#L328) and [`Baek.gerver_params_unique`](Challenge.lean#L332): Romik's system of equations (27)–(44) has exactly
+    one solution with φ ∈ [0.039, 0.04] and θ ∈ [0.68, 0.69], so Gerver's sofa is well defined;
+  - [`Baek.gerver_sofa_area`](Challenge.lean#L338): Gerver's sofa has area between 2.2192 and 2.2199. Gerver's value is 2.21953…;
+    this ties the shape defined from Romik's parameters to the sofa Gerver found;
+  - [`Baek.gerver_sofa_optimal`](Challenge.lean#L344): Gerver's sofa is a moving sofa, and every moving sofa has area at most the
+    area of Gerver's sofa (Baek's Theorem 1.1.1);
+  - [`Baek.gerver_sofa_unique`](Challenge.lean#L351): every moving sofa with the area of Gerver's sofa is mapped onto Gerver's sofa
+    by a rotation about the origin followed by a translation.
+- `FormalConjectures.MovingSofa`, the definitions of formal-conjectures, restated verbatim in that
+  namespace (formal-conjectures uses `MovingSofa`), with an explicit name for its anonymous topology
+  instance on `E(2)`:
+  - `FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`: Gerver's system has exactly one solution;
+  - [`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](Challenge.lean#L388) and [`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](Challenge.lean#L392): Gerver's sofa is a
+    moving sofa whose area is the sofa constant (marked solved in formal-conjectures);
+  - [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](Challenge.lean#L396): a moving sofa has area the sofa
+    constant if and only if an isometry maps Gerver's sofa onto it (marked open in formal-conjectures).
+- `Bridge`: the three theorems above, [`Bridge.isMovingSofa_iff`](Challenge.lean#L363), [`Bridge.sofaConstant_eq`](Challenge.lean#L371) and [`Bridge.gerversSofa_eq`](Challenge.lean#L379).
 
-[`comparator.json`](comparator.json) configures Lake's Comparator, which checks in a sandbox that [`Solution.lean`](Solution.lean) proves
-exactly the statements of [`Challenge.lean`](Challenge.lean) with the standard axioms only:
+The definitions are a verbatim copy of [`ChallengeDefs.lean`](ChallengeDefs.lean), which the libraries and
+[`Solution.lean`](Solution.lean) use, and `scripts/sync_challenge_defs.py --check` checks the copy.
+[`comparator.json`](comparator.json) configures Lake's Comparator, which checks in a sandbox that [`Solution.lean`](Solution.lean)
+proves exactly the twelve statements of [`Challenge.lean`](Challenge.lean) with the standard axioms only:
 
 ```sh
 lake env lake comparator --config=comparator.json
@@ -118,12 +123,12 @@ lake env lake comparator --config=comparator.json
 ## Palomar
 
 The repository is packaged for the [Palomar](https://palomar-registry.org) registry of machine-checked
-proofs. Version 1 of its entry, PALOMAR-2026-10-02-000008, registers the optimality part (commit
-`d0b42d2`).
+proofs. Its entry is PALOMAR-2026-10-02-000008: version 1 registers the optimality part (commit
+`d0b42d2`), and version 2 adds the uniqueness theorem (commit `cf4feff`).
 
 - [`Challenge.lean`](Challenge.lean) holds the statements of record;
 - [`Solution.lean`](Solution.lean) holds their proofs;
-- [`comparator.json`](comparator.json), the only Comparator configuration, selects the nine compared theorems;
+- [`comparator.json`](comparator.json), the only Comparator configuration, selects the twelve compared theorems;
 - [`formalization.yaml`](formalization.yaml) records the metadata: sources, scope, divergences from the
   paper, automation and review;
 - [`LICENSE`](LICENSE) holds the licence.
@@ -167,10 +172,10 @@ only the standard axioms. The three differ as follows. The other two columns des
 
 | | This repository | deancureton/MovingSofa | RuifengCao/sofa-formal |
 | --- | --- | --- | --- |
-| Statement | its own [`Challenge.lean`](Challenge.lean): Gerver's sofa is a moving sofa, no moving sofa has a larger area, and every moving sofa of that area is congruent to it; and the formal-conjectures statements | the formal-conjectures statement | the formal-conjectures statement |
+| Statement | its own [`Challenge.lean`](Challenge.lean): Gerver's sofa is a moving sofa, no moving sofa has a larger area, and every moving sofa of that area is congruent to it; the bridge between the two sets of definitions; and the formal-conjectures statements | the formal-conjectures statement | the formal-conjectures statement |
 | Uniqueness of the optimal sofa | proved, also in formal-conjectures' form | not proved | not proved |
 | Moving sofas | the motion may start from a translate of the set, as in the paper | the motion starts at the identity | the motion starts at the identity |
-| Gerver's sofa | Romik's description: 22 parameters satisfying his equations (27)–(44), with exactly one solution in a stated box; and Gerver's description, proved to give the same set | Gerver's description: four constants satisfying four equations, with exactly one solution on a closed domain | Gerver's description, as in MovingSofa |
+| Gerver's sofa | Romik's description: 22 parameters satisfying Romik's equations (27)–(44), with exactly one solution in a stated box; and Gerver's description, proved to give the same set | Gerver's description: four constants satisfying four equations, with exactly one solution on a closed domain | Gerver's description, as in MovingSofa |
 | Area of Gerver's sofa | between 2.2192 and 2.2199 | at least 2.2 | the bounds that the proof needs |
 | The paper's use of Green's theorem | replaced by direct computations of the areas | a Green-type identity, proved with Jordan curve results from other libraries | replaced by direct computations of the areas |
 | Dependencies | Mathlib | Mathlib, jordan_pick and leancert, and vendored copies of Trela's GerverSofaLean, lean-pool and TauCeti | Mathlib |
@@ -202,7 +207,7 @@ inequalities verified by interval arithmetic.
 - **Missing hypotheses:** none.
 - **Redundant hypotheses:** several, listed in Section 5 of the report; the Lean statements omit them.
 - **Use of cited results:** correct, except for Gerver's Theorem 2 (E12). Romik's assertion that the
-  solution of his system is unique is used by the paper without proof and is proved here.
+  solution of the system is unique is used by the paper without proof and is proved here.
 
 For the uniqueness proof, [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md) records how the formal proof follows the informal one and
 where it departs from it. The formalization found no gap in the argument. It found five helper lemmas
@@ -212,8 +217,8 @@ not part of their statements; they are corrected.
 ## Credits
 
 The-Anh Vu-Le is the author and maintainer of this repository. AI systems wrote the code, the proofs
-and the documents at his request. No human has reviewed the proofs; Lean's kernel checks every one of
-them.
+and the documents at the author's request. No human has reviewed the proofs; Lean's kernel checks every
+one of them.
 
 ### Formalizing Baek's paper
 
@@ -249,16 +254,16 @@ Opus 5.5 (Anthropic, model `claude-opus-5-5`), running in Claude Code 2.1.285.
     every statement compiled.
   - Eight sub-agents, each owning a group of files, proved those 54 again, starting from the draft's
     proofs; a ninth reviewed the statements against note 20. At most nine ran at the same time.
-  - The coordinating agent integrated the proofs, removed unused hypotheses, added the equivalent
-    forms of the theorem and its statement in the Challenge, reorganized the repository into its three
-    parts, and wrote the documents.
+  - The coordinating agent integrated the proofs, removed unused hypotheses, added the theorem's
+    statement to the Challenge, reorganized the repository into its three parts, and wrote the
+    documents.
 - **Time.** About 1 hour of elapsed time, from 2026-10-02 21:55 to 22:56 (US Central Time), up to the
   documented proof (commit `7f967fd`); every proof compiled after 27 minutes. The sub-agents worked
   about 0.9 hours in total. All agents together made 607 tool calls (400 of them by sub-agents),
   generated 0.5 million output tokens and read 1.7 million input tokens, plus 105 million tokens from
   the prompt cache.
 
-### Connecting to formal-conjectures
+### Bridging to formal-conjectures
 
 Claude Opus 5.5 (model `claude-opus-5-5`), in the same Claude Code session, ported ChatGPT Pro 6's draft
 of the connection to the repository's layout and completed it:
@@ -275,6 +280,24 @@ of the connection to the repository's layout and completed it:
   up to the documented proof (commit `dc408ab`). The sub-agents worked about 1.3 hours in total. All
   agents together made 561 tool calls (444 of them by sub-agents), generated 0.6 million output tokens
   and read 1.7 million input tokens, plus 129 million tokens from the prompt cache.
+
+### Consolidating
+
+Claude Opus 5.5 (model `claude-opus-5-5`), in a later session of Claude Code 2.1.287, simplified and
+reorganized the uniqueness and bridge libraries:
+
+- the 75 files of the two libraries became 12 modules, one per step of the argument; the
+  declarations that no final theorem uses, the regression tests and the lemmas that only renamed
+  others were removed (10,428 lines became 8,469);
+- the connection with formal-conjectures became the bridge library, which relates the definitions
+  only; the Challenge states its three theorems, and the Solution derives formal-conjectures'
+  statements from Baek's through them;
+- the Challenge's namespaces became `Baek`, `Bridge` and `FormalConjectures.MovingSofa`;
+- one sub-agent rewrote the documentation of the uniqueness modules, leaving their code unchanged.
+- **Time.** About 1 hour 15 minutes of elapsed time, on 2026-10-03 from 07:48 to 09:03 (US Central
+  Time). The sub-agent worked about 0.4 hours. All agents together made about 230 tool calls,
+  generated 0.4 million output tokens and read 1.4 million input tokens, plus 85 million tokens from
+  the prompt cache.
 
 ## Building
 
@@ -300,7 +323,7 @@ Both need Python 3 with SymPy and mpmath.
 After changing the code, update the links from the documents to the code with
 `python3 scripts/linkify_docs.py`, which reads the `.ilean` files that `lake build` writes. Check the
 Markdown tables with `python3 scripts/check_md_tables.py README.md REPORT.md docs/UNIQUENESS.md
-MovingSofaUniquenessFC/README.md`. After changing `ChallengeDefs.lean`, copy its definitions into the
+docs/BRIDGE.md`. After changing `ChallengeDefs.lean`, copy its definitions into the
 Challenge with `python3 scripts/sync_challenge_defs.py`.
 
 ## Layout
@@ -334,25 +357,23 @@ Challenge with `python3 scripts/sync_challenge_defs.py`.
 
 | Module | Content (propositions of [note 20](docs/uniqueness/20-complete-paper-proof.md)) |
 | --- | --- |
-| [`MovingSofaUniqueness/Main.lean`](MovingSofaUniqueness/Main.lean) | the theorem and its equivalent forms |
-| [`MovingSofaUniqueness/Reductions.lean`](MovingSofaUniqueness/Reductions.lean) | Propositions 3–6 in the form the theorem uses |
-| [`MovingSofaUniqueness/Rigid.lean`](MovingSofaUniqueness/Rigid.lean), [`MovingSofaUniqueness/SetRecovery.lean`](MovingSofaUniqueness/SetRecovery.lean) | rigid motions, and the recovery of a closed set from a regular closed superset of the same area |
-| [`MovingSofaUniqueness/Selection/`](MovingSofaUniqueness/Selection) | Proposition 1: polygon caps converging to a specified maximizing cap |
-| [`MovingSofaUniqueness/Variation/`](MovingSofaUniqueness/Variation) | Proposition 2 and the bounds (19): variations of the selected polygons and their limits |
-| [`MovingSofaUniqueness/Curvature/`](MovingSofaUniqueness/Curvature) | Proposition 3: curvature bounds and the injectivity condition for every maximizing right-angle cap |
+| [`MovingSofaUniqueness/Rigid.lean`](MovingSofaUniqueness/Rigid.lean) | rigid maps, and the recovery of a closed set from a regular closed superset of the same area |
+| [`MovingSofaUniqueness/Selection.lean`](MovingSofaUniqueness/Selection.lean) | Proposition 1: polygon caps converging to a given maximizing cap |
+| [`MovingSofaUniqueness/Variation.lean`](MovingSofaUniqueness/Variation.lean) | Proposition 2 and the bounds (19): variations of the selected polygons and their limits |
+| [`MovingSofaUniqueness/Curvature.lean`](MovingSofaUniqueness/Curvature.lean) | Proposition 3: curvature bounds and the injectivity condition for every maximizing right-angle cap |
 | [`MovingSofaUniqueness/AngleExtension.lean`](MovingSofaUniqueness/AngleExtension.lean) | Proposition 4: the right-angle motion of the same sofa |
-| [`MovingSofaUniqueness/Rigidity/`](MovingSofaUniqueness/Rigidity) | Proposition 5: equality in Mamikon's terms, and Gerver's cap up to a horizontal translation |
-| [`MovingSofaUniqueness/RegularClosed/`](MovingSofaUniqueness/RegularClosed) | Proposition 6: Gerver's sofa is the closure of its interior |
-| [`MovingSofaUniqueness/Tests/`](MovingSofaUniqueness/Tests) | examples for the equality conditions |
+| [`MovingSofaUniqueness/Rigidity.lean`](MovingSofaUniqueness/Rigidity.lean) | Proposition 5: equality in Mamikon's terms, and Gerver's cap up to a horizontal translation |
+| [`MovingSofaUniqueness/RegularClosed.lean`](MovingSofaUniqueness/RegularClosed.lean) | Proposition 6: Gerver's sofa is the closure of its interior |
+| [`MovingSofaUniqueness/Main.lean`](MovingSofaUniqueness/Main.lean) | the theorem |
 
-### `MovingSofaUniquenessFC/`: formal-conjectures' statements
+### `MovingSofaBridge/`: the bridge to formal-conjectures
 
 | Module | Content |
 | --- | --- |
-| [`MovingSofaUniquenessFC/Model.lean`](MovingSofaUniquenessFC/Model.lean), [`MovingSofaUniquenessFC/ReferenceDefs.lean`](MovingSofaUniquenessFC/ReferenceDefs.lean) | basic facts about formal-conjectures' definitions (in [`ChallengeDefs.lean`](ChallengeDefs.lean)) |
-| [`MovingSofaUniquenessFC/Bridge/`](MovingSofaUniquenessFC/Bridge) | coordinates, isometries, path lifting: the two motion models agree; the two Gerver sofas are the same set |
-| `MovingSofaUniquenessFC/Reference*.lean` | Gerver's four constants: existence from Romik's parameters, uniqueness by analytic inequalities, and the rotation path |
-| [`MovingSofaUniquenessFC/Extremal.lean`](MovingSofaUniquenessFC/Extremal.lean), [`MovingSofaUniquenessFC/Uniqueness.lean`](MovingSofaUniquenessFC/Uniqueness.lean), [`MovingSofaUniquenessFC/ReferenceFacts.lean`](MovingSofaUniquenessFC/ReferenceFacts.lean), [`MovingSofaUniquenessFC/Final.lean`](MovingSofaUniquenessFC/Final.lean) | formal-conjectures' four statements |
+| [`MovingSofaBridge/GerverConstants.lean`](MovingSofaBridge/GerverConstants.lean) | Gerver's four constants are unique, by elementary inequalities |
+| [`MovingSofaBridge/RomikParams.lean`](MovingSofaBridge/RomikParams.lean) | Gerver's four constants and Romik's parameters; the constants exist |
+| [`MovingSofaBridge/Motion.lean`](MovingSofaBridge/Motion.lean) | the two notions of moving sofa agree, and so do the two optimal areas |
+| [`MovingSofaBridge/GerverSofa.lean`](MovingSofaBridge/GerverSofa.lean) | the two Gerver's sofas are the same set |
 
 ### Other files
 
@@ -360,7 +381,7 @@ Challenge with `python3 scripts/sync_challenge_defs.py`.
 | --- | --- |
 | [`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean) | the statements of record and their proofs |
 | [`ChallengeDefs.lean`](ChallengeDefs.lean) | the definitions that the Challenge copies |
-| [`docs/`](docs) | the uniqueness proof: [`docs/UNIQUENESS.md`](docs/UNIQUENESS.md), and ChatGPT Pro's notes in [`docs/uniqueness/`](docs/uniqueness) |
+| [`docs/`](docs) | the uniqueness proof ([`docs/UNIQUENESS.md`](docs/UNIQUENESS.md), and ChatGPT Pro's notes in [`docs/uniqueness/`](docs/uniqueness)) and the bridge ([`docs/BRIDGE.md`](docs/BRIDGE.md)) |
 | [`scripts/`](scripts) | the axiom audit, the generators of the two generated files, the documentation tools |
 
 ## GitHub configuration

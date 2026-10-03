@@ -1,37 +1,32 @@
 module
 
-public import Mathlib
-public import MovingSofaOptimality.Balanced.MaximumPolygonCap
 public import MovingSofaOptimality.Balanced.BalancedMaximumSofa
-public import MovingSofaOptimality.Injectivity.LimitIneq
 
 /-!
 # Proposition 1: polygon caps converging to a given maximizing cap
 
-Let `K` be a cap that maximizes the sofa area `A_ω`. At stage `n`, maximize `A_ω` over the polygon
-caps with the `n`-th dyadic normals, minus a squared penalty on the differences between their
-support function and `K`'s at dyadic sample normals of total weight at most one. The polygon
-circumscribed about `K` has penalty zero, and two orthogonal samples keep the maximizers in a
-bounded box, so the maximizers exist (`exists_penalizedMax`) and a subsequence converges to `K`
-(`exists_selectedCapSequence`). This is Proposition 1 of `docs/uniqueness/20-complete-paper-proof.md`,
-with a fixed penalty on persistent samples in place of the note's vanishing penalty.
+Let `K` be a cap that maximizes the sofa area `A_ω`. At stage `n`, maximize the polygon sofa area
+`A_Θ` over the polygon caps with the `n`-th dyadic normals, minus a squared penalty on the
+differences between their support function and `K`'s at dyadic sample normals of total weight at
+most one. The polygon circumscribed about `K` has penalty zero, and two orthogonal samples keep the
+maximizers in a bounded box, so the maximizers exist (`exists_penalizedMax`) and a subsequence
+converges to `K` (`exists_selectedCapSequence`). This is Proposition 1 of
+`docs/uniqueness/20-complete-paper-proof.md`, with a fixed penalty on persistent samples in place of
+the note's vanishing penalty.
 -/
 
 @[expose] public section
 noncomputable section
 
 /-!
-## Finite centered support penalties
+## Weighted squared penalties
 
-The selector may be sampled on the polygon's defining normals. An outward
-floating-height perturbation then changes just one normal's sample values.
-A hierarchy of persistent samples can identify the target without a Riemann
-sum argument. The only global error required is the sum of the positive
-variation defects; it is controlled by the total sample weight.
-
-This module is scalar algebra. The application to actual support values and
-feasible polygons is separate. All estimates keep nonnegativity of the weights
-and finiteness of the sampling set explicit.
+`sampledPenalty s w target f` is the weighted squared distance between finitely many samples `f`
+and `target`, with nonnegative weights `w`. If `f` is within `η` of the target and `g` is within `r`
+of `f` at every sample, their penalties differ by at most the total weight times
+`2 * η * r + r ^ 2` (`sampledPenalty_change_bound`). If `g` differs from `f` only at the samples of
+one normal `t`, the total weight of these samples, `normalWeight`, replaces the total weight
+(`sampledPenalty_change_on_normal`).
 -/
 
 section
@@ -43,7 +38,8 @@ namespace MovingSofaUniqueness
 
 variable {ι α : Type*}
 
-/-- A finite squared-distance penalty centered at the target samples. -/
+/-- The weighted squared distance `∑ i ∈ s, w i * (f i - target i) ^ 2` between the samples `f`
+and `target`. -/
 def sampledPenalty (s : Finset ι) (w target f : ι → ℝ) : ℝ :=
   ∑ i ∈ s, w i * (f i - target i) ^ 2
 
@@ -51,15 +47,15 @@ theorem sampledPenalty_nonneg (s : Finset ι) (w target f : ι → ℝ)
     (hw : ∀ i ∈ s, 0 ≤ w i) : 0 ≤ sampledPenalty s w target f := by
   exact Finset.sum_nonneg fun i hi => mul_nonneg (hw i hi) (sq_nonneg _)
 
-/-- Every positively weighted sample is controlled by the full penalty. -/
+/-- Each weighted term is at most the whole penalty. -/
 theorem sample_sq_le_penalty (s : Finset ι) (w target f : ι → ℝ)
     (hw : ∀ i ∈ s, 0 ≤ w i) {i : ι} (hi : i ∈ s) :
     w i * (f i - target i) ^ 2 ≤ sampledPenalty s w target f := by
   exact Finset.single_le_sum (f := fun j => w j * (f j - target j) ^ 2)
     (fun j hj => mul_nonneg (hw j hj) (sq_nonneg _)) hi
 
-/-- Scalar square-increment estimate. It applies to positive and negative
-changes of the actual support, as needed after pinned-strip normalization. -/
+/-- When a point within `η` of `c` moves by at most `r`, its squared distance to `c` changes by at
+most `2 * η * r + r ^ 2`. -/
 theorem abs_square_increment_le {a b c η r : ℝ}
     (hη : 0 ≤ η) (ha : |a - c| ≤ η) (hab : |b - a| ≤ r) :
     |(b - c) ^ 2 - (a - c) ^ 2| ≤ 2 * η * r + r ^ 2 := by
@@ -78,8 +74,8 @@ theorem abs_square_increment_le {a b c η r : ℝ}
         exact pow_le_pow_left₀ (abs_nonneg _) hab 2
       nlinarith
 
-/-- Uniform changes of the sampled actual supports control the whole penalty.
-The estimate has an explicit quadratic remainder. -/
+/-- If `f` is within `η` of the target and `g` is within `r` of `f` at every sample, their penalties
+differ by at most the total weight times `2 * η * r + r ^ 2`. -/
 theorem sampledPenalty_change_bound (s : Finset ι) (w target f g : ι → ℝ)
     (hw : ∀ i ∈ s, 0 ≤ w i) {η r : ℝ} (hη : 0 ≤ η)
     (hclose : ∀ i ∈ s, |f i - target i| ≤ η)
@@ -105,8 +101,7 @@ theorem sampledPenalty_change_bound (s : Finset ι) (w target f g : ι → ℝ)
   simp only [Finset.sum_sub_distrib, Finset.sum_neg_distrib, ← Finset.sum_mul] at hsumU hsumL
   exact abs_le.mpr ⟨hsumL, hsumU⟩
 
-/-- The exact sample weight associated with a defining normal. Several samples
-from different levels may have the same normal; all of their weights count. -/
+/-- The total weight of the samples at the normal `t`. -/
 def normalWeight (s : Finset ι) (normal : ι → α) (w : ι → ℝ) (t : α) : ℝ := by
   classical
   exact ∑ i ∈ s.filter (fun i => normal i = t), w i
@@ -116,8 +111,9 @@ theorem normalWeight_nonneg (s : Finset ι) (normal : ι → α) (w : ι → ℝ
   classical
   exact Finset.sum_nonneg fun i hi => hw i (Finset.mem_filter.mp hi).1
 
-/-- If just one defining normal changes, only its total sample weight enters
-the penalty variation. No claim about unsampled supporting directions is needed. -/
+/-- If `g` differs from `f` only at the samples of the normal `t`, the bound of
+`sampledPenalty_change_bound` holds with the weight `normalWeight` of `t` in place of the total
+weight. -/
 theorem sampledPenalty_change_on_normal (s : Finset ι) (normal : ι → α)
     (w target f g : ι → ℝ) (hw : ∀ i ∈ s, 0 ≤ w i) (t : α)
     {η r : ℝ} (hη : 0 ≤ η)
@@ -145,8 +141,8 @@ theorem sampledPenalty_change_on_normal (s : Finset ι) (normal : ι → α)
     (fun i hi => hclose i (Finset.mem_filter.mp hi).1)
     (fun i hi => hchange i (Finset.mem_filter.mp hi).1 (Finset.mem_filter.mp hi).2)
 
-/-- Summing over the defining normals counts every sample exactly once.
-This is the reason a mesh-independent total error bound suffices. -/
+/-- Summing `normalWeight` over a set of normals that contains the normal of every sample gives the
+total weight. -/
 theorem sum_normalWeight (s : Finset ι) (D : Finset α)
     (normal : ι → α) (w : ι → ℝ) (hmap : ∀ i ∈ s, normal i ∈ D) :
     (∑ t ∈ D, normalWeight s normal w t) = ∑ i ∈ s, w i := by
@@ -163,7 +159,7 @@ theorem sum_normalWeight (s : Finset ι) (D : Finset α)
   · intro hn
     exact (hn (hmap i hi)).elim
 
-/-- Finite sample penalties are continuous in their actual sample values. -/
+/-- The penalty is continuous in the samples. -/
 theorem continuous_sampledPenalty (s : Finset ι) (w target : ι → ℝ) :
     Continuous (sampledPenalty s w target) := by
   unfold sampledPenalty
@@ -174,15 +170,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Finite penalties on the actual defining supports
+## Support penalties of polygon caps
 
-The data below include only finitely many upper defining normals, with
-nonnegative weights. Repeated normals are allowed. A circumscribed recovery
-polygon has exactly the target's values at all these normals, so its penalty
-is ZERO, rather than merely tending to zero.
-
-The use of actual support values is essential. Assigned heights are used only
-for a comparison whose direction is justified separately in `PolygonPenalty`.
+A `SupportSamples Θ` is a finite family of weighted samples of the defining normals `Θ^◇` of the
+polygon caps of `Θ`, in which a normal may occur several times. Its `penalty target K` is the
+weighted squared distance between the supports of `K` and `target` at the sampled normals. The
+polygon `polyCap Θ target` circumscribed about a cap has the supports of the cap on `Θ^◇`, so its
+penalty is zero (`penalty_recovery_zero`) and its penalized objective is at least the sofa area
+`A_ω` of the cap (`recovery_objective_ge`).
 -/
 
 section
@@ -192,7 +187,8 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- A finite, possibly repeated, sampling of the polygon's defining normals. -/
+/-- Finitely many weighted samples of the defining normals `Θ^◇`; a normal may occur several
+times. -/
 structure SupportSamples (Θ : AngleSet) where
   Index : Type
   finiteIndex : Fintype Index
@@ -207,12 +203,16 @@ namespace SupportSamples
 
 variable {Θ : AngleSet} (S : SupportSamples Θ)
 
+/-- The total weight of the samples. -/
 def totalWeight : ℝ := ∑ i, S.weight i
 
+/-- The weighted squared distance between the supports of `K` and `target` at the sampled
+normals. -/
 def penalty (target K : Set (ℝ × ℝ)) : ℝ :=
   sampledPenalty Finset.univ S.weight (fun i => supp target (S.normal i))
     (fun i => supp K (S.normal i))
 
+/-- The total weight of the samples at the normal `t`. -/
 def atNormal (t : ℝ) : ℝ :=
   normalWeight Finset.univ S.normal S.weight t
 
@@ -229,14 +229,14 @@ theorem sum_atNormal : (∑ t ∈ mpcDiamond Θ, S.atNormal t) = S.totalWeight :
   exact sum_normalWeight Finset.univ (mpcDiamond Θ) S.normal S.weight
     (fun i _ => mpc_mem_mpcDiamond.mpr (S.normal_mem i))
 
-/-- One positively weighted support sample is bounded by the whole penalty. -/
+/-- Each weighted squared support difference is at most the penalty. -/
 theorem sample_bound (target K : Set (ℝ × ℝ)) (i : S.Index) :
     S.weight i * (supp K (S.normal i) - supp target (S.normal i)) ^ 2 ≤
       S.penalty target K :=
   sample_sq_le_penalty Finset.univ S.weight (fun i => supp target (S.normal i))
     (fun i => supp K (S.normal i)) (fun i _ => S.weight_nonneg i) (Finset.mem_univ i)
 
-/-- The recovery penalty vanishes identically, at every finite mesh. -/
+/-- The polygon `polyCap Θ target` circumscribed about a cap has penalty zero. -/
 theorem penalty_recovery_zero {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.ω) :
     S.penalty target (polyCap Θ target) = 0 := by
   unfold penalty sampledPenalty
@@ -246,7 +246,8 @@ theorem penalty_recovery_zero {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.
   rw [nef_supp_polyCap hK (nef_diamond_subset_capAngles Θ (S.normal_mem i)), sub_self]
   simp
 
-/-- Therefore the recovery objective already has the full continuum value. -/
+/-- The penalized objective of the polygon circumscribed about a cap is at least the cap's sofa
+area `A_ω`. -/
 theorem recovery_objective_ge {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.ω) :
     sofaArea Θ.ω target ≤
       polyArea Θ (polyCap Θ target) - S.penalty target (polyCap Θ target) := by
@@ -259,7 +260,7 @@ theorem recovery_objective_ge {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.
   rw [heq]
   exact h
 
-/-- Continuity uses only finitely many actual support values. -/
+/-- The penalty is continuous along sequences whose supports converge at the sampled normals. -/
 theorem penalty_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K target : Set (ℝ × ℝ)}
     (hlim : ∀ i, Tendsto (fun n => supp (Ks n) (S.normal i)) atTop
       (𝓝 (supp K (S.normal i)))) :
@@ -269,7 +270,9 @@ theorem penalty_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K target : Set (ℝ × 
   exact (continuous_sampledPenalty Finset.univ S.weight
     (fun i => supp target (S.normal i))).continuousAt.tendsto.comp hv
 
-/-- A floating perturbation affects only the sample weight at its own normal. -/
+/-- If the sampled supports of `K` are within `η` of the target, and those of `K'` differ from them
+only at the normal `t`, by at most `ε`, the penalties differ by at most
+`atNormal t * (2 * η * ε + ε ^ 2)`. -/
 theorem penalty_change_one {target K K' : Set (ℝ × ℝ)} {t η ε : ℝ}
     (hη : 0 ≤ η)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η)
@@ -282,8 +285,8 @@ theorem penalty_change_one {target K K' : Set (ℝ × ℝ)} {t η ε : ℝ}
     (fun i => supp K' (S.normal i)) (fun i _ => S.weight_nonneg i) t hη
     (fun i _ => hclose i) (fun i _ => hsame i) (fun i _ => hchange i)
 
-/-- Uniform actual-support changes, including normalization after a pinned
-move, have a penalty bound controlled by the total sample weight. -/
+/-- If the sampled supports of `K` are within `η` of the target, and those of `K'` differ from them
+by at most `r`, the penalties differ by at most `totalWeight * (2 * η * r + r ^ 2)`. -/
 theorem penalty_change_uniform {target K K' : Set (ℝ × ℝ)} {η r : ℝ}
     (hη : 0 ≤ η)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η)
@@ -302,20 +305,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## A persistent sampled selector
+## Persistent dyadic samples
 
-Level m receives total weight 2^(-(m+1)), divided equally among its first- and
-second-quadrant defining normals. At stage n all levels m<=n are retained.
-Consequently the total weight is at most one and every fixed dyadic normal
-keeps a strictly positive weight at all later stages.
-
-The recovery polygon has zero penalty at EVERY stage. The coarsest level
-contains a pair of orthogonal directions and controls horizontal escape of a
-positive-objective maximizing sequence. No added box constraints or vanishing
-penalty coefficients are required.
-
-Only the total stationarity error is required to vanish; a uniform per-facet
-O(delta) bound is not asserted for persistent coarse samples.
+At stage `n`, `dyadicSamples` samples the normals `t` and `t + π/2` for the dyadic angles `t` of
+every level `m ≤ n`, level `m` carrying the total weight `(1/2)^(m+1)`. The total weight is
+`1 - (1/2)^(n+1) ≤ 1` (`dyadic_totalWeight`), and a sample of level `m` keeps the weight
+`dyadicLevelWeight m` at every stage `n ≥ m` (`persistent_sample_first`,
+`persistent_sample_second`). The circumscribed polygon has penalty zero at every stage, so its
+penalized objective is at least `A_ω` of the target (`dyadic_recovery_ge`).
 -/
 
 section
@@ -327,7 +324,8 @@ namespace MovingSofaUniqueness
 
 variable (ω : ℝ) (hω : ω ∈ Ioc 0 (π / 2))
 
-/-- The coefficient of one of the two copies of a level-m angle. -/
+/-- The weight of each sample of level `m`: the level's total weight `(1/2)^(m+1)`, divided equally
+among its samples `t` and `t + π/2`. -/
 def dyadicLevelWeight (m : ℕ) : ℝ :=
   (1 / 2 : ℝ) ^ (m + 1) /
     (2 * ((dyadicAngleSet ω hω m).angles.card : ℝ))
@@ -338,11 +336,13 @@ theorem dyadicLevelWeight_pos (m : ℕ) : 0 < dyadicLevelWeight ω hω m := by
   unfold dyadicLevelWeight
   positivity
 
-/-- Repeated coarse normals are intentionally retained as distinct samples. -/
+/-- The samples of stage `n`: a level `m ≤ n`, a dyadic angle `t` of level `m`, and a choice of `t`
+or `t + π/2`. An angle of several levels gives several samples. -/
 abbrev DyadicSampleIndex (n : ℕ) : Type :=
   Σ m : Fin (n + 1), ↥(dyadicAngleSet ω hω m.1).angles × Fin 2
 
-/-- The actual finite sample data for the stage-n polygon. -/
+/-- The samples of stage `n`: the normals `t` and `t + π/2` for the dyadic angles `t` of the levels
+`m ≤ n`. -/
 def dyadicSamples (n : ℕ) : SupportSamples (dyadicAngleSet ω hω n) where
   Index := DyadicSampleIndex ω hω n
   finiteIndex := by classical infer_instance
@@ -361,7 +361,7 @@ def dyadicSamples (n : ℕ) : SupportSamples (dyadicAngleSet ω hω n) where
           Or.inl (Or.inr ⟨t.1, ht, rfl⟩))
   weight_nonneg i := (dyadicLevelWeight_pos ω hω i.1.1).le
 
-/-- The finite mass of a single level, independent of its number of normals. -/
+/-- The samples of level `m` have total weight `(1/2)^(m+1)`. -/
 theorem dyadic_level_mass (m : ℕ) :
     (∑ _i : ↥(dyadicAngleSet ω hω m).angles × Fin 2,
       dyadicLevelWeight ω hω m) = (1 / 2 : ℝ) ^ (m + 1) := by
@@ -374,7 +374,7 @@ theorem dyadic_level_mass (m : ℕ) :
   push_cast
   field_simp
 
-/-- Exact finite geometric mass. -/
+/-- The total weight at stage `n` is `1 - (1/2)^(n+1)`. -/
 theorem dyadic_totalWeight (n : ℕ) :
     (dyadicSamples ω hω n).totalWeight = 1 - (1 / 2 : ℝ) ^ (n + 1) := by
   classical
@@ -401,7 +401,7 @@ theorem dyadic_totalWeight_le_one (n : ℕ) : (dyadicSamples ω hω n).totalWeig
   have h : 0 ≤ (1 / 2 : ℝ) ^ (n + 1) := by positivity
   linarith
 
-/-- The stage-n penalty used in the actual polygon optimization. -/
+/-- The penalty of stage `n`. -/
 def dyadicPenalty (n : ℕ) (target K : Set (ℝ × ℝ)) : ℝ :=
   (dyadicSamples ω hω n).penalty target K
 
@@ -409,7 +409,8 @@ theorem dyadicPenalty_nonneg (n : ℕ) (target K : Set (ℝ × ℝ)) :
     0 ≤ dyadicPenalty ω hω n target K :=
   (dyadicSamples ω hω n).penalty_nonneg target K
 
-/-- A first-quadrant dyadic sample retains its fixed level weight. -/
+/-- The sample at a dyadic angle `t` of level `m ≤ n` keeps the weight `dyadicLevelWeight m` in the
+penalty of stage `n`. -/
 theorem persistent_sample_first {m n : ℕ} (hmn : m ≤ n) {t : ℝ}
     (ht : t ∈ (dyadicAngleSet ω hω m).angles) (target K : Set (ℝ × ℝ)) :
     dyadicLevelWeight ω hω m * (supp K t - supp target t) ^ 2 ≤
@@ -421,7 +422,7 @@ theorem persistent_sample_first {m n : ℕ} (hmn : m ≤ n) {t : ℝ}
   rw [hn] at h
   exact h
 
-/-- The shifted dyadic sample has the same persistent weight. -/
+/-- The same for the sample at `t + π/2`. -/
 theorem persistent_sample_second {m n : ℕ} (hmn : m ≤ n) {t : ℝ}
     (ht : t ∈ (dyadicAngleSet ω hω m).angles) (target K : Set (ℝ × ℝ)) :
     dyadicLevelWeight ω hω m * (supp K (t + π / 2) - supp target (t + π / 2)) ^ 2 ≤
@@ -444,17 +445,13 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Existence of actual penalized polygon maximizers
+## Penalized polygon maximizers exist
 
-We maximize the polygon objective minus a finite sampled support penalty over
-ALL standard polygon caps of the fixed angle set. Two positively weighted
-orthogonal samples prevent translations from escaping. Positive objective
-prevents the width from escaping, by the paper's general polygon-width lemma.
-
-The compactness argument is the finite-support-value argument used for
-Theorem 3.4.3, with the continuous finite penalty retained. It does not assume
-that the selected polygons are balanced, and it imposes no artificial box
-constraint whose later variations would have to be justified.
+`IsPenalizedMax S target K` says that the polygon cap `K` maximizes the penalized objective
+`A_Θ(C) - S.penalty target C` over the polygon caps `C` of `Θ`. By Baek's Lemma 3.4.2 a polygon cap
+of positive area `A_Θ` has bounded width, and the penalty bounds its supports at two orthogonal
+sampled normals `t` and `t + π/2`, so it lies in a fixed box (`polygon_subset_sampleBox`). The
+compactness argument of Baek's Theorem 3.4.3 then gives a maximizer (`exists_penalizedMax`).
 -/
 
 section
@@ -464,7 +461,7 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- A common position bound from two controlled orthogonal support samples. -/
+/-- The half-width of the box of `polygon_subset_sampleBox`. -/
 def sampleBoxRadius (target : Set (ℝ × ℝ)) (t c q : ℝ) : ℝ :=
   let H := |supp target t| + |supp target (t + π / 2)| + c / q + 1
   H / sin t + H / cos t
@@ -477,7 +474,8 @@ theorem sampleBoxRadius_nonneg (target : Set (ℝ × ℝ)) {t c q : ℝ}
   unfold sampleBoxRadius
   positivity
 
-/-- Two sample bounds give a compact bounding rectangle for the actual cap. -/
+/-- If `q * (supp K s - supp target s) ^ 2 ≤ c` at `s = t` and at `s = t + π/2`, the polygon cap `K`
+lies in `[-R, R] × [0, 1]`, where `R = sampleBoxRadius target t c q`. -/
 theorem polygon_subset_sampleBox {Θ : AngleSet} {K target : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t c q : ℝ} (ht : t ∈ Θ.angles)
     (hc : 0 ≤ c) (hq : 0 < q)
@@ -531,14 +529,15 @@ theorem polygon_subset_sampleBox {Θ : AngleSet} {K target : Set (ℝ × ℝ)}
   change p ∈ Icc (-(H / sin t + H / cos t)) (H / sin t + H / cos t) ×ˢ Icc 0 1
   exact ⟨⟨by linarith, by linarith⟩, hy₀, hy₁⟩
 
-/-- Actual penalized maximality, with no balancing condition. -/
+/-- `K` maximizes the penalized objective `A_Θ(C) - S.penalty target C` over the polygon caps `C`
+of `Θ`. -/
 def IsPenalizedMax {Θ : AngleSet} (S : SupportSamples Θ)
     (target K : Set (ℝ × ℝ)) : Prop :=
   IsPolygonCap Θ K ∧ ∀ C, IsPolygonCap Θ C →
     polyArea Θ C - S.penalty target C ≤ polyArea Θ K - S.penalty target K
 
-/-- Positive penalized value implies a bound on the unpenalized objective and
-on the nonnegative penalty, using a supplied polygon-width bound. -/
+/-- If the polygon caps of positive area `A_Θ` have width at most `c`, a polygon cap with positive
+penalized objective has `A_Θ` and penalty at most `c`. -/
 theorem penalty_and_area_le_of_positive {Θ : AngleSet} (S : SupportSamples Θ)
     {target K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) {c : ℝ}
     (hcK : ∀ C, IsPolygonCap Θ C → 0 < polyArea Θ C → width C 0 ≤ c)
@@ -552,8 +551,8 @@ theorem penalty_and_area_le_of_positive {Θ : AngleSet} (S : SupportSamples Θ)
   have heq := theorem3_2_3 hK
   constructor <;> linarith
 
-/-- The penalized objective attains its supremum whenever a positive reference
-value and two positively weighted orthogonal samples are available. -/
+/-- The penalized objective has a maximizer if some polygon cap has a positive penalized objective
+and two samples of positive weight lie at normals `t` and `t + π/2`. -/
 theorem exists_penalizedMax {Θ : AngleSet} (S : SupportSamples Θ)
     (target : Set (ℝ × ℝ)) {t : ℝ} (ht : t ∈ Θ.angles)
     (i₀ i₁ : S.Index) (hi₀ : S.normal i₀ = t) (hi₁ : S.normal i₁ = t + π / 2)
@@ -673,16 +672,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## The approximation facts needed by the sampled selector
+## Limits of dyadic polygon caps
 
-Only upper semicontinuity of the varying polygon objective is needed. The
-niches of caps in a common horizontal box have a common bounded rectangle;
-this does NOT use niche containment in the cap or balancedness. Eventual
-membership in the open inner quadrants then gives the required lower bound
-for the niche areas.
-
-Agreement on all persistent dyadic supports identifies a cap. There is no
-uniform convergence theorem for the area functionals hidden in that step.
+Along a Hausdorff-convergent sequence of polygon caps in a common box, with dyadic angle sets of
+increasing level, the objective `A_Θ` is eventually at most `A_ω` of the limit plus any `ε > 0`
+(`dyadic_objective_limsup`): the areas of the caps are upper semicontinuous, and every point of the
+limit's niche eventually lies in the polygon niches, which stay in a common box
+(`polyNiche_subset_box`). A cap is determined by its supports at the dyadic angles `t` and at
+`t + π/2` (`caps_eq_of_dyadic_supports`), since support functions are continuous and the dyadic
+angles are dense in `[0, ω]`.
 -/
 
 section
@@ -691,7 +689,7 @@ open Set Real Filter Topology MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- A uniform bound for niches, without assuming that a niche is in its cap. -/
+/-- The niche of a cap in the box `[-R, R] × [0, 1]` lies in `[-R, R] × [0, 2R]`. -/
 theorem niche_subset_box {K : Set (ℝ × ℝ)} {ω R : ℝ}
     (hK : IsCap K ω) (hR : 0 ≤ R)
     (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) :
@@ -750,15 +748,15 @@ theorem niche_subset_box {K : Set (ℝ × ℝ)} {ω R : ℝ}
     linarith
   exact ⟨⟨hx₀.le, hx₁.le⟩, hy₀, hy₁⟩
 
-/-- The same rectangle bounds every sampled niche of a cap in the box. -/
+/-- The same box contains the polygon niche `polyNiche Θ K`. -/
 theorem polyNiche_subset_box {Θ : AngleSet} {K : Set (ℝ × ℝ)} {R : ℝ}
     (hK : IsCap K Θ.ω) (hR : 0 ≤ R)
     (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) :
     polyNiche Θ K ⊆ Icc (-R) R ×ˢ Icc 0 (2 * R) :=
   (proposition3_2_2 hK).2.trans (niche_subset_box hK hR hbox)
 
-/-- Upper semicontinuity of the varying dyadic polygon objective along a
-Hausdorff-convergent sequence. No maximizer hypothesis is used. -/
+/-- Along a Hausdorff-convergent sequence of dyadic polygon caps in a common box, `A_Θ` is
+eventually at most `A_ω` of the limit plus `ε`. -/
 theorem dyadic_objective_limsup {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {k : ℕ → ℕ} (hk : StrictMono k) {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (dyadicAngleSet ω hω (k n)) (Ks n))
@@ -780,8 +778,8 @@ theorem dyadic_objective_limsup {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
   unfold sofaArea
   linarith
 
-/-- Exact recovery comparison plus a one-sided objective limit forces the
-possibly varying nonnegative penalties to converge to zero. -/
+/-- If `M ≤ F n - P n` with `P n ≥ 0`, and for every `ε > 0` eventually `F n ≤ A + ε`, where
+`A ≤ M`, then `P n → 0`. -/
 theorem penalty_tendsto_zero_of_objective
     (F P : ℕ → ℝ) (M A : ℝ) (hP : ∀ n, 0 ≤ P n)
     (hselect : ∀ n, M ≤ F n - P n) (hA : A ≤ M)
@@ -796,8 +794,7 @@ theorem penalty_tendsto_zero_of_objective
     have h := hselect n
     linarith
 
-/-- Continuous functions agreeing on every dyadic angle agree on the whole
-closed rotation interval, including its two endpoints. -/
+/-- Continuous functions that agree at every dyadic angle agree on `[0, ω]`. -/
 theorem eqOn_of_dyadic_eq {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {f g : ℝ → ℝ} (hf : Continuous f) (hg : Continuous g)
     (heq : ∀ m, ∀ t ∈ (dyadicAngleSet ω hω m).angles, f t = g t) :
@@ -818,7 +815,7 @@ theorem eqOn_of_dyadic_eq {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
   rw [closure_Ioo hω.1.ne] at hclosure
   exact hclosure
 
-/-- Upper supports and the standard lower strips determine the entire cap. -/
+/-- Caps with the same supports at the upper normals `J_ω` are equal. -/
 theorem caps_eq_of_upper_supports {ω : ℝ} {K L : Set (ℝ × ℝ)}
     (hK : IsCap K ω) (hL : IsCap L ω)
     (heq : ∀ t ∈ jSet ω, supp K t = supp L t) : K = L := by
@@ -840,7 +837,7 @@ theorem caps_eq_of_upper_supports {ω : ℝ} {K L : Set (ℝ × ℝ)}
     rw [hA t ht]
     exact hp t ht
 
-/-- Persistent first and shifted dyadic supports identify a standard cap. -/
+/-- Caps with the same supports at the dyadic angles `t` and at `t + π/2` are equal. -/
 theorem caps_eq_of_dyadic_supports {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {K L : Set (ℝ × ℝ)} (hK : IsCap K ω) (hL : IsCap L ω)
     (heq : ∀ m, ∀ t ∈ (dyadicAngleSet ω hω m).angles,
@@ -865,17 +862,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Polygon selection which retains the specified maximizer
+## Selected polygon caps converge to the given maximizer
 
-The finite objective is A_n-P_n. The recovery polygon has P_n=0 exactly.
-Persistent dyadic sample weights identify every Hausdorff subsequential limit
-with the specified cap. Two coarsest samples give a common bounding box before
-compactness is used. Neither a vanishing penalty weight nor uniform convergence
-of the objectives is assumed.
-
-Only a convergent subsequence is selected, which is all the subsequent
-variational arguments require. Its finite polygons remain exact maximizers of
-A_n-P_n, never reclassified as unpenalized or balanced maxima.
+Let `target` be a cap maximizing `A_ω`, with positive value. At every stage a penalized maximizer
+exists (`exists_dyadic_penalizedMax`), with penalized objective at least `A_ω(target)`
+(`selected_objective_ge`), and the two samples of level `0` keep all of them in one box
+(`selected_sequence_bounded`). By Blaschke selection a subsequence converges to a cap `L`; the
+maximality of `target` and `dyadic_objective_limsup` force the penalties to zero, so `L` has the
+dyadic supports of `target` and equals it (`exists_selectedCapSequence`). This is Proposition 1 of
+note 20.
 -/
 
 section
@@ -884,7 +879,7 @@ open Set Real Filter Topology MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- Every stage has an actual penalized maximizer. -/
+/-- Every stage has a penalized maximizer, for a target cap of positive sofa area. -/
 theorem exists_dyadic_penalizedMax {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {target : Set (ℝ × ℝ)} (hK : IsCap target ω)
     (hpositive : 0 < sofaArea ω target) (n : ℕ) :
@@ -903,8 +898,8 @@ theorem exists_dyadic_penalizedMax {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
   · exact hR
   · exact hpositive.trans_le (dyadic_recovery_ge ω hω hK n)
 
-/-- The recovery comparison gives the continuum value as a lower bound for
-the selected finite penalized objective at every stage. -/
+/-- The penalized objective of a penalized maximizer is at least the sofa area `A_ω` of the
+target. -/
 theorem selected_objective_ge {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {target K : Set (ℝ × ℝ)} (hK : IsCap target ω) {n : ℕ}
     (hselected : IsPenalizedMax (dyadicSamples ω hω n) target K) :
@@ -915,8 +910,7 @@ theorem selected_objective_ge {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (proposition3_2_1 (Θ := dyadicAngleSet ω hω n) hK).2
   exact hrec.trans hmax
 
-/-- A common box for a full sequence of selected finite maximizers. Its bound
-uses the persistent coarsest samples, not any fine-grid angle denominator. -/
+/-- Penalized maximizers of all stages lie in one box `[-R, R] × [0, 1]`. -/
 theorem selected_sequence_bounded {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {target : Set (ℝ × ℝ)} (hK : IsCap target ω)
     (hpositive : 0 < sofaArea ω target)
@@ -944,7 +938,8 @@ theorem selected_sequence_bounded {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
   have h₁ := (persistent_sample_second ω hω (Nat.zero_le n) ht₀ target (Ks n)).trans hP
   exact polygon_subset_sampleBox (hKs n).1 ht₀n hc.le hq h₀ h₁
 
-/-- The exact data passed to the variational and limiting arguments. -/
+/-- A subsequence of penalized maximizers in one box `[-R, R] × [0, 1]`, converging to `target` in
+the Hausdorff distance. -/
 structure SelectedCapSequence (ω : ℝ) (hω : ω ∈ Ioc 0 (π / 2))
     (target : Set (ℝ × ℝ)) where
   index : ℕ → ℕ
@@ -956,7 +951,8 @@ structure SelectedCapSequence (ω : ℝ) (hω : ω ∈ Ioc 0 (π / 2))
   boxed : ∀ n, cap n ⊆ Icc (-radius) radius ×ˢ Icc 0 1
   tends : HausdorffTendsto cap target
 
-/-- Selection of the specified cap, rather than an arbitrary limit maximizer. -/
+/-- Proposition 1 of note 20: a subsequence of penalized polygon maximizers converges to a cap
+that maximizes `A_ω` with positive value. -/
 theorem exists_selectedCapSequence {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     {target : Set (ℝ × ℝ)} (hK : IsCap target ω)
     (hpositive : 0 < sofaArea ω target)

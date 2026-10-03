@@ -1,17 +1,6 @@
 module
 
-public import Mathlib.MeasureTheory.Integral.Bochner.Basic
-public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-public import Mathlib.Tactic
-public import MovingSofaOptimality.Convex.ConvexDomain
-public import MovingSofaOptimality.Convex.Mamikon
-public import Mathlib.MeasureTheory.Measure.OpenPos
-public import MovingSofaOptimality.Optimality.Concavity
-public import Mathlib.Analysis.Calculus.MeanValue
-public import MovingSofaOptimality.Main
 public import MovingSofaUniqueness.Rigid
-import Mathlib.Tactic.Ring
-import Mathlib.Tactic.NormNum
 
 /-!
 # Proposition 5: a maximizing cap with the injectivity condition is Gerver's cap
@@ -28,16 +17,13 @@ is a horizontal translate of Gerver's sofa (`sofa_eq_translate_of_upper_support`
 noncomputable section
 
 /-!
-## The scalar equality case behind Mamikon convexity
+## The square gap
 
-The Mamikon formula is one half the integral of a squared tangent displacement.
-The exact convexity gap is therefore a positive multiple of the squared L²
-distance between the two displacement functions. This module proves that scalar
-step without any moving-sofa definitions or unproved geometric assumptions.
-
-Integrability is explicit. In particular, the fact that Lean's integral of a
-nonintegrable function is defined to be zero cannot produce a spurious equality
-case here.
+Mamikon's formula writes an area as `halfSquareIntegral μ f = (1/2) ∫ f²` for a tangent
+displacement `f`. If `f ^ 2`, `g ^ 2` and `f * g` are integrable, the convexity gap of this
+functional along `(1 - c) f + c g` is `c (1 - c) / 2 · ∫ (f - g)²` for every `c`
+(`halfSquareIntegral_combo_gap`); at the midpoint the factor is `1/8`. So for `c ∈ (0, 1)` the gap
+vanishes if and only if `f = g` almost everywhere (`halfSquareIntegral_combo_eq_iff`).
 -/
 
 section
@@ -49,12 +35,11 @@ namespace MovingSofaUniqueness
 variable {X : Type*} [MeasurableSpace X]
 variable (μ : Measure X) {f g : X → ℝ}
 
-/-- The scalar functional appearing in Mamikon's formula. -/
+/-- Half the integral of `f ^ 2`, the form of Mamikon's area formula. -/
 noncomputable def halfSquareIntegral (f : X → ℝ) : ℝ :=
   (1 / 2) * ∫ x, (f x) ^ 2 ∂μ
 
-/-- Integrability of the squared displacement difference follows from the three
-integrable quadratic monomials. -/
+/-- If `f ^ 2`, `g ^ 2` and `f * g` are integrable, so is `(f - g) ^ 2`. -/
 theorem integrable_sq_sub
     (hf : Integrable (fun x => (f x) ^ 2) μ)
     (hg : Integrable (fun x => (g x) ^ 2) μ)
@@ -65,7 +50,7 @@ theorem integrable_sq_sub
   refine hsum.congr (Eventually.of_forall fun x => ?_)
   ring
 
-/-- Expanding the integral of a squared difference. -/
+/-- `∫ (f - g)² = ∫ f² + ∫ g² - 2 ∫ f g`. -/
 theorem integral_sq_sub
     (hf : Integrable (fun x => (f x) ^ 2) μ)
     (hg : Integrable (fun x => (g x) ^ 2) μ)
@@ -82,8 +67,7 @@ theorem integral_sq_sub
       have hsum : Integrable (fun x => (f x) ^ 2 + (g x) ^ 2) μ := hf.add hg
       rw [integral_sub hsum (hfg.const_mul 2), integral_add hf hg, integral_const_mul]
 
-/-- Expanding a squared affine combination before integrating. The identity is
-valid for every real `c`, not only for convex coefficients. -/
+/-- The expansion of `∫ ((1 - c) f + c g)²`, for every real `c`. -/
 theorem integral_sq_combo (c : ℝ)
     (hf : Integrable (fun x => (f x) ^ 2) μ)
     (hg : Integrable (fun x => (g x) ^ 2) μ)
@@ -106,7 +90,8 @@ theorem integral_sq_combo (c : ℝ)
         integral_add (hf.const_mul ((1 - c) ^ 2)) (hfg.const_mul (2 * c * (1 - c))),
         integral_const_mul, integral_const_mul, integral_const_mul]
 
-/-- Exact square-gap identity. At the midpoint the coefficient is `1/8`. -/
+/-- The convexity gap of `halfSquareIntegral` at `c` is `c (1 - c) / 2 · ∫ (f - g)²`; at the
+midpoint the factor is `1/8`. -/
 theorem halfSquareIntegral_combo_gap (c : ℝ)
     (hf : Integrable (fun x => (f x) ^ 2) μ)
     (hg : Integrable (fun x => (g x) ^ 2) μ)
@@ -118,7 +103,7 @@ theorem halfSquareIntegral_combo_gap (c : ℝ)
   rw [integral_sq_combo μ c hf hg hfg, integral_sq_sub μ hf hg hfg]
   ring
 
-/-- Zero squared L² distance is exactly almost-everywhere equality. -/
+/-- `∫ (f - g)² = 0` if and only if `f = g` almost everywhere. -/
 theorem integral_sq_sub_eq_zero_iff
     (hint : Integrable (fun x => (f x - g x) ^ 2) μ) :
     (∫ x, (f x - g x) ^ 2 ∂μ) = 0 ↔ f =ᵐ[μ] g := by
@@ -134,8 +119,8 @@ theorem integral_sq_sub_eq_zero_iff
     filter_upwards [h] with x hx
     simp [hx]
 
-/-- Equality in a nontrivial convex combination forces equality of the
-underlying displacement functions almost everywhere, and conversely. -/
+/-- For `c ∈ (0, 1)`, the convexity inequality of `halfSquareIntegral` is an equality if and only
+if `f = g` almost everywhere. -/
 theorem halfSquareIntegral_combo_eq_iff {c : ℝ} (hc : c ∈ Set.Ioo (0 : ℝ) 1)
     (hf : Integrable (fun x => (f x) ^ 2) μ)
     (hg : Integrable (fun x => (g x) ^ 2) μ)
@@ -163,10 +148,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Matching the four Mamikon equality intervals
+## The cap kernel is a horizontal translation
 
-This file proves the algebraic/integral propagation step independently of caps.
-Deriving `CapKernel` from vanishing Mamikon gaps is done in `MamikonCapKernel.lean`.
+`CapKernel φ f` collects the equations that equality in the four Mamikon terms of a cap imposes on
+the difference `f` of two support functions: `f(π/2) = 0`; on `[0, φ]`, `[π/2 - φ, π/2]` and
+`[π/2, π]`, the solutions `p cos t + q sin t` of the tangent equations with targets `π/2`, `π - φ`
+and `π`; and on `[φ, π/2 - φ]`, the integrated form of `f'(t) = f(t + π/2)`. Solving these in
+reverse order, as in the proof of Proposition 5 of note 20, gives `f(t) = a cos t` on `[0, π]` with
+`a = -f(π)` (`CapKernel.eq_horizontal_translation`).
 -/
 
 section
@@ -175,16 +164,14 @@ open Set Real MeasureTheory
 
 namespace MovingSofaUniqueness
 
-/-- The solved first-order equation of a tangent term, including its target value.
-The target can lie outside the interval on which the equation was solved. -/
+/-- `f(t) = p cos t + q sin t` on `[a, b]` and at the target `T`: the form of the solutions of the
+tangent equation `sin (T - t) f'(t) + cos (T - t) f(t) = f(T)`. -/
 def TangentKernel (f : ℝ → ℝ) (a b T : ℝ) : Prop :=
   ∃ p q : ℝ, EqOn f (fun t => p * cos t + q * sin t) (Icc a b) ∧
     f T = p * cos T + q * sin T
 
-/-- Consequences of the four separate zero square gaps.
-
-The middle relation is an integral identity, so no unjustified pointwise
-classical derivative or differentiability at the top support is assumed. -/
+/-- The equations imposed on the difference `f` of two support functions by equality in the four
+Mamikon terms of the cap. The middle equation `f'(t) = f(t + π/2)` is stated in integrated form. -/
 structure CapKernel (φ : ℝ) (f : ℝ → ℝ) : Prop where
   top : f (π / 2) = 0
   first : TangentKernel f 0 φ (π / 2)
@@ -193,7 +180,7 @@ structure CapKernel (φ : ℝ) (f : ℝ → ℝ) : Prop where
   third : TangentKernel f (π / 2 - φ) (π / 2) (π - φ)
   fourth : TangentKernel f (π / 2) π π
 
-/-- The upper-left quadrant is determined by the top value. -/
+/-- On `[π/2, π]`, `f(t) = -f(π) cos t`. -/
 theorem CapKernel.upper_left {φ : ℝ} {f : ℝ → ℝ} (h : CapKernel φ f) :
     EqOn f (fun t => -f π * cos t) (Icc (π / 2) π) := by
   obtain ⟨p, q, heq, hπ⟩ := h.fourth
@@ -205,7 +192,8 @@ theorem CapKernel.upper_left {φ : ℝ} {f : ℝ → ℝ} (h : CapKernel φ f) :
   intro t ht
   simpa [hp, hq] using heq ht
 
-/-- Equality in the four cap terms has only the horizontal-translation mode. -/
+/-- On `[0, π]`, `f(t) = -f(π) cos t`: the two support functions differ by a horizontal
+translation. -/
 theorem CapKernel.eq_horizontal_translation {φ : ℝ} {f : ℝ → ℝ}
     (hφ : φ ∈ Ioo 0 (π / 4)) (h : CapKernel φ f) :
     EqOn f (fun t => -f π * cos t) (Icc 0 π) := by
@@ -271,11 +259,13 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Equality cases for concave quadratic functionals
+## Equality in a concave quadratic functional
 
-Theorem 7.1.5 proves maximality from nonpositive first variations. Uniqueness also requires
-control of the equality case. The exact deficit identity below separates the first variation
-from the midpoint concavity gap; both terms are nonnegative at a maximum.
+A concave functional is constant on the segment between two of its global maximizers
+(`eq_on_segment_of_isMax`). For a quadratic functional, `f x - f y` is minus the first variation at
+`x` towards `y` plus four times the midpoint concavity gap (`quadratic_deficit_identity`). So the
+first variation at a maximizer towards another maximizer is zero (`dirDeriv_eq_zero_of_isMax`): it
+is at most zero by Baek's Theorem 7.1.5, and at least zero by concavity.
 -/
 
 section
@@ -296,8 +286,8 @@ theorem eq_on_segment_of_isMax (hc : D.IsConcave f) {x y : V}
   rw [hxy] at h
   nlinarith
 
-/-- The deficit of a quadratic functional is minus its first variation plus four times its
-midpoint concavity gap. No concavity or maximality assumption is needed for this identity. -/
+/-- For a quadratic functional, `f x - f y` is minus the first variation at `x` towards `y` plus
+four times the midpoint concavity gap. -/
 theorem quadratic_deficit_identity (hq : D.IsQuadratic f) (x y : V) :
     f x - f y = -D.dirDeriv f x y +
       4 * (f (D.comb (1 / 2) x y) - (f x + f y) / 2) := by
@@ -317,8 +307,8 @@ theorem quadratic_tangent_bound (hq : D.IsQuadratic f) (hc : D.IsConcave f) (x y
   have he := D.quadratic_deficit_identity hq x y
   nlinarith
 
-/-- A direction from one maximizer to another has zero first variation, not merely a
-nonpositive first variation. -/
+/-- The first variation of a concave quadratic functional at a global maximizer, towards another
+global maximizer, is zero. -/
 theorem dirDeriv_eq_zero_of_isMax (hq : D.IsQuadratic f) (hc : D.IsConcave f) {x y : V}
     (hmax : ∀ z, f z ≤ f x) (hxy : f y = f x) : D.dirDeriv f x y = 0 := by
   have hle := (theorem7_1_5 D hq hc x).1 hmax y
@@ -332,13 +322,15 @@ end MovingSofaOptimality
 end
 
 /-!
-## Equality in Mamikon's formula identifies the displacement functions
+## Equality in a Mamikon term
 
-The square-integrability hypotheses are proved from the bounded measurable
-functions supplied by Theorem 7.4.1. Equality cannot arise from Lean's default
-value for a nonintegrable integral. The result is first almost-everywhere
- equality and then pointwise equality on any interval where both displacements
-are continuous.
+For continuous supporting curves `z K` of bounded variation on `[a, b]`, Baek's Theorem 7.4.1
+writes Mamikon's area as `halfSquareIntegral` of the bounded tangent displacement
+`displacement K (z K)` (`mamikon_eq_halfSquareIntegral`). If `z` is affine under Minkowski
+combinations, so is the displacement (`displacement_combo`), and equality in Mamikon's convexity
+inequality makes the displacements of the two bodies agree almost everywhere
+(`displacement_ae_eq_of_mamikon_eq`), and everywhere on `(a, b)` if both are continuous there
+(`displacement_eqOn_of_mamikon_eq`).
 -/
 
 section
@@ -347,7 +339,8 @@ open Real Set MeasureTheory Filter MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- Signed tangent displacement from the positive endpoint of the support face. -/
+/-- The signed distance along the supporting line from the endpoint `vplus K t` of the support face
+to `z t`. -/
 def displacement (K : Set (ℝ × ℝ)) (z : ℝ → ℝ × ℝ) (t : ℝ) : ℝ :=
   dot (z t - vplus K t) (vvec t)
 
@@ -379,7 +372,7 @@ theorem displacement_mul_integrable (K₀ K₁ : ConvexBodySet) :
   exact hI.mono_set Ioo_subset_Icc_self
 
 include hab hb hz hzl in
-/-- Mamikon's area in the same restricted-measure form as `SquareGap`. -/
+/-- Mamikon's area is `halfSquareIntegral` of the displacement (Baek's Theorem 7.4.1). -/
 theorem mamikon_eq_halfSquareIntegral (K : ConvexBodySet) :
     mamikon K.1 a b (z K) =
       halfSquareIntegral (volume.restrict (Ioo a b)) (displacement K.1 (z K)) := by
@@ -391,7 +384,7 @@ variable (hlin : ∀ K₀ K₁, ∀ c ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
   z (convexBodyComb c K₀ K₁) t = (1 - c) • z K₀ t + c • z K₁ t)
 
 include hlin in
-/-- The signed displacement is affine in the convex body. -/
+/-- The displacement is affine under Minkowski combinations when `z` is. -/
 theorem displacement_combo (K₀ K₁ : ConvexBodySet) {c : ℝ}
     (hc : c ∈ Icc (0 : ℝ) 1) {t : ℝ} (ht : t ∈ Icc a b) :
     displacement (convexBodyComb c K₀ K₁).1 (z (convexBodyComb c K₀ K₁)) t =
@@ -402,8 +395,8 @@ theorem displacement_combo (K₀ K₁ : ConvexBodySet) {c : ℝ}
   ring
 
 include hab hb hz hzl hlin in
-/-- Equality in a nontrivial Mamikon convexity inequality gives a.e. equality
-of the underlying displacement functions. -/
+/-- For `c ∈ (0, 1)`, equality in Mamikon's convexity inequality makes the displacements agree
+almost everywhere. -/
 theorem displacement_ae_eq_of_mamikon_eq (K₀ K₁ : ConvexBodySet) {c : ℝ}
     (hc : c ∈ Ioo (0 : ℝ) 1)
     (heq : mamikon (convexBodyComb c K₀ K₁).1 a b (z (convexBodyComb c K₀ K₁)) =
@@ -436,9 +429,8 @@ theorem displacement_ae_eq_of_mamikon_eq (K₀ K₁ : ConvexBodySet) {c : ℝ}
   exact (halfSquareIntegral_combo_eq_iff μ hc hf hg hfg).mp heq
 
 include hab hb hz hzl hlin in
-/-- Continuity upgrades a.e. displacement equality on the open interval.
-Endpoint values are not asserted; the later support argument uses continuity
-of the support function itself at those endpoints. -/
+/-- For `c ∈ (0, 1)`, equality in Mamikon's convexity inequality makes displacements that are
+continuous on `(a, b)` agree there. -/
 theorem displacement_eqOn_of_mamikon_eq (K₀ K₁ : ConvexBodySet) {c : ℝ}
     (hc : c ∈ Ioo (0 : ℝ) 1)
     (heq : mamikon (convexBodyComb c K₀ K₁).1 a b (z (convexBodyComb c K₀ K₁)) =
@@ -455,12 +447,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Support regularity and the exact kernel of the tangent equation
+## Solving the support equations
 
-Only open arcs avoiding the possible top atom are differentiated. The support
-function itself is continuous at all endpoints. A constant integrating factor
-is first proved on the open interval and then extended by continuity; this
-also handles a target normal equal to the interval's right endpoint.
+Under Baek's condition `InjCond1` the support function `h_K` is differentiable at every
+`t ∈ [0, π/2) ∪ (π/2, π]`, with derivative `dot (vplus K t) (vvec t)`
+(`support_hasDerivAt_of_injCond1`), and `vplus K` is continuous inside each `UpperArc`. A
+continuous solution of the tangent equation `sin (T - t) f'(t) + cos (T - t) f(t) = f(T)` on
+`(a, b)` has the form `p cos t + q sin t` on `[a, b]` and at `T` (`tangentKernel_of_equation`), and
+a continuous solution of `f'(t) = f(t + L)` satisfies its integrated form
+(`integrated_middle_equation`).
 -/
 
 section
@@ -470,11 +465,12 @@ open MovingSofaUniqueness
 
 namespace MovingSofaUniqueness
 
-/-- An upper arc lies entirely on one side of the possible top atom. -/
+/-- `[a, b]` lies in `[0, π/2]` or in `[π/2, π]`. -/
 def UpperArc (a b : ℝ) : Prop :=
   (0 ≤ a ∧ b ≤ π / 2) ∨ (π / 2 ≤ a ∧ b ≤ π)
 
-/-- Equal one-sided support derivatives give an ordinary derivative. -/
+/-- Under `InjCond1`, `h_K` has derivative `dot (vplus K t) (vvec t)` at every
+`t ∈ [0, π/2) ∪ (π/2, π]`. -/
 theorem support_hasDerivAt_of_injCond1 {K : Set (ℝ × ℝ)}
     (hK : IsConvexBody K) (h1 : InjCond1 K) {t : ℝ}
     (ht : t ∈ Ico 0 (π / 2) ∪ Ioc (π / 2) π) :
@@ -496,7 +492,7 @@ theorem arc_mem_regular {a b t : ℝ} (h : UpperArc a b) (ht : t ∈ Ioo a b) :
   · exact Or.inl ⟨ha.trans ht.1.le, ht.2.trans_le hb⟩
   · exact Or.inr ⟨ha.trans_lt ht.1, ht.2.le.trans hb⟩
 
-/-- Positive support vertices are continuous on each open upper arc. -/
+/-- Under `InjCond1`, `vplus K` is continuous inside an upper arc. -/
 theorem vplus_continuousOn_arc {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) {a b : ℝ} (hArc : UpperArc a b) :
     ContinuousOn (vplus K) (Ioo a b) := by
@@ -516,7 +512,7 @@ theorem vplus_continuousOn_arc {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   · exact hfirst.mono (fun t ht => ⟨ha.trans_lt ht.1, ht.2.trans_le hb⟩)
   · exact hsecond.mono (fun t ht => ⟨ha.trans_lt ht.1, ht.2.trans_le hb⟩)
 
-/-- Any continuous supporting curve has continuous displacement on a regular arc. -/
+/-- The displacement of a continuous curve is continuous inside an upper arc. -/
 theorem displacement_continuousOn_arc {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) {a b : ℝ} (hArc : UpperArc a b) {z : ℝ → ℝ × ℝ}
     (hz : ContinuousOn z (Icc a b)) :
@@ -525,7 +521,7 @@ theorem displacement_continuousOn_arc {K : Set (ℝ × ℝ)} (hK : IsCap K (π /
   have hv : ContinuousOn vvec (Ioo a b) := by unfold vvec; fun_prop
   exact (hd.fst.mul hv.fst).add (hd.snd.mul hv.snd)
 
-/-- Explicit displacement to the intersection with the target supporting line. -/
+/-- The displacement of the intersection with the supporting line at `T`. -/
 theorem tangent_displacement_formula (K : Set (ℝ × ℝ)) {T t : ℝ} (ht : t < T) :
     displacement K (tangentParam K T) t =
       (supp K T - supp K t * cos (T - t)) / sin (T - t) -
@@ -534,14 +530,14 @@ theorem tangent_displacement_formula (K : Set (ℝ × ℝ)) {T t : ℝ} (ht : t 
     dot_add_left, dot_smul_left, dot_uvec_vvec, dot_vvec_self,
     mul_zero, mul_one, zero_add]
 
-/-- Explicit displacement to the outer corner. -/
+/-- The displacement of the outer corner. -/
 theorem outer_displacement_formula (K : Set (ℝ × ℝ)) (t : ℝ) :
     displacement K (outerCorner K) t =
       supp K (t + π / 2) - dot (vplus K t) (vvec t) := by
   rw [displacement, dot_sub_left, inj_dot_outerCorner_vvec]
 
-/-- Complete kernel of the tangent equation, with no differentiability assumed
-at either endpoint. -/
+/-- A continuous solution of the tangent equation `sin (T - t) f'(t) + cos (T - t) f(t) = f(T)` on
+`(a, b)` has the form `p cos t + q sin t` on `[a, b]` and at `T`. -/
 theorem tangentKernel_of_equation {f f' : ℝ → ℝ} {a b T : ℝ}
     (hab : a < b) (hTa : T - π < a) (hbT : b ≤ T) (hf : Continuous f)
     (hd : ∀ t ∈ Ioo a b, HasDerivAt f (f' t) t)
@@ -596,7 +592,8 @@ theorem tangentKernel_of_equation {f f' : ℝ → ℝ} {a b T : ℝ}
       f T = f T * (sin T ^ 2 + cos T ^ 2) := by rw [sin_sq_add_cos_sq, mul_one]
       _ = _ := by ring
 
-/-- The middle equation integrates to the form consumed by `CapKernel`. -/
+/-- A continuous solution of `f'(t) = f(t + L)` on `(a, b)` satisfies
+`f(t) = f(b) - ∫ₜᵇ f(u + L) du` on `[a, b]`. -/
 theorem integrated_middle_equation {f : ℝ → ℝ} {a b L : ℝ}
     (hf : Continuous f)
     (hd : ∀ t ∈ Ioo a b, HasDerivAt f (f (t + L)) t) :
@@ -613,12 +610,13 @@ end MovingSofaUniqueness
 end
 
 /-!
-## From Mamikon equality to the support equations
+## From equality in a Mamikon term to a support equation
 
-Each convex-body family uses the continuous supporting curves already proved
-in Theorem 8.3.1 and the outer-corner lemmas. Square-integrability and pointwise
-interior equality come from `MamikonDisplacement`; support derivatives and
-endpoint-safe integration come from `SupportKernelEquations`.
+Let `K₀` and `K₁` be right-angle caps satisfying `InjCond1`, and `[a, b]` an upper arc. Equality in
+the Mamikon term of the tangent curves `tangentParam K T` (Baek's Theorems 8.3.1 and 8.3.2) makes
+`h_{K₁} - h_{K₀}` a solution of the tangent equation with target `T`
+(`tangentKernel_of_mamikon_eq`). Equality in the term of the outer corners gives the integrated
+equation `f'(t) = f(t + π/2)` (`middleKernel_of_mamikon_eq`).
 -/
 
 section
@@ -627,7 +625,8 @@ open Real Set MeasureTheory MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaUniqueness
 
-/-- Equality in a tangent Mamikon term forces the complete support kernel. -/
+/-- Equality in the Mamikon term with tangent target `T` on an upper arc `[a, b]` makes
+`h_{K₁} - h_{K₀}` a `TangentKernel`. -/
 theorem tangentKernel_of_mamikon_eq {a b T : ℝ}
     (hab : a < b) (hTa : T - π < a) (hbT : b ≤ T) (hArc : UpperArc a b)
     (K₀ K₁ : ConvexBodySet) (hcap₀ : IsCap K₀.1 (π / 2)) (hcap₁ : IsCap K₁.1 (π / 2))
@@ -678,7 +677,8 @@ theorem tangentKernel_of_mamikon_eq {a b T : ℝ}
   dsimp [f, f']
   nlinarith [he]
 
-/-- Equality in the outer-corner term integrates to the middle support equation. -/
+/-- Equality in the outer-corner Mamikon term on an upper arc gives
+`f(t) = f(b) - ∫ₜᵇ f(u + π/2) du` for `f = h_{K₁} - h_{K₀}`. -/
 theorem middleKernel_of_mamikon_eq {a b : ℝ}
     (hab : a < b) (hbπ : b < a + π) (hArc : UpperArc a b)
     (K₀ K₁ : ConvexBodySet) (hcap₀ : IsCap K₀.1 (π / 2)) (hcap₁ : IsCap K₁.1 (π / 2))
@@ -724,18 +724,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Equality conditions for the optimal sofa
+## Equality in Baek's upper bound
 
-This module is the first step of the uniqueness argument (`MovingSofaUniqueness/`). A competing
-maximizer of `upperQL` has zero first variation at Gerver's triple, and every
-Minkowski segment joining it to Gerver's triple saturates all three Mamikon convexity
-inequalities separately. At the midpoint these equalities, together with zero first variation,
-are also sufficient for equality of `upperQL` values. The final lemmas apply the necessary
-conditions to caps in `𝒦^i` that attain Gerver's sofa area.
-
-Geometric rigidity of these equality cases, and equality in the reductions from arbitrary
-moving sofas to caps, are proved in `MovingSofaUniqueness/`. Uniqueness of Romik's parameters is not
-by itself uniqueness of the area-maximizing moving sofas.
+`MamikonSegmentEquality φ x y c` says that the Minkowski combination with parameter `c` of the
+triples `x` and `y` attains equality in each of the three Mamikon convexity inequalities behind the
+concavity of `𝒬` (Baek's Lemma 8.3.3 and Theorem 8.3.8); this is equivalent to equality in the
+concavity of `𝒬` (`mamikonSegmentEquality_iff`). If a cap `K` in `𝒦^i` has the sofa area of
+Gerver's sofa, its triple `kiExtensionTriple` attains Gerver's value of `𝒬` (Baek's Theorem 8.2.4
+and Corollary 8.5.8), so the segment from Gerver's triple to it satisfies these equalities
+(`ki_maximizer_equality_conditions`).
 -/
 
 section
@@ -748,8 +745,8 @@ open MovingSofaOptimality
 
 open GerverParams
 
-/-- Equality in each of the three convexity inequalities used to prove concavity of `upperQL`.
-The cap and the two auxiliary bodies are kept separate so no cancellation can hide a gap. -/
+/-- Equality at the parameter `c` in each of the three Mamikon convexity inequalities used to prove
+the concavity of `𝒬`: for the cap and for the two auxiliary bodies. -/
 structure MamikonSegmentEquality (φ : ℝ) (x y : LTriple φ) (c : ℝ) : Prop where
   middle : mamikonS φ ((lDomain φ).comb c x y).1.1.1 =
     (1 - c) * mamikonS φ x.1.1.1 + c * mamikonS φ y.1.1.1
@@ -758,8 +755,8 @@ structure MamikonSegmentEquality (φ : ℝ) (x y : LTriple φ) (c : ℝ) : Prop 
   left : mamikonL φ ((lDomain φ).comb c x y).1.2.2.1 =
     (1 - c) * mamikonL φ x.1.2.2.1 + c * mamikonL φ y.1.2.2.1
 
-/-- Equality in concavity of `upperQL` is equivalent to equality in each of the three
-Mamikon convexity inequalities. This does not require the endpoints to be maximizers. -/
+/-- Equality in the concavity of `𝒬` at `c` is equivalent to equality in each of the three Mamikon
+convexity inequalities. -/
 theorem mamikonSegmentEquality_iff {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
     MamikonSegmentEquality φ x y c ↔
@@ -827,8 +824,8 @@ theorem mamikonSegmentEquality_iff {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     · change mamikonL φ z.1.2.2.1 = _
       linarith
 
-/-- If two triples maximize `upperQL`, the three Mamikon convexity gaps vanish individually
-along their entire segment. This is the equality case of the proof of Theorem 8.3.8. -/
+/-- If `x` and `y` both maximize `𝒬`, the three Mamikon convexity inequalities are equalities along
+the segment from `x` to `y`: the equality case of Baek's Theorem 8.3.8. -/
 theorem mamikonSegmentEquality_of_isMax {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     {x y : LTriple φ} (hmax : ∀ z, upperQL φ z ≤ upperQL φ x)
     (hxy : upperQL φ y = upperQL φ x) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
@@ -837,7 +834,7 @@ theorem mamikonSegmentEquality_of_isMax {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   rw [(lDomain φ).eq_on_segment_of_isMax (theorem8_3_8 hφ) hmax hxy hc, hxy]
   ring
 
-/-- Corollary 8.5.8 in the bundled-triple vocabulary. -/
+/-- Baek's Corollary 8.5.8: Gerver's triple maximizes `𝒬`. -/
 theorem upperQL_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (x : LTriple P.φ) : upperQL P.φ x ≤ upperQL P.φ (gerverTriple hP hbox) :=
   corollary8_5_8 hP hbox x.2
@@ -850,23 +847,22 @@ theorem gerver_dirDeriv_eq_zero_of_upperQL_eq {P : GerverParams} (hP : P.IsSolut
   (lDomain P.φ).dirDeriv_eq_zero_of_isMax (proposition8_2_1 (gm_φ_mem_Ioo hP hbox))
     (theorem8_3_8 (gm_φ_mem_Ioo hP hbox)) (upperQL_le_gerver hP hbox) hx
 
-/-- Every competitor attaining Gerver's upper bound saturates the three Mamikon convexity
-inequalities separately, for every combination parameter in `[0, 1]`. -/
+/-- A triple attaining Gerver's value of `𝒬` satisfies `MamikonSegmentEquality` with Gerver's
+triple for every `c ∈ [0, 1]`. -/
 theorem gerver_mamikonSegmentEquality {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {x : LTriple P.φ} (hx : upperQL P.φ x = upperQL P.φ (gerverTriple hP hbox))
     {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
     MamikonSegmentEquality P.φ (gerverTriple hP hbox) x c :=
   mamikonSegmentEquality_of_isMax (gm_φ_mem_Ioo hP hbox) (upperQL_le_gerver hP hbox) hx hc
 
-/-- The canonical extension of a cap in `𝒦^i` to a triple in `𝓛`. -/
+/-- The canonical triple `(K, B_K, D_K)` in `𝓛` of a cap `K` in `𝒦^i` (Baek's Theorem 8.1.8). -/
 noncomputable def kiExtensionTriple {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
     {K : Set (ℝ × ℝ)} (hK : IsKi K) : LTriple φ :=
   ⟨(⟨K, hK.1.2.1⟩, ⟨rightBody φ K, (theorem8_1_8 hφ hK).2.1⟩,
     ⟨leftBody φ K, (theorem8_1_8 hφ hK).2.2.1⟩), theorem8_1_8 hφ hK⟩
 
-/-- If the sofa-area functional of a cap in `𝒦^i` attains Gerver's area, its canonical triple
-attains Gerver's upper bound. This records equality in both bounding steps, rather than
-assuming equality for the auxiliary functional. -/
+/-- If a cap in `𝒦^i` has the sofa area of Gerver's sofa, its canonical triple attains Gerver's
+value of `𝒬`: both inequalities of `A_{π/2}(K) ≤ 𝒬(x) ≤ 𝒬(x_G)` are equalities. -/
 theorem ki_upperQL_eq_gerver_of_sofaArea_eq {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set (ℝ × ℝ)} (hK : IsKi K)
     (harea : sofaArea (π / 2) K = area (gerverSofa P)) :
@@ -879,8 +875,9 @@ theorem ki_upperQL_eq_gerver_of_sofaArea_eq {P : GerverParams} (hP : P.IsSolutio
   have hGarea := gm_sofaArea_cap hP hbox
   linarith
 
-/-- Necessary equality conditions for an area-maximizing cap in `𝒦^i`. Geometric rigidity
-and the passage back to the original moving sofa are proved in `MovingSofaUniqueness/`. -/
+/-- If a cap in `𝒦^i` has the sofa area of Gerver's sofa, the first variation of `𝒬` at Gerver's
+triple towards the cap's triple is zero, and the segment between the two triples satisfies
+`MamikonSegmentEquality`. -/
 theorem ki_maximizer_equality_conditions {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set (ℝ × ℝ)} (hK : IsKi K)
     (harea : sofaArea (π / 2) K = area (gerverSofa P)) :
@@ -897,13 +894,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## The four cap Mamikon equalities imply the complete support kernel
+## The cap kernel
 
-The four scalar convexity gaps are nonnegative. Their sum can vanish only if
-each vanishes. The preceding modules prove the displacement equality,
-differentiability on regular arcs, the exact tangent kernel and the integrated
-middle equation. Together they give the cap kernel used in Proposition 5 of the
-uniqueness argument.
+The cap's Mamikon term `mamikonS φ` is the sum of four terms, on `[0, φ]`, `[φ, π/2 - φ]`,
+`[π/2 - φ, π/2]` and `[π/2, π]`, each convex under Minkowski combinations. Equality for the sum
+forces equality in each term, and the preceding sections turn the four equalities into
+`CapKernel φ (h_{K₁} - h_{K₀})` (`capKernel_of_mamikonS_eq`). `capKernel_of_triple_midpoint` states
+this for the caps of two triples with `MamikonSegmentEquality` at `c = 1/2`, the form that
+`ki_sofa_eq_gerver_translate` uses to prove Proposition 5 of note 20.
 -/
 
 section
@@ -912,7 +910,8 @@ open Real Set MeasureTheory MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaUniqueness
 
-/-- Equality in the cap Mamikon functional yields all four support equations. -/
+/-- For caps `K₀` and `K₁` in `𝒦^i` and `c ∈ (0, 1)`, equality in the convexity inequality of
+`mamikonS φ` gives `CapKernel φ (h_{K₁} - h_{K₀})`. -/
 theorem capKernel_of_mamikonS_eq {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (K₀ K₁ : ConvexBodySet) (hK₀ : IsKi K₀.1) (hK₁ : IsKi K₁.1)
     {c : ℝ} (hc : c ∈ Ioo (0 : ℝ) 1)
@@ -970,7 +969,8 @@ theorem capKernel_of_mamikonS_eq {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (Or.inr ⟨le_rfl, le_rfl⟩)
       K₀ K₁ hK₀.1 hK₁.1 hK₀.2.1.1 hK₁.2.1.1 hc e₄
 
-/-- The cap kernel (Proposition 5) in the bundled-triple vocabulary of the library. -/
+/-- If two triples satisfy `MamikonSegmentEquality` at `c = 1/2`, the difference of the support
+functions of their caps is a `CapKernel`. -/
 theorem capKernel_of_triple_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) (h : MamikonSegmentEquality φ x y (1 / 2)) :
     CapKernel φ (fun t => supp y.1.1.1 t - supp x.1.1.1 t) := by
@@ -988,11 +988,13 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Recover caps and their niches as actual sets
+## Caps with horizontally translated supports
 
-These are geometric consequences of a support identity, not consequences of
-area equality alone. In particular, no regular-closedness assumption on an
-arbitrary competing sofa is introduced.
+A right-angle cap is the set of points `p` with `0 ≤ p.2` and `dot p (uvec t) ≤ h_K(t)` for
+`t ∈ [0, π]` (`mem_right_cap_iff`), and its niche is also described by its supports
+(`mem_right_niche_iff`). So if `h_K(t) - h_G(t) = a cos t` on `[0, π]`, translation by `(a, 0)` maps
+`G` onto `K` and the niche of `G` onto that of `K`, and `K` minus its niche is the translate of `G`
+minus its niche (`sofa_eq_translate_of_upper_support`): equation (21) of note 20.
 -/
 
 section
@@ -1001,7 +1003,8 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- A right-angle cap is determined by its upper supports and the floor. -/
+/-- A point lies in a right-angle cap if and only if it lies above the floor and below the
+supporting lines at the normals in `[0, π]`. -/
 theorem mem_right_cap_iff {K : Set Plane} (hK : IsCap K (π / 2)) (p : Plane) :
     p ∈ K ↔ 0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ supp K t := by
   constructor
@@ -1022,8 +1025,8 @@ theorem mem_right_cap_iff {K : Set Plane} (hK : IsCap K (π / 2)) (p : Plane) :
     · rw [ht, hbottom, opt_uvec_three_pi_div_two]
       simpa [dot] using hfloor
 
-/-- In a right-angle cap, the fan is the upper half-plane. The quadrant
-inequalities remain strict; they have not been replaced by their closures. -/
+/-- A point lies in the niche of a right-angle cap if and only if it lies above the floor and in
+the open inner quadrant of some `t ∈ (0, π/2)`. -/
 theorem mem_right_niche_iff (K : Set Plane) (p : Plane) :
     p ∈ niche K (π / 2) ↔ 0 ≤ p.2 ∧ ∃ t ∈ Ioo (0 : ℝ) (π / 2),
       dot p (uvec t) < supp K t - 1 ∧
@@ -1044,7 +1047,7 @@ private theorem dot_sub_horizontal_v (p : Plane) (a t : ℝ) :
   simp only [dot, vvec, Prod.fst_sub, Prod.snd_sub, sub_zero]
   ring
 
-/-- The upper-support translation mode gives an exact membership equivalence. -/
+/-- If `h_K(t) - h_G(t) = a cos t` on `[0, π]`, then `p ∈ K` if and only if `p - (a, 0) ∈ G`. -/
 theorem mem_cap_sub_horizontal_iff {K G : Set Plane}
     (hK : IsCap K (π / 2)) (hG : IsCap G (π / 2)) (a : ℝ)
     (hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp G t = a * cos t)
@@ -1062,7 +1065,8 @@ theorem mem_cap_sub_horizontal_iff {K G : Set Plane}
     rw [dot_sub_horizontal_u] at hi
     linarith [hsupp t ht]
 
-/-- No assumption that either cap contains its niche is needed for covariance. -/
+/-- Under the same support identity, `p` lies in the niche of `K` if and only if `p - (a, 0)` lies
+in the niche of `G`. -/
 theorem mem_niche_sub_horizontal_iff {K G : Set Plane} (a : ℝ)
     (hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp G t = a * cos t)
     (p : Plane) : p ∈ niche K (π / 2) ↔ p - (a, 0) ∈ niche G (π / 2) := by
@@ -1089,6 +1093,8 @@ theorem mem_niche_sub_horizontal_iff {K G : Set Plane} (a : ℝ)
     exact ⟨hp, t, ht, by linarith [(hbounds t ht).1],
       by linarith [(hbounds t ht).2]⟩
 
+/-- Equation (21) of note 20: if `h_K(t) - h_G(t) = a cos t` on `[0, π]`, then `K` minus its niche
+is the translate by `(a, 0)` of `G` minus its niche. -/
 theorem sofa_eq_translate_of_upper_support {K G : Set Plane}
     (hK : IsCap K (π / 2)) (hG : IsCap G (π / 2)) (a : ℝ)
     (hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp G t = a * cos t) :

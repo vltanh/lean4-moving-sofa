@@ -7,8 +7,8 @@ public import Mathlib
 
 Statements of record, in Mathlib's vocabulary only, in three groups.
 
-* `Baek`: the definitions of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), his
-  main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions, which the
+* `Baek`: the definitions of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), the
+  paper's main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions, which the
   paper does not prove (the argument is in `docs/uniqueness/20-complete-paper-proof.md`).
 * `FormalConjectures.MovingSofa`: the definitions and statements of Google DeepMind's
   formal-conjectures, including its uniqueness statement, which it lists as open.
@@ -52,14 +52,17 @@ every moving sofa with the area of Gerver's sofa exactly onto Gerver's sofa.
 Google DeepMind's formal-conjectures (`FormalConjectures/Wikipedia/MovingSofa.lean`, Git blob
 `59b6ed7eb42e11b208b09539c245da4d3f11ed00`, Apache-2.0, Copyright 2026 The Formal Conjectures
 Authors) states the problem with its own definitions, restated here verbatim inside the namespace
-`FormalConjectures`, without its test lemmas, and with an explicit name for the topology instance on
-`E(2)`, which it leaves anonymous. **The plane** is `ℝ² = EuclideanSpace ℝ (Fin 2)`. **A moving sofa**
-`s` with motion `m` is connected and closed, `m` is a continuous path in the affine isometries `E(2)`
-with `m 0` the identity, `s` lies in the horizontal side, every `m t '' s` in the hallway, and
-`m 1 '' s` in the vertical side. **The sofa constant** is the supremum of the areas of moving sofas.
-**Gerver's sofa** `gerversSofa` is the shape of the rotation path `GerversSofa.p`, defined by
-integrals from Gerver's four constants `A, B, φ, θ`, the solution of the system `ABφθSpec`;
-`rotateTranslate α p` translates by `p` and then rotates by `α`.
+`FormalConjectures`, with an explicit name for the topology instance on `E(2)`, which it leaves
+anonymous. Its test lemmas are left out, and so is its `sofaConstant_eq`, the statement of
+`sofaConstant_eq_volume_gerversSofa` inside formal-conjectures' `answer` marker.
+
+**The plane** is `ℝ² = EuclideanSpace ℝ (Fin 2)`. **A moving sofa** `s` with motion `m` is connected
+and closed, `m` is a continuous path in the affine isometries `E(2)` with `m 0` the identity, `s` lies
+in the horizontal side, every `m t '' s` in the hallway, and `m 1 '' s` in the vertical side.
+**The sofa constant** is the supremum of the areas of moving sofas. **Gerver's sofa** `gerversSofa`
+is the shape of the rotation path `GerversSofa.p`, defined by integrals from Gerver's four constants
+`A, B, φ, θ`, the solution of the system `ABφθSpec`; `rotateTranslate α p` translates by `p` and then
+rotates by `α`.
 
 **The theorems.** `ABφθSpec.existsUnique`: the system has exactly one solution.
 `isMovingSofa_gerversSofa` and `sofaConstant_eq_volume_gerversSofa`: Gerver's sofa is a moving sofa

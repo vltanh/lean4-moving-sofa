@@ -1,10 +1,7 @@
 module
 
 public import MovingSofaOptimality.Injectivity.BoundingArms
-public import MovingSofaOptimality.Injectivity.LimitIneq
-public import MovingSofaOptimality.Injectivity.DiscreteIneq
 public import MovingSofaUniqueness.Variation
-public import Mathlib.MeasureTheory.Integral.Lebesgue.Map
 
 /-!
 # Proposition 3: every maximizing right-angle cap satisfies the injectivity condition
@@ -20,14 +17,15 @@ Lemma 6.5.5 then gives the injectivity condition of Baek's Chapter 6
 noncomputable section
 
 /-!
-## Regularity and integrated arm bounds without balancedness
+## The curvature bounds (16) and the integral inequalities (17)
 
-The hypotheses are the two measure inequalities themselves. The paper's
-balanced-cap hypothesis is not used. In particular the endpoints 0 and pi are
-included in the restricted measures; the possible atom at pi/2 is excluded.
-
-The second arm identity is derived directly, so reflection of a selected
-maximizer and an unproved mirrored density bound are unnecessary.
+`FirstCurvatureBound K` and `SecondCurvatureBound K` are the bounds (16) of note 20: the surface
+area measure `σ_K` is at most `k₀(g_K⁺(t)) dt` on `[0, π/2)` and at most `k₀(f_K⁻(t - π/2)) dt` on
+`(π/2, π]`. They make `σ_K` absolutely continuous on both intervals, which is Baek's condition
+`InjCond1` (`injCond1_of_curvature`). With the integrated arm identities they give the integral
+inequalities (17) of note 20, `∫₀ᵗ m₀(g_K) ≤ f_K(t) - 1` on `[0, π/2)` and
+`∫ₜ^{π/2} m₀(f_K) ≤ g_K(t) - 1` on `(0, π/2]` (`first_arm_integral_lower`,
+`second_arm_integral_lower`).
 -/
 
 section
@@ -36,17 +34,20 @@ open Real Set MeasureTheory Filter MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
+/-- The first curvature bound (16) of note 20: `σ_K ≤ k₀(g_K⁺(t)) dt` on `[0, π/2)`. -/
 def FirstCurvatureBound (K : Set (ℝ × ℝ)) : Prop :=
   (sigma K).restrict (Ico 0 (π / 2)) ≤
     (volume.restrict (Ico 0 (π / 2))).withDensity
       (fun t => ENNReal.ofReal (k0 (gPlus K t)))
 
+/-- The second curvature bound (16) of note 20: `σ_K ≤ k₀(f_K⁻(t - π/2)) dt` on `(π/2, π]`. -/
 def SecondCurvatureBound (K : Set (ℝ × ℝ)) : Prop :=
   (sigma K).restrict (Ioc (π / 2) π) ≤
     (volume.restrict (Ioc (π / 2) π)).withDensity
       (fun t => ENNReal.ofReal (k0 (fMinus K (t - π / 2))))
 
-/-- Domination by a density gives both absolutely continuous curvature pieces. -/
+/-- The curvature bounds give Baek's condition `InjCond1`: `σ_K` has a density on `[0, π/2)` and
+on `(π/2, π]`. -/
 theorem injCond1_of_curvature {K : Set (ℝ × ℝ)}
     (hfirst : FirstCurvatureBound K) (hsecond : SecondCurvatureBound K) : InjCond1 K := by
   have h1 : (sigma K).restrict (Ico 0 (π / 2)) ≪ volume.restrict (Ico 0 (π / 2)) :=
@@ -74,7 +75,7 @@ theorem injCond1_of_curvature {K : Set (ℝ × ℝ)}
     hsm.comp (measurable_id.add_const _), hr0, fun t => hs0 _, hr, ?_⟩
   simpa using hs
 
-/-- Convert a restricted measure inequality into its real interval-integral bound. -/
+/-- If `μ ≤ k(t) dt` on `J` and `(a, b] ⊆ J`, then `μ (a, b] ≤ ∫ₐᵇ k`. -/
 theorem interval_mass_le_integral {μ : Measure ℝ} {J : Set ℝ} {k : ℝ → ℝ}
     {a b : ℝ} (hab : a ≤ b) (hsub : Ioc a b ⊆ J)
     (h : μ.restrict J ≤ (volume.restrict J).withDensity (fun t => ENNReal.ofReal (k t)))
@@ -88,7 +89,7 @@ theorem interval_mass_le_integral {μ : Measure ℝ} {J : Set ℝ} {k : ℝ → 
   exact ENNReal.toReal_le_of_le_ofReal
     (intervalIntegral.integral_nonneg hab fun t _ => hk0 t) hi
 
-/-- Integral of the first arm, before replacing its endpoint convention. -/
+/-- The integral of `f_K⁺` in terms of the support function. -/
 theorem integral_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
     (∫ t in a..b, fPlus K t) =
       (∫ t in (a + π / 2)..(b + π / 2), supp K t) - (supp K b - supp K a) := by
@@ -102,7 +103,8 @@ theorem integral_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) 
   rw [e, intervalIntegral.integral_sub hh hd,
     intervalIntegral.integral_comp_add_right (supp K), ← inj_supp_sub_supp hK a b]
 
-/-- Integrated second-arm identity, valid for arbitrary convex bodies. -/
+/-- The integrated arm identity `g_K⁺(b) - g_K⁺(a) = σ_K((a + π/2, b + π/2]) - ∫ₐᵇ f_K⁺` for a
+convex body. -/
 theorem gPlus_sub_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a ≤ b) :
     gPlus K b - gPlus K a =
       (sigma K (Ioc (a + π / 2) (b + π / 2))).toReal - ∫ t in a..b, fPlus K t := by
@@ -120,7 +122,7 @@ theorem gPlus_sub_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
   rw [inj_gPlus_eq, inj_gPlus_eq, hs, integral_fPlus hK]
   ring
 
-/-- The two first-arm endpoint conventions agree in integrals over the cap interval. -/
+/-- Under `InjCond1`, `f_K⁺` and `f_K` have the same integrals over subintervals of `[0, π/2]`. -/
 theorem integral_fPlus_eq_fK {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) {a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ π / 2) :
     (∫ t in a..b, fPlus K t) = ∫ t in a..b, fK K t := by
@@ -130,7 +132,7 @@ theorem integral_fPlus_eq_fK {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   intro t ht
   exact ((proposition6_4_5 hK h1).1 t ⟨ha.trans ht.1.le, ht.2.trans_le hb⟩).2
 
-/-- The bottom-left endpoint fixes the terminal value of the second arm. -/
+/-- `g_K(π/2) = 1` for a right-angle cap. -/
 theorem gK_end {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) : gK K (π / 2) = 1 := by
   have h := inj_fK_zero (proposition2_5_4_isCap hK)
   have he := (proposition6_2_2 (K := K) (t := 0)).2.1
@@ -138,7 +140,7 @@ theorem gK_end {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) : gK K (π / 2) = 
   have h' : gPlus K (π / 2) = 1 := by simpa only [sub_zero] using he.symm.trans h
   exact h'
 
-/-- Integrated lower bound for the first arm on the endpoint-safe half interval. -/
+/-- The first integral inequality (17): `∫₀ᵗ m₀(g_K) ≤ f_K(t) - 1` for `t ∈ [0, π/2)`. -/
 theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) (hbound : FirstCurvatureBound K) {t : ℝ}
     (ht : t ∈ Ico 0 (π / 2)) :
@@ -160,7 +162,7 @@ theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
       (inj_intervalIntegrable_k0_gPlus hK.2.1 0 t)
   linarith
 
-/-- Integrated lower bound for the second arm, obtained from the second curvature piece. -/
+/-- The second integral inequality (17): `∫ₜ^{π/2} m₀(f_K) ≤ g_K(t) - 1` for `t ∈ (0, π/2]`. -/
 theorem second_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (h1 : InjCond1 K) (hbound : SecondCurvatureBound K) {t : ℝ}
     (ht : t ∈ Ioc 0 (π / 2)) :
@@ -209,15 +211,13 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Cellwise arm control without a maximal-polygon assumption
+## Arm lengths on one cell
 
-The old Lemma 6.4.1 uses maximality only to obtain the fixed diameter bound 5.
-Here the same geometric conclusion is stated for any polygon cap with an
-explicit diameter bound D. This is the hypothesis actually available for
-selected approximations of a specified cap.
-
-No assertion that penalized maximizers are balanced is made. The parameter
-D need not be the sharp Euclidean diameter; any nonnegative upper bound works.
+Let `K` be a polygon cap of the right-angle set `Θ_n`, with step size `δ`, whose diameter is at most
+`D`. On each cell `[t, t + δ]`, `g_K⁺` is nonincreasing and drops by at most `D δ`
+(`polygon_arm_cell`); this is Baek's Lemma 6.4.1, where `D = 5` for maximum polygon caps. So a bound
+`σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + η δ` at the left end of the cell gives
+`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + η δ` (`polygon_step_integral_bound`).
 -/
 
 section
@@ -226,7 +226,7 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The tangential projection is bounded below by any Euclidean norm bound. -/
+/-- A vector of Euclidean norm at most `D` has `dot w (vvec t) ≥ -D`. -/
 theorem neg_bound_le_dot_vvec {w : ℝ × ℝ} {D : ℝ} (hD : 0 ≤ D)
     (hw : norm2 w ≤ D) (t : ℝ) : -D ≤ dot w (vvec t) := by
   have hww : dot w w ≤ D ^ 2 := by
@@ -235,8 +235,8 @@ theorem neg_bound_le_dot_vvec {w : ℝ × ℝ} {D : ℝ} (hD : 0 ≤ D)
   have he := inj_dot_self_eq w t
   nlinarith [sq_nonneg (dot w (uvec t))]
 
-/-- Both the within-cell monotonicity and the quantitative endpoint estimate
-hold for arbitrary polygon caps under the stated diameter bound. -/
+/-- Baek's Lemma 6.4.1 for a polygon cap of diameter at most `D`: on the cell `[t, t + δ]`, `g_K⁺`
+is nonincreasing, equals `g_K⁻` inside, and drops by at most `D δ`. -/
 theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
     (hKp : IsPolygonCap (rightAngleSet k) K) {D : ℝ} (hD : 0 ≤ D)
     (hdiam : ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ D) {t : ℝ}
@@ -342,8 +342,8 @@ theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
     have h := hmono htI htdI (by linarith)
     linarith
 
-/-- Convert a pointwise discrete estimate with a mesh-local error into an
-integrated estimate on one cell. -/
+/-- A bound `σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + η δ` at the left end of a cell integrates to
+`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + η δ`. -/
 theorem polygon_step_integral_bound {k : ℕ} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap (rightAngleSet k) K) {D C η : ℝ} (hD : 0 ≤ D)
     (hdiam : ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ D) {t : ℝ}
@@ -377,18 +377,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Curvature estimates for penalized polygon maximizers
+## The polygon curvature bound (15)
 
-The inner-ray geometry in the proof of Theorem 6.3.3 does not require
-maximality or balancedness. We first extract its estimate for tau, rather than
-replacing tau by sigma. A one-sided defect sigma<=tau+e is then sufficient for
-
-  sigma(t) <= k0(gPlus(t))*delta + (D+4)*delta^2 + e.
-
-Here D is an arbitrary uniform arm bound. Thus the diameter bound for specially
-chosen exact maximizers is not applied to the specified-cap approximations.
-The geometric proof follows `inj_sigmaAt_le_geom`, retaining its endpoint and
-zero-measure singleton cases but removing its use of Theorem 3.4.9.
+At every normal `t ∈ Θ_n` of a polygon cap of the right-angle set, the inner-ray geometry of Baek's
+Theorem 6.3.3 bounds `τ_K(t)` by
+`max (tan δ (g_K⁻(t) - 1 + q), tan δ (1 - g_K⁺(t) + q), 0) + max (2q - σ_K(t), 0)`, where
+`q = tan (δ/2)` (`polygon_tau_le_geom`); this is inequality (14) of note 20. With a defect bound
+`σ_K(t) ≤ τ_K(t) + e` and `g_K⁺(t) ≤ D`, it gives inequality (15),
+`σ_K(t) ≤ k₀(g_K⁺(t)) δ + (D + 4) δ² + e` (`polygon_curvature_with_defect`).
 -/
 
 section
@@ -397,7 +393,8 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The inner-ray estimate holds for every polygon cap. -/
+/-- Inequality (14) of note 20 for a polygon cap of the right-angle set, from the inner-ray
+geometry of Baek's Theorem 6.3.3. -/
 theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
     (hKp : IsPolygonCap (rightAngleSet k) K)
     {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) :
@@ -498,8 +495,8 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
     inj_polygon_sigmaAt_eq hKp ht] at hreal
   exact hreal
 
-/-- Robust version of the discrete curvature estimate, with an arbitrary arm
-bound and an explicit nonnegative stationarity error. -/
+/-- Inequality (15) of note 20: if `σ_K(t) ≤ τ_K(t) + e` and `g_K⁺(t) ≤ D`, then
+`σ_K(t) ≤ k₀(g_K⁺(t)) δ + (D + 4) δ² + e`. -/
 theorem polygon_curvature_with_defect {k : ℕ} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap (rightAngleSet k) K)
     {t D e : ℝ} (ht : t ∈ (rightAngleSet k).angles)
@@ -565,12 +562,12 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Reflection preserves the specified maximizer
+## Reflection of a right-angle cap
 
-These lemmas concern the actual reflected cap, not a replacement obtained
-from existence of a balanced maximizer. They are independent of injectivity.
-The sofa-area identity uses the reflected niche, including its strict inner
-quadrants.
+The reflection `mirrorCap` preserves the sofa area (`sofaArea_mirror`), so it maps a maximizing cap
+to a maximizing cap (`maximal_sofaArea_mirror`); at a right angle it is an involution
+(`mirrorCap_rightAngle_involutive`). It exchanges the arms: `g⁺` of the reflected cap at `t` is
+`f_K⁻(π/2 - t)` (`gPlus_mirror_eq_fMinus`).
 -/
 
 section
@@ -579,7 +576,7 @@ open Real Set MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- Reflection preserves the cap-minus-niche area functional. -/
+/-- Reflection preserves the sofa area `A_ω`. -/
 theorem sofaArea_mirror (K : Set (ℝ × ℝ)) (ω : ℝ) :
     sofaArea ω (mirrorCap K ω) = sofaArea ω K := by
   unfold sofaArea
@@ -587,7 +584,7 @@ theorem sofaArea_mirror (K : Set (ℝ × ℝ)) (ω : ℝ) :
   change area (mirror ω '' K) - area (mirror ω '' niche K ω) = _
   rw [mpc_area_mirror, mpc_area_mirror]
 
-/-- At a right angle the mirror is the involution `(x,y) ↦ (-x,y)`. -/
+/-- At a right angle the reflection is the involution `(x, y) ↦ (-x, y)`. -/
 theorem mirrorCap_rightAngle_involutive (K : Set (ℝ × ℝ)) :
     mirrorCap (mirrorCap K (π / 2)) (π / 2) = K := by
   have hinv (p : ℝ × ℝ) : mirror (π / 2) (mirror (π / 2) p) = p := by
@@ -599,7 +596,7 @@ theorem mirrorCap_rightAngle_involutive (K : Set (ℝ × ℝ)) :
   · intro p hp
     exact ⟨mirror (π / 2) p, ⟨p, hp, rfl⟩, hinv p⟩
 
-/-- The reflection of this maximizer is again a maximizer. -/
+/-- The reflection of a maximizing right-angle cap is maximizing. -/
 theorem maximal_sofaArea_mirror {K : Set (ℝ × ℝ)}
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
     ∀ C, IsCap C (π / 2) →
@@ -608,8 +605,7 @@ theorem maximal_sofaArea_mirror {K : Set (ℝ × ℝ)}
   rw [sofaArea_mirror]
   exact hmax C hC
 
-/-- The endpoint conventions matter: the reflected plus-arm is the original
-minus-arm. No atom-free or differentiability hypothesis is needed. -/
+/-- The arm `g⁺` of the reflected cap at `t` is `f_K⁻(π/2 - t)`. -/
 theorem gPlus_mirror_eq_fMinus (K : Set (ℝ × ℝ)) (t : ℝ) :
     gPlus (mirrorCap K (π / 2)) t = fMinus K (π / 2 - t) :=
   (proposition6_2_2 (K := K) (t := t)).2.2.1
@@ -619,16 +615,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Injectivity from curvature bounds for the specified cap
+## Injectivity from the curvature bounds
 
-The operator comparison below is simultaneous in the two arm functions. It
-never assumes that the cap is balanced or replaces it by its mirror's chosen
-maximizer. Only the two integrated inequalities and nonnegativity are used.
-
-For the final strict threshold we reuse the existing analytic Lemma 6.5.5.
-Its finite induction consists of real integral inequalities and rational
-algebraic proofs, not a Boolean evaluation or a decision procedure. The
-alternative maximum-deficit argument of the notes is not needed here.
+If nonnegative continuous functions `f` and `g` on `[0, π/2]` satisfy the integral inequalities
+(17), induction on `n` bounds them below by the lower sequence `f_n` of Baek's Definition 6.5.2:
+`f_n(t) ≤ f(t)` and `f_n(π/2 - t) ≤ g(t)` (`lowerSeq_le_of_integral_bounds`). Baek's Lemma 6.5.5
+gives `f_11 > 1` on `(0, π/2]`, so the arms of a cap with the curvature bounds (16) exceed one on
+`(0, π/2)` (`arms_strict_of_curvature`), and the cap satisfies the injectivity condition
+(`injectivity_of_curvature`).
 -/
 
 section
@@ -637,8 +631,8 @@ open Real Set MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The lower sequence bounds both arms without any cap-specific hypothesis.
-The opposite endpoint conventions are kept throughout the induction. -/
+/-- If nonnegative continuous `f` and `g` satisfy the integral inequalities (17), then
+`f_n(t) ≤ f(t)` on `[0, π/2)` and `f_n(π/2 - t) ≤ g(t)` on `(0, π/2]` for every `n`. -/
 theorem lowerSeq_le_of_integral_bounds {f g : ℝ → ℝ}
     (hf : ContinuousOn f (Icc 0 (π / 2))) (hg : ContinuousOn g (Icc 0 (π / 2)))
     (hf0 : ∀ t ∈ Icc (0 : ℝ) (π / 2), 0 ≤ f t)
@@ -693,7 +687,7 @@ theorem lowerSeq_le_of_integral_bounds {f g : ℝ → ℝ}
         sub_sub_cancel, sub_zero]
       linarith
 
-/-- Strict interior arm inequalities follow from the given curvature bounds. -/
+/-- Under the curvature bounds (16), `f_K(t) > 1` and `g_K(t) > 1` for `t ∈ (0, π/2)`. -/
 theorem arms_strict_of_curvature {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (hfirst : FirstCurvatureBound K) (hsecond : SecondCurvatureBound K) :
     ∀ t ∈ Ioo (0 : ℝ) (π / 2), 1 < fK K t ∧ 1 < gK K t := by
@@ -709,8 +703,8 @@ theorem arms_strict_of_curvature {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   exact (lemma6_5_5 ⟨by linarith [ht.2], by linarith [ht.1]⟩).trans_le
     (hseq.2 t ⟨ht.1, ht.2.le⟩)
 
-/-- Proposition 3: the specified cap satisfies all three injectivity conditions.
-No global maximality or balancedness hypothesis is present. -/
+/-- A right-angle cap with the curvature bounds (16) satisfies the injectivity condition: the
+conclusion of Proposition 3 of note 20. -/
 theorem injectivity_of_curvature {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (hfirst : FirstCurvatureBound K) (hsecond : SecondCurvatureBound K) :
     SatisfiesInjectivity K := by
@@ -730,16 +724,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Integrated polygon curvature bounds with summable defects
+## Summing the polygon curvature bounds
 
-The error need not be uniformly O(delta) at each facet. A nonnegative error
-function on the grid is sufficient provided that its TOTAL tends to zero.
-This is important for persistent sampled penalties: their coarse-angle and
-endpoint weights need not shrink proportionally to the finest mesh.
-
-The estimate includes normal zero and extends to open intervals starting below
-zero. Thus passage to the limit can exclude an atom at zero rather than assume
-that it is absent. No balancedness or polygon maximality occurs in the hypotheses.
+Let a polygon cap of the right-angle set satisfy `σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + e(t)` at every
+grid normal `t ∈ {0} ∪ Θ_n`, with `e ≥ 0`, and let `B` bound `k₀(g_K⁺)`. Summing over the cells
+gives `σ_K([a, b)) ≤ ∫ₐᵇ k₀(g_K⁺) + (2B + (π/2) (C + D)) δ + polygonGridError k e` for
+`0 ≤ a ≤ b ≤ π/2`, where `polygonGridError k e` is the sum of the errors `e(t)`
+(`polygon_Ico_with_errors`). Since `σ_K` vanishes on `(-π/2, 0)`, the same bound holds for open
+intervals `(a, b)` with `a ≥ -π/2`, integrating from `max a 0` (`polygon_Ioo_with_errors`).
 -/
 
 section
@@ -749,7 +741,7 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- One cell with an arbitrary additive local error. -/
+/-- `polygon_step_integral_bound` with an additive error `e` in place of `η δ`. -/
 theorem polygon_step_with_error {k : ℕ} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap (rightAngleSet k) K) {D C e : ℝ} (hD : 0 ≤ D)
     (hdiam : ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ D) {t : ℝ}
@@ -762,12 +754,12 @@ theorem polygon_step_with_error {k : ℕ} {K : Set (ℝ × ℝ)}
     (η := e / stepSize k) (by simpa only [div_mul_cancel₀ _ hδ] using hlocal)
   simpa only [div_mul_cancel₀ _ hδ] using h
 
-/-- Sum of the nonnegative grid errors, including the zero normal. -/
+/-- The sum of the errors `e(j δ)` over the grid normals `j δ ∈ [0, π/2)`. -/
 def polygonGridError (k : ℕ) (e : ℝ → ℝ) : ℝ :=
   ∑ j ∈ Finset.range (2 ^ (k + 1)), e ((j : ℝ) * stepSize k)
 
-/-- Integrated estimate on an arbitrary half-open interval in the first
-quadrant. The entire error sum appears once, not once for each cell. -/
+/-- For `0 ≤ a ≤ b ≤ π/2`, `σ_K([a, b))` is at most `∫ₐᵇ k₀(g_K⁺)`, plus `(2B + (π/2) (C + D)) δ`,
+plus the total grid error. -/
 theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap (rightAngleSet k) K) {D C B : ℝ}
     (hD : 0 ≤ D) (hC : 0 ≤ C) (hB : 0 ≤ B)
@@ -927,8 +919,7 @@ theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
     linarith
   linarith
 
-/-- The same estimate on intervals beginning below zero. This deliberately
-keeps zero INSIDE an open interval before taking the limiting measure. -/
+/-- The same bound for open intervals `(a, b)` with `a ≥ -π/2`, integrating from `max a 0`. -/
 theorem polygon_Ioo_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap (rightAngleSet k) K) {D C B : ℝ}
     (hD : 0 ≤ D) (hC : 0 ≤ C) (hB : 0 ≤ B)
@@ -973,13 +964,16 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Curvature domination from arbitrary polygon approximations
+## The first curvature bound in the limit
 
-The hypotheses are convergence of polygon caps and an integrated inequality
-with a vanishing total error. No maximum-polygon or balanced-cap predicate is
-used. Supporting-line intersections furnish lower bounds on open-interval
-curvature masses, so no absence of endpoint atoms is assumed in the passage
-to the limit. The interval comparison then yields domination on [0,pi/2).
+Let polygon caps `K_n` converge to a right-angle cap `K` in the Hausdorff distance, with
+`σ_{K_n}((a, b)) ≤ ∫_{max a 0}^b k₀(g_{K_n}⁺) + error n` for `-π/2 ≤ a < b ≤ π/2` and
+`error n → 0`. The integrals of `k₀(g⁺)` converge by Baek's Lemma 6.4.2 (`k0_integral_tendsto`),
+and the mass of an open interval is a limit of lower bounds expressed through intersections of
+supporting lines, which converge with the caps; so the bounds pass to `K` with zero error
+(`curvature_Ioo_limit`). Because the intervals may start below `0`, these bounds give the first
+curvature bound (16) on `[0, π/2)`, including the normal `0` (`firstCurvature_of_Ioo`,
+`firstCurvature_of_polygon_errors`).
 -/
 
 section
@@ -988,8 +982,8 @@ open Set Real Filter Topology MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- L1 continuity of the arms implies convergence of k0-arm integrals on each
-subinterval, without pointwise differentiability of the limiting support. -/
+/-- Along a Hausdorff-convergent sequence of polygon caps, `∫ₐᵇ k₀(g⁺)` converges, by the `L¹`
+convergence of the arms (Baek's Lemma 6.4.2). -/
 theorem k0_integral_tendsto {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hlim : HausdorffTendsto Ks K)
@@ -1020,7 +1014,7 @@ theorem k0_integral_tendsto {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × �
         (Eventually.of_forall fun u => abs_nonneg _)
         (inj_intervalIntegrable_abs_gPlus_sub hc (hcs n) _ _)
 
-/-- Upper support integrals are continuous under Hausdorff convergence. -/
+/-- Integrals of support functions converge under Hausdorff convergence. -/
 theorem support_integral_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
     (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K)
     (hlim : HausdorffTendsto Ks K) (a b : ℝ) :
@@ -1035,8 +1029,7 @@ theorem support_integral_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ �
   exact intervalIntegral.norm_integral_le_of_norm_le_const
     (fun t _ => by rw [Real.norm_eq_abs]; exact inj_abs_supp_sub_le (hKs n) hK t)
 
-/-- The integrated limit inequality includes intervals starting strictly below
-zero. This is what later excludes a curvature atom at zero. -/
+/-- Open-interval curvature bounds with errors tending to zero pass to the Hausdorff limit. -/
 theorem curvature_Ioo_limit {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hlim : HausdorffTendsto Ks K)
@@ -1079,8 +1072,8 @@ theorem curvature_Ioo_limit {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × �
   filter_upwards [inj_eventually_pos_lt_pi] with ε hε
   exact hΦle ε hε.1 hε.2
 
-/-- Open-interval mass bounds imply the endpoint-safe restricted measure
-inequality. The derivation explicitly includes zero and excludes only the top. -/
+/-- The bounds `σ_K((a, b)) ≤ ∫_{max a 0}^b k₀(g_K⁺)` for `-π/2 ≤ a < b ≤ π/2` give the first
+curvature bound. -/
 theorem firstCurvature_of_Ioo {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     (hbound : ∀ a b, -(π / 2) ≤ a → a < b → max a 0 ≤ b → b ≤ π / 2 →
       (sigma K (Ioo a b)).toReal ≤ ∫ u in (max a 0)..b, k0 (gPlus K u)) :
@@ -1170,8 +1163,8 @@ theorem firstCurvature_of_Ioo {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
       rw [heq]
       simp
 
-/-- Reusable limiting theorem for any convergent polygon sequence with a
-vanishing total integrated error. -/
+/-- The first curvature bound for a Hausdorff limit of polygon caps that satisfy the open-interval
+bounds with errors tending to zero. -/
 theorem firstCurvature_of_polygon_errors {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hlim : HausdorffTendsto Ks K)
@@ -1189,12 +1182,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Curvature domination for the specified cap
+## The first curvature bound for a maximizing cap
 
-Actual penalized stationarity, the geometric inner-ray bound, the cellwise arm
-estimate, and the endpoint-safe limiting theorem are assembled here. Persistent
-coarse sample weights need not be O(delta); their total is at most one, and the
-new integrated estimate sums their errors just once.
+Let `K` be a right-angle cap maximizing `A_{π/2}` with positive value. The polygon caps selected for
+`K` in Proposition 1 lie in one box, so their diameters and arms are bounded (`diameter_le_box`),
+and by inequality (11) they satisfy the bound (15) at every grid normal with the error
+`e(t) = 2 η · atNormal t`, where `η` is their Hausdorff distance to `K`. These errors sum to at most
+`2 η`, since the sample weights sum to at most one (`sampled_grid_error_le`). So the summed bounds
+hold with an error `O(δ + η)` that tends to zero, and `K` satisfies the first curvature bound
+(`firstCurvature_of_maximal_positive`).
 -/
 
 section
@@ -1204,7 +1200,7 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- Any injective finite list of normals collects at most all the sample mass. -/
+/-- The weights `atNormal` at distinct normals sum to at most the total weight. -/
 theorem distinct_normalWeight_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
     {ι : Type*} (s : Finset ι) (t : ι → ℝ)
     (hinj : Set.InjOn t (s : Set ι)) :
@@ -1236,8 +1232,8 @@ theorem distinct_normalWeight_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
     rw [hz]
     exact S.weight_nonneg i
 
-/-- In particular, the first-quadrant grid error is bounded by twice the
-uniform support error, independently of the finest mesh. -/
+/-- With the errors `e(t) = 2 η · atNormal t` and total weight at most one, the grid error is at
+most `2 η`. -/
 theorem sampled_grid_error_le {k : ℕ} (S : SupportSamples (rightAngleSet k))
     {η : ℝ} (hη : 0 ≤ η) (hW : S.totalWeight ≤ 1) :
     polygonGridError k (fun t => 2 * η * S.atNormal t) ≤ 2 * η := by
@@ -1252,8 +1248,7 @@ theorem sampled_grid_error_le {k : ℕ} (S : SupportSamples (rightAngleSet k))
   have h := mul_le_mul_of_nonneg_left (hmass.trans hW) (show 0 ≤ 2 * η by positivity)
   simpa only [mul_one] using h
 
-/-- A common coordinate box supplies the Euclidean diameter bound needed by
-cellwise arm control. The ordinary product norm is not used as Euclidean norm. -/
+/-- A set in `[-R, R] × [0, 1]` has Euclidean diameter at most `2R + 2`. -/
 theorem diameter_le_box {K : Set (ℝ × ℝ)} {R : ℝ}
     (hR : 0 ≤ R) (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) :
     ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ 2 * R + 2 := by
@@ -1276,7 +1271,7 @@ theorem diameter_le_box {K : Set (ℝ × ℝ)} {R : ℝ}
       sq_nonneg (2 * R + (p.1 - q.1)), sq_nonneg (1 - (p.2 - q.2)),
       sq_nonneg (1 + (p.2 - q.2))]
 
-/-- Dyadic mesh sizes tend to zero along every strictly increasing subsequence. -/
+/-- The step sizes `δ` tend to zero along every strictly increasing sequence of levels. -/
 theorem selected_stepSize_tendsto {k : ℕ → ℕ} (hk : StrictMono k) :
     Tendsto (fun n => stepSize (k n)) atTop (𝓝 0) := by
   have hmesh : Tendsto stepSize atTop (𝓝 0) := by
@@ -1286,8 +1281,8 @@ theorem selected_stepSize_tendsto {k : ℕ → ℕ} (hk : StrictMono k) :
     exact tendsto_const_nhds.div_atTop hpow
   exact hmesh.comp hk.tendsto_atTop
 
-/-- First-half curvature domination for every specified cap maximizing a
-positive sofa-area value. Normal zero is included in the conclusion. -/
+/-- A right-angle cap maximizing `A_{π/2}` with positive value satisfies the first curvature
+bound (16). -/
 theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hpositive : 0 < sofaArea (π / 2) K)
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -1370,13 +1365,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Both curvature bounds for the specified maximizer
+## The second curvature bound by reflection
 
-Reflection sends `[0, pi/2)` to `(pi/2, pi]`. The strict and non-strict
-endpoints are preserved explicitly below. The arm identity exchanges plus
-with minus, so no absence of atoms is assumed to prove absence of atoms. The
-measure transport is written as equalities of restricted measures and lower
-integrals.
+The reflection `t ↦ π - t` of normal angles (`normalReflection`) maps the surface area measure of
+the reflected cap to that of the cap (`sigma_eq_map_mirror`), and `[0, π/2)` onto `(π/2, π]`. Since
+the reflection of caps exchanges `g⁺` with `f⁻`, the first curvature bound for the reflected cap is
+the second curvature bound for the cap (`secondCurvature_of_mirror_first`). The reflected cap is
+again maximizing, so every right-angle cap maximizing `A_{π/2}` with positive value satisfies both
+bounds (16) (`curvature_of_maximal_positive`).
 -/
 
 section
@@ -1385,7 +1381,7 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The involution on normal angles induced by the right-angle cap mirror. -/
+/-- The reflection `t ↦ π - t` of normal angles, induced by the reflection of right-angle caps. -/
 def normalReflection : ℝ ≃ᵐ ℝ where
   toFun t := π - t
   invFun t := π - t
@@ -1396,7 +1392,7 @@ def normalReflection : ℝ ≃ᵐ ℝ where
 
 @[simp] theorem normalReflection_apply (t : ℝ) : normalReflection t = π - t := rfl
 
-/-- Reflection of real normal angles preserves Lebesgue measure. -/
+/-- The reflection `t ↦ π - t` preserves Lebesgue measure. -/
 theorem normalReflection_measurePreserving :
     MeasurePreserving normalReflection (volume : Measure ℝ) volume := by
   refine ⟨normalReflection.measurable, ?_⟩
@@ -1410,7 +1406,8 @@ theorem normalReflection_measurePreserving :
   rw [heq, Real.volume_preimage_mul_left (by norm_num), measure_preimage_add]
   norm_num
 
-/-- Curvature reflection, with the output cap identified as the original set. -/
+/-- The surface area measure of a right-angle cap is the image of that of its reflection under
+`t ↦ π - t`. -/
 theorem sigma_eq_map_mirror {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) :
     sigma K = Measure.map normalReflection (sigma (mirrorCap K (π / 2))) := by
   have h := proposition2_5_4_sigma (proposition2_5_4_isCap hK)
@@ -1418,8 +1415,8 @@ theorem sigma_eq_map_mirror {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) :
   change sigma K = Measure.map (fun t : ℝ => π - t) (sigma (mirrorCap K (π / 2)))
   simpa only [show π / 2 + π / 2 = π by ring] using h
 
-/-- Push the first-half bound for the reflected cap to the second half of K.
-This lemma does not require either cap to maximize the area functional. -/
+/-- The first curvature bound for the reflected cap gives the second curvature bound for the
+cap. -/
 theorem secondCurvature_of_mirror_first {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2))
     (hfirst : FirstCurvatureBound (mirrorCap K (π / 2))) : SecondCurvatureBound K := by
@@ -1457,7 +1454,8 @@ theorem secondCurvature_of_mirror_first {K : Set (ℝ × ℝ)}
         normalReflection.measurableEmbedding
         (fun t => ENNReal.ofReal (k0 (fMinus K (t - π / 2)))) B
 
-/-- The second curvature inequality includes the endpoint pi. -/
+/-- A right-angle cap maximizing `A_{π/2}` with positive value satisfies the second curvature
+bound (16). -/
 theorem secondCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hpositive : 0 < sofaArea (π / 2) K)
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -1467,7 +1465,8 @@ theorem secondCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
   · simpa only [sofaArea_mirror] using hpositive
   · exact maximal_sofaArea_mirror hmax
 
-/-- Both endpoint-safe inequalities for the same specified maximizing cap. -/
+/-- The curvature bounds (16) of note 20 for a right-angle cap maximizing `A_{π/2}` with positive
+value. -/
 theorem curvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hpositive : 0 < sofaArea (π / 2) K)
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :

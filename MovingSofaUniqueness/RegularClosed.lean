@@ -1,8 +1,5 @@
 module
 
-public import MovingSofaOptimality.Gerver.StructureCap
-public import MovingSofaOptimality.Gerver.Envelope
-public import Mathlib.Analysis.Convex.Topology
 public import MovingSofaOptimality.Gerver.Properties
 
 /-!
@@ -17,16 +14,13 @@ of interior points (`gerver_regularClosed`).
 noncomputable section
 
 /-!
-## Gerver's rotation path stays strictly below the cap's top
+## Gerver's rotation path stays below height one
 
-The existing phase estimates already have strict slack after adding the
-translation bounds: at most 0.95, 0.99240672, 0.88962658, 0.99240672 and
-0.9500001 respectively. This proof reuses those established inequalities and
-performs only rational linear/nonlinear arithmetic on them. No new numerical
-enclosure, evaluator or decision certificate is introduced.
-
-The strict bound removes the exceptional top-contact case from regular-closed
-recovery.
+On the five phases of Gerver's motion, the height estimates of the optimality library
+(`gs_ineq_y₁`, `gs_ineq_y₂`, `gs_ineq_y₃`) and the bounds on the translations of the phases bound
+the height of the rotation path by `0.95`, `0.99240672`, `0.88962658`, `0.99240672` and
+`0.9500001`. So the path
+has height less than one on `[0, π/2]` (`path_snd_lt_one`), a strict form of `gs_path_snd_le_one`.
 -/
 
 section
@@ -37,7 +31,8 @@ namespace MovingSofaOptimality.GerverParams
 
 variable {P : GerverParams}
 
-/-- A strict version of `gs_path_snd_le_one`, using its existing phase estimates. -/
+/-- Gerver's rotation path has height less than one on `[0, π/2]`, a strict form of
+`gs_path_snd_le_one`. -/
 theorem path_snd_lt_one (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ}
     (h0 : 0 ≤ t) (h1 : t ≤ π / 2) : (P.path t).2 < 1 := by
   have hO := gs_ord hP
@@ -76,12 +71,13 @@ end MovingSofaOptimality.GerverParams
 end
 
 /-!
-## Compactness and coordinate bounds of the three-piece niche envelope
+## The envelope of the inner corner
 
-These lemmas use only the existing `EnvHyp` geometry and a strict height bound
-for the rotation path. The endpoint matching and monotonicity prove the
-horizontal range and nonnegative height of the whole envelope, including both
-ends. No inverse graph parameterization is chosen.
+Under the hypotheses `EnvHyp`, the envelope `envCurve` is the union of the curve `D`, the rotation
+path `x` and the curve `B`. It is compact (`envelope_isCompact`), and its ends and junctions `D(0)`,
+`x(t₄)`, `x(t₁)` and `B(π/2)` have increasing abscissas (`envelope_endpoint_order`). If the path
+stays below height one, every point of the envelope has abscissa between those of `D(0)` and
+`B(π/2)` and height in `[0, 1)` (`envelope_bounds_of_path_height`).
 -/
 
 section
@@ -93,7 +89,7 @@ namespace MovingSofaUniqueness
 variable {t₁ t₂ t₃ t₄ sA sC : ℝ}
 variable {x : ℝ → ℝ × ℝ} {α β ρA ρC : ℝ → ℝ}
 
-/-- The endpoints and junctions are strictly ordered in the horizontal direction. -/
+/-- The abscissas of `D(0)`, `x(t₄)`, `x(t₁)` and `B(π/2)` increase strictly. -/
 theorem envelope_endpoint_order (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     (envD x β 0).1 < (x t₄).1 ∧ (x t₄).1 < (x t₁).1 ∧
       (x t₁).1 < (envB x α (π / 2)).1 := by
@@ -124,7 +120,8 @@ theorem envelope_isCompact (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC
   · exact isCompact_Icc.image_of_continuousOn
       ((env_D_cont h).mono (Icc_subset_Icc le_rfl (by linarith)))
 
-/-- A strict path-height bound propagates to the entire closed envelope. -/
+/-- If the path has height less than one, every point of the envelope has abscissa between those of
+`D(0)` and `B(π/2)` and height in `[0, 1)`. -/
 theorem envelope_bounds_of_path_height
     (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
     (hheight : ∀ t ∈ Icc (0 : ℝ) (π / 2), (x t).2 < 1) :
@@ -167,16 +164,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Regular-closed cap complements without choosing an envelope inverse
+## Removing the region under an envelope
 
-The closed region below a compact nonnegative envelope is compact. A cap point
-outside that closed region is approximable by interior points of the sofa.
-An envelope point below height one can be moved slightly upward; a possible
-unique height-one contact can instead be approached along the top edge.
-
-This proves a general geometric lemma used to formalize paper note 07. It does
-not assume that the competing sofa is regular closed. The concrete Gerver
-hypotheses are supplied in `GerverRegularClosed`.
+Let `K` be a regular closed set in the strip `0 ≤ y ≤ 1` that contains the rectangle
+`[a, b] × [0, 1]`, and let `Γ` be a compact set of points with abscissa in `[a, b]` and height in
+`[0, 1]`, at most one of height one. If `K` minus the region strictly under `Γ` is closed, it is
+regular closed (`regularClosed_cap_sdiff_envelope`). Its points outside the closed region under `Γ`,
+which is compact (`isCompact_envUnder`), are limits of its interior points because `K` is regular
+closed; its other points lie on `Γ` and are limits of points above them or, at height one, of points
+of the top edge.
 -/
 
 section
@@ -211,8 +207,7 @@ theorem isCompact_envUnder {Γ : Set (ℝ × ℝ)} (hΓ : IsCompact Γ)
   rw [he]
   exact (hΓ.prod isCompact_Icc).image hF
 
-/-- Take the endpoint of a continuous path in a closed set, without a sequence
-or a choice of inverse parameterization. -/
+/-- If a continuous path `q` lies in a closed set for `t ∈ (0, 1)`, so does `q 0`. -/
 theorem mem_closed_of_positive_path {X : Type*} [TopologicalSpace X]
     {A : Set X} (hA : IsClosed A) (q : ℝ → X) (hq : Continuous q)
     (hmem : ∀ t ∈ Ioo (0 : ℝ) 1, q t ∈ A) : q 0 ∈ A := by
@@ -222,7 +217,8 @@ theorem mem_closed_of_positive_path {X : Type*} [TopologicalSpace X]
   rw [closure_Ioo zero_ne_one]
   exact ⟨le_rfl, zero_le_one⟩
 
-/-- Outside a closed excluded region, regular-closedness of the cap survives. -/
+/-- If `K` is regular closed and `N ⊆ U` with `U` closed, every point of `K \ U` is a limit of
+interior points of `K \ N`. -/
 theorem outside_closed_envelope_subset {X : Type*} [TopologicalSpace X]
     {K U N : Set X} (hK : closure (interior K) = K) (hU : IsClosed U)
     (hNU : N ⊆ U) : K \ U ⊆ closure (interior (K \ N)) := by
@@ -237,13 +233,10 @@ theorem outside_closed_envelope_subset {X : Type*} [TopologicalSpace X]
     · exact hU.isOpen_compl.inter isOpen_interior
   exact closure_mono hsub hcl
 
-/-- Removing a strict niche under a compact envelope leaves a regular-closed
-sofa, provided the cap contains the full top rectangle and the envelope has at
-most one contact at height one.
-
-No monotonicity or inverse parameterization of the envelope is required here.
-The hypotheses apply to the envelope as a set of points, including its ends.
--/
+/-- Removing the region strictly under a compact set `Γ` from a regular closed set `K` in the strip
+`0 ≤ y ≤ 1` leaves a regular closed set, if the difference is closed, `K` contains
+`[a, b] × [0, 1]`, and the points of `Γ` have abscissa in `[a, b]` and height in `[0, 1]`, at most
+one of them of height one. -/
 theorem regularClosed_cap_sdiff_envelope {K Γ : Set (ℝ × ℝ)} {a b : ℝ}
     (hab : a < b) (hK : closure (interior K) = K)
     (hKstrip : ∀ p ∈ K, 0 ≤ p.2 ∧ p.2 ≤ 1)
@@ -336,16 +329,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Gerver's sofa is the closure of its interior
+## Gerver's sofa is regular closed
 
-This specializes the compact-envelope recovery lemma to the actual Gerver
-sofa already defined in the paper library. Both top endpoints are contact
-points of the cap, and convexity plus downward closure supplies the intervening
-rectangle. The existing phase enclosures give strict height below one, so no
-exceptional top contact or inverse graph parameterization is needed.
-
-This is Proposition 6 of the uniqueness argument. It uses no assumption about
-the boundary regularity of a competing sofa.
+Gerver's sofa is its cap minus the region strictly under the envelope `Γ` of the inner corner. The
+points `(a, 1)` and `(b, 1)` above the ends of `Γ` are contact points of the cap, so convexity and
+downward closure put the rectangle `[a, b] × [0, 1]` in the cap; in particular the convex cap has
+nonempty interior and is regular closed. Since the rotation path stays below height one, every point
+of `Γ` has height less than one, and `regularClosed_cap_sdiff_envelope` gives Proposition 6 of
+note 20 (`gerver_regularClosed`).
 -/
 
 section
@@ -354,7 +345,7 @@ open Real Set MovingSofaOptimality MovingSofaOptimality.GerverParams
 
 namespace MovingSofaUniqueness
 
-/-- The concrete library Gerver sofa is regular closed. -/
+/-- Proposition 6 of note 20: Gerver's sofa is the closure of its interior. -/
 theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     closure (interior (gerverSofa P)) = gerverSofa P := by
   have hB := GerverParams.romik_bounds hP hbox

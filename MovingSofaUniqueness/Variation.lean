@@ -1,13 +1,7 @@
 module
 
-public import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-public import Mathlib.Basic.Real.Basic
-public import MovingSofaOptimality.Balanced.MaximumPolygonCap
-public import MovingSofaUniqueness.Selection
 public import MovingSofaOptimality.Angle.HorizontalSide
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
-import Mathlib.Tactic.Positivity
+public import MovingSofaUniqueness.Selection
 
 /-!
 # Proposition 2: variations of the selected polygons
@@ -23,15 +17,13 @@ selected sequence these defects vanish, which gives the pinned bounds (19) for t
 noncomputable section
 
 /-!
-## Quantitative stationarity without assuming balancedness
+## Scalar lemmas for first variations
 
-A one-sided quadratic expansion and penalized maximality bound the outward
-first variation. A finite weighted endpoint identity then controls both signs
-of a pinned defect. These are the algebraic steps needed for a specified
-maximizer, whose approximating polygons are not unpenalized maxima.
-
-All feasibility, area-expansion and penalty-expansion hypotheses are visible.
-No existence or geometric regularity claim is hidden in these lemmas.
+If `d * ε ≤ C * ε ^ 2` for all small `ε > 0`, then `d ≤ 0` (`le_zero_of_mul_le_sq`); this turns
+penalized maximality into a bound on a first variation. If nonnegative weights satisfy
+`∑ w i * d i = 0`, and `d i ≤ e i` with `e i ≥ 0`, then `|d k| ≤ (∑ w i * e i) / w k` whenever
+`w k > 0` (`abs_defect_le_div`). With the weights `sin t`, this turns upper bounds on the defects
+into the two-sided bound (12) of note 20.
 -/
 
 section
@@ -41,8 +33,7 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- A strictly positive first-order term cannot be bounded by a quadratic
-remainder at every sufficiently small positive increment. -/
+/-- If `d * ε ≤ C * ε ^ 2` for every `ε ∈ (0, ε₀]`, then `d ≤ 0`. -/
 theorem le_zero_of_mul_le_sq {d C ε₀ : ℝ} (hε₀ : 0 < ε₀)
     (h : ∀ ε ∈ Ioc (0 : ℝ) ε₀, d * ε ≤ C * ε ^ 2) : d ≤ 0 := by
   by_contra hnot
@@ -60,9 +51,8 @@ theorem le_zero_of_mul_le_sq {d C ε₀ : ℝ} (hε₀ : 0 < ε₀)
     nlinarith [mul_pos hε hε]
   exact (not_lt_of_ge hbound) hsmall
 
-/-- If signed defects sum to zero with nonnegative weights, their one-sided
-upper bounds also control their negative parts. Crucially the denominator
-below is the pinned weight, never a small extreme-cell sine. -/
+/-- If `∑ w i * d i = 0`, with `w i ≥ 0` and `d i ≤ e i` where `e i ≥ 0`, then
+`|w k * d k| ≤ ∑ w i * e i`. -/
 theorem abs_weighted_defect_le {ι : Type*} (s : Finset ι)
     (w d e : ι → ℝ) (hw : ∀ i ∈ s, 0 ≤ w i)
     (he : ∀ i ∈ s, 0 ≤ e i) (hd : ∀ i ∈ s, d i ≤ e i)
@@ -82,7 +72,7 @@ theorem abs_weighted_defect_le {ι : Type*} (s : Finset ι)
   rw [abs_le]
   constructor <;> linarith
 
-/-- Quantitative pinned-facet estimate obtained from the endpoint identity. -/
+/-- The bound of `abs_weighted_defect_le`, divided by a positive weight `w k`. -/
 theorem abs_defect_le_div {ι : Type*} (s : Finset ι)
     (w d e : ι → ℝ) (hw : ∀ i ∈ s, 0 ≤ w i)
     (he : ∀ i ∈ s, 0 ≤ e i) (hd : ∀ i ∈ s, d i ≤ e i)
@@ -98,16 +88,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Penalized stationarity for actual polygon caps
+## Penalized maximality bounds the variation defect
 
-The area expansion is the existing Lemma 3.4.7, applied to arbitrary polygon
-caps, not to maximizers. The comparison between assigned and actual supports
-uses Proposition 3.3.7 in its proved direction. Therefore an unpenalized
-balancedness theorem is never used for a penalized maximizer.
-
-This module discharges the algebraic variational step. It does not manufacture
-the feasible candidates or the mesh-uniform penalty-growth bounds; those
-geometric inputs are explicit in the statements.
+Raising the assigned height `h_K(t)` of a polygon cap at a defining normal `t` by `ε > 0` changes
+`A_Θ` by `(σ_K(t) - τ_K(t)) ε + O(ε²)` (Baek's Lemma 3.4.7), and the area `A_Θ` of assigned heights
+is at most that of the polygon cap they define (Baek's Proposition 3.3.7,
+`assigned_comparison_of_actual`). So if the move increases the penalty by at most `b ε + D ε²`,
+penalized maximality gives `σ_K(t) - τ_K(t) ≤ b` (`polygon_defect_le_penalty_growth`). At a normal
+with `σ_K(t) = 0` this bound holds for every `b ≥ 0`, since `τ_K(t) ≥ 0`
+(`polygon_defect_le_of_zero_facet`).
 -/
 
 section
@@ -116,13 +105,13 @@ open Set Real MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The assigned-height objective after one outward height increment. -/
+/-- The area `A_Θ` of the assigned heights `h_K`, raised by `ε` at the normal `t`. -/
 def assignedAreaIncrement (Θ : AngleSet) (K : Set (ℝ × ℝ)) (t ε : ℝ) : ℝ :=
   areaH Θ (Function.update (supp K) t (supp K t + ε))
 
-/-- Assigned supports can overestimate the niche. Thus the assigned objective
-is bounded ABOVE by the actual normalized polygon objective. This is the
-correct direction for obtaining a maximality contradiction. -/
+/-- A comparison `A_Θ(C) - Pε ≤ A_Θ(K) - P₀` of penalized objectives passes to assigned heights
+whose cap is a translate of `C`: their area `A_Θ` is at most `A_Θ(C)` (Baek's
+Proposition 3.3.7). -/
 theorem assigned_comparison_of_actual {Θ : AngleSet}
     {K C : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) (hC : IsPolygonCap Θ C)
     (height : ℝ → ℝ) (v : ℝ × ℝ)
@@ -140,9 +129,8 @@ theorem assigned_comparison_of_actual {Θ : AngleSet}
   rw [hbase]
   linarith
 
-/-- Outward polygon defect bounded by a one-sided penalty-growth coefficient.
-No derivative of the normalization map is assumed: a quadratic upper bound on
-the actual penalty change is sufficient, including for pinned-strip moves. -/
+/-- If, for `ε ∈ (0, ε₀]`, the assigned heights raised by `ε` at `t` have penalized objective at
+most that of `K`, and the penalty grows by at most `b ε + D ε²`, then `σ_K(t) - τ_K(t) ≤ b`. -/
 theorem polygon_defect_le_penalty_growth {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t : ℝ} (ht : t ∈ Θ.diamond)
     (P : ℝ → ℝ) {ε₀ b D : ℝ} (hε₀ : 0 < ε₀)
@@ -166,8 +154,7 @@ theorem polygon_defect_le_penalty_growth {Θ : AngleSet} {K : Set (ℝ × ℝ)}
       nlinarith)
   linarith
 
-/-- A zero-length outer facet needs no feasible outward perturbation:
-nonnegativity of the completed inner-boundary length already controls it. -/
+/-- If `σ_K(t) = 0`, then `σ_K(t) - τ_K(t) ≤ b` for every `b ≥ 0`. -/
 theorem polygon_defect_le_of_zero_facet {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     {t b : ℝ} (hσ : sigmaAt K t = 0) (hb : 0 ≤ b) :
     sigmaAt K t - tau Θ K t ≤ b := by
@@ -180,15 +167,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Floating-facet variations of the actual selected polygons
+## Floating facets: inequality (11)
 
-Raising a non-pinned defining height preserves every other sampled actual
-support. The changed actual support lies between its old height and the new
-assigned height. These two elementary facts, not an unproved support-hat
-formula, give the penalty bound needed for stationarity.
-
-The conclusion holds even for a zero-length floating facet. No unpenalized
-maximality, balancedness, or geometric regularity is assumed.
+The floating normals are the defining normals other than `ω` and `π/2`. Raising the height of a
+polygon cap `K` at a floating normal `t` by `ε ≥ 0` gives a polygon cap `floatingCap Θ K t ε` that
+contains `K`; its supports at the other defining normals are those of `K`, and at `t` its support
+rises by at most `ε`. So the penalty grows by at most `atNormal t * (2 * η * ε + ε ^ 2)` when the
+sampled supports of `K` are within `η` of the target (`floating_penalty_growth`), and a penalized
+maximizer satisfies `σ_K(t) - τ_K(t) ≤ 2 * η * atNormal t` (`floating_defect_le`), inequality (11)
+of note 20.
 -/
 
 section
@@ -197,7 +184,7 @@ open Set Real MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The actual outward-perturbed cap. -/
+/-- The cap of the assigned heights `h_K`, raised by `ε` at the normal `t`. -/
 def floatingCap (Θ : AngleSet) (K : Set (ℝ × ℝ)) (t ε : ℝ) : Set (ℝ × ℝ) :=
   capH Θ (Function.update (supp K) t (supp K t + ε))
 
@@ -219,8 +206,7 @@ theorem floatingCap_polygon {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   rw [heq]
   exact proposition3_3_4 ⟨K, 0, hK, by simp⟩
 
-/-- Every old point satisfies the relaxed upper constraint; the two lower
-strip constraints are unchanged. -/
+/-- Raising a floating height enlarges the cap. -/
 theorem subset_floatingCap {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε : ℝ} (htω : t ≠ Θ.ω) (htL : t ≠ π / 2)
     (hε : 0 ≤ ε) : K ⊆ floatingCap Θ K t ε := by
@@ -242,8 +228,8 @@ theorem subset_floatingCap {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   · rw [Function.update_of_ne htL.symm, hK.1.2.2.2.1]
     simpa only [sub_self, mpc_dot_uvec_pi_div_two] using (mpc_cap_nonneg hK.1 hp).1
 
-/-- At every defining normal, the old actual support is a lower bound and the
-new assigned height is an upper bound for the perturbed actual support. -/
+/-- At every defining normal `s`, the support of the raised cap lies between `h_K(s)` and the raised
+assigned height. -/
 theorem floatingCap_support_bounds {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε s : ℝ}
     (htω : t ≠ Θ.ω) (htL : t ≠ π / 2) (hε : 0 ≤ ε) (hs : s ∈ Θ.diamond) :
@@ -258,7 +244,7 @@ theorem floatingCap_support_bounds {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     rw [mpc_mem_capH] at hp
     exact hp.1 s hs
 
-/-- No unsampled-direction estimate is necessary for this selector. -/
+/-- At the defining normals other than `t`, the raised cap has the supports of `K`. -/
 theorem floatingCap_support_other {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε s : ℝ}
     (htω : t ≠ Θ.ω) (htL : t ≠ π / 2) (hε : 0 ≤ ε)
@@ -277,7 +263,9 @@ theorem floatingCap_support_self {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   rw [abs_of_nonneg (sub_nonneg.mpr h.1)]
   linarith
 
-/-- Exact one-sided penalty growth for an outward floating move. -/
+/-- If the sampled supports of `K` are within `η` of the target, raising the height at a floating
+normal `t` by `ε` increases the penalty by at most
+`(2 * η * atNormal t) * ε + atNormal t * ε ^ 2`. -/
 theorem floating_penalty_growth {Θ : AngleSet} (S : SupportSamples Θ)
     {target K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) {t η ε : ℝ}
     (ht : t ∈ Θ.diamond) (htω : t ≠ Θ.ω) (htL : t ≠ π / 2)
@@ -291,8 +279,8 @@ theorem floating_penalty_growth {Θ : AngleSet} (S : SupportSamples Θ)
   have hu := (abs_le.mp h).2
   nlinarith
 
-/-- The actual stationarity estimate for selected polygons. Total sample mass,
-not the number of finest-mesh normals, controls the sum of these errors. -/
+/-- Inequality (11) of note 20: at a floating normal `t`, a penalized maximizer whose sampled
+supports are within `η` of the target satisfies `σ_K(t) - τ_K(t) ≤ 2 * η * atNormal t`. -/
 theorem floating_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     {target K : Set (ℝ × ℝ)} (hK : IsPenalizedMax S target K) {t η : ℝ}
     (ht : t ∈ Θ.diamond) (htω : t ≠ Θ.ω) (htL : t ≠ π / 2)
@@ -320,18 +308,15 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Uniform control of the structured pinned-strip move
+## The pinned move
 
-For omega<pi/2 a standard cap contains O and its top corner o. Raising either
-pinned height by epsilon simultaneously moves the corresponding lower strip.
-For 0<=epsilon<=1 the resulting assigned cap K' satisfies
-
-  (1-epsilon) K + epsilon o subset K' subset (1+epsilon) K.
-
-This specific sandwich, rather than a false general diameter-to-height
-perturbation estimate, gives a mesh-independent support bound. Feasibility as
-a translated polygon cap is supplied by the existing Lemma 3.4.8. Width one
-then determines the normalization translation directly.
+Let `ω < π/2`, so that a polygon cap `K` contains the origin and the top corner `o_ω`. Raising its
+height at a pinned normal `t ∈ {ω, π/2}` by `ε ∈ [0, 1]` moves both lines of the strip of that
+normal, and the moved cap `K'` satisfies `(1 - ε) K + ε o_ω ⊆ K' ⊆ (1 + ε) K`
+(`pinned_contract_mem`, `pinned_div_mem`). If `K'` is a translate of a polygon cap `C`, as Baek's
+Lemma 3.4.8 provides when `σ_K(t) > 0`, the two strips fix the translation up to `O(ε)`
+(`pinned_translation_bound`). So the supports of `C` and `K` differ by at most
+`(2R + 2 / cos ω + 1) ε` when `|h_K| ≤ R` (`pinned_normalized_support_bound`).
 -/
 
 section
@@ -340,29 +325,28 @@ open Set Real MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The assigned height at a pinned normal before subtracting the unit width. -/
+/-- A polygon cap has support `1` at the pinned normals `ω` and `π/2`. -/
 theorem pinned_support_value {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {s : ℝ} (hs : s = Θ.ω ∨ s = π / 2) : supp K s = 1 := by
   rcases hs with rfl | rfl
   · exact hK.1.2.2.1
   · exact hK.1.2.2.2.1
 
-/-- Both scalar products of the common top corner with the pinned normals
-are exactly one. -/
+/-- The top corner `o_ω` has scalar product `1` with `u_ω` and with `u_{π/2}`. -/
 theorem pinned_corner_dot {Θ : AngleSet} {s : ℝ}
     (hs : s = Θ.ω ∨ s = π / 2) : dot (oPt Θ.ω) (uvec s) = 1 := by
   rcases hs with rfl | rfl
   · exact mpc_oPt_dot_uvec Θ.hω
   · rw [mpc_dot_uvec_pi_div_two, mpc_oPt_snd]
 
-/-- The common origin makes every upper support nonnegative. -/
+/-- For `ω < π/2` a polygon cap contains the origin, so its supports are nonnegative. -/
 theorem pinned_support_nonneg {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) (s : ℝ) : 0 ≤ supp K s := by
   have h := dot_le_supp hK.1.2.1.2.1 (ang_cap_origin_mem hK.1 hω) s
   simpa [dot] using h
 
-/-- Contracting toward the common top corner produces points of the moved
-assigned cap. The statement covers both distinct pinned normals. -/
+/-- For `p ∈ K` and `ε ∈ [0, 1]`, the point `(1 - ε) p + ε o_ω` lies in the cap moved by `ε` at a
+pinned normal. -/
 theorem pinned_contract_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) {t ε : ℝ}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
@@ -404,8 +388,8 @@ theorem pinned_contract_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
       have h := (mpc_cap_nonneg hK.1 hcombo).1
       simpa only [sub_self, mpc_dot_uvec_pi_div_two] using h
 
-/-- Contracting the moved assigned cap toward the common origin by
-1/(1+epsilon) puts it back in the original cap. -/
+/-- The cap moved by `ε ≥ 0` at a pinned normal, scaled by `1 / (1 + ε)` about the origin, lies in
+`K`. -/
 theorem pinned_div_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) {t ε : ℝ}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : 0 ≤ ε)
@@ -451,8 +435,8 @@ theorem pinned_div_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     rw [dot_smul_left]
     exact mul_nonneg (by positivity) hlo
 
-/-- A bounded-support consequence of the structured contraction sandwich.
-It is independent of the number or spacing of polygon normals. -/
+/-- If `|h_K| ≤ R`, moving a pinned strip by `ε ∈ [0, 1]` changes every support by at most
+`2 R ε`. -/
 theorem pinned_raw_support_bound {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) {t ε R : ℝ}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
@@ -480,8 +464,8 @@ theorem pinned_raw_support_bound {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   rw [abs_le]
   constructor <;> nlinarith [hε.1]
 
-/-- An actual width-one translated cap fitting between the assigned two strip
-bounds has exactly those two supports: there is no hidden strip slack. -/
+/-- If the translate by `v` of a polygon cap lies in the strip `a ≤ dot p (uvec s) ≤ a + 1` at a
+pinned normal `s`, then `dot v (uvec s) = a`. -/
 theorem translated_strip_support {Θ : AngleSet} {C : Set (ℝ × ℝ)}
     (hC : IsPolygonCap Θ C) (v : ℝ × ℝ) {s a : ℝ}
     (hs : s = Θ.ω ∨ s = π / 2)
@@ -505,8 +489,8 @@ theorem translated_strip_support {Θ : AngleSet} {C : Set (ℝ × ℝ)}
   rw [dot_add_left] at hl
   linarith
 
-/-- The normalization displacement of a pinned move has uniformly controlled
-scalar products. The denominator cos(omega) is fixed, not a mesh sine. -/
+/-- If the cap moved by `ε` at a pinned normal is the translate by `v` of a polygon cap, then
+`|dot v (uvec s)| ≤ (2 / cos ω + 1) ε` for every `s`. -/
 theorem pinned_translation_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hC : IsPolygonCap Θ C) (hω : Θ.ω < π / 2)
     {t ε : ℝ} (ht : t = Θ.ω ∨ t = π / 2) (hε : 0 ≤ ε)
@@ -567,7 +551,8 @@ theorem pinned_translation_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     exact add_le_add hxy hyabs
   exact hdot.trans hbound
 
-/-- Uniform support error AFTER normalization to the original two strips. -/
+/-- If the cap moved by `ε` at a pinned normal is a translate of the polygon cap `C`, the supports
+of `C` and `K` differ by at most `(2R + 2 / cos ω + 1) ε`. -/
 theorem pinned_normalized_support_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hC : IsPolygonCap Θ C) (hω : Θ.ω < π / 2)
     {t ε R : ℝ} (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
@@ -591,13 +576,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Pinned stationarity and the endpoint balance identity
+## Pinned facets: inequality (12)
 
-The structured strip sandwich controls the selected penalty after the actual
-normalization supplied by Lemma 3.4.8. The positive pinned defect is therefore
-O(eta), where eta is the uniform support distance to the target. The outer and
-completed inner boundary walks have the same horizontal displacement. Their
-weighted defect sum is zero, so the negative pinned defect is controlled too.
+At a pinned normal `t`, a penalized maximizer `K` with `|h_K| ≤ R`, whose sampled supports are
+within `η` of the target, satisfies `σ_K(t) - τ_K(t) ≤ 2 W η (2R + 2 / cos ω + 1)`, where `W` is the
+total sample weight (`pinned_defect_le`). Every polygon cap satisfies
+`∑_{t ∈ Θ^◇} sin t (σ_K(t) - τ_K(t)) = 0` (`polygon_weighted_defect_zero`), the identity (13) of
+note 20. With the floating bounds (11), this bounds every defect from both sides
+(`abs_selected_defect_le`), which is inequality (12).
 -/
 
 section
@@ -607,7 +593,9 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- The outward pinned defect for an actual selected polygon. -/
+/-- At a pinned normal `t`, a penalized maximizer with `|h_K| ≤ R`, whose sampled supports are
+within `η` of the target, satisfies `σ_K(t) - τ_K(t) ≤ 2 W η (2R + 2 / cos ω + 1)`, where `W` is the
+total sample weight. -/
 theorem pinned_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     {target K : Set (ℝ × ℝ)} (hK : IsPenalizedMax S target K)
     (hω : Θ.ω < π / 2) {t η R : ℝ} (ht : t = Θ.ω ∨ t = π / 2)
@@ -664,7 +652,8 @@ theorem pinned_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     have hw := S.totalWeight_nonneg
     positivity
 
-/-- The weighted signed defect identity holds for every polygon cap. -/
+/-- The identity (13) of note 20: `∑_{t ∈ Θ^◇} sin t (σ_K(t) - τ_K(t)) = 0` for every polygon
+cap. -/
 theorem polygon_weighted_defect_zero {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) :
     (∑ t ∈ mpcDiamond Θ, sin t * (sigmaAt K t - tau Θ K t)) = 0 := by
@@ -672,7 +661,8 @@ theorem polygon_weighted_defect_zero {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   simp_rw [mul_comm (sin _)]
   rw [mpc_sum_sigma_sin hK, mpc_sum_tau_sin hK, sub_self]
 
-/-- Total error controlling every defect of the actual sampled selector. -/
+/-- The upper bound on the defect at `t`: the floating bound `2 * η * atNormal t`, plus the pinned
+bound at `ω` and `π/2`. -/
 def selectorDefectBound {Θ : AngleSet} (S : SupportSamples Θ) (G η t : ℝ) : ℝ := by
   classical
   exact 2 * η * S.atNormal t +
@@ -687,7 +677,8 @@ theorem selectorDefectBound_nonneg {Θ : AngleSet} (S : SupportSamples Θ)
   unfold selectorDefectBound
   split_ifs <;> positivity
 
-/-- At most two pinned normals contribute a normalization error. -/
+/-- Summed over `Θ^◇`, the bounds are at most `2 * η * W + 4 * W * η * G`, where `W` is the total
+sample weight. -/
 theorem selectorDefectBound_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
     {G η : ℝ} (hG : 0 ≤ G) (hη : 0 ≤ η) :
     (∑ t ∈ mpcDiamond Θ, selectorDefectBound S G η t) ≤
@@ -717,8 +708,9 @@ theorem selectorDefectBound_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
   dsimp [b] at hpin
   linarith
 
-/-- Two-sided control of any specified upper-normal defect. Only its own
-positive sine appears in the denominator, so this is uniform at fixed pins. -/
+/-- Inequality (12) of note 20: for a penalized maximizer with `|h_K| ≤ R`, whose sampled supports
+are within `η` of the target, `|σ_K(t) - τ_K(t)| ≤ (2 η W + 4 W η (2R + 2 / cos ω + 1)) / sin t` at
+every defining normal `t`, where `W` is the total sample weight. -/
 theorem abs_selected_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     {target K : Set (ℝ × ℝ)} (hK : IsPenalizedMax S target K)
     (hω : Θ.ω < π / 2) {η R : ℝ} (hη : 0 ≤ η) (hR : 0 ≤ R)
@@ -769,16 +761,14 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Pinned bounds for the specified continuum maximizer
+## The pinned bounds (19)
 
-The polygon inequalities here are w<=tau and z<=tau. They are valid before
-balancedness and are not the balanced-polygon Theorem 4.1.2. The selected
-polygons have vanishing signed pinned defects; upper semicontinuity of a fixed
-edge length then gives the desired inequalities for their specified limit.
-
-Positive sofa-area is stated because it supplies the compact selector. In the
-shape-uniqueness application it follows from the already proved lower bound
-on Gerver's area, not from any additional assumption on the starting sofa.
+For a polygon cap with `ω < π/2`, Baek's Lemma 3.4.5 on the sides of the niche along the two strips
+gives `w_K° ≤ τ_K(π/2)` and `z_K° ≤ τ_K(ω)` for the wedge gap infima (`polygon_wedgeGapW_le_tau`,
+`polygon_wedgeGapZ_le_tau`). Along the polygon caps selected for a cap `K` that maximizes `A_ω` with
+positive value, the pinned defects tend to zero, the gap infima converge (Baek's Lemma 4.1.1), and
+the edge length `σ` at a fixed normal is upper semicontinuous. Hence `w_K° ≤ σ_K(π/2)` and
+`z_K° ≤ σ_K(ω)` (`pinned_bounds_of_maximal_positive`), the pinned bounds (19) of note 20.
 -/
 
 section
@@ -787,8 +777,7 @@ open Set Real Filter Topology MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- The completed inner boundary, not the outer top edge, is bounded below
-by the right gap before any maximality or stationarity argument is used. -/
+/-- For a polygon cap with `ω < π/2`, `w_K° ≤ τ_K(π/2)`. -/
 theorem polygon_wedgeGapW_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) :
     wedgeGapWInf K Θ.ω ≤ tau Θ K (π / 2) := by
@@ -807,6 +796,7 @@ theorem polygon_wedgeGapW_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   · rw [max_eq_left hW] at hℓ
     linarith
 
+/-- For a polygon cap with `ω < π/2`, `z_K° ≤ τ_K(ω)`. -/
 theorem polygon_wedgeGapZ_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) :
     wedgeGapZInf K Θ.ω ≤ tau Θ K Θ.ω := by
@@ -824,7 +814,7 @@ theorem polygon_wedgeGapZ_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   · rw [max_eq_left hW] at hℓ
     linarith
 
-/-- A common coordinate box bounds the supports in every direction. -/
+/-- A convex body in `[-R, R] × [0, 1]` has supports of absolute value at most `R + 1`. -/
 theorem abs_supp_le_box {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {R : ℝ}
     (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) (t : ℝ) :
     |supp K t| ≤ R + 1 := by
@@ -836,8 +826,8 @@ theorem abs_supp_le_box {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {R : ℝ}
   have hy' : |p.2| ≤ 1 := abs_le.mpr ⟨by linarith [hy.1], hy.2⟩
   linarith
 
-/-- Pinned inequalities for every specified cap maximizing a positive value.
-The sequence in this proof converges to K itself. -/
+/-- The pinned bounds (19) of note 20: for `ω ∈ (0, π/2)`, a cap maximizing `A_ω` with positive
+value satisfies `w_K° ≤ σ_K(π/2)` and `z_K° ≤ σ_K(ω)`. -/
 theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2))
     {K : Set (ℝ × ℝ)} (hK : IsCap K ω) (hpositive : 0 < sofaArea ω K)
     (hmax : ∀ C, IsCap C ω → sofaArea ω C ≤ sofaArea ω K) :

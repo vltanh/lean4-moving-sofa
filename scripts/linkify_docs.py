@@ -28,12 +28,12 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process.
-DOCS = ['README.md', 'REPORT.md', 'docs/UNIQUENESS.md', 'MovingSofaUniquenessFC/README.md']
+DOCS = ['README.md', 'REPORT.md', 'docs/UNIQUENESS.md', 'docs/BRIDGE.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'MovingSofaUniqueness',
-              'MovingSofaChallenge']
+              'MovingSofaBridge', 'MovingSofaBridge.GerverConstants']
 # Top-level module names of the project: a code span naming such a module links to its file.
-MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaUniquenessFC', 'ChallengeDefs',
+MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'ChallengeDefs',
                 'Challenge', 'Solution')
 # The module whose declarations win when a name is declared in several modules.
 PREFERRED_MODULE = 'Challenge'

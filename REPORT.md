@@ -459,10 +459,10 @@ omit them, so they are more general than the paper's.
   ½ ∫_{(a,b)} h_K dσ_K ([`convexCurveArea`](MovingSofaOptimality/Convex/ConvexCurve.lean#L32)). Theorem 7.3.2 shows that it is the curve area functional
   of an injective parametrization of the arc.
 - **Gerver's sofa** follows Romik:
-  - `GerverParams` holds the 22 parameters, and `x₁, …, x₅` are his solutions (SOL1)–(SOL5).
+  - [`GerverParams`](MovingSofaOptimality/Gerver/Defs.lean#L30) holds the 22 parameters, and `x₁, …, x₅` are his solutions (SOL1)–(SOL5).
   - [`IsSolution`](MovingSofaOptimality/Gerver/Defs.lean#L89) is his system (27)–(44) together with 0 < φ < θ < π/4, and [`InBox`](MovingSofaOptimality/Gerver/Defs.lean#L105) is
     φ ∈ [0.039, 0.04], θ ∈ [0.68, 0.69].
-  - `gerverSofa` is the shape of the rotation path, Romik's Equation (8).
+  - [`gerverSofa`](MovingSofaOptimality/Gerver/Defs.lean#L116) is the shape of the rotation path, Romik's Equation (8).
   - Every result about Gerver's sofa is stated for every solution in the box; the box contains exactly
     one solution.
 - **Chapter 8** is stated for a parameter φ ∈ [0.039, 0.04] standing for φ^R, with φ^L = π/2 − φ, rather
