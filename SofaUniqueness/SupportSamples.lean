@@ -77,7 +77,7 @@ theorem sample_bound (target K : Set (ℝ × ℝ)) (i : S.Index) :
     (fun i => supp K (S.normal i)) (fun i _ => S.weight_nonneg i) (Finset.mem_univ i)
 
 /-- A bound on all sampled support differences controls the penalty. -/
-theorem penalty_le (target K : Set (ℝ × ℝ)) {η : ℝ} (hη : 0 ≤ η)
+theorem penalty_le (target K : Set (ℝ × ℝ)) {η : ℝ}
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η) :
     S.penalty target K ≤ S.totalWeight * η ^ 2 :=
   sampledPenalty_le _ _ _ _ (fun i _ => S.weight_nonneg i) (fun i _ => hclose i)
@@ -138,7 +138,7 @@ theorem penalty_change_uniform {target K K' : Set (ℝ × ℝ)} {η r : ℝ}
       S.totalWeight * (2 * η * r + r ^ 2) := by
   exact sampledPenalty_change_bound Finset.univ S.weight
     (fun i => supp target (S.normal i)) (fun i => supp K (S.normal i))
-    (fun i => supp K' (S.normal i)) (fun i _ => S.weight_nonneg i) hη hr
+    (fun i => supp K' (S.normal i)) (fun i _ => S.weight_nonneg i) hη
     (fun i _ => hclose i) (fun i _ => hchange i)
 
 end SupportSamples

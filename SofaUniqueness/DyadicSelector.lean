@@ -153,7 +153,7 @@ theorem dyadic_recovery_ge {target : Set (ℝ × ℝ)} (hK : IsCap target ω) (n
 theorem dyadicPenalty_le_uniform (n : ℕ) (target K : Set (ℝ × ℝ)) {η : ℝ}
     (hη : 0 ≤ η) (hclose : ∀ t, |supp K t - supp target t| ≤ η) :
     dyadicPenalty ω hω n target K ≤ η ^ 2 := by
-  have h := (dyadicSamples ω hω n).penalty_le target K hη
+  have h := (dyadicSamples ω hω n).penalty_le target K
     (fun i => hclose ((dyadicSamples ω hω n).normal i))
   have hmass := mul_le_mul_of_nonneg_right (dyadic_totalWeight_le_one ω hω n) (sq_nonneg η)
   calc dyadicPenalty ω hω n target K

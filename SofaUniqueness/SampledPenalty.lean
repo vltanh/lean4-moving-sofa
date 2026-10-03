@@ -76,7 +76,7 @@ theorem abs_square_increment_le {a b c η r : ℝ}
 /-- Uniform changes of the sampled actual supports control the whole penalty.
 The estimate has an explicit quadratic remainder. -/
 theorem sampledPenalty_change_bound (s : Finset ι) (w target f g : ι → ℝ)
-    (hw : ∀ i ∈ s, 0 ≤ w i) {η r : ℝ} (hη : 0 ≤ η) (hr : 0 ≤ r)
+    (hw : ∀ i ∈ s, 0 ≤ w i) {η r : ℝ} (hη : 0 ≤ η)
     (hclose : ∀ i ∈ s, |f i - target i| ≤ η)
     (hchange : ∀ i ∈ s, |g i - f i| ≤ r) :
     |sampledPenalty s w target g - sampledPenalty s w target f| ≤
@@ -136,7 +136,7 @@ theorem sampledPenalty_change_on_normal (s : Finset ι) (normal : ι → α)
     rw [hsame i hi hne, sub_self]
   rw [heq]
   exact sampledPenalty_change_bound F w target f g
-    (fun i hi => hw i (Finset.mem_filter.mp hi).1) hη hr
+    (fun i hi => hw i (Finset.mem_filter.mp hi).1) hη
     (fun i hi => hclose i (Finset.mem_filter.mp hi).1)
     (fun i hi => hchange i (Finset.mem_filter.mp hi).1 (Finset.mem_filter.mp hi).2)
 
