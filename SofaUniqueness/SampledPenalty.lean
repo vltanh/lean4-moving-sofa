@@ -43,7 +43,7 @@ theorem sample_sq_le_penalty (s : Finset ι) (w target f : ι → ℝ)
 
 /-- A uniform error in the sampled supports bounds the recovery penalty. -/
 theorem sampledPenalty_le (s : Finset ι) (w target f : ι → ℝ)
-    (hw : ∀ i ∈ s, 0 ≤ w i) {η : ℝ} (hη : 0 ≤ η)
+    (hw : ∀ i ∈ s, 0 ≤ w i) {η : ℝ}
     (hclose : ∀ i ∈ s, |f i - target i| ≤ η) :
     sampledPenalty s w target f ≤ (∑ i ∈ s, w i) * η ^ 2 := by
   rw [sampledPenalty, Finset.sum_mul]
@@ -56,7 +56,7 @@ theorem sampledPenalty_le (s : Finset ι) (w target f : ι → ℝ)
 /-- Scalar square-increment estimate. It applies to positive and negative
 changes of the actual support, as needed after pinned-strip normalization. -/
 theorem abs_square_increment_le {a b c η r : ℝ}
-    (hη : 0 ≤ η) (hr : 0 ≤ r) (ha : |a - c| ≤ η) (hab : |b - a| ≤ r) :
+    (hη : 0 ≤ η) (ha : |a - c| ≤ η) (hab : |b - a| ≤ r) :
     |(b - c) ^ 2 - (a - c) ^ 2| ≤ 2 * η * r + r ^ 2 := by
   have hid : (b - c) ^ 2 - (a - c) ^ 2 = 2 * (a - c) * (b - a) + (b - a) ^ 2 := by ring
   rw [hid]
@@ -85,14 +85,14 @@ theorem sampledPenalty_change_bound (s : Finset ι) (w target f g : ι → ℝ)
       w i * (g i - target i) ^ 2 - w i * (f i - target i) ^ 2 ≤
         w i * (2 * η * r + r ^ 2) := by
     intro i hi
-    have h := (abs_le.mp (abs_square_increment_le hη hr (hclose i hi) (hchange i hi))).2
+    have h := (abs_le.mp (abs_square_increment_le hη (hclose i hi) (hchange i hi))).2
     have hm := mul_le_mul_of_nonneg_left h (hw i hi)
     nlinarith
   have hl : ∀ i ∈ s,
       -(w i * (2 * η * r + r ^ 2)) ≤
         w i * (g i - target i) ^ 2 - w i * (f i - target i) ^ 2 := by
     intro i hi
-    have h := (abs_le.mp (abs_square_increment_le hη hr (hclose i hi) (hchange i hi))).1
+    have h := (abs_le.mp (abs_square_increment_le hη (hclose i hi) (hchange i hi))).1
     have hm := mul_le_mul_of_nonneg_left h (hw i hi)
     nlinarith
   have hsumU := Finset.sum_le_sum hu

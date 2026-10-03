@@ -64,7 +64,7 @@ theorem polygon_wedgeGapZ_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
 
 /-- A common coordinate box bounds the supports in every direction. -/
 theorem abs_supp_le_box {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {R : ℝ}
-    (hR : 0 ≤ R) (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) (t : ℝ) :
+    (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) (t : ℝ) :
     |supp K t| ≤ R + 1 := by
   obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hK.2.1 hK.1 t
   rw [← hpt]
@@ -92,7 +92,7 @@ theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2
   let R := seq.radius + 1
   have hR : 0 ≤ R := by dsimp [R]; linarith [seq.radius_nonneg]
   have hsupp : ∀ n s, |supp (Ks n) s| ≤ R :=
-    fun n s => abs_supp_le_box (hcb n) seq.radius_nonneg (seq.boxed n) s
+    fun n s => abs_supp_le_box (hcb n) (seq.boxed n) s
   have hclose : ∀ n s, |supp (Ks n) s - supp K s| ≤ η n :=
     fun n s => ang_abs_supp_sub_le_hausdorffDist (hcb n) hK.2.1 s
   let G := 2 * R + 2 / cos ω + 1

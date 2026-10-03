@@ -126,7 +126,7 @@ theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
   have hdiam : ∀ n, ∀ p ∈ Ks n, ∀ q ∈ Ks n, norm2 (p - q) ≤ D :=
     fun n => diameter_le_box seq.radius_nonneg (seq.boxed n)
   have hsupp : ∀ n t, |supp (Ks n) t| ≤ seq.radius + 1 :=
-    fun n t => abs_supp_le_box (hc n) seq.radius_nonneg (seq.boxed n) t
+    fun n t => abs_supp_le_box (hc n) (seq.boxed n) t
   have hgbound : ∀ n t, gPlus (Ks n) t ≤ D := by
     intro n t
     have h := inj_gPlus_le_width (hc n) t

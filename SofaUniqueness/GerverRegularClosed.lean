@@ -72,7 +72,7 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
       apply Prod.ext
       · dsimp [c]
         field_simp
-        <;> ring
+        ring
       · simp
     rw [he] at htop
     exact opt_cap_down hcap htop hy.1 hy.2

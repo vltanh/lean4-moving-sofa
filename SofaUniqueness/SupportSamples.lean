@@ -80,7 +80,7 @@ theorem sample_bound (target K : Set (ℝ × ℝ)) (i : S.Index) :
 theorem penalty_le (target K : Set (ℝ × ℝ)) {η : ℝ} (hη : 0 ≤ η)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η) :
     S.penalty target K ≤ S.totalWeight * η ^ 2 :=
-  sampledPenalty_le _ _ _ _ (fun i _ => S.weight_nonneg i) hη (fun i _ => hclose i)
+  sampledPenalty_le _ _ _ _ (fun i _ => S.weight_nonneg i) (fun i _ => hclose i)
 
 /-- The recovery penalty vanishes identically, at every finite mesh. -/
 theorem penalty_recovery_zero {target : Set (ℝ × ℝ)} (hK : IsCap target Θ.ω) :

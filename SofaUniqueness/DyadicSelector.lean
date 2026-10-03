@@ -68,7 +68,7 @@ def dyadicSamples (n : ℕ) : SupportSamples (dyadicAngleSet ω hω n) where
 
 /-- The finite mass of a single level, independent of its number of normals. -/
 theorem dyadic_level_mass (m : ℕ) :
-    (∑ i : ↥(dyadicAngleSet ω hω m).angles × Fin 2,
+    (∑ _i : ↥(dyadicAngleSet ω hω m).angles × Fin 2,
       dyadicLevelWeight ω hω m) = (1 / 2 : ℝ) ^ (m + 1) := by
   classical
   have hcard : ((dyadicAngleSet ω hω m).angles.card : ℝ) ≠ 0 := by
