@@ -13,6 +13,15 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.35.0-rc3"
 
+# The exact upstream constants, concrete Gerver sofa, and their existing proofs.
+# A pinned Lean dependency, not an external proof generator or an upstream
+# statement file with admitted solved results. Source compatibility with the
+# root toolchain is untested; no compiler or Lake command has been run.
+[[require]]
+name = "sofa-formal"
+git = "https://github.com/RuifengCao/sofa-formal"
+rev = "838baca722560f30ea8e60b8c711b20147626175"
+
 [[lean_lib]]
 name = "MovingSofa"
 globs = ["MovingSofa.+"]
@@ -23,8 +32,15 @@ name = "Challenge"
 [[lean_lib]]
 name = "Solution"
 
-# Kept opt-in until local elaboration and the separate axiom audit pass.
-# This namespace does not collide with FormalConjectures.Wikipedia.MovingSofa.
+# Source-only development remains opt-in; the default targets are unchanged.
 [[lean_lib]]
 name = "SofaUniqueness"
 globs = ["SofaUniqueness.+"]
+
+# Enumerate the local leaves rather than claiming the dependency's Defs,
+# Challenge, or Solution modules. There is one canonical model, imported from
+# the pinned provider, and one local uniqueness argument.
+[[lean_lib]]
+name = "SofaIntegration"
+roots = ["SofaSubmission.Model", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.ChallengeUniqueness"]
+globs = ["SofaSubmission.Model", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.ChallengeUniqueness"]
