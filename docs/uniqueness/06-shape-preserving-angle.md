@@ -121,7 +121,7 @@ Now suppose omega>=arcsec(2.2), A_omega(K_*)>=2.2, and M=K_* minus N(K_*) is a m
 
 Consequently M has width at most one in every normal direction between omega and L. It can be rotated through L-omega wholly inside the horizontal strip, translated in that strip, and then moved using its original omega-angle motion. This constructs an L-angle motion of a rotated copy of M, not of an unrelated maximizing sofa.
 
-The repository makes this separation particularly explicit: after the call to `theorem4_2_5`, `theorem1_5_2` in `MovingSofa/Angle/RightAngle.lean` uses only `ang_width_le_one`, boundedness, and the original motion to construct the three phases. Those phases do not use balancedness again.
+The repository makes this separation particularly explicit: after the call to `theorem4_2_5`, `theorem1_5_2` in `MovingSofaOptimality/Angle/RightAngle.lean` uses only `ang_width_le_one`, boundedness, and the original motion to construct the three phases. Those phases do not use balancedness again.
 
 ## Status
 

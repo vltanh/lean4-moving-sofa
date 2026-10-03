@@ -91,10 +91,10 @@ The existing reduction for an arbitrary moving sofa compares its AREA to the are
 
 ## Source anchors
 
-- `MovingSofa/Optimality/Concavity.lean`: `mamikonS`, `lemma8_3_3`, `lemma8_3_7`, `theorem8_3_8`.
-- `MovingSofa/Convex/Mamikon.lean`: `theorem7_4_1`, `theorem7_4_2`.
-- `MovingSofa/Optimality/Domain.lean`: `opt_cap_down`, `opt_cap_A_mem`, `opt_cap_C_mem`, and the standard-cap facts.
-- `MovingSofa/Optimality/Equality.lean`: `mamikonSegmentEquality_iff`, `ki_upperQL_eq_gerver_of_sofaArea_eq`.
-- `MovingSofa/Main.lean`: `theorem8_1_1_balanced`, `corollary8_5_8`.
+- `MovingSofaOptimality/Optimality/Concavity.lean`: `mamikonS`, `lemma8_3_3`, `lemma8_3_7`, `theorem8_3_8`.
+- `MovingSofaOptimality/Convex/Mamikon.lean`: `theorem7_4_1`, `theorem7_4_2`.
+- `MovingSofaOptimality/Optimality/Domain.lean`: `opt_cap_down`, `opt_cap_A_mem`, `opt_cap_C_mem`, and the standard-cap facts.
+- `MovingSofaUniqueness/Rigidity/EqualityConditions.lean`: `mamikonSegmentEquality_iff`, `ki_upperQL_eq_gerver_of_sofaArea_eq`.
+- `MovingSofaOptimality/Main.lean`: `theorem8_1_1_balanced`, `corollary8_5_8`.
 
 All references refer to the source already present at commit 865eb1f4e936a976d1405cb59f7a83ffc00fe32b. The rigidity argument above is new mathematical work in this research branch and is not claimed to have been kernel-checked.

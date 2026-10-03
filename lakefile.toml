@@ -1,7 +1,7 @@
 name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["MovingSofa", "SofaUniqueness", "Challenge", "Solution"]
+defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -13,66 +13,21 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.35.0-rc3"
 
+# The formalization of Baek's paper "Optimality of Gerver's sofa".
 [[lean_lib]]
-name = "MovingSofa"
-globs = ["MovingSofa.+"]
+name = "MovingSofaOptimality"
+globs = ["MovingSofaOptimality.+"]
+
+# The uniqueness of Gerver's sofa, in the definitions of MovingSofaOptimality.
+[[lean_lib]]
+name = "MovingSofaUniqueness"
+globs = ["MovingSofaUniqueness.+"]
+
+# MovingSofaUniquenessFC/ (the adapter to formal-conjectures' statement) is a pending draft and
+# is not built.
 
 [[lean_lib]]
 name = "Challenge"
 
 [[lean_lib]]
 name = "Solution"
-
-# The uniqueness of Gerver's sofa: the modules that the final theorem imports.
-# The other files under SofaUniqueness/ (the formal-conjectures adapter and earlier
-# drafts) are not part of this library and are not built.
-[[lean_lib]]
-name = "SofaUniqueness"
-roots = ["SofaUniqueness.Draft.ShapeUniqueness"]
-globs = [
-  "SofaUniqueness.CapApproximation",
-  "SofaUniqueness.CurvatureLimit",
-  "SofaUniqueness.CurvatureRegularity",
-  "SofaUniqueness.Draft.AngleExtension",
-  "SofaUniqueness.Draft.CapGeometry",
-  "SofaUniqueness.Draft.CapKernel",
-  "SofaUniqueness.Draft.PaperReductions",
-  "SofaUniqueness.Draft.Rigid",
-  "SofaUniqueness.Draft.ShapeUniqueness",
-  "SofaUniqueness.DyadicSelector",
-  "SofaUniqueness.EnvelopeBounds",
-  "SofaUniqueness.FloatingVariation",
-  "SofaUniqueness.GerverRegularClosed",
-  "SofaUniqueness.GerverStrictHeight",
-  "SofaUniqueness.InjectivityFromCurvature",
-  "SofaUniqueness.MamikonCapKernel",
-  "SofaUniqueness.MamikonDisplacement",
-  "SofaUniqueness.MirrorMaximality",
-  "SofaUniqueness.MirroredCurvature",
-  "SofaUniqueness.PinnedGeometry",
-  "SofaUniqueness.PinnedLimit",
-  "SofaUniqueness.PinnedVariation",
-  "SofaUniqueness.PolygonArms",
-  "SofaUniqueness.PolygonCurvature",
-  "SofaUniqueness.PolygonMeasureBounds",
-  "SofaUniqueness.PolygonPenalty",
-  "SofaUniqueness.PolygonSelection",
-  "SofaUniqueness.RegularClosedEnvelope",
-  "SofaUniqueness.SampledPenalty",
-  "SofaUniqueness.SelectedCaps",
-  "SofaUniqueness.SelectedCurvature",
-  "SofaUniqueness.SetRecovery",
-  "SofaUniqueness.SquareGap",
-  "SofaUniqueness.SupportKernelEquations",
-  "SofaUniqueness.SupportSamples",
-  "SofaUniqueness.TangentEquality",
-  "SofaUniqueness.VariationDefect",
-]
-
-# The exact concrete reference is now proved in ordinary local Lean modules.
-# No source exporter or external reference-proof dependency is needed.
-# Challenge modules are independent statement environments, not proof imports.
-[[lean_lib]]
-name = "SofaIntegration"
-roots = ["SofaSubmission.Model", "SofaSubmission.ReferenceDefs", "SofaSubmission.ReferenceFacts", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]
-globs = ["SofaSubmission.Model", "SofaSubmission.ReferenceDefs", "SofaSubmission.ReferenceFacts", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]

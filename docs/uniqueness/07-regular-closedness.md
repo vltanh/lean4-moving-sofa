@@ -6,7 +6,7 @@ This is the set-recovery property required in note 03. A drawing of a piecewise 
 
 ## Available inputs
 
-Use the standard Gerver frame of `MovingSofa/Gerver/StructureCap.lean` and `MovingSofa/Gerver/Niche.lean`, with L=pi/2, phi<theta<L-theta<L-phi. Write the rotation path as x(t), with
+Use the standard Gerver frame of `MovingSofaOptimality/Gerver/StructureCap.lean` and `MovingSofaOptimality/Gerver/Niche.lean`, with L=pi/2, phi<theta<L-theta<L-phi. Write the rotation path as x(t), with
 
     x'(t)=alpha(t)u_t+beta(t)v_t,
     B(t)=x(t)+alpha(t)v_t,

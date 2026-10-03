@@ -274,9 +274,9 @@ prerequisites import the new sofa shape-uniqueness theorem.
 
 ## 5. The exact endpoint is now a corollary over proved reference facts
 
-`SofaSubmission/ReferenceFacts.lean` derives the literal reference's motion
+`MovingSofaUniquenessFC/ReferenceFacts.lean` derives the literal reference's motion
 and optimal volume from the correspondence and the existing paper optimality
-result. `SofaSubmission/Final.lean` then contains
+result. `MovingSofaUniquenessFC/Final.lean` then contains
 
 ```lean
 theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)

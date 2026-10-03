@@ -107,4 +107,4 @@ Both are strict for 0<t<L. This supplies the sign part of the injectivity condit
 
 The theorem above is proved by inequalities and an exact triangular-area computation. It does not by itself establish the curvature bounds for every maximizing cap; that geometric/variational argument remains a separate obligation. Nor is 5/3 claimed to be the optimal threshold for this scalar problem.
 
-Definitions of k,m and the Stieltjes arm identities: `MovingSofa/Injectivity/DiscreteIneq.lean` and `MovingSofa/Injectivity/ArmLengths.lean`, corresponding to Baek §§6.2–6.3. The maximum-deficit argument here replaces, rather than assumes, the finite bootstrap in §6.5.
+Definitions of k,m and the Stieltjes arm identities: `MovingSofaOptimality/Injectivity/DiscreteIneq.lean` and `MovingSofaOptimality/Injectivity/ArmLengths.lean`, corresponding to Baek §§6.2–6.3. The maximum-deficit argument here replaces, rather than assumes, the finite bootstrap in §6.5.

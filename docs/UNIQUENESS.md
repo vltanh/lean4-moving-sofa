@@ -2,7 +2,7 @@
 
 ## Current source status
 
-**Code entry point:** [SofaSubmission/Final.lean](../SofaSubmission/Final.lean).
+**Code entry point:** [MovingSofaUniquenessFC/Final.lean](../MovingSofaUniquenessFC/Final.lean).
 **Exact-reference status:** [note 21](uniqueness/21-reference-dependency-audit.md).
 **Detailed inventory:** [formal-conjectures obligations](../drafts/formal-conjectures/OBLIGATIONS.md).
 
@@ -19,7 +19,7 @@ the requested ban on decision-kernel certificate evaluation.** A proposed
 reference-proof dependency was found to use `decide +kernel` and was removed.
 The generic theorem has not been relabeled as the exact upstream theorem.
 
-The canonical motion definitions are shared in `SofaSubmission/Model.lean`.
+The canonical motion definitions are shared in `MovingSofaUniquenessFC/Model.lean`.
 The paper retains its pair-coordinate definitions, with ordinary Lean bridges
 for coordinates, volume, identity-start placement and the supremum. The source
 exporter and all insertion fragments have been deleted.
@@ -28,13 +28,13 @@ exporter and all insertion fragments have been deleted.
 
 | Source | Contribution |
 | --- | --- |
-| [MirrorMaximality](../SofaUniqueness/MirrorMaximality.lean) | Reflection preserves the actual cap's area and maximality, with the plus/minus arm convention. |
-| [MirroredCurvature](../SofaUniqueness/MirroredCurvature.lean) | Push the first-half curvature inequality to the second half, including normal pi. |
-| [PaperReductions](../SofaUniqueness/Draft/PaperReductions.lean) | P2 and P4 now have bodies; positivity is proved at the appropriate callers. |
-| [ShapeUniqueness](../SofaUniqueness/Draft/ShapeUniqueness.lean) | The actual containment chain, both monotonizations, and recovery of the original closed set. |
-| [Final](../SofaSubmission/Final.lean) | Canonical maximizers are congruent; explicit equivalence with the concrete paper Gerver set; existence as well as uniqueness. |
-| [ReferenceEquations](../SofaUniqueness/ReferenceEquations.lean) | Ordinary algebra eliminates A and B from the full upstream four-equation system; this is not a global root theorem. |
-| [ReferenceBoundary](../SofaUniqueness/ReferenceBoundary.lean) | Exclude phi=0 and phi=theta by differentiation and the equations, without certificate evaluation. |
+| [MirrorMaximality](../MovingSofaUniqueness/Curvature/MirrorMaximality.lean) | Reflection preserves the actual cap's area and maximality, with the plus/minus arm convention. |
+| [MirroredCurvature](../MovingSofaUniqueness/Curvature/MirroredCurvature.lean) | Push the first-half curvature inequality to the second half, including normal pi. |
+| [PaperReductions](../MovingSofaUniqueness/Reductions.lean) | P2 and P4 now have bodies; positivity is proved at the appropriate callers. |
+| [ShapeUniqueness](../MovingSofaUniqueness/Main.lean) | The actual containment chain, both monotonizations, and recovery of the original closed set. |
+| [Final](../MovingSofaUniquenessFC/Final.lean) | Canonical maximizers are congruent; explicit equivalence with the concrete paper Gerver set; existence as well as uniqueness. |
+| [ReferenceEquations](../MovingSofaUniquenessFC/ReferenceEquations.lean) | Ordinary algebra eliminates A and B from the full upstream four-equation system; this is not a global root theorem. |
+| [ReferenceBoundary](../MovingSofaUniquenessFC/ReferenceBoundary.lean) | Exclude phi=0 and phi=theta by differentiation and the equations, without certificate evaluation. |
 | [Shared comparison](../comparator.shared-uniqueness.json) | Unexecuted independent statement/definition comparison for the shared theorem, with only the three standard axioms permitted. |
 
 The actual source selection uses a fixed squared penalty on persistent finite

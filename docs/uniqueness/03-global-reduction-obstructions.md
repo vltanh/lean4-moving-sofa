@@ -25,7 +25,7 @@ The repository defines `IsBalancedMaxCap` through a subsequential limit of exact
 
 ## Negative result B: the current area comparison does not preserve the given shape
 
-In `MovingSofa/Main.lean`, `gm_area_le`:
+In `MovingSofaOptimality/Main.lean`, `gm_area_le`:
 
 1. obtains a rotation angle for the given sofa S;
 2. chooses a balanced maximum sofa at that angle and compares AREAS;

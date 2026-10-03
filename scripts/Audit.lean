@@ -4,94 +4,93 @@ public meta import Lean.Elab.Command
 -- One `import all` line per module of the library, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
 --   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all /'
-import all MovingSofa.Angle.HorizontalSide
-import all MovingSofa.Angle.RightAngle
-import all MovingSofa.Balanced.BalancedMaximumSofa
-import all MovingSofa.Balanced.MaximumPolygonCap
-import all MovingSofa.Balanced.NefPolygon
-import all MovingSofa.Balanced.PolygonCap
-import all MovingSofa.Basic.ConvexBody
-import all MovingSofa.Basic.LebesgueStieltjes
-import all MovingSofa.Basic.Plane
-import all MovingSofa.Basic.SurfaceArea
-import all MovingSofa.Convex.ConvexCurve
-import all MovingSofa.Convex.ConvexDomain
-import all MovingSofa.Convex.CurveArea
-import all MovingSofa.Convex.Mamikon
-import all MovingSofa.Convex.QuadraticEquality
-import all MovingSofa.External.AreaFormula
-import all MovingSofa.External.AreaFormula.Param
-import all MovingSofa.External.Romik
-import all MovingSofa.External.Romik.Calc
-import all MovingSofa.External.Romik.Fix
-import all MovingSofa.External.Romik.Num
-import all MovingSofa.Gerver.AreaBounds
-import all MovingSofa.Gerver.Bounds
-import all MovingSofa.Gerver.Defs
-import all MovingSofa.Gerver.Envelope
-import all MovingSofa.Gerver.EnvelopeArea
-import all MovingSofa.Gerver.Frame
-import all MovingSofa.Gerver.Niche
-import all MovingSofa.Gerver.NicheBounds
-import all MovingSofa.Gerver.Properties
-import all MovingSofa.Gerver.Structure
-import all MovingSofa.Gerver.StructureCap
-import all MovingSofa.Injectivity.ArmLengths
-import all MovingSofa.Injectivity.BoundingArms
-import all MovingSofa.Injectivity.DiscreteIneq
-import all MovingSofa.Injectivity.LimitIneq
-import all MovingSofa.Intro.RotationAngleBound
-import all MovingSofa.Main
-import all MovingSofa.Monotone.CapContainsNiche
-import all MovingSofa.Monotone.CapDefs
-import all MovingSofa.Monotone.CapNiche
-import all MovingSofa.Monotone.MonotoneSofa
-import all MovingSofa.Monotone.SupportingHallway
-import all MovingSofa.Optimality.Concavity
-import all MovingSofa.Optimality.Domain
-import all MovingSofa.Optimality.Equality
-import all MovingSofa.Optimality.UpperBound
-import all MovingSofa.Optimality.Variation
-import all MovingSofa.Sofa.Defs
-import all MovingSofa.Tests.Equality
-import all SofaUniqueness.CapApproximation
-import all SofaUniqueness.CurvatureLimit
-import all SofaUniqueness.CurvatureRegularity
-import all SofaUniqueness.Draft.AngleExtension
-import all SofaUniqueness.Draft.CapGeometry
-import all SofaUniqueness.Draft.CapKernel
-import all SofaUniqueness.Draft.PaperReductions
-import all SofaUniqueness.Draft.Rigid
-import all SofaUniqueness.Draft.Selection
-import all SofaUniqueness.Draft.ShapeUniqueness
-import all SofaUniqueness.DyadicSelector
-import all SofaUniqueness.EnvelopeBounds
-import all SofaUniqueness.FloatingVariation
-import all SofaUniqueness.GerverRegularClosed
-import all SofaUniqueness.GerverStrictHeight
-import all SofaUniqueness.InjectivityFromCurvature
-import all SofaUniqueness.MamikonCapKernel
-import all SofaUniqueness.MamikonDisplacement
-import all SofaUniqueness.MirrorMaximality
-import all SofaUniqueness.MirroredCurvature
-import all SofaUniqueness.PinnedGeometry
-import all SofaUniqueness.PinnedLimit
-import all SofaUniqueness.PinnedVariation
-import all SofaUniqueness.PolygonArms
-import all SofaUniqueness.PolygonCurvature
-import all SofaUniqueness.PolygonMeasureBounds
-import all SofaUniqueness.PolygonPenalty
-import all SofaUniqueness.PolygonSelection
-import all SofaUniqueness.RegularClosedEnvelope
-import all SofaUniqueness.SampledPenalty
-import all SofaUniqueness.SelectedCaps
-import all SofaUniqueness.SelectedCurvature
-import all SofaUniqueness.SetRecovery
-import all SofaUniqueness.SquareGap
-import all SofaUniqueness.SupportKernelEquations
-import all SofaUniqueness.SupportSamples
-import all SofaUniqueness.TangentEquality
-import all SofaUniqueness.VariationDefect
+import all MovingSofaOptimality.Angle.HorizontalSide
+import all MovingSofaOptimality.Angle.RightAngle
+import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
+import all MovingSofaOptimality.Balanced.MaximumPolygonCap
+import all MovingSofaOptimality.Balanced.NefPolygon
+import all MovingSofaOptimality.Balanced.PolygonCap
+import all MovingSofaOptimality.Basic.ConvexBody
+import all MovingSofaOptimality.Basic.LebesgueStieltjes
+import all MovingSofaOptimality.Basic.Plane
+import all MovingSofaOptimality.Basic.SurfaceArea
+import all MovingSofaOptimality.Convex.ConvexCurve
+import all MovingSofaOptimality.Convex.ConvexDomain
+import all MovingSofaOptimality.Convex.CurveArea
+import all MovingSofaOptimality.Convex.Mamikon
+import all MovingSofaUniqueness.Rigidity.QuadraticEquality
+import all MovingSofaOptimality.External.AreaFormula
+import all MovingSofaOptimality.External.AreaFormula.Param
+import all MovingSofaOptimality.External.Romik
+import all MovingSofaOptimality.External.Romik.Calc
+import all MovingSofaOptimality.External.Romik.Fix
+import all MovingSofaOptimality.External.Romik.Num
+import all MovingSofaOptimality.Gerver.AreaBounds
+import all MovingSofaOptimality.Gerver.Bounds
+import all MovingSofaOptimality.Gerver.Defs
+import all MovingSofaOptimality.Gerver.Envelope
+import all MovingSofaOptimality.Gerver.EnvelopeArea
+import all MovingSofaOptimality.Gerver.Frame
+import all MovingSofaOptimality.Gerver.Niche
+import all MovingSofaOptimality.Gerver.NicheBounds
+import all MovingSofaOptimality.Gerver.Properties
+import all MovingSofaOptimality.Gerver.Structure
+import all MovingSofaOptimality.Gerver.StructureCap
+import all MovingSofaOptimality.Injectivity.ArmLengths
+import all MovingSofaOptimality.Injectivity.BoundingArms
+import all MovingSofaOptimality.Injectivity.DiscreteIneq
+import all MovingSofaOptimality.Injectivity.LimitIneq
+import all MovingSofaOptimality.Intro.RotationAngleBound
+import all MovingSofaOptimality.Main
+import all MovingSofaOptimality.Monotone.CapContainsNiche
+import all MovingSofaOptimality.Monotone.CapDefs
+import all MovingSofaOptimality.Monotone.CapNiche
+import all MovingSofaOptimality.Monotone.MonotoneSofa
+import all MovingSofaOptimality.Monotone.SupportingHallway
+import all MovingSofaOptimality.Optimality.Concavity
+import all MovingSofaOptimality.Optimality.Domain
+import all MovingSofaUniqueness.Rigidity.EqualityConditions
+import all MovingSofaOptimality.Optimality.UpperBound
+import all MovingSofaOptimality.Optimality.Variation
+import all MovingSofaOptimality.Sofa.Defs
+import all MovingSofaUniqueness.Tests.EqualityConditions
+import all MovingSofaUniqueness.Selection.CapApproximation
+import all MovingSofaUniqueness.Curvature.CurvatureLimit
+import all MovingSofaUniqueness.Curvature.CurvatureRegularity
+import all MovingSofaUniqueness.AngleExtension
+import all MovingSofaUniqueness.Rigidity.CapGeometry
+import all MovingSofaUniqueness.Rigidity.CapKernel
+import all MovingSofaUniqueness.Reductions
+import all MovingSofaUniqueness.Rigid
+import all MovingSofaUniqueness.Main
+import all MovingSofaUniqueness.Selection.DyadicSelector
+import all MovingSofaUniqueness.RegularClosed.EnvelopeBounds
+import all MovingSofaUniqueness.Variation.FloatingVariation
+import all MovingSofaUniqueness.RegularClosed.GerverRegularClosed
+import all MovingSofaUniqueness.RegularClosed.GerverStrictHeight
+import all MovingSofaUniqueness.Curvature.InjectivityFromCurvature
+import all MovingSofaUniqueness.Rigidity.MamikonCapKernel
+import all MovingSofaUniqueness.Rigidity.MamikonDisplacement
+import all MovingSofaUniqueness.Curvature.MirrorMaximality
+import all MovingSofaUniqueness.Curvature.MirroredCurvature
+import all MovingSofaUniqueness.Variation.PinnedGeometry
+import all MovingSofaUniqueness.Variation.PinnedLimit
+import all MovingSofaUniqueness.Variation.PinnedVariation
+import all MovingSofaUniqueness.Curvature.PolygonArms
+import all MovingSofaUniqueness.Curvature.PolygonCurvature
+import all MovingSofaUniqueness.Curvature.PolygonMeasureBounds
+import all MovingSofaUniqueness.Variation.PolygonPenalty
+import all MovingSofaUniqueness.Selection.PolygonSelection
+import all MovingSofaUniqueness.RegularClosed.RegularClosedEnvelope
+import all MovingSofaUniqueness.Selection.SampledPenalty
+import all MovingSofaUniqueness.Selection.SelectedCaps
+import all MovingSofaUniqueness.Curvature.SelectedCurvature
+import all MovingSofaUniqueness.SetRecovery
+import all MovingSofaUniqueness.Rigidity.SquareGap
+import all MovingSofaUniqueness.Rigidity.SupportKernelEquations
+import all MovingSofaUniqueness.Selection.SupportSamples
+import all MovingSofaUniqueness.Rigidity.TangentEquality
+import all MovingSofaUniqueness.Variation.VariationDefect
 import all Solution
 
 /-!
@@ -100,7 +99,7 @@ import all Solution
 Run with `lake env lean scripts/Audit.lean` after `lake build`.
 
 For every numbered result of the paper, this prints the axioms it depends on and the results from
-prior work (`MovingSofa/External/`) that its proof uses. It then checks every declaration
+prior work (`MovingSofaOptimality/External/`) that its proof uses. It then checks every declaration
 of the library and the theorems that Palomar's comparator checks. The run fails if any of them
 depends on an axiom other than Lean's standard `propext`, `Classical.choice` and `Quot.sound` (a
 `sorry` shows up as the axiom `sorryAx`). Its table of results is the source of the report's
@@ -119,229 +118,229 @@ open Lean Elab Command
 
 namespace Audit
 
-/-- The results from prior work, proved in `MovingSofa/External/`, with a short label. Their
+/-- The results from prior work, proved in `MovingSofaOptimality/External/`, with a short label. Their
 proofs are not searched: the traversal stops at them. -/
 meta def externalResults : List (String × Name) :=
-  [("Schneider, Remark 5.1.2: |K| = ½∫ h_K dσ_K", ``MovingSofa.area_eq_half_integral_supp),
-   ("Romik 2018: Romik's system has a solution in the box", ``MovingSofa.GerverParams.romik_exists),
-   ("Romik 2018: the solution in the box is unique", ``MovingSofa.GerverParams.romik_unique)]
+  [("Schneider, Remark 5.1.2: |K| = ½∫ h_K dσ_K", ``MovingSofaOptimality.area_eq_half_integral_supp),
+   ("Romik 2018: Romik's system has a solution in the box", ``MovingSofaOptimality.GerverParams.romik_exists),
+   ("Romik 2018: the solution in the box is unique", ``MovingSofaOptimality.GerverParams.romik_unique)]
 
 /-- The numbered results of the paper, in the order of the paper. -/
 meta def paperResults : List (String × Name) :=
-  [("Thm 1.1.1", ``MovingSofa.theorem1_1_1),
-   ("Prop 1.2.2", ``MovingSofa.proposition1_2_2),
-   ("Thm 1.5.1", ``MovingSofa.theorem1_5_1),
-   ("Thm 1.5.2", ``MovingSofa.theorem1_5_2),
-   ("Thm 1.7.1", ``MovingSofa.theorem1_7_1),
-   ("Prop 2.1.2", ``MovingSofa.proposition2_1_2),
-   ("Thm 2.1.3 (vint left)", ``MovingSofa.tendsto_vint_left),
-   ("Thm 2.1.3 (vint right)", ``MovingSofa.tendsto_vint_right),
-   ("Thm 2.1.3 (vminus left)", ``MovingSofa.tendsto_vminus_left),
-   ("Thm 2.1.3 (vminus right)", ``MovingSofa.tendsto_vminus_right),
-   ("Thm 2.1.3 (vplus left)", ``MovingSofa.tendsto_vplus_left),
-   ("Thm 2.1.3 (vplus right)", ``MovingSofa.tendsto_vplus_right),
-   ("Prop 2.2.1", ``MovingSofa.proposition2_2_1),
-   ("Prop 2.2.2 (hallway)", ``MovingSofa.proposition2_2_2_hallway),
-   ("Prop 2.2.2 (innerCorner)", ``MovingSofa.proposition2_2_2_innerCorner),
-   ("Prop 2.2.2 (outerCorner)", ``MovingSofa.proposition2_2_2_outerCorner),
-   ("Prop 2.2.2 (qMinus)", ``MovingSofa.proposition2_2_2_qMinus),
-   ("Prop 2.2.2 (qPlus)", ``MovingSofa.proposition2_2_2_qPlus),
-   ("Prop 2.2.2 (wallA)", ``MovingSofa.proposition2_2_2_wallA),
-   ("Prop 2.2.2 (wallB)", ``MovingSofa.proposition2_2_2_wallB),
-   ("Prop 2.2.2 (wallC)", ``MovingSofa.proposition2_2_2_wallC),
-   ("Prop 2.2.2 (wallD)", ``MovingSofa.proposition2_2_2_wallD),
-   ("Prop 2.2.3", ``MovingSofa.proposition2_2_3),
-   ("Prop 2.3.1 (exists)", ``MovingSofa.proposition2_3_1_exists),
-   ("Prop 2.3.1 (subset)", ``MovingSofa.proposition2_3_1_subset),
-   ("Prop 2.3.1 (unique)", ``MovingSofa.proposition2_3_1_unique),
-   ("Prop 2.3.1 (unique horizontal)", ``MovingSofa.proposition2_3_1_unique_horizontal),
-   ("Thm 2.3.2", ``MovingSofa.theorem2_3_2),
-   ("Prop 2.3.3", ``MovingSofa.proposition2_3_3),
-   ("Prop 2.3.4", ``MovingSofa.proposition2_3_4),
-   ("Lemma 2.3.5 (hallway)", ``MovingSofa.lemma2_3_5_hallway),
-   ("Lemma 2.3.5 (supp)", ``MovingSofa.lemma2_3_5_supp),
-   ("Thm 2.3.6", ``MovingSofa.theorem2_3_6),
-   ("Thm 2.4.1", ``MovingSofa.theorem2_4_1),
-   ("Thm 2.4.2", ``MovingSofa.theorem2_4_2),
-   ("Thm 2.4.3", ``MovingSofa.theorem2_4_3),
-   ("Thm 2.4.4", ``MovingSofa.theorem2_4_4),
-   ("Thm 2.4.4 (iff)", ``MovingSofa.theorem2_4_4_iff),
-   ("Prop 2.5.1", ``MovingSofa.proposition2_5_1),
-   ("Prop 2.5.2", ``MovingSofa.proposition2_5_2),
-   ("Prop 2.5.3", ``MovingSofa.proposition2_5_3),
-   ("Prop 2.5.4 (gaps)", ``MovingSofa.proposition2_5_4_gaps),
-   ("Prop 2.5.4 (hallway)", ``MovingSofa.proposition2_5_4_hallway),
-   ("Prop 2.5.4 (isCap)", ``MovingSofa.proposition2_5_4_isCap),
-   ("Prop 2.5.4 (sets)", ``MovingSofa.proposition2_5_4_sets),
-   ("Prop 2.5.4 (sigma)", ``MovingSofa.proposition2_5_4_sigma),
-   ("Prop 2.5.4 (supp)", ``MovingSofa.proposition2_5_4_supp),
-   ("Prop 2.5.4 (vertices)", ``MovingSofa.proposition2_5_4_vertices),
-   ("Thm 2.5.5", ``MovingSofa.theorem2_5_5),
-   ("Lemma 2.5.6", ``MovingSofa.lemma2_5_6),
-   ("Lemma 2.5.7", ``MovingSofa.lemma2_5_7),
-   ("Thm 2.5.8", ``MovingSofa.theorem2_5_8),
-   ("Thm 2.5.9", ``MovingSofa.theorem2_5_9),
-   ("Rem 2.5.2", ``MovingSofa.remark2_5_2),
-   ("Thm 2.5.10", ``MovingSofa.theorem2_5_10),
-   ("Prop 3.1.1", ``MovingSofa.proposition3_1_1),
-   ("Thm 3.1.2", ``MovingSofa.theorem3_1_2),
-   ("Prop 3.2.1", ``MovingSofa.proposition3_2_1),
-   ("Prop 3.2.1 (fix)", ``MovingSofa.proposition3_2_1_fix),
-   ("Prop 3.2.2", ``MovingSofa.proposition3_2_2),
-   ("Thm 3.2.3", ``MovingSofa.theorem3_2_3),
-   ("Thm 3.2.3 (le)", ``MovingSofa.theorem3_2_3_le),
-   ("Prop 3.3.1", ``MovingSofa.proposition3_3_1),
-   ("Prop 3.3.2", ``MovingSofa.proposition3_3_2),
-   ("Prop 3.3.3", ``MovingSofa.proposition3_3_3),
-   ("Prop 3.3.4", ``MovingSofa.proposition3_3_4),
-   ("Prop 3.3.5", ``MovingSofa.proposition3_3_5),
-   ("Thm 3.3.6", ``MovingSofa.theorem3_3_6),
-   ("Prop 3.3.7", ``MovingSofa.proposition3_3_7),
-   ("Lemma 3.4.1", ``MovingSofa.lemma3_4_1),
-   ("Lemma 3.4.2", ``MovingSofa.lemma3_4_2),
-   ("Thm 3.4.3", ``MovingSofa.theorem3_4_3),
-   ("Thm 3.4.4", ``MovingSofa.theorem3_4_4),
-   ("Lemma 3.4.5 (one)", ``MovingSofa.lemma3_4_5_one),
-   ("Lemma 3.4.5 (two)", ``MovingSofa.lemma3_4_5_two),
-   ("Lemma 3.4.6", ``MovingSofa.lemma3_4_6),
-   ("Lemma 3.4.7", ``MovingSofa.lemma3_4_7),
-   ("Lemma 3.4.8", ``MovingSofa.lemma3_4_8),
-   ("Thm 3.4.9", ``MovingSofa.theorem3_4_9),
-   ("Thm 3.4.10", ``MovingSofa.theorem3_4_10),
-   ("Prop 3.5.1", ``MovingSofa.proposition3_5_1),
-   ("Thm 3.5.2", ``MovingSofa.theorem3_5_2),
-   ("Lemma 3.5.3", ``MovingSofa.lemma3_5_3),
-   ("Thm 3.5.4", ``MovingSofa.theorem3_5_4),
-   ("Thm 3.5.5", ``MovingSofa.theorem3_5_5),
-   ("Thm 3.5.6", ``MovingSofa.theorem3_5_6),
-   ("Lemma 4.1.1", ``MovingSofa.lemma4_1_1),
-   ("Thm 4.1.2", ``MovingSofa.theorem4_1_2),
-   ("Thm 4.1.3", ``MovingSofa.theorem4_1_3),
-   ("Thm 4.1.4", ``MovingSofa.theorem4_1_4),
-   ("Prop 4.2.1", ``MovingSofa.proposition4_2_1),
-   ("Lemma 4.2.2", ``MovingSofa.lemma4_2_2),
-   ("Lemma 4.2.3", ``MovingSofa.lemma4_2_3),
-   ("Lemma 4.2.4", ``MovingSofa.lemma4_2_4),
-   ("Thm 4.2.5", ``MovingSofa.theorem4_2_5),
-   ("Prop 5.1.1", ``MovingSofa.proposition5_1_1),
-   ("Lemma 5.1.2", ``MovingSofa.lemma5_1_2),
-   ("Lemma 5.1.3", ``MovingSofa.lemma5_1_3),
-   ("Prop 5.1.4", ``MovingSofa.proposition5_1_4),
-   ("Prop 5.1.4 (as stated false)", ``MovingSofa.proposition5_1_4_as_stated_false),
-   ("Prop 5.1.4 (deriv)", ``MovingSofa.proposition5_1_4_deriv),
-   ("Lemma 5.2.1", ``MovingSofa.lemma5_2_1),
-   ("Thm 5.2.2", ``MovingSofa.theorem5_2_2),
-   ("Thm 6.1.1", ``MovingSofa.theorem6_1_1),
-   ("Thm 6.1.2", ``MovingSofa.theorem6_1_2),
-   ("Prop 6.2.1", ``MovingSofa.proposition6_2_1),
-   ("Prop 6.2.2", ``MovingSofa.proposition6_2_2),
-   ("Thm 6.2.3 (left)", ``MovingSofa.theorem6_2_3_left),
-   ("Thm 6.2.3 (right)", ``MovingSofa.theorem6_2_3_right),
-   ("Lemma 6.2.4", ``MovingSofa.lemma6_2_4),
-   ("Thm 6.2.5", ``MovingSofa.theorem6_2_5),
-   ("Thm 6.2.5 (regular)", ``MovingSofa.theorem6_2_5_regular),
-   ("Lemma 6.3.1", ``MovingSofa.lemma6_3_1),
-   ("Lemma 6.3.2", ``MovingSofa.lemma6_3_2),
-   ("Thm 6.3.3", ``MovingSofa.theorem6_3_3),
-   ("Lemma 6.4.1", ``MovingSofa.lemma6_4_1),
-   ("Lemma 6.4.2", ``MovingSofa.lemma6_4_2),
-   ("Thm 6.4.3", ``MovingSofa.theorem6_4_3),
-   ("Cor 6.4.4", ``MovingSofa.corollary6_4_4),
-   ("Prop 6.4.5", ``MovingSofa.proposition6_4_5),
-   ("Prop 6.4.6 (continuous)", ``MovingSofa.proposition6_4_6_continuous),
-   ("Prop 6.4.6 (deriv)", ``MovingSofa.proposition6_4_6_deriv),
-   ("Thm 6.5.1", ``MovingSofa.theorem6_5_1),
-   ("Lemma 6.5.2", ``MovingSofa.lemma6_5_2),
-   ("Lemma 6.5.3", ``MovingSofa.lemma6_5_3),
-   ("Lemma 6.5.4", ``MovingSofa.lemma6_5_4),
-   ("Lemma 6.5.5", ``MovingSofa.lemma6_5_5),
-   ("Thm 6.5.6", ``MovingSofa.theorem6_5_6),
-   ("Thm 7.1.1", ``MovingSofa.theorem7_1_1),
-   ("Thm 7.1.2 (sigma)", ``MovingSofa.theorem7_1_2_sigma),
-   ("Thm 7.1.2 (supp)", ``MovingSofa.theorem7_1_2_supp),
-   ("Thm 7.1.2 (vertices)", ``MovingSofa.theorem7_1_2_vertices),
-   ("Thm 7.1.3", ``MovingSofa.theorem7_1_3),
-   ("Thm 7.1.3 (quadratic)", ``MovingSofa.theorem7_1_3_quadratic),
-   ("Lemma 7.1.4", ``MovingSofa.lemma7_1_4),
-   ("Thm 7.1.5", ``MovingSofa.theorem7_1_5),
-   ("Lemma 7.1.6", ``MovingSofa.lemma7_1_6),
-   ("Prop 7.2.2", ``MovingSofa.proposition7_2_2),
-   ("Prop 7.2.4", ``MovingSofa.proposition7_2_4),
-   ("Prop 7.2.4 (line)", ``MovingSofa.proposition7_2_4_line),
-   ("Prop 7.2.5", ``MovingSofa.proposition7_2_5),
-   ("Prop 7.2.6", ``MovingSofa.proposition7_2_6),
-   ("Lemma 7.3.1", ``MovingSofa.lemma7_3_1),
-   ("Lemma 7.3.1 (degenerate)", ``MovingSofa.lemma7_3_1_degenerate),
-   ("Thm 7.3.2", ``MovingSofa.theorem7_3_2),
-   ("Thm 7.3.2 (quadratic)", ``MovingSofa.theorem7_3_2_quadratic),
-   ("Lemma 7.3.3", ``MovingSofa.lemma7_3_3),
-   ("Lemma 7.3.3 (self)", ``MovingSofa.lemma7_3_3_self),
-   ("Lemma 7.3.4", ``MovingSofa.lemma7_3_4),
-   ("Lemma 7.3.5", ``MovingSofa.lemma7_3_5),
-   ("Thm 7.4.1", ``MovingSofa.theorem7_4_1),
-   ("Thm 7.4.2", ``MovingSofa.theorem7_4_2),
-   ("Thm 8.1.1 (balanced)", ``MovingSofa.theorem8_1_1_balanced),
-   ("Thm 8.1.1 (convex)", ``MovingSofa.theorem8_1_1_convex),
-   ("Thm 8.1.1 (gerver)", ``MovingSofa.theorem8_1_1_gerver),
-   ("Def 8.1.2 (exists)", ``MovingSofa.definition8_1_2_exists),
-   ("Def 8.1.2 (unique)", ``MovingSofa.definition8_1_2_unique),
-   ("Prop 8.1.2", ``MovingSofa.proposition8_1_2),
-   ("Lemma 8.1.3", ``MovingSofa.lemma8_1_3),
-   ("Lemma 8.1.4", ``MovingSofa.lemma8_1_4),
-   ("Lemma 8.1.5", ``MovingSofa.lemma8_1_5),
-   ("Lemma 8.1.6 (left)", ``MovingSofa.lemma8_1_6_left),
-   ("Lemma 8.1.6 (right)", ``MovingSofa.lemma8_1_6_right),
-   ("Lemma 8.1.7 (four)", ``MovingSofa.lemma8_1_7_four),
-   ("Lemma 8.1.7 (one)", ``MovingSofa.lemma8_1_7_one),
-   ("Lemma 8.1.7 (three)", ``MovingSofa.lemma8_1_7_three),
-   ("Lemma 8.1.7 (two)", ``MovingSofa.lemma8_1_7_two),
-   ("Thm 8.1.8", ``MovingSofa.theorem8_1_8),
-   ("Prop 8.2.1", ``MovingSofa.proposition8_2_1),
-   ("Lemma 8.2.2", ``MovingSofa.lemma8_2_2),
-   ("Lemma 8.2.3", ``MovingSofa.lemma8_2_3),
-   ("Thm 8.2.4", ``MovingSofa.theorem8_2_4),
-   ("Thm 8.3.1", ``MovingSofa.theorem8_3_1),
-   ("Thm 8.3.2", ``MovingSofa.theorem8_3_2),
-   ("Lemma 8.3.3", ``MovingSofa.lemma8_3_3),
-   ("Lemma 8.3.4", ``MovingSofa.lemma8_3_4),
-   ("Lemma 8.3.5", ``MovingSofa.lemma8_3_5),
-   ("Lemma 8.3.6", ``MovingSofa.lemma8_3_6),
-   ("Lemma 8.3.7", ``MovingSofa.lemma8_3_7),
-   ("Thm 8.3.8", ``MovingSofa.theorem8_3_8),
-   ("Thm 8.4.1 (monotone)", ``MovingSofa.theorem8_4_1_monotone),
-   ("Thm 8.4.1 (niche)", ``MovingSofa.theorem8_4_1_niche),
-   ("Thm 8.4.1 (tangents)", ``MovingSofa.theorem8_4_1_tangents),
-   ("Thm 8.4.1 (walls)", ``MovingSofa.theorem8_4_1_walls),
-   ("Thm 8.4.2", ``MovingSofa.theorem8_4_2),
-   ("Thm 8.4.3 (one)", ``MovingSofa.theorem8_4_3_one),
-   ("Thm 8.4.3 (three)", ``MovingSofa.theorem8_4_3_three),
-   ("Thm 8.4.3 (two)", ``MovingSofa.theorem8_4_3_two),
-   ("Prop 8.4.4", ``MovingSofa.proposition8_4_4),
-   ("Thm 8.4.5", ``MovingSofa.theorem8_4_5),
-   ("Thm 8.4.6", ``MovingSofa.theorem8_4_6),
-   ("Thm 8.5.1", ``MovingSofa.theorem8_5_1),
-   ("Thm 8.5.2", ``MovingSofa.theorem8_5_2),
-   ("Thm 8.5.3", ``MovingSofa.theorem8_5_3),
-   ("Thm 8.5.4", ``MovingSofa.theorem8_5_4),
-   ("Thm 8.5.5", ``MovingSofa.theorem8_5_5),
-   ("Thm 8.5.6", ``MovingSofa.theorem8_5_6),
-   ("Thm 8.5.7", ``MovingSofa.theorem8_5_7),
-   ("Cor 8.5.8", ``MovingSofa.corollary8_5_8)]
+  [("Thm 1.1.1", ``MovingSofaOptimality.theorem1_1_1),
+   ("Prop 1.2.2", ``MovingSofaOptimality.proposition1_2_2),
+   ("Thm 1.5.1", ``MovingSofaOptimality.theorem1_5_1),
+   ("Thm 1.5.2", ``MovingSofaOptimality.theorem1_5_2),
+   ("Thm 1.7.1", ``MovingSofaOptimality.theorem1_7_1),
+   ("Prop 2.1.2", ``MovingSofaOptimality.proposition2_1_2),
+   ("Thm 2.1.3 (vint left)", ``MovingSofaOptimality.tendsto_vint_left),
+   ("Thm 2.1.3 (vint right)", ``MovingSofaOptimality.tendsto_vint_right),
+   ("Thm 2.1.3 (vminus left)", ``MovingSofaOptimality.tendsto_vminus_left),
+   ("Thm 2.1.3 (vminus right)", ``MovingSofaOptimality.tendsto_vminus_right),
+   ("Thm 2.1.3 (vplus left)", ``MovingSofaOptimality.tendsto_vplus_left),
+   ("Thm 2.1.3 (vplus right)", ``MovingSofaOptimality.tendsto_vplus_right),
+   ("Prop 2.2.1", ``MovingSofaOptimality.proposition2_2_1),
+   ("Prop 2.2.2 (hallway)", ``MovingSofaOptimality.proposition2_2_2_hallway),
+   ("Prop 2.2.2 (innerCorner)", ``MovingSofaOptimality.proposition2_2_2_innerCorner),
+   ("Prop 2.2.2 (outerCorner)", ``MovingSofaOptimality.proposition2_2_2_outerCorner),
+   ("Prop 2.2.2 (qMinus)", ``MovingSofaOptimality.proposition2_2_2_qMinus),
+   ("Prop 2.2.2 (qPlus)", ``MovingSofaOptimality.proposition2_2_2_qPlus),
+   ("Prop 2.2.2 (wallA)", ``MovingSofaOptimality.proposition2_2_2_wallA),
+   ("Prop 2.2.2 (wallB)", ``MovingSofaOptimality.proposition2_2_2_wallB),
+   ("Prop 2.2.2 (wallC)", ``MovingSofaOptimality.proposition2_2_2_wallC),
+   ("Prop 2.2.2 (wallD)", ``MovingSofaOptimality.proposition2_2_2_wallD),
+   ("Prop 2.2.3", ``MovingSofaOptimality.proposition2_2_3),
+   ("Prop 2.3.1 (exists)", ``MovingSofaOptimality.proposition2_3_1_exists),
+   ("Prop 2.3.1 (subset)", ``MovingSofaOptimality.proposition2_3_1_subset),
+   ("Prop 2.3.1 (unique)", ``MovingSofaOptimality.proposition2_3_1_unique),
+   ("Prop 2.3.1 (unique horizontal)", ``MovingSofaOptimality.proposition2_3_1_unique_horizontal),
+   ("Thm 2.3.2", ``MovingSofaOptimality.theorem2_3_2),
+   ("Prop 2.3.3", ``MovingSofaOptimality.proposition2_3_3),
+   ("Prop 2.3.4", ``MovingSofaOptimality.proposition2_3_4),
+   ("Lemma 2.3.5 (hallway)", ``MovingSofaOptimality.lemma2_3_5_hallway),
+   ("Lemma 2.3.5 (supp)", ``MovingSofaOptimality.lemma2_3_5_supp),
+   ("Thm 2.3.6", ``MovingSofaOptimality.theorem2_3_6),
+   ("Thm 2.4.1", ``MovingSofaOptimality.theorem2_4_1),
+   ("Thm 2.4.2", ``MovingSofaOptimality.theorem2_4_2),
+   ("Thm 2.4.3", ``MovingSofaOptimality.theorem2_4_3),
+   ("Thm 2.4.4", ``MovingSofaOptimality.theorem2_4_4),
+   ("Thm 2.4.4 (iff)", ``MovingSofaOptimality.theorem2_4_4_iff),
+   ("Prop 2.5.1", ``MovingSofaOptimality.proposition2_5_1),
+   ("Prop 2.5.2", ``MovingSofaOptimality.proposition2_5_2),
+   ("Prop 2.5.3", ``MovingSofaOptimality.proposition2_5_3),
+   ("Prop 2.5.4 (gaps)", ``MovingSofaOptimality.proposition2_5_4_gaps),
+   ("Prop 2.5.4 (hallway)", ``MovingSofaOptimality.proposition2_5_4_hallway),
+   ("Prop 2.5.4 (isCap)", ``MovingSofaOptimality.proposition2_5_4_isCap),
+   ("Prop 2.5.4 (sets)", ``MovingSofaOptimality.proposition2_5_4_sets),
+   ("Prop 2.5.4 (sigma)", ``MovingSofaOptimality.proposition2_5_4_sigma),
+   ("Prop 2.5.4 (supp)", ``MovingSofaOptimality.proposition2_5_4_supp),
+   ("Prop 2.5.4 (vertices)", ``MovingSofaOptimality.proposition2_5_4_vertices),
+   ("Thm 2.5.5", ``MovingSofaOptimality.theorem2_5_5),
+   ("Lemma 2.5.6", ``MovingSofaOptimality.lemma2_5_6),
+   ("Lemma 2.5.7", ``MovingSofaOptimality.lemma2_5_7),
+   ("Thm 2.5.8", ``MovingSofaOptimality.theorem2_5_8),
+   ("Thm 2.5.9", ``MovingSofaOptimality.theorem2_5_9),
+   ("Rem 2.5.2", ``MovingSofaOptimality.remark2_5_2),
+   ("Thm 2.5.10", ``MovingSofaOptimality.theorem2_5_10),
+   ("Prop 3.1.1", ``MovingSofaOptimality.proposition3_1_1),
+   ("Thm 3.1.2", ``MovingSofaOptimality.theorem3_1_2),
+   ("Prop 3.2.1", ``MovingSofaOptimality.proposition3_2_1),
+   ("Prop 3.2.1 (fix)", ``MovingSofaOptimality.proposition3_2_1_fix),
+   ("Prop 3.2.2", ``MovingSofaOptimality.proposition3_2_2),
+   ("Thm 3.2.3", ``MovingSofaOptimality.theorem3_2_3),
+   ("Thm 3.2.3 (le)", ``MovingSofaOptimality.theorem3_2_3_le),
+   ("Prop 3.3.1", ``MovingSofaOptimality.proposition3_3_1),
+   ("Prop 3.3.2", ``MovingSofaOptimality.proposition3_3_2),
+   ("Prop 3.3.3", ``MovingSofaOptimality.proposition3_3_3),
+   ("Prop 3.3.4", ``MovingSofaOptimality.proposition3_3_4),
+   ("Prop 3.3.5", ``MovingSofaOptimality.proposition3_3_5),
+   ("Thm 3.3.6", ``MovingSofaOptimality.theorem3_3_6),
+   ("Prop 3.3.7", ``MovingSofaOptimality.proposition3_3_7),
+   ("Lemma 3.4.1", ``MovingSofaOptimality.lemma3_4_1),
+   ("Lemma 3.4.2", ``MovingSofaOptimality.lemma3_4_2),
+   ("Thm 3.4.3", ``MovingSofaOptimality.theorem3_4_3),
+   ("Thm 3.4.4", ``MovingSofaOptimality.theorem3_4_4),
+   ("Lemma 3.4.5 (one)", ``MovingSofaOptimality.lemma3_4_5_one),
+   ("Lemma 3.4.5 (two)", ``MovingSofaOptimality.lemma3_4_5_two),
+   ("Lemma 3.4.6", ``MovingSofaOptimality.lemma3_4_6),
+   ("Lemma 3.4.7", ``MovingSofaOptimality.lemma3_4_7),
+   ("Lemma 3.4.8", ``MovingSofaOptimality.lemma3_4_8),
+   ("Thm 3.4.9", ``MovingSofaOptimality.theorem3_4_9),
+   ("Thm 3.4.10", ``MovingSofaOptimality.theorem3_4_10),
+   ("Prop 3.5.1", ``MovingSofaOptimality.proposition3_5_1),
+   ("Thm 3.5.2", ``MovingSofaOptimality.theorem3_5_2),
+   ("Lemma 3.5.3", ``MovingSofaOptimality.lemma3_5_3),
+   ("Thm 3.5.4", ``MovingSofaOptimality.theorem3_5_4),
+   ("Thm 3.5.5", ``MovingSofaOptimality.theorem3_5_5),
+   ("Thm 3.5.6", ``MovingSofaOptimality.theorem3_5_6),
+   ("Lemma 4.1.1", ``MovingSofaOptimality.lemma4_1_1),
+   ("Thm 4.1.2", ``MovingSofaOptimality.theorem4_1_2),
+   ("Thm 4.1.3", ``MovingSofaOptimality.theorem4_1_3),
+   ("Thm 4.1.4", ``MovingSofaOptimality.theorem4_1_4),
+   ("Prop 4.2.1", ``MovingSofaOptimality.proposition4_2_1),
+   ("Lemma 4.2.2", ``MovingSofaOptimality.lemma4_2_2),
+   ("Lemma 4.2.3", ``MovingSofaOptimality.lemma4_2_3),
+   ("Lemma 4.2.4", ``MovingSofaOptimality.lemma4_2_4),
+   ("Thm 4.2.5", ``MovingSofaOptimality.theorem4_2_5),
+   ("Prop 5.1.1", ``MovingSofaOptimality.proposition5_1_1),
+   ("Lemma 5.1.2", ``MovingSofaOptimality.lemma5_1_2),
+   ("Lemma 5.1.3", ``MovingSofaOptimality.lemma5_1_3),
+   ("Prop 5.1.4", ``MovingSofaOptimality.proposition5_1_4),
+   ("Prop 5.1.4 (as stated false)", ``MovingSofaOptimality.proposition5_1_4_as_stated_false),
+   ("Prop 5.1.4 (deriv)", ``MovingSofaOptimality.proposition5_1_4_deriv),
+   ("Lemma 5.2.1", ``MovingSofaOptimality.lemma5_2_1),
+   ("Thm 5.2.2", ``MovingSofaOptimality.theorem5_2_2),
+   ("Thm 6.1.1", ``MovingSofaOptimality.theorem6_1_1),
+   ("Thm 6.1.2", ``MovingSofaOptimality.theorem6_1_2),
+   ("Prop 6.2.1", ``MovingSofaOptimality.proposition6_2_1),
+   ("Prop 6.2.2", ``MovingSofaOptimality.proposition6_2_2),
+   ("Thm 6.2.3 (left)", ``MovingSofaOptimality.theorem6_2_3_left),
+   ("Thm 6.2.3 (right)", ``MovingSofaOptimality.theorem6_2_3_right),
+   ("Lemma 6.2.4", ``MovingSofaOptimality.lemma6_2_4),
+   ("Thm 6.2.5", ``MovingSofaOptimality.theorem6_2_5),
+   ("Thm 6.2.5 (regular)", ``MovingSofaOptimality.theorem6_2_5_regular),
+   ("Lemma 6.3.1", ``MovingSofaOptimality.lemma6_3_1),
+   ("Lemma 6.3.2", ``MovingSofaOptimality.lemma6_3_2),
+   ("Thm 6.3.3", ``MovingSofaOptimality.theorem6_3_3),
+   ("Lemma 6.4.1", ``MovingSofaOptimality.lemma6_4_1),
+   ("Lemma 6.4.2", ``MovingSofaOptimality.lemma6_4_2),
+   ("Thm 6.4.3", ``MovingSofaOptimality.theorem6_4_3),
+   ("Cor 6.4.4", ``MovingSofaOptimality.corollary6_4_4),
+   ("Prop 6.4.5", ``MovingSofaOptimality.proposition6_4_5),
+   ("Prop 6.4.6 (continuous)", ``MovingSofaOptimality.proposition6_4_6_continuous),
+   ("Prop 6.4.6 (deriv)", ``MovingSofaOptimality.proposition6_4_6_deriv),
+   ("Thm 6.5.1", ``MovingSofaOptimality.theorem6_5_1),
+   ("Lemma 6.5.2", ``MovingSofaOptimality.lemma6_5_2),
+   ("Lemma 6.5.3", ``MovingSofaOptimality.lemma6_5_3),
+   ("Lemma 6.5.4", ``MovingSofaOptimality.lemma6_5_4),
+   ("Lemma 6.5.5", ``MovingSofaOptimality.lemma6_5_5),
+   ("Thm 6.5.6", ``MovingSofaOptimality.theorem6_5_6),
+   ("Thm 7.1.1", ``MovingSofaOptimality.theorem7_1_1),
+   ("Thm 7.1.2 (sigma)", ``MovingSofaOptimality.theorem7_1_2_sigma),
+   ("Thm 7.1.2 (supp)", ``MovingSofaOptimality.theorem7_1_2_supp),
+   ("Thm 7.1.2 (vertices)", ``MovingSofaOptimality.theorem7_1_2_vertices),
+   ("Thm 7.1.3", ``MovingSofaOptimality.theorem7_1_3),
+   ("Thm 7.1.3 (quadratic)", ``MovingSofaOptimality.theorem7_1_3_quadratic),
+   ("Lemma 7.1.4", ``MovingSofaOptimality.lemma7_1_4),
+   ("Thm 7.1.5", ``MovingSofaOptimality.theorem7_1_5),
+   ("Lemma 7.1.6", ``MovingSofaOptimality.lemma7_1_6),
+   ("Prop 7.2.2", ``MovingSofaOptimality.proposition7_2_2),
+   ("Prop 7.2.4", ``MovingSofaOptimality.proposition7_2_4),
+   ("Prop 7.2.4 (line)", ``MovingSofaOptimality.proposition7_2_4_line),
+   ("Prop 7.2.5", ``MovingSofaOptimality.proposition7_2_5),
+   ("Prop 7.2.6", ``MovingSofaOptimality.proposition7_2_6),
+   ("Lemma 7.3.1", ``MovingSofaOptimality.lemma7_3_1),
+   ("Lemma 7.3.1 (degenerate)", ``MovingSofaOptimality.lemma7_3_1_degenerate),
+   ("Thm 7.3.2", ``MovingSofaOptimality.theorem7_3_2),
+   ("Thm 7.3.2 (quadratic)", ``MovingSofaOptimality.theorem7_3_2_quadratic),
+   ("Lemma 7.3.3", ``MovingSofaOptimality.lemma7_3_3),
+   ("Lemma 7.3.3 (self)", ``MovingSofaOptimality.lemma7_3_3_self),
+   ("Lemma 7.3.4", ``MovingSofaOptimality.lemma7_3_4),
+   ("Lemma 7.3.5", ``MovingSofaOptimality.lemma7_3_5),
+   ("Thm 7.4.1", ``MovingSofaOptimality.theorem7_4_1),
+   ("Thm 7.4.2", ``MovingSofaOptimality.theorem7_4_2),
+   ("Thm 8.1.1 (balanced)", ``MovingSofaOptimality.theorem8_1_1_balanced),
+   ("Thm 8.1.1 (convex)", ``MovingSofaOptimality.theorem8_1_1_convex),
+   ("Thm 8.1.1 (gerver)", ``MovingSofaOptimality.theorem8_1_1_gerver),
+   ("Def 8.1.2 (exists)", ``MovingSofaOptimality.definition8_1_2_exists),
+   ("Def 8.1.2 (unique)", ``MovingSofaOptimality.definition8_1_2_unique),
+   ("Prop 8.1.2", ``MovingSofaOptimality.proposition8_1_2),
+   ("Lemma 8.1.3", ``MovingSofaOptimality.lemma8_1_3),
+   ("Lemma 8.1.4", ``MovingSofaOptimality.lemma8_1_4),
+   ("Lemma 8.1.5", ``MovingSofaOptimality.lemma8_1_5),
+   ("Lemma 8.1.6 (left)", ``MovingSofaOptimality.lemma8_1_6_left),
+   ("Lemma 8.1.6 (right)", ``MovingSofaOptimality.lemma8_1_6_right),
+   ("Lemma 8.1.7 (four)", ``MovingSofaOptimality.lemma8_1_7_four),
+   ("Lemma 8.1.7 (one)", ``MovingSofaOptimality.lemma8_1_7_one),
+   ("Lemma 8.1.7 (three)", ``MovingSofaOptimality.lemma8_1_7_three),
+   ("Lemma 8.1.7 (two)", ``MovingSofaOptimality.lemma8_1_7_two),
+   ("Thm 8.1.8", ``MovingSofaOptimality.theorem8_1_8),
+   ("Prop 8.2.1", ``MovingSofaOptimality.proposition8_2_1),
+   ("Lemma 8.2.2", ``MovingSofaOptimality.lemma8_2_2),
+   ("Lemma 8.2.3", ``MovingSofaOptimality.lemma8_2_3),
+   ("Thm 8.2.4", ``MovingSofaOptimality.theorem8_2_4),
+   ("Thm 8.3.1", ``MovingSofaOptimality.theorem8_3_1),
+   ("Thm 8.3.2", ``MovingSofaOptimality.theorem8_3_2),
+   ("Lemma 8.3.3", ``MovingSofaOptimality.lemma8_3_3),
+   ("Lemma 8.3.4", ``MovingSofaOptimality.lemma8_3_4),
+   ("Lemma 8.3.5", ``MovingSofaOptimality.lemma8_3_5),
+   ("Lemma 8.3.6", ``MovingSofaOptimality.lemma8_3_6),
+   ("Lemma 8.3.7", ``MovingSofaOptimality.lemma8_3_7),
+   ("Thm 8.3.8", ``MovingSofaOptimality.theorem8_3_8),
+   ("Thm 8.4.1 (monotone)", ``MovingSofaOptimality.theorem8_4_1_monotone),
+   ("Thm 8.4.1 (niche)", ``MovingSofaOptimality.theorem8_4_1_niche),
+   ("Thm 8.4.1 (tangents)", ``MovingSofaOptimality.theorem8_4_1_tangents),
+   ("Thm 8.4.1 (walls)", ``MovingSofaOptimality.theorem8_4_1_walls),
+   ("Thm 8.4.2", ``MovingSofaOptimality.theorem8_4_2),
+   ("Thm 8.4.3 (one)", ``MovingSofaOptimality.theorem8_4_3_one),
+   ("Thm 8.4.3 (three)", ``MovingSofaOptimality.theorem8_4_3_three),
+   ("Thm 8.4.3 (two)", ``MovingSofaOptimality.theorem8_4_3_two),
+   ("Prop 8.4.4", ``MovingSofaOptimality.proposition8_4_4),
+   ("Thm 8.4.5", ``MovingSofaOptimality.theorem8_4_5),
+   ("Thm 8.4.6", ``MovingSofaOptimality.theorem8_4_6),
+   ("Thm 8.5.1", ``MovingSofaOptimality.theorem8_5_1),
+   ("Thm 8.5.2", ``MovingSofaOptimality.theorem8_5_2),
+   ("Thm 8.5.3", ``MovingSofaOptimality.theorem8_5_3),
+   ("Thm 8.5.4", ``MovingSofaOptimality.theorem8_5_4),
+   ("Thm 8.5.5", ``MovingSofaOptimality.theorem8_5_5),
+   ("Thm 8.5.6", ``MovingSofaOptimality.theorem8_5_6),
+   ("Thm 8.5.7", ``MovingSofaOptimality.theorem8_5_7),
+   ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
-/-- The uniqueness of Gerver's sofa (`SofaUniqueness/`): the theorem and the propositions of its
+/-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
 argument, `docs/uniqueness/20-complete-paper-proof.md`. -/
 meta def uniquenessResults : List (String × Name) :=
-  [("Uniqueness theorem", ``SofaUniqueness.Draft.image_eq_gerver_of_volume_eq),
-   ("Uniqueness: maximizers are congruent", ``SofaUniqueness.Draft.globalMax_congruent),
-   ("Uniqueness: Prop 1", ``SofaUniqueness.exists_selectedCapSequence),
-   ("Uniqueness: Prop 2 (floating)", ``SofaUniqueness.floating_defect_le),
-   ("Uniqueness: Prop 2 (pinned)", ``SofaUniqueness.pinned_defect_le),
-   ("Uniqueness: Prop 3 (curvature)", ``SofaUniqueness.Draft.curvatureBounds_of_isMaxCap),
-   ("Uniqueness: Prop 3 (injectivity)", ``SofaUniqueness.Draft.isKi_of_maximal_area),
-   ("Uniqueness: Prop 4 (pinned bounds)", ``SofaUniqueness.Draft.pinnedBounds_of_isMaxCap),
-   ("Uniqueness: Prop 4 (right-angle motion)", ``SofaUniqueness.Draft.right_angle_motion_of_pinned),
-   ("Uniqueness: Prop 5", ``SofaUniqueness.Draft.ki_sofa_eq_gerver_translate),
-   ("Uniqueness: Prop 6", ``SofaUniqueness.Draft.regularClosed_gerver)]
+  [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
+   ("Uniqueness: maximizers are congruent", ``MovingSofaUniqueness.globalMax_congruent),
+   ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
+   ("Uniqueness: Prop 2 (floating)", ``MovingSofaUniqueness.floating_defect_le),
+   ("Uniqueness: Prop 2 (pinned)", ``MovingSofaUniqueness.pinned_defect_le),
+   ("Uniqueness: Prop 3 (curvature)", ``MovingSofaUniqueness.curvatureBounds_of_isMaxCap),
+   ("Uniqueness: Prop 3 (injectivity)", ``MovingSofaUniqueness.isKi_of_maximal_area),
+   ("Uniqueness: Prop 4 (pinned bounds)", ``MovingSofaUniqueness.pinnedBounds_of_isMaxCap),
+   ("Uniqueness: Prop 4 (right-angle motion)", ``MovingSofaUniqueness.right_angle_motion_of_pinned),
+   ("Uniqueness: Prop 5", ``MovingSofaUniqueness.ki_sofa_eq_gerver_translate),
+   ("Uniqueness: Prop 6", ``MovingSofaUniqueness.regularClosed_gerver)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
@@ -355,7 +354,7 @@ meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.so
 
 /-- Whether `m` is a module of the library (Baek's paper, and the uniqueness of Gerver's sofa). -/
 meta def isLibraryModule (m : Name) : Bool :=
-  (`MovingSofa).isPrefixOf m || (`SofaUniqueness).isPrefixOf m
+  (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

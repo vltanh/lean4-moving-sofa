@@ -8,7 +8,7 @@ including its endpoint pi and the correct fMinus convention. The pinned-bound
 caller proves positivity from Gerver's area; no premise is added to the final
 shape-uniqueness statement.
 
-`SofaSubmission/Final.lean` now states the canonical all-maximizers congruence
+`MovingSofaUniquenessFC/Final.lean` now states the canonical all-maximizers congruence
 theorem and the equivalence with congruence to the concrete paper Gerver witness.
 All six paper reductions and the direct model bridges have written proof bodies.
 They remain uncompiled: neither elaboration nor their axiom closure is certified.
@@ -60,7 +60,7 @@ publication and shared theorem use ordinary Lean modules and no code generation.
 The current `Final.lean` deliberately does NOT take the upstream target's name.
 Doing so while switching its reference shape or adding a premise would not solve
 the original problem. The exact independent target remains in
-`SofaSubmission/ChallengeUniqueness.lean` as a statement fixture, not an imported
+`MovingSofaUniquenessFC/ChallengeUniqueness.lean` as a statement fixture, not an imported
 solution. Its deliberate statement placeholders are not proof dependencies.
 
 ## Remaining work for the exact named target under all restrictions

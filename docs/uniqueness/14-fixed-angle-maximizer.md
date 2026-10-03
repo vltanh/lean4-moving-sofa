@@ -180,4 +180,4 @@ This constructs a right-angle motion of a rotated copy of the SAME M. Every subs
 
 Selection comes from note 12; floating variations from note 10; pinned feasibility, penalty control, and error cancellation are proved above. The old inputs are the general Nef-polygon first variation and endpoint identities (Chapter 3), weak curvature convergence, and the scalar estimates of §4.2. The proof never invokes Theorem 4.1.4 or 4.2.5 with a missing balancedness hypothesis.
 
-The old repository locations are `MovingSofa/Balanced/MaximumPolygonCap.lean`, `MovingSofa/Angle/HorizontalSide.lean`, and `MovingSofa/Angle/RightAngle.lean`. The construction of the extra motion is written explicitly here rather than inferred from equality of areas.
+The old repository locations are `MovingSofaOptimality/Balanced/MaximumPolygonCap.lean`, `MovingSofaOptimality/Angle/HorizontalSide.lean`, and `MovingSofaOptimality/Angle/RightAngle.lean`. The construction of the extra motion is written explicitly here rather than inferred from equality of areas.

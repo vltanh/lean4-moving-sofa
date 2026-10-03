@@ -76,7 +76,7 @@ For a floating facet, section 1 identifies these assigned heights with the actua
 
 For ell_t=0 the inequality holds without perturbation since tau_n(t)>=0. The O(epsilon^2) coefficient need not be uniform in n: it has already disappeared before the mesh limit. Constants in (2)–(4), unlike that coefficient, are uniform in n.
 
-The first-variation formula used here is the general polygon formula, not its specialization to maximizers: Baek Lemma 3.4.7 and the corrected proof in `MovingSofa/Balanced/MaximumPolygonCap.lean`. The sine interpolation is the same elementary consecutive-normal geometry used by `inj_consecutive` and `inj_polygon_vertices_at` in `MovingSofa/Injectivity/DiscreteIneq.lean`.
+The first-variation formula used here is the general polygon formula, not its specialization to maximizers: Baek Lemma 3.4.7 and the corrected proof in `MovingSofaOptimality/Balanced/MaximumPolygonCap.lean`. The sine interpolation is the same elementary consecutive-normal geometry used by `inj_consecutive` and `inj_polygon_vertices_at` in `MovingSofaOptimality/Injectivity/DiscreteIneq.lean`.
 
 ## 4. Negative result: the full-circle penalty loses this estimate
 

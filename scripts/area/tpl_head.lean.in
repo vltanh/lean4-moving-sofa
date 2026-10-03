@@ -1,7 +1,7 @@
 module
 
-public import MovingSofa.Gerver.Frame
-public import MovingSofa.Convex.CurveArea
+public import MovingSofaOptimality.Gerver.Frame
+public import MovingSofaOptimality.Convex.CurveArea
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Series
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 public import Mathlib.Analysis.SpecificLimits.Normed
@@ -21,7 +21,7 @@ the sum is at least `2.2` (its value is `2.21953…`).
   `t₃ = π/2 - θ`, `t₄ = π/2 - φ`, hence of class `C^BV` (`ga_isCBV_A`, …), and the curve area
   functional is additive (`proposition7_2_6`).
 * **One phase.** On the closed phase interval `[t_{i-1}, t_i]` each curve agrees with the smooth
-  phase curve of `MovingSofa.Gerver.Frame` (`gs_contactA_eq`, …), so `𝒥 = ½ ∫ Z × Z'`
+  phase curve of `MovingSofaOptimality.Gerver.Frame` (`gs_contactA_eq`, …), so `𝒥 = ½ ∫ Z × Z'`
   (`ga_curveArea_eq`). In the rotating frame (`ga_cross_A`, …), with `W = (w₁, w₂)`:
   `𝐀 × 𝐀' = ρ_A (w₁ + 1 + κ·u_t)`, `𝐂 × 𝐂' = ρ_C (w₂ + 1 + κ·v_t)`,
   `𝐁 × 𝐁' = (ρ_A - 1)(w₁ + κ·u_t)`, `𝐃 × 𝐃' = (1 - ρ_C)(-w₂ - κ·v_t)` and
@@ -48,5 +48,5 @@ the sum is at least `2.2` (its value is `2.21953…`).
 
 open Real Set MeasureTheory
 
-namespace MovingSofa.GerverParams
+namespace MovingSofaOptimality.GerverParams
 

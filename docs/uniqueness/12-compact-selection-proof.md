@@ -117,4 +117,4 @@ For omega=L the artificial horizontal box constraints are eventually inactive, s
 
 This proof uses only compact convex geometry, explicit wedge coordinates, finite intersections, continuity of area, and Dini's theorem. It does not use cap rigidity or injectivity. It does not assume that every maximizer is approximated by exact unpenalized maximizers; note 03 shows that this assumption would be false in general.
 
-The cap, circumscribed-cap and fan-niche definitions are those of `MovingSofa/Monotone/CapDefs.lean` and `MovingSofa/Balanced/PolygonCap.lean`. The new selection argument is independent of the repository's definition of `IsBalancedMaxCap`.
+The cap, circumscribed-cap and fan-niche definitions are those of `MovingSofaOptimality/Monotone/CapDefs.lean` and `MovingSofaOptimality/Balanced/PolygonCap.lean`. The new selection argument is independent of the repository's definition of `IsBalancedMaxCap`.

@@ -1,4 +1,4 @@
-"""Generator for the numerical part of MovingSofa/Gerver/AreaBounds.lean.
+"""Generator for the numerical part of MovingSofaOptimality/Gerver/AreaBounds.lean.
 
 Produces Lean text for
   * the coefficient structures `ga_K_*` of the antiderivatives on each phase,
@@ -745,7 +745,7 @@ def emit_tail(seg):
             '  have h5 := ga_curveArea_B_mem hP hB',
             '  have h6 := ga_curveArea_D_mem hP hB',
             '  linarith [h1.1, h2.1, h3.1, h4.2, h5.1, h6.1]', '',
-            'end MovingSofa.GerverParams', '']
+            'end MovingSofaOptimality.GerverParams', '']
     return '\n'.join(out), bounds, s
 
 if __name__ == '__main__' and 'emit' in sys.argv:

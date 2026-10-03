@@ -6,7 +6,7 @@ This research track targets uniqueness of the actual maximizing shape up to Eucl
 
 ## Sources and conventions
 
-The starting identity is Baek, *Optimality of Gerver's Sofa*, version 1, Theorem 7.4.1; in this repository it is `MovingSofa/Convex/Mamikon.lean`, `theorem7_4_1`. The square-gap calculation and equality equations below are derived here. The conventions are those of `MovingSofa/Basic/ConvexBody.lean` and `MovingSofa/Optimality/Concavity.lean`.
+The starting identity is Baek, *Optimality of Gerver's Sofa*, version 1, Theorem 7.4.1; in this repository it is `MovingSofaOptimality/Convex/Mamikon.lean`, `theorem7_4_1`. The square-gap calculation and equality equations below are derived here. The conventions are those of `MovingSofaOptimality/Basic/ConvexBody.lean` and `MovingSofaOptimality/Optimality/Concavity.lean`.
 
 Write u(t)=(cos t,sin t), v(t)=(-sin t,cos t), and h_K(t)=max_{p in K} p.u(t) for a nonempty compact convex set K. At almost every t,
 
