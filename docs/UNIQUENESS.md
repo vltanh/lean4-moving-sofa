@@ -9,8 +9,9 @@ and results of the first part, [`MovingSofaOptimality/`](../MovingSofaOptimality
 Every moving sofa whose area equals the area of Gerver's sofa is mapped onto Gerver's sofa, as a set,
 by a rotation about the origin followed by a translation.
 
-- [`gerver_sofa_unique`](../Challenge.lean#L188) in [`Challenge.lean`](../Challenge.lean) states it in Mathlib's vocabulary, and
-  [`Solution.lean`](../Solution.lean) proves it; Comparator checks the pair, with the four theorems of Baek's paper.
+- [`gerver_sofa_unique`](../Challenge.lean#L335) in [`Challenge.lean`](../Challenge.lean) states it in Mathlib's vocabulary, and
+  [`Solution.lean`](../Solution.lean) proves it; Comparator checks the pair, with the four theorems of Baek's paper and
+  formal-conjectures' four statements.
 - In the library ([`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean)):
   - [`image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L142): the theorem, for the library's moving sofas and Gerver's sofa;
   - [`volume_eq_gerver_iff`](../MovingSofaUniqueness/Main.lean#L178): a moving sofa has the area of Gerver's sofa if and only if a
@@ -107,10 +108,11 @@ documentation:
 ## Not formalized
 
 - The quantitative stability estimate of [note 17](uniqueness/17-quantitative-cap-rigidity.md): the uniqueness theorem does not need it.
-- The connection with formal-conjectures' statement, whose moving sofas are defined in
-  `EuclideanSpace ℝ (Fin 2)` with motions starting at the identity, and whose Gerver's sofa is defined
-  from Gerver's four constants. The third part of the repository, [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC), is a
-  draft of it, not yet compiled.
+
+Formal-conjectures' form of the theorem, [`MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../Challenge.lean#L353),
+whose moving sofas live in `EuclideanSpace ℝ (Fin 2)` with motions starting at the identity and whose
+Gerver's sofa is defined from Gerver's four constants, is proved in the third part of the
+repository, [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC), from the theorem here.
 
 ## The notes
 
@@ -130,7 +132,7 @@ documentation:
 | [17](uniqueness/17-quantitative-cap-rigidity.md) | A quantitative form of cap rigidity (not formalized) |
 | [18](uniqueness/18-failed-uniform-angle-threshold.md), [19](uniqueness/19-exact-angle-reduction.md) | A failed uniform angle threshold, and the exact angle reduction |
 | [20](uniqueness/20-complete-paper-proof.md) | **The proof**: the inputs from Baek's paper, six propositions and the theorem |
-| [21](uniqueness/21-reference-dependency-audit.md), [22](uniqueness/22-reference-correspondence.md) | Work toward formal-conjectures' statement (see [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC)) |
+| [21](uniqueness/21-reference-dependency-audit.md), [22](uniqueness/22-reference-correspondence.md) | The correspondence with formal-conjectures' definitions, formalized in [`MovingSofaUniquenessFC/`](../MovingSofaUniquenessFC) |
 
 The notes are ChatGPT Pro's working record. Statements in them about the state of the Lean code
 ("uncompiled", "admissions") describe the draft and are out of date.

@@ -32,7 +32,13 @@ project:
     paper: it selects polygon approximations of a given maximizing cap, shows that every maximizing
     right-angle cap satisfies Baek's injectivity condition, extends the motion of a maximizing sofa
     to a right angle, and identifies the cap with Gerver's through the equality case of Baek's upper
-    bound and the regular closedness of Gerver's sofa.
+    bound and the regular closedness of Gerver's sofa. Finally, the repository proves formal-conjectures'
+    four statements of the problem with formal-conjectures' own definitions (moving sofas in
+    EuclideanSpace R (Fin 2) moved by identity-start paths of isometries, the sofa constant as a
+    supremum, and Gerver's sofa from Gerver's four constants): Gerver's system has exactly one
+    solution, Gerver's sofa is a moving sofa of area the sofa constant, and a moving sofa has that area
+    if and only if it is an isometric image of Gerver's sofa. The uniqueness of Gerver's constants is
+    proved by elementary inequalities, without numerical certificates.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -123,9 +129,10 @@ related_formalizations:
       Google DeepMind's formal-conjectures states the optimality (solved) and the uniqueness
       (category research open, volume_eq_sofaConstant_iff_congruent_gerversSofa) with different
       definitions: moving sofas in EuclideanSpace R (Fin 2) moved from the identity, the optimal
-      area as a supremum, and Gerver's sofa from Gerver's four constants. This repository proves
-      both results in its own Challenge; the proof of formal-conjectures' exact statements is not
-      done (MovingSofaUniquenessFC/ is a draft outside the build).
+      area as a supremum, and Gerver's sofa from Gerver's four constants. The Challenge restates its
+      definitions verbatim (with an explicit name for its anonymous topology instance) and its four
+      statements, which MovingSofaUniquenessFC/ proves from the formalization of Baek's paper and
+      the uniqueness proof.
   - id: "https://github.com/deancureton/MovingSofa"
     relationship: other
     note: >-
@@ -156,8 +163,9 @@ status:
     and the remarks and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
     motions (MovingSofaUniqueness/), with the theorem and the six propositions of
     docs/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
-    estimate of note 17, which the theorem does not use, and the statement of formal-conjectures,
-    whose definitions differ (MovingSofaUniquenessFC/ is a draft outside the build).
+    estimate of note 17, which the theorem does not use. Also formalized: formal-conjectures' four
+    statements with its definitions (MovingSofaUniquenessFC/), including the existence and uniqueness
+    of Gerver's four constants on their whole domain.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -255,6 +263,10 @@ fidelity:
     area, which is proved where it is used; the arm inequalities come from the lower sequence of
     Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of
     Gerver's sofa uses that its rotation path stays strictly below the top of the cap.
+    (7) Formal-conjectures' statements: its definitions are restated verbatim, except that its
+    anonymous topology instance on E(2) gets an explicit name (an automatically generated name depends
+    on the library that declares it, and Comparator compares constants by name). Its theorems are
+    stated after its definitions instead of between them.
 
 review:
   status: "agent-reviewed"
@@ -314,6 +326,33 @@ alignment:
         Every moving sofa whose area equals that of Gerver's sofa is mapped onto Gerver's sofa, as a
         set, by a rotation about the origin followed by a translation. With gerver_sofa_optimal, the
         moving sofas of maximum area are exactly the moving sofas congruent to Gerver's sofa.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, GerversSofa.ABφθSpec.existsUnique"
+      lean: "MovingSofa.GerversSofa.ABφθSpec.existsUnique"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Gerver's system for the constants A, B, phi, theta (Romik 2018, Equations (1)-(4)) has exactly
+        one solution with 0 <= phi <= theta <= pi/4 and A, B >= 0. The definitions of Gerver's sofa in
+        formal-conjectures choose this solution.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, isMovingSofa_gerversSofa"
+      lean: "MovingSofa.isMovingSofa_gerversSofa"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Formal-conjectures' Gerver's sofa admits an identity-start motion through the hallway.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, sofaConstant_eq_volume_gerversSofa"
+      lean: "MovingSofa.sofaConstant_eq_volume_gerversSofa"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        The sofa constant, the supremum of the areas of moving sofas, is the area of Gerver's sofa.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, volume_eq_sofaConstant_iff_congruent_gerversSofa (research open there)"
+      lean: "MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        A moving sofa has area the sofa constant if and only if an isometry of the plane maps Gerver's
+        sofa onto it.
 
 acknowledgements: >-
   Mathlib and the Lean toolchain (Lean 4, Lake, Comparator). The audit used the arXiv LaTeX source of
