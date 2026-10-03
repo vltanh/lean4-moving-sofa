@@ -71,7 +71,8 @@ def prePath (t : ℝ) : ℝ × ℝ :=
 This identity is not assumed from the reference's name. -/
 theorem prePath_zero (hφ : 0 ≤ D.φ) (hφL : D.φ ≤ π / 2)
     (hy : D.boundaryY 0 = 1) : D.prePath 0 = 0 := by
-  sorry
+  have hL : (0 : ℝ) ≤ π / 2 - D.φ := sub_nonneg.mpr hφL
+  simp [prePath, hφ, hL, hy]
 
 end Data
 
@@ -89,7 +90,8 @@ def Data.shape (D : Data) : Set (ℝ × ℝ) := shapeFromPrePath D.prePath
 /-- The rotating-frame coordinates uniquely determine the translation. -/
 theorem rotate_dot_coordinates (t : ℝ) (q : ℝ × ℝ) :
     rot t (dot q (uvec t), dot q (vvec t)) = q := by
-  sorry
+  rw [gs_rot_pair]
+  exact (eq_dot_uvec_smul_add q t).symm
 
 /-- Convert the whole reference shape, not just its intermediate hallways.
 The horizontal start is fixed only because `p 0 = 0` is proved separately. -/
@@ -97,6 +99,30 @@ theorem shape_eq_of_rotated_path {p x : ℝ → ℝ × ℝ}
     (hzero : p 0 = 0)
     (hpath : ∀ t ∈ Icc 0 (π / 2), rot t (p t) = x t) :
     shapeFromPrePath p = shapeOfPath x := by
-  sorry
+  have hL : (0 : ℝ) ≤ π / 2 := by positivity
+  have hmap : ∀ t ∈ Icc 0 (π / 2),
+      rotateTranslatePair t (p t) = fun q => x t + rot t q := by
+    intro t ht
+    funext q
+    rw [rotateTranslatePair, rot_add_vec, hpath t ht, add_comm]
+  have hstart : rotateTranslatePair 0 (p 0) '' horizSide = horizSide := by
+    have hid : rotateTranslatePair 0 (p 0) = id := by
+      funext q
+      simp [rotateTranslatePair, hzero]
+    rw [hid, Set.image_id]
+  have hfinish := hmap (π / 2) ⟨hL, le_rfl⟩
+  have hall : (⋂ t ∈ Icc 0 (π / 2),
+      rotateTranslatePair t (p t) '' MovingSofaOptimality.hallway) =
+      ⋂ t ∈ Icc 0 (π / 2), (fun q => x t + rot t q) '' MovingSofaOptimality.hallway := by
+    apply Set.iInter_congr
+    intro t
+    apply Set.iInter_congr
+    intro ht
+    rw [hmap t ht]
+  unfold shapeFromPrePath shapeOfPath
+  rw [hstart, hfinish, hall]
+  ext q
+  simp only [Set.mem_inter_iff]
+  tauto
 
 end MovingSofaUniquenessFC.Reference

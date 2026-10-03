@@ -94,7 +94,14 @@ theorem contact_error (D : Data) :
 
 theorem contact_first {D : Data} (h : D.Valid) :
     D.toPaper.x₁ D.φ = contactB D.toPaper.x₄ (π / 2 - D.θ) := by
-  sorry
+  have h1 := (spec_iff.mp h).2.2.2.2.2.1
+  have h2 := (spec_iff.mp h).2.2.2.2.2.2.1
+  have he := contact_error D
+  rw [h1, h2] at he
+  have hz : D.toPaper.x₂ D.φ - contactB D.toPaper.x₄ (π / 2 - D.θ) = 0 := by
+    rw [he]
+    ext <;> simp
+  exact (continuity_phi h).trans (sub_eq_zero.mp hz)
 
 theorem contact_second {D : Data} (h : D.Valid) :
     D.toPaper.x₅ (π / 2 - D.φ) = contactD D.toPaper.x₂ D.θ := by
@@ -131,6 +138,22 @@ theorem toPaper_isSolution {D : Data} (h : D.Valid) (hθ : D.θ < π / 4) :
 /-- Local parameter uniqueness may now be used with its actual hypotheses. -/
 theorem toPaper_eq_of_same_box {D E : Data} (hD : D.Valid) (hE : E.Valid)
     (hDb : D.toPaper.InBox) (hEb : E.toPaper.InBox) : D = E := by
-  sorry
+  have hDθ : D.θ < π / 4 := by
+    have h69 : D.θ ≤ 0.69 := hDb.2.2
+    linarith [pi_gt_three]
+  have hEθ : E.θ < π / 4 := by
+    have h69 : E.θ ≤ 0.69 := hEb.2.2
+    linarith [pi_gt_three]
+  have hp := romik_unique (toPaper_isSolution hD hDθ) hDb
+    (toPaper_isSolution hE hEθ) hEb
+  have hφ : D.φ = E.φ := congrArg GerverParams.φ hp
+  have hθ : D.θ = E.θ := congrArg GerverParams.θ hp
+  have hA : D.A = E.A := by
+    rw [← D.coefficients_roundtrip.1, hp, E.coefficients_roundtrip.1]
+  have hB : D.B = E.B := by
+    rw [← D.coefficients_roundtrip.2, hp, E.coefficients_roundtrip.2]
+  cases D
+  cases E
+  simp_all
 
 end MovingSofaUniquenessFC.Reference.Data

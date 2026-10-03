@@ -45,17 +45,21 @@ theorem Data.eq_ofPaper {D : Data} (hD : D.Valid) {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) : D = ofPaper P := by
   obtain ⟨ha, hb, hp, ht⟩ := spec_unique hD (ofPaper_valid hP hbox)
   cases D
-  simp_all only [ofPaper, Data.mk.injEq]
+  simp_all only [ofPaper]
 
 /-- The reference equations now imply the previously missing strict upper
 angle bound, by equality with the existing paper witness. -/
 theorem Data.theta_lt_pi_div_four {D : Data} (hD : D.Valid) : D.θ < π / 4 := by
-  sorry
+  obtain ⟨P, hP, hbox⟩ := romik_exists
+  rw [Data.eq_ofPaper hD hP hbox]
+  exact hP.2.2.1
 
 /-- The reconstructed paper parameters solve the paper equations and lie in
 its established box, for EVERY solution of the exact upstream specification. -/
 theorem Data.paper_solution {D : Data} (hD : D.Valid) :
     D.toPaper.IsSolution ∧ D.toPaper.InBox := by
-  sorry
+  obtain ⟨P, hP, hbox⟩ := romik_exists
+  rw [Data.eq_ofPaper hD hP hbox, ofPaper_toPaper hP]
+  exact ⟨hP, hbox⟩
 
 end MovingSofaUniquenessFC.Reference

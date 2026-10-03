@@ -96,11 +96,23 @@ theorem theta_radius (h : D.Valid) :
 theorem x2_phi (D : Data) :
     D.toPaper.x₂ D.φ = rot D.φ (D.B - 1 / 2, (D.A - 1) / 2) + D.k2 := by
   unfold GerverParams.x₂
-  congr 2 <;> simp only [toPaper, b1, b2] <;> ring
+  congr 2
+  simp only [toPaper, b1, b2]
+  ext <;> ring
 
 /-- Continuity at phi follows from equation three and the definition of k2. -/
 theorem continuity_phi (h : D.Valid) : D.toPaper.x₁ D.φ = D.toPaper.x₂ D.φ := by
-  sorry
+  obtain ⟨hs, hc⟩ := a1_frame h
+  have hw : (D.a1 * cos D.φ + (-1 / 4 : ℝ) * sin D.φ - 1,
+      -(-1 / 4 : ℝ) * cos D.φ + D.a1 * sin D.φ - 1 / 2) =
+      (D.B - 1 / 2, (D.A - 1) / 2) + (-D.B / 2, 1 / 4) := by
+    ext <;> simp only [Prod.fst_add, Prod.snd_add] <;> linarith
+  rw [x2_phi]
+  change rot D.φ (D.a1 * cos D.φ + (-1 / 4 : ℝ) * sin D.φ - 1,
+      -(-1 / 4 : ℝ) * cos D.φ + D.a1 * sin D.φ - 1 / 2) + D.k1 = _
+  rw [hw, rot_add_vec]
+  unfold k2
+  abel
 
 /-- Derivative matching at phi, in the exact derivative convention of IsSolution. -/
 theorem derivative_phi (h : D.Valid) :
@@ -112,7 +124,16 @@ theorem derivative_phi (h : D.Valid) :
 
 /-- Continuity at theta follows from equation four and the definition of k3. -/
 theorem continuity_theta (h : D.Valid) : D.toPaper.x₂ D.θ = D.toPaper.x₃ D.θ := by
-  sorry
+  have hr := theta_radius h
+  have hw : (-D.θ ^ 2 / 4 + D.b1 * D.θ + D.b2, D.θ / 2 - D.b1 - 1) =
+      (π / 2 + D.A - D.φ - 1 - D.θ, D.A - D.φ - 1 + D.θ) +
+        (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2) := by
+    ext <;> simp only [Prod.fst_add, Prod.snd_add, b1, b2] <;> nlinarith
+  change rot D.θ (-D.θ ^ 2 / 4 + D.b1 * D.θ + D.b2, D.θ / 2 - D.b1 - 1) + D.k2 =
+    rot D.θ (π / 2 + D.A - D.φ - 1 - D.θ, D.A - D.φ - 1 + D.θ) + D.k3
+  rw [hw, rot_add_vec]
+  unfold k3
+  abel
 
 /-- The derivative matching condition at theta is the same scalar equation. -/
 theorem derivative_theta (h : D.Valid) :
