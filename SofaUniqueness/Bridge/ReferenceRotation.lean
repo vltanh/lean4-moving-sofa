@@ -1,7 +1,7 @@
 module
 
 public import SofaSubmission.ReferenceDefs
-public import SofaUniqueness.Bridge.Coordinates
+public import SofaUniqueness.Bridge.EuclideanRigid
 public import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
 
 /-!
