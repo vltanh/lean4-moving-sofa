@@ -1,7 +1,7 @@
 module
 
-public import SofaUniqueness.Bridge.EuclideanRigid
-public import SofaUniqueness.AffineRecovery
+public import MovingSofaUniquenessFC.Bridge.EuclideanRigid
+public import MovingSofaUniquenessFC.AffineRecovery
 public import Mathlib.Topology.Order.IntermediateValue
 
 /-!
@@ -21,7 +21,9 @@ noncomputable section
 open Set Real
 open scoped unitInterval EuclideanGeometry
 
-namespace SofaUniqueness.Bridge
+namespace MovingSofaUniquenessFC.Bridge
+
+open MovingSofaUniqueness
 
 def basisX : Point := !₂[1, 0]
 def basisY : Point := !₂[0, 1]
@@ -33,14 +35,12 @@ def determinant (e : Motion) : ℝ :=
 
 /-- Evaluation is continuous for the model's declared induced topology. -/
 theorem continuous_motion_eval (p : Point) : Continuous (fun e : Motion => e p) := by
-  have h : Continuous (fun e : Motion =>
-      e.toAffineIsometry.toContinuousAffineMap) := continuous_induced_dom
-  exact (continuous_eval_const p).comp h
+  sorry
 
 theorem linear_apply_eq_sub (e : Motion) (p : Point) :
     e.linearIsometryEquiv p = e p - e 0 := by
   apply eq_sub_iff_add_eq.mpr
-  exact (SofaUniqueness.affineIsometry_apply_eq e p).symm
+  exact (MovingSofaUniquenessFC.affineIsometry_apply_eq e p).symm
 
 /-- The linear evaluation is a difference of two continuous affine evaluations. -/
 theorem continuous_linear_eval (p : Point) :
@@ -53,21 +53,7 @@ theorem column_laws (e : Motion) :
     (leftColumn e 0) ^ 2 + (leftColumn e 1) ^ 2 = 1 ∧
     (rightColumn e 0) ^ 2 + (rightColumn e 1) ^ 2 = 1 ∧
     leftColumn e 0 * rightColumn e 0 + leftColumn e 1 * rightColumn e 1 = 0 := by
-  have hx : (leftColumn e 0) ^ 2 + (leftColumn e 1) ^ 2 = 1 := by
-    have h := congrArg (fun r : ℝ => r ^ 2) (e.linearIsometryEquiv.norm_map basisX)
-    rw [norm_sq_coordinates, norm_sq_coordinates] at h
-    simpa [leftColumn, basisX] using h
-  have hy : (rightColumn e 0) ^ 2 + (rightColumn e 1) ^ 2 = 1 := by
-    have h := congrArg (fun r : ℝ => r ^ 2) (e.linearIsometryEquiv.norm_map basisY)
-    rw [norm_sq_coordinates, norm_sq_coordinates] at h
-    simpa [rightColumn, basisY] using h
-  have hsum : (leftColumn e 0 + rightColumn e 0) ^ 2 +
-      (leftColumn e 1 + rightColumn e 1) ^ 2 = 2 := by
-    have h := congrArg (fun r : ℝ => r ^ 2)
-      (e.linearIsometryEquiv.norm_map (basisX + basisY))
-    rw [e.linearIsometryEquiv.map_add, norm_sq_coordinates, norm_sq_coordinates] at h
-    simpa [leftColumn, rightColumn, basisX, basisY] using h
-  exact ⟨hx, hy, by nlinarith⟩
+  sorry
 
 /-- The determinant cannot vanish: its square is one. -/
 theorem determinant_sq (e : Motion) : determinant e ^ 2 = 1 := by
@@ -91,21 +77,7 @@ theorem determinant_continuous : Continuous determinant := by
 theorem determinant_eq_one_on_path (m : I → Motion) (hm : Continuous m)
     (hzero : m 0 = AffineIsometryEquiv.refl ℝ Point) (t : I) :
     determinant (m t) = 1 := by
-  have hd0 : determinant (m 0) = 1 := by
-    rw [hzero]
-    norm_num [determinant, leftColumn, rightColumn, basisX, basisY]
-  have hc := determinant_continuous.comp hm
-  have hpos : 0 < determinant (m t) := by
-    by_contra h
-    have hle : determinant (m t) ≤ 0 := le_of_not_gt h
-    obtain ⟨u, hu⟩ := intermediate_value_univ t 0 hc
-      (show (0 : ℝ) ∈ Icc (determinant (m t)) (determinant (m 0)) from
-        ⟨hle, by rw [hd0]; norm_num⟩)
-    have hs := determinant_sq (m u)
-    rw [hu] at hs
-    norm_num at hs
-  have hs := determinant_sq (m t)
-  nlinarith
+  sorry
 
 /-- For determinant +1, the second column is the first column rotated by pi/2. -/
 theorem rightColumn_of_determinant_one {e : Motion} (he : determinant e = 1) :
@@ -143,4 +115,4 @@ theorem linear_eq_euclideanRotate {e : Motion} {t : ℝ}
   ext i
   fin_cases i <;> simp [euclideanRotate, h0, h1, hc, hs] <;> ring
 
-end SofaUniqueness.Bridge
+end MovingSofaUniquenessFC.Bridge

@@ -1,7 +1,7 @@
 module
 
-public import SofaSubmission.Uniqueness
-public import SofaSubmission.ReferenceFacts
+public import MovingSofaUniquenessFC.Uniqueness
+public import MovingSofaUniquenessFC.ReferenceFacts
 
 /-!
 # Shared and exact-reference moving-sofa uniqueness endpoints
@@ -26,7 +26,7 @@ kernel verification, or Palomar acceptance. No such execution was performed.
 noncomputable section
 
 open Set MeasureTheory
-open SofaUniqueness.Bridge
+open MovingSofaUniquenessFC.Bridge
 open scoped Real unitInterval EuclideanGeometry
 
 namespace MovingSofa.Canonical
@@ -42,25 +42,25 @@ theorem maximizers_congruent (s t : Set ℝ²)
 
 /-- The publication's explicit pair-coordinate Gerver witness, without an
 assumption that it has already been placed in the horizontal hallway. -/
-theorem volume_eq_constant_iff_congruent_paper_gerver {P : MovingSofa.GerverParams}
+theorem volume_eq_constant_iff_congruent_paper_gerver {P : MovingSofaOptimality.GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) (s : Set ℝ²)
     (hs : ∃ m, MovingSofa.IsMovingSofa s m) :
     volume s = MovingSofa.sofaConstant ↔
-      ∃ g : E(2), s = g '' (point '' MovingSofa.gerverSofa P) := by
+      ∃ g : E(2), s = g '' (point '' MovingSofaOptimality.gerverSofa P) := by
   constructor
   · intro hvolume
     have hpaper := canonical_to_paper hs
-    have heq : volume (coordinates '' s) = volume (MovingSofa.gerverSofa P) := by
+    have heq : volume (coordinates '' s) = volume (MovingSofaOptimality.gerverSofa P) := by
       rw [volume_coordinates_image, hvolume, constant_eq_paper_gerver hP hbox]
-    obtain ⟨g, hg⟩ := SofaUniqueness.Draft.image_eq_gerver_of_volume_eq
+    obtain ⟨g, hg⟩ := MovingSofaUniqueness.image_eq_gerver_of_volume_eq
       hP hbox hpaper heq
     have hcoordinates : coordinates '' s = g.symm '' (coordinates ''
-        (point '' MovingSofa.gerverSofa P)) := by
+        (point '' MovingSofaOptimality.gerverSofa P)) := by
       rw [coordinates_point_image, ← hg,
-        SofaUniqueness.Draft.Rigid.symm_image_image]
+        MovingSofaUniqueness.Rigid.symm_image_image]
     exact ⟨realizeRigid g.symm, congruent_of_coordinates g.symm hcoordinates⟩
   · intro hcongruent
-    have hv := SofaUniqueness.volume_eq_of_congruent hcongruent
+    have hv := MovingSofaUniquenessFC.volume_eq_of_congruent hcongruent
     rw [volume_point_image] at hv
     exact hv.trans (constant_eq_paper_gerver hP hbox).symm
 

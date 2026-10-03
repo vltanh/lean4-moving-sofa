@@ -1,7 +1,7 @@
 module
 
-public import SofaSubmission.Extremal
-public import SofaUniqueness.Draft.ShapeUniqueness
+public import MovingSofaUniquenessFC.Extremal
+public import MovingSofaUniqueness.Main
 
 /-!
 # One Euclidean uniqueness API for the paper and upstream motion model
@@ -26,14 +26,14 @@ elaborated dependency graph, and Palomar acceptance have not been established.
 noncomputable section
 
 open Set MeasureTheory
-open SofaUniqueness.Bridge
+open MovingSofaUniquenessFC.Bridge
 open scoped EuclideanGeometry
 
 namespace MovingSofa.Canonical
 
 /-- Transfer maximality of this specified canonical sofa to the paper model. -/
 theorem IsMaximizer.paper {s : Set Point} (hs : IsMaximizer s) :
-    SofaUniqueness.Draft.IsGlobalMax (coordinates '' s) := by
+    MovingSofaUniqueness.IsGlobalMax (coordinates '' s) := by
   refine ⟨canonical_to_paper hs.1, ?_⟩
   exact (maximizer_iff_paper_maximal hs.1).mp hs
 
@@ -42,7 +42,7 @@ The isometry uses the Euclidean norm, not the ordinary product norm. -/
 theorem IsMaximizer.congruent {s t : Set Point}
     (hs : IsMaximizer s) (ht : IsMaximizer t) :
     ∃ g : Point ≃ᵃⁱ[ℝ] Point, s = g '' t := by
-  obtain ⟨g, hg⟩ := SofaUniqueness.Draft.globalMax_congruent hs.paper ht.paper
+  obtain ⟨g, hg⟩ := MovingSofaUniqueness.globalMax_congruent hs.paper ht.paper
   exact ⟨realizeRigid g, congruent_of_coordinates g hg⟩
 
 /-- Any specified optimal reference shape characterizes all maximizers.
@@ -58,7 +58,7 @@ theorem volume_eq_constant_iff_congruent {s G : Set Point}
   · intro hvol
     exact IsMaximizer.congruent ⟨hs, hvol⟩ ⟨hG, hGvolume.symm⟩
   · intro hcongruent
-    exact (SofaUniqueness.volume_eq_of_congruent hcongruent).trans hGvolume.symm
+    exact (MovingSofaUniquenessFC.volume_eq_of_congruent hcongruent).trans hGvolume.symm
 
 /-- Congruence of reference maximizers does not depend on a choice of valid
 Gerver parameters in the pair-coordinate development. -/
@@ -76,7 +76,7 @@ theorem optimal_reference_independent {G H : Set Point}
     rfl
   · rintro ⟨g, rfl⟩
     have hHG : H = e.symm '' G :=
-      SofaUniqueness.eq_image_symm_of_image_eq e hGH.symm
+      MovingSofaUniquenessFC.eq_image_symm_of_image_eq e hGH.symm
     refine ⟨e.symm.trans g, ?_⟩
     rw [hHG, Set.image_image]
     rfl

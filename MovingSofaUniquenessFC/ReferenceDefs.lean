@@ -6,8 +6,8 @@ The parameter theorem is replaced by the analytic proof in this repository.
 -/
 module
 
-public import SofaSubmission.Model
-public import SofaUniqueness.ReferenceExistence
+public import MovingSofaUniquenessFC.Model
+public import MovingSofaUniquenessFC.ReferenceExistence
 
 /-!
 # The exact formal-conjectures Gerver reference
@@ -67,7 +67,7 @@ def ABφθSpec (A B φ θ : ℝ) : Prop :=
 /-- Analytic existence and uniqueness on the full specification domain. -/
 theorem ABφθSpec.existsUnique : ∃! ABφθ : ℝ × ℝ × ℝ × ℝ,
     ABφθSpec ABφθ.1 ABφθ.2.1 ABφθ.2.2.1 ABφθ.2.2.2 := by
-  exact SofaUniqueness.Reference.spec_existsUnique
+  exact MovingSofaUniquenessFC.Reference.spec_existsUnique
 
 def A : ℝ := ABφθSpec.existsUnique.choose.1
 def B : ℝ := ABφθSpec.existsUnique.choose.2.1
@@ -101,7 +101,7 @@ def p (α : ℝ) : ℝ² :=
       else -(4 * x 0 - 3) * α.sin - 1]
 
 /-- Package the constants without choosing a different root. -/
-def referenceData : SofaUniqueness.Reference.Data := ⟨A, B, φ, θ⟩
+def referenceData : MovingSofaUniquenessFC.Reference.Data := ⟨A, B, φ, θ⟩
 
 theorem referenceData_valid : referenceData.Valid :=
   ABφθSpec.existsUnique.choose_spec.1

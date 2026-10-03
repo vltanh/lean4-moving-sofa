@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceBoundary
+public import MovingSofaUniquenessFC.ReferenceBoundary
 
 /-!
 # Elementary bounds on the full reference parameter domain
@@ -18,7 +18,7 @@ noncomputable section
 
 open Set Real
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 /-- Common trigonometric order on the closed angle triangle. -/
 theorem triangle_trig {φ θ : ℝ} (hφ : 0 ≤ φ) (horder : φ ≤ θ)
@@ -107,4 +107,4 @@ theorem Spec.phi_lt_half {A B φ θ : ℝ} (h : Spec A B φ θ) : φ < 1 / 2 := 
   have hin := h.angle_inequality
   nlinarith [sq_nonneg (sin φ - 23 / 48)]
 
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

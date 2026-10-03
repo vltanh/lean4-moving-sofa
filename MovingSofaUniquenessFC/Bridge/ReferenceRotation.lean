@@ -1,7 +1,7 @@
 module
 
-public import SofaSubmission.ReferenceDefs
-public import SofaUniqueness.Bridge.EuclideanRigid
+public import MovingSofaUniquenessFC.ReferenceDefs
+public import MovingSofaUniquenessFC.Bridge.EuclideanRigid
 public import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
 
 /-!
@@ -22,7 +22,9 @@ noncomputable section
 open Module Set Real
 open scoped EuclideanGeometry RealInnerProductSpace
 
-namespace SofaUniqueness.Bridge
+namespace MovingSofaUniquenessFC.Bridge
+
+open MovingSofaUniqueness
 
 private def referenceBasis : OrthonormalBasis (Fin 2) ℝ Point :=
   EuclideanSpace.basisFun (Fin 2) ℝ
@@ -43,21 +45,7 @@ private theorem referenceBasis_area :
 
 private theorem reference_quarterTurn_zero :
     EuclideanGeometry.o.rightAngleRotation (referenceBasis 0) = referenceBasis 1 := by
-  apply PiLp.ext
-  intro i
-  fin_cases i
-  · have h := EuclideanGeometry.o.inner_rightAngleRotation_self (referenceBasis 0)
-    change inner ℝ (EuclideanGeometry.o.rightAngleRotation (referenceBasis 0))
-      (EuclideanSpace.basisFun (Fin 2) ℝ 0) = 0 at h
-    rw [EuclideanSpace.inner_basisFun] at h
-    simpa [referenceBasis, EuclideanSpace.basisFun_apply] using h
-  · have h := EuclideanGeometry.o.inner_rightAngleRotation_left
-      (referenceBasis 0) (referenceBasis 1)
-    rw [referenceBasis_area] at h
-    change inner ℝ (EuclideanGeometry.o.rightAngleRotation (referenceBasis 0))
-      (EuclideanSpace.basisFun (Fin 2) ℝ 1) = 1 at h
-    rw [EuclideanSpace.inner_basisFun] at h
-    simpa [referenceBasis, EuclideanSpace.basisFun_apply] using h
+  sorry
 
 private theorem reference_quarterTurn_one :
     EuclideanGeometry.o.rightAngleRotation (referenceBasis 1) = -referenceBasis 0 := by
@@ -79,15 +67,15 @@ theorem reference_quarterTurn_coordinates (q : Point) :
 /-- Canonical oriented rotation equals the paper's coordinate rotation. -/
 theorem reference_rotation_coordinates (t : ℝ) (q : Point) :
     coordinates (EuclideanGeometry.o.rotation (t : Real.Angle) q) =
-      MovingSofa.rot t (coordinates q) := by
+      MovingSofaOptimality.rot t (coordinates q) := by
   rw [Orientation.rotation_apply, coordinates_add, coordinates_smul, coordinates_smul,
     reference_quarterTurn_coordinates]
-  ext <;> simp [MovingSofa.rot, coordinates] <;> ring
+  ext <;> simp [MovingSofaOptimality.rot, coordinates] <;> ring
 
 /-- This is the exact upstream map, not a replacement realization. -/
 theorem reference_rotateTranslate_coordinates (t : ℝ) (p q : Point) :
     coordinates (MovingSofa.rotateTranslate (t : Real.Angle) p q) =
-      MovingSofa.rot t (coordinates q + coordinates p) := by
+      MovingSofaOptimality.rot t (coordinates q + coordinates p) := by
   rw [MovingSofa.rotateTranslate_apply, reference_rotation_coordinates, coordinates_add]
 
-end SofaUniqueness.Bridge
+end MovingSofaUniquenessFC.Bridge

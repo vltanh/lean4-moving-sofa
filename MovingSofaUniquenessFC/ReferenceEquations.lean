@@ -25,7 +25,7 @@ noncomputable section
 
 open Real Set
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 /-- The full upstream parameter domain and all four equations. -/
 def Spec (A B φ θ : ℝ) : Prop :=
@@ -176,4 +176,4 @@ theorem coefficients_unique {A B A' B' φ θ : ℝ}
   ⟨h.coefficients.1.trans h'.coefficients.1.symm,
     h.coefficients.2.trans h'.coefficients.2.symm⟩
 
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

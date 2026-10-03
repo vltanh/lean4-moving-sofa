@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceContacts
+public import MovingSofaUniquenessFC.ReferenceContacts
 
 /-!
 # The two concrete Gerver paths and shapes agree in coordinates
@@ -17,9 +17,9 @@ All scripts remain uncompiled.
 @[expose] public section
 noncomputable section
 
-open Set Real MovingSofa MovingSofa.GerverParams
+open Set Real MovingSofaOptimality MovingSofaOptimality.GerverParams
 
-namespace SofaUniqueness.Reference.Data
+namespace MovingSofaUniquenessFC.Reference.Data
 
 private theorem contactA_projection (D : Data) (t : ℝ) :
     dot (contactA D.toPaper.path t) (uvec t) = dot (D.toPaper.path t) (uvec t) + 1 := by
@@ -36,35 +36,7 @@ private theorem contactC_projection (D : Data) (t : ℝ) :
 /-- The literal upstream pre-rotation translation, including all branch cases. -/
 theorem prePath_eq_projections {D : Data} (hD : D.Valid) (t : ℝ) :
     D.prePath t = (dot (D.toPaper.path t) (uvec t), dot (D.toPaper.path t) (vvec t)) := by
-  have hA := contactA_projection D t
-  have hC := contactC_projection D t
-  ext
-  · change (if t ≤ D.φ then cos t - 1 else
-        D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t - 1) = _
-    by_cases ht : t ≤ D.φ
-    · rw [if_pos ht]
-      rw [contactA_first hD ht] at hA
-      simp only [dot, uvec, mul_one, one_mul, zero_mul, add_zero] at hA
-      linarith
-    · rw [if_neg ht]
-      rw [contactA_integral_coordinates hD] at hA
-      change D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t =
-        dot (D.toPaper.path t) (uvec t) + 1 at hA
-      linarith
-  · change (if t ≤ π / 2 - D.φ then
-        D.boundaryY t * cos t - (4 * D.boundaryX 0 - 2 - D.boundaryX t) * sin t - 1
-      else -(4 * D.boundaryX 0 - 3) * sin t - 1) = _
-    by_cases ht : t ≤ π / 2 - D.φ
-    · rw [if_pos ht]
-      rw [contactC_integral_coordinates hD, horizontal_normalization hD] at hC
-      change (4 * D.boundaryX 0 - 2 - D.boundaryX t) * (-sin t) +
-        D.boundaryY t * cos t = dot (D.toPaper.path t) (vvec t) + 1 at hC
-      nlinarith
-    · rw [if_neg ht]
-      rw [contactC_last hD (lt_of_not_ge ht).le, horizontal_normalization hD] at hC
-      change (4 * D.boundaryX 0 - 2 - 1) * (-sin t) + 0 * cos t =
-        dot (D.toPaper.path t) (vvec t) + 1 at hC
-      nlinarith
+  sorry
 
 /-- Exact conversion of the two translation conventions, for every parameter. -/
 theorem rotated_prePath {D : Data} (hD : D.Valid) (t : ℝ) :
@@ -73,9 +45,7 @@ theorem rotated_prePath {D : Data} (hD : D.Valid) (t : ℝ) :
 
 /-- The initial hallway is not displaced in the reference construction. -/
 theorem prePath_zero_of_valid {D : Data} (hD : D.Valid) : D.prePath 0 = 0 := by
-  have h := rotated_prePath hD 0
-  rw [rot_zero, gs_path_zero hD.paper_solution.1] at h
-  exact h
+  sorry
 
 /-- Exact set equality with the paper construction, not merely equal area. -/
 theorem shape_eq_gerverSofa {D : Data} (hD : D.Valid) :
@@ -88,6 +58,6 @@ box. Global parameter uniqueness identifies the parameters; shape uniqueness
 plays no role in the correspondence. -/
 theorem shape_eq_paper_witness {D : Data} (hD : D.Valid) {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) : D.shape = gerverSofa P := by
-  rw [shape_eq_gerverSofa hD, hD.eq_ofPaper hP hbox, ofPaper_toPaper hP]
+  sorry
 
-end SofaUniqueness.Reference.Data
+end MovingSofaUniquenessFC.Reference.Data

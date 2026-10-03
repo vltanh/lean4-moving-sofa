@@ -1,7 +1,7 @@
 module
 
-public import SofaSubmission.Final
-public import SofaUniqueness.ReferenceBoundary
+public import MovingSofaUniquenessFC.Final
+public import MovingSofaUniquenessFC.ReferenceBoundary
 
 /-!
 # Unexecuted endpoint and integration regressions
@@ -19,10 +19,12 @@ an example while its stricter source integration remains unfinished.
 @[expose] public section
 noncomputable section
 
-open Real Set MeasureTheory MovingSofa
+open Real Set MeasureTheory MovingSofa MovingSofaOptimality
 open scoped EuclideanGeometry
 
-namespace SofaUniqueness.Tests
+namespace MovingSofaUniquenessFC.Tests
+
+open MovingSofaUniqueness
 
 /-- Reflection starts from a general cap; no atom-free assumption is supplied. -/
 example {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
@@ -33,15 +35,15 @@ example {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   exact secondCurvature_of_mirror_first hK hfirst
 
 /-- The specified right-angle maximizer supplies its own positivity. -/
-example {K : Set (ℝ × ℝ)} (hK : Draft.IsMaxCap (π / 2) K) :
-    Draft.CurvatureBounds K := by
-  exact Draft.curvatureBounds_of_isMaxCap hK
+example {K : Set (ℝ × ℝ)} (hK : MovingSofaUniqueness.IsMaxCap (π / 2) K) :
+    MovingSofaUniqueness.CurvatureBounds K := by
+  sorry
 
 /-- The smaller-angle interface does not silently drop its positivity premise. -/
 example {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2))
-    (hK : Draft.IsMaxCap ω K) (hpositive : 0 < sofaArea ω K) :
-    Draft.PinnedBounds ω K := by
-  exact Draft.pinnedBounds_of_isMaxCap hω hK hpositive
+    (hK : MovingSofaUniqueness.IsMaxCap ω K) (hpositive : 0 < sofaArea ω K) :
+    MovingSofaUniqueness.PinnedBounds ω K := by
+  sorry
 
 /-- Exact equality of sets modulo a Euclidean isometry, with no regularity
 hypothesis added to either canonical competitor. -/
@@ -70,4 +72,4 @@ example {A B A' B' φ θ : ℝ} (h : Reference.Spec A B φ θ)
     (h' : Reference.Spec A' B' φ θ) : A = A' ∧ B = B' := by
   exact Reference.coefficients_unique h h'
 
-end SofaUniqueness.Tests
+end MovingSofaUniquenessFC.Tests

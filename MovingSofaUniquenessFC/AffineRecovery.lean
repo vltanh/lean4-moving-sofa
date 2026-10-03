@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.SetRecovery
+public import MovingSofaUniqueness.SetRecovery
 public import Mathlib.Analysis.Normed.Affine.Isometry
 public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 public import Mathlib.MeasureTheory.Group.Action
@@ -20,8 +20,11 @@ must not be reported as a proof of the moving-sofa uniqueness conjecture.
 @[expose] public section
 
 open Set MeasureTheory
+open scoped ENNReal
 
-namespace SofaUniqueness
+namespace MovingSofaUniquenessFC
+
+open MovingSofaUniqueness
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -116,4 +119,4 @@ theorem volume_eq_iff_congruent_of_containment {s G : Set E} {c : ℝ≥0∞}
   · intro hcongruent
     exact (volume_eq_of_congruent hcongruent).trans hc.symm
 
-end SofaUniqueness
+end MovingSofaUniquenessFC

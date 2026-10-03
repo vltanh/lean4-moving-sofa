@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.Bridge.Coordinates
+public import MovingSofaUniquenessFC.Bridge.Coordinates
 public import Mathlib.Topology.Algebra.ContinuousAffineMap.Topology
 
 /-!
@@ -25,7 +25,9 @@ noncomputable section
 open Set Real MeasureTheory
 open scoped EuclideanGeometry
 
-namespace SofaUniqueness.Bridge
+namespace MovingSofaUniquenessFC.Bridge
+
+open MovingSofaUniqueness
 
 @[simp] theorem coordinates_add (p q : Point) :
     coordinates (p + q) = coordinates p + coordinates q := rfl
@@ -45,7 +47,7 @@ def euclideanRotate (t : ℝ) (p : Point) : Point :=
   !₂[cos t * p 0 - sin t * p 1, sin t * p 0 + cos t * p 1]
 
 @[simp] theorem euclideanRotate_coordinates (t : ℝ) (p : Point) :
-    coordinates (euclideanRotate t p) = MovingSofa.rot t (coordinates p) := rfl
+    coordinates (euclideanRotate t p) = MovingSofaOptimality.rot t (coordinates p) := rfl
 
 /-- This uses the Euclidean norm; no product-norm isometry is asserted. -/
 theorem euclideanRotate_norm (t : ℝ) (p : Point) :
@@ -63,16 +65,17 @@ def rotationLinearEquiv (t : ℝ) : Point ≃ₗ[ℝ] Point where
   invFun := euclideanRotate (-t)
   left_inv p := by
     apply coordinates_injective
-    simp only [euclideanRotate_coordinates, MovingSofa.rot_neg_rot]
+    simp only [euclideanRotate_coordinates, MovingSofaOptimality.rot_neg_rot]
   right_inv p := by
     apply coordinates_injective
-    simp only [euclideanRotate_coordinates, MovingSofa.rot_rot_neg]
+    simp only [euclideanRotate_coordinates, MovingSofaOptimality.rot_rot_neg]
   map_add' p q := by
     apply coordinates_injective
-    simp only [euclideanRotate_coordinates, coordinates_add, MovingSofa.rot_add_vec]
+    simp only [euclideanRotate_coordinates, coordinates_add, MovingSofaOptimality.rot_add_vec]
   map_smul' a p := by
     apply coordinates_injective
-    simp only [euclideanRotate_coordinates, coordinates_smul, MovingSofa.rot_smul]
+    simp only [euclideanRotate_coordinates, coordinates_smul, MovingSofaOptimality.rot_smul,
+      RingHom.id_apply]
 
 def rotation (t : ℝ) : Point ≃ₗᵢ[ℝ] Point :=
   { rotationLinearEquiv t with norm_map' := euclideanRotate_norm t }
@@ -84,7 +87,7 @@ def realization (ac : ℝ × CoordinatePlane) : Motion :=
 
 /-- The coordinate action is the specified rotation and translation. -/
 theorem realization_coordinates (ac : ℝ × CoordinatePlane) (p : Point) :
-    coordinates (realization ac p) = MovingSofa.rot ac.1 (coordinates p) + ac.2 := by
+    coordinates (realization ac p) = MovingSofaOptimality.rot ac.1 (coordinates p) + ac.2 := by
   change coordinates (euclideanRotate ac.1 p + point ac.2) = _
   rw [coordinates_add, euclideanRotate_coordinates, coordinates_point]
 
@@ -93,7 +96,7 @@ def quarterTurn : Point →L[ℝ] Point where
   toFun p := !₂[-p 1, p 0]
   map_add' p q := by
     ext i
-    fin_cases i <;> simp
+    fin_cases i <;> simp <;> ring
   map_smul' a p := by
     ext i
     fin_cases i <;> simp
@@ -105,13 +108,7 @@ theorem realization_toContinuousAffineMap (ac : ℝ × CoordinatePlane) :
       (ContinuousAffineMap.decompHomeomorph ℝ Point Point).symm
         (point ac.2, cos ac.1 • (ContinuousLinearMap.id ℝ Point) +
           sin ac.1 • quarterTurn) := by
-  ext p
-  apply coordinates_injective
-  rw [realization_coordinates,
-    ContinuousAffineMap.decompHomeomorph_symm_apply]
-  change MovingSofa.rot ac.1 (coordinates p) + ac.2 =
-    coordinates ((cos ac.1 • p + sin ac.1 • quarterTurn p) + point ac.2)
-  ext <;> simp [MovingSofa.rot, coordinates, quarterTurn, point] <;> ring
+  sorry
 
 /-- Continuity uses precisely the canonical model's induced topology. -/
 theorem realization_continuous : Continuous realization := by
@@ -125,15 +122,15 @@ theorem realization_continuous : Continuous realization := by
       ((Real.continuous_sin.comp continuous_fst).smul continuous_const))
 
 /-- The library's coordinate rigid map as an actual Euclidean affine isometry. -/
-def realizeRigid (g : SofaUniqueness.Draft.Rigid) : Motion :=
+def realizeRigid (g : MovingSofaUniqueness.Rigid) : Motion :=
   realization (g.angle, g.shift)
 
-theorem realizeRigid_coordinates (g : SofaUniqueness.Draft.Rigid) (p : Point) :
+theorem realizeRigid_coordinates (g : MovingSofaUniqueness.Rigid) (p : Point) :
     coordinates (realizeRigid g p) = g (coordinates p) :=
   realization_coordinates (g.angle, g.shift) p
 
 /-- Transfer actual set equality in the direction requested upstream. -/
-theorem congruent_of_coordinates {s t : Set Point} (g : SofaUniqueness.Draft.Rigid)
+theorem congruent_of_coordinates {s t : Set Point} (g : MovingSofaUniqueness.Rigid)
     (h : coordinates '' s = g '' (coordinates '' t)) : s = realizeRigid g '' t := by
   have he : point '' (g '' (coordinates '' t)) = realizeRigid g '' t := by
     rw [Set.image_image, Set.image_image]
@@ -145,4 +142,4 @@ theorem congruent_of_coordinates {s t : Set Point} (g : SofaUniqueness.Draft.Rig
   rw [point_coordinates_image, he] at hp
   exact hp
 
-end SofaUniqueness.Bridge
+end MovingSofaUniquenessFC.Bridge

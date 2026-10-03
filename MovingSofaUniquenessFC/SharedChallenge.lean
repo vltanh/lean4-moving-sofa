@@ -26,6 +26,7 @@ scoped[EuclideanGeometry] notation "ℝ²" => EuclideanSpace ℝ (Fin 2)
 namespace MovingSofa
 
 open Topology MeasureTheory
+open scoped ENNReal
 open scoped Real unitInterval EuclideanGeometry
 
 def horizontalHallway : Set ℝ² :=

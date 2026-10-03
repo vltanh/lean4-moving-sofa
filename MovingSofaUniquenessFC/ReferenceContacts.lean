@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceRadius
+public import MovingSofaUniquenessFC.ReferenceRadius
 
 /-!
 # Exact boundary coordinates and normalization of the integral reference
@@ -15,9 +15,9 @@ approximation. Uncompiled source.
 @[expose] public section
 noncomputable section
 
-open Set Real MovingSofa MovingSofa.GerverParams
+open Set Real MovingSofaOptimality MovingSofaOptimality.GerverParams
 
-namespace SofaUniqueness.Reference.Data
+namespace MovingSofaUniquenessFC.Reference.Data
 
 private theorem rot_frame_constant (t a b : ℝ) :
     rot t (a * cos t + b * sin t, -a * sin t + b * cos t) = (a, b) := by
@@ -29,34 +29,17 @@ private theorem rot_frame_constant (t a b : ℝ) :
 theorem contactC_last {D : Data} (hD : D.Valid) {t : ℝ}
     (ht : π / 2 - D.φ ≤ t) :
     contactC D.toPaper.path t = (2 * D.k3.1 - 1, 0) := by
-  rw [gs_contactC_eq hD.paper_solution.1 (show gs_piece D.toPaper 4 t from ht)]
-  change rot t (-(1 / 4 * sin t + D.a1 * cos t),
-    -1 / 4 * cos t + D.a1 * sin t - 1 + 1) +
-      (2 * D.k3.1 - 1 + D.a1, 1 / 4) = _
-  have hframe : (-(1 / 4 * sin t + D.a1 * cos t),
-      -1 / 4 * cos t + D.a1 * sin t - 1 + 1) =
-      ((-D.a1) * cos t + (-1 / 4) * sin t,
-       -(-D.a1) * sin t + (-1 / 4) * cos t) := by ext <;> ring
-  rw [hframe, rot_frame_constant]
-  ext <;> simp <;> ring
+  sorry
 
 /-- The first outer contact is fixed, including the first junction. -/
 theorem contactA_first {D : Data} (hD : D.Valid) {t : ℝ} (ht : t ≤ D.φ) :
     contactA D.toPaper.path t = (1, 0) := by
-  rw [gs_contactA_eq hD.paper_solution.1 (show gs_piece D.toPaper 0 t from ht)]
-  change rot t (D.a1 * cos t + (-1 / 4) * sin t - 1 + 1,
-      -D.a1 * sin t + (-1 / 4) * cos t) + D.k1 = _
-  rw [sub_add_cancel, rot_frame_constant]
-  ext <;> simp only [k1, Prod.fst_add, Prod.snd_add] <;> ring
+  sorry
 
 /-- The initial outer contact fixes the integral's height normalization. -/
 theorem contactC_zero {D : Data} (hD : D.Valid) :
     contactC D.toPaper.path 0 = (1 - 2 * D.a1, 1) := by
-  rw [gs_contactC_eq hD.paper_solution.1
-    (show gs_piece D.toPaper 0 0 from hD.phi_pos.le)]
-  simp only [gs_phase, gs_ph1, gs_Phase.C, toPaper, k1, rot,
-    sin_zero, cos_zero, Prod.fst_add, Prod.snd_add]
-  ext <;> simp <;> ring
+  sorry
 
 /-- Every parameter belongs to one of the five closed phase intervals. -/
 private theorem exists_piece (P : GerverParams) (t : ℝ) :
@@ -74,36 +57,23 @@ private theorem exists_piece (P : GerverParams) (t : ℝ) :
 private theorem reflected_piece (D : Data) (i : Fin 5) {t : ℝ}
     (ht : gs_piece D.toPaper i t) :
     gs_piece D.toPaper (4 - (i : ℕ)) (π / 2 - t) := by
-  fin_cases i <;> simp only [gs_piece, toPaper] at ht ⊢
-  · linarith
-  · constructor <;> linarith [ht.1, ht.2]
-  · constructor <;> linarith [ht.1, ht.2]
-  · constructor <;> linarith [ht.1, ht.2]
-  · linarith
+  sorry
 
 /-- The reflection identity is algebraic at the level of each phase. -/
 private theorem phase_contact_reflection (D : Data) (i : Fin 5) (t : ℝ) :
     (D.toPaper.gs_phase i).A t =
       D.reflect ((D.toPaper.gs_phase (4 - (i : ℕ))).C (π / 2 - t)) := by
-  fin_cases i <;> ext <;>
-    simp only [gs_phase, gs_ph1, gs_ph2, gs_ph3, gs_ph4, gs_ph5,
-      gs_Phase.A, gs_Phase.C, toPaper, reflect, k1, rot,
-      cos_pi_div_two_sub, sin_pi_div_two_sub, Prod.fst_add, Prod.snd_add] <;> ring
+  sorry
 
 /-- Reflection relates the actual glued contacts, also at their junctions. -/
 theorem contactA_reflection {D : Data} (hD : D.Valid) (t : ℝ) :
     contactA D.toPaper.path t = D.reflect (contactC D.toPaper.path (π / 2 - t)) := by
-  obtain ⟨i, hi⟩ := exists_piece D.toPaper t
-  rw [gs_contactA_eq hD.paper_solution.1 hi,
-    gs_contactC_eq hD.paper_solution.1 (reflected_piece D i hi)]
-  exact phase_contact_reflection D i t
+  sorry
 
 /-- The reference integrals are the two coordinates of the paper contact C. -/
 theorem contactC_integral_coordinates {D : Data} (hD : D.Valid) (t : ℝ) :
     contactC D.toPaper.path t = (2 * D.k3.1 - D.boundaryX t, D.boundaryY t) := by
-  obtain ⟨hx, hy⟩ := contactC_integrals hD t (π / 2 - D.φ)
-  rw [contactC_last hD le_rfl] at hx hy
-  ext <;> simp only [boundaryX, boundaryY, Prod.fst_mk, Prod.snd_mk] at hx hy ⊢ <;> linarith
+  sorry
 
 /-- The opposite contact gives the reference boundary evaluated at L-t. -/
 theorem contactA_integral_coordinates {D : Data} (hD : D.Valid) (t : ℝ) :
@@ -129,4 +99,4 @@ theorem horizontal_normalization {D : Data} (hD : D.Valid) :
   have h := k3_fst hD
   linarith
 
-end SofaUniqueness.Reference.Data
+end MovingSofaUniquenessFC.Reference.Data

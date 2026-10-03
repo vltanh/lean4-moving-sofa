@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.Bridge.Motions
+public import MovingSofaUniquenessFC.Bridge.Motions
 
 /-!
 # The same extremal problem in the publication and submission models
@@ -21,7 +21,7 @@ Uncompiled source. The proofs in this module introduce no admissions.
 noncomputable section
 
 open Set MeasureTheory
-open SofaUniqueness.Bridge
+open MovingSofaUniquenessFC.Bridge
 open scoped EuclideanGeometry
 
 namespace MovingSofa.Canonical
@@ -34,16 +34,16 @@ def IsMaximizer (s : Set Point) : Prop :=
 not just of some congruent placement. -/
 theorem compact_of_moving {s : Set Point}
     (hs : ∃ m, MovingSofa.IsMovingSofa s m) : IsCompact s := by
-  have h := MovingSofa.isCompact_of_isMovingSofa (canonical_to_paper hs)
+  have h := MovingSofaOptimality.isCompact_of_isMovingSofa (canonical_to_paper hs)
   simpa only [point_coordinates_image] using h.image point_continuous
 
 /-- The supremum in the canonical presentation agrees with the exact volume
 of the paper's Gerver witness. This does not identify the two explicit Gerver
 parameterizations and makes no use of uniqueness. -/
-theorem constant_eq_paper_gerver {P : MovingSofa.GerverParams}
+theorem constant_eq_paper_gerver {P : MovingSofaOptimality.GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    MovingSofa.sofaConstant = volume (MovingSofa.gerverSofa P) := by
-  have hG := MovingSofa.theorem1_1_1 hP hbox
+    MovingSofa.sofaConstant = volume (MovingSofaOptimality.gerverSofa P) := by
+  have hG := MovingSofaOptimality.theorem1_1_1 hP hbox
   apply le_antisymm
   · unfold MovingSofa.sofaConstant
     refine iSup_le fun s => iSup_le fun hs => ?_
@@ -55,22 +55,22 @@ theorem constant_eq_paper_gerver {P : MovingSofa.GerverParams}
 
 /-- Finiteness is proved before any use of ENNReal.toReal injectivity. -/
 theorem constant_ne_top : MovingSofa.sofaConstant ≠ ⊤ := by
-  obtain ⟨P, hP, hbox⟩ := MovingSofa.definition8_1_2_exists
+  obtain ⟨P, hP, hbox⟩ := MovingSofaOptimality.definition8_1_2_exists
   rw [constant_eq_paper_gerver hP hbox]
-  exact MovingSofa.gerverSofa_volume_ne_top hP hbox
+  exact MovingSofaOptimality.gerverSofa_volume_ne_top hP hbox
 
 /-- The canonical supremum is attained by an actual identity-start placement. -/
 theorem exists_maximizer : ∃ s : Set Point, IsMaximizer s := by
-  obtain ⟨P, hP, hbox⟩ := MovingSofa.definition8_1_2_exists
+  obtain ⟨P, hP, hbox⟩ := MovingSofaOptimality.definition8_1_2_exists
   obtain ⟨s, hs, hvol⟩ :=
-    paper_to_canonical (MovingSofa.theorem1_1_1 hP hbox).1
+    paper_to_canonical (MovingSofaOptimality.theorem1_1_1 hP hbox).1
   refine ⟨s, hs, ?_⟩
   exact hvol.trans (constant_eq_paper_gerver hP hbox).symm
 
 /-- The canonical maximum bounds every competitor in the paper model,
 including a competitor not already placed in the horizontal hallway. -/
 theorem paper_volume_le_constant {S : Set CoordinatePlane}
-    (hS : MovingSofa.Paper.IsMovingSofa S) :
+    (hS : MovingSofaOptimality.IsMovingSofa S) :
     volume S ≤ MovingSofa.sofaConstant := by
   obtain ⟨s, hs, hvol⟩ := paper_to_canonical hS
   rw [← hvol]
@@ -81,7 +81,7 @@ actual placement, not after an assumption of zero initial translation. -/
 theorem maximizer_iff_paper_maximal {s : Set Point}
     (hs : ∃ m, MovingSofa.IsMovingSofa s m) :
     IsMaximizer s ↔
-      ∀ T : Set CoordinatePlane, MovingSofa.Paper.IsMovingSofa T →
+      ∀ T : Set CoordinatePlane, MovingSofaOptimality.IsMovingSofa T →
         volume T ≤ volume (coordinates '' s) := by
   constructor
   · rintro ⟨_, hmax⟩ T hT

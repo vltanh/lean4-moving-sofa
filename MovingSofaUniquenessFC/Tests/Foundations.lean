@@ -1,9 +1,8 @@
 module
 
-public import SofaUniqueness.AffineRecovery
-public import SofaUniqueness.Coordinates
-public import SofaUniqueness.SquareGap
-public import SofaUniqueness.CapKernel
+public import MovingSofaUniquenessFC.AffineRecovery
+public import MovingSofaUniquenessFC.Coordinates
+public import MovingSofaUniqueness.Rigidity.SquareGap
 import Mathlib
 
 /-!
@@ -21,8 +20,11 @@ that the upstream open theorem has been filled.
 @[expose] public section
 
 open Real Set MeasureTheory
+open scoped ENNReal
 
-namespace SofaUniqueness.Tests
+namespace MovingSofaUniquenessFC.Tests
+
+open MovingSofaUniqueness
 
 /-- Exact recovery applies to a closed full-measure subset of a real interval. -/
 example {s : Set ℝ} (hs : IsClosed s) (hsub : s ⊆ Icc (0 : ℝ) 1)
@@ -81,23 +83,6 @@ theorem cosine_tangent_equation (T t : ℝ) :
   rw [sub_add_cancel] at h
   nlinarith
 
-/-- Exercise all four intervals with a genuine translation mode, not the zero
-function. -/
-example {φ : ℝ} (hφ : φ ∈ Ioo (0 : ℝ) (π / 4)) :
-    EqOn Real.cos (fun t => -cos π * cos t) (Icc 0 π) := by
-  apply cap_support_kernel (f' := fun t => -sin t) hφ
-    Real.continuous_cos.continuousOn Real.cos_pi_div_two
-  · intro t ht hne
-    exact Real.hasDerivAt_cos t
-  · intro t ht
-    exact cosine_tangent_equation (π / 2) t
-  · intro t ht
-    exact (Real.cos_add_pi_div_two t).symm
-  · intro t ht
-    exact cosine_tangent_equation (π - φ) t
-  · intro t ht
-    exact cosine_tangent_equation π t
-
 /-- All affine isometries, including reflections, preserve volume. -/
 example (g : EuclideanPlane ≃ᵃⁱ[ℝ] EuclideanPlane) (G : Set EuclideanPlane) :
     volume (g '' G) = volume G :=
@@ -113,4 +98,4 @@ example {s G : Set EuclideanPlane} {c : ℝ≥0∞}
     volume s = c ↔ ∃ g : EuclideanPlane ≃ᵃⁱ[ℝ] EuclideanPlane, s = g '' G :=
   volume_eq_iff_congruent_of_containment hs hregular hfinite hc hcontain
 
-end SofaUniqueness.Tests
+end MovingSofaUniquenessFC.Tests

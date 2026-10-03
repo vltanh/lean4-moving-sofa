@@ -23,8 +23,10 @@ globs = ["MovingSofaOptimality.+"]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# MovingSofaUniquenessFC/ (the adapter to formal-conjectures' statement) is a pending draft and
-# is not built.
+# The adapter to formal-conjectures' statement (in progress; not a default target).
+[[lean_lib]]
+name = "MovingSofaUniquenessFC"
+globs = ["MovingSofaUniquenessFC.+"]
 
 [[lean_lib]]
 name = "Challenge"

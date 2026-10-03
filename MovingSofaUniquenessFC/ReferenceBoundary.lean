@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceEquations
+public import MovingSofaUniquenessFC.ReferenceEquations
 
 /-!
 # Exclude degenerate boundaries of the upstream parameter domain
@@ -19,7 +19,7 @@ noncomputable section
 
 open Real Set
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 /-- The upstream system has no solution with phi equal to zero. -/
 theorem Spec.phi_pos {A B φ θ : ℝ} (h : Spec A B φ θ) : 0 < φ := by
@@ -91,4 +91,4 @@ theorem Spec.strict_order {A B φ θ : ℝ} (h : Spec A B φ θ) :
     0 < φ ∧ φ < θ ∧ θ ≤ π / 4 :=
   ⟨h.phi_pos, h.phi_lt_theta, h.2.2.1⟩
 
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

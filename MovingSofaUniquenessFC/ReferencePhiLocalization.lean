@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceDifferential
+public import MovingSofaUniquenessFC.ReferenceDifferential
 
 /-!
 # Analytic localization of the reference roots
@@ -19,7 +19,7 @@ noncomputable section
 
 open Set Real
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 theorem cut_trig :
     (499 / 10000 : ℝ) ≤ sin (1 / 20) ∧ sin (1 / 20) ≤ 1 / 20 ∧
@@ -188,4 +188,4 @@ theorem Spec.phi_lt_twentieth {A B φ θ : ℝ} (h : Spec A B φ θ) : φ < 1 / 
   have hzero := h.reduced_zero.1
   linarith [reducedQ_cut_boundary_neg]
 
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

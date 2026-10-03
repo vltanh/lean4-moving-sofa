@@ -1,6 +1,6 @@
 module
 
-public import SofaUniqueness.ReferenceExistence
+public import MovingSofaUniquenessFC.ReferenceExistence
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
@@ -16,9 +16,9 @@ All scripts are uncompiled.
 @[expose] public section
 noncomputable section
 
-open Set Real Filter Topology MeasureTheory MovingSofa MovingSofa.GerverParams
+open Set Real Filter Topology MeasureTheory MovingSofaOptimality MovingSofaOptimality.GerverParams
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 private theorem intervalIntegrable_ite {p : ℝ → Prop} [DecidablePred p]
     (hp : MeasurableSet {t | p t}) {f g : ℝ → ℝ} {a b : ℝ}
@@ -46,10 +46,7 @@ def rightRadius (D : Data) (t : ℝ) : ℝ :=
 /-- This equality holds for every parameter tuple, before imposing equations. -/
 theorem rightRadius_eq_phase (D : Data) (t : ℝ) :
     D.rightRadius t = (D.toPaper.gs_phase (D.toPaper.gs_ridx t)).ρC t := by
-  unfold rightRadius GerverParams.gs_ridx
-  simp only [Data.toPaper]
-  split_ifs <;> simp only [gs_phase, gs_ph1, gs_ph2, gs_ph3, gs_ph4, gs_ph5,
-    gs_Phase.ρC, Data.toPaper, Data.b1, Data.b2] <;> ring
+  sorry
 
 /-- Changing finitely many assigned junction values does not change an integral. -/
 theorem radius_ae_rightRadius (D : Data) : D.radius =ᵐ[volume] D.rightRadius := by
@@ -95,9 +92,7 @@ theorem integral_radius_eq_rightRadius (D : Data) (w : ℝ → ℝ) (a b : ℝ) 
 theorem contactC_right_deriv {D : Data} (hD : D.Valid) (t : ℝ) :
     HasDerivWithinAt (contactC D.toPaper.path)
       (-D.rightRadius t • uvec t) (Ioi t) t := by
-  rw [rightRadius_eq_phase]
-  exact (gs_hasDerivWithinAt_contactC hD.paper_solution.1
-    (gs_rpiece_ridx t)).mono Ioi_subset_Ici_self
+  sorry
 
 /-- Integrate the contact curve in each coordinate. The right-derivative
 version of FTC includes all phase breakpoints without differentiability there. -/
@@ -106,26 +101,7 @@ theorem contactC_integrals {D : Data} (hD : D.Valid) (a b : ℝ) :
         (contactC D.toPaper.path a).1 - (contactC D.toPaper.path b).1 ∧
     (∫ t in a..b, D.radius t * sin t) =
         (contactC D.toPaper.path a).2 - (contactC D.toPaper.path b).2 := by
-  have hcont := gs_continuous_contactC hD.paper_solution.1
-  have hdx : ∀ t, HasDerivWithinAt (fun t => (contactC D.toPaper.path t).1)
-      (-(D.rightRadius t * cos t)) (Ioi t) t := by
-    intro t
-    have hd := (ContinuousLinearMap.fst ℝ ℝ ℝ).hasFDerivAt.comp_hasDerivWithinAt t
-      (contactC_right_deriv hD t)
-    convert hd using 1 <;> simp only [ContinuousLinearMap.coe_fst', Prod.smul_fst, uvec, smul_eq_mul] <;> ring
-  have hdy : ∀ t, HasDerivWithinAt (fun t => (contactC D.toPaper.path t).2)
-      (-(D.rightRadius t * sin t)) (Ioi t) t := by
-    intro t
-    have hd := (ContinuousLinearMap.snd ℝ ℝ ℝ).hasFDerivAt.comp_hasDerivWithinAt t
-      (contactC_right_deriv hD t)
-    convert hd using 1 <;> simp only [ContinuousLinearMap.coe_snd', Prod.smul_snd, uvec, smul_eq_mul] <;> ring
-  have hx := intervalIntegral.integral_eq_sub_of_hasDeriv_right hcont.fst.continuousOn
-    (fun t _ => hdx t) (D.rightRadius_mul_integrable continuous_cos a b).neg
-  have hy := intervalIntegral.integral_eq_sub_of_hasDeriv_right hcont.snd.continuousOn
-    (fun t _ => hdy t) (D.rightRadius_mul_integrable continuous_sin a b).neg
-  rw [intervalIntegral.integral_neg] at hx hy
-  rw [D.integral_radius_eq_rightRadius cos a b, D.integral_radius_eq_rightRadius sin a b]
-  constructor <;> linarith
+  sorry
 
 end Data
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

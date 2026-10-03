@@ -1,7 +1,7 @@
 module
 
-public import SofaUniqueness.Bridge.ReferenceRotation
-public import SofaUniqueness.ReferencePath
+public import MovingSofaUniquenessFC.Bridge.ReferenceRotation
+public import MovingSofaUniquenessFC.ReferencePath
 
 /-!
 # Equality of the two concrete Gerver definitions
@@ -18,10 +18,12 @@ All proof scripts are uncompiled.
 @[expose] public section
 noncomputable section
 
-open Set Real MovingSofa
+open Set Real MovingSofa MovingSofaOptimality
 open scoped EuclideanGeometry
 
-namespace SofaUniqueness.Bridge
+namespace MovingSofaUniquenessFC.Bridge
+
+open MovingSofaUniqueness
 
 /-- The explicit-parameter model has the literal reference's radius. -/
 theorem reference_radius (t : ℝ) : GerversSofa.referenceData.radius t = GerversSofa.r t := rfl
@@ -55,11 +57,11 @@ private theorem reference_image_iff (t : ℝ) (q : Point)
 /-- The two special endpoint intersections are transferred separately. -/
 theorem mem_reference_iff (q : Point) :
     q ∈ MovingSofa.gerversSofa ↔ coordinates q ∈ GerversSofa.referenceData.shape := by
-  have hH := reference_image_iff 0 q MovingSofa.horizontalHallway MovingSofa.horizSide
+  have hH := reference_image_iff 0 q MovingSofa.horizontalHallway MovingSofaOptimality.horizSide
     coordinates_mem_horizontal
-  have hV := reference_image_iff (π / 2) q MovingSofa.verticalHallway MovingSofa.vertSide
+  have hV := reference_image_iff (π / 2) q MovingSofa.verticalHallway MovingSofaOptimality.vertSide
     coordinates_mem_vertical
-  have hL := fun t => reference_image_iff t q MovingSofa.hallway MovingSofa.Paper.hallway
+  have hL := fun t => reference_image_iff t q MovingSofa.hallway MovingSofaOptimality.hallway
     coordinates_mem_hallway
   simp only [MovingSofa.gerversSofa, MovingSofa.sofaOfRotateTranslatePath,
     Reference.Data.shape, Reference.shapeFromPrePath, mem_inter_iff, mem_iInter] at ⊢
@@ -80,16 +82,16 @@ theorem coordinates_reference_shape :
 
 /-- Main concrete bridge: the EXACT upstream set is the paper's Gerver sofa
 in canonical pair coordinates, for every valid paper parameter witness. -/
-theorem coordinates_gerversSofa_eq_paper {P : MovingSofa.GerverParams}
+theorem coordinates_gerversSofa_eq_paper {P : MovingSofaOptimality.GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    coordinates '' MovingSofa.gerversSofa = MovingSofa.gerverSofa P := by
+    coordinates '' MovingSofa.gerversSofa = MovingSofaOptimality.gerverSofa P := by
   rw [coordinates_reference_shape]
   exact Reference.Data.shape_eq_paper_witness GerversSofa.referenceData_valid hP hbox
 
 /-- The inverse-coordinate version used in Euclidean-space statements. -/
-theorem gerversSofa_eq_point_paper {P : MovingSofa.GerverParams}
+theorem gerversSofa_eq_point_paper {P : MovingSofaOptimality.GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    MovingSofa.gerversSofa = point '' MovingSofa.gerverSofa P := by
+    MovingSofa.gerversSofa = point '' MovingSofaOptimality.gerverSofa P := by
   have h := congrArg (fun S : Set CoordinatePlane => point '' S)
     (coordinates_gerversSofa_eq_paper hP hbox)
   simpa only [point_coordinates_image] using h
@@ -104,11 +106,6 @@ theorem reference_p_zero : GerversSofa.p 0 = 0 := by
 /-- Membership in the initial hallway is obtained from its exact definition. -/
 theorem gerversSofa_subset_horizontal :
     MovingSofa.gerversSofa ⊆ MovingSofa.horizontalHallway := by
-  intro q hq
-  have hstart : q ∈ MovingSofa.rotateTranslate 0 (GerversSofa.p 0) '' MovingSofa.horizontalHallway :=
-    hq.1.1
-  rcases hstart with ⟨p, hp, rfl⟩
-  simpa only [reference_p_zero, MovingSofa.rotateTranslate_apply, add_zero,
-    Orientation.rotation_zero, LinearIsometryEquiv.refl_apply] using hp
+  sorry
 
-end SofaUniqueness.Bridge
+end MovingSofaUniquenessFC.Bridge

@@ -20,7 +20,7 @@ or between the two parameterizations of Gerver's sofa.
 
 open MeasureTheory Set
 
-namespace SofaUniqueness
+namespace MovingSofaUniquenessFC
 
 /-- The type denoted by `ℝ²` in the formal-conjectures target. -/
 abbrev EuclideanPlane := EuclideanSpace ℝ (Fin 2)
@@ -100,4 +100,4 @@ theorem isConnected_image_planeToPair {s : Set EuclideanPlane} (hs : IsConnected
     IsConnected (planeToPair '' s) :=
   hs.image planeToPair continuous_planeToPair.continuousOn
 
-end SofaUniqueness
+end MovingSofaUniquenessFC

@@ -1,7 +1,7 @@
 module
 
-public import SofaUniqueness.ReferenceEquations
-public import MovingSofa.Gerver.Frame
+public import MovingSofaUniquenessFC.ReferenceEquations
+public import MovingSofaOptimality.Gerver.Frame
 
 /-!
 # The integral Gerver reference, with explicit parameters
@@ -23,9 +23,9 @@ Uncompiled source. No decision procedure or external proof script is used.
 @[expose] public section
 noncomputable section
 
-open Set Real MovingSofa
+open Set Real MovingSofaOptimality
 
-namespace SofaUniqueness.Reference
+namespace MovingSofaUniquenessFC.Reference
 
 structure Data where
   A : ℝ
@@ -71,8 +71,7 @@ def prePath (t : ℝ) : ℝ × ℝ :=
 This identity is not assumed from the reference's name. -/
 theorem prePath_zero (hφ : 0 ≤ D.φ) (hφL : D.φ ≤ π / 2)
     (hy : D.boundaryY 0 = 1) : D.prePath 0 = 0 := by
-  have hL : (0 : ℝ) ≤ π / 2 - D.φ := sub_nonneg.mpr hφL
-  simp [prePath, hφ, hL, hy]
+  sorry
 
 end Data
 
@@ -83,15 +82,14 @@ def rotateTranslatePair (t : ℝ) (p q : ℝ × ℝ) : ℝ × ℝ := rot t (q + 
 def shapeFromPrePath (p : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
   rotateTranslatePair 0 (p 0) '' horizSide ∩
   rotateTranslatePair (π / 2) (p (π / 2)) '' vertSide ∩
-  ⋂ t ∈ Icc 0 (π / 2), rotateTranslatePair t (p t) '' MovingSofa.Paper.hallway
+  ⋂ t ∈ Icc 0 (π / 2), rotateTranslatePair t (p t) '' MovingSofaOptimality.hallway
 
 def Data.shape (D : Data) : Set (ℝ × ℝ) := shapeFromPrePath D.prePath
 
 /-- The rotating-frame coordinates uniquely determine the translation. -/
 theorem rotate_dot_coordinates (t : ℝ) (q : ℝ × ℝ) :
     rot t (dot q (uvec t), dot q (vvec t)) = q := by
-  rw [gs_rot_pair]
-  exact (eq_dot_uvec_smul_add q t).symm
+  sorry
 
 /-- Convert the whole reference shape, not just its intermediate hallways.
 The horizontal start is fixed only because `p 0 = 0` is proved separately. -/
@@ -99,27 +97,6 @@ theorem shape_eq_of_rotated_path {p x : ℝ → ℝ × ℝ}
     (hzero : p 0 = 0)
     (hpath : ∀ t ∈ Icc 0 (π / 2), rot t (p t) = x t) :
     shapeFromPrePath p = shapeOfPath x := by
-  have hL : (0 : ℝ) ≤ π / 2 := by positivity
-  have hmap : ∀ t ∈ Icc 0 (π / 2),
-      rotateTranslatePair t (p t) = fun q => x t + rot t q := by
-    intro t ht
-    funext q
-    rw [rotateTranslatePair, rot_add_vec, hpath t ht, add_comm]
-  have hstart : rotateTranslatePair 0 (p 0) '' horizSide = horizSide := by
-    simp [rotateTranslatePair, hzero, rot_zero]
-  have hfinish := hmap (π / 2) ⟨hL, le_rfl⟩
-  have hall : (⋂ t ∈ Icc 0 (π / 2),
-      rotateTranslatePair t (p t) '' MovingSofa.Paper.hallway) =
-      ⋂ t ∈ Icc 0 (π / 2), (fun q => x t + rot t q) '' MovingSofa.Paper.hallway := by
-    apply Set.iInter_congr
-    intro t
-    apply Set.iInter_congr
-    intro ht
-    rw [hmap t ht]
-  unfold shapeFromPrePath shapeOfPath
-  rw [hstart, hfinish, hall]
-  ext q
-  simp only [Set.mem_inter_iff]
-  tauto
+  sorry
 
-end SofaUniqueness.Reference
+end MovingSofaUniquenessFC.Reference

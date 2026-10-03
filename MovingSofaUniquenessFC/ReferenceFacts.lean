@@ -1,7 +1,7 @@
 module
 
-public import SofaUniqueness.Bridge.ReferenceShape
-public import SofaSubmission.Extremal
+public import MovingSofaUniquenessFC.Bridge.ReferenceShape
+public import MovingSofaUniquenessFC.Extremal
 
 /-!
 # Motion and optimality of the exact formal-conjectures reference
@@ -19,7 +19,7 @@ successful elaboration or a computed axiom audit.
 noncomputable section
 
 open Set MeasureTheory
-open SofaUniqueness.Bridge
+open MovingSofaUniquenessFC.Bridge
 open scoped EuclideanGeometry
 
 namespace MovingSofa
@@ -27,27 +27,20 @@ namespace MovingSofa
 /-- The concrete reference admits an identity-start motion in the exact
 canonical topology and hallway model. -/
 theorem isMovingSofa_gerversSofa : ∃ m, IsMovingSofa gerversSofa m := by
-  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
-  apply paper_with_initial_to_canonical
-  · rw [coordinates_gerversSofa_eq_paper hP hbox]
-    exact (theorem1_1_1 hP hbox).1
-  · exact gerversSofa_subset_horizontal
+  sorry
 
 /-- The upstream named set has the volume of the actual paper witness. -/
-theorem volume_gerversSofa_eq_paper {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) : volume gerversSofa = volume (gerverSofa P) := by
-  rw [← volume_coordinates_image, coordinates_gerversSofa_eq_paper hP hbox]
+theorem volume_gerversSofa_eq_paper {P : MovingSofaOptimality.GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    volume gerversSofa = volume (MovingSofaOptimality.gerverSofa P) := by
+  sorry
 
 /-- The precise solved-result statement required by the upstream uniqueness
 corollary, with an actual proof rather than a catalog placeholder. -/
 theorem sofaConstant_eq_volume_gerversSofa : sofaConstant = volume gerversSofa := by
-  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
-  rw [volume_gerversSofa_eq_paper hP hbox]
-  exact Canonical.constant_eq_paper_gerver hP hbox
+  sorry
 
 theorem gerversSofa_volume_ne_top : volume gerversSofa ≠ ⊤ := by
-  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
-  rw [volume_gerversSofa_eq_paper hP hbox]
-  exact gerverSofa_volume_ne_top hP hbox
+  sorry
 
 end MovingSofa

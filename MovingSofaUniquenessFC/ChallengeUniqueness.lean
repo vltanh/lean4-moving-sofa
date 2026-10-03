@@ -174,9 +174,7 @@ open scoped ENNReal
 def sofaConstant : ℝ≥0∞ := ⨆ (s : Set ℝ²) (_ : ∃ m, IsMovingSofa s m), volume s
 
 theorem one_le_sofaConstant : 1 ≤ sofaConstant := by
-  calc
-    _ = volume unitSquare := (OrthonormalBasis.volume_parallelepiped _).symm
-    _ ≤ sofaConstant := le_iSup₂ (α := ℝ≥0∞) unitSquare isMovingSofa_unitSquare
+  sorry
 
 /-- Gerver's concrete sofa uniquely attains the sofa constant up to rigid motion. -/
 theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)

@@ -1,7 +1,7 @@
 module
 
-public import SofaSubmission.Model
-public import SofaUniqueness.Draft.Rigid
+public import MovingSofaUniquenessFC.Model
+public import MovingSofaUniqueness.Rigid
 
 /-!
 # One coordinate bridge for the paper and formal-conjectures presentations
@@ -20,7 +20,9 @@ noncomputable section
 open Set Real MeasureTheory
 open scoped EuclideanGeometry
 
-namespace SofaUniqueness.Bridge
+namespace MovingSofaUniquenessFC.Bridge
+
+open MovingSofaUniqueness
 
 abbrev Point := EuclideanSpace ℝ (Fin 2)
 abbrev CoordinatePlane := ℝ × ℝ
@@ -71,13 +73,11 @@ theorem coordinates_measurePreserving :
 
 @[simp] theorem point_coordinates_image (s : Set Point) :
     point '' (coordinates '' s) = s := by
-  rw [Set.image_image]
-  simpa only [Function.comp_def, point_coordinates] using Set.image_id s
+  sorry
 
 @[simp] theorem coordinates_point_image (s : Set CoordinatePlane) :
     coordinates '' (point '' s) = s := by
-  rw [Set.image_image]
-  simpa only [Function.comp_def, coordinates_point] using Set.image_id s
+  sorry
 
 theorem volume_coordinates_image (s : Set Point) :
     volume (coordinates '' s) = volume s := by
@@ -117,18 +117,18 @@ theorem point_image_closed {s : Set CoordinatePlane} (hs : IsClosed s) :
   exact hs.preimage coordinates_continuous
 
 theorem coordinates_mem_horizontal (p : Point) :
-    coordinates p ∈ MovingSofa.horizSide ↔ p ∈ MovingSofa.horizontalHallway := by
+    coordinates p ∈ MovingSofaOptimality.horizSide ↔ p ∈ MovingSofa.horizontalHallway := by
   rw [MovingSofa.Canonical.mem_horizontal_iff]
   rfl
 
 theorem coordinates_mem_vertical (p : Point) :
-    coordinates p ∈ MovingSofa.vertSide ↔ p ∈ MovingSofa.verticalHallway := by
+    coordinates p ∈ MovingSofaOptimality.vertSide ↔ p ∈ MovingSofa.verticalHallway := by
   rw [MovingSofa.Canonical.mem_vertical_iff]
   rfl
 
 theorem coordinates_mem_hallway (p : Point) :
-    coordinates p ∈ MovingSofa.Paper.hallway ↔ p ∈ MovingSofa.hallway := by
-  simp only [MovingSofa.Paper.hallway, MovingSofa.hallway, Set.mem_union,
+    coordinates p ∈ MovingSofaOptimality.hallway ↔ p ∈ MovingSofa.hallway := by
+  simp only [MovingSofaOptimality.hallway, MovingSofa.hallway, Set.mem_union,
     coordinates_mem_horizontal, coordinates_mem_vertical]
 
-end SofaUniqueness.Bridge
+end MovingSofaUniquenessFC.Bridge
