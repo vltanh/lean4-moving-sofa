@@ -1,0 +1,20 @@
+{
+  "challenge_module": "SofaSubmission.SharedChallenge",
+  "solution_module": "SofaSubmission.Final",
+  "theorem_names": [
+    "MovingSofa.Canonical.maximizers_congruent"
+  ],
+  "definition_names": [
+    "MovingSofa.horizontalHallway",
+    "MovingSofa.verticalHallway",
+    "MovingSofa.hallway",
+    "MovingSofa.IsMovingSofa",
+    "MovingSofa.sofaConstant"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}
