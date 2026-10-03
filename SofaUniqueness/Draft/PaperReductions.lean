@@ -5,14 +5,16 @@ public import SofaUniqueness.Draft.CapKernel
 public import SofaUniqueness.Draft.CapGeometry
 public import SofaUniqueness.Draft.Selection
 public import SofaUniqueness.Draft.AngleExtension
+public import SofaUniqueness.InjectivityFromCurvature
 public import SofaUniqueness.SquareGap
 
 /-!
 # UNCOMPILED, INCOMPLETE DRAFT: formal boundaries of the paper reductions
 
-Five admissions remain in this file: P1, P2, P3, P4, P6. P5 now has an explicit
-proof through `AngleExtension.lean`, exposing the two pinned inequalities used
-by the existing geometric argument. All new scripts remain uncompiled.
+Four admissions remain in this file: P1, P2, P4, P6. P3 now has an explicit
+proof through `InjectivityFromCurvature`, and P5 through `AngleExtension`.
+All new scripts remain uncompiled; these dependency changes are not a report
+of successful Lean elaboration or a completed uniqueness proof.
 
 The old balanced-maximizer theorems are deliberately not applied to an
 arbitrary specified maximizer. That invalid shortcut would lose the original
@@ -36,7 +38,8 @@ theorem moving_of_monotone {S : Set Plane} {ω : ℝ}
   exact (theorem2_3_2 hω hT hstd).1
 
 theorem area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    {S : Set Plane} (hS : IsMovingSofa S) : area S ≤ area (gerverSofa P) := by
+    {S : Set Plane} (hS : MovingSofa.Paper.IsMovingSofa S) :
+    area S ≤ area (gerverSofa P) := by
   exact ENNReal.toReal_mono (gerverSofa_volume_ne_top hP hbox)
     ((theorem1_1_1 hP hbox).2 S hS)
 
@@ -96,17 +99,17 @@ theorem curvatureBounds_of_isMaxCap {K : Set Plane}
     (hK : IsMaxCap (π / 2) K) : CurvatureBounds K := by
   sorry
 
-/-- DRAFT-P3: the analytic arm bootstrap and support regularity.
+/-- P3: curvature-density regularity and the two-arm comparison imply injectivity.
 
-From the two measure bounds obtain AC arm functions f,g with f(0)=g(pi/2)=1,
-then integrate f'>=m0(g), -g'>=m0(f). The maximum-deficit lemma in note 11 gives
-f(t)>=1+t/2 and g(t)>=1+(pi/2-t)/2. Use these for the inner-corner derivative
-signs and C^1 regularity on its parameter interval. Do NOT infer a globally C^1
-support function across the permitted top atom. Sources: notes 11, 13 and 15.
+The imported proof obtains Radon–Nikodym densities, both integrated arm
+inequalities, and a simultaneous comparison with the existing analytic lower
+sequence. Its strict threshold uses real integral inequalities and finite
+induction, not a decision procedure or an evaluated numerical certificate.
+No balancedness of the specified cap is asserted or used.
 -/
 theorem injectivity_of_curvatureBounds {K : Set Plane}
     (hK : IsCap K (π / 2)) (hbound : CurvatureBounds K) : SatisfiesInjectivity K := by
-  sorry
+  exact SofaUniqueness.injectivity_of_curvature hK hbound.1 hbound.2
 
 theorem isKi_of_maximal_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Plane} (hK : IsCap K (π / 2))
