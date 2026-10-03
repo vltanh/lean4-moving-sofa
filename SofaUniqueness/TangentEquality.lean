@@ -31,7 +31,45 @@ theorem tangentKernel_of_mamikon_eq {a b T : ℝ}
       (1 - c) * mamikon K₀.1 a b (tangentParam K₀.1 T) +
         c * mamikon K₁.1 a b (tangentParam K₁.1 T)) :
     TangentKernel (fun t => supp K₁.1 t - supp K₀.1 t) a b T := by
-  sorry
+  have hbπ : b < a + π := by linarith
+  let z : ConvexBodySet → ℝ → ℝ × ℝ := fun K => tangentParam K.1 T
+  have hz : ∀ K, IsCBV (z K) a b :=
+    fun K => (theorem8_3_1 K.2 hTa hab.le hbT).1
+  have hzl : ∀ K, ∀ t ∈ Icc a b, z K t ∈ suppLine K.1 t := by
+    intro K t ht
+    by_cases hlt : t < T
+    · simp only [z, tangentParam, hlt, ite_true]
+      exact vint_mem_line_left K.1 t T
+    · have he : t = T := le_antisymm (ht.2.trans hbT) (not_lt.mp hlt)
+      subst t
+      simp only [z, tangentParam, lt_irrefl, ite_false]
+      exact dot_vminus_uvec K.1 T
+  have hlin : ∀ K L, ∀ d ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
+      z (convexBodyComb d K L) t = (1 - d) • z K t + d • z L t :=
+    fun K L d hd t ht => theorem8_3_2 hab.le hbT K L hd t ht
+  have hdEq := displacement_eqOn_of_mamikon_eq hab hbπ z hz hzl hlin K₀ K₁ hc heq
+    (displacement_continuousOn_arc hcap₀ h1₀ hArc (hz K₀).1)
+    (displacement_continuousOn_arc hcap₁ h1₁ hArc (hz K₁).1)
+  let f : ℝ → ℝ := fun t => supp K₁.1 t - supp K₀.1 t
+  let f' : ℝ → ℝ := fun t => dot (vplus K₁.1 t) (vvec t) -
+    dot (vplus K₀.1 t) (vvec t)
+  have hf : Continuous f := (inj_continuous_supp K₁.2).sub (inj_continuous_supp K₀.2)
+  have hd : ∀ t ∈ Ioo a b, HasDerivAt f (f' t) t := by
+    intro t ht
+    exact (support_hasDerivAt_of_injCond1 K₁.2 h1₁ (arc_mem_regular hArc ht)).sub
+      (support_hasDerivAt_of_injCond1 K₀.2 h1₀ (arc_mem_regular hArc ht))
+  apply tangentKernel_of_equation hab hTa hbT hf hd
+  intro t ht
+  have hlt : t < T := ht.2.trans_le hbT
+  have hs : sin (T - t) ≠ 0 :=
+    (sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.1])).ne'
+  have he := hdEq ht
+  change displacement K₀.1 (tangentParam K₀.1 T) t =
+    displacement K₁.1 (tangentParam K₁.1 T) t at he
+  rw [tangent_displacement_formula K₀.1 hlt, tangent_displacement_formula K₁.1 hlt] at he
+  field_simp [hs] at he
+  dsimp [f, f']
+  nlinarith [he]
 
 /-- Equality in the outer-corner term integrates to the middle support equation. -/
 theorem middleKernel_of_mamikon_eq {a b : ℝ}
@@ -46,6 +84,32 @@ theorem middleKernel_of_mamikon_eq {a b : ℝ}
     ∀ t ∈ Icc a b, supp K₁.1 t - supp K₀.1 t =
       (supp K₁.1 b - supp K₀.1 b) -
         ∫ u in t..b, supp K₁.1 (u + π / 2) - supp K₀.1 (u + π / 2) := by
-  sorry
+  let z : ConvexBodySet → ℝ → ℝ × ℝ := fun K => outerCorner K.1
+  have hz : ∀ K, IsCBV (z K) a b := fun K => opt_outerCorner_cbv K.2 a b
+  have hzl : ∀ K, ∀ t ∈ Icc a b, z K t ∈ suppLine K.1 t := by
+    intro K t ht
+    exact inj_dot_outerCorner_uvec K.1 t
+  have hlin : ∀ K L, ∀ d ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
+      z (convexBodyComb d K L) t = (1 - d) • z K t + d • z L t := by
+    intro K L d hd t ht
+    change outerCorner (convexBodyComb d K L).1 t = _
+    rw [opt_convexBodyComb_val hd, opt_outerCorner_comb K.2 L.2 hd]
+    rfl
+  have hdEq := displacement_eqOn_of_mamikon_eq hab hbπ z hz hzl hlin K₀ K₁ hc heq
+    (displacement_continuousOn_arc hcap₀ h1₀ hArc (hz K₀).1)
+    (displacement_continuousOn_arc hcap₁ h1₁ hArc (hz K₁).1)
+  let f : ℝ → ℝ := fun t => supp K₁.1 t - supp K₀.1 t
+  have hf : Continuous f := (inj_continuous_supp K₁.2).sub (inj_continuous_supp K₀.2)
+  apply integrated_middle_equation hf
+  intro t ht
+  have hd := (support_hasDerivAt_of_injCond1 K₁.2 h1₁ (arc_mem_regular hArc ht)).sub
+    (support_hasDerivAt_of_injCond1 K₀.2 h1₀ (arc_mem_regular hArc ht))
+  have he := hdEq ht
+  change displacement K₀.1 (outerCorner K₀.1) t =
+    displacement K₁.1 (outerCorner K₁.1) t at he
+  rw [outer_displacement_formula, outer_displacement_formula] at he
+  convert hd using 1
+  dsimp [f]
+  linarith
 
 end SofaUniqueness

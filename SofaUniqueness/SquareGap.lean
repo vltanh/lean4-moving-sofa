@@ -37,7 +37,10 @@ theorem integrable_sq_sub
     (hg : Integrable (fun x => (g x) ^ 2) μ)
     (hfg : Integrable (fun x => f x * g x) μ) :
     Integrable (fun x => (f x - g x) ^ 2) μ := by
-  sorry
+  have hsum : Integrable (fun x => (f x) ^ 2 + (g x) ^ 2 - 2 * (f x * g x)) μ :=
+    (hf.add hg).sub (hfg.const_mul 2)
+  refine hsum.congr (Eventually.of_forall fun x => ?_)
+  ring
 
 /-- Expanding the integral of a squared difference. -/
 theorem integral_sq_sub
@@ -47,7 +50,14 @@ theorem integral_sq_sub
     (∫ x, (f x - g x) ^ 2 ∂μ) =
       (∫ x, (f x) ^ 2 ∂μ) + (∫ x, (g x) ^ 2 ∂μ) -
         2 * (∫ x, f x * g x ∂μ) := by
-  sorry
+  calc
+    (∫ x, (f x - g x) ^ 2 ∂μ) =
+        ∫ x, (f x) ^ 2 + (g x) ^ 2 - 2 * (f x * g x) ∂μ := by
+      apply integral_congr_ae
+      exact Eventually.of_forall fun x => by ring
+    _ = _ := by
+      have hsum : Integrable (fun x => (f x) ^ 2 + (g x) ^ 2) μ := hf.add hg
+      rw [integral_sub hsum (hfg.const_mul 2), integral_add hf hg, integral_const_mul]
 
 /-- Expanding a squared affine combination before integrating. The identity is
 valid for every real `c`, not only for convex coefficients. -/
@@ -59,7 +69,19 @@ theorem integral_sq_combo (c : ℝ)
       (1 - c) ^ 2 * (∫ x, (f x) ^ 2 ∂μ) +
         (2 * c * (1 - c)) * (∫ x, f x * g x ∂μ) +
         c ^ 2 * (∫ x, (g x) ^ 2 ∂μ) := by
-  sorry
+  calc
+    (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ) =
+        ∫ x, (1 - c) ^ 2 * (f x) ^ 2 +
+          (2 * c * (1 - c)) * (f x * g x) + c ^ 2 * (g x) ^ 2 ∂μ := by
+      apply integral_congr_ae
+      exact Eventually.of_forall fun x => by ring
+    _ = _ := by
+      have h12 : Integrable
+          (fun x => (1 - c) ^ 2 * (f x) ^ 2 + (2 * c * (1 - c)) * (f x * g x)) μ :=
+        (hf.const_mul ((1 - c) ^ 2)).add (hfg.const_mul (2 * c * (1 - c)))
+      rw [integral_add h12 (hg.const_mul (c ^ 2)),
+        integral_add (hf.const_mul ((1 - c) ^ 2)) (hfg.const_mul (2 * c * (1 - c))),
+        integral_const_mul, integral_const_mul, integral_const_mul]
 
 /-- Exact square-gap identity. At the midpoint the coefficient is `1/8`. -/
 theorem halfSquareIntegral_combo_gap (c : ℝ)
