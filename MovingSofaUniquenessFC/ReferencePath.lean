@@ -36,7 +36,36 @@ private theorem contactC_projection (D : Data) (t : ℝ) :
 /-- The literal upstream pre-rotation translation, including all branch cases. -/
 theorem prePath_eq_projections {D : Data} (hD : D.Valid) (t : ℝ) :
     D.prePath t = (dot (D.toPaper.path t) (uvec t), dot (D.toPaper.path t) (vvec t)) := by
-  sorry
+  have hA := contactA_projection D t
+  have hC := contactC_projection D t
+  refine Prod.ext ?_ ?_
+  · show (if t ≤ D.φ then cos t - 1 else
+        D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t - 1) =
+      dot (D.toPaper.path t) (uvec t)
+    by_cases ht : t ≤ D.φ
+    · rw [ite_eq_left ht]
+      rw [contactA_first hD ht] at hA
+      change 1 * cos t + 0 * sin t = dot (D.toPaper.path t) (uvec t) + 1 at hA
+      linarith
+    · rw [ite_eq_right ht]
+      rw [contactA_integral_coordinates hD] at hA
+      change D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t =
+        dot (D.toPaper.path t) (uvec t) + 1 at hA
+      linarith
+  · show (if t ≤ π / 2 - D.φ then
+        D.boundaryY t * cos t - (4 * D.boundaryX 0 - 2 - D.boundaryX t) * sin t - 1
+      else -(4 * D.boundaryX 0 - 3) * sin t - 1) = dot (D.toPaper.path t) (vvec t)
+    by_cases ht : t ≤ π / 2 - D.φ
+    · rw [ite_eq_left ht]
+      rw [contactC_integral_coordinates hD, horizontal_normalization hD] at hC
+      change (4 * D.boundaryX 0 - 2 - D.boundaryX t) * (-sin t) +
+        D.boundaryY t * cos t = dot (D.toPaper.path t) (vvec t) + 1 at hC
+      linarith
+    · rw [ite_eq_right ht]
+      rw [contactC_last hD (lt_of_not_ge ht).le, horizontal_normalization hD] at hC
+      change (4 * D.boundaryX 0 - 2 - 1) * (-sin t) + 0 * cos t =
+        dot (D.toPaper.path t) (vvec t) + 1 at hC
+      linarith
 
 /-- Exact conversion of the two translation conventions, for every parameter. -/
 theorem rotated_prePath {D : Data} (hD : D.Valid) (t : ℝ) :
@@ -45,7 +74,9 @@ theorem rotated_prePath {D : Data} (hD : D.Valid) (t : ℝ) :
 
 /-- The initial hallway is not displaced in the reference construction. -/
 theorem prePath_zero_of_valid {D : Data} (hD : D.Valid) : D.prePath 0 = 0 := by
-  sorry
+  have h := rotated_prePath hD 0
+  rw [rot_zero, gs_path_zero (paper_solution hD).1] at h
+  exact h
 
 /-- Exact set equality with the paper construction, not merely equal area. -/
 theorem shape_eq_gerverSofa {D : Data} (hD : D.Valid) :
@@ -58,6 +89,6 @@ box. Global parameter uniqueness identifies the parameters; shape uniqueness
 plays no role in the correspondence. -/
 theorem shape_eq_paper_witness {D : Data} (hD : D.Valid) {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) : D.shape = gerverSofa P := by
-  sorry
+  rw [shape_eq_gerverSofa hD, eq_ofPaper hD hP hbox, ofPaper_toPaper hP]
 
 end MovingSofaUniquenessFC.Reference.Data

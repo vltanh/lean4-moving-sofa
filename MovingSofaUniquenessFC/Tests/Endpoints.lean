@@ -37,13 +37,13 @@ example {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
 /-- The specified right-angle maximizer supplies its own positivity. -/
 example {K : Set (ℝ × ℝ)} (hK : MovingSofaUniqueness.IsMaxCap (π / 2) K) :
     MovingSofaUniqueness.CurvatureBounds K := by
-  sorry
+  exact MovingSofaUniqueness.curvatureBounds_of_isMaxCap hK
 
 /-- The smaller-angle interface does not silently drop its positivity premise. -/
 example {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2))
     (hK : MovingSofaUniqueness.IsMaxCap ω K) (hpositive : 0 < sofaArea ω K) :
     MovingSofaUniqueness.PinnedBounds ω K := by
-  sorry
+  exact MovingSofaUniqueness.pinnedBounds_of_isMaxCap hω hK hpositive
 
 /-- Exact equality of sets modulo a Euclidean isometry, with no regularity
 hypothesis added to either canonical competitor. -/

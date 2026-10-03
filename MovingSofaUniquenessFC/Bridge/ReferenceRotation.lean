@@ -45,7 +45,21 @@ private theorem referenceBasis_area :
 
 private theorem reference_quarterTurn_zero :
     EuclideanGeometry.o.rightAngleRotation (referenceBasis 0) = referenceBasis 1 := by
-  sorry
+  apply PiLp.ext
+  intro i
+  fin_cases i
+  · have h := EuclideanGeometry.o.inner_rightAngleRotation_self (referenceBasis 0)
+    change inner ℝ (EuclideanGeometry.o.rightAngleRotation (referenceBasis 0))
+      (EuclideanSpace.basisFun (Fin 2) ℝ 0) = 0 at h
+    rw [EuclideanSpace.inner_basisFun_real] at h
+    simpa [referenceBasis, EuclideanSpace.basisFun_apply] using h
+  · have h := EuclideanGeometry.o.inner_rightAngleRotation_left
+      (referenceBasis 0) (referenceBasis 1)
+    rw [referenceBasis_area] at h
+    change inner ℝ (EuclideanGeometry.o.rightAngleRotation (referenceBasis 0))
+      (EuclideanSpace.basisFun (Fin 2) ℝ 1) = 1 at h
+    rw [EuclideanSpace.inner_basisFun_real] at h
+    simpa [referenceBasis, EuclideanSpace.basisFun_apply] using h
 
 private theorem reference_quarterTurn_one :
     EuclideanGeometry.o.rightAngleRotation (referenceBasis 1) = -referenceBasis 0 := by

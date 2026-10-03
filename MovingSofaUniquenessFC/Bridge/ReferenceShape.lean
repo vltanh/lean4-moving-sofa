@@ -106,6 +106,11 @@ theorem reference_p_zero : GerversSofa.p 0 = 0 := by
 /-- Membership in the initial hallway is obtained from its exact definition. -/
 theorem gerversSofa_subset_horizontal :
     MovingSofa.gerversSofa ⊆ MovingSofa.horizontalHallway := by
-  sorry
+  intro q hq
+  have hstart : q ∈ MovingSofa.rotateTranslate 0 (GerversSofa.p 0) '' MovingSofa.horizontalHallway :=
+    hq.1.1
+  rcases hstart with ⟨p, hp, rfl⟩
+  simpa only [reference_p_zero, MovingSofa.rotateTranslate_apply, add_zero,
+    Orientation.rotation_zero, LinearIsometryEquiv.coe_refl, id] using hp
 
 end MovingSofaUniquenessFC.Bridge
