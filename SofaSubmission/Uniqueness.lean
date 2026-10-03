@@ -4,25 +4,22 @@ public import SofaSubmission.Extremal
 public import SofaUniqueness.Draft.ShapeUniqueness
 
 /-!
-# One Euclidean uniqueness API for the paper and upstream statement
+# One Euclidean uniqueness API for the paper and upstream motion model
 
-The canonical definitions come from `SofaSubmission.Model`. The actual paper
-modules and their coordinate presentation are imported directly. This is an
-ordinary Lean source module, not an insertion fragment or generated overlay.
+The canonical definitions come from `SofaSubmission.Model`, which imports only
+Mathlib. The actual paper modules are imported directly in their pair-coordinate
+presentation, with explicit `MovingSofa.Paper` kernel names for the colliding
+hallway and moving-sofa predicates. No source relocation or generation is used.
 
-The generic reference set G needs only its actual moving-sofa and optimality
-facts. It need not be identified definitionally with the paper's Romik formula.
-For the formal-conjectures reference, the final call is
+The generic reference set G needs its actual moving-sofa and optimality facts.
+They are explicit inputs, not postulated global instances. For upstream's
+concrete Gerver formula these inputs still need a source integration meeting
+the requested prohibition on decision-kernel certificate evaluation. See note 21.
+The generic theorem must not be reported as completion of that exact endpoint.
 
-  volume_eq_constant_iff_congruent hs isMovingSofa_gerversSofa
-    sofaConstant_eq_volume_gerversSofa
-
-with exactly the original target statement. Those upstream facts are NOT
-postulated here or imported from a file containing placeholders.
-
-Status: uncompiled and dependent on the two variational admissions P2 and P4
-in `PaperReductions`. An admission-free body is not an admission-free proof
-closure. This file must not be advertised as a verified solution.
+P1-P6 and the motion bridges now have written proof bodies. The entire source
+remains uncompiled: successful elaboration, an admission-free elaborated
+dependency graph, and Palomar acceptance have not been established.
 -/
 
 @[expose] public section
@@ -41,16 +38,16 @@ theorem IsMaximizer.paper {s : Set Point} (hs : IsMaximizer s) :
   exact (maximizer_iff_paper_maximal hs.1).mp hs
 
 /-- Every two canonical maximizers are congruent as actual sets.
-The isometry has the Euclidean norm, not the ordinary product norm. -/
+The isometry uses the Euclidean norm, not the ordinary product norm. -/
 theorem IsMaximizer.congruent {s t : Set Point}
     (hs : IsMaximizer s) (ht : IsMaximizer t) :
     ∃ g : Point ≃ᵃⁱ[ℝ] Point, s = g '' t := by
   obtain ⟨g, hg⟩ := SofaUniqueness.Draft.globalMax_congruent hs.paper ht.paper
   exact ⟨realizeRigid g, congruent_of_coordinates g hg⟩
 
-/-- Target-shaped theorem for any specified optimal reference sofa.
-The two reference hypotheses are ordinary solved-result facts, not uniqueness
-or shape-rigidity hypotheses. They are deliberately explicit. -/
+/-- Any specified optimal reference shape characterizes all maximizers.
+The two reference premises concern that shape's motion and area; they are
+not uniqueness, regularity, or rigidity assumptions on the competitor. -/
 theorem volume_eq_constant_iff_congruent {s G : Set Point}
     (hs : ∃ m, MovingSofa.IsMovingSofa s m)
     (hG : ∃ m, MovingSofa.IsMovingSofa G m)
@@ -63,8 +60,8 @@ theorem volume_eq_constant_iff_congruent {s G : Set Point}
   · intro hcongruent
     exact (SofaUniqueness.volume_eq_of_congruent hcongruent).trans hGvolume.symm
 
-/-- Congruence of reference maximizers is independent of an arbitrary choice
-of Gerver parameters in the pair-coordinate development. -/
+/-- Congruence of reference maximizers does not depend on a choice of valid
+Gerver parameters in the pair-coordinate development. -/
 theorem optimal_reference_independent {G H : Set Point}
     (hG : IsMaximizer G) (hH : IsMaximizer H) :
     ∀ s : Set Point,
