@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "Optimality of Gerver's sofa (Baek 2024), formalized in Lean 4"
+  name: "Optimality (Baek 2024) and uniqueness of Gerver's sofa, formalized in Lean 4"
   description: >-
     The moving sofa problem (Moser 1966) asks for the largest area of a connected planar shape that
     can be moved around the right-angled corner of a hallway of unit width. Gerver (1992) constructed
@@ -22,6 +22,17 @@ project:
     3.2.5, which makes Proposition 3.3.5 and Lemma 3.4.2 false, and one direction of
     Proposition 5.1.4. The proof of Theorem 6.1.2 is invalid as written. The audit also records
     smaller gaps and slips. Every result survives in its intended form, and the main theorem holds.
+    The repository also proves, and the Challenge states, that Gerver's sofa is the only moving sofa
+    of maximum area up to rigid motions: every moving sofa with the area of Gerver's sofa is mapped
+    onto it, as a set, by a rotation followed by a translation. Baek's paper does not prove this, and
+    Google DeepMind's formal-conjectures lists it as an open problem; we know of no earlier proof but
+    have not searched the literature systematically. The argument was written by ChatGPT Pro
+    (OpenAI) for this repository (docs/uniqueness/20-complete-paper-proof.md) and has not been peer
+    reviewed. Its formal proof uses the definitions and results of the formalization of Baek's
+    paper: it selects polygon approximations of a given maximizing cap, shows that every maximizing
+    right-angle cap satisfies Baek's injectivity condition, extends the motion of a maximizing sofa
+    to a right angle, and identifies the cap with Gerver's through the equality case of Baek's upper
+    bound and the regular closedness of Gerver's sofa.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -45,6 +56,19 @@ sources:
       LaTeX source. Statements that are false or meaningless as printed are formalized in their
       intended form; REPORT.md (Sections 3 and 6) lists every correction.
     author_endorsement: not-contacted
+  - title: "Uniqueness of Gerver's sofa: complete paper argument"
+    id: "docs/uniqueness/20-complete-paper-proof.md"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/blob/main/docs/uniqueness/20-complete-paper-proof.md"
+    relationship: formalizes
+    note: >-
+      An informal proof that every moving sofa with the area of Gerver's sofa is congruent to it,
+      written by ChatGPT Pro (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
+      before it in docs/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
+      does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
+      its six propositions; docs/UNIQUENESS.md lists the Lean form of each step and the places
+      where the formal proof takes a different route.
+    author_endorsement: n/a
   - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
     authors:
       - "Dan Romik"
@@ -93,6 +117,15 @@ sources:
     author_endorsement: n/a
 
 related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean"
+    relationship: other
+    note: >-
+      Google DeepMind's formal-conjectures states the optimality (solved) and the uniqueness
+      (category research open, volume_eq_sofaConstant_iff_congruent_gerversSofa) with different
+      definitions: moving sofas in EuclideanSpace R (Fin 2) moved from the identity, the optimal
+      area as a supremum, and Gerver's sofa from Gerver's four constants. This repository proves
+      both results in its own Challenge; the proof of formal-conjectures' exact statements is not
+      done (MovingSofaUniquenessFC/ is a draft outside the build).
   - id: "https://github.com/deancureton/MovingSofa"
     relationship: other
     note: >-
@@ -120,7 +153,11 @@ status:
     Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
     surface area measure is defined directly and the properties the paper uses are proved; the
     quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose content the paper reproves in Chapter 3;
-    and the remarks and figures.
+    and the remarks and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
+    motions (MovingSofaUniqueness/), with the theorem and the six propositions of
+    docs/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
+    estimate of note 17, which the theorem does not use, and the statement of formal-conjectures,
+    whose definitions differ (MovingSofaUniquenessFC/ is a draft outside the build).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -131,29 +168,50 @@ automation:
       models: ["Claude Opus 5.5 (claude-opus-5-5)"]
       framework: "Claude Code (Anthropic)"
       tool_setup: >-
-        Claude Code 2.1.285, with one coordinating agent and 19 sub-agents of the same model (at most
-        13 running at once), each sub-agent owning a group of files. The work followed the
-        formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit cbdedac):
-        statements first, then proofs, verification, cleanup and the audit. The agents had a Lean 4 and Lake toolchain, a local Mathlib checkout,
-        Python with NumPy, SciPy, SymPy and mpmath for the numerics, and the paper's arXiv LaTeX
-        source. Two Lean files of interval arithmetic are generated by Python scripts kept in the
-        repository (scripts/romik, scripts/area).
+        Baek's paper: Claude Code 2.1.285, with one coordinating agent and 19 sub-agents of the same
+        model (at most 13 running at once), each sub-agent owning a group of files. The work followed
+        the formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
+        cbdedac): statements first, then proofs, verification, cleanup and the audit. The agents had
+        a Lean 4 and Lake toolchain, a local Mathlib checkout, Python with NumPy, SciPy, SymPy and
+        mpmath for the numerics, and the paper's arXiv LaTeX source. Two Lean files of interval
+        arithmetic are generated by Python scripts kept in the repository (scripts/romik,
+        scripts/area). Uniqueness: Claude Code 2.1.287 with the same skill (version 1.3.0) compiled
+        ChatGPT Pro's Lean draft, replaced its 54 failing proofs by sorry, and had them proved again
+        by 8 sub-agents, starting from the draft's proofs; a ninth sub-agent reviewed the statements
+        against the informal proof.
       cost:
         wall_time: >-
-          about 3 hours 50 minutes of elapsed time to the audited formalization (2026-10-01 22:38 to
-          2026-10-02 02:28, US Central Time), with about 18 hours of sub-agent working time; the
-          Palomar packaging came afterwards
+          Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
+          (2026-10-01 22:38 to 2026-10-02 02:28, US Central Time), with about 18 hours of sub-agent
+          working time; the Palomar packaging came afterwards. Uniqueness: about 1 hour of elapsed
+          time from ChatGPT Pro's draft to the documented proof (2026-10-02 21:55 to 22:56), with
+          about 0.9 hours of sub-agent working time
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
         One instruction, to formalize arXiv:2411.19826 following the formalize-math-paper skill, and
         later approvals: of the correction of Proposition 5.1.4, of publishing the repository, and of
         packaging it for Palomar. The coordinating agent wrote the statements, split the proofs among
-        sub-agents by chapter, reviewed and integrated every result, and wrote the audit.
+        sub-agents by chapter, reviewed and integrated every result, and wrote the audit. For the
+        uniqueness, one instruction to make ChatGPT Pro's draft into a complete proof in this
+        repository's definitions, then instructions on the layout of the repository and on the
+        Palomar submission.
+    - method: agent
+      models: ["ChatGPT Pro (OpenAI); the model version was not recorded"]
+      framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
+      tool_setup: >-
+        Wrote the informal uniqueness proof (docs/uniqueness/, notes 01-20) and a Lean draft of it
+        without a Lean compiler, in pull request #1 (147 commits on 2026-10-02, 15:01 to 22:39 US
+        Central Time). The draft's statements all compiled; 54 of its proofs did not.
+      cost:
+        wall_time: "about 7 hours 40 minutes between the first and the last commit used here"
+        spend_usd: "not tracked"
   spend_usd: "not tracked"
   notes: >-
-    All Lean code, the numerical verification scripts and the audit were written by Claude Opus 5.5
-    in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this repository.
+    The Lean code of Baek's paper, the numerical verification scripts and the audit were written by
+    Claude Opus 5.5 in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this
+    repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro, and
+    Claude Opus 5.5 made the draft compile and completed it.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
     pair.
@@ -190,18 +248,29 @@ fidelity:
     Brunn-Minkowski inequality in Theorem 8.1.1 (1); proofs of Lemma 8.1.7 (2), (4) and Theorem 8.2.4
     that do not use N(K) in K, which the cap space K^i does not provide; Theorems 6.1.2 and 8.4.1 from
     Romik's equations. REPORT.md, Section 6 lists them.
+    (6) The uniqueness: "U(S) = G for a Euclidean isometry U" is formalized with U a rotation about
+    the origin followed by a translation, which is stronger. Some proofs take different routes from
+    note 20 (docs/UNIQUENESS.md): the selection uses a fixed penalty on persistent dyadic support
+    samples instead of a vanishing continuous penalty; the selection needs the cap to have positive
+    area, which is proved where it is used; the arm inequalities come from the lower sequence of
+    Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of
+    Gerver's sofa uses that its rotation path stays strictly below the top of the cap.
 
 review:
   status: "agent-reviewed"
   reviewers:
     - "Claude Opus 5.5 sub-agents, separate from the proving agents: a statement-fidelity review against the LaTeX source, and an audit of the paper's findings against the LaTeX source"
+    - "A Claude Opus 5.5 sub-agent, separate from the proving agents: a review of the uniqueness statements against the informal proof"
   notes: >-
     No human has reviewed the proofs, the statements or the audit. Before any proof was written, a
     separate agent reviewed every statement against the paper's LaTeX source. Every statement change
     after that was compared with the original statements by script (stmt_diff), and each one is
     documented. Every finding about the paper was checked against the LaTeX source, and every
     numerical claim was recomputed by script. Lean's kernel checks the proofs; Comparator checks
-    that the Solution proves the Challenge's statements with the standard axioms only.
+    that the Solution proves the Challenge's statements with the standard axioms only. The
+    uniqueness argument has been reviewed only by AI systems: ChatGPT Pro's own reviews, and a
+    separate agent that compared the Lean statements with the informal proof and found no weakening,
+    vacuous definition or hidden assumption.
 
 alignment:
   namespace: "MovingSofaChallenge"
@@ -237,7 +306,16 @@ alignment:
         sofa has area at most the area of Gerver's sofa. The paper's moving sofas are translates of
         subsets of H_L, and its rigid motions are continuous curves in SE(2) starting at a
         translation; Challenge.lean's docstring explains the equivalent formulation used.
+    - source: "Uniqueness of Gerver's sofa, docs/uniqueness/20-complete-paper-proof.md, Theorem (not a result of Baek's paper)"
+      lean: "MovingSofaChallenge.gerver_sofa_unique"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        Every moving sofa whose area equals that of Gerver's sofa is mapped onto Gerver's sofa, as a
+        set, by a rotation about the origin followed by a translation. With gerver_sofa_optimal, the
+        moving sofas of maximum area are exactly the moving sofas congruent to Gerver's sofa.
 
 acknowledgements: >-
   Mathlib and the Lean toolchain (Lean 4, Lake, Comparator). The audit used the arXiv LaTeX source of
-  arXiv:2411.19826v1.
+  arXiv:2411.19826v1. Google DeepMind's formal-conjectures pointed to the uniqueness of the optimal
+  sofa as an open problem.
