@@ -65,13 +65,45 @@ theorem mem_cap_sub_horizontal_iff {K G : Set Plane}
     (hK : IsCap K (π / 2)) (hG : IsCap G (π / 2)) (a : ℝ)
     (hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp G t = a * cos t)
     (p : Plane) : p ∈ K ↔ p - (a, 0) ∈ G := by
-  sorry
+  rw [mem_right_cap_iff hK, mem_right_cap_iff hG]
+  simp only [Prod.snd_sub, sub_zero]
+  constructor
+  · rintro ⟨hp, hu⟩
+    refine ⟨hp, fun t ht => ?_⟩
+    rw [dot_sub_horizontal_u]
+    linarith [hu t ht, hsupp t ht]
+  · rintro ⟨hp, hu⟩
+    refine ⟨hp, fun t ht => ?_⟩
+    have hi := hu t ht
+    rw [dot_sub_horizontal_u] at hi
+    linarith [hsupp t ht]
 
 /-- No assumption that either cap contains its niche is needed for covariance. -/
 theorem mem_niche_sub_horizontal_iff {K G : Set Plane} (a : ℝ)
     (hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp G t = a * cos t)
     (p : Plane) : p ∈ niche K (π / 2) ↔ p - (a, 0) ∈ niche G (π / 2) := by
-  sorry
+  rw [mem_right_niche_iff, mem_right_niche_iff]
+  simp only [Prod.snd_sub, sub_zero]
+  have hbounds : ∀ t ∈ Ioo (0 : ℝ) (π / 2),
+      supp K t - supp G t = a * cos t ∧
+        supp K (t + π / 2) - supp G (t + π / 2) = -a * sin t := by
+    intro t ht
+    refine ⟨hsupp t ⟨ht.1.le, by linarith [ht.2, pi_pos]⟩, ?_⟩
+    have h := hsupp (t + π / 2)
+      ⟨by linarith [ht.1, pi_pos], by linarith [ht.2]⟩
+    simpa [cos_add_pi_div_two, mul_neg, neg_mul] using h
+  constructor
+  · rintro ⟨hp, t, ht, hu, hv⟩
+    refine ⟨hp, t, ht, ?_, ?_⟩
+    · rw [dot_sub_horizontal_u]
+      linarith [(hbounds t ht).1]
+    · rw [dot_sub_horizontal_v]
+      linarith [(hbounds t ht).2]
+  · rintro ⟨hp, t, ht, hu, hv⟩
+    rw [dot_sub_horizontal_u] at hu
+    rw [dot_sub_horizontal_v] at hv
+    exact ⟨hp, t, ht, by linarith [(hbounds t ht).1],
+      by linarith [(hbounds t ht).2]⟩
 
 theorem cap_eq_translate_of_upper_support {K G : Set Plane}
     (hK : IsCap K (π / 2)) (hG : IsCap G (π / 2)) (a : ℝ)
