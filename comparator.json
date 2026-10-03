@@ -2,15 +2,18 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "MovingSofaChallenge.gerver_params_exists",
-    "MovingSofaChallenge.gerver_params_unique",
-    "MovingSofaChallenge.gerver_sofa_area",
-    "MovingSofaChallenge.gerver_sofa_optimal",
-    "MovingSofaChallenge.gerver_sofa_unique",
-    "MovingSofa.GerversSofa.ABφθSpec.existsUnique",
-    "MovingSofa.isMovingSofa_gerversSofa",
-    "MovingSofa.sofaConstant_eq_volume_gerversSofa",
-    "MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+    "Baek.gerver_params_exists",
+    "Baek.gerver_params_unique",
+    "Baek.gerver_sofa_area",
+    "Baek.gerver_sofa_optimal",
+    "Baek.gerver_sofa_unique",
+    "Bridge.isMovingSofa_iff",
+    "Bridge.sofaConstant_eq",
+    "Bridge.gerversSofa_eq",
+    "FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique",
+    "FormalConjectures.MovingSofa.isMovingSofa_gerversSofa",
+    "FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa",
+    "FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
   ],
   "definition_names": [],
   "permitted_axioms": [

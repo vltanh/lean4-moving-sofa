@@ -1,10 +1,87 @@
 module
 
+public import Mathlib.MeasureTheory.Measure.OpenPos
+public import Mathlib.MeasureTheory.Measure.Basic
 public import MovingSofaOptimality.Main
-public import MovingSofaUniqueness.SetRecovery
 
 /-!
-# Rigid maps in the library's coordinate plane
+# Rigid maps, and the recovery of a set from its area
+
+A `Rigid` map of `ℝ × ℝ` is a rotation about the origin followed by a translation; it preserves
+volume. A closed set contained in a regular closed set `G` of finite measure, with the same measure,
+is `G` itself (`Rigid.recover`): this is the last step of the uniqueness theorem.
+-/
+
+@[expose] public section
+noncomputable section
+
+/-!
+## Recover a closed set from containment and equal volume
+
+These lemmas are independent of both moving-sofa definitions. They isolate the
+last step of the paper argument: a closed full-measure subset of a regular-closed
+set is the entire set, for a measure positive on nonempty open sets.
+
+Regular closedness of Gerver's sofa is not proved or assumed globally here. It is
+an explicit hypothesis of the applicable lemmas. Finite measure is needed only
+when replacing a null set difference by equality of measures.
+-/
+
+section
+
+open Set MeasureTheory
+
+namespace MovingSofaUniqueness
+
+variable {X : Type*} [TopologicalSpace X] [MeasurableSpace X]
+variable {μ : Measure X} [Measure.IsOpenPosMeasure μ]
+variable {s t : Set X}
+
+/-- A closed set whose complement in `t` is null contains the interior of `t`. -/
+theorem interior_subset_of_null_sdiff (hs : IsClosed s) (hnull : μ (t \ s) = 0) :
+    interior t ⊆ s := by
+  intro x hx
+  by_contra hxs
+  have hopen : IsOpen (interior t \ s) := isOpen_interior.inter hs.isOpen_compl
+  have hne : μ (interior t \ s) ≠ 0 := hopen.measure_ne_zero μ ⟨x, hx, hxs⟩
+  have hsub : interior t \ s ⊆ t \ s := Set.sdiff_subset_sdiff_left interior_subset
+  exact hne (measure_mono_null hsub hnull)
+
+/-- Closedness upgrades containment of the interior to containment of its closure. -/
+theorem closure_interior_subset_of_null_sdiff (hs : IsClosed s)
+    (hnull : μ (t \ s) = 0) : closure (interior t) ⊆ s :=
+  closure_minimal (interior_subset_of_null_sdiff hs hnull) hs
+
+/-- A closed full-measure subset of a regular-closed set is that set.
+
+The hypothesis is nullity of the difference, so this version does not need finite
+measure or measurability of either set. -/
+theorem eq_of_subset_of_null_sdiff (hs : IsClosed s) (hst : s ⊆ t)
+    (ht : closure (interior t) = t) (hnull : μ (t \ s) = 0) : s = t := by
+  apply Set.Subset.antisymm hst
+  rw [← ht]
+  exact closure_interior_subset_of_null_sdiff hs hnull
+
+/-- In the finite-measure case, equal measure supplies the null difference.
+
+The finite-measure hypothesis must not be dropped: equality `∞ = ∞` gives no
+information about the measure of the difference. -/
+theorem eq_of_subset_of_measure_eq [OpensMeasurableSpace X]
+    (hs : IsClosed s) (hst : s ⊆ t) (ht : closure (interior t) = t)
+    (htfin : μ t ≠ ⊤) (hvol : μ s = μ t) : s = t := by
+  have hsfin : μ s ≠ ⊤ := by
+    rw [hvol]
+    exact htfin
+  have hnull : μ (t \ s) = 0 := by
+    rw [measure_sdiff hst hs.measurableSet.nullMeasurableSet hsfin, hvol, tsub_self]
+  exact eq_of_subset_of_null_sdiff hs hst ht hnull
+
+end MovingSofaUniqueness
+
+end
+
+/-!
+## Rigid maps in the library's coordinate plane
 
 The product norm on `ℝ × ℝ` is not the Euclidean norm. We therefore represent
 rotations and translations explicitly, rather than asserting that an arbitrary
@@ -12,8 +89,7 @@ plane rotation is an isometry for that norm. A `Rigid` map is a rotation by `ang
 about the origin followed by the translation by `shift`.
 -/
 
-@[expose] public section
-noncomputable section
+section
 
 open Set Real MeasureTheory
 
@@ -31,7 +107,6 @@ def Rigid.apply (g : Rigid) (p : Plane) : Plane :=
 
 instance : CoeFun Rigid (fun _ => Plane → Plane) := ⟨Rigid.apply⟩
 
-def Rigid.refl : Rigid := ⟨0, 0⟩
 def Rigid.translate (v : Plane) : Rigid := ⟨0, v⟩
 def Rigid.rotate (a : ℝ) : Rigid := ⟨a, 0⟩
 
@@ -41,9 +116,6 @@ def Rigid.trans (g h : Rigid) : Rigid :=
 
 def Rigid.symm (g : Rigid) : Rigid :=
   ⟨-g.angle, -MovingSofaOptimality.rot (-g.angle) g.shift⟩
-
-@[simp] theorem Rigid.refl_apply (p : Plane) : Rigid.refl p = p := by
-  simp [Rigid.refl, Rigid.apply, MovingSofaOptimality.rot_zero]
 
 @[simp] theorem Rigid.translate_apply (v p : Plane) : Rigid.translate v p = p + v := by
   simp [Rigid.translate, Rigid.apply, MovingSofaOptimality.rot_zero]
@@ -69,35 +141,9 @@ def Rigid.symm (g : Rigid) : Rigid :=
     MovingSofaOptimality.rot_rot_neg, hneg]
   abel
 
-/-- A rigid map preserves the Euclidean inner product of differences. -/
-theorem Rigid.dot_sub (g : Rigid) (p q : Plane) :
-    MovingSofaOptimality.dot (g p - g q) (g p - g q) = MovingSofaOptimality.dot (p - q) (p - q) := by
-  simp only [Rigid.apply, MovingSofaOptimality.rot, MovingSofaOptimality.dot, Prod.fst_sub, Prod.snd_sub,
-    Prod.fst_add, Prod.snd_add]
-  nlinarith [sin_sq_add_cos_sq g.angle]
-
-/-- A rigid map is a Euclidean isometry. -/
-theorem Rigid.norm2_sub (g : Rigid) (p q : Plane) :
-    MovingSofaOptimality.norm2 (g p - g q) = MovingSofaOptimality.norm2 (p - q) := by
-  unfold MovingSofaOptimality.norm2
-  rw [g.dot_sub]
-
-def Rigid.toEquiv (g : Rigid) : Plane ≃ Plane where
-  toFun := g
-  invFun := g.symm
-  left_inv := g.symm_apply_apply
-  right_inv := g.apply_symm_apply
-
-theorem Rigid.injective (g : Rigid) : Function.Injective g := g.toEquiv.injective
-
 theorem Rigid.continuous (g : Rigid) : Continuous g := by
   change Continuous (fun p : Plane => MovingSofaOptimality.rot g.angle p + g.shift)
   exact (MovingSofaOptimality.ang_continuous_rot g.angle).add continuous_const
-
-def Rigid.toHomeomorph (g : Rigid) : Plane ≃ₜ Plane where
-  toEquiv := g.toEquiv
-  continuous_toFun := g.continuous
-  continuous_invFun := g.symm.continuous
 
 @[simp] theorem Rigid.trans_image (g h : Rigid) (s : Set Plane) :
     (g.trans h) '' s = h '' (g '' s) := by
@@ -108,15 +154,6 @@ def Rigid.toHomeomorph (g : Rigid) : Plane ≃ₜ Plane where
     exact ⟨g x, ⟨x, hx, rfl⟩, (g.trans_apply h x).symm⟩
   · rintro ⟨y, ⟨x, hx, rfl⟩, rfl⟩
     exact ⟨x, hx, g.trans_apply h x⟩
-
-@[simp] theorem Rigid.symm_image_image (g : Rigid) (s : Set Plane) :
-    g.symm '' (g '' s) = s := by
-  ext p
-  constructor
-  · rintro ⟨y, ⟨x, hx, rfl⟩, rfl⟩
-    simpa using hx
-  · intro hp
-    exact ⟨g p, ⟨p, hp, rfl⟩, g.symm_apply_apply p⟩
 
 theorem Rigid.isClosed_image (g : Rigid) {s : Set Plane} (hs : IsClosed s) :
     IsClosed (g '' s) := by
@@ -155,11 +192,6 @@ theorem volume_translate (v : Plane) (s : Set Plane) :
   unfold MovingSofaOptimality.area
   rw [g.volume_image]
 
-/-- Keep the direction of the final set equality explicit. -/
-theorem Rigid.eq_image_symm (g : Rigid) {s t : Set Plane} (h : g '' s = t) :
-    s = g.symm '' t := by
-  rw [← h, g.symm_image_image]
-
 /-- Recover the original closed set from the actual inclusion constructed on paper. -/
 theorem Rigid.recover (g : Rigid) {s G : Set Plane} (hs : IsClosed s)
     (hsub : g '' s ⊆ G) (hreg : closure (interior G) = G)
@@ -169,3 +201,5 @@ theorem Rigid.recover (g : Rigid) {s G : Set Plane} (hs : IsClosed s)
   simpa using hvol
 
 end MovingSofaUniqueness
+
+end

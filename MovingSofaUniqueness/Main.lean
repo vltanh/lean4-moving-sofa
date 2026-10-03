@@ -1,17 +1,27 @@
 module
 
-public import MovingSofaUniqueness.Reductions
+public import MovingSofaUniqueness.Rigidity
+public import MovingSofaUniqueness.AngleExtension
+public import MovingSofaUniqueness.Curvature
+public import MovingSofaUniqueness.RegularClosed
 
 /-!
-# Assemble shape uniqueness in the paper coordinates
+# The uniqueness of Gerver's sofa
 
-Both monotonizations apply to the actual starting set. Balanced-maximizer
-existence supplies only the global numerical bound in `cap_area_le_gerver`.
-The positive-area premise needed for the pinned selection is proved from
-Gerver's established lower bound, not added to the final theorem.
+Every moving sofa `S` with the area of Gerver's sofa `G` is mapped onto `G` by a rotation about the
+origin followed by a translation (`image_eq_gerver_of_volume_eq`). The proof assembles the
+propositions of `docs/uniqueness/20-complete-paper-proof.md`:
 
-The historical `Draft` namespace is retained for compatibility with the
-formal-conjectures adapter, which imports this module.
+1. By Baek's Theorem 1.5.1, `S` moves with a rotation angle `ω ∈ [arcsec(11/5), π/2]`. A translate
+   of `S` lies in its monotonization, a monotone sofa `T` of the same area (`maximal_envelope`),
+   whose cap maximizes the cap area `A_ω` (`own_cap_isMax`).
+2. If `ω < π/2`, the pinned bounds of that cap (Propositions 1 and 2) give a right-angle motion of a
+   rotated copy of `T` (Proposition 4, `maximal_monotone_has_right_angle`). Monotonizing again gives
+   a right-angle monotone sofa `U` of area `|G|` that contains a rigid image of `S`.
+3. The cap of `U` satisfies the injectivity condition (Proposition 3, `isKi_of_maximal_area`), so
+   `U` is a horizontal translate of `G` (Proposition 5, `ki_sofa_eq_gerver_translate`).
+4. `G` is the closure of its interior (Proposition 6, `gerver_regularClosed`), so the rigid image of
+   the closed set `S`, which has the same area, is all of `G`.
 -/
 
 @[expose] public section
@@ -21,10 +31,94 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- Global maximality in the paper presentation, in exact ENNReal volume. -/
-def IsGlobalMax (S : Set Plane) : Prop :=
-  MovingSofaOptimality.IsMovingSofa S ∧
-    ∀ T, MovingSofaOptimality.IsMovingSofa T → volume T ≤ volume S
+/-! ## Maximizing caps -/
+
+/-- `K` maximizes the sofa area `A_ω` among the caps of angle `ω`. -/
+def IsMaxCap (ω : ℝ) (K : Set Plane) : Prop :=
+  IsCap K ω ∧ ∀ C, IsCap C ω → sofaArea ω C ≤ sofaArea ω K
+
+theorem moving_of_monotone {S : Set Plane} {ω : ℝ}
+    (hS : IsMonotoneSofa S ω) : IsMovingSofaWithAngle S ω := by
+  obtain ⟨hω, T, hT, hstd, rfl⟩ := hS
+  exact (theorem2_3_2 hω hT hstd).1
+
+theorem standard_of_monotone {S : Set Plane} {ω : ℝ}
+    (hS : IsMonotoneSofa S ω) : IsStandardPosition S ω := by
+  obtain ⟨hω, T, hT, hstd, rfl⟩ := hS
+  exact (theorem2_3_2 hω hT hstd).2.1
+
+theorem area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {S : Set Plane} (hS : MovingSofaOptimality.IsMovingSofa S) :
+    area S ≤ area (gerverSofa P) := by
+  exact ENNReal.toReal_mono (gerverSofa_volume_ne_top hP hbox)
+    ((theorem1_1_1 hP hbox).2 S hS)
+
+/-- Every cap has sofa area at most the area of Gerver's sofa (Baek's Theorems 3.5.5, 3.5.6 and
+1.1.1). -/
+theorem cap_area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {K : Set Plane} {ω : ℝ} (hK : IsCap K ω) :
+    sofaArea ω K ≤ area (gerverSofa P) := by
+  obtain ⟨B, hB, hS, hcap, _⟩ := theorem3_5_6 hK.1
+  have hle := theorem3_5_5 hB K hK
+  have hval := theorem2_5_10 hS.1
+  rw [hcap] at hval
+  have harea := area_le_gerver hP hbox ⟨ω, moving_of_monotone hS.1⟩
+  linarith
+
+theorem isMaxCap_of_area_eq {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {K : Set Plane} {ω : ℝ} (hK : IsCap K ω)
+    (heq : sofaArea ω K = area (gerverSofa P)) : IsMaxCap ω K := by
+  refine ⟨hK, fun C hC => ?_⟩
+  rw [heq]
+  exact cap_area_le_gerver hP hbox hC
+
+/-! ## Proposition 3: maximizing right-angle caps satisfy the injectivity condition -/
+
+/-- A maximizing right-angle cap has positive sofa area: Gerver's cap is a competitor. -/
+theorem sofaArea_pos_of_isMaxCap {K : Set Plane}
+    (hK : IsMaxCap (π / 2) K) : 0 < sofaArea (π / 2) K := by
+  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
+  have hcompare := hK.2 P.cap (GerverParams.gm_isCap hP hbox)
+  rw [GerverParams.gm_sofaArea_cap hP hbox] at hcompare
+  have hG := gerverSofa_area hP hbox
+  linarith
+
+/-- **Proposition 3.** A right-angle cap with the sofa area of Gerver's sofa is in `𝒦^i`: its
+curvature bounds (16) give the injectivity condition. -/
+theorem isKi_of_maximal_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {K : Set Plane} (hK : IsCap K (π / 2))
+    (heq : sofaArea (π / 2) K = area (gerverSofa P)) : IsKi K := by
+  have hmax := isMaxCap_of_area_eq hP hbox hK heq
+  have hcurv := curvature_of_maximal_positive hK (sofaArea_pos_of_isMaxCap hmax) hmax.2
+  refine ⟨hK, injectivity_of_curvature hK hcurv.1 hcurv.2, ?_⟩
+  have hG := gerverSofa_area hP hbox
+  have hn : 0 ≤ area (niche K (π / 2)) := ENNReal.toReal_nonneg
+  unfold sofaArea at heq
+  linarith
+
+/-! ## Proposition 5: such a cap is Gerver's cap -/
+
+/-- **Proposition 5.** A cap in `𝒦^i` with the sofa area of Gerver's sofa is, minus its niche, a
+horizontal translate of Gerver's sofa. -/
+theorem ki_sofa_eq_gerver_translate {P : GerverParams} (hP : P.IsSolution)
+    (hbox : P.InBox) {K : Set Plane} (hK : IsKi K)
+    (heq : sofaArea (π / 2) K = area (gerverSofa P)) :
+    ∃ a : ℝ, K \ niche K (π / 2) = Rigid.translate (a, 0) '' gerverSofa P := by
+  have hmid := (ki_maximizer_equality_conditions hP hbox hK heq).2
+    (1 / 2) (by constructor <;> norm_num)
+  have hker := capKernel_of_triple_midpoint (GerverParams.gm_φ_mem_Ioo hP hbox)
+    (gerverTriple hP hbox) (kiExtensionTriple hbox.1 hK) hmid
+  change CapKernel P.φ (fun t => supp K t - supp P.cap t) at hker
+  let a := -(supp K π - supp P.cap π)
+  have hsupp : ∀ t ∈ Icc (0 : ℝ) π, supp K t - supp P.cap t = a * cos t :=
+    hker.eq_horizontal_translation (GerverParams.gm_φ_mem_Ioo hP hbox)
+  refine ⟨a, ?_⟩
+  have hGset : gerverSofa P = P.cap \ niche P.cap (π / 2) :=
+    theorem2_4_3 (GerverParams.gm_isMonotone hP hbox)
+  rw [hGset]
+  exact sofa_eq_translate_of_upper_support hK.1 (GerverParams.gm_isCap hP hbox) a hsupp
+
+/-! ## The theorem -/
 
 private theorem coe_translate (v : Plane) :
     (Rigid.translate v : Plane → Plane) = fun p => p + v := by
@@ -36,12 +130,8 @@ private theorem coe_rotate (a : ℝ) :
   funext p
   exact Rigid.rotate_apply a p
 
-theorem standard_of_monotone {S : Set Plane} {ω : ℝ}
-    (hS : IsMonotoneSofa S ω) : IsStandardPosition S ω := by
-  obtain ⟨hω, T, hT, hstd, rfl⟩ := hS
-  exact (theorem2_3_2 hω hT hstd).2.1
-
-/-- Translate the specified sofa, then take its own monotonization. -/
+/-- A translate of a moving sofa of Gerver's area lies in its monotonization, a monotone sofa of
+the same area. -/
 theorem maximal_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (heq : area S = area (gerverSofa P)) :
@@ -60,7 +150,7 @@ theorem maximal_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   rw [Rigid.area_image, heq] at hlower
   exact ⟨v, T, hmono, hTm.2.2, le_antisymm hupper hlower⟩
 
-/-- The own cap of a monotone sofa of Gerver's area maximizes cap area. -/
+/-- The cap of a monotone sofa of Gerver's area maximizes the cap area. -/
 theorem own_cap_isMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hS : IsMonotoneSofa S ω)
     (heq : area S = area (gerverSofa P)) : IsMaxCap ω (capOf S ω) := by
@@ -69,8 +159,8 @@ theorem own_cap_isMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   rw [theorem2_5_10 hS]
   exact heq
 
-/-- The right-angle case needs no extension. In the smaller-angle case the
-new pinned estimates apply to this same positive-area cap. -/
+/-- **Proposition 4.** A rotated copy of a monotone sofa of Gerver's area moves with a right angle:
+for `ω < π/2`, by the pinned bounds (19) of its maximizing cap. -/
 theorem maximal_monotone_has_right_angle {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Icc arcsec22 (π / 2))
@@ -84,12 +174,12 @@ theorem maximal_monotone_has_right_angle {P : GerverParams}
       rw [theorem2_5_10 hS, heq]
       have hG := gerverSofa_area hP hbox
       linarith
-    have hpin := pinnedBounds_of_isMaxCap ⟨hS.1.1, hsmall⟩ hmax hpositive
-    apply right_angle_motion_of_pinned hS ⟨hω.1, hsmall⟩ _ hpin
+    have hpin := pinned_bounds_of_maximal_positive ⟨hS.1.1, hsmall⟩ hmax.1 hpositive hmax.2
+    apply right_angle_motion_of_pinned_bounds hS ⟨hω.1, hsmall⟩ _ hpin.1 hpin.2
     rw [heq]
     exact gerverSofa_area hP hbox
 
-/-- A maximal right-angle monotone sofa is an actual translate of Gerver's sofa. -/
+/-- A right-angle monotone sofa of Gerver's area is a horizontal translate of Gerver's sofa. -/
 theorem right_angle_monotone_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {T : Set Plane}
     (hT : IsMonotoneSofa T (π / 2)) (heq : area T = area (gerverSofa P)) :
@@ -102,7 +192,7 @@ theorem right_angle_monotone_eq_gerver {P : GerverParams}
     (isKi_of_maximal_area hP hbox hcap hvalue) hvalue
   exact ⟨a, (theorem2_4_3 hT).trans ha⟩
 
-/-- Keep the full containment chain before applying regular-closedness. -/
+/-- A rigid image of a moving sofa of Gerver's area lies in Gerver's sofa. -/
 theorem maximizer_contained_in_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
     (hS : MovingSofaOptimality.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
@@ -138,7 +228,8 @@ theorem maximizer_contained_in_gerver {P : GerverParams}
   rw [hcancel]
   exact hr
 
-/-- Recover the original closed set, not only its area or its monotone envelope. -/
+/-- **The uniqueness of Gerver's sofa.** A rotation about the origin followed by a translation maps
+every moving sofa with the area of Gerver's sofa onto Gerver's sofa. -/
 theorem image_eq_gerver_of_volume_eq {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
     (hS : MovingSofaOptimality.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
@@ -147,59 +238,7 @@ theorem image_eq_gerver_of_volume_eq {P : GerverParams}
   have hclosed : IsClosed S := by
     obtain ⟨ω, hω⟩ := hS
     exact hω.1
-  exact ⟨g, g.recover hclosed hsub (regularClosed_gerver hP hbox)
+  exact ⟨g, g.recover hclosed hsub (gerver_regularClosed hP hbox)
     (gerverSofa_volume_ne_top hP hbox) heq⟩
-
-/-- A paper maximizer has the volume of the library's concrete Gerver witness. -/
-theorem globalMax_volume_eq_gerver {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane} (hS : IsGlobalMax S) :
-    volume S = volume (gerverSofa P) := by
-  have hG := theorem1_1_1 hP hbox
-  exact le_antisymm (hG.2 S hS.1) (hS.2 _ hG.1)
-
-/-- Any two global maximizers are congruent via the same internal Gerver witness. -/
-theorem globalMax_congruent {S T : Set Plane}
-    (hS : IsGlobalMax S) (hT : IsGlobalMax T) : ∃ g : Rigid, S = g '' T := by
-  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
-  obtain ⟨gS, hgS⟩ := image_eq_gerver_of_volume_eq hP hbox hS.1
-    (globalMax_volume_eq_gerver hP hbox hS)
-  obtain ⟨gT, hgT⟩ := image_eq_gerver_of_volume_eq hP hbox hT.1
-    (globalMax_volume_eq_gerver hP hbox hT)
-  refine ⟨gT.trans gS.symm, ?_⟩
-  rw [Rigid.trans_image, hgT, ← hgS, Rigid.symm_image_image]
-
-/-- Gerver's sofa is a moving sofa of maximum area (Theorem 1.1.1 of Baek's paper). -/
-theorem gerverSofa_isGlobalMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
-    IsGlobalMax (gerverSofa P) :=
-  theorem1_1_1 hP hbox
-
-/-- A moving sofa has the area of Gerver's sofa if and only if a rigid motion maps it onto
-Gerver's sofa. -/
-theorem volume_eq_gerver_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    {S : Set Plane} (hS : MovingSofaOptimality.IsMovingSofa S) :
-    volume S = volume (gerverSofa P) ↔ ∃ g : Rigid, g '' S = gerverSofa P := by
-  refine ⟨image_eq_gerver_of_volume_eq hP hbox hS, ?_⟩
-  rintro ⟨g, hg⟩
-  rw [← hg, Rigid.volume_image]
-
-/-- The moving sofas of maximum area are exactly the moving sofas that a rigid motion maps onto
-Gerver's sofa. (Not every rigid image of Gerver's sofa is a moving sofa: the definition fixes the
-starting position in the horizontal side of the hallway.) -/
-theorem isGlobalMax_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    {S : Set Plane} :
-    IsGlobalMax S ↔ MovingSofaOptimality.IsMovingSofa S ∧ ∃ g : Rigid, g '' S = gerverSofa P := by
-  constructor
-  · intro h
-    exact ⟨h.1, image_eq_gerver_of_volume_eq hP hbox h.1 (globalMax_volume_eq_gerver hP hbox h)⟩
-  · rintro ⟨hS, g, hg⟩
-    refine ⟨hS, fun T hT => ?_⟩
-    have h := (theorem1_1_1 hP hbox).2 T hT
-    rwa [← hg, Rigid.volume_image] at h
-
-/-- There is a moving sofa of maximum area, and it is unique up to rigid motions. -/
-theorem exists_globalMax_unique_up_to_rigid :
-    (∃ S, IsGlobalMax S) ∧ ∀ S T, IsGlobalMax S → IsGlobalMax T → ∃ g : Rigid, S = g '' T := by
-  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
-  exact ⟨⟨gerverSofa P, gerverSofa_isGlobalMax hP hbox⟩, fun _ _ => globalMax_congruent⟩
 
 end MovingSofaUniqueness

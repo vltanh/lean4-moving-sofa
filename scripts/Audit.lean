@@ -3,8 +3,7 @@ module
 public meta import Lean.Elab.Command
 -- One `import all` line per module of the library, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
---   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all /'
-import all MovingSofaOptimality.Angle.HorizontalSide
+--   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all MovingSofaOptimality.Angle.HorizontalSide
 import all MovingSofaOptimality.Angle.RightAngle
 import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
 import all MovingSofaOptimality.Balanced.MaximumPolygonCap
@@ -18,13 +17,12 @@ import all MovingSofaOptimality.Convex.ConvexCurve
 import all MovingSofaOptimality.Convex.ConvexDomain
 import all MovingSofaOptimality.Convex.CurveArea
 import all MovingSofaOptimality.Convex.Mamikon
-import all MovingSofaUniqueness.Rigidity.QuadraticEquality
-import all MovingSofaOptimality.External.AreaFormula
 import all MovingSofaOptimality.External.AreaFormula.Param
-import all MovingSofaOptimality.External.Romik
+import all MovingSofaOptimality.External.AreaFormula
 import all MovingSofaOptimality.External.Romik.Calc
 import all MovingSofaOptimality.External.Romik.Fix
 import all MovingSofaOptimality.External.Romik.Num
+import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.Gerver.AreaBounds
 import all MovingSofaOptimality.Gerver.Bounds
 import all MovingSofaOptimality.Gerver.Defs
@@ -49,84 +47,22 @@ import all MovingSofaOptimality.Monotone.MonotoneSofa
 import all MovingSofaOptimality.Monotone.SupportingHallway
 import all MovingSofaOptimality.Optimality.Concavity
 import all MovingSofaOptimality.Optimality.Domain
-import all MovingSofaUniqueness.Rigidity.EqualityConditions
 import all MovingSofaOptimality.Optimality.UpperBound
 import all MovingSofaOptimality.Optimality.Variation
 import all MovingSofaOptimality.Sofa.Defs
-import all MovingSofaUniqueness.Tests.EqualityConditions
-import all MovingSofaUniqueness.Selection.CapApproximation
-import all MovingSofaUniqueness.Curvature.CurvatureLimit
-import all MovingSofaUniqueness.Curvature.CurvatureRegularity
 import all MovingSofaUniqueness.AngleExtension
-import all MovingSofaUniqueness.Rigidity.CapGeometry
-import all MovingSofaUniqueness.Rigidity.CapKernel
-import all MovingSofaUniqueness.Reductions
-import all MovingSofaUniqueness.Rigid
+import all MovingSofaUniqueness.Curvature
 import all MovingSofaUniqueness.Main
-import all MovingSofaUniqueness.Selection.DyadicSelector
-import all MovingSofaUniqueness.RegularClosed.EnvelopeBounds
-import all MovingSofaUniqueness.Variation.FloatingVariation
-import all MovingSofaUniqueness.RegularClosed.GerverRegularClosed
-import all MovingSofaUniqueness.RegularClosed.GerverStrictHeight
-import all MovingSofaUniqueness.Curvature.InjectivityFromCurvature
-import all MovingSofaUniqueness.Rigidity.MamikonCapKernel
-import all MovingSofaUniqueness.Rigidity.MamikonDisplacement
-import all MovingSofaUniqueness.Curvature.MirrorMaximality
-import all MovingSofaUniqueness.Curvature.MirroredCurvature
-import all MovingSofaUniqueness.Variation.PinnedGeometry
-import all MovingSofaUniqueness.Variation.PinnedLimit
-import all MovingSofaUniqueness.Variation.PinnedVariation
-import all MovingSofaUniqueness.Curvature.PolygonArms
-import all MovingSofaUniqueness.Curvature.PolygonCurvature
-import all MovingSofaUniqueness.Curvature.PolygonMeasureBounds
-import all MovingSofaUniqueness.Variation.PolygonPenalty
-import all MovingSofaUniqueness.Selection.PolygonSelection
-import all MovingSofaUniqueness.RegularClosed.RegularClosedEnvelope
-import all MovingSofaUniqueness.Selection.SampledPenalty
-import all MovingSofaUniqueness.Selection.SelectedCaps
-import all MovingSofaUniqueness.Curvature.SelectedCurvature
-import all MovingSofaUniqueness.SetRecovery
-import all MovingSofaUniqueness.Rigidity.SquareGap
-import all MovingSofaUniqueness.Rigidity.SupportKernelEquations
-import all MovingSofaUniqueness.Selection.SupportSamples
-import all MovingSofaUniqueness.Rigidity.TangentEquality
-import all MovingSofaUniqueness.Variation.VariationDefect
+import all MovingSofaUniqueness.RegularClosed
+import all MovingSofaUniqueness.Rigid
+import all MovingSofaUniqueness.Rigidity
+import all MovingSofaUniqueness.Selection
+import all MovingSofaUniqueness.Variation
+import all MovingSofaBridge.GerverConstants
+import all MovingSofaBridge.GerverSofa
+import all MovingSofaBridge.Motion
+import all MovingSofaBridge.RomikParams
 import all ChallengeDefs
-import all MovingSofaUniquenessFC.AffineRecovery
-import all MovingSofaUniquenessFC.Bridge.Coordinates
-import all MovingSofaUniquenessFC.Bridge.EuclideanRigid
-import all MovingSofaUniquenessFC.Bridge.Motions
-import all MovingSofaUniquenessFC.Bridge.Orientation
-import all MovingSofaUniquenessFC.Bridge.PathLifting
-import all MovingSofaUniquenessFC.Bridge.ReferenceRotation
-import all MovingSofaUniquenessFC.Bridge.ReferenceShape
-import all MovingSofaUniquenessFC.Coordinates
-import all MovingSofaUniquenessFC.Extremal
-import all MovingSofaUniquenessFC.Final
-import all MovingSofaUniquenessFC.Model
-import all MovingSofaUniquenessFC.ReferenceBoundary
-import all MovingSofaUniquenessFC.ReferenceContacts
-import all MovingSofaUniquenessFC.ReferenceDefs
-import all MovingSofaUniquenessFC.ReferenceDerivativeSigns
-import all MovingSofaUniquenessFC.ReferenceDifferential
-import all MovingSofaUniquenessFC.ReferenceDomainBounds
-import all MovingSofaUniquenessFC.ReferenceEquations
-import all MovingSofaUniquenessFC.ReferenceExistence
-import all MovingSofaUniquenessFC.ReferenceFacts
-import all MovingSofaUniquenessFC.ReferenceFromPaper
-import all MovingSofaUniquenessFC.ReferenceModel
-import all MovingSofaUniquenessFC.ReferenceParameters
-import all MovingSofaUniquenessFC.ReferencePath
-import all MovingSofaUniquenessFC.ReferencePhiLocalization
-import all MovingSofaUniquenessFC.ReferenceRadius
-import all MovingSofaUniquenessFC.ReferenceResiduals
-import all MovingSofaUniquenessFC.ReferenceSmallBounds
-import all MovingSofaUniquenessFC.ReferenceSolution
-import all MovingSofaUniquenessFC.ReferenceUniqueness
-import all MovingSofaUniquenessFC.Tests.Endpoints
-import all MovingSofaUniquenessFC.Tests.Foundations
-import all MovingSofaUniquenessFC.Tests.Reference
-import all MovingSofaUniquenessFC.Uniqueness
 import all Solution
 
 /-!
@@ -364,44 +300,47 @@ meta def paperResults : List (String × Name) :=
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
 /-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/uniqueness/20-complete-paper-proof.md`. -/
+argument, `docs/uniqueness/20-complete-paper-proof.md`; and the bridge to formal-conjectures'
+definitions (`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
-   ("Uniqueness: maximizers are congruent", ``MovingSofaUniqueness.globalMax_congruent),
    ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
    ("Uniqueness: Prop 2 (floating)", ``MovingSofaUniqueness.floating_defect_le),
    ("Uniqueness: Prop 2 (pinned)", ``MovingSofaUniqueness.pinned_defect_le),
-   ("Uniqueness: Prop 3 (curvature)", ``MovingSofaUniqueness.curvatureBounds_of_isMaxCap),
+   ("Uniqueness: Prop 3 (curvature)", ``MovingSofaUniqueness.curvature_of_maximal_positive),
    ("Uniqueness: Prop 3 (injectivity)", ``MovingSofaUniqueness.isKi_of_maximal_area),
-   ("Uniqueness: Prop 4 (pinned bounds)", ``MovingSofaUniqueness.pinnedBounds_of_isMaxCap),
-   ("Uniqueness: Prop 4 (right-angle motion)", ``MovingSofaUniqueness.right_angle_motion_of_pinned),
+   ("Uniqueness: Prop 4 (pinned bounds)", ``MovingSofaUniqueness.pinned_bounds_of_maximal_positive),
+   ("Uniqueness: Prop 4 (right-angle motion)", ``MovingSofaUniqueness.maximal_monotone_has_right_angle),
    ("Uniqueness: Prop 5", ``MovingSofaUniqueness.ki_sofa_eq_gerver_translate),
-   ("Uniqueness: Prop 6", ``MovingSofaUniqueness.regularClosed_gerver),
-   ("Formal-conjectures: Gerver's constants", ``MovingSofa.GerversSofa.ABφθSpec.existsUnique),
-   ("Formal-conjectures: the two shapes agree", ``MovingSofaUniquenessFC.Bridge.coordinates_gerversSofa_eq_paper),
-   ("Formal-conjectures: the two suprema agree", ``MovingSofaUniquenessFC.Bridge.sofaConstant_eq_paperConstant),
-   ("Formal-conjectures: optimality", ``MovingSofa.sofaConstant_eq_volume_gerversSofa),
-   ("Formal-conjectures: uniqueness", ``MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa)]
+   ("Uniqueness: Prop 6", ``MovingSofaUniqueness.gerver_regularClosed),
+   ("Bridge: moving sofas", ``MovingSofaBridge.isMovingSofa_iff),
+   ("Bridge: the sofa constant", ``MovingSofaBridge.sofaConstant_eq),
+   ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
+   ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
-  [``MovingSofaChallenge.gerver_params_exists,
-   ``MovingSofaChallenge.gerver_params_unique,
-   ``MovingSofaChallenge.gerver_sofa_area,
-   ``MovingSofaChallenge.gerver_sofa_optimal,
-   ``MovingSofaChallenge.gerver_sofa_unique,
-   ``MovingSofa.GerversSofa.ABφθSpec.existsUnique,
-   ``MovingSofa.isMovingSofa_gerversSofa,
-   ``MovingSofa.sofaConstant_eq_volume_gerversSofa,
-   ``MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa]
+  [``Baek.gerver_params_exists,
+   ``Baek.gerver_params_unique,
+   ``Baek.gerver_sofa_area,
+   ``Baek.gerver_sofa_optimal,
+   ``Baek.gerver_sofa_unique,
+   ``Bridge.isMovingSofa_iff,
+   ``Bridge.sofaConstant_eq,
+   ``Bridge.gerversSofa_eq,
+   ``FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique,
+   ``FormalConjectures.MovingSofa.isMovingSofa_gerversSofa,
+   ``FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa,
+   ``FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
-/-- Whether `m` is a module of the library (Baek's paper, and the uniqueness of Gerver's sofa). -/
+/-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the bridge
+to formal-conjectures' definitions, and the Challenge's definitions). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
-    (`MovingSofaUniquenessFC).isPrefixOf m || m == `ChallengeDefs
+    (`MovingSofaBridge).isPrefixOf m || m == `ChallengeDefs
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

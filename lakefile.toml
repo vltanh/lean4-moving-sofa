@@ -1,7 +1,7 @@
 name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaUniquenessFC",
+defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
   "ChallengeDefs", "Challenge", "Solution"]
 
 [leanOptions]
@@ -24,10 +24,10 @@ globs = ["MovingSofaOptimality.+"]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# The connection with the definitions of formal-conjectures.
+# The bridge between the definitions of formal-conjectures and those of Baek's paper.
 [[lean_lib]]
-name = "MovingSofaUniquenessFC"
-globs = ["MovingSofaUniquenessFC.+"]
+name = "MovingSofaBridge"
+globs = ["MovingSofaBridge.+"]
 
 # The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
 [[lean_lib]]

@@ -1,18 +1,17 @@
 module
 
 public import Mathlib
-public import MovingSofaUniquenessFC.ReferenceExistence
+public import MovingSofaBridge.RomikParams
 
 /-!
 # The definitions of the Challenge
 
-The definitions that `Challenge.lean` states its theorems with: those of Baek's paper, in the
-namespace `MovingSofaChallenge`, and those of formal-conjectures, in its namespace `MovingSofa`.
-`scripts/sync_challenge_defs.py` copies the two marked blocks verbatim into `Challenge.lean`, which
-may not import the project. The Solution and the libraries use these constants, so Comparator sees
-the same constants in the Challenge and in the Solution. Only `ABφθSpec.existsUnique`, between the
-blocks, differs: the Challenge states it, and this module proves it with the analytic argument of
-`MovingSofaUniquenessFC.Reference.spec_existsUnique`.
+The definitions of `Challenge.lean`: those of Baek's paper, in the namespace `Baek`, and those of
+formal-conjectures, in the namespace `FormalConjectures.MovingSofa`. `Challenge.lean` may not import
+the project, so `scripts/sync_challenge_defs.py` copies the two marked blocks into it verbatim; the
+libraries and `Solution.lean` use the constants defined here, so Comparator sees the same constants
+in the Challenge and in the Solution. Between the blocks, the Challenge states
+`ABφθSpec.existsUnique` and this module proves it (`MovingSofaBridge.GerverConstants`).
 -/
 
 @[expose] public section
@@ -20,7 +19,7 @@ blocks, differs: the Challenge states it, and this module proves it with the ana
 -- BEGIN SHARED DEFINITIONS 1
 open Real Set MeasureTheory
 
-namespace MovingSofaChallenge
+namespace Baek
 
 /-- The counterclockwise rotation of the plane by the angle `t`. -/
 noncomputable def rot (t : ℝ) (p : ℝ × ℝ) : ℝ × ℝ :=
@@ -131,7 +130,7 @@ def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 /-- Gerver's sofa. -/
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
-end MovingSofaChallenge
+end Baek
 
 scoped[EuclideanGeometry] notation "ℝ²" => EuclideanSpace ℝ (Fin 2)
 
@@ -145,7 +144,7 @@ instance fact_finrank_euclideanSpace_fin_two : Fact (Module.finrank ℝ ℝ² = 
 
 noncomputable section
 
-namespace MovingSofa
+namespace FormalConjectures.MovingSofa
 
 open Topology
 open scoped Real unitInterval EuclideanGeometry
@@ -206,7 +205,7 @@ def ABφθSpec (A B φ θ : ℝ) : Prop :=
 /-- There exist unique constants `A`, `B`, `φ` and `θ` satisfying the system. -/
 theorem ABφθSpec.existsUnique : ∃! ABφθ : ℝ × ℝ × ℝ × ℝ,
     ABφθSpec ABφθ.1 ABφθ.2.1 ABφθ.2.2.1 ABφθ.2.2.2 := by
-  exact MovingSofaUniquenessFC.Reference.spec_existsUnique
+  exact MovingSofaBridge.GerverConstants.spec_existsUnique
 
 -- BEGIN SHARED DEFINITIONS 2
 def A : ℝ := ABφθSpec.existsUnique.choose.1
@@ -252,7 +251,7 @@ open scoped ENNReal
 /-- The **sofa constant** is the maximal area of a moving sofa. -/
 def sofaConstant : ℝ≥0∞ := ⨆ (s : Set ℝ²) (_ : ∃ m, IsMovingSofa s m), volume s
 
-end MovingSofa
+end FormalConjectures.MovingSofa
 
 end
 -- END SHARED DEFINITIONS 2
