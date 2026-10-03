@@ -6,19 +6,21 @@ public import SofaUniqueness.Draft.CapGeometry
 public import SofaUniqueness.Draft.Selection
 public import SofaUniqueness.Draft.AngleExtension
 public import SofaUniqueness.InjectivityFromCurvature
-public import SofaUniqueness.SquareGap
+public import SofaUniqueness.MamikonCapKernel
+public import SofaUniqueness.GerverRegularClosed
 
 /-!
-# UNCOMPILED, INCOMPLETE DRAFT: formal boundaries of the paper reductions
+# UNCOMPILED, INCOMPLETE DRAFT: the remaining variational reductions
 
-Four admissions remain in this file: P1, P2, P4, P6. P3 now has an explicit
-proof through `InjectivityFromCurvature`, and P5 through `AngleExtension`.
-All new scripts remain uncompiled; these dependency changes are not a report
-of successful Lean elaboration or a completed uniqueness proof.
+Two admissions remain in this file: P2 and P4. The Mamikon kernel extraction
+(P1), curvature-to-injectivity implication (P3), angular extension (P5), and
+regular-closedness of Gerver's sofa (P6) now have explicit scripts in the
+imported modules. No successful elaboration or completed uniqueness proof is
+claimed while P2 and P4 remain admitted.
 
 The old balanced-maximizer theorems are deliberately not applied to an
 arbitrary specified maximizer. That invalid shortcut would lose the original
-sofa and is the central reason the remaining obligations are needed.
+sofa and is precisely what the two remaining variational limits must avoid.
 -/
 
 @[expose] public section
@@ -61,21 +63,14 @@ theorem isMaxCap_of_area_eq {P : GerverParams} (hP : P.IsSolution) (hbox : P.InB
   rw [heq]
   exact cap_area_le_gerver hP hbox hC
 
-/-- DRAFT-P1: extract and integrate all four zero displacement equations.
-
-Required steps: split `h.middle` into its four nonnegative gaps; apply the
-Mamikon square formula and `halfSquareIntegral_combo_eq_iff` with integrability;
-identify the a.e. supporting-face derivative; solve each tangent equation on
-compact subintervals and pass to endpoints by continuity; integrate the middle
-equation using absolute continuity. Source: paper notes 01, 02 and 17.
--/
+/-- P1: all four zero Mamikon gaps yield the endpoint-safe support kernel. -/
 theorem capKernel_of_mamikon_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) (h : MamikonSegmentEquality φ x y (1 / 2)) :
     CapKernel φ (fun t => supp y.1.1.1 t - supp x.1.1.1 t) := by
-  sorry
+  exact SofaUniqueness.capKernel_of_triple_midpoint hφ x y h
 
-/-- The exact endpoint-safe curvature estimates needed for injectivity.
-The top atom at pi/2 is excluded; the atoms at 0 and pi are included. -/
+/-- Endpoint-safe curvature estimates. The possible top atom is excluded;
+the atoms at 0 and pi are included. -/
 def CurvatureBounds (K : Set Plane) : Prop :=
   (sigma K).restrict (Ico 0 (π / 2)) ≤
     (volume.restrict (Ico 0 (π / 2))).withDensity
@@ -84,29 +79,22 @@ def CurvatureBounds (K : Set Plane) : Prop :=
     (volume.restrict (Ioc (π / 2) π)).withDensity
       (fun t => ENNReal.ofReal (k0 (fMinus K (t - π / 2))))
 
-/-- DRAFT-P2: selection, finite-angle variation and weak measure limits.
+/-- DRAFT-P2: specified-cap selection, finite-angle variation and weak limits.
 
-Use upper-support penalization, the exact sine hats, and an eventually inactive
-horizontal box. Each facet defect is O(lambda*delta), and the total is
+Use upper-support penalization, exact sine hats, and an eventually inactive
+horizontal box. Each facet defect is O(lambda*delta), with total error
 O(lambda+delta). The local ray estimate is
   tau(t) <= tan(delta)*(abs(gPlus(t)-1)+tan(delta/2))
              + max (2*tan(delta/2)-sigmaAt(t)) 0.
-Tests crossing angle zero are needed before asserting that zero has no atom.
-Sources: notes 10, 12 and 13. `Selection.lean` supplies only the scalar selection
-comparison, not the missing compactness/geometry or limiting argument.
+Tests crossing zero are required before concluding that it has no atom.
+Sources: notes 10, 12 and 13. The abstract selection comparison alone does
+not prove the missing geometric compactness, variations or limiting estimate.
 -/
 theorem curvatureBounds_of_isMaxCap {K : Set Plane}
     (hK : IsMaxCap (π / 2) K) : CurvatureBounds K := by
   sorry
 
-/-- P3: curvature-density regularity and the two-arm comparison imply injectivity.
-
-The imported proof obtains Radon–Nikodym densities, both integrated arm
-inequalities, and a simultaneous comparison with the existing analytic lower
-sequence. Its strict threshold uses real integral inequalities and finite
-induction, not a decision procedure or an evaluated numerical certificate.
-No balancedness of the specified cap is asserted or used.
--/
+/-- P3: both curvature bounds imply injectivity of this same cap. -/
 theorem injectivity_of_curvatureBounds {K : Set Plane}
     (hK : IsCap K (π / 2)) (hbound : CurvatureBounds K) : SatisfiesInjectivity K := by
   exact SofaUniqueness.injectivity_of_curvature hK hbound.1 hbound.2
@@ -127,40 +115,29 @@ def PinnedBounds (ω : ℝ) (K : Set Plane) : Prop :=
 
 /-- DRAFT-P4: pinned-strip variation for a specified maximizer.
 
-The common interior ball is necessary. A defining-height perturbation must
-compare actual and assigned supports in the correct direction. Sum the
-positive weighted defects, then use sum d(t)*sin(t)=0 to control negative pinned
-defects. Weak convergence gives an upper bound for the limsup of each fixed
-atom; gap-infimum continuity completes the passage to the limit.
+A common interior ball is needed. Actual and assigned supports must be
+compared in the correct direction. Sum the positive weighted defects and
+use sum d(t)*sin(t)=0 to control negative pinned defects. Upper semicontinuity
+of the fixed atoms and continuity of the gap infima complete the limit.
 Sources: notes 10, 12, 14 (sections 1-7) and 15.
 -/
 theorem pinnedBounds_of_isMaxCap {K : Set Plane} {ω : ℝ}
     (hω : ω ∈ Ioo 0 (π / 2)) (hK : IsMaxCap ω K) : PinnedBounds ω K := by
   sorry
 
-/-- P5: the specified sofa admits the additional motion. The complete script
-is in `AngleExtension.lean`; balancedness is not used or inferred. -/
+/-- P5: the specified sofa admits the additional motion from its pinned bounds. -/
 theorem right_angle_motion_of_pinned {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Ico arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S) (hpin : PinnedBounds ω (capOf S ω)) :
     ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
   exact right_angle_motion_of_pinned_bounds hS hω harea hpin.1 hpin.2
 
-/-- DRAFT-P6: regular-closedness of the concrete library Gerver sofa.
-
-Use the strict abscissa monotonicity and matching endpoints of the existing
-B/path/D envelope to represent the niche by a continuous height graph under
-the cap's top rectangle. Its height is less than one on a dense set: any
-height-one path point solves -alpha/beta=cot(t), which has at most one solution.
-Approximate the boundary, including the two ends and that possible point, by
-interior points. No regularity of the COMPETING sofa is assumed. Source: note 07.
--/
+/-- P6: regular-closedness is proved for the actual library Gerver sofa. -/
 theorem regularClosed_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     closure (interior (gerverSofa P)) = gerverSofa P := by
-  sorry
+  exact SofaUniqueness.gerver_regularClosed hP hbox
 
-/-- Cap rigidity follows from the existing scalar equality theorem and P1;
-its support matching and exact-set recovery have explicit proof scripts. -/
+/-- The four cap kernels identify the actual cap-minus-niche set. -/
 theorem ki_sofa_eq_gerver_translate {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set Plane} (hK : IsKi K)
     (heq : sofaArea (π / 2) K = area (gerverSofa P)) :
