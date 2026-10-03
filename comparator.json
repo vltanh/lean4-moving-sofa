@@ -6,7 +6,11 @@
     "MovingSofaChallenge.gerver_params_unique",
     "MovingSofaChallenge.gerver_sofa_area",
     "MovingSofaChallenge.gerver_sofa_optimal",
-    "MovingSofaChallenge.gerver_sofa_unique"
+    "MovingSofaChallenge.gerver_sofa_unique",
+    "MovingSofa.GerversSofa.ABφθSpec.existsUnique",
+    "MovingSofa.isMovingSofa_gerversSofa",
+    "MovingSofa.sofaConstant_eq_volume_gerversSofa",
+    "MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
   ],
   "definition_names": [],
   "permitted_axioms": [

@@ -1,7 +1,8 @@
 name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "Challenge", "Solution"]
+defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaUniquenessFC",
+  "ChallengeDefs", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -23,10 +24,14 @@ globs = ["MovingSofaOptimality.+"]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# The adapter to formal-conjectures' statement (in progress; not a default target).
+# The connection with the definitions of formal-conjectures.
 [[lean_lib]]
 name = "MovingSofaUniquenessFC"
 globs = ["MovingSofaUniquenessFC.+"]
+
+# The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
+[[lean_lib]]
+name = "ChallengeDefs"
 
 [[lean_lib]]
 name = "Challenge"

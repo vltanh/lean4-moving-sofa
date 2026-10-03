@@ -1,68 +1,18 @@
 module
 
 public import Mathlib
+public import MovingSofaUniquenessFC.ReferenceExistence
 
 /-!
-# The moving sofa problem: Gerver's sofa has maximum area, and is the only such sofa
+# The definitions of the Challenge
 
-Statements of record, in Mathlib's vocabulary only, of Jineon Baek, *Optimality of Gerver's Sofa*
-(arXiv:2411.19826v1), Theorem 1.1.1, and of the uniqueness of the optimal sofa up to rigid motions,
-which that paper does not prove (the argument is in `docs/uniqueness/20-complete-paper-proof.md`).
-
-**The plane** is `ℝ × ℝ`, and the area of a set is its Lebesgue measure `volume`.
-
-**The hallway** `L = H_L ∪ V_L` is the union of its horizontal side `H_L = (-∞, 1] × [0, 1]` and its
-vertical side `V_L = [0, 1] × (-∞, 1]`.
-
-**A moving sofa** is a nonempty, connected, closed set `S ⊆ ℝ²` that can be moved inside `L` by a
-continuous rigid motion from `H_L` to `V_L`: there are a continuous angle `θ` and a continuous
-translation `c` on `[0, 1]` such that, writing `Φ_s(p) = R_{θ(s)} p + c(s)` with `R_θ` the
-counterclockwise rotation by `θ`, the map `Φ_0` is a translation (`θ(0) = 0`), `Φ_0(S) ⊆ H_L`,
-`Φ_s(S) ⊆ L` for all `s ∈ [0, 1]`, and `Φ_1(S) ⊆ V_L`. (A continuous curve in the group of
-orientation-preserving isometries of the plane always has this form, by lifting its rotation part.)
-
-**Gerver's sofa** is given by Romik's description (*Differential equations and exact solutions in the
-moving sofa problem*, Experimental Mathematics 2018, Section 4): its rotation path `𝐱 : [0, π/2] → ℝ²`
-is glued from the five explicit families `𝐱_1, …, 𝐱_5` below on the phases `[0, φ)`, `[φ, θ)`,
-`[θ, π/2 - θ]`, `(π/2 - θ, π/2 - φ]` and `(π/2 - φ, π/2]`, whose 22 parameters satisfy Romik's
-equations (27)–(44): left-right symmetry, `𝐀(0) = (1, 0)` and `𝐱(0) = 0`, continuous
-differentiability at the phase boundaries, and the two contact conditions
-`𝐱_1(φ) = 𝐁(π/2 - θ)` and `𝐱_5(π/2 - φ) = 𝐃(θ)` for the contact paths
-`𝐁(t) = 𝐱(t) + ⟨𝐱'(t), u_t⟩ v_t` and `𝐃(t) = 𝐱(t) - ⟨𝐱'(t), v_t⟩ u_t`, where `u_t = (cos t, sin t)`
-and `v_t = (-sin t, cos t)`. Gerver's sofa is the shape
-`S_𝐱 = H_L ∩ ⋂_{t ∈ [0, π/2]} (𝐱(t) + R_t(L)) ∩ (𝐱(π/2) + R_{π/2}(V_L))` of this rotation path
-(Romik's Equation (8)). Romik's numerical solution has `φ = 0.03917…` and `θ = 0.68130…`; we consider
-the solutions with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`, and state that there is exactly one.
-
-**The theorems.** `gerver_params_exists` and `gerver_params_unique`: Romik's system has exactly one
-solution in this range, so Gerver's sofa is well defined. `gerver_sofa_area`: its area is `2.219…`
-(between `2.2192` and `2.2199`), which identifies the shape with the sofa of area `2.21953…` that
-Gerver found. `gerver_sofa_optimal`: Gerver's sofa is a moving sofa, and every moving sofa has area at
-most the area of Gerver's sofa. `gerver_sofa_unique`: every moving sofa with the area of Gerver's sofa
-is congruent to it, as a set: a rotation `R_θ` about the origin followed by a translation by a vector
-`v` maps it exactly onto Gerver's sofa. So Gerver's sofa is, up to rigid motions, the only moving sofa
-of maximum area.
-
-## The statements of formal-conjectures
-
-Google DeepMind's formal-conjectures (`FormalConjectures/Wikipedia/MovingSofa.lean`, Git blob
-`59b6ed7eb42e11b208b09539c245da4d3f11ed00`, Apache-2.0, Copyright 2026 The Formal Conjectures
-Authors) states the problem with its own definitions, restated here verbatim in its namespace
-`MovingSofa`, without its test lemmas. **The plane** is `ℝ² = EuclideanSpace ℝ (Fin 2)`, with its
-standard orientation. **A moving sofa** `s` with motion `m` is connected and closed, `m` is a
-continuous path in the affine isometries `E(2)` with `m 0` the identity, `s` lies in the horizontal
-side, every `m t '' s` in the hallway, and `m 1 '' s` in the vertical side. **The sofa constant**
-is the supremum of the areas of moving sofas. **Gerver's sofa** `gerversSofa` is the shape of the
-rotation path `GerversSofa.p`, defined by integrals from Gerver's four constants `A, B, φ, θ`, the
-solution of the system `ABφθSpec`; `rotateTranslate α p` translates by `p` and then rotates by `α`.
-The one change is the name of the topology instance on `E(2)`, which formal-conjectures leaves
-anonymous.
-
-**The theorems.** `ABφθSpec.existsUnique`: the system has exactly one solution, so the constants
-are well defined. `isMovingSofa_gerversSofa`: Gerver's sofa is a moving sofa.
-`sofaConstant_eq_volume_gerversSofa`: its area is the sofa constant. These two are marked solved
-in formal-conjectures. `volume_eq_sofaConstant_iff_congruent_gerversSofa`: a moving sofa has area
-the sofa constant if and only if an isometry maps Gerver's sofa onto it. It is marked open there.
+The definitions that `Challenge.lean` states its theorems with: those of Baek's paper, in the
+namespace `MovingSofaChallenge`, and those of formal-conjectures, in its namespace `MovingSofa`.
+`scripts/sync_challenge_defs.py` copies the two marked blocks verbatim into `Challenge.lean`, which
+may not import the project. The Solution and the libraries use these constants, so Comparator sees
+the same constants in the Challenge and in the Solution. Only `ABφθSpec.existsUnique`, between the
+blocks, differs: the Challenge states it, and this module proves it with the analytic argument of
+`MovingSofaUniquenessFC.Reference.spec_existsUnique`.
 -/
 
 @[expose] public section
@@ -255,8 +205,8 @@ def ABφθSpec (A B φ θ : ℝ) : Prop :=
 
 /-- There exist unique constants `A`, `B`, `φ` and `θ` satisfying the system. -/
 theorem ABφθSpec.existsUnique : ∃! ABφθ : ℝ × ℝ × ℝ × ℝ,
-    ABφθSpec ABφθ.1 ABφθ.2.1 ABφθ.2.2.1 ABφθ.2.2.2 :=
-  sorry
+    ABφθSpec ABφθ.1 ABφθ.2.1 ABφθ.2.2.1 ABφθ.2.2.2 := by
+  exact MovingSofaUniquenessFC.Reference.spec_existsUnique
 
 -- BEGIN SHARED DEFINITIONS 2
 def A : ℝ := ABφθSpec.existsUnique.choose.1
@@ -306,53 +256,3 @@ end MovingSofa
 
 end
 -- END SHARED DEFINITIONS 2
-
-namespace MovingSofaChallenge
-
-/-- Romik's system has a solution in the stated range. -/
-theorem gerver_params_exists : ∃ P : GerverParams, P.IsSolution ∧ P.InBox := by
-  sorry
-
-/-- Romik's system has at most one solution in the stated range. -/
-theorem gerver_params_unique (P Q : GerverParams) (hP : P.IsSolution) (hPb : P.InBox)
-    (hQ : Q.IsSolution) (hQb : Q.InBox) : P = Q := by
-  sorry
-
-/-- Gerver's sofa has area `2.219…`: between `2.2192` and `2.2199`. (Gerver's and Romik's value is
-`2.21953…`.) -/
-theorem gerver_sofa_area (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
-    ENNReal.ofReal 2.2192 ≤ volume (gerverSofa P) ∧ volume (gerverSofa P) ≤ ENNReal.ofReal 2.2199 := by
-  sorry
-
-/-- **Theorem 1.1.1.** Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
-of Gerver's sofa. -/
-theorem gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
-    IsMovingSofa (gerverSofa P) ∧ ∀ S, IsMovingSofa S → volume S ≤ volume (gerverSofa P) := by
-  sorry
-
-/-- **Uniqueness.** Every moving sofa with the area of Gerver's sofa is congruent to Gerver's sofa: a
-rotation about the origin followed by a translation maps it onto Gerver's sofa. -/
-theorem gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) (S : Set (ℝ × ℝ))
-    (hS : IsMovingSofa S) (harea : volume S = volume (gerverSofa P)) :
-    ∃ (θ : ℝ) (v : ℝ × ℝ), (fun p => rot θ p + v) '' S = gerverSofa P := by
-  sorry
-
-end MovingSofaChallenge
-
-namespace MovingSofa
-
-/-- Gerver's concrete sofa admits a valid hallway motion. -/
-theorem isMovingSofa_gerversSofa : ∃ m, IsMovingSofa gerversSofa m := by
-  sorry
-
-/-- Gerver's sofa attains the sofa constant. -/
-theorem sofaConstant_eq_volume_gerversSofa : sofaConstant = volume gerversSofa := by
-  sorry
-
-/-- Gerver's sofa is the unique sofa that attains the sofa constant, up to a rigid motion. -/
-theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)
-    (hs : ∃ m, IsMovingSofa s m) :
-    volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa := by
-  sorry
-
-end MovingSofa

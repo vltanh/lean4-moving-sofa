@@ -91,6 +91,42 @@ import all MovingSofaUniqueness.Rigidity.SupportKernelEquations
 import all MovingSofaUniqueness.Selection.SupportSamples
 import all MovingSofaUniqueness.Rigidity.TangentEquality
 import all MovingSofaUniqueness.Variation.VariationDefect
+import all ChallengeDefs
+import all MovingSofaUniquenessFC.AffineRecovery
+import all MovingSofaUniquenessFC.Bridge.Coordinates
+import all MovingSofaUniquenessFC.Bridge.EuclideanRigid
+import all MovingSofaUniquenessFC.Bridge.Motions
+import all MovingSofaUniquenessFC.Bridge.Orientation
+import all MovingSofaUniquenessFC.Bridge.PathLifting
+import all MovingSofaUniquenessFC.Bridge.ReferenceRotation
+import all MovingSofaUniquenessFC.Bridge.ReferenceShape
+import all MovingSofaUniquenessFC.Coordinates
+import all MovingSofaUniquenessFC.Extremal
+import all MovingSofaUniquenessFC.Final
+import all MovingSofaUniquenessFC.Model
+import all MovingSofaUniquenessFC.ReferenceBoundary
+import all MovingSofaUniquenessFC.ReferenceContacts
+import all MovingSofaUniquenessFC.ReferenceDefs
+import all MovingSofaUniquenessFC.ReferenceDerivativeSigns
+import all MovingSofaUniquenessFC.ReferenceDifferential
+import all MovingSofaUniquenessFC.ReferenceDomainBounds
+import all MovingSofaUniquenessFC.ReferenceEquations
+import all MovingSofaUniquenessFC.ReferenceExistence
+import all MovingSofaUniquenessFC.ReferenceFacts
+import all MovingSofaUniquenessFC.ReferenceFromPaper
+import all MovingSofaUniquenessFC.ReferenceModel
+import all MovingSofaUniquenessFC.ReferenceParameters
+import all MovingSofaUniquenessFC.ReferencePath
+import all MovingSofaUniquenessFC.ReferencePhiLocalization
+import all MovingSofaUniquenessFC.ReferenceRadius
+import all MovingSofaUniquenessFC.ReferenceResiduals
+import all MovingSofaUniquenessFC.ReferenceSmallBounds
+import all MovingSofaUniquenessFC.ReferenceSolution
+import all MovingSofaUniquenessFC.ReferenceUniqueness
+import all MovingSofaUniquenessFC.Tests.Endpoints
+import all MovingSofaUniquenessFC.Tests.Foundations
+import all MovingSofaUniquenessFC.Tests.Reference
+import all MovingSofaUniquenessFC.Uniqueness
 import all Solution
 
 /-!
@@ -340,7 +376,12 @@ meta def uniquenessResults : List (String × Name) :=
    ("Uniqueness: Prop 4 (pinned bounds)", ``MovingSofaUniqueness.pinnedBounds_of_isMaxCap),
    ("Uniqueness: Prop 4 (right-angle motion)", ``MovingSofaUniqueness.right_angle_motion_of_pinned),
    ("Uniqueness: Prop 5", ``MovingSofaUniqueness.ki_sofa_eq_gerver_translate),
-   ("Uniqueness: Prop 6", ``MovingSofaUniqueness.regularClosed_gerver)]
+   ("Uniqueness: Prop 6", ``MovingSofaUniqueness.regularClosed_gerver),
+   ("Formal-conjectures: Gerver's constants", ``MovingSofa.GerversSofa.ABφθSpec.existsUnique),
+   ("Formal-conjectures: the two shapes agree", ``MovingSofaUniquenessFC.Bridge.coordinates_gerversSofa_eq_paper),
+   ("Formal-conjectures: the two suprema agree", ``MovingSofaUniquenessFC.Bridge.sofaConstant_eq_paperConstant),
+   ("Formal-conjectures: optimality", ``MovingSofa.sofaConstant_eq_volume_gerversSofa),
+   ("Formal-conjectures: uniqueness", ``MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
@@ -348,14 +389,19 @@ meta def solutionResults : List Name :=
    ``MovingSofaChallenge.gerver_params_unique,
    ``MovingSofaChallenge.gerver_sofa_area,
    ``MovingSofaChallenge.gerver_sofa_optimal,
-   ``MovingSofaChallenge.gerver_sofa_unique]
+   ``MovingSofaChallenge.gerver_sofa_unique,
+   ``MovingSofa.GerversSofa.ABφθSpec.existsUnique,
+   ``MovingSofa.isMovingSofa_gerversSofa,
+   ``MovingSofa.sofaConstant_eq_volume_gerversSofa,
+   ``MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
 /-- Whether `m` is a module of the library (Baek's paper, and the uniqueness of Gerver's sofa). -/
 meta def isLibraryModule (m : Name) : Bool :=
-  (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m
+  (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
+    (`MovingSofaUniquenessFC).isPrefixOf m || m == `ChallengeDefs
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
