@@ -19,8 +19,6 @@ rigid motions:
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
   Baek's. Its statements, the open one included, follow from the first two results.
 
-![The L-shaped hallway of unit width, with Gerver's sofa in blue halfway through its turn around the corner, and dashed outlines of the sofa at the start of its motion, in the horizontal side, and at the end, in the vertical side](docs/proof/figures/01-introduction/hallway.svg)
-
 ![Gerver's sofa sliding along the horizontal side of the hallway, turning the corner, and leaving along the vertical side](docs/proof/figures/01-introduction/gerver-moving.gif)
 
 ## Definitions
