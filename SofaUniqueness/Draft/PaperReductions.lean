@@ -3,7 +3,6 @@ module
 public import MovingSofa.Optimality.Equality
 public import SofaUniqueness.Draft.CapKernel
 public import SofaUniqueness.Draft.CapGeometry
-public import SofaUniqueness.Draft.Selection
 public import SofaUniqueness.Draft.AngleExtension
 public import SofaUniqueness.InjectivityFromCurvature
 public import SofaUniqueness.MamikonCapKernel
@@ -72,12 +71,7 @@ theorem capKernel_of_mamikon_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 
 /-- The top atom is excluded; the atoms at 0 and pi are included. -/
 def CurvatureBounds (K : Set Plane) : Prop :=
-  (sigma K).restrict (Ico 0 (π / 2)) ≤
-    (volume.restrict (Ico 0 (π / 2))).withDensity
-      (fun t => ENNReal.ofReal (k0 (gPlus K t))) ∧
-  (sigma K).restrict (Ioc (π / 2) π) ≤
-    (volume.restrict (Ioc (π / 2) π)).withDensity
-      (fun t => ENNReal.ofReal (k0 (fMinus K (t - π / 2))))
+  SofaUniqueness.FirstCurvatureBound K ∧ SofaUniqueness.SecondCurvatureBound K
 
 /-- Positivity of a right-angle maximum follows from an existing competitor. -/
 theorem sofaArea_pos_of_isMaxCap {K : Set Plane}

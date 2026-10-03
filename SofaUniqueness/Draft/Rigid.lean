@@ -69,6 +69,19 @@ def Rigid.symm (g : Rigid) : Rigid :=
     MovingSofa.rot_rot_neg, hneg]
   abel
 
+/-- A rigid map preserves the Euclidean inner product of differences. -/
+theorem Rigid.dot_sub (g : Rigid) (p q : Plane) :
+    MovingSofa.dot (g p - g q) (g p - g q) = MovingSofa.dot (p - q) (p - q) := by
+  simp only [Rigid.apply, MovingSofa.rot, MovingSofa.dot, Prod.fst_sub, Prod.snd_sub,
+    Prod.fst_add, Prod.snd_add]
+  nlinarith [sin_sq_add_cos_sq g.angle]
+
+/-- A rigid map is a Euclidean isometry. -/
+theorem Rigid.norm2_sub (g : Rigid) (p q : Plane) :
+    MovingSofa.norm2 (g p - g q) = MovingSofa.norm2 (p - q) := by
+  unfold MovingSofa.norm2
+  rw [g.dot_sub]
+
 def Rigid.toEquiv (g : Rigid) : Plane ≃ Plane where
   toFun := g
   invFun := g.symm

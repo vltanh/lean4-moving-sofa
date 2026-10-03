@@ -168,4 +168,38 @@ theorem globalMax_congruent {S T : Set Plane}
   refine ⟨gT.trans gS.symm, ?_⟩
   rw [Rigid.trans_image, hgT, ← hgS, Rigid.symm_image_image]
 
+/-- Gerver's sofa is a moving sofa of maximum area (Theorem 1.1.1 of Baek's paper). -/
+theorem gerverSofa_isGlobalMax {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    IsGlobalMax (gerverSofa P) :=
+  theorem1_1_1 hP hbox
+
+/-- A moving sofa has the area of Gerver's sofa if and only if a rigid motion maps it onto
+Gerver's sofa. -/
+theorem volume_eq_gerver_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {S : Set Plane} (hS : MovingSofa.Paper.IsMovingSofa S) :
+    volume S = volume (gerverSofa P) ↔ ∃ g : Rigid, g '' S = gerverSofa P := by
+  refine ⟨image_eq_gerver_of_volume_eq hP hbox hS, ?_⟩
+  rintro ⟨g, hg⟩
+  rw [← hg, Rigid.volume_image]
+
+/-- The moving sofas of maximum area are exactly the moving sofas that a rigid motion maps onto
+Gerver's sofa. (Not every rigid image of Gerver's sofa is a moving sofa: the definition fixes the
+starting position in the horizontal side of the hallway.) -/
+theorem isGlobalMax_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {S : Set Plane} :
+    IsGlobalMax S ↔ MovingSofa.Paper.IsMovingSofa S ∧ ∃ g : Rigid, g '' S = gerverSofa P := by
+  constructor
+  · intro h
+    exact ⟨h.1, image_eq_gerver_of_volume_eq hP hbox h.1 (globalMax_volume_eq_gerver hP hbox h)⟩
+  · rintro ⟨hS, g, hg⟩
+    refine ⟨hS, fun T hT => ?_⟩
+    have h := (theorem1_1_1 hP hbox).2 T hT
+    rwa [← hg, Rigid.volume_image] at h
+
+/-- There is a moving sofa of maximum area, and it is unique up to rigid motions. -/
+theorem exists_globalMax_unique_up_to_rigid :
+    (∃ S, IsGlobalMax S) ∧ ∀ S T, IsGlobalMax S → IsGlobalMax T → ∃ g : Rigid, S = g '' T := by
+  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
+  exact ⟨⟨gerverSofa P, gerverSofa_isGlobalMax hP hbox⟩, fun _ _ => globalMax_congruent⟩
+
 end SofaUniqueness.Draft

@@ -29,6 +29,45 @@ name = "Solution"
 [[lean_lib]]
 name = "SofaUniqueness"
 roots = ["SofaUniqueness.Draft.ShapeUniqueness"]
+globs = [
+  "SofaUniqueness.CapApproximation",
+  "SofaUniqueness.CurvatureLimit",
+  "SofaUniqueness.CurvatureRegularity",
+  "SofaUniqueness.Draft.AngleExtension",
+  "SofaUniqueness.Draft.CapGeometry",
+  "SofaUniqueness.Draft.CapKernel",
+  "SofaUniqueness.Draft.PaperReductions",
+  "SofaUniqueness.Draft.Rigid",
+  "SofaUniqueness.Draft.ShapeUniqueness",
+  "SofaUniqueness.DyadicSelector",
+  "SofaUniqueness.EnvelopeBounds",
+  "SofaUniqueness.FloatingVariation",
+  "SofaUniqueness.GerverRegularClosed",
+  "SofaUniqueness.GerverStrictHeight",
+  "SofaUniqueness.InjectivityFromCurvature",
+  "SofaUniqueness.MamikonCapKernel",
+  "SofaUniqueness.MamikonDisplacement",
+  "SofaUniqueness.MirrorMaximality",
+  "SofaUniqueness.MirroredCurvature",
+  "SofaUniqueness.PinnedGeometry",
+  "SofaUniqueness.PinnedLimit",
+  "SofaUniqueness.PinnedVariation",
+  "SofaUniqueness.PolygonArms",
+  "SofaUniqueness.PolygonCurvature",
+  "SofaUniqueness.PolygonMeasureBounds",
+  "SofaUniqueness.PolygonPenalty",
+  "SofaUniqueness.PolygonSelection",
+  "SofaUniqueness.RegularClosedEnvelope",
+  "SofaUniqueness.SampledPenalty",
+  "SofaUniqueness.SelectedCaps",
+  "SofaUniqueness.SelectedCurvature",
+  "SofaUniqueness.SetRecovery",
+  "SofaUniqueness.SquareGap",
+  "SofaUniqueness.SupportKernelEquations",
+  "SofaUniqueness.SupportSamples",
+  "SofaUniqueness.TangentEquality",
+  "SofaUniqueness.VariationDefect",
+]
 
 # No source exporter or external reference-proof dependency is needed.
 # The exact upstream Gerver-reference proof is tracked separately: the
