@@ -1,141 +1,129 @@
-# Shared moving-sofa uniqueness: uncompiled source and exact-reference boundary
+# Shared moving-sofa uniqueness and the exact upstream reference
 
-## Current status
+## Source status
 
 Start with [SofaSubmission/Final.lean](../../SofaSubmission/Final.lean),
-[the paper-coordinate assembly](../../SofaUniqueness/Draft/ShapeUniqueness.lean),
-and [the current obligation inventory](OBLIGATIONS.md).
+[the concrete shape correspondence](../../SofaUniqueness/Bridge/ReferenceShape.lean),
+and [the mathematical explanation in note 22](../../docs/uniqueness/22-reference-correspondence.md).
 
-The local source now has explicit proof bodies for all six paper reductions
-P1-P6 and the three model bridges B1-B3. In particular the last two intentional
-admissions in `Draft/PaperReductions.lean` have been replaced. No Lean compiler,
-Lake build, CI runner, Comparator or independent kernel check was run.
-
-**The exact formal-conjectures theorem naming its concrete `gerversSofa` is
-NOT complete under the requested prohibition on decision-kernel certificates.**
-The current final module proves the shared all-maximizers statement and the
-version naming the paper's concrete Gerver formula. It does not take the
-upstream theorem's name for a different reference shape.
-
-## Current source endpoints
-
-`MovingSofa.Canonical.maximizers_congruent` states, in the canonical Euclidean
-motion model, that any two sets attaining `sofaConstant` are congruent. There
-is no smoothness, injectivity, balancedness or regular-closedness assumption
-on either input sofa.
-
-`MovingSofa.Canonical.volume_eq_constant_iff_congruent_paper_gerver` identifies
-a canonical maximizer with `Bridge.point '' MovingSofa.gerverSofa P`, the
-actual Gerver construction used in the paper development, for a proved solution
-P in the paper's parameter box.
-
-`MovingSofa.Canonical.exists_unique_maximizer_modulo_isometry` includes actual
-existence of a maximizer. It does not infer attainment merely from a supremum.
-
-These are uncompiled proof scripts, not claims of accepted Lean declarations.
-
-## How the two settings share one proof
-
-[SofaSubmission/Model.lean](../../SofaSubmission/Model.lean) contains the exact
-canonical hallway predicates, induced topology on affine isometries,
-identity-start motion structure, and ENNReal supremum from the inspected
-upstream source. It imports only Mathlib. It does not assume upstream's
-parameter-existence or optimality theorems.
-
-The publication retains its pair-coordinate presentation under explicit
-`MovingSofa.Paper` kernel names for the two colliding definitions. The ordinary
-Lean modules in [Bridge](../../SofaUniqueness/Bridge) establish the coordinate,
-measure and motion relationships directly. The coordinate identification is
-not falsely treated as an isometry for the ordinary product norm. Initial
-placement is explicit when transporting a paper motion to an identity-start
-canonical motion.
-
-The core uniqueness proof is used once. The bridge proves equality of the
-extremal values independently of uniqueness and transfers specified maximizers
-to that proof. It does not choose an unrelated balanced maximizer in place of
-the original set.
-
-The old source exporter, its synthetic Python tests, and all three `.lean.inc`
-insertion fragments have been deleted. No source-generation step is needed.
-The repository's pre-existing documentation utilities are not proof inputs.
-
-## What changed in P2 and P4
-
-[SelectedCurvature](../../SofaUniqueness/SelectedCurvature.lean) gives the
-first curvature inequality for a specified positive maximizing cap.
-[MirroredCurvature](../../SofaUniqueness/MirroredCurvature.lean) now reflects it
-to the second inequality, taking `[0,pi/2)` to `(pi/2,pi]` and `gPlus` to
-`fMinus`. The endpoint pi is included without assuming atom-freeness.
-
-[PinnedLimit](../../SofaUniqueness/PinnedLimit.lean) supplies the pinned
-inequalities for a specified positive maximizer. Its positivity premise is
-proved at the shape-theorem caller from equality with Gerver's area. At a right
-angle positivity follows by comparison with Gerver's cap itself.
-
-The implementation uses persistent finite dyadic support samples with bounded
-total weight and a fixed squared-support penalty. The total floating error is
-bounded using the support distance tending to zero. This is not a claim that
-exact unpenalized maximizers select every continuum maximizer.
-
-## Exact upstream endpoint: the remaining issue
-
-The requested declaration is still
+The final source now contains the exact requested declaration:
 
 ```lean
 theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)
     (hs : ∃ m, IsMovingSofa s m) :
-    volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa
-```
-
-Once the concrete reference facts are proved in the same definition environment,
-its final specialization is the ordinary term
-
-```lean
-by
-  exact MovingSofa.Canonical.volume_eq_constant_iff_congruent hs
+    volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa := by
+  exact Canonical.volume_eq_constant_iff_congruent hs
     isMovingSofa_gerversSofa sofaConstant_eq_volume_gerversSofa
 ```
 
-This term is NOT by itself a completed submission. The catalog's solved-result
-placeholders are not proofs, and its constants depend on the full parameter
-existence-and-uniqueness theorem.
+Its concrete reference is the integral-defined `gerversSofa` from the inspected
+formal-conjectures file, not a differently defined reference under the same
+name. Both reference facts used in this final term now have local explicit
+proof bodies. The full parameter existence-and-uniqueness theorem used to
+choose its constants also has a local analytic proof.
 
-I prototyped an import of the published reference proofs in
-RuifengCao/sofa-formal at `838baca722560f30ea8e60b8c711b20147626175`, but then
-found `decide +kernel` in its parameter proof (`mapOK_true`), as well as its
-localization-certificate approach. That violates the stricter restriction for
-this work even though such proof terms can have only standard axioms. The
-reference dependency was removed and the Mathlib-only manifest restored.
-The rejected prototype remains only in Git history, not in the active proof.
+**All this is uncompiled source.** No Lean, Lake, CI, Comparator or independent
+checker was executed. Written proof bodies are not a claim of successful
+elaboration, a computed admission-free axiom closure, accepted upstream
+submission, or Palomar certification. Source/API/tactic errors, mathematical
+errors and version-porting problems have not been excluded by execution.
 
-[Note 21](../../docs/uniqueness/21-reference-dependency-audit.md) records the
-finding and the resulting boundary. The exact upstream statement is preserved
-as an independent fixture in `SofaSubmission/ChallengeUniqueness.lean`; that
-Challenge is not imported by the solution modules.
+## Exact correspondence, without circular use of sofa uniqueness
 
-[ReferenceEquations](../../SofaUniqueness/ReferenceEquations.lean) and
-[ReferenceBoundary](../../SofaUniqueness/ReferenceBoundary.lean) begin the
-replacement with ordinary algebra and differentiation. They reconstruct A and
-B from the two angles, reduce the four equations to two scalar equations, and
-exclude phi=0 and phi=theta. They do NOT yet prove global existence/uniqueness
-of those angle roots or identify the two concrete Gerver formulas.
+The central bridge is stronger than congruence:
 
-## Comparison configuration and verification limits
+```lean
+theorem coordinates_gerversSofa_eq_paper {P : MovingSofa.GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    coordinates '' MovingSofa.gerversSofa = MovingSofa.gerverSofa P
+```
+
+It identifies the actual sets under the canonical coordinate map. The proof
+has four parts:
+
+1. **Full-domain parameters.** `ReferenceUniqueness.lean` proves uniqueness
+   throughout `0<=phi<=theta<=pi/4`, `A,B>=0`, by analytic localization and
+   monotone residual separation. `ReferenceFromPaper.lean` constructs an
+   actual solution from the existing paper witness. `ReferenceExistence.lean`
+   combines them into the exact nested-tuple `existsUnique` statement.
+2. **Literal integral formulas.** `ReferenceRadius.lean` proves integrability
+   and identifies the reference radius with the paper contact derivative.
+   Breakpoint values agree almost everywhere, not falsely pointwise.
+   `ReferenceContacts.lean` integrates that derivative to obtain the actual
+   reference X,Y and their normalizations.
+3. **Path conventions and endpoints.** `ReferencePath.lean` proves
+   `R_t p(t)=x(t)`: the reference translation is BEFORE rotation and the paper
+   translation is AFTER it. It proves `p(0)=0` and carries the final vertical
+   hallway separately. All intermediate hallway intersections are preserved.
+4. **Canonical orientation.** `Bridge/ReferenceRotation.lean` verifies the
+   coordinate matrix of the actual `EuclideanGeometry.o.rotation` used by
+   upstream. `Bridge/ReferenceShape.lean` then transfers the literal reference
+   through coordinates and obtains the exact set equality above.
+
+None of these correspondence modules uses the new sofa shape-uniqueness
+argument. The global parameter proof does not silently replace the upstream
+domain by the paper's small box; membership in that box is deduced only after
+the full-domain uniqueness theorem has been established in the source.
+
+## One proof for publication and submission
+
+`SofaSubmission/Model.lean` contains the canonical hallway, the induced topology
+on affine isometries, the identity-start motion structure, and the ENNReal
+supremum. Its mathematical definitions are those of the inspected upstream
+source. It imports Mathlib only.
+
+The paper presentation is retained with explicit `MovingSofa.Paper` names for
+the colliding hallway and moving-sofa predicates. `Bridge/Motions.lean` proves
+the exact relationship, including initial placement, and equality of the two
+supremum problems independently of uniqueness. The coordinate map is a
+volume-preserving homeomorphism, not an isometry for the ordinary product norm.
+
+The same core uniqueness proof supplies all four endpoints in `Final.lean`:
+
+- `MovingSofa.Canonical.maximizers_congruent`;
+- `MovingSofa.Canonical.volume_eq_constant_iff_congruent_paper_gerver`;
+- `MovingSofa.Canonical.exists_unique_maximizer_modulo_isometry`;
+- `MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`.
+
+There is no extra smoothness, balancedness, injectivity or regular-closedness
+assumption on a competing sofa. Set recovery concerns the original closed set,
+not merely its cap, envelope, area or equivalence modulo null sets.
+
+## Source restrictions and historical alternatives
+
+No new reference proof uses `decide +kernel`, `native_decide`, an external
+root-checking process, a generated proof-source step or a custom axiom.
+The analytic estimates are written using ordinary algebra and calculus proofs.
+A transitive source-policy audit and elaborated axiom audit have not been run;
+these are distinct from the absence of those mechanisms in the new scripts.
+
+The previously considered external reference provider used a decision-kernel
+certificate and was rejected. Its dependency remains removed. [Note 21](../../docs/uniqueness/21-reference-dependency-audit.md)
+records that historical finding; [note 22](../../docs/uniqueness/22-reference-correspondence.md)
+records the analytic replacement. No source relocation or exporter is needed.
+The old exporter, its tests, and generated insertion fragments remain deleted.
+
+## Comparison configuration, examples and version boundary
+
+[comparator.reference-uniqueness.json](../../comparator.reference-uniqueness.json)
+is configured to compare the exact concrete-reference target, the full
+parameter theorem, and the defining constants/path/hallways against the
+independent `SofaSubmission.ChallengeUniqueness` fixture. The allowed axioms are
+`propext`, `Quot.sound`, `Classical.choice`, with the independent checker enabled.
+It has not been run. Configuration alone is not validation or certification.
 
 [comparator.shared-uniqueness.json](../../comparator.shared-uniqueness.json)
-compares `MovingSofa.Canonical.maximizers_congruent` against the independent
-Mathlib-only `SofaSubmission.SharedChallenge` and checks the shared definitions.
-The permitted axioms are exactly `propext`, `Quot.sound`, and `Classical.choice`,
-with the independent checker enabled. This configuration is unexecuted and does
-not target the still-unfinished concrete-reference specialization.
+retains the reference-independent comparison. The Challenge fixtures contain
+intentional statement placeholders but are not imported by the solution.
 
-No `sorry` or custom axiom was introduced to close P2/P4 or the model bridges.
-The independent Challenge files intentionally contain statement placeholders;
-they are not imported into the proof graph. Source examples in
-[SofaUniqueness/Tests/Endpoints.lean](../../SofaUniqueness/Tests/Endpoints.lean)
-are unexecuted too. No test-pass claim is attached to them.
+The new [reference examples](../../SofaUniqueness/Tests/Reference.lean) record
+full-domain parameter existence, exact coordinate set equality, the rotation
+convention, concrete motion/attainment and the exact final theorem type. These
+examples are unexecuted; no test-pass claim is attached to them.
 
-The root toolchain remains `v4.35.0-rc3`; the inspected upstream repository
-uses `v4.33.1`. A port and full elaboration are still untested. The comparison
-configuration is not Palomar certification; further repository packaging and
-policy checks also remain before any submission is presented as accepted.
+The source remains on Lean `v4.35.0-rc3`; the inspected upstream checkout used
+`v4.33.1`. No version pin has been changed here and the port remains untested.
+The uniqueness/submission libraries remain opt-in; the original paper default
+build targets and axiom allowlists are unchanged.
+
+For the current dependency map and verification boundaries see [OBLIGATIONS.md](OBLIGATIONS.md).
