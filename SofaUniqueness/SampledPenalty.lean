@@ -115,7 +115,7 @@ theorem normalWeight_nonneg (s : Finset ι) (normal : ι → α) (w : ι → ℝ
 the penalty variation. No claim about unsampled supporting directions is needed. -/
 theorem sampledPenalty_change_on_normal (s : Finset ι) (normal : ι → α)
     (w target f g : ι → ℝ) (hw : ∀ i ∈ s, 0 ≤ w i) (t : α)
-    {η r : ℝ} (hη : 0 ≤ η) (hr : 0 ≤ r)
+    {η r : ℝ} (hη : 0 ≤ η)
     (hclose : ∀ i ∈ s, |f i - target i| ≤ η)
     (hsame : ∀ i ∈ s, normal i ≠ t → g i = f i)
     (hchange : ∀ i ∈ s, normal i = t → |g i - f i| ≤ r) :

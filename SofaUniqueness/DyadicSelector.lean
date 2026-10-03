@@ -151,7 +151,7 @@ theorem dyadic_recovery_ge {target : Set (ℝ × ℝ)} (hK : IsCap target ω) (n
 
 /-- The whole penalty is at most the squared uniform support error. -/
 theorem dyadicPenalty_le_uniform (n : ℕ) (target K : Set (ℝ × ℝ)) {η : ℝ}
-    (hη : 0 ≤ η) (hclose : ∀ t, |supp K t - supp target t| ≤ η) :
+    (hclose : ∀ t, |supp K t - supp target t| ≤ η) :
     dyadicPenalty ω hω n target K ≤ η ^ 2 := by
   have h := (dyadicSamples ω hω n).penalty_le target K
     (fun i => hclose ((dyadicSamples ω hω n).normal i))

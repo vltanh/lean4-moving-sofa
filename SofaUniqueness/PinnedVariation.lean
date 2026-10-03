@@ -59,8 +59,7 @@ theorem pinned_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     · intro ε he
       have hε : ε ∈ Icc (0 : ℝ) 1 :=
         ⟨he.1.le, he.2.trans (min_le_right _ _)⟩
-      have hgrowth := S.penalty_change_uniform hη
-        (mul_nonneg hG he.1.le) hclose
+      have hgrowth := S.penalty_change_uniform hη hclose
         (fun i => pinned_normalized_support_bound hK.1 (hCp ⟨ε, he⟩)
           hω ht hε hR hsupp (v ⟨ε, he⟩) (hset ⟨ε, he⟩) (S.normal i))
       dsimp only [P]

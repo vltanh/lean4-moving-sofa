@@ -125,13 +125,13 @@ theorem penalty_change_one {target K K' : Set (ℝ × ℝ)} {t η ε : ℝ}
       S.atNormal t * (2 * η * ε + ε ^ 2) := by
   exact sampledPenalty_change_on_normal Finset.univ S.normal S.weight
     (fun i => supp target (S.normal i)) (fun i => supp K (S.normal i))
-    (fun i => supp K' (S.normal i)) (fun i _ => S.weight_nonneg i) t hη hε
+    (fun i => supp K' (S.normal i)) (fun i _ => S.weight_nonneg i) t hη
     (fun i _ => hclose i) (fun i _ => hsame i) (fun i _ => hchange i)
 
 /-- Uniform actual-support changes, including normalization after a pinned
 move, have a penalty bound controlled by the total sample weight. -/
 theorem penalty_change_uniform {target K K' : Set (ℝ × ℝ)} {η r : ℝ}
-    (hη : 0 ≤ η) (hr : 0 ≤ r)
+    (hη : 0 ≤ η)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η)
     (hchange : ∀ i, |supp K' (S.normal i) - supp K (S.normal i)| ≤ r) :
     |S.penalty target K' - S.penalty target K| ≤
