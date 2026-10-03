@@ -111,7 +111,7 @@ theorem floating_penalty_growth {Θ : AngleSet} (S : SupportSamples Θ)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η) :
     S.penalty target (floatingCap Θ K t ε) - S.penalty target K ≤
       (2 * η * S.atNormal t) * ε + S.atNormal t * ε ^ 2 := by
-  have h := S.penalty_change_one hη hε hclose
+  have h := S.penalty_change_one (ε := ε) hη hclose
     (fun i hi => floatingCap_support_other hK htω htL hε (S.normal_mem i) hi)
     (fun i hi => by rw [hi]; exact floatingCap_support_self hK ht htω htL hε)
   have hu := (abs_le.mp h).2

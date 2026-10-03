@@ -117,7 +117,7 @@ theorem penalty_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K target : Set (ℝ × 
 
 /-- A floating perturbation affects only the sample weight at its own normal. -/
 theorem penalty_change_one {target K K' : Set (ℝ × ℝ)} {t η ε : ℝ}
-    (hη : 0 ≤ η) (hε : 0 ≤ ε)
+    (hη : 0 ≤ η)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η)
     (hsame : ∀ i, S.normal i ≠ t → supp K' (S.normal i) = supp K (S.normal i))
     (hchange : ∀ i, S.normal i = t → |supp K' (S.normal i) - supp K (S.normal i)| ≤ ε) :
