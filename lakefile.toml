@@ -28,10 +28,10 @@ name = "Solution"
 name = "SofaUniqueness"
 globs = ["SofaUniqueness.+"]
 
+# The exact concrete reference is now proved in ordinary local Lean modules.
 # No source exporter or external reference-proof dependency is needed.
-# The exact upstream Gerver-reference proof is tracked separately: the
-# inspected existing provider uses a decision tactic prohibited for this work.
+# Challenge modules are independent statement environments, not proof imports.
 [[lean_lib]]
 name = "SofaIntegration"
-roots = ["SofaSubmission.Model", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]
-globs = ["SofaSubmission.Model", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]
+roots = ["SofaSubmission.Model", "SofaSubmission.ReferenceDefs", "SofaSubmission.ReferenceFacts", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]
+globs = ["SofaSubmission.Model", "SofaSubmission.ReferenceDefs", "SofaSubmission.ReferenceFacts", "SofaSubmission.Extremal", "SofaSubmission.Uniqueness", "SofaSubmission.Final", "SofaSubmission.SharedChallenge", "SofaSubmission.ChallengeUniqueness"]
