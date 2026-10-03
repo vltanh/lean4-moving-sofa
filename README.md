@@ -12,7 +12,7 @@ right-angled corner of a hallway of unit width. Jineon Baek, *Optimality of Gerv
 - **uniqueness:** every moving sofa with the area of Gerver's sofa is congruent to it. So Gerver's sofa
   is, up to rigid motions, the only moving sofa of maximum area. Baek's paper does not prove this, and
   Google DeepMind's formal-conjectures lists it as an open problem. The argument was written by ChatGPT
-  Pro (OpenAI) for this repository and has not been peer reviewed; Lean's kernel checks every step of
+  Pro 6 (OpenAI) for this repository and has not been peer reviewed; Lean's kernel checks every step of
   the formal proof.
 
 ## The three parts
@@ -210,10 +210,10 @@ Opus 5.5 (Anthropic, model `claude-opus-5-5`), running in Claude Code 2.1.285.
 
 ### Proving uniqueness
 
-- **The argument and the Lean draft.** ChatGPT Pro (OpenAI) wrote the informal proof
+- **The argument and the Lean draft.** ChatGPT Pro 6 (OpenAI) wrote the informal proof
   ([note 20](docs/uniqueness/20-complete-paper-proof.md) and the notes before it) and a Lean draft of it, without a compiler, in 147
-  commits from 2026-10-02 15:01 to 22:39 (US Central Time), in pull request #1 of this repository. The
-  model version and the effort were not recorded.
+  commits from 2026-10-02 15:01 to 22:39 (US Central Time), in pull request #1 of this repository. Its
+  effort was not recorded.
 - **The compiled proof.** Claude Opus 5.5 (model `claude-opus-5-5`), running in Claude Code 2.1.287,
   with the same skill (version 1.3.0), made the draft compile and completed it:
   - It checked every module of the draft and replaced the 54 proofs that did not compile by `sorry`;

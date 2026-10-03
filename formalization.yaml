@@ -26,7 +26,7 @@ project:
     of maximum area up to rigid motions: every moving sofa with the area of Gerver's sofa is mapped
     onto it, as a set, by a rotation followed by a translation. Baek's paper does not prove this, and
     Google DeepMind's formal-conjectures lists it as an open problem; we know of no earlier proof but
-    have not searched the literature systematically. The argument was written by ChatGPT Pro
+    have not searched the literature systematically. The argument was written by ChatGPT Pro 6
     (OpenAI) for this repository (docs/uniqueness/20-complete-paper-proof.md) and has not been peer
     reviewed. Its formal proof uses the definitions and results of the formalization of Baek's
     paper: it selects polygon approximations of a given maximizing cap, shows that every maximizing
@@ -63,7 +63,7 @@ sources:
     relationship: formalizes
     note: >-
       An informal proof that every moving sofa with the area of Gerver's sofa is congruent to it,
-      written by ChatGPT Pro (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
+      written by ChatGPT Pro 6 (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
       before it in docs/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
       does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
       its six propositions; docs/UNIQUENESS.md lists the Lean form of each step and the places
@@ -197,7 +197,7 @@ automation:
         repository's definitions, then instructions on the layout of the repository and on the
         Palomar submission.
     - method: agent
-      models: ["ChatGPT Pro (OpenAI); the model version was not recorded"]
+      models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
       tool_setup: >-
         Wrote the informal uniqueness proof (docs/uniqueness/, notes 01-20) and a Lean draft of it
@@ -210,7 +210,7 @@ automation:
   notes: >-
     The Lean code of Baek's paper, the numerical verification scripts and the audit were written by
     Claude Opus 5.5 in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this
-    repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro, and
+    repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro 6, and
     Claude Opus 5.5 made the draft compile and completed it.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution

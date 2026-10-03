@@ -38,7 +38,7 @@ states the uniqueness as `volume_eq_sofaConstant_iff_congruent_gerversSofa` in t
 `research open`. We know of no earlier proof, but we have not searched the literature
 systematically.
 
-The argument was written by ChatGPT Pro (OpenAI) at the request of The-Anh Vu-Le, on 2026-10-02:
+The argument was written by ChatGPT Pro 6 (OpenAI) at the request of The-Anh Vu-Le, on 2026-10-02:
 the informal proof is [note 20](uniqueness/20-complete-paper-proof.md), and notes 01–19 are the investigation behind it.
 ChatGPT Pro also wrote a Lean draft that it could not compile. Claude Opus 5.5 (Anthropic) made the
 draft compile and completed it; the README's credits describe how. No human has reviewed the
