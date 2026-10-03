@@ -8,19 +8,23 @@ public import SofaUniqueness.Draft.AngleExtension
 public import SofaUniqueness.InjectivityFromCurvature
 public import SofaUniqueness.MamikonCapKernel
 public import SofaUniqueness.GerverRegularClosed
+public import SofaUniqueness.MirroredCurvature
 
 /-!
-# UNCOMPILED, INCOMPLETE DRAFT: the remaining variational reductions
+# Variational reductions for the specified maximizing sofa
 
-Two admissions remain in this file: P2 and P4. The Mamikon kernel extraction
-(P1), curvature-to-injectivity implication (P3), angular extension (P5), and
-regular-closedness of Gerver's sofa (P6) now have explicit scripts in the
-imported modules. No successful elaboration or completed uniqueness proof is
-claimed while P2 and P4 remain admitted.
+The six paper-to-Lean reductions now have explicit proof bodies. In particular,
+the curvature and pinned bounds use polygons converging to the specified cap,
+not a different cap selected by a balanced-maximizer existence theorem.
 
-The old balanced-maximizer theorems are deliberately not applied to an
-arbitrary specified maximizer. That invalid shortcut would lose the original
-sofa and is precisely what the two remaining variational limits must avoid.
+The pinned result takes a positive-area hypothesis because that is the exact
+hypothesis of the compact selection theorem. Its shape-uniqueness caller
+proves positivity from equality with Gerver's area; no assumption is added to
+the final sofa theorem. The right-angle result derives positivity directly by
+comparison with Gerver's cap.
+
+All scripts remain uncompiled. Explicit bodies are not a claim of successful
+elaboration, kernel verification, or Palomar certification.
 -/
 
 @[expose] public section
@@ -45,7 +49,7 @@ theorem area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   exact ENNReal.toReal_mono (gerverSofa_volume_ne_top hP hbox)
     ((theorem1_1_1 hP hbox).2 S hS)
 
-/-- Balanced cap existence is used here for a NUMBER bound only. -/
+/-- Balanced cap existence is used here for a numerical bound only. -/
 theorem cap_area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Plane} {ω : ℝ} (hK : IsCap K ω) :
     sofaArea ω K ≤ area (gerverSofa P) := by
@@ -69,8 +73,7 @@ theorem capKernel_of_mamikon_midpoint {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     CapKernel φ (fun t => supp y.1.1.1 t - supp x.1.1.1 t) := by
   exact SofaUniqueness.capKernel_of_triple_midpoint hφ x y h
 
-/-- Endpoint-safe curvature estimates. The possible top atom is excluded;
-the atoms at 0 and pi are included. -/
+/-- The top atom is excluded; the atoms at 0 and pi are included. -/
 def CurvatureBounds (K : Set Plane) : Prop :=
   (sigma K).restrict (Ico 0 (π / 2)) ≤
     (volume.restrict (Ico 0 (π / 2))).withDensity
@@ -79,20 +82,20 @@ def CurvatureBounds (K : Set Plane) : Prop :=
     (volume.restrict (Ioc (π / 2) π)).withDensity
       (fun t => ENNReal.ofReal (k0 (fMinus K (t - π / 2))))
 
-/-- DRAFT-P2: specified-cap selection, finite-angle variation and weak limits.
+/-- Positivity of a right-angle maximum follows from an existing competitor. -/
+theorem sofaArea_pos_of_isMaxCap {K : Set Plane}
+    (hK : IsMaxCap (π / 2) K) : 0 < sofaArea (π / 2) K := by
+  obtain ⟨P, hP, hbox⟩ := definition8_1_2_exists
+  have hcompare := hK.2 P.cap (gm_isCap hP hbox)
+  rw [gm_sofaArea_cap hP hbox] at hcompare
+  have hG := gerverSofa_area hP hbox
+  linarith
 
-Use upper-support penalization, exact sine hats, and an eventually inactive
-horizontal box. Each facet defect is O(lambda*delta), with total error
-O(lambda+delta). The local ray estimate is
-  tau(t) <= tan(delta)*(abs(gPlus(t)-1)+tan(delta/2))
-             + max (2*tan(delta/2)-sigmaAt(t)) 0.
-Tests crossing zero are required before concluding that it has no atom.
-Sources: notes 10, 12 and 13. The abstract selection comparison alone does
-not prove the missing geometric compactness, variations or limiting estimate.
--/
+/-- P2: both curvature bounds for this cap, including the two outer endpoints. -/
 theorem curvatureBounds_of_isMaxCap {K : Set Plane}
     (hK : IsMaxCap (π / 2) K) : CurvatureBounds K := by
-  sorry
+  exact SofaUniqueness.curvature_of_maximal_positive hK.1
+    (sofaArea_pos_of_isMaxCap hK) hK.2
 
 /-- P3: both curvature bounds imply injectivity of this same cap. -/
 theorem injectivity_of_curvatureBounds {K : Set Plane}
@@ -113,17 +116,12 @@ theorem isKi_of_maximal_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
 def PinnedBounds (ω : ℝ) (K : Set Plane) : Prop :=
   wedgeGapWInf K ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K ω ≤ sigmaAt K ω
 
-/-- DRAFT-P4: pinned-strip variation for a specified maximizer.
-
-A common interior ball is needed. Actual and assigned supports must be
-compared in the correct direction. Sum the positive weighted defects and
-use sum d(t)*sin(t)=0 to control negative pinned defects. Upper semicontinuity
-of the fixed atoms and continuity of the gap infima complete the limit.
-Sources: notes 10, 12, 14 (sections 1-7) and 15.
--/
+/-- P4: pinned-strip variation and fixed-atom limits for a positive maximizer.
+The positivity premise is discharged by the Gerver-area equality at the caller. -/
 theorem pinnedBounds_of_isMaxCap {K : Set Plane} {ω : ℝ}
-    (hω : ω ∈ Ioo 0 (π / 2)) (hK : IsMaxCap ω K) : PinnedBounds ω K := by
-  sorry
+    (hω : ω ∈ Ioo 0 (π / 2)) (hK : IsMaxCap ω K)
+    (hpositive : 0 < sofaArea ω K) : PinnedBounds ω K := by
+  exact SofaUniqueness.pinned_bounds_of_maximal_positive hω hK.1 hpositive hK.2
 
 /-- P5: the specified sofa admits the additional motion from its pinned bounds. -/
 theorem right_angle_motion_of_pinned {S : Set Plane} {ω : ℝ}
@@ -132,7 +130,7 @@ theorem right_angle_motion_of_pinned {S : Set Plane} {ω : ℝ}
     ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
   exact right_angle_motion_of_pinned_bounds hS hω harea hpin.1 hpin.2
 
-/-- P6: regular-closedness is proved for the actual library Gerver sofa. -/
+/-- P6: regular-closedness for the actual library Gerver sofa. -/
 theorem regularClosed_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     closure (interior (gerverSofa P)) = gerverSofa P := by
   exact SofaUniqueness.gerver_regularClosed hP hbox
