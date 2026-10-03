@@ -32,18 +32,22 @@ section
 
 variable (D : GerverConstants)
 
-/-! The coefficients and translations of the first three phases of the path. -/
-
+/-- Romik's coefficient `a₁` of the first phase. -/
 def a1 : ℝ := ((D.A + 1 / 2) * sin D.φ + (D.B + 1) * cos D.φ) / 2
 
+/-- Romik's coefficient `b₁` of the second phase. -/
 def b1 : ℝ := (D.φ - 1 - D.A) / 2
 
+/-- Romik's coefficient `b₂` of the second phase. -/
 def b2 : ℝ := D.B - 1 / 2 - D.b1 * D.φ + D.φ ^ 2 / 4
 
+/-- The translation `κ₁` of the first phase. -/
 def k1 : ℝ × ℝ := (1 - D.a1, 1 / 4)
 
+/-- The translation `κ₂` of the second phase. -/
 def k2 : ℝ × ℝ := D.k1 + rot D.φ (-D.B / 2, 1 / 4)
 
+/-- The translation `κ₃` of the third phase. -/
 def k3 : ℝ × ℝ := D.k2 + rot D.θ (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2)
 
 /-- Romik's parameters rebuilt from Gerver's four constants. -/
@@ -78,11 +82,8 @@ theorem x2_phi (D : GerverConstants) :
 
 /-- Gerver's second equation fixes the horizontal position of the third phase. -/
 theorem k3_fst (h : D.Valid) : D.k3.1 = 1 - 4 * D.a1 / 3 := by
-  have h2 := (spec_iff.mp h).2.2.2.2.2.2.1
-  change eq2 D.A D.B D.φ D.θ = 0 at h2
-  unfold eq2 at h2
-  simp only [k3, k2, k1, rot, Prod.fst_add]
-  unfold a1
+  obtain ⟨-, -, -, -, -, -, h2, -⟩ := h
+  simp only [k3, k2, k1, a1, rot, Prod.fst_add]
   linear_combination h2 / 6
 
 end
@@ -123,7 +124,7 @@ theorem contactB_four (D : GerverConstants) (t : ℝ) :
     contactB D.toRomik.x₄ (π / 2 - t) =
       rot (π / 2 - t) ((D.A + t - D.φ - 1) / 2, -1 / 2) +
         (2 * D.k3.1 - D.k2.1, D.k2.2) := by
-  rw [contactB, (rom_hasDerivAt_x₄ _ _).deriv, rom_dot_rot_uvec]
+  rw [contactB, (rom_hasDerivAt_x₄ _ _).deriv, dot_rot_uvec_eq_fst]
   ext <;> simp only [toRomik, GerverParams.x₄, b1, rot, vvec,
     Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring
 
@@ -158,23 +159,25 @@ theorem ofRomik_frame {P : GerverParams} (hP : P.IsSolution) :
     2 * P.a₁ * cos P.φ = (ofRomik P).B + 1 + sin P.φ / 2 := by
   obtain ⟨_, _, _, _, _, _, _, _, _, _, ha₂, _, hd12, _⟩ := hP
   rw [(rom_hasDerivAt_x₁ _ _).deriv, (rom_hasDerivAt_x₂ _ _).deriv] at hd12
-  have hd := rom_rot_inj hd12
-  have hx := congrArg Prod.fst hd
-  have hy := congrArg Prod.snd hd
+  obtain ⟨hx, hy⟩ := Prod.ext_iff.mp (rot_injective _ hd12)
   simp only [ha₂] at hx hy
   constructor <;> simp only [ofRomik] <;> linarith
+
+/-- The derivative matching at `θ`, in the rotating frame. -/
+theorem deriv_match_theta {P : GerverParams} (hP : P.IsSolution) :
+    2 * P.b₁ + 1 - P.θ = -1 - P.c₂ - P.θ ∧
+      1 / 2 - P.θ ^ 2 / 4 + P.b₁ * P.θ + P.b₂ = 1 + P.c₁ - P.θ := by
+  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, hd23, _⟩ := hP
+  rw [(rom_hasDerivAt_x₂ _ _).deriv, (rom_hasDerivAt_x₃ _ _).deriv] at hd23
+  exact Prod.ext_iff.mp (rot_injective _ hd23)
 
 /-- The derivative matching at `θ` is Gerver's fourth equation. -/
 theorem ofRomik_eq4 {P : GerverParams} (hP : P.IsSolution) :
     eq4 (ofRomik P).A (ofRomik P).B P.φ P.θ = 0 := by
-  obtain ⟨_, _, _, _, _, _, _, hc₂, _, _, _, _, _, _, hd23, _⟩ := hP
-  rw [(rom_hasDerivAt_x₂ _ _).deriv, (rom_hasDerivAt_x₃ _ _).deriv] at hd23
-  have hd := rom_rot_inj hd23
-  have hx := congrArg Prod.fst hd
-  have hy := congrArg Prod.snd hd
-  simp only [hc₂] at hx
+  obtain ⟨hx, hy⟩ := deriv_match_theta hP
+  have hc₂ : P.c₂ = P.c₁ - π / 2 := hP.2.2.2.2.2.2.2.1
   unfold eq4 ofRomik
-  nlinarith
+  linarith
 
 /-- The derivative matching at `φ` gives Gerver's third equation. -/
 theorem ofRomik_eq3 {P : GerverParams} (hP : P.IsSolution) :
@@ -195,33 +198,25 @@ theorem ofRomik_coefficients {P : GerverParams} (hP : P.IsSolution) :
       (sin P.φ / 2) * hs - (cos P.φ / 2) * hc
   have hb : (ofRomik P).b1 = P.b₁ := by simp only [b1, ofRomik]; ring
   have hb' : (ofRomik P).b2 = P.b₂ := by
-    show (ofRomik P).B - 1 / 2 - (ofRomik P).b1 * P.φ + P.φ ^ 2 / 4 = P.b₂
-    rw [hb]
+    simp only [b2, hb]
     simp only [ofRomik]
     ring
-  obtain ⟨_, _, _, _, _, _, _, hc₂, _, _, _, _, _, _, hd23, _⟩ := hP
-  rw [(rom_hasDerivAt_x₂ _ _).deriv, (rom_hasDerivAt_x₃ _ _).deriv] at hd23
-  have hx := congrArg Prod.fst (rom_rot_inj hd23)
-  refine ⟨ha, hb, hb', ?_, ?_⟩
-  · simp only [toRomik, ofRomik]
-    linarith
-  · simp only [toRomik, ofRomik]
-    linarith
+  have hx := (deriv_match_theta hP).1
+  have hc₂ : P.c₂ = P.c₁ - π / 2 := hP.2.2.2.2.2.2.2.1
+  refine ⟨ha, hb, hb', ?_, ?_⟩ <;> simp only [toRomik, ofRomik] <;> linarith
 
 /-- `toRomik` recovers Romik's parameters: the translations of the phases are determined by
 continuity. -/
 theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
     (ofRomik P).toRomik = P := by
-  let D := ofRomik P
-  have hcoef := ofRomik_coefficients hP
+  -- Step 1: the scalar parameters agree, by the matching at `φ` and `θ` and the symmetry
+  -- equations (27)–(31).
+  obtain ⟨ha, hb, hb', hc', hc''⟩ := ofRomik_coefficients hP
   obtain ⟨hs, hc⟩ := ofRomik_frame hP
+  obtain ⟨hx, hy⟩ := deriv_match_theta hP
   obtain ⟨_, _, _, he₁, he₂, hd₁, hd₂, hc₂, hk₁x, hk₁y, ha₂,
-    h12, hd12, h23, hd23, h34, hd34, h45, hd45, hc1, hc2⟩ := hP
-  have ha : D.a1 = P.a₁ := hcoef.1
-  have hb : D.b1 = P.b₁ := hcoef.2.1
-  have hb' : D.b2 = P.b₂ := hcoef.2.2.1
-  have hc' : D.toRomik.c₁ = P.c₁ := hcoef.2.2.2.1
-  have hc'' : D.toRomik.c₂ = P.c₂ := hcoef.2.2.2.2
+    h12, -, h23, -, h34, -, h45, -, -, -⟩ := hP
+  set D := ofRomik P
   have hd' : D.toRomik.d₁ = P.d₁ := by
     simpa only [toRomik, hb] using hd₁.symm
   have hd'' : D.toRomik.d₂ = P.d₂ := by
@@ -231,6 +226,7 @@ theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
   have he'' : D.toRomik.e₂ = P.e₂ := by
     simp only [toRomik, he₂, ha₂]
     norm_num
+  -- Step 2: the translations of the first three phases agree, by continuity at `0`, `φ`, `θ`.
   have hk1 : D.k1 = P.κ₁ := by
     ext <;> simp only [k1, ha] <;> linarith
   have hw1 : (P.a₁ * cos P.φ + P.a₂ * sin P.φ - 1,
@@ -256,10 +252,6 @@ theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
   have hw3 : (-P.θ ^ 2 / 4 + P.b₁ * P.θ + P.b₂,
       P.θ / 2 - P.b₁ - 1) = (P.c₁ - P.θ, P.c₂ + P.θ) +
         (1 / 2, (1 - D.A - (D.θ - D.φ)) / 2) := by
-    have hdc := hd23
-    rw [(rom_hasDerivAt_x₂ _ _).deriv, (rom_hasDerivAt_x₃ _ _).deriv] at hdc
-    have hx := congrArg Prod.fst (rom_rot_inj hdc)
-    have hy := congrArg Prod.snd (rom_rot_inj hdc)
     ext <;> simp only [Prod.fst_add, Prod.snd_add, D, ofRomik] <;> linarith
   have hk3 : D.k3 = P.κ₃ := by
     have hmatch := h23
@@ -273,6 +265,7 @@ theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
     change rot t (D.toRomik.c₁ - t, D.toRomik.c₂ + t) + D.k3 = _
     rw [hc', hc'', hk3]
     rfl
+  -- Step 3: the translations of the last two phases agree, by the symmetry of both paths.
   have hD23 : D.toRomik.x₂ D.θ = D.toRomik.x₃ D.θ := by
     rw [hX2, hX3]
     exact h23
@@ -301,6 +294,7 @@ theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
     unfold GerverParams.x₅ at hh
     rw [he', he''] at hh
     exact add_left_cancel hh
+  -- Step 4: all seventeen fields agree.
   have hfields :
       D.toRomik.φ = P.φ ∧ D.toRomik.θ = P.θ ∧ D.toRomik.a₁ = P.a₁ ∧
       D.toRomik.a₂ = P.a₂ ∧ D.toRomik.b₁ = P.b₁ ∧ D.toRomik.b₂ = P.b₂ ∧
@@ -309,7 +303,6 @@ theorem ofRomik_toRomik {P : GerverParams} (hP : P.IsSolution) :
       D.toRomik.κ₁ = P.κ₁ ∧ D.toRomik.κ₂ = P.κ₂ ∧ D.toRomik.κ₃ = P.κ₃ ∧
       D.toRomik.κ₄ = P.κ₄ ∧ D.toRomik.κ₅ = P.κ₅ :=
     ⟨rfl, rfl, ha, ha₂.symm, hb, hb', hc', hc'', hd', hd'', he', he'', hk1, hk2, hk3, hk4, hk5⟩
-  change D.toRomik = P
   generalize hQ : D.toRomik = Q at hfields ⊢
   cases P
   cases Q
@@ -348,20 +341,15 @@ theorem ofRomik_valid {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
 ## Gerver's system has exactly one solution
 -/
 
-/-- Gerver's system has a solution. -/
-theorem spec_exists : ∃ A B φ θ : ℝ, Spec A B φ θ := by
-  obtain ⟨P, hP, hbox⟩ := romik_exists
-  exact ⟨(ofRomik P).A, (ofRomik P).B, P.φ, P.θ, ofRomik_valid hP hbox⟩
-
 /-- Gerver's system has exactly one solution, in the form that formal-conjectures states. -/
 theorem spec_existsUnique : ∃! q : ℝ × ℝ × ℝ × ℝ,
     Spec q.1 q.2.1 q.2.2.1 q.2.2.2 := by
-  obtain ⟨A, B, φ, θ, h⟩ := spec_exists
-  refine ⟨(A, B, φ, θ), h, ?_⟩
+  obtain ⟨P, hP, hbox⟩ := romik_exists
+  have h : Spec (ofRomik P).A (ofRomik P).B P.φ P.θ := ofRomik_valid hP hbox
+  refine ⟨((ofRomik P).A, (ofRomik P).B, P.φ, P.θ), h, ?_⟩
   rintro ⟨A', B', φ', θ'⟩ h'
-  obtain ⟨ha, hb, hp, ht⟩ := spec_unique h' h
-  simp only [Prod.mk.injEq]
-  exact ⟨ha, hb, hp, ht⟩
+  obtain ⟨rfl, rfl, rfl, rfl⟩ := spec_unique h' h
+  rfl
 
 /-- Every solution of Gerver's system is read off every solution of Romik's system in the box. -/
 theorem eq_ofRomik {D : GerverConstants} (hD : D.Valid) {P : GerverParams}

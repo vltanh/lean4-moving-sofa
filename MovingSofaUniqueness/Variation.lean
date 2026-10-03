@@ -58,7 +58,6 @@ theorem abs_weighted_defect_le {ι : Type*} (s : Finset ι)
     (he : ∀ i ∈ s, 0 ≤ e i) (hd : ∀ i ∈ s, d i ≤ e i)
     (hsum : (∑ i ∈ s, w i * d i) = 0) {k : ι} (hk : k ∈ s) :
     |w k * d k| ≤ ∑ i ∈ s, w i * e i := by
-  classical
   have heach := Finset.single_le_sum (s := s) (f := fun i => w i * e i)
     (fun i hi => mul_nonneg (hw i hi) (he i hi)) hk
   have hgap := Finset.single_le_sum (s := s)
@@ -188,45 +187,41 @@ namespace MovingSofaUniqueness
 def floatingCap (Θ : AngleSet) (K : Set (ℝ × ℝ)) (t ε : ℝ) : Set (ℝ × ℝ) :=
   capH Θ (Function.update (supp K) t (supp K t + ε))
 
+/-- Raising a floating height by `ε ≥ 0` gives a polygon cap. -/
 theorem floatingCap_polygon {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε : ℝ} (htω : t ≠ Θ.ω) (htL : t ≠ π / 2)
     (hε : 0 ≤ ε) : IsPolygonCap Θ (floatingCap Θ K t ε) :=
   mpc_capH_update_inner hK htω htL hε
 
+/-- Raising a height by `0` gives back the polygon cap. -/
 @[simp] theorem floatingCap_zero {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) (t : ℝ) : floatingCap Θ K t 0 = K := by
-  classical
-  have heq : Function.update (supp K) t (supp K t + 0) = supp K := by
-    funext s
-    by_cases hs : s = t
-    · subst s
-      simp
-    · simp [hs]
   unfold floatingCap
-  rw [heq]
+  rw [add_zero, Function.update_eq_self]
   exact proposition3_3_4 ⟨K, 0, hK, by simp⟩
+
+/-- A point of `K` lies below the assigned heights `h_K` raised by `ε ≥ 0` at a normal `t`. -/
+theorem dot_le_update_of_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K)
+    {p : ℝ × ℝ} (hp : p ∈ K) {ε : ℝ} (hε : 0 ≤ ε) (t s : ℝ) :
+    dot p (uvec s) ≤ Function.update (supp K) t (supp K t + ε) s := by
+  have h := dot_le_supp hK.1.2.1.2.1 hp s
+  rcases eq_or_ne s t with rfl | hst
+  · rw [Function.update_self]
+    linarith
+  · rwa [Function.update_of_ne hst]
 
 /-- Raising a floating height enlarges the cap. -/
 theorem subset_floatingCap {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε : ℝ} (htω : t ≠ Θ.ω) (htL : t ≠ π / 2)
     (hε : 0 ≤ ε) : K ⊆ floatingCap Θ K t ε := by
-  classical
   intro p hp
   change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε))
-  rw [mpc_mem_capH]
-  refine ⟨?_, ?_, ?_⟩
-  · intro s hs
-    have h := dot_le_supp hK.1.2.1.2.1 hp s
-    by_cases hst : s = t
-    · subst s
-      rw [Function.update_self]
-      linarith
-    · rw [Function.update_of_ne hst]
-      exact h
+  rw [nef_mem_capH_iff]
+  refine ⟨fun s _ => dot_le_update_of_mem hK hp hε t s, ?_, ?_⟩
   · rw [Function.update_of_ne htω.symm, hK.1.2.2.1]
-    simpa only [sub_self] using (mpc_cap_nonneg hK.1 hp).2
+    simpa only [sub_self] using hK.1.dot_omega_nonneg hp
   · rw [Function.update_of_ne htL.symm, hK.1.2.2.2.1]
-    simpa only [sub_self, mpc_dot_uvec_pi_div_two] using (mpc_cap_nonneg hK.1 hp).1
+    simpa only [sub_self, dot_uvec_pi_div_two] using hK.1.snd_nonneg hp
 
 /-- At every defining normal `s`, the support of the raised cap lies between `h_K(s)` and the raised
 assigned height. -/
@@ -238,10 +233,10 @@ theorem floatingCap_support_bounds {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   have hC := floatingCap_polygon hK htω htL hε
   constructor
   · exact supp_mono (subset_floatingCap hK htω htL hε) hK.1.2.1.1 hC.1.2.1.2.1 s
-  · apply nef_supp_le hC.1.2.1.1
+  · apply supp_le_of_forall hC.1.2.1.1
     intro p hp
     change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-    rw [mpc_mem_capH] at hp
+    rw [nef_mem_capH_iff] at hp
     exact hp.1 s hs
 
 /-- At the defining normals other than `t`, the raised cap has the supports of `K`. -/
@@ -254,6 +249,7 @@ theorem floatingCap_support_other {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   rw [Function.update_of_ne hst] at h
   exact le_antisymm h.2 h.1
 
+/-- At the raised normal `t`, the support rises by at most `ε`. -/
 theorem floatingCap_support_self {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (hK : IsPolygonCap Θ K) {t ε : ℝ}
     (ht : t ∈ Θ.diamond) (htω : t ≠ Θ.ω) (htL : t ≠ π / 2) (hε : 0 ≤ ε) :
@@ -336,8 +332,8 @@ theorem pinned_support_value {Θ : AngleSet} {K : Set (ℝ × ℝ)}
 theorem pinned_corner_dot {Θ : AngleSet} {s : ℝ}
     (hs : s = Θ.ω ∨ s = π / 2) : dot (oPt Θ.ω) (uvec s) = 1 := by
   rcases hs with rfl | rfl
-  · exact mpc_oPt_dot_uvec Θ.hω
-  · rw [mpc_dot_uvec_pi_div_two, mpc_oPt_snd]
+  · exact oPt_dot_uvec (Ioc_subset_Icc_self Θ.hω)
+  · rw [dot_uvec_pi_div_two, mpc_oPt_snd]
 
 /-- For `ω < π/2` a polygon cap contains the origin, so its supports are nonnegative. -/
 theorem pinned_support_nonneg {Θ : AngleSet} {K : Set (ℝ × ℝ)}
@@ -352,41 +348,32 @@ theorem pinned_contract_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : ε ∈ Icc (0 : ℝ) 1)
     {p : ℝ × ℝ} (hp : p ∈ K) :
     (1 - ε) • p + ε • oPt Θ.ω ∈ floatingCap Θ K t ε := by
-  classical
-  have ho := mpc_oPt_mem hK hω
+  have ho := hK.1.oPt_mem hω
   have hcombo : (1 - ε) • p + ε • oPt Θ.ω ∈ K :=
     hK.1.2.1.2.2 hp ho (by linarith [hε.2]) hε.1 (by ring)
   change _ ∈ capH Θ (Function.update (supp K) t (supp K t + ε))
-  rw [mpc_mem_capH]
-  refine ⟨?_, ?_, ?_⟩
-  · intro s hs
-    have h := dot_le_supp hK.1.2.1.2.1 hcombo s
-    by_cases hst : s = t
-    · subst s
-      rw [Function.update_self]
-      linarith [hε.1]
-    · rw [Function.update_of_ne hst]
-      exact h
+  rw [nef_mem_capH_iff]
+  refine ⟨fun s _ => dot_le_update_of_mem hK hcombo hε.1 t s, ?_, ?_⟩
   · by_cases hst : Θ.ω = t
     · subst hst
       rw [Function.update_self, pinned_support_value hK ht]
-      have hp0 : 0 ≤ dot p (uvec Θ.ω) := (mpc_cap_nonneg hK.1 hp).2
+      have hp0 : 0 ≤ dot p (uvec Θ.ω) := hK.1.dot_omega_nonneg hp
       rw [dot_add_left, dot_smul_left, dot_smul_left, pinned_corner_dot ht]
       nlinarith [hε.2]
     · rw [Function.update_of_ne hst, hK.1.2.2.1]
-      have h := (mpc_cap_nonneg hK.1 hcombo).2
+      have h := hK.1.dot_omega_nonneg hcombo
       simpa only [sub_self] using h
   · by_cases hst : π / 2 = t
     · subst hst
       rw [Function.update_self, pinned_support_value hK ht]
       have hp0 : 0 ≤ dot p (uvec (π / 2)) := by
-        rw [mpc_dot_uvec_pi_div_two]
-        exact (mpc_cap_nonneg hK.1 hp).1
+        rw [dot_uvec_pi_div_two]
+        exact hK.1.snd_nonneg hp
       rw [dot_add_left, dot_smul_left, dot_smul_left, pinned_corner_dot ht]
       nlinarith [hε.2]
     · rw [Function.update_of_ne hst, hK.1.2.2.2.1]
-      have h := (mpc_cap_nonneg hK.1 hcombo).1
-      simpa only [sub_self, mpc_dot_uvec_pi_div_two] using h
+      have h := hK.1.snd_nonneg hcombo
+      simpa only [sub_self, dot_uvec_pi_div_two] using h
 
 /-- The cap moved by `ε ≥ 0` at a pinned normal, scaled by `1 / (1 + ε)` about the origin, lies in
 `K`. -/
@@ -395,10 +382,9 @@ theorem pinned_div_mem {Θ : AngleSet} {K : Set (ℝ × ℝ)}
     (ht : t = Θ.ω ∨ t = π / 2) (hε : 0 ≤ ε)
     {p : ℝ × ℝ} (hp : p ∈ floatingCap Θ K t ε) :
     (1 / (1 + ε)) • p ∈ K := by
-  classical
   have hden : 0 < 1 + ε := by linarith
   change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-  rw [mpc_mem_capH] at hp
+  rw [nef_mem_capH_iff] at hp
   rw [mpc_polycap_mem_iff hK]
   refine ⟨?_, ?_, ?_⟩
   · intro s hs
@@ -447,17 +433,17 @@ theorem pinned_raw_support_bound {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   have hmem := pinned_contract_mem hK hω ht hε hq
   have hne : (floatingCap Θ K t ε).Nonempty := ⟨_, hmem⟩
   have hupper : supp (floatingCap Θ K t ε) s ≤ (1 + ε) * supp K s := by
-    apply nef_supp_le hne
+    apply supp_le_of_forall hne
     intro p hp
     have h := dot_le_supp hK.1.2.1.2.1 (pinned_div_mem hK hω ht hε.1 hp) s
     rw [dot_smul_left, one_div, inv_mul_eq_div, div_le_iff₀ (by linarith [hε.1] : 0 < 1 + ε)] at h
     nlinarith
   have hlower := dot_le_supp hcpt hmem s
   rw [dot_add_left, dot_smul_left, dot_smul_left, hqs] at hlower
-  have ho := mpc_oPt_mem hK hω
+  have ho := hK.1.oPt_mem hω
   have hodot : -R ≤ dot (oPt Θ.ω) (uvec s) := by
     have h := dot_le_supp hK.1.2.1.2.1 ho (s + π)
-    rw [mpc_dot_uvec_add_pi] at h
+    rw [dot_uvec_add_pi] at h
     have hb := (abs_le.mp (hsupp (s + π))).2
     linarith
   have hKs := abs_le.mp (hsupp s)
@@ -482,7 +468,7 @@ theorem translated_strip_support {Θ : AngleSet} {C : Set (ℝ × ℝ)}
   obtain ⟨p, hp, hps⟩ := exists_dot_eq_supp hc.2.1 hc.1 s
   obtain ⟨q, hq, hqs⟩ := exists_dot_eq_supp hc.2.1 hc.1 (s + π)
   rw [htop] at hps
-  rw [hbot, mpc_dot_uvec_add_pi] at hqs
+  rw [hbot, dot_uvec_add_pi] at hqs
   have hu := hhi (p + v) ⟨p, hp, rfl⟩
   have hl := hlo (q + v) ⟨q, hq, rfl⟩
   rw [dot_add_left, hps] at hu
@@ -496,7 +482,6 @@ theorem pinned_translation_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     {t ε : ℝ} (ht : t = Θ.ω ∨ t = π / 2) (hε : 0 ≤ ε)
     (v : ℝ × ℝ) (hset : floatingCap Θ K t ε = (fun p => p + v) '' C) (s : ℝ) :
     |dot v (uvec s)| ≤ (2 / cos Θ.ω + 1) * ε := by
-  classical
   have hcos : 0 < cos Θ.ω :=
     cos_pos_of_mem_Ioo ⟨by linarith [Θ.hω.1, pi_pos], hω⟩
   have hsin : 0 ≤ sin Θ.ω := sin_nonneg_of_nonneg_of_le_pi Θ.hω.1.le
@@ -517,24 +502,20 @@ theorem pinned_translation_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     · intro p hp
       rw [← hset] at hp
       change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-      rw [mpc_mem_capH] at hp
+      rw [nef_mem_capH_iff] at hp
       rcases hr with rfl | rfl
       · exact hp.2.1
       · exact hp.2.2
     · intro p hp
       rw [← hset] at hp
       change p ∈ capH Θ (Function.update (supp K) t (supp K t + ε)) at hp
-      rw [mpc_mem_capH] at hp
-      have hrd : r ∈ Θ.diamond := by
-        rcases hr with rfl | rfl
-        · exact Or.inr (Or.inl rfl)
-        · exact Or.inr (Or.inr rfl)
-      have h := hp.1 r hrd
+      rw [nef_mem_capH_iff] at hp
+      have h := hp.1 r (Or.inr hr)
       dsimp [a]
       linarith
   have hy := ha (π / 2) (Or.inr rfl)
   have hx := ha Θ.ω (Or.inl rfl)
-  rw [← hv (π / 2) (Or.inr rfl), mpc_dot_uvec_pi_div_two] at hy
+  rw [← hv (π / 2) (Or.inr rfl), dot_uvec_pi_div_two] at hy
   rw [← hv Θ.ω (Or.inl rfl)] at hx
   have hyabs : |v.2| ≤ ε := abs_le.mpr ⟨by linarith [hy.1], hy.2⟩
   have hxy : |v.1| ≤ 2 * ε / cos Θ.ω := by
@@ -544,7 +525,7 @@ theorem pinned_translation_bound {Θ : AngleSet} {K C : Set (ℝ × ℝ)}
     have hprod : v.2 * sin Θ.ω ≤ ε := by nlinarith [hy.1, hy.2]
     rw [← abs_of_pos hcos, ← abs_mul, abs_le]
     constructor <;> nlinarith [hx.1, hx.2, hy.1]
-  have hdot := mpc_abs_dot_uvec_le v s
+  have hdot := abs_dot_uvec_le v s
   have hbound : |v.1| + |v.2| ≤ (2 / cos Θ.ω + 1) * ε := by
     have heq : 2 * ε / cos Θ.ω + ε = (2 / cos Θ.ω + 1) * ε := by ring
     rw [← heq]
@@ -603,17 +584,15 @@ theorem pinned_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     (hclose : ∀ i, |supp K (S.normal i) - supp target (S.normal i)| ≤ η) :
     sigmaAt K t - tau Θ K t ≤
       2 * S.totalWeight * η * (2 * R + 2 / cos Θ.ω + 1) := by
-  classical
   let G := 2 * R + 2 / cos Θ.ω + 1
   have hcos : 0 < cos Θ.ω :=
     cos_pos_of_mem_Ioo ⟨by linarith [Θ.hω.1, pi_pos], hω⟩
   have hG : 0 ≤ G := by dsimp [G]; positivity
-  have htd : t ∈ Θ.diamond := by
-    rcases ht with rfl | rfl
-    · exact Or.inr (Or.inl rfl)
-    · exact Or.inr (Or.inr rfl)
+  have htd : t ∈ Θ.diamond := Or.inr ht
   by_cases hσ : 0 < sigmaAt K t
-  · obtain ⟨r, hr, hfeasible⟩ := lemma3_4_8 hK.1 htd hσ
+  · -- For `σ_K(t) > 0`, Baek's Lemma 3.4.8 makes the moved caps translates of polygon caps
+    -- `C ε` for small `ε`, whose supports are within `G ε` of those of `K`.
+    obtain ⟨r, hr, hfeasible⟩ := lemma3_4_8 hK.1 htd hσ
     let r' := min r 1
     have hr' : 0 < r' := lt_min hr zero_lt_one
     have hC : ∀ e : Ioc (0 : ℝ) r', ∃ C v, IsPolygonCap Θ C ∧
@@ -664,14 +643,12 @@ theorem polygon_weighted_defect_zero {Θ : AngleSet} {K : Set (ℝ × ℝ)}
 /-- The upper bound on the defect at `t`: the floating bound `2 * η * atNormal t`, plus the pinned
 bound at `ω` and `π/2`. -/
 def selectorDefectBound {Θ : AngleSet} (S : SupportSamples Θ) (G η t : ℝ) : ℝ := by
-  classical
   exact 2 * η * S.atNormal t +
     if t = Θ.ω ∨ t = π / 2 then 2 * S.totalWeight * η * G else 0
 
 theorem selectorDefectBound_nonneg {Θ : AngleSet} (S : SupportSamples Θ)
     {G η : ℝ} (hG : 0 ≤ G) (hη : 0 ≤ η) (t : ℝ) :
     0 ≤ selectorDefectBound S G η t := by
-  classical
   have hw := S.atNormal_nonneg t
   have hW := S.totalWeight_nonneg
   unfold selectorDefectBound
@@ -683,26 +660,18 @@ theorem selectorDefectBound_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
     {G η : ℝ} (hG : 0 ≤ G) (hη : 0 ≤ η) :
     (∑ t ∈ mpcDiamond Θ, selectorDefectBound S G η t) ≤
       2 * η * S.totalWeight + 4 * S.totalWeight * η * G := by
-  classical
   let b := 2 * S.totalWeight * η * G
   have hb : 0 ≤ b := by
     have hW := S.totalWeight_nonneg
     dsimp [b]
     positivity
+  -- At most two defining normals are pinned.
   have hpin : (∑ t ∈ mpcDiamond Θ, if t = Θ.ω ∨ t = π / 2 then b else 0) ≤ 2 * b := by
-    calc
-      (∑ t ∈ mpcDiamond Θ, if t = Θ.ω ∨ t = π / 2 then b else 0)
-          ≤ ∑ t ∈ mpcDiamond Θ, ((if t = Θ.ω then b else 0) + (if t = π / 2 then b else 0)) := by
-        apply Finset.sum_le_sum
-        intro t ht
-        split_ifs <;> simp_all
-      _ ≤ 2 * b := by
-        rw [Finset.sum_add_distrib]
-        have h₀ : (∑ t ∈ mpcDiamond Θ, if t = Θ.ω then b else 0) ≤ b := by
-          by_cases h : Θ.ω ∈ mpcDiamond Θ <;> simp [h, hb]
-        have h₁ : (∑ t ∈ mpcDiamond Θ, if t = π / 2 then b else 0) ≤ b := by
-          by_cases h : π / 2 ∈ mpcDiamond Θ <;> simp [h, hb]
-        linarith
+    rw [Finset.sum_ite, Finset.sum_const_zero, add_zero, Finset.sum_const, nsmul_eq_mul]
+    have hcard : ((mpcDiamond Θ).filter (fun t => t = Θ.ω ∨ t = π / 2)).card ≤ 2 :=
+      (Finset.card_le_card (s := _) (t := {Θ.ω, π / 2}) fun t ht => by
+        simpa using (Finset.mem_filter.mp ht).2).trans Finset.card_le_two
+    exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hb
   unfold selectorDefectBound
   rw [Finset.sum_add_distrib, ← Finset.mul_sum, S.sum_atNormal]
   dsimp [b] at hpin
@@ -720,7 +689,6 @@ theorem abs_selected_defect_le {Θ : AngleSet} (S : SupportSamples Θ)
     |sigmaAt K t - tau Θ K t| ≤
       (2 * η * S.totalWeight +
         4 * S.totalWeight * η * (2 * R + 2 / cos Θ.ω + 1)) / sin t := by
-  classical
   let G := 2 * R + 2 / cos Θ.ω + 1
   have hcos : 0 < cos Θ.ω :=
     cos_pos_of_mem_Ioo ⟨by linarith [Θ.hω.1, pi_pos], hω⟩
@@ -764,8 +732,8 @@ end
 ## The pinned bounds (19)
 
 For a polygon cap with `ω < π/2`, Baek's Lemma 3.4.5 on the sides of the niche along the two strips
-gives `w_K° ≤ τ_K(π/2)` and `z_K° ≤ τ_K(ω)` for the wedge gap infima (`polygon_wedgeGapW_le_tau`,
-`polygon_wedgeGapZ_le_tau`). Along the polygon caps selected for a cap `K` that maximizes `A_ω` with
+gives `w_K° ≤ τ_K(π/2)` and `z_K° ≤ τ_K(ω)` for the wedge gap infima (`ang_wedgeGapWInf_le_tau`,
+`ang_wedgeGapZInf_le_tau`). Along the polygon caps selected for a cap `K` that maximizes `A_ω` with
 positive value, the pinned defects tend to zero, the gap infima converge (Baek's Lemma 4.1.1), and
 the edge length `σ` at a fixed normal is upper semicontinuous. Hence `w_K° ≤ σ_K(π/2)` and
 `z_K° ≤ σ_K(ω)` (`pinned_bounds_of_maximal_positive`), the pinned bounds (19) of note 20.
@@ -777,76 +745,30 @@ open Set Real Filter Topology MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
-/-- For a polygon cap with `ω < π/2`, `w_K° ≤ τ_K(π/2)`. -/
-theorem polygon_wedgeGapW_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
-    (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) :
-    wedgeGapWInf K Θ.ω ≤ tau Θ K (π / 2) := by
-  obtain ⟨t₀, ht₀, hmax⟩ :=
-    Θ.angles.exists_max_image (fun t => (supp K t - 1) / cos t) Θ.nonempty
-  have hℓ := ang_lineLength_polyNiche_le (K := K) hω hmax
-  have h352 := (lemma3_4_5_two hK (t := π / 2) (Or.inr rfl)).2
-  rw [show π / 2 + π = 3 * π / 2 by ring] at h352
-  have hσ := ang_supp_zero_le_sigmaAt hK.1 hω
-  have h1 := ang_wedgeGapWInf_le_supp_zero hK.1 hω
-  have h2 := ang_wedgeGapWInf_le hK.1.2.1 hω (Θ.subset t₀ ht₀)
-  rw [ang_wedgeGapW_eq] at h2
-  rcases le_total ((supp K t₀ - 1) / cos t₀) 0 with hW | hW
-  · rw [max_eq_right hW] at hℓ
-    linarith
-  · rw [max_eq_left hW] at hℓ
-    linarith
-
-/-- For a polygon cap with `ω < π/2`, `z_K° ≤ τ_K(ω)`. -/
-theorem polygon_wedgeGapZ_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
-    (hK : IsPolygonCap Θ K) (hω : Θ.ω < π / 2) :
-    wedgeGapZInf K Θ.ω ≤ tau Θ K Θ.ω := by
-  obtain ⟨t₀, ht₀, hmax⟩ :=
-    Θ.angles.exists_max_image (fun t => (supp K (t + π / 2) - 1) / cos (Θ.ω - t)) Θ.nonempty
-  have hℓ := ang_lineLength_polyNiche_le_z (K := K) hω hmax
-  have h352 := (lemma3_4_5_two hK (t := Θ.ω) (Or.inl rfl)).2
-  have hσ := ang_supp_le_sigmaAt_add_pi hK.1 hω
-  have h1 := ang_wedgeGapZInf_le_supp hK.1 hω
-  have h2 := ang_wedgeGapZInf_le hK.1.2.1 hω (Θ.subset t₀ ht₀)
-  rw [ang_wedgeGapZ_eq] at h2
-  rcases le_total ((supp K (t₀ + π / 2) - 1) / cos (Θ.ω - t₀)) 0 with hW | hW
-  · rw [max_eq_right hW] at hℓ
-    linarith
-  · rw [max_eq_left hW] at hℓ
-    linarith
-
-/-- A convex body in `[-R, R] × [0, 1]` has supports of absolute value at most `R + 1`. -/
-theorem abs_supp_le_box {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {R : ℝ}
-    (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) (t : ℝ) :
-    |supp K t| ≤ R + 1 := by
-  obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hK.2.1 hK.1 t
-  rw [← hpt]
-  have h := mpc_abs_dot_uvec_le p t
-  obtain ⟨hx, hy⟩ := hbox hp
-  have hx' : |p.1| ≤ R := abs_le.mpr hx
-  have hy' : |p.2| ≤ 1 := abs_le.mpr ⟨by linarith [hy.1], hy.2⟩
-  linarith
-
 /-- The pinned bounds (19) of note 20: for `ω ∈ (0, π/2)`, a cap maximizing `A_ω` with positive
 value satisfies `w_K° ≤ σ_K(π/2)` and `z_K° ≤ σ_K(ω)`. -/
 theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2))
     {K : Set (ℝ × ℝ)} (hK : IsCap K ω) (hpositive : 0 < sofaArea ω K)
     (hmax : ∀ C, IsCap C ω → sofaArea ω C ≤ sofaArea ω K) :
     wedgeGapWInf K ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K ω ≤ sigmaAt K ω := by
-  classical
+  -- Step 1: the selected polygon caps `Ks n` (Proposition 1) converge to `K`; their supports are
+  -- bounded by `R` and within `η n` of those of `K`, where `η n → 0`.
   have hω' : ω ∈ Ioc 0 (π / 2) := ⟨hω.1, hω.2.le⟩
   obtain ⟨seq⟩ := exists_selectedCapSequence hω' hK hpositive hmax
   let Ks := seq.cap
   have hcap : ∀ n, IsCap (Ks n) ω := fun n => (seq.selected n).1.1
   have hcb : ∀ n, IsConvexBody (Ks n) := fun n => (hcap n).2.1
   let η : ℕ → ℝ := fun n => hausdorffDist (Ks n) K
-  have hη : ∀ n, 0 ≤ η n := fun n => ang_hausdorffDist_nonneg (hcb n) hK.2.1
+  have hη : ∀ n, 0 ≤ η n := fun n => hausdorffDist_nonneg _ _
   have hηlim : Tendsto η atTop (𝓝 0) := seq.tends
   let R := seq.radius + 1
   have hR : 0 ≤ R := by dsimp [R]; linarith [seq.radius_nonneg]
   have hsupp : ∀ n s, |supp (Ks n) s| ≤ R :=
     fun n s => abs_supp_le_box (hcb n) (seq.boxed n) s
   have hclose : ∀ n s, |supp (Ks n) s - supp K s| ≤ η n :=
-    fun n s => ang_abs_supp_sub_le_hausdorffDist (hcb n) hK.2.1 s
+    fun n s => abs_supp_sub_le_hausdorffDist (hcb n) hK.2.1 s
+  -- Step 2: by inequality (12), their defects `|σ - τ|` at the pinned normals are at most
+  -- `err t n`, which tends to zero.
   let G := 2 * R + 2 / cos ω + 1
   have hcos : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
   have hG : 0 ≤ G := by dsimp [G]; positivity
@@ -858,22 +780,20 @@ theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2
       |sigmaAt (Ks n) t - tau (dyadicAngleSet ω hω' (seq.index n)) (Ks n) t| ≤ err t n := by
     intro n t ht
     let S := dyadicSamples ω hω' (seq.index n)
-    have htd : t ∈ (dyadicAngleSet ω hω' (seq.index n)).diamond := by
-      rcases ht with rfl | rfl
-      · exact Or.inr (Or.inl rfl)
-      · exact Or.inr (Or.inr rfl)
+    have htd : t ∈ (dyadicAngleSet ω hω' (seq.index n)).diamond := Or.inr ht
     have h := abs_selected_defect_le S (seq.selected n) hω.2 (hη n) hR
       (hsupp n) (fun i => hclose n (S.normal i)) htd
     have hmass : S.totalWeight ≤ 1 := dyadic_totalWeight_le_one ω hω' (seq.index n)
     have hnumer : 2 * η n * S.totalWeight + 4 * S.totalWeight * η n * G ≤
         (2 + 4 * G) * η n := by
-      have h₀ := mul_le_mul_of_nonneg_left hmass
-        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) (hη n))
-      have h₁ := mul_le_mul_of_nonneg_left hmass
-        (mul_nonneg (mul_nonneg (by norm_num : (0 : ℝ) ≤ 4) (hη n)) hG)
-      nlinarith
+      have h := mul_le_mul_of_nonneg_left hmass
+        (mul_nonneg (by linarith) (hη n) : 0 ≤ (2 + 4 * G) * η n)
+      linarith
     have hsint : 0 ≤ sin t := (mpc_sin_pos_of_diamond htd).le
     exact h.trans (div_le_div_of_nonneg_right hnumer hsint)
+  -- Step 3: the wedge gap infima of `Ks n` converge to those of `K` (Baek's Lemma 4.1.1) and are
+  -- at most `τ`, hence at most `σ` plus an error tending to zero; and the limit of such bounds is
+  -- at most `σ_K`.
   have hgapErr : Tendsto (fun n => (1 + 1 / cos ω) * η n) atTop (𝓝 0) := by
     simpa using hηlim.const_mul (1 + 1 / cos ω)
   constructor
@@ -888,7 +808,7 @@ theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2
     intro n
     have hτ : wedgeGapWInf (Ks n) ω ≤
         tau (dyadicAngleSet ω hω' (seq.index n)) (Ks n) (π / 2) :=
-      polygon_wedgeGapW_le_tau (seq.selected n).1 hω.2
+      ang_wedgeGapWInf_le_tau (seq.selected n).1 hω.2
     have hd := (abs_le.mp (hdefect n (π / 2) (Or.inr rfl))).1
     linarith
   · have hz : Tendsto (fun n => wedgeGapZInf (Ks n) ω) atTop (𝓝 (wedgeGapZInf K ω)) := by
@@ -902,7 +822,7 @@ theorem pinned_bounds_of_maximal_positive {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2
     intro n
     have hτ : wedgeGapZInf (Ks n) ω ≤
         tau (dyadicAngleSet ω hω' (seq.index n)) (Ks n) ω :=
-      polygon_wedgeGapZ_le_tau (seq.selected n).1 hω.2
+      ang_wedgeGapZInf_le_tau (seq.selected n).1 hω.2
     have hd := (abs_le.mp (hdefect n ω (Or.inl rfl))).1
     linarith
 

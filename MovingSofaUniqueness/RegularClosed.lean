@@ -19,8 +19,8 @@ noncomputable section
 On the five phases of Gerver's motion, the height estimates of the optimality library
 (`gs_ineq_y₁`, `gs_ineq_y₂`, `gs_ineq_y₃`) and the bounds on the translations of the phases bound
 the height of the rotation path by `0.95`, `0.99240672`, `0.88962658`, `0.99240672` and
-`0.9500001`. So the path
-has height less than one on `[0, π/2]` (`path_snd_lt_one`), a strict form of `gs_path_snd_le_one`.
+`0.9500001`. So the path has height less than one on `[0, π/2]` (`path_snd_lt_one`), a strict form
+of `gs_path_snd_le_one`.
 -/
 
 section
@@ -107,6 +107,7 @@ theorem envelope_endpoint_order (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρ
   rw [h.B_t₃] at hb
   exact ⟨hd, hx, hb⟩
 
+/-- The envelope is compact: it is the union of three continuous images of closed intervals. -/
 theorem envelope_isCompact (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     IsCompact (envCurve t₁ t₂ t₃ t₄ x α β) := by
   obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
@@ -166,13 +167,12 @@ end
 /-!
 ## Removing the region under an envelope
 
-Let `K` be a regular closed set in the strip `0 ≤ y ≤ 1` that contains the rectangle
-`[a, b] × [0, 1]`, and let `Γ` be a compact set of points with abscissa in `[a, b]` and height in
-`[0, 1]`, at most one of height one. If `K` minus the region strictly under `Γ` is closed, it is
-regular closed (`regularClosed_cap_sdiff_envelope`). Its points outside the closed region under `Γ`,
-which is compact (`isCompact_envUnder`), are limits of its interior points because `K` is regular
-closed; its other points lie on `Γ` and are limits of points above them or, at height one, of points
-of the top edge.
+Let `K` be a regular closed set that contains the rectangle `[a, b] × [0, 1]`, and let `Γ` be a
+compact set of points with abscissa in `[a, b]` and height in `[0, 1)`. If `K` minus the region
+strictly under `Γ` is closed, it is regular closed (`regularClosed_cap_sdiff_envelope`). Its points
+outside the closed region under `Γ`, which is compact (`isCompact_envUnder`), are limits of its
+interior points because `K` is regular closed; its other points lie on `Γ`, below height one, and
+are limits of the points of the rectangle just above them.
 -/
 
 section
@@ -211,11 +211,8 @@ theorem isCompact_envUnder {Γ : Set (ℝ × ℝ)} (hΓ : IsCompact Γ)
 theorem mem_closed_of_positive_path {X : Type*} [TopologicalSpace X]
     {A : Set X} (hA : IsClosed A) (q : ℝ → X) (hq : Continuous q)
     (hmem : ∀ t ∈ Ioo (0 : ℝ) 1, q t ∈ A) : q 0 ∈ A := by
-  have hsub : Ioo (0 : ℝ) 1 ⊆ q ⁻¹' A := fun t ht => hmem t ht
-  have h := closure_minimal hsub (hA.preimage hq)
-  apply h
-  rw [closure_Ioo zero_ne_one]
-  exact ⟨le_rfl, zero_le_one⟩
+  have h : closure (Ioo (0 : ℝ) 1) ⊆ q ⁻¹' A := (hA.preimage hq).closure_subset_iff.mpr hmem
+  exact h (by rw [closure_Ioo zero_ne_one]; exact ⟨le_rfl, zero_le_one⟩)
 
 /-- If `K` is regular closed and `N ⊆ U` with `U` closed, every point of `K \ U` is a limit of
 interior points of `K \ N`. -/
@@ -223,106 +220,49 @@ theorem outside_closed_envelope_subset {X : Type*} [TopologicalSpace X]
     {K U N : Set X} (hK : closure (interior K) = K) (hU : IsClosed U)
     (hNU : N ⊆ U) : K \ U ⊆ closure (interior (K \ N)) := by
   intro p hp
-  have hnear : p ∈ Uᶜ ∩ closure (interior K) := by
-    exact ⟨hp.2, by rw [hK]; exact hp.1⟩
-  have hcl : p ∈ closure (Uᶜ ∩ interior K) := hU.isOpen_compl.inter_closure hnear
-  have hsub : Uᶜ ∩ interior K ⊆ interior (K \ N) := by
-    apply interior_maximal
-    · intro q hq
-      exact ⟨interior_subset hq.2, fun hqN => hq.1 (hNU hqN)⟩
-    · exact hU.isOpen_compl.inter isOpen_interior
-  exact closure_mono hsub hcl
+  have hcl : p ∈ closure (Uᶜ ∩ interior K) :=
+    hU.isOpen_compl.inter_closure ⟨hp.2, by rw [hK]; exact hp.1⟩
+  refine closure_mono (interior_maximal ?_ (hU.isOpen_compl.inter isOpen_interior)) hcl
+  exact fun q hq => ⟨interior_subset hq.2, fun hqN => hq.1 (hNU hqN)⟩
 
-/-- Removing the region strictly under a compact set `Γ` from a regular closed set `K` in the strip
-`0 ≤ y ≤ 1` leaves a regular closed set, if the difference is closed, `K` contains
-`[a, b] × [0, 1]`, and the points of `Γ` have abscissa in `[a, b]` and height in `[0, 1]`, at most
-one of them of height one. -/
+/-- Removing the region strictly under a compact set `Γ` from a regular closed set `K` leaves a
+regular closed set, if the difference is closed, `K` contains `[a, b] × [0, 1]`, and the points of
+`Γ` have abscissa in `[a, b]` and height in `[0, 1)`. -/
 theorem regularClosed_cap_sdiff_envelope {K Γ : Set (ℝ × ℝ)} {a b : ℝ}
-    (hab : a < b) (hK : closure (interior K) = K)
-    (hKstrip : ∀ p ∈ K, 0 ≤ p.2 ∧ p.2 ≤ 1)
+    (hK : closure (interior K) = K)
     (hrect : ∀ x ∈ Icc a b, ∀ y ∈ Icc (0 : ℝ) 1, (x, y) ∈ K)
     (hΓ : IsCompact Γ)
-    (hΓbounds : ∀ p ∈ Γ, p.1 ∈ Icc a b ∧ p.2 ∈ Icc (0 : ℝ) 1)
-    (hΓtop : ∀ p ∈ Γ, ∀ q ∈ Γ, p.2 = 1 → q.2 = 1 → p = q)
+    (hΓbounds : ∀ p ∈ Γ, p.1 ∈ Icc a b ∧ p.2 ∈ Ico (0 : ℝ) 1)
     (hclosed : IsClosed (K \ envUnderStrict Γ)) :
     closure (interior (K \ envUnderStrict Γ)) = K \ envUnderStrict Γ := by
-  let C := closure (interior (K \ envUnderStrict Γ))
-  have hCclosed : IsClosed C := isClosed_closure
-  have hUclosed : IsClosed (envUnder Γ) :=
-    (isCompact_envUnder hΓ (fun p hp => (hΓbounds p hp).2.1)).isClosed
-  have hNU : envUnderStrict Γ ⊆ envUnder Γ := by
+  set C := closure (interior (K \ envUnderStrict Γ))
+  -- The points outside the closed region under `Γ` are limits of interior points.
+  have hout : K \ envUnder Γ ⊆ C := by
+    refine outside_closed_envelope_subset hK
+      (isCompact_envUnder hΓ fun p hp => (hΓbounds p hp).2.1).isClosed ?_
     rintro p ⟨hp0, γ, hγ, hγx, hpγ⟩
     exact ⟨hp0, γ, hγ, hγx, hpγ.le⟩
-  have hout : K \ envUnder Γ ⊆ C :=
-    outside_closed_envelope_subset hK hUclosed hNU
-  apply Set.Subset.antisymm (closure_minimal interior_subset hclosed)
-  intro p hp
+  refine Set.Subset.antisymm (closure_minimal interior_subset hclosed) fun p hp => ?_
   by_cases hpU : p ∈ envUnder Γ
-  · obtain ⟨hp0, γ, hγ, hγx, hpγ⟩ := hpU
-    have hpI : p.1 ∈ Icc a b := by rw [← hγx]; exact (hΓbounds γ hγ).1
-    obtain ⟨hpy0, hpy1⟩ := hKstrip p hp.1
-    rcases lt_or_eq_of_le hpy1 with hplt | hpone
-    · let q : ℝ → ℝ × ℝ := fun t => (p.1, (1 - t) * p.2 + t)
-      have hq : Continuous q := by unfold q; fun_prop
-      have hmem : ∀ t ∈ Ioo (0 : ℝ) 1, q t ∈ C := by
-        intro t ht
-        have hygt : p.2 < (q t).2 := by
-          dsimp [q]; nlinarith [mul_pos ht.1 (sub_pos.mpr hplt)]
-        have hylo : 0 ≤ (q t).2 := hpy0.trans hygt.le
-        have hyhi : (q t).2 ≤ 1 := by
-          dsimp [q]; nlinarith [mul_nonneg (sub_nonneg.mpr ht.2.le) (sub_nonneg.mpr hpy1)]
-        apply hout
-        refine ⟨hrect _ hpI _ ⟨hylo, hyhi⟩, ?_⟩
-        rintro ⟨_, δ, hδ, hδx, hqδ⟩
-        apply hp.2
-        exact ⟨hpy0, δ, hδ, hδx, hygt.trans_le hqδ⟩
-      have h := mem_closed_of_positive_path hCclosed q hq hmem
-      simpa [q] using h
-    · have hγone : γ.2 = 1 := le_antisymm (hΓbounds γ hγ).2.2 (by linarith)
-      have hγp : γ = p := by
-        apply Prod.ext hγx
-        exact hγone.trans hpone.symm
-      have hpΓ : p ∈ Γ := hγp ▸ hγ
-      obtain ⟨v, hv, hvne⟩ : ∃ v ∈ Icc a b, v ≠ p.1 := by
-        by_cases ha : a = p.1
-        · exact ⟨b, ⟨hab.le, le_rfl⟩, by rw [← ha]; exact ne_of_gt hab⟩
-        · exact ⟨a, ⟨le_rfl, hab.le⟩, ha⟩
-      let q : ℝ → ℝ × ℝ := fun t => ((1 - t) * p.1 + t * v, 1)
-      have hq : Continuous q := by unfold q; fun_prop
-      have hmem : ∀ t ∈ Ioo (0 : ℝ) 1, q t ∈ C := by
-        intro t ht
-        have h1t : 0 ≤ 1 - t := by linarith [ht.2]
-        have hxlo : a ≤ (q t).1 := by
-          calc
-            a = (1 - t) * a + t * a := by ring
-            _ ≤ (1 - t) * p.1 + t * v :=
-              add_le_add (mul_le_mul_of_nonneg_left hpI.1 h1t)
-                (mul_le_mul_of_nonneg_left hv.1 ht.1.le)
-        have hxhi : (q t).1 ≤ b := by
-          calc
-            (1 - t) * p.1 + t * v ≤ (1 - t) * b + t * b :=
-              add_le_add (mul_le_mul_of_nonneg_left hpI.2 h1t)
-                (mul_le_mul_of_nonneg_left hv.2 ht.1.le)
-            _ = b := by ring
-        apply hout
-        refine ⟨hrect _ ⟨hxlo, hxhi⟩ 1 ⟨zero_le_one, le_rfl⟩, ?_⟩
-        rintro ⟨_, δ, hδ, hδx, hqδ⟩
-        have hδone : δ.2 = 1 := le_antisymm (hΓbounds δ hδ).2.2 hqδ
-        have hδp := hΓtop δ hδ p hpΓ hδone hpone
-        have hx : (1 - t) * p.1 + t * v = p.1 := by
-          calc
-            _ = δ.1 := hδx.symm
-            _ = p.1 := congrArg Prod.fst hδp
-        have hprod : t * (v - p.1) = 0 := by nlinarith
-        exact hvne (sub_eq_zero.mp ((mul_eq_zero.mp hprod).resolve_left ht.1.ne'))
-      have h := mem_closed_of_positive_path hCclosed q hq hmem
-      have hq0 : q 0 = p := by
-        ext
-        · simp [q]
-        · simp [q, hpone]
-      rw [hq0] at h
-      exact h
+  swap
   · exact hout ⟨hp.1, hpU⟩
+  -- A point `p` on or below a point `γ` of `Γ` has height `p.2 ≤ γ.2 < 1`. The points just above
+  -- `p` lie in the rectangle, outside the region under `Γ`, and tend to `p`.
+  obtain ⟨hp0, γ, hγ, hγx, hpγ⟩ := hpU
+  have hpI : p.1 ∈ Icc a b := by rw [← hγx]; exact (hΓbounds γ hγ).1
+  have hp1 : p.2 < 1 := hpγ.trans_lt (hΓbounds γ hγ).2.2
+  let q : ℝ → ℝ × ℝ := fun t => (p.1, (1 - t) * p.2 + t)
+  have hq : Continuous q := by unfold q; fun_prop
+  have hmem : ∀ t ∈ Ioo (0 : ℝ) 1, q t ∈ C := by
+    intro t ht
+    have hygt : p.2 < (q t).2 := by
+      dsimp [q]; nlinarith [mul_pos ht.1 (sub_pos.mpr hp1)]
+    have hyle : (q t).2 ≤ 1 := by
+      dsimp [q]; nlinarith [mul_nonneg (sub_nonneg.mpr ht.2.le) (sub_nonneg.mpr hp1.le)]
+    refine hout ⟨hrect _ hpI _ ⟨hp0.trans hygt.le, hyle⟩, ?_⟩
+    rintro ⟨-, δ, hδ, hδx, hqδ⟩
+    exact hp.2 ⟨hp0, δ, hδ, hδx, hygt.trans_le hqδ⟩
+  simpa [q] using mem_closed_of_positive_path isClosed_closure q hq hmem
 
 end MovingSofaUniqueness
 
@@ -350,8 +290,8 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
     closure (interior (gerverSofa P)) = gerverSofa P := by
   have hB := GerverParams.romik_bounds hP hbox
   have henv := gn_envHyp hP hB
-  let Γ := envCurve P.φ P.θ (π / 2 - P.θ) (π / 2 - P.φ)
-    P.path P.gs_α P.gs_β
+  -- Step 1: the envelope `Γ` is compact, with abscissas in `[a, b]` and heights in `[0, 1)`.
+  let Γ := envCurve P.φ P.θ (π / 2 - P.θ) (π / 2 - P.φ) P.path P.gs_α P.gs_β
   let a := (envD P.path P.gs_β 0).1
   let b := (envB P.path P.gs_α (π / 2)).1
   have hheight : ∀ t ∈ Icc (0 : ℝ) (π / 2), (P.path t).2 < 1 :=
@@ -361,6 +301,8 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
     envelope_bounds_of_path_height henv hheight
   obtain ⟨ho1, ho2, ho3⟩ := envelope_endpoint_order henv
   have hab : a < b := ho1.trans (ho2.trans ho3)
+  -- Step 2: `(a, 1)` and `(b, 1)` are contact points of the cap, so the cap contains the segment
+  -- between them and the rectangle `[a, b] × [0, 1]` below it.
   have hcap : IsCap P.gs_K (π / 2) := gs_isCap_K hP hB
   have hconv : Convex ℝ P.gs_K := gs_convex_K
   have hleft : (a, 1) ∈ P.gs_K := by
@@ -395,6 +337,7 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
       · simp
     rw [he] at htop
     exact opt_cap_down hcap htop hy.1 hy.2
+  -- Step 3: the convex cap has nonempty interior, so it is regular closed.
   have hKreg : closure (interior P.gs_K) = P.gs_K := by
     have hsub : Ioo a b ×ˢ Ioo (0 : ℝ) 1 ⊆ P.gs_K := by
       rintro ⟨x, y⟩ ⟨hx, hy⟩
@@ -407,6 +350,7 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
       closure (interior P.gs_K) = closure P.gs_K :=
         hconv.closure_interior_eq_closure_of_nonempty_interior hne
       _ = P.gs_K := gs_isClosed_K.closure_eq
+  -- Step 4: Gerver's sofa is the closed set obtained by removing the region under `Γ` from the cap.
   have hn : niche P.gs_K (π / 2) = envUnderStrict Γ := by
     calc
       niche P.gs_K (π / 2) = niche (capOf (gerverSofa P) (π / 2)) (π / 2) := by
@@ -418,13 +362,7 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
   have hclosed : IsClosed (P.gs_K \ envUnderStrict Γ) := by
     rw [← hG]
     exact (gm_movingSofa_std hP hbox).1.1
-  have hfinal := regularClosed_cap_sdiff_envelope hab hKreg
-    (fun p hp => (gs_K_bounds hP hp).2.2) hrect hΓc
-    (fun p hp => ⟨(hΓbounds p hp).1,
-      (hΓbounds p hp).2.1, (hΓbounds p hp).2.2.le⟩)
-    (fun p hp q hq hpone hqone => False.elim ((hΓbounds p hp).2.2.ne hpone))
-    hclosed
-  simpa only [← hG] using hfinal
+  simpa only [← hG] using regularClosed_cap_sdiff_envelope hKreg hrect hΓc hΓbounds hclosed
 
 end MovingSofaUniqueness
 

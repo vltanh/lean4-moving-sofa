@@ -3,13 +3,18 @@ module
 public meta import Lean.Elab.Command
 -- One `import all` line per module of the library, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
---   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all MovingSofaOptimality.Angle.HorizontalSide
+--   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all /'
+import all MovingSofaOptimality.Angle.HorizontalSide
 import all MovingSofaOptimality.Angle.RightAngle
 import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
+import all MovingSofaOptimality.Balanced.CapGeometry
 import all MovingSofaOptimality.Balanced.MaximumPolygonCap
+import all MovingSofaOptimality.Balanced.MaxPolygonCapExists
 import all MovingSofaOptimality.Balanced.NefPolygon
 import all MovingSofaOptimality.Balanced.PolygonCap
+import all MovingSofaOptimality.Balanced.Polyline
 import all MovingSofaOptimality.Basic.ConvexBody
+import all MovingSofaOptimality.Basic.Interval
 import all MovingSofaOptimality.Basic.LebesgueStieltjes
 import all MovingSofaOptimality.Basic.Plane
 import all MovingSofaOptimality.Basic.SurfaceArea

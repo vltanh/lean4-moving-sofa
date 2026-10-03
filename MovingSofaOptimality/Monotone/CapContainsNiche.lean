@@ -17,36 +17,6 @@ open Real Set
 
 namespace MovingSofaOptimality
 
-/-! ### Helper lemmas: vectors and the support function -/
-
-private lemma cn_uvec_three_pi_div_two : uvec (3 * π / 2) = -uvec (π / 2) := by
-  rw [show 3 * π / 2 = π / 2 + π by ring, uvec_add_pi]
-
-private lemma cn_dot_uvec_zero (p : ℝ × ℝ) : dot p (uvec 0) = p.1 := by simp [dot, uvec]
-
-private lemma cn_dot_uvec_pi_div_two (p : ℝ × ℝ) : dot p (uvec (π / 2)) = p.2 := by
-  simp [dot, uvec]
-
-private lemma cn_vvec_eq_uvec (t : ℝ) : vvec t = uvec (t + π / 2) :=
-  (uvec_add_pi_div_two t).symm
-
-private lemma cn_continuous_dot : Continuous (fun x : (ℝ × ℝ) × (ℝ × ℝ) => dot x.1 x.2) := by
-  unfold dot; fun_prop
-
-private lemma cn_continuous_dot_left (v : ℝ × ℝ) : Continuous fun p : ℝ × ℝ => dot p v := by
-  unfold dot; fun_prop
-
-private lemma cn_continuous_vvec : Continuous vvec := by
-  unfold vvec; fun_prop
-
-/-- The support function of a nonempty set contained in a half-plane is bounded by its offset. -/
-private lemma cn_supp_le_of_subset {K : Set (ℝ × ℝ)} (hne : K.Nonempty) {t c : ℝ}
-    (h : K ⊆ halfMinus t c) : supp K t ≤ c := by
-  unfold supp
-  apply csSup_le (hne.image _)
-  rintro _ ⟨p, hp, rfl⟩
-  exact h hp
-
 /-! ### Helper lemmas: basic properties of a cap -/
 
 section Cap
@@ -54,7 +24,6 @@ section Cap
 variable {K : Set (ℝ × ℝ)} {ω : ℝ}
 
 private lemma IsCap.omega_mem (hK : IsCap K ω) : ω ∈ Ioc 0 (π / 2) := hK.1
-private lemma IsCap.isConvexBody (hK : IsCap K ω) : IsConvexBody K := hK.2.1
 private lemma IsCap.isCompact (hK : IsCap K ω) : IsCompact K := hK.2.1.2.1
 private lemma IsCap.nonempty (hK : IsCap K ω) : K.Nonempty := hK.2.1.1
 private lemma IsCap.convex (hK : IsCap K ω) : Convex ℝ K := hK.2.1.2.2
@@ -67,89 +36,50 @@ private lemma IsCap.supp_three_pi_div_two (hK : IsCap K ω) : supp K (3 * π / 2
 private lemma IsCap.dot_le (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) (t : ℝ) :
     dot p (uvec t) ≤ supp K t := dot_le_supp hK.isCompact hp t
 
-private lemma IsCap.dot_omega_nonneg (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) :
-    0 ≤ dot p (uvec ω) := by
-  have h := hK.dot_le hp (ω + π)
-  rw [uvec_add_pi, dot_neg_right, hK.supp_omega_add_pi] at h
-  linarith
-
-private lemma IsCap.snd_nonneg (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) : 0 ≤ p.2 := by
-  have h := hK.dot_le hp (3 * π / 2)
-  rw [cn_uvec_three_pi_div_two, dot_neg_right, cn_dot_uvec_pi_div_two,
-    hK.supp_three_pi_div_two] at h
-  linarith
-
-private lemma IsCap.dot_omega_le_one (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) :
-    dot p (uvec ω) ≤ 1 := hK.supp_omega ▸ hK.dot_le hp ω
-
-private lemma IsCap.snd_le_one (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) : p.2 ≤ 1 := by
-  have h := hK.dot_le hp (π / 2)
-  rwa [cn_dot_uvec_pi_div_two, hK.supp_pi_div_two] at h
-
-private lemma IsCap.mem_fan (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) : p ∈ fan ω :=
-  ⟨hK.dot_omega_nonneg hp, by
-    show (0 : ℝ) ≤ dot p (uvec (π / 2))
-    rw [cn_dot_uvec_pi_div_two]; exact hK.snd_nonneg hp⟩
-
 /-- Membership criterion for a cap: a point of the fan lies in the cap iff it satisfies the
 supporting half-plane constraints with normal angles in `J_ω`. -/
 private lemma IsCap.mem_iff (hK : IsCap K ω) (p : ℝ × ℝ) :
     p ∈ K ↔ p ∈ fan ω ∧ ∀ s ∈ jSet ω, dot p (uvec s) ≤ supp K s := by
-  refine ⟨fun hp => ⟨hK.mem_fan hp, fun s _ => hK.dot_le hp s⟩, ?_⟩
+  refine ⟨fun hp => ⟨hK.subset_fan hp, fun s _ => hK.dot_le hp s⟩, ?_⟩
   rintro ⟨hpF, hpJ⟩
+  rw [mem_fan_iff] at hpF
   obtain ⟨ι, t, c, ht, hKeq⟩ := hK.2.2.2.2.2.2
-  have hsub : ∀ i, K ⊆ halfMinus (t i) (c i) := fun i => hKeq ▸ iInter_subset _ i
   rw [hKeq, mem_iInter]
   intro i
-  have hci := cn_supp_le_of_subset hK.nonempty (hsub i)
+  -- the offset of a defining half-plane is at least the support function in its direction
+  have hci : supp K (t i) ≤ c i :=
+    supp_le_of_forall hK.nonempty fun q hq => by rw [hKeq] at hq; exact mem_iInter.1 hq i
   show dot p (uvec (t i)) ≤ c i
-  rcases ht i with hJ | hi
+  rcases ht i with hJ | hi | hi
   · exact (hpJ _ hJ).trans hci
-  · rcases hi with hi | hi
-    · rw [hi] at hci ⊢
-      rw [uvec_add_pi, dot_neg_right]
-      rw [hK.supp_omega_add_pi] at hci
-      have : (0 : ℝ) ≤ dot p (uvec ω) := hpF.1
-      linarith
-    · rw [Set.mem_singleton_iff] at hi
-      rw [hi] at hci ⊢
-      rw [cn_uvec_three_pi_div_two, dot_neg_right]
-      rw [hK.supp_three_pi_div_two] at hci
-      have : (0 : ℝ) ≤ dot p (uvec (π / 2)) := hpF.2
-      linarith
+  · rw [hi, hK.supp_omega_add_pi] at hci
+    rw [hi, dot_uvec_add_pi]
+    linarith [hpF.1]
+  · rw [mem_singleton_iff] at hi
+    rw [hi, hK.supp_three_pi_div_two] at hci
+    rw [hi, dot_uvec_three_pi_div_two]
+    linarith [hpF.2]
 
 end Cap
 
 /-! ### Helper lemmas: trigonometry -/
-
-private lemma cn_comb (p : ℝ × ℝ) (a b s : ℝ) :
-    sin (b - a) * dot p (uvec s) = sin (b - s) * dot p (uvec a) + sin (s - a) * dot p (uvec b) := by
-  simp only [dot, uvec, sin_sub]; ring
 
 /-- If `p` is not further than `q` in the directions `u_a` and `u_b`, then neither in any direction
 `u_s` between them. -/
 private lemma cn_dot_le_of_between {p q : ℝ × ℝ} {a b s : ℝ} (hab : 0 < sin (b - a))
     (h1 : 0 ≤ sin (b - s)) (h2 : 0 ≤ sin (s - a)) (ha : dot p (uvec a) ≤ dot q (uvec a))
     (hb : dot p (uvec b) ≤ dot q (uvec b)) : dot p (uvec s) ≤ dot q (uvec s) := by
-  have e1 := cn_comb p a b s
-  have e2 := cn_comb q a b s
-  by_contra h
-  push Not at h
-  have : sin (b - a) * (dot q (uvec s) - dot p (uvec s)) < 0 :=
-    mul_neg_of_pos_of_neg hab (by linarith)
-  nlinarith [mul_nonneg h1 (sub_nonneg.2 ha), mul_nonneg h2 (sub_nonneg.2 hb)]
+  refine le_of_mul_le_mul_left ?_ hab
+  linarith [dot_uvec_comb p a b s, dot_uvec_comb q a b s, mul_le_mul_of_nonneg_left ha h1,
+    mul_le_mul_of_nonneg_left hb h2]
 
 /-- The strict version of `cn_dot_le_of_between`. -/
 private lemma cn_dot_lt_of_between {p q : ℝ × ℝ} {a b s : ℝ} (hab : 0 < sin (b - a))
     (h1 : 0 < sin (b - s)) (h2 : 0 < sin (s - a)) (ha : dot p (uvec a) < dot q (uvec a))
     (hb : dot p (uvec b) < dot q (uvec b)) : dot p (uvec s) < dot q (uvec s) := by
-  have e1 := cn_comb p a b s
-  have e2 := cn_comb q a b s
-  by_contra h
-  push Not at h
-  have : sin (b - a) * (dot q (uvec s) - dot p (uvec s)) ≤ 0 :=
-    mul_nonpos_of_nonneg_of_nonpos hab.le (by linarith)
-  nlinarith [mul_pos h1 (sub_pos.2 ha), mul_pos h2 (sub_pos.2 hb)]
+  refine lt_of_mul_lt_mul_left ?_ hab.le
+  linarith [dot_uvec_comb p a b s, dot_uvec_comb q a b s, mul_lt_mul_of_pos_left ha h1,
+    mul_lt_mul_of_pos_left hb h2]
 
 /-- `u_{t+π/2} = cos(ω - t) u_{ω+π/2} + sin(ω - t) u_ω`. -/
 private lemma cn_dot_uvec_decomp (q : ℝ × ℝ) (ω t : ℝ) :
@@ -157,12 +87,6 @@ private lemma cn_dot_uvec_decomp (q : ℝ × ℝ) (ω t : ℝ) :
       cos (ω - t) * dot q (uvec (ω + π / 2)) + sin (ω - t) * dot q (uvec ω) := by
   simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, sin_sub, cos_sub]
   linear_combination (q.1 * sin t - q.2 * cos t) * sin_sq_add_cos_sq ω
-
-/-- `u_s = cos(s - ω) u_ω + sin(s - ω) v_ω`. -/
-private lemma cn_dot_uvec_rot (p : ℝ × ℝ) (s ω : ℝ) :
-    dot p (uvec s) = cos (s - ω) * dot p (uvec ω) + sin (s - ω) * dot p (vvec ω) := by
-  conv_lhs => rw [show s = (s - ω) + ω by ring]
-  simp only [dot, uvec, vvec, cos_add, sin_add]; ring
 
 private lemma cn_trig_of_mem {ω t : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (ht : t ∈ Ioo 0 ω) :
     0 < cos t ∧ 0 < sin t ∧ sin t < 1 ∧ 0 < cos (ω - t) ∧ 0 < sin (ω - t) ∧ sin (ω - t) < 1 := by
@@ -193,7 +117,7 @@ private lemma IsCap.gapW_ineq (hK : IsCap K ω) {t : ℝ} (ht : t ∈ Ioo 0 ω) 
   obtain ⟨hc, hs, hs1, -⟩ := cn_trig_of_mem hK.omega_mem ht
   obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty t
   have h0 := hK.dot_le hqK 0
-  rw [cn_dot_uvec_zero] at h0
+  rw [dot_uvec_zero] at h0
   have h1 := hK.snd_le_one hqK
   have h2 := hK.snd_nonneg hqK
   rw [← hq]
@@ -222,37 +146,21 @@ private lemma cn_add_smul_uvec_mem_fan {ω s ε : ℝ} (hω : ω ∈ Ioc 0 (π /
   obtain ⟨hs0, hs1⟩ := hs
   have hcos : 0 ≤ cos (s - ω) := cos_nonneg_of_mem_Icc ⟨by linarith, by linarith⟩
   have hsin : 0 ≤ sin s := sin_nonneg_of_nonneg_of_le_pi hs0 (by linarith)
-  have h1 : (0 : ℝ) ≤ dot p (uvec ω) := hp.1
-  have h2 : (0 : ℝ) ≤ dot p (uvec (π / 2)) := hp.2
-  constructor
-  · show (0 : ℝ) ≤ dot (p + ε • uvec s) (uvec ω)
-    rw [dot_add_left, dot_smul_left, dot_uvec_uvec]
-    positivity
-  · show (0 : ℝ) ≤ dot (p + ε • uvec s) (uvec (π / 2))
-    rw [dot_add_left, dot_smul_left, dot_uvec_uvec, cos_sub_pi_div_two]
-    positivity
+  obtain ⟨h1, h2⟩ := mem_fan_iff.1 hp
+  rw [mem_fan_iff, dot_add_left, dot_smul_left, dot_uvec_uvec]
+  simp only [Prod.snd_add, Prod.smul_snd, uvec_snd, smul_eq_mul]
+  constructor <;> positivity
 
 private lemma cn_tendsto_add_smul (p v : ℝ × ℝ) :
     Filter.Tendsto (fun ε : ℝ => p + ε • v) (nhdsWithin 0 (Ioi 0)) (nhds p) := by
   have : Continuous (fun ε : ℝ => p + ε • v) := by fun_prop
   simpa using (this.tendsto 0).mono_left nhdsWithin_le_nhds
 
-private lemma cn_dot_sub_le (p q : ℝ × ℝ) (s : ℝ) :
-    |dot p (uvec s) - dot q (uvec s)| ≤ 2 * dist p q := by
-  rw [← dot_sub_left, Prod.dist_eq, Real.dist_eq, Real.dist_eq]
-  simp only [dot, uvec, Prod.fst_sub, Prod.snd_sub]
-  have h1 := abs_cos_le_one s
-  have h2 := abs_sin_le_one s
-  have h3 := le_max_left |p.1 - q.1| |p.2 - q.2|
-  have h4 := le_max_right |p.1 - q.1| |p.2 - q.2|
-  calc |(p.1 - q.1) * cos s + (p.2 - q.2) * sin s|
-      ≤ |(p.1 - q.1) * cos s| + |(p.2 - q.2) * sin s| := abs_add_le _ _
-    _ = |p.1 - q.1| * |cos s| + |p.2 - q.2| * |sin s| := by rw [abs_mul, abs_mul]
-    _ ≤ |p.1 - q.1| * 1 + |p.2 - q.2| * 1 := by gcongr
-    _ ≤ 2 * max |p.1 - q.1| |p.2 - q.2| := by linarith
+private lemma cn_upperBoundary_subset (K : Set (ℝ × ℝ)) (ω : ℝ) : upperBoundary K ω ⊆ K :=
+  iUnion₂_subset fun _ _ => inter_subset_left
 
-/-- **Proposition 2.5.1** (`pro:upper-boundary-interior`). The upper boundary `δK` is the boundary of
-`K` in the subspace topology of the fan `F_ω`, that is `K ∩ closure (F_ω \ K)`. -/
+/-- **Proposition 2.5.1** (`pro:upper-boundary-interior`). The upper boundary `δK` is the boundary
+of `K` in the subspace topology of the fan `F_ω`, that is `K ∩ closure (F_ω \ K)`. -/
 theorem proposition2_5_1 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     upperBoundary K ω = K ∩ closure (fan ω \ K) := by
   ext z
@@ -262,34 +170,25 @@ theorem proposition2_5_1 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     obtain ⟨t, ht, hzK, hzl⟩ := mem_iUnion₂.1 hz
     refine ⟨hzK, mem_closure_of_tendsto (cn_tendsto_add_smul z (uvec t)) ?_⟩
     filter_upwards [self_mem_nhdsWithin] with ε (hε : 0 < ε)
-    refine ⟨cn_add_smul_uvec_mem_fan hK.omega_mem ht hε.le (hK.mem_fan hzK), fun h => ?_⟩
+    refine ⟨cn_add_smul_uvec_mem_fan hK.omega_mem ht hε.le (hK.subset_fan hzK), fun h => ?_⟩
     have h1 := hK.dot_le h t
-    have h2 : dot z (uvec t) = supp K t := hzl
-    rw [dot_add_left, dot_smul_left, dot_uvec_self, h2] at h1
+    rw [dot_add_left, dot_smul_left, dot_uvec_self, hzl] at h1
     linarith
-  · -- otherwise a ball around `z` meets `F_ω` only inside `K`
+  · -- otherwise the gap `h_K(t) - z · u_t` has a positive minimum `m` on `[0, ω + π/2]`, and the
+    -- points of `F_ω` at distance `< m/2` from `z` lie in `K`
     rintro ⟨hzK, hzc⟩
     by_contra hz
-    have hlt : ∀ t ∈ Icc 0 (ω + π / 2), dot z (uvec t) < supp K t := by
-      intro t ht
-      exact lt_of_le_of_ne (hK.dot_le hzK t) (fun h => hz (mem_iUnion₂.2 ⟨t, ht, hzK, h⟩))
-    have hcont : Continuous fun t => supp K t - dot z (uvec t) := by
-      have := continuous_supp hK.isCompact
-      have hu : Continuous uvec := by unfold uvec; fun_prop
-      exact this.sub (cn_continuous_dot.comp (continuous_const.prodMk hu))
+    have hlt : ∀ t ∈ Icc 0 (ω + π / 2), dot z (uvec t) < supp K t := fun t ht =>
+      lt_of_le_of_ne (hK.dot_le hzK t) fun h => hz (mem_iUnion₂.2 ⟨t, ht, hzK, h⟩)
+    have hcont : Continuous fun t => supp K t - dot z (uvec t) :=
+      (continuous_supp hK.isCompact).sub (by simp only [dot, uvec]; fun_prop)
     obtain ⟨t0, ht0, hmin⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := ω + π / 2)).exists_isMinOn
       (nonempty_Icc.2 (by linarith [hK.omega_mem.1, pi_pos])) hcont.continuousOn
     have hm : 0 < supp K t0 - dot z (uvec t0) := sub_pos.2 (hlt t0 ht0)
     obtain ⟨p, ⟨hpF, hpK⟩, hdist⟩ := Metric.mem_closure_iff.1 hzc _ (half_pos hm)
-    apply hpK
-    rw [hK.mem_iff]
-    refine ⟨hpF, fun s hs => ?_⟩
-    have h1 : supp K t0 - dot z (uvec t0) ≤ supp K s - dot z (uvec s) :=
-      hmin (cn_jSet_subset hs)
-    have h2 := cn_dot_sub_le p z s
-    rw [dist_comm] at hdist
-    have h3 := (abs_le.1 h2).2
-    linarith
+    refine hpK ((hK.mem_iff p).2 ⟨hpF, fun s hs => ?_⟩)
+    have h1 : supp K t0 - dot z (uvec t0) ≤ supp K s - dot z (uvec s) := hmin (cn_jSet_subset hs)
+    linarith [(abs_le.1 (abs_dot_uvec_sub_le p z s)).2, dist_comm z p]
 
 /-- **Proposition 2.5.2** (`pro:upper-boundary-connected`). The upper boundary of a cap is
 connected. -/
@@ -300,25 +199,18 @@ theorem proposition2_5_2 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
   have hI0 : (0 : ℝ) ∈ I := ⟨le_rfl, by linarith [hK.omega_mem.1, pi_pos]⟩
   have hsub : ∀ t ∈ I, edge K t ⊆ upperBoundary K ω := fun t ht =>
     subset_biUnion_of_mem (u := fun t => edge K t) ht
-  have hconv : ∀ t, IsPreconnected (edge K t) := by
-    intro t
-    refine (hK.convex.inter ?_).isPreconnected
-    have : suppLine K t = {p | dot p (uvec t) = supp K t} := rfl
-    rw [this]
-    exact (convex_hyperplane (f := fun p : ℝ × ℝ => dot p (uvec t))
-      ⟨fun x y => dot_add_left x y _, fun c x => dot_smul_left c x _⟩ _)
+  have hconv : ∀ t, IsPreconnected (edge K t) := fun t =>
+    (hK.convex.inter (convex_line t (supp K t))).isPreconnected
   refine ⟨⟨vplus K 0, hsub 0 hI0 (vplus_mem_edge hKc 0)⟩, ?_⟩
   rw [isPreconnected_iff_subset_of_disjoint]
   intro U V hU hV hcover hdisj
+  -- no vertex `v_K⁺(t)`, `t ∈ I`, lies in both `U` and `V`
+  have hUV : ∀ t ∈ I, vplus K t ∈ U → vplus K t ∈ V → False := fun t ht h1 h2 =>
+    eq_empty_iff_forall_notMem.1 hdisj _ ⟨hsub t ht (vplus_mem_edge hKc t), h1, h2⟩
   -- each edge, being connected, lies in `U` or in `V`
-  have hside : ∀ t ∈ I, edge K t ⊆ U ∨ edge K t ⊆ V := by
-    intro t ht
-    refine isPreconnected_iff_subset_of_disjoint.1 (hconv t) U V hU hV
-      ((hsub t ht).trans hcover) ?_
-    apply subset_empty_iff.1
-    intro x hx
-    rw [← hdisj]
-    exact ⟨hsub t ht hx.1, hx.2⟩
+  have hside : ∀ t ∈ I, edge K t ⊆ U ∨ edge K t ⊆ V := fun t ht =>
+    isPreconnected_iff_subset_of_disjoint.1 (hconv t) U V hU hV ((hsub t ht).trans hcover)
+      (subset_empty_iff.1 fun x hx => hdisj ▸ ⟨hsub t ht hx.1, hx.2⟩)
   -- the vertex `v_K⁺(r)` stays near the edge `e_K(t)` for `r` near `t`
   have hloc : ∀ t ∈ I, ∀ W, IsOpen W → edge K t ⊆ W → ∀ᶠ r in nhds t, vplus K r ∈ W := by
     intro t _ W hW hsubW
@@ -333,6 +225,7 @@ theorem proposition2_5_2 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       exact Filter.eventually_sup.2 ⟨h1, hr⟩
     rw [← nhdsLT_sup_nhdsGE]
     exact Filter.eventually_sup.2 ⟨hl, hge⟩
+  -- the parameters whose nearby vertices lie in `U`, resp. `V`, form open sets covering `I`
   set U' := {t : ℝ | ∀ᶠ r in nhds t, r ∈ I → vplus K r ∈ U}
   set V' := {t : ℝ | ∀ᶠ r in nhds t, r ∈ I → vplus K r ∈ V}
   have hU' : IsOpen U' := isOpen_setOfPred_eventually_nhds
@@ -342,32 +235,21 @@ theorem proposition2_5_2 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     rcases hside t ht with h | h
     · exact Or.inl ((hloc t ht U hU h).mono fun r hr _ => hr)
     · exact Or.inr ((hloc t ht V hV h).mono fun r hr _ => hr)
-  have hdisj' : I ∩ (U' ∩ V') = ∅ := by
-    apply subset_empty_iff.1
-    rintro t ⟨ht, htU, htV⟩
-    have : vplus K t ∈ upperBoundary K ω ∩ (U ∩ V) :=
-      ⟨hsub t ht (vplus_mem_edge hKc t), htU.self_of_nhds ht, htV.self_of_nhds ht⟩
-    rw [hdisj] at this
-    exact this
-  have key : ∀ (W W' : Set (ℝ × ℝ)), (∀ t ∈ I, edge K t ⊆ W ∨ edge K t ⊆ W') →
-      upperBoundary K ω ∩ (W ∩ W') = ∅ →
+  have hdisj' : I ∩ (U' ∩ V') = ∅ := subset_empty_iff.1 fun t ⟨ht, htU, htV⟩ =>
+    hUV t ht (htU.self_of_nhds ht) (htV.self_of_nhds ht)
+  -- if all the vertices lie in `W`, then so do all the edges
+  have key : ∀ W W' : Set (ℝ × ℝ), (∀ t ∈ I, edge K t ⊆ W ∨ edge K t ⊆ W') →
+      (∀ t ∈ I, vplus K t ∈ W → vplus K t ∈ W' → False) →
       I ⊆ {t : ℝ | ∀ᶠ r in nhds t, r ∈ I → vplus K r ∈ W} → upperBoundary K ω ⊆ W := by
     intro W W' hs hd hI' z hz
     obtain ⟨t, ht, hzt⟩ := mem_iUnion₂.1 hz
-    rcases hs t ht with h' | h'
-    · exact h' hzt
-    · exfalso
-      have h1 : vplus K t ∈ W := (hI' ht).self_of_nhds ht
-      have h2 : vplus K t ∈ W' := h' (vplus_mem_edge hKc t)
-      have : vplus K t ∈ upperBoundary K ω ∩ (W ∩ W') :=
-        ⟨hsub t ht (vplus_mem_edge hKc t), h1, h2⟩
-      rw [hd] at this
-      exact this
+    exact (hs t ht).resolve_right
+      (fun h => hd t ht ((hI' ht).self_of_nhds ht) (h (vplus_mem_edge hKc t))) hzt
+  -- the interval `I` is connected
   rcases isPreconnected_iff_subset_of_disjoint.1 isPreconnected_Icc U' V' hU' hV' hcov' hdisj'
     with h | h
-  · exact Or.inl (key U V hside hdisj h)
-  · refine Or.inr (key V U (fun t ht => (hside t ht).symm) ?_ h)
-    rw [inter_comm V U]; exact hdisj
+  · exact Or.inl (key U V hside hUV h)
+  · exact Or.inr (key V U (fun t ht => (hside t ht).symm) (fun t ht h1 h2 => hUV t ht h2 h1) h)
 
 /-- **Proposition 2.5.3** (`pro:wedge`). The niche is the union of the wedges. -/
 theorem proposition2_5_3 (K : Set (ℝ × ℝ)) (ω : ℝ) :
@@ -383,7 +265,8 @@ private lemma cn_mirror_apply (ω : ℝ) (p : ℝ × ℝ) :
   · simp only
   · simp only; ring
 
-private lemma cn_mirror_mirror (ω : ℝ) (p : ℝ × ℝ) : mirror ω (mirror ω p) = p := by
+/-- The mirror reflection `M_ω` is an involution. -/
+lemma cn_mirror_mirror (ω : ℝ) (p : ℝ × ℝ) : mirror ω (mirror ω p) = p := by
   rw [cn_mirror_apply, cn_mirror_apply]
   ext
   · simp only; linear_combination p.1 * sin_sq_add_cos_sq ω
@@ -391,17 +274,22 @@ private lemma cn_mirror_mirror (ω : ℝ) (p : ℝ × ℝ) : mirror ω (mirror �
 
 private lemma cn_mirror_involutive (ω : ℝ) : Function.Involutive (mirror ω) := cn_mirror_mirror ω
 
+/-- The mirror reflection of a set is an involution. -/
+lemma mirrorCap_mirrorCap (K : Set (ℝ × ℝ)) (ω : ℝ) : mirrorCap (mirrorCap K ω) ω = K := by
+  simp only [mirrorCap, Set.image_image, cn_mirror_mirror, Set.image_id']
+
 private lemma cn_mirror_injective (ω : ℝ) : Function.Injective (mirror ω) :=
   (cn_mirror_involutive ω).injective
 
-private lemma cn_mirror_image_eq (ω : ℝ) (X : Set (ℝ × ℝ)) : mirror ω '' X = mirror ω ⁻¹' X :=
+lemma cn_mirror_image_eq (ω : ℝ) (X : Set (ℝ × ℝ)) : mirror ω '' X = mirror ω ⁻¹' X :=
   congrFun (cn_mirror_involutive ω).image_eq_preimage_symm X
 
-private lemma cn_mem_mirror_image {ω : ℝ} {X : Set (ℝ × ℝ)} {p : ℝ × ℝ} :
+lemma cn_mem_mirror_image {ω : ℝ} {X : Set (ℝ × ℝ)} {p : ℝ × ℝ} :
     p ∈ mirror ω '' X ↔ mirror ω p ∈ X := by
   rw [cn_mirror_image_eq]; rfl
 
-private lemma cn_dot_mirror_uvec (ω t : ℝ) (p : ℝ × ℝ) :
+/-- `M_ω(p) · u_t = p · u_{ω + π/2 - t}`. -/
+lemma cn_dot_mirror_uvec (ω t : ℝ) (p : ℝ × ℝ) :
     dot (mirror ω p) (uvec t) = dot p (uvec (ω + π / 2 - t)) := by
   rw [cn_mirror_apply, show ω + π / 2 - t = (ω - t) + π / 2 by ring]
   simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, sin_sub, cos_sub]
@@ -415,24 +303,15 @@ private lemma cn_dot_mirror_vvec (ω t : ℝ) (p : ℝ × ℝ) :
 
 private lemma cn_mirror_add (ω : ℝ) (p q : ℝ × ℝ) : mirror ω (p + q) = mirror ω p + mirror ω q := by
   simp only [mirror, Prod.fst_add, Prod.snd_add, Prod.mk_add_mk]
-  ext
-  · simp only; ring
-  · simp only; ring
+  congr 1 <;> ring
 
-private lemma cn_mirror_smul (ω c : ℝ) (p : ℝ × ℝ) : mirror ω (c • p) = c • mirror ω p := by
+lemma cn_mirror_smul (ω c : ℝ) (p : ℝ × ℝ) : mirror ω (c • p) = c • mirror ω p := by
   simp only [mirror, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, Prod.smul_mk]
-  ext
-  · simp only; ring
-  · simp only; ring
-
-private lemma cn_mirror_neg (ω : ℝ) (p : ℝ × ℝ) : mirror ω (-p) = -mirror ω p := by
-  simp only [mirror, Prod.fst_neg, Prod.snd_neg, Prod.neg_mk]
-  ext
-  · simp only; ring
-  · simp only; ring
+  congr 1 <;> ring
 
 private lemma cn_mirror_sub (ω : ℝ) (p q : ℝ × ℝ) : mirror ω (p - q) = mirror ω p - mirror ω q := by
-  rw [sub_eq_add_neg, cn_mirror_add, cn_mirror_neg, ← sub_eq_add_neg]
+  simp only [mirror, Prod.fst_sub, Prod.snd_sub, Prod.mk_sub_mk]
+  congr 1 <;> ring
 
 private lemma cn_mirror_uvec (ω s : ℝ) : mirror ω (uvec s) = uvec (ω + π / 2 - s) := by
   rw [cn_mirror_apply, show ω + π / 2 - s = (ω - s) + π / 2 by ring]
@@ -571,6 +450,8 @@ and the niche are equivariant under `M_ω`. The paper writes `?_{K^m}(t) = M_ω(
 statement exchanges `a ↔ c`, `b ↔ d` and `W ↔ Z`, as the paper's own next items (`A ↔ C` and
 `w ↔ z`) do. The statements below are the corrected ones. -/
 
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the cap: the mirror reflection
+`K^m = M_ω(K)` of a cap is a cap with the same rotation angle. -/
 theorem proposition2_5_4_isCap {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     IsCap (mirrorCap K ω) ω := by
   have hω := hK.omega_mem
@@ -591,24 +472,18 @@ theorem proposition2_5_4_isCap {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
     obtain ⟨ι, t, c, ht, hKeq⟩ := hK.2.2.2.2.2.2
     refine ⟨ι, fun i => if t i ≤ π then ω + π / 2 - t i else ω + π / 2 - t i + 2 * π, c, ?_, ?_⟩
     · intro i
-      have hω0 := hω.1
-      have hω1 := hω.2
+      obtain ⟨hω0, hω1⟩ := hω
       dsimp only
-      rcases ht i with (h | h) | h
-      · have h' : t i ≤ π := by linarith [h.2]
-        simp only [h', ite_true]
-        left; right; constructor <;> linarith [h.1, h.2]
-      · have h' : t i ≤ π := by linarith [h.2]
-        simp only [h', ite_true]
-        left; left; constructor <;> linarith [h.1, h.2]
-      · rcases h with h | h
-        · have h' : ¬ t i ≤ π := by linarith
-          rw [ite_eq_right h', h]
-          right; right; rw [mem_singleton_iff]; ring
-        · rw [mem_singleton_iff] at h
-          have h' : ¬ t i ≤ π := by linarith
-          rw [ite_eq_right h', h]
-          right; left; ring
+      rcases ht i with (⟨h1, h2⟩ | ⟨h1, h2⟩) | h | h
+      · rw [ite_eq_left (by linarith)]
+        exact Or.inl (Or.inr ⟨by linarith, by linarith⟩)
+      · rw [ite_eq_left (by linarith)]
+        exact Or.inl (Or.inl ⟨by linarith, by linarith⟩)
+      · rw [ite_eq_right (by linarith), h]
+        exact Or.inr (Or.inr (mem_singleton_iff.2 (by ring)))
+      · rw [mem_singleton_iff] at h
+        rw [ite_eq_right (by linarith), h]
+        exact Or.inr (Or.inl (by ring))
     · rw [mirrorCap, hKeq, image_iInter (cn_mirror_involutive ω).bijective]
       congr 1; funext i
       rw [cn_halfMinus_mirror]
@@ -617,10 +492,14 @@ theorem proposition2_5_4_isCap {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
       · rfl
       · ext p; simp only [halfMinus, mem_ofPred_eq, uvec_add_two_pi]
 
+/-- **Proposition 2.5.4**, the support function: `h_{K^m}(t) = h_K(ω + π/2 - t)`. -/
 theorem proposition2_5_4_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
-    supp (mirrorCap K ω) t = supp K (ω + π / 2 - t) := by
-  exact cn_supp_mirror ω t K
+    supp (mirrorCap K ω) t = supp K (ω + π / 2 - t) :=
+  cn_supp_mirror ω t K
 
+/-- **Proposition 2.5.4**, the supporting hallway: `L_{K^m}(t) = M_ω(L_K(ω - t))`, with its inner
+and outer corners, and with the walls `a ↔ c`, `b ↔ d` and the wedge endpoints `W ↔ Z`
+exchanged. -/
 theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     suppHallway (mirrorCap K ω) t = mirror ω '' suppHallway K (ω - t) ∧
       innerCorner (mirrorCap K ω) t = mirror ω (innerCorner K (ω - t)) ∧
@@ -647,6 +526,8 @@ theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     · simp [vvec]; ring
     · simp [vvec]; ring
 
+/-- **Proposition 2.5.4**, the vertices: `A_{K^m}^±(t) = M_ω(C_K^∓(ω - t))` and
+`C_{K^m}^±(t) = M_ω(A_K^∓(ω - t))`. -/
 theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     aPlus (mirrorCap K ω) t = mirror ω (cMinus K (ω - t)) ∧
       aMinus (mirrorCap K ω) t = mirror ω (cPlus K (ω - t)) ∧
@@ -656,6 +537,8 @@ theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     show ω - t + π / 2 = ω + π / 2 - t by ring, show ω + π / 2 - (t + π / 2) = ω - t by ring,
     and_self]
 
+/-- **Proposition 2.5.4**, the wedge gaps: `w_{K^m}(t) = z_K(ω - t)` and
+`z_{K^m}(t) = w_K(ω - t)`. -/
 theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     wedgeGapW (mirrorCap K ω) t = wedgeGapZ K ω (ω - t) ∧
       wedgeGapZ (mirrorCap K ω) ω t = wedgeGapW K (ω - t) := by
@@ -668,6 +551,8 @@ theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
   · rw [wedgeGapW, wedgeGapZ, hCω, hZ, ← cn_mirror_sub, cn_dot_mirror_vvec, sub_self,
       show ω + π / 2 - ω = 0 + π / 2 by ring, vvec_add_pi_div_two, dot_neg_right, neg_neg]
 
+/-- **Proposition 2.5.4**, the sets: the upper boundary, the wedge `T_{K^m}(t)` and the niche of
+`K^m` are the reflections of the upper boundary, the wedge `T_K(ω - t)` and the niche of `K`. -/
 theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     upperBoundary (mirrorCap K ω) ω = mirror ω '' upperBoundary K ω ∧
       wedge (mirrorCap K ω) ω t = mirror ω '' wedge K ω (ω - t) ∧
@@ -699,22 +584,8 @@ theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
       refine ⟨h1, ω - s, ⟨by linarith [hs.2], by linarith [hs.1]⟩, ?_⟩
       rwa [show ω - (ω - s) = s by ring]
 
-/-- The left limit of the distribution function of `σ_K`: `v_K⁺(s) → v_K⁻(t)` as `s → t⁻`. -/
-private lemma cn_leftLim_sigmaFun {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (d : ℝ) :
-    Function.leftLim (sigmaFun K) d =
-      dot (vminus K d) (vvec d) + ∫ s in (0 : ℝ)..d, supp K s := by
-  have hcont : Continuous (supp K) := continuous_supp hK.2.1
-  apply leftLim_eq_of_tendsto
-  have h1 : Filter.Tendsto (vplus K) (nhdsWithin d (Iio d)) (nhds (vminus K d)) :=
-    tendsto_vplus_left hK d
-  have h2 : Filter.Tendsto vvec (nhdsWithin d (Iio d)) (nhds (vvec d)) :=
-    (cn_continuous_vvec.tendsto d).mono_left nhdsWithin_le_nhds
-  have h3 : Filter.Tendsto (fun t => ∫ s in (0 : ℝ)..t, supp K s) (nhdsWithin d (Iio d))
-      (nhds (∫ s in (0 : ℝ)..d, supp K s)) :=
-    ((intervalIntegral.continuous_primitive (fun a b => hcont.intervalIntegrable a b) 0).tendsto
-      d).mono_left nhdsWithin_le_nhds
-  exact ((cn_continuous_dot.tendsto _).comp (h1.prodMk_nhds h2)).add h3
-
+/-- **Proposition 2.5.4**, the surface area measure: `σ_{K^m}` is the image of `σ_K` under
+`t ↦ ω + π/2 - t`. -/
 theorem proposition2_5_4_sigma {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     sigma (mirrorCap K ω) = (sigma K).map (fun s => ω + π / 2 - s) := by
   have hKc := hK.isConvexBody
@@ -743,7 +614,7 @@ theorem proposition2_5_4_sigma {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   rw [hpre, sigma, sigmaStieltjes, dite_eq_left hKc, StieltjesFunction.measure_Ico]
   change ENNReal.ofReal _ =
     ENNReal.ofReal (Function.leftLim (sigmaFun K) _ - Function.leftLim (sigmaFun K) _)
-  rw [hmir, hmir, cn_leftLim_sigmaFun hKc, cn_leftLim_sigmaFun hKc]
+  rw [hmir, hmir, leftLim_sigmaFun hKc, leftLim_sigmaFun hKc]
   congr 1
   ring
 
@@ -752,13 +623,27 @@ theorem theorem2_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {t : �
     0 < wedgeGapW K t ∧ 0 < wedgeGapZ K ω t := by
   obtain ⟨hc, -, -, hc', -, -⟩ := cn_trig_of_mem hK.omega_mem ht
   constructor
-  · rw [wedgeGapW, aMinus, dot_sub_left, dot_vminus_uvec, wedgeW, cn_dot_uvec_zero]
+  · rw [wedgeGapW, aMinus, dot_sub_left, dot_vminus_uvec, wedgeW, dot_uvec_zero]
     have := hK.gapW_ineq ht
     rw [sub_pos, div_lt_iff₀ hc]; linarith
-  · rw [wedgeGapZ, cPlus, dot_sub_left, wedgeZ, cn_vvec_eq_uvec, dot_vplus_uvec, dot_smul_left,
-      dot_uvec_self, mul_one]
+  · rw [wedgeGapZ, cPlus, dot_sub_left, wedgeZ, ← uvec_add_pi_div_two, dot_vplus_uvec,
+      dot_smul_left, dot_uvec_self, mul_one]
     have := hK.gapZ_ineq ht
     rw [sub_pos, div_lt_iff₀ hc']; linarith
+
+/-- **Theorem 2.5.5** in terms of support values: for `t ∈ (0, ω)`,
+`h_K(t) - 1 < h_K(0) cos t` and `h_K(t + π/2) - 1 < h_K(ω + π/2) cos (ω - t)`. -/
+theorem theorem2_5_5_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {t : ℝ}
+    (ht : t ∈ Ioo 0 ω) :
+    supp K t - 1 < supp K 0 * cos t ∧
+      supp K (t + π / 2) - 1 < supp K (ω + π / 2) * cos (ω - t) := by
+  obtain ⟨hW, hZ⟩ := theorem2_5_5 hK ht
+  obtain ⟨hc, -, -, hc', -, -⟩ := cn_trig_of_mem hK.omega_mem ht
+  rw [wedgeGapW, aMinus, dot_sub_left, dot_vminus_uvec, wedgeW, dot_uvec_zero, sub_pos,
+    div_lt_iff₀ hc] at hW
+  rw [wedgeGapZ, cPlus, dot_sub_left, wedgeZ, ← uvec_add_pi_div_two, dot_vplus_uvec,
+    dot_smul_left, dot_uvec_self, mul_one, sub_pos, div_lt_iff₀ hc'] at hZ
+  constructor <;> linarith
 
 /-! ### Helper lemmas: the quadrant `Q_K⁻(t)` and the wedges -/
 
@@ -767,10 +652,12 @@ private lemma cn_mem_qMinus {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} :
       dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1 := by
   rw [proposition2_2_2_qMinus]; rfl
 
-private lemma cn_innerCorner_dot (K : Set (ℝ × ℝ)) (t : ℝ) :
+/-- The inner corner `x_K(t)` lies on the lines `l(t, h_K(t) - 1)` and
+`l(t + π/2, h_K(t + π/2) - 1)`. -/
+lemma cn_innerCorner_dot (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot (innerCorner K t) (uvec t) = supp K t - 1 ∧
       dot (innerCorner K t) (uvec (t + π / 2)) = supp K (t + π / 2) - 1 := by
-  rw [proposition2_2_2_innerCorner, ← cn_vvec_eq_uvec]
+  rw [proposition2_2_2_innerCorner, uvec_add_pi_div_two]
   simp only [dot_add_left, dot_smul_left, dot_uvec_self, dot_vvec_uvec, dot_uvec_vvec,
     dot_vvec_self]
   constructor <;> ring
@@ -784,11 +671,9 @@ private lemma cn_wedge_dot_le_low {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCa
   have hgap := hK.gapW_ineq ht
   obtain ⟨hpF, hpQ⟩ := hp
   rw [cn_mem_qMinus] at hpQ
-  have hp2 : (0 : ℝ) ≤ p.2 := by
-    have : (0 : ℝ) ≤ dot p (uvec (π / 2)) := hpF.2
-    rwa [cn_dot_uvec_pi_div_two] at this
+  have hp2 := (mem_fan_iff.1 hpF).2
   obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty 0
-  rw [cn_dot_uvec_zero] at hq
+  rw [dot_uvec_zero] at hq
   have hq2 := hK.snd_nonneg hqK
   have ht1 : t < π := by linarith [ht.2, hK.omega_mem.2, pi_pos]
   refine (cn_dot_le_of_between (a := 0) (b := t) (q := q) ?_ ?_ ?_ ?_ ?_).trans (hK.dot_le hqK s)
@@ -796,7 +681,7 @@ private lemma cn_wedge_dot_le_low {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCa
   · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
   · rw [sub_zero]; exact sin_nonneg_of_nonneg_of_le_pi hs0 (by linarith)
   · -- `p.1 < h_K(0) = q.1`
-    rw [cn_dot_uvec_zero, cn_dot_uvec_zero, hq]
+    rw [dot_uvec_zero, dot_uvec_zero, hq]
     have h1 : dot p (uvec t) = p.1 * cos t + p.2 * sin t := rfl
     have h2 : p.1 * cos t < supp K 0 * cos t := by nlinarith [mul_nonneg hp2 hsn.le]
     exact (lt_of_mul_lt_mul_right h2 hc.le).le
@@ -813,7 +698,7 @@ private lemma cn_wedge_dot_le_high {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsC
   have hgap := hK.gapZ_ineq ht
   obtain ⟨hpF, hpQ⟩ := hp
   rw [cn_mem_qMinus] at hpQ
-  have hp1 : (0 : ℝ) ≤ dot p (uvec ω) := hpF.1
+  have hp1 := (mem_fan_iff.1 hpF).1
   obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (ω + π / 2)
   have hq1 := hK.dot_omega_nonneg hqK
   have hω := hK.omega_mem
@@ -865,7 +750,7 @@ theorem lemma2_5_7 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hU
     rw [cn_mem_qMinus] at hq
     have h0 : (aMinus K 0).1 = supp K 0 := by
-      rw [← cn_dot_uvec_zero, aMinus, dot_vminus_uvec]
+      rw [← dot_uvec_zero, aMinus, dot_vminus_uvec]
     have h2 : 0 ≤ (aMinus K 0).2 := hK.snd_nonneg (vminus_mem_edge hKc 0).1
     have hgap := hK.gapW_ineq ht
     obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hK.omega_mem ht
@@ -884,17 +769,9 @@ theorem lemma2_5_7 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
 
 /-! ### Helper lemmas for Theorem 2.5.8 -/
 
-private lemma cn_isOpen_qMinus (K : Set (ℝ × ℝ)) (t : ℝ) : IsOpen (qMinus K t) := by
-  have : qMinus K t = {p | dot p (uvec t) < supp K t - 1} ∩
-      {p | dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1} := by
-    ext p; exact cn_mem_qMinus
-  rw [this]
-  exact (isOpen_lt (cn_continuous_dot_left _) continuous_const).inter
-    (isOpen_lt (cn_continuous_dot_left _) continuous_const)
-
 private lemma cn_isOpen_iUnion_qMinus (K : Set (ℝ × ℝ)) (ω : ℝ) :
     IsOpen (⋃ t ∈ Ioo 0 ω, qMinus K t) :=
-  isOpen_biUnion fun t _ => cn_isOpen_qMinus K t
+  isOpen_biUnion fun t _ => ms_isOpen_qMinus K t
 
 /-- `Q_K⁻(t)` is closed in the direction `-v_0` when `t ∈ [0, π/2]`. -/
 private lemma cn_qMinus_down {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} (hp : p ∈ qMinus K t)
@@ -915,30 +792,24 @@ private lemma cn_below_corner_mem_qMinus {K : Set (ℝ × ℝ)} {t : ℝ} (hs : 
 private lemma cn_mem_interior_fan_iff {ω : ℝ} {x : ℝ × ℝ} :
     x ∈ interior (fan ω) ↔ 0 < dot x (uvec ω) ∧ 0 < x.2 := by
   constructor
-  · intro hx
-    have key : ∀ v : ℝ × ℝ, ∃ ε : ℝ, 0 < ε ∧ x + ε • v ∈ fan ω := by
-      intro v
-      have hev := (cn_tendsto_add_smul x v).eventually_mem (mem_interior_iff_mem_nhds.1 hx)
-      obtain ⟨ε, h1, h2⟩ := (hev.and self_mem_nhdsWithin).exists
-      exact ⟨ε, h2, h1⟩
+  · -- an interior point can be moved a little in the directions `-u_ω` and `-v_0` inside `F_ω`
+    intro hx
+    have key : ∀ v : ℝ × ℝ, ∃ ε : ℝ, 0 < ε ∧ x + ε • v ∈ fan ω := fun v =>
+      (((cn_tendsto_add_smul x v).eventually_mem (mem_interior_iff_mem_nhds.1 hx)).and
+        self_mem_nhdsWithin).exists.imp fun _ h => ⟨h.2, h.1⟩
     obtain ⟨ε, hε, h⟩ := key (-uvec ω)
     obtain ⟨δ, hδ, h'⟩ := key (-uvec (π / 2))
-    have h1 : (0 : ℝ) ≤ dot (x + ε • -uvec ω) (uvec ω) := h.1
-    have h2 : (0 : ℝ) ≤ dot (x + δ • -uvec (π / 2)) (uvec (π / 2)) := h'.2
-    rw [dot_add_left, dot_smul_left, dot_neg_left, dot_uvec_self] at h1 h2
-    rw [cn_dot_uvec_pi_div_two] at h2
+    have h1 := (mem_fan_iff.1 h).1
+    have h2 := (mem_fan_iff.1 h').2
+    rw [dot_add_left, dot_smul_left, dot_neg_left, dot_uvec_self] at h1
+    simp only [Prod.snd_add, Prod.smul_snd, Prod.snd_neg, uvec_snd, sin_pi_div_two,
+      smul_eq_mul] at h2
     constructor <;> linarith
   · rintro ⟨h1, h2⟩
     have hO : IsOpen ({p : ℝ × ℝ | 0 < dot p (uvec ω)} ∩ {p | 0 < p.2}) :=
-      (isOpen_lt continuous_const (cn_continuous_dot_left _)).inter
+      (isOpen_lt continuous_const (continuous_dot _)).inter
         (isOpen_lt continuous_const continuous_snd)
-    refine interior_maximal ?_ hO ⟨h1, h2⟩
-    rintro p ⟨hp1, hp2⟩
-    refine ⟨?_, ?_⟩
-    · show (0 : ℝ) ≤ dot p (uvec ω)
-      exact le_of_lt hp1
-    show (0 : ℝ) ≤ dot p (uvec (π / 2))
-    rw [cn_dot_uvec_pi_div_two]; exact le_of_lt hp2
+    exact interior_maximal (fun p hp => mem_fan_iff.2 ⟨hp.1.le, hp.2.le⟩) hO ⟨h1, h2⟩
 
 /-- The set `F_ω \ K` is closed in the direction `v_0`. -/
 private lemma IsCap.up_not_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {z : ℝ × ℝ}
@@ -956,7 +827,7 @@ private lemma IsCap.up_not_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   nlinarith [mul_le_mul_of_nonneg_right hy hsin]
 
 /-- The corner `h_K(ω + π/2) v_ω` of a cap, on the line `l(ω, 0)`, lies in the cap. -/
-private lemma IsCap.corner_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
+lemma IsCap.corner_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     supp K (ω + π / 2) • vvec ω ∈ K := by
   set H := supp K (ω + π / 2)
   obtain ⟨hω0, hω1⟩ := hK.omega_mem
@@ -965,29 +836,72 @@ private lemma IsCap.corner_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   have hpv : dot (H • vvec ω) (vvec ω) = H := by
     rw [dot_smul_left, dot_vvec_self, mul_one]
   obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (ω + π / 2)
-  rw [← cn_vvec_eq_uvec] at hq
+  rw [uvec_add_pi_div_two] at hq
   have hq1 := hK.dot_omega_nonneg hqK
-  rw [hK.mem_iff]
-  refine ⟨⟨?_, ?_⟩, fun s hs => ?_⟩
-  · show (0 : ℝ) ≤ dot (H • vvec ω) (uvec ω)
-    rw [hpu]
-  · show (0 : ℝ) ≤ dot (H • vvec ω) (uvec (π / 2))
-    rw [cn_dot_uvec_rot _ _ ω, hpu, hpv, mul_zero, zero_add, sin_pi_div_two_sub]
-    -- `cos ω * H ≥ 1 - sin ω ≥ 0`
+  rw [hK.mem_iff, mem_fan_iff]
+  refine ⟨⟨hpu.ge, ?_⟩, fun s hs => ?_⟩
+  · -- `H cos ω ≥ 1 - sin ω ≥ 0`, using a point `q'` of `K` with `q' · u_{π/2} = 1`
     obtain ⟨q', hq'K, hq'⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (π / 2)
-    rw [hK.supp_pi_div_two, cn_dot_uvec_rot _ _ ω, cos_pi_div_two_sub, sin_pi_div_two_sub] at hq'
+    rw [hK.supp_pi_div_two, dot_uvec_eq_cos_add_sin _ _ ω, cos_pi_div_two_sub,
+      sin_pi_div_two_sub] at hq'
     have h1 := hK.dot_omega_le_one hq'K
     have h2 := hK.dot_le hq'K (ω + π / 2)
-    rw [← cn_vvec_eq_uvec] at h2
+    rw [uvec_add_pi_div_two] at h2
     have hs : 0 ≤ sin ω := sin_nonneg_of_nonneg_of_le_pi hω0.le (by linarith [pi_pos])
     have hc : 0 ≤ cos ω := cos_nonneg_of_mem_Icc ⟨by linarith [pi_pos], hω1⟩
-    have hs1 : sin ω ≤ 1 := sin_le_one ω
-    nlinarith [mul_le_mul_of_nonneg_left h1 hs, mul_le_mul_of_nonneg_left h2 hc]
+    simp only [Prod.smul_snd, vvec_snd, smul_eq_mul]
+    nlinarith [mul_le_mul_of_nonneg_left h1 hs, mul_le_mul_of_nonneg_left h2 hc, sin_le_one ω]
   · have hsI := cn_jSet_subset hs
     have hc : 0 ≤ cos (s - ω) := cos_nonneg_of_mem_Icc ⟨by linarith [hsI.1], by linarith [hsI.2]⟩
     refine le_trans ?_ (hK.dot_le hqK s)
-    rw [cn_dot_uvec_rot _ s ω, cn_dot_uvec_rot q s ω, hpu, hpv, hq]
+    rw [dot_uvec_eq_cos_add_sin _ s ω, dot_uvec_eq_cos_add_sin q s ω, hpu, hpv, hq]
     nlinarith [mul_nonneg hc hq1]
+
+/-- The vertex `o_ω = (tan(π/4 - ω/2), 1)` of `P_ω` lies on the line `l(ω, 1)`. -/
+lemma oPt_dot_uvec {ω : ℝ} (hω : ω ∈ Icc 0 (π / 2)) : dot (oPt ω) (uvec ω) = 1 := by
+  -- `tan(π/4 - ω/2) cos ω = 1 - sin ω` is `tan(δ/2) sin δ = 1 - cos δ` for `δ = π/2 - ω`
+  have e : (π / 2 - ω) / 2 = π / 4 - ω / 2 := by ring
+  have h := tan_half_mul_sin (δ := π / 2 - ω)
+    (cos_pos_of_mem_Ioo ⟨by linarith [hω.2, pi_pos], by linarith [hω.1, pi_pos]⟩).ne'
+  rw [e, sin_pi_div_two_sub, cos_pi_div_two_sub] at h
+  simp only [dot, oPt, uvec]; linarith
+
+/-- The vertex `o_ω` of `P_ω` lies in every cap with `ω < π/2`. -/
+lemma IsCap.oPt_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (hω : ω < π / 2) : oPt ω ∈ K := by
+  have hω0 := hK.omega_mem.1
+  have hcos : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [pi_pos], hω⟩
+  have ho := oPt_dot_uvec ⟨hω0.le, hω.le⟩
+  rw [hK.mem_iff, mem_fan_iff]
+  refine ⟨⟨ho ▸ zero_le_one, zero_le_one⟩, fun t ht => ?_⟩
+  rcases ht with ht | ht
+  · obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty ω
+    rw [hK.supp_omega] at hpt
+    have hp2 := hK.snd_le_one hp
+    have hs : sin (t - ω) ≤ 0 := sin_nonpos_of_nonpos_of_neg_pi_le (by linarith [ht.2])
+      (by linarith [ht.1, pi_pos, hω])
+    have hD : dot (p - oPt ω) (uvec ω) = 0 := by rw [dot_sub_left, hpt, ho]; ring
+    have hD2 : (p - oPt ω).2 ≤ 0 := by simp only [Prod.snd_sub, oPt]; linarith
+    have key : dot (p - oPt ω) (uvec t) * cos ω = (p - oPt ω).2 * sin (t - ω) := by
+      simp only [dot, uvec, sin_sub] at hD ⊢; linear_combination (cos t) * hD
+    have h1 : 0 ≤ dot (p - oPt ω) (uvec t) := by
+      by_contra h; rw [not_le] at h; nlinarith [mul_nonneg_of_nonpos_of_nonpos hD2 hs]
+    rw [dot_sub_left] at h1
+    linarith [hK.dot_le hp t]
+  · obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (π / 2)
+    rw [hK.supp_pi_div_two, dot_uvec_pi_div_two] at hpt
+    have hpω := hK.dot_omega_le_one hp
+    have hct : cos t ≤ 0 := cos_nonpos_of_pi_div_two_le_of_le ht.1 (by linarith [ht.2, pi_pos])
+    have hD1 : p.1 - (oPt ω).1 ≤ 0 := by
+      have : dot (p - oPt ω) (uvec ω) ≤ 0 := by rw [dot_sub_left, ho]; linarith
+      simp only [dot, uvec, Prod.fst_sub, Prod.snd_sub, oPt, hpt, sub_self, zero_mul,
+        add_zero] at this ⊢
+      by_contra h; rw [not_le] at h; nlinarith
+    have h1 : 0 ≤ dot (p - oPt ω) (uvec t) := by
+      have e : dot (p - oPt ω) (uvec t) = (p.1 - (oPt ω).1) * cos t := by
+        simp only [dot, uvec, Prod.fst_sub, Prod.snd_sub, oPt, hpt, sub_self, zero_mul, add_zero]
+      rw [e]; nlinarith
+    rw [dot_sub_left] at h1
+    linarith [hK.dot_le hp t]
 
 private lemma IsCap.corner_not_mem_niche {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     supp K (ω + π / 2) • vvec ω ∉ niche K ω := by
@@ -995,10 +909,61 @@ private lemma IsCap.corner_not_mem_niche {K : Set (ℝ × ℝ)} {ω : ℝ} (hK :
   obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hU
   rw [cn_mem_qMinus] at hq
   have hq2 := hq.2
-  rw [cn_dot_uvec_decomp _ ω t, ← cn_vvec_eq_uvec, dot_smul_left, dot_vvec_self, mul_one,
+  rw [cn_dot_uvec_decomp _ ω t, uvec_add_pi_div_two, dot_smul_left, dot_vvec_self, mul_one,
     dot_smul_left, dot_vvec_uvec, mul_zero, mul_zero, add_zero] at hq2
   have := hK.gapZ_ineq ht
   linarith
+
+/-- A highest point of `K` on a vertical line lies on the upper boundary `δK`. -/
+private lemma IsCap.mem_upperBoundary_of_top {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω)
+    {q : ℝ × ℝ} (hqK : q ∈ K) (hmax : ∀ z ∈ K, z.1 = q.1 → z.2 ≤ q.2) :
+    q ∈ upperBoundary K ω := by
+  have hω := hK.omega_mem
+  rw [proposition2_5_1 hK]
+  refine ⟨hqK, mem_closure_of_tendsto (cn_tendsto_add_smul q (uvec (π / 2))) ?_⟩
+  filter_upwards [self_mem_nhdsWithin] with ε (hε : 0 < ε)
+  refine ⟨cn_add_smul_uvec_mem_fan hω ⟨by linarith [pi_pos], by linarith [hω.1]⟩ hε.le
+    (hK.subset_fan hqK), fun h => ?_⟩
+  have := hmax _ h (by simp)
+  simp only [Prod.snd_add, Prod.smul_snd, uvec_snd, sin_pi_div_two, smul_eq_mul, mul_one] at this
+  linarith
+
+/-- An inner corner `x_K(t)` strictly above the line `l(π/2, 0)` lies strictly to the left of
+`A_K⁻(0)` (this uses `w_K(t) > 0`). -/
+private lemma IsCap.innerCorner_fst_lt {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCap K ω)
+    (ht : t ∈ Ioo 0 ω) (hx : 0 < (innerCorner K t).2) :
+    (innerCorner K t).1 < (aMinus K 0).1 := by
+  obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hK.omega_mem ht
+  have hgap := hK.gapW_ineq ht
+  have hxt : dot (innerCorner K t) (uvec t) =
+      (innerCorner K t).1 * cos t + (innerCorner K t).2 * sin t := rfl
+  rw [(cn_innerCorner_dot K t).1] at hxt
+  have h0 : (aMinus K 0).1 = supp K 0 := by rw [← dot_uvec_zero, aMinus, dot_vminus_uvec]
+  rw [h0]
+  refine lt_of_mul_lt_mul_right ?_ hc.le
+  nlinarith [mul_pos hx hs]
+
+/-- An inner corner `x_K(t)` strictly above the line `l(ω, 0)` lies strictly to the right of the
+corner `h_K(ω + π/2) v_ω` (this uses `z_K(t) > 0`). -/
+private lemma IsCap.corner_fst_lt {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCap K ω)
+    (ht : t ∈ Ioo 0 ω) (hx : 0 < dot (innerCorner K t) (uvec ω)) :
+    (supp K (ω + π / 2) • vvec ω).1 < (innerCorner K t).1 := by
+  obtain ⟨hc, -, -, hc', -, -⟩ := cn_trig_of_mem hK.omega_mem ht
+  have hsω : 0 < sin ω :=
+    sin_pos_of_pos_of_lt_pi hK.omega_mem.1 (by linarith [hK.omega_mem.2, pi_pos])
+  have hgap := hK.gapZ_ineq ht
+  have hid : ∀ d : ℝ × ℝ, d.1 * cos (ω - t) =
+      cos t * dot d (uvec ω) - sin ω * dot d (uvec (t + π / 2)) := by
+    intro d
+    simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, cos_sub]
+    ring
+  have e1 := hid (innerCorner K t)
+  have e2 := hid (supp K (ω + π / 2) • vvec ω)
+  rw [(cn_innerCorner_dot K t).2] at e1
+  rw [cn_dot_uvec_decomp _ ω t, uvec_add_pi_div_two] at e2
+  simp only [dot_smul_left, dot_vvec_uvec, dot_vvec_self] at e2
+  refine lt_of_mul_lt_mul_right ?_ hc'.le
+  nlinarith [mul_pos hc hx, mul_pos hsω (sub_pos.2 hgap)]
 
 /-- **Theorem 2.5.8** (`thm:monotonization-connected-iff`). For a cap `K`, the following are
 equivalent: (1) `𝒩(K) ⊆ K`; (2) `𝒩(K) ⊆ K \ δK`; (3) for every `t ∈ (0, ω)`, either
@@ -1016,14 +981,12 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     obtain ⟨hpF, hpU⟩ := hp
     obtain ⟨t, ht, hpt⟩ := mem_iUnion₂.1 hpU
     have hev := (cn_tendsto_add_smul p (uvec s)).eventually_mem
-      ((cn_isOpen_qMinus K t).mem_nhds hpt)
-    obtain ⟨ε, hεQ, hεpos⟩ := (hev.and self_mem_nhdsWithin).exists
+      ((ms_isOpen_qMinus K t).mem_nhds hpt)
+    obtain ⟨ε, hεQ, hε : 0 < ε⟩ := (hev.and self_mem_nhdsWithin).exists
     have hmem : p + ε • uvec s ∈ K :=
-      h1 ⟨cn_add_smul_uvec_mem_fan hω hs (le_of_lt hεpos) hpF, mem_iUnion₂.2 ⟨t, ht, hεQ⟩⟩
+      h1 ⟨cn_add_smul_uvec_mem_fan hω hs hε.le hpF, mem_iUnion₂.2 ⟨t, ht, hεQ⟩⟩
     have := hK.dot_le hmem s
-    have hpl' : dot p (uvec s) = supp K s := hpl
-    rw [dot_add_left, dot_smul_left, dot_uvec_self, hpl'] at this
-    have hε : (0 : ℝ) < ε := hεpos
+    rw [dot_add_left, dot_smul_left, dot_uvec_self, hpl] at this
     linarith
   tfae_have 2 → 1 := fun h2 p hp => (h2 hp).1
   tfae_have 1 → 3 := by
@@ -1036,12 +999,9 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     set x := innerCorner K t
     have hev := (cn_tendsto_add_smul x ((0 : ℝ), (-1 : ℝ))).eventually_mem
       ((isOpen_interior.inter hK.isCompact.isClosed.isOpen_compl).mem_nhds ⟨hxF, hxK⟩)
-    obtain ⟨ε, ⟨hεF, hεK⟩, hεpos⟩ := (hev.and self_mem_nhdsWithin).exists
-    have hε : (0 : ℝ) < ε := hεpos
+    obtain ⟨ε, ⟨hεF, hεK⟩, hε : 0 < ε⟩ := (hev.and self_mem_nhdsWithin).exists
     have heq : x + ε • ((0 : ℝ), (-1 : ℝ)) = (x.1, x.2 - ε) := by
-      ext
-      · simp
-      · simp; ring
+      ext <;> simp [sub_eq_add_neg]
     rw [heq] at hεF hεK
     exact hεK (h1 ⟨interior_subset hεF,
       mem_iUnion₂.2 ⟨t, ht, cn_below_corner_mem_qMinus hs hc (by linarith)⟩⟩)
@@ -1060,7 +1020,7 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       have hp2 : (0 : ℝ) ≤ dot p (uvec (π / 2)) := hpF.2
       have hab : 0 < sin (t + π / 2 - t) := by
         rw [show t + π / 2 - t = π / 2 by ring, sin_pi_div_two]; exact one_pos
-      rw [cn_mem_interior_fan_iff, ← cn_dot_uvec_pi_div_two]
+      rw [cn_mem_interior_fan_iff, ← dot_uvec_pi_div_two]
       constructor
       · refine lt_of_le_of_lt hp1 (cn_dot_lt_of_between hab ?_ ?_ hpt.1 hpt.2)
         · rw [show t + π / 2 - ω = π / 2 - (ω - t) by ring, sin_pi_div_two_sub]; exact hc'
@@ -1073,24 +1033,16 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     -- every point of `K \ 𝒩(K)` is joined to the connected set `δK` by a vertical segment
     intro h2
     have hδS : upperBoundary K ω ⊆ K \ niche K ω := fun z hz =>
-      ⟨by obtain ⟨s, -, hzK, -⟩ := mem_iUnion₂.1 hz; exact hzK, fun hn => (h2 hn).2 hz⟩
+      ⟨cn_upperBoundary_subset K ω hz, fun hn => (h2 hn).2 hz⟩
     have hδ := proposition2_5_2 hK
     obtain ⟨z0, hz0⟩ := hδ.nonempty
     refine ⟨⟨z0, hδS hz0⟩, isPreconnected_of_forall z0 fun y hy => ?_⟩
     have hM : IsCompact (K ∩ {z : ℝ × ℝ | z.1 = y.1}) :=
       hK.isCompact.inter_right (isClosed_eq continuous_fst continuous_const)
-    obtain ⟨q, ⟨hqK, hq1⟩, hqmax⟩ := hM.exists_isMaxOn ⟨y, hy.1, rfl⟩ continuous_snd.continuousOn
-    have hq1' : q.1 = y.1 := hq1
-    have hqδ : q ∈ upperBoundary K ω := by
-      rw [proposition2_5_1 hK]
-      refine ⟨hqK, mem_closure_of_tendsto (cn_tendsto_add_smul q (uvec (π / 2))) ?_⟩
-      filter_upwards [self_mem_nhdsWithin] with ε (hε : 0 < ε)
-      refine ⟨cn_add_smul_uvec_mem_fan hω ⟨by linarith [pi_pos], by linarith [hω.1]⟩ hε.le
-        (hK.mem_fan hqK), fun h => ?_⟩
-      have := hqmax ⟨h, by simp [uvec, hq1']⟩
-      simp only [mem_ofPred_eq, Prod.snd_add, Prod.smul_snd, uvec_snd, sin_pi_div_two,
-        smul_eq_mul, mul_one] at this
-      linarith
+    -- `q` is a highest point of `K` on the vertical line through `y`
+    obtain ⟨q, ⟨hqK, hq1' : q.1 = y.1⟩, hqmax⟩ :=
+      hM.exists_isMaxOn ⟨y, hy.1, rfl⟩ continuous_snd.continuousOn
+    have hqδ := hK.mem_upperBoundary_of_top hqK fun z hz hz1 => hqmax ⟨hz, hz1.trans hq1'⟩
     have hyq : y.2 ≤ q.2 := hqmax ⟨hy.1, rfl⟩
     refine ⟨upperBoundary K ω ∪ segment ℝ y q, union_subset hδS ?_, Or.inl hz0,
       Or.inr (left_mem_segment _ _ _),
@@ -1102,7 +1054,7 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     obtain ⟨-, hzU⟩ := hzn
     obtain ⟨t, ht, hzt⟩ := mem_iUnion₂.1 hzU
     obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hω ht
-    refine ⟨hK.mem_fan hy.1, mem_iUnion₂.2 ⟨t, ht, ?_⟩⟩
+    refine ⟨hK.subset_fan hy.1, mem_iUnion₂.2 ⟨t, ht, ?_⟩⟩
     have hz1 : (a • y + b • q).1 = y.1 := by
       simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul, hq1']
       rw [← add_mul, hab, one_mul]
@@ -1113,15 +1065,15 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     have := cn_qMinus_down hzt hs.le hc.le hz2
     rwa [hz1] at this
   tfae_have 4 → 3 := by
-    -- the vertical line through `x_K(t) ∈ F_ω° \ K` would separate `K \ 𝒩(K)`
+    -- the vertical line through `x_K(t) ∈ F_ω° \ K` would separate `K \ 𝒩(K)`: no point of
+    -- `K \ 𝒩(K)` lies on it, `A_K⁻(0)` lies to its right and `h_K(ω + π/2) v_ω` to its left
     intro h4 t ht
     by_contra hcon
     push Not at hcon
     obtain ⟨hxF, hxK⟩ := hcon
-    obtain ⟨hc, hs, -, hc', hs', -⟩ := cn_trig_of_mem hω ht
-    set x := innerCorner K t with hxdef
+    obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hω ht
+    set x := innerCorner K t
     obtain ⟨hxω, hx2⟩ := cn_mem_interior_fan_iff.1 hxF
-    obtain ⟨hx1, hx2'⟩ := cn_innerCorner_dot K t
     have hsplit : K \ niche K ω ⊆ {q : ℝ × ℝ | q.1 < x.1} ∪ {q | x.1 < q.1} := by
       rintro q ⟨hqK, hqN⟩
       rcases lt_trichotomy q.1 x.1 with h | h | h
@@ -1130,80 +1082,26 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
         rcases le_or_gt x.2 q.2 with h' | h'
         · exact hK.up_not_mem (interior_subset hxF) hxK h' (by rw [← h]; exact hqK)
         · apply hqN
-          refine ⟨hK.mem_fan hqK, mem_iUnion₂.2 ⟨t, ht, ?_⟩⟩
+          refine ⟨hK.subset_fan hqK, mem_iUnion₂.2 ⟨t, ht, ?_⟩⟩
           have := cn_below_corner_mem_qMinus (K := K) hs hc h'
           rwa [← h] at this
       · exact Or.inr h
     have hdisj : (K \ niche K ω) ∩ ({q : ℝ × ℝ | q.1 < x.1} ∩ {q | x.1 < q.1}) = ∅ := by
       ext q
       simp only [mem_inter_iff, mem_ofPred_eq, mem_empty_iff_false, iff_false]
-      intro h
-      linarith [h.2.1, h.2.2]
+      exact fun h => lt_asymm h.2.1 h.2.2
     rcases isPreconnected_iff_subset_of_disjoint.1 h4.isPreconnected _ _
       (isOpen_lt continuous_fst continuous_const) (isOpen_lt continuous_const continuous_fst)
       hsplit hdisj with h | h
-    · -- `A_K⁻(0)` lies to the right of the line
-      have hA := h (lemma2_5_7 hK).1
-      have h0 : (aMinus K 0).1 = supp K 0 := by
-        rw [← cn_dot_uvec_zero, aMinus, dot_vminus_uvec]
-      have hgap := hK.gapW_ineq ht
-      have hxt : dot x (uvec t) = x.1 * cos t + x.2 * sin t := rfl
-      have : x.1 * cos t < supp K 0 * cos t := by nlinarith [mul_pos hx2 hs]
-      have := lt_of_mul_lt_mul_right this hc.le
-      simp only [mem_ofPred_eq] at hA
-      linarith
-    · -- the corner `h_K(ω + π/2) v_ω` lies to the left of the line
-      have hP := h ⟨hK.corner_mem, hK.corner_not_mem_niche⟩
-      simp only [mem_ofPred_eq] at hP
-      set H := supp K (ω + π / 2)
-      have hgap := hK.gapZ_ineq ht
-      have hsω : 0 < sin ω := sin_pos_of_pos_of_lt_pi hω.1 (by linarith [hω.2, pi_pos])
-      have hpu : dot (H • vvec ω) (uvec ω) = 0 := by rw [dot_smul_left, dot_vvec_uvec, mul_zero]
-      have hpt : dot (H • vvec ω) (uvec (t + π / 2)) = H * cos (ω - t) := by
-        rw [cn_dot_uvec_decomp _ ω t, ← cn_vvec_eq_uvec, dot_smul_left, dot_vvec_self, hpu]
-        ring
-      have hid : ∀ d : ℝ × ℝ, d.1 * cos (ω - t) =
-          cos t * dot d (uvec ω) - sin ω * dot d (uvec (t + π / 2)) := by
-        intro d
-        simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, cos_sub]
-        ring
-      have e := hid (x - H • vvec ω)
-      rw [dot_sub_left, dot_sub_left, hpu, hpt, hx2', Prod.fst_sub] at e
-      have : 0 < (x - H • vvec ω).1 * cos (ω - t) := by
-        rw [Prod.fst_sub] at *
-        rw [e]
-        nlinarith [mul_pos hc hxω,
-          mul_pos hsω (show 0 < H * cos (ω - t) - (supp K (t + π / 2) - 1) by linarith)]
-      rw [Prod.fst_sub] at this
-      have := pos_of_mul_pos_left this hc'.le
-      linarith
+    · have hA := h (lemma2_5_7 hK).1
+      rw [mem_ofPred_eq] at hA
+      exact lt_asymm hA (hK.innerCorner_fst_lt ht hx2)
+    · have hP := h ⟨hK.corner_mem, hK.corner_not_mem_niche⟩
+      rw [mem_ofPred_eq] at hP
+      exact lt_asymm hP (hK.corner_fst_lt ht hxω)
   tfae_finish
 
 /-! ### Helper lemmas for Theorem 2.5.9 -/
-
-private lemma cn_mem_vStripRot {ω : ℝ} {p : ℝ × ℝ} :
-    p ∈ vStripRot ω ↔ 0 ≤ dot p (uvec ω) ∧ dot p (uvec ω) ≤ 1 := by
-  have key : ∀ q : ℝ × ℝ, dot (rot ω q) (uvec ω) = q.1 := by
-    intro q
-    have := dot_rot_uvec ω 0 q
-    rwa [zero_add, cn_dot_uvec_zero] at this
-  constructor
-  · rintro ⟨q, hq, rfl⟩
-    rw [key]; exact hq
-  · intro h
-    refine ⟨rot (-ω) p, ?_, rot_rot_neg ω p⟩
-    have : (rot (-ω) p).1 = dot p (uvec ω) := by
-      rw [← key (rot (-ω) p), rot_rot_neg]
-    show 0 ≤ (rot (-ω) p).1 ∧ (rot (-ω) p).1 ≤ 1
-    rw [this]; exact h
-
-private lemma cn_mem_para {ω : ℝ} {p : ℝ × ℝ} :
-    p ∈ para ω ↔ (0 ≤ p.2 ∧ p.2 ≤ 1) ∧ (0 ≤ dot p (uvec ω) ∧ dot p (uvec ω) ≤ 1) := by
-  rw [para, mem_inter_iff, cn_mem_vStripRot]; rfl
-
-private lemma IsCap.subset_para {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) : K ⊆ para ω :=
-  fun _ hp => cn_mem_para.2 ⟨⟨hK.snd_nonneg hp, hK.snd_le_one hp⟩,
-    ⟨hK.dot_omega_nonneg hp, hK.dot_omega_le_one hp⟩⟩
 
 private lemma cn_mem_qPlus {S : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} :
     p ∈ qPlus S t ↔ dot p (uvec t) ≤ supp S t ∧
@@ -1216,33 +1114,15 @@ private lemma IsCap.capOf_self {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   simp only [capOf, mem_inter_iff, mem_iInter₂, cn_mem_qPlus]
   constructor
   · rintro ⟨hpP, hpQ⟩
-    rw [cn_mem_para] at hpP
+    rw [mem_para_iff] at hpP
     rw [hK.mem_iff]
-    have hp2 : (0 : ℝ) ≤ dot p (uvec (π / 2)) := by
-      rw [cn_dot_uvec_pi_div_two]; exact hpP.1.1
-    refine ⟨⟨hpP.2.1, hp2⟩, fun s hs => ?_⟩
+    refine ⟨mem_fan_iff.2 ⟨hpP.2.1, hpP.1.1⟩, fun s hs => ?_⟩
     rcases hs with hs | hs
     · exact (hpQ s hs).1
     · have := (hpQ (s - π / 2) ⟨by linarith [hs.1], by linarith [hs.2]⟩).2
       rwa [sub_add_cancel] at this
   · intro hp
     exact ⟨hK.subset_para hp, fun t _ => ⟨hK.dot_le hp t, hK.dot_le hp (t + π / 2)⟩⟩
-
-/-- `𝓒(S)` only depends on the support function of `S` on `J_ω`. -/
-private lemma cn_capOf_congr {S K : Set (ℝ × ℝ)} {ω : ℝ}
-    (h : ∀ s ∈ jSet ω, supp S s = supp K s) : capOf S ω = capOf K ω := by
-  have hq : ∀ t ∈ Icc 0 ω, qPlus S t = qPlus K t := by
-    intro t ht
-    have h1 := h t (Or.inl ht)
-    have h2 := h (t + π / 2) (Or.inr ⟨by linarith [ht.1], by linarith [ht.2]⟩)
-    have : hallwayMap S t = hallwayMap K t := by
-      funext q; rw [hallwayMap, hallwayMap, h1, h2]
-    rw [qPlus, qPlus, this]
-  ext p
-  simp only [capOf, mem_inter_iff, mem_iInter₂]
-  constructor
-  · rintro ⟨h1, h2⟩; exact ⟨h1, fun t ht => hq t ht ▸ h2 t ht⟩
-  · rintro ⟨h1, h2⟩; exact ⟨h1, fun t ht => (hq t ht).symm ▸ h2 t ht⟩
 
 private lemma cn_rot_hallwayMap (K : Set (ℝ × ℝ)) (t : ℝ) (q : ℝ × ℝ) :
     rot (-t) (hallwayMap K t q) + (1 - supp K t, 1 - supp K (t + π / 2)) = q := by
@@ -1260,52 +1140,32 @@ private lemma cn_isMovement {K S : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω
       (fun s => (1 - supp K (ω * s), 1 - supp K (ω * s + π / 2))) where
   continuousOn_angle := by fun_prop
   continuousOn_shift := by
-    have hc := continuous_supp hK.isCompact
-    exact (Continuous.prodMk (continuous_const.sub (hc.comp (continuous_const.mul continuous_id)))
-      (continuous_const.sub (hc.comp ((continuous_const.mul continuous_id).add
-        continuous_const)))).continuousOn
+    have := continuous_supp hK.isCompact
+    fun_prop
   angle_zero := by simp
   angle_one := by simp
-  start := by
-    intro p hp
+  start p hp := by
     have hpK := hSK hp
     have h0 := hK.dot_le hpK 0
-    rw [cn_dot_uvec_zero] at h0
-    simp only [mul_zero, zero_add, rot_zero, hK.supp_pi_div_two, sub_self]
-    refine ⟨?_, ?_, ?_⟩
-    · show p.1 + (1 - supp K 0) ≤ 1
-      linarith
-    · show 0 ≤ p.2 + 0
-      linarith [hK.snd_nonneg hpK]
-    · show p.2 + 0 ≤ 1
-      linarith [hK.snd_le_one hpK]
-  inside := by
-    intro s hs p hp
+    rw [dot_uvec_zero] at h0
+    simp only [mul_zero, zero_add, rot_zero, hK.supp_pi_div_two, sub_self, horizSide,
+      mem_ofPred_eq, Prod.fst_add, Prod.snd_add, add_zero]
+    exact ⟨by linarith, hK.snd_nonneg hpK, hK.snd_le_one hpK⟩
+  inside s hs p hp := by
     have hω := hK.omega_mem
     have hts : ω * s ∈ Icc 0 ω := ⟨mul_nonneg hω.1.le hs.1, by nlinarith [hs.2, hω.1]⟩
     obtain ⟨q, hq, rfl⟩ := hSL _ hts hp
-    show rot (-ω * s) (hallwayMap K (ω * s) q) +
-      (1 - supp K (ω * s), 1 - supp K (ω * s + π / 2)) ∈ hallway
-    rw [neg_mul, cn_rot_hallwayMap]
-    exact hq
-  finish := by
-    intro p hp
+    simpa only [neg_mul, cn_rot_hallwayMap] using hq
+  finish p hp := by
     have hpK := hSK hp
-    simp only [mul_one, hK.supp_omega, sub_self]
-    have h1 : (rot (-ω) p).1 = dot p (uvec ω) := by
-      simp only [rot, dot, uvec, cos_neg, sin_neg]; ring
-    have h2 : (rot (-ω) p).2 = dot p (uvec (ω + π / 2)) := by
-      simp only [rot, dot, uvec, cos_neg, sin_neg, cos_add_pi_div_two, sin_add_pi_div_two]; ring
-    refine ⟨?_, ?_, ?_⟩
-    · show 0 ≤ (rot (-ω) p).1 + 0
-      rw [h1]; linarith [hK.dot_omega_nonneg hpK]
-    · show (rot (-ω) p).1 + 0 ≤ 1
-      rw [h1]; linarith [hK.dot_omega_le_one hpK]
-    · show (rot (-ω) p).2 + (1 - supp K (ω + π / 2)) ≤ 1
-      rw [h2]; linarith [hK.dot_le hpK (ω + π / 2)]
+    have h := hK.dot_le hpK (ω + π / 2)
+    rw [uvec_add_pi_div_two] at h
+    simp only [mul_one, hK.supp_omega, sub_self, vertSide, mem_ofPred_eq, Prod.fst_add,
+      Prod.snd_add, add_zero, ms_rot_neg_fst, ms_rot_neg_snd]
+    exact ⟨hK.dot_omega_nonneg hpK, hK.dot_omega_le_one hpK, by linarith⟩
 
-/-- **Theorem 2.5.9** (`thm:niche-in-cap`). A cap `K` is the cap of a monotone sofa if and only if it
-contains its niche. -/
+/-- **Theorem 2.5.9** (`thm:niche-in-cap`). A cap `K` is the cap of a monotone sofa if and only if
+it contains its niche. -/
 theorem theorem2_5_9 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     (∃ S, IsMonotoneSofa S ω ∧ capOf S ω = K) ↔ niche K ω ⊆ K := by
   have htfae := theorem2_5_8 hK
@@ -1314,8 +1174,7 @@ theorem theorem2_5_9 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     rintro ⟨S, hS, hcap⟩
     have hSeq := theorem2_4_3 hS
     rw [hcap] at hSeq
-    obtain ⟨hω, S', hS', hstd', hS'eq⟩ := hS
-    have hconn : IsConnected S := hS'eq ▸ (theorem2_3_2 hω hS' hstd').1.2.1
+    have hconn : IsConnected S := hS.isMovingSofaWithAngle.2.1
     rw [hSeq] at hconn
     exact (htfae.out 4 1).1 hconn
   · -- `S = K \ 𝒩(K) = P_ω ∩ ⋂ L_K(t)` is a moving sofa in standard position with cap `K`
@@ -1325,11 +1184,11 @@ theorem theorem2_5_9 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     have hconn : IsConnected (K \ niche K ω) := (htfae.out 1 4).1 h1
     have hSK : K \ niche K ω ⊆ K := sdiff_subset
     have hδS : upperBoundary K ω ⊆ K \ niche K ω := fun z hz =>
-      ⟨by obtain ⟨s, -, hzK, -⟩ := mem_iUnion₂.1 hz; exact hzK, fun hn => (h2 hn).2 hz⟩
+      ⟨cn_upperBoundary_subset K ω hz, fun hn => (h2 hn).2 hz⟩
     have hSeq' : K \ niche K ω = K \ ⋃ t ∈ Ioo 0 ω, qMinus K t := by
       ext p
       constructor
-      · rintro ⟨hpK, hpN⟩; exact ⟨hpK, fun h => hpN ⟨hK.mem_fan hpK, h⟩⟩
+      · rintro ⟨hpK, hpN⟩; exact ⟨hpK, fun h => hpN ⟨hK.subset_fan hpK, h⟩⟩
       · rintro ⟨hpK, hpU⟩; exact ⟨hpK, fun h => hpU h.2⟩
     have hSclosed : IsClosed (K \ niche K ω) := by
       rw [hSeq']; exact hK.isCompact.isClosed.sdiff (cn_isOpen_iUnion_qMinus K ω)
@@ -1349,20 +1208,20 @@ theorem theorem2_5_9 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       rcases eq_or_lt_of_le ht.1 with h0 | h0
       · subst h0
         have := (cn_mem_qMinus.1 hpQ).2
-        rw [zero_add, hK.supp_pi_div_two, cn_dot_uvec_pi_div_two] at this
+        rw [zero_add, hK.supp_pi_div_two, dot_uvec_pi_div_two] at this
         linarith [hK.snd_nonneg hpK]
       rcases eq_or_lt_of_le ht.2 with h1 | h1
       · subst h1
         have := (cn_mem_qMinus.1 hpQ).1
         rw [hK.supp_omega] at this
         linarith [hK.dot_omega_nonneg hpK]
-      exact hpN ⟨hK.mem_fan hpK, mem_iUnion₂.2 ⟨t, ⟨h0, h1⟩, hpQ⟩⟩
+      exact hpN ⟨hK.subset_fan hpK, mem_iUnion₂.2 ⟨t, ⟨h0, h1⟩, hpQ⟩⟩
     have hSofa : IsMovingSofaWithAngle (K \ niche K ω) ω :=
       ⟨hSclosed, hconn, _, _, cn_isMovement hK hSK hSL⟩
     have hstd : IsStandardPosition (K \ niche K ω) ω :=
       ⟨(hsuppJ ω (Or.inl ⟨hω.1.le, le_rfl⟩)).trans hK.supp_omega,
         (hsuppJ (π / 2) (Or.inr ⟨le_rfl, by linarith [hω.1]⟩)).trans hK.supp_pi_div_two⟩
-    have hcap : capOf (K \ niche K ω) ω = K := (cn_capOf_congr hsuppJ).trans hK.capOf_self
+    have hcap : capOf (K \ niche K ω) ω = K := (ms_capOf_congr hsuppJ).trans hK.capOf_self
     refine ⟨K \ niche K ω, ⟨hω, K \ niche K ω, hSofa, hstd, ?_⟩, hcap⟩
     rw [theorem2_4_2 hω hSofa hstd, hcap]
 
@@ -1378,19 +1237,18 @@ theorem remark2_5_2 : IsCap (Icc (0 : ℝ) 100 ×ˢ Icc 0 1) (π / 2) ∧
     unfold supp
     apply IsGreatest.csSup_eq
     refine ⟨⟨((0 : ℝ), (1 : ℝ)), ⟨⟨le_rfl, by norm_num⟩, ⟨by norm_num, le_rfl⟩⟩, by
-      dsimp only; rw [cn_dot_uvec_pi_div_two]⟩, ?_⟩
+      dsimp only; rw [dot_uvec_pi_div_two]⟩, ?_⟩
     rintro _ ⟨p, hp, rfl⟩
     dsimp only
-    rw [cn_dot_uvec_pi_div_two]; exact hp.2.2
+    rw [dot_uvec_pi_div_two]; exact hp.2.2
   have h3 : supp K (3 * π / 2) = 0 := by
     unfold supp
     apply IsGreatest.csSup_eq
-    refine ⟨⟨((0 : ℝ), (0 : ℝ)), h00, by
-      dsimp only; rw [cn_uvec_three_pi_div_two, dot_neg_right, cn_dot_uvec_pi_div_two, neg_zero]⟩,
+    refine ⟨⟨((0 : ℝ), (0 : ℝ)), h00, by dsimp only; rw [dot_uvec_three_pi_div_two, neg_zero]⟩,
       ?_⟩
     rintro _ ⟨p, hp, rfl⟩
     dsimp only
-    rw [cn_uvec_three_pi_div_two, dot_neg_right, cn_dot_uvec_pi_div_two]
+    rw [dot_uvec_three_pi_div_two]
     linarith [hp.2.1]
   refine ⟨⟨⟨by positivity, le_rfl⟩, ⟨⟨_, h00⟩, hKc, (convex_Icc _ _).prod (convex_Icc _ _)⟩, h1, h1,
     by rw [show π / 2 + π = 3 * π / 2 by ring]; exact h3, h3, ?_⟩, ?_⟩
@@ -1402,11 +1260,10 @@ theorem remark2_5_2 : IsCap (Icc (0 : ℝ) 100 ×ˢ Icc 0 1) (π / 2) ∧
       · left; positivity
       · right; right; positivity
     · ext p
-      have e0 : dot p (uvec 0) = p.1 := cn_dot_uvec_zero p
-      have e1 : dot p (uvec (π / 2)) = p.2 := cn_dot_uvec_pi_div_two p
+      have e0 : dot p (uvec 0) = p.1 := dot_uvec_zero p
+      have e1 : dot p (uvec (π / 2)) = p.2 := dot_uvec_pi_div_two p
       have e2 : dot p (uvec π) = -p.1 := by simp [dot, uvec]
-      have e3 : dot p (uvec (3 * π / 2)) = -p.2 := by
-        rw [cn_uvec_three_pi_div_two, dot_neg_right, e1]
+      have e3 : dot p (uvec (3 * π / 2)) = -p.2 := dot_uvec_three_pi_div_two p
       simp only [mem_iInter, Fin.forall_fin_succ, halfMinus, mem_ofPred_eq, Matrix.cons_val_zero,
         Matrix.cons_val_succ, IsEmpty.forall_iff, and_true]
       simp only [hKdef, mem_prod, mem_Icc]
@@ -1431,38 +1288,28 @@ theorem remark2_5_2 : IsCap (Icc (0 : ℝ) 100 ×ˢ Icc 0 1) (π / 2) ∧
         simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, cos_pi_div_four,
           sin_pi_div_four] at this
         linarith
-      refine ⟨⟨?_, ?_⟩, mem_iUnion₂.2 ⟨π / 4, ⟨by positivity, by linarith⟩, ?_⟩⟩
-      · show (0 : ℝ) ≤ dot ((50 : ℝ), (2 : ℝ)) (uvec (π / 2))
-        rw [cn_dot_uvec_pi_div_two]; norm_num
-      · show (0 : ℝ) ≤ dot ((50 : ℝ), (2 : ℝ)) (uvec (π / 2))
-        rw [cn_dot_uvec_pi_div_two]; norm_num
-      · rw [cn_mem_qMinus]
-        simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, cos_pi_div_four,
-          sin_pi_div_four]
-        constructor <;> nlinarith
+      refine ⟨mem_fan_iff.2 ⟨by rw [dot_uvec_pi_div_two]; norm_num, by norm_num⟩,
+        mem_iUnion₂.2 ⟨π / 4, ⟨by positivity, by linarith⟩, ?_⟩⟩
+      rw [cn_mem_qMinus]
+      simp only [dot, uvec, cos_add_pi_div_two, sin_add_pi_div_two, cos_pi_div_four,
+        sin_pi_div_four]
+      constructor <;> nlinarith
     have := (h hp).2.2
     norm_num at this
 
 /-! ### Helper lemmas for Theorem 2.5.10 -/
 
-private lemma cn_isClosed_fan (ω : ℝ) : IsClosed (fan ω) :=
-  (isClosed_le continuous_const (cn_continuous_dot_left _)).inter
-    (isClosed_le continuous_const (cn_continuous_dot_left _))
-
 private lemma cn_measurableSet_niche (K : Set (ℝ × ℝ)) (ω : ℝ) : MeasurableSet (niche K ω) :=
-  (cn_isClosed_fan ω).measurableSet.inter (cn_isOpen_iUnion_qMinus K ω).measurableSet
+  (isClosed_fan ω).measurableSet.inter (cn_isOpen_iUnion_qMinus K ω).measurableSet
 
 /-- **Theorem 2.5.10** (`thm:sofa-area-functional`). For the cap `K = 𝓒(S)` of a monotone sofa,
 `𝒜_ω(K) = |S|`. -/
 theorem theorem2_5_10 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsMonotoneSofa S ω) :
     sofaArea ω (capOf S ω) = area S := by
   have hSeq := theorem2_4_3 hS
-  have hS0 := hS
-  obtain ⟨hω, S', hS', hstd', hS'eq⟩ := hS
-  have hmov := theorem2_3_2 hω hS' hstd'
-  rw [← hS'eq] at hmov
-  have hcap : IsCap (capOf S ω) ω := theorem2_4_1 hω hmov.1 hmov.2.1
-  have hsub : niche (capOf S ω) ω ⊆ capOf S ω := (theorem2_5_9 hcap).1 ⟨S, hS0, rfl⟩
+  have hcap : IsCap (capOf S ω) ω :=
+    theorem2_4_1 hS.1 hS.isMovingSofaWithAngle hS.isStandardPosition
+  have hsub : niche (capOf S ω) ω ⊆ capOf S ω := (theorem2_5_9 hcap).1 ⟨S, hS, rfl⟩
   have hfin : MeasureTheory.volume (capOf S ω) ≠ ⊤ := hcap.isCompact.measure_lt_top.ne
   rw [sofaArea, show area S = area (capOf S ω \ niche (capOf S ω) ω) from congrArg area hSeq,
     area, area, area, MeasureTheory.measure_sdiff hsub

@@ -746,7 +746,7 @@ def fig_enclosure():
     text = NUM.read_text()
     block = text[text.index('theorem rom_D_box'):]
     block = block[:block.index('exact h5')]
-    steps = re.findall(r'have (h\d) := (rom_iv_\w+) \(L := ' + LEAN_NUM + r'\) \(U := ' + LEAN_NUM + r'\)',
+    steps = re.findall(r'have (h\d) := (iv_\w+) \(L := ' + LEAN_NUM + r'\) \(U := ' + LEAN_NUM + r'\)',
                        block)
     steps = {h: (lem, Fr(a), Fr(b)) for h, lem, a, b in steps}
     hyp = {h: (Fr(a), Fr(b)) for h, a, b in
@@ -770,13 +770,13 @@ def fig_enclosure():
     assert float(h5[0]) <= min(vals) and max(vals) <= float(h5[1])
     fmt = lambda iv: f'[{decimal(iv[0])}, {decimal(iv[1])}]'
     nodes = {
-        'D': ((3.15, 4.0), 'D = 2c − (2 + θ − φ) s', h5, 'h5 · rom_iv_sub'),
-        'h1': ((1.0, 2.75), '2c', h1, 'h1 · rom_iv_mul_nn'),
-        'h4': ((4.7, 2.75), '(2 + θ − φ) s', h4, 'h4 · rom_iv_mul_nn'),
+        'D': ((3.15, 4.0), 'D = 2c − (2 + θ − φ) s', h5, f'h5 · {steps["h5"][0]}'),
+        'h1': ((1.0, 2.75), '2c', h1, f'h1 · {steps["h1"][0]}'),
+        'h4': ((4.7, 2.75), '(2 + θ − φ) s', h4, f'h4 · {steps["h4"][0]}'),
         'c': ((1.0, 1.5), 'c = cos φ', c, 'hc'),
-        'h3': ((3.55, 1.5), '2 + θ − φ', h3, 'h3 · rom_iv_sub'),
+        'h3': ((3.55, 1.5), '2 + θ − φ', h3, f'h3 · {steps["h3"][0]}'),
         's': ((6.05, 1.5), 's = sin φ', s, 'hs'),
-        'h2': ((2.45, 0.25), '2 + θ', h2, 'h2 · rom_iv_add'),
+        'h2': ((2.45, 0.25), '2 + θ', h2, f'h2 · {steps["h2"][0]}'),
         'phi': ((4.75, 0.25), 'φ', phi, 'hφ'),
         'th': ((2.45, -1.0), 'θ', th, 'hθ'),
     }

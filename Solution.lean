@@ -71,9 +71,7 @@ theorem gerver_params_unique (P Q : GerverParams) (hP : P.IsSolution) (hPb : P.I
     ((GerverParams.toLib_inBox Q).2 hQb)
   cases P; cases Q
   simp only [GerverParams.toLib, MovingSofaOptimality.GerverParams.mk.injEq] at h
-  obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17⟩ := h
-  subst h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 h15 h16 h17
-  rfl
+  simpa only [GerverParams.mk.injEq] using h
 
 /-- Gerver's sofa has area `2.219…`: between `2.2192` and `2.2199`. (Gerver's and Romik's value is
 `2.21953…`.) -/

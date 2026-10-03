@@ -17,10 +17,10 @@ noncomputable section
 ## A closed subset of full measure
 
 Let `μ` be a measure that is positive on nonempty open sets. A closed set `s` with
-`μ (t \ s) = 0` contains the interior of `t`, hence its closure; so if `s ⊆ t` and `t` is regular
-closed, then `s = t` (`eq_of_subset_of_null_sdiff`). When `μ t` is finite, equal measures give
-`μ (t \ s) = 0` (`eq_of_subset_of_measure_eq`). This is the last step of the proof of the theorem
-in note 20.
+`μ (t \ s) = 0` contains the interior of `t`, hence the closure of that interior; so if `s ⊆ t` and
+`t` is regular closed, then `s = t` (`eq_of_subset_of_null_sdiff`). When `μ t` is finite, equal
+measures give `μ (t \ s) = 0` (`eq_of_subset_of_measure_eq`). This is the last step of the proof of
+the theorem in note 20.
 -/
 
 section
@@ -33,38 +33,29 @@ variable {X : Type*} [TopologicalSpace X] [MeasurableSpace X]
 variable {μ : Measure X} [Measure.IsOpenPosMeasure μ]
 variable {s t : Set X}
 
-/-- A closed set `s` with `μ (t \ s) = 0` contains the interior of `t`. -/
+/-- A closed set `s` with `μ (t \ s) = 0` contains the interior of `t`: otherwise the nonempty
+open set `interior t \ s` would have measure zero. -/
 theorem interior_subset_of_null_sdiff (hs : IsClosed s) (hnull : μ (t \ s) = 0) :
     interior t ⊆ s := by
   intro x hx
   by_contra hxs
   have hopen : IsOpen (interior t \ s) := isOpen_interior.inter hs.isOpen_compl
-  have hne : μ (interior t \ s) ≠ 0 := hopen.measure_ne_zero μ ⟨x, hx, hxs⟩
-  have hsub : interior t \ s ⊆ t \ s := Set.sdiff_subset_sdiff_left interior_subset
-  exact hne (measure_mono_null hsub hnull)
-
-/-- A closed set `s` with `μ (t \ s) = 0` contains the closure of the interior of `t`. -/
-theorem closure_interior_subset_of_null_sdiff (hs : IsClosed s)
-    (hnull : μ (t \ s) = 0) : closure (interior t) ⊆ s :=
-  closure_minimal (interior_subset_of_null_sdiff hs hnull) hs
+  exact hopen.measure_ne_zero μ ⟨x, hx, hxs⟩
+    (measure_mono_null (Set.sdiff_subset_sdiff_left interior_subset) hnull)
 
 /-- A closed subset `s` of a regular closed set `t` with `μ (t \ s) = 0` is `t`. -/
 theorem eq_of_subset_of_null_sdiff (hs : IsClosed s) (hst : s ⊆ t)
     (ht : closure (interior t) = t) (hnull : μ (t \ s) = 0) : s = t := by
-  apply Set.Subset.antisymm hst
+  refine Set.Subset.antisymm hst ?_
   rw [← ht]
-  exact closure_interior_subset_of_null_sdiff hs hnull
+  exact closure_minimal (interior_subset_of_null_sdiff hs hnull) hs
 
 /-- A closed subset `s` of a regular closed set `t` with `μ s = μ t < ∞` is `t`. -/
 theorem eq_of_subset_of_measure_eq [OpensMeasurableSpace X]
     (hs : IsClosed s) (hst : s ⊆ t) (ht : closure (interior t) = t)
     (htfin : μ t ≠ ⊤) (hvol : μ s = μ t) : s = t := by
-  have hsfin : μ s ≠ ⊤ := by
-    rw [hvol]
-    exact htfin
-  have hnull : μ (t \ s) = 0 := by
-    rw [measure_sdiff hst hs.measurableSet.nullMeasurableSet hsfin, hvol, tsub_self]
-  exact eq_of_subset_of_null_sdiff hs hst ht hnull
+  refine eq_of_subset_of_null_sdiff (μ := μ) hs hst ht ?_
+  rw [measure_sdiff hst hs.measurableSet.nullMeasurableSet (hvol ▸ htfin), hvol, tsub_self]
 
 end MovingSofaUniqueness
 
@@ -82,10 +73,11 @@ Rigid maps compose (`Rigid.trans`), have inverses (`Rigid.symm`) and preserve Le
 
 section
 
-open Set Real MeasureTheory
+open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness
 
+/-- The plane `ℝ × ℝ`. -/
 abbrev Plane := ℝ × ℝ
 
 /-- An orientation-preserving rigid map of the plane: the rotation by `angle` about the origin,
@@ -94,104 +86,76 @@ structure Rigid where
   angle : ℝ
   shift : Plane
 
+/-- The rigid map `p ↦ rot angle p + shift`. -/
 def Rigid.apply (g : Rigid) (p : Plane) : Plane :=
-  MovingSofaOptimality.rot g.angle p + g.shift
+  rot g.angle p + g.shift
 
 instance : CoeFun Rigid (fun _ => Plane → Plane) := ⟨Rigid.apply⟩
 
+/-- The translation by `v`. -/
 def Rigid.translate (v : Plane) : Rigid := ⟨0, v⟩
+/-- The rotation by `a` about the origin. -/
 def Rigid.rotate (a : ℝ) : Rigid := ⟨a, 0⟩
 
 /-- The rigid map that applies `g`, then `h`, in the order of `Equiv.trans`. -/
 def Rigid.trans (g h : Rigid) : Rigid :=
-  ⟨h.angle + g.angle, MovingSofaOptimality.rot h.angle g.shift + h.shift⟩
+  ⟨h.angle + g.angle, rot h.angle g.shift + h.shift⟩
 
+/-- The inverse of a rigid map. -/
 def Rigid.symm (g : Rigid) : Rigid :=
-  ⟨-g.angle, -MovingSofaOptimality.rot (-g.angle) g.shift⟩
+  ⟨-g.angle, -rot (-g.angle) g.shift⟩
 
 @[simp] theorem Rigid.translate_apply (v p : Plane) : Rigid.translate v p = p + v := by
-  simp [Rigid.translate, Rigid.apply, MovingSofaOptimality.rot_zero]
+  simp [Rigid.translate, Rigid.apply]
 
-@[simp] theorem Rigid.rotate_apply (a : ℝ) (p : Plane) :
-    Rigid.rotate a p = MovingSofaOptimality.rot a p := by
+@[simp] theorem Rigid.rotate_apply (a : ℝ) (p : Plane) : Rigid.rotate a p = rot a p := by
   simp [Rigid.rotate, Rigid.apply]
 
-@[simp] theorem Rigid.trans_apply (g h : Rigid) (p : Plane) :
-    (g.trans h) p = h (g p) := by
-  simp only [Rigid.trans, Rigid.apply, MovingSofaOptimality.rot_add, MovingSofaOptimality.rot_add_vec]
+@[simp] theorem Rigid.trans_apply (g h : Rigid) (p : Plane) : (g.trans h) p = h (g p) := by
+  simp only [Rigid.trans, Rigid.apply, rot_add, rot_add_vec]
   abel
 
 @[simp] theorem Rigid.symm_apply_apply (g : Rigid) (p : Plane) : g.symm (g p) = p := by
-  simp [Rigid.symm, Rigid.apply, MovingSofaOptimality.rot_add_vec, MovingSofaOptimality.rot_neg_rot]
+  simp [Rigid.symm, Rigid.apply, rot_add_vec, rot_neg_rot]
 
 @[simp] theorem Rigid.apply_symm_apply (g : Rigid) (p : Plane) : g (g.symm p) = p := by
-  -- Rewrite the negative rotated translation by linearity of the rotation.
-  have hneg : MovingSofaOptimality.rot g.angle (-MovingSofaOptimality.rot (-g.angle) g.shift) = -g.shift := by
-    have h := (MovingSofaOptimality.gm_rotLM g.angle).map_neg (MovingSofaOptimality.rot (-g.angle) g.shift)
-    simpa [MovingSofaOptimality.gm_rotLM, MovingSofaOptimality.rot_rot_neg] using h
-  simp only [Rigid.symm, Rigid.apply, MovingSofaOptimality.rot_add_vec,
-    MovingSofaOptimality.rot_rot_neg, hneg]
+  have hneg : rot g.angle (-rot (-g.angle) g.shift) = -g.shift := by
+    rw [← neg_one_smul ℝ, rot_smul, rot_rot_neg, neg_one_smul]
+  simp only [Rigid.symm, Rigid.apply, rot_add_vec, rot_rot_neg, hneg]
   abel
 
-theorem Rigid.continuous (g : Rigid) : Continuous g := by
-  change Continuous (fun p : Plane => MovingSofaOptimality.rot g.angle p + g.shift)
-  exact (MovingSofaOptimality.ang_continuous_rot g.angle).add continuous_const
+theorem Rigid.continuous (g : Rigid) : Continuous g :=
+  (continuous_rot g.angle).add continuous_const
 
 @[simp] theorem Rigid.trans_image (g h : Rigid) (s : Set Plane) :
     (g.trans h) '' s = h '' (g '' s) := by
-  ext p
-  simp only [Set.mem_image]
-  constructor
-  · rintro ⟨x, hx, rfl⟩
-    exact ⟨g x, ⟨x, hx, rfl⟩, (g.trans_apply h x).symm⟩
-  · rintro ⟨y, ⟨x, hx, rfl⟩, rfl⟩
-    exact ⟨x, hx, g.trans_apply h x⟩
+  rw [Set.image_image]
+  simp
 
+/-- A rigid map maps closed sets to closed sets: its image is the preimage under its inverse. -/
 theorem Rigid.isClosed_image (g : Rigid) {s : Set Plane} (hs : IsClosed s) :
     IsClosed (g '' s) := by
-  have he : g '' s = g.symm ⁻¹' s := by
-    ext p
-    constructor
-    · rintro ⟨x, hx, rfl⟩
-      simpa using hx
-    · intro hp
-      exact ⟨g.symm p, hp, g.apply_symm_apply p⟩
-  rw [he]
+  rw [Set.image_eq_preimage_of_inverse g.symm_apply_apply g.apply_symm_apply]
   exact hs.preimage g.symm.continuous
 
-/-- A rotation about the origin preserves volume. -/
-theorem volume_rot (a : ℝ) (s : Set Plane) :
-    volume (MovingSofaOptimality.rot a '' s) = volume s := by
-  have h := Measure.addHaar_image_linearMap volume (MovingSofaOptimality.gm_rotLM a) s
-  have he : (⇑(MovingSofaOptimality.gm_rotLM a) : Plane → Plane) = MovingSofaOptimality.rot a := rfl
-  rw [he, MovingSofaOptimality.gm_det_rotLM] at h
-  simpa using h
-
-theorem volume_translate (v : Plane) (s : Set Plane) :
-    volume ((fun p => p + v) '' s) = volume s := by
-  rw [image_add_right]
-  exact MovingSofaOptimality.mpc_volume_preimage_add s (-v)
-
+/-- A rigid map preserves Lebesgue measure: rotations have determinant one, and translations
+preserve the measure. -/
 @[simp] theorem Rigid.volume_image (g : Rigid) (s : Set Plane) :
     volume (g '' s) = volume s := by
-  have he : g '' s = (fun p => p + g.shift) '' (MovingSofaOptimality.rot g.angle '' s) := by
+  have he : g '' s = (fun p => p + g.shift) '' (rot g.angle '' s) := by
     rw [Set.image_image]
     rfl
-  rw [he, volume_translate, volume_rot]
+  rw [he, Set.image_add_right, volume_preimage_add, volume_image_rot]
 
-@[simp] theorem Rigid.area_image (g : Rigid) (s : Set Plane) :
-    MovingSofaOptimality.area (g '' s) = MovingSofaOptimality.area s := by
-  unfold MovingSofaOptimality.area
-  rw [g.volume_image]
+@[simp] theorem Rigid.area_image (g : Rigid) (s : Set Plane) : area (g '' s) = area s := by
+  rw [area, area, g.volume_image]
 
 /-- If `g '' s ⊆ G` for a closed set `s` and a regular closed set `G` of finite volume, and
 `volume s = volume G`, then `g '' s = G`. -/
 theorem Rigid.recover (g : Rigid) {s G : Set Plane} (hs : IsClosed s)
     (hsub : g '' s ⊆ G) (hreg : closure (interior G) = G)
-    (hfin : volume G ≠ ⊤) (hvol : volume s = volume G) : g '' s = G := by
-  apply MovingSofaUniqueness.eq_of_subset_of_measure_eq (μ := volume)
-    (g.isClosed_image hs) hsub hreg hfin
-  simpa using hvol
+    (hfin : volume G ≠ ⊤) (hvol : volume s = volume G) : g '' s = G :=
+  eq_of_subset_of_measure_eq (g.isClosed_image hs) hsub hreg hfin (by simpa using hvol)
 
 end MovingSofaUniqueness
 

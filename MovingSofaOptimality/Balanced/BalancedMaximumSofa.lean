@@ -15,9 +15,9 @@ Definitions 3.5.1–3.5.3, Proposition 3.5.1, Theorem 3.5.2 (`thm:balanced-maxim
 compactness of the nonempty compact subsets of a compact set in the Hausdorff metric together with
 the estimate `|h_A - h_B| ≤ 2 d_H(A, B)` (sup metric on `ℝ × ℝ`); the limit is a cap because the
 support functions of the approximating polygon caps are "linear" on the gaps of
-`J_ω ∪ {ω + π, 3π/2}` (`mpc_gap_limit`). Theorems 3.5.4 and 3.5.5 do not need Lemma 3.5.3: a point of
-the niche lies in the open quarter-planes `Q_K⁻(t)` for a dyadic `t`, hence in the polygon niches of
-the approximating caps (`mpc_niche_eventually`); the area is upper semicontinuous under Hausdorff
+`J_ω ∪ {ω + π, 3π/2}` (`mpc_gap_limit`). Theorems 3.5.4 and 3.5.5 do not need Lemma 3.5.3: a point
+of the niche lies in the open quarter-planes `Q_K⁻(t)` for a dyadic `t`, hence in the polygon niches
+of the approximating caps (`mpc_niche_eventually`); the area is upper semicontinuous under Hausdorff
 convergence (`mpc_area_usc`) and lower semicontinuous along eventual membership (`mpc_area_lsc`).
 -/
 
@@ -54,6 +54,7 @@ noncomputable def dyadicAngleSet (ω : ℝ) (hω : ω ∈ Ioc 0 (π / 2)) (k : �
 
 /-! ### Dyadic angle sets -/
 
+/-- The dyadic angles are the `iω/2^(k+1)`, `0 < i < 2^(k+1)`. -/
 lemma mpc_mem_dyadic {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (k : ℕ) (s : ℝ) :
     s ∈ (dyadicAngleSet ω hω k).angles ↔
       ∃ i : ℕ, 0 < i ∧ i < 2 ^ (k + 1) ∧ s = i * ω / 2 ^ (k + 1) := by
@@ -64,6 +65,7 @@ lemma mpc_mem_dyadic {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (k : ℕ) (s : ℝ
   · rintro ⟨i, h1, h2, rfl⟩
     exact ⟨i, ⟨h1, h2⟩, by push_cast; ring⟩
 
+/-- The dyadic angle sets increase with `k`. -/
 lemma mpc_dyadic_mono {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {k k' : ℕ} (hkk : k ≤ k') :
     (dyadicAngleSet ω hω k).angles ⊆ (dyadicAngleSet ω hω k').angles := by
   intro s hs
@@ -80,6 +82,7 @@ lemma mpc_dyadic_mono {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {k k' : ℕ} (hkk
     push_cast
     field_simp
 
+/-- The dyadic angles are dense in `(0, ω)`. -/
 lemma mpc_dyadic_dense {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {t : ℝ} (ht : t ∈ Ioo 0 ω) {η : ℝ}
     (hη : 0 < η) : ∃ k, ∃ s ∈ (dyadicAngleSet ω hω k).angles, |s - t| < η := by
   have hω0 : 0 < ω := hω.1
@@ -137,40 +140,29 @@ def IsBalancedMaxCap (K : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
 
 /-! ### Mirror reflections of balanced maximum caps -/
 
-
-/-- The support function of the mirror image. -/
-lemma mpc_supp_mirror (ω : ℝ) (S : Set (ℝ × ℝ)) (t : ℝ) :
-    supp (mirror ω '' S) t = supp S (π / 2 + ω - t) := by
-  simp only [supp, Set.image_image, mpc_dot_mirror]
-
+/-- The mirror reflection `M_ω` preserves the Hausdorff distance. -/
 lemma mpc_hausdorffDist_mirror (ω : ℝ) (A B : Set (ℝ × ℝ)) :
-    hausdorffDist (mirror ω '' A) (mirror ω '' B) = hausdorffDist A B := by
-  simp only [hausdorffDist, mpc_supp_mirror]
-  exact (Equiv.subLeft (π / 2 + ω)).iSup_comp (g := fun t => |supp A t - supp B t|)
+    hausdorffDist (mirrorCap A ω) (mirrorCap B ω) = hausdorffDist A B := by
+  simp only [hausdorffDist, proposition2_5_4_supp]
+  exact (Equiv.subLeft (ω + π / 2)).iSup_comp (g := fun t => |supp A t - supp B t|)
 
+/-- The dyadic angle sets are symmetric: `Θ_{ω,n}^m = Θ_{ω,n}`. -/
 lemma mpc_dyadic_mirror {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (k : ℕ) :
     (dyadicAngleSet ω hω k).mirror = dyadicAngleSet ω hω k := by
   have hω' : (dyadicAngleSet ω hω k).ω = ω := rfl
+  -- `iω/n ↦ ω - iω/n = (n - i)ω/n`
+  have hsymm : ∀ s ∈ (dyadicAngleSet ω hω k).angles, ω - s ∈ (dyadicAngleSet ω hω k).angles := by
+    intro s hs
+    rw [mpc_mem_dyadic] at hs ⊢
+    obtain ⟨i, h1, h2, rfl⟩ := hs
+    refine ⟨2 ^ (k + 1) - i, by omega, by omega, ?_⟩
+    rw [Nat.cast_sub h2.le]
+    push_cast
+    field_simp
   have key : (dyadicAngleSet ω hω k).mirror.angles = (dyadicAngleSet ω hω k).angles := by
     ext s
-    rw [mpc_mem_mirror_angles, hω', mpc_mem_dyadic, mpc_mem_dyadic]
-    constructor
-    · rintro ⟨i, h1, h2, h3⟩
-      refine ⟨2 ^ (k + 1) - i, by omega, by omega, ?_⟩
-      have : ((2 ^ (k + 1) - i : ℕ) : ℝ) = 2 ^ (k + 1) - i := by
-        rw [Nat.cast_sub h2.le]; push_cast; ring
-      rw [this]
-      have hpos : (0 : ℝ) < 2 ^ (k + 1) := by positivity
-      rw [eq_div_iff hpos.ne'] at h3
-      field_simp
-      linear_combination -h3
-    · rintro ⟨i, h1, h2, h3⟩
-      refine ⟨2 ^ (k + 1) - i, by omega, by omega, ?_⟩
-      have : ((2 ^ (k + 1) - i : ℕ) : ℝ) = 2 ^ (k + 1) - i := by
-        rw [Nat.cast_sub h2.le]; push_cast; ring
-      rw [this, h3]
-      have hpos : (0 : ℝ) < 2 ^ (k + 1) := by positivity
-      field_simp
+    rw [mpc_mem_mirror_angles, hω']
+    exact ⟨fun h => by simpa using hsymm _ h, hsymm s⟩
   cases h : dyadicAngleSet ω hω k
   rw [h] at key
   simp only [AngleSet.mirror] at key ⊢
@@ -184,11 +176,8 @@ theorem proposition3_5_1 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCa
   obtain ⟨hω, hcap, k, Ks, hk, hmax, hlim⟩ := hK
   refine ⟨hω, proposition2_5_4_isCap hcap, k, fun i => mirrorCap (Ks i) ω, hk, fun i => ?_, ?_⟩
   · have := lemma3_4_1 (hmax i)
-    rw [mpc_dyadic_mirror] at this
-    exact this
-  · unfold HausdorffTendsto
-    simp only [mirrorCap, mpc_hausdorffDist_mirror]
-    exact hlim
+    rwa [mpc_dyadic_mirror] at this
+  · simpa only [HausdorffTendsto, mpc_hausdorffDist_mirror] using hlim
 
 /-! ### Blaschke selection and limits of polygon caps -/
 
@@ -199,23 +188,56 @@ lemma mpc_supp_le_add_hausdorff {A B : Set (ℝ × ℝ)} (hA : IsCompact A) (hAn
     supp A t ≤ supp B t + 2 * Metric.hausdorffDist A B := by
   have hfin := Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded hAne hBne hA.isBounded
     hB.isBounded
-  apply csSup_le (hAne.image _)
-  rintro _ ⟨p, hp, rfl⟩
-  apply le_of_forall_pos_lt_add
-  intro δ hδ
+  refine supp_le_of_forall hAne fun p hp => le_of_forall_pos_lt_add fun δ hδ => ?_
+  -- a point `q ∈ B` with `d(p, q) < d_H(A, B) + δ/2`
   obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt hp
     (lt_add_of_pos_right (Metric.hausdorffDist A B) (half_pos hδ)) hfin
-  have h1 := dot_le_supp hB hq t
-  have h2 := mpc_abs_dot_uvec_le (p - q) t
-  have hpq' : dist p q = max (dist p.1 q.1) (dist p.2 q.2) := Prod.dist_eq
-  have h3 : |(p - q).1| ≤ dist p q := by
-    rw [Prod.fst_sub, ← Real.dist_eq, hpq']; exact le_max_left _ _
-  have h4 : |(p - q).2| ≤ dist p q := by
-    rw [Prod.snd_sub, ← Real.dist_eq, hpq']; exact le_max_right _ _
-  have h5 : dot p (uvec t) = dot q (uvec t) + dot (p - q) (uvec t) := by
-    rw [dot_sub_left]; ring
-  dsimp only
-  linarith [le_abs_self (dot (p - q) (uvec t))]
+  -- `p · u_t ≤ q · u_t + |(p - q)₁| + |(p - q)₂| ≤ h_B(t) + 2 d(p, q)`
+  have h1 : |(p - q).1| ≤ dist p q := by
+    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_fst_le (p - q)
+  have h2 : |(p - q).2| ≤ dist p q := by
+    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_snd_le (p - q)
+  have h3 := (abs_le.1 (abs_dot_uvec_le (p - q) t)).2
+  rw [dot_sub_left] at h3
+  linarith [dot_le_supp hB hq t]
+
+/-- The distance `sup_t |h_A(t) - h_B(t)|` of the support functions is at most twice the
+(Mathlib) Hausdorff distance. -/
+private lemma mpc_hausdorffDist_le_two_mul {A B : Set (ℝ × ℝ)} (hA : IsCompact A)
+    (hAne : A.Nonempty) (hB : IsCompact B) (hBne : B.Nonempty) :
+    hausdorffDist A B ≤ 2 * Metric.hausdorffDist A B :=
+  ciSup_le fun t => abs_le.2
+    ⟨by linarith [mpc_supp_le_add_hausdorff hB hBne hA hAne t,
+        Metric.hausdorffDist_comm (s := A) (t := B)],
+      by linarith [mpc_supp_le_add_hausdorff hA hAne hB hBne t]⟩
+
+/-- A nonempty closed set which is the limit, in the Hausdorff distance, of convex sets is
+convex. -/
+private lemma mpc_convex_of_tendsto {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, Convex ℝ (Ks i))
+    {L : Set (ℝ × ℝ)} (hLc : IsClosed L) (hLne : L.Nonempty)
+    (hd : Tendsto (fun i => Metric.hausdorffDist (Ks i) L) atTop (𝓝 0))
+    (hfin : ∀ i, Metric.hausdorffEDist (Ks i) L ≠ ⊤) : Convex ℝ L := by
+  intro p hp q hq a b ha hb hab
+  rw [← hLc.closure_eq, Metric.mem_closure_iff_infDist_zero hLne]
+  refine le_antisymm (le_of_forall_pos_le_add fun ε hε => ?_) Metric.infDist_nonneg
+  -- `p, q` are within `ε/2` of points `p', q'` of some `K_i`, which contains `a p' + b q'`
+  obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds (show 0 < ε / 2 by positivity))).exists
+  obtain ⟨p', hp', hpp'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
+  obtain ⟨q', hq', hqq'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hq hi (hfin i)
+  have h1 : Metric.infDist (a • p' + b • q') L ≤ Metric.hausdorffDist (Ks i) L :=
+    Metric.infDist_le_hausdorffDist_of_mem ((hKs i) hp' hq' ha hb hab) (hfin i)
+  have h2 : dist (a • p + b • q) (a • p' + b • q') ≤ a * dist p' p + b * dist q' q := by
+    rw [dist_comm p', dist_comm q']
+    refine (dist_add_add_le _ _ _ _).trans_eq ?_
+    rw [dist_smul₀, dist_smul₀, Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
+  have h3 := Metric.infDist_le_infDist_add_dist (x := a • p + b • q) (y := a • p' + b • q')
+    (s := L)
+  have h4 : a * dist p' p + b * dist q' q ≤ ε / 2 := by
+    have e1 := mul_le_mul_of_nonneg_left hpp'.le ha
+    have e2 := mul_le_mul_of_nonneg_left hqq'.le hb
+    have e3 : a * (ε / 2) + b * (ε / 2) = ε / 2 := by rw [← add_mul, hab, one_mul]
+    linarith
+  linarith
 
 open TopologicalSpace in
 /-- **Blaschke selection theorem** for convex bodies in a compact set, with convergence of the
@@ -223,6 +245,7 @@ support functions. -/
 lemma mpc_blaschke {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (Ks i)) {B : Set (ℝ × ℝ)}
     (hB : IsCompact B) (hsub : ∀ i, Ks i ⊆ B) :
     ∃ L, IsConvexBody L ∧ L ⊆ B ∧ ∃ φ : ℕ → ℕ, StrictMono φ ∧ HausdorffTendsto (Ks ∘ φ) L := by
+  -- the nonempty compact subsets of `B` form a compact set in the Hausdorff metric
   set C : ℕ → NonemptyCompacts (ℝ × ℝ) := fun i => ⟨⟨Ks i, (hKs i).2.1⟩, (hKs i).1⟩ with hC
   set S := {D : NonemptyCompacts (ℝ × ℝ) | (D : Set (ℝ × ℝ)) ⊆ B}
   have hS : TotallyBounded S :=
@@ -240,6 +263,7 @@ lemma mpc_blaschke {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (K
   have hfin : ∀ i, Metric.hausdorffEDist (Ks (φ i)) L ≠ ⊤ := fun i =>
     Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded (hKs _).1 hLne (hKs _).2.1.isBounded
       hLc.isBounded
+  -- the limit lies in `B` and is convex
   have hLB : L ⊆ B := by
     intro p hp
     rw [← hB.isClosed.closure_eq, Metric.mem_closure_iff]
@@ -247,49 +271,13 @@ lemma mpc_blaschke {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (K
     obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds hε)).exists
     obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
     exact ⟨q, hsub _ hq, by rw [dist_comm]; exact hpq⟩
-  have hLconv : Convex ℝ L := by
-    intro p hp q hq a b ha hb hab
-    rw [← hLc.isClosed.closure_eq, Metric.mem_closure_iff_infDist_zero hLne]
-    refine le_antisymm (le_of_forall_pos_le_add fun ε hε => ?_) Metric.infDist_nonneg
-    obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds (show 0 < ε / 2 by positivity))).exists
-    obtain ⟨p', hp', hpp'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
-    obtain ⟨q', hq', hqq'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hq hi (hfin i)
-    have hm' : a • p' + b • q' ∈ Ks (φ i) := (hKs _).2.2 hp' hq' ha hb hab
-    have h1 : Metric.infDist (a • p' + b • q') L ≤ Metric.hausdorffDist (Ks (φ i)) L :=
-      Metric.infDist_le_hausdorffDist_of_mem hm' (hfin i)
-    have h2 : dist (a • p + b • q) (a • p' + b • q') ≤ a * dist p' p + b * dist q' q := by
-      rw [dist_eq_norm, show a • p + b • q - (a • p' + b • q') = a • (p - p') + b • (q - q') by
-        simp only [smul_sub]; abel]
-      calc ‖a • (p - p') + b • (q - q')‖ ≤ ‖a • (p - p')‖ + ‖b • (q - q')‖ := norm_add_le _ _
-        _ = a * dist p' p + b * dist q' q := by
-          rw [norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg ha,
-            abs_of_nonneg hb, ← dist_eq_norm, ← dist_eq_norm, dist_comm p, dist_comm q]
-    have h3 := Metric.infDist_le_infDist_add_dist (x := a • p + b • q) (y := a • p' + b • q')
-      (s := L)
-    have h4 : a * dist p' p + b * dist q' q ≤ ε / 2 := by
-      have e1 := mul_le_mul_of_nonneg_left hpp'.le ha
-      have e2 := mul_le_mul_of_nonneg_left hqq'.le hb
-      have e3 : a * (ε / 2) + b * (ε / 2) = ε / 2 := by rw [← add_mul, hab, one_mul]
-      linarith
-    linarith
-  have hLb : IsConvexBody L := ⟨hLne, hLc, hLconv⟩
-  refine ⟨L, hLb, hLB, φ, hφ, ?_⟩
-  -- the support functions converge
-  have hbridge : ∀ i, hausdorffDist (Ks (φ i)) L ≤ 2 * Metric.hausdorffDist (Ks (φ i)) L := by
-    intro i
-    apply ciSup_le
-    intro t
-    rw [abs_le]
-    have e1 := mpc_supp_le_add_hausdorff (hKs (φ i)).2.1 (hKs (φ i)).1 hLc hLne t
-    have e2 := mpc_supp_le_add_hausdorff hLc hLne (hKs (φ i)).2.1 (hKs (φ i)).1 t
-    rw [Metric.hausdorffDist_comm] at e2
-    constructor <;> linarith
-  have hnn : ∀ i, 0 ≤ hausdorffDist (Ks (φ i)) L := fun i =>
-    (abs_nonneg _).trans (le_ciSup (mpc_bddAbove_abs_supp_sub (hKs (φ i)).2.1 (hKs (φ i)).1
-      hLc hLne) 0)
-  have h2 : Tendsto (fun i => 2 * Metric.hausdorffDist (Ks (φ i)) L) atTop (𝓝 0) := by
-    simpa using hd.const_mul 2
-  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h2 hnn hbridge
+  have hLconv : Convex ℝ L :=
+    mpc_convex_of_tendsto (fun i => (hKs (φ i)).2.2) hLc.isClosed hLne hd hfin
+  refine ⟨L, ⟨hLne, hLc, hLconv⟩, hLB, φ, hφ, ?_⟩
+  -- the support functions converge, since `sup_t |h_{K_i}(t) - h_L(t)| ≤ 2 d_H(K_i, L)`
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (by simpa using hd.const_mul 2) (fun i => Real.iSup_nonneg fun _ => abs_nonneg _)
+    (fun i => mpc_hausdorffDist_le_two_mul (hKs (φ i)).2.1 (hKs (φ i)).1 hLc hLne)
 
 /-- The cap angles lie in `(0, 3π/2]`. -/
 lemma mpc_capAngles_bounds {Θ : AngleSet} {c : ℝ} (hc : c ∈ Θ.capAngles) :
@@ -320,29 +308,42 @@ lemma mpc_gap_limit {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
       · right; exact ⟨by linarith, h⟩
       · left; exact ⟨h, by linarith⟩)
     rw [← hqx r hr1 hr2, ← hqa, ← hqb]
-    exact mpc_dot_uvec_comb q a b r
-  have t1 := (mpc_supp_tendsto hL hKb hlim r).const_mul (sin (b - a))
-  have t2 := ((mpc_supp_tendsto hL hKb hlim a).const_mul (sin (b - r))).add
-    ((mpc_supp_tendsto hL hKb hlim b).const_mul (sin (r - a)))
+    exact dot_uvec_comb q a b r
+  have t1 := (tendsto_supp hKb hL hlim r).const_mul (sin (b - a))
+  have t2 := ((tendsto_supp hKb hL hlim a).const_mul (sin (b - r))).add
+    ((tendsto_supp hKb hL hlim b).const_mul (sin (r - a)))
   exact tendsto_nhds_unique (t1.congr hid) t2
+
+/-- In a gap `[a, b]` of the normal angles of polygon caps `K_i → L`, a point satisfying the
+supporting constraints of `L` at `a` and at `b` satisfies those at every angle in between. -/
+private lemma mpc_dot_le_supp_of_gap {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
+    (hKs : ∀ i, IsPolygonCap (Θs i) (Ks i)) {L : Set (ℝ × ℝ)} (hL : IsConvexBody L)
+    (hlim : HausdorffTendsto Ks L) {a b r : ℝ} (ha : 0 ≤ a) (hab : a < b) (hb : b ≤ 2 * π)
+    (hba : b - a < π) (hgap : ∀ i, ∀ c ∈ (Θs i).capAngles, c ≤ a ∨ b ≤ c) {p : ℝ × ℝ}
+    (hpa : dot p (uvec a) ≤ supp L a) (hpb : dot p (uvec b) ≤ supp L b) (hr1 : a ≤ r)
+    (hr2 : r ≤ b) : dot p (uvec r) ≤ supp L r := by
+  have hsab : 0 < sin (b - a) := sin_pos_of_pos_of_lt_pi (by linarith) hba
+  have hs1 : 0 ≤ sin (b - r) := sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
+  have hs2 : 0 ≤ sin (r - a) := sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
+  refine le_of_mul_le_mul_left ?_ hsab
+  rw [dot_uvec_comb p a b r, mpc_gap_limit hKs hL hlim ha hab hb hba hgap hr1 hr2]
+  exact add_le_add (mul_le_mul_of_nonneg_left hpa hs1) (mul_le_mul_of_nonneg_left hpb hs2)
 
 /-- A Hausdorff limit of polygon caps with rotation angle `ω` is a cap. -/
 lemma mpc_limit_isCap {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {Θs : ℕ → AngleSet}
     (hΘ : ∀ i, (Θs i).ω = ω) {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsPolygonCap (Θs i) (Ks i))
     {L : Set (ℝ × ℝ)} (hL : IsConvexBody L) (hlim : HausdorffTendsto Ks L) : IsCap L ω := by
   have hKb : ∀ i, IsConvexBody (Ks i) := fun i => (hKs i).1.2.1
-  have hconst : ∀ t c, (∀ i, supp (Ks i) t = c) → supp L t = c := by
-    intro t c h
-    have := mpc_supp_tendsto hL hKb hlim t
-    simp only [h] at this
-    exact tendsto_nhds_unique this tendsto_const_nhds
-  have hω0 := hω.1
-  have hω2 := hω.2
-  refine ⟨hω, hL, hconst _ _ fun i => by have := (hKs i).1.2.2.1; rwa [hΘ i] at this,
-    hconst _ _ fun i => (hKs i).1.2.2.2.1,
-    hconst _ _ fun i => by have := (hKs i).1.2.2.2.2.1; rwa [hΘ i] at this,
+  -- the values `h(ω) = h(π/2) = 1` and `h(ω + π) = h(3π/2) = 0` pass to the limit
+  have hconst : ∀ t c, (∀ i, supp (Ks i) t = c) → supp L t = c := fun t c h =>
+    tendsto_nhds_unique ((tendsto_supp hKb hL hlim t).congr h) tendsto_const_nhds
+  obtain ⟨hω0, hω2⟩ := hω
+  have hpi := pi_pos
+  refine ⟨⟨hω0, hω2⟩, hL, hconst _ _ fun i => hΘ i ▸ (hKs i).1.2.2.1,
+    hconst _ _ fun i => (hKs i).1.2.2.2.1, hconst _ _ fun i => hΘ i ▸ (hKs i).1.2.2.2.2.1,
     hconst _ _ fun i => (hKs i).1.2.2.2.2.2.1, ?_⟩
-  -- `L` is the intersection of its supporting half-planes with normal angles in `A`
+  -- `L` is the intersection of its supporting half-planes with normal angles in
+  -- `A = J_ω ∪ {ω + π, 3π/2}`: a point `p` satisfying these constraints lies in `L`
   set A := jSet ω ∪ {ω + π, 3 * π / 2} with hA
   refine ⟨A, fun s => s.1, fun s => supp L s.1, fun s => s.2, ?_⟩
   ext p
@@ -350,49 +351,25 @@ lemma mpc_limit_isCap {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {Θs : ℕ → An
   refine ⟨fun hp s => dot_le_supp hL.2.1 hp s.1, fun hp => ?_⟩
   have hpA : ∀ s ∈ A, dot p (uvec s) ≤ supp L s := fun s hs => hp ⟨s, hs⟩
   rw [mem_iff_forall_dot_le_supp hL]
-  -- the normal angles of the polygon caps avoid the gaps of `A`
-  have hcap : ∀ i, ∀ c ∈ (Θs i).capAngles, c ∈ A := by
-    intro i c hc
-    have := mpc_capAngles_subset (Θs i) hc
-    rwa [hΘ i] at this
-  have hgapA : ∀ {a b : ℝ}, (∀ c ∈ A, c ≤ a ∨ b ≤ c) →
-      ∀ i, ∀ c ∈ (Θs i).capAngles, c ≤ a ∨ b ≤ c := fun h i c hc => h c (hcap i c hc)
-  -- the gap estimate
-  have hgapEst : ∀ {a b r : ℝ}, 0 ≤ a → a < b → b ≤ 2 * π → b - a < π →
-      (∀ c ∈ A, c ≤ a ∨ b ≤ c) → dot p (uvec a) ≤ supp L a → dot p (uvec b) ≤ supp L b →
-      a ≤ r → r ≤ b → dot p (uvec r) ≤ supp L r := by
-    intro a b r ha hab hb hba hg hpa hpb hr1 hr2
-    have hid := mpc_gap_limit hKs hL hlim ha hab hb hba (hgapA hg) hr1 hr2
-    have hsab : 0 < sin (b - a) := sin_pos_of_pos_of_lt_pi (by linarith) hba
-    have hs1 : 0 ≤ sin (b - r) := sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
-    have hs2 : 0 ≤ sin (r - a) := sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
-    have hcomb := mpc_dot_uvec_comb p a b r
-    have : sin (b - a) * dot p (uvec r) ≤ sin (b - a) * supp L r := by
-      rw [hcomb, hid]
-      nlinarith [mul_le_mul_of_nonneg_left hpa hs1, mul_le_mul_of_nonneg_left hpb hs2]
-    exact le_of_mul_le_mul_left this hsab
-  have hJ1 : ∀ s, 0 ≤ s → s ≤ ω → s ∈ A := fun s h1 h2 => Or.inl (Or.inl ⟨h1, h2⟩)
-  have hJ2 : ∀ s, π / 2 ≤ s → s ≤ ω + π / 2 → s ∈ A := fun s h1 h2 => Or.inl (Or.inr ⟨h1, h2⟩)
-  have hA3 : ω + π ∈ A := Or.inr (Or.inl rfl)
-  have hA4 : 3 * π / 2 ∈ A := Or.inr (Or.inr rfl)
-  have hAbounds : ∀ c ∈ A, 0 ≤ c ∧ c ≤ 3 * π / 2 := by
-    rintro c ((⟨h1, h2⟩ | ⟨h1, h2⟩) | h | h)
-    · exact ⟨h1, by linarith [pi_pos]⟩
-    · exact ⟨by linarith [pi_pos], by linarith⟩
-    · rw [mem_singleton_iff.1 h] at *; exact ⟨by linarith [pi_pos], by linarith⟩
-    · rw [mem_singleton_iff.1 h]; exact ⟨by linarith [pi_pos], le_rfl⟩
   have hAcase : ∀ c ∈ A, (0 ≤ c ∧ c ≤ ω) ∨ (π / 2 ≤ c ∧ c ≤ ω + π / 2) ∨ c = ω + π ∨
       c = 3 * π / 2 := by
-    rintro c ((⟨h1, h2⟩ | ⟨h1, h2⟩) | h | h)
-    · exact Or.inl ⟨h1, h2⟩
-    · exact Or.inr (Or.inl ⟨h1, h2⟩)
-    · exact Or.inr (Or.inr (Or.inl (mem_singleton_iff.1 h)))
+    rintro c ((h | h) | h | h)
+    · exact Or.inl h
+    · exact Or.inr (Or.inl h)
+    · exact Or.inr (Or.inr (Or.inl h))
     · exact Or.inr (Or.inr (Or.inr (mem_singleton_iff.1 h)))
-  -- reduce the angle modulo `2π`
+  -- in a gap `[a, b]` of `A`, hence of the normal angles of every `K_i`, the constraints at `a`
+  -- and `b` imply those in between
+  have hgap : ∀ {a b r : ℝ}, 0 ≤ a → a < b → b ≤ 2 * π → b - a < π →
+      (∀ c ∈ A, c ≤ a ∨ b ≤ c) → dot p (uvec a) ≤ supp L a → dot p (uvec b) ≤ supp L b →
+      a ≤ r → r ≤ b → dot p (uvec r) ≤ supp L r := fun ha hab hb hba hg =>
+    mpc_dot_le_supp_of_gap hKs hL hlim ha hab hb hba fun i c hc =>
+      hg c (by have := nef_capAngles_subset (Θs i) hc; rwa [hΘ i] at this)
+  -- reduce the angle modulo `2π` to `r' ∈ [0, 2π)`
   intro r
   set r' := toIcoMod two_pi_pos 0 r with hr'
-  have hr'mem := toIcoMod_mem_Ico two_pi_pos 0 r
-  rw [zero_add] at hr'mem
+  obtain ⟨h0, h2π⟩ := toIcoMod_mem_Ico two_pi_pos 0 r
+  rw [zero_add] at h2π
   have hu : uvec r' = uvec r := by
     obtain ⟨k, hk⟩ : ∃ k : ℤ, r' = r - k * (2 * π) := ⟨toIcoDiv two_pi_pos 0 r, by
       rw [hr', toIcoMod, zsmul_eq_mul]⟩
@@ -400,58 +377,55 @@ lemma mpc_limit_isCap {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {Θs : ℕ → An
     simp [uvec, cos_sub_int_mul_two_pi, sin_sub_int_mul_two_pi]
   have hsupp : supp L r' = supp L r := by simp only [supp, hu]
   rw [← hu, ← hsupp]
-  obtain ⟨h0, h2π⟩ := hr'mem
-  -- the cases
+  -- `r'` lies in `[0, ω]` or `[π/2, ω + π/2]`, which are in `A`, or in one of the gaps
+  -- `[ω, π/2]`, `[ω + π/2, ω + π]`, `[ω + π, 3π/2]`, `[3π/2, 2π]` of `A`
+  have h0A : 0 ∈ A := Or.inl (Or.inl ⟨le_rfl, hω0.le⟩)
+  have hωA : ω ∈ A := Or.inl (Or.inl ⟨hω0.le, le_rfl⟩)
+  have hπA : π / 2 ∈ A := Or.inl (Or.inr ⟨le_rfl, by linarith⟩)
+  have hωπA : ω + π / 2 ∈ A := Or.inl (Or.inr ⟨by linarith, le_rfl⟩)
+  have hA3 : ω + π ∈ A := Or.inr (Or.inl rfl)
+  have hA4 : 3 * π / 2 ∈ A := Or.inr (Or.inr rfl)
   by_cases c1 : r' ≤ ω
-  · exact hpA _ (hJ1 _ h0 c1)
+  · exact hpA _ (Or.inl (Or.inl ⟨h0, c1⟩))
+  push Not at c1
   by_cases c2 : r' < π / 2
-  · push Not at c1
-    exact hgapEst hω0.le (by linarith) (by linarith [pi_pos]) (by linarith [pi_pos])
-      (fun c hc => by
-        rcases hAcase c hc with h | h | rfl | rfl
-        · exact Or.inl h.2
-        · exact Or.inr h.1
-        · exact Or.inr (by linarith [pi_pos])
-        · exact Or.inr (by linarith [pi_pos]))
-      (hpA _ (hJ1 _ hω0.le le_rfl)) (hpA _ (hJ2 _ le_rfl (by linarith))) c1.le c2.le
+  · refine hgap hω0.le (c1.trans c2) (by linarith) (by linarith) (fun c hc => ?_) (hpA _ hωA)
+      (hpA _ hπA) c1.le c2.le
+    rcases hAcase c hc with ⟨-, h⟩ | ⟨h, -⟩ | rfl | rfl
+    all_goals first | (left; linarith) | (right; linarith)
+  push Not at c2
   by_cases c3 : r' ≤ ω + π / 2
-  · push Not at c2
-    exact hpA _ (hJ2 _ c2 c3)
+  · exact hpA _ (Or.inl (Or.inr ⟨c2, c3⟩))
+  push Not at c3
   by_cases c4 : r' ≤ ω + π
-  · push Not at c3
-    exact hgapEst (by linarith [pi_pos]) (by linarith [pi_pos]) (by linarith [pi_pos])
-      (by linarith [pi_pos])
-      (fun c hc => by
-        rcases hAcase c hc with h | h | rfl | rfl
-        · exact Or.inl (by linarith [pi_pos])
-        · exact Or.inl h.2
-        · exact Or.inr le_rfl
-        · exact Or.inr (by linarith [pi_pos]))
-      (hpA _ (hJ2 _ (by linarith) le_rfl)) (hpA _ hA3) c3.le c4
+  · refine hgap (by linarith) (by linarith) (by linarith) (by linarith) (fun c hc => ?_)
+      (hpA _ hωπA) (hpA _ hA3) c3.le c4
+    rcases hAcase c hc with ⟨-, h⟩ | ⟨-, h⟩ | rfl | rfl
+    all_goals first | (left; linarith) | (right; linarith)
+  push Not at c4
   by_cases c5 : r' ≤ 3 * π / 2
-  · push Not at c4
-    exact hgapEst (by linarith [pi_pos]) (by linarith [pi_pos]) (by linarith [pi_pos])
-      (by linarith [pi_pos])
-      (fun c hc => by
-        rcases hAcase c hc with h | h | rfl | rfl
-        · exact Or.inl (by linarith [pi_pos])
-        · exact Or.inl (by linarith [pi_pos])
-        · exact Or.inl le_rfl
-        · exact Or.inr le_rfl)
+  · refine hgap (by linarith) (c4.trans_le c5) (by linarith) (by linarith) (fun c hc => ?_)
       (hpA _ hA3) (hpA _ hA4) c4.le c5
-  · push Not at c5
-    have hb : dot p (uvec (2 * π)) ≤ supp L (2 * π) := by
-      have h := hpA 0 (hJ1 0 le_rfl hω0.le)
-      rw [show (2 : ℝ) * π = 0 + 2 * π by ring, uvec_add_two_pi, supp_add_two_pi]
-      exact h
-    exact hgapEst (by linarith [pi_pos]) (by linarith [pi_pos]) le_rfl (by linarith [pi_pos])
-      (fun c hc => Or.inl (hAbounds c hc).2) (hpA _ hA4) hb c5.le h2π.le
+    rcases hAcase c hc with ⟨-, h⟩ | ⟨-, h⟩ | rfl | rfl
+    all_goals first | (left; linarith) | (right; linarith)
+  push Not at c5
+  -- the last gap ends at `2π ≡ 0`
+  have hb : dot p (uvec (2 * π)) ≤ supp L (2 * π) := by
+    rw [show (2 : ℝ) * π = 0 + 2 * π by ring, uvec_add_two_pi, supp_add_two_pi]
+    exact hpA 0 h0A
+  refine hgap (by linarith) (by linarith) le_rfl (by linarith) (fun c hc => ?_) (hpA _ hA4) hb
+    c5.le h2π.le
+  rcases hAcase c hc with ⟨-, h⟩ | ⟨-, h⟩ | rfl | rfl
+  all_goals left; linarith
 
 /-- **Theorem 3.5.2** (`thm:balanced-maximum-cap`). A balanced maximum cap exists for every
 `ω ∈ (0, π/2]`. -/
 theorem theorem3_5_2 {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) : ∃ K, IsBalancedMaxCap K ω := by
   classical
+  -- maximum polygon caps `K_m` for the dyadic angle sets (Theorem 3.4.3)
   choose Ks hKs using fun m => theorem3_4_3 (dyadicAngleSet ω hω m)
+  -- `ω/2` is a common angle, and `𝒜(K_m) > 0`, so the widths `w_{K_m}(0)` are bounded
+  -- (Lemma 3.4.2)
   have ht₀ : ∀ m, ω / 2 ∈ (dyadicAngleSet ω hω m).angles := by
     intro m
     refine (mpc_mem_dyadic hω m _).2 ⟨2 ^ m, by positivity, ?_, ?_⟩
@@ -468,6 +442,8 @@ theorem theorem3_5_2 {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) : ∃ K, IsBalance
     linarith
   have hw : ∀ m, width (Ks m) 0 ≤ c := fun m => hcK _ rfl (ht₀ m) _ (hKs m).1 (hpos m)
   set R := |(oPt ω).1| + c with hR
+  -- each `K_m` contains `o_ω` and has width at most `c` along `u_0`, so all of them lie in a
+  -- fixed box, and the Blaschke selection theorem applies
   have hbox : ∀ m, Ks m ⊆ Icc (-R) R ×ˢ Icc 0 1 := by
     intro m p hp
     have hKc := (hKs m).1.1.2.1.2.1
@@ -476,14 +452,14 @@ theorem theorem3_5_2 {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) : ∃ K, IsBalance
     have e2 := dot_le_supp hKc ho π
     have e3 := dot_le_supp hKc hp π
     have e4 := dot_le_supp hKc ho 0
-    rw [mpc_dot_uvec_zero] at e1 e4
-    rw [mpc_dot_uvec_pi] at e2 e3
+    rw [dot_uvec_zero] at e1 e4
+    rw [dot_uvec_pi] at e2 e3
     have hwm := hw m
     rw [width, zero_add] at hwm
     have a1 := neg_abs_le (oPt ω).1
     have a2 := le_abs_self (oPt ω).1
-    exact ⟨⟨by linarith, by linarith⟩, (mpc_cap_nonneg (hKs m).1.1 hp).1,
-      (mpc_cap_le_one (hKs m).1.1 hp).2⟩
+    exact ⟨⟨by linarith, by linarith⟩, (hKs m).1.1.snd_nonneg hp,
+      (hKs m).1.1.snd_le_one hp⟩
   obtain ⟨L, hLb, -, φ, hφ, hlim⟩ := mpc_blaschke (fun m => (hKs m).1.1.2.1)
     (isCompact_Icc.prod isCompact_Icc) hbox
   exact ⟨L, hω, mpc_limit_isCap hω (fun i => rfl) (fun i => (hKs (φ i)).1) hLb hlim, φ,
@@ -518,8 +494,8 @@ theorem lemma3_5_3 {X Y : Set (ℝ × ℝ)} {Xs Ys : ℕ → Set (ℝ × ℝ)}
   linarith
 
 /-- A point of the niche of the limit `K` of convex bodies `K_i` lies in the polygon niches
-`𝒩_{Θ_{k_i}}(K_i)` for all large `i`: the quarter-planes `Q_K⁻(t)` are open conditions on the support
-function, and the dyadic angles are dense in `(0, ω)`. -/
+`𝒩_{Θ_{k_i}}(K_i)` for all large `i`: the quarter-planes `Q_K⁻(t)` are open conditions on the
+support function, and the dyadic angles are dense in `(0, ω)`. -/
 lemma mpc_niche_eventually {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {K : Set (ℝ × ℝ)}
     (hK : IsConvexBody K) {k : ℕ → ℕ} (hk : StrictMono k) {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ i, IsConvexBody (Ks i)) (hlim : HausdorffTendsto Ks K) {p : ℝ × ℝ}
@@ -528,44 +504,30 @@ lemma mpc_niche_eventually {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {K : Set (�
   obtain ⟨hpf, hpq⟩ := hp
   obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hpq
   rw [proposition2_2_2_qMinus] at hq
-  obtain ⟨hq1, hq2⟩ := hq
-  have hq1' : dot p (uvec t) < supp K t - 1 := hq1
-  have hq2' : dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1 := hq2
-  set f : ℝ → ℝ := fun s => supp K s - 1 - dot p (uvec s) with hf
-  set g : ℝ → ℝ := fun s => supp K (s + π / 2) - 1 - dot p (uvec (s + π / 2)) with hg
-  have hsc := continuous_supp hK.2.1
+  obtain ⟨hq1 : dot p (uvec t) < supp K t - 1,
+    hq2 : dot p (uvec (t + π / 2)) < supp K (t + π / 2) - 1⟩ := hq
+  -- the margin `f(s)` of `p` inside `Q_K⁻(s)` is continuous in `s` and positive at `t`
+  set f : ℝ → ℝ := fun s => min (supp K s - 1 - dot p (uvec s))
+    (supp K (s + π / 2) - 1 - dot p (uvec (s + π / 2))) with hf
   have hfc : Continuous f := by
+    have := continuous_supp hK.2.1
     simp only [hf, dot, uvec]
-    exact (hsc.sub continuous_const).sub (by fun_prop)
-  have hgc : Continuous g := by
-    simp only [hg, dot, uvec]
-    exact ((hsc.comp (continuous_id.add continuous_const)).sub continuous_const).sub (by fun_prop)
-  set δ := min (f t) (g t) / 2 with hδ_def
-  have hft : 0 < f t := by simp only [hf]; linarith
-  have hgt : 0 < g t := by simp only [hg]; linarith
-  have hδ : 0 < δ := by positivity
-  have hδf : δ < f t := by
-    have := min_le_left (f t) (g t); simp only [hδ_def]; linarith
-  have hδg : δ < g t := by
-    have := min_le_right (f t) (g t); simp only [hδ_def]; linarith
-  have hev : ∀ᶠ s in 𝓝 t, δ < f s ∧ δ < g s :=
-    (continuousAt_const.eventually_lt hfc.continuousAt hδf).and
-      (continuousAt_const.eventually_lt hgc.continuousAt hδg)
-  obtain ⟨η, hη, hηs⟩ := Metric.eventually_nhds_iff.1 hev
+    fun_prop
+  have hft : 0 < f t := lt_min (by linarith) (by linarith)
+  -- so it exceeds `f(t)/2` at a dyadic angle `s` near `t`
+  obtain ⟨η, hη, hηs⟩ := Metric.eventually_nhds_iff.1
+    (continuousAt_const.eventually_lt hfc.continuousAt (half_lt_self hft))
   obtain ⟨m, s, hs, hst⟩ := mpc_dyadic_dense hω ht hη
-  obtain ⟨hfs, hgs⟩ := hηs (show dist s t < η by rwa [Real.dist_eq])
-  filter_upwards [mpc_supp_uniform hK hKs hlim hδ,
+  obtain ⟨hfs, hgs⟩ := lt_min_iff.1 (hηs (show dist s t < η by rwa [Real.dist_eq]))
+  -- and `h_{K_i}` is within `f(t)/2` of `h_K` for all large `i`
+  filter_upwards [mpc_supp_uniform hK hKs hlim (half_pos hft),
     hk.tendsto_atTop.eventually_ge_atTop m] with i hi hki
   refine ⟨hpf, mem_iUnion₂.2 ⟨s, mpc_dyadic_mono hω hki hs, ?_⟩⟩
   rw [proposition2_2_2_qMinus]
   have e1 := abs_lt.1 (hi s)
   have e2 := abs_lt.1 (hi (s + π / 2))
-  simp only [hf, hg] at hfs hgs
-  constructor
-  · show dot p (uvec s) < supp (Ks i) s - 1
-    linarith
-  · show dot p (uvec (s + π / 2)) < supp (Ks i) (s + π / 2) - 1
-    linarith
+  exact ⟨show dot p (uvec s) < supp (Ks i) s - 1 by linarith,
+    show dot p (uvec (s + π / 2)) < supp (Ks i) (s + π / 2) - 1 by linarith⟩
 
 /-- **Theorem 3.5.4** (`thm:limiting-maximum-cap-connected`). A balanced maximum cap contains its
 niche. -/
@@ -577,14 +539,14 @@ theorem theorem3_5_4 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K 
   filter_upwards [mpc_niche_eventually hω hcap.2.1 hk hKs hlim hp] with i hi
   exact theorem3_4_10 (hmax i) hi
 
-/-- **Theorem 3.5.5** (`thm:limiting-maximum-cap-max`). A balanced maximum cap maximizes the sofa area
-functional `𝒜_ω` over all caps with rotation angle `ω`. -/
+/-- **Theorem 3.5.5** (`thm:limiting-maximum-cap-max`). A balanced maximum cap maximizes the sofa
+area functional `𝒜_ω` over all caps with rotation angle `ω`. -/
 theorem theorem3_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K ω) :
     ∀ K', IsCap K' ω → sofaArea ω K' ≤ sofaArea ω K := by
-  have hN := theorem3_5_4 hK
   obtain ⟨hω, hcap, k, Ks, hk, hmax, hlim⟩ := hK
   have hKs : ∀ i, IsConvexBody (Ks i) := fun i => (hmax i).1.1.2.1
   intro K' hK'
+  -- `𝒜_ω(K') ≤ 𝒜_Θ(𝓒_Θ(K')) ≤ 𝒜_Θ(K_i) = |K_i| - |𝒩_Θ(K_i)|` for `Θ = Θ_{k_i}`
   have hbound : ∀ i, sofaArea ω K' ≤
       area (Ks i) - area (polyNiche (dyadicAngleSet ω hω (k i)) (Ks i)) := by
     intro i
@@ -598,6 +560,7 @@ theorem theorem3_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K 
     have h4 : polyArea Θ (Ks i) = area (Ks i) - area (polyNiche Θ (Ks i)) :=
       theorem3_2_3 (hmax i).1
     linarith
+  -- for large `i`, `|K_i| ≤ |K| + ε/2` and `|𝒩_Θ(K_i)| ≥ |𝒩(K)| - ε/2`
   apply le_of_forall_pos_le_add
   intro ε hε
   have hev1 := mpc_area_usc hcap.2.1 hKs hlim (half_pos hε)
@@ -614,15 +577,8 @@ theorem theorem3_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K 
   rw [e]
   linarith
 
-/-- Translations preserve the area. -/
-lemma mpc_volume_preimage_add (S : Set (ℝ × ℝ)) (v : ℝ × ℝ) :
-    MeasureTheory.volume ((fun p => p + v) ⁻¹' S) = MeasureTheory.volume S := by
-  have : (MeasureTheory.volume : MeasureTheory.Measure (ℝ × ℝ)).IsAddRightInvariant :=
-    (inferInstance : ((MeasureTheory.volume : MeasureTheory.Measure ℝ).prod
-      MeasureTheory.volume).IsAddRightInvariant)
-  exact MeasureTheory.measure_preimage_add_right _ v S
-
-/-- A translate of a moving sofa with rotation angle `ω` is a moving sofa with rotation angle `ω`. -/
+/-- A translate of a moving sofa with rotation angle `ω` is a moving sofa with rotation angle
+`ω`. -/
 lemma mpc_isMovingSofaWithAngle_translate {S : Set (ℝ × ℝ)} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) (v : ℝ × ℝ) :
     IsMovingSofaWithAngle ((fun p => p + v) '' S) ω := by
@@ -666,9 +622,7 @@ theorem theorem3_5_6 {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) :
   intro S' hS'
   obtain ⟨v, hv⟩ := proposition2_3_1_exists hω hS'
   have hS'' := mpc_isMovingSofaWithAngle_translate hS' v
-  have harea : area S' = area ((fun p => p + v) '' S') := by
-    simp only [area]
-    rw [image_add_right, mpc_volume_preimage_add]
+  have harea := (area_image_add S' v).symm
   obtain ⟨hM, hstd, hsub⟩ := theorem2_3_2 hω hS'' hv
   have hmono : IsMonotoneSofa (monotonization ((fun p => p + v) '' S') ω) ω :=
     ⟨hω, _, hS'', hv, rfl⟩

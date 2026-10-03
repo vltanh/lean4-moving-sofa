@@ -60,10 +60,14 @@ noncomputable def polyArea (Θ : AngleSet) (K : Set (ℝ × ℝ)) : ℝ :=
 
 /-! ### Auxiliary lemmas for §3.2 -/
 
+/-- A closed half-plane with normal angle in `A` is an intersection of half-planes with normal
+angles in `A`. -/
 lemma nef_isHalfPlaneInter_halfMinus {A : Set ℝ} {t : ℝ} (ht : t ∈ A) (c : ℝ) :
     IsHalfPlaneInter (halfMinus t c) A :=
   ⟨Unit, fun _ => t, fun _ => c, fun _ => ht, (iInter_const _).symm⟩
 
+/-- Intersections of half-planes with normal angles in `A` are closed under binary
+intersections. -/
 lemma nef_isHalfPlaneInter_inter {A : Set ℝ} {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsHalfPlaneInter K₁ A)
     (h₂ : IsHalfPlaneInter K₂ A) : IsHalfPlaneInter (K₁ ∩ K₂) A := by
   obtain ⟨ι₁, t₁, c₁, ht₁, rfl⟩ := h₁
@@ -74,6 +78,8 @@ lemma nef_isHalfPlaneInter_inter {A : Set ℝ} {K₁ K₂ : Set (ℝ × ℝ)} (h
     · exact ht₂ i
   · rw [Set.iInter_sum]; rfl
 
+/-- Intersections of half-planes with normal angles in `A` are closed under arbitrary
+intersections. -/
 lemma nef_isHalfPlaneInter_iInter {A : Set ℝ} {κ : Type} (K : κ → Set (ℝ × ℝ))
     (h : ∀ k, IsHalfPlaneInter (K k) A) : IsHalfPlaneInter (⋂ k, K k) A := by
   choose ι t c ht hK using h
@@ -81,75 +87,35 @@ lemma nef_isHalfPlaneInter_iInter {A : Set ℝ} {κ : Type} (K : κ → Set (ℝ
   rw [Set.iInter_sigma]
   exact Set.iInter_congr hK
 
+/-- Enlarging the set of allowed normal angles. -/
 lemma nef_isHalfPlaneInter_mono {A B : Set ℝ} (hAB : A ⊆ B) {K : Set (ℝ × ℝ)}
     (h : IsHalfPlaneInter K A) : IsHalfPlaneInter K B := by
   obtain ⟨ι, t, c, ht, rfl⟩ := h
   exact ⟨ι, t, c, fun i => hAB (ht i), rfl⟩
 
-lemma nef_dot_uvec_pi_div_two (p : ℝ × ℝ) : dot p (uvec (π / 2)) = p.2 := by
-  simp [dot, uvec]
-
-lemma nef_dot_uvec_add_pi (p : ℝ × ℝ) (t : ℝ) : dot p (uvec (t + π)) = -dot p (uvec t) := by
-  rw [uvec_add_pi, dot_neg_right]
-
 lemma nef_three_pi_div_two : 3 * π / 2 = π / 2 + π := by ring
-
-lemma nef_dot_uvec_three_pi_div_two (p : ℝ × ℝ) : dot p (uvec (3 * π / 2)) = -p.2 := by
-  rw [nef_three_pi_div_two, nef_dot_uvec_add_pi, nef_dot_uvec_pi_div_two]
-
-lemma nef_mem_para (ω : ℝ) (p : ℝ × ℝ) :
-    p ∈ para ω ↔ (0 ≤ p.2 ∧ p.2 ≤ 1) ∧ (0 ≤ dot p (uvec ω) ∧ dot p (uvec ω) ≤ 1) := by
-  constructor
-  · rintro ⟨h1, q, hq, rfl⟩
-    refine ⟨h1, ?_⟩
-    have : dot (rot ω q) (uvec ω) = q.1 := by
-      have := dot_rot_uvec ω 0 q
-      simp only [zero_add] at this
-      rw [this]; simp [dot, uvec]
-    rw [this]; exact hq
-  · rintro ⟨h1, h2⟩
-    refine ⟨h1, rot (-ω) p, ?_, rot_rot_neg ω p⟩
-    have : (rot (-ω) p).1 = dot p (uvec ω) := by
-      simp [rot, dot, uvec, cos_neg, sin_neg]; ring
-    show 0 ≤ (rot (-ω) p).1 ∧ (rot (-ω) p).1 ≤ 1
-    rw [this]; exact h2
 
 /-- `P_ω = H₋(π/2, 1) ∩ H₋(3π/2, 0) ∩ H₋(ω, 1) ∩ H₋(ω + π, 0)`. -/
 lemma nef_para_eq (ω : ℝ) : para ω =
     halfMinus (π / 2) 1 ∩ halfMinus (3 * π / 2) 0 ∩ halfMinus ω 1 ∩ halfMinus (ω + π) 0 := by
   ext p
-  simp only [nef_mem_para, mem_inter_iff, halfMinus, mem_ofPred_eq, nef_dot_uvec_pi_div_two,
-    nef_dot_uvec_three_pi_div_two, nef_dot_uvec_add_pi]
+  simp only [mem_para_iff, mem_inter_iff, halfMinus, mem_ofPred_eq, dot_uvec_pi_div_two,
+    dot_uvec_three_pi_div_two, dot_uvec_add_pi]
   constructor
   · rintro ⟨⟨h1, h2⟩, h3, h4⟩; exact ⟨⟨⟨h2, by linarith⟩, h4⟩, by linarith⟩
   · rintro ⟨⟨⟨h1, h2⟩, h3⟩, h4⟩; exact ⟨⟨by linarith, h1⟩, by linarith, h3⟩
 
-lemma nef_supp_le {S : Set (ℝ × ℝ)} (hS : S.Nonempty) {t c : ℝ}
-    (h : ∀ p ∈ S, dot p (uvec t) ≤ c) : supp S t ≤ c :=
-  csSup_le (hS.image _) (by rintro _ ⟨p, hp, rfl⟩; exact h p hp)
-
-lemma nef_continuous_dot (u : ℝ × ℝ) : Continuous fun p : ℝ × ℝ => dot p u := by
-  unfold dot; fun_prop
-
-lemma nef_isClosed_halfMinus (t c : ℝ) : IsClosed (halfMinus t c) :=
-  isClosed_le (nef_continuous_dot _) continuous_const
-
-lemma nef_convex_halfMinus (t c : ℝ) : Convex ℝ (halfMinus t c) := by
-  intro p hp q hq a b ha hb hab
-  simp only [halfMinus, mem_ofPred_eq] at *
-  rw [dot_add_left, dot_smul_left, dot_smul_left]
-  calc a * dot p (uvec t) + b * dot q (uvec t) ≤ a * c + b * c := by gcongr
-    _ = c := by rw [← add_mul, hab, one_mul]
-
+/-- An intersection of closed half-planes is closed. -/
 lemma nef_isHalfPlaneInter_isClosed {K : Set (ℝ × ℝ)} {A : Set ℝ} (h : IsHalfPlaneInter K A) :
     IsClosed K := by
   obtain ⟨ι, t, c, -, rfl⟩ := h
-  exact isClosed_iInter fun i => nef_isClosed_halfMinus _ _
+  exact isClosed_iInter fun i => isClosed_halfMinus _ _
 
+/-- An intersection of closed half-planes is convex. -/
 lemma nef_isHalfPlaneInter_convex {K : Set (ℝ × ℝ)} {A : Set ℝ} (h : IsHalfPlaneInter K A) :
     Convex ℝ K := by
   obtain ⟨ι, t, c, -, rfl⟩ := h
-  exact convex_iInter fun i => nef_convex_halfMinus _ _
+  exact convex_iInter fun i => convex_halfMinus _ _
 
 /-- A convex body which is an intersection of closed half-planes with normal angles in `A` is the
 intersection of its supporting half-planes with normal angles in `A`. -/
@@ -161,83 +127,76 @@ lemma nef_eq_setOf_supp {K : Set (ℝ × ℝ)} {A : Set ℝ} (hK : IsConvexBody 
   · intro p hp
     obtain ⟨ι, t, c, ht, hKeq⟩ := hA
     have hle : ∀ i, supp K (t i) ≤ c i := fun i =>
-      nef_supp_le hK.1 (fun q hq => by rw [hKeq] at hq; exact mem_iInter.1 hq i)
+      supp_le_of_forall hK.1 (fun q hq => by rw [hKeq] at hq; exact mem_iInter.1 hq i)
     rw [hKeq]
     exact mem_iInter.2 fun i => (hp (t i) (ht i)).trans (hle i)
 
+/-- The normal angles of a polygon cap, listed. -/
 lemma nef_mem_capAngles {Θ : AngleSet} {s : ℝ} :
-    s ∈ Θ.capAngles ↔ s ∈ Θ.angles ∨ (∃ t ∈ Θ.angles, s = t + π / 2) ∨ s = Θ.ω ∨ s = π / 2 ∨
+    s ∈ Θ.capAngles ↔ s ∈ Θ.angles ∨ (∃ t ∈ Θ.angles, t + π / 2 = s) ∨ s = Θ.ω ∨ s = π / 2 ∨
       s = Θ.ω + π ∨ s = 3 * π / 2 := by
   simp only [AngleSet.capAngles, AngleSet.diamond, mem_union, mem_insert_iff,
-    mem_singleton_iff, Finset.mem_coe, mem_image]
-  constructor
-  · rintro (((h | ⟨t, ht, rfl⟩) | h | h) | h | h)
-    · exact Or.inl h
-    · exact Or.inr (Or.inl ⟨t, ht, rfl⟩)
-    · exact Or.inr (Or.inr (Or.inl h))
-    · exact Or.inr (Or.inr (Or.inr (Or.inl h)))
-    · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h))))
-    · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr h))))
-  · rintro (h | ⟨t, ht, rfl⟩ | h | h | h | h)
-    · exact Or.inl (Or.inl (Or.inl h))
-    · exact Or.inl (Or.inl (Or.inr ⟨t, ht, rfl⟩))
-    · exact Or.inl (Or.inr (Or.inl h))
-    · exact Or.inl (Or.inr (Or.inr h))
-    · exact Or.inr (Or.inl h)
-    · exact Or.inr (Or.inr h)
+    mem_singleton_iff, Finset.mem_coe, mem_image, or_assoc]
 
 lemma nef_angle_mem {Θ : AngleSet} {t : ℝ} (ht : t ∈ Θ.angles) :
     0 < t ∧ t < Θ.ω ∧ Θ.ω ≤ π / 2 := ⟨(Θ.subset t ht).1, (Θ.subset t ht).2, Θ.hω.2⟩
 
+/-- Membership in `𝓒_Θ(K)`: the constraints of `P_ω` and of the quarter-planes `Q_K⁺(t)`,
+`t ∈ Θ`. -/
 lemma nef_mem_polyCap_iff {Θ : AngleSet} {K : Set (ℝ × ℝ)} (p : ℝ × ℝ) :
     p ∈ polyCap Θ K ↔ p ∈ para Θ.ω ∧ ∀ t ∈ Θ.angles,
       dot p (uvec t) ≤ supp K t ∧ dot p (uvec (t + π / 2)) ≤ supp K (t + π / 2) := by
   simp only [polyCap, mem_inter_iff, mem_iInter, proposition2_2_2_qPlus, suppHalf, halfMinus,
     mem_ofPred_eq]
 
+/-- A point of `𝓒_Θ(K)` satisfies the supporting constraints of the cap `K` with normal angles in
+`Θ^◇ ∪ {ω + π, 3π/2}`. -/
 lemma nef_mem_polyCap_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ.ω) {p : ℝ × ℝ}
     (hp : p ∈ polyCap Θ K) {s : ℝ} (hs : s ∈ Θ.capAngles) : dot p (uvec s) ≤ supp K s := by
   obtain ⟨hω, hKcb, h1, h2, h3, h4, -⟩ := hK
-  rw [nef_mem_polyCap_iff, nef_mem_para] at hp
+  rw [nef_mem_polyCap_iff, mem_para_iff] at hp
   obtain ⟨⟨⟨hy0, hy1⟩, hu0, hu1⟩, hΘ⟩ := hp
   rcases nef_mem_capAngles.1 hs with h | ⟨t, ht, rfl⟩ | rfl | rfl | rfl | rfl
   · exact (hΘ s h).1
   · exact (hΘ t ht).2
   · rw [h1]; exact hu1
-  · rw [h2, nef_dot_uvec_pi_div_two]; exact hy1
-  · rw [h3, nef_dot_uvec_add_pi]; linarith
-  · rw [h4, nef_dot_uvec_three_pi_div_two]; linarith
+  · rw [h2, dot_uvec_pi_div_two]; exact hy1
+  · rw [h3, dot_uvec_add_pi]; linarith
+  · rw [h4, dot_uvec_three_pi_div_two]; linarith
 
+/-- A cap is contained in its polygon cap `𝓒_Θ(K)`. -/
 lemma nef_subset_polyCap {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ.ω) :
     K ⊆ polyCap Θ K := by
   obtain ⟨hω, hKcb, h1, h2, h3, h4, -⟩ := hK
   intro p hp
   have hd := fun s => dot_le_supp hKcb.2.1 hp s
-  rw [nef_mem_polyCap_iff, nef_mem_para]
+  rw [nef_mem_polyCap_iff, mem_para_iff]
   refine ⟨⟨⟨?_, ?_⟩, ?_, ?_⟩, fun t _ => ⟨hd t, hd _⟩⟩
-  · have := hd (3 * π / 2); rw [h4, nef_dot_uvec_three_pi_div_two] at this; linarith
-  · have := hd (π / 2); rwa [h2, nef_dot_uvec_pi_div_two] at this
-  · have := hd (Θ.ω + π); rw [h3, nef_dot_uvec_add_pi] at this; linarith
+  · have := hd (3 * π / 2); rw [h4, dot_uvec_three_pi_div_two] at this; linarith
+  · have := hd (π / 2); rwa [h2, dot_uvec_pi_div_two] at this
+  · have := hd (Θ.ω + π); rw [h3, dot_uvec_add_pi] at this; linarith
   · have := hd Θ.ω; rwa [h1] at this
 
+/-- `𝓒_Θ(K)` is an intersection of closed half-planes with normal angles in
+`Θ^◇ ∪ {ω + π, 3π/2}`. -/
 lemma nef_polyCap_isHalfPlaneInter (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
     IsHalfPlaneInter (polyCap Θ K) Θ.capAngles := by
-  have hmem : ∀ s, (s ∈ Θ.angles ∨ (∃ t ∈ Θ.angles, s = t + π / 2) ∨ s = Θ.ω ∨ s = π / 2 ∨
-      s = Θ.ω + π ∨ s = 3 * π / 2) → s ∈ Θ.capAngles := fun s h => nef_mem_capAngles.2 h
+  have hmem := fun s => (nef_mem_capAngles (Θ := Θ) (s := s)).2
   unfold polyCap
   rw [nef_para_eq]
   refine nef_isHalfPlaneInter_inter (nef_isHalfPlaneInter_inter (nef_isHalfPlaneInter_inter
     (nef_isHalfPlaneInter_inter ?_ ?_) ?_) ?_) ?_
-  · exact nef_isHalfPlaneInter_halfMinus (hmem _ (by simp)) _
-  · exact nef_isHalfPlaneInter_halfMinus (hmem _ (by simp)) _
-  · exact nef_isHalfPlaneInter_halfMinus (hmem _ (by simp)) _
-  · exact nef_isHalfPlaneInter_halfMinus (hmem _ (by simp)) _
-  · rw [← Finset.set_biInter_coe, Set.biInter_eq_iInter]
-    refine nef_isHalfPlaneInter_iInter _ fun t => ?_
-    rw [proposition2_2_2_qPlus]
-    exact nef_isHalfPlaneInter_inter (nef_isHalfPlaneInter_halfMinus (hmem _ (Or.inl t.2)) _)
-      (nef_isHalfPlaneInter_halfMinus (hmem _ (Or.inr (Or.inl ⟨t, t.2, rfl⟩))) _)
+  -- the four sides of `P_ω`
+  any_goals exact nef_isHalfPlaneInter_halfMinus (hmem _ (by simp)) _
+  -- the quarter-planes `Q_K⁺(t)`, `t ∈ Θ`
+  rw [← Finset.set_biInter_coe, Set.biInter_eq_iInter]
+  refine nef_isHalfPlaneInter_iInter _ fun t => ?_
+  rw [proposition2_2_2_qPlus]
+  exact nef_isHalfPlaneInter_inter (nef_isHalfPlaneInter_halfMinus (hmem _ (Or.inl t.2)) _)
+    (nef_isHalfPlaneInter_halfMinus (hmem _ (Or.inr (Or.inl ⟨t, t.2, rfl⟩))) _)
 
+/-- `𝓒_Θ(K)` is bounded: it lies in `P_ω` and below the lines `l(t, h_K(t))`,
+`l(t + π/2, h_K(t + π/2))` for any `t ∈ Θ`. -/
 lemma nef_polyCap_isBounded (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
     Bornology.IsBounded (polyCap Θ K) := by
   obtain ⟨t, ht⟩ := Θ.nonempty
@@ -247,7 +206,7 @@ lemma nef_polyCap_isBounded (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
   refine (Metric.isBounded_Icc ((-supp K (t + π / 2) / sin t, (0 : ℝ)))
     (supp K t / cos t, (1 : ℝ))).subset ?_
   intro p hp
-  rw [nef_mem_polyCap_iff, nef_mem_para] at hp
+  rw [nef_mem_polyCap_iff, mem_para_iff] at hp
   obtain ⟨⟨⟨hy0, hy1⟩, -, -⟩, hΘ⟩ := hp
   obtain ⟨hA, hB⟩ := hΘ t ht
   rw [uvec_add_pi_div_two] at hB
@@ -260,6 +219,7 @@ lemma nef_polyCap_isBounded (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
     rw [le_div_iff₀ hc]
     nlinarith
 
+/-- The polygon cap of a cap is a convex body. -/
 lemma nef_polyCap_isConvexBody {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ.ω) :
     IsConvexBody (polyCap Θ K) := by
   have hint := nef_polyCap_isHalfPlaneInter Θ K
@@ -271,9 +231,10 @@ lemma nef_polyCap_isConvexBody {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCa
 lemma nef_supp_polyCap {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ.ω) {s : ℝ}
     (hs : s ∈ Θ.capAngles) : supp (polyCap Θ K) s = supp K s := by
   have hcb := nef_polyCap_isConvexBody hK
-  exact le_antisymm (nef_supp_le hcb.1 fun p hp => nef_mem_polyCap_dot_le hK hp hs)
+  exact le_antisymm (supp_le_of_forall hcb.1 fun p hp => nef_mem_polyCap_dot_le hK hp hs)
     (supp_mono (nef_subset_polyCap hK) hK.2.1.1 hcb.2.1 s)
 
+/-- The normal angles of a polygon cap are normal angles of a cap. -/
 lemma nef_capAngles_subset (Θ : AngleSet) : Θ.capAngles ⊆ jSet Θ.ω ∪ {Θ.ω + π, 3 * π / 2} := by
   intro s hs
   obtain ⟨hω0, hω1⟩ := Θ.hω
@@ -289,6 +250,7 @@ lemma nef_capAngles_subset (Θ : AngleSet) : Θ.capAngles ⊆ jSet Θ.ω ∪ {Θ
 lemma nef_niche_isBounded {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     Bornology.IsBounded (niche K ω) := by
   obtain ⟨⟨hω0, hω1⟩, hKcb, h1, h2, h3, h4, -⟩ := hK
+  -- `K` lies in the square `[-R, R]²` and below the line `l(π/2, 1)`
   obtain ⟨R, hR⟩ := hKcb.2.1.isBounded.subset_closedBall 0
   have hRK : ∀ q ∈ K, |q.1| ≤ R ∧ |q.2| ≤ R := by
     intro q hq
@@ -300,10 +262,11 @@ lemma nef_niche_isBounded {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
   have hR0 : 0 ≤ R := (abs_nonneg _).trans (hRK q0 hq0).1
   have hq2 : ∀ q ∈ K, q.2 ≤ 1 := fun q hq => by
     have := dot_le_supp hKcb.2.1 hq (π / 2)
-    rwa [h2, nef_dot_uvec_pi_div_two] at this
+    rwa [h2, dot_uvec_pi_div_two] at this
+  -- a point `p ∈ F_ω ∩ Q_K⁻(t)`, `t ∈ (0, ω)`, lies in `[-R, R] × [0, 2R]`
   refine (Metric.isBounded_Icc ((-R, (0 : ℝ))) (R, 2 * R)).subset ?_
   rintro p ⟨⟨hf1, hf2⟩, hu⟩
-  simp only [halfPlus, mem_ofPred_eq, nef_dot_uvec_pi_div_two] at hf1 hf2
+  simp only [halfPlus, mem_ofPred_eq, dot_uvec_pi_div_two] at hf1 hf2
   simp only [mem_iUnion] at hu
   obtain ⟨t, ⟨ht0, htω⟩, hp⟩ := hu
   rw [proposition2_2_2_qMinus] at hp
@@ -313,15 +276,16 @@ lemma nef_niche_isBounded {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
   have hs : 0 < sin t := sin_pos_of_pos_of_lt_pi ht0 (by linarith)
   have hc1 : cos t ≤ 1 := cos_le_one t
   have hs1 : sin t ≤ 1 := sin_le_one t
+  -- the support function is at most `R cos t + 1` at `t` and `R sin t + 1` at `t + π/2`
   have hsuppa : supp K t ≤ R * cos t + 1 := by
-    refine nef_supp_le ⟨q0, hq0⟩ fun q hq => ?_
+    refine supp_le_of_forall ⟨q0, hq0⟩ fun q hq => ?_
     obtain ⟨hq1, -⟩ := hRK q hq
     have := hq2 q hq
     simp only [dot, uvec]
     have := (abs_le.1 hq1).2
     nlinarith
   have hsuppb : supp K (t + π / 2) ≤ R * sin t + 1 := by
-    refine nef_supp_le ⟨q0, hq0⟩ fun q hq => ?_
+    refine supp_le_of_forall ⟨q0, hq0⟩ fun q hq => ?_
     obtain ⟨hq1, -⟩ := hRK q hq
     have := hq2 q hq
     rw [uvec_add_pi_div_two]
@@ -361,6 +325,7 @@ theorem proposition3_2_1 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ
   · rw [hs _ (nef_mem_capAngles.2 (by simp)), h3]
   · rw [hs _ (nef_mem_capAngles.2 (by simp)), h4]
 
+/-- **Proposition 3.2.1** (`pro:angled-cap`), second part: `𝓒_Θ` fixes polygon caps. -/
 theorem proposition3_2_1_fix {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) :
     polyCap Θ K = K := by
   refine Subset.antisymm ?_ (nef_subset_polyCap hK.1)
@@ -396,6 +361,8 @@ theorem theorem3_2_3 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap �
     polyArea Θ K = area K - area (polyNiche Θ K) := by
   rw [polyArea, proposition3_2_1_fix hK]
 
+/-- **Theorem 3.2.3** (`thm:polygon-upper-bound`), second part: `𝒜_ω(K) ≤ 𝒜_Θ(K)` for every
+cap `K`. -/
 theorem theorem3_2_3_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsCap K Θ.ω) :
     sofaArea Θ.ω K ≤ polyArea Θ K := by
   have h1 : area K ≤ area (polyCap Θ K) :=
@@ -414,12 +381,14 @@ def IsPolygonCapTranslate (Θ : AngleSet) (K' : Set (ℝ × ℝ)) : Prop :=
 
 /-! ### Auxiliary lemmas for §3.3 -/
 
+/-- Membership in a translate. -/
 lemma nef_mem_translate {K : Set (ℝ × ℝ)} {v p : ℝ × ℝ} :
     p ∈ (fun q => q + v) '' K ↔ p - v ∈ K := by
   constructor
   · rintro ⟨q, hq, rfl⟩; simpa using hq
   · intro h; exact ⟨p - v, h, by simp⟩
 
+/-- A translate of an intersection of half-planes with normal angles in `A` is again one. -/
 lemma nef_isHalfPlaneInter_translate {K : Set (ℝ × ℝ)} {A : Set ℝ} (h : IsHalfPlaneInter K A)
     (v : ℝ × ℝ) : IsHalfPlaneInter ((fun p => p + v) '' K) A := by
   obtain ⟨ι, t, c, ht, rfl⟩ := h
@@ -428,18 +397,14 @@ lemma nef_isHalfPlaneInter_translate {K : Set (ℝ × ℝ)} {A : Set ℝ} (h : I
   simp only [nef_mem_translate, mem_iInter, halfMinus, mem_ofPred_eq, dot_sub_left]
   exact forall_congr' fun i => by constructor <;> intro h <;> linarith
 
+/-- A translate of a convex body is a convex body. -/
 lemma nef_isConvexBody_translate {K : Set (ℝ × ℝ)} (h : IsConvexBody K) (v : ℝ × ℝ) :
     IsConvexBody ((fun p => p + v) '' K) := by
   refine ⟨h.1.image _, h.2.1.image (continuous_id.add continuous_const), ?_⟩
   have : (fun p => p + v) '' K = (fun p => v + p) '' K := by simp_rw [add_comm]
   rw [this]; exact h.2.2.translate v
 
-lemma nef_area_translate (S : Set (ℝ × ℝ)) (v : ℝ × ℝ) :
-    area ((fun p => p + v) '' S) = area S := by
-  have : MeasureTheory.Measure.IsAddHaarMeasure (MeasureTheory.volume : MeasureTheory.Measure
-      (ℝ × ℝ)) := MeasureTheory.Measure.prod.instIsAddHaarMeasure _ _
-  rw [area, area, Set.image_add_right, MeasureTheory.measure_preimage_add_right]
-
+/-- The normal angles of a polygon cap other than `ω + π` and `3π/2` lie in `Θ^◇`. -/
 lemma nef_mem_diamond_of_mem_capAngles {Θ : AngleSet} {s : ℝ} (hs : s ∈ Θ.capAngles)
     (h1 : s ≠ Θ.ω + π) (h2 : s ≠ 3 * π / 2) : s ∈ Θ.diamond := by
   rcases hs with hs | hs
@@ -451,10 +416,10 @@ lemma nef_mem_diamond_of_mem_capAngles {Θ : AngleSet} {s : ℝ} (hs : s ∈ Θ.
 lemma nef_diamond_subset_capAngles (Θ : AngleSet) : Θ.diamond ⊆ Θ.capAngles :=
   subset_union_left
 
-/-- **Proposition 3.3.1** (`pro:cap-trans-space`). A convex polygon `K'` is a polygon cap translate if
-and only if its widths along the angles `ω` and `π/2` are one, and it is a convex polygon with normal
-angles in `Θ^◇ ∪ {ω + π, 3π/2}`. (The paper writes `Θ^◇`; the bottom sides of a cap have the normal
-angles `ω + π` and `3π/2`, which its proof uses.) -/
+/-- **Proposition 3.3.1** (`pro:cap-trans-space`). A convex polygon `K'` is a polygon cap translate
+if and only if its widths along the angles `ω` and `π/2` are one, and it is a convex polygon with
+normal angles in `Θ^◇ ∪ {ω + π, 3π/2}`. (The paper writes `Θ^◇`; the bottom sides of a cap have the
+normal angles `ω + π` and `3π/2`, which its proof uses.) -/
 theorem proposition3_3_1 {Θ : AngleSet} {K' : Set (ℝ × ℝ)} :
     IsPolygonCapTranslate Θ K' ↔
       IsConvexBody K' ∧ width K' Θ.ω = 1 ∧ width K' (π / 2) = 1 ∧
@@ -463,10 +428,11 @@ theorem proposition3_3_1 {Θ : AngleSet} {K' : Set (ℝ × ℝ)} :
   · rintro ⟨K, v, ⟨⟨hω, hKcb, h1, h2, h3, h4, -⟩, hint⟩, rfl⟩
     have hs := fun t => supp_translate K v t hKcb.2.1 hKcb.1
     refine ⟨nef_isConvexBody_translate hKcb v, ?_, ?_, nef_isHalfPlaneInter_translate hint v⟩
-    · rw [width, hs, hs, h1, h3, nef_dot_uvec_add_pi]; ring
+    · rw [width, hs, hs, h1, h3, dot_uvec_add_pi]; ring
     · rw [width, hs, hs, ← nef_three_pi_div_two, h2, h4, nef_three_pi_div_two,
-        nef_dot_uvec_add_pi]; ring
-  · rintro ⟨hcb, hw1, hw2, hint⟩
+        dot_uvec_add_pi]; ring
+  · -- translate `K'` by `-v`, where `v · u_ω = h_{K'}(ω) - 1` and `v · u_{π/2} = h_{K'}(π/2) - 1`
+    rintro ⟨hcb, hw1, hw2, hint⟩
     obtain ⟨hω0, hω1⟩ := Θ.hω
     set A := supp K' Θ.ω - 1 with hA
     set B := supp K' (π / 2) - 1 with hB
@@ -480,7 +446,8 @@ theorem proposition3_3_1 {Θ : AngleSet} {K' : Set (ℝ × ℝ)} :
         simp only [dot, uvec, hv, hc, mul_zero, zero_add]
         rw [hωe, sin_pi_div_two, mul_one, hA, hB, hωe]
       · simp only [dot, uvec, hv]; field_simp; ring
-    have hv2 : dot v (uvec (π / 2)) = B := by rw [nef_dot_uvec_pi_div_two]
+    have hv2 : dot v (uvec (π / 2)) = B := by rw [dot_uvec_pi_div_two]
+    -- `K' - v` is a polygon cap
     refine ⟨(fun p => p + -v) '' K', v, ?_, ?_⟩
     · have hcb' := nef_isConvexBody_translate hcb (-v)
       have hs := fun t => supp_translate K' (-v) t hcb.2.1 hcb.1
@@ -490,8 +457,8 @@ theorem proposition3_3_1 {Θ : AngleSet} {K' : Set (ℝ × ℝ)} :
         nef_isHalfPlaneInter_mono (nef_capAngles_subset Θ) hint'⟩, hint'⟩
       · rw [hs, dot_neg_left, hvω, hA]; ring
       · rw [hs, dot_neg_left, hv2, hB]; ring
-      · rw [hs, dot_neg_left, nef_dot_uvec_add_pi, hvω, hA]; linarith
-      · rw [hs, dot_neg_left, nef_three_pi_div_two, nef_dot_uvec_add_pi, hv2, hB]; linarith
+      · rw [hs, dot_neg_left, dot_uvec_add_pi, hvω, hA]; linarith
+      · rw [hs, dot_neg_left, nef_three_pi_div_two, dot_uvec_add_pi, hv2, hB]; linarith
     · rw [Set.image_image]; simp
 
 /-- **Proposition 3.3.2** (`pro:height-space-embedding`). A polygon cap translate is determined by
@@ -552,6 +519,8 @@ def nicheHalfPlanes (Θ : AngleSet) (h : ℝ → ℝ) : Set HalfPlaneData :=
 
 /-! ### Auxiliary lemmas for Proposition 3.3.3 -/
 
+/-- Membership in `𝓒_Θ(h)`: the constraints `p · u_s ≤ h(s)`, `s ∈ Θ^◇`, and
+`p · u_s ≥ h(s) - 1`, `s ∈ {ω, π/2}`. -/
 lemma nef_mem_capH_iff (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × ℝ) :
     p ∈ capH Θ h ↔ (∀ s ∈ Θ.diamond, dot p (uvec s) ≤ h s) ∧
       h Θ.ω - 1 ≤ dot p (uvec Θ.ω) ∧ h (π / 2) - 1 ≤ dot p (uvec (π / 2)) := by
@@ -571,6 +540,8 @@ lemma nef_mem_capH_iff (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × ℝ) :
     · exact ⟨hd _ (Or.inr (Or.inl rfl)), hω⟩
     · exact ⟨hd _ (Or.inr (Or.inr rfl)), hπ⟩
 
+/-- If two lines `l(t₁, c₁)` and `l(t₂, c₂)` coincide, then `sin(t₁ - t₂) = 0` and
+`c₁ cos(t₁ - t₂) = c₂`. -/
 lemma nef_line_eq_imp {t₁ t₂ c₁ c₂ : ℝ} (h : line t₁ c₁ = line t₂ c₂) :
     sin (t₁ - t₂) = 0 ∧ c₁ * cos (t₁ - t₂) = c₂ := by
   have h0 : c₁ • uvec t₁ ∈ line t₂ c₂ := h ▸ (by simp [line, dot_smul_left])
@@ -582,6 +553,7 @@ lemma nef_line_eq_imp {t₁ t₂ c₁ c₂ : ℝ} (h : line t₁ c₁ = line t�
   have : sin (t₂ - t₁) = 0 := by linarith
   rw [← neg_sub, sin_neg, this, neg_zero]
 
+/-- A line determines its normal angle in `(0, π)` and its offset. -/
 lemma nef_line_inj {t₁ t₂ c₁ c₂ : ℝ} (h1 : t₁ ∈ Ioo 0 π) (h2 : t₂ ∈ Ioo 0 π)
     (h : line t₁ c₁ = line t₂ c₂) : t₁ = t₂ ∧ c₁ = c₂ := by
   obtain ⟨hs, hc⟩ := nef_line_eq_imp h
@@ -590,10 +562,12 @@ lemma nef_line_inj {t₁ t₂ c₁ c₂ : ℝ} (h1 : t₁ ∈ Ioo 0 π) (h2 : t�
   refine ⟨by linarith, ?_⟩
   rw [h0, cos_zero, mul_one] at hc; exact hc
 
+/-- `l(s + π, c) = l(s, -c)`. -/
 lemma nef_line_add_pi (s c : ℝ) : line (s + π) c = line s (-c) := by
-  ext p; simp only [line, mem_ofPred_eq, nef_dot_uvec_add_pi]
+  ext p; simp only [line, mem_ofPred_eq, dot_uvec_add_pi]
   constructor <;> intro h <;> linarith
 
+/-- The angles of `Θ^◇` lie in `(0, π)`. -/
 lemma nef_mem_diamond_Ioo {Θ : AngleSet} {s : ℝ} (hs : s ∈ Θ.diamond) : s ∈ Ioo 0 π := by
   obtain ⟨hω0, hω1⟩ := Θ.hω
   have hπ := pi_pos
@@ -609,6 +583,7 @@ lemma nef_pair_mem_diamond {Θ : AngleSet} {s : ℝ} (hs : s ∈ ({Θ.ω, π / 2
     s ∈ Θ.diamond := by
   rcases hs with rfl | rfl <;> simp [AngleSet.diamond]
 
+/-- The angles of `Θ ∪ (Θ + π/2)` differ from `ω` and `π/2`. -/
 lemma nef_ne_of_mem_angles {Θ : AngleSet} {t s : ℝ}
     (ht : t ∈ (Θ.angles : Set ℝ) ∪ (fun s => s + π / 2) '' (Θ.angles : Set ℝ))
     (hs : s ∈ ({Θ.ω, π / 2} : Set ℝ)) : t ≠ s := by
@@ -633,6 +608,7 @@ lemma nef_toSet_open (t c : ℝ) : (⟨t, c, true⟩ : HalfPlaneData).toSet = ha
 lemma nef_boundary_eq (t c : ℝ) (o : Bool) :
     (⟨t, c, o⟩ : HalfPlaneData).boundary = line t c := rfl
 
+/-- The defining half-planes of `𝓒_Θ(h)` have pairwise different boundary lines. -/
 lemma nef_capHalfPlanes_boundary_ne {Θ : AngleSet} {h : ℝ → ℝ} {d₁ d₂ : HalfPlaneData}
     (h₁ : d₁ ∈ capHalfPlanes Θ h) (h₂ : d₂ ∈ capHalfPlanes Θ h) (hne : d₁ ≠ d₂) :
     d₁.boundary ≠ d₂.boundary := by
@@ -658,6 +634,7 @@ lemma nef_capHalfPlanes_boundary_ne {Θ : AngleSet} {h : ℝ → ℝ} {d₁ d₂
       (nef_mem_diamond_Ioo (nef_pair_mem_diamond hs₂)) hl
     exact hne ⟨rfl, rfl, rfl⟩
 
+/-- The defining half-planes of `𝒩_Θ(h)` have pairwise different boundary lines. -/
 lemma nef_nicheHalfPlanes_boundary_ne {Θ : AngleSet} {h : ℝ → ℝ} {d₁ d₂ : HalfPlaneData}
     (h₁ : d₁ ∈ nicheHalfPlanes Θ h) (h₂ : d₂ ∈ nicheHalfPlanes Θ h) (hne : d₁ ≠ d₂) :
     d₁.boundary ≠ d₂.boundary := by
@@ -684,6 +661,7 @@ lemma nef_nicheHalfPlanes_boundary_ne {Θ : AngleSet} {h : ℝ → ℝ} {d₁ d�
       (nef_mem_diamond_Ioo (nef_pair_mem_diamond hs₂)) hl
     exact hne ⟨rfl, rfl, rfl⟩
 
+/-- `𝓒_Θ(h)` has finitely many defining half-planes. -/
 lemma nef_capHalfPlanes_finite (Θ : AngleSet) (h : ℝ → ℝ) : (capHalfPlanes Θ h).Finite := by
   refine (((nef_diamond_finite Θ).image (fun t => (⟨t, h t, false⟩ : HalfPlaneData))).union
     ((Set.toFinite ({Θ.ω, π / 2} : Set ℝ)).image
@@ -694,6 +672,7 @@ lemma nef_capHalfPlanes_finite (Θ : AngleSet) (h : ℝ → ℝ) : (capHalfPlane
   · simp only at ht hc ho; subst ht hc ho
     exact Or.inr ⟨s, hs, rfl⟩
 
+/-- `𝒩_Θ(h)` has finitely many defining half-planes. -/
 lemma nef_nicheHalfPlanes_finite (Θ : AngleSet) (h : ℝ → ℝ) :
     (nicheHalfPlanes Θ h).Finite := by
   refine (((((Θ.angles.finite_toSet).union
@@ -707,6 +686,7 @@ lemma nef_nicheHalfPlanes_finite (Θ : AngleSet) (h : ℝ → ℝ) :
   · simp only at ht hc ho; subst ht hc ho
     exact Or.inr ⟨s, hs, rfl⟩
 
+/-- `𝓒_Θ(h)` is the intersection of its defining half-planes. -/
 lemma nef_mem_capH_iff_halfPlanes (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × ℝ) :
     p ∈ capH Θ h ↔ ∀ d ∈ capHalfPlanes Θ h, p ∈ d.toSet := by
   rw [nef_mem_capH_iff]
@@ -716,7 +696,7 @@ lemma nef_mem_capH_iff_halfPlanes (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × 
       exact hd t ht
     · simp only at ht hc ho; subst ht hc ho
       show dot p (uvec (s + π)) ≤ 1 - h s
-      rw [nef_dot_uvec_add_pi]
+      rw [dot_uvec_add_pi]
       rcases hs with rfl | rfl
       · linarith
       · linarith
@@ -724,23 +704,20 @@ lemma nef_mem_capH_iff_halfPlanes (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × 
     refine ⟨fun s hs => H ⟨s, h s, false⟩ (Or.inl ⟨hs, rfl, rfl⟩), ?_, ?_⟩
     · have : dot p (uvec (Θ.ω + π)) ≤ 1 - h Θ.ω :=
         H ⟨Θ.ω + π, 1 - h Θ.ω, false⟩ (Or.inr ⟨Θ.ω, by simp, rfl, rfl, rfl⟩)
-      rw [nef_dot_uvec_add_pi] at this; linarith
+      rw [dot_uvec_add_pi] at this; linarith
     · have : dot p (uvec (π / 2 + π)) ≤ 1 - h (π / 2) :=
         H ⟨π / 2 + π, 1 - h (π / 2), false⟩ (Or.inr ⟨π / 2, by simp, rfl, rfl, rfl⟩)
-      rw [nef_dot_uvec_add_pi] at this; linarith
+      rw [dot_uvec_add_pi] at this; linarith
 
+/-- Membership in `𝒩_Θ(h)` in terms of its defining half-planes. -/
 lemma nef_mem_nicheH_iff (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × ℝ) :
     p ∈ nicheH Θ h ↔ (∀ s ∈ ({Θ.ω, π / 2} : Set ℝ),
         p ∈ (⟨s + π, 1 - h s, false⟩ : HalfPlaneData).toSet) ∧
       ∃ t ∈ Θ.angles, p ∈ (⟨t, h t - 1, true⟩ : HalfPlaneData).toSet ∧
         p ∈ (⟨t + π / 2, h (t + π / 2) - 1, true⟩ : HalfPlaneData).toSet := by
   simp only [nicheH, fanH, mem_inter_iff, mem_iInter, mem_iUnion, nef_toSet_closed,
-    nef_toSet_open, halfPlus, halfMinus, mem_ofPred_eq, nef_dot_uvec_add_pi, exists_prop]
-  constructor
-  · rintro ⟨hf, ht⟩
-    exact ⟨fun s hs => by linarith [hf s hs], ht⟩
-  · rintro ⟨hf, ht⟩
-    exact ⟨fun s hs => by linarith [hf s hs], ht⟩
+    nef_toSet_open, halfPlus, halfMinus, mem_ofPred_eq, dot_uvec_add_pi, exists_prop]
+  constructor <;> rintro ⟨hf, ht⟩ <;> exact ⟨fun s hs => by linarith [hf s hs], ht⟩
 
 /-- **Proposition 3.3.3** (`pro:cap-niche-nef-polygons`). `𝓒_Θ(h)` and `𝒩_Θ(h)` are simple Nef
 polygons with the listed defining half-planes. -/
@@ -820,16 +797,16 @@ theorem proposition3_3_4 {Θ : AngleSet} {K' : Set (ℝ × ℝ)} (hK' : IsPolygo
   constructor
   · rintro ⟨hd, hω, hπ⟩ s hs
     by_cases h1 : s = Θ.ω + π
-    · subst h1; rw [nef_dot_uvec_add_pi]; linarith
+    · subst h1; rw [dot_uvec_add_pi]; linarith
     by_cases h2 : s = 3 * π / 2
-    · subst h2; rw [nef_three_pi_div_two, nef_dot_uvec_add_pi]; linarith
+    · subst h2; rw [nef_three_pi_div_two, dot_uvec_add_pi]; linarith
     exact hd s (nef_mem_diamond_of_mem_capAngles hs h1 h2)
   · intro H
     refine ⟨fun s hs => H s (nef_diamond_subset_capAngles Θ hs), ?_, ?_⟩
     · have := H (Θ.ω + π) (by simp [AngleSet.capAngles])
-      rw [nef_dot_uvec_add_pi] at this; linarith
+      rw [dot_uvec_add_pi] at this; linarith
     · have := H (3 * π / 2) (by simp [AngleSet.capAngles])
-      rw [nef_three_pi_div_two, nef_dot_uvec_add_pi] at this; linarith
+      rw [nef_three_pi_div_two, dot_uvec_add_pi] at this; linarith
 
 /-- **Proposition 3.3.5** (`pro:niche-extension-compatible`). For a polygon cap `K`,
 `𝒩_Θ(h_K) = 𝒩_Θ(K)` and `𝒜_Θ(h_K) = 𝒜_Θ(K)`. -/
@@ -855,17 +832,16 @@ def nicheT (Θ : AngleSet) (K' : Set (ℝ × ℝ)) : Set (ℝ × ℝ) := nicheH 
 /-- `𝒜_Θ(K') := 𝒜_Θ(h_{K'})` (Definition 3.3.4). -/
 noncomputable def areaT (Θ : AngleSet) (K' : Set (ℝ × ℝ)) : ℝ := areaH Θ (supp K')
 
+/-- Replacing the heights `h` by `h + v · u_(·)`, the heights of the translate by `v`, translates
+`𝒩_Θ(h)` by `v`. -/
 lemma nef_nicheH_translate (Θ : AngleSet) (h : ℝ → ℝ) (v : ℝ × ℝ) :
     nicheH Θ (fun t => h t + dot v (uvec t)) = (fun p => p + v) '' nicheH Θ h := by
   ext p
   rw [nef_mem_translate]
   simp only [nicheH, fanH, mem_inter_iff, mem_iInter, mem_iUnion, halfPlus, halfMinusOpen,
     mem_ofPred_eq, dot_sub_left, exists_prop]
-  constructor
-  · rintro ⟨hf, t, ht, h1, h2⟩
-    exact ⟨fun s hs => by have := hf s hs; linarith, t, ht, by linarith, by linarith⟩
-  · rintro ⟨hf, t, ht, h1, h2⟩
-    exact ⟨fun s hs => by have := hf s hs; linarith, t, ht, by linarith, by linarith⟩
+  constructor <;> rintro ⟨hf, t, ht, h1, h2⟩ <;>
+    exact ⟨fun s hs => by linarith [hf s hs], t, ht, by linarith, by linarith⟩
 
 /-- **Theorem 3.3.6** (`thm:height-extensions`). For a translate `K' = K + v` of a polygon cap,
 `𝒩_Θ(K') = 𝒩_Θ(K) + v` and `𝒜_Θ(K') = 𝒜_Θ(K)`. -/
@@ -879,8 +855,8 @@ theorem theorem3_3_6 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap �
     rw [hs, nef_nicheH_translate, (proposition3_3_5 hK).1]
   refine ⟨hn, ?_⟩
   have htr : IsPolygonCapTranslate Θ ((fun p => p + v) '' K) := ⟨K, v, hK, rfl⟩
-  rw [areaT, areaH, proposition3_3_4 htr, hn, theorem3_2_3 hK, nef_area_translate,
-    nef_area_translate]
+  rw [areaT, areaH, proposition3_3_4 htr, hn, theorem3_2_3 hK, area_image_add,
+    area_image_add]
 
 /-- Each wedge `F_h ∩ H₋°(t, ·) ∩ H₋°(t + π/2, ·)`, `t ∈ (0, ω)`, is bounded. -/
 lemma nef_wedge_isBounded {ω t a b c d : ℝ} (ht0 : 0 < t) (htω : t < ω) (hω : ω ≤ π / 2) :
@@ -898,15 +874,12 @@ lemma nef_wedge_isBounded {ω t a b c d : ℝ} (ht0 : 0 < t) (htω : t < ω) (h�
   rintro p ⟨h1, h2, h3, h4⟩
   refine ⟨(dot p (uvec t), dot p (vvec t)), ⟨⟨?_, h3.le⟩, ⟨?_, h4.le⟩⟩,
     (eq_dot_uvec_smul_add p t).symm⟩
-  · have e : dot p (uvec ω) = cos (ω - t) * dot p (uvec t) + sin (ω - t) * dot p (vvec t) := by
-      simp only [dot, uvec, vvec, cos_sub, sin_sub]
-      linear_combination (-(p.1 * cos ω + p.2 * sin ω)) * sin_sq_add_cos_sq t
+  · have e := dot_uvec_eq_cos_add_sin p ω t
     show (a - d * sin (ω - t)) / cos (ω - t) ≤ dot p (uvec t)
     rw [div_le_iff₀ hc2]
     nlinarith
-  · have e : dot p (uvec (π / 2)) = sin t * dot p (uvec t) + cos t * dot p (vvec t) := by
-      simp only [dot, uvec, vvec, cos_pi_div_two, sin_pi_div_two]
-      linear_combination (-p.2) * sin_sq_add_cos_sq t
+  · have e := dot_uvec_eq_cos_add_sin p (π / 2) t
+    rw [cos_pi_div_two_sub, sin_pi_div_two_sub] at e
     show (b - c * sin t) / cos t ≤ dot p (vvec t)
     rw [div_le_iff₀ hc1]
     nlinarith
@@ -937,38 +910,31 @@ theorem proposition3_3_7 {Θ : AngleSet} {h : ℝ → ℝ}
   have hmem : ∀ p ∈ K, (∀ s ∈ Θ.diamond, dot p (uvec s) ≤ h s) ∧
       h Θ.ω - 1 ≤ dot p (uvec Θ.ω) ∧ h (π / 2) - 1 ≤ dot p (uvec (π / 2)) :=
     fun p hp => (nef_mem_capH_iff Θ h p).1 hp
+  -- `h_K ≤ h` on `Θ^◇`, with equality at `ω` and `π/2` (the widths of `K` are one)
   have hle : ∀ s ∈ Θ.diamond, supp K s ≤ h s := fun s hs =>
-    nef_supp_le hcb.1 fun p hp => (hmem p hp).1 s hs
+    supp_le_of_forall hcb.1 fun p hp => (hmem p hp).1 s hs
   have hge : ∀ s ∈ ({Θ.ω, π / 2} : Set ℝ), h s ≤ supp K s := by
     intro s hs
-    have hw : supp K s + supp K (s + π) = 1 := by
-      rcases hs with rfl | rfl
-      · exact hw1
-      · exact hw2
+    have hw : supp K s + supp K (s + π) = 1 := by rcases hs with rfl | rfl <;> assumption
     have hpi : supp K (s + π) ≤ 1 - h s := by
-      refine nef_supp_le hcb.1 fun p hp => ?_
-      rw [nef_dot_uvec_add_pi]
+      refine supp_le_of_forall hcb.1 fun p hp => ?_
+      rw [dot_uvec_add_pi]
       rcases hs with rfl | rfl
       · linarith [(hmem p hp).2.1]
       · linarith [(hmem p hp).2.2]
     linarith
+  -- hence `𝒩_Θ(h_K) ⊆ 𝒩_Θ(h)`: the fan grows and the quarter-planes shrink
   have hsub : nicheH Θ (supp K) ⊆ nicheH Θ h := by
     rintro p ⟨hf, hu⟩
-    simp only [fanH, mem_iInter, halfPlus, mem_ofPred_eq, mem_insert_iff,
-      mem_singleton_iff] at hf
+    simp only [fanH, mem_iInter, halfPlus, mem_ofPred_eq] at hf
     simp only [mem_iUnion, mem_inter_iff, halfMinusOpen, mem_ofPred_eq] at hu
+    obtain ⟨t, ht, h1, h2⟩ := hu
     refine ⟨?_, ?_⟩
-    · simp only [fanH, mem_iInter, halfPlus, mem_ofPred_eq, mem_insert_iff, mem_singleton_iff]
-      intro s hs
-      have h1 := hf s hs
-      have h2 := hge s hs
-      linarith
+    · simp only [fanH, mem_iInter, halfPlus, mem_ofPred_eq]
+      exact fun s hs => by linarith [hf s hs, hge s hs]
     · simp only [mem_iUnion, mem_inter_iff, halfMinusOpen, mem_ofPred_eq]
-      obtain ⟨t, ht, h1, h2⟩ := hu
-      have htd : t ∈ Θ.diamond := by simp [AngleSet.diamond, ht]
-      have htd' : t + π / 2 ∈ Θ.diamond := by
-        simp only [AngleSet.diamond, mem_union, Finset.mem_coe, mem_image]
-        exact Or.inl (Or.inr ⟨t, ht, rfl⟩)
+      have htd : t ∈ Θ.diamond := Or.inl (Or.inl ht)
+      have htd' : t + π / 2 ∈ Θ.diamond := Or.inl (Or.inr ⟨t, ht, rfl⟩)
       exact ⟨t, ht, by linarith [hle t htd], by linarith [hle _ htd']⟩
   unfold areaT areaH
   rw [proposition3_3_4 hK]

@@ -6,7 +6,7 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 /-!
 # The arc-length parametrization of the boundary of a planar convex body
 
-Auxiliary file for `External/AreaFormula.lean` (package X1, prefix `af_`).
+Auxiliary file for `MovingSofaOptimality.External.AreaFormula`.
 
 For a convex body `K` with positive perimeter `P = σ_K((0, 2π])`, the distribution function
 `F = sigmaStieltjes K` of `σ_K` satisfies `F(t + 2π) = F(t) + P`, so it is unbounded in both
@@ -39,9 +39,7 @@ variable {f : StieltjesFunction ℝ}
 /-- If `f` takes values below every `y`, the sets `{t | y ≤ f t}` are bounded below. -/
 lemma af_bddBelow (hbot : ∀ y, ∃ t, f t < y) (y : ℝ) : BddBelow {t | y ≤ f t} := by
   obtain ⟨t₀, ht₀⟩ := hbot y
-  refine ⟨t₀, fun t ht => ?_⟩
-  by_contra h
-  exact absurd (lt_of_le_of_lt (f.mono (not_le.1 h).le) ht₀) (not_lt.2 ht)
+  exact ⟨t₀, fun t ht => not_lt.1 fun h => lt_irrefl y ((ht.trans (f.mono h.le)).trans_lt ht₀)⟩
 
 /-- By right continuity, the infimum defining `af_ginv f y` is attained. -/
 lemma af_le_ginv_apply (htop : ∀ y, ∃ t, y ≤ f t) (y : ℝ) :
@@ -57,10 +55,8 @@ lemma af_le_ginv_apply (htop : ∀ y, ∃ t, y ≤ f t) (y : ℝ) :
 
 /-- The Galois connection `af_ginv f y ≤ t ↔ y ≤ f t`. -/
 lemma af_ginv_le_iff (htop : ∀ y, ∃ t, y ≤ f t) (hbot : ∀ y, ∃ t, f t < y) {y t : ℝ} :
-    af_ginv f y ≤ t ↔ y ≤ f t := by
-  constructor
-  · intro h; exact (af_le_ginv_apply htop y).trans (f.mono h)
-  · intro h; exact csInf_le (af_bddBelow hbot y) h
+    af_ginv f y ≤ t ↔ y ≤ f t :=
+  ⟨fun h => (af_le_ginv_apply htop y).trans (f.mono h), fun h => csInf_le (af_bddBelow hbot y) h⟩
 
 lemma af_lt_ginv_iff (htop : ∀ y, ∃ t, y ≤ f t) (hbot : ∀ y, ∃ t, f t < y) {y t : ℝ} :
     t < af_ginv f y ↔ f t < y := by
@@ -103,60 +99,32 @@ end GenInv
 
 /-! ## The arc-length parametrization of the boundary -/
 
-lemma af_continuous_vvec : Continuous vvec := by unfold vvec; fun_prop
-
-/-- `‖v_t‖ ≤ 1` for the sup norm of `ℝ × ℝ`. -/
-lemma af_norm_vvec_le (t : ℝ) : ‖vvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  simp only [vvec, Real.norm_eq_abs, abs_neg]
-  exact max_le (abs_sin_le_one t) (abs_cos_le_one t)
-
 /-- Bounded measurable functions are interval integrable. -/
 lemma af_intervalIntegrable_of_bound {E : Type*} [NormedAddCommGroup E] {g : ℝ → E}
     (hg : AEStronglyMeasurable g volume) (C : ℝ) (hC : ∀ x, ‖g x‖ ≤ C) (a b : ℝ) :
     IntervalIntegrable g volume a b :=
-  ⟨IntegrableOn.of_bound measure_Ioc_lt_top hg.restrict C (ae_of_all _ hC),
-    IntegrableOn.of_bound measure_Ioc_lt_top hg.restrict C (ae_of_all _ hC)⟩
+  intervalIntegrable_const.mono_fun' hg.restrict (ae_of_all _ hC)
 
 /-- `dot` with a fixed vector commutes with interval integrals. -/
 lemma af_dot_intervalIntegral {g : ℝ → ℝ × ℝ} {a b : ℝ} (hg : IntervalIntegrable g volume a b)
     (w : ℝ × ℝ) : dot (∫ r in a..b, g r) w = ∫ r in a..b, dot (g r) w := by
-  let L : ℝ × ℝ →L[ℝ] ℝ :=
-    w.1 • ContinuousLinearMap.fst ℝ ℝ ℝ + w.2 • ContinuousLinearMap.snd ℝ ℝ ℝ
-  have hL : ∀ p, L p = dot p w := fun p => by simp [L, dot]; ring
-  rw [← hL, ← L.intervalIntegral_comp_comm hg]
-  simp_rw [hL]
+  simp_rw [← dotCLM_apply]
+  exact ((dotCLM w).intervalIntegral_comp_comm hg).symm
 
 section Param
 
 variable {K : Set (ℝ × ℝ)}
 
-lemma af_edge_add_two_pi (K : Set (ℝ × ℝ)) (t : ℝ) : edge K (t + 2 * π) = edge K t := by
-  simp only [edge, suppLine, line, uvec_add_two_pi, supp_add_two_pi]
-
-/-- `v_K⁺` is `2π`-periodic. -/
-lemma af_vplus_add_two_pi (K : Set (ℝ × ℝ)) (t : ℝ) : vplus K (t + 2 * π) = vplus K t := by
-  simp only [vplus, af_edge_add_two_pi, uvec_add_two_pi, vvec_add_two_pi, supp_add_two_pi]
-
 /-- The perimeter `σ_K((0, 2π])`. -/
 noncomputable def af_perim (K : Set (ℝ × ℝ)) : ℝ :=
   sigmaStieltjes K (2 * π) - sigmaStieltjes K 0
-
-lemma af_sigma_Ioc (K : Set (ℝ × ℝ)) (a b : ℝ) :
-    sigma K (Ioc a b) = ENNReal.ofReal (sigmaStieltjes K b - sigmaStieltjes K a) :=
-  (sigmaStieltjes K).measure_Ioc a b
-
-/-- The atom `σ_K({t})` is the jump `F(t) - F(t⁻)` of the distribution function. -/
-lemma af_sigmaAt_eq (K : Set (ℝ × ℝ)) (t : ℝ) :
-    sigmaAt K t = sigmaStieltjes K t - leftLim (sigmaStieltjes K) t := by
-  rw [sigmaAt, sigma, StieltjesFunction.measure_singleton,
-    ENNReal.toReal_ofReal (sub_nonneg.2 ((sigmaStieltjes K).mono.leftLim_le le_rfl))]
 
 lemma af_stieltjes_sub_periodic (hK : IsConvexBody K) {t t' : ℝ} (h : t ≤ t') :
     sigmaStieltjes K (t' + 2 * π) - sigmaStieltjes K (t + 2 * π) =
       sigmaStieltjes K t' - sigmaStieltjes K t := by
   have h1 := sigma_periodic hK (Ioc t t')
-  rw [image_add_const_Ioc, af_sigma_Ioc, af_sigma_Ioc] at h1
+  rw [image_add_const_Ioc, sigma_eq_measure, StieltjesFunction.measure_Ioc,
+    StieltjesFunction.measure_Ioc] at h1
   have m := (sigmaStieltjes K).mono
   rwa [ENNReal.ofReal_eq_ofReal_iff (sub_nonneg.2 (m (by linarith))) (sub_nonneg.2 (m h))] at h1
 
@@ -164,10 +132,7 @@ lemma af_stieltjes_sub_periodic (hK : IsConvexBody K) {t t' : ℝ} (h : t ≤ t'
 lemma af_stieltjes_add_two_pi (hK : IsConvexBody K) (t : ℝ) :
     sigmaStieltjes K (t + 2 * π) = sigmaStieltjes K t + af_perim K := by
   unfold af_perim
-  rcases le_total 0 t with h | h
-  · have := af_stieltjes_sub_periodic hK h
-    rw [zero_add] at this
-    linarith
+  rcases le_total 0 t with h | h <;>
   · have := af_stieltjes_sub_periodic hK h
     rw [zero_add] at this
     linarith
@@ -262,15 +227,15 @@ lemma af_setIntegral_tau {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 lemma af_intervalIntegrable_vvec_tau (hK : IsConvexBody K) (hP : 0 < af_perim K) (a b : ℝ) :
     IntervalIntegrable (fun r => vvec (af_tau K r)) volume a b :=
   af_intervalIntegrable_of_bound
-    (af_continuous_vvec.measurable.comp (af_measurable_tau hK hP)).aestronglyMeasurable 1
-    (fun _ => af_norm_vvec_le _) a b
+    (continuous_vvec.measurable.comp (af_measurable_tau hK hP)).aestronglyMeasurable 1
+    (fun _ => norm_vvec_le _) a b
 
 /-- `∫_{F(a)}^{F(b)} v_{τ(r)} dr = v_K⁺(b) - v_K⁺(a)`, by `vplus_sub_vplus`. -/
 lemma af_integral_vvec_tau (hK : IsConvexBody K) (hP : 0 < af_perim K) (a b : ℝ) :
     ∫ r in (sigmaStieltjes K a)..(sigmaStieltjes K b), vvec (af_tau K r) =
       vplus K b - vplus K a := by
-  rw [intervalIntegral, af_setIntegral_tau hK hP af_continuous_vvec,
-    af_setIntegral_tau hK hP af_continuous_vvec]
+  rw [intervalIntegral, af_setIntegral_tau hK hP continuous_vvec,
+    af_setIntegral_tau hK hP continuous_vvec]
   rcases le_total a b with h | h
   · rw [Ioc_eq_empty (not_lt.2 h), setIntegral_empty, sub_zero, vplus_sub_vplus hK h]
   · rw [Ioc_eq_empty (not_lt.2 h), setIntegral_empty, zero_sub, ← vplus_sub_vplus hK h, neg_sub]
@@ -328,7 +293,7 @@ lemma af_gamma_mem (hK : IsConvexBody K) (hP : 0 < af_perim K) (y : ℝ) : af_ga
   have hplus : vplus K t ∈ K := (vplus_mem_edge hK t).1
   have hminus : vminus K t ∈ K := (vminus_mem_edge hK t).1
   have hpm := (proposition2_1_2 hK t).2
-  rw [af_sigmaAt_eq] at hpm
+  rw [sigmaAt_eq_jump] at hpm
   rw [af_gamma_eq hK hP]
   rcases eq_or_lt_of_le (sub_nonneg.2 ((sigmaStieltjes K).mono.leftLim_le (le_refl t)))
     with h0 | hpos
@@ -343,10 +308,10 @@ lemma af_gamma_mem (hK : IsConvexBody K) (hP : 0 < af_perim K) (y : ℝ) : af_ga
     rw [e, smul_neg, smul_smul, div_mul_cancel₀ _ hpos.ne', ← sub_eq_add_neg] at hmem
     exact hmem
 
-/-- `γ(y + P) = γ(y)`. -/
+/-- `γ` is `P`-periodic: `γ(y + P) = γ(y)`. -/
 lemma af_gamma_add_perim (hK : IsConvexBody K) (hP : 0 < af_perim K) (y : ℝ) :
     af_gamma K (y + af_perim K) = af_gamma K y := by
-  rw [af_gamma_eq hK hP, af_gamma_eq hK hP y, af_tau_add_perim hK hP, af_vplus_add_two_pi,
+  rw [af_gamma_eq hK hP, af_gamma_eq hK hP y, af_tau_add_perim hK hP, vplus_add_two_pi,
     vvec_add_two_pi, af_stieltjes_add_two_pi hK]
   congr 2; ring
 
@@ -356,17 +321,13 @@ lemma af_exists_gamma_eq (hK : IsConvexBody K) (hP : 0 < af_perim K) {q : ℝ ×
   rw [edge_eq_segment hK] at hq
   obtain ⟨a, b, ha, hb, hab, rfl⟩ := hq
   have hpm := (proposition2_1_2 hK t).2
-  rw [af_sigmaAt_eq] at hpm
+  rw [sigmaAt_eq_jump] at hpm
   have hσ : 0 ≤ sigmaStieltjes K t - leftLim (sigmaStieltjes K) t :=
     sub_nonneg.2 ((sigmaStieltjes K).mono.leftLim_le le_rfl)
   refine ⟨sigmaStieltjes K t - a * (sigmaStieltjes K t - leftLim (sigmaStieltjes K) t), ?_⟩
   rw [af_gamma_eq_of_mem hK hP (t := t) (by nlinarith) (by nlinarith), hpm]
   obtain rfl : b = 1 - a := by linarith
   ext <;> simp <;> ring
-
-lemma af_gamma_periodic (hK : IsConvexBody K) (hP : 0 < af_perim K) :
-    Periodic (af_gamma K) (af_perim K) :=
-  af_gamma_add_perim hK hP
 
 lemma af_preimage_tau_Ioc (hK : IsConvexBody K) (hP : 0 < af_perim K) (a b : ℝ) :
     af_tau K ⁻¹' Ioc a b = Ioc (sigmaStieltjes K a) (sigmaStieltjes K b) :=
@@ -387,10 +348,10 @@ lemma af_integrableOn_comp_tau {E : Type*} [NormedAddCommGroup E] (hK : IsConvex
 lemma af_hasDerivAt_gamma (hK : IsConvexBody K) (hP : 0 < af_perim K) {y : ℝ}
     (hy : ContinuousAt (af_tau K) y) : HasDerivAt (af_gamma K) (vvec (af_tau K y)) y := by
   have hmeas : Measurable (fun r => vvec (af_tau K r)) :=
-    af_continuous_vvec.measurable.comp (af_measurable_tau hK hP)
+    continuous_vvec.measurable.comp (af_measurable_tau hK hP)
   have := intervalIntegral.integral_hasDerivAt_right
     (af_intervalIntegrable_vvec_tau hK hP (sigmaStieltjes K 0) y)
-    hmeas.stronglyMeasurable.stronglyMeasurableAtFilter (af_continuous_vvec.continuousAt.comp hy)
+    hmeas.stronglyMeasurable.stronglyMeasurableAtFilter (continuous_vvec.continuousAt.comp hy)
   exact this.const_add (vplus K 0)
 
 /-- If the normal angle turns by less than `π` between `y < y'`, then `γ(y) ≠ γ(y')`: all the

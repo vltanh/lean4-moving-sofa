@@ -9,8 +9,8 @@ import Mathlib.Analysis.Calculus.FDeriv.Measurable
 /-!
 # The area of the niche of a rotation path
 
-This file computes the area of the niche `N` of `MovingSofaOptimality.Gerver.Envelope` (the analytic part of
-Theorem 8.4.1 (2) of the paper):
+This file computes the area of the niche `N` of `MovingSofaOptimality.Gerver.Envelope` (the
+analytic part of Theorem 8.4.1 (2) of the paper):
 `|N| = 𝒥(𝐱|_{[t₁, t₄]}) - 𝒥(𝐁|_{[t₃, π/2]}) - 𝒥(𝐃|_{[0, t₂]})` (`env_area`).
 
 ## The area under a curve
@@ -30,9 +30,10 @@ injective on `T × (0, 1)` with Jacobian `z₁'(t) z₂(t)`, so the change of va
 (`env_volume_sweep`). Off `T`, either `z₂ = 0` or `z₁` is constant on a nondegenerate interval
 through `t`, so `z₁'(t) = 0` (`env_deriv_eq_zero_of_level`); hence `∫_T |z₁'| z₂ = ∫_a^b |z₁'| z₂`.
 The image differs from the regions by a null set: the `x`-axis, countably many vertical lines (the
-values taken twice by a monotone function form a countable set, `env_countable_levels`), and the
-curve itself (`env_volume_image`). Finally `∫_a^b z₁' z₂ = ½ [z₁ z₂]_a^b - 𝒥(z)` by integration by
-parts and `cvx_curveArea_of_primitive` (`env_integral_eq_curveArea`).
+values taken twice by a monotone function form a countable set,
+`MonotoneOn.countable_setOfPred_two_preimages`), and the curve itself (`env_volume_image`).
+Finally `∫_a^b z₁' z₂ = ½ [z₁ z₂]_a^b - 𝒥(z)` by integration by parts and
+`cvx_curveArea_of_primitive` (`env_integral_eq_curveArea`).
 
 ## The niche
 
@@ -112,12 +113,6 @@ private lemma env_volume_sweep {z ψ : ℝ → ℝ × ℝ} {T : Set ℝ} (hT : M
   simp only [lintegral_one, Measure.restrict_apply_univ, Real.volume_Ioo, sub_zero,
     ENNReal.ofReal_one, mul_one]
 
-/-- Integrability on `[a, b]` gives interval integrability. -/
-lemma env_intervalIntegrable {E : Type*} [NormedAddCommGroup E] {f : ℝ → E} {a b : ℝ}
-    (hab : a ≤ b) (hf : IntegrableOn f (Icc a b)) : IntervalIntegrable f volume a b := by
-  rw [← uIcc_of_le hab] at hf
-  exact hf.intervalIntegrable
-
 /-- A bounded function that is the derivative of a curve off a countable set is integrable. -/
 lemma env_integrableOn_of_deriv {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} (hS : S.Countable)
     {M : ℝ} (hd : ∀ t ∈ Ioo a b \ S, HasDerivAt z (ψ t) t) (hM : ∀ t ∈ Icc a b, ‖ψ t‖ ≤ M) :
@@ -145,26 +140,27 @@ lemma env_integral_eq_curveArea {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set
     rw [integral_eq_of_hasDerivAt_off_countable_of_le z ψ ht.1 hS
       (hz.mono (Icc_subset_Icc le_rfl ht.2))
       (fun s hs => hd s ⟨⟨hs.1.1, hs.1.2.trans_le ht.2⟩, hs.2⟩)
-      (env_intervalIntegrable ht.1 (hψ.mono_set (Icc_subset_Icc le_rfl ht.2)))]
+      ((intervalIntegrable_iff_integrableOn_Icc_of_le ht.1).2
+        (hψ.mono_set (Icc_subset_Icc le_rfl ht.2)))]
     abel
   rw [cvx_curveArea_of_primitive hab hψ hψM hprim]
-  have i1 : IntegrableOn (fun t => (ψ t).1 * (z t).2) (Icc a b) :=
-    IntegrableOn.mul_continuousOn (Integrable.fst hψ) hz.snd isCompact_Icc
-  have i2 : IntegrableOn (fun t => (z t).1 * (ψ t).2) (Icc a b) :=
-    IntegrableOn.continuousOn_mul hz.fst (Integrable.snd hψ) isCompact_Icc
+  -- `𝒥(z) = ½ ∫ z × ψ = ½ (∫ z₁ ψ₂ - ∫ ψ₁ z₂)`, and `∫ (ψ₁ z₂ + z₁ ψ₂) = [z₁ z₂]_a^b`.
+  have i1 : IntervalIntegrable (fun t => (ψ t).1 * (z t).2) volume a b :=
+    (intervalIntegrable_iff_integrableOn_Icc_of_le hab).2
+      (IntegrableOn.mul_continuousOn (Integrable.fst hψ) hz.snd isCompact_Icc)
+  have i2 : IntervalIntegrable (fun t => (z t).1 * (ψ t).2) volume a b :=
+    (intervalIntegrable_iff_integrableOn_Icc_of_le hab).2
+      (IntegrableOn.continuousOn_mul hz.fst (Integrable.snd hψ) isCompact_Icc)
   have hprod : ∫ t in a..b, ((ψ t).1 * (z t).2 + (z t).1 * (ψ t).2) =
       (z b).1 * (z b).2 - (z a).1 * (z a).2 :=
     integral_eq_of_hasDerivAt_off_countable_of_le (fun t => (z t).1 * (z t).2) _ hab hS
       (hz.fst.mul hz.snd)
-      (fun t ht => (env_hasDerivAt_fst (hd t ht)).mul (env_hasDerivAt_snd (hd t ht)))
-      (env_intervalIntegrable hab (i1.add i2))
+      (fun t ht => (hasDerivAt_fst (hd t ht)).mul (hasDerivAt_snd (hd t ht))) (i1.add i2)
   have hcross : ∫ t in a..b, cross (z t) (ψ t) =
       (∫ t in a..b, (z t).1 * (ψ t).2) - ∫ t in a..b, (ψ t).1 * (z t).2 := by
-    rw [← intervalIntegral.integral_sub (env_intervalIntegrable hab i2)
-      (env_intervalIntegrable hab i1)]
+    rw [← intervalIntegral.integral_sub i2 i1]
     congr 1; ext t; simp only [cross]; ring
-  rw [intervalIntegral.integral_add (env_intervalIntegrable hab i1)
-    (env_intervalIntegrable hab i2)] at hprod
+  rw [intervalIntegral.integral_add i1 i2] at hprod
   rw [hcross]
   linarith
 
@@ -179,6 +175,11 @@ def envRegion (z : ℝ → ℝ × ℝ) (a b : ℝ) : Set (ℝ × ℝ) :=
 curve `z|_{[a, b]}`. -/
 def envRegionStrict (z : ℝ → ℝ × ℝ) (a b : ℝ) : Set (ℝ × ℝ) :=
   {q | 0 ≤ q.2 ∧ ∃ t ∈ Icc a b, (z t).1 = q.1 ∧ q.2 < (z t).2}
+
+/-- The region strictly below a curve lies in the region below it. -/
+lemma env_regionStrict_subset (z : ℝ → ℝ × ℝ) (a b : ℝ) :
+    envRegionStrict z a b ⊆ envRegion z a b :=
+  fun _ ⟨h0, t, ht, h1, h2⟩ => ⟨h0, t, ht, h1, h2.le⟩
 
 /-- The `x`-axis is a null set. -/
 lemma env_volume_horizontal : volume {q : ℝ × ℝ | q.2 = 0} = 0 := by
@@ -217,16 +218,6 @@ lemma env_eq_of_mono {f : ℝ → ℝ} {a b : ℝ} (hf : MonotoneOn f (Icc a b) 
   rcases hf with hf | hf
   · exact le_antisymm ((hf hs' hv hs.2).trans huv.ge) (hf hu hs' hs.1)
   · exact le_antisymm (hf hu hs' hs.1) (huv.le.trans (hf hs' hv hs.2))
-
-/-- The values taken at two different points by a monotone or antitone function form a countable
-set. -/
-lemma env_countable_levels {f : ℝ → ℝ} {a b : ℝ}
-    (hf : MonotoneOn f (Icc a b) ∨ AntitoneOn f (Icc a b)) :
-    {c | ∃ u ∈ Icc a b, ∃ v ∈ Icc a b, u < v ∧ f u = c ∧ f v = c}.Countable := by
-  refine (countable_range (fun r : ℚ => f r)).mono ?_
-  rintro c ⟨u, hu, v, hv, huv, rfl, hfv⟩
-  obtain ⟨r, hr1, hr2⟩ := exists_rat_btwn huv
-  exact ⟨r, env_eq_of_mono hf hu hv hfv.symm ⟨hr1.le, hr2.le⟩⟩
 
 /-- At a point of a level set with two points, the derivative of a monotone or antitone function
 vanishes. -/
@@ -267,11 +258,15 @@ theorem env_volume_region {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} 
     volume (envRegion z a b) = ENNReal.ofReal (∫ t in Ioo a b, |(ψ t).1| * (z t).2) ∧
       volume (envRegionStrict z a b) = ENNReal.ofReal (∫ t in Ioo a b, |(ψ t).1| * (z t).2) ∧
       NullMeasurableSet (envRegion z a b) ∧ NullMeasurableSet (envRegionStrict z a b) := by
-  set f : ℝ → ℝ := fun t => (z t).1 with hf_def
-  set V : Set ℝ := {c | ∃ u ∈ Icc a b, ∃ v ∈ Icc a b, u < v ∧ f u = c ∧ f v = c} with hV_def
-  have hV : V.Countable := env_countable_levels hmono
+  set f : ℝ → ℝ := fun t => (z t).1
+  -- Step 1: the parameter set `T` of the sweep: the points of `(a, b)` off `S` with `z₂ > 0` at
+  -- which `f = z₁` takes a value it takes only once (the values taken twice form a countable
+  -- set `V`).
+  set V : Set ℝ := {c | ∃ u v, u ∈ Icc a b ∧ v ∈ Icc a b ∧ u < v ∧ f u = c ∧ f v = c}
+  have hV : V.Countable :=
+    hmono.elim (·.countable_setOfPred_two_preimages) (·.countable_setOfPred_two_preimages)
   set Tbad : Set ℝ := Icc a b ∩ f ⁻¹' V with hTbad_def
-  set T : Set ℝ := (Ioo a b ∩ (fun t => (z t).2) ⁻¹' Ioi 0) \ (S ∪ Tbad) with hT_def
+  set T : Set ℝ := (Ioo a b ∩ (fun t => (z t).2) ⁻¹' Ioi 0) \ (S ∪ Tbad)
   have hTbad : MeasurableSet Tbad := by
     have e : Tbad = ⋃ c ∈ V, Icc a b ∩ f ⁻¹' {c} := by
       ext t
@@ -291,8 +286,8 @@ theorem env_volume_region {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} 
     have htI := Ioo_subset_Icc_self ht.1.1
     have htI' := Ioo_subset_Icc_self ht'.1.1
     rcases lt_or_gt_of_ne hne with hlt | hlt
-    · exact ht.2 (Or.inr ⟨htI, t, htI, t', htI', hlt, rfl, heq.symm⟩)
-    · exact ht.2 (Or.inr ⟨htI, t', htI', t, htI, hlt, heq.symm, rfl⟩)
+    · exact ht.2 (Or.inr ⟨htI, t, t', htI, htI', hlt, rfl, heq.symm⟩)
+    · exact ht.2 (Or.inr ⟨htI, t', t, htI', htI, hlt, heq.symm, rfl⟩)
   have hint : IntegrableOn (fun t => |(ψ t).1| * (z t).2) (Ioo a b) := by
     have h1 : Integrable (fun t => |(ψ t).1|) (volume.restrict (Icc a b)) := by
       simpa only [Real.norm_eq_abs] using (Integrable.fst hψ).norm
@@ -302,6 +297,8 @@ theorem env_volume_region {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} 
       (Measure.restrict_mono hTsub le_rfl)
   have hdT : ∀ t ∈ T, HasDerivAt z (ψ t) t := fun t ht => hd t ⟨ht.1.1, fun h => ht.2 (Or.inl h)⟩
   have hposT : ∀ t ∈ T, 0 < (z t).2 := fun t ht => ht.1.2
+  -- Step 2: the swept region `E` is measurable with area `∫_T |z₁'| z₂ = ∫_{(a,b)} |z₁'| z₂`,
+  -- since `z₁' = 0` at the points of `(a, b) \ T` off `S` where `z₂ > 0`.
   set E := env_sweep z '' (T ×ˢ Ioo 0 1) with hE_def
   have hE_meas : MeasurableSet E := measurable_image_of_fderivWithin (hT.prod measurableSet_Ioo)
     (fun p hp => (env_hasFDerivAt_sweep (hdT p.1 hp.1)).hasFDerivWithinAt)
@@ -320,24 +317,25 @@ theorem env_volume_region {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} 
       · have htb : t ∈ Tbad := by
           by_contra hcon
           exact ht.2 ⟨⟨ht1, hpos⟩, fun h => h.elim htS hcon⟩
-        obtain ⟨u, hu, v, hv, huv, hfu, hfv⟩ := htb.2
+        obtain ⟨u, v, hu, hv, huv, hfu, hfv⟩ := htb.2
         have h0 := env_deriv_eq_zero_of_level hmono htb.1
-          (env_hasDerivAt_fst (hd t ⟨ht1, htS⟩)) hu hv huv hfu hfv
+          (hasDerivAt_fst (hd t ⟨ht1, htS⟩)) hu hv huv hfu hfv
         simp [h0]
       · have : (z t).2 = 0 := le_antisymm (not_lt.1 hpos) (hnn t (Ioo_subset_Icc_self ht1))
         simp [this]
     rw [h0, add_zero]
+  -- Step 3: `E ⊆ envRegionStrict ⊆ envRegion ⊆ E ∪ N`, where the null set `N` consists of the
+  -- `x`-axis, countably many vertical lines and the curve itself.
   have hE_sub : E ⊆ envRegionStrict z a b := by
     rintro _ ⟨⟨t, l⟩, ⟨ht, hl⟩, rfl⟩
     have hz2 := hposT t ht
     refine ⟨mul_nonneg hl.1.le hz2.le, t, Ioo_subset_Icc_self ht.1.1, rfl, ?_⟩
     show l * (z t).2 < (z t).2
     nlinarith [hl.2]
-  have hsc : envRegionStrict z a b ⊆ envRegion z a b :=
-    fun q ⟨h0, t, ht, h1, h2⟩ => ⟨h0, t, ht, h1, h2.le⟩
-  set C : Set ℝ := f '' (S ∪ {a, b}) ∪ V with hC_def
+  have hsc := env_regionStrict_subset z a b
+  set C : Set ℝ := f '' (S ∪ {a, b}) ∪ V
   have hC : C.Countable := ((hS.union (Set.toFinite _).countable).image f).union hV
-  set N : Set (ℝ × ℝ) := {q | q.2 = 0} ∪ {q | q.1 ∈ C} ∪ z '' Icc a b with hN_def
+  set N : Set (ℝ × ℝ) := {q | q.2 = 0} ∪ {q | q.1 ∈ C} ∪ z '' Icc a b
   have hN : volume N = 0 := measure_union_null
     (measure_union_null env_volume_horizontal (env_volume_vertical hC)) (env_volume_image hS hd)
   have hcl_sub : envRegion z a b ⊆ E ∪ N := by
@@ -367,6 +365,7 @@ theorem env_volume_region {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S : Set ℝ} 
     refine Prod.ext hq1 ?_
     show q.2 / (z t).2 * (z t).2 = q.2
     field_simp
+  -- Step 4: hence both regions have the area of `E` and are null measurable.
   have hvol_cl : volume (envRegion z a b) = volume E := by
     apply le_antisymm
     · calc volume (envRegion z a b) ≤ volume (E ∪ N) := measure_mono hcl_sub
@@ -394,7 +393,7 @@ lemma env_integral_abs_of_monotoneOn {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S 
     integral_Ioc_eq_integral_Ioo]
   refine setIntegral_congr_ae measurableSet_Ioo ?_
   filter_upwards [hS.ae_notMem volume] with t htS ht
-  rw [abs_of_nonneg ((env_hasDerivAt_fst (hd t ⟨ht, htS⟩)).hasDerivWithinAt.nonneg_of_monotoneOn
+  rw [abs_of_nonneg ((hasDerivAt_fst (hd t ⟨ht, htS⟩)).hasDerivWithinAt.nonneg_of_monotoneOn
     (env_accPt_Icc ht) hmono)]
 
 /-- For `z₁` antitone, `∫_{(a,b)} |z₁'| z₂ = 𝒥(z) - ½ [z₁ z₂]_a^b`. -/
@@ -409,7 +408,7 @@ lemma env_integral_abs_of_antitoneOn {z ψ : ℝ → ℝ × ℝ} {a b : ℝ} {S 
   have e : ∫ t in Ioo a b, |(ψ t).1| * (z t).2 = ∫ t in Ioo a b, -((ψ t).1 * (z t).2) := by
     refine setIntegral_congr_ae measurableSet_Ioo ?_
     filter_upwards [hS.ae_notMem volume] with t htS ht
-    rw [abs_of_nonpos ((env_hasDerivAt_fst (hd t ⟨ht, htS⟩)).hasDerivWithinAt.nonpos_of_antitoneOn
+    rw [abs_of_nonpos ((hasDerivAt_fst (hd t ⟨ht, htS⟩)).hasDerivWithinAt.nonpos_of_antitoneOn
       (env_accPt_Icc ht) hanti), neg_mul]
   rw [e, integral_neg, h]
   ring
@@ -454,28 +453,6 @@ theorem env_volume_region_of_antitoneOn {z ψ : ℝ → ℝ × ℝ} {a b M : ℝ
   refine ⟨hI ▸ h1, hI ▸ h2, hI ▸ setIntegral_nonneg measurableSet_Ioo fun t ht =>
     mul_nonneg (abs_nonneg _) (hnn t (Ioo_subset_Icc_self ht))⟩
 
-/-- `area` form of `env_volume_region_of_monotoneOn`. -/
-theorem env_area_region_of_monotoneOn {z ψ : ℝ → ℝ × ℝ} {a b M : ℝ} {S : Set ℝ} (hab : a ≤ b)
-    (hS : S.Countable) (hz : ContinuousOn z (Icc a b))
-    (hd : ∀ t ∈ Ioo a b \ S, HasDerivAt z (ψ t) t) (hψM : ∀ t ∈ Icc a b, ‖ψ t‖ ≤ M)
-    (hnn : ∀ t ∈ Icc a b, 0 ≤ (z t).2) (hmono : MonotoneOn (fun t => (z t).1) (Icc a b)) :
-    area (envRegion z a b) = ((z b).1 * (z b).2 - (z a).1 * (z a).2) / 2 - curveArea z a b ∧
-      area (envRegionStrict z a b) =
-        ((z b).1 * (z b).2 - (z a).1 * (z a).2) / 2 - curveArea z a b := by
-  obtain ⟨h1, h2, h3⟩ := env_volume_region_of_monotoneOn hab hS hz hd hψM hnn hmono
-  exact ⟨by rw [area, h1, ENNReal.toReal_ofReal h3], by rw [area, h2, ENNReal.toReal_ofReal h3]⟩
-
-/-- `area` form of `env_volume_region_of_antitoneOn`. -/
-theorem env_area_region_of_antitoneOn {z ψ : ℝ → ℝ × ℝ} {a b M : ℝ} {S : Set ℝ} (hab : a ≤ b)
-    (hS : S.Countable) (hz : ContinuousOn z (Icc a b))
-    (hd : ∀ t ∈ Ioo a b \ S, HasDerivAt z (ψ t) t) (hψM : ∀ t ∈ Icc a b, ‖ψ t‖ ≤ M)
-    (hnn : ∀ t ∈ Icc a b, 0 ≤ (z t).2) (hanti : AntitoneOn (fun t => (z t).1) (Icc a b)) :
-    area (envRegion z a b) = curveArea z a b - ((z b).1 * (z b).2 - (z a).1 * (z a).2) / 2 ∧
-      area (envRegionStrict z a b) =
-        curveArea z a b - ((z b).1 * (z b).2 - (z a).1 * (z a).2) / 2 := by
-  obtain ⟨h1, h2, h3⟩ := env_volume_region_of_antitoneOn hab hS hz hd hψM hnn hanti
-  exact ⟨by rw [area, h1, ENNReal.toReal_ofReal h3], by rw [area, h2, ENNReal.toReal_ofReal h3]⟩
-
 /-- The regions on and strictly below a curve with monotone or antitone abscissa are null
 measurable. -/
 theorem env_nullMeasurableSet_region {z ψ : ℝ → ℝ × ℝ} {a b M : ℝ} {S : Set ℝ}
@@ -485,11 +462,6 @@ theorem env_nullMeasurableSet_region {z ψ : ℝ → ℝ × ℝ} {a b M : ℝ} {
     (hmono : MonotoneOn (fun t => (z t).1) (Icc a b) ∨ AntitoneOn (fun t => (z t).1) (Icc a b)) :
     NullMeasurableSet (envRegion z a b) ∧ NullMeasurableSet (envRegionStrict z a b) :=
   (env_volume_region hS hz hd (env_integrableOn_of_deriv hS hd hψM) hnn hmono).2.2
-
-/-- The region strictly below a curve lies in the region below it. -/
-lemma env_regionStrict_subset (z : ℝ → ℝ × ℝ) (a b : ℝ) :
-    envRegionStrict z a b ⊆ envRegion z a b :=
-  fun _ ⟨h0, t, ht, h1, h2⟩ => ⟨h0, t, ht, h1, h2.le⟩
 
 /-- The abscissas of the region below a curve with monotone abscissa lie in `[z₁(a), z₁(b)]`. -/
 lemma env_region_fst_mem_of_monotoneOn {z : ℝ → ℝ × ℝ} {a b : ℝ}
@@ -539,18 +511,6 @@ lemma env_underStrict_image (z : ℝ → ℝ × ℝ) (a b : ℝ) :
   · rintro ⟨h0, t, ht, h1, h2⟩
     exact ⟨h0, z t, ⟨t, ht, rfl⟩, h1, h2⟩
 
-/-- `‖u_t‖ ≤ 1` (sup norm). -/
-lemma env_norm_uvec_le (t : ℝ) : ‖uvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  exact max_le (by simpa [Real.norm_eq_abs] using abs_cos_le_one t)
-    (by simpa [Real.norm_eq_abs] using abs_sin_le_one t)
-
-/-- `‖v_t‖ ≤ 1` (sup norm). -/
-lemma env_norm_vvec_le (t : ℝ) : ‖vvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  exact max_le (by simpa [Real.norm_eq_abs] using abs_sin_le_one t)
-    (by simpa [Real.norm_eq_abs] using abs_cos_le_one t)
-
 section area
 
 variable {t₁ t₂ t₃ t₄ sA sC : ℝ} {x : ℝ → ℝ × ℝ} {α β ρA ρC : ℝ → ℝ}
@@ -584,11 +544,9 @@ theorem env_area (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
     have h1 : mA ≤ ρA t := hmA ⟨t, ht, rfl⟩
     have h2 : ρA t < 1 := h.ρA_lt t ht
     rw [norm_smul, Real.norm_eq_abs, abs_of_neg (by linarith)]
-    nlinarith [env_norm_vvec_le t, norm_nonneg (vvec t)]
-  have hB_nn : ∀ t ∈ Icc t₃ (π / 2), 0 ≤ (envB x α t).2 := fun t ht => by
-    have := (env_B₂_strictAnti h).antitoneOn ht ⟨by linarith [ht.1], le_rfl⟩ ht.2
-    simp only [h.B_end] at this
-    exact this
+    nlinarith [norm_vvec_le t, norm_nonneg (vvec t)]
+  have hB_nn : ∀ t ∈ Icc t₃ (π / 2), 0 ≤ (envB x α t).2 := fun t ht =>
+    h.B_end ▸ (env_B₂_strictAnti h).antitoneOn ht ⟨by linarith [ht.1], le_rfl⟩ ht.2
   have hB_mono := (env_B₁_strictMono h).monotoneOn
   obtain ⟨-, hB2, hB3⟩ :=
     env_volume_region_of_monotoneOn (by linarith) hS hB_cont hB_d hB_M hB_nn hB_mono
@@ -599,8 +557,8 @@ theorem env_area (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
       HasDerivAt x (α t • uvec t + β t • vvec t) t :=
     fun t ht => h.x_deriv t ⟨by linarith [ht.1.1], by linarith [ht.1.2]⟩
   have hψx : ContinuousOn (fun t => α t • uvec t + β t • vvec t) (Icc t₁ t₄) :=
-    ((h.α_cont.mono hsubx).smul env_continuous_uvec.continuousOn).add
-      ((h.β_cont.mono hsubx).smul env_continuous_vvec.continuousOn)
+    ((h.α_cont.mono hsubx).smul continuous_uvec.continuousOn).add
+      ((h.β_cont.mono hsubx).smul continuous_vvec.continuousOn)
   obtain ⟨Mx, hx_M⟩ := isCompact_Icc.exists_bound_of_continuousOn hψx
   have hx_nn : ∀ t ∈ Icc t₁ t₄, 0 ≤ (x t).2 := fun t ht => (h.x_pos t ht).le
   have hx_anti := (env_x₁_strictAnti h).antitoneOn
@@ -617,11 +575,9 @@ theorem env_area (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
     have h1 : mC ≤ ρC t := hmC ⟨t, ht, rfl⟩
     have h2 : ρC t < 1 := h.ρC_lt t ht
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos (by linarith)]
-    nlinarith [env_norm_uvec_le t, norm_nonneg (uvec t)]
-  have hD_nn : ∀ t ∈ Icc 0 t₂, 0 ≤ (envD x β t).2 := fun t ht => by
-    have := (env_D₂_strictMono h).monotoneOn ⟨le_rfl, by linarith [ht.2]⟩ ht ht.1
-    simp only [h.D_end] at this
-    exact this
+    nlinarith [norm_uvec_le t, norm_nonneg (uvec t)]
+  have hD_nn : ∀ t ∈ Icc 0 t₂, 0 ≤ (envD x β t).2 := fun t ht =>
+    h.D_end ▸ (env_D₂_strictMono h).monotoneOn ⟨le_rfl, by linarith [ht.2]⟩ ht ht.1
   have hD_mono := (env_D₁_strictMono h).monotoneOn
   obtain ⟨-, hD2, hD3⟩ :=
     env_volume_region_of_monotoneOn (by linarith) hS hD_cont hD_d hD_M hD_nn hD_mono

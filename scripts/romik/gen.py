@@ -41,21 +41,41 @@ def dec(s):  # decimal literal
 
 class Ref(E):
     def __init__(self, name): self.name = name
-    def lean(self): return '(' + DEFS[self.name].call() + ')'
+    def lean(self): return DEFS[self.name].call()
     def atoms(self): return set(DEFS[self.name].atoms)
     def refs(self): return {self.name}
 
 class Bin(E):
     def __init__(self, op, a, b): self.op = op; self.a = a; self.b = b
-    def lean(self): return '(' + self.a.lean() + ' ' + self.op + ' ' + self.b.lean() + ')'
     def atoms(self): return self.a.atoms() | self.b.atoms()
     def refs(self): return self.a.refs() | self.b.refs()
 
 class Neg(E):
     def __init__(self, a): self.a = a
-    def lean(self): return '(-' + self.a.lean() + ')'
     def atoms(self): return self.a.atoms()
     def refs(self): return self.a.refs()
+
+# Lean precedences: `+`, `-` (65) and `*`, `/` (70) are left associative; prefix `-` is 75.
+PREC = {'+': 65, '-': 65, '*': 70, '/': 70}
+
+def prec(e):
+    """the precedence of the printed form of `e` (1024 for an atom or an application)"""
+    if isinstance(e, Bin): return PREC[e.op]
+    if isinstance(e, Neg): return 75
+    if isinstance(e, Num) and (' ' in e.s or e.s.startswith('-')): return 70
+    return 1024
+
+def lean(e, p=0):
+    """Lean text of `e` with the fewest parentheses: `e` is parenthesized when its precedence is
+    below `p`; a right operand gets the precedence of its operator plus one."""
+    if isinstance(e, Bin):
+        q = PREC[e.op]
+        t = lean(e.a, q) + ' ' + e.op + ' ' + lean(e.b, q + 1)
+    elif isinstance(e, Neg):
+        t = '-' + lean(e.a, 75)
+    else:
+        t = e.lean()
+    return '(' + t + ')' if prec(e) < p else t
 
 φ, θ, c, s, C, S, p = [Var(n) for n in ATOMS]
 
@@ -189,14 +209,14 @@ class Emitter:
         if isinstance(e, Var):
             return env[e.name]
         if isinstance(e, Num):
-            return ('(rom_iv_self (' + e.s + ' : ℝ))', (e.val, e.val))
+            return ('(iv_const (' + e.s + ' : ℝ))', (e.val, e.val))
         if isinstance(e, Ref):
             return env[e.name]
         if isinstance(e, Neg):
             ha, (a, b) = self.ev(e.a, env)
             lo, hi = -b, -a
             h = self.fresh()
-            self.lines.append('have %s := rom_iv_neg (L := %s) (U := %s) %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha))
+            self.lines.append('have %s := iv_neg (L := %s) (U := %s) %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha))
             return (h, (lo, hi))
         ha, (a, b) = self.ev(e.a, env)
         if e.op == '/' and isinstance(e.b, Num):
@@ -204,28 +224,28 @@ class Emitter:
             assert k > 0
             lo, hi = self.rnd(a / k, b / k)
             h = self.fresh()
-            self.lines.append('have %s := rom_iv_div (L := %s) (U := %s) %s (k := %s) (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, e.b.s))
+            self.lines.append('have %s := iv_div_const (L := %s) (U := %s) %s (k := %s) (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, e.b.s))
             return (h, (lo, hi))
         hb, (cc, d) = self.ev(e.b, env)
         h = self.fresh()
         if e.op == '+':
             lo, hi = self.rnd(a + cc, b + d)
-            self.lines.append('have %s := rom_iv_add (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
+            self.lines.append('have %s := iv_add (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
         elif e.op == '-':
             lo, hi = self.rnd(a - d, b - cc)
-            self.lines.append('have %s := rom_iv_sub (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
+            self.lines.append('have %s := iv_sub (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
         elif e.op == '*':
             if a >= 0 and cc >= 0:
                 lo, hi = self.rnd(a * cc, b * d)
-                self.lines.append('have %s := rom_iv_mul_nn (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
+                self.lines.append('have %s := iv_mul_nonneg (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
             else:
                 prods = [a * cc, a * d, b * cc, b * d]
                 lo, hi = self.rnd(min(prods), max(prods))
-                self.lines.append('have %s := rom_iv_mul (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
+                self.lines.append('have %s := iv_mul (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
         elif e.op == '/':
             assert a >= 0 and cc > 0
             lo, hi = self.rnd(a / d, b / cc)
-            self.lines.append('have %s := rom_iv_div2 (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
+            self.lines.append('have %s := iv_div (L := %s) (U := %s) %s %s (by norm_num)' % (h, lean_num(lo), lean_num(hi), ha, hb))
         else:
             raise ValueError(e.op)
         return (h, (lo, hi))
@@ -260,12 +280,32 @@ def gen_regime(regime, names, atom_iv, digits, out_iv=None):
     return results, '\n'.join(text)
 
 # ---------------------------------------------------------------- definitions text
+def summands(e):
+    """the top-level terms of a sum or difference `e`, as a list of (operator, term)"""
+    if isinstance(e, Bin) and e.op in '+-':
+        return summands(e.a) + [(e.op, e.b)]
+    return [(None, e)]
+
+def body_text(e, width=100):
+    """the body of a definition, broken before a top-level `+` or `-` when too long"""
+    lines = []
+    for op, t in summands(e):
+        if op is None:
+            lines.append('  ' + lean(t, 65))
+            continue
+        piece = op + ' ' + lean(t, 66)
+        if len(lines[-1]) + 1 + len(piece) <= width:
+            lines[-1] += ' ' + piece
+        else:
+            lines.append('    ' + piece)
+    return '\n'.join(lines)
+
 def gen_defs(names):
     out = []
     for n in names:
         d = DEFS[n]
         out.append('/-- %s -/' % (d.doc[0].upper() + d.doc[1:] + '.'))
-        out.append('noncomputable def %s (%s : ℝ) : ℝ :=\n  %s' % (n, ' '.join(d.atoms), d.expr.lean()))
+        out.append('noncomputable def %s (%s : ℝ) : ℝ :=\n%s' % (n, ' '.join(d.atoms), body_text(d.expr)))
         out.append('')
     return '\n'.join(out)
 

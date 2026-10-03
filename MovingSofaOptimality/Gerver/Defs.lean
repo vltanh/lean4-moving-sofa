@@ -73,16 +73,19 @@ noncomputable def path (t : ℝ) : ℝ × ℝ :=
   else if t ≤ π / 2 - P.φ then P.x₄ t
   else P.x₅ t
 
-/-- The contact path `𝐀(t) = 𝐱(t) + ⟨𝐱'(t), u_t⟩ v_t + u_t` of a rotation path (Romik's Equation (9)). -/
+/-- The contact path `𝐀(t) = 𝐱(t) + ⟨𝐱'(t), u_t⟩ v_t + u_t` of a rotation path (Romik's
+Equation (9)). -/
 noncomputable def contactA (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ :=
   x t + dot (deriv x t) (uvec t) • vvec t + uvec t
 /-- The contact path `𝐁(t) = 𝐱(t) + ⟨𝐱'(t), u_t⟩ v_t` (Romik's Equation (10)). -/
-noncomputable def contactB (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ := x t + dot (deriv x t) (uvec t) • vvec t
+noncomputable def contactB (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ :=
+  x t + dot (deriv x t) (uvec t) • vvec t
 /-- The contact path `𝐂(t) = 𝐱(t) - ⟨𝐱'(t), v_t⟩ u_t + v_t` (Romik's Equation (11)). -/
 noncomputable def contactC (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ :=
   x t - dot (deriv x t) (vvec t) • uvec t + vvec t
 /-- The contact path `𝐃(t) = 𝐱(t) - ⟨𝐱'(t), v_t⟩ u_t` (Romik's Equation (12)). -/
-noncomputable def contactD (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ := x t - dot (deriv x t) (vvec t) • uvec t
+noncomputable def contactD (x : ℝ → ℝ × ℝ) (t : ℝ) : ℝ × ℝ :=
+  x t - dot (deriv x t) (vvec t) • uvec t
 
 /-- Romik's system of equations (27)–(44) for the parameters of Gerver's sofa, with
 `0 < φ < θ < π/4`. -/
@@ -106,8 +109,8 @@ def InBox : Prop := P.φ ∈ Icc (0.039 : ℝ) 0.04 ∧ P.θ ∈ Icc (0.68 : ℝ
 
 end GerverParams
 
-/-- The shape `S_𝐱 = H_L ∩ ⋂_{t ∈ [0, π/2]} (𝐱(t) + R_t(L)) ∩ (𝐱(π/2) + R_{π/2}(V_L))` of a rotation path
-(Romik's Equation (8)). -/
+/-- The shape `S_𝐱 = H_L ∩ ⋂_{t ∈ [0, π/2]} (𝐱(t) + R_t(L)) ∩ (𝐱(π/2) + R_{π/2}(V_L))` of a
+rotation path (Romik's Equation (8)). -/
 def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
   horizSide ∩ (⋂ t ∈ Icc 0 (π / 2), (fun p => x t + rot t p) '' hallway) ∩
     (fun p => x (π / 2) + rot (π / 2) p) '' vertSide

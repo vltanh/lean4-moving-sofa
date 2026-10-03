@@ -44,13 +44,24 @@ def ConvexDomain.IsConvexBilinear {V₁ V₂ V₃ : Type} (D₁ : ConvexDomain V
     (D₃ : ConvexDomain V₃) (g : V₁ → V₂ → V₃) : Prop :=
   (∀ v₁, D₂.IsConvexLinear D₃ (g v₁)) ∧ ∀ v₂, D₁.IsConvexLinear D₃ (fun v₁ => g v₁ v₂)
 
+/-- A constant multiple of a real-valued convex-bilinear map is convex-bilinear. -/
+lemma ConvexDomain.IsConvexBilinear.const_mul {V₁ V₂ : Type} {D₁ : ConvexDomain V₁}
+    {D₂ : ConvexDomain V₂} {g : V₁ → V₂ → ℝ} (hg : D₁.IsConvexBilinear D₂ realDomain g) (r : ℝ) :
+    D₁.IsConvexBilinear D₂ realDomain (fun v₁ v₂ => r * g v₁ v₂) := by
+  refine ⟨fun v₁ c hc v w => ?_, fun v₂ c hc v w => ?_⟩
+  · change r * g v₁ (D₂.comb c v w) = (1 - c) * (r * g v₁ v) + c * (r * g v₁ w)
+    rw [hg.1 v₁ c hc v w]; simp only [realDomain]; ring
+  · change r * g (D₁.comb c v w) v₂ = (1 - c) * (r * g v v₂) + c * (r * g w v₂)
+    rw [show g (D₁.comb c v w) v₂ = _ from hg.2 v₂ c hc v w]; simp only [realDomain]; ring
+
 /-- A quadratic functional on a convex domain (Definition 7.1.4, `def:convex-space-quadratic`). -/
 def ConvexDomain.IsQuadratic {V : Type} (D : ConvexDomain V) (h : V → ℝ) : Prop :=
   ∃ g : V → V → ℝ, D.IsConvexBilinear D realDomain g ∧ ∀ v, h v = g v v
 
 /-- The directional derivative `Df(K; K') = d/dλ|_{λ=0} f(c_λ(K, K'))` (Definition 7.1.5,
 `def:convex-space-directional-derivative`), as a one-sided derivative on `[0, 1]`. -/
-noncomputable def ConvexDomain.dirDeriv {V : Type} (D : ConvexDomain V) (f : V → ℝ) (K K' : V) : ℝ :=
+noncomputable def ConvexDomain.dirDeriv {V : Type} (D : ConvexDomain V) (f : V → ℝ) (K K' : V) :
+    ℝ :=
   derivWithin (fun c => f (D.comb c K K')) (Icc 0 1) 0
 
 /-- The expansion of a convex-bilinear form along a segment (the display in the proof of
@@ -67,32 +78,18 @@ lemma cvx_bilin_comb {V : Type} (D : ConvexDomain V) {h : V → V → ℝ}
   simp only [realDomain]
   ring
 
-private lemma cvx_hasDerivAt_quad (A B C : ℝ) :
-    HasDerivAt (fun c : ℝ => A + c * (B - 2 * A) + c * c * (A - B + C)) (B - 2 * A) 0 := by
-  have h1 := (hasDerivAt_id (0 : ℝ)).mul_const (B - 2 * A)
-  have h2 := ((hasDerivAt_id (0 : ℝ)).mul (hasDerivAt_id (0 : ℝ))).mul_const (A - B + C)
-  have := (h1.add h2).const_add A
-  convert this using 1
-  · funext c; simp [add_assoc]
-  · simp
-
 /-- **Lemma 7.1.4** (`lem:derivative-calculation`). For `f(K) = h(K, K)` with `h` convex-bilinear,
 `Df(K; K') = h(K, K') + h(K', K) - 2h(K, K)`. -/
 theorem lemma7_1_4 {V : Type} (D : ConvexDomain V) {h : V → V → ℝ}
     (hh : D.IsConvexBilinear D realDomain h) (K K' : V) :
     D.dirDeriv (fun v => h v v) K K' = h K K' + h K' K - 2 * h K K := by
-  unfold ConvexDomain.dirDeriv
-  have h0 : (0 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨le_refl _, zero_le_one⟩
+  -- on `[0, 1]`, `λ ↦ h(c_λ(K, K'), c_λ(K, K'))` is the quadratic polynomial of `cvx_bilin_comb`
+  have h0 : (0 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨le_rfl, zero_le_one⟩
   have hp : ∀ c ∈ Icc (0 : ℝ) 1, h (D.comb c K K') (D.comb c K K') =
-      h K K + c * ((h K K' + h K' K) - 2 * h K K) +
-        c * c * (h K K - (h K K' + h K' K) + h K' K') := by
-    intro c hc
-    rw [cvx_bilin_comb D hh K K' hc]
-    ring
-  rw [derivWithin_congr (f := fun c : ℝ => h K K + c * ((h K K' + h K' K) - 2 * h K K) +
-      c * c * (h K K - (h K K' + h K' K) + h K' K')) (fun c hc => hp c hc) (hp 0 h0)]
-  rw [(cvx_hasDerivAt_quad _ _ _).hasDerivWithinAt.derivWithin
-    (uniqueDiffOn_Icc zero_lt_one 0 h0)]
+      (h K K - (h K K' + h K' K) + h K' K') * c ^ 2 + (h K K' + h K' K - 2 * h K K) * c + h K K :=
+    fun c hc => by rw [cvx_bilin_comb D hh K K' hc]; ring
+  exact ((hasDerivAt_quad _ _ _ (fun _ => rfl) (by ring)).hasDerivWithinAt.congr hp
+    (hp 0 h0)).derivWithin (uniqueDiffOn_Icc zero_lt_one 0 h0)
 
 /-- A concave functional (Definition 7.1.6, `def:convex-space-concavity`). -/
 def ConvexDomain.IsConcave {V : Type} (D : ConvexDomain V) (f : V → ℝ) : Prop :=
@@ -102,8 +99,8 @@ def ConvexDomain.IsConcave {V : Type} (D : ConvexDomain V) (f : V → ℝ) : Pro
 def ConvexDomain.IsConvexFun {V : Type} (D : ConvexDomain V) (f : V → ℝ) : Prop :=
   ∀ K₁ K₂, ∀ c ∈ Icc (0 : ℝ) 1, f (D.comb c K₁ K₂) ≤ (1 - c) * f K₁ + c * f K₂
 
-/-- **Theorem 7.1.5** (`thm:quadratic-variation`). A concave quadratic functional attains its maximum
-at `K` iff `Df(K; -)` is nonpositive. -/
+/-- **Theorem 7.1.5** (`thm:quadratic-variation`). A concave quadratic functional attains its
+maximum at `K` iff `Df(K; -)` is nonpositive. -/
 theorem theorem7_1_5 {V : Type} (D : ConvexDomain V) {f : V → ℝ} (hq : D.IsQuadratic f)
     (hc : D.IsConcave f) (K : V) : (∀ K', f K' ≤ f K) ↔ ∀ K', D.dirDeriv f K K' ≤ 0 := by
   obtain ⟨g, hg, hfg⟩ := hq
@@ -111,7 +108,8 @@ theorem theorem7_1_5 {V : Type} (D : ConvexDomain V) {f : V → ℝ} (hq : D.IsQ
   subst hf
   simp only [lemma7_1_4 D hg]
   constructor
-  · intro hmax K'
+  · -- If `Df(K; K') = δ > 0`, then `f(c_λ(K, K')) - f(K) = λδ + λ²E > 0` for small `λ > 0`.
+    intro hmax K'
     by_contra hpos
     push Not at hpos
     set δ := g K K' + g K' K - 2 * g K K with hδ
@@ -135,7 +133,8 @@ theorem theorem7_1_5 {V : Type} (D : ConvexDomain V) {f : V → ℝ} (hq : D.IsQ
     have h1 := hle c ⟨hc0.le, hc1⟩
     have h2 : -(c * |E|) ≤ c * E := by nlinarith [neg_abs_le E]
     nlinarith
-  · intro hderiv K'
+  · -- Concavity at `λ = 1/2` and `Df(K; K') ≤ 0` give `f(K') ≤ f(K)`.
+    intro hderiv K'
     have h1 := hderiv K'
     have hhalf : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
     have h2 := hc K K' (1 / 2) hhalf
@@ -198,17 +197,19 @@ open Classical in
 noncomputable def convexBodyComb (c : ℝ) (K₁ K₂ : ConvexBodySet) : ConvexBodySet :=
   if c ∈ Icc (0 : ℝ) 1 then ⟨(1 - c) • K₁.1 + c • K₂.1, isConvexBody_comb K₁.2 K₂.2⟩ else K₁
 
-/-- **Theorem 7.1.1** (`thm:convex-body-space`). The planar convex bodies form a convex domain under
-Minkowski combinations: `K ↦ h_K` embeds them into the vector space of functions `ℝ → ℝ`. -/
+/-- For `λ ∈ [0, 1]`, `c_λ(K₁, K₂)` is the Minkowski combination `(1 - λ) K₁ + λ K₂`. -/
 lemma cvx_convexBodyComb_val {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) :
     (convexBodyComb c K₁ K₂).1 = (1 - c) • K₁.1 + c • K₂.1 := by
   simp [convexBodyComb, hc]
 
+/-- The support function of `c_λ(K₁, K₂)` is `(1 - λ) h_{K₁} + λ h_{K₂}`. -/
 lemma cvx_supp_convexBodyComb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (t : ℝ) :
     supp (convexBodyComb c K₁ K₂).1 t = (1 - c) * supp K₁.1 t + c * supp K₂.1 t := by
   rw [cvx_convexBodyComb_val hc]
   exact supp_comb K₁.2 K₂.2 hc t
 
+/-- **Theorem 7.1.1** (`thm:convex-body-space`). The planar convex bodies form a convex domain under
+Minkowski combinations: `K ↦ h_K` embeds them into the vector space of functions `ℝ → ℝ`. -/
 theorem theorem7_1_1 : ∃ (E : Type) (_ : AddCommGroup E) (_ : Module ℝ E) (e : ConvexBodySet → E),
     Function.Injective e ∧ ∀ c ∈ Icc (0 : ℝ) 1, ∀ v w,
       e (convexBodyComb c v w) = (1 - c) • e v + c • e w := by
@@ -227,16 +228,18 @@ noncomputable def convexBodyDomain : ConvexDomain ConvexBodySet where
 
 /-- **Theorem 7.1.2** (`thm:convex-body-linear`) (1): `h_K` is convex-linear in `K`. -/
 theorem theorem7_1_2_supp (t : ℝ) :
-    convexBodyDomain.IsConvexLinear realDomain (fun K => supp K.1 t) := by
-  intro c hc v w
-  exact cvx_supp_convexBodyComb hc v w t
+    convexBodyDomain.IsConvexLinear realDomain (fun K => supp K.1 t) :=
+  fun _ hc v w => cvx_supp_convexBodyComb hc v w t
 
+/-- The vertex `v_K(a, b)` of `c_λ(K₁, K₂)` is the combination of those of `K₁` and `K₂`. -/
 lemma cvx_vint_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (a b : ℝ) :
     vint (convexBodyComb c K₁ K₂).1 a b = (1 - c) • vint K₁.1 a b + c • vint K₂.1 a b := by
   simp only [vint, cvx_supp_convexBodyComb hc]
   ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;>
     ring
 
+/-- `v_K⁺(a)` of `c_λ(K₁, K₂)` is the combination of those of `K₁` and `K₂` (limit of
+`cvx_vint_comb`). -/
 lemma cvx_vplus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (a : ℝ) :
     vplus (convexBodyComb c K₁ K₂).1 a = (1 - c) • vplus K₁.1 a + c • vplus K₂.1 a := by
   have h₁ := tendsto_vint_right (convexBodyComb c K₁ K₂).2 a
@@ -245,6 +248,7 @@ lemma cvx_vplus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexB
   simp only [cvx_vint_comb hc] at h₁
   exact tendsto_nhds_unique h₁ h₂
 
+/-- `v_K⁻(a)` of `c_λ(K₁, K₂)` is the combination of those of `K₁` and `K₂`. -/
 lemma cvx_vminus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (a : ℝ) :
     vminus (convexBodyComb c K₁ K₂).1 a = (1 - c) • vminus K₁.1 a + c • vminus K₂.1 a := by
   have h₁ := tendsto_vint_left (convexBodyComb c K₁ K₂).2 a
@@ -262,6 +266,7 @@ theorem theorem7_1_2_vertices (a b : ℝ) :
   ⟨fun _ hc v w => cvx_vplus_comb hc v w a, fun _ hc v w => cvx_vminus_comb hc v w a,
     fun _ hc v w => cvx_vint_comb hc v w a b⟩
 
+/-- The distribution function of `σ` is convex-linear in `K`. -/
 lemma cvx_sigmaFun_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (t : ℝ) :
     sigmaFun (convexBodyComb c K₁ K₂).1 t =
       (1 - c) * sigmaFun K₁.1 t + c * sigmaFun K₂.1 t := by
@@ -302,21 +307,15 @@ theorem theorem7_1_3 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
 lemma cvx_integral_supp_sigma_bilin {X : Set ℝ} (hXb : Bornology.IsBounded X) :
     convexBodyDomain.IsConvexBilinear convexBodyDomain realDomain
       (fun K₁ K₂ => ∫ t in X, supp K₁.1 t ∂(sigma K₂.1)) := by
-  have hint : ∀ K₁ K₂ : ConvexBodySet, IntegrableOn (supp K₁.1) X (sigma K₂.1) := by
-    intro K₁ K₂
-    obtain ⟨R, hR⟩ := hXb.subset_closedBall 0
-    have hsub : X ⊆ Icc (-R) R := by
-      intro x hx
-      have := hR hx
-      rw [Metric.mem_closedBall, Real.dist_eq, sub_zero] at this
-      exact ⟨by linarith [neg_abs_le x], by linarith [le_abs_self x]⟩
-    exact ((continuous_supp K₁.2.2.1).integrableOn_Icc).mono_set hsub
+  have hint : ∀ K₁ K₂ : ConvexBodySet, IntegrableOn (supp K₁.1) X (sigma K₂.1) := fun K₁ _ =>
+    ((continuous_supp K₁.2.2.1).continuousOn.integrableOn_compact
+      hXb.isCompact_closure).mono_set subset_closure
   constructor
   · intro K₁ c hc v w
     show ∫ t in X, supp K₁.1 t ∂(sigma (convexBodyComb c v w).1) =
       (1 - c) * ∫ t in X, supp K₁.1 t ∂(sigma v.1) + c * ∫ t in X, supp K₁.1 t ∂(sigma w.1)
-    rw [theorem7_1_2_sigma v w hc, Measure.restrict_add, integral_add_measure, Measure.restrict_smul,
-      Measure.restrict_smul, integral_smul_measure, integral_smul_measure,
+    rw [theorem7_1_2_sigma v w hc, Measure.restrict_add, integral_add_measure,
+      Measure.restrict_smul, Measure.restrict_smul, integral_smul_measure, integral_smul_measure,
       ENNReal.toReal_ofReal (by linarith [hc.2]), ENNReal.toReal_ofReal hc.1, smul_eq_mul,
       smul_eq_mul]
     · rw [Measure.restrict_smul]; exact (hint K₁ v).smul_measure ENNReal.ofReal_ne_top
@@ -329,19 +328,8 @@ lemma cvx_integral_supp_sigma_bilin {X : Set ℝ} (hXb : Bornology.IsBounded X) 
       integral_const_mul]
 
 /-- **Theorem 7.1.3**, second claim: the area is a quadratic functional on `𝒦`. -/
-theorem theorem7_1_3_quadratic : convexBodyDomain.IsQuadratic (fun K => area K.1) := by
-  have hb := cvx_integral_supp_sigma_bilin (X := Ico 0 (2 * π)) (Metric.isBounded_Ico _ _)
-  refine ⟨fun K₁ K₂ => (1 / 2) * ∫ t in Ico 0 (2 * π), supp K₁.1 t ∂(sigma K₂.1), ⟨?_, ?_⟩,
+theorem theorem7_1_3_quadratic : convexBodyDomain.IsQuadratic (fun K => area K.1) :=
+  ⟨_, (cvx_integral_supp_sigma_bilin (Metric.isBounded_Ico 0 (2 * π))).const_mul (1 / 2),
     fun K => theorem7_1_3 K.2⟩
-  · intro K₁ c hc v w
-    have := hb.1 K₁ c hc v w
-    simp only [realDomain] at this ⊢
-    rw [this]
-    ring
-  · intro K₂ c hc v w
-    have := hb.2 K₂ c hc v w
-    simp only [realDomain] at this ⊢
-    rw [this]
-    ring
 
 end MovingSofaOptimality

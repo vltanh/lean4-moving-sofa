@@ -182,7 +182,14 @@ automation:
         bridge libraries from 75 files into 12 modules, removed the declarations that no final
         theorem uses, made the bridge independent of the optimality and uniqueness theorems, and
         restated it in the Challenge; one sub-agent rewrote the documentation of the uniqueness
-        modules.
+        modules. Simplification: a later Claude Code 2.1.287 session, with one coordinating agent and
+        26 sub-agents of the same model (at most 18 running at once), merged about 190 duplicated
+        helper lemmas into the Basic modules, simplified every file, split the file of Baek's §3.4
+        into four modules and unified the interval arithmetic of the two generated files (the three
+        libraries went from 50,304 to 45,783 lines; no statement of the Challenge or of a numbered
+        result changed), fixed the axiom audit's list of imports, audited the illustrated text
+        against the Lean statements, and checked that the proofs still follow Baek's arguments
+        (REPORT.md section 6 records every route difference).
       cost:
         wall_time: >-
           Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
@@ -192,7 +199,8 @@ automation:
           about 0.9 hours of sub-agent working time. Connection with formal-conjectures: about 1 hour
           (2026-10-02 23:05 to 2026-10-03 00:02), with about 1.3 hours of sub-agent working time.
           Consolidation: about 1 hour 5 minutes (2026-10-03 07:48 to 08:53), with about 0.4 hours of
-          sub-agent working time
+          sub-agent working time. Simplification: about 3 hours 10 minutes (2026-10-03 12:35 to
+          15:45), with about 12.5 hours of sub-agent working time
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
@@ -205,7 +213,9 @@ automation:
         Palomar submission. For the consolidation, one instruction: simplify the uniqueness proof,
         consolidate the Lean files, give the Challenge's namespaces clearer names, present the
         bridge between formal-conjectures' definitions and Baek's as the core of that part, and
-        shorten this file's description.
+        shorten this file's description. For the simplification, one instruction: a deep audit to
+        simplify the Lean and the text proofs and make them more human-friendly, then a check
+        that the proofs remain faithful to Baek's before committing.
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"

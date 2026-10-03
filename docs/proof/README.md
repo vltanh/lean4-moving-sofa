@@ -7,24 +7,21 @@ A companion text to the Lean 4 formalization in this repository
 [Contributors](../contributors.md).
 
 **Abstract.** A moving sofa is a connected planar shape that can be moved around the right-angled
-corner of a hallway of unit width, and the moving sofa problem asks for the largest area of one.
-Gerver found a sofa of area $2.21953\ldots$ in 1992 and conjectured that it is optimal; Baek proved
-the conjecture in 2024. This text gives a complete proof of Baek's theorem, including the facts about
-Gerver's sofa that the paper takes from Gerver and Romik or states without proof, and proves that
-Gerver's sofa is the only moving sofa of maximum area: every other one is its image under a rotation
-and a translation. Baek's proof reduces a maximum sofa to a monotone one, a convex cap minus the
-niche that the inner corner of the hallway carves out of it. Limits of maximum polygon sofas are
-balanced, turn through a right angle, and satisfy an injectivity condition: seen from the sofa, the
-inner corner never crosses its own path. For such sofas a quadratic functional $\mathcal{Q}$ of three
-convex bodies bounds the area; it is concave by Mamikon's theorem, and it is maximized at Gerver's
-sofa, where it equals the area. The uniqueness proof shows that every maximum sofa, not only the
-limits of polygon sofas, turns through a right angle and satisfies the injectivity condition, by
-approximating it with maximizers of a penalized polygon problem; then the equality case of Baek's
-bound forces equality in each of Mamikon's terms, which makes the sofa a translate of Gerver's. A last
-chapter shows that the definitions of Google DeepMind's formal-conjectures describe the same moving
-sofas and the same Gerver's sofa as Baek's, so that its statements follow, among them the
-uniqueness, which it lists as open. Every result is proved in Lean 4 with Mathlib, and each numbered
-statement names the declarations that prove it.
+corner of a hallway of unit width. The moving sofa problem asks for the largest area of a moving
+sofa. Gerver found a sofa of area $2.21953\ldots$ in 1992 and conjectured that it is optimal; Baek
+proved this in 2024. This text gives a complete proof of Baek's theorem, including the facts about
+Gerver's sofa that the paper takes from Gerver and Romik or states without proof. It then proves
+that Gerver's sofa is the only optimal sofa: a rotation and a translation map every moving sofa of
+maximum area onto it. Baek shows that some sofa of maximum area is monotone (a convex cap minus a
+niche), turns through a right angle and satisfies an injectivity condition, and he bounds the area
+of such sofas by a concave quadratic functional that Gerver's sofa maximizes. The uniqueness proof
+shows that every sofa of maximum area lies, after a rigid motion, in a monotone sofa with these
+properties. The equality case of the bound makes that sofa a translate of Gerver's sofa. As Gerver's
+sofa is the closure of its interior, a closed subset of it with the same area is all of it. A last
+chapter shows that Google DeepMind's formal-conjectures defines the same moving sofas and the same
+Gerver's sofa, so that its statements follow, including the uniqueness, which it lists as open.
+Every result is proved in Lean 4 with Mathlib, and each numbered statement names the declarations
+that prove it.
 
 ## Contents
 
@@ -159,12 +156,12 @@ time $s$ matters. The *moving sofa problem*, posed by Moser in 1966 [1], asks fo
 \alpha_{\max} = \sup \lbrace \lvert S \rvert : S \text{ is a moving sofa} \rbrace,
 ```
 
-and for the moving sofas that attain it; Figures 1.1 and 1.2 show the best one known, Gerver's sofa,
-on its way around the corner. Closedness costs nothing, since the closure of a movable set moves
-along the same motion; connectedness is part of the problem as Moser posed it. [Definition
+and for the moving sofas that attain it. Figures 1.1 and 1.2 show the best one known, Gerver's
+sofa, on its way around the corner. Asking for a closed set costs nothing, since the closure of a
+set moves along the same motion. Connectedness is part of the problem as Moser posed it. [Definition
 2.4](02-preliminaries.md#definition-24-moving-sofa-and-rotation-angle-baek-definitions-112-and-233)
-gives the definition in Lean, and the [Definitions](../definitions.md) page compares it with that of
-formal-conjectures.
+restates the definition in the notation of the formalization, and the
+[Definitions](../definitions.md) page compares it with that of formal-conjectures.
 
 ![The L-shaped hallway of unit width, with the horizontal side H on the left and the vertical side V at the bottom. Gerver's sofa, in blue, is halfway through its turn around the inner corner o, rotated by 45 degrees; dashed outlines show the sofa where its turn starts, pushed into the corner of the horizontal side, and where its turn ends, in the vertical side](figures/01-introduction/hallway.svg)
 
@@ -178,32 +175,32 @@ leaves along the vertical side $V_L$ (dashed, bottom).
 
 A sofa that never turns lies at the start in a horizontal strip of width 1 and at the end in a
 vertical one, so it fits in a unit square, and its area is at most 1. A sofa that turns can be much
-longer, but seen from the sofa, the inner corner of the hallway traces a curve as the sofa turns, and
-the sofa must keep clear of it. The sofas of largest known area all have a *niche*, a hollow in their
-lower side that makes room for the corner.
+longer. But seen from the sofa, the inner corner of the hallway traces a curve as the sofa turns,
+and the sofa must keep clear of it. The sofas of largest known area all have a *niche*, a hollow in
+their lower side that makes room for the corner.
 
 ### 1.2 The main theorems
 
-**Gerver's sofa.** Seen from the sofa, the hallway turns around it. Fix the sofa and suppose that at
-the moment it has turned by $t \in [0, \pi/2]$, the hallway occupies $\mathbf{x}(t) + R_t L$: the
-hallway turned by $t$, with its inner corner at the point $\mathbf{x}(t)$. The curve
-$\mathbf{x} : [0, \pi/2] \to \mathbb{R}^2$ is the *rotation path*, and a rotation path determines the
-largest set that moves along it, the *shape* of the path: the set of points of the horizontal side
-that lie in every turned hallway, and at the end in the turned vertical side,
+**Gerver's sofa.** It is convenient to fix the sofa and let the hallway move around it. Suppose that
+when the sofa has turned clockwise by $t \in [0, \pi/2]$, the hallway, seen from the sofa, occupies
+$\mathbf{x}(t) + R_t L$: the hallway turned counterclockwise by $t$, with its inner corner at the
+point $\mathbf{x}(t)$. The curve $\mathbf{x} : [0, \pi/2] \to \mathbb{R}^2$ is the *rotation path*.
+The largest set that moves along a rotation path is its *shape*: the points of the horizontal side
+that lie in every turned hallway and, at the end, in the turned vertical side,
 
 ```math
 \operatorname{shape}(\mathbf{x}) = H_L \cap \bigcap_{t \in [0, \pi/2]} \bigl(\mathbf{x}(t) + R_t L\bigr) \cap \bigl(\mathbf{x}(\pi/2) + R_{\pi/2} V_L\bigr).
 ```
 
-Romik [4] derived Gerver's sofa from differential equations that balance the sides of the sofa, and
-found its rotation path in closed form. It is glued from five explicit curves, on the five phases
-$[0, \varphi]$, $[\varphi, \theta]$, $[\theta, \pi/2 - \theta]$, $[\pi/2 - \theta, \pi/2 - \varphi]$ and
-$[\pi/2 - \varphi, \pi/2]$, where $\varphi \approx 0.0392$ and $\theta \approx 0.6813$ are two angles.
-Each curve is a rotated polynomial or trigonometric curve, and the 22 parameters of the five curves,
-the two angles among them, solve a system of equations: Romik's equations (27)–(44), which make the
-path start at the origin, symmetric and continuously differentiable across the phases, and impose two
-contact conditions where the phases meet. *Gerver's sofa* $G$ is the shape of this rotation path (Figures 1.3 and 1.4). Chapter
-10 gives the formulas.
+Romik [4] derived Gerver's sofa from differential equations that balance its sides, and found its
+rotation path in closed form. The path is glued from five explicit curves, one on each of the five
+phases $[0, \varphi]$, $[\varphi, \theta]$, $[\theta, \pi/2 - \theta]$,
+$[\pi/2 - \theta, \pi/2 - \varphi]$ and $[\pi/2 - \varphi, \pi/2]$, where $\varphi \approx 0.0392$
+and $\theta \approx 0.6813$. Each curve is a rotated polynomial or trigonometric curve. The five
+curves have 22 parameters, $\varphi$ and $\theta$ among them, and *Romik's equations* (27)–(44) fix
+them: they make the path start at the origin, symmetric, and continuously differentiable where the
+phases meet, and they impose two contact conditions. *Gerver's sofa* $G$ is the shape of this
+rotation path (Figures 1.3 and 1.4). Chapter 10 gives the formulas.
 
 ![Gerver's sofa, a blue region between the lines y = 0 and y = 1, with a flat top, rounded ends, and a niche in the middle of its lower side; the niche is bounded by the orange rotation path, an arch from x(0) at the origin to x(pi/2) about 1.23 units to its left](figures/01-introduction/gerver-sofa.svg)
 
@@ -218,8 +215,8 @@ $G$: its outer walls $a(t)$ and $c(t)$ touch the sofa, and its inner corner $\ma
 the boundary of the niche. As $t$ runs from $0$ to $\pi/2$, the inner corner traces the rotation
 path.
 
-Romik solves the equations numerically and states that the solution is unique; the paper uses this
-to define Gerver's sofa, and here it is proved.
+Romik solves the equations numerically and states that the solution is unique. Baek's paper relies
+on this to define Gerver's sofa; here it is proved.
 
 #### Theorem 1.1 (Gerver's sofa is well defined)
 
@@ -232,8 +229,9 @@ $2.2192 \le \lvert G \rvert \le 2.2199$.
 
 *Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L328), [`Baek.gerver_params_unique`](../../Challenge.lean#L332), [`Baek.gerver_sofa_area`](../../Challenge.lean#L338).*
 
-Gerver's value of the area is $\lvert G \rvert = 2.21953166887\ldots$ [3, 4]; the bounds of Theorem
-1.1 identify the set defined from Romik's equations with the sofa that Gerver found.
+The value of the area computed by Gerver and Romik, $\lvert G \rvert = 2.21953166887\ldots$ [3, 4],
+lies within these bounds. Theorem 1.4 below shows that the sofa defined from Gerver's own
+description is the same set $G$.
 
 #### Theorem 1.2 (optimality; Baek, Theorem 1.1.1)
 
@@ -242,7 +240,7 @@ So $\alpha_{\max} = \lvert G \rvert$.
 
 *Proof.* This is [Theorem 9.33](09-optimality.md#theorem-933-optimality-of-gervers-sofa-baek-theorem-111). $\square$
 
-*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L318).*
+*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L301).*
 
 #### Theorem 1.3 (uniqueness)
 
@@ -256,7 +254,7 @@ R_\theta S + v = G.
 *Proof.* This is [Theorem 12.1](12-uniqueness.md#theorem-121-uniqueness-of-gervers-sofa), proved in
 [§12.6](12-uniqueness.md#126-proof-of-theorem-121) from the results of Chapters 11 and 12. $\square$
 
-*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L233).*
+*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212).*
 
 *Remarks.* (i) With Theorem 1.2, the moving sofas of maximum area are exactly the moving sofas that
 a rotation and a translation map onto $G$. Not every rotated copy of $G$ is a moving sofa: a motion
@@ -333,24 +331,48 @@ formal-conjectures' statement of the optimality, but not the uniqueness; the
 
 ### 1.4 Outline of the proof
 
-**Monotone sofas** (Chapters 2 and 3). Every moving sofa of area at least $2.2$ can be moved with a
-rotation angle $\omega \in [\sec^{-1}(2.2), \pi/2]$, the angle through which it has turned when it
-reaches the vertical side (Baek's Theorem 1.5.1). For each $t \in [0, \omega]$, push the hallway
-turned by $t$ against the sofa until both outer walls touch it: this is the *supporting hallway*
-$L_t$, with inner corner $\mathbf{x}(t)$, as in Figure 1.4. The intersection of the strip $H =
-\mathbb{R} \times [0, 1]$, the supporting hallways and a final strip is again a moving sofa, and it
-contains a translate of the sofa; so a maximum sofa may be taken *monotone*, equal to that
-intersection. A monotone sofa is $K \setminus \mathcal{N}(K)$: its *cap* $K$, the convex body cut
-out by the outer walls, minus its *niche* $\mathcal{N}(K)$, the part of $K$ cut away by the inner
-corners of the supporting hallways (Figure 1.5). The problem becomes the maximization of the *sofa
-area functional*
+The proof of Theorem 1.2 has four steps.
+
+1. After a translation, a moving sofa lies in a *monotone* sofa, which is described by a convex
+   body, its *cap*.
+2. Every moving sofa has area at most that of a *balanced maximum sofa* that turns through a right
+   angle, a monotone sofa obtained as a limit of polygons.
+3. A balanced maximum sofa satisfies the *injectivity condition*: seen from the sofa, the inner
+   corner of the hallway never crosses its own path.
+4. For the sofas with the injectivity condition, a concave quadratic functional $\mathcal{Q}$ bounds
+   the area, and Gerver's sofa maximizes $\mathcal{Q}$.
+
+The proof of Theorem 1.3 repeats steps 1 to 3 for a given sofa of maximum area, and then uses the
+case of equality in step 4.
+
+**Monotone sofas** (Chapters 2 and 3). A moving sofa turns through some angle $\omega$ on its way
+from the horizontal side to the vertical side, its *rotation angle*. If the sofa has area at least
+$2.2$, the motion can be chosen with $\omega \in [\sec^{-1}(2.2), \pi/2]$
+([Theorem 5.1](05-rotation-angle.md#theorem-51-a-first-bound-on-the-rotation-angle-baek-theorem-151)).
+This covers every sofa of maximum area, since $\lvert G \rvert > 2.2$.
+
+Fix the sofa and let the hallway move, as in §1.2. For each $t \in [0, \omega]$, some copy of the
+hallway turned by $t$ contains the sofa. Push this copy against the sofa until both of its outer
+walls touch it. The result is the *supporting hallway* $L_t$, with inner corner $\mathbf{x}(t)$
+(Figure 1.4). The sofa lies in every $L_t$, in the strip $H = \mathbb{R} \times [0, 1]$ where the
+motion starts, and in a turned strip where it ends. The intersection of all these sets is the
+*monotonization* of the sofa. It contains the sofa, and it is again a moving sofa: the hallways
+$L_t$ carry it around the corner. The hard point is that it is connected
+([Theorem 3.8](03-monotone.md#theorem-38-the-monotonization-is-connected-baek-theorem-236)). So a
+sofa of maximum area may be taken *monotone*, equal to its own monotonization.
+
+A monotone sofa is a convex body minus a hollow (Figure 1.5). Its *cap* $K$ is the convex body cut
+out by the outer walls of the hallways $L_t$. Its *niche* $\mathcal{N}(K)$ is the part of the cap
+cut away by their inner corners. The sofa is $K \setminus \mathcal{N}(K)$, and its area is the
+*sofa area functional*
 
 ```math
-\mathcal{A}_\omega(K) = \lvert K \rvert - \lvert \mathcal{N}(K) \rvert
+\mathcal{A}_\omega(K) = \lvert K \rvert - \lvert \mathcal{N}(K) \rvert .
 ```
 
-over the caps $K$ of rotation angle $\omega$. The area of the cap is a quadratic functional of $K$,
-but the area of the niche has no tractable formula: the inner corner may trace a complicated curve.
+The problem becomes the maximization of $\mathcal{A}_\omega$ over caps. The area of the cap is a
+quadratic functional of $K$ and easy to handle. The area of the niche is not: it depends on the
+curve traced by the inner corner $\mathbf{x}(t)$, which may be complicated.
 
 ![Three panels for Gerver's sofa. (a) The cap K, light blue, below the grey outer walls of nine supporting hallways, whose envelope is the top and the rounded ends of K. (b) The niche N(K), orange, an arch on the floor below the orange rotation path x(t), with nine inner corners marked and the dashed walls of their quarter-planes; the cap is outlined dashed around it. (c) The sofa S, the cap minus the niche](figures/03-monotone/cap-niche.svg)
 
@@ -358,19 +380,21 @@ but the area of the niche has no tractable formula: the inner corner may trace a
 walls of the supporting hallways; (b) its niche $\mathcal{N}(K)$, cut out by their inner corners
 $\mathbf{x}(t)$; (c) the sofa $K \setminus \mathcal{N}(K)$.
 
-**Balanced maximum sofas and the rotation angle** (Chapters 4 and 5). Keep only the supporting
-hallways of the angles of a finite set $\Theta$: the cap becomes a polygon cap, the niche a polygon
-niche, and the polygon area functional $\mathcal{A}_\Theta(K) = \lvert K \rvert - \lvert
-\mathcal{N}_\Theta(K) \rvert$ has a maximizer. A maximum polygon cap is *balanced*: in every
-direction, the sides of the cap and the niche with that outer normal have the same total length as
-those with the opposite normal, since otherwise translating one hallway would increase the area.
-This is Gerver's balancing argument [3]; Baek runs it on caps rather than on polygon sofas, which
-closes a gap in Gerver's proof, where pushing a hallway can disconnect the sofa. As $\Theta$ fills
-$[0, \omega]$, the maximum polygon caps converge to a maximum cap (Figure 1.6), the cap of a
-*balanced maximum sofa*, which has the largest area among the monotone sofas of rotation angle
-$\omega$. Elementary geometry with the balance shows that a balanced maximum sofa of area at least
-$2.2$ can be turned through the full right angle (Baek's Theorem 1.5.2). So a maximum sofa may be
-taken balanced, with $\omega = \pi/2$.
+**Balanced maximum sofas and the right angle** (Chapters 4 and 5). Keep only the supporting
+hallways $L_t$ for $t$ in a finite set $\Theta$. The cap and the niche become polygons, and the
+*polygon area functional* $\mathcal{A}_\Theta(K) = \lvert K \rvert - \lvert \mathcal{N}_\Theta(K) \rvert$
+has a maximizer. A maximizer is *balanced*: each side of the cap on an outer wall of a hallway is
+as long as the sides of the niche on the parallel inner wall, at distance one. Otherwise, pushing
+that hallway slightly would increase the area. This is Gerver's balancing argument [3]. Baek pushes
+the hallway against the cap rather than against the sofa, which closes a gap in Gerver's proof:
+pushing a hallway can disconnect a sofa. As $\Theta$ fills $[0, \omega]$, the maximum polygon caps
+converge to a cap that maximizes $\mathcal{A}_\omega$ (Figure 1.6). Its sofa, a *balanced maximum
+sofa*, has the largest area among the moving sofas with rotation angle $\omega$. Elementary geometry
+with the balance shows that if its area is at least $2.2$, a rotated copy of it turns through the
+full right angle
+([Theorem 5.2](05-rotation-angle.md#theorem-52-the-right-angle-baek-theorem-152)). Together, these
+results show that every moving sofa has area at most that of a balanced maximum sofa with rotation
+angle $\pi/2$.
 
 ![Three rows, for n = 4, 8 and 16, each showing a blue polygon sofa between faint lines y = 0 and y = 1 with a dashed outline of Gerver's sofa centred on the same vertical line. For n = 4 the polygon sofa is visibly wider, with straight slanted ends and a jagged notch; for n = 8 it is closer; for n = 16 its ends and its notch nearly follow the dashed outline](figures/04-balanced/limit.svg)
 
@@ -378,24 +402,32 @@ taken balanced, with $\omega = \pi/2$.
 angles, computed numerically (Figure 4.7), approaching Gerver's sofa (dashed). Their areas $2.4148$,
 $2.3027$ and $2.2584$ decrease towards $\lvert G \rvert = 2.2195$.
 
-**The injectivity condition** (Chapters 6 and 7). The *surface area measure* $\sigma_K$ of a convex
-body records the lengths of its sides by their normal angles, and gives the area by Schneider's
-formula $\lvert K \rvert = \frac12 \int h_K \, d\sigma_K$, where $h_K$ is the support function. The
-balance of the maximum polygon caps passes to the limit as a differential inequality on the balanced
-maximum sofa,
+**The injectivity condition** (Chapters 6 and 7). From here on $\omega = \pi/2$. The *arm lengths*
+$f(t)$ and $g(t)$ are the distances from the outer corner of $L_t$ to the points where the sofa
+touches its two outer walls. With $u_t = (\cos t, \sin t)$ and $v_t = (-\sin t, \cos t)$, the inner
+corner moves with velocity
 
 ```math
-\sigma_K \le k_0\bigl(g(t)\bigr)\, dt \quad \text{on } [0, \pi/2), \qquad k_0(x) = \max\bigl(\lvert x - 1 \rvert, (\lvert x - 1 \rvert + 1)/2\bigr),
+\mathbf{x}'(t) = -\bigl(f(t) - 1\bigr)\, u_t + \bigl(g(t) - 1\bigr)\, v_t .
 ```
 
-where $g(t)$ and its mirror $f(t)$ are the *arm lengths*, the distances from the outer corner of
-$L_t$ to the points where the sofa touches the two outer walls. The inner corner moves with velocity
-$\mathbf{x}'(t) = -(f(t) - 1)\, u_t + (g(t) - 1)\, v_t$, where $u_t = (\cos t, \sin t)$ and
-$v_t = (-\sin t, \cos t)$. Starting from the trivial bounds $f, g \ge 0$, the inequality yields
-better and better lower bounds, and after eleven rounds $f, g > 1$ on $(0, \pi/2)$. Then the
-inner corner moves strictly to the left as $t$ increases, so its path is a simple arc: this is the
-*injectivity condition* (Figure 1.7), Baek's key property, and $\mathcal{K}^\mathrm{i}$ denotes the
-caps that satisfy it.
+The *injectivity condition* asks, besides some regularity, that $f, g > 1$ on $(0, \pi/2)$. Then
+$\mathbf{x}'(t)$ points between the directions $-u_t$ and $v_t$, so the inner corner moves strictly
+to the left and its path does not cross itself (Figure 1.7). This is Baek's key property: it makes
+the area of the niche computable.
+
+To prove the condition for a balanced maximum sofa, Baek passes the balance of the polygon caps to
+the limit. The *surface area measure* $\sigma_K$ of the cap records the lengths of its sides by
+their normal angles (Chapter 6). In the limit, the balance becomes the inequality
+
+```math
+\sigma_K \le k_0\bigl(g(t)\bigr)\, dt \quad \text{on } [0, \pi/2), \qquad k_0(x) = \max\bigl(\lvert x - 1 \rvert, (\lvert x - 1 \rvert + 1)/2\bigr) .
+```
+
+The derivative of $f$ is $g$ minus the density of $\sigma_K$, so this is a differential inequality
+for $f$ in terms of $g$; the mirror image of the cap gives one for $g$ in terms of $f$. Starting
+from the trivial bounds $f, g \ge 0$, integrating these inequalities gives better and better lower
+bounds. After eleven rounds, $f, g > 1$ on $(0, \pi/2)$.
 
 ![The cap K of Gerver's sofa, with its niche shaded orange under an arch, and the rotation path x drawn thick in orange from x(0) on the right to x(π/2) on the left, along the top of the niche. At three points of the path, t = π/8, π/4 and 3π/8, a small green quadrant is shaded between the directions −u_t and v_t, and the velocity x'(t), drawn as a black arrow, points into it](figures/07-injectivity/rotation-path.svg)
 
@@ -404,70 +436,92 @@ $\mathbf{x}'(t)$ lies between the directions $-u_t$ and $v_t$ (green), so the in
 to the left, from $\mathbf{x}(0) = (0, 0)$ to $\mathbf{x}(\pi/2) \approx (-1.228, 0)$, and its path
 does not cross itself.
 
-**The upper bound** (Chapters 8 and 9). For a monotone sofa with the injectivity condition, Baek
-replaces the niche by a smaller region of the same shape as the niche of Gerver's sofa: a core,
-traced by the inner corner over $[\varphi, \pi/2 - \varphi]$, and two tails, swept by the inner
-walls. The area of the cap minus this region is an upper bound $\mathcal{Q}$ for the area of the
-sofa, equal to it for Gerver's sofa. Unlike the area, $\mathcal{Q}$ is a quadratic functional of
-three convex bodies, the cap $K$ and two bodies $B$ and $D$ that bound the tails, on a convex domain
-$\mathcal{L}$ of such triples. *Mamikon's theorem*, that the region swept by tangent segments of
-length $\ell(t)$ to a convex curve has area $\frac12 \int \ell(t)^2 \, dt$, writes $\mathcal{Q}$ as
-a linear functional minus a sum of such areas, which are convex in the triple (Figure 1.8); so
-$\mathcal{Q}$ is concave. Romik's equations make the directional derivatives of $\mathcal{Q}$ at the
-triple of Gerver's sofa nonpositive in every direction of $\mathcal{L}$, so Gerver's sofa maximizes
-$\mathcal{Q}$, and for a balanced maximum sofa $S$ of rotation angle $\pi/2$, which satisfies the
-injectivity condition,
+**The upper bound** (Chapters 8 and 9). For a cap with the injectivity condition, Baek replaces the
+niche by a smaller region with the shape of the niche of Gerver's sofa. The region consists of a
+*core*, bounded by the path of the inner corner over $[\varphi, \pi/2 - \varphi]$, and two *tails*,
+swept by the inner walls near the ends. The cap minus this region has an area $\mathcal{Q}$ that
+bounds the area of the sofa, with equality for Gerver's sofa. Unlike the area of the sofa,
+$\mathcal{Q}$ is a quadratic functional of three convex bodies: the cap $K$ and two bodies $B$ and
+$D$ that bound the tails. These triples form a convex domain $\mathcal{L}$. *Mamikon's theorem*
+states that the region swept by tangent segments of length $\ell(t)$ to a convex curve has area
+$\frac12 \int \ell(t)^2 \, dt$. It writes $\mathcal{Q}$ as a linear functional minus a sum of such
+areas, which are convex in the triple (Figure 1.8), so $\mathcal{Q}$ is concave. Romik's equations
+make every directional derivative of $\mathcal{Q}$ at the triple of Gerver's sofa nonpositive. For a
+concave functional this means that Gerver's triple is a maximum. So a balanced maximum sofa $S$
+with rotation angle $\pi/2$, which satisfies the injectivity condition, has
 
 ```math
-\lvert S \rvert \le \mathcal{Q}(K_S, B_S, D_S) \le \mathcal{Q}(K_G, B_G, D_G) = \lvert G \rvert.
+\lvert S \rvert \le \mathcal{Q}(K_S, B_S, D_S) \le \mathcal{Q}(K_G, B_G, D_G) = \lvert G \rvert .
 ```
 
-A balanced maximum sofa has the largest area of all moving sofas, so this proves Theorem 1.2.
+Since every moving sofa has area at most that of such an $S$, this proves Theorem 1.2
+([Theorem 9.33](09-optimality.md#theorem-933-optimality-of-gervers-sofa-baek-theorem-111)).
 
 ![Gerver's cap K, light blue, with the core part of its niche white under the orange core, and four purple regions swept by tangent segments: a thin fan at the bottom right corner, a large fan from the right side and top of the cap up to a purple arch traced by the outer corner, a thin wedge above the top edge, and segments from the left side of the cap to a vertical line. A bold black outline encloses the cap and the four regions, minus the core part of the niche](figures/09-optimality/mamikon-cap.svg)
 
 *Figure 1.8.* The concavity of $\mathcal{Q}$ for Gerver's cap (Figure 9.5). The regions swept by
 tangent segments (purple) have areas $\frac12 \int \ell(t)^2 \, dt$, convex in the cap by
-Mamikon's theorem, and together with the region of area $\mathcal{Q}$ they fill a region (bold
-outline) whose area is linear in the cap.
+Mamikon's theorem. Together with the region of area $\mathcal{Q}$ they fill a region (bold outline)
+whose area is linear in the cap.
 
-**Gerver's sofa** (Chapter 10 and Appendix B). The proof uses the structure of Gerver's sofa: that
-it is a monotone sofa with the injectivity condition, which of the walls of $L_t$ touch it on each
-phase, and that its niche has the shape of the core and two tails, so that $\mathcal{Q}$ equals its
-area. Baek's paper states this structure (its Theorem 8.4.1) without proof. Here it is proved from
+**Gerver's sofa** (Chapter 10 and Appendix B). The proof uses the structure of Gerver's sofa: it is
+a monotone sofa with the injectivity condition, the walls of $L_t$ that touch it on each phase are
+known, and its niche is exactly a core and two tails, so that $\mathcal{Q}$ equals its area.
+Baek's paper states this structure (its Theorem 8.4.1) without proof. Here it is proved from
 Romik's equations, with rigorous bounds on Romik's parameters and interval arithmetic for the
 inequalities that hold only numerically.
 
-**Uniqueness** (Chapters 11 and 12). Baek's argument shows that *some* maximum sofa, a balanced one,
-turns through a right angle and satisfies the injectivity condition; a maximum sofa given in
-advance need not be a limit of maximum polygon sofas. The uniqueness proof gives these properties
-to every maximum sofa. Let $S$ be a moving sofa with $\lvert S \rvert = \lvert G \rvert$; the proof
-follows $S$ through a chain of rigid motions and monotonizations (Figure 1.9).
+**Uniqueness** (Chapters 11 and 12). Baek's argument shows that *some* sofa of maximum area, a
+balanced one, turns through a right angle and satisfies the injectivity condition. A sofa of maximum area
+given in advance need not be balanced, since it need not be a limit of maximum polygon sofas. The
+uniqueness proof gives these properties to every sofa of maximum area. Let $S$ be a moving sofa
+with $\lvert S \rvert = \lvert G \rvert$. The proof follows $S$ through a chain of rigid motions and
+monotonizations. Each set in the chain contains a rigid image of $S$ and has area
+$\lvert G \rvert$ (Figure 1.9).
 
-1. *Monotonization.* $S$ moves with a rotation angle $\omega \in [\sec^{-1}(2.2), \pi/2]$, and a
-   translate of $S$ lies in a monotone sofa $T$ of rotation angle $\omega$ and the same area, whose
-   cap $K$ maximizes $\mathcal{A}_\omega$.
-2. *Selection.* Polygon caps that maximize the sofa area minus a penalty for straying from $K$
-   converge to $K$ itself (note 20, Proposition 1).
-3. *Variations.* Moving one side of a selected polygon gives inequalities between its side lengths
-   that survive the limit as bounds on the sides of $K$ (Proposition 2).
-4. *The right angle.* If $\omega < \pi/2$, these bounds give $T$ width at most 1 in the directions
-   $u_t$, $t \in [\omega, \pi/2]$, that the turn has not reached, so a rotated copy of $T$ can turn
-   through a right angle; monotonizing again gives a monotone sofa $U$ of rotation angle $\pi/2$ and
-   area $\lvert G \rvert$ that contains a rigid image of $S$ (Proposition 4). If $\omega = \pi/2$,
-   take $U = T$.
-5. *Injectivity.* Applied to the cap of $U$, the selection and the variations give the curvature
-   bound $\sigma_K \le k_0(g(t))\, dt$, and Baek's iteration then gives the injectivity condition
-   (Proposition 3).
-6. *Rigidity.* Now $\lvert U \rvert \le \mathcal{Q}(U) \le \mathcal{Q}(G) = \lvert G \rvert = \lvert U \rvert$,
-   so both inequalities are equalities. Along the segment from Gerver's triple to that of $U$, the
-   concave $\mathcal{Q}$ is then constant, and its concavity gap, a sum of the squared differences
-   of Mamikon's tangent lengths, vanishes. So the tangent lengths of $U$ and $G$ agree, which forces
-   the support functions of their caps to differ by a horizontal translation: $U = G + (b, 0)$
-   (Proposition 5).
-7. *Recovery.* Gerver's sofa is the closure of its interior (Proposition 6). A closed subset of $G$
-   with the area of $G$ contains the interior of $G$, since the rest of the interior is an open set
-   of measure zero, and so it is all of $G$. The rigid image of $S$ in $U$ is therefore all of $U$.
+1. *Monotonization*
+   ([Lemma 11.3](11-selection.md#lemma-113-the-monotonization-of-a-maximizing-sofa)). $S$ moves with
+   a rotation angle $\omega \in [\sec^{-1}(2.2), \pi/2]$. A translate of $S$ lies in its
+   monotonization $T$, a monotone sofa with rotation angle $\omega$ and area $\lvert G \rvert$. The
+   cap $K$ of $T$ maximizes $\mathcal{A}_\omega$.
+2. *Selection*
+   ([Proposition 11.13](11-selection.md#proposition-1113-selection-note-20-proposition-1)).
+   Maximize the polygon area functional minus a penalty for straying from $K$. As the polygons get
+   finer, these penalized maximizers converge to $K$ itself.
+3. *Variations*
+   ([Propositions 11.16](11-selection.md#proposition-1116-floating-defects-note-20-proposition-2),
+   [11.19](11-selection.md#proposition-1119-pinned-defects-note-20-proposition-2) and
+   [11.23](11-selection.md#proposition-1123-pinned-bounds-note-20-proposition-4)). Pushing one side
+   of a penalized maximizer shows that it is nearly balanced. In the limit this gives bounds on the
+   sides of $K$.
+4. *The right angle*
+   ([Proposition 12.13](12-uniqueness.md#proposition-1213-right-angle-motion-note-20-proposition-4)).
+   If $\omega < \pi/2$, these bounds show that $T$ has width at most 1 in each direction $u_t$,
+   $t \in [\omega, \pi/2]$. So a rotated copy of $T$ can first turn by $\pi/2 - \omega$ inside the
+   horizontal side, and then follow the motion of $T$. Monotonizing this copy gives a monotone sofa
+   $U$ with rotation angle $\pi/2$ and area $\lvert G \rvert$ that contains a rigid image of $S$. If
+   $\omega = \pi/2$, take $U = T$.
+5. *Injectivity*
+   ([Propositions 12.6](12-uniqueness.md#proposition-126-curvature-bounds-note-20-proposition-3) and
+   [12.9](12-uniqueness.md#proposition-129-injectivity-note-20-proposition-3)). For the cap of $U$,
+   steps 2 and 3 give the inequality $\sigma_K \le k_0(g(t))\, dt$, and Baek's iteration then gives
+   the injectivity condition.
+6. *Rigidity*
+   ([Proposition 12.19](12-uniqueness.md#proposition-1219-gervers-cap-up-to-translation-note-20-proposition-5)).
+   Write $\mathcal{Q}(U)$ and $\mathcal{Q}(G)$ for the values of $\mathcal{Q}$ at the triples of $U$
+   and $G$. Then $\lvert U \rvert \le \mathcal{Q}(U) \le \mathcal{Q}(G) = \lvert G \rvert = \lvert U \rvert$,
+   so both inequalities are equalities. A concave functional that is maximal at two points is
+   constant on the segment between them, which forces equality in each of Mamikon's convex terms.
+   By Mamikon's theorem, each convexity gap is an integral of squared differences of tangent
+   lengths, so the tangent lengths of $U$ and $G$ agree. Then the support functions of their caps
+   differ by $b \cos t$ for some $b$, which is the effect of a horizontal translation by $b$:
+   $U = G + (b, 0)$.
+7. *Recovery*
+   ([Proposition 12.22](12-uniqueness.md#proposition-1222-regular-closedness-note-20-proposition-6),
+   [§12.6](12-uniqueness.md#126-proof-of-theorem-121)). The rigid image of $S$ is a closed subset of
+   $U = G + (b, 0)$ with the same area. The interior points of $U$ that it misses form an open set
+   of measure zero, which is empty, so it contains the interior of $U$. Gerver's sofa is the closure
+   of its interior, so the image is all of $U$, and the translation by $(-b, 0)$ maps it onto $G$.
 
 ![A flow chart of five boxes joined by downward arrows: S, a moving sofa with the area of G; S + v0 contained in T, a monotone sofa of angle ω whose cap maximizes the sofa area; R_a(S + v0) contained in R_a T, which moves with angle π/2; g1(S) contained in U = G + (b, 0); and g(S) = G. The arrows are labelled translate and monotonize, rotate by a, translate and monotonize, and translate by (−b, 0)](figures/12-uniqueness/chain.svg)
 
@@ -475,29 +529,30 @@ follows $S$ through a chain of rigid motions and monotonizations (Figure 1.9).
 the image of $S$ under the maps so far, and every set has area $\lvert G \rvert$.
 
 **The bridge** (Chapter 13 and Appendix A). A continuous path of isometries that starts at the
-identity consists of orientation-preserving isometries, whose angle of rotation lifts to a
-continuous real function; this matches the two notions of moving sofa. Gerver's four equations have
-a unique solution, proved by elementary inequalities, and Romik's parameters are explicit functions
-of Gerver's four constants. formal-conjectures' rotation path, given by integrals, is Romik's path
-seen in a rotating frame, so the two Gerver's sofas are the same set.
+identity consists of orientation-preserving isometries, and their angle of rotation lifts to a
+continuous real function. This matches the two notions of moving sofa. Gerver's four equations
+have a unique solution, proved by elementary inequalities, and Romik's parameters are explicit
+functions of Gerver's four constants. formal-conjectures' rotation path, given by integrals, is
+Romik's path seen in a rotating frame, so the two Gerver's sofas are the same set.
 
 ### 1.5 This text and the formalization
 
-Chapters 2 to 10 follow Baek's paper: Chapters 2 and 3 its Chapter 2, with the definitions of its
-Chapter 1; Chapters 4 to 9 its Chapters 3 to 8, in order; and Chapter 10 what the paper states about
-Gerver's sofa, its Section 8.4 and Theorem 6.1.2, with Romik's description of the sofa. Chapters 11
-and 12 prove the uniqueness, following the informal proof written for this formalization ("note 20",
-in the [archive](../archive/uniqueness/20-complete-paper-proof.md)), and Chapter 13 and Appendix A
-prove the bridge. Appendix B explains the rigorous numerics. Definitions, lemmas, propositions,
-theorems and corollaries are numbered together within each chapter; figures and tables separately. A
-result of Baek's paper carries the paper's number in its name, as in "Theorem 1.2 (optimality; Baek,
-Theorem 1.1.1)", and a step of the uniqueness proof the number of its proposition in note 20.
+Chapters 2 to 10 follow Baek's paper. Chapters 2 and 3 cover its Chapter 2, with the definitions
+of its Chapter 1; Chapters 4 to 9 cover its Chapters 3 to 8, in order; and Chapter 10 covers what the
+paper states about Gerver's sofa (its Section 8.4 and Theorem 6.1.2), with Romik's description of
+the sofa. Chapters 11 and 12 prove the uniqueness, following the informal proof written for this
+formalization ("note 20", in the [archive](../archive/uniqueness/20-complete-paper-proof.md)).
+Chapter 13 and Appendix A prove the bridge, and Appendix B explains the rigorous numerics.
+Definitions, lemmas, propositions, theorems and corollaries are numbered together within each
+chapter; figures and tables are numbered separately. A result of Baek's paper carries the paper's
+number in its heading, as in "Theorem 1.2 (optimality; Baek, Theorem 1.1.1)", and a step of the
+uniqueness proof carries the number of its proposition in note 20.
 
-Every numbered statement ends with a line *Lean: …* naming the Lean 4 declarations [9, 10] that
-state and prove it, linked to their source. The proofs here follow the formal proofs, but are
-written for a human reader, and the longest of them are given as sketches that state the steps and
-the key estimates and say where the full argument is. Where a statement of Baek's paper is false as
-printed, the text states and proves the intended version and says so; the audit in
+Every numbered statement has a line *Lean: …* naming the Lean 4 declarations [9, 10] that state and
+prove it, linked to their source. The proofs here follow the formal proofs, except where a remark
+says otherwise, but they are written for a human reader. The longest are sketches that give the
+steps and the key estimates and say where the full argument is. Where a statement of Baek's paper is
+false as printed, the text states and proves the intended version and says so; the audit in
 [`REPORT.md`](../../REPORT.md) lists every such correction. The formal proofs are checked by Lean's
 kernel; the [verification](../verification.md) page explains how to build them and audit their
 axioms. The figures are computed from the same definitions by the scripts in

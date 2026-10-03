@@ -10,8 +10,8 @@ Definitions 6.3.1–6.3.4, Lemmas 6.3.1 (`lem:leg-bounded`), 6.3.2 (`lem:leg-com
 Theorem 6.3.3 (`thm:balanced-discrete-ineq`).
 
 The uniform angle sets `Θ_n` of Definition 6.3.1 with `n = 2^(k+1)` are `dyadicAngleSet (π/2) _ k`,
-and a "maximum polygon cap with `n` steps of step size `δ = (π/2)/n`" (Definition 6.3.2) is a maximum
-polygon cap with that angle set.
+and a "maximum polygon cap with `n` steps of step size `δ = (π/2)/n`" (Definition 6.3.2) is a
+maximum polygon cap with that angle set.
 -/
 
 @[expose] public section
@@ -52,24 +52,6 @@ lemma inj_not_between {x a b : ℝ}
     have := sin_nonpos_of_nonpos_of_neg_pi_le (x := x - b + π) (by linarith) (by linarith)
     linarith
 
-/-- `sin (b - a) (p · u_s) = sin (b - s) (p · u_a) + sin (s - a) (p · u_b)`. -/
-lemma inj_dot_uvec_comb (p : ℝ × ℝ) (a b s : ℝ) :
-    sin (b - a) * dot p (uvec s) = sin (b - s) * dot p (uvec a) + sin (s - a) * dot p (uvec b) := by
-  simp only [dot, uvec, sin_sub]
-  ring
-
-/-- If `p · u_a = q · u_a` and `p · u_b = q · u_b` with `sin (b - a) ≠ 0`, then `p = q`. -/
-lemma inj_eq_of_dot_eq {p q : ℝ × ℝ} {a b : ℝ} (hab : sin (b - a) ≠ 0)
-    (ha : dot p (uvec a) = dot q (uvec a)) (hb : dot p (uvec b) = dot q (uvec b)) : p = q := by
-  have e := inj_eq_add_smul_vvec ha
-  have h2 : dot (p - q) (vvec a) * sin (b - a) = 0 := by
-    have : dot (p - q) (uvec b) = 0 := by rw [dot_sub_left, hb, sub_self]
-    rw [e, add_sub_cancel_left, dot_smul_left, dot_vvec_uvec'] at this
-    linarith
-  rcases mul_eq_zero.1 h2 with h | h
-  · rw [e, h, zero_smul, add_zero]
-  · exact absurd h hab
-
 /-- **Vertices between consecutive normal angles.** Let `K` be a convex body which is an
 intersection of closed half-planes, none of whose normal angles lies strictly between `a` and `b`
 (in the sense of `inj_not_between`), where `a < b < a + π`. Then the supporting lines `l_K(a)` and
@@ -83,6 +65,7 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
         vminus K s = vint K a b := by
   set q := vint K a b with hq
   have hsab : 0 < sin (b - a) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith)
+  have hsba : sin (a - b) = -sin (b - a) := by rw [← sin_neg, neg_sub]
   have hqa : dot q (uvec a) = supp K a := vint_mem_line_left K a b
   have hqb : dot q (uvec b) = supp K b := vint_mem_line_right K hsab.ne'
   obtain ⟨Pa, hPaK, hPa⟩ := exists_dot_eq_supp hK.2.1 hK.1 a
@@ -107,7 +90,6 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
     rw [eb, dot_add_left, dot_smul_left, dot_vvec_uvec', hqa] at h2
     rw [ea, dot_add_left, dot_smul_left, dot_vvec_uvec'] at hPai
     rw [eb, dot_add_left, dot_smul_left, dot_vvec_uvec'] at hPbi
-    have hsba : sin (a - b) = -sin (b - a) := by rw [← sin_neg, neg_sub]
     rw [hsba] at h2
     have hα : α ≤ 0 := by nlinarith
     have hβ : 0 ≤ β := by nlinarith
@@ -128,8 +110,8 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
       (by linarith [hs.2])
     have hpa : dot p (uvec a) ≤ dot q (uvec a) := hqa ▸ dot_le_supp hK.2.1 hp a
     have hpb : dot p (uvec b) ≤ dot q (uvec b) := hqb ▸ dot_le_supp hK.2.1 hp b
-    have c1 := inj_dot_uvec_comb p a b s
-    have c2 := inj_dot_uvec_comb q a b s
+    have c1 := dot_uvec_comb p a b s
+    have c2 := dot_uvec_comb q a b s
     have : sin (b - a) * dot p (uvec s) ≤ sin (b - a) * dot q (uvec s) := by
       rw [c1, c2]
       exact add_le_add (mul_le_mul_of_nonneg_left hpa hs1) (mul_le_mul_of_nonneg_left hpb hs2)
@@ -152,9 +134,7 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
     have hpb : dot p (uvec b) = dot q (uvec b) := by rw [hqb]; exact hpl
     have e := inj_eq_add_smul_vvec hpb
     have h1 : dot p (uvec a) ≤ dot q (uvec a) := hqa ▸ dot_le_supp hK.2.1 hp a
-    rw [e, dot_add_left, dot_smul_left, dot_vvec_uvec'] at h1
-    have hsba : sin (a - b) = -sin (b - a) := by rw [← sin_neg, neg_sub]
-    rw [hsba] at h1
+    rw [e, dot_add_left, dot_smul_left, dot_vvec_uvec', hsba] at h1
     have h3 : 0 ≤ dot (p - q) (vvec b) := by nlinarith
     rw [dot_sub_left] at h3; linarith
   have hq_edge : ∀ s ∈ Icc a b, q ∈ edge K s := fun s hs =>
@@ -190,11 +170,11 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
           (by linarith [hs.2])
         have hpa : dot p (uvec a) ≤ dot q (uvec a) := hqa ▸ dot_le_supp hK.2.1 hp a
         have hpb : dot p (uvec b) ≤ dot q (uvec b) := hqb ▸ dot_le_supp hK.2.1 hp b
-        have c1 := inj_dot_uvec_comb p a b s
-        have c2 := inj_dot_uvec_comb q a b s
+        have c1 := dot_uvec_comb p a b s
+        have c2 := dot_uvec_comb q a b s
         have hpa' : dot p (uvec a) = dot q (uvec a) := by nlinarith
         have hpb' : dot p (uvec b) = dot q (uvec b) := by nlinarith
-        exact inj_eq_of_dot_eq hsab.ne' hpa' hpb'
+        exact eq_of_dot_uvec_eq hsab.ne' hpa' hpb'
       · rintro rfl; exact hq_edge s hsI
     refine ⟨hsupp s hsI, ?_, ?_⟩
     · rw [vplus, hsing, image_singleton, csSup_singleton, hq_eq s hsI]
@@ -204,21 +184,26 @@ lemma inj_consecutive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {ι : Type} {
 
 lemma inj_stepSize_pos (k : ℕ) : 0 < stepSize k := by unfold stepSize; positivity
 
+/-- The step sizes tend to zero along every strictly increasing sequence of levels. -/
+lemma tendsto_stepSize {k : ℕ → ℕ} (hk : StrictMono k) :
+    Tendsto (fun n => stepSize (k n)) atTop (𝓝 0) := by
+  have hpow : Tendsto (fun m : ℕ => (2 : ℝ) ^ (m + 1)) atTop atTop :=
+    (tendsto_pow_atTop_atTop_of_one_lt one_lt_two).comp (tendsto_add_atTop_nat 1)
+  exact (tendsto_const_nhds.div_atTop hpow).comp hk.tendsto_atTop
+
 lemma inj_two_pow_mul_stepSize (k : ℕ) : (2 : ℝ) ^ (k + 1) * stepSize k = π / 2 := by
   unfold stepSize; field_simp
 
-lemma inj_two_le_two_pow (k : ℕ) : (2 : ℝ) ≤ 2 ^ (k + 1) := by
-  calc (2 : ℝ) = 2 ^ 1 := by norm_num
-    _ ≤ 2 ^ (k + 1) := pow_le_pow_right₀ (by norm_num) (by omega)
-
+/-- `δ ≤ π/4`. -/
 lemma inj_stepSize_le (k : ℕ) : stepSize k ≤ π / 4 := by
   have h := inj_two_pow_mul_stepSize k
-  have h2 := inj_two_le_two_pow k
+  have h2 : (2 : ℝ) ≤ 2 ^ (k + 1) := le_self_pow₀ one_le_two (Nat.succ_ne_zero k)
   have hd := inj_stepSize_pos k
   nlinarith [pi_pos]
 
 @[simp] lemma inj_rightAngleSet_ω (k : ℕ) : (rightAngleSet k).ω = π / 2 := rfl
 
+/-- `Θ_n = {jδ : 0 < j < n}`. -/
 lemma inj_mem_angles {k : ℕ} {t : ℝ} :
     t ∈ (rightAngleSet k).angles ↔ ∃ j : ℕ, 0 < j ∧ j < 2 ^ (k + 1) ∧ t = j * stepSize k := by
   change t ∈ (Finset.Ioo 0 (2 ^ (k + 1))).image
@@ -232,6 +217,8 @@ lemma inj_mem_angles {k : ℕ} {t : ℝ} :
     refine ⟨j, ⟨h1, h2⟩, ?_⟩
     unfold stepSize; push_cast; ring
 
+/-- The normal angles of a polygon cap with angle set `Θ_n` are the multiples `jδ` of the step
+size in `[δ, π]`, and `3π/2`. -/
 lemma inj_capAngles {k : ℕ} {x : ℝ} (hx : x ∈ (rightAngleSet k).capAngles) :
     (∃ j : ℕ, 1 ≤ j ∧ j + 1 ≤ 2 * 2 ^ (k + 1) ∧ x = j * stepSize k) ∨ x = 3 * π / 2 := by
   have hn := inj_two_pow_mul_stepSize k
@@ -349,61 +336,14 @@ lemma inj_cap_consecutive {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) :
 /-- If `v_K⁺(t) = v_K⁻(t)`, then `σ_K` has no atom at `t`. -/
 lemma inj_sigmaAt_eq_zero {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ}
     (h : vplus K t = vminus K t) : sigmaAt K t = 0 := by
-  rw [(proposition2_1_2 hK t).1, h, sub_self]
-  simp [norm2, dot]
+  rw [sigmaAt_eq_dot_sub hK, h, sub_self]
 
+/-- If `v_K⁺(t) = v_K⁻(t)`, then `σ_K({t}) = 0`. -/
 lemma inj_sigma_singleton_eq_zero {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ}
     (h : vplus K t = vminus K t) : sigma K {t} = 0 := by
   have h0 := inj_sigmaAt_eq_zero hK h
   rw [sigmaAt, ENNReal.toReal_eq_zero_iff] at h0
-  rcases h0 with h0 | h0
-  · exact h0
-  · rw [← Icc_self] at h0; exact absurd h0 measure_Icc_lt_top.ne
-
-/-- `σ_K(t) = (v_K⁺(t) - v_K⁻(t)) · v_t`. -/
-lemma inj_sigmaAt_eq_dot {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    sigmaAt K t = dot (vplus K t - vminus K t) (vvec t) := by
-  rw [(proposition2_1_2 hK t).2, add_sub_cancel_left, dot_smul_left, dot_vvec_self, mul_one]
-
-/-- If `v_K⁺` is constant on `[a, b)`, then `σ_K((a, b)) = 0`. -/
-lemma inj_sigma_Ioo_eq_zero {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
-    {q : ℝ × ℝ} (hq : ∀ s ∈ Ico a b, vplus K s = q) : sigma K (Ioo a b) = 0 := by
-  have hconst : ∀ s ∈ Ico a b, sigmaFun K s = sigmaFun K a := by
-    intro s hs
-    have hsupp : ∀ r ∈ uIcc a s, supp K r = dot q (uvec r) := by
-      intro r hr
-      rw [uIcc_of_le hs.1] at hr
-      rw [← dot_vplus_uvec K r, hq r ⟨hr.1, lt_of_le_of_lt hr.2 hs.2⟩]
-    have hint : ∫ r in a..s, supp K r = q.1 * (sin s - sin a) + q.2 * (cos a - cos s) := by
-      rw [intervalIntegral.integral_congr hsupp]
-      simp only [dot, uvec]
-      have i1 : IntervalIntegrable (fun x => q.1 * cos x) volume a s :=
-        (continuous_const.mul continuous_cos).intervalIntegrable _ _
-      have i2 : IntervalIntegrable (fun x => q.2 * sin x) volume a s :=
-        (continuous_const.mul continuous_sin).intervalIntegrable _ _
-      rw [intervalIntegral.integral_add i1 i2,
-        intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul, integral_cos,
-        integral_sin]
-    have hc := inj_continuous_supp hK
-    have h3 := intervalIntegral.integral_interval_sub_left
-      (hc.intervalIntegrable (μ := volume) 0 s) (hc.intervalIntegrable 0 a)
-    have e1 : sigmaFun K s - sigmaFun K a = 0 := by
-      rw [sigmaFun, sigmaFun, hq s hs, hq a ⟨le_rfl, hab⟩]
-      have : dot q (vvec s) + (∫ r in (0 : ℝ)..s, supp K r) -
-          (dot q (vvec a) + ∫ r in (0 : ℝ)..a, supp K r) =
-          dot q (vvec s) - dot q (vvec a) + ∫ r in a..s, supp K r := by linarith
-      rw [this, hint]
-      simp only [dot, vvec]; ring
-    linarith
-  have hS : sigma K (Ioo a b) =
-      ENNReal.ofReal (Function.leftLim (sigmaFun K) b - sigmaFun K a) := by
-    simp [sigma, sigmaStieltjes, hK, StieltjesFunction.measure_Ioo]
-  have hlim : Function.leftLim (sigmaFun K) b = sigmaFun K a := by
-    apply leftLim_eq_of_tendsto
-    apply tendsto_const_nhds.congr'
-    filter_upwards [Ioo_mem_nhdsLT hab] with s hs
-    exact (hconst s ⟨hs.1.le, hs.2⟩).symm
-  rw [hS, hlim, sub_self, ENNReal.ofReal_zero]
+  exact h0.resolve_right measure_singleton_lt_top.ne
 
 /-- The half-plane `H_K^b(t) = H₊(t, h_K(t) - 1)` above the inner wall `b_K(t)`
 (Definition 6.3.3, `def:upper-half-planes`). -/
@@ -417,13 +357,8 @@ def halfD (K : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := halfPlus (t + �
 
 /-- A cap with rotation angle `π/2` lies in the strip `H = ℝ × [0, 1]`. -/
 lemma inj_cap_strip {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {p : ℝ × ℝ} (hp : p ∈ K) :
-    0 ≤ p.2 ∧ p.2 ≤ 1 := by
-  have h1 := dot_le_supp hK.2.1.2.1 hp (π / 2)
-  have h2 := dot_le_supp hK.2.1.2.1 hp (3 * π / 2)
-  rw [hK.2.2.2.1] at h1
-  rw [hK.2.2.2.2.2.1, show 3 * π / 2 = π / 2 + π by ring] at h2
-  simp only [dot, uvec, cos_pi_div_two, sin_pi_div_two, cos_add_pi, sin_add_pi] at h1 h2
-  constructor <;> linarith
+    0 ≤ p.2 ∧ p.2 ≤ 1 :=
+  (mem_para_iff.1 (hK.subset_para hp)).1
 
 /-- `|w|² = (w · u_t)² + (w · v_t)²`. -/
 lemma inj_dot_self_eq (w : ℝ × ℝ) (t : ℝ) :
@@ -431,6 +366,7 @@ lemma inj_dot_self_eq (w : ℝ × ℝ) (t : ℝ) :
   simp only [dot, uvec, vvec]
   linear_combination (-(w.1 ^ 2 + w.2 ^ 2)) * sin_sq_add_cos_sq t
 
+/-- The coordinates of `v_K⁺(t) - C_K⁺(t)` in the frame `u_t, v_t` are `(g_K⁺(t), -f_K⁺(t))`. -/
 lemma inj_dot_vplus_sub_cPlus (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot (vplus K t - cPlus K t) (uvec t) = gPlus K t ∧
       dot (vplus K t - cPlus K t) (vvec t) = -fPlus K t := by
@@ -438,6 +374,7 @@ lemma inj_dot_vplus_sub_cPlus (K : Set (ℝ × ℝ)) (t : ℝ) :
   · rw [gPlus, dot_sub_left, dot_sub_left, inj_dot_outerCorner_uvec, dot_vplus_uvec]
   · rw [inj_fPlus_eq, dot_sub_left, inj_dot_cPlus_vvec]; ring
 
+/-- The coordinates of `v_K⁻(t) - C_K⁻(t)` in the frame `u_t, v_t` are `(g_K⁻(t), -f_K⁻(t))`. -/
 lemma inj_dot_vminus_sub_cMinus (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot (vminus K t - cMinus K t) (uvec t) = gMinus K t ∧
       dot (vminus K t - cMinus K t) (vvec t) = -fMinus K t := by
@@ -537,7 +474,8 @@ theorem lemma6_3_1 {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap (right
     have := (inj_cap_strip hcap (theorem3_4_10 hK hpN)).2
     simp only [hp] at this
     linarith
-  -- the diameter bound
+  -- the diameter bound: every point of `K` lies at most `1` beyond `x_K(π/4)` in the directions
+  -- `u_{π/4}` and `v_{π/4}`, and in the strip `0 ≤ y ≤ 1`
   have hdiam : ∀ p ∈ K, ∀ q ∈ K, dot (p - q) (p - q) ≤ 25 := by
     have hb : ∀ p ∈ K, dot p (uvec (π / 4)) ≤ dot X (uvec (π / 4)) + 1 ∧
         dot p (vvec (π / 4)) ≤ dot X (vvec (π / 4)) + 1 := by
@@ -556,39 +494,32 @@ theorem lemma6_3_1 {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap (right
     have hr2 : r ^ 2 = 1 / 2 := by
       rw [hr, div_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]; norm_num
     have hr34 : r < 3 / 4 := by nlinarith
-    set D := p.1 - q.1
-    have hD1 : r * D ≤ 2 * r + 2 := by nlinarith
-    have hD2 : -(r * D) ≤ 2 * r + 2 := by nlinarith
-    have hD : D ^ 2 ≤ 12 + 16 * r := by
-      have : (r * D) ^ 2 ≤ (2 * r + 2) ^ 2 := by nlinarith
-      nlinarith
-    have hE : (p.2 - q.2) ^ 2 ≤ 1 := by nlinarith
-    simp only [dot, Prod.fst_sub, Prod.snd_sub]
-    nlinarith
+    have hrX : r * X.2 ≤ r := mul_le_of_le_one_right hr0.le hX2
+    have hp0 := mul_nonneg hr0.le sp.1
+    have hq0 := mul_nonneg hr0.le sq.1
+    -- `r |p.1 - q.1| ≤ 2r + 2`, so `(p.1 - q.1)² ≤ (2 + 2√2)² = 12 + 16r`
+    have hD1 : r * (p.1 - q.1) ≤ 2 * r + 2 := by linarith
+    have hD2 : r * (q.1 - p.1) ≤ 2 * r + 2 := by linarith
+    have hD : (p.1 - q.1) ^ 2 ≤ 12 + 16 * r := by
+      have h := sq_le_sq' (by linarith) hD1
+      have e : (2 * r + 2) ^ 2 = 6 + 8 * r := by ring_nf; rw [hr2]; ring
+      rw [mul_pow, hr2, e] at h
+      linarith
+    have hE : (p.2 - q.2) ^ 2 ≤ 1 :=
+      (sq_le_one_iff_abs_le_one _).2 (abs_le.2 ⟨by linarith, by linarith⟩)
+    simp only [dot, Prod.fst_sub, Prod.snd_sub, ← pow_two]
+    linarith
   refine ⟨fun p hp q hq => ?_, fun t _ => inj_arm_le_of_diam hKc hdiam t⟩
   rw [norm2, Real.sqrt_le_iff]
-  exact ⟨by norm_num, by have := hdiam p hp q hq; nlinarith⟩
+  exact ⟨by norm_num, (hdiam p hp q hq).trans (by norm_num)⟩
 
 /-! ### Lemma 6.3.2 -/
-
-lemma inj_rot_zero_left (t y : ℝ) : rot t (0, y) = y • vvec t := by
-  ext <;> simp [rot, vvec] <;> ring
 
 /-- The half-line `b⃗_K(t)` in the coordinates `(h_K(t) - 1) u_t + s v_t` of the line `b_K(t)`. -/
 lemma inj_mem_wallBVec {K : Set (ℝ × ℝ)} {t s : ℝ} :
     (supp K t - 1) • uvec t + s • vvec t ∈ wallBVec K t ↔ s ≤ supp K (t + π / 2) - 1 := by
-  constructor
-  · rintro ⟨p, ⟨hp1, hp2⟩, hpx⟩
-    have hp : p = (0, p.2) := by ext <;> simp [hp1]
-    rw [hp, hallwayMap, inj_rot_zero_left] at hpx
-    have := congrArg (fun w => dot w (vvec t)) hpx
-    simp only [dot_add_left, dot_smul_left, dot_vvec_self, dot_uvec_vvec, mul_zero, mul_one,
-      add_zero, zero_add] at this
-    linarith
-  · intro hs
-    refine ⟨(0, s - (supp K (t + π / 2) - 1)), ⟨rfl, by simp only; linarith⟩, ?_⟩
-    rw [hallwayMap, inj_rot_zero_left]
-    ext <;> simp <;> ring
+  simp only [mpc_mem_wallBVec, uvec_add_pi_div_two, dot_add_left, dot_smul_left, dot_uvec_self,
+    dot_vvec_uvec, dot_uvec_vvec, dot_vvec_self, mul_one, mul_zero, add_zero, zero_add, true_and]
 
 lemma inj_wall_dot_uvec (c t u s : ℝ) :
     dot (c • uvec t + s • vvec t) (uvec u) = c * cos (t - u) + s * sin (u - t) := by
@@ -598,24 +529,17 @@ lemma inj_wall_dot_vvec (c t u s : ℝ) :
     dot (c • uvec t + s • vvec t) (vvec u) = c * sin (t - u) + s * cos (t - u) := by
   rw [dot_add_left, dot_smul_left, dot_smul_left, dot_uvec_vvec', dot_vvec_vvec]
 
+/-- When the point `(h_K(t) - 1) u_t + s v_t` of the line `b_K(t)` lies in `H_K^d(u)`. -/
 lemma inj_mem_halfD {K : Set (ℝ × ℝ)} {t u s : ℝ} :
     (supp K t - 1) • uvec t + s • vvec t ∈ halfD K u ↔
       supp K (u + π / 2) - 1 ≤ (supp K t - 1) * sin (t - u) + s * cos (t - u) := by
   simp only [halfD, halfPlus, mem_ofPred_eq, uvec_add_pi_div_two, inj_wall_dot_vvec]
 
+/-- When the point `(h_K(t) - 1) u_t + s v_t` of the line `b_K(t)` lies in `H_K^b(u)`. -/
 lemma inj_mem_halfB {K : Set (ℝ × ℝ)} {t u s : ℝ} :
     (supp K t - 1) • uvec t + s • vvec t ∈ halfB K u ↔
       supp K u - 1 ≤ (supp K t - 1) * cos (t - u) + s * sin (u - t) := by
   simp only [halfB, halfPlus, mem_ofPred_eq, inj_wall_dot_uvec]
-
-lemma inj_tan_half_mul_sin (δ : ℝ) (h : cos (δ / 2) ≠ 0) : tan (δ / 2) * sin δ = 1 - cos δ := by
-  have e1 : sin δ = 2 * sin (δ / 2) * cos (δ / 2) := by
-    rw [← sin_two_mul]; ring_nf
-  have e2 : cos δ = 2 * cos (δ / 2) ^ 2 - 1 := by
-    rw [← cos_two_mul]; ring_nf
-  rw [tan_eq_sin_div_cos, e1, e2]
-  field_simp
-  linear_combination 2 * sin_sq_add_cos_sq (δ / 2)
 
 /-- Trigonometric facts about the step size `δ ∈ (0, π/4]`. -/
 lemma inj_step_trig (k : ℕ) :
@@ -630,7 +554,7 @@ lemma inj_step_trig (k : ℕ) :
     cos_pos_of_mem_Ioo ⟨by linarith [pi_pos], by linarith [pi_pos]⟩
   have hs2 : 0 < sin (stepSize k / 2) :=
     sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [pi_pos])
-  refine ⟨hc, hs, ?_, ?_, inj_tan_half_mul_sin _ hc2.ne'⟩
+  refine ⟨hc, hs, ?_, ?_, tan_half_mul_sin hc2.ne'⟩
   · rw [tan_eq_sin_div_cos]; positivity
   · rw [tan_eq_sin_div_cos]; positivity
 
@@ -705,6 +629,7 @@ lemma inj_param_plus {K : Set (ℝ × ℝ)} {t δ : ℝ} (hc : 0 < cos δ) :
   rw [e1, e2, sin_neg, cos_neg, div_le_iff₀ hc]
   constructor <;> rintro ⟨h1, h2⟩ <;> constructor <;> linarith
 
+/-- The length of the parameter interval of `inj_param_minus` at `t ∈ Θ_n`. -/
 lemma inj_param_minus_length {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap (rightAngleSet k) K)
     {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) :
     supp K (t + π / 2) - 1 - (supp K (t + π / 2 - stepSize k) - 1 -
@@ -719,6 +644,7 @@ lemma inj_param_minus_length {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap
   field_simp
   linear_combination (-1) * hT + A * hsc
 
+/-- The length of the parameter interval of `inj_param_plus` at `t ∈ Θ_n`. -/
 lemma inj_param_plus_length {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap (rightAngleSet k) K)
     {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) :
     supp K (t + π / 2) - 1 - (supp K (t + π / 2 + stepSize k) - 1 +
@@ -759,6 +685,7 @@ noncomputable def m0 (x : ℝ) : ℝ := x - k0 x
 lemma inj_k0_nonneg (x : ℝ) : 0 ≤ k0 x :=
   le_trans (abs_nonneg _) (le_max_left _ _)
 
+/-- `tan x ≤ x + x²` for `x ∈ [0, π/4]`. -/
 lemma inj_tan_le {x : ℝ} (h0 : 0 ≤ x) (h1 : x ≤ π / 4) : tan x ≤ x + x ^ 2 := by
   have hx1 : x ≤ 1 := by linarith [pi_le_four]
   have hc : 1 - x ^ 2 / 2 ≤ cos x := one_sub_sq_div_two_le_cos
@@ -767,6 +694,7 @@ lemma inj_tan_le {x : ℝ} (h0 : 0 ≤ x) (h1 : x ≤ π / 4) : tan x ≤ x + x 
   rw [tan_eq_sin_div_cos, div_le_iff₀ hcpos]
   nlinarith [mul_nonneg h0 h0, mul_nonneg (mul_nonneg h0 h0) h0]
 
+/-- The predecessor `t - δ` of `t ∈ Θ_n` is in `Θ_n` or is `0`. -/
 lemma inj_angles_pred {k : ℕ} {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) :
     t - stepSize k ∈ (rightAngleSet k).angles ∨ t - stepSize k = 0 := by
   obtain ⟨j, hj0, hjn, rfl⟩ := inj_mem_angles.1 ht
@@ -775,6 +703,7 @@ lemma inj_angles_pred {k : ℕ} {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) 
   · right; push_cast; ring
   · left; exact inj_mem_angles.2 ⟨j', hj', by omega, by push_cast; ring⟩
 
+/-- The successor `t + δ` of `t ∈ Θ_n` is in `Θ_n` or is `π/2`. -/
 lemma inj_angles_succ {k : ℕ} {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) :
     t + stepSize k ∈ (rightAngleSet k).angles ∨ t + stepSize k = π / 2 := by
   obtain ⟨j, hj0, hjn, rfl⟩ := inj_mem_angles.1 ht
@@ -785,14 +714,6 @@ lemma inj_angles_succ {k : ℕ} {t : ℝ} (ht : t ∈ (rightAngleSet k).angles) 
     have : j + 1 = 2 ^ (k + 1) := by omega
     have h' : ((j : ℝ) + 1) = 2 ^ (k + 1) := by exact_mod_cast this
     rw [← hn, ← h']; ring
-
-lemma inj_continuous_dot (v : ℝ × ℝ) : Continuous fun p : ℝ × ℝ => dot p v := by
-  unfold dot; fun_prop
-
-lemma inj_isOpen_qMinus (K : Set (ℝ × ℝ)) (u : ℝ) : IsOpen (qMinus K u) := by
-  rw [proposition2_2_2_qMinus]
-  exact (isOpen_lt (inj_continuous_dot _) continuous_const).inter
-    (isOpen_lt (inj_continuous_dot _) continuous_const)
 
 /-- A point of the boundary of the polygon niche lies in the closed upper half-plane. -/
 lemma inj_frontier_niche_snd {Θ : AngleSet} (hω : Θ.ω = π / 2) {K : Set (ℝ × ℝ)} {x : ℝ × ℝ}
@@ -818,7 +739,7 @@ lemma inj_not_mem_qMinus {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap (ri
       have hp2' : (0 : ℝ) ≤ p.2 := le_of_lt hp2
       refine ⟨⟨?_, ?_⟩, mem_iUnion₂.2 ⟨u, hu, hpq⟩⟩ <;>
         simpa [halfPlus, dot, uvec] using hp2'
-    · exact (isOpen_lt continuous_const continuous_snd).inter (inj_isOpen_qMinus K u)
+    · exact (isOpen_lt continuous_const continuous_snd).inter (ms_isOpen_qMinus K u)
   · rw [proposition2_2_2_qMinus] at hxq
     have h := hxq.2
     simp only [halfMinusOpen, mem_ofPred_eq, zero_add, hcap.2.2.2.1, dot, uvec, cos_pi_div_two,
@@ -839,7 +760,7 @@ lemma inj_polygon_sigmaAt_eq {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap
   obtain ⟨hc, hs, -, -, hT⟩ := inj_step_trig k
   obtain ⟨hV3, hV4, -, -⟩ := inj_polygon_vertices_at hK ht
   have hsc := sin_sq_add_cos_sq (stepSize k)
-  rw [inj_sigmaAt_eq_dot hK.1.2.1, hV3, hV4, vint, vint, dot_sub_left, dot_add_left, dot_add_left,
+  rw [sigmaAt_eq_dot_sub hK.1.2.1, hV3, hV4, vint, vint, dot_add_left, dot_add_left,
     dot_smul_left, dot_smul_left, dot_smul_left, dot_smul_left, dot_uvec_vvec, dot_vvec_self,
     dot_uvec_vvec', dot_vvec_vvec]
   have e1 : t + stepSize k - t = stepSize k := by ring
@@ -955,8 +876,8 @@ lemma inj_sigmaAt_le_geom {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap
     inj_polygon_sigmaAt_eq hKp ht] at hreal
   exact hreal
 
-/-- **Theorem 6.3.3** (`thm:balanced-discrete-ineq`). There is an absolute constant `C` such that every
-maximum polygon cap `K` with `n` steps of step size `δ` satisfies
+/-- **Theorem 6.3.3** (`thm:balanced-discrete-ineq`). There is an absolute constant `C` such that
+every maximum polygon cap `K` with `n` steps of step size `δ` satisfies
 `σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ²` for every `t ∈ {0} ∪ Θ_n`. -/
 theorem theorem6_3_3 : ∃ C : ℝ, ∀ k : ℕ, ∀ K, IsMaxPolygonCap (rightAngleSet k) K →
     ∀ t ∈ insert 0 ((rightAngleSet k).angles : Set ℝ),

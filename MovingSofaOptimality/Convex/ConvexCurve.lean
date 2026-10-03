@@ -9,12 +9,13 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Periodic
 Definition 7.3.1 (`def:convex-curve`), Lemma 7.3.1 (`lem:convex-curve-cut`), Theorem 7.3.2
 (`thm:convex-curve-area-functional`), Lemmas 7.3.3–7.3.5.
 
-**Reading.** The paper's curve area functional `𝒥(𝐮_K^{a,b})` of the convex arc is defined through a
-parametrization of the arc as a Jordan arc, and Theorem 7.3.2 evaluates it to `½ ∫_{(a,b)} h_K dσ_K`.
-We name that value `convexCurveArea K a b`; Theorem 7.3.2 exhibits a parametrization of the arc of
-bounded variation, from `v_K⁺(a)` to `v_K⁻(b)` and injective unless the arc is a point, whose curve area
-functional is this value. Lemma 7.3.5 (1) (the boundary of the region is a counterclockwise Jordan
-curve) is replaced by the computation of the area of the region, which is how the paper uses it.
+**Reading.** The paper's curve area functional `𝒥(𝐮_K^{a,b})` of the convex arc is defined through
+a parametrization of the arc as a Jordan arc, and Theorem 7.3.2 evaluates it to
+`½ ∫_{(a,b)} h_K dσ_K`. We name that value `convexCurveArea K a b`; Theorem 7.3.2 exhibits a
+parametrization of the arc of bounded variation, from `v_K⁺(a)` to `v_K⁻(b)` and injective unless
+the arc is a point, whose curve area functional is this value. Lemma 7.3.5 (1) (the boundary of the
+region is a counterclockwise Jordan curve) is replaced by the computation of the area of the region,
+which is how the paper uses it.
 -/
 
 @[expose] public section
@@ -36,98 +37,15 @@ noncomputable def convexCurveArea (K : Set (ℝ × ℝ)) (a b : ℝ) : ℝ :=
 noncomputable def convexCurveBilin (K₁ K₂ : Set (ℝ × ℝ)) (a b : ℝ) : ℝ :=
   (1 / 2) * ∫ t in Ioo a b, supp K₁ t ∂(sigma K₂)
 
-/-! ### Auxiliary plane geometry -/
-
-/-! ### Plane trigonometry -/
-
-lemma cvx_uvec_eq (a b : ℝ) : uvec b = cos (b - a) • uvec a + sin (b - a) • vvec a := by
-  have hb : b = (b - a) + a := by ring
-  ext <;> simp only [uvec, vvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
-    smul_eq_mul] <;> conv_lhs => rw [hb]
-  · rw [cos_add]; ring
-  · rw [sin_add]; ring
-
-lemma cvx_vvec_eq (a b : ℝ) : vvec b = -sin (b - a) • uvec a + cos (b - a) • vvec a := by
-  have hb : b = (b - a) + a := by ring
-  ext <;> simp only [uvec, vvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
-    smul_eq_mul] <;> conv_lhs => rw [hb]
-  · rw [sin_add]; ring
-  · rw [cos_add]; ring
-
-/-- Interpolation of `u_t` between `u_a` and `u_b`. -/
-lemma cvx_uvec_interp (a b t : ℝ) :
-    sin (b - a) • uvec t = sin (b - t) • uvec a + sin (t - a) • uvec b := by
-  ext <;> simp only [uvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
-    smul_eq_mul, sin_sub] <;> ring
-
-lemma cvx_dot_uvec_interp (w : ℝ × ℝ) (a b t : ℝ) :
-    sin (b - a) * dot w (uvec t) = sin (b - t) * dot w (uvec a) + sin (t - a) * dot w (uvec b) := by
-  rw [← dot_smul_right, cvx_uvec_interp, dot_add_right, dot_smul_right, dot_smul_right]
-
-/-- Two non-parallel normals determine a vector. -/
-lemma cvx_eq_zero_of_dot_uvec {w : ℝ × ℝ} {a b : ℝ} (hs : sin (b - a) ≠ 0)
-    (ha : dot w (uvec a) = 0) (hb : dot w (uvec b) = 0) : w = 0 := by
-  have hv : dot w (vvec a) = 0 := by
-    rw [cvx_uvec_eq a b, dot_add_right, dot_smul_right, dot_smul_right, ha] at hb
-    simpa [hs] using hb
-  rw [eq_dot_uvec_smul_add w a, ha, hv, zero_smul, zero_smul, add_zero]
-
 /-! ### Edges and vertices -/
-
-lemma cvx_continuous_dot_right (q : ℝ × ℝ) : Continuous fun p : ℝ × ℝ => dot p q := by
-  unfold dot; fun_prop
-
-lemma cvx_isClosed_line (t h : ℝ) : IsClosed (line t h) :=
-  isClosed_eq (cvx_continuous_dot_right _) continuous_const
-
-lemma cvx_isClosed_halfMinus (t h : ℝ) : IsClosed (halfMinus t h) :=
-  isClosed_le (cvx_continuous_dot_right _) continuous_const
-
-lemma cvx_convex_halfMinus (t h : ℝ) : Convex ℝ (halfMinus t h) := by
-  intro p hp q hq α β hα hβ hαβ
-  simp only [halfMinus, mem_ofPred_eq] at hp hq ⊢
-  rw [dot_add_left, dot_smul_left, dot_smul_left]
-  have e : α * h + β * h = h := by rw [← add_mul, hαβ, one_mul]
-  linarith [mul_le_mul_of_nonneg_left hp hα, mul_le_mul_of_nonneg_left hq hβ]
-
-lemma cvx_convex_line (t h : ℝ) : Convex ℝ (line t h) := by
-  intro p hp q hq α β hα hβ hαβ
-  simp only [line, mem_ofPred_eq] at hp hq ⊢
-  rw [dot_add_left, dot_smul_left, dot_smul_left, hp, hq, ← add_mul, hαβ, one_mul]
-
-lemma cvx_isCompact_edge {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) : IsCompact (edge K t) :=
-  hK.2.1.inter_right (cvx_isClosed_line _ _)
-
-lemma cvx_dot_vplus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
-    dot (vplus K t) (vvec t) = sSup ((fun p => dot p (vvec t)) '' edge K t) := by
-  simp [vplus, dot_add_left, dot_smul_left]
-
-lemma cvx_dot_vminus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
-    dot (vminus K t) (vvec t) = sInf ((fun p => dot p (vvec t)) '' edge K t) := by
-  simp [vminus, dot_add_left, dot_smul_left]
-
-lemma cvx_dot_le_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ} {q : ℝ × ℝ}
-    (hq : q ∈ edge K t) : dot q (vvec t) ≤ dot (vplus K t) (vvec t) := by
-  rw [cvx_dot_vplus_vvec]
-  exact le_csSup ((cvx_isCompact_edge hK t).image (cvx_continuous_dot_right _)).bddAbove
-    (mem_image_of_mem _ hq)
-
-lemma cvx_vminus_le_dot {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ} {q : ℝ × ℝ}
-    (hq : q ∈ edge K t) : dot (vminus K t) (vvec t) ≤ dot q (vvec t) := by
-  rw [cvx_dot_vminus_vvec]
-  exact csInf_le ((cvx_isCompact_edge hK t).image (cvx_continuous_dot_right _)).bddBelow
-    (mem_image_of_mem _ hq)
-
-lemma cvx_mem_edge_iff {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} :
-    p ∈ edge K t ↔ p ∈ K ∧ dot p (uvec t) = supp K t := Iff.rfl
 
 /-- A point of the edge which is furthest in the direction `v_t` is `v_K⁺(t)`. -/
 lemma cvx_eq_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ} {p : ℝ × ℝ}
     (hp : p ∈ edge K t) (h : ∀ q ∈ edge K t, dot q (vvec t) ≤ dot p (vvec t)) :
     p = vplus K t := by
   have e : dot p (vvec t) = dot (vplus K t) (vvec t) := by
-    refine le_antisymm (cvx_dot_le_vplus hK hp) ?_
-    rw [cvx_dot_vplus_vvec]
+    refine le_antisymm (dot_le_dot_vplus hK.2.1 hp) ?_
+    rw [dot_vplus_vvec]
     exact csSup_le ⟨_, mem_image_of_mem _ hp⟩ (by rintro _ ⟨q, hq, rfl⟩; exact h q hq)
   rw [eq_dot_uvec_smul_add p t, eq_dot_uvec_smul_add (vplus K t) t, e, hp.2, dot_vplus_uvec]
 
@@ -136,16 +54,10 @@ lemma cvx_eq_vminus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ} {p : 
     (hp : p ∈ edge K t) (h : ∀ q ∈ edge K t, dot p (vvec t) ≤ dot q (vvec t)) :
     p = vminus K t := by
   have e : dot p (vvec t) = dot (vminus K t) (vvec t) := by
-    refine le_antisymm ?_ (cvx_vminus_le_dot hK hp)
-    rw [cvx_dot_vminus_vvec]
+    refine le_antisymm ?_ (dot_vminus_le_dot hK.2.1 hp)
+    rw [dot_vminus_vvec]
     exact le_csInf ⟨_, mem_image_of_mem _ hp⟩ (by rintro _ ⟨q, hq, rfl⟩; exact h q hq)
   rw [eq_dot_uvec_smul_add p t, eq_dot_uvec_smul_add (vminus K t) t, e, hp.2, dot_vminus_uvec]
-
-/-- Two points on the same line `l(t, h)` differ by a multiple of `v_t`. -/
-lemma cvx_sub_eq_smul_vvec {p q : ℝ × ℝ} {t : ℝ} (h : dot p (uvec t) = dot q (uvec t)) :
-    q - p = dot (q - p) (vvec t) • vvec t := by
-  conv_lhs => rw [eq_dot_uvec_smul_add (q - p) t]
-  rw [dot_sub_left, h, sub_self, zero_smul, zero_add]
 
 /-- **Common points of two edges.** If `t < s < t + π`, a common point of `e_K(t)` and `e_K(s)` is
 `v_K⁻(s)`. -/
@@ -155,7 +67,7 @@ lemma cvx_edge_inter_eq_vminus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t s
   refine cvx_eq_vminus hK hps fun q hq => ?_
   by_contra hlt
   push Not at hlt
-  obtain ⟨d, hqp⟩ : ∃ d, q - p = d • vvec s := ⟨_, cvx_sub_eq_smul_vvec (hps.2.trans hq.2.symm)⟩
+  obtain ⟨d, hqp⟩ : ∃ d, q - p = d • vvec s := ⟨_, sub_eq_smul_vvec (hps.2.trans hq.2.symm)⟩
   have hsin : 0 < sin (s - t) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith)
   have key : dot q (uvec t) - dot p (uvec t) = d * -sin (s - t) := by
     rw [← dot_sub_left, hqp, dot_smul_left, dot_vvec_uvec', ← neg_sub s t, sin_neg]
@@ -173,7 +85,7 @@ lemma cvx_edge_inter_eq_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t s 
   refine cvx_eq_vplus hK hpt fun q hq => ?_
   by_contra hlt
   push Not at hlt
-  obtain ⟨d, hqp⟩ : ∃ d, q - p = d • vvec t := ⟨_, cvx_sub_eq_smul_vvec (hpt.2.trans hq.2.symm)⟩
+  obtain ⟨d, hqp⟩ : ∃ d, q - p = d • vvec t := ⟨_, sub_eq_smul_vvec (hpt.2.trans hq.2.symm)⟩
   have hsin : 0 < sin (s - t) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith)
   have key : dot q (uvec s) - dot p (uvec s) = d * sin (s - t) := by
     rw [← dot_sub_left, hqp, dot_smul_left, dot_vvec_uvec']
@@ -186,12 +98,9 @@ lemma cvx_edge_inter_eq_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t s 
 
 /-- `v_K(a, b)` is the intersection point of the two supporting lines. -/
 lemma cvx_vint_eq {K : Set (ℝ × ℝ)} {a b : ℝ} {p : ℝ × ℝ} (hs : sin (b - a) ≠ 0)
-    (ha : dot p (uvec a) = supp K a) (hb : dot p (uvec b) = supp K b) : vint K a b = p := by
-  have hv : dot p (vvec a) = (supp K b - supp K a * cos (b - a)) / sin (b - a) := by
-    rw [eq_div_iff hs, ← hb, ← ha, cvx_uvec_eq a b, dot_add_right, dot_smul_right,
-      dot_smul_right]
-    ring
-  rw [vint, ← hv, ← ha, ← eq_dot_uvec_smul_add]
+    (ha : dot p (uvec a) = supp K a) (hb : dot p (uvec b) = supp K b) : vint K a b = p :=
+  eq_of_dot_uvec_eq hs ((vint_mem_line_left K a b).trans ha.symm)
+    ((vint_mem_line_right K hs).trans hb.symm)
 
 /-- If `a < t < b < a + π` and `w · u_a ≤ 0`, `w · u_b ≤ 0`, `w · u_t ≥ 0`, then `w = 0`. -/
 lemma cvx_eq_zero_of_dot_le {w : ℝ × ℝ} {a b t : ℝ} (hb : b < a + π)
@@ -201,14 +110,15 @@ lemma cvx_eq_zero_of_dot_le {w : ℝ × ℝ} {a b t : ℝ} (hb : b < a + π)
     sin_pos_of_pos_of_lt_pi (by linarith [ht.1, ht.2]) (by linarith)
   have hs1 : 0 < sin (b - t) := sin_pos_of_pos_of_lt_pi (by linarith [ht.2]) (by linarith [ht.1])
   have hs2 : 0 < sin (t - a) := sin_pos_of_pos_of_lt_pi (by linarith [ht.1]) (by linarith [ht.2])
-  have key := cvx_dot_uvec_interp w a b t
+  have key := dot_uvec_comb w a b t
   have t1 : sin (b - t) * dot w (uvec a) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hs1.le h1
   have t2 : sin (t - a) * dot w (uvec b) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hs2.le h2
   have t3 : 0 ≤ sin (b - a) * dot w (uvec t) := mul_nonneg hsin.le h3
   have e1 : sin (b - t) * dot w (uvec a) = 0 := by linarith
   have e2 : sin (t - a) * dot w (uvec b) = 0 := by linarith
-  exact cvx_eq_zero_of_dot_uvec hsin.ne'
-    ((mul_eq_zero.1 e1).resolve_left hs1.ne') ((mul_eq_zero.1 e2).resolve_left hs2.ne')
+  exact eq_of_dot_uvec_eq (q := 0) hsin.ne'
+    (by rw [(mul_eq_zero.1 e1).resolve_left hs1.ne', dot_zero_left])
+    (by rw [(mul_eq_zero.1 e2).resolve_left hs2.ne', dot_zero_left])
 
 /-- If `a < t < b < a + π`, `w · u_a ≤ 0` and `w · u_b ≤ 0`, then `w · u_t < 0` unless `w = 0`. -/
 lemma cvx_dot_lt_zero {w : ℝ × ℝ} {a b t : ℝ} (hb : b < a + π)
@@ -217,16 +127,17 @@ lemma cvx_dot_lt_zero {w : ℝ × ℝ} {a b t : ℝ} (hb : b < a + π)
   by_contra h3
   exact hw (cvx_eq_zero_of_dot_le hb ht h1 h2 (not_lt.1 h3))
 
+/-- If `p ∈ L` maximizes `· u_t` on `L`, then `h_L(t) = p · u_t`. -/
+lemma cvx_supp_eq_of_isGreatest {L : Set (ℝ × ℝ)} {p : ℝ × ℝ} {t : ℝ} (hp : p ∈ L)
+    (h : ∀ q ∈ L, dot q (uvec t) ≤ dot p (uvec t)) : supp L t = dot p (uvec t) :=
+  IsGreatest.csSup_eq ⟨mem_image_of_mem _ hp, by rintro _ ⟨q, hq, rfl⟩; exact h q hq⟩
+
 /-- If `p ∈ L` is the unique maximizer of `· u_t` on `L`, then `e_L(t) = {p}`. -/
 lemma cvx_edge_eq_singleton {L : Set (ℝ × ℝ)} {p : ℝ × ℝ} {t : ℝ} (hp : p ∈ L)
     (h : ∀ q ∈ L, q ≠ p → dot q (uvec t) < dot p (uvec t)) : edge L t = {p} := by
-  have hs : supp L t = dot p (uvec t) := by
-    apply IsGreatest.csSup_eq
-    refine ⟨mem_image_of_mem _ hp, ?_⟩
-    rintro _ ⟨q, hq, rfl⟩
-    by_cases hqp : q = p
-    · rw [hqp]
-    · exact (h q hq hqp).le
+  have hs : supp L t = dot p (uvec t) := cvx_supp_eq_of_isGreatest hp fun q hq => by
+    rcases eq_or_ne q p with rfl | hqp
+    exacts [le_rfl, (h q hq hqp).le]
   ext q
   simp only [edge, suppLine, line, mem_inter_iff, mem_ofPred_eq, mem_singleton_iff, hs]
   constructor
@@ -234,10 +145,6 @@ lemma cvx_edge_eq_singleton {L : Set (ℝ × ℝ)} {p : ℝ × ℝ} {t : ℝ} (h
     by_contra hqp
     exact (h q hq hqp).ne hqe
   · rintro rfl; exact ⟨hp, rfl⟩
-
-lemma cvx_supp_eq_of_isGreatest {L : Set (ℝ × ℝ)} {p : ℝ × ℝ} {t : ℝ} (hp : p ∈ L)
-    (h : ∀ q ∈ L, dot q (uvec t) ≤ dot p (uvec t)) : supp L t = dot p (uvec t) :=
-  IsGreatest.csSup_eq ⟨mem_image_of_mem _ hp, by rintro _ ⟨q, hq, rfl⟩; exact h q hq⟩
 
 /-- Cutting `K` by a closed set containing the edge `e_K(t)` does not change that edge. -/
 lemma cvx_edge_inter_of_subset {K H : Set (ℝ × ℝ)} (hK : IsConvexBody K) (hH : IsClosed H)
@@ -303,10 +210,12 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
   have h0a : dot p₀ (uvec a) = supp K a := vint_mem_line_left K a b
   have h0b : dot p₀ (uvec b) = supp K b := vint_mem_line_right K hsin.ne'
   have hsab : sin (a - b) = -sin (b - a) := by rw [← sin_neg, neg_sub]
+  -- Step 1: `p₀ = v_K(a, b)` is `p₁ + α v_a = p₂ - β v_b` with `α, β > 0`, where `p₁ = v_K⁺(a)` and
+  -- `p₂ = v_K⁻(b)` (`α = 0` or `β = 0` would force `p₁ = p₂`).
   obtain ⟨α, hα⟩ : ∃ α, p₀ - p₁ = α • vvec a :=
-    ⟨_, cvx_sub_eq_smul_vvec (hpa.2.trans h0a.symm)⟩
+    ⟨_, sub_eq_smul_vvec (hpa.2.trans h0a.symm)⟩
   obtain ⟨β, hβ⟩ : ∃ β, p₂ - p₀ = β • vvec b :=
-    ⟨_, cvx_sub_eq_smul_vvec (h0b.trans hpb.2.symm)⟩
+    ⟨_, sub_eq_smul_vvec (h0b.trans hpb.2.symm)⟩
   have hα0 : 0 ≤ α := by
     have e : dot (p₀ - p₁) (uvec b) = α * sin (b - a) := by
       rw [hα, dot_smul_left, dot_vvec_uvec']
@@ -333,6 +242,8 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       have he : p₂ = p₀ := by rw [← sub_eq_zero, hβ, ← hzero, zero_smul]
       have h0K : p₀ ∈ K := he ▸ hpb.1
       exact h ((cvx_edge_inter_eq_vplus hK hab hb ⟨h0K, h0a⟩ ⟨h0K, h0b⟩).symm.trans he.symm)
+  -- Step 2: `p₂ - p₁ = α v_a + β v_b` is orthogonal to `u_{t'}` for some `t' ∈ (a, b)`
+  -- (intermediate value theorem), so `p₂ - p₁ = τ v_{t'}`, and `τ > 0`.
   have hw : p₂ - p₁ = α • vvec a + β • vvec b := by rw [← hα, ← hβ]; abel
   have hf_cont : Continuous fun θ => dot (p₂ - p₁) (uvec θ) := by
     unfold dot uvec; fun_prop
@@ -345,8 +256,7 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
   obtain ⟨t', ht', hft'⟩ : ∃ t' ∈ Ioo a b, dot (p₂ - p₁) (uvec t') = 0 :=
     intermediate_value_Ioo hab.le hf_cont.continuousOn ⟨hfa, hfb⟩
   set τ := dot (p₂ - p₁) (vvec t') with hτdef
-  have hwτ : p₂ - p₁ = τ • vvec t' := by
-    conv_lhs => rw [eq_dot_uvec_smul_add (p₂ - p₁) t', hft', zero_smul, zero_add]
+  have hwτ : p₂ - p₁ = τ • vvec t' := eq_smul_vvec_of_dot_uvec_eq_zero hft'
   have hτ : 0 < τ := by
     obtain ⟨m, hm⟩ : ∃ m : ℝ, m = (a + b) / 2 := ⟨_, rfl⟩
     have hc1 : 0 < cos (a - m) := cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩
@@ -358,6 +268,8 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       rw [hwτ, dot_smul_left, dot_vvec_vvec]
     have : 0 < τ * cos (t' - m) := by rw [← e2, e1]; positivity
     exact pos_of_mul_pos_left this hc3.le
+  -- Step 3: the line `l'` through `p₁` and `p₂` is `l(t' + π, c)`; the closed half-plane
+  -- `H' = H(t' + π, c)` is `{q | (q - p₁) · u_{t'} ≥ 0}`.
   have hp₂eq : p₂ = p₁ + τ • vvec t' := by rw [← hwτ]; abel
   have hu : uvec (t' + π) = -uvec t' := uvec_add_pi t'
   set c := dot p₁ (uvec (t' + π)) with hc
@@ -366,9 +278,10 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     show dot p₂ (uvec (t' + π)) = c
     simp only [hc, hp₂eq, dot_add_left, dot_smul_left, hu, dot_neg_right, dot_vvec_uvec,
       mul_zero, add_zero]
-  have hsta : 0 < sin (t' - a) := sin_pos_of_pos_of_lt_pi (by linarith [ht'.1]) (by linarith [ht'.2])
-  have hsbt : 0 < sin (b - t') := sin_pos_of_pos_of_lt_pi (by linarith [ht'.2]) (by linarith [ht'.1])
-  -- membership in the half-plane
+  have hsta : 0 < sin (t' - a) :=
+    sin_pos_of_pos_of_lt_pi (by linarith [ht'.1]) (by linarith [ht'.2])
+  have hsbt : 0 < sin (b - t') :=
+    sin_pos_of_pos_of_lt_pi (by linarith [ht'.2]) (by linarith [ht'.1])
   have hH : ∀ q, q ∈ halfMinus (t' + π) c ↔ 0 ≤ dot (q - p₁) (uvec t') := by
     intro q
     show dot q (uvec (t' + π)) ≤ c ↔ _
@@ -382,6 +295,7 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     rw [this]
   have hp₁K' : p₁ ∈ K ∩ halfMinus (t' + π) c := ⟨hpa.1, (hH p₁).2 (by simp)⟩
   have hp₂K' : p₂ ∈ K ∩ halfMinus (t' + π) c := ⟨hpb.1, (hH₂ p₂).2 (by simp)⟩
+  -- Step 4: the six claims.
   refine ⟨t', ht', c, hp₁line, hp₂line, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · -- the vertex `v_K(a, b)` is strictly inside `H'`
     have e : dot p₀ (uvec (t' + π)) - c = -(α * sin (t' - a)) := by
@@ -389,9 +303,10 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       ring
     have : 0 < α * sin (t' - a) := mul_pos hαpos hsta
     linarith
-  · exact ⟨⟨p₁, hp₁K'⟩, hK.2.1.inter_right (cvx_isClosed_halfMinus _ _),
-      hK.2.2.inter (cvx_convex_halfMinus _ _)⟩
-  · -- (i)
+  · -- `K'` is a convex body
+    exact ⟨⟨p₁, hp₁K'⟩, hK.2.1.inter_right (isClosed_halfMinus _ _),
+      hK.2.2.inter (convex_halfMinus _ _)⟩
+  · -- (i): for `t ∈ (t' - π, a]`, `p₁` is the unique maximizer of `· u_t` on `K'`
     intro t ht
     apply cvx_edge_eq_singleton hp₁K'
     intro q hq hqp
@@ -413,9 +328,9 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
         show dot q (uvec a) = supp K a
         rw [dot_sub_left, hpa.2] at he; linarith⟩
       obtain ⟨d, hd⟩ : ∃ d, q - p₁ = d • vvec a :=
-        ⟨_, cvx_sub_eq_smul_vvec (hpa.2.trans hqe.2.symm)⟩
+        ⟨_, sub_eq_smul_vvec (hpa.2.trans hqe.2.symm)⟩
       have hd1 : d ≤ 0 := by
-        have := cvx_dot_le_vplus hK hqe
+        have := dot_le_dot_vplus hK.2.1 hqe
         have e : dot (q - p₁) (vvec a) = d := by rw [hd, dot_smul_left, dot_vvec_self, mul_one]
         rw [dot_sub_left] at e; linarith
       have hd2 : 0 ≤ d := by
@@ -424,9 +339,9 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
         nlinarith
       apply hqp
       rw [← sub_eq_zero, hd, le_antisymm hd1 hd2, zero_smul]
-  · -- (ii)
+  · -- (ii): for `t ∈ (a, b)`, the edge `e_K(t)` lies in `H'`
     intro t ht
-    apply cvx_edge_inter_of_subset hK (cvx_isClosed_halfMinus _ _)
+    apply cvx_edge_inter_of_subset hK (isClosed_halfMinus _ _)
     intro q hqe
     rw [hH q]
     by_contra hlt
@@ -436,8 +351,9 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     have hqt : 0 ≤ dot (q - p₁) (uvec t) := by
       rw [dot_sub_left, hqe.2]; linarith [dot_le_supp hK.2.1 hpa.1 t]
     rcases lt_trichotomy t t' with htt | htt | htt
-    · have key := cvx_dot_uvec_interp (q - p₁) a t' t
-      have s2 : 0 < sin (t' - t) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.1, ht'.2])
+    · have key := dot_uvec_comb (q - p₁) a t' t
+      have s2 : 0 < sin (t' - t) :=
+        sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.1, ht'.2])
       have s3 : 0 < sin (t - a) := sin_pos_of_pos_of_lt_pi (by linarith [ht.1]) (by linarith [ht.2])
       nlinarith [mul_nonpos_of_nonneg_of_nonpos s2.le hqa, mul_neg_of_pos_of_neg s3 hlt,
         mul_nonneg hsta.le hqt]
@@ -451,12 +367,14 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
         rw [dot_sub_left, hpb.2]; linarith [dot_le_supp hK.2.1 hqe.1 b]
       have hqt2 : 0 ≤ dot (q - p₂) (uvec t) := by
         rw [dot_sub_left, hqe.2]; linarith [dot_le_supp hK.2.1 hpb.1 t]
-      have key := cvx_dot_uvec_interp (q - p₂) t' b t
-      have s2 : 0 < sin (b - t) := sin_pos_of_pos_of_lt_pi (by linarith [ht.2]) (by linarith [ht'.1])
-      have s3 : 0 < sin (t - t') := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.2, ht'.1])
+      have key := dot_uvec_comb (q - p₂) t' b t
+      have s2 : 0 < sin (b - t) :=
+        sin_pos_of_pos_of_lt_pi (by linarith [ht.2]) (by linarith [ht'.1])
+      have s3 : 0 < sin (t - t') :=
+        sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.2, ht'.1])
       nlinarith [mul_neg_of_pos_of_neg s2 hlt2, mul_nonpos_of_nonneg_of_nonpos s3.le hqb,
         mul_nonneg hsbt.le hqt2]
-  · -- (iii)
+  · -- (iii): for `t ∈ [b, t' + π)`, `p₂` is the unique maximizer of `· u_t` on `K'`
     intro t ht
     apply cvx_edge_eq_singleton hp₂K'
     intro q hq hqp
@@ -477,9 +395,9 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
         show dot q (uvec b) = supp K b
         rw [dot_sub_left, hpb.2] at he; linarith⟩
       obtain ⟨d, hd⟩ : ∃ d, q - p₂ = d • vvec b :=
-        ⟨_, cvx_sub_eq_smul_vvec (hpb.2.trans hqe.2.symm)⟩
+        ⟨_, sub_eq_smul_vvec (hpb.2.trans hqe.2.symm)⟩
       have hd1 : 0 ≤ d := by
-        have := cvx_vminus_le_dot hK hqe
+        have := dot_vminus_le_dot hK.2.1 hqe
         have e : dot (q - p₂) (vvec b) = d := by rw [hd, dot_smul_left, dot_vvec_self, mul_one]
         rw [dot_sub_left] at e; linarith
       have hd2 : d ≤ 0 := by
@@ -488,7 +406,7 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
         nlinarith
       apply hqp
       rw [← sub_eq_zero, hd, le_antisymm hd2 hd1, zero_smul]
-  · -- (iv)
+  · -- (iv): `e_{K'}(t' + π) = K ∩ l'` is the segment `[p₂, p₁]`
     have hs : supp (K ∩ halfMinus (t' + π) c) (t' + π) = c :=
       cvx_supp_eq_of_isGreatest hp₁K' (fun q hq => hq.2)
     ext q
@@ -498,8 +416,7 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       have hdot : dot (q - p₁) (uvec t') = 0 := by
         have : dot (q - p₁) (uvec (t' + π)) = 0 := by rw [dot_sub_left, hqe, hc, sub_self]
         rw [hu, dot_neg_right] at this; linarith
-      obtain ⟨s, hs'⟩ : ∃ s, q - p₁ = s • vvec t' :=
-        ⟨_, by conv_lhs => rw [eq_dot_uvec_smul_add (q - p₁) t', hdot, zero_smul, zero_add]⟩
+      obtain ⟨s, hs'⟩ : ∃ s, q - p₁ = s • vvec t' := ⟨_, eq_smul_vvec_of_dot_uvec_eq_zero hdot⟩
       have hs0 : 0 ≤ s := by
         have h1 : dot (q - p₁) (uvec a) ≤ 0 := by
           rw [dot_sub_left, hpa.2]; linarith [dot_le_supp hK.2.1 hqK a]
@@ -521,7 +438,7 @@ theorem lemma7_3_1 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     · intro hq
       have hqK : q ∈ K := hK.2.2.segment_subset hpb.1 hpa.1 hq
       have hqL : q ∈ line (t' + π) c :=
-        (cvx_convex_line (t' + π) c).segment_subset hp₂line hp₁line hq
+        (convex_line (t' + π) c).segment_subset hp₂line hp₁line hq
       exact ⟨⟨hqK, le_of_eq hqL⟩, hqL⟩
 
 
@@ -531,27 +448,28 @@ open Filter Topology Function
 
 /-! ### Measurability and boundedness of the vertices -/
 
+/-- `v_K⁺` is strongly measurable: it is the pointwise limit of clamped functions of bounded
+variation. -/
 lemma cvx_stronglyMeasurable_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     StronglyMeasurable (vplus K) := by
   refine stronglyMeasurable_of_tendsto Filter.atTop
     (f := fun n : ℕ => clampFun (vplus K) (-(n : ℝ)) n)
-    (fun n => (cvx_bv_clampFun (lemma5_2_1 hK _ _)).stronglyMeasurable) ?_
+    (fun n => (boundedVariationOn_clampFun (neg_le_self n.cast_nonneg)
+      (lemma5_2_1 hK _ _)).stronglyMeasurable) ?_
   rw [tendsto_pi_nhds]
   intro t
   apply tendsto_const_nhds.congr'
   filter_upwards [Filter.eventually_ge_atTop ⌈|t|⌉₊] with n hn
   have h1 : |t| ≤ n := (Nat.le_ceil _).trans (by exact_mod_cast hn)
-  exact (cvx_clampFun_eq _ ⟨by linarith [neg_abs_le t], (le_abs_self t).trans h1⟩).symm
+  exact (clampFun_of_mem ⟨by linarith [neg_abs_le t], (le_abs_self t).trans h1⟩).symm
 
-lemma cvx_leftLim_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    Function.leftLim (vplus K) t = vminus K t :=
-  leftLim_eq_of_tendsto (tendsto_vplus_left hK t)
-
+/-- `v_K⁻` is strongly measurable: it is the left limit of `v_K⁺`. -/
 lemma cvx_stronglyMeasurable_vminus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     StronglyMeasurable (vminus K) := by
   refine stronglyMeasurable_of_tendsto Filter.atTop
     (f := fun n : ℕ => Function.leftLim (clampFun (vplus K) (-(n : ℝ)) n))
-    (fun n => (cvx_bv_clampFun (lemma5_2_1 hK _ _)).leftLim.stronglyMeasurable) ?_
+    (fun n => (boundedVariationOn_clampFun (neg_le_self n.cast_nonneg)
+      (lemma5_2_1 hK _ _)).leftLim.stronglyMeasurable) ?_
   rw [tendsto_pi_nhds]
   intro t
   apply tendsto_const_nhds.congr'
@@ -563,31 +481,13 @@ lemma cvx_stronglyMeasurable_vminus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
   apply leftLim_eq_of_tendsto
   apply (tendsto_vplus_left hK t).congr'
   filter_upwards [Ioo_mem_nhdsLT hlt] with s hs
-  exact (cvx_clampFun_eq _ ⟨hs.1.le, hs.2.le.trans hle⟩).symm
+  exact (clampFun_of_mem ⟨hs.1.le, hs.2.le.trans hle⟩).symm
 
+/-- A convex body is bounded. -/
 lemma cvx_exists_bound {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     ∃ R : NNReal, ∀ p ∈ K, ‖p‖ ≤ R := by
   obtain ⟨R, hR⟩ := hK.isBounded.exists_norm_le
   exact ⟨R.toNNReal, fun p hp => (hR p hp).trans (Real.le_coe_toNNReal R)⟩
-
-lemma cvx_norm_vvec_le (t : ℝ) : ‖vvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  simp only [vvec, Real.norm_eq_abs, abs_neg]
-  exact max_le (abs_sin_le_one t) (abs_cos_le_one t)
-
-lemma cvx_norm_uvec_le (t : ℝ) : ‖uvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  simp only [uvec, Real.norm_eq_abs]
-  exact max_le (abs_cos_le_one t) (abs_sin_le_one t)
-
-/-- The restriction of a vector measure with density. -/
-lemma cvx_withDensityᵥ_restrict {X E : Type*} [MeasurableSpace X] [NormedAddCommGroup E]
-    [NormedSpace ℝ E] {μ : Measure X} {f : X → E} (hf : Integrable f μ) {s : Set X}
-    (hs : MeasurableSet s) :
-    (μ.withDensityᵥ f).restrict s = (μ.restrict s).withDensityᵥ f := by
-  ext t ht
-  rw [VectorMeasure.restrict_apply _ hs ht, withDensityᵥ_apply hf (ht.inter hs),
-    withDensityᵥ_apply hf.restrict ht, Measure.restrict_restrict ht]
 
 /-- On `(a, b)`, `dv_K⁺ = v_t σ_K` (Theorem 5.2.2) as vector measures restricted to `(a, b)`. -/
 lemma cvx_lsMeasure_vplus_restrict_Ioo {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
@@ -598,12 +498,26 @@ lemma cvx_lsMeasure_vplus_restrict_Ioo {K : Set (ℝ × ℝ)} (hK : IsConvexBody
   have hvi : Integrable vvec ((sigma K).restrict (Ioc a b)) := by
     have : IsFiniteMeasure ((sigma K).restrict (Ioc a b)) :=
       isFiniteMeasure_restrict.2 (measure_Ioc_lt_top).ne
-    exact Integrable.of_bound (by unfold vvec; fun_prop : Continuous vvec).aestronglyMeasurable 1
-      (Filter.Eventually.of_forall cvx_norm_vvec_le)
+    exact Integrable.of_bound continuous_vvec.aestronglyMeasurable 1
+      (Filter.Eventually.of_forall norm_vvec_le)
   have e : Ioo a b = Ioo a b ∩ Ioc a b := (inter_eq_left.2 Ioo_subset_Ioc_self).symm
   conv_lhs => rw [e, ← VectorMeasure.restrict_restrict _ measurableSet_Ioo measurableSet_Ioc]
   rw [theorem5_2_2 hK hab, cvx_withDensityᵥ_restrict hvi measurableSet_Ioo,
     Measure.restrict_restrict measurableSet_Ioo, ← e]
+
+/-- `∫_{(a,b)} g × dv_K⁺ = ∫_{(a,b)} (g · u_t) dσ_K`, since `dv_K⁺ = v_t σ_K` on `(a, b)`. -/
+lemma cvx_integral_cross_dvplus' {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
+    (hb : b < a + π) {g : ℝ → ℝ × ℝ} (hgi : Integrable g ((sigma K).restrict (Ioo a b))) :
+    ∫ᵛ t in Ioo a b, g t ∂[crossCLM; lsMeasure (vplus K) a b] =
+      ∫ t in Ioo a b, dot (g t) (uvec t) ∂(sigma K) := by
+  have : IsFiniteMeasure ((sigma K).restrict (Ioo a b)) :=
+    isFiniteMeasure_restrict.2 (measure_Ioo_lt_top).ne
+  have hvi : Integrable vvec ((sigma K).restrict (Ioo a b)) :=
+    Integrable.of_bound continuous_vvec.aestronglyMeasurable 1 (Eventually.of_forall norm_vvec_le)
+  rw [cvx_lsMeasure_vplus_restrict_Ioo hK hab hb,
+    cvx_integral_withDensityᵥ hvi (M := 1) (Eventually.of_forall
+      (fun t => by exact_mod_cast norm_vvec_le t)) crossCLM hgi]
+  simp only [crossCLM_apply, cross_vvec]
 
 /-- `½ ∫_{(a,b)} p_{K₁} × dv_{K₂}⁺ = ½ ∫_{(a,b)} h_{K₁} dσ_{K₂}` for a selection `p_{K₁}(t)` of the
 supporting lines of `K₁`. -/
@@ -616,15 +530,9 @@ lemma cvx_integral_cross_dvplus {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexB
   have : IsFiniteMeasure ((sigma K₂).restrict (Ioo a b)) :=
     isFiniteMeasure_restrict.2 (measure_Ioo_lt_top).ne
   obtain ⟨R, hR⟩ := cvx_exists_bound h₁
-  have hvi : Integrable vvec ((sigma K₂).restrict (Ioo a b)) :=
-    Integrable.of_bound (by unfold vvec; fun_prop : Continuous vvec).aestronglyMeasurable 1
-      (Filter.Eventually.of_forall cvx_norm_vvec_le)
-  have hgi : Integrable g ((sigma K₂).restrict (Ioo a b)) :=
-    Integrable.of_bound hgm R (Filter.Eventually.of_forall fun t => hR _ (hgK t))
-  rw [cvx_lsMeasure_vplus_restrict_Ioo h₂ hab hb,
-    cvx_integral_withDensityᵥ hvi (M := 1) (Filter.Eventually.of_forall
-      (fun t => by exact_mod_cast cvx_norm_vvec_le t)) crossCLM hgi]
-  simp only [crossCLM_apply, cross_vvec, hgl]
+  rw [cvx_integral_cross_dvplus' h₂ hab hb
+    (Integrable.of_bound hgm R (Eventually.of_forall fun t => hR _ (hgK t)))]
+  simp only [hgl]
 
 /-! ### The generalized inverse of a distribution function -/
 
@@ -654,6 +562,8 @@ lemma cvxQuantile_mono (hab : a ≤ b) (hL : 0 ≤ L) : Monotone (cvxQuantile f 
   · exact ⟨hat, Or.inl h⟩
   · exact ⟨hat, Or.inr (le_trans (by nlinarith) h)⟩
 
+/-- Below the jump at `b`, the generalized inverse lies in `[a, b)` and solves
+`f a + L r ≤ f (cvxQuantile r)`. -/
 lemma cvxQuantile_spec (hab : a < b) {r : ℝ} (hr : f a + L * r < leftLim f b) :
     cvxQuantile f a b L r < b ∧ f a + L * r ≤ f (cvxQuantile f a b L r) := by
   obtain ⟨t₀, ht₀, ht₀b⟩ : ∃ t₀, f a + L * r < f t₀ ∧ t₀ < b := by
@@ -674,12 +584,14 @@ lemma cvxQuantile_spec (hab : a < b) {r : ℝ} (hr : f a + L * r < leftLim f b) 
   · exact absurd (h.trans_lt (hty.trans hy.2)) (lt_irrefl _)
   · exact h.trans (f.mono hty.le)
 
+/-- The Galois connection between the generalized inverse and `f`. -/
 lemma cvxQuantile_le_iff (hab : a < b) {r t : ℝ} (hr : f a + L * r < leftLim f b) (hat : a ≤ t) :
     cvxQuantile f a b L r ≤ t ↔ f a + L * r ≤ f t := by
   constructor
   · intro h; exact (cvxQuantile_spec hab hr).2.trans (f.mono h)
   · intro h; exact csInf_le (cvxQuantile_bddBelow r) ⟨hat, Or.inr h⟩
 
+/-- For `L r > 0`, the generalized inverse is `> a`. -/
 lemma cvxQuantile_gt (hab : a < b) {r : ℝ} (hr : f a + L * r < leftLim f b) (hr0 : 0 < L * r) :
     a < cvxQuantile f a b L r := by
   rcases (cvxQuantile_mem_Icc (f := f) (L := L) hab.le r).1.lt_or_eq with h | h
@@ -688,15 +600,41 @@ lemma cvxQuantile_gt (hab : a < b) {r : ℝ} (hr : f a + L * r < leftLim f b) (h
     rw [← h] at this
     linarith
 
+/-- `(0, 1) ∩ (-∞, s]` is `(0, s]` up to a null set. -/
+lemma cvx_Ioo_inter_Iic_ae_eq {s : ℝ} (hs1 : s ≤ 1) :
+    (Ioo (0 : ℝ) 1 ∩ Iic s : Set ℝ) =ᵐ[volume] Ioc 0 s := by
+  refine ae_eq_set.2 ⟨?_, ?_⟩
+  · refine measure_mono_null (fun r hr => ?_) (measure_empty (μ := volume))
+    exact hr.2 ⟨hr.1.1.1, hr.1.2⟩
+  · refine measure_mono_null (fun r hr => ?_) (measure_singleton (1 : ℝ))
+    rw [mem_singleton_iff]
+    by_contra hne
+    exact hr.2 ⟨⟨hr.1.1, lt_of_le_of_ne (hr.1.2.trans hs1) hne⟩, hr.1.2⟩
+
+/-- `|(0, 1) ∩ (-∞, s]| = s` for `s ≤ 1` (read as `0` for `s < 0`). -/
 lemma cvx_volume_Ioo_inter_Iic {s : ℝ} (hs1 : s ≤ 1) :
     volume (Ioo (0 : ℝ) 1 ∩ Iic s) = ENNReal.ofReal s := by
-  apply le_antisymm
-  · calc volume (Ioo (0 : ℝ) 1 ∩ Iic s) ≤ volume (Icc 0 s) :=
-          measure_mono (fun r hr => ⟨hr.1.1.le, hr.2⟩)
-      _ = ENNReal.ofReal s := by rw [Real.volume_Icc, sub_zero]
-  · calc ENNReal.ofReal s = volume (Ioo 0 s) := by rw [Real.volume_Ioo, sub_zero]
-      _ ≤ volume (Ioo (0 : ℝ) 1 ∩ Iic s) :=
-          measure_mono (fun r hr => ⟨⟨hr.1, hr.2.trans_le hs1⟩, hr.2.le⟩)
+  rw [measure_congr (cvx_Ioo_inter_Iic_ae_eq hs1), Real.volume_Ioc, sub_zero]
+
+/-- For `a ≤ x` and `r ∈ (0, 1)`, the generalized inverse at `r` is at most `x` iff
+`r ≤ (f x - f a) / L`. -/
+lemma cvxQuantile_preimage_Iic (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 0 < L)
+    {x : ℝ} (hxa : a ≤ x) :
+    cvxQuantile f a b L ⁻¹' Iic x ∩ Ioo 0 1 = Ioo 0 1 ∩ Iic ((f x - f a) / L) := by
+  have hr1 : ∀ r < 1, f a + L * r < leftLim f b := by
+    intro r hr; rw [hL] at hLpos ⊢; nlinarith
+  ext r
+  simp only [mem_inter_iff, mem_preimage, mem_Iic, mem_Ioo]
+  constructor
+  · rintro ⟨hθ, hr0, hr1'⟩
+    refine ⟨⟨hr0, hr1'⟩, ?_⟩
+    rw [le_div_iff₀ hLpos]
+    have := (cvxQuantile_le_iff hab (hr1 r hr1') hxa).1 hθ
+    linarith
+  · rintro ⟨⟨hr0, hr1'⟩, hr⟩
+    refine ⟨(cvxQuantile_le_iff hab (hr1 r hr1') hxa).2 ?_, hr0, hr1'⟩
+    rw [le_div_iff₀ hLpos] at hr
+    linarith
 
 /-- **The quantile transform.** The image of the Lebesgue measure on `(0, 1)` under the generalized
 inverse of the normalized distribution function is the normalized Stieltjes measure on `(a, b)`. -/
@@ -706,8 +644,6 @@ theorem cvx_map_cvxQuantile (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 
   have hmeas : Measurable (cvxQuantile f a b L) := (cvxQuantile_mono hab.le hLpos.le).measurable
   have : IsFiniteMeasure (volume.restrict (Ioo (0 : ℝ) 1)) :=
     isFiniteMeasure_restrict.2 measure_Ioo_lt_top.ne
-  have hr1 : ∀ r < 1, f a + L * r < leftLim f b := by
-    intro r hr; rw [hL] at hLpos ⊢; nlinarith
   have hLne : ENNReal.ofReal L ≠ 0 := (ENNReal.ofReal_pos.2 hLpos).ne'
   apply Measure.ext_of_Iic
   intro x
@@ -728,19 +664,6 @@ theorem cvx_map_cvxQuantile (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 
   rcases lt_or_ge x b with hxb | hxb
   · have hsx : f a ≤ f x := f.mono hxa
     have hxl : f x ≤ leftLim f b := f.mono.le_leftLim hxb
-    have h1 : cvxQuantile f a b L ⁻¹' Iic x ∩ Ioo 0 1 = Ioo 0 1 ∩ Iic ((f x - f a) / L) := by
-      ext r
-      simp only [mem_inter_iff, mem_preimage, mem_Iic, mem_Ioo]
-      constructor
-      · rintro ⟨hθ, hr0, hr1'⟩
-        refine ⟨⟨hr0, hr1'⟩, ?_⟩
-        rw [le_div_iff₀ hLpos]
-        have := (cvxQuantile_le_iff hab (hr1 r hr1') hxa).1 hθ
-        linarith
-      · rintro ⟨⟨hr0, hr1'⟩, hr⟩
-        refine ⟨(cvxQuantile_le_iff hab (hr1 r hr1') hxa).2 ?_, hr0, hr1'⟩
-        rw [le_div_iff₀ hLpos] at hr
-        linarith
     have h2 : Iic x ∩ Ioo a b = Ioc a x := by
       ext r
       simp only [mem_inter_iff, mem_Iic, mem_Ioo, mem_Ioc]
@@ -750,7 +673,8 @@ theorem cvx_map_cvxQuantile (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 
     have hs0 : 0 ≤ (f x - f a) / L := div_nonneg (by linarith) hLpos.le
     have hs1 : (f x - f a) / L ≤ 1 := by
       rw [div_le_one hLpos, hL]; linarith
-    rw [h1, h2, cvx_volume_Ioo_inter_Iic hs1, StieltjesFunction.measure_Ioc,
+    rw [cvxQuantile_preimage_Iic hab hL hLpos hxa, h2, cvx_volume_Ioo_inter_Iic hs1,
+      StieltjesFunction.measure_Ioc,
       ENNReal.ofReal_div_of_pos hLpos, div_eq_mul_inv, mul_comm]
   · have h1 : cvxQuantile f a b L ⁻¹' Iic x ∩ Ioo 0 1 = Ioo 0 1 := by
       ext r
@@ -764,13 +688,6 @@ theorem cvx_map_cvxQuantile (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 
     rw [h1, h2, Real.volume_Ioo, sub_zero, ENNReal.ofReal_one, StieltjesFunction.measure_Ioo,
       ← hL, ENNReal.inv_mul_cancel hLne ENNReal.ofReal_ne_top]
 
-end quantile
-
-
-section quantile2
-
-variable {f : StieltjesFunction ℝ} {a b L : ℝ}
-
 /-- Integrals of functions of the quantile. -/
 lemma cvx_integral_comp_cvxQuantile {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 0 < L) {g : ℝ → E} (hg : Continuous g)
@@ -783,25 +700,7 @@ lemma cvx_integral_comp_cvxQuantile {E : Type*} [NormedAddCommGroup E] [NormedSp
     integral_smul_measure, Measure.restrict_restrict hA, ENNReal.toReal_inv,
     ENNReal.toReal_ofReal hLpos.le]
 
-lemma cvxQuantile_preimage_Iic (hab : a < b) (hL : L = leftLim f b - f a) (hLpos : 0 < L)
-    {x : ℝ} (hxa : a ≤ x) :
-    cvxQuantile f a b L ⁻¹' Iic x ∩ Ioo 0 1 = Ioo 0 1 ∩ Iic ((f x - f a) / L) := by
-  have hr1 : ∀ r < 1, f a + L * r < leftLim f b := by
-    intro r hr; rw [hL] at hLpos ⊢; nlinarith
-  ext r
-  simp only [mem_inter_iff, mem_preimage, mem_Iic, mem_Ioo]
-  constructor
-  · rintro ⟨hθ, hr0, hr1'⟩
-    refine ⟨⟨hr0, hr1'⟩, ?_⟩
-    rw [le_div_iff₀ hLpos]
-    have := (cvxQuantile_le_iff hab (hr1 r hr1') hxa).1 hθ
-    linarith
-  · rintro ⟨⟨hr0, hr1'⟩, hr⟩
-    refine ⟨(cvxQuantile_le_iff hab (hr1 r hr1') hxa).2 ?_, hr0, hr1'⟩
-    rw [le_div_iff₀ hLpos] at hr
-    linarith
-
-end quantile2
+end quantile
 
 /-! ### The arc-length parametrization of a convex arc -/
 
@@ -825,8 +724,6 @@ section param
 
 variable {K : Set (ℝ × ℝ)} {a b : ℝ}
 
-lemma cvx_sigma_eq_measure (K : Set (ℝ × ℝ)) : sigma K = (sigmaStieltjes K).measure := rfl
-
 lemma cvxArcL_nonneg (hab : a < b) : 0 ≤ cvxArcL K a b :=
   sub_nonneg.2 ((sigmaStieltjes K).mono.le_leftLim hab)
 
@@ -834,20 +731,16 @@ lemma cvx_sigma_Ioo (K : Set (ℝ × ℝ)) (a b : ℝ) :
     sigma K (Ioo a b) = ENNReal.ofReal (cvxArcL K a b) :=
   (sigmaStieltjes K).measure_Ioo
 
-lemma cvx_continuous_vvec : Continuous vvec := by unfold vvec; fun_prop
-
-lemma cvx_continuous_uvec : Continuous uvec := by unfold uvec; fun_prop
-
 lemma cvxArcθ_measurable (hab : a < b) : Measurable (cvxArcθ K a b) :=
   (cvxQuantile_mono hab.le (cvxArcL_nonneg hab)).measurable
 
 lemma cvxArcψ_measurable (hab : a < b) : Measurable (cvxArcψ K a b) := by
   show Measurable (fun r => cvxArcL K a b • vvec (cvxArcθ K a b r))
-  exact (cvx_continuous_vvec.measurable.comp (cvxArcθ_measurable hab)).const_smul (cvxArcL K a b)
+  exact (continuous_vvec.measurable.comp (cvxArcθ_measurable hab)).const_smul (cvxArcL K a b)
 
 lemma cvxArcψ_norm_le (hab : a < b) (r : ℝ) : ‖cvxArcψ K a b r‖ ≤ cvxArcL K a b := by
   rw [cvxArcψ, norm_smul, Real.norm_of_nonneg (cvxArcL_nonneg hab)]
-  exact mul_le_of_le_one_right (cvxArcL_nonneg hab) (cvx_norm_vvec_le _)
+  exact mul_le_of_le_one_right (cvxArcL_nonneg hab) (norm_vvec_le _)
 
 lemma cvxArcψ_integrableOn (hab : a < b) {s : Set ℝ} (hs : volume s ≠ ⊤) :
     IntegrableOn (cvxArcψ K a b) s :=
@@ -857,23 +750,14 @@ lemma cvxArcψ_integrableOn (hab : a < b) {s : Set ℝ} (hs : volume s ≠ ⊤) 
 
 lemma cvxArcψ_intervalIntegrable (hab : a < b) (u v : ℝ) :
     IntervalIntegrable (cvxArcψ K a b) volume u v :=
-  (cvxArcψ_integrableOn hab (by rw [Real.volume_interval]; exact ENNReal.ofReal_ne_top)).intervalIntegrable
-
-lemma cvx_Ioo_inter_Iic_ae_eq {s : ℝ} (hs1 : s ≤ 1) :
-    (Ioo (0 : ℝ) 1 ∩ Iic s : Set ℝ) =ᵐ[volume] Ioc 0 s := by
-  refine ae_eq_set.2 ⟨?_, ?_⟩
-  · refine measure_mono_null (fun r hr => ?_) (measure_empty (μ := volume))
-    exact hr.2 ⟨hr.1.1.1, hr.1.2⟩
-  · refine measure_mono_null (fun r hr => ?_) (measure_singleton (1 : ℝ))
-    rw [mem_singleton_iff]
-    by_contra hne
-    exact hr.2 ⟨⟨hr.1.1, lt_of_le_of_ne (hr.1.2.trans hs1) hne⟩, hr.1.2⟩
+  (cvxArcψ_integrableOn hab
+    (by rw [Real.volume_interval]; exact ENNReal.ofReal_ne_top)).intervalIntegrable
 
 /-- `∫_{(a, b)} v_t dσ_K(t) = v_K⁻(b) - v_K⁺(a)`. -/
 lemma cvx_integral_vvec_Ioo (hK : IsConvexBody K) (hab : a < b) :
     ∫ t in Ioo a b, vvec t ∂(sigma K) = vminus K b - vplus K a := by
   have h1 := vplus_sub_vplus hK hab.le
-  have hint : IntegrableOn vvec (Icc a b) (sigma K) := cvx_continuous_vvec.integrableOn_Icc
+  have hint : IntegrableOn vvec (Icc a b) (sigma K) := continuous_vvec.integrableOn_Icc
   rw [← Set.Ioo_union_right hab, setIntegral_union (Set.disjoint_left.2 fun t ht ht' => by
       rw [mem_singleton_iff] at ht'; rw [ht'] at ht; exact lt_irrefl _ ht.2)
     (measurableSet_singleton b) (hint.mono_set Ioo_subset_Icc_self)
@@ -888,7 +772,8 @@ lemma cvx_integral_vvec_Ioo (hK : IsConvexBody K) (hab : a < b) :
 
 lemma cvxArc_zero : cvxArc K a b 0 = vplus K a := by simp [cvxArc]
 
-lemma cvxArc_primitive (s : ℝ) : cvxArc K a b s = cvxArc K a b 0 + ∫ r in (0 : ℝ)..s, cvxArcψ K a b r := by
+lemma cvxArc_primitive (s : ℝ) :
+    cvxArc K a b s = cvxArc K a b 0 + ∫ r in (0 : ℝ)..s, cvxArcψ K a b r := by
   rw [cvxArc_zero]; rfl
 
 lemma cvxArc_continuous (hab : a < b) : Continuous (cvxArc K a b) :=
@@ -918,8 +803,8 @@ lemma cvxArc_vplus (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a 
   rw [intervalIntegral.integral_of_le hs0, ← setIntegral_congr_set hset]
   simp only [cvxArcψ]
   rw [integral_smul, cvxArcθ, cvx_integral_comp_cvxQuantile (L := cvxArcL K a b) hab rfl hLpos
-    cvx_continuous_vvec measurableSet_Iic, smul_smul, mul_inv_cancel₀ hLpos.ne', one_smul, hIoc,
-    ← cvx_sigma_eq_measure, ← vplus_sub_vplus hK hxa]
+    continuous_vvec measurableSet_Iic, smul_smul, mul_inv_cancel₀ hLpos.ne', one_smul, hIoc,
+    ← sigma_eq_measure, ← vplus_sub_vplus hK hxa]
   abel
 
 /-- The parametrization ends at `v_K⁻(b)`. -/
@@ -931,8 +816,8 @@ lemma cvxArc_one (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a b)
   rw [e]
   simp only [cvxArcψ]
   rw [integral_smul, cvxArcθ, cvx_integral_comp_cvxQuantile (L := cvxArcL K a b) hab rfl hLpos
-    cvx_continuous_vvec MeasurableSet.univ, smul_smul, mul_inv_cancel₀ hLpos.ne', one_smul, univ_inter,
-    ← cvx_sigma_eq_measure, cvx_integral_vvec_Ioo hK hab]
+    continuous_vvec MeasurableSet.univ, smul_smul, mul_inv_cancel₀ hLpos.ne', one_smul, univ_inter,
+    ← sigma_eq_measure, cvx_integral_vvec_Ioo hK hab]
   abel
 
 /-- The parametrization passes through `v_K⁻(x)` at the normalized arc length of `(a, x)`. -/
@@ -1037,11 +922,6 @@ lemma cvxArcθ_spec (hab : a < b) (hLpos : 0 < cvxArcL K a b) {s : ℝ} (hs : s 
     unfold cvxArcθ
     linarith [hspec.2]
 
-lemma cvx_sigmaAt_eq (K : Set (ℝ × ℝ)) (t : ℝ) :
-    sigmaAt K t = sigmaStieltjes K t - leftLim (sigmaStieltjes K) t := by
-  rw [sigmaAt, cvx_sigma_eq_measure, StieltjesFunction.measure_singleton,
-    ENNReal.toReal_ofReal (sub_nonneg.2 ((sigmaStieltjes K).mono.leftLim_le le_rfl))]
-
 /-- A point `v_K⁻(t) + λ v_t` with `0 ≤ λ ≤ σ_K(t)` lies on the edge `e_K(t)`. -/
 lemma cvx_mem_edge_of (hK : IsConvexBody K) {t lam : ℝ} (h0 : 0 ≤ lam) (h1 : lam ≤ sigmaAt K t) :
     vminus K t + lam • vvec t ∈ edge K t := by
@@ -1054,14 +934,16 @@ lemma cvx_mem_edge_of (hK : IsConvexBody K) {t lam : ℝ} (h0 : 0 ≤ lam) (h1 :
     refine ⟨lam / sigmaAt K t, ⟨div_nonneg h0 hσ.le, (div_le_one hσ).2 h1⟩, ?_⟩
     simp only [hv, smul_smul, div_mul_cancel₀ _ hσ.ne']
 
+/-- At `s ∈ (0, 1)` the parametrization lies on the edge with normal angle `cvxArcθ s`. -/
 lemma cvxArc_mem_edge (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a b) {s : ℝ}
     (hs : s ∈ Ioo (0 : ℝ) 1) : cvxArc K a b s ∈ edge K (cvxArcθ K a b s) := by
   obtain ⟨hx, h1, h2⟩ := cvxArcθ_spec hab hLpos hs
   rw [cvxArc_edge hK hab hLpos hx.1 hx.2 h1 h2]
   apply cvx_mem_edge_of hK
   · rw [div_le_iff₀ hLpos] at h1; linarith
-  · rw [cvx_sigmaAt_eq]; rw [le_div_iff₀ hLpos] at h2; linarith
+  · rw [sigmaAt_eq_jump]; rw [le_div_iff₀ hLpos] at h2; linarith
 
+/-- The parametrization sweeps out the convex curve `𝐮_K^{a,b}`. -/
 lemma cvxArc_image (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a b) :
     cvxArc K a b '' Icc 0 1 = convexCurve K a b := by
   apply Subset.antisymm
@@ -1097,21 +979,12 @@ lemma cvxArc_image (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a 
       have hv : vplus K t - vminus K t = sigmaAt K t • vvec t := by
         rw [(proposition2_1_2 hK t).2]; abel
       show _ = vminus K t + μ • (vplus K t - vminus K t)
-      rw [hv, smul_smul, cvx_sigmaAt_eq]
+      rw [hv, smul_smul, sigmaAt_eq_jump]
       congr 2
       rw [hs₀, hs₁]
       field_simp
       ring
     · exact ⟨1, ⟨zero_le_one, le_rfl⟩, cvxArc_one hK hab hLpos⟩
-
-/-- The dot product with a fixed vector, as a continuous linear map. -/
-noncomputable def cvxDotCLM (q : ℝ × ℝ) : (ℝ × ℝ) →L[ℝ] ℝ :=
-  q.1 • ContinuousLinearMap.fst ℝ ℝ ℝ + q.2 • ContinuousLinearMap.snd ℝ ℝ ℝ
-
-lemma cvxDotCLM_apply (q p : ℝ × ℝ) : cvxDotCLM q p = dot p q := by
-  simp only [cvxDotCLM, add_apply, smul_apply,
-    ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd', smul_eq_mul, dot]
-  ring
 
 /-- The cosine of the angle between `v_t` and `v_m` for `t ∈ [a, b]` and the midpoint `m`. -/
 lemma cvx_cos_ge {t : ℝ} (ht : t ∈ Icc a b) (hb : b < a + π) :
@@ -1120,6 +993,8 @@ lemma cvx_cos_ge {t : ℝ} (ht : t ∈ Icc a b) (hb : b < a + π) :
   apply Real.cos_le_cos_of_nonneg_of_le_pi (abs_nonneg _) (by linarith [ht.1, ht.2])
   rw [abs_le]; constructor <;> linarith [ht.1, ht.2]
 
+/-- The parametrization is injective: its velocity has a positive component along `v_m`, `m` the
+midpoint of `[a, b]`. -/
 lemma cvxArc_injOn (hab : a < b) (hb : b < a + π) (hLpos : 0 < cvxArcL K a b) :
     InjOn (cvxArc K a b) (Icc 0 1) := by
   have hcos : 0 < cos ((b - a) / 2) := cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩
@@ -1131,17 +1006,17 @@ lemma cvxArc_injOn (hab : a < b) (hb : b < a + π) (hLpos : 0 < cvxArcL K a b) :
       simp only [cvxArc]
       rw [add_sub_add_left_eq_sub, intervalIntegral.integral_interval_sub_left
         (cvxArcψ_intervalIntegrable hab 0 s₂) (cvxArcψ_intervalIntegrable hab 0 s₁)]
-    rw [hsub, ← cvxDotCLM_apply, ← (cvxDotCLM _).intervalIntegral_comp_comm hi]
-    have hi' : IntervalIntegrable (fun r => cvxDotCLM (vvec ((a + b) / 2)) (cvxArcψ K a b r))
+    rw [hsub, ← dotCLM_apply, ← (dotCLM _).intervalIntegral_comp_comm hi]
+    have hi' : IntervalIntegrable (fun r => dotCLM (vvec ((a + b) / 2)) (cvxArcψ K a b r))
         volume s₁ s₂ :=
-      ⟨(cvxDotCLM _).integrable_comp hi.1, (cvxDotCLM _).integrable_comp hi.2⟩
+      ⟨(dotCLM _).integrable_comp hi.1, (dotCLM _).integrable_comp hi.2⟩
     calc cvxArcL K a b * cos ((b - a) / 2) * (s₂ - s₁)
         = ∫ _ in s₁..s₂, cvxArcL K a b * cos ((b - a) / 2) := by
           rw [intervalIntegral.integral_const, smul_eq_mul]; ring
-      _ ≤ ∫ r in s₁..s₂, cvxDotCLM (vvec ((a + b) / 2)) (cvxArcψ K a b r) := by
+      _ ≤ ∫ r in s₁..s₂, dotCLM (vvec ((a + b) / 2)) (cvxArcψ K a b r) := by
           apply intervalIntegral.integral_mono_on h12.le intervalIntegrable_const hi'
           intro r _
-          rw [cvxDotCLM_apply, cvxArcψ, dot_smul_left, dot_vvec_vvec]
+          rw [dotCLM_apply, cvxArcψ, dot_smul_left, dot_vvec_vvec]
           exact mul_le_mul_of_nonneg_left
             (cvx_cos_ge (cvxQuantile_mem_Icc hab.le r) hb) (cvxArcL_nonneg hab)
   intro s₁ _ s₂ _ heq
@@ -1154,6 +1029,7 @@ lemma cvxArc_injOn (hab : a < b) (hb : b < a + π) (hLpos : 0 < cvxArcL K a b) :
     rw [heq, sub_self, dot_zero_left] at this
     nlinarith [mul_pos (mul_pos hLpos hcos) (sub_pos.2 h)]
 
+/-- The curve area functional of the parametrization is `½ ∫_{(a,b)} h_K dσ_K`. -/
 lemma cvxArc_curveArea (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL K a b) :
     curveArea (cvxArc K a b) 0 1 = convexCurveArea K a b := by
   rw [cvx_curveArea_of_primitive (M := (cvxArcL K a b).toNNReal) zero_le_one
@@ -1171,7 +1047,7 @@ lemma cvxArc_curveArea (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL 
   have e : Ioo (0 : ℝ) 1 = cvxArcθ K a b ⁻¹' univ ∩ Ioo 0 1 := by simp
   rw [e, cvxArcθ, cvx_integral_comp_cvxQuantile (L := cvxArcL K a b) hab rfl hLpos
     (continuous_supp hK.2.1) MeasurableSet.univ, univ_inter, smul_eq_mul, ← mul_assoc,
-    mul_inv_cancel₀ hLpos.ne', one_mul, ← cvx_sigma_eq_measure]
+    mul_inv_cancel₀ hLpos.ne', one_mul, ← sigma_eq_measure]
 
 /-- If the arc degenerates to a point, it carries no surface area measure. -/
 lemma cvxArcL_eq_zero (hK : IsConvexBody K) (hab : a < b) (hb : b < a + π)
@@ -1182,13 +1058,13 @@ lemma cvxArcL_eq_zero (hK : IsConvexBody K) (hab : a < b) (hb : b < a + π)
     isFiniteMeasure_restrict.2 measure_Ioo_lt_top.ne
   have hcos : 0 < cos ((b - a) / 2) := cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩
   have hvi : IntegrableOn vvec (Ioo a b) (sigma K) :=
-    cvx_continuous_vvec.integrableOn_Icc.mono_set Ioo_subset_Icc_self
-  have hdot : cvxDotCLM (vvec ((a + b) / 2)) (∫ t in Ioo a b, vvec t ∂(sigma K)) =
+    continuous_vvec.integrableOn_Icc.mono_set Ioo_subset_Icc_self
+  have hdot : dotCLM (vvec ((a + b) / 2)) (∫ t in Ioo a b, vvec t ∂(sigma K)) =
       ∫ t in Ioo a b, cos (t - (a + b) / 2) ∂(sigma K) := by
-    rw [← (cvxDotCLM _).integral_comp_comm hvi]
+    rw [← (dotCLM _).integral_comp_comm hvi]
     congr 1
     funext t
-    rw [cvxDotCLM_apply, dot_vvec_vvec]
+    rw [dotCLM_apply, dot_vvec_vvec]
   rw [hint, map_zero] at hdot
   have hge : (sigma K).real (Ioo a b) * cos ((b - a) / 2) ≤
       ∫ t in Ioo a b, cos (t - (a + b) / 2) ∂(sigma K) := by
@@ -1236,34 +1112,19 @@ theorem theorem7_3_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (h
         have := cvx_integral_vvec_Ioo hK hab
         rw [Measure.restrict_eq_zero.2 hσ0, integral_zero_measure] at this
         exact (sub_eq_zero.1 this.symm).symm
-    have hlip := cvx_lipschitzOnWith_of_primitive (a := 0) (b := 1) (M := (cvxArcL K a b).toNNReal)
-      (cvxArcψ_integrableOn (K := K) (s := Icc 0 1) hab
-        (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top))
+    obtain ⟨hbv, hc⟩ := cvx_bv_of_primitive (M := (cvxArcL K a b).toNNReal) zero_le_one
+      (cvxArcψ_integrableOn (K := K) hab (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top))
       (fun r _ => (cvxArcψ_norm_le hab r).trans (Real.le_coe_toNNReal _))
       (fun t _ => cvxArc_primitive t)
-    refine ⟨cvxArc K a b, ⟨hlip.continuousOn, ?_⟩, cvxArc_image hK hab hLpos, cvxArc_zero,
+    exact ⟨cvxArc K a b, ⟨hc, hbv⟩, cvxArc_image hK hab hLpos, cvxArc_zero,
       cvxArc_one hK hab hLpos, fun _ => cvxArc_injOn hab hb hLpos, cvxArc_curveArea hK hab hLpos⟩
-    have := hlip.locallyBoundedVariationOn 0 1 ⟨le_rfl, zero_le_one⟩ ⟨zero_le_one, le_rfl⟩
-    rwa [inter_self] at this
 
 
 /-- **Theorem 7.3.2**, last claim: `𝒥(𝐮_K^{a,b})` is quadratic in `K`. -/
 theorem theorem7_3_2_quadratic {a b : ℝ} :
-    convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) := by
-  have hbil := cvx_integral_supp_sigma_bilin (X := Ioo a b) (Metric.isBounded_Ioo _ _)
-  refine ⟨fun K₁ K₂ => convexCurveBilin K₁.1 K₂.1 a b, ⟨?_, ?_⟩, fun K => rfl⟩
-  · intro K₁ c hc v w
-    have := hbil.1 K₁ c hc v w
-    simp only [realDomain] at this ⊢
-    simp only [convexCurveBilin]
-    rw [this]
-    ring
-  · intro K₂ c hc v w
-    have := hbil.2 K₂ c hc v w
-    simp only [realDomain] at this ⊢
-    simp only [convexCurveBilin]
-    rw [this]
-    ring
+    convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) :=
+  ⟨fun K₁ K₂ => convexCurveBilin K₁.1 K₂.1 a b,
+    (cvx_integral_supp_sigma_bilin (Metric.isBounded_Ioo a b)).const_mul (1 / 2), fun _ => rfl⟩
 
 /-- **Lemma 7.3.3** (`lem:convex-curve-bilinear-computation`).
 `𝓑(K₁, K₂) = ½ ∫_{(a,b)} v_{K₁}⁺ × dv_{K₂}⁺ = ½ ∫_{(a,b)} v_{K₁}⁻ × dv_{K₂}⁺`, and in particular
@@ -1284,9 +1145,11 @@ theorem lemma7_3_3 {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
       (fun t => (vminus_mem_edge h₁ t).1) (dot_vminus_uvec K₁)]
     rfl
 
+/-- **Lemma 7.3.3**, the case `K₁ = K₂ = K`: `𝒥(𝐮_K^{a,b}) = ½ ∫_{(a,b)} v_K⁺ × dv_K⁺`. -/
 theorem lemma7_3_3_self {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) :
-    convexCurveArea K a b = (1 / 2) * ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM; lsMeasure (vplus K) a b] :=
+    convexCurveArea K a b =
+      (1 / 2) * ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM; lsMeasure (vplus K) a b] :=
   (lemma7_3_3 hK hK hab hb).1
 
 /-- **Lemma 7.3.4** (`lem:convex-curve-concat`). For `a < b < c < a + π`, `𝐮_K^{a,c}` is the
@@ -1299,7 +1162,8 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
       convexCurveArea K a c =
         convexCurveArea K a b + segArea (vminus K b) (vplus K b) + convexCurveArea K b c := by
   refine ⟨?_, ?_, ?_, ?_⟩
-  · ext q
+  · -- the union: split the normal angles `t ∈ (a, c)` at `b`
+    ext q
     simp only [convexCurve, mem_union, mem_singleton_iff, mem_iUnion, exists_prop, mem_Ioo]
     constructor
     · rintro ((rfl | ⟨t, ⟨hat, htc⟩, hq⟩) | rfl)
@@ -1317,7 +1181,8 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
       · exact Or.inl (Or.inr ⟨b, ⟨hab, hbc⟩, vplus_mem_edge hK b⟩)
       · exact Or.inl (Or.inr ⟨t, ⟨hab.trans hbt, htc⟩, hq⟩)
       · exact Or.inr rfl
-  · ext q
+  · -- the edges `e_K(t)`, `t < b`, meet `e_K(b)` only at `v_K⁻(b)`
+    ext q
     simp only [mem_inter_iff, mem_singleton_iff]
     constructor
     · rintro ⟨hq, hqb⟩
@@ -1328,7 +1193,8 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
       · rfl
     · rintro rfl
       exact ⟨by simp [convexCurve], vminus_mem_edge hK b⟩
-  · ext q
+  · -- the edges `e_K(t)`, `t > b`, meet `e_K(b)` only at `v_K⁺(b)`
+    ext q
     simp only [mem_inter_iff, mem_singleton_iff]
     constructor
     · rintro ⟨hqb, hq⟩
@@ -1339,7 +1205,8 @@ theorem lemma7_3_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b c : ℝ} (h
       · exact cvx_edge_inter_eq_vplus hK hbc (by linarith) hqb (vminus_mem_edge hK c)
     · rintro rfl
       exact ⟨vplus_mem_edge hK b, by simp [convexCurve]⟩
-  · have hint : ∀ s ⊆ Icc a c, IntegrableOn (supp K) s (sigma K) := fun s hs =>
+  · -- additivity: `(a, c) = (a, b) ∪ {b} ∪ (b, c)`, and the atom at `b` is `𝒥(v_K⁻(b), v_K⁺(b))`
+    have hint : ∀ s ⊆ Icc a c, IntegrableOn (supp K) s (sigma K) := fun s hs =>
       ((continuous_supp hK.2.1).integrableOn_Icc).mono_set hs
     have hsplit : Ioo a c = Ioo a b ∪ {b} ∪ Ioo b c := by
       ext t
@@ -1383,6 +1250,7 @@ variable {K L : Set (ℝ × ℝ)}
 
 /-! ### Periodicity -/
 
+/-- `σ_K` is invariant under translation by multiples of `2π`. -/
 lemma cvx_sigma_shift (hK : IsConvexBody K) (k : ℤ) (X : Set ℝ) :
     sigma K ((fun t => t + k * (2 * π)) '' X) = sigma K X := by
   induction k using Int.induction_on generalizing X with
@@ -1398,6 +1266,7 @@ lemma cvx_sigma_shift (hK : IsConvexBody K) (k : ℤ) (X : Set ℝ) :
       rw [image_image]; congr 1; funext t; push_cast; ring
     rw [← sigma_periodic hK, e, ih]
 
+/-- `σ_K` is invariant under the action of `2πℤ`. -/
 lemma cvx_vaddInvariant (hK : IsConvexBody K) :
     VAddInvariantMeasure (AddSubgroup.zmultiples (2 * π)) ℝ (sigma K) := by
   constructor
@@ -1437,66 +1306,8 @@ lemma cvx_integral_window (hK : IsConvexBody K) (L : Set (ℝ × ℝ)) (s : ℝ)
 
 /-! ### The surface area measure where the vertex is constant -/
 
-lemma cvx_sigmaStieltjes_apply (hL : IsConvexBody L) (t : ℝ) :
-    sigmaStieltjes L t = sigmaFun L t := by
-  simp [sigmaStieltjes, hL]
-
-lemma cvx_hasDerivAt_dot_vvec (p : ℝ × ℝ) (t : ℝ) :
-    HasDerivAt (fun s => -dot p (vvec s)) (dot p (uvec t)) t := by
-  have h := ((Real.hasDerivAt_sin t).const_mul p.1).sub ((Real.hasDerivAt_cos t).const_mul p.2)
-  convert h using 1
-  · funext s; simp only [dot, vvec, Pi.sub_apply]; ring
-  · simp only [dot, uvec]; ring
-
-/-- If the vertex `v_L⁺` is constant on `[x, y]`, the distribution function of `σ_L` is too. -/
-lemma cvx_sigmaFun_eq_of_vplus_const (hL : IsConvexBody L) {x y : ℝ} (hxy : x ≤ y) {p : ℝ × ℝ}
-    (hp : ∀ t ∈ Icc x y, vplus L t = p) : sigmaFun L y = sigmaFun L x := by
-  have hsupp : ∀ t ∈ Icc x y, supp L t = dot p (uvec t) := fun t ht => by
-    rw [← hp t ht, dot_vplus_uvec]
-  have hc := continuous_supp hL.2.1
-  have hint : ∫ s in x..y, supp L s = dot p (vvec x) - dot p (vvec y) := by
-    rw [intervalIntegral.integral_congr (g := fun s => dot p (uvec s)) (fun t ht => by
-      rw [uIcc_of_le hxy] at ht; exact hsupp t ht),
-      intervalIntegral.integral_eq_sub_of_hasDerivAt (fun s _ => cvx_hasDerivAt_dot_vvec p s)
-        ((by unfold dot uvec; fun_prop : Continuous fun s => dot p (uvec s)).intervalIntegrable _ _)]
-    ring
-  have h1 : ∫ s in (0 : ℝ)..y, supp L s = (∫ s in (0 : ℝ)..x, supp L s) + ∫ s in x..y, supp L s :=
-    (intervalIntegral.integral_add_adjacent_intervals (hc.intervalIntegrable _ _)
-      (hc.intervalIntegrable _ _)).symm
-  simp only [sigmaFun, hp y ⟨hxy, le_rfl⟩, hp x ⟨le_rfl, hxy⟩, h1, hint]
-  ring
-
-lemma cvx_sigma_Ioc_eq_zero (hL : IsConvexBody L) {x y : ℝ} (hxy : x ≤ y) {p : ℝ × ℝ}
-    (hp : ∀ t ∈ Icc x y, vplus L t = p) : sigma L (Ioc x y) = 0 := by
-  rw [sigma_Ioc hL, cvx_sigmaFun_eq_of_vplus_const hL hxy hp, sub_self, ENNReal.ofReal_zero]
-
-lemma cvx_sigma_Ioo_eq_zero (hL : IsConvexBody L) {x y : ℝ} (hxy : x < y) {p : ℝ × ℝ}
-    (hp : ∀ t ∈ Ico x y, vplus L t = p) : sigma L (Ioo x y) = 0 := by
-  rw [cvx_sigma_eq_measure, StieltjesFunction.measure_Ioo]
-  have hlim : leftLim (sigmaStieltjes L) y = sigmaStieltjes L x := by
-    apply leftLim_eq_of_tendsto
-    apply tendsto_const_nhds.congr'
-    filter_upwards [Ioo_mem_nhdsLT hxy] with t ht
-    rw [cvx_sigmaStieltjes_apply hL, cvx_sigmaStieltjes_apply hL]
-    exact (cvx_sigmaFun_eq_of_vplus_const hL ht.1.le
-      (fun s hs => hp s ⟨hs.1, hs.2.trans_lt ht.2⟩)).symm
-  rw [hlim, sub_self, ENNReal.ofReal_zero]
-
-lemma cvx_sigma_singleton_eq_zero (hL : IsConvexBody L) {t : ℝ} (h : vplus L t = vminus L t) :
-    sigma L {t} = 0 := by
-  have h2 := (proposition2_1_2 hL t).2
-  rw [h, left_eq_add] at h2
-  have hv : vvec t ≠ 0 := by
-    intro hv0
-    have := dot_vvec_self t
-    rw [hv0, dot_zero_left] at this
-    exact zero_ne_one this
-  have hs : sigmaAt L t = 0 := (smul_eq_zero.1 h2).resolve_right hv
-  rw [sigmaAt, ENNReal.toReal_eq_zero_iff] at hs
-  rcases hs with hs | hs
-  · exact hs
-  · exact absurd hs (isCompact_singleton.measure_lt_top).ne
-
+/-- If the distribution functions of `σ_L` and `σ_K` differ by a constant on `[a, b)`, the
+measures agree on `(a, b)`. -/
 lemma cvx_sigma_restrict_Ioo_eq (hK : IsConvexBody K) (hL : IsConvexBody L) {a b : ℝ}
     (hab : a < b) (C : ℝ) (h : ∀ t ∈ Ico a b, sigmaFun L t = sigmaFun K t + C) :
     (sigma L).restrict (Ioo a b) = (sigma K).restrict (Ioo a b) := by
@@ -1521,33 +1332,30 @@ lemma cvx_sigma_restrict_Ioo_eq (hK : IsConvexBody K) (hL : IsConvexBody L) {a b
   · have e : Iic x ∩ Ioo a b = Ioo a b := by
       ext t; simp only [mem_inter_iff, mem_Iic, mem_Ioo, and_iff_right_iff_imp]
       rintro ⟨_, h2⟩; exact h2.le.trans hxb
-    rw [e, cvx_sigma_eq_measure, cvx_sigma_eq_measure, StieltjesFunction.measure_Ioo,
+    rw [e, sigma_eq_measure, sigma_eq_measure, StieltjesFunction.measure_Ioo,
       StieltjesFunction.measure_Ioo]
     have hlim : leftLim (sigmaStieltjes L) b = leftLim (sigmaStieltjes K) b + C := by
       apply leftLim_eq_of_tendsto
       have := ((sigmaStieltjes K).mono.tendsto_leftLim b).add_const C
       apply this.congr'
       filter_upwards [Ioo_mem_nhdsLT hab] with t ht
-      rw [cvx_sigmaStieltjes_apply hK, cvx_sigmaStieltjes_apply hL, h t ⟨ht.1.le, ht.2⟩]
-    rw [hlim, cvx_sigmaStieltjes_apply hL a, cvx_sigmaStieltjes_apply hK a, h a ⟨le_rfl, hab⟩]
+      rw [sigmaStieltjes_apply hK, sigmaStieltjes_apply hL, h t ⟨ht.1.le, ht.2⟩]
+    rw [hlim, sigmaStieltjes_apply hL a, sigmaStieltjes_apply hK a, h a ⟨le_rfl, hab⟩]
     congr 1; ring
 
-lemma cvx_edge_add_two_pi (L : Set (ℝ × ℝ)) (t : ℝ) : edge L (t + 2 * π) = edge L t := by
-  simp only [edge, suppLine, line, supp_add_two_pi, uvec_add_two_pi]
-
-lemma cvx_vplus_add_two_pi (L : Set (ℝ × ℝ)) (t : ℝ) : vplus L (t + 2 * π) = vplus L t := by
-  simp only [vplus, cvx_edge_add_two_pi, supp_add_two_pi, uvec_add_two_pi, vvec_add_two_pi]
-
+/-- Equal edges have equal support values. -/
 lemma cvx_supp_eq_of_edge_eq (hL : IsConvexBody L) {t : ℝ} (h : edge L t = edge K t) :
     supp L t = supp K t := by
   have hv := vplus_mem_edge hL t
   have hv' : vplus L t ∈ edge K t := h ▸ hv
   exact hv.2.symm.trans hv'.2
 
+/-- Equal edges have equal vertices `v⁺`. -/
 lemma cvx_vplus_eq_of_edge_eq (hL : IsConvexBody L) {t : ℝ} (h : edge L t = edge K t) :
     vplus L t = vplus K t := by
   simp only [vplus, cvx_supp_eq_of_edge_eq hL h, h]
 
+/-- If the edge `e_L(t)` is a point, both vertices are that point. -/
 lemma cvx_eq_of_edge_singleton (hL : IsConvexBody L) {t : ℝ} {p : ℝ × ℝ} (h : edge L t = {p}) :
     vplus L t = p ∧ vminus L t = p := by
   have h1 := vplus_mem_edge hL t
@@ -1555,6 +1363,7 @@ lemma cvx_eq_of_edge_singleton (hL : IsConvexBody L) {t : ℝ} {p : ℝ × ℝ} 
   rw [h] at h1 h2
   exact ⟨h1, h2⟩
 
+/-- The integral over a period may be taken over `[0, 2π)` or `(0, 2π]`. -/
 lemma cvx_integral_Ico_eq_Ioc (hK : IsConvexBody K) (hL : IsConvexBody L) :
     ∫ t in Ico 0 (2 * π), supp L t ∂(sigma K) = ∫ t in Ioc 0 (0 + 2 * π), supp L t ∂(sigma K) := by
   have h2π : (0 : ℝ) < 2 * π := by positivity
@@ -1577,8 +1386,8 @@ lemma cvx_integral_Ico_eq_Ioc (hK : IsConvexBody K) (hL : IsConvexBody L) :
   rw [measureReal_def, measureReal_def, hσ, hs]
   ring
 
-/-- **The area of the cut body** `K' = K ∩ H'` of Lemma 7.3.1: `|K'| = 𝒥(𝐮_K^{a,b}) + 𝒥(v_K⁻(b), v_K⁺(a))`
-(the two equations in the proof of Theorem 7.3.2). -/
+/-- **The area of the cut body** `K' = K ∩ H'` of Lemma 7.3.1:
+`|K'| = 𝒥(𝐮_K^{a,b}) + 𝒥(v_K⁻(b), v_K⁺(a))` (the two equations in the proof of Theorem 7.3.2). -/
 lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a + π)
     {t' c : ℝ} (ht' : t' ∈ Ioo a b)
     (hp₁ : vplus K a ∈ line (t' + π) c) (hp₂ : vminus K b ∈ line (t' + π) c)
@@ -1589,17 +1398,21 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
     (h4 : edge (K ∩ halfMinus (t' + π) c) (t' + π) = segment ℝ (vminus K b) (vplus K a)) :
     area (K ∩ halfMinus (t' + π) c) =
       convexCurveArea K a b + segArea (vminus K b) (vplus K a) := by
+  -- By Theorem 7.1.3, `|K'| = ½ ∫ h_{K'} dσ_{K'}` over a period, which we take to be
+  -- `(t' - π, t' + π]`; `σ_{K'}` is concentrated on `(a, b) ∪ {t' + π}`, it equals `σ_K` on
+  -- `(a, b)`, and its atom at `t' + π` is the segment `[v_K⁻(b), v_K⁺(a)]`.
   set K' := K ∩ halfMinus (t' + π) c with hK'def
   have hlt1 : t' - π < a := by linarith [ht'.2]
   have hlt2 : b < t' + π := by linarith [ht'.1]
   -- the vertices of `K'` at the normal angle `t' + π`
   obtain ⟨d, hd0, hd⟩ : ∃ d : ℝ, 0 ≤ d ∧ vplus K a - vminus K b = d • vvec (t' + π) := by
-    refine ⟨_, ?_, cvx_sub_eq_smul_vvec (hp₂.trans hp₁.symm)⟩
+    refine ⟨_, ?_, sub_eq_smul_vvec (hp₂.trans hp₁.symm)⟩
     have hle : 0 ≤ dot (vplus K a - vminus K b) (uvec a) := by
       rw [dot_sub_left, (vplus_mem_edge hK a).2]
       linarith [dot_le_supp hK.2.1 (vminus_mem_edge hK b).1 a]
-    have hs : 0 < sin (t' - a) := sin_pos_of_pos_of_lt_pi (by linarith [ht'.1]) (by linarith [ht'.2])
-    rw [cvx_sub_eq_smul_vvec (hp₂.trans hp₁.symm), dot_smul_left, dot_vvec_uvec',
+    have hs : 0 < sin (t' - a) :=
+      sin_pos_of_pos_of_lt_pi (by linarith [ht'.1]) (by linarith [ht'.2])
+    rw [sub_eq_smul_vvec (hp₂.trans hp₁.symm), dot_smul_left, dot_vvec_uvec',
       show a - (t' + π) = (a - t') - π by ring, sin_sub_pi, show a - t' = -(t' - a) by ring,
       sin_neg, neg_neg] at hle
     exact nonneg_of_mul_nonneg_left hle hs
@@ -1622,16 +1435,16 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
     nlinarith [hθ.1]
   -- `σ_{K'}` vanishes outside `(a, b) ∪ {t' + π}`
   have hz1 : sigma K' (Ioc (t' - π) a) = 0 := by
-    refine cvx_sigma_Ioc_eq_zero hK' hlt1.le (p := vplus K a) fun t ht => ?_
+    refine sigma_Ioc_eq_zero_of_vplus_const hK' hlt1.le (p := vplus K a) fun t ht => ?_
     rcases ht.1.eq_or_lt with h | h
-    · rw [← h, ← cvx_vplus_add_two_pi, show t' - π + 2 * π = t' + π by ring, hvp]
+    · rw [← h, ← vplus_add_two_pi, show t' - π + 2 * π = t' + π by ring, hvp]
     · exact (cvx_eq_of_edge_singleton hK' (h1 t ⟨h, ht.2⟩)).1
   have hz2 : sigma K' (Ico b (t' + π)) = 0 := by
     rw [← Ioo_insert_left hlt2, insert_eq]
     refine measure_union_null ?_ ?_
     · have := cvx_eq_of_edge_singleton hK' (h3 b ⟨le_rfl, hlt2⟩)
-      exact cvx_sigma_singleton_eq_zero hK' (this.1.trans this.2.symm)
-    · exact cvx_sigma_Ioo_eq_zero hK' hlt2 (p := vminus K b)
+      exact inj_sigma_singleton_eq_zero hK' (this.1.trans this.2.symm)
+    · exact sigma_Ioo_eq_zero_of_vplus_const hK' hlt2 (q := vminus K b)
         fun t ht => (cvx_eq_of_edge_singleton hK' (h3 t ht)).1
   -- `σ_{K'} = σ_K` on `(a, b)`
   have hva : vplus K' a = vplus K a := (cvx_eq_of_edge_singleton hK' (h1 a ⟨hlt1, le_rfl⟩)).1
@@ -1682,7 +1495,8 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
       rw [mem_singleton_iff] at ht'; rw [ht'] at ht; exact absurd ht.2 (not_lt.2 hlt2.le))
       (measurableSet_singleton _)
       (hint _ fun t ht => ⟨by linarith [ht.1], by linarith [ht.2]⟩)
-      (hint _ fun t ht => by rw [mem_singleton_iff] at ht; rw [ht]; exact ⟨by linarith [pi_pos], le_rfl⟩),
+      (hint _ fun t ht => by
+        rw [mem_singleton_iff] at ht; rw [ht]; exact ⟨by linarith [pi_pos], le_rfl⟩),
     integral_singleton, hres]
   have hsupp : EqOn (supp K') (supp K) (Ioo a b) := fun t ht => hsab t ⟨ht.1.le, ht.2⟩
   rw [setIntegral_congr_fun measurableSet_Ioo hsupp]
@@ -1698,6 +1512,28 @@ lemma cvx_area_cut (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) (hb : b < a +
 
 /-! ### The area of a triangle -/
 
+/-- A convex combination of `p`, `q`, `r` lies in their convex hull. -/
+lemma cvx_mem_convexHull_three {p q r x : ℝ × ℝ} {α β γ : ℝ} (hα : 0 ≤ α) (hβ : 0 ≤ β)
+    (hγ : 0 ≤ γ) (hs : α + β + γ = 1) (hx : x = α • p + β • q + γ • r) :
+    x ∈ convexHull ℝ {p, q, r} := by
+  have hc := convex_convexHull ℝ ({p, q, r} : Set (ℝ × ℝ))
+  have mp : p ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
+  have mq : q ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
+  have mr : r ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
+  rcases (add_nonneg hβ hγ).eq_or_lt with h0 | hpos
+  · have hβ0 : β = 0 := by linarith
+    have hγ0 : γ = 0 := by linarith
+    have hα1 : α = 1 := by linarith
+    rw [hx, hβ0, hγ0, hα1, one_smul, zero_smul, zero_smul, add_zero, add_zero]
+    exact mp
+  · have mqr := hc mq mr (div_nonneg hβ hpos.le) (div_nonneg hγ hpos.le)
+      (by rw [← add_div, div_self hpos.ne'])
+    have := hc mp mqr hα hpos.le (by linarith)
+    convert this using 1
+    rw [hx, smul_add, smul_smul, smul_smul, mul_div_cancel₀ _ hpos.ne',
+      mul_div_cancel₀ _ hpos.ne', add_assoc]
+
+/-- The standard triangle `conv{(0, 0), (1, 0), (0, 1)}`. -/
 lemma cvx_convexHull_std :
     convexHull ℝ {((0 : ℝ), (0 : ℝ)), ((1 : ℝ), (0 : ℝ)), ((0 : ℝ), (1 : ℝ))} =
       {p : ℝ × ℝ | 0 ≤ p.1 ∧ 0 ≤ p.2 ∧ p.1 + p.2 ≤ 1} := by
@@ -1711,27 +1547,10 @@ lemma cvx_convexHull_std :
         smul_eq_mul] at hp hq ⊢
       refine ⟨by nlinarith, by nlinarith, by nlinarith⟩
   · rintro ⟨x, y⟩ ⟨hx, hy, hxy⟩
-    have hc := convex_convexHull ℝ
-      ({((0 : ℝ), (0 : ℝ)), ((1 : ℝ), (0 : ℝ)), ((0 : ℝ), (1 : ℝ))} : Set (ℝ × ℝ))
-    have m0 : ((0 : ℝ), (0 : ℝ)) ∈ convexHull ℝ
-        ({((0 : ℝ), (0 : ℝ)), ((1 : ℝ), (0 : ℝ)), ((0 : ℝ), (1 : ℝ))} : Set (ℝ × ℝ)) :=
-      subset_convexHull ℝ _ (by simp)
-    have m1 : ((1 : ℝ), (0 : ℝ)) ∈ convexHull ℝ
-        ({((0 : ℝ), (0 : ℝ)), ((1 : ℝ), (0 : ℝ)), ((0 : ℝ), (1 : ℝ))} : Set (ℝ × ℝ)) :=
-      subset_convexHull ℝ _ (by simp)
-    have m2 : ((0 : ℝ), (1 : ℝ)) ∈ convexHull ℝ
-        ({((0 : ℝ), (0 : ℝ)), ((1 : ℝ), (0 : ℝ)), ((0 : ℝ), (1 : ℝ))} : Set (ℝ × ℝ)) :=
-      subset_convexHull ℝ _ (by simp)
-    rcases (add_nonneg hx hy).eq_or_lt with h0 | hpos
-    · have hx0 : x = 0 := by linarith
-      have hy0 : y = 0 := by linarith
-      rw [hx0, hy0]; exact m0
-    · have mq := hc m1 m2 (div_nonneg hx hpos.le) (div_nonneg hy hpos.le)
-        (by rw [← add_div, div_self hpos.ne'])
-      have := hc m0 mq (by linarith : (0 : ℝ) ≤ 1 - (x + y)) hpos.le (by ring)
-      convert this using 1
-      ext <;> simp <;> field_simp
+    exact cvx_mem_convexHull_three (α := 1 - x - y) (by linarith) hx hy (by ring)
+      (by ext <;> simp)
 
+/-- The standard triangle has area `1/2`. -/
 lemma cvx_volume_std :
     volume {p : ℝ × ℝ | 0 ≤ p.1 ∧ 0 ≤ p.2 ∧ p.1 + p.2 ≤ 1} = ENNReal.ofReal (1 / 2) := by
   have hm : MeasurableSet {p : ℝ × ℝ | 0 ≤ p.1 ∧ 0 ≤ p.2 ∧ p.1 + p.2 ≤ 1} :=
@@ -1791,26 +1610,6 @@ lemma cvx_area_triangle (p q r : ℝ × ℝ) :
     simp only [cross]; ring]
   ring
 
-lemma cvx_mem_convexHull_three {p q r x : ℝ × ℝ} {α β γ : ℝ} (hα : 0 ≤ α) (hβ : 0 ≤ β)
-    (hγ : 0 ≤ γ) (hs : α + β + γ = 1) (hx : x = α • p + β • q + γ • r) :
-    x ∈ convexHull ℝ {p, q, r} := by
-  have hc := convex_convexHull ℝ ({p, q, r} : Set (ℝ × ℝ))
-  have mp : p ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
-  have mq : q ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
-  have mr : r ∈ convexHull ℝ ({p, q, r} : Set (ℝ × ℝ)) := subset_convexHull ℝ _ (by simp)
-  rcases (add_nonneg hβ hγ).eq_or_lt with h0 | hpos
-  · have hβ0 : β = 0 := by linarith
-    have hγ0 : γ = 0 := by linarith
-    have hα1 : α = 1 := by linarith
-    rw [hx, hβ0, hγ0, hα1, one_smul, zero_smul, zero_smul, add_zero, add_zero]
-    exact mp
-  · have mqr := hc mq mr (div_nonneg hβ hpos.le) (div_nonneg hγ hpos.le)
-      (by rw [← add_div, div_self hpos.ne'])
-    have := hc mp mqr hα hpos.le (by linarith)
-    convert this using 1
-    rw [hx, smul_add, smul_smul, smul_smul, mul_div_cancel₀ _ hpos.ne',
-      mul_div_cancel₀ _ hpos.ne', add_assoc]
-
 /-- In the plane, `(A × B) w = (w × B) A + (A × w) B`. -/
 lemma cvx_cross_decomp (A B w : ℝ × ℝ) :
     cross A B • w = cross w B • A + cross A w • B := by
@@ -1824,9 +1623,10 @@ end region
 def convexCurveRegion (K : Set (ℝ × ℝ)) (a b : ℝ) : Set (ℝ × ℝ) :=
   interior (convexHull ℝ {vplus K a, vint K a b, vminus K b}) \ ⋂ t ∈ Icc a b, suppHalf K t
 
-/-- **Lemma 7.3.5** (`lem:convex-curve-jordan-curve`) (2) and (3), with (1) replaced by the area of the
-region (see the module docstring): the region lies in the interior of `H_K(a) ∩ H_K(b)`, is disjoint
-from `⋂_{t ∈ [a,b]} H_K(t)`, and has area `𝒥(v_K⁺(a), v_K(a,b)) + 𝒥(v_K(a,b), v_K⁻(b)) - 𝒥(𝐮_K^{a,b})`. -/
+/-- **Lemma 7.3.5** (`lem:convex-curve-jordan-curve`) (2) and (3), with (1) replaced by the area of
+the region (see the module docstring): the region lies in the interior of `H_K(a) ∩ H_K(b)`, is
+disjoint from `⋂_{t ∈ [a,b]} H_K(t)`, and has area
+`𝒥(v_K⁺(a), v_K(a,b)) + 𝒥(v_K(a,b), v_K⁻(b)) - 𝒥(𝐮_K^{a,b})`. -/
 theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) (h : vplus K a ≠ vminus K b) :
     convexCurveRegion K a b ⊆ interior (suppHalf K a ∩ suppHalf K b) ∧
@@ -1834,6 +1634,9 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       area (convexCurveRegion K a b) =
         segArea (vplus K a) (vint K a b) + segArea (vint K a b) (vminus K b) -
           convexCurveArea K a b := by
+  -- With the cut body `K' = K ∩ H'` of Lemma 7.3.1 and the triangle
+  -- `T = conv{v_K⁺(a), v_K(a, b), v_K⁻(b)}`, we show `T ∩ ⋂_{t ∈ [a,b]} H_K(t) = K'`; the region is
+  -- then `T° \ K'`, of area `|T| - |K'|`, computed by `cvx_area_triangle` and `cvx_area_cut`.
   obtain ⟨t', ht', c, hp₁l, hp₂l, hp₀lt, hK'cb, h1, h2, h3, h4⟩ := lemma7_3_1 hK hab hb h
   have hsin : 0 < sin (b - a) := sin_pos_of_pos_of_lt_pi (by linarith) (by linarith)
   have hpa : vplus K a ∈ edge K a := vplus_mem_edge hK a
@@ -1847,9 +1650,9 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     sin_pos_of_pos_of_lt_pi (by linarith [ht'.2]) (by linarith [ht'.1])
   -- the three sides
   obtain ⟨α, hα⟩ : ∃ α, vint K a b - vplus K a = α • vvec a :=
-    ⟨_, cvx_sub_eq_smul_vvec (hpa.2.trans h0a.symm)⟩
+    ⟨_, sub_eq_smul_vvec (hpa.2.trans h0a.symm)⟩
   obtain ⟨β, hβ⟩ : ∃ β, vminus K b - vint K a b = β • vvec b :=
-    ⟨_, cvx_sub_eq_smul_vvec (h0b.trans hpb.2.symm)⟩
+    ⟨_, sub_eq_smul_vvec (h0b.trans hpb.2.symm)⟩
   have hαpos : 0 < α := by
     have e : dot (vint K a b - vplus K a) (uvec (t' + π)) = -(α * sin (t' - a)) := by
       rw [hα, dot_smul_left, hu, dot_neg_right, dot_vvec_uvec', mul_neg]
@@ -1866,7 +1669,7 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     nlinarith
   -- `T ⊆ H_K(a) ∩ H_K(b)`
   have hTab : convexHull ℝ {vplus K a, vint K a b, vminus K b} ⊆ suppHalf K a ∩ suppHalf K b := by
-    apply convexHull_min _ ((cvx_convex_halfMinus _ _).inter (cvx_convex_halfMinus _ _))
+    apply convexHull_min _ ((convex_halfMinus _ _).inter (convex_halfMinus _ _))
     intro q hq
     simp only [mem_insert_iff, mem_singleton_iff] at hq
     rcases hq with rfl | rfl | rfl
@@ -1881,8 +1684,8 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
     rw [hc, hu, dot_neg_right, dot_neg_right, neg_le_neg_iff, dot_sub_left, sub_nonneg]
   -- the triangle is positively oriented
   have hB : vminus K b - vplus K a = α • vvec a + β • vvec b := by rw [← hα, ← hβ]; abel
-  have hcvv : ∀ x y : ℝ, cross (vvec x) (vvec y) = sin (y - x) := by
-    intro x y; simp only [cross, vvec, sin_sub]; ring
+  have hcvv : ∀ x y : ℝ, cross (vvec x) (vvec y) = sin (y - x) := fun x y => by
+    rw [cross_vvec, dot_vvec_uvec']
   have hcpos : 0 < cross (vint K a b - vplus K a) (vminus K b - vplus K a) := by
     rw [hα, hB, cross_add_right, cross_smul_left, cross_smul_right, cross_smul_left,
       cross_smul_right, cross_self, hcvv]
@@ -1891,12 +1694,10 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
   -- `v_K⁻(b) - v_K⁺(a)` is a positive multiple of `v_{t'}`
   have hBt : vminus K b - vplus K a =
       dot (vminus K b - vplus K a) (vvec t') • vvec t' := by
-    conv_lhs => rw [eq_dot_uvec_smul_add (vminus K b - vplus K a) t']
-    have : dot (vminus K b - vplus K a) (uvec t') = 0 := by
-      have e1 := hp₁l; have e2 := hp₂l
-      simp only [line, mem_ofPred_eq, hu, dot_neg_right] at e1 e2
-      rw [dot_sub_left]; linarith
-    rw [this, zero_smul, zero_add]
+    refine eq_smul_vvec_of_dot_uvec_eq_zero ?_
+    have e1 := hp₁l; have e2 := hp₂l
+    simp only [line, mem_ofPred_eq, hu, dot_neg_right] at e1 e2
+    rw [dot_sub_left]; linarith
   have hspos : 0 < dot (vminus K b - vplus K a) (vvec t') := by
     have e : cross (vint K a b - vplus K a) (vminus K b - vplus K a) =
         α * dot (vminus K b - vplus K a) (vvec t') * sin (t' - a) := by
@@ -1933,7 +1734,8 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       rw [e]
       exact mul_nonneg hspos'.le (by rw [hwdef]; exact (hH q).1 hq.2)
     have hl₁ : 0 ≤ cross A B - cross w B - cross A w := by
-      have e : cross A B - cross w B - cross A w = cross (vint K a b - q) (vminus K b - vint K a b) := by
+      have e : cross A B - cross w B - cross A w =
+          cross (vint K a b - q) (vminus K b - vint K a b) := by
         rw [hAdef, hBdef, hwdef]; simp only [cross, Prod.fst_sub, Prod.snd_sub]; ring
       rw [e, hβ, cross_smul_right, cross_vvec, dot_sub_left, h0b]
       exact mul_nonneg hβpos.le (sub_nonneg.2 (dot_le_supp hK.2.1 hq.1 b))
@@ -1974,15 +1776,17 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
       rw [hper_u, hper_s]
       rcases le_or_gt t₀ b with htb | htb
       · exact (mem_iInter₂.1 hqX) t₀ ⟨hmem.1, htb⟩
-      · have hsub : convexHull ℝ {vplus K a, vint K a b, vminus K b} ⊆ halfMinus t₀ (supp K t₀) := by
-          apply convexHull_min _ (cvx_convex_halfMinus _ _)
+      · have hsub :
+            convexHull ℝ {vplus K a, vint K a b, vminus K b} ⊆ halfMinus t₀ (supp K t₀) := by
+          apply convexHull_min _ (convex_halfMinus _ _)
           intro r hr
           simp only [mem_insert_iff, mem_singleton_iff] at hr
           show dot r (uvec t₀) ≤ supp K t₀
           rcases hr with rfl | rfl | rfl
           · exact dot_le_supp hK.2.1 hpa.1 t₀
           · rcases le_or_gt (sin (t₀ - a)) 0 with hs | hs
-            · have e : dot (vint K a b) (uvec t₀) = dot (vplus K a) (uvec t₀) + α * sin (t₀ - a) := by
+            · have e : dot (vint K a b) (uvec t₀) =
+                  dot (vplus K a) (uvec t₀) + α * sin (t₀ - a) := by
                 rw [show vint K a b = vplus K a + α • vvec a by rw [← hα]; abel, dot_add_left,
                   dot_smul_left, dot_vvec_uvec']
               rw [e]; nlinarith [dot_le_supp hK.2.1 hpa.1 t₀]
@@ -2002,7 +1806,7 @@ theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab
           · exact dot_le_supp hK.2.1 hpb.1 t₀
         exact hsub hqT
     · have hsub : convexHull ℝ {vplus K a, vint K a b, vminus K b} ⊆ halfMinus (t' + π) c := by
-        apply convexHull_min _ (cvx_convex_halfMinus _ _)
+        apply convexHull_min _ (convex_halfMinus _ _)
         intro r hr
         simp only [mem_insert_iff, mem_singleton_iff] at hr
         rcases hr with rfl | rfl | rfl

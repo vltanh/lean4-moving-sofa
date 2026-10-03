@@ -6,15 +6,17 @@ public import MovingSofaOptimality.Convex.ConvexDomain
 # The curve area functional (§7.2)
 
 Definitions 7.2.4 (`def:plane-cross-product`), 7.2.5 (`def:bounded-variation-space`), 7.2.6
-(`def:curve-area-functional`), 7.2.8 (`def:curve-area-line-segment`); Propositions 7.2.2, 7.2.4–7.2.6.
+(`def:curve-area-functional`), 7.2.8 (`def:curve-area-line-segment`); Propositions 7.2.2,
+7.2.4–7.2.6.
 
-**Not formalized from this section.** The Jordan curve theorem (Theorem 7.2.1, cited), Green's theorem
-for rectifiable Jordan curves (Theorem 7.2.3, cited from Apostol), the notions of Jordan arcs and
-curves and their orientation (Definitions 7.2.1–7.2.3, 7.2.7, 7.2.9) and Proposition 7.2.7 (the
-orientation of a Jordan curve with a boundary segment). The paper uses them to compute the areas of
-specific regions (Lemmas 8.2.2–8.2.3, Theorem 8.4.6); the formalization computes those areas directly
-(Fubini and changes of variables). The curve area functional is defined for every continuous curve of
-bounded variation, as in Definition 7.2.6, and concatenation is splitting the parameter interval.
+**Not formalized from this section.** The Jordan curve theorem (Theorem 7.2.1, cited), Green's
+theorem for rectifiable Jordan curves (Theorem 7.2.3, cited from Apostol), the notions of Jordan
+arcs and curves and their orientation (Definitions 7.2.1–7.2.3, 7.2.7, 7.2.9) and Proposition
+7.2.7 (the orientation of a Jordan curve with a boundary segment). The paper uses them to compute
+the areas of specific regions (Lemmas 8.2.2–8.2.3, Theorem 8.4.6); the formalization computes
+those areas directly (Fubini and changes of variables). The curve area functional is defined for
+every continuous curve of bounded variation, as in Definition 7.2.6, and concatenation is
+splitting the parameter interval.
 -/
 
 @[expose] public section
@@ -29,32 +31,7 @@ section aux
 
 open scoped NNReal ENNReal
 
-lemma cvx_clampFun_eq {α : Type*} (f : ℝ → α) {a b t : ℝ} (ht : t ∈ Icc a b) :
-    clampFun f a b t = f t := by
-  simp [clampFun, ht.1, ht.2]
-
-lemma cvx_eVariationOn_add_le {α E : Type*} [LinearOrder α] [SeminormedAddCommGroup E]
-    (f g : α → E) (s : Set α) :
-    eVariationOn (f + g) s ≤ eVariationOn f s + eVariationOn g s := by
-  apply iSup_le
-  rintro ⟨n, ⟨u, u_mono, u_mem⟩⟩
-  calc ∑ i ∈ Finset.range n, edist ((f + g) (u (i + 1))) ((f + g) (u i))
-      ≤ ∑ i ∈ Finset.range n,
-          (edist (f (u (i + 1))) (f (u i)) + edist (g (u (i + 1))) (g (u i))) := by
-        gcongr with i hi
-        exact edist_add_add_le _ _ _ _
-    _ = ∑ i ∈ Finset.range n, edist (f (u (i + 1))) (f (u i)) +
-          ∑ i ∈ Finset.range n, edist (g (u (i + 1))) (g (u i)) := Finset.sum_add_distrib
-    _ ≤ eVariationOn f s + eVariationOn g s := by
-        gcongr
-        · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i _ ↦ u_mem i)
-        · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i _ ↦ u_mem i)
-
-lemma cvx_bv_add {α E : Type*} [LinearOrder α] [SeminormedAddCommGroup E] {f g : α → E}
-    {s : Set α} (hf : BoundedVariationOn f s) (hg : BoundedVariationOn g s) :
-    BoundedVariationOn (f + g) s :=
-  ne_top_of_le_ne_top (ENNReal.add_ne_top.2 ⟨hf, hg⟩) (cvx_eVariationOn_add_le f g s)
-
+/-- A constant multiple of a function of bounded variation has bounded variation. -/
 lemma cvx_bv_const_smul {α E : Type*} [LinearOrder α] [SeminormedAddCommGroup E]
     [NormedSpace ℝ E] {f : α → E} {s : Set α} (hf : BoundedVariationOn f s) (c : ℝ) :
     BoundedVariationOn (c • f) s :=
@@ -62,31 +39,9 @@ lemma cvx_bv_const_smul {α E : Type*} [LinearOrder α] [SeminormedAddCommGroup 
 
 variable {E : Type*} [NormedAddCommGroup E]
 
-lemma cvx_bv_clampFun {f : ℝ → E} {a b : ℝ} (hf : BoundedVariationOn f (Icc a b)) :
-    BoundedVariationOn (clampFun f a b) univ := by
-  rcases le_or_gt a b with hab | hab
-  · have hφ : Monotone (fun t : ℝ => max a (min b t)) :=
-      fun x y h => max_le_max le_rfl (min_le_min le_rfl h)
-    have hmaps : MapsTo (fun t : ℝ => max a (min b t)) univ (Icc a b) :=
-      fun t _ => ⟨le_max_left _ _, max_le hab (min_le_left _ _)⟩
-    exact ne_top_of_le_ne_top hf
-      (eVariationOn.comp_le_of_monotoneOn f _ (hφ.monotoneOn univ) hmaps)
-  · have : clampFun f a b = fun _ => f a := by
-      funext t; simp [clampFun, (min_le_left b t).trans hab.le]
-    rw [this]
-    exact (eVariationOn.constant_on (by simp)).trans_lt ENNReal.zero_lt_top |>.ne
-
-lemma cvx_continuous_clampFun {f : ℝ → E} {a b : ℝ} (hab : a ≤ b)
-    (hf : ContinuousOn f (Icc a b)) : Continuous (clampFun f a b) := by
-  have hφ : Continuous (fun t : ℝ => max a (min b t)) := by fun_prop
-  exact hf.comp_continuous hφ fun t => ⟨le_max_left _ _, max_le hab (min_le_left _ _)⟩
-
 variable [CompleteSpace E]
 
-lemma cvx_lsMeasure_eq {f : ℝ → E} {a b : ℝ} (hf : BoundedVariationOn f (Icc a b)) :
-    lsMeasure f a b = (cvx_bv_clampFun hf).vectorMeasure := by
-  simp [lsMeasure, cvx_bv_clampFun hf]
-
+/-- The Lebesgue–Stieltjes measure has finite total variation. -/
 instance cvx_isFiniteMeasure_variation_lsMeasure (f : ℝ → E) (a b : ℝ) :
     IsFiniteMeasure (lsMeasure f a b).variation := by
   unfold lsMeasure
@@ -99,18 +54,19 @@ interval. -/
 lemma cvx_lsMeasure_Icc {f : ℝ → E} {a b : ℝ} (hab : a ≤ b) (hf : BoundedVariationOn f (Icc a b))
     (hfc : ContinuousOn f (Icc a b)) {c d : ℝ} (hcd : c ≤ d) :
     lsMeasure f a b (Icc c d) = clampFun f a b d - clampFun f a b c := by
-  have hc := cvx_continuous_clampFun hab hfc
-  rw [cvx_lsMeasure_eq hf, BoundedVariationOn.vectorMeasure_Icc _ hcd,
-    hc.continuousAt.continuousWithinAt.rightLim_eq, hc.continuousAt.continuousWithinAt.leftLim_eq]
+  have hc := continuous_clampFun hab hfc
+  rw [lsMeasure_eq_vectorMeasure (boundedVariationOn_clampFun hab hf),
+    BoundedVariationOn.vectorMeasure_Icc _ hcd, hc.continuousWithinAt.rightLim_eq,
+    hc.continuousWithinAt.leftLim_eq]
 
 /-- A continuous curve of bounded variation gives no mass to points. -/
 lemma cvx_lsMeasure_variation_singleton {f : ℝ → E} {a b : ℝ} (hab : a ≤ b)
     (hf : BoundedVariationOn f (Icc a b)) (hfc : ContinuousOn f (Icc a b)) (t : ℝ) :
     (lsMeasure f a b).variation {t} = 0 := by
-  have hc := cvx_continuous_clampFun hab hfc
-  rw [cvx_lsMeasure_eq hf, BoundedVariationOn.variation_vectorMeasure_singleton,
-    hc.continuousAt.continuousWithinAt.rightLim_eq, hc.continuousAt.continuousWithinAt.leftLim_eq]
-  simp
+  have hc := continuous_clampFun hab hfc
+  rw [lsMeasure_eq_vectorMeasure (boundedVariationOn_clampFun hab hf),
+    BoundedVariationOn.variation_vectorMeasure_singleton, hc.continuousWithinAt.rightLim_eq,
+    hc.continuousWithinAt.leftLim_eq, sub_self, enorm_zero]
 
 /-- The Lebesgue–Stieltjes measure on `[a, b]` restricted to a subinterval `[a', b']` is the
 Lebesgue–Stieltjes measure on `[a', b']`. -/
@@ -127,11 +83,13 @@ lemma cvx_lsMeasure_restrict_Icc {f : ℝ → E} {a b a' b' : ℝ} (ha : a ≤ a
     have h2 : min q b' ∈ Icc a' b' := ⟨(le_max_right _ _).trans h, min_le_right _ _⟩
     rw [cvx_lsMeasure_Icc (ha.trans (hab'.trans hb)) hf hfc h,
       cvx_lsMeasure_Icc hab' (hf.mono hsub) (hfc.mono hsub) h,
-      cvx_clampFun_eq f h1, cvx_clampFun_eq f h2, cvx_clampFun_eq f (hsub h1),
-      cvx_clampFun_eq f (hsub h2)]
+      clampFun_of_mem h1, clampFun_of_mem h2, clampFun_of_mem (hsub h1),
+      clampFun_of_mem (hsub h2)]
   · rw [Icc_eq_empty (not_le.2 h)]; simp
 
 omit [CompleteSpace E] in
+/-- A function continuous on `[a, b]` is integrable against a finite vector measure restricted to
+`[a, b]`. -/
 lemma cvx_integrable_restrict_Icc {F' : Type*} [NormedAddCommGroup F'] (ν : VectorMeasure ℝ E)
     [IsFiniteMeasure ν.variation] {x : ℝ → F'} {a b : ℝ} (hx : ContinuousOn x (Icc a b)) :
     (ν.restrict (Icc a b)).Integrable x := by
@@ -156,7 +114,33 @@ lemma cvx_lipschitzOnWith_of_primitive [NormedSpace ℝ E] {x ψ : ℝ → E} {a
     · rw [uIoc_of_ge h] at hu; exact ⟨hs.1.trans hu.1.le, hu.2.trans ht.2⟩
   · rw [Real.dist_eq]
 
-/-- The Lebesgue–Stieltjes measure of a primitive. -/
+omit [CompleteSpace E] in
+/-- A primitive of a bounded integrable function is continuous and of bounded variation. -/
+lemma cvx_bv_of_primitive [NormedSpace ℝ E] {x ψ : ℝ → E} {a b : ℝ} {M : ℝ≥0} (hab : a ≤ b)
+    (hψ : IntegrableOn ψ (Icc a b)) (hψM : ∀ t ∈ Icc a b, ‖ψ t‖ ≤ M)
+    (hx : ∀ t ∈ Icc a b, x t = x a + ∫ s in a..t, ψ s) :
+    BoundedVariationOn x (Icc a b) ∧ ContinuousOn x (Icc a b) := by
+  have hlip := cvx_lipschitzOnWith_of_primitive hψ hψM hx
+  refine ⟨?_, hlip.continuousOn⟩
+  simpa using hlip.locallyBoundedVariationOn a b ⟨le_rfl, hab⟩ ⟨hab, le_rfl⟩
+
+omit [NormedAddCommGroup E] [CompleteSpace E] in
+/-- For `p ≤ q`, the interval between the clamped endpoints `max a (min b ·)` is `[p, q] ∩ [a, b]`
+up to a null set. -/
+private lemma cvx_Icc_clamp_ae_eq {a b p q : ℝ} (hab : a ≤ b) (hpq : p ≤ q) :
+    Icc (max a (min b p)) (max a (min b q)) =ᵐ[volume] Icc (max p a) (min q b) := by
+  rcases le_or_gt (max p a) (min q b) with h | h
+  · have e1 : max a (min b p) = max p a := by
+      simp only [max_def, min_def] at *; split_ifs at * <;> linarith
+    have e2 : max a (min b q) = min q b := by
+      simp only [max_def, min_def] at *; split_ifs at * <;> linarith
+    rw [e1, e2]
+  · have e : max a (min b p) = max a (min b q) := by
+      simp only [max_def, min_def] at *; split_ifs at * <;> linarith
+    rw [e, Icc_self, Icc_eq_empty h.not_ge]
+    exact ae_eq_empty.2 (measure_singleton _)
+
+/-- The Lebesgue–Stieltjes measure of a primitive `x(t) = x(a) + ∫_a^t ψ` is `ψ dt`. -/
 lemma cvx_lsMeasure_eq_withDensityᵥ [NormedSpace ℝ E] {x ψ : ℝ → E} {a b : ℝ} (hab : a ≤ b)
     (hψ : IntegrableOn ψ (Icc a b)) (hx : ∀ t ∈ Icc a b, x t = x a + ∫ s in a..t, ψ s)
     (hbv : BoundedVariationOn x (Icc a b)) (hxc : ContinuousOn x (Icc a b)) :
@@ -167,51 +151,24 @@ lemma cvx_lsMeasure_eq_withDensityᵥ [NormedSpace ℝ E] {x ψ : ℝ → E} {a 
   intro p q hpq
   rw [cvx_lsMeasure_Icc hab hbv hxc hpq, withDensityᵥ_apply hψ measurableSet_Icc,
     Measure.restrict_restrict measurableSet_Icc, Icc_inter_Icc]
-  have hp' : max a (min b p) ∈ Icc a b := ⟨le_max_left _ _, max_le hab (min_le_left _ _)⟩
-  have hq' : max a (min b q) ∈ Icc a b := ⟨le_max_left _ _, max_le hab (min_le_left _ _)⟩
   have key : clampFun x a b q - clampFun x a b p =
       ∫ t in (max a (min b p))..(max a (min b q)), ψ t := by
     simp only [clampFun]
-    rw [hx _ hq', hx _ hp', add_sub_add_left_eq_sub,
-      intervalIntegral.integral_interval_sub_left (hi _ hq') (hi _ hp')]
-  have hpq' : max a (min b p) ≤ max a (min b q) := max_le_max le_rfl (min_le_min le_rfl hpq)
-  rw [key, intervalIntegral.integral_of_le hpq', ← integral_Icc_eq_integral_Ioc]
-  rcases le_or_gt (max p a) (min q b) with h | h
-  · have e1 : max a (min b p) = max p a := by
-      rw [min_eq_right (le_trans (le_max_left p a) (h.trans (min_le_right q b))), max_comm]
-    have e2 : max a (min b q) = min q b := by
-      rw [min_comm, max_eq_right ((le_max_right p a).trans h)]
-    rw [e1, e2]
-  · rw [Icc_eq_empty (not_le.2 h), Measure.restrict_empty, integral_zero_measure]
-    have e : max a (min b p) = max a (min b q) := by
-      rcases lt_or_ge q a with hq | hq
-      · rw [max_eq_left ((min_le_right b q).trans hq.le),
-          max_eq_left ((min_le_right b p).trans (hpq.trans hq.le))]
-      · have hbq : b < q := by
-          by_contra hcon
-          push Not at hcon
-          rw [min_eq_left hcon] at h
-          exact absurd h (not_lt.2 (max_le hpq hq))
-        have hbp : b < p := by
-          by_contra hcon
-          push Not at hcon
-          rw [min_eq_right hbq.le] at h
-          rcases le_total p a with hpa | hpa
-          · rw [max_eq_right hpa] at h; linarith
-          · rw [max_eq_left hpa] at h; linarith
-        rw [min_eq_left hbp.le, min_eq_left hbq.le]
-    rw [e, Icc_self, Measure.restrict_singleton, measure_singleton, zero_smul,
-      integral_zero_measure]
+    rw [hx _ (clamp_mem hab q), hx _ (clamp_mem hab p), add_sub_add_left_eq_sub,
+      intervalIntegral.integral_interval_sub_left (hi _ (clamp_mem hab q))
+        (hi _ (clamp_mem hab p))]
+  rw [key, intervalIntegral.integral_of_le (max_le_max le_rfl (min_le_min le_rfl hpq)),
+    ← integral_Icc_eq_integral_Ioc, setIntegral_congr_set (cvx_Icc_clamp_ae_eq hab hpq)]
 
 omit [CompleteSpace E] in
-lemma cvx_withDensityᵥ_restrict_self [NormedSpace ℝ E] {X : Type*} [MeasurableSpace X]
-    {μ : Measure X} {s : Set X} (hs : MeasurableSet s) {f : X → E}
-    (hf : Integrable f (μ.restrict s)) :
-    ((μ.restrict s).withDensityᵥ f).restrict s = (μ.restrict s).withDensityᵥ f := by
+/-- The restriction of a vector measure with density is the vector measure with density with
+respect to the restricted measure. -/
+lemma cvx_withDensityᵥ_restrict [NormedSpace ℝ E] {X : Type*} [MeasurableSpace X]
+    {μ : Measure X} {f : X → E} (hf : Integrable f μ) {s : Set X} (hs : MeasurableSet s) :
+    (μ.withDensityᵥ f).restrict s = (μ.restrict s).withDensityᵥ f := by
   ext t ht
   rw [VectorMeasure.restrict_apply _ hs ht, withDensityᵥ_apply hf (ht.inter hs),
-    withDensityᵥ_apply hf ht, Measure.restrict_restrict (ht.inter hs), Measure.restrict_restrict ht,
-    inter_assoc, inter_self]
+    withDensityᵥ_apply hf.restrict ht, Measure.restrict_restrict ht]
 
 end aux
 
@@ -219,7 +176,7 @@ section density
 
 open scoped NNReal ENNReal
 
-/-- A property of `L¹` functions stating the equality of two Lipschitz functionals is closed. -/
+/-- The set of `L¹` functions on which two Lipschitz functionals agree is closed. -/
 lemma cvx_isClosed_eq_of_lipschitz {X E G : Type*} [MeasurableSpace X]
     [NormedAddCommGroup E] [NormedAddCommGroup G] {μ : Measure X} {Φ Ψ : (X → E) → G} {K : ℝ≥0}
     (hΦ : ∀ g₁ g₂ : X →₁[μ] E, dist (Φ g₁) (Φ g₂) ≤ K * dist g₁ g₂)
@@ -235,6 +192,7 @@ variable {X E F G : Type*} [MeasurableSpace X]
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup G] [NormedSpace ℝ G]
   [CompleteSpace G] in
+/-- A density bounded by `M` gives a vector measure of total variation at most `M μ`. -/
 lemma cvx_variation_withDensityᵥ_le {μ : Measure X} {f : X → F} (hf : Integrable f μ) {M : ℝ≥0}
     (hM : ∀ᵐ x ∂μ, ‖f x‖ ≤ M) : (μ.withDensityᵥ f).variation ≤ (M : ℝ≥0∞) • μ := by
   rw [Measure.variation_withDensityᵥ hf, Measure.le_iff]
@@ -245,7 +203,9 @@ lemma cvx_variation_withDensityᵥ_le {μ : Measure X} {f : X → F} (hf : Integ
   rw [← ofReal_norm, ← ENNReal.ofReal_coe_nnreal]
   exact ENNReal.ofReal_le_ofReal hx
 
-/-- Integration against a vector measure with density with respect to a positive measure. -/
+/-- Integration against a vector measure with density with respect to a positive measure:
+`∫ g d[B; f μ] = ∫ B(g, f) dμ` for a bounded density `f`. The proof checks indicator functions and
+extends by linearity and continuity in `L¹(μ)`. -/
 theorem cvx_integral_withDensityᵥ {μ : Measure X} {f : X → F} (hf : Integrable f μ) {M : ℝ≥0}
     (hM : ∀ᵐ x ∂μ, ‖f x‖ ≤ M) (B : E →L[ℝ] F →L[ℝ] G) {g : X → E} (hg : Integrable g μ) :
     ∫ᵛ x, g x ∂[B; μ.withDensityᵥ f] = ∫ x, B (g x) (f x) ∂μ := by
@@ -268,23 +228,28 @@ theorem cvx_integral_withDensityᵥ {μ : Measure X} {f : X → F} (hf : Integra
     · exact B.aestronglyMeasurable_comp₂ hg.aestronglyMeasurable hf.aestronglyMeasurable
     · filter_upwards [hbd g 0] with x hx
       simpa using hx
+  -- induction on `g ∈ L¹(μ)`
   refine hg.induction (P := fun g => ∫ᵛ x, g x ∂[B; ν] = ∫ x, B (g x) (f x) ∂μ) ?_ ?_ ?_ ?_
-  · intro c s hs hμs
+  · -- indicator functions of sets of finite measure
+    intro c s hs hμs
     have : IsFiniteMeasure (ν.variation.restrict s) := ⟨by
       rw [Measure.restrict_apply_univ]
       exact (hvar s).trans_lt (by
         rw [Measure.smul_apply, smul_eq_mul]
         exact ENNReal.mul_lt_top ENNReal.coe_lt_top hμs)⟩
     rw [VectorMeasure.integral_indicator_const _ hs]
-    have e : (fun x => B (s.indicator (fun _ => c) x) (f x)) = s.indicator (fun x => B c (f x)) := by
+    have e : (fun x => B (s.indicator (fun _ => c) x) (f x)) =
+        s.indicator (fun x => B c (f x)) := by
       ext x; by_cases hx : x ∈ s <;> simp [hx]
     rw [e, integral_indicator hs, ContinuousLinearMap.integral_comp_comm _ hf.integrableOn,
       hν, withDensityᵥ_apply hf hs]
-  · intro g₁ g₂ _ hg₁ hg₂ h₁ h₂
+  · -- sums
+    intro g₁ g₂ _ hg₁ hg₂ h₁ h₂
     simp only [Pi.add_apply, map_add, add_apply]
     rw [VectorMeasure.integral_fun_add (hint hg₁) (hint hg₂), integral_add (hint2 hg₁) (hint2 hg₂),
       h₁, h₂]
-  · refine cvx_isClosed_eq_of_lipschitz (K := ‖B‖₊ * M)
+  · -- closedness: both sides are `‖B‖ M`-Lipschitz in `g ∈ L¹(μ)`
+    refine cvx_isClosed_eq_of_lipschitz (K := ‖B‖₊ * M)
       (Φ := fun g => ∫ᵛ x, g x ∂[B; ν]) (Ψ := fun g => ∫ x, B (g x) (f x) ∂μ) ?_ ?_
     · intro g₁ g₂
       refine (VectorMeasure.dist_integral_le_lintegral_edist (hint (L1.integrable_coeFn g₁))
@@ -310,11 +275,10 @@ theorem cvx_integral_withDensityᵥ {μ : Measure X} {f : X → F} (hf : Integra
       refine norm_integral_le_of_norm_le (hi.const_mul _) ?_
       · filter_upwards [hbd g₁ g₂] with x hx
         rw [dist_eq_norm]; exact hx
-  · intro g₁ g₂ hfg _ h₁
+  · -- a.e. equal functions
+    intro g₁ g₂ hfg _ h₁
     rw [← VectorMeasure.integral_congr_ae (hac.ae_eq hfg), h₁]
-    apply integral_congr_ae
-    filter_upwards [hfg] with x hx
-    rw [hx]
+    exact integral_congr_ae (hfg.mono fun x hx => by simp only [hx])
 
 end density
 
@@ -356,8 +320,26 @@ abbrev CBV (a b : ℝ) : Type := {x : ℝ → ℝ × ℝ // IsCBV x a b}
 theorem isCBV_comb {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hx : IsCBV x a b) (hy : IsCBV y a b) (c : ℝ) :
     IsCBV ((1 - c) • x + c • y) a b :=
   ⟨(hx.1.const_smul (1 - c)).add (hy.1.const_smul c),
-    cvx_bv_add (cvx_bv_const_smul hx.2 _) (cvx_bv_const_smul hy.2 _)⟩
+    boundedVariationOn_add (cvx_bv_const_smul hx.2 _) (cvx_bv_const_smul hy.2 _)⟩
 
+/-- `C^BV` is stable under concatenation. -/
+lemma isCBV_append {Z : ℝ → ℝ × ℝ} {a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c)
+    (h₁ : IsCBV Z a b) (h₂ : IsCBV Z b c) : IsCBV Z a c := by
+  refine ⟨?_, ?_⟩
+  · rw [← Icc_union_Icc_eq_Icc hab hbc]
+    exact h₁.1.union_of_isClosed h₂.1 isClosed_Icc isClosed_Icc
+  · have := eVariationOn.Icc_add_Icc Z (s := univ) hab hbc (mem_univ b)
+    simp only [univ_inter] at this
+    unfold BoundedVariationOn
+    rw [← this]
+    exact ENNReal.add_ne_top.2 ⟨h₁.2, h₂.2⟩
+
+/-- `C^BV` is stable under restriction. -/
+lemma isCBV_mono {Z : ℝ → ℝ × ℝ} {a b a' b' : ℝ} (h : IsCBV Z a b) (ha : a ≤ a')
+    (hb : b' ≤ b) : IsCBV Z a' b' :=
+  ⟨h.1.mono (Icc_subset_Icc ha hb), h.2.mono (Icc_subset_Icc ha hb)⟩
+
+/-- The Lebesgue–Stieltjes measure is linear in the curve. -/
 lemma cvx_lsMeasure_comb {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b) (hx : IsCBV x a b)
     (hy : IsCBV y a b) (c : ℝ) :
     lsMeasure ((1 - c) • x + c • y) a b = (1 - c) • lsMeasure x a b + c • lsMeasure y a b := by
@@ -376,6 +358,7 @@ noncomputable def cbvDomain (a b : ℝ) : ConvexDomain (CBV a b) where
   embeds := ⟨ℝ → ℝ × ℝ, inferInstance, inferInstance, Subtype.val, Subtype.val_injective,
     fun _ _ _ _ => rfl⟩
 
+/-- `𝓑(x₁, x₂)` is linear in `x₁`. -/
 lemma cvx_curveBilin_comb_left {x z : ℝ → ℝ × ℝ} (y : ℝ → ℝ × ℝ) {a b : ℝ}
     (hx : ContinuousOn x (Icc a b)) (hz : ContinuousOn z (Icc a b)) (c : ℝ) :
     curveBilin ((1 - c) • x + c • z) y a b =
@@ -391,37 +374,38 @@ lemma cvx_curveBilin_comb_left {x z : ℝ → ℝ × ℝ} (y : ℝ → ℝ × �
     VectorMeasure.integral_fun_smul, smul_eq_mul, smul_eq_mul]
   ring
 
-/-- **Proposition 7.2.2** (`pro:curve-area-functional-quadratic`). `𝒥` is quadratic on `C^BV[a, b]`. -/
+/-- `𝓑(x₁, x₂)` is linear in `x₂`. -/
+lemma cvx_curveBilin_comb_right {x y z : ℝ → ℝ × ℝ} {a b c : ℝ} (hab : a ≤ b)
+    (hxc : ContinuousOn x (Icc a b)) (hy : IsCBV y a b) (hz : IsCBV z a b) :
+    curveBilin x ((1 - c) • y + c • z) a b =
+      (1 - c) * curveBilin x y a b + c * curveBilin x z a b := by
+  simp only [curveBilin]
+  rw [cvx_lsMeasure_comb hab hy hz c, VectorMeasure.restrict_add, VectorMeasure.restrict_smul,
+    VectorMeasure.restrict_smul, VectorMeasure.integral_add_vectorMeasure
+      ((cvx_integrable_restrict_Icc _ hxc).smul_vectorMeasure _)
+      ((cvx_integrable_restrict_Icc _ hxc).smul_vectorMeasure _),
+    VectorMeasure.integral_smul_vectorMeasure, VectorMeasure.integral_smul_vectorMeasure,
+    smul_eq_mul, smul_eq_mul]
+  ring
+
+/-- **Proposition 7.2.2** (`pro:curve-area-functional-quadratic`). `𝒥` is quadratic on
+`C^BV[a, b]`. -/
 theorem proposition7_2_2 {a b : ℝ} (hab : a ≤ b) :
     (cbvDomain a b).IsQuadratic (fun x => curveArea x.1 a b) := by
-  refine ⟨fun x y => curveBilin x.1 y.1 a b, ⟨?_, ?_⟩, fun x => rfl⟩
-  · intro x c _ y z
-    show curveBilin x.1 ((1 - c) • y.1 + c • z.1) a b =
-      (1 - c) * curveBilin x.1 y.1 a b + c * curveBilin x.1 z.1 a b
-    simp only [curveBilin]
-    rw [cvx_lsMeasure_comb hab y.2 z.2 c, VectorMeasure.restrict_add, VectorMeasure.restrict_smul,
-      VectorMeasure.restrict_smul, VectorMeasure.integral_add_vectorMeasure,
-      VectorMeasure.integral_smul_vectorMeasure, VectorMeasure.integral_smul_vectorMeasure,
-      smul_eq_mul, smul_eq_mul]
-    · ring
-    · exact (cvx_integrable_restrict_Icc _ x.2.1).smul_vectorMeasure _
-    · exact (cvx_integrable_restrict_Icc _ x.2.1).smul_vectorMeasure _
-  · intro y c _ x z
-    exact cvx_curveBilin_comb_left y.1 x.2.1 z.2.1 c
+  exact ⟨fun x y => curveBilin x.1 y.1 a b,
+    ⟨fun x c _ y z => cvx_curveBilin_comb_right hab x.2.1 y.2 z.2,
+      fun y c _ x z => cvx_curveBilin_comb_left y.1 x.2.1 z.2.1 c⟩, fun x => rfl⟩
 
 /-- The curve area functional of a primitive of a bounded integrable function. -/
 theorem cvx_curveArea_of_primitive {x ψ : ℝ → ℝ × ℝ} {a b : ℝ} {M : NNReal} (hab : a ≤ b)
     (hψ : IntegrableOn ψ (Icc a b)) (hψM : ∀ t ∈ Icc a b, ‖ψ t‖ ≤ M)
     (hx : ∀ t ∈ Icc a b, x t = x a + ∫ s in a..t, ψ s) :
     curveArea x a b = (1 / 2) * ∫ t in a..b, cross (x t) (ψ t) := by
-  have hlip := cvx_lipschitzOnWith_of_primitive hψ hψM hx
-  have hbv : BoundedVariationOn x (Icc a b) := by
-    have := hlip.locallyBoundedVariationOn a b ⟨le_rfl, hab⟩ ⟨hab, le_rfl⟩
-    rwa [inter_self] at this
-  have hxc := hlip.continuousOn
+  obtain ⟨hbv, hxc⟩ := cvx_bv_of_primitive hab hψ hψM hx
   unfold curveArea curveBilin
   rw [cvx_lsMeasure_eq_withDensityᵥ hab hψ hx hbv hxc,
-    cvx_withDensityᵥ_restrict_self measurableSet_Icc hψ,
+    cvx_withDensityᵥ_restrict hψ measurableSet_Icc,
+    Measure.restrict_restrict_of_subset subset_rfl,
     cvx_integral_withDensityᵥ hψ (ae_restrict_of_forall_mem measurableSet_Icc hψM) crossCLM
       hxc.integrableOn_Icc, intervalIntegral.integral_of_le hab, integral_Icc_eq_integral_Ioc]
   simp only [crossCLM_apply]
@@ -467,9 +451,10 @@ theorem curveArea_eq_integral {x : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ 
 `def:curve-area-line-segment`). -/
 noncomputable def segArea (p q : ℝ × ℝ) : ℝ := cross p q / 2
 
-/-- **Proposition 7.2.4** (`pro:curve-area-line-segment`). The curve area functional of the oriented
-segment from `p` to `q` is `𝒥(p, q)`; if `p, q ∈ l(t, h)` and `q - p = d v_t` then `𝒥(p, q) = hd/2`. -/
-theorem proposition7_2_4 (p q : ℝ × ℝ) : curveArea (fun s => p + s • (q - p)) 0 1 = segArea p q := by
+/-- **Proposition 7.2.4** (`pro:curve-area-line-segment`). The curve area functional of the
+oriented segment from `p` to `q` is `𝒥(p, q)`. -/
+theorem proposition7_2_4 (p q : ℝ × ℝ) :
+    curveArea (fun s => p + s • (q - p)) 0 1 = segArea p q := by
   rw [cvx_curveArea_of_primitive (ψ := fun _ => q - p) (M := ‖q - p‖₊) zero_le_one
     (integrableOn_const (by simp)) (fun _ _ => le_rfl)]
   · have : ∀ t : ℝ, cross (p + t • (q - p)) (q - p) = cross p q := by
@@ -480,6 +465,8 @@ theorem proposition7_2_4 (p q : ℝ × ℝ) : curveArea (fun s => p + s • (q -
   · intro t _
     simp [smul_sub]
 
+/-- **Proposition 7.2.4**, second claim: if `p ∈ l(t, h)` and `q - p = d v_t`, then
+`𝒥(p, q) = hd/2`. -/
 theorem proposition7_2_4_line {p q : ℝ × ℝ} {t h d : ℝ} (hp : p ∈ line t h)
     (hd : q - p = d • vvec t) : segArea p q = h * d / 2 := by
   have hq' : q = p + d • vvec t := by rw [← hd]; abel
@@ -487,17 +474,13 @@ theorem proposition7_2_4_line {p q : ℝ × ℝ} {t h d : ℝ} (hp : p ∈ line 
   rw [segArea, hq', cross_add_right, cross_self, cross_smul_right, cross_vvec, hp]
   ring
 
-/-- **Proposition 7.2.5** (`pro:curve-area-line-segment-colinear`). If `p`, `q` and the origin lie on
-a common line, then `𝒥(p, q) = 0`. -/
+/-- **Proposition 7.2.5** (`pro:curve-area-line-segment-colinear`). If `p`, `q` and the origin lie
+on a common line, then `𝒥(p, q) = 0`. -/
 theorem proposition7_2_5 {p q : ℝ × ℝ} {t : ℝ} (hp : p ∈ line t 0) (hq : q ∈ line t 0) :
     segArea p q = 0 := by
-  have hd : q - p = dot (q - p) (vvec t) • vvec t := by
-    have h0 : dot (q - p) (uvec t) = 0 := by
-      simp only [line, Set.mem_ofPred_eq] at hp hq
-      rw [dot_sub_left, hp, hq, sub_zero]
-    conv_lhs => rw [eq_dot_uvec_smul_add (q - p) t, h0, zero_smul, zero_add]
-  rw [proposition7_2_4_line hp hd]
-  ring
+  refine (proposition7_2_4_line hp (eq_smul_vvec_of_dot_uvec_eq_zero ?_)).trans (by ring)
+  simp only [line, Set.mem_ofPred_eq] at hp hq
+  rw [dot_sub_left, hp, hq, sub_zero]
 
 /-- **Proposition 7.2.6** (`pro:curve-area-functional-additive`). The curve area functional is
 additive under concatenation: `𝒥(x|_{[a,c]}) = 𝒥(x|_{[a,b]}) + 𝒥(x|_{[b,c]})`. -/
@@ -521,5 +504,61 @@ theorem proposition7_2_6 {x : ℝ → ℝ × ℝ} {a b c : ℝ} (hab : a ≤ b) 
     rw [mem_singleton_iff]
     by_contra hne
     exact ht.2 ⟨lt_of_le_of_ne ht.1.1 (Ne.symm hne), ht.1.2⟩
+
+/-- Splitting the curve area functional at two points. -/
+lemma curveArea_split_three {Z : ℝ → ℝ × ℝ} {a b c d : ℝ} (hab : a ≤ b) (hbc : b ≤ c) (hcd : c ≤ d)
+    (h : IsCBV Z a d) :
+    curveArea Z a d = curveArea Z a b + curveArea Z b c + curveArea Z c d := by
+  rw [proposition7_2_6 hab (hbc.trans hcd) h,
+    proposition7_2_6 hbc hcd (isCBV_mono h hab le_rfl), add_assoc]
+
+/-- Splitting the curve area functional at four points. -/
+lemma curveArea_split_five {Z : ℝ → ℝ × ℝ} {a b c d e f : ℝ} (hab : a ≤ b) (hbc : b ≤ c)
+    (hcd : c ≤ d) (hde : d ≤ e) (hef : e ≤ f) (h : IsCBV Z a f) :
+    curveArea Z a f = curveArea Z a b + curveArea Z b c + curveArea Z c d + curveArea Z d e
+      + curveArea Z e f := by
+  have h₁ := isCBV_mono h hab le_rfl
+  have h₂ := isCBV_mono h₁ hbc le_rfl
+  rw [proposition7_2_6 hab (hbc.trans (hcd.trans (hde.trans hef))) h,
+    proposition7_2_6 hbc (hcd.trans (hde.trans hef)) h₁, curveArea_split_three hcd hde hef h₂]
+  ring
+
+/-! ### Elementary properties of `𝒥` -/
+
+/-- The curve area functional only depends on the values of the curve on `[a, b]`. -/
+lemma curveArea_congr {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b) (h : EqOn x y (Icc a b)) :
+    curveArea x a b = curveArea y a b := by
+  unfold curveArea curveBilin lsMeasure
+  rw [clampFun_congr hab h]
+  congr 1
+  exact VectorMeasure.setIntegral_congr_fun h
+
+/-- A curve that is constant on `[a, b]` has zero curve area functional. -/
+lemma curveArea_const {x : ℝ → ℝ × ℝ} {a b : ℝ} {P : ℝ × ℝ} (hab : a ≤ b)
+    (h : ∀ t ∈ Icc a b, x t = P) : curveArea x a b = 0 := by
+  rw [curveArea_congr hab (y := fun _ => P) h, curveArea_eq_integral hab contDiffOn_const]
+  simp [cross]
+
+/-- `𝒥(p, q) = -𝒥(q, p)`. -/
+lemma segArea_swap (p q : ℝ × ℝ) : segArea p q = -segArea q p := by
+  rw [segArea, segArea, cross_anticomm]; ring
+
+/-- `𝒥(p, p) = 0`. -/
+lemma segArea_self (p : ℝ × ℝ) : segArea p p = 0 := by
+  simp [segArea]
+
+/-- Collinear points: `𝒥(p, q) + 𝒥(q, r) = 𝒥(p, r)`. -/
+lemma segArea_add_of_mem_line {p q r : ℝ × ℝ} {t c : ℝ} (hp : p ∈ line t c) (hq : q ∈ line t c)
+    (hr : r ∈ line t c) : segArea p q + segArea q r = segArea p r := by
+  -- by Proposition 7.2.4, `𝒥(x, y) = c ((y - x) · v_t) / 2` for `x, y ∈ l(t, c)`
+  have h : ∀ {x y}, x ∈ line t c → y ∈ line t c → segArea x y = c * dot (y - x) (vvec t) / 2 :=
+    fun hx hy => proposition7_2_4_line hx (eq_smul_vvec_of_dot_uvec_eq_zero (by
+      simp only [line, Set.mem_ofPred_eq] at hx hy; rw [dot_sub_left, hx, hy, sub_self]))
+  rw [h hp hq, h hq hr, h hp hr, dot_sub_left, dot_sub_left, dot_sub_left]
+  ring
+
+/-- Two points on the `x`-axis have zero curve area functional. -/
+lemma segArea_of_snd_eq_zero {p q : ℝ × ℝ} (hp : p.2 = 0) (hq : q.2 = 0) : segArea p q = 0 := by
+  simp only [segArea, cross, hp, hq]; ring
 
 end MovingSofaOptimality

@@ -9,15 +9,15 @@ public import MovingSofaOptimality.Injectivity.ArmLengths
 /-!
 # The structure of Gerver's sofa
 
-The paper states the structure of Gerver's sofa (Theorem 8.4.1) without proof, and imports Romik's
-balancing ODEs (Theorem 8.4.2). This file verifies, for every solution `P` of Romik's system satisfying
-the enclosures `P.Bounds`, the parts of Theorem 8.4.1 that do not concern the niche, Theorem 8.4.2
-and Theorem 6.1.2.
+The paper states the structure of Gerver's sofa (Theorem 8.4.1) without proof, and imports
+Romik's balancing ODEs (Theorem 8.4.2). This file verifies, for every solution `P` of Romik's system
+satisfying the enclosures `P.Bounds`, the parts of Theorem 8.4.1 that do not concern the niche,
+Theorem 8.4.2 and Theorem 6.1.2.
 
-Method (see `notes/gerver_plan.md`): in the rotating frame of each phase the curves `𝐀, 𝐁, 𝐂, 𝐃` and
-the derivatives of the rotation path are explicit; the cap of `G` is the explicit convex body
-`{p_y ≥ 0} ∩ ⋂_{σ ∈ [0, π]} H₋(σ, H(σ))`, and Theorems 2.5.8–2.5.9 identify `G` with the monotone sofa
-of that cap.
+Method: in the rotating frame of each phase the curves `𝐀, 𝐁, 𝐂, 𝐃` and the derivatives of the
+rotation path are explicit (`MovingSofaOptimality.Gerver.Frame`); the cap of `G` is the explicit
+convex body `{p_y ≥ 0} ∩ ⋂_{σ ∈ [0, π]} H₋(σ, H(σ))`, and Theorems 2.5.8–2.5.9 identify `G` with
+the monotone sofa of that cap (`MovingSofaOptimality.Gerver.StructureCap`).
 -/
 
 @[expose] public section
@@ -44,7 +44,8 @@ theorem gv_monotone (hP : P.IsSolution) (hB : P.Bounds) :
 
 /-- Theorem 8.4.1 (3) under the enclosures. -/
 theorem gv_walls (hP : P.IsSolution) (hB : P.Bounds) :
-    (∀ t ∈ Icc (π / 2 - P.θ) (π / 2), contactB P.path t ∈ wallBVec (capOf (gerverSofa P) (π / 2)) t) ∧
+    (∀ t ∈ Icc (π / 2 - P.θ) (π / 2),
+        contactB P.path t ∈ wallBVec (capOf (gerverSofa P) (π / 2)) t) ∧
       ∀ t ∈ Icc 0 P.θ, contactD P.path t ∈ wallDVec (capOf (gerverSofa P) (π / 2)) t := by
   have hO := gs_ord hP
   rw [(gs_monotone_K hP hB).2]
@@ -70,9 +71,8 @@ theorem gv_tangents (hP : P.IsSolution) (hB : P.Bounds) :
   · rcases hne.lt_or_gt with h | h
     · have ho : gs_opiece P 3 t := ⟨ht.1, h⟩
       refine ⟨(P.gs_phase 3).ρA t - 1, ?_, gs_hasDerivAt_contactB hP ho⟩
-      rw [show t = π / 2 - (π / 2 - t) by ring, gs_ρA₄_eq hP]
-      have := (gs_ineq_ρC₂ hB (s := π / 2 - t) (by linarith [hO.1]) (by linarith [ht.1])).2
-      linarith
+      rw [gs_ρA₄_eq' hP]
+      linarith [(gs_ineq_ρC₂ hB (s := π / 2 - t) (by linarith [hO.1]) (by linarith [ht.1])).2]
     · have ho : gs_opiece P 4 t := h
       refine ⟨(P.gs_phase 4).ρA t - 1, ?_, gs_hasDerivAt_contactB hP ho⟩
       rw [gs_ρA₅_eq]; norm_num
@@ -83,8 +83,7 @@ theorem gv_tangents (hP : P.IsSolution) (hB : P.Bounds) :
     · have ho : gs_opiece P 1 t := ⟨h, ht.2⟩
       refine ⟨1 - (P.gs_phase 1).ρC t, ?_, gs_hasDerivAt_contactD hP ho⟩
       rw [gs_ρC₂_eq]
-      have := (gs_ineq_ρC₂ hB (s := t) ht.1.le ht.2.le).2
-      linarith
+      linarith [(gs_ineq_ρC₂ hB (s := t) ht.1.le ht.2.le).2]
 
 /-- Theorem 8.4.2 (Romik's ODEs) under the enclosures. -/
 theorem gv_odes (hP : P.IsSolution) (hB : P.Bounds) :
@@ -110,7 +109,7 @@ theorem gv_odes (hP : P.IsSolution) (hB : P.Bounds) :
   · have ho : gs_opiece P 0 t := ht.2
     rw [(gs_hasDerivAt_contactA hP ho).deriv, (gs_hasDerivAt_contactC hP ho).deriv,
       (gs_hasDerivAt_contactD hP ho).deriv]
-    simp only [dot_neg_left, gs_dot_smul_vvec_vvec, gs_dot_smul_uvec_uvec, gs_ρA₁_eq, gs_ρC₁_eq]
+    simp only [dot_neg_left, dot_smul_left, dot_vvec_self, dot_uvec_self, gs_ρA₁_eq, gs_ρC₁_eq]
     norm_num
   · have ho : gs_opiece P 1 t := ht
     rw [(gs_hasDerivAt_contactA hP ho).deriv, (gs_hasDerivAt_contactC hP ho).deriv,
@@ -128,14 +127,12 @@ theorem gv_odes (hP : P.IsSolution) (hB : P.Bounds) :
     rw [(gs_hasDerivAt_contactA hP ho).deriv, (gs_hasDerivAt_contactC hP ho).deriv,
       (gs_hasDerivAt_contactB hP ho).deriv, gs_deriv_path_eq hP (gs_piece_of_opiece ho)]
     simp only [dot_neg_left, dot_add_left, dot_smul_left, dot_uvec_self, dot_vvec_self,
-      dot_uvec_vvec, dot_vvec_uvec]
-    rw [show t = π / 2 - (π / 2 - t) by ring, gs_ρA₄_eq hP, gs_ρC₄_eq hP, gs_α₄_eq hP,
-      gs_β₄_eq hP]
+      dot_uvec_vvec, dot_vvec_uvec, gs_ρA₄_eq' hP, gs_ρC₄_eq' hP, gs_α₄_eq' hP, gs_β₄_eq' hP]
     constructor <;> ring
   · have ho : gs_opiece P 4 t := ht.1
     rw [(gs_hasDerivAt_contactA hP ho).deriv, (gs_hasDerivAt_contactC hP ho).deriv,
       (gs_hasDerivAt_contactB hP ho).deriv]
-    simp only [dot_neg_left, gs_dot_smul_vvec_vvec, gs_dot_smul_uvec_uvec, gs_ρA₅_eq, gs_ρC₅_eq]
+    simp only [dot_neg_left, dot_smul_left, dot_vvec_self, dot_uvec_self, gs_ρA₅_eq, gs_ρC₅_eq]
     norm_num
 
 /-- Theorem 6.1.2 under the enclosures: the cap of Gerver's sofa satisfies the injectivity

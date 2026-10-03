@@ -12,8 +12,8 @@ import Mathlib.Analysis.Calculus.FDeriv.Prod
 The paper (Theorem 8.4.1 (2)) uses without proof that the niche of the cap of Gerver's sofa is the
 region enclosed by the curves `𝐃`, `𝐱|_{[t₁, t₄]}`, `𝐁` and the `x`-axis. This file proves the
 geometric part of an abstract version of this statement (the area is computed in
-`MovingSofaOptimality.Gerver.EnvelopeArea`); `notes/gerver_plan.md`, section "Niche structure", reduces the
-statement for Gerver's sofa to it.
+`MovingSofaOptimality.Gerver.EnvelopeArea`); `MovingSofaOptimality.Gerver.Niche` applies it to
+Gerver's sofa.
 
 ## Setting
 
@@ -30,9 +30,8 @@ facts that hold for Gerver's path (with `t₁ = φ`, `t₂ = θ`, `t₃ = π/2 -
 * `env_not_mem`: the points of `Γ` lie in no quadrant `Q⁻(s)`, `s ∈ (0, π/2)`; hence not in `N`
   (`env_not_mem_niche`);
 * `env_mem_closure`: the points of `Γ` lie in the closure of `N`;
-* `env_subset_niche`, `env_niche_subset_strict`, `env_niche_subset`, `env_niche_eq`: `N` is the set
-  of points `q` with `q₂ ≥ 0` lying strictly below a point of `Γ` (`envUnderStrict`), and hence lies
-  in the set of points lying on or below a point of `Γ` (`envUnder`).
+* `env_subset_niche`, `env_niche_subset_strict`, `env_niche_eq`: `N` is the set of points `q` with
+  `q₂ ≥ 0` lying strictly below a point of `Γ` (`envUnderStrict`).
 
 ## Proof
 
@@ -122,34 +121,6 @@ structure EnvHyp (t₁ t₂ t₃ t₄ sA sC : ℝ) (x : ℝ → ℝ × ℝ) (α 
 
 /-! ### Elementary facts -/
 
-/-- The first coordinate of a differentiable curve. -/
-lemma env_hasDerivAt_fst {p : ℝ → ℝ × ℝ} {p' : ℝ × ℝ} {t : ℝ} (hp : HasDerivAt p p' t) :
-    HasDerivAt (fun t => (p t).1) p'.1 t :=
-  HasFDerivAt.comp_hasDerivAt t (hasFDerivAt_fst (𝕜 := ℝ) (p := p t)) hp
-
-/-- The second coordinate of a differentiable curve. -/
-lemma env_hasDerivAt_snd {p : ℝ → ℝ × ℝ} {p' : ℝ × ℝ} {t : ℝ} (hp : HasDerivAt p p' t) :
-    HasDerivAt (fun t => (p t).2) p'.2 t :=
-  HasFDerivAt.comp_hasDerivAt t (hasFDerivAt_snd (𝕜 := ℝ) (p := p t)) hp
-
-/-- The derivative of `t ↦ p(t) · w`. -/
-lemma env_hasDerivAt_dot {p : ℝ → ℝ × ℝ} {p' : ℝ × ℝ} {t : ℝ} (hp : HasDerivAt p p' t)
-    (w : ℝ × ℝ) : HasDerivAt (fun t => dot (p t) w) (dot p' w) t := by
-  unfold dot
-  exact ((env_hasDerivAt_fst hp).mul_const w.1).add ((env_hasDerivAt_snd hp).mul_const w.2)
-
-/-- Continuity of `t ↦ p(t) · w`. -/
-lemma env_continuousOn_dot {p : ℝ → ℝ × ℝ} {S : Set ℝ} (hp : ContinuousOn p S) (w : ℝ × ℝ) :
-    ContinuousOn (fun t => dot (p t) w) S := by
-  unfold dot
-  exact (hp.fst.mul continuousOn_const).add (hp.snd.mul continuousOn_const)
-
-/-- `t ↦ u_t` is continuous. -/
-lemma env_continuous_uvec : Continuous uvec := by unfold uvec; fun_prop
-
-/-- `t ↦ v_t` is continuous. -/
-lemma env_continuous_vvec : Continuous vvec := by unfold vvec; fun_prop
-
 /-- Envelope fact: `f_s(𝐁(s)) = (𝐁(s) - x(s)) · u_s = 0`. -/
 lemma env_dot_B_self (x : ℝ → ℝ × ℝ) (α : ℝ → ℝ) (s : ℝ) :
     dot (envB x α s - x s) (uvec s) = 0 := by
@@ -165,21 +136,11 @@ lemma env_bp_finite (t₁ t₂ t₃ t₄ : ℝ) : ({t₁, t₂, t₃, t₄} : Se
 
 /-! ### Principle P -/
 
-/-- `u_σ = cos(σ - s) u_s + sin(σ - s) v_s`, paired with a vector `p`. -/
-lemma env_dot_uvec_eq (p : ℝ × ℝ) (s σ : ℝ) :
-    dot p (uvec σ) = cos (σ - s) * dot p (uvec s) + sin (σ - s) * dot p (vvec s) := by
-  have h1 : cos σ = cos (σ - s) * cos s - sin (σ - s) * sin s := by
-    rw [← cos_add, sub_add_cancel]
-  have h2 : sin σ = sin (σ - s) * cos s + cos (σ - s) * sin s := by
-    rw [← sin_add, sub_add_cancel]
-  simp only [dot, uvec, vvec]
-  rw [h1, h2]; ring
-
 /-- **Principle P.** If `(p - x(s)) · u_σ ≥ 0` for some `σ ∈ [s, s + π/2]`, then `p ∉ Q⁻(s)`. -/
 lemma env_not_mem_of_dot {x : ℝ → ℝ × ℝ} {s σ : ℝ} {p : ℝ × ℝ} (hσ : σ ∈ Icc s (s + π / 2))
     (h : 0 ≤ dot (p - x s) (uvec σ)) : p ∉ envQuad x s := by
   rintro ⟨hf, hg⟩
-  rw [env_dot_uvec_eq _ s σ] at h
+  rw [dot_uvec_eq_cos_add_sin _ σ s] at h
   have hc : 0 ≤ cos (σ - s) :=
     cos_nonneg_of_mem_Icc ⟨by linarith [hσ.1, pi_pos], by linarith [hσ.2]⟩
   have hs : 0 ≤ sin (σ - s) := sin_nonneg_of_nonneg_of_le_pi (by linarith [hσ.1])
@@ -194,6 +155,8 @@ lemma env_not_mem_of_dot {x : ℝ → ℝ × ℝ} {s σ : ℝ} {p : ℝ × ℝ} 
 
 /-! ### Monotonicity from the sign of a derivative off a finite set -/
 
+/-- `f a ≤ f b` for `f` continuous on `[a, b]` with a nonnegative derivative off a finite set `T`,
+by induction on `T` (splitting `[a, b]` at a point of `T`). -/
 private lemma env_le_aux {f f' : ℝ → ℝ} (T : Finset ℝ) :
     ∀ a b : ℝ, a ≤ b → ContinuousOn f (Icc a b) →
       (∀ t ∈ Ioo a b, t ∉ (T : Set ℝ) → HasDerivAt f (f' t) t ∧ 0 ≤ f' t) → f a ≤ f b := by
@@ -223,33 +186,6 @@ private lemma env_le_aux {f f' : ℝ → ℝ} (T : Finset ℝ) :
         simp only [Finset.coe_insert, mem_insert_iff, not_or]
         exact ⟨fun h => hc (h ▸ ht), htT⟩))
 
-private lemma env_lt_aux {f f' : ℝ → ℝ} (T : Finset ℝ) :
-    ∀ a b : ℝ, a < b → ContinuousOn f (Icc a b) →
-      (∀ t ∈ Ioo a b, t ∉ (T : Set ℝ) → HasDerivAt f (f' t) t ∧ 0 < f' t) → f a < f b := by
-  induction T using Finset.induction_on with
-  | empty =>
-    intro a b hab hc hd
-    obtain ⟨c, hc', hfc⟩ :=
-      exists_hasDerivAt_eq_slope f f' hab hc (fun t ht => (hd t ht (by simp)).1)
-    have h1 := (hd c hc' (by simp)).2
-    rw [hfc] at h1
-    have h2 := mul_pos h1 (sub_pos.2 hab)
-    rw [div_mul_cancel₀ _ (sub_pos.2 hab).ne'] at h2
-    linarith
-  | insert c T hcT ih =>
-    intro a b hab hcont hd
-    by_cases hc : c ∈ Ioo a b
-    · have h1 : f a < f c := ih a c hc.1 (hcont.mono (Icc_subset_Icc le_rfl hc.2.le))
-        (fun t ht htT => hd t ⟨ht.1, ht.2.trans hc.2⟩ (by
-          simp only [Finset.coe_insert, mem_insert_iff, not_or]; exact ⟨ht.2.ne, htT⟩))
-      have h2 : f c < f b := ih c b hc.2 (hcont.mono (Icc_subset_Icc hc.1.le le_rfl))
-        (fun t ht htT => hd t ⟨hc.1.trans ht.1, ht.2⟩ (by
-          simp only [Finset.coe_insert, mem_insert_iff, not_or]; exact ⟨ht.1.ne', htT⟩))
-      exact h1.trans h2
-    · exact ih a b hab hcont (fun t ht htT => hd t ht (by
-        simp only [Finset.coe_insert, mem_insert_iff, not_or]
-        exact ⟨fun h => hc (h ▸ ht), htT⟩))
-
 /-- A continuous function with a nonnegative derivative off a finite set is monotone. -/
 lemma env_monotoneOn {f f' : ℝ → ℝ} {a b : ℝ} {S : Set ℝ} (hS : S.Finite)
     (hc : ContinuousOn f (Icc a b)) (hd : ∀ t ∈ Ioo a b, t ∉ S → HasDerivAt f (f' t) t)
@@ -269,16 +205,24 @@ lemma env_antitoneOn {f f' : ℝ → ℝ} {a b : ℝ} {S : Set ℝ} (hS : S.Fini
     (fun t ht htS => (hd t ht htS).neg) (fun t ht htS => neg_nonneg.2 (hneg t ht htS))
   exact fun u hu v hv huv => neg_le_neg_iff.1 (this hu hv huv)
 
-/-- A continuous function with a positive derivative off a finite set is strictly monotone. -/
+/-- A continuous function with a positive derivative off a finite set is strictly monotone: it is
+monotone, and it is constant on no interval `[u, v]`, `u < v`, since its derivative at a point of
+`(u, v)` off the finite set is positive. -/
 lemma env_strictMonoOn {f f' : ℝ → ℝ} {a b : ℝ} {S : Set ℝ} (hS : S.Finite)
     (hc : ContinuousOn f (Icc a b)) (hd : ∀ t ∈ Ioo a b, t ∉ S → HasDerivAt f (f' t) t)
     (hpos : ∀ t ∈ Ioo a b, t ∉ S → 0 < f' t) : StrictMonoOn f (Icc a b) := by
+  have hmono := env_monotoneOn hS hc hd fun t ht htS => (hpos t ht htS).le
   intro u hu v hv huv
-  refine env_lt_aux (f' := f') hS.toFinset u v huv (hc.mono (Icc_subset_Icc hu.1 hv.2)) ?_
-  intro t ht htS
-  rw [Set.Finite.coe_toFinset] at htS
+  refine lt_of_le_of_ne (hmono hu hv huv.le) fun heq => ?_
+  obtain ⟨t, ht, htS⟩ := ((Ioo_infinite huv).sdiff hS).nonempty
   have ht' : t ∈ Ioo a b := ⟨hu.1.trans_lt ht.1, ht.2.trans_le hv.2⟩
-  exact ⟨hd t ht' htS, hpos t ht' htS⟩
+  -- `f` is constant on `[u, v]`, so its derivative at `t` vanishes.
+  have hconst : ∀ s ∈ Ioo u v, f u = f s := fun s hs =>
+    le_antisymm (hmono hu ⟨hu.1.trans hs.1.le, hs.2.le.trans hv.2⟩ hs.1.le)
+      (heq ▸ hmono ⟨hu.1.trans hs.1.le, hs.2.le.trans hv.2⟩ hv hs.2.le)
+  have h0 : f' t = 0 := ((hd t ht' htS).congr_of_eventuallyEq
+    (Filter.eventually_of_mem (Ioo_mem_nhds ht.1 ht.2) hconst)).unique (hasDerivAt_const t (f u))
+  exact (hpos t ht' htS).ne' h0
 
 /-- A continuous function with a negative derivative off a finite set is strictly antitone. -/
 lemma env_strictAntiOn {f f' : ℝ → ℝ} {a b : ℝ} {S : Set ℝ} (hS : S.Finite)
@@ -330,18 +274,18 @@ variable {t₁ t₂ t₃ t₄ sA sC : ℝ} {x : ℝ → ℝ × ℝ} {α β ρA �
 /-- `𝐁` is continuous on `[0, π/2]`. -/
 lemma env_B_cont (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     ContinuousOn (envB x α) (Icc 0 (π / 2)) :=
-  h.x_cont.add (h.α_cont.smul env_continuous_vvec.continuousOn)
+  h.x_cont.add (h.α_cont.smul continuous_vvec.continuousOn)
 
 /-- `𝐃` is continuous on `[0, π/2]`. -/
 lemma env_D_cont (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     ContinuousOn (envD x β) (Icc 0 (π / 2)) :=
-  h.x_cont.sub (h.β_cont.smul env_continuous_uvec.continuousOn)
+  h.x_cont.sub (h.β_cont.smul continuous_uvec.continuousOn)
 
 /-- The derivative of `r ↦ f_s(𝐁(r))` off the breakpoints. -/
 lemma env_phi_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s r : ℝ}
     (hr : r ∈ Ioo 0 (π / 2)) (hr' : r ∉ ({t₁, t₂, t₃, t₄} : Set ℝ)) :
     HasDerivAt (fun r => dot (envB x α r - x s) (uvec s)) ((ρA r - 1) * sin (s - r)) r := by
-  have := env_hasDerivAt_dot ((h.B_deriv r hr hr').sub_const (x s)) (uvec s)
+  have := hasDerivAt_dot ((h.B_deriv r hr hr').sub_const (x s)) (uvec s)
   convert this using 1
   rw [dot_smul_left, dot_vvec_uvec']
 
@@ -349,7 +293,7 @@ lemma env_phi_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s r 
 lemma env_psi_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s r : ℝ}
     (hr : r ∈ Ioo 0 (π / 2)) (hr' : r ∉ ({t₁, t₂, t₃, t₄} : Set ℝ)) :
     HasDerivAt (fun r => dot (envD x β r - x s) (vvec s)) ((1 - ρC r) * sin (r - s)) r := by
-  have := env_hasDerivAt_dot ((h.D_deriv r hr hr').sub_const (x s)) (vvec s)
+  have := hasDerivAt_dot ((h.D_deriv r hr hr').sub_const (x s)) (vvec s)
   convert this using 1
   rw [dot_smul_left, dot_uvec_vvec']
 
@@ -357,7 +301,7 @@ lemma env_psi_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s r 
 lemma env_F_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : ℝ}
     (hτ : τ ∈ Ioo 0 (π / 2)) :
     HasDerivAt (fun τ => dot (x τ - x s) (uvec s)) (α τ * cos (τ - s) + β τ * sin (s - τ)) τ := by
-  have := env_hasDerivAt_dot ((h.x_deriv τ hτ).sub_const (x s)) (uvec s)
+  have := hasDerivAt_dot ((h.x_deriv τ hτ).sub_const (x s)) (uvec s)
   convert this using 1
   rw [dot_add_left, dot_smul_left, dot_smul_left, dot_uvec_uvec, dot_vvec_uvec']
 
@@ -365,7 +309,7 @@ lemma env_F_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ :
 lemma env_G_deriv (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : ℝ}
     (hτ : τ ∈ Ioo 0 (π / 2)) :
     HasDerivAt (fun τ => dot (x τ - x s) (vvec s)) (α τ * sin (τ - s) + β τ * cos (τ - s)) τ := by
-  have := env_hasDerivAt_dot ((h.x_deriv τ hτ).sub_const (x s)) (vvec s)
+  have := hasDerivAt_dot ((h.x_deriv τ hτ).sub_const (x s)) (vvec s)
   convert this using 1
   rw [dot_add_left, dot_smul_left, dot_smul_left, dot_uvec_vvec', dot_vvec_vvec]
 
@@ -376,7 +320,7 @@ lemma env_phi_mono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s : �
   have hsub : Icc (max s sA) (π / 2) ⊆ Icc 0 (π / 2) :=
     Icc_subset_Icc (le_max_of_le_left hs.1.le) le_rfl
   refine env_monotoneOn (env_bp_finite t₁ t₂ t₃ t₄)
-    (env_continuousOn_dot (((env_B_cont h).mono hsub).sub continuousOn_const) _)
+    (continuousOn_dot (((env_B_cont h).mono hsub).sub continuousOn_const) _)
     (fun r hr hr' => env_phi_deriv h ⟨(lt_max_of_lt_left hs.1).trans hr.1, hr.2⟩ hr') ?_
   intro r hr _
   have h1 : ρA r - 1 ≤ 0 := by
@@ -392,7 +336,7 @@ lemma env_phi_anti (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s : �
   have hsA : 0 < sA := h.ht.1.trans_le h.hsA.1
   have hsub : Icc sA s ⊆ Icc 0 (π / 2) := Icc_subset_Icc hsA.le hs.2.le
   refine env_antitoneOn (env_bp_finite t₁ t₂ t₃ t₄)
-    (env_continuousOn_dot (((env_B_cont h).mono hsub).sub continuousOn_const) _)
+    (continuousOn_dot (((env_B_cont h).mono hsub).sub continuousOn_const) _)
     (fun r hr hr' => env_phi_deriv h ⟨hsA.trans hr.1, hr.2.trans hs.2⟩ hr') ?_
   intro r hr _
   have h1 : ρA r - 1 ≤ 0 := by
@@ -408,7 +352,7 @@ lemma env_psi_mono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s : �
   have hsC : sC < π / 2 := h.hsC.2.trans_lt h.ht.2.2.2.2
   have hsub : Icc s sC ⊆ Icc 0 (π / 2) := Icc_subset_Icc hs.1.le hsC.le
   refine env_monotoneOn (env_bp_finite t₁ t₂ t₃ t₄)
-    (env_continuousOn_dot (((env_D_cont h).mono hsub).sub continuousOn_const) _)
+    (continuousOn_dot (((env_D_cont h).mono hsub).sub continuousOn_const) _)
     (fun r hr hr' => env_psi_deriv h ⟨hs.1.trans hr.1, hr.2.trans hsC⟩ hr') ?_
   intro r hr _
   have h1 : 0 ≤ 1 - ρC r := by
@@ -424,7 +368,7 @@ lemma env_psi_anti (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s : �
   have hsub : Icc 0 (min s sC) ⊆ Icc 0 (π / 2) :=
     Icc_subset_Icc le_rfl ((min_le_left _ _).trans hs.2.le)
   refine env_antitoneOn (env_bp_finite t₁ t₂ t₃ t₄)
-    (env_continuousOn_dot (((env_D_cont h).mono hsub).sub continuousOn_const) _)
+    (continuousOn_dot (((env_D_cont h).mono hsub).sub continuousOn_const) _)
     (fun r hr hr' => env_psi_deriv h ⟨hr.1, hr.2.trans_le ((min_le_left _ _).trans hs.2.le)⟩ hr')
     ?_
   intro r hr _
@@ -444,8 +388,7 @@ lemma env_I_nonneg (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s : �
   have e : dot (x t₁ - x s) (uvec s) = dot (envB x α t₃ - x s) (uvec s) := by rw [h.B_t₃]
   rw [e, ← env_dot_B_self x α s]
   rcases le_total s t₃ with hst | hst
-  · have hm := max_eq_left hsA
-    exact env_phi_mono h hs' ⟨(max_le le_rfl hsA), hs.2.le⟩
+  · exact env_phi_mono h hs' ⟨(max_le le_rfl hsA), hs.2.le⟩
       ⟨max_le hst h.hsA.2, (ht₃₄.trans ht₄).le⟩ hst
   · exact env_phi_anti h hs' ⟨h.hsA.2, hst⟩ ⟨hsA, le_rfl⟩ hst
 
@@ -474,7 +417,7 @@ lemma env_wit_x (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : �
     have hsub : Icc t₁ s ⊆ Icc 0 (π / 2) := Icc_subset_Icc ht₁.le hs.2.le
     have hmin := env_min_le (F := fun τ => dot (x τ - x s) (uvec s))
       (F' := fun τ => α τ * cos (τ - s) + β τ * sin (s - τ))
-      (env_continuousOn_dot ((h.x_cont.mono hsub).sub continuousOn_const) _)
+      (continuousOn_dot ((h.x_cont.mono hsub).sub continuousOn_const) _)
       (fun τ' hτ' => env_F_deriv h ⟨ht₁.trans hτ'.1, hτ'.2.trans hs.2⟩) ?_ τ ⟨hτ.1, hτs⟩
     · have hI := env_I_nonneg h ⟨hτ.1.trans hτs, hs.2⟩
       simp only [sub_self, dot_zero_left] at hmin
@@ -500,7 +443,7 @@ lemma env_wit_x (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : �
     have hsub : Icc s t₄ ⊆ Icc 0 (π / 2) := Icc_subset_Icc hs.1.le ht₄.le
     have hmin := env_min_le (F := fun τ => dot (x τ - x s) (vvec s))
       (F' := fun τ => α τ * sin (τ - s) + β τ * cos (τ - s))
-      (env_continuousOn_dot ((h.x_cont.mono hsub).sub continuousOn_const) _)
+      (continuousOn_dot ((h.x_cont.mono hsub).sub continuousOn_const) _)
       (fun τ' hτ' => env_G_deriv h ⟨hs.1.trans hτ'.1, hτ'.2.trans ht₄⟩) ?_ τ ⟨hτs, hτ.2⟩
     · have hJ := env_J_nonneg h ⟨hs.1, hτs.trans hτ.2⟩
       simp only [sub_self, dot_zero_left] at hmin
@@ -524,22 +467,22 @@ lemma env_wit_B (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : �
     ∃ σ ∈ Icc s (s + π / 2), σ ≤ π / 2 ∧ 0 ≤ dot (envB x α τ - x s) (uvec σ) := by
   obtain ⟨ht₁, ht₁₂, ht₂₃, ht₃₄, ht₄⟩ := h.ht
   rcases le_total t₁ s with hts | hts
-  · refine ⟨s, ⟨le_rfl, by linarith [pi_pos]⟩, hs.2.le, ?_⟩
-    rw [← env_dot_B_self x α s]
+  · -- `σ = s`: `f_s(𝐁(τ)) ≥ 0`, from `f_s(𝐁(s)) = 0` and the monotonicity of `r ↦ f_s(𝐁(r))`
+    refine ⟨s, ⟨le_rfl, by linarith [pi_pos]⟩, hs.2.le, ?_⟩
     rcases le_total s t₃ with hs3 | hs3
-    · have hI := env_I_nonneg h ⟨hts, hs.2⟩
-      have e : dot (x t₁ - x s) (uvec s) = dot (envB x α t₃ - x s) (uvec s) := by rw [h.B_t₃]
-      have hm := env_phi_mono h hs ⟨max_le hs3 h.hsA.2, (ht₃₄.trans ht₄).le⟩
-        ⟨(max_le hs3 h.hsA.2).trans hτ.1, hτ.2⟩ hτ.1
-      simp only at hm
-      rw [env_dot_B_self x α s]
-      linarith
-    · have hsA : sA ≤ s := h.hsA.2.trans hs3
+    · -- `0 ≤ I(s) = f_s(𝐁(t₃)) ≤ f_s(𝐁(τ))`
+      have hI := env_I_nonneg h ⟨hts, hs.2⟩
+      rw [← h.B_t₃] at hI
+      exact hI.trans (env_phi_mono h hs ⟨max_le hs3 h.hsA.2, (ht₃₄.trans ht₄).le⟩
+        ⟨(max_le hs3 h.hsA.2).trans hτ.1, hτ.2⟩ hτ.1)
+    · rw [← env_dot_B_self x α s]
+      have hsA : sA ≤ s := h.hsA.2.trans hs3
       rcases le_total s τ with hsτ | hsτ
       · exact env_phi_mono h hs ⟨max_le le_rfl hsA, hs.2.le⟩
           ⟨(max_le le_rfl hsA).trans hsτ, hτ.2⟩ hsτ
       · exact env_phi_anti h hs ⟨h.hsA.2.trans hτ.1, hsτ⟩ ⟨hsA, le_rfl⟩ hsτ
-  · refine ⟨t₃, ⟨by linarith, by linarith [hs.1]⟩, by linarith, ?_⟩
+  · -- `σ = t₃`: `f_{t₃}(𝐁(τ)) ≥ f_{t₃}(𝐁(t₃)) = 0` and `(x(t₁) - x(s)) · u_{t₃} ≥ 0` (`corner_B`)
+    refine ⟨t₃, ⟨by linarith, by linarith [hs.1]⟩, by linarith, ?_⟩
     have ht₃ : t₃ ∈ Ioo 0 (π / 2) := ⟨by linarith, by linarith⟩
     have hm := env_phi_mono h ht₃ ⟨max_le le_rfl h.hsA.2, (ht₃₄.trans ht₄).le⟩
       ⟨max_le hτ.1 (h.hsA.2.trans hτ.1), hτ.2⟩ hτ.1
@@ -556,21 +499,23 @@ lemma env_wit_D (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {s τ : �
     ∃ σ ∈ Icc s (s + π / 2), π / 2 ≤ σ ∧ 0 ≤ dot (envD x β τ - x s) (uvec σ) := by
   obtain ⟨ht₁, ht₁₂, ht₂₃, ht₃₄, ht₄⟩ := h.ht
   rcases le_total s t₄ with hst | hst
-  · refine ⟨s + π / 2, ⟨by linarith [pi_pos], le_rfl⟩, by linarith [hs.1], ?_⟩
-    rw [uvec_add_pi_div_two, ← env_dot_D_self x β s]
+  · -- `σ = s + π/2`: `g_s(𝐃(τ)) ≥ 0`, from `g_s(𝐃(s)) = 0` and the monotonicity of `r ↦ g_s(𝐃(r))`
+    refine ⟨s + π / 2, ⟨by linarith [pi_pos], le_rfl⟩, by linarith [hs.1], ?_⟩
+    rw [uvec_add_pi_div_two]
     rcases le_total t₂ s with hs2 | hs2
-    · have hJ := env_J_nonneg h ⟨hs.1, hst⟩
-      have e : dot (x t₄ - x s) (vvec s) = dot (envD x β t₂ - x s) (vvec s) := by rw [h.D_t₂]
-      have hm := env_psi_anti h hs ⟨hτ.1, le_min (hτ.2.trans hs2) (hτ.2.trans h.hsC.1)⟩
-        ⟨by linarith, le_min hs2 h.hsC.1⟩ hτ.2
-      simp only at hm
-      rw [env_dot_D_self x β s]
-      linarith
-    · have hsC : s ≤ sC := hs2.trans h.hsC.1
+    · -- `0 ≤ J(s) = g_s(𝐃(t₂)) ≤ g_s(𝐃(τ))`
+      have hJ := env_J_nonneg h ⟨hs.1, hst⟩
+      rw [← h.D_t₂] at hJ
+      exact hJ.trans (env_psi_anti h hs ⟨hτ.1, le_min (hτ.2.trans hs2) (hτ.2.trans h.hsC.1)⟩
+        ⟨by linarith, le_min hs2 h.hsC.1⟩ hτ.2)
+    · rw [← env_dot_D_self x β s]
+      have hsC : s ≤ sC := hs2.trans h.hsC.1
       rcases le_total τ s with hτs | hτs
       · exact env_psi_anti h hs ⟨hτ.1, le_min hτs (hτs.trans hsC)⟩ ⟨hs.1.le, le_min le_rfl hsC⟩ hτs
       · exact env_psi_mono h hs ⟨le_rfl, hsC⟩ ⟨hτs, hτ.2.trans h.hsC.1⟩ hτs
-  · refine ⟨t₂ + π / 2, ⟨by linarith [hs.2], by linarith⟩, by linarith [hs.1], ?_⟩
+  · -- `σ = t₂ + π/2`: `g_{t₂}(𝐃(τ)) ≥ g_{t₂}(𝐃(t₂)) = 0` and `(x(t₄) - x(s)) · v_{t₂} ≥ 0`
+    -- (`corner_D`)
+    refine ⟨t₂ + π / 2, ⟨by linarith [hs.2], by linarith⟩, by linarith [hs.1], ?_⟩
     rw [uvec_add_pi_div_two]
     have ht₂ : t₂ ∈ Ioo 0 (π / 2) := ⟨by linarith, by linarith⟩
     have hm := env_psi_anti h ht₂ ⟨hτ.1, le_min hτ.2 (hτ.2.trans h.hsC.1)⟩
@@ -616,7 +561,7 @@ lemma env_x₁_strictAnti (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
   have hsub : Icc t₁ t₄ ⊆ Icc 0 (π / 2) := Icc_subset_Icc ht₁.le ht₄.le
   refine env_strictAntiOn (S := ∅) (f' := fun t => (α t • uvec t + β t • vvec t).1)
     finite_empty (h.x_cont.mono hsub).fst
-    (fun t ht _ => env_hasDerivAt_fst (h.x_deriv t ⟨ht₁.trans ht.1, ht.2.trans ht₄⟩)) ?_
+    (fun t ht _ => hasDerivAt_fst (h.x_deriv t ⟨ht₁.trans ht.1, ht.2.trans ht₄⟩)) ?_
   intro t ht _
   have ht' : t ∈ Ioo 0 (π / 2) := ⟨ht₁.trans ht.1, ht.2.trans ht₄⟩
   have hc : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht'.1, pi_pos], ht'.2⟩
@@ -631,7 +576,7 @@ lemma env_B₁_strictMono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
   have hsub : Icc t₃ (π / 2) ⊆ Icc 0 (π / 2) := Icc_subset_Icc (by linarith) le_rfl
   refine env_strictMonoOn (f' := fun t => ((ρA t - 1) • vvec t).1) (env_bp_finite t₁ t₂ t₃ t₄)
     ((env_B_cont h).mono hsub).fst
-    (fun t ht ht' => env_hasDerivAt_fst (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ ht')) ?_
+    (fun t ht ht' => hasDerivAt_fst (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ ht')) ?_
   intro t ht _
   have hs : 0 < sin t := sin_pos_of_pos_of_lt_pi (by linarith [ht.1]) (by linarith [ht.2, pi_pos])
   have hρ : ρA t - 1 < 0 := by linarith [h.ρA_lt t ⟨ht.1.le, ht.2.le⟩]
@@ -645,7 +590,7 @@ lemma env_B₂_strictAnti (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
   have hsub : Icc t₃ (π / 2) ⊆ Icc 0 (π / 2) := Icc_subset_Icc (by linarith) le_rfl
   refine env_strictAntiOn (f' := fun t => ((ρA t - 1) • vvec t).2) (env_bp_finite t₁ t₂ t₃ t₄)
     ((env_B_cont h).mono hsub).snd
-    (fun t ht ht' => env_hasDerivAt_snd (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ ht')) ?_
+    (fun t ht ht' => hasDerivAt_snd (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ ht')) ?_
   intro t ht _
   have hc : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht.1, pi_pos], ht.2⟩
   have hρ : ρA t - 1 < 0 := by linarith [h.ρA_lt t ⟨ht.1.le, ht.2.le⟩]
@@ -659,7 +604,7 @@ lemma env_D₁_strictMono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
   have hsub : Icc 0 t₂ ⊆ Icc 0 (π / 2) := Icc_subset_Icc le_rfl (by linarith)
   refine env_strictMonoOn (f' := fun t => ((1 - ρC t) • uvec t).1) (env_bp_finite t₁ t₂ t₃ t₄)
     ((env_D_cont h).mono hsub).fst
-    (fun t ht ht' => env_hasDerivAt_fst (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ ht')) ?_
+    (fun t ht ht' => hasDerivAt_fst (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ ht')) ?_
   intro t ht _
   have hc : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht.1, pi_pos], by linarith [ht.2]⟩
   have hρ : 0 < 1 - ρC t := by linarith [h.ρC_lt t ⟨ht.1.le, ht.2.le⟩]
@@ -673,7 +618,7 @@ lemma env_D₂_strictMono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
   have hsub : Icc 0 t₂ ⊆ Icc 0 (π / 2) := Icc_subset_Icc le_rfl (by linarith)
   refine env_strictMonoOn (f' := fun t => ((1 - ρC t) • uvec t).2) (env_bp_finite t₁ t₂ t₃ t₄)
     ((env_D_cont h).mono hsub).snd
-    (fun t ht ht' => env_hasDerivAt_snd (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ ht')) ?_
+    (fun t ht ht' => hasDerivAt_snd (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ ht')) ?_
   intro t ht _
   have hs : 0 < sin t := sin_pos_of_pos_of_lt_pi ht.1 (by linarith [ht.2, pi_pos])
   have hρ : 0 < 1 - ρC t := by linarith [h.ρC_lt t ⟨ht.1.le, ht.2.le⟩]
@@ -682,19 +627,13 @@ lemma env_D₂_strictMono (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
 
 /-- `𝐁₂ > 0` on `[t₃, π/2)`. -/
 lemma env_B₂_pos (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {τ : ℝ} (hτ : τ ∈ Ico t₃ (π / 2)) :
-    0 < (envB x α τ).2 := by
-  have := env_B₂_strictAnti h ⟨hτ.1, hτ.2.le⟩ ⟨hτ.1.trans hτ.2.le, le_rfl⟩ hτ.2
-  simp only at this
-  rw [h.B_end] at this
-  exact this
+    0 < (envB x α τ).2 :=
+  h.B_end ▸ env_B₂_strictAnti h ⟨hτ.1, hτ.2.le⟩ ⟨hτ.1.trans hτ.2.le, le_rfl⟩ hτ.2
 
 /-- `𝐃₂ > 0` on `(0, t₂]`. -/
 lemma env_D₂_pos (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {τ : ℝ} (hτ : τ ∈ Ioc 0 t₂) :
-    0 < (envD x β τ).2 := by
-  have := env_D₂_strictMono h ⟨le_rfl, hτ.1.le.trans hτ.2⟩ ⟨hτ.1.le, hτ.2⟩ hτ.1
-  simp only at this
-  rw [h.D_end] at this
-  exact this
+    0 < (envD x β τ).2 :=
+  h.D_end ▸ env_D₂_strictMono h ⟨le_rfl, hτ.1.le.trans hτ.2⟩ ⟨hτ.1.le, hτ.2⟩ hτ.1
 
 /-! ### The niche is the region under `Γ` -/
 
@@ -784,12 +723,6 @@ theorem env_niche_subset_strict (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρ
     sin_nonneg_of_nonneg_of_le_pi (by linarith [hσ.1, hs.1]) (by linarith [hσ.2, hs.2])
   nlinarith [mul_nonneg (sub_nonneg.2 hle) hsn]
 
-/-- **The niche lies under `Γ`.** -/
-theorem env_niche_subset (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
-    envNiche x ⊆ envUnder (envCurve t₁ t₂ t₃ t₄ x α β) := fun q hq => by
-  obtain ⟨h2, γ, hγ, h1, hlt⟩ := env_niche_subset_strict h hq
-  exact ⟨h2, γ, hγ, h1, hlt.le⟩
-
 /-- **The region strictly under `Γ` lies in the niche.** -/
 theorem env_subset_niche (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     envUnderStrict (envCurve t₁ t₂ t₃ t₄ x α β) ⊆ envNiche x := by
@@ -852,10 +785,8 @@ lemma env_mem_closure_of_pos (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA �
   intro ε hε
   have hm : 0 < min (ε / 2) γ.2 := lt_min (half_pos hε) hpos
   refine ⟨(γ.1, γ.2 - min (ε / 2) γ.2), env_subset_niche h ⟨?_, γ, hγ, rfl, ?_⟩, ?_⟩
-  · show 0 ≤ γ.2 - min (ε / 2) γ.2
-    linarith [min_le_right (ε / 2) γ.2]
-  · show γ.2 - min (ε / 2) γ.2 < γ.2
-    linarith
+  · exact sub_nonneg.2 (min_le_right _ _)
+  · exact sub_lt_self _ hm
   · rw [Prod.dist_eq]
     simp only [dist_self, Real.dist_eq]
     rw [show γ.2 - (γ.2 - min (ε / 2) γ.2) = min (ε / 2) γ.2 by ring, abs_of_pos hm,

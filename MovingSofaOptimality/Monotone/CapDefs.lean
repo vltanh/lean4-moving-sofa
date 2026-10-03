@@ -20,9 +20,9 @@ namespace MovingSofaOptimality
 def IsHalfPlaneInter (K : Set (ℝ × ℝ)) (A : Set ℝ) : Prop :=
   ∃ (ι : Type) (t c : ι → ℝ), (∀ i, t i ∈ A) ∧ K = ⋂ i, halfMinus (t i) (c i)
 
-/-- A cap with rotation angle `ω ∈ (0, π/2]` (Definition 2.4.1, `def:cap`): a convex body `K` with
-`h_K(ω) = h_K(π/2) = 1`, `h_K(ω + π) = h_K(3π/2) = 0`, which is an intersection of closed half-planes
-with normal angles in `J_ω ∪ {ω + π, 3π/2}`. -/
+/-- A cap with rotation angle `ω ∈ (0, π/2]` (Definition 2.4.1, `def:cap`): a convex body `K`
+with `h_K(ω) = h_K(π/2) = 1`, `h_K(ω + π) = h_K(3π/2) = 0`, which is an intersection of closed
+half-planes with normal angles in `J_ω ∪ {ω + π, 3π/2}`. -/
 def IsCap (K : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
   ω ∈ Ioc 0 (π / 2) ∧ IsConvexBody K ∧ supp K ω = 1 ∧ supp K (π / 2) = 1 ∧
     supp K (ω + π) = 0 ∧ supp K (3 * π / 2) = 0 ∧
@@ -78,7 +78,47 @@ noncomputable def mirror (ω : ℝ) (p : ℝ × ℝ) : ℝ × ℝ :=
 /-- The mirror reflection `K^m = M_ω(K)` of a cap (Definition 2.5.6). -/
 def mirrorCap (K : Set (ℝ × ℝ)) (ω : ℝ) : Set (ℝ × ℝ) := mirror ω '' K
 
-/-- The sofa area functional `𝒜_ω(K) = |K| - |𝒩(K)|` (Definition 2.5.8, `def:sofa-area-functional`). -/
+/-- The sofa area functional `𝒜_ω(K) = |K| - |𝒩(K)|` (Definition 2.5.8,
+`def:sofa-area-functional`). -/
 noncomputable def sofaArea (ω : ℝ) (K : Set (ℝ × ℝ)) : ℝ := area K - area (niche K ω)
+
+/-! ### Basic properties of fans and caps -/
+
+lemma mem_fan_iff {ω : ℝ} {p : ℝ × ℝ} : p ∈ fan ω ↔ 0 ≤ dot p (uvec ω) ∧ 0 ≤ p.2 := by
+  rw [← dot_uvec_pi_div_two]; rfl
+
+lemma isClosed_fan (ω : ℝ) : IsClosed (fan ω) :=
+  (isClosed_halfPlus _ _).inter (isClosed_halfPlus _ _)
+
+section Cap
+
+variable {K : Set (ℝ × ℝ)} {ω : ℝ}
+
+lemma IsCap.isConvexBody (hK : IsCap K ω) : IsConvexBody K := hK.2.1
+
+/-- A cap lies in `H₊(ω, 0)`, as `h_K(ω + π) = 0`. -/
+lemma IsCap.dot_omega_nonneg (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) :
+    0 ≤ dot p (uvec ω) := by
+  have h := dot_le_supp hK.2.1.2.1 hp (ω + π)
+  rw [dot_uvec_add_pi, hK.2.2.2.2.1] at h
+  linarith
+
+/-- A cap lies above the `x`-axis, as `h_K(3π/2) = 0`. -/
+lemma IsCap.snd_nonneg (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) : 0 ≤ p.2 := by
+  have h := dot_le_supp hK.2.1.2.1 hp (3 * π / 2)
+  rw [dot_uvec_three_pi_div_two, hK.2.2.2.2.2.1] at h
+  linarith
+
+lemma IsCap.dot_omega_le_one (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) :
+    dot p (uvec ω) ≤ 1 := hK.2.2.1 ▸ dot_le_supp hK.2.1.2.1 hp ω
+
+lemma IsCap.snd_le_one (hK : IsCap K ω) {p : ℝ × ℝ} (hp : p ∈ K) : p.2 ≤ 1 := by
+  simpa [hK.2.2.2.1, dot_uvec_pi_div_two] using dot_le_supp hK.2.1.2.1 hp (π / 2)
+
+/-- A cap lies in the fan `F_ω`. -/
+lemma IsCap.subset_fan (hK : IsCap K ω) : K ⊆ fan ω := fun _ hp =>
+  mem_fan_iff.2 ⟨hK.dot_omega_nonneg hp, hK.snd_nonneg hp⟩
+
+end Cap
 
 end MovingSofaOptimality

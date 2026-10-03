@@ -19,7 +19,7 @@ open Real Set MeasureTheory
 
 namespace MovingSofaOptimality
 
-/-- `sec⁻¹(2.2) = arccos(1/2.2)`. -/
+/-- The angle `sec⁻¹(2.2) = arccos(1/2.2)`. -/
 noncomputable def arcsec22 : ℝ := arccos (1 / 2.2)
 
 /-! ### Helper lemmas -/
@@ -71,6 +71,7 @@ lemma ang_area_le_of_slices {S : Set (ℝ × ℝ)} {lo ℓ : ℝ} {f : ℝ → �
   unfold area
   exact ENNReal.toReal_le_of_le_ofReal hℓ (ang_volume_le_of_slices hf hS)
 
+/-- `cos (sec⁻¹(2.2)) = 1 / 2.2 = 5 / 11`. -/
 lemma ang_cos_arcsec22 : cos arcsec22 = 5 / 11 := by
   unfold arcsec22; rw [cos_arccos] <;> norm_num
 
@@ -80,16 +81,14 @@ lemma ang_arcsec22_le_pi_div_two : arcsec22 ≤ π / 2 := by
 lemma ang_arcsec22_pos : 0 < arcsec22 := by
   unfold arcsec22; rw [arccos_pos]; norm_num
 
+/-- `π/4 < sec⁻¹(2.2)`, as `cos (sec⁻¹(2.2)) = 5/11 < √2/2 = cos (π/4)`. -/
 lemma ang_pi_div_four_lt_arcsec22 : π / 4 < arcsec22 := by
   have h1 : cos arcsec22 < cos (π / 4) := by
     rw [ang_cos_arcsec22, cos_pi_div_four]
-    have : (1.4 : ℝ) < √2 := by
-      rw [show (1.4 : ℝ) = √(1.4 ^ 2) by rw [sqrt_sq (by norm_num)]]
-      exact Real.sqrt_lt_sqrt (by norm_num) (by norm_num)
+    have : (1.4 : ℝ) < √2 := (Real.lt_sqrt (by norm_num)).2 (by norm_num)
     linarith
   by_contra h
-  rw [not_lt] at h
-  have := cos_le_cos_of_nonneg_of_le_pi ang_arcsec22_pos.le (by linarith [pi_pos]) h
+  have := cos_le_cos_of_nonneg_of_le_pi ang_arcsec22_pos.le (by linarith [pi_pos]) (not_lt.1 h)
   linarith
 
 /-- Case `ω ≤ -π/4` of Theorem 1.5.1: the area bound `√2`. -/
@@ -165,24 +164,20 @@ theorem theorem1_5_1 {S : Set (ℝ × ℝ)} (hS : IsMovingSofa S) (harea : 2.2 �
   obtain ⟨ω, hcl, hconn, θ, c, hm⟩ := hS
   have hstart : ∀ p ∈ S, p + c 0 ∈ horizSide := by
     intro p hp; have := hm.start p hp; rwa [hm.angle_zero, rot_zero] at this
-  -- the rotation angle is larger than `-π/4`
+  -- Step 1: the rotation angle is larger than `-π/4`, or the area would be at most `√2`
   have hω1 : -(π / 4) < ω := by
-    by_contra h
-    rw [not_lt] at h
+    by_contra! h
     have hmem : π / 4 ∈ Icc (θ 0) (θ 1) := by
       rw [hm.angle_zero, hm.angle_one]; constructor <;> linarith [pi_pos]
     obtain ⟨s, hs, hθs⟩ := intermediate_value_Icc (zero_le_one' ℝ) hm.continuousOn_angle hmem
     have h1 : ∀ p ∈ S, rot (π / 4) p + c s ∈ hallway := by
       intro p hp; rw [← hθs]; exact hm.inside s hs p hp
     have h2 := ang_area_le_sqrt_two hstart h1
-    have h3 : √2 < 2.2 := by
-      rw [show (2.2 : ℝ) = √(2.2 ^ 2) by rw [sqrt_sq (by norm_num)]]
-      exact Real.sqrt_lt_sqrt (by norm_num) (by norm_num)
+    have h3 : √2 < 2.2 := (Real.sqrt_lt' (by norm_num)).2 (by norm_num)
     linarith
-  -- the rotation angle is at least `sec⁻¹(2.2)`
+  -- Step 2: the rotation angle is at least `sec⁻¹(2.2)`, or the area would be at most `sec ω`
   have hω2 : arcsec22 ≤ ω := by
-    by_contra h
-    rw [not_le] at h
+    by_contra! h
     have hcos : 5 / 11 < cos ω := by
       rw [← cos_abs, ← ang_cos_arcsec22]
       apply cos_lt_cos_of_nonneg_of_le_pi (abs_nonneg _)
@@ -193,20 +188,29 @@ theorem theorem1_5_1 {S : Set (ℝ × ℝ)} (hS : IsMovingSofa S) (harea : 2.2 �
     have h2 := ang_area_le_sec (by linarith) hstart hfin
     have h3 : 1 / cos ω < 2.2 := by rw [div_lt_iff₀ (by linarith)]; linarith
     linarith
-  by_cases hω3 : ω ≤ π / 2
+  rcases le_or_gt ω (π / 2) with hω3 | hω3
   · exact ⟨ω, ⟨hω2, hω3⟩, hcl, hconn, θ, c, hm⟩
-  rw [not_le] at hω3
   refine ⟨π / 2, ⟨ang_arcsec22_le_pi_div_two, le_rfl⟩, hcl, hconn, ?_⟩
-  -- stop the movement when the sofa has rotated by `π/2`, then translate it into `V_L`
+  -- Step 3: if `ω > π/2`, stop the movement when the sofa has rotated by `π/2`, then translate it
+  -- horizontally into `V_L`
   obtain ⟨s₀, hs₀, hθs₀⟩ : ∃ s₀ ∈ Icc (0 : ℝ) 1, θ s₀ = -(π / 2) := by
     apply intermediate_value_Icc' (zero_le_one' ℝ) hm.continuousOn_angle
     rw [hm.angle_zero, hm.angle_one]; constructor <;> linarith [pi_pos]
-  have hs₀1 : s₀ < 1 := by
-    rcases eq_or_lt_of_le hs₀.2 with h | h
-    · rw [h, hm.angle_one] at hθs₀; linarith
-    · exact h
+  have hs₀1 : s₀ < 1 := hs₀.2.lt_of_ne fun h => by rw [h, hm.angle_one] at hθs₀; linarith
   have hpos : 0 < 1 - s₀ := by linarith
+  -- at time `s₀` the sofa is in `L`, and translating it by `(δ, 0)` puts it in `V_L`
   set δ := (c 0).2 - (c s₀).1 with hδ
+  have hL : ∀ p ∈ S, rot (-(π / 2)) p + c s₀ ∈ hallway := fun p hp => by
+    rw [← hθs₀]; exact hm.inside s₀ hs₀ p hp
+  have hV : ∀ p ∈ S, rot (-(π / 2)) p + c s₀ + (δ, 0) ∈ vertSide := by
+    intro p hp
+    have hy1 : (rot (-(π / 2)) p + c s₀).2 ≤ 1 := by
+      rcases hL p hp with ⟨-, -, h⟩ | ⟨-, -, h⟩ <;> exact h
+    obtain ⟨-, hy0', hy1'⟩ := hstart p hp
+    simp only [Prod.snd_add] at hy0' hy1'
+    refine ⟨?_, ?_, ?_⟩ <;>
+      simp only [Prod.fst_add, Prod.snd_add, rot, cos_neg, sin_neg, cos_pi_div_two,
+        sin_pi_div_two, add_zero, hδ] at hy1 ⊢ <;> linarith
   have hmaps : MapsTo (fun s : ℝ => min s s₀) (Icc 0 1) (Icc 0 1) := fun s hs =>
     ⟨le_min hs.1 hs₀.1, (min_le_left _ _).trans hs.2⟩
   have hmin_cont : Continuous fun s : ℝ => min s s₀ := continuous_id.min continuous_const
@@ -233,33 +237,11 @@ theorem theorem1_5_1 {S : Set (ℝ × ℝ)} (hS : IsMovingSofa S) (harea : 2.2 �
       have hl1 : (s - s₀) / (1 - s₀) ≤ 1 := by rw [div_le_one hpos]; linarith [hs.2]
       simp only [min_eq_right hss.le, max_eq_right hl0, hθs₀]
       rw [← add_assoc]
-      have hP := hm.inside s₀ hs₀ p hp
-      rw [hθs₀] at hP
-      refine ang_hallway_translate hP ?_ hl0 hl1
-      have hy1 : (rot (-(π / 2)) p + c s₀).2 ≤ 1 := by
-        rcases hP with ⟨-, -, h⟩ | ⟨-, -, h⟩ <;> exact h
-      obtain ⟨-, hy0', hy1'⟩ := hstart p hp
-      simp only [Prod.snd_add] at hy0' hy1'
-      refine ⟨?_, ?_, ?_⟩ <;>
-        simp only [Prod.fst_add, Prod.snd_add, rot, cos_neg, sin_neg, cos_pi_div_two,
-          sin_pi_div_two, add_zero, hδ] at hy1 ⊢
-      · linarith
-      · linarith
-      · linarith
+      exact ang_hallway_translate (hL p hp) (hV p hp) hl0 hl1
   · intro p hp
     have hl : max 0 ((1 - s₀) / (1 - s₀)) = 1 := by rw [div_self hpos.ne']; norm_num
     simp only [min_eq_right hs₀.2, hl, one_mul, hθs₀]
-    have hP := hm.inside s₀ hs₀ p hp
-    rw [hθs₀] at hP
-    have hy1 : (rot (-(π / 2)) p + c s₀).2 ≤ 1 := by
-      rcases hP with ⟨-, -, h⟩ | ⟨-, -, h⟩ <;> exact h
-    obtain ⟨-, hy0', hy1'⟩ := hstart p hp
-    simp only [Prod.snd_add] at hy0' hy1'
-    refine ⟨?_, ?_, ?_⟩ <;>
-      simp only [Prod.fst_add, Prod.snd_add, rot, cos_neg, sin_neg, cos_pi_div_two,
-        sin_pi_div_two, add_zero, hδ] at hy1 ⊢
-    · linarith
-    · linarith
-    · linarith
+    rw [← add_assoc]
+    exact hV p hp
 
 end MovingSofaOptimality

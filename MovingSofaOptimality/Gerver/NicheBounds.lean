@@ -9,27 +9,27 @@ import Mathlib.Order.Monotone.Union
 /-!
 # Numerical facts about Gerver's rotation path for the niche
 
-Package GB. For a solution `hP : P.IsSolution` with the enclosures `hB : P.Bounds`, this file
-proves the one-dimensional facts about Gerver's rotation path `𝐱 = P.path` that the abstract
-envelope argument for the niche of Gerver's sofa uses (`notes/gerver_plan.md`, section "Niche
-structure"), with the breakpoints `t₁ = φ`, `t₂ = θ`, `t₃ = π/2 - θ`, `t₄ = π/2 - φ` and the
-auxiliary angles `s_A = 0.62`, `s_C = 0.95`:
+For a solution `hP : P.IsSolution` with the enclosures `hB : P.Bounds`, this file proves the
+one-dimensional facts about Gerver's rotation path `𝐱 = P.path` that the envelope theorem for the
+niche of Gerver's sofa (`MovingSofaOptimality.Gerver.Envelope`, hypotheses `EnvHyp`) uses, with the
+breakpoints `t₁ = φ`, `t₂ = θ`, `t₃ = π/2 - θ`, `t₄ = π/2 - φ` and the auxiliary angles
+`s_A = 0.62`, `s_C = 0.95`:
 
 * the functions `gb_rhoA P`, `gb_rhoC P` (glued along the phases like `P.path`), with
-  `𝐁' = (ρ_A - 1) v_t` for `𝐁 = 𝐱 + α v_t` and `𝐃' = (1 - ρ_C) u_t` for `𝐃 = 𝐱 - β u_t` away from
-  the breakpoints;
+  `𝐀' = ρ_A v_t`, `𝐁' = (ρ_A - 1) v_t`, `𝐂' = -ρ_C u_t`, `𝐃' = (1 - ρ_C) u_t` away from the
+  breakpoints (`gb_A_deriv`, `gb_B_deriv`, `gb_C_deriv`, `gb_D_deriv`), and bounded on `[0, π/2]`
+  (`gb_rhoA_bdd`, `gb_rhoC_bdd`);
 * `gb_order`, `gb_sA_mem`, `gb_sC_mem`: the order of the angles;
-* `gb_x_cont`, `gb_x_deriv`, `gb_α_cont`, `gb_β_cont`, `gb_B_deriv`, `gb_D_deriv`: regularity;
-* `gb_α_neg`, `gb_β_pos`, `gb_ratio_mono` (`|α|/β` is nondecreasing, as `α` and `β` are antitone,
-  `gb_α_antitoneOn`, `gb_β_antitoneOn`);
+* `gb_ratio_mono` (`|α|/β` is nondecreasing, as `α` and `β` are antitone, `gb_α_antitoneOn`,
+  `gb_β_antitoneOn`);
 * `gb_rhoA_le`, `gb_rhoA_lt`, `gb_rhoC_le`, `gb_rhoC_lt`: `ρ_A ≤ 1` on `[s_A, π/2]`, `ρ_C ≤ 1` on
   `[0, s_C]`;
 * `gb_I_nonneg`, `gb_I'_nonneg`: `(𝐱(t₁) - 𝐱(s)) · u_s ≥ 0` on `[t₁, s_A]` and its mirror image;
 * `gb_corner_B`, `gb_corner_D`: `(𝐱(t₁) - 𝐱(s)) · u_{t₃} ≥ 0` on `[0, t₁]` and its mirror image;
-* `gb_x_pos`: `𝐱(t)_y > 0` on `[t₁, t₄]`;
-* `gb_rhoA_measurable`, `gb_rhoA_bdd`, `gb_rhoC_measurable`, `gb_rhoC_bdd`;
-* `gb_B_t₃`, `gb_D_t₂`, `gb_B_end`, `gb_D_end`: the identities `𝐁(t₃) = 𝐱(t₁)`, `𝐃(t₂) = 𝐱(t₄)`,
-  `𝐁(π/2)_y = 0`, `𝐃(0)_y = 0`.
+* `gb_x_pos`: `𝐱(t)_y > 0` on `[t₁, t₄]`.
+
+The other hypotheses of the envelope theorem (continuity, the signs of `α` and `β`, the
+identities at the breakpoints) are facts of `MovingSofaOptimality.Gerver.Frame`.
 
 Method: interval arithmetic with the enclosures and `π ∈ (3.141592, 3.141593)`, the Taylor bounds
 `gb_cos_le`, `gb_sin_le`, `gb_cos_ge` for `sin` and `cos`, and monotonicity from derivative signs.
@@ -91,21 +91,6 @@ private lemma gb_antitoneOn_union {f : ℝ → ℝ} {a b c : ℝ} (hab : a ≤ b
     (h₁ : AntitoneOn f (Icc a b)) (h₂ : AntitoneOn f (Icc b c)) : AntitoneOn f (Icc a c) := by
   rw [← Icc_union_Icc_eq_Icc hab hbc]
   exact AntitoneOn.union_right h₁ h₂ (isGreatest_Icc hab) (isLeast_Icc hbc)
-
-private lemma gb_hasDerivAt_dot {f : ℝ → ℝ × ℝ} {f' : ℝ × ℝ} {s : ℝ} (hf : HasDerivAt f f' s)
-    (w : ℝ × ℝ) : HasDerivAt (fun r => dot (f r) w) (dot f' w) s := by
-  let L : (ℝ × ℝ) →L[ℝ] ℝ :=
-    w.1 • ContinuousLinearMap.fst ℝ ℝ ℝ + w.2 • ContinuousLinearMap.snd ℝ ℝ ℝ
-  have h := L.hasFDerivAt.comp_hasDerivAt s hf
-  convert h using 1
-  · funext r; simp [L, dot]; ring
-  · simp [L, dot]; ring
-
-private lemma gb_hasDerivAt_snd {f : ℝ → ℝ × ℝ} {f' : ℝ × ℝ} {s : ℝ} (hf : HasDerivAt f f' s) :
-    HasDerivAt (fun r => (f r).2) f'.2 s := by
-  have h := gb_hasDerivAt_dot hf (0, 1)
-  simp only [dot, mul_zero, mul_one, zero_add] at h
-  exact h
 
 /-- `cos x ≤ 1 - x²/2 + x⁴/24` for `x ≥ 0`. -/
 lemma gb_cos_le {x : ℝ} (hx : 0 ≤ x) : cos x ≤ 1 - x ^ 2 / 2 + x ^ 4 / 24 := by
@@ -192,28 +177,7 @@ lemma gb_sC_mem (hB : P.Bounds) : P.θ ≤ 0.95 ∧ 0.95 ≤ π / 2 - P.φ := by
   have := pi_gt_d6
   constructor <;> linarith
 
-/-! ### Regularity -/
-
-lemma gb_x_cont (hP : P.IsSolution) : ContinuousOn P.path (Icc 0 (π / 2)) :=
-  (gs_continuous_path hP).continuousOn
-
-private lemma gb_pathD_eq (hP : P.IsSolution) (t : ℝ) :
-    P.gs_pathD t = P.gs_α t • uvec t + P.gs_β t • vvec t := by
-  rw [gs_α, gs_β, ← gs_deriv_path hP]
-  exact eq_dot_uvec_smul_add _ t
-
-/-- `𝐱' = α u_t + β v_t`. -/
-lemma gb_x_deriv (hP : P.IsSolution) :
-    ∀ t ∈ Ioo 0 (π / 2), HasDerivAt P.path (P.gs_α t • uvec t + P.gs_β t • vvec t) t := by
-  intro t _
-  rw [← gb_pathD_eq hP]
-  exact gs_hasDerivAt_path hP t
-
-lemma gb_α_cont (hP : P.IsSolution) : ContinuousOn P.gs_α (Icc 0 (π / 2)) :=
-  (gs_continuous_α hP).continuousOn
-
-lemma gb_β_cont (hP : P.IsSolution) : ContinuousOn P.gs_β (Icc 0 (π / 2)) :=
-  (gs_continuous_β hP).continuousOn
+/-! ### Derivatives of the contact curves off the breakpoints -/
 
 /-- Away from the breakpoints, `t` lies in an open phase interval on which `gb_rhoA`, `gb_rhoC` are
 the phase formulas. -/
@@ -242,57 +206,57 @@ private lemma gb_opiece_of_ne {t : ℝ}
   · simp only [c1, c2, c3, c4, ↓reduceIte]
     exact ⟨4, (show π / 2 - P.φ < t from not_le.1 c4), rfl, rfl⟩
 
-/-- `𝐁' = (ρ_A - 1) v_t` off the breakpoints, for `𝐁 = 𝐱 + α v_t`. -/
-lemma gb_B_deriv (hP : P.IsSolution) :
-    ∀ t ∈ Ioo 0 (π / 2), t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ) →
-      HasDerivAt (fun r => P.path r + P.gs_α r • vvec r) ((gb_rhoA P t - 1) • vvec t) t := by
-  intro t _ ht
+/-- `𝐀' = ρ_A v_t` off the breakpoints. -/
+lemma gb_A_deriv (hP : P.IsSolution) {t : ℝ}
+    (ht : t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ)) :
+    HasDerivAt (contactA P.path) (gb_rhoA P t • vvec t) t := by
+  obtain ⟨i, hi, hA, -⟩ := gb_opiece_of_ne ht
+  rw [hA]
+  exact gs_hasDerivAt_contactA hP hi
+
+/-- `𝐁' = (ρ_A - 1) v_t` off the breakpoints. -/
+lemma gb_B_deriv (hP : P.IsSolution) {t : ℝ}
+    (ht : t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ)) :
+    HasDerivAt (contactB P.path) ((gb_rhoA P t - 1) • vvec t) t := by
   obtain ⟨i, hi, hA, -⟩ := gb_opiece_of_ne ht
   rw [hA]
   exact gs_hasDerivAt_contactB hP hi
 
-/-- `𝐃' = (1 - ρ_C) u_t` off the breakpoints, for `𝐃 = 𝐱 - β u_t`. -/
-lemma gb_D_deriv (hP : P.IsSolution) :
-    ∀ t ∈ Ioo 0 (π / 2), t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ) →
-      HasDerivAt (fun r => P.path r - P.gs_β r • uvec r) ((1 - gb_rhoC P t) • uvec t) t := by
-  intro t _ ht
+/-- `𝐂' = -ρ_C u_t` off the breakpoints. -/
+lemma gb_C_deriv (hP : P.IsSolution) {t : ℝ}
+    (ht : t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ)) :
+    HasDerivAt (contactC P.path) (-gb_rhoC P t • uvec t) t := by
+  obtain ⟨i, hi, -, hC⟩ := gb_opiece_of_ne ht
+  rw [hC]
+  exact gs_hasDerivAt_contactC hP hi
+
+/-- `𝐃' = (1 - ρ_C) u_t` off the breakpoints. -/
+lemma gb_D_deriv (hP : P.IsSolution) {t : ℝ}
+    (ht : t ∉ ({P.φ, P.θ, π / 2 - P.θ, π / 2 - P.φ} : Set ℝ)) :
+    HasDerivAt (contactD P.path) ((1 - gb_rhoC P t) • uvec t) t := by
   obtain ⟨i, hi, -, hC⟩ := gb_opiece_of_ne ht
   rw [hC]
   exact gs_hasDerivAt_contactD hP hi
 
-/-! ### Signs and monotonicity of `α` and `β` -/
+/-- At every point, `gb_rhoA` and `gb_rhoC` are the formulas of one of the five phases. -/
+private lemma gb_exists_phase (t : ℝ) :
+    ∃ i < 5, gb_rhoA P t = (P.gs_phase i).ρA t ∧ gb_rhoC P t = (P.gs_phase i).ρC t := by
+  unfold gb_rhoA gb_rhoC
+  split_ifs
+  exacts [⟨0, by norm_num, rfl, rfl⟩, ⟨1, by norm_num, rfl, rfl⟩, ⟨2, by norm_num, rfl, rfl⟩,
+    ⟨3, by norm_num, rfl, rfl⟩, ⟨4, by norm_num, rfl, rfl⟩]
 
-lemma gb_α_neg (hP : P.IsSolution) (hB : P.Bounds) : ∀ t ∈ Ioo 0 (π / 2), P.gs_α t < 0 :=
-  fun _ ht => gs_α_neg hP hB ht.1 ht.2.le
+/-- `ρ_A` is bounded on `[0, π/2]`. -/
+lemma gb_rhoA_bdd : ∃ M, ∀ t ∈ Icc 0 (π / 2), |gb_rhoA P t| ≤ M := by
+  simpa only [Real.norm_eq_abs] using gs_exists_bound_of_sel gs_continuous_ρA
+    (fun t => (gb_exists_phase t).imp fun _ h => ⟨h.1, h.2.1⟩) 0 (π / 2)
 
-lemma gb_β_pos (hP : P.IsSolution) (hB : P.Bounds) : ∀ t ∈ Ioo 0 (π / 2), 0 < P.gs_β t :=
-  fun _ ht => gs_β_pos hP hB ht.1.le ht.2
+/-- `ρ_C` is bounded on `[0, π/2]`. -/
+lemma gb_rhoC_bdd : ∃ M, ∀ t ∈ Icc 0 (π / 2), |gb_rhoC P t| ≤ M := by
+  simpa only [Real.norm_eq_abs] using gs_exists_bound_of_sel gs_continuous_ρC
+    (fun t => (gb_exists_phase t).imp fun _ h => ⟨h.1, h.2.2⟩) 0 (π / 2)
 
-/-! Phase formulas in the variable `t` (Frame states phases 4–5 in the variable `π/2 - t`). -/
-
-private lemma gb_α₄ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 3).α t = -(1 / 2 - (π / 2 - t) ^ 2 / 4 + P.b₁ * (π / 2 - t) + P.b₂) := by
-  have := gs_α₄_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
-
-private lemma gb_β₄ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 3).β t = -(2 * P.b₁ + 1 - (π / 2 - t)) := by
-  have := gs_β₄_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
-
-private lemma gb_α₅ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 4).α t = -(2 * P.a₁ * cos (π / 2 - t) - sin (π / 2 - t) / 2 - 1) := by
-  have := gs_α₅_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
-
-private lemma gb_β₅ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 4).β t = -((1 - cos (π / 2 - t)) / 2 - 2 * P.a₁ * sin (π / 2 - t)) := by
-  have := gs_β₅_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
-
-private lemma gb_ρA₄ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 3).ρA t = (π / 2 - t) / 2 - P.b₁ := by
-  have := gs_ρA₄_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
-
-private lemma gb_ρC₄ (hP : P.IsSolution) (t : ℝ) :
-    (P.gs_phase 3).ρC t = 1 / 2 - (π / 2 - t) ^ 2 / 4 + P.b₁ * (π / 2 - t) + P.b₂ := by
-  have := gs_ρC₄_eq hP (π / 2 - t); rwa [sub_sub_cancel] at this
+/-! ### Monotonicity of `α` and `β` -/
 
 /-- `α₁` is antitone on `[0, φ]`. -/
 private lemma gb_α₁_anti (hB : P.Bounds) :
@@ -354,12 +318,13 @@ lemma gb_α_antitoneOn (hP : P.IsSolution) (hB : P.Bounds) : AntitoneOn P.gs_α 
     linarith
   have h4 : AntitoneOn P.gs_α (Icc (π / 2 - P.θ) (π / 2 - P.φ)) := by
     intro x hx y hy hxy
-    rw [gs_α_eq hP (gs_piece₃ hx.1 hx.2), gs_α_eq hP (gs_piece₃ hy.1 hy.2), gb_α₄ hP, gb_α₄ hP]
+    rw [gs_α_eq hP (gs_piece₃ hx.1 hx.2), gs_α_eq hP (gs_piece₃ hy.1 hy.2), gs_α₄_eq' hP,
+      gs_α₄_eq' hP]
     have := gb_β₂_anti hB (x := π / 2 - y) (y := π / 2 - x) (by linarith [hy.2]) (by linarith)
     linarith
   have h5 : AntitoneOn P.gs_α (Icc (π / 2 - P.φ) (π / 2)) := by
     intro x hx y hy hxy
-    rw [gs_α_eq hP (gs_piece₄ hx.1), gs_α_eq hP (gs_piece₄ hy.1), gb_α₅ hP, gb_α₅ hP]
+    rw [gs_α_eq hP (gs_piece₄ hx.1), gs_α_eq hP (gs_piece₄ hy.1), gs_α₅_eq' hP, gs_α₅_eq' hP]
     have h : 2 * P.a₁ * cos (π / 2 - x) - sin (π / 2 - x) / 2 - 1 ≤
         2 * P.a₁ * cos (π / 2 - y) - sin (π / 2 - y) / 2 - 1 :=
       gb_β₁_anti hB (a := π / 2 - y) (b := π / 2 - x)
@@ -386,11 +351,12 @@ lemma gb_β_antitoneOn (hP : P.IsSolution) (hB : P.Bounds) : AntitoneOn P.gs_β 
     linarith
   have h4 : AntitoneOn P.gs_β (Icc (π / 2 - P.θ) (π / 2 - P.φ)) := by
     intro x hx y hy hxy
-    rw [gs_β_eq hP (gs_piece₃ hx.1 hx.2), gs_β_eq hP (gs_piece₃ hy.1 hy.2), gb_β₄ hP, gb_β₄ hP]
+    rw [gs_β_eq hP (gs_piece₃ hx.1 hx.2), gs_β_eq hP (gs_piece₃ hy.1 hy.2), gs_β₄_eq' hP,
+      gs_β₄_eq' hP]
     linarith
   have h5 : AntitoneOn P.gs_β (Icc (π / 2 - P.φ) (π / 2)) := by
     intro x hx y hy hxy
-    rw [gs_β_eq hP (gs_piece₄ hx.1), gs_β_eq hP (gs_piece₄ hy.1), gb_β₅ hP, gb_β₅ hP]
+    rw [gs_β_eq hP (gs_piece₄ hx.1), gs_β_eq hP (gs_piece₄ hy.1), gs_β₅_eq' hP, gs_β₅_eq' hP]
     have h : (1 - cos (π / 2 - x)) / 2 - 2 * P.a₁ * sin (π / 2 - x) ≤
         (1 - cos (π / 2 - y)) / 2 - 2 * P.a₁ * sin (π / 2 - y) :=
       gb_α₁_anti hB (a := π / 2 - y) (b := π / 2 - x)
@@ -436,7 +402,7 @@ lemma gb_rhoA_le (hP : P.IsSolution) (hB : P.Bounds) :
     nlinarith [ht.1, mul_nonneg (show 0 ≤ t - 0.62 by linarith [ht.1]) (show 0 ≤ -P.b₁ by linarith),
       mul_nonneg (show 0 ≤ t - 0.62 by linarith [ht.1]) (show 0 ≤ t + 0.62 by linarith [ht.1])]
   · rw [gs_ρA₃_eq]; linarith
-  · rw [gb_ρA₄ hP]; linarith
+  · rw [gs_ρA₄_eq' hP]; linarith
   · rw [gs_ρA₅_eq]; norm_num
 
 /-- `ρ_A < 1` on `[t₃, π/2]`. -/
@@ -454,7 +420,7 @@ lemma gb_rhoA_lt (hP : P.IsSolution) (hB : P.Bounds) :
   · linarith [ht.1]
   · linarith [ht.1]
   · rw [gs_ρA₃_eq]; linarith [ht.1]
-  · rw [gb_ρA₄ hP]; linarith [ht.1]
+  · rw [gs_ρA₄_eq' hP]; linarith [ht.1]
   · rw [gs_ρA₅_eq]; norm_num
 
 /-- `ρ_C ≤ 1` on `[0, s_C]` (`ρ_C(0.95) ≈ 0.9964`). -/
@@ -475,7 +441,7 @@ lemma gb_rhoC_le (hP : P.IsSolution) (hB : P.Bounds) :
   · rw [gs_ρC₁_eq]; norm_num
   · rw [gs_ρC₂_eq]; linarith
   · rw [gs_ρC₃_eq hP]; linarith
-  · rw [gb_ρC₄ hP]
+  · rw [gs_ρC₄_eq' hP]
     have h1 : 0.6207 ≤ π / 2 - t := by linarith [ht.2]
     nlinarith [mul_nonneg (sub_nonneg.2 h1) (show 0 ≤ -P.b₁ by linarith),
       mul_nonneg (sub_nonneg.2 h1) (show 0 ≤ π / 2 - t + 0.6207 by linarith)]
@@ -572,15 +538,6 @@ lemma gb_I'_nonneg (hP : P.IsSolution) (hB : P.Bounds) :
   obtain ⟨hW1, hW2, -, hW3, hW4⟩ := gb_W_bounds hB
   exact gb_core hW1 hW2 hW3 hW4 (by linarith [hs.2]) (by linarith [hs.1])
 
-/-- The derivative of `r ↦ 𝐱(r) · w`. -/
-private lemma gb_hasDerivAt_dot_path (hP : P.IsSolution) (w : ℝ × ℝ) (r : ℝ) :
-    HasDerivAt (fun r => dot (P.path r) w) (dot (P.gs_pathD r) w) r :=
-  gb_hasDerivAt_dot (gs_hasDerivAt_path hP r) w
-
-private lemma gb_pathD_phase (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
-    P.gs_pathD t = (P.gs_phase i).α t • uvec t + (P.gs_phase i).β t • vvec t := by
-  rw [gs_pathD_eq_phase hP h]; rfl
-
 /-- The base inequality for `gb_corner_B` and `gb_corner_D`: on `[0, φ]`,
 `α₁(r) sin(θ + r) + β₁(r) cos(θ + r) ≥ 0`. -/
 private lemma gb_corner_ineq (hB : P.Bounds) {r : ℝ} (h0 : 0 ≤ r) (h1 : r ≤ P.φ) :
@@ -623,14 +580,14 @@ lemma gb_corner_B (hP : P.IsSolution) (hB : P.Bounds) :
   intro s hs
   obtain ⟨o1, o2, o3, o4, o5⟩ := gb_order hP
   have hmono : MonotoneOn (fun r => dot (P.path r) (uvec (π / 2 - P.θ))) (Icc 0 P.φ) := by
-    refine gb_monotoneOn_Icc (gb_hasDerivAt_dot_path hP _) (fun r hr => ?_)
+    refine gb_monotoneOn_Icc (fun r => hasDerivAt_dot (gs_hasDerivAt_path hP r) _) (fun r hr => ?_)
     show 0 ≤ dot (P.gs_pathD r) (uvec (π / 2 - P.θ))
     have e1 : cos (r - (π / 2 - P.θ)) = sin (P.θ + r) := by
       rw [show r - (π / 2 - P.θ) = P.θ + r - π / 2 by ring, cos_sub_pi_div_two]
     have e2 : sin (π / 2 - P.θ - r) = cos (P.θ + r) := by
       rw [show π / 2 - P.θ - r = π / 2 - (P.θ + r) by ring, sin_pi_div_two_sub]
-    rw [gb_pathD_phase hP (gs_piece₀ hr.2.le), dot_add_left, dot_smul_left, dot_smul_left,
-      dot_uvec_uvec, dot_vvec_uvec', gs_α₁_eq hP, gs_β₁_eq hP, e1, e2]
+    rw [gs_pathD_eq_phase hP (gs_piece₀ hr.2.le), gs_Phase.X', dot_add_left, dot_smul_left,
+      dot_smul_left, dot_uvec_uvec, dot_vvec_uvec', gs_α₁_eq hP, gs_β₁_eq hP, e1, e2]
     exact gb_corner_ineq hB hr.1.le hr.2.le
   have h : dot (P.path s) (uvec (π / 2 - P.θ)) ≤ dot (P.path P.φ) (uvec (π / 2 - P.θ)) :=
     hmono hs ⟨o1.le, le_rfl⟩ hs.2
@@ -643,14 +600,14 @@ lemma gb_corner_D (hP : P.IsSolution) (hB : P.Bounds) :
   intro s hs
   obtain ⟨o1, o2, o3, o4, o5⟩ := gb_order hP
   have hanti : AntitoneOn (fun r => dot (P.path r) (vvec P.θ)) (Icc (π / 2 - P.φ) (π / 2)) := by
-    refine gb_antitoneOn_Icc (gb_hasDerivAt_dot_path hP _) (fun r hr => ?_)
+    refine gb_antitoneOn_Icc (fun r => hasDerivAt_dot (gs_hasDerivAt_path hP r) _) (fun r hr => ?_)
     show dot (P.gs_pathD r) (vvec P.θ) ≤ 0
     have e1 : sin (r - P.θ) = cos (P.θ + (π / 2 - r)) := by
       rw [show r - P.θ = π / 2 - (P.θ + (π / 2 - r)) by ring, sin_pi_div_two_sub]
     have e2 : cos (r - P.θ) = sin (P.θ + (π / 2 - r)) := by
       rw [show r - P.θ = π / 2 - (P.θ + (π / 2 - r)) by ring, cos_pi_div_two_sub]
-    rw [gb_pathD_phase hP (gs_piece₄ hr.1.le), dot_add_left, dot_smul_left, dot_smul_left,
-      dot_uvec_vvec', dot_vvec_vvec, gb_α₅ hP, gb_β₅ hP, e1, e2]
+    rw [gs_pathD_eq_phase hP (gs_piece₄ hr.1.le), gs_Phase.X', dot_add_left, dot_smul_left,
+      dot_smul_left, dot_uvec_vvec', dot_vvec_vvec, gs_α₅_eq' hP, gs_β₅_eq' hP, e1, e2]
     have := gb_corner_ineq hB (r := π / 2 - r) (by linarith [hr.2]) (by linarith [hr.1])
     linarith
   have h : dot (P.path s) (vvec P.θ) ≤ dot (P.path (π / 2 - P.φ)) (vvec P.θ) :=
@@ -690,55 +647,11 @@ private lemma gb_y'₃ (hB : P.Bounds) {t : ℝ} (h0 : 0 ≤ t) (h1 : t ≤ π /
   have := pi_lt_d2
   refine ⟨by ring, by linarith, sin_nonneg_of_nonneg_of_le_pi h0 (by linarith [pi_pos])⟩
 
-/-- `𝐱(t)_y > 0` on `[t₁, t₄]`: `𝐱_y` increases on `[t₁, π/4]` and decreases on `[π/4, t₄]`,
-and `𝐱(t₁)_y = 𝐱(t₄)_y ≈ 0.0552`. -/
-lemma gb_x_pos (hP : P.IsSolution) (hB : P.Bounds) :
-    ∀ t ∈ Icc P.φ (π / 2 - P.φ), 0 < (P.path t).2 := by
-  intro t ht
-  obtain ⟨o1, o2, o3, o4, o5⟩ := gb_order hP
-  have hθ' : P.θ < π / 4 := (gs_ord hP).2.2
-  have hy : ∀ r, HasDerivAt (fun r => (P.path r).2) (P.gs_pathD r).2 r :=
-    fun r => gb_hasDerivAt_snd (gs_hasDerivAt_path hP r)
-  have hd : ∀ {i : ℕ} {r : ℝ}, gs_piece P i r →
-      (P.gs_pathD r).2 = (P.gs_phase i).α r * sin r + (P.gs_phase i).β r * cos r := by
-    intro i r h
-    rw [gb_pathD_phase hP h]
-    simp [uvec, vvec]
-  have hmono : MonotoneOn (fun r => (P.path r).2) (Icc P.φ (π / 4)) := by
-    refine gb_monotoneOn_Icc hy (fun r hr => ?_)
-    show 0 ≤ (P.gs_pathD r).2
-    rcases le_or_gt r P.θ with h | h
-    · rw [hd (gs_piece₁ hr.1.le h), gs_α₂_eq, gs_β₂_eq]
-      exact gb_y'₂ hB (by linarith [hr.1]) h
-    · rw [hd (gs_piece₂ h.le (by linarith [hr.2])), gs_α₃_eq hP, gs_β₃_eq]
-      obtain ⟨e, h1, h2⟩ := gb_y'₃ hB (t := r) (by linarith) (by linarith [hr.2])
-      have h3 : sin r ≤ cos r := by
-        rw [← cos_pi_div_two_sub]
-        exact cos_le_cos_of_nonneg_of_le_pi (by linarith) (by linarith [pi_pos])
-          (by linarith [hr.2])
-      rw [e]
-      exact add_nonneg (mul_nonneg h1 (by linarith)) (mul_nonneg (by linarith [hr.2]) h2)
-  have hanti : AntitoneOn (fun r => (P.path r).2) (Icc (π / 4) (π / 2 - P.φ)) := by
-    refine gb_antitoneOn_Icc hy (fun r hr => ?_)
-    show (P.gs_pathD r).2 ≤ 0
-    rcases le_or_gt r (π / 2 - P.θ) with h | h
-    · rw [hd (gs_piece₂ (by linarith [hr.1]) h), gs_α₃_eq hP, gs_β₃_eq]
-      obtain ⟨e, h1, h2⟩ := gb_y'₃ hB (t := r) (by linarith [hr.1, pi_pos]) h
-      have h3 : cos r ≤ sin r := by
-        rw [← cos_pi_div_two_sub]
-        exact cos_le_cos_of_nonneg_of_le_pi (by linarith) (by linarith [hr.2, pi_pos])
-          (by linarith [hr.1])
-      rw [e]
-      have h4 : (1 + P.c₁ - r) * (cos r - sin r) ≤ 0 :=
-        mul_nonpos_of_nonneg_of_nonpos h1 (by linarith)
-      have h5 : (π / 2 - 2 * r) * sin r ≤ 0 :=
-        mul_nonpos_of_nonpos_of_nonneg (by linarith [hr.1]) h2
-      linarith
-    · rw [hd (gs_piece₃ h.le hr.2.le), gb_α₄ hP, gb_β₄ hP, ← cos_pi_div_two_sub r,
-        ← sin_pi_div_two_sub r]
-      have := gb_y'₂ hB (t := π / 2 - r) (by linarith [hr.2]) (by linarith)
-      linarith
-  -- the values at the endpoints
+/-- The heights `𝐱(t₁)_y` and `𝐱(t₄)_y` (both `≈ 0.0552`) are positive: both are
+`W₁ sin φ + W₂ cos φ + κ` with `κ ≥ 0.4724`. -/
+private lemma gb_x_snd_ends (hP : P.IsSolution) (hB : P.Bounds) :
+    0 < (P.path P.φ).2 ∧ 0 < (P.path (π / 2 - P.φ)).2 := by
+  obtain ⟨o1, o2, -, o4, -⟩ := gb_order hP
   obtain ⟨-, -, hW1', hW3, hW4⟩ := gb_W_bounds hB
   have hend : ∀ κ : ℝ, 0.472406519 ≤ κ →
       0 < sin P.φ * (-P.φ ^ 2 / 4 + P.b₁ * P.φ + P.b₂) + cos P.φ * (P.φ / 2 - P.b₁ - 1) + κ := by
@@ -771,113 +684,67 @@ lemma gb_x_pos (hP : P.IsSolution) (hB : P.Bounds) :
       ring
     rw [e]
     exact hend P.κ₄.2 hB.κ₄₂_mem.1
+  exact ⟨hφ, hφ'⟩
+
+/-- `𝐱(t)_y > 0` on `[t₁, t₄]`: `𝐱_y` increases on `[t₁, π/4]` and decreases on `[π/4, t₄]`,
+and `𝐱(t₁)_y = 𝐱(t₄)_y ≈ 0.0552`. -/
+lemma gb_x_pos (hP : P.IsSolution) (hB : P.Bounds) :
+    ∀ t ∈ Icc P.φ (π / 2 - P.φ), 0 < (P.path t).2 := by
+  intro t ht
+  obtain ⟨o1, o2, o3, o4, o5⟩ := gb_order hP
+  have hθ' : P.θ < π / 4 := (gs_ord hP).2.2
+  -- Step 1: `(𝐱_y)' = α sin t + β cos t`, with the formulas of the phase.
+  have hy : ∀ r, HasDerivAt (fun r => (P.path r).2) (P.gs_pathD r).2 r :=
+    fun r => hasDerivAt_snd (gs_hasDerivAt_path hP r)
+  have hd : ∀ {i : ℕ} {r : ℝ}, gs_piece P i r →
+      (P.gs_pathD r).2 = (P.gs_phase i).α r * sin r + (P.gs_phase i).β r * cos r := by
+    intro i r h
+    rw [gs_pathD_eq_phase hP h, gs_Phase.X']
+    simp [uvec, vvec]
+  -- Step 2: `𝐱_y` increases on `[t₁, π/4]` (phases 2 and 3).
+  have hmono : MonotoneOn (fun r => (P.path r).2) (Icc P.φ (π / 4)) := by
+    refine gb_monotoneOn_Icc hy (fun r hr => ?_)
+    show 0 ≤ (P.gs_pathD r).2
+    rcases le_or_gt r P.θ with h | h
+    · rw [hd (gs_piece₁ hr.1.le h), gs_α₂_eq, gs_β₂_eq]
+      exact gb_y'₂ hB (by linarith [hr.1]) h
+    · rw [hd (gs_piece₂ h.le (by linarith [hr.2])), gs_α₃_eq hP, gs_β₃_eq]
+      obtain ⟨e, h1, h2⟩ := gb_y'₃ hB (t := r) (by linarith) (by linarith [hr.2])
+      have h3 : sin r ≤ cos r := by
+        rw [← cos_pi_div_two_sub]
+        exact cos_le_cos_of_nonneg_of_le_pi (by linarith) (by linarith [pi_pos])
+          (by linarith [hr.2])
+      rw [e]
+      exact add_nonneg (mul_nonneg h1 (by linarith)) (mul_nonneg (by linarith [hr.2]) h2)
+  -- Step 3: `𝐱_y` decreases on `[π/4, t₄]` (phases 3 and 4).
+  have hanti : AntitoneOn (fun r => (P.path r).2) (Icc (π / 4) (π / 2 - P.φ)) := by
+    refine gb_antitoneOn_Icc hy (fun r hr => ?_)
+    show (P.gs_pathD r).2 ≤ 0
+    rcases le_or_gt r (π / 2 - P.θ) with h | h
+    · rw [hd (gs_piece₂ (by linarith [hr.1]) h), gs_α₃_eq hP, gs_β₃_eq]
+      obtain ⟨e, h1, h2⟩ := gb_y'₃ hB (t := r) (by linarith [hr.1, pi_pos]) h
+      have h3 : cos r ≤ sin r := by
+        rw [← cos_pi_div_two_sub]
+        exact cos_le_cos_of_nonneg_of_le_pi (by linarith) (by linarith [hr.2, pi_pos])
+          (by linarith [hr.1])
+      rw [e]
+      have h4 : (1 + P.c₁ - r) * (cos r - sin r) ≤ 0 :=
+        mul_nonpos_of_nonneg_of_nonpos h1 (by linarith)
+      have h5 : (π / 2 - 2 * r) * sin r ≤ 0 :=
+        mul_nonpos_of_nonpos_of_nonneg (by linarith [hr.1]) h2
+      linarith
+    · rw [hd (gs_piece₃ h.le hr.2.le), gs_α₄_eq' hP, gs_β₄_eq' hP, ← cos_pi_div_two_sub r,
+        ← sin_pi_div_two_sub r]
+      have := gb_y'₂ hB (t := π / 2 - r) (by linarith [hr.2]) (by linarith)
+      linarith
+  -- Step 4: the heights `𝐱(t₁)_y` and `𝐱(t₄)_y` are positive.
+  obtain ⟨hφ, hφ'⟩ := gb_x_snd_ends hP hB
   rcases le_total t (π / 4) with h | h
   · have h1 : (P.path P.φ).2 ≤ (P.path t).2 := hmono ⟨le_rfl, by linarith⟩ ⟨ht.1, h⟩ ht.1
     linarith
   · have h1 : (P.path (π / 2 - P.φ)).2 ≤ (P.path t).2 :=
       hanti ⟨h, ht.2⟩ ⟨by linarith [pi_pos], le_rfl⟩ ht.2
     linarith
-
-/-! ### Regularity of the curvature radii -/
-
-private lemma gb_continuous_ρA (i : ℕ) : Continuous (P.gs_phase i).ρA := by
-  match i with
-  | 0 => unfold gs_Phase.ρA; simp only [gs_phase, gs_ph1]; fun_prop
-  | 1 => unfold gs_Phase.ρA; simp only [gs_phase, gs_ph2]; fun_prop
-  | 2 => unfold gs_Phase.ρA; simp only [gs_phase, gs_ph3]; fun_prop
-  | 3 => unfold gs_Phase.ρA; simp only [gs_phase, gs_ph4]; fun_prop
-  | n + 4 =>
-    show Continuous (P.gs_phase 4).ρA
-    unfold gs_Phase.ρA; simp only [gs_phase, gs_ph5]; fun_prop
-
-private lemma gb_continuous_ρC (i : ℕ) : Continuous (P.gs_phase i).ρC := by
-  match i with
-  | 0 => unfold gs_Phase.ρC; simp only [gs_phase, gs_ph1]; fun_prop
-  | 1 => unfold gs_Phase.ρC; simp only [gs_phase, gs_ph2]; fun_prop
-  | 2 => unfold gs_Phase.ρC; simp only [gs_phase, gs_ph3]; fun_prop
-  | 3 => unfold gs_Phase.ρC; simp only [gs_phase, gs_ph4]; fun_prop
-  | n + 4 =>
-    show Continuous (P.gs_phase 4).ρC
-    unfold gs_Phase.ρC; simp only [gs_phase, gs_ph5]; fun_prop
-
-lemma gb_rhoA_measurable : Measurable (gb_rhoA P) := by
-  unfold gb_rhoA
-  exact Measurable.ite measurableSet_Iio (gb_continuous_ρA 0).measurable
-    (Measurable.ite measurableSet_Iio (gb_continuous_ρA 1).measurable
-      (Measurable.ite measurableSet_Iic (gb_continuous_ρA 2).measurable
-        (Measurable.ite measurableSet_Iic (gb_continuous_ρA 3).measurable
-          (gb_continuous_ρA 4).measurable)))
-
-lemma gb_rhoC_measurable : Measurable (gb_rhoC P) := by
-  unfold gb_rhoC
-  exact Measurable.ite measurableSet_Iio (gb_continuous_ρC 0).measurable
-    (Measurable.ite measurableSet_Iio (gb_continuous_ρC 1).measurable
-      (Measurable.ite measurableSet_Iic (gb_continuous_ρC 2).measurable
-        (Measurable.ite measurableSet_Iic (gb_continuous_ρC 3).measurable
-          (gb_continuous_ρC 4).measurable)))
-
-lemma gb_rhoA_bdd : ∃ M, ∀ t ∈ Icc 0 (π / 2), |gb_rhoA P t| ≤ M := by
-  have hc : Continuous fun t => |(P.gs_phase 0).ρA t| + |(P.gs_phase 1).ρA t| +
-      |(P.gs_phase 2).ρA t| + |(P.gs_phase 3).ρA t| + |(P.gs_phase 4).ρA t| :=
-    (((((gb_continuous_ρA 0).abs.add (gb_continuous_ρA 1).abs).add (gb_continuous_ρA 2).abs).add
-      (gb_continuous_ρA 3).abs).add (gb_continuous_ρA 4).abs)
-  obtain ⟨M, hM⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := π / 2)).exists_bound_of_continuousOn
-    hc.continuousOn
-  refine ⟨M, fun t ht => ?_⟩
-  have h : ‖|(P.gs_phase 0).ρA t| + |(P.gs_phase 1).ρA t| + |(P.gs_phase 2).ρA t| +
-      |(P.gs_phase 3).ρA t| + |(P.gs_phase 4).ρA t|‖ ≤ M := hM t ht
-  rw [Real.norm_eq_abs] at h
-  have := le_abs_self (|(P.gs_phase 0).ρA t| + |(P.gs_phase 1).ρA t| + |(P.gs_phase 2).ρA t| +
-      |(P.gs_phase 3).ρA t| + |(P.gs_phase 4).ρA t|)
-  have := abs_nonneg ((P.gs_phase 0).ρA t)
-  have := abs_nonneg ((P.gs_phase 1).ρA t)
-  have := abs_nonneg ((P.gs_phase 2).ρA t)
-  have := abs_nonneg ((P.gs_phase 3).ρA t)
-  have := abs_nonneg ((P.gs_phase 4).ρA t)
-  unfold gb_rhoA
-  split_ifs <;> linarith
-
-lemma gb_rhoC_bdd : ∃ M, ∀ t ∈ Icc 0 (π / 2), |gb_rhoC P t| ≤ M := by
-  have hc : Continuous fun t => |(P.gs_phase 0).ρC t| + |(P.gs_phase 1).ρC t| +
-      |(P.gs_phase 2).ρC t| + |(P.gs_phase 3).ρC t| + |(P.gs_phase 4).ρC t| :=
-    (((((gb_continuous_ρC 0).abs.add (gb_continuous_ρC 1).abs).add (gb_continuous_ρC 2).abs).add
-      (gb_continuous_ρC 3).abs).add (gb_continuous_ρC 4).abs)
-  obtain ⟨M, hM⟩ := (isCompact_Icc (a := (0 : ℝ)) (b := π / 2)).exists_bound_of_continuousOn
-    hc.continuousOn
-  refine ⟨M, fun t ht => ?_⟩
-  have h : ‖|(P.gs_phase 0).ρC t| + |(P.gs_phase 1).ρC t| + |(P.gs_phase 2).ρC t| +
-      |(P.gs_phase 3).ρC t| + |(P.gs_phase 4).ρC t|‖ ≤ M := hM t ht
-  rw [Real.norm_eq_abs] at h
-  have := le_abs_self (|(P.gs_phase 0).ρC t| + |(P.gs_phase 1).ρC t| + |(P.gs_phase 2).ρC t| +
-      |(P.gs_phase 3).ρC t| + |(P.gs_phase 4).ρC t|)
-  have := abs_nonneg ((P.gs_phase 0).ρC t)
-  have := abs_nonneg ((P.gs_phase 1).ρC t)
-  have := abs_nonneg ((P.gs_phase 2).ρC t)
-  have := abs_nonneg ((P.gs_phase 3).ρC t)
-  have := abs_nonneg ((P.gs_phase 4).ρC t)
-  unfold gb_rhoC
-  split_ifs <;> linarith
-
-/-! ### Identities at the breakpoints and the endpoints -/
-
-/-- `𝐁(t₃) = 𝐱(t₁)` (Romik's (43)). -/
-lemma gb_B_t₃ (hP : P.IsSolution) :
-    P.path (π / 2 - P.θ) + P.gs_α (π / 2 - P.θ) • vvec (π / 2 - P.θ) = P.path P.φ :=
-  gs_contactB_t₃ hP
-
-/-- `𝐃(t₂) = 𝐱(t₄)` (Romik's (44)). -/
-lemma gb_D_t₂ (hP : P.IsSolution) :
-    P.path P.θ - P.gs_β P.θ • uvec P.θ = P.path (π / 2 - P.φ) :=
-  gs_contactD_t₂ hP
-
-/-- `𝐁(π/2)_y = 0`. -/
-lemma gb_B_end (hP : P.IsSolution) :
-    (P.path (π / 2) + P.gs_α (π / 2) • vvec (π / 2)).2 = 0 :=
-  gs_contactB_pi_div_two_snd hP
-
-/-- `𝐃(0)_y = 0`. -/
-lemma gb_D_end (hP : P.IsSolution) : (P.path 0 - P.gs_β 0 • uvec 0).2 = 0 :=
-  gs_contactD_zero_snd hP
 
 end GerverParams
 

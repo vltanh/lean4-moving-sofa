@@ -20,16 +20,17 @@ all the parameters from the two angles: `a₁ = N/D`, `b₁ = β₀ - a₁ sin �
 `c₁ = π/2 - 2 - 2 b₁`, and the continuity conditions give `κ₂, κ₃` and `κ₄ = (2 κ₃₁ - κ₂₁, κ₂₂)`,
 `κ₅ = (2 κ₃₁ - 1 + a₁, 1/4)` (`rom_eq_mk`: a solution in the box equals `rom_mk φ θ`). The first
 contact condition then reads `U + b₁ V = 0` (`rom_mk_contact1_iff`), i.e.
-`H(φ, θ) = D (U + b₁ V) = 0` for the explicit system `H` of `MovingSofaOptimality.External.Romik.Num`.
-Conversely, for every zero of `H` in the box, `rom_mk φ θ` satisfies all of Romik's equations
-(`rom_mk_isSolution`): the remaining derivative conditions and the second contact condition follow
-from the left-right symmetry, as Romik says (they are polynomial identities in the explicit
-parameters).
+`H(φ, θ) = D (U + b₁ V) = 0` for the explicit system `H` of
+`MovingSofaOptimality.External.Romik.Num`. Conversely, for every zero of `H` in the box,
+`rom_mk φ θ` satisfies all of Romik's equations (`rom_mk_isSolution`): the remaining derivative
+conditions and the second contact condition follow from the left-right symmetry, as Romik says
+(they are polynomial identities in the explicit parameters).
 
 **Numerics.** `H` has a unique zero in the box, which lies within `10⁻¹⁰` of
-`(0.0391773648, 0.6813015094)` (`MovingSofaOptimality.External.Romik.Fix`: a Newton-type map is a contraction on
-the box, by interval arithmetic). This gives `romik_exists` and `romik_unique`, and the enclosures
-`rom_phi_mem`, `rom_theta_mem`, `rom_a1_mem`, … and `romik_bounds` of the parameters.
+`(0.0391773648, 0.6813015094)` (`MovingSofaOptimality.External.Romik.Fix`: a Newton-type map is a
+contraction on the box, by interval arithmetic). This gives `romik_exists` and `romik_unique`, and
+the enclosures `rom_phi_mem`, `rom_theta_mem`, `rom_a1_mem`, … and `romik_bounds` of the
+parameters.
 -/
 
 @[expose] public section
@@ -46,21 +47,11 @@ namespace GerverParams
 theorem rom_hasDerivAt_rot {f g : ℝ → ℝ} {f' g' t : ℝ} (κ : ℝ × ℝ) (hf : HasDerivAt f f' t)
     (hg : HasDerivAt g g' t) :
     HasDerivAt (fun s => rot s (f s, g s) + κ) (rot t (f' - g t, g' + f t)) t := by
-  have h1 : HasDerivAt (fun s => cos s * f s - sin s * g s + κ.1)
-      (-sin t * f t + cos t * f' - (cos t * g t + sin t * g')) t :=
-    (((hasDerivAt_cos t).fun_mul hf).fun_sub ((hasDerivAt_sin t).fun_mul hg)).add_const κ.1
-  have h2 : HasDerivAt (fun s => sin s * f s + cos s * g s + κ.2)
-      (cos t * f t + sin t * f' + (-sin t * g t + cos t * g')) t :=
-    (((hasDerivAt_sin t).fun_mul hf).fun_add ((hasDerivAt_cos t).fun_mul hg)).add_const κ.2
-  have e1 : (fun s => rot s (f s, g s) + κ) =
-      fun s => (cos s * f s - sin s * g s + κ.1, sin s * f s + cos s * g s + κ.2) := by
-    funext s
-    ext <;> simp [rot]
-  have e2 : rot t (f' - g t, g' + f t) = (-sin t * f t + cos t * f' - (cos t * g t + sin t * g'),
-      cos t * f t + sin t * f' + (-sin t * g t + cos t * g')) := by
-    ext <;> simp only [rot] <;> ring
-  rw [e1, e2]
-  exact h1.prodMk h2
+  have h1 := ((hasDerivAt_cos t).mul hf).sub ((hasDerivAt_sin t).mul hg)
+  have h2 := ((hasDerivAt_sin t).mul hf).add ((hasDerivAt_cos t).mul hg)
+  have h : HasDerivAt (fun s => rot s (f s, g s) + κ) _ t := (h1.prodMk h2).add_const κ
+  refine h.congr_deriv ?_
+  ext <;> simp only [rot] <;> ring
 
 /-- The derivative of `t ↦ t² / 4`. -/
 theorem rom_hasDerivAt_sq_div (t : ℝ) : HasDerivAt (fun s : ℝ => s ^ 2 / 4) (t / 2) t := by
@@ -135,20 +126,6 @@ theorem rom_hasDerivAt_x₅ (P : GerverParams) (t : ℝ) :
   congr 1
   ext <;> ring
 
-/-- The rotation `R_t` is injective. -/
-theorem rom_rot_inj {t : ℝ} {u v : ℝ × ℝ} (h : rot t u = rot t v) : u = v := by
-  rw [← rot_neg_rot t u, h, rot_neg_rot]
-
-/-- `⟨R_t v, u_t⟩ = v₁`. -/
-theorem rom_dot_rot_uvec (t : ℝ) (v : ℝ × ℝ) : dot (rot t v) (uvec t) = v.1 := by
-  simp only [dot, rot, uvec]
-  linear_combination v.1 * cos_sq_add_sin_sq t
-
-/-- `⟨R_t v, v_t⟩ = v₂`. -/
-theorem rom_dot_rot_vvec (t : ℝ) (v : ℝ × ℝ) : dot (rot t v) (vvec t) = v.2 := by
-  simp only [dot, rot, vvec]
-  linear_combination v.2 * sin_sq_add_cos_sq t
-
 /-! ### Reduction to the angles -/
 
 /-- The parameters determined by the angles `(φ, θ)`: the unique solution of all of Romik's
@@ -188,12 +165,14 @@ theorem rom_eq_mk {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     -⟩ := hP
   obtain ⟨hφ, hθ⟩ := hb
   dsimp only at he1 he2 hd1 hd2 hc2 hk11 hk12 ha2 hφ hθ
+  -- Step 1: the symmetry and initial conditions give `a₂, c₂, d₁, d₂, e₁, e₂, κ₁` directly.
   subst E1 E2 D1 D2 C2 k11 k12 A2
   have hD := rom_D_pos hφ hθ
+  -- Step 2: the derivative conditions at `φ` and `θ` give `b₁, c₁, b₂` and `a₁ = N / D`.
   rw [(rom_hasDerivAt_x₁ _ φ).deriv, (rom_hasDerivAt_x₂ _ φ).deriv] at d12
   rw [(rom_hasDerivAt_x₂ _ θ).deriv, (rom_hasDerivAt_x₃ _ θ).deriv] at d23
-  have E12 := rom_rot_inj d12
-  have E23 := rom_rot_inj d23
+  have E12 := rot_injective _ d12
+  have E23 := rot_injective _ d23
   simp only [Prod.mk.injEq] at E12 E23
   obtain ⟨eq1, eq2⟩ := E12
   obtain ⟨eq3, eq4⟩ := E23
@@ -210,10 +189,10 @@ theorem rom_eq_mk {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
   have hmul : A1 * rom_D φ θ (cos φ) (sin φ) = rom_N φ θ (cos φ) (sin φ) π := by
     simp only [rom_D, rom_N, rom_β₀]
     linear_combination eq2
-  have ha1 : A1 = rom_a₁ φ θ (cos φ) (sin φ) π := by
-    rw [rom_a₁, eq_div_iff hD.ne']; exact hmul
+  have ha1 : A1 = rom_a₁ φ θ (cos φ) (sin φ) π := by rw [rom_a₁, eq_div_iff hD.ne', hmul]
   subst ha1
   clear d12 d23 eq1 eq2 eq3 eq4
+  -- Step 3: the continuity conditions give `κ₂, κ₃, κ₄, κ₅`.
   simp only [GerverParams.x₁, GerverParams.x₂, GerverParams.x₃, GerverParams.x₄, GerverParams.x₅,
     rot, cos_pi_div_two_sub, sin_pi_div_two_sub, Prod.mk_add_mk, Prod.mk.injEq, rom_K]
     at c12 c23 c34 c45
@@ -225,24 +204,17 @@ theorem rom_eq_mk {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
   congr 1
   · norm_num
   · simp only [rom_κ₂₁, rom_κ₂₂, rom_Δ₁, rom_Δ₂, rom_b₁, rom_b₂, rom_β₀, rom_K, Prod.mk.injEq]
-    constructor
-    · linear_combination (-1 : ℝ) * c12a
-    · linear_combination (-1 : ℝ) * c12b
+    exact ⟨by linear_combination -c12a, by linear_combination -c12b⟩
   · simp only [rom_κ₃₁, rom_κ₃₂, rom_κ₂₁, rom_κ₂₂, rom_Δ₁, rom_Δ₂, rom_b₁, rom_b₂, rom_β₀, rom_K,
       Prod.mk.injEq]
-    constructor
-    · linear_combination (-1 : ℝ) * c23a + (-1 : ℝ) * c12a
-    · linear_combination (-1 : ℝ) * c23b + (-1 : ℝ) * c12b
+    exact ⟨by linear_combination -c23a - c12a, by linear_combination -c23b - c12b⟩
   · simp only [rom_κ₄₁, rom_κ₃₁, rom_κ₂₁, rom_κ₂₂, rom_Δ₁, rom_Δ₂, rom_b₁, rom_b₂, rom_β₀, rom_K,
       Prod.mk.injEq]
-    constructor
-    · linear_combination (-1 : ℝ) * c34a + (-1 : ℝ) * c23a + (-1 : ℝ) * c12a
-    · linear_combination (-1 : ℝ) * c34b + (-1 : ℝ) * c23b + (-1 : ℝ) * c12b
+    exact ⟨by linear_combination -c34a - c23a - c12a, by linear_combination -c34b - c23b - c12b⟩
   · simp only [rom_κ₅₁, rom_κ₃₁, rom_κ₂₁, rom_Δ₁, rom_Δ₂, rom_b₁, rom_b₂, rom_β₀, rom_K,
       Prod.mk.injEq]
-    constructor
-    · linear_combination (-1 : ℝ) * c45a + (-1 : ℝ) * c34a + (-1 : ℝ) * c23a + (-1 : ℝ) * c12a
-    · linear_combination (-1 : ℝ) * c45b + (-1 : ℝ) * c34b + (-1 : ℝ) * c23b + (-1 : ℝ) * c12b
+    exact ⟨by linear_combination -c45a - c34a - c23a - c12a,
+      by linear_combination -c45b - c34b - c23b - c12b⟩
 
 /-- `a₁ D = N`. -/
 theorem rom_a₁_mul {φ θ : ℝ} (hD : 0 < rom_D φ θ (cos φ) (sin φ)) :
@@ -270,16 +242,12 @@ theorem rom_mk_contact1_iff (φ θ : ℝ) :
           rom_b₁ φ θ (cos φ) (sin φ) π * rom_V1 φ θ (cos φ) (sin φ) (sin θ) = 0 ∧
         rom_U2 φ θ (cos φ) (sin φ) (cos θ) (sin θ) π +
           rom_b₁ φ θ (cos φ) (sin φ) π * rom_V2 φ θ (cos φ) (sin φ) (cos θ) = 0 := by
-  rw [contactB, (rom_hasDerivAt_x₄ _ _).deriv, rom_dot_rot_uvec]
+  rw [contactB, (rom_hasDerivAt_x₄ _ _).deriv, dot_rot_uvec_eq_fst]
   simp only [GerverParams.x₁, GerverParams.x₄, rom_mk, rot, vvec, cos_pi_div_two_sub,
     sin_pi_div_two_sub, Prod.mk_add_mk, Prod.smul_mk, smul_eq_mul, Prod.mk.injEq]
   simp only [rom_U1, rom_U2, rom_V1, rom_V2, rom_κ₄₁, rom_κ₃₁, rom_κ₂₁, rom_κ₂₂, rom_Δ₁, rom_Δ₂,
     rom_b₂, rom_b₁, rom_β₀, rom_K]
-  constructor
-  · rintro ⟨h1, h2⟩
-    exact ⟨by linear_combination (-1 : ℝ) * h1, by linear_combination (-1 : ℝ) * h2⟩
-  · rintro ⟨h1, h2⟩
-    exact ⟨by linear_combination (-1 : ℝ) * h1, by linear_combination (-1 : ℝ) * h2⟩
+  constructor <;> rintro ⟨h1, h2⟩ <;> exact ⟨by linear_combination -h1, by linear_combination -h2⟩
 
 /-- The second contact condition for `rom_mk φ θ` follows from `U + b₁ V = 0` (left-right
 symmetry). -/
@@ -289,12 +257,12 @@ theorem rom_mk_contact2 {φ θ : ℝ}
     (h2 : rom_U2 φ θ (cos φ) (sin φ) (cos θ) (sin θ) π +
       rom_b₁ φ θ (cos φ) (sin φ) π * rom_V2 φ θ (cos φ) (sin φ) (cos θ) = 0) :
     (rom_mk φ θ).x₅ (π / 2 - φ) = contactD (rom_mk φ θ).x₂ θ := by
-  rw [contactD, (rom_hasDerivAt_x₂ _ _).deriv, rom_dot_rot_vvec]
+  rw [contactD, (rom_hasDerivAt_x₂ _ _).deriv, dot_rot_vvec_eq_snd]
   simp only [GerverParams.x₅, GerverParams.x₂, rom_mk, rot, uvec, cos_pi_div_two_sub,
     sin_pi_div_two_sub, Prod.mk_add_mk, Prod.smul_mk, smul_eq_mul, Prod.mk_sub_mk, Prod.mk.injEq]
   simp only [rom_U1, rom_U2, rom_V1, rom_V2, rom_κ₅₁, rom_κ₃₁, rom_κ₂₁, rom_κ₂₂, rom_Δ₁, rom_Δ₂,
     rom_b₂, rom_b₁, rom_β₀, rom_K] at h1 h2 ⊢
-  exact ⟨by linear_combination h1, by linear_combination (-1 : ℝ) * h2⟩
+  exact ⟨by linear_combination h1, by linear_combination -h2⟩
 
 /-- For a zero `(φ, θ)` of `H` in the box, `rom_mk φ θ` solves Romik's system. -/
 theorem rom_mk_isSolution {z : ℝ × ℝ} (hz : z ∈ rom_box) (hH : rom_Hz z = 0) :
@@ -365,7 +333,6 @@ theorem rom_mk_isSolution {z : ℝ × ℝ} (hz : z ∈ rom_box) (hH : rom_Hz z =
     · linear_combination hmul
     · ring
 
-
 /-! ### The angles of a solution and the main theorems -/
 
 /-- A solution in the box gives a zero of the reduced system `H`. -/
@@ -424,40 +391,32 @@ theorem rom_theta_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
 theorem rom_a1_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.a₁ ∈ Icc (1.2103224215 : ℝ) 1.2103224227 := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.a₁ = rom_a₁ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg GerverParams.a₁ (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_a₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_a₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `b₁` for a solution in the box. -/
 theorem rom_b1_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.b₁ ∈ Icc (-0.5276245983 : ℝ) (-0.5276245978) := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.b₁ = rom_b₁ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg GerverParams.b₁ (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_b₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_b₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `b₂` for a solution in the box. -/
 theorem rom_b2_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.b₂ ∈ Icc (0.9202583844 : ℝ) 0.920258386 := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.b₂ = rom_b₂ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg GerverParams.b₂ (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_b₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_b₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `c₁` for a solution in the box. -/
 theorem rom_c1_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.c₁ ∈ Icc (0.6260455224 : ℝ) 0.6260455233 := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.c₁ = rom_c₁ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg GerverParams.c₁ (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_c₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_c₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `c₂ = c₁ - π/2` for a solution in the box. -/
@@ -484,12 +443,12 @@ theorem rom_d2_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
   have h1 := rom_b1_mem hP hb
   have h2 := rom_b2_mem hP hb
   have e : P.d₂ = P.b₂ + π / 4 * (2 * P.b₁ - π / 4) := hP.2.2.2.2.2.2.1
-  have k1 := rom_iv_div (L := 0.785398163397) (U := 0.785398163398) (k := 4) rom_pi_mem20
+  have k1 := iv_div_const (L := 0.785398163397) (U := 0.785398163398) (k := 4) rom_pi_mem20
     (by norm_num)
-  have k2 := rom_iv_mul (L := -1.0552491966) (U := -1.0552491956) (rom_iv_self 2) h1 (by norm_num)
-  have k3 := rom_iv_sub (L := -1.84064736) (U := -1.8406473589) k2 k1 (by norm_num)
-  have k4 := rom_iv_mul (L := -1.4456410561) (U := -1.4456410551) k1 k3 (by norm_num)
-  have k5 := rom_iv_add (L := -0.5253826717) (U := -0.5253826691) h2 k4 (by norm_num)
+  have k2 := iv_mul (L := -1.0552491966) (U := -1.0552491956) (iv_const 2) h1 (by norm_num)
+  have k3 := iv_sub (L := -1.84064736) (U := -1.8406473589) k2 k1 (by norm_num)
+  have k4 := iv_mul (L := -1.4456410561) (U := -1.4456410551) k1 k3 (by norm_num)
+  have k5 := iv_add (L := -0.5253826717) (U := -0.5253826691) h2 k4 (by norm_num)
   rw [e]
   exact k5
 
@@ -497,59 +456,46 @@ theorem rom_d2_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
 theorem rom_kappa21_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₂.1 ∈ Icc (-0.919179295 : ℝ) (-0.9191792905) := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₂.1 = rom_κ₂₁ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₂.1) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₂₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₂₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `κ₂.2` for a solution in the box. -/
 theorem rom_kappa22_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₂.2 ∈ Icc (0.4724066191 : ℝ) 0.4724066204 := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₂.2 = rom_κ₂₂ P.φ P.θ (cos P.φ) (sin P.φ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₂.2) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₂₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₂₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) rom_pi_mem20)
     (by norm_num)
 
 /-- Enclosure of `κ₃.1` for a solution in the box. -/
 theorem rom_kappa31_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₃.1 ∈ Icc (-0.6137632319 : ℝ) (-0.613763227) := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₃.1 = rom_κ₃₁ P.φ P.θ (cos P.φ) (sin P.φ) (cos P.θ) (sin P.θ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₃.1) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₃₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₃₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
     (rom_sin_tiny' h2) rom_pi_mem20) (by norm_num)
 
 /-- Enclosure of `κ₃.2` for a solution in the box. -/
 theorem rom_kappa32_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₃.2 ∈ Icc (0.8896264781 : ℝ) 0.8896264799 := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₃.2 = rom_κ₃₂ P.φ P.θ (cos P.φ) (sin P.φ) (cos P.θ) (sin P.θ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₃.2) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₃₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₃₂_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
     (rom_sin_tiny' h2) rom_pi_mem20) (by norm_num)
 
 /-- Enclosure of `κ₄.1` for a solution in the box. -/
 theorem rom_kappa41_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₄.1 ∈ Icc (-0.3083471732 : ℝ) (-0.308347159) := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₄.1 = rom_κ₄₁ P.φ P.θ (cos P.φ) (sin P.φ) (cos P.θ) (sin P.θ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₄.1) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₄₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₄₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
     (rom_sin_tiny' h2) rom_pi_mem20) (by norm_num)
 
 /-- `κ₄.2 = κ₂.2` (left-right symmetry). -/
 theorem rom_kappa42_eq {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₄.2 = P.κ₂.2 := by
-  have e := rom_eq_mk hP hb
-  have e1 : P.κ₄.2 = (rom_mk P.φ P.θ).κ₄.2 := congrArg (fun Q : GerverParams => Q.κ₄.2) e
-  have e2 : P.κ₂.2 = (rom_mk P.φ P.θ).κ₂.2 := congrArg (fun Q : GerverParams => Q.κ₂.2) e
-  rw [e1, e2]
+  rw [rom_eq_mk hP hb]
   rfl
 
 /-- Enclosure of `κ₄.2` for a solution in the box. -/
@@ -562,32 +508,31 @@ theorem rom_kappa42_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
 theorem rom_kappa51_mem {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
     P.κ₅.1 ∈ Icc (-1.0172040423 : ℝ) (-1.0172040313) := by
   obtain ⟨h1, h2⟩ := rom_angles_mem hP hb
-  have e : P.κ₅.1 = rom_κ₅₁ P.φ P.θ (cos P.φ) (sin P.φ) (cos P.θ) (sin P.θ) π :=
-    congrArg (fun Q : GerverParams => Q.κ₅.1) (rom_eq_mk hP hb)
-  rw [e]
-  exact rom_iv_mono (rom_κ₅₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
+  rw [rom_eq_mk hP hb]
+  exact iv_mono (rom_κ₅₁_tiny h1 h2 (rom_cos_tiny h1) (rom_sin_tiny h1) (rom_cos_tiny' h2)
     (rom_sin_tiny' h2) rom_pi_mem20) (by norm_num)
 
 /-- `κ₅.2 = 1/4` (left-right symmetry). -/
 theorem rom_kappa52_eq {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) :
-    P.κ₅.2 = 1 / 4 :=
-  congrArg (fun Q : GerverParams => Q.κ₅.2) (rom_eq_mk hP hb)
+    P.κ₅.2 = 1 / 4 := by
+  rw [rom_eq_mk hP hb]
+  rfl
 
 /-- Every solution in the box satisfies the enclosures `GerverParams.Bounds`. -/
 theorem romik_bounds {P : GerverParams} (hP : P.IsSolution) (hb : P.InBox) : P.Bounds where
-  φ_mem := rom_iv_mono (rom_phi_mem hP hb) (by norm_num)
-  θ_mem := rom_iv_mono (rom_theta_mem hP hb) (by norm_num)
-  a₁_mem := rom_iv_mono (rom_a1_mem hP hb) (by norm_num)
-  b₁_mem := rom_iv_mono (rom_b1_mem hP hb) (by norm_num)
-  b₂_mem := rom_iv_mono (rom_b2_mem hP hb) (by norm_num)
-  c₁_mem := rom_iv_mono (rom_c1_mem hP hb) (by norm_num)
-  κ₂₁_mem := rom_iv_mono (rom_kappa21_mem hP hb) (by norm_num)
-  κ₂₂_mem := rom_iv_mono (rom_kappa22_mem hP hb) (by norm_num)
-  κ₃₁_mem := rom_iv_mono (rom_kappa31_mem hP hb) (by norm_num)
-  κ₃₂_mem := rom_iv_mono (rom_kappa32_mem hP hb) (by norm_num)
-  κ₄₁_mem := rom_iv_mono (rom_kappa41_mem hP hb) (by norm_num)
-  κ₄₂_mem := rom_iv_mono (rom_kappa42_mem hP hb) (by norm_num)
-  κ₅₁_mem := rom_iv_mono (rom_kappa51_mem hP hb) (by norm_num)
+  φ_mem := iv_mono (rom_phi_mem hP hb) (by norm_num)
+  θ_mem := iv_mono (rom_theta_mem hP hb) (by norm_num)
+  a₁_mem := iv_mono (rom_a1_mem hP hb) (by norm_num)
+  b₁_mem := iv_mono (rom_b1_mem hP hb) (by norm_num)
+  b₂_mem := iv_mono (rom_b2_mem hP hb) (by norm_num)
+  c₁_mem := iv_mono (rom_c1_mem hP hb) (by norm_num)
+  κ₂₁_mem := iv_mono (rom_kappa21_mem hP hb) (by norm_num)
+  κ₂₂_mem := iv_mono (rom_kappa22_mem hP hb) (by norm_num)
+  κ₃₁_mem := iv_mono (rom_kappa31_mem hP hb) (by norm_num)
+  κ₃₂_mem := iv_mono (rom_kappa32_mem hP hb) (by norm_num)
+  κ₄₁_mem := iv_mono (rom_kappa41_mem hP hb) (by norm_num)
+  κ₄₂_mem := iv_mono (rom_kappa42_mem hP hb) (by norm_num)
+  κ₅₁_mem := iv_mono (rom_kappa51_mem hP hb) (by norm_num)
   κ₅₂_mem := by rw [rom_kappa52_eq hP hb]; norm_num
 
 

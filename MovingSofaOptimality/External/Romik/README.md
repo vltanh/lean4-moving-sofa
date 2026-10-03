@@ -28,8 +28,10 @@ parameters, which the numerical verifications of Theorem 8.4.1 use.
 - The parameters that enter Romik's system linearly are eliminated symbolically (`rom_mk`), leaving
   two equations H(φ, θ) = 0.
 - `Num.lean` encloses H and its partial derivatives on the box by interval arithmetic. It is generated
-  by `scripts/romik/mk_num.py`; every step is an explicit inequality checked by `norm_num`.
+  by `scripts/romik/mk_num.py`; every step is an explicit inequality checked by `norm_num`, with the
+  interval lemmas of `MovingSofaOptimality/Basic/Interval.lean`.
+- `Calc.lean` encloses the atoms cos φ, sin φ, cos θ, sin θ and π of these computations, from the
+  Taylor bounds for cos and sin of `Basic/Interval.lean`.
 - `Fix.lean` shows that z ↦ z − M·H(z) maps a small box to itself and is a ½-contraction. Banach's
   fixed point theorem then gives a zero within 10⁻¹⁰ of (0.0391773648, 0.6813015094), and the
   contraction gives that it is the only zero in the box.
-- `Calc.lean` holds the interval arithmetic and the Taylor bounds for sin and cos.

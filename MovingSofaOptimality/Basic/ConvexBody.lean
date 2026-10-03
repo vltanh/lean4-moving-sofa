@@ -12,9 +12,10 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
 /-!
 # Planar convex bodies (§2.1)
 
-Definitions `def:convex-body`, `def:support-function`, `def:supporting-line-half-plane`, `def:width`,
-`def:convex-body-edge`, `def:convex-body-vertex`, `def:convex-body-tangent-lines-intersection`,
-`def:hausdorff-distance`, and Theorem `thm:limits-converging-to-vertex`.
+Definitions `def:convex-body`, `def:support-function`, `def:supporting-line-half-plane`,
+`def:width`, `def:convex-body-edge`, `def:convex-body-vertex`,
+`def:convex-body-tangent-lines-intersection`, `def:hausdorff-distance`, and Theorem
+`thm:limits-converging-to-vertex`.
 
 The support function, supporting lines and half-planes are defined for every subset of the plane;
 they have their intended meaning for nonempty compact sets.
@@ -22,11 +23,17 @@ they have their intended meaning for nonempty compact sets.
 The three non-public imports (Hahn–Banach separation, slopes, derivatives of `sin`/`cos`) are only
 used inside proofs.
 
+The file is organised as follows: basic properties of the support function (boundedness,
+continuity, translation, the Hausdorff distance); edges and vertices (`e_K(t)` is the segment
+`[v_K⁻(t), v_K⁺(t)]`); Theorem `thm:limits-converging-to-vertex`; the one-sided derivatives
+`v_K^±(t) · v_t` of `h_K`.
+
 Theorem `thm:limits-converging-to-vertex` is proved by compactness rather than by the paper's
-`ε`-triangle: for `s → t⁺`, any point `w` of `e_K(s)` satisfies `w · u_s ≥ v_K⁺(t) · u_s`, which forces
-`w · u_t → h_K(t)` and `w · v_t ≥ v_K⁺(t) · v_t`, so every cluster point of `w` lies on `e_K(t)` and is
-at least as far as `v_K⁺(t)` in the direction `v_t`, hence equals `v_K⁺(t)` (`cb_tendsto_core`). The
-one-sided derivatives of `h_K` follow from the limit of the `v_t`-coordinate of `v_K(t, s)`.
+`ε`-triangle: for `s → t⁺`, any point `w` of `e_K(s)` satisfies `w · u_s ≥ v_K⁺(t) · u_s`, which
+forces `w · u_t → h_K(t)` and `w · v_t ≥ v_K⁺(t) · v_t`, so every cluster point of `w` lies on
+`e_K(t)` and is at least as far as `v_K⁺(t)` in the direction `v_t`, hence equals `v_K⁺(t)`
+(`cb_tendsto_core`). The one-sided derivatives of `h_K` follow from the limit of the
+`v_t`-coordinate of `v_K(t, s)`.
 -/
 
 @[expose] public section
@@ -34,6 +41,8 @@ one-sided derivatives of `h_K` follow from the limit of the `v_t`-coordinate of 
 open Real Set Filter Topology
 
 namespace MovingSofaOptimality
+
+/-! ### Definitions -/
 
 /-- A planar convex body: a nonempty, compact and convex subset of the plane (`def:convex-body`).
 Its interior may be empty. -/
@@ -85,85 +94,106 @@ lemma IsConvexBody.isClosed {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : IsClo
 lemma IsConvexBody.isBounded {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : Bornology.IsBounded K :=
   hK.2.1.isBounded
 
-/-- `p ↦ p · v` is continuous. -/
-private lemma cb_continuous_dot (v : ℝ × ℝ) : Continuous (fun p : ℝ × ℝ => dot p v) := by
-  simp only [dot]
-  fun_prop
-
 private lemma cb_bddAbove {S : Set (ℝ × ℝ)} (hS : IsCompact S) (v : ℝ × ℝ) :
     BddAbove ((fun p => dot p v) '' S) :=
-  hS.bddAbove_image (cb_continuous_dot v).continuousOn
+  hS.bddAbove_image (continuous_dot v).continuousOn
 
 private lemma cb_bddBelow {S : Set (ℝ × ℝ)} (hS : IsCompact S) (v : ℝ × ℝ) :
     BddBelow ((fun p => dot p v) '' S) :=
-  hS.bddBelow_image (cb_continuous_dot v).continuousOn
+  hS.bddBelow_image (continuous_dot v).continuousOn
 
+/-- Every point `p` of a compact set `S` satisfies `p · u_t ≤ h_S(t)`. -/
 lemma dot_le_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) {p : ℝ × ℝ} (hp : p ∈ S) (t : ℝ) :
-    dot p (uvec t) ≤ supp S t := by
-  exact le_csSup (cb_bddAbove hS _) (mem_image_of_mem _ hp)
+    dot p (uvec t) ≤ supp S t :=
+  le_csSup (cb_bddAbove hS _) (mem_image_of_mem _ hp)
 
+/-- The supremum defining `h_S(t)` is attained for a nonempty compact `S`. -/
 lemma exists_dot_eq_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) (hne : S.Nonempty) (t : ℝ) :
-    ∃ p ∈ S, dot p (uvec t) = supp S t := by
-  exact (hS.image (cb_continuous_dot (uvec t))).sSup_mem (hne.image _)
+    ∃ p ∈ S, dot p (uvec t) = supp S t :=
+  (hS.image (continuous_dot (uvec t))).sSup_mem (hne.image _)
 
+/-- If every point `p` of `S` satisfies `p · u_t ≤ c`, then `h_S(t) ≤ c`. -/
+lemma supp_le_of_forall {S : Set (ℝ × ℝ)} (hne : S.Nonempty) {t c : ℝ}
+    (h : ∀ p ∈ S, dot p (uvec t) ≤ c) : supp S t ≤ c :=
+  csSup_le (hne.image _) (forall_mem_image.2 h)
+
+/-- The support function is monotone in the set. -/
 lemma supp_mono {S T : Set (ℝ × ℝ)} (hST : S ⊆ T) (hS : S.Nonempty) (hT : IsCompact T) (t : ℝ) :
-    supp S t ≤ supp T t := by
-  exact csSup_le_csSup (cb_bddAbove hT _) (hS.image _) (image_mono hST)
+    supp S t ≤ supp T t :=
+  csSup_le_csSup (cb_bddAbove hT _) (hS.image _) (image_mono hST)
+
+/-- If every point `p` of a compact set `S` satisfies `p · u_t ≤ c`, with equality at a point of
+`S`, then `h_S(t) = c`. -/
+lemma supp_eq_of_mem {S : Set (ℝ × ℝ)} (hS : IsCompact S) {t c : ℝ}
+    (hle : ∀ p ∈ S, dot p (uvec t) ≤ c) {q : ℝ × ℝ} (hq : q ∈ S) (hqc : dot q (uvec t) = c) :
+    supp S t = c :=
+  le_antisymm (supp_le_of_forall ⟨q, hq⟩ hle) (hqc ▸ dot_le_supp hS hq t)
+
+/-- A compact set `T ⊇ S` with `p · u_t ≤ h_S(t)` on `T` has `h_T(t) = h_S(t)`. -/
+lemma supp_eq_of_squeeze {S T : Set (ℝ × ℝ)} (hST : S ⊆ T) (hS : S.Nonempty)
+    (hT : IsCompact T) {t c : ℝ} (hSt : supp S t = c) (hT' : ∀ p ∈ T, dot p (uvec t) ≤ c) :
+    supp T t = c :=
+  le_antisymm (supp_le_of_forall (hS.mono hST) hT') (hSt ▸ supp_mono hST hS hT t)
 
 lemma supp_add_two_pi (S : Set (ℝ × ℝ)) (t : ℝ) : supp S (t + 2 * π) = supp S t := by
   simp [supp, uvec_add_two_pi]
 
+/-- The support function of a compact set is continuous: it is the supremum over a compact set of
+a jointly continuous family. -/
 lemma continuous_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) :
     Continuous (supp S) := by
-  -- the supremum of a jointly continuous family over a compact set is continuous (`hne` is not
-  -- needed)
   have h : Continuous (fun x : ℝ × (ℝ × ℝ) => dot x.2 (uvec x.1)) := by
     simp only [dot, uvec]
     fun_prop
   exact hS.continuous_sSup (f := fun t p => dot p (uvec t)) h
+
+lemma IsConvexBody.continuous_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : Continuous (supp K) :=
+  MovingSofaOptimality.continuous_supp hK.2.1
+
+/-- The support function of a nonempty compact set is Lipschitz. -/
+lemma exists_lipschitzWith_supp {S : Set (ℝ × ℝ)} (hS : IsCompact S) (hne : S.Nonempty) :
+    ∃ L, LipschitzWith L (supp S) := by
+  obtain ⟨R, hR⟩ := hS.isBounded.exists_norm_le
+  refine ⟨_, LipschitzWith.of_le_add_mul' (2 * R) fun s t => supp_le_of_forall hne fun p hp => ?_⟩
+  -- `p · u_s - p · u_t ≤ 2 ‖p‖ ‖u_s - u_t‖ ≤ 2 R |s - t|`
+  have h1 := dot_le_supp hS hp t
+  have h2 := (le_abs_self _).trans (abs_dot_le p (uvec s - uvec t))
+  have h3 : ‖uvec s - uvec t‖ ≤ dist s t := by
+    simpa [← dist_eq_norm] using lipschitz_uvec.dist_le_mul s t
+  rw [dot_sub_right] at h2
+  nlinarith [hR p hp, norm_nonneg p, norm_nonneg (uvec s - uvec t)]
 
 /-- A point lies in a closed convex set iff it lies in all of its supporting half-planes. -/
 lemma mem_iff_forall_dot_le_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (p : ℝ × ℝ) :
     p ∈ K ↔ ∀ t, dot p (uvec t) ≤ supp K t := by
   refine ⟨fun hp t => dot_le_supp hK.2.1 hp t, fun h => ?_⟩
   by_contra hp
-  -- separate `p` from `K` by a continuous linear functional `f`
+  -- separate `p` from `K` by a continuous linear functional `f`, which is `x ↦ x · n`
   obtain ⟨f, u, hfK, hfp⟩ := geometric_hahn_banach_closed_point hK.2.2 hK.isClosed hp
-  set n : ℝ × ℝ := (f (1, 0), f (0, 1)) with hn
+  set n : ℝ × ℝ := (f (1, 0), f (0, 1))
   have hf : ∀ x : ℝ × ℝ, f x = dot x n := by
     intro x
-    have hx : x = x.1 • ((1 : ℝ), (0 : ℝ)) + x.2 • ((0 : ℝ), (1 : ℝ)) := by
-      ext <;> simp
+    have hx : x = x.1 • ((1 : ℝ), (0 : ℝ)) + x.2 • ((0 : ℝ), (1 : ℝ)) := by ext <;> simp
     conv_lhs => rw [hx]
     rw [map_add, map_smul, map_smul]
     simp [dot, n, smul_eq_mul]
-  -- write the normal vector `n` in polar form `n = ‖z‖ • u_θ`
-  set z : ℂ := ⟨n.1, n.2⟩ with hz
-  have hz0 : z ≠ 0 := by
-    intro hz0
-    have hn0 : n = 0 := by
-      have h1 : z.re = 0 := by rw [hz0]; rfl
-      have h2 : z.im = 0 := by rw [hz0]; rfl
-      ext
-      · exact h1
-      · exact h2
+  -- write `n` in polar form `n = ‖z‖ u_θ`, where `z = n₁ + n₂ i` and `θ = arg z`
+  set z : ℂ := ⟨n.1, n.2⟩
+  have hn : n = ‖z‖ • uvec (Complex.arg z) := by
+    ext
+    · simp only [Prod.smul_fst, uvec_fst, smul_eq_mul, Complex.norm_mul_cos_arg]; rfl
+    · simp only [Prod.smul_snd, uvec_snd, smul_eq_mul, Complex.norm_mul_sin_arg]; rfl
+  have hz : 0 < ‖z‖ := by
+    refine norm_pos_iff.2 fun hz0 => ?_
     obtain ⟨a, ha⟩ := hK.1
     have h1 := hfK a ha
-    rw [hf, hn0, dot_zero_right] at h1 hfp
+    rw [hf, hn, hz0, norm_zero, zero_smul, dot_zero_right] at h1 hfp
     linarith
-  have hr : 0 < ‖z‖ := norm_pos_iff.2 hz0
-  have hn' : n = ‖z‖ • uvec (Complex.arg z) := by
-    ext
-    · simp only [Prod.smul_fst, uvec_fst, smul_eq_mul, Complex.norm_mul_cos_arg]
-      rfl
-    · simp only [Prod.smul_snd, uvec_snd, smul_eq_mul, Complex.norm_mul_sin_arg]
-      rfl
+  -- a point `a ∈ K` on the supporting line `l_K(θ)` gives `f p ≤ f a < u < f p`
   obtain ⟨a, ha, hae⟩ := exists_dot_eq_supp hK.2.1 hK.1 (Complex.arg z)
   have h1 := hfK a ha
-  have h2 := h (Complex.arg z)
-  rw [hf, hn', dot_smul_right] at h1 hfp
-  rw [← hae] at h2
-  have h3 := mul_le_mul_of_nonneg_left h2 hr.le
+  rw [hf, hn, dot_smul_right] at h1 hfp
+  have h2 := mul_le_mul_of_nonneg_left (hae ▸ h (Complex.arg z)) hz.le
   linarith
 
 /-- Two convex bodies with the same support function are equal. -/
@@ -173,6 +203,7 @@ lemma eq_of_supp_eq {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h
   rw [mem_iff_forall_dot_le_supp h₁, mem_iff_forall_dot_le_supp h₂]
   simp only [h]
 
+/-- Translating a set by `v` adds `v · u_t` to its support function. -/
 lemma supp_translate (S : Set (ℝ × ℝ)) (v : ℝ × ℝ) (t : ℝ) (hS : IsCompact S)
     (hne : S.Nonempty) : supp ((fun p => p + v) '' S) t = supp S t + dot v (uvec t) := by
   have hS' : IsCompact ((fun p => p + v) '' S) :=
@@ -185,118 +216,126 @@ lemma supp_translate (S : Set (ℝ × ℝ)) (v : ℝ × ℝ) (t : ℝ) (hS : IsC
     rw [← hpe, ← dot_add_left]
     exact dot_le_supp hS' (mem_image_of_mem _ hp) t
 
+/-- The support function of a nonempty compact set is bounded. -/
+lemma exists_abs_supp_le {S : Set (ℝ × ℝ)} (hS : IsCompact S) (hne : S.Nonempty) :
+    ∃ R, ∀ t, |supp S t| ≤ R := by
+  obtain ⟨R, hR⟩ := hS.isBounded.exists_norm_le
+  refine ⟨2 * R, fun t => ?_⟩
+  obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hS hne t
+  rw [← hpt]
+  have h1 : |p.1| ≤ R := (norm_fst_le p).trans (hR p hp)
+  have h2 : |p.2| ≤ R := (norm_snd_le p).trans (hR p hp)
+  linarith [abs_dot_uvec_le p t]
+
+/-- A convex body in `[-R, R] × [0, 1]` has supports of absolute value at most `R + 1`. -/
+lemma abs_supp_le_box {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {R : ℝ}
+    (hbox : K ⊆ Icc (-R) R ×ˢ Icc 0 1) (t : ℝ) : |supp K t| ≤ R + 1 := by
+  obtain ⟨p, hp, hpt⟩ := exists_dot_eq_supp hK.2.1 hK.1 t
+  obtain ⟨hx, hy⟩ := hbox hp
+  rw [← hpt]
+  linarith [abs_dot_uvec_le p t, abs_le.2 hx, abs_le.2 ⟨by linarith [hy.1], hy.2⟩]
+
+/-! ### The Hausdorff distance -/
+
+/-- `|h_K(t) - h_{K'}(t)|` is at most the Hausdorff distance of `K` and `K'`. -/
+lemma abs_supp_sub_le_hausdorffDist {K K' : Set (ℝ × ℝ)} (hK : IsConvexBody K)
+    (hK' : IsConvexBody K') (t : ℝ) : |supp K t - supp K' t| ≤ hausdorffDist K K' := by
+  obtain ⟨R, hR⟩ := exists_abs_supp_le hK.2.1 hK.1
+  obtain ⟨R', hR'⟩ := exists_abs_supp_le hK'.2.1 hK'.1
+  refine le_ciSup (f := fun t => |supp K t - supp K' t|) ⟨R + R', ?_⟩ t
+  rintro _ ⟨s, rfl⟩
+  calc |supp K s - supp K' s| ≤ |supp K s| + |supp K' s| := abs_sub _ _
+    _ ≤ R + R' := add_le_add (hR s) (hR' s)
+
+lemma hausdorffDist_nonneg (K K' : Set (ℝ × ℝ)) : 0 ≤ hausdorffDist K K' :=
+  Real.iSup_nonneg fun _ => abs_nonneg _
+
+/-- Hausdorff convergence of convex bodies gives pointwise convergence of the support functions. -/
+lemma tendsto_supp {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)} (hKs : ∀ n, IsConvexBody (Ks n))
+    (hK : IsConvexBody K) (hlim : HausdorffTendsto Ks K) (t : ℝ) :
+    Tendsto (fun n => supp (Ks n) t) atTop (𝓝 (supp K t)) := by
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  exact squeeze_zero (fun n => norm_nonneg _)
+    (fun n => abs_supp_sub_le_hausdorffDist (hKs n) hK t) hlim
+
 /-! ### Edges and vertices -/
 
-private lemma cb_isClosed_line (t h : ℝ) : IsClosed (line t h) :=
-  isClosed_eq (cb_continuous_dot _) continuous_const
+lemma mem_edge_iff {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} :
+    p ∈ edge K t ↔ p ∈ K ∧ dot p (uvec t) = supp K t := Iff.rfl
 
-private lemma cb_convex_line (t h : ℝ) : Convex ℝ (line t h) := by
-  intro x hx y hy a b _ _ hab
-  simp only [line, mem_ofPred_eq] at *
-  rw [dot_add_left, dot_smul_left, dot_smul_left, hx, hy]
-  linear_combination h * hab
-
-private lemma cb_isCompact_edge {K : Set (ℝ × ℝ)} (hK : IsCompact K) (t : ℝ) :
+lemma isCompact_edge {K : Set (ℝ × ℝ)} (hK : IsCompact K) (t : ℝ) :
     IsCompact (edge K t) :=
-  hK.inter_right (cb_isClosed_line t _)
-
-private lemma cb_mem_edge {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} (hp : p ∈ K)
-    (h : dot p (uvec t) = supp K t) : p ∈ edge K t :=
-  ⟨hp, h⟩
-
-private lemma cb_dot_eq_of_mem_edge {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} (hp : p ∈ edge K t) :
-    dot p (uvec t) = supp K t :=
-  hp.2
+  hK.inter_right (isClosed_line t _)
 
 private lemma cb_edge_nonempty {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ) :
-    (edge K t).Nonempty := by
-  obtain ⟨p, hp, hpe⟩ := exists_dot_eq_supp hK hne t
-  exact ⟨p, hp, hpe⟩
+    (edge K t).Nonempty :=
+  let ⟨p, hp, hpe⟩ := exists_dot_eq_supp hK hne t
+  ⟨p, mem_edge_iff.2 ⟨hp, hpe⟩⟩
 
 /-- A point of the edge `e_K(t)` is determined by its `v_t`-coordinate. -/
 private lemma cb_eq_of_mem_edge {K : Set (ℝ × ℝ)} {t : ℝ} {p : ℝ × ℝ} (hp : p ∈ edge K t) :
     p = supp K t • uvec t + dot p (vvec t) • vvec t := by
   conv_lhs => rw [eq_dot_uvec_smul_add p t]
-  rw [cb_dot_eq_of_mem_edge hp]
+  rw [(mem_edge_iff.1 hp).2]
 
-private lemma cb_dot_vplus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
+lemma dot_vplus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot (vplus K t) (vvec t) = sSup ((fun p => dot p (vvec t)) '' edge K t) := by
   simp [vplus, dot_add_left, dot_smul_left]
 
-private lemma cb_dot_vminus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
+lemma dot_vminus_vvec (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot (vminus K t) (vvec t) = sInf ((fun p => dot p (vvec t)) '' edge K t) := by
   simp [vminus, dot_add_left, dot_smul_left]
 
 private lemma cb_vplus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ) :
     vplus K t ∈ edge K t := by
-  obtain ⟨p, hp, hpe⟩ := ((cb_isCompact_edge hK t).image (cb_continuous_dot (vvec t))).sSup_mem
+  obtain ⟨p, hp, hpe⟩ := ((isCompact_edge hK t).image (continuous_dot (vvec t))).sSup_mem
     ((cb_edge_nonempty hK hne t).image _)
-  have : vplus K t = p := by
-    rw [cb_eq_of_mem_edge hp, vplus, ← hpe]
-  rw [this]
-  exact hp
+  rwa [show vplus K t = p by rw [cb_eq_of_mem_edge hp, vplus, ← hpe]]
 
 private lemma cb_vminus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty)
     (t : ℝ) : vminus K t ∈ edge K t := by
-  obtain ⟨p, hp, hpe⟩ := ((cb_isCompact_edge hK t).image (cb_continuous_dot (vvec t))).sInf_mem
+  obtain ⟨p, hp, hpe⟩ := ((isCompact_edge hK t).image (continuous_dot (vvec t))).sInf_mem
     ((cb_edge_nonempty hK hne t).image _)
-  have : vminus K t = p := by
-    rw [cb_eq_of_mem_edge hp, vminus, ← hpe]
-  rw [this]
-  exact hp
+  rwa [show vminus K t = p by rw [cb_eq_of_mem_edge hp, vminus, ← hpe]]
 
 /-- `v_K⁺(t)` is the farthest point of `e_K(t)` in the direction `v_t`. -/
-private lemma cb_le_dot_vplus {K : Set (ℝ × ℝ)} (hK : IsCompact K) {t : ℝ} {p : ℝ × ℝ}
+lemma dot_le_dot_vplus {K : Set (ℝ × ℝ)} (hK : IsCompact K) {t : ℝ} {p : ℝ × ℝ}
     (hp : p ∈ edge K t) : dot p (vvec t) ≤ dot (vplus K t) (vvec t) := by
-  rw [cb_dot_vplus_vvec]
-  exact le_csSup (cb_bddAbove (cb_isCompact_edge hK t) _) (mem_image_of_mem _ hp)
+  rw [dot_vplus_vvec]
+  exact le_csSup (cb_bddAbove (isCompact_edge hK t) _) (mem_image_of_mem _ hp)
 
 /-- `v_K⁻(t)` is the farthest point of `e_K(t)` in the direction `-v_t`. -/
-private lemma cb_dot_vminus_le {K : Set (ℝ × ℝ)} (hK : IsCompact K) {t : ℝ} {p : ℝ × ℝ}
+lemma dot_vminus_le_dot {K : Set (ℝ × ℝ)} (hK : IsCompact K) {t : ℝ} {p : ℝ × ℝ}
     (hp : p ∈ edge K t) : dot (vminus K t) (vvec t) ≤ dot p (vvec t) := by
-  rw [cb_dot_vminus_vvec]
-  exact csInf_le (cb_bddBelow (cb_isCompact_edge hK t) _) (mem_image_of_mem _ hp)
+  rw [dot_vminus_vvec]
+  exact csInf_le (cb_bddBelow (isCompact_edge hK t) _) (mem_image_of_mem _ hp)
 
-lemma vplus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) : vplus K t ∈ edge K t := by
-  exact cb_vplus_mem_edge hK.2.1 hK.1 t
+lemma vplus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) : vplus K t ∈ edge K t :=
+  cb_vplus_mem_edge hK.2.1 hK.1 t
 
-lemma vminus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) : vminus K t ∈ edge K t := by
-  exact cb_vminus_mem_edge hK.2.1 hK.1 t
+lemma vminus_mem_edge {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
+    vminus K t ∈ edge K t :=
+  cb_vminus_mem_edge hK.2.1 hK.1 t
 
+/-- The edge `e_K(t)` is the segment `[v_K⁻(t), v_K⁺(t)]`. -/
 lemma edge_eq_segment {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     edge K t = segment ℝ (vminus K t) (vplus K t) := by
-  apply Subset.antisymm
-  · intro p hp
-    have hm := cb_dot_vminus_le hK.2.1 hp
-    have hM := cb_le_dot_vplus hK.2.1 hp
-    have hpe := cb_eq_of_mem_edge hp
-    have hme := cb_eq_of_mem_edge (vminus_mem_edge hK t)
-    have hMe := cb_eq_of_mem_edge (vplus_mem_edge hK t)
-    set m := dot (vminus K t) (vvec t)
-    set M := dot (vplus K t) (vvec t)
-    set d := dot p (vvec t)
-    rcases eq_or_lt_of_le (hm.trans hM) with hmM | hmM
-    · have hd : d = m := le_antisymm (hmM ▸ hM) hm
-      have : p = vminus K t := by rw [hpe, hme, hd]
-      rw [this]
-      exact left_mem_segment ℝ _ _
-    · have hMm : 0 < M - m := sub_pos.2 hmM
-      have hab : (M - d) / (M - m) + (d - m) / (M - m) = 1 := by
-        rw [← add_div, div_eq_one_iff_eq hMm.ne']
-        ring
-      have hcoef : (M - d) / (M - m) * m + (d - m) / (M - m) * M = d := by
-        rw [div_mul_eq_mul_div, div_mul_eq_mul_div, ← add_div, div_eq_iff hMm.ne']
-        ring
-      refine ⟨(M - d) / (M - m), (d - m) / (M - m), div_nonneg (by linarith) hMm.le,
-        div_nonneg (by linarith) hMm.le, hab, ?_⟩
-      rw [hpe, hme, hMe]
-      ext
-      · simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul]
-        linear_combination (supp K t * (uvec t).1) * hab + (vvec t).1 * hcoef
-      · simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul]
-        linear_combination (supp K t * (uvec t).2) * hab + (vvec t).2 * hcoef
-  · exact (hK.2.2.inter (cb_convex_line t _)).segment_subset (vminus_mem_edge hK t)
-      (vplus_mem_edge hK t)
+  refine Subset.antisymm (fun p hp => ?_) ((hK.2.2.inter (convex_line t _)).segment_subset
+    (vminus_mem_edge hK t) (vplus_mem_edge hK t))
+  -- the points of `e_K(t)` are `h_K(t) u_t + d v_t` with `m ≤ d ≤ M`, `m, M` those of `v_K^±(t)`
+  set m := dot (vminus K t) (vvec t)
+  set M := dot (vplus K t) (vvec t)
+  set d := dot p (vvec t)
+  have hm : m ≤ d := dot_vminus_le_dot hK.2.1 hp
+  have hM : d ≤ M := dot_le_dot_vplus hK.2.1 hp
+  -- so `p = v_K⁻(t) + θ (v_K⁺(t) - v_K⁻(t))` with `θ = (d - m) / (M - m)` (and `θ = 0` if `m = M`)
+  have hθ : (d - m) / (M - m) * (M - m) = d - m := div_mul_cancel_of_imp fun h => by linarith
+  rw [segment_eq_image']
+  refine ⟨(d - m) / (M - m), ⟨div_nonneg (by linarith) (by linarith),
+    div_le_one_of_le₀ (by linarith) (by linarith)⟩, ?_⟩
+  rw [cb_eq_of_mem_edge hp, cb_eq_of_mem_edge (vminus_mem_edge hK t),
+    cb_eq_of_mem_edge (vplus_mem_edge hK t)]
+  linear_combination (norm := module) hθ • vvec t
 
 lemma dot_vplus_uvec (K : Set (ℝ × ℝ)) (t : ℝ) : dot (vplus K t) (uvec t) = supp K t := by
   simp [vplus, dot_add_left, dot_smul_left]
@@ -305,12 +344,14 @@ lemma dot_vminus_uvec (K : Set (ℝ × ℝ)) (t : ℝ) : dot (vminus K t) (uvec 
   simp [vminus, dot_add_left, dot_smul_left]
 
 lemma dot_vminus_le_dot_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    dot (vminus K t) (vvec t) ≤ dot (vplus K t) (vvec t) := by
-  exact cb_dot_vminus_le hK.2.1 (vplus_mem_edge hK t)
+    dot (vminus K t) (vvec t) ≤ dot (vplus K t) (vvec t) :=
+  dot_vminus_le_dot hK.2.1 (vplus_mem_edge hK t)
 
+/-- `v_K(a, b)` lies on the supporting line `l_K(a)`. -/
 lemma vint_mem_line_left (K : Set (ℝ × ℝ)) (a b : ℝ) : vint K a b ∈ suppLine K a := by
   simp [vint, suppLine, line, dot_add_left, dot_smul_left]
 
+/-- `v_K(a, b)` lies on the supporting line `l_K(b)` when `sin (b - a) ≠ 0`. -/
 lemma vint_mem_line_right (K : Set (ℝ × ℝ)) {a b : ℝ} (h : sin (b - a) ≠ 0) :
     vint K a b ∈ suppLine K b := by
   simp only [vint, suppLine, line, mem_ofPred_eq, dot_add_left, dot_smul_left, dot_uvec_uvec,
@@ -320,19 +361,10 @@ lemma vint_mem_line_right (K : Set (ℝ × ℝ)) {a b : ℝ} (h : sin (b - a) �
 
 /-! ### Proof of Theorem `thm:limits-converging-to-vertex` -/
 
-/-- The frame identity `p · u_s = cos (s - t) (p · u_t) + sin (s - t) (p · v_t)`. -/
-private lemma cb_dot_uvec_right (x : ℝ × ℝ) (s t : ℝ) :
-    dot x (uvec s) = cos (s - t) * dot x (uvec t) + sin (s - t) * dot x (vvec t) := by
-  conv_lhs => rw [show s = (s - t) + t by ring]
-  simp only [dot, uvec, vvec, cos_add, sin_add]
-  ring
-
 /-- The frame identity `p · u_s = cos (t - s) (p · u_t) + sin (t - s) (p · (-v_t))`. -/
 private lemma cb_dot_uvec_left (x : ℝ × ℝ) (s t : ℝ) :
     dot x (uvec s) = cos (t - s) * dot x (uvec t) + sin (t - s) * dot x (-vvec t) := by
-  conv_lhs => rw [show s = t - (t - s) by ring]
-  simp only [dot, uvec, vvec, cos_sub, sin_sub, Prod.fst_neg, Prod.snd_neg]
-  ring
+  rw [dot_uvec_eq_cos_add_sin x s t, dot_neg_right, ← neg_sub t s, cos_neg, sin_neg]; ring
 
 /-- Decomposition in the frame `(u_t, -v_t)`. -/
 private lemma cb_frame_left (x : ℝ × ℝ) (t : ℝ) :
@@ -351,9 +383,9 @@ private lemma cb_tendsto_of_dot {u v P : ℝ × ℝ} (huv : ∀ x : ℝ × ℝ, 
 
 /-- The core of Theorem `thm:limits-converging-to-vertex`, for a compact set `K` and a frame
 `(u, v)`. Let `P ∈ K` maximize `· u` over `K`, and among those maximizers maximize `· v`. If the
-points `w i ∈ K` do at least as well as `P` in the direction `c i • u + d i • v`, where `c i → 1` and
-`d i → 0⁺`, then `w i → P`. Every cluster point `q` of `w` lies in `K`, maximizes `· u` and satisfies
-`q · v ≥ P · v`, hence equals `P`. -/
+points `w i ∈ K` do at least as well as `P` in the direction `c i • u + d i • v`, where `c i → 1`
+and `d i → 0⁺`, then `w i → P`. Every cluster point `q` of `w` lies in `K`, maximizes `· u` and
+satisfies `q · v ≥ P · v`, hence equals `P`. -/
 private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : ℝ × ℝ}
     (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
     (hP : P ∈ K) (hle : ∀ x ∈ K, dot x u ≤ dot P u)
@@ -364,7 +396,7 @@ private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P :
     (hw : ∀ᶠ i in l, c i * dot P u + d i * dot P v ≤ c i * dot (w i) u + d i * dot (w i) v) :
     Tendsto w l (𝓝 P) := by
   obtain ⟨R, hR⟩ : ∃ R, ∀ x ∈ K, |dot x v| ≤ R := by
-    obtain ⟨R, hR⟩ := hK.exists_bound_of_continuousOn (cb_continuous_dot v).continuousOn
+    obtain ⟨R, hR⟩ := hK.exists_bound_of_continuousOn (continuous_dot v).continuousOn
     exact ⟨R, fun x hx => by simpa [Real.norm_eq_abs] using hR x hx⟩
   have hc' : ∀ᶠ i in l, 1 / 2 < c i := hc.eventually (lt_mem_nhds (by norm_num))
   -- the `u`-coordinate converges: `0 ≤ P · u - w · u ≤ 4 R d`
@@ -395,14 +427,14 @@ private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P :
   have hqu : dot q u = dot P u := by
     have h1 : MapClusterPt (dot P u - dot q u) l (fun i => dot P u - dot (w i) u) :=
       hq.continuousAt_comp (f := fun x => dot P u - dot x u)
-        (continuous_const.sub (cb_continuous_dot u)).continuousAt
+        (continuous_const.sub (continuous_dot u)).continuousAt
     have h2 : ClusterPt (dot P u - dot q u) (𝓝 0) := h1.clusterPt.mono ha
     have h3 : dot P u - dot q u = 0 := by
       by_contra hne
       exact clusterPt_iff_not_disjoint.1 h2 (disjoint_nhds_nhds.2 hne)
     linarith
   have hqv : dot P v ≤ dot q v :=
-    (isClosed_le continuous_const (cb_continuous_dot v)).mem_of_mapClusterPt hq hb
+    (isClosed_le continuous_const (continuous_dot v)).mem_of_mapClusterPt hq hb
   have hqv' := hmax q hqK hqu
   rw [huv q, huv P, hqu, le_antisymm hqv' hqv]
 
@@ -421,11 +453,9 @@ private lemma cb_coef_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : �
     Tendsto (fun i => (F i - dot P u * c i) / d i) l (𝓝 (dot P v)) := by
   have hw : Tendsto w l (𝓝 P) := by
     refine cb_tendsto_core hK huv hP hle hmax hc hd hdpos hwK ?_
-    filter_upwards [hF, hFP] with i h1 h2
-    rw [← h1]
-    exact h2
+    filter_upwards [hF, hFP] with i h1 h2 using h1 ▸ h2
   have hwv : Tendsto (fun i => dot (w i) v) l (𝓝 (dot P v)) :=
-    ((cb_continuous_dot v).tendsto P).comp hw
+    ((continuous_dot v).tendsto P).comp hw
   have hc' : ∀ᶠ i in l, 0 < c i := hc.eventually (lt_mem_nhds (by norm_num))
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hwv ?_ ?_
   · filter_upwards [hFP, hdpos] with i h1 hdi
@@ -436,21 +466,21 @@ private lemma cb_coef_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : �
     have := mul_le_mul_of_nonneg_left (hle _ hi) hci.le
     linarith
 
-private lemma cb_tendsto_cos_right (t : ℝ) : Tendsto (fun s => cos (s - t)) (𝓝[>] t) (𝓝 1) := by
-  have h : Continuous (fun s => cos (s - t)) := by fun_prop
-  simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
+private lemma cb_tendsto_cos_right (t : ℝ) : Tendsto (fun s => cos (s - t)) (𝓝[>] t) (𝓝 1) :=
+  tendsto_nhdsWithin_of_tendsto_nhds <|
+    (by fun_prop : Continuous fun s => cos (s - t)).tendsto' t 1 (by simp)
 
-private lemma cb_tendsto_sin_right (t : ℝ) : Tendsto (fun s => sin (s - t)) (𝓝[>] t) (𝓝 0) := by
-  have h : Continuous (fun s => sin (s - t)) := by fun_prop
-  simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
+private lemma cb_tendsto_sin_right (t : ℝ) : Tendsto (fun s => sin (s - t)) (𝓝[>] t) (𝓝 0) :=
+  tendsto_nhdsWithin_of_tendsto_nhds <|
+    (by fun_prop : Continuous fun s => sin (s - t)).tendsto' t 0 (by simp)
 
-private lemma cb_tendsto_cos_left (t : ℝ) : Tendsto (fun s => cos (t - s)) (𝓝[<] t) (𝓝 1) := by
-  have h : Continuous (fun s => cos (t - s)) := by fun_prop
-  simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
+private lemma cb_tendsto_cos_left (t : ℝ) : Tendsto (fun s => cos (t - s)) (𝓝[<] t) (𝓝 1) :=
+  tendsto_nhdsWithin_of_tendsto_nhds <|
+    (by fun_prop : Continuous fun s => cos (t - s)).tendsto' t 1 (by simp)
 
-private lemma cb_tendsto_sin_left (t : ℝ) : Tendsto (fun s => sin (t - s)) (𝓝[<] t) (𝓝 0) := by
-  have h : Continuous (fun s => sin (t - s)) := by fun_prop
-  simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
+private lemma cb_tendsto_sin_left (t : ℝ) : Tendsto (fun s => sin (t - s)) (𝓝[<] t) (𝓝 0) :=
+  tendsto_nhdsWithin_of_tendsto_nhds <|
+    (by fun_prop : Continuous fun s => sin (t - s)).tendsto' t 0 (by simp)
 
 private lemma cb_sin_pos_right (t : ℝ) : ∀ᶠ s in 𝓝[>] t, 0 < sin (s - t) := by
   filter_upwards [Ioo_mem_nhdsGT (show t < t + π by linarith [pi_pos])] with s hs
@@ -467,10 +497,10 @@ private lemma cb_tendsto_right {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : 
   have hP := cb_vplus_mem_edge hK hne t
   refine cb_tendsto_core hK (fun x => eq_dot_uvec_smul_add x t) hP.1
     (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK hx t)
-    (fun x hx hxu => cb_le_dot_vplus hK (cb_mem_edge hx (by rw [hxu, dot_vplus_uvec])))
+    (fun x hx hxu => dot_le_dot_vplus hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
     (cb_tendsto_cos_right t) (cb_tendsto_sin_right t) (cb_sin_pos_right t)
     (Eventually.of_forall fun s => (hw s).1) (Eventually.of_forall fun s => ?_)
-  rw [← cb_dot_uvec_right, ← cb_dot_uvec_right, cb_dot_eq_of_mem_edge (hw s)]
+  rw [← dot_uvec_eq_cos_add_sin, ← dot_uvec_eq_cos_add_sin, (hw s).2]
   exact dot_le_supp hK hP.1 s
 
 /-- Left limits for a compact set: every choice of points `w s ∈ e_K(s)` converges to `v_K⁻(t)` as
@@ -482,10 +512,10 @@ private lemma cb_tendsto_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K
     (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK hx t)
     (fun x hx hxu => by
       rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]
-      exact cb_dot_vminus_le hK (cb_mem_edge hx (by rw [hxu, dot_vminus_uvec])))
+      exact dot_vminus_le_dot hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
     (cb_tendsto_cos_left t) (cb_tendsto_sin_left t) (cb_sin_pos_left t)
     (Eventually.of_forall fun s => (hw s).1) (Eventually.of_forall fun s => ?_)
-  rw [← cb_dot_uvec_left, ← cb_dot_uvec_left, cb_dot_eq_of_mem_edge (hw s)]
+  rw [← cb_dot_uvec_left, ← cb_dot_uvec_left, (hw s).2]
   exact dot_le_supp hK hP.1 s
 
 /-- The `v_t`-coordinate `(h(s) - h(t) cos (s - t)) / sin (s - t)` of `v_K(t, s)` tends to
@@ -496,14 +526,14 @@ private lemma cb_coef_right {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.N
   have hP := cb_vplus_mem_edge hK hne t
   have h := cb_coef_core hK (fun x => eq_dot_uvec_smul_add x t) hP.1
     (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK hx t)
-    (fun x hx hxu => cb_le_dot_vplus hK (cb_mem_edge hx (by rw [hxu, dot_vplus_uvec])))
+    (fun x hx hxu => dot_le_dot_vplus hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
     (cb_tendsto_cos_right t) (cb_tendsto_sin_right t) (cb_sin_pos_right t)
     (F := supp K) (w := vplus K)
     (Eventually.of_forall fun s => (cb_vplus_mem_edge hK hne s).1)
     (Eventually.of_forall fun s => by
-      rw [← cb_dot_uvec_right, cb_dot_eq_of_mem_edge (cb_vplus_mem_edge hK hne s)])
+      rw [← dot_uvec_eq_cos_add_sin, (cb_vplus_mem_edge hK hne s).2])
     (Eventually.of_forall fun s => by
-      rw [← cb_dot_uvec_right]; exact dot_le_supp hK hP.1 s)
+      rw [← dot_uvec_eq_cos_add_sin]; exact dot_le_supp hK hP.1 s)
   rwa [dot_vplus_uvec] at h
 
 /-- The mirror statement: `(h(s) - h(t) cos (t - s)) / sin (t - s) → v_K⁻(t) · (-v_t)` as
@@ -516,27 +546,29 @@ private lemma cb_coef_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.No
     (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK hx t)
     (fun x hx hxu => by
       rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]
-      exact cb_dot_vminus_le hK (cb_mem_edge hx (by rw [hxu, dot_vminus_uvec])))
+      exact dot_vminus_le_dot hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
     (cb_tendsto_cos_left t) (cb_tendsto_sin_left t) (cb_sin_pos_left t)
     (F := supp K) (w := vminus K)
     (Eventually.of_forall fun s => (cb_vminus_mem_edge hK hne s).1)
     (Eventually.of_forall fun s => by
-      rw [← cb_dot_uvec_left, cb_dot_eq_of_mem_edge (cb_vminus_mem_edge hK hne s)])
+      rw [← cb_dot_uvec_left, (cb_vminus_mem_edge hK hne s).2])
     (Eventually.of_forall fun s => by
       rw [← cb_dot_uvec_left]; exact dot_le_supp hK hP.1 s)
   rwa [dot_vminus_uvec] at h
 
-/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits. For a convex body `K` and an angle
-`t`, the vertices `v_K^±(s)` and the intersections `v_K(t, s)` converge to `v_K⁺(t)` as `s → t⁺`.
-In particular `v_K⁺` is right-continuous. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits. For a convex body `K` and
+an angle `t`, the vertices `v_K^±(s)` and the intersections `v_K(t, s)` converge to `v_K⁺(t)` as
+`s → t⁺`. In particular `v_K⁺` is right-continuous. -/
 theorem tendsto_vplus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    Tendsto (vplus K) (𝓝[>] t) (𝓝 (vplus K t)) := by
-  exact cb_tendsto_right hK.2.1 hK.1 t (vplus_mem_edge hK)
+    Tendsto (vplus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
+  cb_tendsto_right hK.2.1 hK.1 t (vplus_mem_edge hK)
 
+/-- **Theorem 2.1.3**, right limits: `v_K⁻(s) → v_K⁺(t)` as `s → t⁺`. -/
 theorem tendsto_vminus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    Tendsto (vminus K) (𝓝[>] t) (𝓝 (vplus K t)) := by
-  exact cb_tendsto_right hK.2.1 hK.1 t (vminus_mem_edge hK)
+    Tendsto (vminus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
+  cb_tendsto_right hK.2.1 hK.1 t (vminus_mem_edge hK)
 
+/-- **Theorem 2.1.3**, right limits: `v_K(t, s) → v_K⁺(t)` as `s → t⁺`. -/
 theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (fun s => vint K t s) (𝓝[>] t) (𝓝 (vplus K t)) := by
   refine cb_tendsto_of_dot (fun x => eq_dot_uvec_smul_add x t) ?_ ?_
@@ -546,15 +578,19 @@ theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ
   · refine (cb_coef_right hK.2.1 hK.1 t).congr (fun s => ?_)
     simp [vint, dot_add_left, dot_smul_left]
 
-/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K⁺(s) → v_K⁻(t)` as
+`s → t⁻`. -/
 theorem tendsto_vplus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    Tendsto (vplus K) (𝓝[<] t) (𝓝 (vminus K t)) := by
-  exact cb_tendsto_left hK.2.1 hK.1 t (vplus_mem_edge hK)
+    Tendsto (vplus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
+  cb_tendsto_left hK.2.1 hK.1 t (vplus_mem_edge hK)
 
+/-- **Theorem 2.1.3**, left limits: `v_K⁻(s) → v_K⁻(t)` as `s → t⁻`; so `v_K⁻` is
+left-continuous. -/
 theorem tendsto_vminus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
-    Tendsto (vminus K) (𝓝[<] t) (𝓝 (vminus K t)) := by
-  exact cb_tendsto_left hK.2.1 hK.1 t (vminus_mem_edge hK)
+    Tendsto (vminus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
+  cb_tendsto_left hK.2.1 hK.1 t (vminus_mem_edge hK)
 
+/-- **Theorem 2.1.3**, left limits: `v_K(s, t) → v_K⁻(t)` as `s → t⁻`. -/
 theorem tendsto_vint_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (fun s => vint K s t) (𝓝[<] t) (𝓝 (vminus K t)) := by
   refine cb_tendsto_of_dot (fun x => cb_frame_left x t) ?_ ?_
@@ -586,27 +622,18 @@ private lemma cb_tendsto_cos_sub_div : Tendsto (fun e : ℝ => (cos e - 1) / e) 
   refine h.congr (fun e => ?_)
   simp [slope_def_field]
 
-private lemma cb_tendsto_sub_right (t : ℝ) : Tendsto (fun s => s - t) (𝓝[>] t) (𝓝[≠] 0) := by
-  refine tendsto_nhdsWithin_iff.2 ⟨?_, ?_⟩
-  · have h : Continuous (fun s : ℝ => s - t) := by fun_prop
-    simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
-  · filter_upwards [self_mem_nhdsWithin] with s hs
-    exact sub_ne_zero.2 (ne_of_gt hs)
-
-private lemma cb_tendsto_sub_left (t : ℝ) : Tendsto (fun s => s - t) (𝓝[<] t) (𝓝[≠] 0) := by
-  refine tendsto_nhdsWithin_iff.2 ⟨?_, ?_⟩
-  · have h : Continuous (fun s : ℝ => s - t) := by fun_prop
-    simpa using (h.tendsto t).mono_left nhdsWithin_le_nhds
-  · filter_upwards [self_mem_nhdsWithin] with s hs
-    exact sub_ne_zero.2 (ne_of_lt hs)
+private lemma cb_tendsto_sub (t : ℝ) : Tendsto (fun s => s - t) (𝓝[≠] t) (𝓝[≠] 0) := by
+  have h := ((Homeomorph.subRight t).map_punctured_nhds_eq t).le
+  rwa [Homeomorph.subRight_apply, sub_self] at h
 
 /-- The support function has right derivative `v_K⁺(t) · v_t`. -/
 theorem hasDerivWithinAt_supp_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     HasDerivWithinAt (supp K) (dot (vplus K t) (vvec t)) (Ici t) t := by
   rw [← hasDerivWithinAt_Ioi_iff_Ici, hasDerivWithinAt_iff_tendsto_slope' (by simp)]
   -- slope = (sin δ / δ) · (v_t-coordinate of `v_K(t, s)`) + h(t) (cos δ - 1) / δ, `δ = s - t`
-  have h1 := cb_tendsto_sin_div.comp (cb_tendsto_sub_right t)
-  have h2 := cb_tendsto_cos_sub_div.comp (cb_tendsto_sub_right t)
+  have hsub := (cb_tendsto_sub t).mono_left (nhdsGT_le_nhdsNE t)
+  have h1 := cb_tendsto_sin_div.comp hsub
+  have h2 := cb_tendsto_cos_sub_div.comp hsub
   have h := (h1.mul (cb_coef_right hK.2.1 hK.1 t)).add (h2.const_mul (supp K t))
   rw [one_mul, mul_zero, add_zero] at h
   refine h.congr' ?_
@@ -620,8 +647,10 @@ theorem hasDerivWithinAt_supp_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
 theorem hasDerivWithinAt_supp_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     HasDerivWithinAt (supp K) (dot (vminus K t) (vvec t)) (Iic t) t := by
   rw [← hasDerivWithinAt_Iio_iff_Iic, hasDerivWithinAt_iff_tendsto_slope' (by simp)]
-  have h1 := cb_tendsto_sin_div.comp (cb_tendsto_sub_left t)
-  have h2 := cb_tendsto_cos_sub_div.comp (cb_tendsto_sub_left t)
+  -- slope = (sin δ / δ) · (`v_t`-coordinate of `v_K(s, t)`) + h(t) (cos δ - 1) / δ, `δ = s - t`
+  have hsub := (cb_tendsto_sub t).mono_left (nhdsLT_le_nhdsNE t)
+  have h1 := cb_tendsto_sin_div.comp hsub
+  have h2 := cb_tendsto_cos_sub_div.comp hsub
   have h := ((h1.mul (cb_coef_left hK.2.1 hK.1 t)).neg).add (h2.const_mul (supp K t))
   rw [one_mul, mul_zero, add_zero, dot_neg_right, neg_neg] at h
   refine h.congr' ?_
@@ -632,5 +661,21 @@ theorem hasDerivWithinAt_supp_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) 
   rw [show s - t = -(t - s) by ring, sin_neg, cos_neg]
   field_simp
   ring
+
+/-- If the support function agrees on a left neighbourhood of `t` with a function differentiable at
+`t`, then `v_K⁻(t) · v_t` is its derivative. -/
+lemma dot_vminus_vvec_of_hasDerivAt {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t g' : ℝ}
+    {G : ℝ → ℝ} (hG : HasDerivAt G g' t) (heq : supp K =ᶠ[𝓝[≤] t] G) (hval : supp K t = G t) :
+    dot (vminus K t) (vvec t) = g' :=
+  (uniqueDiffWithinAt_Iic t).eq_deriv _ (hasDerivWithinAt_supp_left hK t)
+    (hG.hasDerivWithinAt.congr_of_eventuallyEq heq hval)
+
+/-- If the support function agrees on a right neighbourhood of `t` with a function differentiable
+at `t`, then `v_K⁺(t) · v_t` is its derivative. -/
+lemma dot_vplus_vvec_of_hasDerivAt {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t g' : ℝ}
+    {G : ℝ → ℝ} (hG : HasDerivAt G g' t) (heq : supp K =ᶠ[𝓝[≥] t] G) (hval : supp K t = G t) :
+    dot (vplus K t) (vvec t) = g' :=
+  (uniqueDiffWithinAt_Ici t).eq_deriv _ (hasDerivWithinAt_supp_right hK t)
+    (hG.hasDerivWithinAt.congr_of_eventuallyEq heq hval)
 
 end MovingSofaOptimality

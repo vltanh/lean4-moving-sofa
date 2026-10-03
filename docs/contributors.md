@@ -59,7 +59,7 @@ Central time (UTC−5); figures on effort come from the session transcripts, com
   [#6808](https://github.com/google-deepmind/formal-conjectures/pull/6808) links the proofs from
   formal-conjectures' file and marks the uniqueness statement solved.
 
-## 3 October 2026: consolidation, and this text
+## 3 October 2026: consolidation, this text, and its simplification
 
 * **07:48 to 08:53: consolidation.** Claude Opus 5.5, in Claude Code 2.1.287, at the owner's
   request: the 75 files of the uniqueness and bridge libraries became 12 modules, one per step of the
@@ -85,3 +85,32 @@ Central time (UTC−5); figures on effort come from the session transcripts, com
   declarations. No statement or proof changed. The sub-agents worked about 5.8 hours; all agents
   together made 1,619 tool calls (1,303 by sub-agents), generated 2.7 million output tokens and
   read 7.2 million input tokens, plus 658 million tokens from the prompt cache.
+* **12:35 to 15:45: simplification.** Claude Opus 5.5, in Claude Code 2.1.287, at the owner's
+  request for a deep audit that would simplify the Lean and the text proofs and make them easier to
+  read. The coordinating agent merged about 190 copies of small facts, proved again in file after
+  file, into about 90 lemmas of `Basic/`, and found that the axiom audit had not imported one module
+  with `import all` (its line had merged into a comment), so that the audit did not see that
+  module's proofs; CI now checks the audit's imports. Eleven sub-agents, each owning a group of
+  files, then simplified the proofs, removed dead and repeated code, and gave the long proofs named
+  steps and docstrings; a twelfth merged the duplicates that crossed their boundaries, and a
+  thirteenth split the file of Baek's §3.4 into four modules. One copy of the interval arithmetic
+  now serves both generated files, whose generators still reproduce them exactly. The three
+  libraries went from 50,304 to 45,783 lines; no statement of the Challenge or of a numbered result
+  changed. Seven sub-agents audited the text, two chapters each, checking every proof against its
+  Lean statement. They found no false theorem, but about forty gaps and imprecisions: steps asserted
+  without an argument, missing cases, a few statements that said more or less than their Lean forms,
+  a numerical bound stated too strongly, and a claim about every cap that holds only for Gerver's.
+  They filled the gaps, replaced repeated arguments by citations, and cited the text's own numbering
+  throughout; the text grew by 4%. At the owner's request, the proofs were then compared with those
+  of the last audited commit, `eb93296`: every statement and definition is unchanged, and 197 of the
+  216 audited results rest on exactly the same numbered results as before; the others changed only
+  in which lemma states a step, and Lemma 3.4.1 and Theorems 8.5.3 and 8.5.4 now cite the results
+  that the paper cites. Six more sub-agents compared the changed proofs, Lean and text, with Baek's
+  LaTeX source. The Lean arguments are unchanged. One proof of the text, which an editor had
+  replaced by another argument, was restored to Baek's, and a clause of Lemma 7.1.4 to its
+  statement; about a dozen remarks on Baek's or the formalization's route were corrected, and five
+  route differences, two inaccuracies of the audit (Lemmas 6.5.3 and 8.2.2) and one reading (Lemma
+  7.1.4), all older than this run, are now recorded in [`REPORT.md`](../REPORT.md). Twenty-six
+  sub-agents took part, at most 18 at the same time, and worked about 12.5 hours; all agents
+  together made about 3,210 tool calls (2,914 by sub-agents), generated 1.4 million output tokens
+  and read 14.0 million input tokens, plus 1.0 billion tokens from the prompt cache.

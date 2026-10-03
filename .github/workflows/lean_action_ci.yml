@@ -15,6 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: leanprover/lean-action@v1
+      - name: Check that the audit imports every module of the libraries
+        run: >-
+          diff <(find MovingSofaOptimality MovingSofaUniqueness MovingSofaBridge -name '*.lean'
+          | sed 's/\.lean$//; s#/#.#g' | sort)
+          <(grep '^import all MovingSofa' scripts/Audit.lean | sed 's/^import all //' | sort)
       - name: Audit axioms and dependencies
         run: lake env lean scripts/Audit.lean
       - name: Check the Challenge's copy of the shared definitions

@@ -75,26 +75,12 @@ theorem injCond1_of_curvature {K : Set (ℝ × ℝ)}
     hsm.comp (measurable_id.add_const _), hr0, fun t => hs0 _, hr, ?_⟩
   simpa using hs
 
-/-- If `μ ≤ k(t) dt` on `J` and `(a, b] ⊆ J`, then `μ (a, b] ≤ ∫ₐᵇ k`. -/
-theorem interval_mass_le_integral {μ : Measure ℝ} {J : Set ℝ} {k : ℝ → ℝ}
-    {a b : ℝ} (hab : a ≤ b) (hsub : Ioc a b ⊆ J)
-    (h : μ.restrict J ≤ (volume.restrict J).withDensity (fun t => ENNReal.ofReal (k t)))
-    (hk : IntervalIntegrable k volume a b) (hk0 : ∀ t, 0 ≤ k t) :
-    (μ (Ioc a b)).toReal ≤ ∫ t in a..b, k t := by
-  have hi := Measure.le_iff'.1 h (Ioc a b)
-  rw [Measure.restrict_apply measurableSet_Ioc, inter_eq_left.2 hsub,
-    withDensity_apply _ measurableSet_Ioc, Measure.restrict_restrict measurableSet_Ioc,
-    inter_eq_left.2 hsub, ← ofReal_integral_eq_lintegral_ofReal hk.1
-      (Filter.Eventually.of_forall hk0), ← intervalIntegral.integral_of_le hab] at hi
-  exact ENNReal.toReal_le_of_le_ofReal
-    (intervalIntegral.integral_nonneg hab fun t _ => hk0 t) hi
-
 /-- The integral of `f_K⁺` in terms of the support function. -/
 theorem integral_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
     (∫ t in a..b, fPlus K t) =
       (∫ t in (a + π / 2)..(b + π / 2), supp K t) - (supp K b - supp K a) := by
   have hh : IntervalIntegrable (fun t => supp K (t + π / 2)) volume a b :=
-    ((inj_continuous_supp hK).comp
+    ((IsConvexBody.continuous_supp hK).comp
       (continuous_id.add (continuous_const (y := π / 2)))).intervalIntegrable a b
   have hd : IntervalIntegrable (fun t => dot (vplus K t) (vvec t)) volume a b := by
     simpa only [add_zero] using inj_intervalIntegrable_dvplus hK 0 a b
@@ -115,8 +101,8 @@ theorem gPlus_sub_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
     rw [sigma_Ioc hK, ENNReal.toReal_ofReal
       (sub_nonneg.2 (monotone_sigmaFun hK (by linarith)))]
     have hi := intervalIntegral.integral_interval_sub_left
-      ((inj_continuous_supp hK).intervalIntegrable (μ := volume) 0 (b + π / 2))
-      ((inj_continuous_supp hK).intervalIntegrable 0 (a + π / 2))
+      ((IsConvexBody.continuous_supp hK).intervalIntegrable (μ := volume) 0 (b + π / 2))
+      ((IsConvexBody.continuous_supp hK).intervalIntegrable 0 (a + π / 2))
     simp only [sigmaFun]
     linarith
   rw [inj_gPlus_eq, inj_gPlus_eq, hs, integral_fPlus hK]
@@ -137,8 +123,8 @@ theorem gK_end {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) : gK K (π / 2) = 
   have h := inj_fK_zero (proposition2_5_4_isCap hK)
   have he := (proposition6_2_2 (K := K) (t := 0)).2.1
   change fMinus (mirrorCap K (π / 2)) 0 = 1 at h
-  have h' : gPlus K (π / 2) = 1 := by simpa only [sub_zero] using he.symm.trans h
-  exact h'
+  change gPlus K (π / 2) = 1
+  simpa only [sub_zero] using he.symm.trans h
 
 /-- The first integral inequality (17): `∫₀ᵗ m₀(g_K) ≤ f_K(t) - 1` for `t ∈ [0, π/2)`. -/
 theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
@@ -149,7 +135,7 @@ theorem first_arm_integral_lower {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     fun u hu => ⟨hu.1.le, hu.2.trans_lt ht.2⟩
   have hb := interval_mass_le_integral ht.1 hsub hbound
     (inj_intervalIntegrable_k0_gPlus hK.2.1 0 t) (fun u => inj_k0_nonneg _)
-  have he := inj_fPlus_sub_fPlus hK.2.1 ht.1
+  have he := fPlus_sub_fPlus hK.2.1 ht.1
   have hf (u : ℝ) (hu : u ∈ Ico 0 (π / 2)) : fPlus K u = fMinus K u :=
     ((proposition6_4_5 hK h1).1 u hu).2
   rw [hf t ht, hf 0 ⟨le_rfl, by positivity⟩] at he
@@ -216,8 +202,8 @@ end
 Let `K` be a polygon cap of the right-angle set `Θ_n`, with step size `δ`, whose diameter is at most
 `D`. On each cell `[t, t + δ]`, `g_K⁺` is nonincreasing and drops by at most `D δ`
 (`polygon_arm_cell`); this is Baek's Lemma 6.4.1, where `D = 5` for maximum polygon caps. So a bound
-`σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + η δ` at the left end of the cell gives
-`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + η δ` (`polygon_step_integral_bound`).
+`σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + e` at the left end of the cell gives
+`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + e` (`polygon_step_with_error`).
 -/
 
 section
@@ -229,9 +215,7 @@ namespace MovingSofaUniqueness
 /-- A vector of Euclidean norm at most `D` has `dot w (vvec t) ≥ -D`. -/
 theorem neg_bound_le_dot_vvec {w : ℝ × ℝ} {D : ℝ} (hD : 0 ≤ D)
     (hw : norm2 w ≤ D) (t : ℝ) : -D ≤ dot w (vvec t) := by
-  have hww : dot w w ≤ D ^ 2 := by
-    have h := (Real.sqrt_le_left hD).mp hw
-    exact h
+  have hww : dot w w ≤ D ^ 2 := (Real.sqrt_le_left hD).mp hw
   have he := inj_dot_self_eq w t
   nlinarith [sq_nonneg (dot w (uvec t))]
 
@@ -259,6 +243,8 @@ theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
   have hsinne' : sin (t + π / 2 + stepSize k - (t + π / 2)) ≠ 0 := by
     rw [add_sub_cancel_left]
     exact hs.ne'
+  -- Step 1: the supporting lines at the normals `s ∈ [t, t + δ]` all pass through a vertex `A` of
+  -- `K`, and those at the normals `s + π/2` through a vertex `C`.
   set A := vint K t (t + stepSize k) with hAdef
   set C := vint K (t + π / 2) (t + π / 2 + stepSize k) with hCdef
   have hsuppA : ∀ s ∈ Icc t (t + stepSize k), supp K s = dot A (uvec s) := by
@@ -277,6 +263,7 @@ theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
     · rw [show t + stepSize k + π / 2 = t + π / 2 + stepSize k by ring]
       exact (vint_mem_line_right K hsinne').symm
     · exact (hC3 (s + π / 2) ⟨by linarith, by linarith⟩).1
+  -- Step 2: so `g⁺` and `g⁻` are `G s = (A - C) · u_s` on the cell.
   set G : ℝ → ℝ := fun s => dot (A - C) (uvec s) with hG
   have hgt : gPlus K t = G t := by
     rw [gPlus, dot_sub_left, inj_dot_outerCorner_uvec, cPlus, hC1,
@@ -297,8 +284,11 @@ theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
     · rw [gMinus, dot_sub_left, inj_dot_outerCorner_uvec, cMinus, hC.2.2,
         hsuppA s ⟨hs'.1.le, hs'.2.le⟩]
       exact (dot_sub_left _ _ _).symm
+  -- Step 3: `G' = (A - C) · v_s` lies in `[-D, 0]` on the cell: it is at most zero since `A` lies
+  -- below the supporting line through `C`, and at least `-D` since `|A - C| ≤ D`. So `G` is
+  -- nonincreasing and `G + D s` nondecreasing.
   have hGd : ∀ s, HasDerivAt G (dot (A - C) (vvec s)) s :=
-    fun s => inj_hasDerivAt_dot_uvec (A - C) s
+    fun s => hasDerivAt_dot_uvec (A - C) s
   have hGneg : ∀ s ∈ Icc t (t + stepSize k), dot (A - C) (vvec s) ≤ 0 := by
     intro s hs'
     rw [dot_sub_left, ← uvec_add_pi_div_two, ← hsuppC s hs']
@@ -342,16 +332,15 @@ theorem polygon_arm_cell {k : ℕ} {K : Set (ℝ × ℝ)}
     have h := hmono htI htdI (by linarith)
     linarith
 
-/-- A bound `σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + η δ` at the left end of a cell integrates to
-`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + η δ`. -/
-theorem polygon_step_integral_bound {k : ℕ} {K : Set (ℝ × ℝ)}
-    (hK : IsPolygonCap (rightAngleSet k) K) {D C η : ℝ} (hD : 0 ≤ D)
+/-- A bound `σ_K(t) ≤ k₀(g_K⁺(t)) δ + C δ² + e` at the left end of a cell integrates to
+`σ_K(t) ≤ ∫ₜ^{t+δ} k₀(g_K⁺) + (C + D) δ² + e`. -/
+theorem polygon_step_with_error {k : ℕ} {K : Set (ℝ × ℝ)}
+    (hK : IsPolygonCap (rightAngleSet k) K) {D C e : ℝ} (hD : 0 ≤ D)
     (hdiam : ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ D) {t : ℝ}
     (ht : t ∈ insert 0 ((rightAngleSet k).angles : Set ℝ))
-    (hlocal : sigmaAt K t ≤ k0 (gPlus K t) * stepSize k +
-      C * stepSize k ^ 2 + η * stepSize k) :
+    (hlocal : sigmaAt K t ≤ k0 (gPlus K t) * stepSize k + C * stepSize k ^ 2 + e) :
     sigmaAt K t ≤ (∫ u in t..(t + stepSize k), k0 (gPlus K u)) +
-      (C + D) * stepSize k ^ 2 + η * stepSize k := by
+      (C + D) * stepSize k ^ 2 + e := by
   have hδ := inj_stepSize_pos k
   obtain ⟨hmon, hDstep⟩ := polygon_arm_cell hK hD hdiam ht
   have hint : (k0 (gPlus K t) - D * stepSize k) * stepSize k ≤
@@ -406,6 +395,8 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
   have htI := (rightAngleSet k).subset t ht
   simp only [inj_rightAngleSet_ω] at htI
   have hct : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [htI.1, pi_pos], htI.2⟩
+  -- Step 1: `τ_K(t)` is the length of the set `Q` of parameters `s` of the points
+  -- `(h_K(t) - 1) u_t + s v_t` of the wall that lie on the frontier of the niche (Lemma 3.4.5).
   have hlen := (lemma3_4_5_one hKp ht).2.1
   set s₀ := supp K (t + π / 2) - 1 with hs₀
   set s₁ := (supp K (t + π / 2 - stepSize k) - 1 - (supp K t - 1) * sin (stepSize k)) /
@@ -421,6 +412,10 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
     frontier (polyNiche (rightAngleSet k) K) ∩ wallBVec K t} with hQ
   have hτ : tau (rightAngleSet k) K t = (volume Q).toReal := by
     rw [← hlen, lineLength]
+  -- Step 2: if a point of `Q` lies in the half-plane `D` of a neighbouring normal `t ± δ`, its
+  -- parameter is in `[min s₁ s₁', s₀]`; if it lies in that of `t`, it is `s₀`. Otherwise, above
+  -- the floor the point lies in the half-planes `B` of `t ± δ`, so the parameter is in
+  -- `[sp, sm]`; on the floor it is `z₀`.
   have hincl : Q ⊆ ((Icc (min s₁ s₁') s₀ ∪ {s₀}) ∪ Icc sp sm) ∪ {z₀} := by
     intro s hsQ
     obtain ⟨hxF, hxW⟩ := hsQ
@@ -454,8 +449,10 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
         rcases hq with hq | hq
         · exact hq
         · exact absurd hq hnD
-      have h1 := hB (t + stepSize k) ((inj_angles_succ ht).elim Or.inl (fun h => Or.inr (Or.inr h))) hD2
-      have h2 := hB (t - stepSize k) ((inj_angles_pred ht).elim Or.inl (fun h => Or.inr (Or.inl h))) hD1
+      have h1 := hB (t + stepSize k)
+        ((inj_angles_succ ht).elim Or.inl fun h => Or.inr (Or.inr h)) hD2
+      have h2 := hB (t - stepSize k)
+        ((inj_angles_pred ht).elim Or.inl fun h => Or.inr (Or.inl h)) hD1
       rw [inj_mem_halfB] at h1 h2
       have e1 : t - (t + stepSize k) = -stepSize k := by ring
       have e2 : t + stepSize k - t = stepSize k := by ring
@@ -472,6 +469,8 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
       rw [mem_singleton_iff, hz₀, eq_div_iff hct.ne']
       rw [hx2e] at hx2
       linarith
+  -- Step 3: so `τ_K(t)` is at most the sum of the two interval lengths, which are the two maxima
+  -- of the statement.
   have hvol : volume Q ≤ ENNReal.ofReal (s₀ - min s₁ s₁') + ENNReal.ofReal (sm - sp) := by
     calc
       volume Q ≤ volume (((Icc (min s₁ s₁') s₀ ∪ {s₀}) ∪ Icc sp sm) ∪ {z₀}) := measure_mono hincl
@@ -487,7 +486,8 @@ theorem polygon_tau_le_geom {k : ℕ} {K : Set (ℝ × ℝ)}
     rw [hτ]
     calc
       (volume Q).toReal ≤ (ENNReal.ofReal (s₀ - min s₁ s₁') + ENNReal.ofReal (sm - sp)).toReal :=
-        ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨ENNReal.ofReal_ne_top, ENNReal.ofReal_ne_top⟩) hvol
+        ENNReal.toReal_mono
+          (ENNReal.add_ne_top.2 ⟨ENNReal.ofReal_ne_top, ENNReal.ofReal_ne_top⟩) hvol
       _ = _ := by
         rw [ENNReal.toReal_add ENNReal.ofReal_ne_top ENNReal.ofReal_ne_top,
           ENNReal.toReal_ofReal', ENNReal.toReal_ofReal']
@@ -503,6 +503,7 @@ theorem polygon_curvature_with_defect {k : ℕ} {K : Set (ℝ × ℝ)}
     (hD : 0 ≤ D) (hgD : gPlus K t ≤ D) (he : 0 ≤ e)
     (hdefect : sigmaAt K t ≤ tau (rightAngleSet k) K t + e) :
     sigmaAt K t ≤ k0 (gPlus K t) * stepSize k + (D + 4) * stepSize k ^ 2 + e := by
+  -- Step 1: `0 ≤ g⁻ ≤ g⁺` at `t`, and `δ ≤ 1`, `tan δ ≤ δ + δ²`, `tan (δ/2) ≤ δ`.
   have hgeom := polygon_tau_le_geom hK ht
   have hKc : IsConvexBody K := hK.1.2.1
   have hg0 : 0 ≤ gPlus K t := (inj_arm_nonneg hKc t).2.2.1
@@ -520,6 +521,7 @@ theorem polygon_curvature_with_defect {k : ℕ} {K : Set (ℝ × ℝ)}
   have hT := inj_tan_le (x := stepSize k / 2) (by linarith) (by linarith)
   set δ := stepSize k
   set T := tan (δ / 2)
+  -- Step 2: with `M = |g⁺ - 1| ≤ k₀(g⁺)`, the first maximum of (14) is at most `δ M + (D + 3) δ²`.
   set M := |gPlus K t - 1|
   have hM0 : 0 ≤ M := abs_nonneg _
   have hMD : M ≤ D + 1 := by
@@ -548,6 +550,8 @@ theorem polygon_curvature_with_defect {k : ℕ} {K : Set (ℝ × ℝ)}
   have hk' : (M + 1) / 2 ≤ k0 (gPlus K t) := le_max_right _ _
   have hkδ := mul_le_mul_of_nonneg_left hk hδ.le
   have hkδ' := mul_le_mul_of_nonneg_left hk' hδ.le
+  -- Step 3: the second maximum is `0` or `2 tan (δ/2) - σ_K(t)`; in the second case
+  -- `k₀(g⁺) ≥ (M + 1)/2` absorbs the term `2 tan (δ/2)`.
   rcases le_total (2 * T - sigmaAt K t) 0 with hcase | hcase
   · change tau (rightAngleSet k) K t ≤ _ + max (2 * T - sigmaAt K t) 0 at hgeom
     rw [max_eq_right hcase] at hgeom
@@ -565,9 +569,8 @@ end
 ## Reflection of a right-angle cap
 
 The reflection `mirrorCap` preserves the sofa area (`sofaArea_mirror`), so it maps a maximizing cap
-to a maximizing cap (`maximal_sofaArea_mirror`); at a right angle it is an involution
-(`mirrorCap_rightAngle_involutive`). It exchanges the arms: `g⁺` of the reflected cap at `t` is
-`f_K⁻(π/2 - t)` (`gPlus_mirror_eq_fMinus`).
+to a maximizing cap, and it is an involution (`mirrorCap_mirrorCap`). At a right angle it
+exchanges the arms: `g⁺` of the reflected cap at `t` is `f_K⁻(π/2 - t)` (`gPlus_mirror_eq_fMinus`).
 -/
 
 section
@@ -584,26 +587,6 @@ theorem sofaArea_mirror (K : Set (ℝ × ℝ)) (ω : ℝ) :
   change area (mirror ω '' K) - area (mirror ω '' niche K ω) = _
   rw [mpc_area_mirror, mpc_area_mirror]
 
-/-- At a right angle the reflection is the involution `(x, y) ↦ (-x, y)`. -/
-theorem mirrorCap_rightAngle_involutive (K : Set (ℝ × ℝ)) :
-    mirrorCap (mirrorCap K (π / 2)) (π / 2) = K := by
-  have hinv (p : ℝ × ℝ) : mirror (π / 2) (mirror (π / 2) p) = p := by
-    rcases p with ⟨x, y⟩
-    simp only [inj_mirror_pi_div_two, neg_neg]
-  apply Set.Subset.antisymm
-  · rintro p ⟨q, ⟨r, hr, rfl⟩, rfl⟩
-    simpa only [hinv] using hr
-  · intro p hp
-    exact ⟨mirror (π / 2) p, ⟨p, hp, rfl⟩, hinv p⟩
-
-/-- The reflection of a maximizing right-angle cap is maximizing. -/
-theorem maximal_sofaArea_mirror {K : Set (ℝ × ℝ)}
-    (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
-    ∀ C, IsCap C (π / 2) →
-      sofaArea (π / 2) C ≤ sofaArea (π / 2) (mirrorCap K (π / 2)) := by
-  intro C hC
-  rw [sofaArea_mirror]
-  exact hmax C hC
 
 /-- The arm `g⁺` of the reflected cap at `t` is `f_K⁻(π/2 - t)`. -/
 theorem gPlus_mirror_eq_fMinus (K : Set (ℝ × ℝ)) (t : ℝ) :
@@ -741,19 +724,6 @@ open scoped BigOperators
 
 namespace MovingSofaUniqueness
 
-/-- `polygon_step_integral_bound` with an additive error `e` in place of `η δ`. -/
-theorem polygon_step_with_error {k : ℕ} {K : Set (ℝ × ℝ)}
-    (hK : IsPolygonCap (rightAngleSet k) K) {D C e : ℝ} (hD : 0 ≤ D)
-    (hdiam : ∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ D) {t : ℝ}
-    (ht : t ∈ insert 0 ((rightAngleSet k).angles : Set ℝ))
-    (hlocal : sigmaAt K t ≤ k0 (gPlus K t) * stepSize k + C * stepSize k ^ 2 + e) :
-    sigmaAt K t ≤ (∫ u in t..(t + stepSize k), k0 (gPlus K u)) +
-      (C + D) * stepSize k ^ 2 + e := by
-  have hδ : stepSize k ≠ 0 := (inj_stepSize_pos k).ne'
-  have h := polygon_step_integral_bound hK hD hdiam ht
-    (η := e / stepSize k) (by simpa only [div_mul_cancel₀ _ hδ] using hlocal)
-  simpa only [div_mul_cancel₀ _ hδ] using h
-
 /-- The sum of the errors `e(j δ)` over the grid normals `j δ ∈ [0, π/2)`. -/
 def polygonGridError (k : ℕ) (e : ℝ → ℝ) : ℝ :=
   ∑ j ∈ Finset.range (2 ^ (k + 1)), e ((j : ℝ) * stepSize k)
@@ -779,6 +749,8 @@ theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
     exact inj_two_pow_mul_stepSize k
   set δ := stepSize k with hδdef
   set n := 2 ^ (k + 1) with hndef
+  -- The grid normals `j δ`, `j < n`, are `0` and the angles of `Θ_n`; `E m` is the sum of the
+  -- errors at the first `m` of them.
   let E : ℕ → ℝ := fun m => ∑ j ∈ Finset.range m, e ((j : ℝ) * δ)
   have hint := inj_intervalIntegrable_k0_gPlus hKc
   have hgrid : ∀ j : ℕ, j < n →
@@ -799,6 +771,8 @@ theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
     apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hm)
     intro j hj _
     exact he _ (hgrid j (Finset.mem_range.mp hj))
+  -- Step 1: sum the bounds of the cells `[j δ, (j + 1) δ)` for `p ≤ j < m`; on each cell, `σ_K` is
+  -- concentrated at the left end.
   have hsum : ∀ p m : ℕ, p ≤ m → m ≤ n →
       (sigma K (Ico (p * δ) (m * δ))).toReal ≤
         (∫ u in (p * δ)..(m * δ), k0 (gPlus K u)) +
@@ -822,7 +796,7 @@ theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
       have hmΘ := hgrid m (by omega)
       obtain ⟨_, hA1, _, hA3⟩ := inj_polygon_consecutive hK (m := m) (by omega) rfl
       have hIoo : sigma K (Ioo ((m : ℝ) * δ) (m * δ + δ)) = 0 := by
-        apply inj_sigma_Ioo_eq_zero hKc (by linarith)
+        apply sigma_Ioo_eq_zero_of_vplus_const hKc (by linarith)
           (q := vint K (m * δ) (m * δ + δ))
         intro s hs
         rcases eq_or_lt_of_le hs.1 with rfl | h1
@@ -843,6 +817,9 @@ theorem polygon_Ico_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
           (hint _ _) (hint _ _), hm1, hEs]
       push_cast
       nlinarith
+  -- Step 2: `[a, b)` lies in `[p δ, q δ)` for `p = ⌊a/δ⌋` and `q = ⌈b/δ⌉`. The two extra pieces of
+  -- the integral are at most `B δ` each, there are at most `n` cells, and the errors sum to at most
+  -- `polygonGridError k e`.
   set p := ⌊a / δ⌋₊ with hp
   set q := ⌈b / δ⌉₊ with hq
   have hpa : (p : ℝ) * δ ≤ a := by
@@ -936,7 +913,7 @@ theorem polygon_Ioo_with_errors {k : ℕ} {K : Set (ℝ × ℝ)}
   have hKc : IsConvexBody K := hcap.2.1
   obtain ⟨_, hc2, hc3⟩ := inj_cap_consecutive hcap
   have h0 : sigma K (Ioo (-(π / 2)) 0) = 0 := by
-    apply inj_sigma_Ioo_eq_zero hKc (by linarith [pi_pos]) (q := (supp K 0, 0))
+    apply sigma_Ioo_eq_zero_of_vplus_const hKc (by linarith [pi_pos]) (q := (supp K 0, 0))
     intro s hs
     rcases eq_or_lt_of_le hs.1 with rfl | h1
     · exact hc2
@@ -1014,21 +991,6 @@ theorem k0_integral_tendsto {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × �
         (Eventually.of_forall fun u => abs_nonneg _)
         (inj_intervalIntegrable_abs_gPlus_sub hc (hcs n) _ _)
 
-/-- Integrals of support functions converge under Hausdorff convergence. -/
-theorem support_integral_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
-    (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K)
-    (hlim : HausdorffTendsto Ks K) (a b : ℝ) :
-    Tendsto (fun n => ∫ t in a..b, supp (Ks n) t) atTop
-      (𝓝 (∫ t in a..b, supp K t)) := by
-  rw [tendsto_iff_norm_sub_tendsto_zero]
-  have hd : Tendsto (fun n => hausdorffDist (Ks n) K * |b - a|) atTop (𝓝 0) := by
-    simpa using hlim.mul_const |b - a|
-  refine squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hd
-  rw [← intervalIntegral.integral_sub ((inj_continuous_supp (hKs n)).intervalIntegrable _ _)
-    ((inj_continuous_supp hK).intervalIntegrable _ _)]
-  exact intervalIntegral.norm_integral_le_of_norm_le_const
-    (fun t _ => by rw [Real.norm_eq_abs]; exact inj_abs_supp_sub_le (hKs n) hK t)
-
 /-- Open-interval curvature bounds with errors tending to zero pass to the Hausdorff limit. -/
 theorem curvature_Ioo_limit {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) {K : Set (ℝ × ℝ)}
@@ -1042,11 +1004,11 @@ theorem curvature_Ioo_limit {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × �
     (sigma K (Ioo a b)).toReal ≤ ∫ u in (max a 0)..b, k0 (gPlus K u) := by
   have hc := hK.2.1
   have hcs : ∀ n, IsConvexBody (Ks n) := fun n => (hKs n).1.2.1
-  have hsupp := inj_tendsto_supp hcs hc hlim
+  have hsupp := tendsto_supp hcs hc hlim
   have hU : Tendsto (fun n => (∫ u in (max a 0)..b, k0 (gPlus (Ks n) u)) + error n)
       atTop (𝓝 (∫ u in (max a 0)..b, k0 (gPlus K u))) := by
     simpa using (k0_integral_tendsto hKs hK hlim (le_max_right _ _) hab' hb).add herr
-  have hI := support_integral_tendsto hcs hc hlim a b
+  have hI := MovingSofaOptimality.ang_tendsto_integral_supp hcs hc hlim a b
   let Φ : ℝ → ℝ := fun ε => dot (vint K (b - ε) b) (vvec b) -
     dot (vint K a (a + ε)) (vvec a) + ∫ t in a..b, supp K t
   have hΦle : ∀ ε, 0 < ε → ε < π → Φ ε ≤ ∫ u in (max a 0)..b, k0 (gPlus K u) := by
@@ -1082,6 +1044,8 @@ theorem firstCurvature_of_Ioo {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
   have hint := inj_intervalIntegrable_k0_gPlus hc
   have hk0 : ∀ t, 0 ≤ k0 (gPlus K t) := fun t => inj_k0_nonneg _
   have hπ : (0 : ℝ) < π / 2 := by positivity
+  -- The density integrates to `∫ₓʸ k₀(g_K⁺)` over `[x, y)` and over `(x, y)`; both measures are
+  -- finite.
   have hlin : ∀ x y : ℝ, x ≤ y → ∀ s : Set ℝ, (s = Ico x y ∨ s = Ioo x y) →
       ∫⁻ t in s, ENNReal.ofReal (k0 (gPlus K t)) =
         ENNReal.ofReal (∫ t in x..y, k0 (gPlus K t)) := by
@@ -1101,67 +1065,39 @@ theorem firstCurvature_of_Ioo {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2))
     rw [withDensity_apply _ MeasurableSet.univ, Measure.restrict_univ,
       hlin 0 (π / 2) hπ.le _ (Or.inl rfl)]
     exact ENNReal.ofReal_lt_top
+  -- It suffices to compare the two measures on open intervals `(a, b)`. With `a' = max a 0` and
+  -- `b' = min b (π/2)`, the set `(a, b) ∩ [0, π/2)` contains `(a', b')` and lies in
+  -- `(max a (-π/2), b')`, an interval to which the hypothesis applies.
   apply inj_measure_le_of_Ioo
-  intro a b hab
+  intro a b _
   rw [Measure.restrict_apply measurableSet_Ioo, withDensity_apply _ measurableSet_Ioo,
     Measure.restrict_restrict measurableSet_Ioo]
-  let b' := min b (π / 2)
-  have hb'b : b' ≤ b := min_le_left _ _
-  have hb'π : b' ≤ π / 2 := min_le_right _ _
-  by_cases ha : a < 0
-  · by_cases hb0 : 0 < b'
-    · have heq : Ioo a b ∩ Ico 0 (π / 2) = Ico 0 b' := by
-        ext x
-        simp only [mem_inter_iff, mem_Ioo, mem_Ico, b', lt_min_iff]
-        constructor
-        · rintro ⟨⟨h1, h2⟩, h3, h4⟩
-          exact ⟨h3, h2, h4⟩
-        · rintro ⟨h1, h2, h3⟩
-          exact ⟨⟨by linarith, h2⟩, h1, h3⟩
-      rw [heq, hlin 0 b' hb0.le _ (Or.inl rfl)]
-      have h := hbound (-(π / 2)) b' le_rfl (by linarith)
-        (by rw [max_eq_right (by linarith)]; exact hb0.le) hb'π
-      rw [max_eq_right (by linarith)] at h
-      calc
-        sigma K (Ico 0 b') ≤ sigma K (Ioo (-(π / 2)) b') :=
-          measure_mono (fun x hx => ⟨by linarith [hx.1], hx.2⟩)
-        _ = ENNReal.ofReal (sigma K (Ioo (-(π / 2)) b')).toReal :=
-          (ENNReal.ofReal_toReal measure_Ioo_lt_top.ne).symm
-        _ ≤ ENNReal.ofReal (∫ t in (0 : ℝ)..b', k0 (gPlus K t)) := ENNReal.ofReal_le_ofReal h
-    · have heq : Ioo a b ∩ Ico 0 (π / 2) = ∅ := by
-        ext x
-        simp only [mem_inter_iff, mem_Ioo, mem_Ico, mem_empty_iff_false, iff_false]
-        rintro ⟨⟨_, h2⟩, h3, h4⟩
-        have : x < b' := lt_min h2 h4
-        linarith
-      rw [heq]
-      simp
-  · have ha0 := not_lt.mp ha
-    by_cases hab' : a < b'
-    · have heq : Ioo a b ∩ Ico 0 (π / 2) = Ioo a b' := by
-        ext x
-        simp only [mem_inter_iff, mem_Ioo, mem_Ico, b', lt_min_iff]
-        constructor
-        · rintro ⟨⟨h1, h2⟩, h3, h4⟩
-          exact ⟨h1, h2, h4⟩
-        · rintro ⟨h1, h2, h3⟩
-          exact ⟨⟨h1, h2⟩, by linarith, h3⟩
-      rw [heq, hlin a b' hab'.le _ (Or.inr rfl)]
-      have h := hbound a b' (by linarith) hab'
-        (by rw [max_eq_left ha0]; exact hab'.le) hb'π
-      rw [max_eq_left ha0] at h
-      calc
-        sigma K (Ioo a b') = ENNReal.ofReal (sigma K (Ioo a b')).toReal :=
-          (ENNReal.ofReal_toReal measure_Ioo_lt_top.ne).symm
-        _ ≤ ENNReal.ofReal (∫ t in a..b', k0 (gPlus K t)) := ENNReal.ofReal_le_ofReal h
-    · have heq : Ioo a b ∩ Ico 0 (π / 2) = ∅ := by
-        ext x
-        simp only [mem_inter_iff, mem_Ioo, mem_Ico, mem_empty_iff_false, iff_false]
-        rintro ⟨⟨h1, h2⟩, _, h4⟩
-        have : x < b' := lt_min h2 h4
-        linarith
-      rw [heq]
-      simp
+  set a' := max a 0
+  set b' := min b (π / 2)
+  have hupper : Ioo a b ∩ Ico 0 (π / 2) ⊆ Ioo (max a (-(π / 2))) b' := fun x hx =>
+    ⟨max_lt hx.1.1 (by linarith [hx.2.1]), lt_min hx.1.2 hx.2.2⟩
+  rcases le_or_gt b' a' with hba | hab'
+  · have hempty : Ioo a b ∩ Ico 0 (π / 2) = ∅ := Set.eq_empty_of_forall_notMem fun x hx =>
+      (hba.trans (max_le hx.1.1.le hx.2.1)).not_gt (lt_min hx.1.2 hx.2.2)
+    rw [hempty, measure_empty]
+    exact zero_le
+  have hlower : Ioo a' b' ⊆ Ioo a b ∩ Ico 0 (π / 2) := fun x hx =>
+    ⟨⟨(le_max_left a 0).trans_lt hx.1, hx.2.trans_le (min_le_left _ _)⟩,
+      (le_max_right a 0).trans hx.1.le, hx.2.trans_le (min_le_right _ _)⟩
+  have hmax : max (max a (-(π / 2))) 0 = a' := by
+    rw [max_assoc, max_eq_right (by linarith : -(π / 2) ≤ 0)]
+  have h := hbound (max a (-(π / 2))) b' (le_max_right _ _)
+    (max_lt ((le_max_left a 0).trans_lt hab') (by linarith [le_max_right a 0]))
+    (hmax ▸ hab'.le) (min_le_right _ _)
+  rw [hmax] at h
+  calc
+    sigma K (Ioo a b ∩ Ico 0 (π / 2)) ≤ sigma K (Ioo (max a (-(π / 2))) b') := measure_mono hupper
+    _ = ENNReal.ofReal (sigma K (Ioo (max a (-(π / 2))) b')).toReal :=
+      (ENNReal.ofReal_toReal measure_Ioo_lt_top.ne).symm
+    _ ≤ ENNReal.ofReal (∫ t in a'..b', k0 (gPlus K t)) := ENNReal.ofReal_le_ofReal h
+    _ = ∫⁻ t in Ioo a' b', ENNReal.ofReal (k0 (gPlus K t)) :=
+      (hlin a' b' hab'.le _ (Or.inr rfl)).symm
+    _ ≤ _ := lintegral_mono_set hlower
 
 /-- The first curvature bound for a Hausdorff limit of polygon caps that satisfy the open-interval
 bounds with errors tending to zero. -/
@@ -1205,32 +1141,13 @@ theorem distinct_normalWeight_sum_le {Θ : AngleSet} (S : SupportSamples Θ)
     {ι : Type*} (s : Finset ι) (t : ι → ℝ)
     (hinj : Set.InjOn t (s : Set ι)) :
     (∑ j ∈ s, S.atNormal (t j)) ≤ S.totalWeight := by
-  classical
-  unfold SupportSamples.atNormal normalWeight SupportSamples.totalWeight
-  simp_rw [Finset.sum_filter]
-  rw [Finset.sum_comm]
-  apply Finset.sum_le_sum
-  intro i hi
-  by_cases hex : ∃ j ∈ s, S.normal i = t j
-  · obtain ⟨j, hj, heq⟩ := hex
-    rw [Finset.sum_eq_single j]
-    · simp [heq]
-    · intro k hk hkj
-      have hne : S.normal i ≠ t k := by
-        intro h
-        have he : t k = t j := h.symm.trans heq
-        exact hkj (hinj hk hj he)
-      simp [hne]
-    · exact fun hn => (hn hj).elim
-  · have hne : ∀ j ∈ s, S.normal i ≠ t j := by
-      intro j hj h
-      exact hex ⟨j, hj, h⟩
-    have hz : (∑ j ∈ s, if S.normal i = t j then S.weight i else 0) = 0 := by
-      apply Finset.sum_eq_zero
-      intro j hj
-      simp [hne j hj]
-    rw [hz]
-    exact S.weight_nonneg i
+  rw [← Finset.sum_image hinj]
+  calc
+    ∑ u ∈ s.image t, S.atNormal u ≤ ∑ u ∈ s.image t ∪ Finset.univ.image S.normal, S.atNormal u :=
+      Finset.sum_le_sum_of_subset_of_nonneg Finset.subset_union_left
+        fun u _ _ => S.atNormal_nonneg u
+    _ = S.totalWeight := sum_normalWeight Finset.univ _ S.normal S.weight
+      fun i _ => Finset.mem_union_right _ (Finset.mem_image_of_mem _ (Finset.mem_univ i))
 
 /-- With the errors `e(t) = 2 η · atNormal t` and total weight at most one, the grid error is at
 most `2 η`. -/
@@ -1271,30 +1188,21 @@ theorem diameter_le_box {K : Set (ℝ × ℝ)} {R : ℝ}
       sq_nonneg (2 * R + (p.1 - q.1)), sq_nonneg (1 - (p.2 - q.2)),
       sq_nonneg (1 + (p.2 - q.2))]
 
-/-- The step sizes `δ` tend to zero along every strictly increasing sequence of levels. -/
-theorem selected_stepSize_tendsto {k : ℕ → ℕ} (hk : StrictMono k) :
-    Tendsto (fun n => stepSize (k n)) atTop (𝓝 0) := by
-  have hmesh : Tendsto stepSize atTop (𝓝 0) := by
-    unfold stepSize
-    have hpow : Tendsto (fun m : ℕ => (2 : ℝ) ^ (m + 1)) atTop atTop :=
-      (tendsto_pow_atTop_atTop_of_one_lt one_lt_two).comp (tendsto_add_atTop_nat 1)
-    exact tendsto_const_nhds.div_atTop hpow
-  exact hmesh.comp hk.tendsto_atTop
-
 /-- A right-angle cap maximizing `A_{π/2}` with positive value satisfies the first curvature
 bound (16). -/
 theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     (hK : IsCap K (π / 2)) (hpositive : 0 < sofaArea (π / 2) K)
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
     FirstCurvatureBound K := by
-  classical
+  -- Step 1: the selected polygon caps `Ks n` (Proposition 1) converge to `K` and lie in one box,
+  -- so their diameters, arms and `k₀(g⁺)` are bounded.
   obtain ⟨seq⟩ := exists_selectedCapSequence pi_div_two_mem_Ioc hK hpositive hmax
   let Ks := seq.cap
   let k := seq.index
   have hpoly : ∀ n, IsPolygonCap (rightAngleSet (k n)) (Ks n) := fun n => (seq.selected n).1
   have hc : ∀ n, IsConvexBody (Ks n) := fun n => (hpoly n).1.2.1
   let η : ℕ → ℝ := fun n => hausdorffDist (Ks n) K
-  have hη : ∀ n, 0 ≤ η n := fun n => ang_hausdorffDist_nonneg (hc n) hK.2.1
+  have hη : ∀ n, 0 ≤ η n := fun n => hausdorffDist_nonneg _ _
   have hηlim : Tendsto η atTop (𝓝 0) := seq.tends
   let D := 2 * seq.radius + 2
   have hD : 0 ≤ D := by dsimp [D]; linarith [seq.radius_nonneg]
@@ -1314,6 +1222,8 @@ theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
     have h := inj_k0_le (gPlus (Ks n) u)
     rw [abs_of_nonneg (inj_arm_nonneg (hc n) u).2.2.1] at h
     linarith [hgbound n u]
+  -- Step 2: by inequalities (11) and (15), they satisfy the bound (15) at every grid normal, with
+  -- the errors `e n t = 2 η · atNormal t`, which sum to at most `2 η`.
   let sample n := dyadicSamples (π / 2) pi_div_two_mem_Ioc (k n)
   let e (n : ℕ) (t : ℝ) := 2 * η n * (sample n).atNormal t
   have he : ∀ n t, 0 ≤ e n t := by
@@ -1336,7 +1246,7 @@ theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
       have htL : t < π / 2 := htI.2
       have hdefect := floating_defect_le (sample n) (seq.selected n)
         (Or.inl (Or.inl ht)) (ne_of_lt htL) (ne_of_lt htL) (hη n)
-        (fun i => ang_abs_supp_sub_le_hausdorffDist (hc n) hK.2.1 ((sample n).normal i))
+        (fun i => abs_supp_sub_le_hausdorffDist (hc n) hK.2.1 ((sample n).normal i))
       change sigmaAt (Ks n) t - tau (rightAngleSet (k n)) (Ks n) t ≤
         2 * η n * (sample n).atNormal t at hdefect
       apply polygon_curvature_with_defect (hpoly n) ht hD (hgbound n t) (he n t)
@@ -1345,10 +1255,12 @@ theorem firstCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
   have hsum : ∀ n, polygonGridError (k n) (e n) ≤ 2 * η n :=
     fun n => sampled_grid_error_le (sample n) (hη n)
       (dyadic_totalWeight_le_one (π / 2) pi_div_two_mem_Ioc (k n))
+  -- Step 3: summed over the cells, the bounds hold with an error `O(δ + η)` that tends to zero, so
+  -- they pass to the limit `K`.
   let A := 2 * (D + 1) + π / 2 * ((D + 4) + D)
   let error : ℕ → ℝ := fun n => A * stepSize (k n) + 2 * η n
   have herr : Tendsto error atTop (𝓝 0) := by
-    have h₀ := (selected_stepSize_tendsto seq.index_strict).const_mul A
+    have h₀ := (tendsto_stepSize seq.index_strict).const_mul A
     have h₁ := hηlim.const_mul 2
     simpa [error] using h₀.add h₁
   apply firstCurvature_of_polygon_errors hpoly hK seq.tends error herr
@@ -1395,15 +1307,13 @@ def normalReflection : ℝ ≃ᵐ ℝ where
 /-- The reflection `t ↦ π - t` preserves Lebesgue measure. -/
 theorem normalReflection_measurePreserving :
     MeasurePreserving normalReflection (volume : Measure ℝ) volume := by
-  refine ⟨normalReflection.measurable, ?_⟩
-  apply Measure.ext
-  intro A hA
-  rw [Measure.map_apply normalReflection.measurable hA]
+  refine ⟨normalReflection.measurable, Measure.ext fun A hA => ?_⟩
   have heq : normalReflection ⁻¹' A =
       (fun t : ℝ => (-1 : ℝ) * t) ⁻¹' ((fun t : ℝ => π + t) ⁻¹' A) := by
     ext t
     simp only [mem_preimage, normalReflection_apply, neg_one_mul, sub_eq_add_neg]
-  rw [heq, Real.volume_preimage_mul_left (by norm_num), measure_preimage_add]
+  rw [Measure.map_apply normalReflection.measurable hA, heq,
+    Real.volume_preimage_mul_left (by norm_num), measure_preimage_add]
   norm_num
 
 /-- The surface area measure of a right-angle cap is the image of that of its reflection under
@@ -1411,7 +1321,7 @@ theorem normalReflection_measurePreserving :
 theorem sigma_eq_map_mirror {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) :
     sigma K = Measure.map normalReflection (sigma (mirrorCap K (π / 2))) := by
   have h := proposition2_5_4_sigma (proposition2_5_4_isCap hK)
-  rw [mirrorCap_rightAngle_involutive] at h
+  rw [mirrorCap_mirrorCap] at h
   change sigma K = Measure.map (fun t : ℝ => π - t) (sigma (mirrorCap K (π / 2)))
   simpa only [show π / 2 + π / 2 = π by ring] using h
 
@@ -1463,7 +1373,7 @@ theorem secondCurvature_of_maximal_positive {K : Set (ℝ × ℝ)}
   apply secondCurvature_of_mirror_first hK
   apply firstCurvature_of_maximal_positive (proposition2_5_4_isCap hK)
   · simpa only [sofaArea_mirror] using hpositive
-  · exact maximal_sofaArea_mirror hmax
+  · exact fun C hC => (hmax C hC).trans_eq (sofaArea_mirror K _).symm
 
 /-- The curvature bounds (16) of note 20 for a right-angle cap maximizing `A_{π/2}` with positive
 value. -/

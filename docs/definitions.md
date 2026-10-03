@@ -71,11 +71,11 @@ noncomputable def x₂ (t : ℝ) : ℝ × ℝ :=
   rot t (-t ^ 2 / 4 + P.b₁ * t + P.b₂, t / 2 - P.b₁ - 1) + P.κ₂
 ```
 
-[`GerverParams.IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L89) states Romik's equations (27)–(44): left–right symmetry, the start of the
+[`GerverParams.IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L92) states Romik's equations (27)–(44): left–right symmetry, the start of the
 path at the origin, continuous differentiability at the four phase boundaries, and two contact
 conditions `𝐱_1(φ) = 𝐁(π/2 - θ)` and `𝐱_5(π/2 - φ) = 𝐃(θ)`, where `𝐁(t) = 𝐱(t) + ⟨𝐱'(t), u_t⟩ v_t`
 and `𝐃(t) = 𝐱(t) - ⟨𝐱'(t), v_t⟩ u_t` are the points where the inner walls of the hallway touch the
-sofa. [`GerverParams.InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L105) restricts the angles to `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`, around
+sofa. [`GerverParams.InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L108) restricts the angles to `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`, around
 Romik's numerical solution `φ = 0.039177…`, `θ = 0.681301…`. Then
 
 ```lean
@@ -84,7 +84,7 @@ def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
 The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L328) and [`Baek.gerver_params_unique`](../Challenge.lean#L332) prove that the box holds exactly one solution, so
 Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L338) that its area lies between `2.2192` and `2.2199`, around
-Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L89) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L105) are in
+Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L92) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L108) are in
 [`ChallengeDefs.lean`](../ChallengeDefs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
 
 ## Formal-conjectures' definitions

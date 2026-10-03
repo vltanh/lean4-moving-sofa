@@ -40,8 +40,21 @@ noncomputable def cOmega (ω : ℝ) : ℝ := tan ((π / 2 - ω) / 2)
 lemma ang_cOmega_eq (ω : ℝ) : cOmega ω = tan (π / 4 - ω / 2) := by
   unfold cOmega; congr 1; ring
 
+/-- `c_ω cos ω = 1 - sin ω`. -/
 lemma ang_cOmega_mul_cos {ω : ℝ} (hω : ω ∈ Icc 0 (π / 2)) : cOmega ω * cos ω = 1 - sin ω := by
   rw [ang_cOmega_eq]; exact ang_tan_mul_cos ω (ang_cos_quarter_pos hω).ne'
+
+/-- `c_ω (1 + sin ω) = cos ω`. -/
+lemma ang_cOmega_mul_one_add_sin {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) :
+    cOmega ω * (1 + sin ω) = cos ω := by
+  have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
+  refine mul_right_cancel₀ hc.ne' ?_
+  rw [mul_right_comm, ang_cOmega_mul_cos ⟨hω.1, hω.2.le⟩]
+  nlinarith [sin_sq_add_cos_sq ω]
+
+lemma ang_cOmega_pos {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) : 0 < cOmega ω := by
+  rw [ang_cOmega_eq]
+  exact tan_pos_of_pos_of_lt_pi_div_two (by linarith [hω.2]) (by linarith [hω.1, pi_pos])
 
 /-- **Proposition 4.2.1** (`pro:omega-gap`). For `ω ∈ [0, π/2)`: `o_ω - v_0 = c_ω u_0`,
 `o_ω - u_ω = c_ω v_ω`, the base `e_{P_ω}(3π/2)` of `P_ω` is the segment from `O` to `(sec ω, 0)`,
@@ -53,13 +66,9 @@ theorem proposition4_2_1 {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) :
   have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
   have hk := ang_cOmega_mul_cos ⟨hω.1, hω.2.le⟩
   have hco := ang_cOmega_eq ω
-  have hsc := sin_sq_add_cos_sq ω
   refine ⟨?_, ?_, ?_, ?_⟩
   · ext <;> simp [oPt, vvec, uvec, hco]
-  · have h2 : cOmega ω * (1 + sin ω) = cos ω := by
-      have : cOmega ω * (1 + sin ω) * cos ω = cos ω * cos ω := by
-        rw [mul_right_comm, hk]; nlinarith
-      exact mul_right_cancel₀ hc.ne' this
+  · have h2 := ang_cOmega_mul_one_add_sin hω
     ext <;> simp only [oPt, vvec, uvec, Prod.fst_sub, Prod.snd_sub, Prod.smul_fst,
       Prod.smul_snd, smul_eq_mul, ← hco]
     · linarith
@@ -67,18 +76,18 @@ theorem proposition4_2_1 {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) :
   · have hsupp : supp (para ω) (3 * π / 2) = 0 := by
       apply IsGreatest.csSup_eq
       constructor
-      · refine ⟨(0, 0), ang_mem_para_iff.2 ⟨le_rfl, zero_le_one, by simp [dot], by simp [dot]⟩,
-          by simp [dot, ang_uvec_three_pi_div_two]⟩
+      · refine ⟨(0, 0), mem_para_iff.2 ⟨⟨le_rfl, zero_le_one⟩, by simp [dot], by simp [dot]⟩,
+          by simp [dot, uvec_three_pi_div_two]⟩
       · rintro _ ⟨p, hp, rfl⟩
         show dot p (uvec (3 * π / 2)) ≤ 0
-        rw [ang_dot_uvec_three_pi_div_two]
-        linarith [(ang_mem_para_iff.1 hp).1]
+        rw [dot_uvec_three_pi_div_two]
+        linarith [(mem_para_iff.1 hp).1.1]
     ext p
     rw [segment_eq_image']
     simp only [edge, suppLine, line, hsupp, mem_inter_iff, mem_ofPred_eq,
-      ang_dot_uvec_three_pi_div_two, ang_mem_para_iff, mem_image, mem_Icc]
+      dot_uvec_three_pi_div_two, mem_para_iff, mem_image, mem_Icc]
     constructor
-    · rintro ⟨⟨-, -, h3, h4⟩, h5⟩
+    · rintro ⟨⟨⟨-, -⟩, h3, h4⟩, h5⟩
       have hp2 : p.2 = 0 := by linarith
       simp only [dot, uvec, hp2, zero_mul, add_zero] at h3 h4
       refine ⟨p.1 * cos ω, ⟨by positivity, h4⟩, ?_⟩
@@ -91,16 +100,18 @@ theorem proposition4_2_1 {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) :
       have hd : dot (θ / cos ω, (0 : ℝ)) (uvec ω) = θ := by
         simp only [dot, uvec, zero_mul, add_zero]; field_simp
       rw [e, hd]
-      exact ⟨⟨le_rfl, zero_le_one, h0, h1⟩, by simp⟩
+      exact ⟨⟨⟨le_rfl, zero_le_one⟩, h0, h1⟩, by simp⟩
   · rw [tan_eq_sin_div_cos]; field_simp; linarith
 
 /-- `d_{ω,min}`: `1.25` if `ω < tan⁻¹(2.2)` and `1.1` otherwise (Definition 4.2.2, `def:d-min`). -/
 noncomputable def dMin (ω : ℝ) : ℝ := if ω < arctan 2.2 then 1.25 else 1.1
 
-/-- `R_{ω,d} = P_ω ∩ H₋(0, d + c_ω) ∩ H₋(ω + π/2, d + c_ω)` (Definition 4.2.3, `def:cap-clipped`). -/
+/-- `R_{ω,d} = P_ω ∩ H₋(0, d + c_ω) ∩ H₋(ω + π/2, d + c_ω)` (Definition 4.2.3,
+`def:cap-clipped`). -/
 def clippedRegion (ω d : ℝ) : Set (ℝ × ℝ) :=
   para ω ∩ halfMinus 0 (d + cOmega ω) ∩ halfMinus (ω + π / 2) (d + cOmega ω)
 
+/-- Elementary bounds for `ω ∈ [sec⁻¹(2.2), π/2)`. -/
 lemma ang_omega_facts {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) :
     0 < cos ω ∧ cos ω ≤ 5 / 11 ∧ 0 < sin ω ∧ sin ω < 1 ∧ π / 4 < ω := by
   have h0 : 0 < ω := ang_arcsec22_pos.trans_le hω.1
@@ -114,33 +125,42 @@ lemma ang_omega_facts {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) :
     rw [not_lt] at h
     nlinarith
 
+/-- `sin ω ≥ 2.2 cos ω`, i.e. `tan ω ≥ 2.2`, for `ω ∈ [tan⁻¹(2.2), π/2)`. -/
 lemma ang_tan_ge {ω : ℝ} (hω : ω ∈ Ico (arctan 2.2) (π / 2)) (hω0 : -(π / 2) < ω) :
     2.2 * cos ω ≤ sin ω := by
-  have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨hω0, hω.2⟩
   have h := hω.1
-  rw [← arctan_tan hω0 hω.2, arctan_le_arctan_iff, tan_eq_sin_div_cos, le_div_iff₀ hc] at h
-  exact h
+  rwa [← arctan_tan hω0 hω.2, arctan_le_arctan_iff, tan_eq_sin_div_cos,
+    le_div_iff₀ (cos_pos_of_mem_Ioo ⟨hω0, hω.2⟩)] at h
 
+/-- `sin ω < 2.2 cos ω`, i.e. `tan ω < 2.2`, for `ω ∈ (-π/2, tan⁻¹(2.2))`. -/
 lemma ang_tan_lt {ω : ℝ} (hω : ω < arctan 2.2) (hω0 : -(π / 2) < ω) (hω1 : ω < π / 2) :
     sin ω < 2.2 * cos ω := by
-  have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨hω0, hω1⟩
   have h := hω
-  rw [← arctan_tan hω0 hω1, arctan_lt_arctan_iff, tan_eq_sin_div_cos, div_lt_iff₀ hc] at h
-  exact h
+  rwa [← arctan_tan hω0 hω1, arctan_lt_arctan_iff, tan_eq_sin_div_cos,
+    div_lt_iff₀ (cos_pos_of_mem_Ioo ⟨hω0, hω1⟩)] at h
 
-/-- The area of a region with prescribed horizontal slices. -/
+/-- The area of a region `A ⊆ ℝ × [a, b]` whose horizontal slice at height `y ∈ [a, b]` has length
+`h(y)` is `∫_a^b h`. -/
 lemma ang_volume_eq_ofReal_integral {A : Set (ℝ × ℝ)} (hA : MeasurableSet A) {a b : ℝ}
     (hab : a ≤ b) {h : ℝ → ℝ} (hh : Continuous h) (h0 : ∀ y ∈ Icc a b, 0 ≤ h y)
-    (hsl : ∀ y, volume {x : ℝ | (x, y) ∈ A} =
-      (Icc a b).indicator (fun y => ENNReal.ofReal (h y)) y) :
+    (hAy : ∀ p ∈ A, p.2 ∈ Icc a b)
+    (hsl : ∀ y ∈ Icc a b, volume {x : ℝ | (x, y) ∈ A} = ENNReal.ofReal (h y)) :
     volume A = ENNReal.ofReal (∫ y in a..b, h y) := by
+  have hsl' : ∀ y, volume {x : ℝ | (x, y) ∈ A} =
+      (Icc a b).indicator (fun y => ENNReal.ofReal (h y)) y := by
+    intro y
+    by_cases hy : y ∈ Icc a b
+    · rw [indicator_of_mem hy, hsl y hy]
+    · rw [indicator_of_notMem hy, show {x : ℝ | (x, y) ∈ A} = ∅ from
+        eq_empty_of_forall_notMem fun x hx => hy (hAy (x, y) hx), measure_empty]
   rw [ang_volume_eq_lintegral_slices hA]
-  simp_rw [hsl]
+  simp_rw [hsl']
   rw [lintegral_indicator measurableSet_Icc, intervalIntegral.integral_of_le hab,
     ← integral_Icc_eq_integral_Ioc, ofReal_integral_eq_lintegral_ofReal]
   · exact hh.integrableOn_Icc
   · filter_upwards [ae_restrict_mem measurableSet_Icc] with y hy using h0 y hy
 
+/-- `∫_a^b (α + β y) dy = α (b - a) + β (b² - a²) / 2`. -/
 lemma ang_integral_affine (α β a b : ℝ) :
     ∫ y in a..b, (α + β * y) = α * (b - a) + β * ((b ^ 2 - a ^ 2) / 2) := by
   have h1 : IntervalIntegrable (fun _ : ℝ => α) volume a b := intervalIntegrable_const
@@ -163,8 +183,7 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
   set s := sin ω with hs_def
   set k := cos ω with hk_def
   set c := cOmega ω with hc_def
-  have hc0 : 0 ≤ c := by
-    by_contra h; rw [not_le] at h; nlinarith [sin_le_one ω]
+  have hc0 : 0 ≤ c := (ang_cOmega_pos ⟨hω.1.le, hω.2⟩).le
   set D := d + c with hD_def
   have hD1 : 1 ≤ D := by linarith
   set yh := 1 - d * k / s with hyh_def
@@ -173,7 +192,8 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
     have : 0 ≤ d * k / s := by positivity
     rw [hyh_def]; linarith
   have hDk : D * k = d * k + 1 - s := by rw [hD_def, add_mul, hc]; ring
-  -- the two corner triangles
+  -- Step 1: the corner triangles `T_r` (right of the line `l(0, D)`) and `T_l` (left of the line
+  -- `l(ω + π/2, D)`) of `P_ω`, each of area `(sin ω - d cos ω)² / (2 sin ω cos ω)`
   set Tr : Set (ℝ × ℝ) := {p | p.2 ∈ Icc 0 yh ∧ D < p.1 ∧ p.1 ≤ (1 - p.2 * s) / k} with hTr
   set Tl : Set (ℝ × ℝ) :=
     {p | p.2 ∈ Icc (D * k) 1 ∧ -(p.2 * s) / k ≤ p.1 ∧ p.1 < (p.2 * k - D) / s} with hTl
@@ -185,10 +205,9 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
   have hmTl : MeasurableSet Tl := by
     refine (measurableSet_Icc.preimage measurable_snd).inter
       ((measurableSet_le ?_ measurable_fst).inter (measurableSet_lt measurable_fst ?_)) <;> fun_prop
-  -- their areas
   have vTr : volume Tr = ENNReal.ofReal ((s - d * k) ^ 2 / (2 * s * k)) := by
     rw [ang_volume_eq_ofReal_integral hmTr hyh0 (h := fun y => (1 / k - D) + (-s / k) * y)
-      (by fun_prop) ?_ ?_, ang_integral_affine]
+      (by fun_prop) ?_ (fun p hp => hp.1) ?_, ang_integral_affine]
     · congr 1
       rw [hyh_def, hD_def, show c = (1 - s) / k by field_simp; linarith]
       field_simp
@@ -200,21 +219,14 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
         rw [sub_mul, div_mul_cancel₀ _ hs.ne'] at h2; linarith
       have e : 1 / k - D + -s / k * y = (1 - y * s - D * k) / k := by field_simp; ring
       rw [e]; apply div_nonneg _ hk.le; rw [hDk]; linarith
-    · intro y
-      by_cases hy : y ∈ Icc 0 yh
-      · rw [indicator_of_mem hy]
-        have : {x : ℝ | (x, y) ∈ Tr} = Ioc D ((1 - y * s) / k) := by
-          ext x; simp [hTr, hy.1, hy.2]
-        rw [this, Real.volume_Ioc]; congr 1; field_simp; ring
-      · rw [indicator_of_notMem hy]
-        have : {x : ℝ | (x, y) ∈ Tr} = ∅ := by
-          ext x; simp only [hTr, mem_ofPred_eq, mem_empty_iff_false, iff_false]
-          exact fun h => hy h.1
-        rw [this, measure_empty]
+    · intro y hy
+      have : {x : ℝ | (x, y) ∈ Tr} = Ioc D ((1 - y * s) / k) := by
+        ext x; simp [hTr, hy.1, hy.2]
+      rw [this, Real.volume_Ioc]; congr 1; field_simp; ring
   have vTl : volume Tl = ENNReal.ofReal ((s - d * k) ^ 2 / (2 * s * k)) := by
     have hDk1 : D * k ≤ 1 := by rw [hDk]; linarith
     rw [ang_volume_eq_ofReal_integral hmTl hDk1 (h := fun y => -D / s + (1 / (s * k)) * y)
-      (by fun_prop) ?_ ?_, ang_integral_affine]
+      (by fun_prop) ?_ (fun p hp => hp.1) ?_, ang_integral_affine]
     · congr 1
       have e1 : 1 - D * k = s - d * k := by rw [hDk]; ring
       have e2 : -D / s * (1 - D * k) + 1 / (s * k) * ((1 ^ 2 - (D * k) ^ 2) / 2) =
@@ -223,27 +235,20 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
     · intro y hy
       have e : -D / s + 1 / (s * k) * y = (y - D * k) / (s * k) := by field_simp; ring
       rw [e]; exact div_nonneg (by linarith [hy.1]) (by positivity)
-    · intro y
-      by_cases hy : y ∈ Icc (D * k) 1
-      · rw [indicator_of_mem hy]
-        have : {x : ℝ | (x, y) ∈ Tl} = Ico (-(y * s) / k) ((y * k - D) / s) := by
-          ext x; simp [hTl, hy.1, hy.2]
-        rw [this, Real.volume_Ico]
-        congr 1
-        have e : (y * k - D) / s - -(y * s) / k = (y * (s ^ 2 + k ^ 2) - D * k) / (s * k) := by
-          field_simp; ring
-        rw [e, hsk]; field_simp; ring
-      · rw [indicator_of_notMem hy]
-        have : {x : ℝ | (x, y) ∈ Tl} = ∅ := by
-          ext x; simp only [hTl, mem_ofPred_eq, mem_empty_iff_false, iff_false]
-          exact fun h => hy h.1
-        rw [this, measure_empty]
-  -- the three pieces are disjoint subsets of `P_ω`
+    · intro y hy
+      have : {x : ℝ | (x, y) ∈ Tl} = Ico (-(y * s) / k) ((y * k - D) / s) := by
+        ext x; simp [hTl, hy.1, hy.2]
+      rw [this, Real.volume_Ico]
+      congr 1
+      have e : (y * k - D) / s - -(y * s) / k = (y * (s ^ 2 + k ^ 2) - D * k) / (s * k) := by
+        field_simp; ring
+      rw [e, hsk]; field_simp; ring
+  -- Step 2: `R_{ω,d}`, `T_r` and `T_l` are disjoint subsets of `P_ω`, which has area `sec ω`
   have hR : ∀ p ∈ clippedRegion ω d, p ∈ para ω ∧ p.1 ≤ D ∧ -(p.1 * s) + p.2 * k ≤ D := by
     rintro p ⟨⟨hp1, hp2⟩, hp3⟩
     refine ⟨hp1, ?_, ?_⟩
     · have : dot p (uvec 0) ≤ D := hp2
-      rwa [ang_dot_uvec_zero] at this
+      rwa [dot_uvec_zero] at this
     · have : dot p (uvec (ω + π / 2)) ≤ D := hp3
       rw [uvec_add_pi_div_two] at this
       simp only [dot, vvec] at this; linarith
@@ -268,7 +273,7 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
   have hU : volume (clippedRegion ω d ∪ Tr ∪ Tl) ≤ ENNReal.ofReal (1 / k) := by
     refine ang_volume_le_of_slices (lo := 0) (f := fun y => -(y * s) / k) (by fun_prop) ?_
     rintro p ((hp | hp) | hp)
-    · obtain ⟨h1, h2, h3, h4⟩ := ang_mem_para_iff.1 (hR p hp).1
+    · obtain ⟨⟨h1, h2⟩, h3, h4⟩ := mem_para_iff.1 (hR p hp).1
       simp only [dot, uvec] at h3 h4
       refine ⟨h1, by linarith, ?_, ?_⟩
       · rw [div_le_iff₀ hk]; linarith
@@ -285,6 +290,7 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
       rw [lt_div_iff₀ hs] at h4
       rw [← add_div, le_div_iff₀ hk]
       nlinarith
+  -- Step 3: so `|R_{ω,d}| ≤ sec ω - 2 (sin ω - d cos ω)² / (2 sin ω cos ω)`
   rw [measure_union d2 hmTl, measure_union d1 hmTr, vTr, vTl] at hU
   have hfin : volume (clippedRegion ω d) ≠ ⊤ :=
     ne_top_of_le_ne_top ENNReal.ofReal_ne_top (le_trans le_self_add (le_trans le_self_add hU))
@@ -301,7 +307,8 @@ lemma ang_area_clippedRegion_le {ω d : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (hd :
 
 /-- **Lemma 4.2.2** (`lem:cap-support-elementary-bound`). For `ω ∈ [sec⁻¹(2.2), π/2)`, the region
 `R_{ω, d_{ω,min}}` has area less than `2.2`. -/
-theorem lemma4_2_2 {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) : area (clippedRegion ω (dMin ω)) < 2.2 := by
+theorem lemma4_2_2 {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) :
+    area (clippedRegion ω (dMin ω)) < 2.2 := by
   obtain ⟨hc, hc5, hs, hs1, h4⟩ := ang_omega_facts hω
   have hsc := sin_sq_add_cos_sq ω
   have hω' : ω ∈ Ioo 0 (π / 2) := ⟨by linarith [pi_pos], hω.2⟩
@@ -330,90 +337,95 @@ theorem lemma4_2_2 {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) : area (clipp
     rw [e, div_lt_iff₀ hsk]
     linarith
 
-/-- **Lemma 4.2.3** (`lem:calculation-convex`). For `d ≥ 1`, `(1 - d cot ω)²` and `cos² ω` are convex
-on `[π/4, π/2]`. -/
-theorem lemma4_2_3 {d : ℝ} (hd : 1 ≤ d) :
-    ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => (1 - d * cot ω) ^ 2) ∧
-      ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => cos ω ^ 2) := by
+/-- The derivative of `cot = cos / sin` is `-1 / sin²`. -/
+lemma ang_hasDerivAt_cos_div_sin {x : ℝ} (hs : sin x ≠ 0) :
+    HasDerivAt (fun x => cos x / sin x) (-1 / sin x ^ 2) x := by
+  convert (hasDerivAt_cos x).div (hasDerivAt_sin x) hs using 1
+  field_simp
+  linear_combination (sin_sq_add_cos_sq x)
+
+/-- The first half of Lemma 4.2.3: for `d ≥ 1`, `(1 - d cot ω)²` is convex on `[π/4, π/2]`, as its
+second derivative `2d (d - 2 sin ω cos ω + 2d cos² ω) / sin⁴ ω` is nonnegative there. -/
+lemma ang_convexOn_sq_one_sub_cot {d : ℝ} (hd : 1 ≤ d) :
+    ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => (1 - d * cot ω) ^ 2) := by
   have hint : interior (Icc (π / 4) (π / 2)) = Ioo (π / 4) (π / 2) := interior_Icc
   have hsin : ∀ x ∈ Icc (π / 4) (π / 2), 0 < sin x := fun x hx =>
     sin_pos_of_pos_of_lt_pi (by linarith [hx.1, pi_pos]) (by linarith [hx.2, pi_pos])
-  constructor
-  · have hf : (fun ω => (1 - d * cot ω) ^ 2) = fun ω => (1 - d * (cos ω / sin ω)) ^ 2 := by
-      funext ω; rw [cot_eq_cos_div_sin]
-    rw [hf]
-    refine convexOn_of_hasDerivWithinAt2_nonneg (convex_Icc _ _)
-      (f' := fun x => 2 * (1 - d * (cos x / sin x)) * (d / sin x ^ 2))
-      (f'' := fun x => 2 * (d / sin x ^ 2) * (d / sin x ^ 2) +
-        2 * (1 - d * (cos x / sin x)) * (d * (-2 * cos x / sin x ^ 3))) ?_ ?_ ?_ ?_
-    · refine ContinuousOn.pow (continuousOn_const.sub (continuousOn_const.mul ?_)) 2
-      exact continuous_cos.continuousOn.div continuous_sin.continuousOn fun x hx => (hsin x hx).ne'
-    · intro x hx
-      rw [hint] at hx
-      have hs : sin x ≠ 0 := (hsin x (Ioo_subset_Icc_self hx)).ne'
-      have h1 : HasDerivAt (fun x => cos x / sin x) (-1 / sin x ^ 2) x := by
-        have := (hasDerivAt_cos x).div (hasDerivAt_sin x) hs
-        convert this using 1
-        field_simp
-        linear_combination (sin_sq_add_cos_sq x)
-      have h2 := ((h1.const_mul d).const_sub 1).pow 2
-      refine HasDerivAt.hasDerivWithinAt ?_
-      convert h2 using 1
-      simp only [Nat.cast_ofNat]
-      ring
-    · intro x hx
-      rw [hint] at hx
-      have hs : sin x ≠ 0 := (hsin x (Ioo_subset_Icc_self hx)).ne'
-      have h1 : HasDerivAt (fun x => cos x / sin x) (-1 / sin x ^ 2) x := by
-        have := (hasDerivAt_cos x).div (hasDerivAt_sin x) hs
-        convert this using 1
-        field_simp
-        linear_combination (sin_sq_add_cos_sq x)
-      have h3 : HasDerivAt (fun x => d / sin x ^ 2) (d * (-2 * cos x / sin x ^ 3)) x := by
-        have := ((hasDerivAt_sin x).pow 2).inv (pow_ne_zero 2 hs)
-        have := this.const_mul d
-        convert this using 1
-        · funext y; simp [div_eq_mul_inv]
-        · simp only [Pi.pow_apply]
-          field_simp
-          ring
-      have h4 := (((h1.const_mul d).const_sub 1).const_mul 2).mul h3
-      refine HasDerivAt.hasDerivWithinAt ?_
-      convert h4 using 1
-      ring
-    · intro x hx
-      rw [hint] at hx
-      have hs : 0 < sin x := hsin x (Ioo_subset_Icc_self hx)
-      have hc : 0 ≤ cos x := cos_nonneg_of_mem_Icc ⟨by linarith [hx.1, pi_pos], hx.2.le⟩
-      have key : 2 * (d / sin x ^ 2) * (d / sin x ^ 2) +
-          2 * (1 - d * (cos x / sin x)) * (d * (-2 * cos x / sin x ^ 3)) =
-          2 * d * (d - 2 * cos x * sin x + 2 * d * cos x ^ 2) / sin x ^ 4 := by
+  have hf : (fun ω => (1 - d * cot ω) ^ 2) = fun ω => (1 - d * (cos ω / sin ω)) ^ 2 := by
+    funext ω; rw [cot_eq_cos_div_sin]
+  rw [hf]
+  refine convexOn_of_hasDerivWithinAt2_nonneg (convex_Icc _ _)
+    (f' := fun x => 2 * (1 - d * (cos x / sin x)) * (d / sin x ^ 2))
+    (f'' := fun x => 2 * (d / sin x ^ 2) * (d / sin x ^ 2) +
+      2 * (1 - d * (cos x / sin x)) * (d * (-2 * cos x / sin x ^ 3))) ?_ ?_ ?_ ?_
+  · refine ContinuousOn.pow (continuousOn_const.sub (continuousOn_const.mul ?_)) 2
+    exact continuous_cos.continuousOn.div continuous_sin.continuousOn fun x hx => (hsin x hx).ne'
+  · -- the first derivative
+    intro x hx
+    rw [hint] at hx
+    have hs : sin x ≠ 0 := (hsin x (Ioo_subset_Icc_self hx)).ne'
+    refine HasDerivAt.hasDerivWithinAt ?_
+    convert (((ang_hasDerivAt_cos_div_sin hs).const_mul d).const_sub 1).pow 2 using 1
+    simp only [Nat.cast_ofNat]
+    ring
+  · -- the second derivative
+    intro x hx
+    rw [hint] at hx
+    have hs : sin x ≠ 0 := (hsin x (Ioo_subset_Icc_self hx)).ne'
+    have h3 : HasDerivAt (fun x => d / sin x ^ 2) (d * (-2 * cos x / sin x ^ 3)) x := by
+      convert (((hasDerivAt_sin x).pow 2).inv (pow_ne_zero 2 hs)).const_mul d using 1
+      · funext y; simp [div_eq_mul_inv]
+      · simp only [Pi.pow_apply]
         field_simp
         ring
-      rw [key]
-      have hsc := sin_sq_add_cos_sq x
-      have : 0 ≤ d - 2 * cos x * sin x + 2 * d * cos x ^ 2 := by
-        nlinarith [sq_nonneg (sin x - cos x), sq_nonneg (cos x), mul_nonneg (sub_nonneg.2 hd)
-          (sq_nonneg (cos x))]
-      positivity
-  · refine convexOn_of_hasDerivWithinAt2_nonneg (convex_Icc _ _)
-      (f' := fun x => -sin (2 * x)) (f'' := fun x => -(2 * cos (2 * x))) ?_ ?_ ?_ ?_
-    · exact (continuous_cos.pow 2).continuousOn
-    · intro x _
-      refine HasDerivAt.hasDerivWithinAt ?_
-      convert (hasDerivAt_cos x).pow 2 using 1
-      rw [sin_two_mul]; simp only [Nat.cast_ofNat]; ring
-    · intro x _
-      refine HasDerivAt.hasDerivWithinAt ?_
-      have := ((hasDerivAt_id x).const_mul 2).sin.neg
-      convert this using 1
-      · funext y; simp
-      · simp; ring
-    · intro x hx
-      rw [hint] at hx
-      have : cos (2 * x) ≤ 0 :=
-        cos_nonpos_of_pi_div_two_le_of_le (by linarith [hx.1]) (by linarith [hx.2, pi_pos])
-      linarith
+    refine HasDerivAt.hasDerivWithinAt ?_
+    convert ((((ang_hasDerivAt_cos_div_sin hs).const_mul d).const_sub 1).const_mul 2).mul h3
+      using 1
+    ring
+  · -- the second derivative is nonnegative
+    intro x hx
+    rw [hint] at hx
+    have hs : 0 < sin x := hsin x (Ioo_subset_Icc_self hx)
+    have hc : 0 ≤ cos x := cos_nonneg_of_mem_Icc ⟨by linarith [hx.1, pi_pos], hx.2.le⟩
+    have key : 2 * (d / sin x ^ 2) * (d / sin x ^ 2) +
+        2 * (1 - d * (cos x / sin x)) * (d * (-2 * cos x / sin x ^ 3)) =
+        2 * d * (d - 2 * cos x * sin x + 2 * d * cos x ^ 2) / sin x ^ 4 := by
+      field_simp
+      ring
+    rw [key]
+    have hsc := sin_sq_add_cos_sq x
+    have : 0 ≤ d - 2 * cos x * sin x + 2 * d * cos x ^ 2 := by
+      nlinarith [sq_nonneg (sin x - cos x), sq_nonneg (cos x), mul_nonneg (sub_nonneg.2 hd)
+        (sq_nonneg (cos x))]
+    positivity
+
+/-- The second half of Lemma 4.2.3: `cos² ω` is convex on `[π/4, π/2]`, as its second derivative
+`-2 cos 2ω` is nonnegative there. -/
+lemma ang_convexOn_cos_sq : ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => cos ω ^ 2) := by
+  refine convexOn_of_hasDerivWithinAt2_nonneg (convex_Icc _ _)
+    (f' := fun x => -sin (2 * x)) (f'' := fun x => -(2 * cos (2 * x))) ?_ ?_ ?_ ?_
+  · exact (continuous_cos.pow 2).continuousOn
+  · intro x _
+    refine HasDerivAt.hasDerivWithinAt ?_
+    convert (hasDerivAt_cos x).pow 2 using 1
+    rw [sin_two_mul]; simp only [Nat.cast_ofNat]; ring
+  · intro x _
+    refine HasDerivAt.hasDerivWithinAt ?_
+    convert ((hasDerivAt_id x).const_mul 2).sin.neg using 1
+    · funext y; simp
+    · simp; ring
+  · intro x hx
+    rw [interior_Icc] at hx
+    have : cos (2 * x) ≤ 0 :=
+      cos_nonpos_of_pi_div_two_le_of_le (by linarith [hx.1]) (by linarith [hx.2, pi_pos])
+    linarith
+
+/-- **Lemma 4.2.3** (`lem:calculation-convex`). For `d ≥ 1`, `(1 - d cot ω)²` and `cos² ω` are
+convex on `[π/4, π/2]`. -/
+theorem lemma4_2_3 {d : ℝ} (hd : 1 ≤ d) :
+    ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => (1 - d * cot ω) ^ 2) ∧
+      ConvexOn ℝ (Icc (π / 4) (π / 2)) (fun ω => cos ω ^ 2) :=
+  ⟨ang_convexOn_sq_one_sub_cot hd, ang_convexOn_cos_sq⟩
 
 /-- `r_y = 1 - d cot ω` (Definition 4.2.4, `def:calculation-variables`). -/
 noncomputable def calcRy (ω d : ℝ) : ℝ := 1 - d * cot ω
@@ -435,13 +447,7 @@ lemma ang_cos_sq_arctan22 : cos (arctan 2.2) ^ 2 = 25 / 146 := by
   rw [cos_sq_arctan]; norm_num
 
 lemma ang_cot_arctan22 : cot (arctan 2.2) = 5 / 11 := by
-  have hc : 0 < cos (arctan 2.2) := cos_arctan_pos _
-  have ht : tan (arctan 2.2) = 2.2 := tan_arctan _
-  rw [tan_eq_sin_div_cos] at ht
-  rw [cot_eq_cos_div_sin]
-  have hs : sin (arctan 2.2) = 2.2 * cos (arctan 2.2) := by
-    field_simp at ht; linarith
-  rw [hs]; field_simp; norm_num
+  rw [← tan_inv_eq_cot, tan_arctan]; norm_num
 
 lemma ang_arcsec22_lt_pi_div_two : arcsec22 < π / 2 := by
   unfold arcsec22; rw [arccos_lt_pi_div_two]; norm_num
@@ -552,11 +558,12 @@ theorem lemma4_2_4 {ω d : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2)) (hd : d ∈
       nlinarith
     nlinarith [mul_lt_mul_of_pos_right hg hc]
 
+/-- The parallelogram `P_ω` has area at most `sec ω`. -/
 lemma ang_volume_para_le {ω : ℝ} (hc : 0 < cos ω) :
     volume (para ω) ≤ ENNReal.ofReal (1 / cos ω) := by
   refine ang_volume_le_of_slices (lo := 0) (f := fun y => -(y * sin ω) / cos ω) (by fun_prop) ?_
   intro p hp
-  obtain ⟨h1, h2, h3, h4⟩ := ang_mem_para_iff.1 hp
+  obtain ⟨⟨h1, h2⟩, h3, h4⟩ := mem_para_iff.1 hp
   simp only [dot, uvec] at h3 h4
   refine ⟨h1, by linarith, ?_, ?_⟩
   · rw [div_le_iff₀ hc]; linarith
@@ -572,10 +579,10 @@ lemma ang_supp_le_corner {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (h�
   have hst : 0 ≤ sin t := sin_nonneg_of_nonneg_of_le_pi ht.1 (by linarith [ht.2, pi_pos])
   have hswt : 0 ≤ sin (ω - t) :=
     sin_nonneg_of_nonneg_of_le_pi (by linarith [ht.2]) (by linarith [ht.1, pi_pos])
-  refine ang_supp_le hK.2.1.1 fun p hp => ?_
+  refine supp_le_of_forall hK.2.1.1 fun p hp => ?_
   have hp0 : dot p (uvec 0) ≤ supp K 0 := dot_le_supp hK.2.1.2.1 hp 0
-  have hpω := (ang_cap_props hK hp).2.2.2
-  rw [ang_dot_uvec_zero] at hp0
+  have hpω := (mem_para_iff.1 (hK.subset_para hp)).2.2
+  rw [dot_uvec_zero] at hp0
   simp only [dot, uvec] at hpω ⊢
   have key : sin ω * ((supp K 0 - p.1) * cos t + (ry - p.2) * sin t) =
       sin (ω - t) * (supp K 0 - p.1) +
@@ -584,10 +591,8 @@ lemma ang_supp_le_corner {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (h�
   have h1 : 0 ≤ sin (ω - t) * (supp K 0 - p.1) := mul_nonneg hswt (by linarith)
   have h2 : 0 ≤ sin t * ((supp K 0 - p.1) * cos ω + (ry - p.2) * sin ω) :=
     mul_nonneg hst (by linarith)
-  have h3 : 0 ≤ (supp K 0 - p.1) * cos t + (ry - p.2) * sin t := by
-    have := add_nonneg h1 h2
-    rw [← key] at this
-    exact le_of_mul_le_mul_left (by rw [mul_zero]; exact this) hs
+  have h3 : 0 ≤ (supp K 0 - p.1) * cos t + (ry - p.2) * sin t :=
+    (mul_nonneg_iff_of_pos_left hs).1 (key ▸ add_nonneg h1 h2)
   linarith
 
 /-- If `r - s = (g, r_y)` is a unit vector, the point `s = (h_K(0) - g, 0)` lies beyond every
@@ -606,58 +611,37 @@ lemma ang_le_wedgeGapWInf_of_unit {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap 
     rw [div_le_iff₀ hct]; nlinarith
   linarith
 
-/-- The point `o_ω - g u_0` lies in the top edge of a cap when `0 ≤ g ≤ σ_K(π/2)`. -/
+/-- The point `o_ω - g u_0` lies in a cap when `0 ≤ g ≤ σ_K(π/2)`: it lies on the segment from the
+vertex `v_K⁺(π/2) = v_K⁻(π/2) - σ_K(π/2) u_0` of the top edge to `o_ω`. -/
 lemma ang_q1_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (hω : ω < π / 2) {g : ℝ}
     (hg0 : 0 ≤ g) (hgσ : g ≤ sigmaAt K (π / 2)) : oPt ω - g • uvec 0 ∈ K := by
   have hcb := hK.2.1
-  have hω0 := hK.1.1
   have hc : 0 < cos ω := ang_cos_pos_of_cap hK.1 hω
-  have ho := ang_dot_oPt_uvec ⟨hω0.le, hω.le⟩
+  have ho := oPt_dot_uvec ⟨hK.1.1.le, hω.le⟩
   have hvp := vplus_mem_edge hcb (π / 2)
   have hvm := vminus_mem_edge hcb (π / 2)
+  -- both vertices of the top edge lie on the line `y = 1`
   have hvp2 : (vplus K (π / 2)).2 = 1 := by
-    have := dot_vplus_uvec K (π / 2); rwa [ang_dot_uvec_pi_div_two, hK.2.2.2.1] at this
+    have := dot_vplus_uvec K (π / 2); rwa [dot_uvec_pi_div_two, hK.2.2.2.1] at this
   have hvm2 : (vminus K (π / 2)).2 = 1 := by
-    have := dot_vminus_uvec K (π / 2); rwa [ang_dot_uvec_pi_div_two, hK.2.2.2.1] at this
-  have hvm1 : (vminus K (π / 2)).1 ≤ (oPt ω).1 := by
-    have h1 := (ang_cap_props hK hvm.1).2.2.2
+    have := dot_vminus_uvec K (π / 2); rwa [dot_uvec_pi_div_two, hK.2.2.2.1] at this
+  -- `v_K⁻(π/2)` lies left of `o_ω` (as `K ⊆ P_ω`), and `v_K⁺(π/2)` lies `σ_K(π/2)` further left
+  have hvm1 : (vminus K (π / 2)).1 ≤ tan (π / 4 - ω / 2) := by
+    have h1 := (mem_para_iff.1 (hK.subset_para hvm.1)).2.2
     simp only [dot, uvec, hvm2, one_mul] at h1
     simp only [dot, uvec, oPt, one_mul] at ho
-    have : ((vminus K (π / 2)).1 - (oPt ω).1) * cos ω ≤ 0 := by
-      simp only [oPt]; nlinarith
-    by_contra h; rw [not_le] at h; nlinarith
+    nlinarith
   have hvp1 : (vplus K (π / 2)).1 = (vminus K (π / 2)).1 - sigmaAt K (π / 2) := by
     have := (proposition2_1_2 hcb (π / 2)).2
-    rw [ang_vvec_pi_div_two] at this
+    rw [vvec_pi_div_two] at this
     rw [this]; simp; ring
-  set x₀ := (vplus K (π / 2)).1 with hx₀
-  set c := (oPt ω).1 with hc_def
-  have hle : g ≤ c - x₀ := by rw [hvp1]; linarith
-  have hμ : g / (c - x₀) ∈ Icc (0 : ℝ) 1 := by
-    constructor
-    · exact div_nonneg hg0 (by linarith)
-    · rcases eq_or_lt_of_le (show 0 ≤ c - x₀ by linarith) with h | h
-      · rw [← h, div_zero]; norm_num
-      · rw [div_le_one h]; exact hle
-  have hmem := hcb.2.2.add_smul_sub_mem (ang_cap_oPt_mem hK hω) hvp.1 hμ
-  convert hmem using 1
-  ext
-  · simp only [Prod.fst_sub, Prod.fst_add, Prod.smul_fst, smul_eq_mul, uvec, cos_zero, mul_one]
-    rw [← hc_def, ← hx₀]
-    rcases eq_or_lt_of_le (show 0 ≤ c - x₀ by linarith) with h | h
-    · have hg' : g = 0 := le_antisymm (by linarith) hg0
-      rw [← h, div_zero, hg']; ring
-    · field_simp; ring
-  · simp only [Prod.snd_sub, Prod.snd_add, Prod.smul_snd, smul_eq_mul, uvec, sin_zero, mul_zero,
-      sub_zero, oPt, hvp2, sub_self, add_zero]
-
-lemma ang_cOmega_pos {ω : ℝ} (hω : ω ∈ Ico 0 (π / 2)) : 0 < cOmega ω := by
-  have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
-  have hck := ang_cOmega_mul_cos ⟨hω.1, hω.2.le⟩
-  have hs : sin ω < 1 := by
-    have := sin_sq_add_cos_sq ω
-    by_contra h; rw [not_lt] at h; nlinarith
-  by_contra h; rw [not_lt] at h; nlinarith
+  -- the segment from `v_K⁺(π/2)` to `o_ω` is horizontal and lies in `K`
+  have hseg : segment ℝ (vplus K (π / 2)) (oPt ω) ⊆ K :=
+    hcb.2.2.segment_subset hvp.1 (hK.oPt_mem hω)
+  rw [← Prod.mk.eta (p := vplus K (π / 2)), hvp2, oPt, ← Prod.image_mk_segment_left,
+    segment_eq_Icc (by linarith)] at hseg
+  refine hseg ⟨tan (π / 4 - ω / 2) - g, ⟨by linarith, by linarith⟩, ?_⟩
+  ext <;> simp [oPt, uvec]
 
 /-- The three points `O, o_ω - v_0, o_ω - u_ω` lie in `Q_K⁻(π/2 - ω)` once `K` contains two
 points `q₀, q₁` satisfying the inequalities of Lemma 4.2.4. -/
@@ -722,7 +706,7 @@ lemma ang_consumed_of_supp_zero {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ 
   have hq0K : (supp K 0, (0 : ℝ)) ∈ K := ang_cap_corner_mem hcap hω.2
   have hq0 : calcQ0 ω d = (supp K 0, 0) := by
     rw [calcQ0, (proposition4_2_1 ⟨hω0, hω.2⟩).1, hd_def]; ext <;> simp [uvec]
-  have hq0P := (ang_cap_props hcap hq0K).2.2.2
+  have hq0P := (mem_para_iff.1 (hcap.subset_para hq0K)).2.2
   simp only [dot, uvec, zero_mul, add_zero] at hq0P
   have hdc : d * cos ω ≤ sin ω := by rw [hd_def]; nlinarith
   have hdmin : dMin ω ≤ d := by rw [hd_def]; linarith
@@ -747,12 +731,7 @@ lemma ang_consumed_of_supp_zero {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ 
   rw [hq0] at hL
   exact ang_three_points_mem hω hcap.2.1.2.1 hq0K hq1K hL.1 hL.2
 
-lemma ang_dot_mirror (ω s : ℝ) (p : ℝ × ℝ) :
-    dot (mirror ω p) (uvec s) = dot p (uvec (ω + π / 2 - s)) := by
-  simp only [dot, mirror, uvec]
-  rw [show ω + π / 2 - s = (π / 2 + ω) - s by ring, cos_sub, sin_sub]
-  ring
-
+/-- The mirror reflection `M_ω` maps `Q_{K^m}⁻(t)` into `Q_K⁻(ω - t)`. -/
 lemma ang_mirror_mem_qMinus {K : Set (ℝ × ℝ)} {ω t : ℝ} {p : ℝ × ℝ}
     (hp : p ∈ qMinus (mirrorCap K ω) t) : mirror ω p ∈ qMinus K (ω - t) := by
   rw [proposition2_2_2_qMinus] at hp ⊢
@@ -762,37 +741,31 @@ lemma ang_mirror_mem_qMinus {K : Set (ℝ × ℝ)} {ω t : ℝ} {p : ℝ × ℝ}
   rw [proposition2_5_4_supp] at h1' h2'
   refine ⟨?_, ?_⟩
   · show dot (mirror ω p) (uvec (ω - t)) < supp K (ω - t) - 1
-    rw [ang_dot_mirror, show ω + π / 2 - (ω - t) = t + π / 2 by ring]
+    rw [cn_dot_mirror_uvec, show ω + π / 2 - (ω - t) = t + π / 2 by ring]
     rwa [show ω + π / 2 - (t + π / 2) = ω - t by ring] at h2'
   · show dot (mirror ω p) (uvec (ω - t + π / 2)) < supp K (ω - t + π / 2) - 1
-    rw [ang_dot_mirror, show ω + π / 2 - (ω - t + π / 2) = t by ring,
+    rw [cn_dot_mirror_uvec, show ω + π / 2 - (ω - t + π / 2) = t by ring,
       show ω - t + π / 2 = ω + π / 2 - t by ring]
     exact h1'
 
-lemma ang_mirror_smul (ω a : ℝ) (p : ℝ × ℝ) : mirror ω (a • p) = a • mirror ω p := by
-  ext <;> simp only [mirror, Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring
-
-lemma ang_cos_pi_div_two_add (ω : ℝ) : cos (π / 2 + ω) = -sin ω := by
-  rw [add_comm, cos_add_pi_div_two]
-
-lemma ang_sin_pi_div_two_add (ω : ℝ) : sin (π / 2 + ω) = cos ω := by
-  rw [add_comm, sin_add_pi_div_two]
-
+/-- `M_ω u_0 = v_ω`. -/
 lemma ang_mirror_uvec_zero (ω : ℝ) : mirror ω (uvec 0) = vvec ω := by
-  ext <;> simp [mirror, uvec, vvec, ang_cos_pi_div_two_add, ang_sin_pi_div_two_add]
+  ext <;> simp [mirror, uvec, vvec, add_comm (π / 2) ω, cos_add_pi_div_two, sin_add_pi_div_two]
 
+/-- `M_ω v_ω = u_0`. -/
 lemma ang_mirror_vvec (ω : ℝ) : mirror ω (vvec ω) = uvec 0 := by
   have := sin_sq_add_cos_sq ω
-  ext <;> simp [mirror, uvec, vvec, ang_cos_pi_div_two_add, ang_sin_pi_div_two_add] <;> nlinarith
+  ext <;> simp [mirror, uvec, vvec, add_comm (π / 2) ω, cos_add_pi_div_two, sin_add_pi_div_two] <;>
+    nlinarith
 
-/-- **Theorem 4.2.5** (`thm:balanced-consumed`). Let `ω ∈ [sec⁻¹(2.2), π/2)` and let `K` be a balanced
-maximum cap with rotation angle `ω` and `𝒜_ω(K) ≥ 2.2`. Then for some `t ∈ (0, ω)` the three points
-`O`, `o_ω - v_0`, `o_ω - u_ω` lie in the closure of `Q_K⁻(t)`. -/
+/-- **Theorem 4.2.5** (`thm:balanced-consumed`). Let `ω ∈ [sec⁻¹(2.2), π/2)` and let `K` be a
+balanced maximum cap with rotation angle `ω` and `𝒜_ω(K) ≥ 2.2`. Then for some `t ∈ (0, ω)` the
+three points `O`, `o_ω - v_0`, `o_ω - u_ω` lie in the closure of `Q_K⁻(t)`. -/
 theorem theorem4_2_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ico arcsec22 (π / 2))
     (hK : IsBalancedMaxCap K ω) (harea : 2.2 ≤ sofaArea ω K) :
     ∃ t ∈ Ioo 0 ω, (0, 0) ∈ closure (qMinus K t) ∧ oPt ω - vvec 0 ∈ closure (qMinus K t) ∧
       oPt ω - uvec ω ∈ closure (qMinus K t) := by
-  have hcap : IsCap K ω := by obtain ⟨-, hcap, -⟩ := hK; exact hcap
+  have hcap : IsCap K ω := hK.2.1
   obtain ⟨hc, hc5, hs, hs1, h4⟩ := ang_omega_facts hω
   have hω0 : 0 ≤ ω := by linarith [pi_pos]
   have hω2 := hω.2
@@ -803,7 +776,7 @@ theorem theorem4_2_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ico arcsec2
     obtain ⟨h1, h2⟩ := h
     have hsub : K ⊆ clippedRegion ω (dMin ω) := by
       intro p hp
-      refine ⟨⟨ang_cap_subset_para hcap hp, ?_⟩, ?_⟩
+      refine ⟨⟨IsCap.subset_para hcap hp, ?_⟩, ?_⟩
       · exact (dot_le_supp hcap.2.1.2.1 hp 0).trans h1.le
       · exact (dot_le_supp hcap.2.1.2.1 hp (ω + π / 2)).trans h2.le
     have hfin : volume (clippedRegion ω (dMin ω)) ≠ ⊤ :=
@@ -832,13 +805,14 @@ theorem theorem4_2_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ico arcsec2
     have m2 := ang_mirror_mem_qMinus h2
     have m3 := ang_mirror_mem_qMinus h3
     obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hω0, hω.2⟩
-    rw [hP1, ang_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
-    rw [hP2, ang_mirror_smul, ang_mirror_vvec, ← hP1] at m3
+    rw [hP1, cn_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
+    rw [hP2, cn_mirror_smul, ang_mirror_vvec, ← hP1] at m3
     have hm0 : mirror ω ((0 : ℝ), (0 : ℝ)) = (0, 0) := by simp [mirror]
     rw [hm0] at m1
     exact ⟨ω - (π / 2 - ω), ⟨by linarith, by linarith⟩, subset_closure m1, subset_closure m3,
       subset_closure m2⟩
 
+/-- The closure of the open quadrant `Q_K⁻(t)` lies in the closed quadrant. -/
 lemma ang_closure_qMinus_subset (K : Set (ℝ × ℝ)) (t : ℝ) :
     closure (qMinus K t) ⊆ {x | dot x (uvec t) ≤ supp K t - 1 ∧
       dot x (uvec (t + π / 2)) ≤ supp K (t + π / 2) - 1} := by
@@ -846,8 +820,8 @@ lemma ang_closure_qMinus_subset (K : Set (ℝ × ℝ)) (t : ℝ) :
   · intro x hx
     rw [proposition2_2_2_qMinus] at hx
     exact ⟨hx.1.le, hx.2.le⟩
-  · exact (isClosed_le (ang_continuous_dot _) continuous_const).inter
-      (isClosed_le (ang_continuous_dot _) continuous_const)
+  · exact (isClosed_le (continuous_dot _) continuous_const).inter
+      (isClosed_le (continuous_dot _) continuous_const)
 
 /-- If the three points `O, c_ω u_0, c_ω v_ω` lie in the closure of `Q_K⁻(t₀)`, then every point
 `a u_0 + b v_ω` of `P_ω` with `a + b < c_ω` lies in the niche of `K`. -/
@@ -882,7 +856,7 @@ lemma ang_mem_niche_of_small {K : Set (ℝ × ℝ)} {ω t₀ : ℝ} (hω : ω �
       cos_neg, sub_self, sin_zero]
     nlinarith
   · show 0 ≤ dot (a • uvec 0 + b • vvec ω) (uvec (π / 2))
-    rw [ang_dot_uvec_pi_div_two]
+    rw [dot_uvec_pi_div_two]
     simp only [Prod.snd_add, Prod.smul_snd, uvec, vvec, smul_eq_mul, sin_zero, mul_zero,
       zero_add]
     positivity
@@ -904,7 +878,7 @@ lemma ang_mem_niche_of_small {K : Set (ℝ × ℝ)} {ω t₀ : ℝ} (hω : ω �
 /-- `P_ω` lies below `o_ω` in the directions `u_t`, `t ∈ [ω, π/2]`. -/
 lemma ang_dot_le_oPt {ω t : ℝ} (hω : ω ∈ Ioo 0 (π / 2)) (ht : t ∈ Icc ω (π / 2)) {p : ℝ × ℝ}
     (hp : p ∈ para ω) : dot p (uvec t) ≤ cOmega ω * cos t + sin t := by
-  obtain ⟨h1, h2, h3, h4⟩ := ang_mem_para_iff.1 hp
+  obtain ⟨⟨h1, h2⟩, h3, h4⟩ := mem_para_iff.1 hp
   have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
   have hck := ang_cOmega_mul_cos ⟨hω.1.le, hω.2.le⟩
   have hct : 0 ≤ cos t := cos_nonneg_of_mem_Icc ⟨by linarith [ht.1, hω.1, pi_pos], ht.2⟩
@@ -927,13 +901,9 @@ lemma ang_width_le_one {K : Set (ℝ × ℝ)} {ω t₀ : ℝ} (hω : ω ∈ Ioo 
     (hq : q ∈ K \ niche K ω) {t : ℝ} (ht : t ∈ Icc ω (π / 2)) : dot (p - q) (uvec t) ≤ 1 := by
   have hc : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩
   have hck := ang_cOmega_mul_cos ⟨hω.1.le, hω.2.le⟩
-  have hsc := sin_sq_add_cos_sq ω
-  have hck2 : cOmega ω * (1 + sin ω) = cos ω := by
-    have : cOmega ω * (1 + sin ω) * cos ω = cos ω * cos ω := by
-      rw [mul_right_comm, hck]; nlinarith
-    exact mul_right_cancel₀ hc.ne' this
-  have hpo := ang_dot_le_oPt hω ht (ang_cap_subset_para hK hp)
-  obtain ⟨hq1, hq2, hq3, hq4⟩ := ang_cap_props hK hq.1
+  have hck2 := ang_cOmega_mul_one_add_sin ⟨hω.1.le, hω.2⟩
+  have hpo := ang_dot_le_oPt hω ht (IsCap.subset_para hK hp)
+  obtain ⟨⟨hq1, hq2⟩, hq3, hq4⟩ := mem_para_iff.1 (hK.subset_para hq.1)
   set a := dot q (uvec ω) / cos ω with ha_def
   set b := q.2 / cos ω with hb_def
   have ha : 0 ≤ a := div_nonneg hq3 hc.le
@@ -978,9 +948,9 @@ lemma ang_phase_one {S : Set (ℝ × ℝ)} {ω R : ℝ} (hSc : IsCompact S) (hR 
   have hy : (rot φ p).2 = dot p (uvec (π / 2 - φ)) := by
     simp only [rot, dot, uvec, cos_pi_div_two_sub, sin_pi_div_two_sub]; ring
   obtain ⟨q, hq, hqt⟩ := exists_dot_eq_supp hSc hne (π / 2 - φ + π)
-  rw [ang_dot_uvec_add_pi] at hqt
+  rw [dot_uvec_add_pi] at hqt
   have hpt := dot_le_supp hSc hp (π / 2 - φ + π)
-  rw [ang_dot_uvec_add_pi] at hpt
+  rw [dot_uvec_add_pi] at hpt
   have hw := hwidth p hp q hq (π / 2 - φ) ⟨by linarith [hφ.2], by linarith [hφ.1]⟩
   rw [dot_sub_left] at hw
   refine ⟨?_, ?_, ?_⟩
@@ -1000,6 +970,7 @@ lemma ang_phase_one {S : Set (ℝ × ℝ)} {ω R : ℝ} (hSc : IsCompact S) (hR 
   · simp only [Prod.snd_add]; rw [hy]; linarith
   · simp only [Prod.snd_add]; rw [hy]; linarith
 
+/-- If `p + a` and `p + b` lie in `H_L`, so does `p + ((1 - l) a + l b)` for `l ∈ [0, 1]`. -/
 lemma ang_horizSide_combo {p a b : ℝ × ℝ} {l : ℝ} (ha : p + a ∈ horizSide)
     (hb : p + b ∈ horizSide) (hl0 : 0 ≤ l) (hl1 : l ≤ 1) :
     p + ((1 - l) • a + l • b) ∈ horizSide := by
@@ -1013,52 +984,24 @@ lemma ang_horizSide_combo {p a b : ℝ × ℝ} {l : ℝ} (ha : p + a ∈ horizSi
   · nlinarith [mul_le_mul_of_nonneg_left ha2 h1l, mul_le_mul_of_nonneg_left hb2 hl0]
   · nlinarith [mul_le_mul_of_nonneg_left ha3 h1l, mul_le_mul_of_nonneg_left hb3 hl0]
 
-lemma ang_continuous_rot (a : ℝ) : Continuous (rot a) := by
-  unfold rot; fun_prop
+/-- The image of a set under the rotation `R_a` is its preimage under `R_{-a}`. -/
+lemma ang_image_rot (a : ℝ) (S : Set (ℝ × ℝ)) : rot a '' S = rot (-a) ⁻¹' S :=
+  congrFun (image_eq_preimage_of_inverse (rot_neg_rot a) (rot_rot_neg a)) S
 
-lemma ang_image_rot (a : ℝ) (S : Set (ℝ × ℝ)) : rot a '' S = rot (-a) ⁻¹' S := by
-  ext x
-  constructor
-  · rintro ⟨p, hp, rfl⟩
-    show rot (-a) (rot a p) ∈ S
-    rwa [rot_neg_rot]
-  · intro hx
-    exact ⟨rot (-a) x, hx, rot_rot_neg a x⟩
-
-/-- **Theorem 1.5.2** (`thm:angle`). A balanced maximum sofa `S_ω` of area at least `2.2` with
-rotation angle `ω ∈ [sec⁻¹(2.2), π/2]` has a rotated copy admitting a movement with rotation angle
-`π/2`. -/
-theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S ω) (harea : 2.2 ≤ area S)
-    (hω : ω ∈ Icc arcsec22 (π / 2)) : ∃ s : ℝ, IsMovingSofaWithAngle (rot s '' S) (π / 2) := by
-  obtain ⟨hmono, hbal⟩ := hS
-  obtain ⟨hωI, S', hS'mov, hS'std, hSeq⟩ := id hmono
-  have hmovS : IsMovingSofaWithAngle S ω := by
-    rw [hSeq]; exact (theorem2_3_2 hωI hS'mov hS'std).1
-  rcases eq_or_lt_of_le hω.2 with heq | hlt
-  · refine ⟨0, ?_⟩
-    have : rot 0 '' S = S := by simp [rot_zero]
-    rw [this, ← heq]
-    exact hmovS
-  -- `ω < π/2`: the sofa can first rotate by `π/2 - ω` inside `H_L`
-  have hcap : IsCap (capOf S ω) ω := by obtain ⟨-, hcap, -⟩ := hbal; exact hcap
-  have hSK : S = capOf S ω \ niche (capOf S ω) ω := theorem2_4_3 hmono
-  have harea' : 2.2 ≤ sofaArea ω (capOf S ω) := by rw [theorem2_5_10 hmono]; exact harea
-  obtain ⟨t₀, ht₀, h1, h2, h3⟩ := theorem4_2_5 ⟨hω.1, hlt⟩ hbal harea'
-  obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hωI.1.le, hlt⟩
-  rw [hP1] at h2
-  rw [hP2] at h3
-  have hωI' : ω ∈ Ioo 0 (π / 2) := ⟨hωI.1, hlt⟩
-  have hwidth : ∀ p ∈ S, ∀ q ∈ S, ∀ t ∈ Icc ω (π / 2), dot (p - q) (uvec t) ≤ 1 := by
-    intro p hp q hq t ht
-    rw [hSK] at hp hq
-    exact ang_width_le_one hωI' hcap ht₀ h1 h2 h3 hp.1 hq ht
-  obtain ⟨hcl, hconn, θ, c, hm⟩ := hmovS
+/-- If a moving sofa with rotation angle `ω < π/2` has width at most one in every direction `u_t`,
+`t ∈ [ω, π/2]`, then a rotated copy of it has a movement with rotation angle `π/2`: it first
+rotates by `π/2 - ω` inside `H_L` (`ang_phase_one`). -/
+theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsMovingSofaWithAngle S ω)
+    (hω : ω < π / 2) (hwidth : ∀ p ∈ S, ∀ q ∈ S, ∀ t ∈ Icc ω (π / 2), dot (p - q) (uvec t) ≤ 1) :
+    ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
+  obtain ⟨hcl, hconn, θ, c, hm⟩ := hS
   have hSc : IsCompact S := isCompact_of_isMovingSofa ⟨ω, hcl, hconn, θ, c, hm⟩
-  have hSne : S.Nonempty := hconn.nonempty
   obtain ⟨R, hR⟩ := hSc.isBounded.exists_norm_le
   set β := π / 2 - ω with hβ
   have hβ0 : 0 < β := by linarith
-  -- reparametrisations of `[0, 1]`
+  -- the movement, in three phases glued by reparametrisations of `[0, 1]`: on `[0, 1/3]` it turns
+  -- back by `β` to `S` inside `H_L` (`ang_phase_one`), on `[1/3, 2/3]` it slides along `H_L` to the
+  -- start of the original movement, which it follows on `[2/3, 1]`
   set φf : ℝ → ℝ := fun s => β * max 0 (1 - 3 * s) with hφf
   set lf : ℝ → ℝ := fun s => max 0 (min 1 (3 * s - 1)) with hlf
   set τf : ℝ → ℝ := fun s => max 0 (min 1 (3 * s - 2)) with hτf
@@ -1080,8 +1023,8 @@ theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S
   have hphase := fun φ (hφ : φ ∈ Icc 0 β) p (hp : p ∈ S) => ang_phase_one hSc hR hwidth hφ hp
   refine ⟨β, ?_, ?_, fun s => θ (τf s) - β + φf s,
     fun s => (1 - lf s) • e (φf s) + lf s • c (τf s), ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
-  · rw [ang_image_rot]; exact hcl.preimage (ang_continuous_rot _)
-  · exact hconn.image _ (ang_continuous_rot _).continuousOn
+  · rw [ang_image_rot]; exact hcl.preimage (continuous_rot _)
+  · exact hconn.image _ (continuous_rot _).continuousOn
   · exact ((hm.continuousOn_angle.comp hτc.continuousOn hτmaps).sub continuousOn_const).add
       hφc.continuousOn
   · exact ((continuous_const.sub hlc).smul (hec.comp hφc)).continuousOn.add
@@ -1121,8 +1064,6 @@ theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S
       rw [hm.angle_zero, rot_zero] at hb
       exact ang_horizSide_combo ha hb hl.1 hl.2
     · -- third phase: the original movement
-      have hτ : τf s = 3 * s - 2 := by
-        simp only [hτf]; rw [min_eq_right (by linarith [hs.2]), max_eq_right (by linarith)]
       have hφ : φf s = 0 := by
         simp only [hφf]; rw [max_eq_left (by linarith), mul_zero]
       have hl : lf s = 1 := by
@@ -1133,5 +1074,27 @@ theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S
     rw [← rot_add, show θ (τf 1) - β + φf 1 + β = θ (τf 1) + φf 1 by ring]
     simp only [hτ1, hφ1, hl1, add_zero, sub_self, zero_smul, zero_add, one_smul]
     exact hm.finish q hq
+
+
+/-- **Theorem 1.5.2** (`thm:angle`). A balanced maximum sofa `S_ω` of area at least `2.2` with
+rotation angle `ω ∈ [sec⁻¹(2.2), π/2]` has a rotated copy admitting a movement with rotation angle
+`π/2`. -/
+theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S ω) (harea : 2.2 ≤ area S)
+    (hω : ω ∈ Icc arcsec22 (π / 2)) : ∃ s : ℝ, IsMovingSofaWithAngle (rot s '' S) (π / 2) := by
+  obtain ⟨hmono, hbal⟩ := hS
+  -- if `ω = π/2` there is nothing to do
+  rcases eq_or_lt_of_le hω.2 with heq | hlt
+  · exact ⟨0, by simpa [rot_zero, ← heq] using hmono.isMovingSofaWithAngle⟩
+  -- for `ω < π/2`, Theorem 4.2.5 makes the width of `S` in the directions `u_t`, `t ∈ [ω, π/2]`,
+  -- at most one
+  have hcap : IsCap (capOf S ω) ω := hbal.2.1
+  have harea' : 2.2 ≤ sofaArea ω (capOf S ω) := by rw [theorem2_5_10 hmono]; exact harea
+  obtain ⟨t₀, ht₀, h1, h2, h3⟩ := theorem4_2_5 ⟨hω.1, hlt⟩ hbal harea'
+  obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hmono.1.1.le, hlt⟩
+  rw [hP1] at h2
+  rw [hP2] at h3
+  refine right_angle_motion_of_width hmono.isMovingSofaWithAngle hlt fun p hp q hq t ht => ?_
+  rw [theorem2_4_3 hmono] at hp hq
+  exact ang_width_le_one ⟨hmono.1.1, hlt⟩ hcap ht₀ h1 h2 h3 hp.1 hq ht
 
 end MovingSofaOptimality

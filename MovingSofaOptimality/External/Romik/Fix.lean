@@ -1,19 +1,21 @@
 module
 
 public import MovingSofaOptimality.External.Romik.Num
+public import MovingSofaOptimality.External.Romik.Calc
 public import Mathlib.Analysis.Calculus.MeanValue
 public import Mathlib.Topology.MetricSpace.Contracting
 
 /-!
 # The zero of the reduced system for Gerver's sofa
 
-`rom_Hz (φ, θ) = 0` is the reduced form of Romik's system (see `MovingSofaOptimality.External.Romik`). With a
-rational matrix `M ≈ DH(z*)⁻¹`, the map `G(z) = z - M H(z)` (`rom_Gz`) satisfies
-`|∂G_i/∂z_j| ≤ (0.03, 0.012; 0.3, 0.16)` on the box `[0.039, 0.04] × [0.68, 0.69]` (interval
-arithmetic in `MovingSofaOptimality.External.Romik.Num`), so it is a `1/2`-contraction there for the sup metric.
-Hence `H` has at most one zero in the box (`rom_zero_unique`), and Banach's fixed point theorem on
-the square of radius `10⁻¹⁰` around `(φ₀, θ₀) = (0.0391773648, 0.6813015094)`, where the residual
-`M H(φ₀, θ₀)` is below `2 · 10⁻¹¹`, gives a zero there (`rom_exists_zero`).
+`rom_Hz (φ, θ) = 0` is the reduced form of Romik's system (see
+`MovingSofaOptimality.External.Romik`). With a rational matrix `M ≈ DH(z*)⁻¹`, the map
+`G(z) = z - M H(z)` (`rom_Gz`) satisfies `|∂G_i/∂z_j| ≤ (0.03, 0.012; 0.3, 0.16)` on the box
+`[0.039, 0.04] × [0.68, 0.69]` (interval arithmetic in `MovingSofaOptimality.External.Romik.Num`),
+so it is a `1/2`-contraction there for the sup metric. Hence `H` has at most one zero in the box
+(`rom_zero_unique`), and Banach's fixed point theorem on the square of radius `10⁻¹⁰` around
+`(φ₀, θ₀) = (0.0391773648, 0.6813015094)`, where the residual `M H(φ₀, θ₀)` is below `2 · 10⁻¹¹`,
+gives a zero there (`rom_exists_zero`).
 -/
 
 @[expose] public section
@@ -43,6 +45,10 @@ theorem rom_tiny_subset : rom_tiny ⊆ rom_box := by
   rintro z ⟨⟨h1, h2⟩, h3, h4⟩
   exact ⟨⟨by linarith, by linarith⟩, by linarith, by linarith⟩
 
+theorem rom_z0_mem_tiny : ((0.0391773648 : ℝ), (0.6813015094 : ℝ)) ∈ rom_tiny := by
+  constructor <;> constructor <;> norm_num
+
+/-- The fixed points of `G` are the zeros of `H` (the matrix `M` is invertible). -/
 theorem rom_Gz_eq_iff (z : ℝ × ℝ) : rom_Gz z = z ↔ rom_Hz z = 0 := by
   simp only [rom_Gz, rom_Hz, rom_G1, rom_G2, Prod.ext_iff, Prod.fst_zero, Prod.snd_zero]
   constructor
@@ -52,7 +58,9 @@ theorem rom_Gz_eq_iff (z : ℝ × ℝ) : rom_Gz z = z ↔ rom_Hz z = 0 := by
     rw [h1, h2]
     constructor <;> ring
 
-/-! ### Bounds on the partial derivatives of `G` on the box -/
+/-! ### Bounds on the partial derivatives of `G` on the box
+
+From the enclosures `rom_G1φ_box`, … of `MovingSofaOptimality.External.Romik.Num`. -/
 
 theorem rom_G1φ_bound {x y : ℝ} (hx : x ∈ Icc (0.039 : ℝ) 0.04) (hy : y ∈ Icc (0.68 : ℝ) 0.69) :
     |rom_G1φ x y (cos x) (sin x) (cos y) (sin y) π| ≤ 0.03 := by
@@ -89,6 +97,7 @@ theorem rom_mvt {f f' : ℝ → ℝ} {a b L x y : ℝ} (hf : ∀ t ∈ Icc a b, 
     (convex_Icc a b) hy hx
   simpa only [Real.norm_eq_abs] using this
 
+/-- `G₁` is Lipschitz on the box, by the mean value inequality in each variable. -/
 theorem rom_G1_lip {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ rom_box) :
     |(rom_Gz z).1 - (rom_Gz z').1| ≤ 0.03 * |z.1 - z'.1| + 0.012 * |z.2 - z'.2| := by
   obtain ⟨hz1, hz2⟩ := hz
@@ -99,6 +108,7 @@ theorem rom_G1_lip {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ rom_bo
     (fun t _ => rom_G1_hasDerivAt_θ z'.1 t) (fun t ht => rom_G1θ_bound hz1' ht) hz2 hz2'
   exact (abs_sub_le _ _ _).trans (add_le_add e1 e2)
 
+/-- `G₂` is Lipschitz on the box, by the mean value inequality in each variable. -/
 theorem rom_G2_lip {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ rom_box) :
     |(rom_Gz z).2 - (rom_Gz z').2| ≤ 0.3 * |z.1 - z'.1| + 0.16 * |z.2 - z'.2| := by
   obtain ⟨hz1, hz2⟩ := hz
@@ -109,6 +119,7 @@ theorem rom_G2_lip {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ rom_bo
     (fun t _ => rom_G2_hasDerivAt_θ z'.1 t) (fun t ht => rom_G2θ_bound hz1' ht) hz2 hz2'
   exact (abs_sub_le _ _ _).trans (add_le_add e1 e2)
 
+/-- `G` is a `1/2`-contraction on the box for the sup metric. -/
 theorem rom_Gz_dist_le {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ rom_box) :
     dist (rom_Gz z) (rom_Gz z') ≤ 1 / 2 * dist z z' := by
   have h1 := rom_G1_lip hz hz'
@@ -132,8 +143,7 @@ theorem rom_zero_unique {z z' : ℝ × ℝ} (hz : z ∈ rom_box) (hz' : z' ∈ r
     (h : rom_Hz z = 0) (h' : rom_Hz z' = 0) : z = z' := by
   have e := rom_Gz_dist_le hz hz'
   rw [(rom_Gz_eq_iff z).2 h, (rom_Gz_eq_iff z').2 h'] at e
-  have h0 : dist z z' = 0 := le_antisymm (by linarith [dist_nonneg (x := z) (y := z')]) dist_nonneg
-  exact dist_eq_zero.1 h0
+  exact dist_le_zero.1 (by linarith [dist_nonneg (x := z) (y := z')])
 
 /-- The residual at `(φ₀, θ₀)`. -/
 theorem rom_Gz_z0 :
@@ -143,20 +153,20 @@ theorem rom_Gz_z0 :
       (rom_Gz ((0.0391773648 : ℝ), (0.6813015094 : ℝ))).2 ∈
         Icc (0.6813015094 - 0.0000000000172760407234 : ℝ)
           (0.6813015094 - 0.0000000000172726825567) := by
-  have h1 := rom_MH1_z0 (rom_iv_self _) (rom_iv_self _) rom_cos_φ₀ rom_sin_φ₀ rom_cos_θ₀ rom_sin_θ₀
+  have h1 := rom_MH1_z0 (iv_const _) (iv_const _) rom_cos_φ₀ rom_sin_φ₀ rom_cos_θ₀ rom_sin_θ₀
     rom_pi_mem20
-  have h2 := rom_MH2_z0 (rom_iv_self _) (rom_iv_self _) rom_cos_φ₀ rom_sin_φ₀ rom_cos_θ₀ rom_sin_θ₀
+  have h2 := rom_MH2_z0 (iv_const _) (iv_const _) rom_cos_φ₀ rom_sin_φ₀ rom_cos_θ₀ rom_sin_θ₀
     rom_pi_mem20
   simp only [rom_Gz, rom_G1, rom_G2]
   simp only [rom_MH1, rom_MH2] at h1 h2
   exact ⟨⟨by linarith [h1.1], by linarith [h1.2]⟩, ⟨by linarith [h2.1], by linarith [h2.2]⟩⟩
 
+/-- `G` maps the square of radius `10⁻¹⁰` around `(φ₀, θ₀)` to itself: it moves `(φ₀, θ₀)` by
+less than `2 · 10⁻¹¹` and is Lipschitz. -/
 theorem rom_mapsTo_tiny : MapsTo rom_Gz rom_tiny rom_tiny := by
   intro z hz
-  have hz0 : ((0.0391773648 : ℝ), (0.6813015094 : ℝ)) ∈ rom_tiny := by
-    constructor <;> constructor <;> norm_num
-  have h1 := rom_G1_lip (rom_tiny_subset hz) (rom_tiny_subset hz0)
-  have h2 := rom_G2_lip (rom_tiny_subset hz) (rom_tiny_subset hz0)
+  have h1 := rom_G1_lip (rom_tiny_subset hz) (rom_tiny_subset rom_z0_mem_tiny)
+  have h2 := rom_G2_lip (rom_tiny_subset hz) (rom_tiny_subset rom_z0_mem_tiny)
   obtain ⟨r1, r2⟩ := rom_Gz_z0
   obtain ⟨⟨a1, a2⟩, a3, a4⟩ := hz
   have b1 : |z.1 - 0.0391773648| ≤ 0.0000000001 := abs_sub_le_iff.2 ⟨by linarith, by linarith⟩
@@ -168,16 +178,13 @@ theorem rom_mapsTo_tiny : MapsTo rom_Gz rom_tiny rom_tiny := by
 
 /-- `H` has a zero within `10⁻¹⁰` of `(φ₀, θ₀)`. -/
 theorem rom_exists_zero : ∃ z ∈ rom_tiny, rom_Hz z = 0 := by
-  have hz0 : ((0.0391773648 : ℝ), (0.6813015094 : ℝ)) ∈ rom_tiny := by
-    constructor <;> constructor <;> norm_num
   have hcomplete : IsComplete rom_tiny := (isClosed_Icc.prod isClosed_Icc).isComplete
   have hcontr : ContractingWith (1 / 2) (rom_mapsTo_tiny.restrict rom_Gz rom_tiny rom_tiny) := by
     refine ⟨by norm_num, LipschitzWith.of_dist_le_mul fun a b => ?_⟩
     simp only [Subtype.dist_eq, MapsTo.val_restrict_apply]
-    have := rom_Gz_dist_le (rom_tiny_subset a.2) (rom_tiny_subset b.2)
-    simpa using this
+    simpa using rom_Gz_dist_le (rom_tiny_subset a.2) (rom_tiny_subset b.2)
   obtain ⟨z, hz, hfix, -⟩ :=
-    hcontr.exists_fixedPoint' hcomplete rom_mapsTo_tiny hz0 (edist_ne_top _ _)
+    hcontr.exists_fixedPoint' hcomplete rom_mapsTo_tiny rom_z0_mem_tiny (edist_ne_top _ _)
   exact ⟨z, hz, (rom_Gz_eq_iff z).1 hfix⟩
 
 end MovingSofaOptimality

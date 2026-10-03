@@ -13,15 +13,15 @@
 <polygon points="245.5,99.0 470.5,99.0 470.5,37.0 245.5,37.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="358.0" y="55.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">D = 2c − (2 + θ − φ) s</text>
 <text x="358.0" y="82.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[1.8923884882, 1.8970660986]</text>
-<text x="358.0" y="111.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h5 · rom_iv_sub</text>
+<text x="358.0" y="111.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h5 · iv_sub</text>
 <polygon points="30.5,224.0 255.5,224.0 255.5,162.0 30.5,162.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="143.0" y="180.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">2c</text>
 <text x="143.0" y="207.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[1.9984002132, 2]</text>
-<text x="143.0" y="236.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h1 · rom_iv_mul_nn</text>
+<text x="143.0" y="236.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h1 · iv_mul_nonneg</text>
 <polygon points="400.5,224.0 625.5,224.0 625.5,162.0 400.5,162.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="513.0" y="180.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">(2 + θ − φ) s</text>
 <text x="513.0" y="207.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[0.1029339014, 0.106011725]</text>
-<text x="513.0" y="236.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h4 · rom_iv_mul_nn</text>
+<text x="513.0" y="236.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h4 · iv_mul_nonneg</text>
 <polygon points="30.5,349.0 255.5,349.0 255.5,287.0 30.5,287.0" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="143.0" y="305.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">c = cos φ</text>
 <text x="143.0" y="332.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[0.9992001066, 1]</text>
@@ -29,7 +29,7 @@
 <polygon points="285.5,349.0 510.5,349.0 510.5,287.0 285.5,287.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="398.0" y="305.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">2 + θ − φ</text>
 <text x="398.0" y="332.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[2.64, 2.651]</text>
-<text x="398.0" y="361.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h3 · rom_iv_sub</text>
+<text x="398.0" y="361.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h3 · iv_sub</text>
 <polygon points="535.5,349.0 760.5,349.0 760.5,287.0 535.5,287.0" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="648.0" y="305.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">s = sin φ</text>
 <text x="648.0" y="332.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[0.0389901142, 0.0399893342]</text>
@@ -37,7 +37,7 @@
 <polygon points="175.5,474.0 400.5,474.0 400.5,412.0 175.5,412.0" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="288.0" y="430.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">2 + θ</text>
 <text x="288.0" y="457.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[2.68, 2.69]</text>
-<text x="288.0" y="486.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h2 · rom_iv_add</text>
+<text x="288.0" y="486.0" font-size="11" font-family="Georgia, 'Times New Roman', serif" fill="#9ca3af" text-anchor="middle" dominant-baseline="middle">h2 · iv_add</text>
 <polygon points="405.5,474.0 630.5,474.0 630.5,412.0 405.5,412.0" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2" fill-opacity="1" stroke-linejoin="round"/>
 <text x="518.0" y="430.0" font-size="13.5" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle" font-style="italic">φ</text>
 <text x="518.0" y="457.0" font-size="12" font-family="Georgia, 'Times New Roman', serif" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">[0.039, 0.04]</text>

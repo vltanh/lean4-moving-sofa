@@ -9,8 +9,9 @@ Let `S` be a monotone sofa of rotation angle `ω ∈ [arcsec(11/5), π/2)` and a
 whose cap `K` satisfies the pinned bounds (19) of note 20. Then the points `O`, `o_ω - v_0` and
 `o_ω - u_ω` lie in the closure of one inner quadrant `Q_K⁻(t)` of `K` (`consumed_of_pinned`), so
 `S` has width at most one in every direction `u_t` with `t ∈ [ω, π/2]`, and a rotated copy of `S`
-has a right-angle motion (`right_angle_motion_of_width`, `right_angle_motion_of_pinned_bounds`).
-This is Proposition 4 of note 20; the geometry is that of Baek's Theorems 4.2.5 and 1.5.2.
+has a right-angle motion (`right_angle_motion_of_pinned_bounds`, by the motion
+`right_angle_motion_of_width` of the proof of Theorem 1.5.2). This is Proposition 4 of note 20; the
+geometry is that of Baek's Theorems 4.2.5 and 1.5.2.
 -/
 
 @[expose] public section
@@ -34,6 +35,8 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
   obtain ⟨hc, hc5, hs, hs1, h4⟩ := ang_omega_facts hω
   have hω0 : 0 ≤ ω := by linarith [pi_pos]
   have hω2 := hω.2
+  -- Step 1: `K` reaches the line at distance `dMin ω + cOmega ω` in the direction `u_0` or
+  -- `u_{ω + π/2}`; otherwise it lies in the clipped region, whose area is too small (Lemma 4.2.2).
   have hlarge : dMin ω + cOmega ω ≤ supp K 0 ∨
       dMin ω + cOmega ω ≤ supp K (ω + π / 2) := by
     by_contra h
@@ -41,7 +44,7 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     obtain ⟨h1, h2⟩ := h
     have hsub : K ⊆ clippedRegion ω (dMin ω) := by
       intro p hp
-      refine ⟨⟨ang_cap_subset_para hcap hp, ?_⟩, ?_⟩
+      refine ⟨⟨IsCap.subset_para hcap hp, ?_⟩, ?_⟩
       · exact (dot_le_supp hcap.2.1.2.1 hp 0).trans h1.le
       · exact (dot_le_supp hcap.2.1.2.1 hp (ω + π / 2)).trans h2.le
     have hfin : volume (clippedRegion ω (dMin ω)) ≠ ⊤ :=
@@ -53,6 +56,7 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     have hclip := lemma4_2_2 hω
     unfold sofaArea at harea
     linarith
+  -- Step 2: in the first case Baek's argument applies to `K`, in the second to its reflection.
   rcases hlarge with h | h
   · obtain ⟨h1, h2, h3⟩ := ang_consumed_of_supp_zero hω hcap hw h
     exact ⟨π / 2 - ω, ⟨by linarith, by linarith⟩,
@@ -71,114 +75,12 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
     have m2 := ang_mirror_mem_qMinus h2
     have m3 := ang_mirror_mem_qMinus h3
     obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hω0, hω.2⟩
-    rw [hP1, ang_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
-    rw [hP2, ang_mirror_smul, ang_mirror_vvec, ← hP1] at m3
+    rw [hP1, cn_mirror_smul, ang_mirror_uvec_zero, ← hP2] at m2
+    rw [hP2, cn_mirror_smul, ang_mirror_vvec, ← hP1] at m3
     have hm0 : mirror ω ((0 : ℝ), (0 : ℝ)) = (0, 0) := by simp [mirror]
     rw [hm0] at m1
     exact ⟨ω - (π / 2 - ω), ⟨by linarith, by linarith⟩,
       subset_closure m1, subset_closure m3, subset_closure m2⟩
-
-/-- If a moving sofa of angle `ω < π/2` has width at most one in every direction `u_t` with
-`t ∈ [ω, π/2]`, a rotated copy of it has a right-angle motion. -/
-theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ}
-    (hS : IsMovingSofaWithAngle S ω) (hω : ω < π / 2)
-    (hwidth : ∀ p ∈ S, ∀ q ∈ S, ∀ t ∈ Icc ω (π / 2),
-      dot (p - q) (uvec t) ≤ 1) :
-    ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
-  obtain ⟨hcl, hconn, θ, c, hm⟩ := hS
-  have hSc : IsCompact S :=
-    isCompact_of_isMovingSofa ⟨ω, hcl, hconn, θ, c, hm⟩
-  obtain ⟨R, hR⟩ := hSc.isBounded.exists_norm_le
-  set β := π / 2 - ω with hβ
-  have hβ0 : 0 < β := by linarith
-  set φf : ℝ → ℝ := fun s => β * max 0 (1 - 3 * s) with hφf
-  set lf : ℝ → ℝ := fun s => max 0 (min 1 (3 * s - 1)) with hlf
-  set τf : ℝ → ℝ := fun s => max 0 (min 1 (3 * s - 2)) with hτf
-  set e : ℝ → ℝ × ℝ := fun φ =>
-    (1 - 2 * R, supp S (π / 2 - φ + π)) with he
-  have hφc : Continuous φf := by rw [hφf]; fun_prop
-  have hlc : Continuous lf := by rw [hlf]; fun_prop
-  have hτc : Continuous τf := by rw [hτf]; fun_prop
-  have hec : Continuous e := by
-    rw [he]
-    exact continuous_const.prodMk ((continuous_supp hSc).comp (by fun_prop))
-  have hτmaps : MapsTo τf (Icc 0 1) (Icc 0 1) := fun s _ =>
-    ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩
-  have hτ0 : τf 0 = 0 := by simp only [hτf]; norm_num
-  have hτ1 : τf 1 = 1 := by simp only [hτf]; norm_num
-  have hφ0 : φf 0 = β := by simp only [hφf]; norm_num
-  have hφ1 : φf 1 = 0 := by simp only [hφf]; norm_num
-  have hl0 : lf 0 = 0 := by simp only [hlf]; norm_num
-  have hl1 : lf 1 = 1 := by simp only [hlf]; norm_num
-  have hphase := fun φ (hφ : φ ∈ Icc 0 β) p (hp : p ∈ S) =>
-    ang_phase_one hSc hR hwidth hφ hp
-  refine ⟨β, ?_, ?_, fun s => θ (τf s) - β + φf s,
-    fun s => (1 - lf s) • e (φf s) + lf s • c (τf s),
-    ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
-  · rw [ang_image_rot]
-    exact hcl.preimage (ang_continuous_rot _)
-  · exact hconn.image _ (ang_continuous_rot _).continuousOn
-  · exact ((hm.continuousOn_angle.comp hτc.continuousOn hτmaps).sub
-      continuousOn_const).add hφc.continuousOn
-  · exact ((continuous_const.sub hlc).smul (hec.comp hφc)).continuousOn.add
-      (hlc.continuousOn.smul
-        (hm.continuousOn_shift.comp hτc.continuousOn hτmaps))
-  · simp only [hτ0, hφ0, hm.angle_zero]
-    ring
-  · simp only [hτ1, hφ1, hm.angle_one, hβ]
-    ring
-  · rintro _ ⟨q, hq, rfl⟩
-    simp only [hτ0, hφ0, hl0, hm.angle_zero, sub_zero, one_smul,
-      zero_smul, add_zero]
-    rw [show (0 : ℝ) - β + β = 0 by ring, rot_zero]
-    exact hphase β ⟨hβ0.le, le_rfl⟩ q hq
-  · rintro s hs _ ⟨q, hq, rfl⟩
-    rw [← rot_add,
-      show θ (τf s) - β + φf s + β = θ (τf s) + φf s by ring]
-    rcases le_or_gt s (1 / 3) with hs1 | hs1
-    · have hτ : τf s = 0 := by
-        simp only [hτf]
-        rw [min_eq_right (by linarith), max_eq_left (by linarith)]
-      have hl : lf s = 0 := by
-        simp only [hlf]
-        rw [min_eq_right (by linarith), max_eq_left (by linarith)]
-      have hφ : φf s ∈ Icc 0 β := by
-        simp only [hφf]
-        rw [max_eq_right (by linarith)]
-        constructor <;> nlinarith [hs.1]
-      rw [hτ, hl, hm.angle_zero, zero_add, sub_zero, one_smul,
-        zero_smul, add_zero]
-      exact Or.inl (hphase _ hφ q hq)
-    rcases le_or_gt s (2 / 3) with hs2 | hs2
-    · have hτ : τf s = 0 := by
-        simp only [hτf]
-        rw [min_eq_right (by linarith), max_eq_left (by linarith)]
-      have hφ : φf s = 0 := by
-        simp only [hφf]
-        rw [max_eq_left (by linarith), mul_zero]
-      have hl : lf s ∈ Icc (0 : ℝ) 1 :=
-        ⟨le_max_left _ _, max_le zero_le_one (min_le_left _ _)⟩
-      rw [hτ, hφ, hm.angle_zero, add_zero, rot_zero]
-      left
-      have ha := hphase 0 ⟨le_rfl, hβ0.le⟩ q hq
-      rw [rot_zero] at ha
-      have hb := hm.start q hq
-      rw [hm.angle_zero, rot_zero] at hb
-      exact ang_horizSide_combo ha hb hl.1 hl.2
-    · have hφ : φf s = 0 := by
-        simp only [hφf]
-        rw [max_eq_left (by linarith), mul_zero]
-      have hl : lf s = 1 := by
-        simp only [hlf]
-        rw [min_eq_left (by linarith), max_eq_right zero_le_one]
-      rw [hφ, hl, add_zero, sub_self, zero_smul, zero_add, one_smul]
-      exact hm.inside (τf s) (hτmaps hs) q hq
-  · rintro _ ⟨q, hq, rfl⟩
-    rw [← rot_add,
-      show θ (τf 1) - β + φf 1 + β = θ (τf 1) + φf 1 by ring]
-    simp only [hτ1, hφ1, hl1, add_zero, sub_self, zero_smul,
-      zero_add, one_smul]
-    exact hm.finish q hq
 
 /-- A monotone sofa of angle `ω ∈ [arcsec(11/5), π/2)` and area at least `11/5`, whose cap satisfies
 the pinned bounds (19), has a rotated copy with a right-angle motion. -/
@@ -188,27 +90,15 @@ theorem right_angle_motion_of_pinned_bounds {S : Set (ℝ × ℝ)} {ω : ℝ}
     (hw : wedgeGapWInf (capOf S ω) ω ≤ sigmaAt (capOf S ω) (π / 2))
     (hz : wedgeGapZInf (capOf S ω) ω ≤ sigmaAt (capOf S ω) ω) :
     ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
-  have hωI := hS.1
-  have hmove : IsMovingSofaWithAngle S ω := by
-    obtain ⟨hω', T, hT, hstd, hEq⟩ := hS
-    rw [hEq]
-    exact (theorem2_3_2 hω' hT hstd).1
-  have hstdS : IsStandardPosition S ω := by
-    obtain ⟨hω', T, hT, hstd, hEq⟩ := hS
-    rw [hEq]
-    exact (theorem2_3_2 hω' hT hstd).2.1
-  have hcap : IsCap (capOf S ω) ω := theorem2_4_1 hωI hmove hstdS
-  have hSK : S = capOf S ω \ niche (capOf S ω) ω := theorem2_4_3 hS
-  have harea' : (2.2 : ℝ) ≤ sofaArea ω (capOf S ω) := by
-    rw [theorem2_5_10 hS]
-    exact harea
+  have hmove := hS.isMovingSofaWithAngle
+  have hcap : IsCap (capOf S ω) ω := theorem2_4_1 hS.1 hmove hS.isStandardPosition
+  have harea' : (2.2 : ℝ) ≤ sofaArea ω (capOf S ω) := by rwa [theorem2_5_10 hS]
   obtain ⟨t₀, ht₀, h1, h2, h3⟩ := consumed_of_pinned hω hcap harea' hw hz
-  obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hωI.1.le, hω.2⟩
+  obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hS.1.1.le, hω.2⟩
   rw [hP1] at h2
   rw [hP2] at h3
-  apply right_angle_motion_of_width hmove hω.2
-  intro p hp q hq t ht
-  rw [hSK] at hp hq
-  exact ang_width_le_one ⟨hωI.1, hω.2⟩ hcap ht₀ h1 h2 h3 hp.1 hq ht
+  refine right_angle_motion_of_width hmove hω.2 fun p hp q hq t ht => ?_
+  rw [theorem2_4_3 hS] at hp hq
+  exact ang_width_le_one ⟨hS.1.1, hω.2⟩ hcap ht₀ h1 h2 h3 hp.1 hq ht
 
 end MovingSofaUniqueness

@@ -19,16 +19,25 @@ The project has three libraries, one per result, and the files of the Palomar re
 
 ### `MovingSofaOptimality/`: Baek's paper
 
+Facts that several files use live in `Basic/` under plain names ([`dot_uvec_pi_div_two`](../MovingSofaOptimality/Basic/Plane.lean#L238),
+[`tendsto_supp`](../MovingSofaOptimality/Basic/ConvexBody.lean#L254), …). A helper lemma used by one part of the proof carries a prefix that names that
+part: `ms_` for monotone sofas, `cn_` for the cap containing its niche, `nef_` for Nef polygons and
+polygon caps, `mpc_` for maximum polygon caps, `ang_` for the rotation angle, `inj_` for the
+injectivity condition, `cvx_` for convex curves, `opt_` for the upper bound, `gs_`, `gb_`, `gn_`,
+`ga_`, `gv_` and `gm_` for Gerver's sofa, `env_` for envelopes, `af_` for the area formula and
+`rom_` for Romik's system.
+
 | Module | Paper content |
 | --- | --- |
-| [`MovingSofaOptimality/Basic/Plane.lean`](../MovingSofaOptimality/Basic/Plane.lean) | the plane: unit vectors, dot and cross products, rotations, lines, half-planes, area |
+| [`MovingSofaOptimality/Basic/Plane.lean`](../MovingSofaOptimality/Basic/Plane.lean) | the plane: unit vectors, dot and cross products, rotations, lines, half-planes, area, and the facts about them that the other files share (values at the axes, continuity, derivatives, invariance of area) |
 | [`MovingSofaOptimality/Basic/ConvexBody.lean`](../MovingSofaOptimality/Basic/ConvexBody.lean) | §2.1: convex bodies, support functions, edges and vertices, Hausdorff distance, Theorem 2.1.3 |
+| [`MovingSofaOptimality/Basic/Interval.lean`](../MovingSofaOptimality/Basic/Interval.lean) | interval arithmetic and Taylor bounds for cos and sin, used by the two generated files of numerics |
 | [`MovingSofaOptimality/Basic/LebesgueStieltjes.lean`](../MovingSofaOptimality/Basic/LebesgueStieltjes.lean) | §5.1: Lebesgue–Stieltjes measures and integrals |
 | [`MovingSofaOptimality/Basic/SurfaceArea.lean`](../MovingSofaOptimality/Basic/SurfaceArea.lean) | the surface area measure σ_K, Proposition 2.1.2, §5.2 |
 | [`MovingSofaOptimality/Sofa/Defs.lean`](../MovingSofaOptimality/Sofa/Defs.lean) | Chapter 1 and §2.2–2.3: hallways, moving sofas, supporting hallways, monotone sofas |
 | [`MovingSofaOptimality/Intro/RotationAngleBound.lean`](../MovingSofaOptimality/Intro/RotationAngleBound.lean) | Theorem 1.5.1 |
 | [`MovingSofaOptimality/Monotone/`](../MovingSofaOptimality/Monotone) | §2.2–2.5: supporting hallways, monotonization, caps and niches |
-| [`MovingSofaOptimality/Balanced/`](../MovingSofaOptimality/Balanced) | Chapter 3: nef polygons, polygon caps, maximum polygon caps, balanced maximum sofas |
+| [`MovingSofaOptimality/Balanced/`](../MovingSofaOptimality/Balanced) | Chapter 3: nef polygons (`NefPolygon`), polygon caps (`PolygonCap`), maximum polygon caps (§3.4, in four modules: `CapGeometry`, the geometry of polygon caps and their niches; `MaxPolygonCapExists`, Definition 3.4.1, Lemmas 3.4.1–3.4.2 and Theorem 3.4.3; `Polyline`, Definitions 3.4.2–3.4.4, Theorem 3.4.4 and Lemma 3.4.5; `MaximumPolygonCap`, Lemmas 3.4.6–3.4.8 and Theorems 3.4.9–3.4.10), balanced maximum sofas (`BalancedMaximumSofa`) |
 | [`MovingSofaOptimality/Angle/`](../MovingSofaOptimality/Angle) | Chapter 4: the rotation angle of a balanced maximum sofa (Theorem 1.5.2) |
 | [`MovingSofaOptimality/Injectivity/`](../MovingSofaOptimality/Injectivity) | Chapter 6 (except Theorem 6.1.2): the injectivity condition |
 | [`MovingSofaOptimality/Convex/`](../MovingSofaOptimality/Convex) | Chapter 7: convex domains, curve area functionals, convex curves, Mamikon's theorem |

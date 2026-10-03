@@ -23,6 +23,9 @@ alone.
   unproved lemma would add `sorryAx`, and `native_decide`, which trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
   uniqueness proof and each bridge theorem, the results from prior work that its proof uses.
+  It reaches the proofs through one `import all` line per module (the module system hides proofs
+  from a plain import), and CI checks that these lines name exactly the modules of the three
+  libraries.
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
   import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
@@ -37,8 +40,8 @@ axioms only, and replays the proofs through Lean's kernel and the NanoDa kernel.
 
 ## Continuous integration and the Palomar preflight
 
-[`.github/workflows/lean_action_ci.yml`](../.github/workflows/lean_action_ci.yml) builds the project on every push and pull request, runs the axiom
-audit and the check of the Challenge's definitions, and checks that the links from the documentation
+[`.github/workflows/lean_action_ci.yml`](../.github/workflows/lean_action_ci.yml) builds the project on every push and pull request, checks that the
+axiom audit imports every module, runs the audit and the check of the Challenge's definitions, and checks that the links from the documentation
 to the code are current and that the Markdown tables are well formed.
 [`.github/workflows/palomar_preflight.yml`](../.github/workflows/palomar_preflight.yml), run by hand with `gh workflow run palomar_preflight.yml --ref main`,
 runs Palomar's complete mechanical verification of a commit without submitting it; its report, the

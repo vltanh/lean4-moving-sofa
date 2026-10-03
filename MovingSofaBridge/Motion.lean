@@ -2,13 +2,6 @@ module
 
 public import ChallengeDefs
 public import MovingSofaOptimality.Main
-public import Mathlib.Analysis.Normed.Affine.Isometry
-public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-public import Mathlib.MeasureTheory.Group.Action
-public import Mathlib.Topology.Algebra.ContinuousAffineMap.Topology
-public import Mathlib.Topology.Order.IntermediateValue
-public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
-public import Mathlib.Topology.Homotopy.Lifting
 
 /-!
 # The two notions of moving sofa agree
@@ -39,8 +32,11 @@ open FormalConjectures
 
 /-! ## Coordinates -/
 
+/-- The plane `ℝ²` of formal-conjectures. -/
 abbrev Point := EuclideanSpace ℝ (Fin 2)
+/-- The plane `ℝ × ℝ` of Baek's paper. -/
 abbrev CoordinatePlane := ℝ × ℝ
+/-- The group `E(2)` of affine isometries of `ℝ²`. -/
 abbrev Motion := Point ≃ᵃⁱ[ℝ] Point
 
 /-- The coordinates `(p 0, p 1)` of a point of `ℝ²`. -/
@@ -49,19 +45,14 @@ def coordinates (p : Point) : CoordinatePlane := (p 0, p 1)
 /-- The point of `ℝ²` with given coordinates. -/
 def point (p : CoordinatePlane) : Point := !₂[p.1, p.2]
 
-@[simp] theorem coordinates_point (p : CoordinatePlane) :
-    coordinates (point p) = p := by
-  rcases p with ⟨x, y⟩
-  rfl
+@[simp] theorem coordinates_point (p : CoordinatePlane) : coordinates (point p) = p := rfl
 
 @[simp] theorem point_coordinates (p : Point) : point (coordinates p) = p := by
   ext i
   fin_cases i <;> rfl
 
-theorem coordinates_injective : Function.Injective coordinates := by
-  intro p q h
-  have he := congrArg point h
-  simpa using he
+theorem coordinates_injective : Function.Injective coordinates :=
+  Function.LeftInverse.injective point_coordinates
 
 theorem coordinates_continuous : Continuous coordinates := by
   unfold coordinates
@@ -82,8 +73,8 @@ def coordinatesMeasurableEquiv : Point ≃ᵐ CoordinatePlane :=
   (MeasurableEquiv.toLp 2 (Fin 2 → ℝ)).symm.trans MeasurableEquiv.finTwoArrow
 
 theorem coordinates_measurePreserving :
-    MeasurePreserving coordinates (volume : Measure Point) volume := by
-  exact (volume_preserving_finTwoArrow ℝ).comp
+    MeasurePreserving coordinates (volume : Measure Point) volume :=
+  (volume_preserving_finTwoArrow ℝ).comp
     (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp (Fin 2))
 
 @[simp] theorem point_coordinates_image (s : Set Point) :
@@ -106,33 +97,12 @@ theorem volume_coordinates_image (s : Set Point) :
 
 theorem volume_point_image (s : Set CoordinatePlane) :
     volume (point '' s) = volume s := by
-  have h := volume_coordinates_image (point '' s)
-  rw [coordinates_point_image] at h
-  exact h.symm
+  rw [← volume_coordinates_image, coordinates_point_image]
 
 theorem coordinates_image_closed {s : Set Point} (hs : IsClosed s) :
     IsClosed (coordinates '' s) := by
-  have he : coordinates '' s = point ⁻¹' s := by
-    ext p
-    constructor
-    · rintro ⟨q, hq, rfl⟩
-      simpa using hq
-    · intro hp
-      exact ⟨point p, hp, coordinates_point p⟩
-  rw [he]
+  rw [image_eq_preimage_of_inverse point_coordinates coordinates_point]
   exact hs.preimage point_continuous
-
-theorem point_image_closed {s : Set CoordinatePlane} (hs : IsClosed s) :
-    IsClosed (point '' s) := by
-  have he : point '' s = coordinates ⁻¹' s := by
-    ext p
-    constructor
-    · rintro ⟨q, hq, rfl⟩
-      simpa using hq
-    · intro hp
-      exact ⟨coordinates p, hp, point_coordinates p⟩
-  rw [he]
-  exact hs.preimage coordinates_continuous
 
 theorem mem_horizontalHallway_iff (p : Point) :
     p ∈ MovingSofa.horizontalHallway ↔ p 0 ≤ 1 ∧ 0 ≤ p 1 ∧ p 1 ≤ 1 := by
@@ -181,6 +151,7 @@ theorem affineIsometry_apply_eq (e : E ≃ᵃⁱ[ℝ] E) (x : E) :
 
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
+/-- An affine isometry preserves volume. -/
 theorem affineIsometry_measurePreserving (e : E ≃ᵃⁱ[ℝ] E) :
     MeasurePreserving e (volume : Measure E) volume := by
   have hp : MeasurePreserving (fun x : E => e.linearIsometryEquiv x + e 0)
@@ -206,9 +177,7 @@ end AffineIsometry
 
 /-- The squared Euclidean norm in coordinates. -/
 theorem norm_sq_coordinates (p : Point) : ‖p‖ ^ 2 = (p 0) ^ 2 + (p 1) ^ 2 := by
-  rw [← real_inner_self_eq_norm_sq]
-  change (∑ i : Fin 2, p i * p i) = (p 0) ^ 2 + (p 1) ^ 2
-  simp [Fin.sum_univ_two, pow_two]
+  rw [EuclideanSpace.real_norm_sq_eq, Fin.sum_univ_two]
 
 /-- The counterclockwise rotation of `ℝ²` by the angle `t`. -/
 def euclideanRotate (t : ℝ) (p : Point) : Point :=
@@ -223,10 +192,9 @@ theorem euclideanRotate_norm (t : ℝ) (p : Point) :
   rw [norm_sq_coordinates, norm_sq_coordinates]
   change (cos t * p 0 - sin t * p 1) ^ 2 +
       (sin t * p 0 + cos t * p 1) ^ 2 = (p 0) ^ 2 + (p 1) ^ 2
-  calc
-    _ = (sin t ^ 2 + cos t ^ 2) * ((p 0) ^ 2 + (p 1) ^ 2) := by ring
-    _ = _ := by rw [sin_sq_add_cos_sq, one_mul]
+  linear_combination ((p 0) ^ 2 + (p 1) ^ 2) * sin_sq_add_cos_sq t
 
+/-- The rotation by `t`, as a linear equivalence of `ℝ²`. -/
 def rotationLinearEquiv (t : ℝ) : Point ≃ₗ[ℝ] Point where
   toFun := euclideanRotate t
   invFun := euclideanRotate (-t)
@@ -270,6 +238,8 @@ def quarterTurn : Point →L[ℝ] Point where
     fin_cases i <;> simp
   cont := by fun_prop
 
+/-- `realization (a, c)` as a continuous affine map: the linear part `cos a • id + sin a • J`,
+with `J` the quarter turn, and the translation by `c`. -/
 theorem realization_toContinuousAffineMap (ac : ℝ × CoordinatePlane) :
     (realization ac).toAffineIsometry.toContinuousAffineMap =
       (ContinuousAffineMap.decompHomeomorph ℝ Point Point).symm
@@ -306,9 +276,13 @@ theorem realization_image_eq {s t : Set Point} (a : ℝ) (c : CoordinatePlane)
 
 /-! ## The rotation angle of a path from the identity -/
 
+/-- The first vector of the standard basis of `ℝ²`. -/
 def basisX : Point := !₂[1, 0]
+/-- The second vector of the standard basis of `ℝ²`. -/
 def basisY : Point := !₂[0, 1]
+/-- The first column of the linear part of an element of `E(2)`. -/
 def leftColumn (e : Motion) : Point := e.linearIsometryEquiv basisX
+/-- The second column of the linear part of an element of `E(2)`. -/
 def rightColumn (e : Motion) : Point := e.linearIsometryEquiv basisY
 
 /-- The determinant of the linear part of an element of `E(2)`. -/
@@ -316,16 +290,17 @@ def determinant (e : Motion) : ℝ :=
   leftColumn e 0 * rightColumn e 1 - leftColumn e 1 * rightColumn e 0
 
 /-- Evaluation is continuous for the topology of `E(2)`. -/
-theorem continuous_motion_eval (p : Point) : Continuous (fun e : Motion => e p) := by
-  have h : Continuous (fun e : Motion =>
-      e.toAffineIsometry.toContinuousAffineMap) := continuous_induced_dom
-  have h2 : Continuous (fun f : Point →ᴬ[ℝ] Point => f p) := continuous_eval_const p
-  exact h2.comp h
+theorem continuous_motion_eval (p : Point) : Continuous (fun e : Motion => e p) :=
+  (continuous_eval_const (F := Point →ᴬ[ℝ] Point) p).comp
+    (continuous_induced_dom : Continuous fun e : Motion => e.toAffineIsometry.toContinuousAffineMap)
 
 theorem linear_apply_eq_sub (e : Motion) (p : Point) :
-    e.linearIsometryEquiv p = e p - e 0 := by
-  apply eq_sub_iff_add_eq.mpr
-  exact (affineIsometry_apply_eq e p).symm
+    e.linearIsometryEquiv p = e p - e 0 :=
+  eq_sub_of_add_eq (affineIsometry_apply_eq e p).symm
+
+/-- The linear part of the identity is the identity. -/
+theorem refl_linearIsometryEquiv_apply (p : Point) :
+    (AffineIsometryEquiv.refl ℝ Point).linearIsometryEquiv p = p := rfl
 
 theorem continuous_linear_eval (p : Point) :
     Continuous (fun e : Motion => e.linearIsometryEquiv p) := by
@@ -353,6 +328,7 @@ theorem column_laws (e : Motion) :
     simpa [leftColumn, rightColumn, basisX, basisY, one_add_one_eq_two] using h
   exact ⟨hx, hy, by nlinarith⟩
 
+/-- The determinant of an element of `E(2)` is `±1`. -/
 theorem determinant_sq (e : Motion) : determinant e ^ 2 = 1 := by
   obtain ⟨hx, hy, hxy⟩ := column_laws e
   calc
@@ -375,11 +351,9 @@ theorem determinant_eq_one_on_path (m : I → Motion) (hm : Continuous m)
     (hzero : m 0 = AffineIsometryEquiv.refl ℝ Point) (t : I) :
     determinant (m t) = 1 := by
   have hd0 : determinant (m 0) = 1 := by
-    have hlin (p : Point) : (AffineIsometryEquiv.refl ℝ Point).linearIsometryEquiv p = p := by
-      rw [linear_apply_eq_sub]
-      simp
     rw [hzero]
-    norm_num [determinant, leftColumn, rightColumn, hlin, basisX, basisY]
+    norm_num [determinant, leftColumn, rightColumn, refl_linearIsometryEquiv_apply, basisX,
+      basisY]
   have hc := determinant_continuous.comp hm
   have hpos : 0 < determinant (m t) := by
     by_contra h
@@ -398,16 +372,12 @@ theorem rightColumn_of_determinant_one {e : Motion} (he : determinant e = 1) :
     rightColumn e 0 = -leftColumn e 1 ∧ rightColumn e 1 = leftColumn e 0 := by
   obtain ⟨hx, hy, _⟩ := column_laws e
   unfold determinant at he
+  -- The two columns are unit vectors with determinant `1`, so the second is the first turned.
   have hsum : (rightColumn e 0 + leftColumn e 1) ^ 2 +
       (rightColumn e 1 - leftColumn e 0) ^ 2 = 0 := by nlinarith
-  have h0 : (rightColumn e 0 + leftColumn e 1) ^ 2 = 0 :=
-    le_antisymm (by nlinarith [sq_nonneg (rightColumn e 1 - leftColumn e 0)])
-      (sq_nonneg _)
-  have h1 : (rightColumn e 1 - leftColumn e 0) ^ 2 = 0 :=
-    le_antisymm (by nlinarith [sq_nonneg (rightColumn e 0 + leftColumn e 1)])
-      (sq_nonneg _)
-  have h0' := sq_eq_zero_iff.mp h0
-  have h1' := sq_eq_zero_iff.mp h1
+  obtain ⟨h0, h1⟩ := (add_eq_zero_iff_of_nonneg (sq_nonneg _) (sq_nonneg _)).mp hsum
+  have h0' := pow_eq_zero_iff two_ne_zero |>.mp h0
+  have h1' := pow_eq_zero_iff two_ne_zero |>.mp h1
   constructor <;> linarith
 
 /-- With determinant `1`, the first column determines the linear part. -/
@@ -458,14 +428,11 @@ theorem exists_angle_lift (m : I → Motion) (hm : Continuous m)
         coordinates (m t p) = MovingSofaOptimality.rot (θ t) (coordinates p) + c t := by
   let γ : C(I, Circle) :=
     ⟨fun t => firstDirection (m t), firstDirection_continuous.comp hm⟩
-  have hlin (p : Point) : (AffineIsometryEquiv.refl ℝ Point).linearIsometryEquiv p = p := by
-    rw [linear_apply_eq_sub]
-    simp
   have hγ0 : γ 0 = Circle.exp 0 := by
     change firstDirection (m 0) = Circle.exp 0
     rw [hzero, Circle.exp_zero]
     apply Circle.ext
-    simp [firstDirection, leftColumn, basisX, hlin, Complex.ext_iff]
+    simp [firstDirection, leftColumn, basisX, refl_linearIsometryEquiv_apply, Complex.ext_iff]
   obtain ⟨θ, hθ, hθ0⟩ := Circle.isCoveringMap_exp.exists_path_lifts γ 0 hγ0
   refine ⟨θ, fun t => coordinates (m t 0), θ.continuous,
     coordinates_continuous.comp ((continuous_motion_eval 0).comp hm),
@@ -526,7 +493,8 @@ theorem isMovingSofa_of_coordinates {s : Set Point}
     ∃ m, MovingSofa.IsMovingSofa s m := by
   obtain ⟨ω, hclosed, hconnected, θ, c, hm⟩ := hS
   have hsclosed : IsClosed s := by
-    simpa only [point_coordinates_image] using point_image_closed hclosed
+    simpa only [preimage_image_eq _ coordinates_injective] using
+      hclosed.preimage coordinates_continuous
   have hsconnected : IsConnected s := by
     simpa only [point_coordinates_image] using
       hconnected.image _ point_continuous.continuousOn
@@ -534,6 +502,8 @@ theorem isMovingSofa_of_coordinates {s : Set Point}
     hm.continuousOn_angle.comp_continuous continuous_subtype_val (fun t => t.property)
   have hc : Continuous (fun t : I => c t) :=
     hm.continuousOn_shift.comp_continuous continuous_subtype_val (fun t => t.property)
+  -- The motion `m`: on `[0, 1/2]` it slides `s` by `lam t • c 0`, from `0` to `c 0` (the angle
+  -- is `θ 0 = 0`); on `[1/2, 1]` it follows the paper's motion, reparametrized by `τ`.
   let τ : I → I := fun t =>
     ⟨max 0 (2 * (t : ℝ) - 1), le_max_left _ _,
       max_le zero_le_one (by linarith [t.property.2])⟩
@@ -559,7 +529,9 @@ theorem isMovingSofa_of_coordinates {s : Set Point}
     rw [hformula]
     simp [hτ0, hlam0, hm.angle_zero, MovingSofaOptimality.rot_zero]
   refine ⟨m, hsconnected, hsclosed, hmcont, hmzero, hinitial, ?_, ?_⟩
-  · rintro t _ ⟨p, hp, rfl⟩
+  · -- The sofa stays in the hallway: during the slide it stays in the horizontal side, between
+    -- `s` and its translate by `c 0`; afterwards it is moved by the paper's motion.
+    rintro t _ ⟨p, hp, rfl⟩
     apply (coordinates_mem_hallway _).mp
     rw [hformula]
     by_cases ht : (t : ℝ) ≤ 1 / 2
@@ -592,8 +564,8 @@ theorem isMovingSofa_iff (s : Set Point) :
       s ⊆ MovingSofa.horizontalHallway ∧
         MovingSofaOptimality.IsMovingSofa (coordinates '' s) := by
   constructor
-  · intro hs
-    exact ⟨by obtain ⟨m, hm⟩ := hs; exact hm.initial, isMovingSofa_coordinates hs⟩
+  · rintro ⟨m, hm⟩
+    exact ⟨hm.initial, isMovingSofa_coordinates ⟨m, hm⟩⟩
   · rintro ⟨hinit, hpaper⟩
     exact isMovingSofa_of_coordinates hpaper hinit
 
@@ -615,8 +587,9 @@ theorem exists_isMovingSofa_volume_eq {S : Set CoordinatePlane}
       simpa only [coordinates_point, hm.angle_zero, MovingSofaOptimality.rot_zero] using
         hm.start p hp
   · rw [volume_point_image, image_add_right]
-    exact MovingSofaOptimality.mpc_volume_preimage_add S (-(c 0))
+    exact MovingSofaOptimality.volume_preimage_add S (-(c 0))
 
+/-- The area of a moving sofa of formal-conjectures is at most the sofa constant. -/
 theorem volume_le_sofaConstant {s : Set Point} (hs : ∃ m, MovingSofa.IsMovingSofa s m) :
     volume s ≤ MovingSofa.sofaConstant := by
   unfold MovingSofa.sofaConstant

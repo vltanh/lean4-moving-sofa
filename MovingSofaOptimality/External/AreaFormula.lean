@@ -51,25 +51,18 @@ section Boundary
 
 variable {K : Set (ℝ × ℝ)}
 
-/-- `‖u_t‖ ≤ 1` for the sup norm of `ℝ × ℝ`. -/
-lemma af_norm_uvec_le (t : ℝ) : ‖uvec t‖ ≤ 1 := by
-  rw [Prod.norm_def]
-  simp only [uvec, Real.norm_eq_abs]
-  exact max_le (abs_cos_le_one t) (abs_sin_le_one t)
-
 lemma af_dot_uvec_le_abs (p : ℝ × ℝ) (t : ℝ) : dot p (uvec t) ≤ |p.1| + |p.2| := by
+  have h1 : |p.1 * cos t| ≤ |p.1| := by
+    rw [abs_mul]; exact mul_le_of_le_one_right (abs_nonneg _) (abs_cos_le_one t)
+  have h2 : |p.2 * sin t| ≤ |p.2| := by
+    rw [abs_mul]; exact mul_le_of_le_one_right (abs_nonneg _) (abs_sin_le_one t)
   simp only [dot, uvec]
-  have h1 : p.1 * cos t ≤ |p.1| := by
-    calc p.1 * cos t ≤ |p.1 * cos t| := le_abs_self _
-      _ = |p.1| * |cos t| := abs_mul _ _
-      _ ≤ |p.1| * 1 := mul_le_mul_of_nonneg_left (abs_cos_le_one t) (abs_nonneg _)
-      _ = |p.1| := mul_one _
-  have h2 : p.2 * sin t ≤ |p.2| := by
-    calc p.2 * sin t ≤ |p.2 * sin t| := le_abs_self _
-      _ = |p.2| * |sin t| := abs_mul _ _
-      _ ≤ |p.2| * 1 := mul_le_mul_of_nonneg_left (abs_sin_le_one t) (abs_nonneg _)
-      _ = |p.2| := mul_one _
-  linarith
+  linarith [le_abs_self (p.1 * cos t), le_abs_self (p.2 * sin t)]
+
+/-- `t ↦ h_K(t) - c · u_t` is continuous. -/
+lemma af_continuous_supp_sub (hK : IsConvexBody K) (c : ℝ × ℝ) :
+    Continuous fun t => supp K t - dot c (uvec t) :=
+  (continuous_supp hK.2.1).sub (by unfold dot uvec; fun_prop)
 
 /-- A point of a convex body that is not an interior point lies on a supporting line. -/
 lemma af_exists_dot_eq_supp (hK : IsConvexBody K) {q : ℝ × ℝ} (hq : q ∈ K)
@@ -78,8 +71,7 @@ lemma af_exists_dot_eq_supp (hK : IsConvexBody K) {q : ℝ × ℝ} (hq : q ∈ K
   have hlt : ∀ t, dot q (uvec t) < supp K t := fun t =>
     lt_of_le_of_ne (dot_le_supp hK.2.1 hq t) (fun h => hcon ⟨t, h⟩)
   set g : ℝ → ℝ := fun t => supp K t - dot q (uvec t) with hg_def
-  have hg : Continuous g :=
-    (continuous_supp hK.2.1).sub (by unfold dot uvec; fun_prop)
+  have hg : Continuous g := af_continuous_supp_sub hK q
   have hgper : Periodic g (2 * π) := fun t => by
     simp only [hg_def, supp_add_two_pi, uvec_add_two_pi]
   obtain ⟨t₀, -, hmin⟩ :=
@@ -112,7 +104,7 @@ lemma af_dot_lt_supp (hK : IsConvexBody K) {c : ℝ × ℝ} (hc : c ∈ interior
   have hmem : c + (r / 2) • uvec t ∈ K := hball (by
     rw [Metric.mem_ball, dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
       abs_of_pos (half_pos hr)]
-    have := af_norm_uvec_le t
+    have := norm_uvec_le t
     nlinarith)
   have := dot_le_supp hK.2.1 hmem t
   rw [dot_add_left, dot_smul_left, dot_uvec_self, mul_one] at this
@@ -192,9 +184,7 @@ lemma af_hasFDerivAt_cone (hK : IsConvexBody K) (hP : 0 < af_perim K) (c : ℝ �
       (((1 : ℝ →L[ℝ] ℝ).smulRight (vvec (af_tau K z.1))).comp
         (ContinuousLinearMap.fst ℝ ℝ ℝ)) z :=
     (hγ.comp z hasFDerivAt_fst).sub_const c
-  have h2 := (hasFDerivAt_snd (p := z)).smul h1
-  have h3 := h2.const_add c
-  refine h3.congr_fderiv ?_
+  refine (((hasFDerivAt_snd (p := z)).smul h1).const_add c).congr_fderiv ?_
   refine ContinuousLinearMap.ext fun x => ?_
   simp [af_coneDeriv]
   ext <;> simp [vvec] <;> ring
@@ -238,11 +228,8 @@ lemma af_cone_injOn (hK : IsConvexBody K) (hP : 0 < af_perim K) {c : ℝ × ℝ}
   have hll : l = l' := le_antisymm (key y y' l l' hl' heq') (key y' y l' l hl heq'.symm)
   subst hll
   have hγ : af_gamma K y = af_gamma K y' := by
-    have := smul_right_injective (ℝ × ℝ) (ne_of_gt (show (0 : ℝ) < l from hl)) heq'
-    simpa using this
-  have := af_gamma_injOn hK hP (af_width_pos hK hc) a hy hy' hγ
-  simp only at this
-  rw [this]
+    simpa using smul_right_injective (ℝ × ℝ) (ne_of_gt (show (0 : ℝ) < l from hl)) heq'
+  exact Prod.ext (af_gamma_injOn hK hP (af_width_pos hK hc) a hy hy' hγ) rfl
 
 /-- The cone map sends `[0, 1]`-heights into `K`. -/
 lemma af_cone_mem (hK : IsConvexBody K) (hP : 0 < af_perim K) {c : ℝ × ℝ} (hcK : c ∈ K)
@@ -295,7 +282,7 @@ lemma af_subset_cone (hK : IsConvexBody K) (hP : 0 < af_perim K) (c : ℝ × ℝ
   have hy : toIcoMod hP a y₀ ∈ Ico a (a + af_perim K) := toIcoMod_mem_Ico hP a y₀
   have hγy : af_gamma K (toIcoMod hP a y₀) = c + μ • (p - c) := by
     rw [← hy₀, ← self_sub_toIcoDiv_zsmul]
-    exact (af_gamma_periodic hK hP).sub_zsmul_eq _
+    exact Function.Periodic.sub_zsmul_eq (af_gamma_add_perim hK hP) _
   have hμ0 : μ ≠ 0 := by positivity
   have hpeq : c + μ⁻¹ • (af_gamma K (toIcoMod hP a y₀) - c) = p := by
     rw [hγy, add_sub_cancel_left, smul_smul, inv_mul_cancel₀ hμ0, one_smul, add_sub_cancel]
@@ -308,18 +295,15 @@ lemma af_subset_cone (hK : IsConvexBody K) (hP : 0 < af_perim K) (c : ℝ × ℝ
 /-- `|K| = |Ψ(([a, a + P) \ bad) × (0, 1))|`. -/
 lemma af_volume_eq_cone (hK : IsConvexBody K) (hP : 0 < af_perim K) {c : ℝ × ℝ}
     (hc : c ∈ interior K) (a : ℝ) : volume K = volume (af_cone K c '' af_dom K a) := by
-  have hN : volume ((frontier K ∪
-      ⋃ y ∈ af_bad K, range fun s : ℝ => c + s • (af_gamma K y - c)) ∪ {c}) = 0 :=
+  set N := (frontier K ∪ ⋃ y ∈ af_bad K, range fun s : ℝ => c + s • (af_gamma K y - c)) ∪ {c}
+  have hN : volume N = 0 :=
     measure_union_null (measure_union_null (Convex.addHaar_frontier volume hK.2.2)
       ((measure_biUnion_null_iff (af_bad_countable hK hP)).2 fun y _ => af_volume_line _ _))
       (measure_singleton c)
   apply le_antisymm
-  · calc volume K ≤ volume (af_cone K c '' af_dom K a ∪ ((frontier K ∪
-          ⋃ y ∈ af_bad K, range fun s : ℝ => c + s • (af_gamma K y - c)) ∪ {c})) :=
+  · calc volume K ≤ volume (af_cone K c '' af_dom K a ∪ N) :=
           measure_mono (af_subset_cone hK hP c a)
-      _ ≤ volume (af_cone K c '' af_dom K a) + volume ((frontier K ∪
-          ⋃ y ∈ af_bad K, range fun s : ℝ => c + s • (af_gamma K y - c)) ∪ {c}) :=
-          measure_union_le _ _
+      _ ≤ volume (af_cone K c '' af_dom K a) + volume N := measure_union_le _ _
       _ = volume (af_cone K c '' af_dom K a) := by rw [hN, add_zero]
   · apply measure_mono
     rintro _ ⟨z, hz, rfl⟩
@@ -334,11 +318,6 @@ variable {K : Set (ℝ × ℝ)}
 /-- The height `h_K(τ(y)) - c · u_{τ(y)}` of the cone over the boundary point `γ(y)`. -/
 noncomputable def af_height (K : Set (ℝ × ℝ)) (c : ℝ × ℝ) (y : ℝ) : ℝ :=
   supp K (af_tau K y) - dot c (uvec (af_tau K y))
-
-/-- `t ↦ h_K(t) - c · u_t` is continuous. -/
-lemma af_continuous_supp_sub (hK : IsConvexBody K) (c : ℝ × ℝ) :
-    Continuous fun t => supp K t - dot c (uvec t) :=
-  (continuous_supp hK.2.1).sub (by unfold dot uvec; fun_prop)
 
 lemma af_measurable_height (hK : IsConvexBody K) (hP : 0 < af_perim K) (c : ℝ × ℝ) :
     Measurable (af_height K c) :=
@@ -371,11 +350,6 @@ lemma af_lintegral_Ioo_mul {g : ℝ} (hg : 0 ≤ g) :
   · exact (continuous_id.mul continuous_const).integrableOn_Icc.mono_set Ioo_subset_Icc_self
   · exact ae_restrict_of_forall_mem measurableSet_Ioo fun l hl => mul_nonneg hl.1.le hg
 
-/-- Tonelli on a product set of the plane. -/
-lemma af_lintegral_prod_set {A B : Set ℝ} (f : ℝ × ℝ → ENNReal) (hf : Measurable f) :
-    ∫⁻ z in A ×ˢ B, f z = ∫⁻ y in A, ∫⁻ l in B, f (y, l) := by
-  rw [Measure.volume_eq_prod, ← Measure.prod_restrict, lintegral_prod _ hf.aemeasurable]
-
 /-- Integrating out `λ`: `∫∫ λ g(y) dλ dy = ∫ g(y) / 2 dy`. -/
 lemma af_lintegral_dom (hK : IsConvexBody K) (hP : 0 < af_perim K) {c : ℝ × ℝ}
     (hc : c ∈ interior K) (a : ℝ) :
@@ -385,8 +359,9 @@ lemma af_lintegral_dom (hK : IsConvexBody K) (hP : 0 < af_perim K) {c : ℝ × �
       ∫⁻ z in af_dom K a, ENNReal.ofReal (z.2 * af_height K c z.1) := by
     refine setLIntegral_congr_fun (af_measurableSet_dom hK hP a) fun z hz => ?_
     rw [af_abs_det hK hP hc hz.2.1.le]
-  rw [h1, af_dom, af_lintegral_prod_set (fun z => ENNReal.ofReal (z.2 * af_height K c z.1))
-    (measurable_snd.mul ((af_measurable_height hK hP c).comp measurable_fst)).ennreal_ofReal]
+  rw [h1, af_dom, Measure.volume_eq_prod,
+    setLIntegral_prod (fun z => ENNReal.ofReal (z.2 * af_height K c z.1)) (measurable_snd.mul
+      ((af_measurable_height hK hP c).comp measurable_fst)).ennreal_ofReal.aemeasurable]
   refine setLIntegral_congr_fun
     (measurableSet_Ico.diff (af_bad_countable hK hP).measurableSet) fun y _ => ?_
   have hy : 0 ≤ af_height K c y := (sub_pos.2 (af_dot_lt_supp hK hc _)).le
@@ -421,9 +396,8 @@ lemma af_perim_pos (hK : IsConvexBody K) {c : ℝ × ℝ} (hc : c ∈ interior K
   have hP0 : af_perim K = 0 := le_antisymm (not_lt.1 h) (af_perim_nonneg K)
   have hσ : sigma K (Ioc 0 π) = 0 := by
     apply measure_mono_null (Ioc_subset_Ioc_right (by linarith [pi_pos] : π ≤ 2 * π))
-    rw [af_sigma_Ioc]
-    have : sigmaStieltjes K (2 * π) - sigmaStieltjes K 0 = 0 := hP0
-    rw [this, ENNReal.ofReal_zero]
+    rw [sigma_eq_measure, StieltjesFunction.measure_Ioc]
+    exact ENNReal.ofReal_eq_zero.2 hP0.le
   have hv := vplus_sub_vplus hK pi_pos.le
   rw [setIntegral_measure_zero _ hσ, sub_eq_zero] at hv
   have hw := af_width_pos hK hc 0
@@ -501,15 +475,10 @@ of the boundary curve, wherever `τ` is continuous. -/
 lemma af_dot_vvec_tau_eq_zero (hK : IsConvexBody K) (hP : 0 < af_perim K) {n c : ℝ × ℝ}
     (hn : ∀ p ∈ K, dot (p - c) n = 0) {y : ℝ} (hy : ContinuousAt (af_tau K) y) :
     dot (vvec (af_tau K y)) n = 0 := by
-  let L : ℝ × ℝ →L[ℝ] ℝ :=
-    n.1 • ContinuousLinearMap.fst ℝ ℝ ℝ + n.2 • ContinuousLinearMap.snd ℝ ℝ ℝ
-  have hL : ∀ p, L p = dot p n := fun p => by simp [L, dot]; ring
-  have h1 := L.hasFDerivAt.comp_hasDerivAt y ((af_hasDerivAt_gamma hK hP hy).sub_const c)
-  have h2 : (L ∘ fun y => af_gamma K y - c) = fun _ => 0 := by
-    funext y
-    simp only [comp_apply, hL]
-    exact hn _ (af_gamma_mem hK hP y)
-  rw [h2, hL] at h1
+  have h1 := hasDerivAt_dot ((af_hasDerivAt_gamma hK hP hy).sub_const c) n
+  have h2 : (fun y => dot (af_gamma K y - c) n) = fun _ => 0 :=
+    funext fun y => hn _ (af_gamma_mem hK hP y)
+  rw [h2] at h1
   exact h1.unique (hasDerivAt_const y 0)
 
 /-- For a convex body with empty interior, `∫_{(0, 2π]} (h_K(t) - c · u_t) dσ_K(t) = 0`: the
@@ -518,9 +487,8 @@ lemma af_integral_eq_zero (hK : IsConvexBody K) (h : interior K = ∅) {c : ℝ 
     ∫ t in Ioc 0 (2 * π), (supp K t - dot c (uvec t)) ∂(sigma K) = 0 := by
   rcases (af_perim_nonneg K).eq_or_lt with hP0 | hP
   · apply setIntegral_measure_zero
-    rw [af_sigma_Ioc]
-    have : sigmaStieltjes K (2 * π) - sigmaStieltjes K 0 = 0 := hP0.symm
-    rw [this, ENNReal.ofReal_zero]
+    rw [sigma_eq_measure, StieltjesFunction.measure_Ioc]
+    exact ENNReal.ofReal_eq_zero.2 hP0.ge
   · obtain ⟨n, hn0, hn⟩ := af_exists_normal hK h
     rw [← af_setIntegral_tau hK hP (af_continuous_supp_sub hK c)]
     apply integral_eq_zero_of_ae
@@ -542,14 +510,12 @@ variable {K : Set (ℝ × ℝ)}
 /-- `dot` with a fixed vector commutes with set integrals. -/
 lemma af_dot_setIntegral {μ : Measure ℝ} {s : Set ℝ} {g : ℝ → ℝ × ℝ} (hg : IntegrableOn g s μ)
     (w : ℝ × ℝ) : dot (∫ t in s, g t ∂μ) w = ∫ t in s, dot (g t) w ∂μ := by
-  let L : ℝ × ℝ →L[ℝ] ℝ :=
-    w.1 • ContinuousLinearMap.fst ℝ ℝ ℝ + w.2 • ContinuousLinearMap.snd ℝ ℝ ℝ
-  have hL : ∀ p, L p = dot p w := fun p => by simp [L, dot]; ring
-  rw [← hL, ← L.integral_comp_comm hg]
-  simp_rw [hL]
+  simp_rw [← dotCLM_apply]
+  exact ((dotCLM w).integral_comp_comm hg).symm
 
 /-- Continuous functions are `σ_K`-integrable on `(0, 2π]`. -/
-lemma af_integrableOn_Ioc {G : ℝ → ℝ} (hG : Continuous G) (K : Set (ℝ × ℝ)) :
+lemma af_integrableOn_Ioc {E : Type*} [NormedAddCommGroup E] {G : ℝ → E} (hG : Continuous G)
+    (K : Set (ℝ × ℝ)) :
     IntegrableOn G (Ioc 0 (2 * π)) (sigma K) :=
   hG.integrableOn_Icc.mono_set Ioc_subset_Icc_self
 
@@ -559,9 +525,9 @@ lemma af_integral_dot_uvec (hK : IsConvexBody K) (c : ℝ × ℝ) :
   have hw : ∀ t, dot c (uvec t) = dot (vvec t) (-c.2, c.1) := fun t => by
     simp only [dot, uvec, vvec]; ring
   simp_rw [hw]
-  rw [← af_dot_setIntegral (af_continuous_vvec.integrableOn_Icc.mono_set Ioc_subset_Icc_self),
+  rw [← af_dot_setIntegral (af_integrableOn_Ioc continuous_vvec K),
     ← vplus_sub_vplus hK two_pi_pos.le]
-  have := af_vplus_add_two_pi K 0
+  have := vplus_add_two_pi K 0
   rw [zero_add] at this
   rw [this, sub_self, dot_zero_left]
 

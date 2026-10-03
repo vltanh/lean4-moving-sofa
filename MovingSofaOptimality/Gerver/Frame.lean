@@ -8,7 +8,8 @@ import Mathlib.Analysis.Real.Pi.Bounds
 /-!
 # The rotating frame of Gerver's rotation path
 
-Infrastructure for `MovingSofaOptimality.Gerver.Structure` (package GS, see `notes/gerver_plan.md`).
+The phase-by-phase description of Gerver's rotation path on which the verification of Gerver's sofa
+(`MovingSofaOptimality.Gerver.StructureCap`, `.Structure`, `.NicheBounds`) rests.
 
 On each phase `i` Romik's rotation path is `𝐱(t) = R_t (w₁ t, w₂ t) + κ_i`. A `gs_Phase` records
 `w₁, w₂`, their first two derivatives and `κ`; `gs_Phase.Valid` says that the derivatives are
@@ -32,21 +33,28 @@ with `P.x₁ = P.gs_ph1.X` (`gs_x₁_eq`, …). For a solution `hP : P.IsSolutio
   `gs_deriv_path_eq hP : gs_piece P i t → deriv P.path t = α • u_t + β • v_t`,
   `gs_continuous_pathD`, `gs_contDiff_path : ContDiff ℝ 1 P.path`;
 * `P.gs_α t = ⟨𝐱'(t), u_t⟩`, `P.gs_β t = ⟨𝐱'(t), v_t⟩` (continuous: `gs_continuous_α/β`), with
+  `gs_hasDerivAt_path' : 𝐱' = α u_t + β v_t`,
   `gs_α_eq hP : gs_piece P i t → P.gs_α t = (P.gs_phase i).α t` (and `gs_β_eq`), and the explicit
   formulas `gs_α₁_eq … gs_β₅_eq`, `gs_ρA₁_eq … gs_ρC₅_eq` (phases 4–5 in the variable
-  `π/2 - s`, where they are minus the formulas of phases 2–1);
+  `π/2 - s`, where they are minus the formulas of phases 2–1; the primed versions
+  `gs_α₄_eq'`, … state them in the variable `t`); the functions `ρA`, `ρC` of every phase are
+  continuous (`gs_continuous_ρA/ρC`);
 * `gs_contactA_eq hP : gs_piece P i t → contactA P.path t = (P.gs_phase i).A t` (and `B`, `C`,
   `D`), and `gs_contactA_eq' : contactA P.path t = P.path t + P.gs_α t • v_t + u_t` (and `B`,
   `C`, `D`);
 * `gs_hasDerivAt_contactA/B/C/D hP : gs_opiece P i t → HasDerivAt (contactX P.path) _ t`
   and the right derivatives `gs_hasDerivWithinAt_contactA/C hP : gs_rpiece P i t → …`;
+  `gs_ridx t` is the index of the half-open interval containing `t`, and
+  `gs_exists_bound_of_sel` bounds a function that agrees at every point with one of five
+  continuous functions;
 * identities: `gs_path_zero : 𝐱(0) = 0`, `gs_path_pi_div_two_snd : 𝐱(π/2)_y = 0`,
   `gs_contactB_t₃ : 𝐁(π/2 - θ) = 𝐱(φ)`, `gs_contactD_t₂ : 𝐃(θ) = 𝐱(π/2 - φ)`,
-  `gs_contactB_pi_div_two_snd : 𝐁(π/2)_y = 0`, `gs_contactD_zero_snd : 𝐃(0)_y = 0`.
+  `gs_contactB_pi_div_two_snd : 𝐁(π/2)_y = 0`, `gs_contactD_zero_snd : 𝐃(0)_y = 0`,
+  `gs_α_zero : α(0) = 0`, `gs_β_pi_div_two : β(π/2) = 0`.
 
 Under the enclosures `hB : P.Bounds`: `gs_α_neg : 0 < t → t ≤ π/2 → P.gs_α t < 0`,
-`gs_β_pos : 0 ≤ t → t < π/2 → 0 < P.gs_β t`, `gs_α_zero`, `gs_β_pi_div_two`, `gs_α_nonpos`,
-`gs_β_nonneg`, and `gs_ρ_nonneg : gs_rpiece P i t → 0 ≤ t → t ≤ π/2 → 0 ≤ ρA ∧ 0 ≤ ρC`.
+`gs_β_pos : 0 ≤ t → t < π/2 → 0 < P.gs_β t`, `gs_α_nonpos`, `gs_β_nonneg`, and
+`gs_ρ_nonneg : gs_rpiece P i t → 0 ≤ t → t ≤ π/2 → 0 ≤ ρA ∧ 0 ≤ ρC`.
 -/
 
 @[expose] public section
@@ -100,9 +108,6 @@ noncomputable def D (t : ℝ) : ℝ × ℝ := rot t (-Φ.w₂' t, Φ.w₂ t) + �
 
 end gs_Phase
 
-lemma gs_rot_pair (t a b : ℝ) : rot t (a, b) = a • uvec t + b • vvec t := by
-  ext <;> simp [rot, uvec, vvec] <;> ring
-
 /-- The derivative of `t ↦ R_t (a t, b t) + κ`. -/
 lemma gs_hasDerivAt_frame {a b : ℝ → ℝ} {a' b' t : ℝ} (κ : ℝ × ℝ) (ha : HasDerivAt a a' t)
     (hb : HasDerivAt b b' t) :
@@ -117,28 +122,41 @@ namespace gs_Phase
 
 variable {Φ : gs_Phase}
 
+/-- The derivative of the phase path: `𝐱' = α u_t + β v_t`. -/
 lemma hasDerivAt_X (hΦ : Φ.Valid) (t : ℝ) : HasDerivAt Φ.X (Φ.X' t) t :=
   gs_hasDerivAt_frame Φ.κ (hΦ.d₁ t) (hΦ.d₂ t)
 
+/-- `𝐀' = ρ_A v_t`. -/
 lemma hasDerivAt_A (hΦ : Φ.Valid) (t : ℝ) : HasDerivAt Φ.A (Φ.ρA t • vvec t) t := by
   refine (gs_hasDerivAt_frame Φ.κ ((hΦ.d₁ t).add_const 1) (hΦ.dd₁ t)).congr_deriv ?_
   ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, uvec,
     vvec, ρA] <;> ring
 
+/-- `𝐁' = (ρ_A - 1) v_t`. -/
 lemma hasDerivAt_B (hΦ : Φ.Valid) (t : ℝ) : HasDerivAt Φ.B ((Φ.ρA t - 1) • vvec t) t := by
   refine (gs_hasDerivAt_frame Φ.κ (hΦ.d₁ t) (hΦ.dd₁ t)).congr_deriv ?_
   ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, uvec,
     vvec, ρA] <;> ring
 
+/-- `𝐂' = -ρ_C u_t`. -/
 lemma hasDerivAt_C (hΦ : Φ.Valid) (t : ℝ) : HasDerivAt Φ.C (-Φ.ρC t • uvec t) t := by
   refine (gs_hasDerivAt_frame Φ.κ (hΦ.dd₂ t).neg ((hΦ.d₂ t).add_const 1)).congr_deriv ?_
   ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, uvec,
     vvec, ρC, Pi.neg_apply] <;> ring
 
+/-- `𝐃' = (1 - ρ_C) u_t`. -/
 lemma hasDerivAt_D (hΦ : Φ.Valid) (t : ℝ) : HasDerivAt Φ.D ((1 - Φ.ρC t) • uvec t) t := by
   refine (gs_hasDerivAt_frame Φ.κ (hΦ.dd₂ t).neg (hΦ.d₂ t)).congr_deriv ?_
   ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, uvec,
     vvec, ρC, Pi.neg_apply] <;> ring
+
+/-- The derivative `𝐱'` of a phase is continuous. -/
+lemma continuous_X' (hΦ : Φ.Valid) : Continuous Φ.X' := by
+  have h₁ : Continuous Φ.w₁ := continuous_iff_continuousAt.2 fun t => (hΦ.d₁ t).continuousAt
+  have h₂ : Continuous Φ.w₂ := continuous_iff_continuousAt.2 fun t => (hΦ.d₂ t).continuousAt
+  have h₁' : Continuous Φ.w₁' := continuous_iff_continuousAt.2 fun t => (hΦ.dd₁ t).continuousAt
+  have h₂' : Continuous Φ.w₂' := continuous_iff_continuousAt.2 fun t => (hΦ.dd₂ t).continuousAt
+  exact ((h₁'.sub h₂).smul continuous_uvec).add ((h₂'.add h₁).smul continuous_vvec)
 
 variable (Φ)
 
@@ -148,24 +166,35 @@ lemma dot_X'_uvec (t : ℝ) : dot (Φ.X' t) (uvec t) = Φ.α t := by
 lemma dot_X'_vvec (t : ℝ) : dot (Φ.X' t) (vvec t) = Φ.β t := by
   simp [X', dot_add_left, dot_smul_left]
 
+/-- The phase curve `A` is the contact curve `𝐀 = 𝐱 + α v_t + u_t` of the phase path. -/
 lemma A_eq (t : ℝ) : Φ.A t = Φ.X t + Φ.α t • vvec t + uvec t := by
-  simp only [A, X, α, gs_rot_pair]; ext <;> simp <;> ring
+  simp only [A, X, α, rot_pair]; ext <;> simp <;> ring
 
+/-- The phase curve `B` is the contact curve `𝐁 = 𝐱 + α v_t`. -/
 lemma B_eq (t : ℝ) : Φ.B t = Φ.X t + Φ.α t • vvec t := by
-  simp only [B, X, α, gs_rot_pair]; ext <;> simp <;> ring
+  simp only [B, X, α, rot_pair]; ext <;> simp <;> ring
 
+/-- The phase curve `C` is the contact curve `𝐂 = 𝐱 - β u_t + v_t`. -/
 lemma C_eq (t : ℝ) : Φ.C t = Φ.X t - Φ.β t • uvec t + vvec t := by
-  simp only [C, X, β, gs_rot_pair]; ext <;> simp <;> ring
+  simp only [C, X, β, rot_pair]; ext <;> simp <;> ring
 
+/-- The phase curve `D` is the contact curve `𝐃 = 𝐱 - β u_t`. -/
 lemma D_eq (t : ℝ) : Φ.D t = Φ.X t - Φ.β t • uvec t := by
-  simp only [D, X, β, gs_rot_pair]; ext <;> simp <;> ring
+  simp only [D, X, β, rot_pair]; ext <;> simp <;> ring
+
+variable {Φ}
+
+/-- On a phase, the contact curves of `Φ.X` are the phase curves `Φ.A`, …, `Φ.D`. -/
+lemma contactA_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactA Φ.X t = Φ.A t := by
+  rw [GerverParams.contactA, (hasDerivAt_X hΦ t).deriv, dot_X'_uvec, A_eq]
+
+lemma contactB_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactB Φ.X t = Φ.B t := by
+  rw [GerverParams.contactB, (hasDerivAt_X hΦ t).deriv, dot_X'_uvec, B_eq]
+
+lemma contactD_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactD Φ.X t = Φ.D t := by
+  rw [GerverParams.contactD, (hasDerivAt_X hΦ t).deriv, dot_X'_vvec, D_eq]
 
 end gs_Phase
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
 
 /-! ### Gluing along the five phases -/
 
@@ -196,6 +225,7 @@ lemma gs_Ord.φ_pos (hO : gs_Ord P) : 0 < P.φ := hO.1
 lemma gs_Ord.lt_φ' (hO : gs_Ord P) : π / 2 - P.θ < π / 2 - P.φ := by
   obtain ⟨h1, h2, h3⟩ := hO; linarith
 
+/-- On `(-∞, φ]` the glued function is the first one. -/
 lemma gs_pw_eq₁ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t : ℝ} (ht : t ≤ P.φ) :
     gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₁ t := by
   unfold gs_pw
@@ -203,6 +233,7 @@ lemma gs_pw_eq₁ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t 
   · rw [ite_eq_left h]
   · rw [ite_eq_right (lt_irrefl _), ite_eq_left hO.φ_lt_θ, hm.1]
 
+/-- On `[φ, θ]` the glued function is the second one. -/
 lemma gs_pw_eq₂ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t : ℝ} (ht₁ : P.φ ≤ t)
     (ht₂ : t ≤ P.θ) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₂ t := by
   unfold gs_pw
@@ -211,12 +242,14 @@ lemma gs_pw_eq₂ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t 
   · rw [ite_eq_left h]
   · rw [ite_eq_right (lt_irrefl _), ite_eq_left hO.θ_lt.le, hm.2.1]
 
+/-- On `[θ, π/2 - θ]` the glued function is the third one. -/
 lemma gs_pw_eq₃ (hO : gs_Ord P) {t : ℝ} (ht₁ : P.θ ≤ t)
     (ht₂ : t ≤ π / 2 - P.θ) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₃ t := by
   unfold gs_pw
   rw [ite_eq_right (not_lt.2 (hO.φ_lt_θ.le.trans ht₁)), ite_eq_right (not_lt.2 ht₁),
     ite_eq_left ht₂]
 
+/-- On `[π/2 - θ, π/2 - φ]` the glued function is the fourth one. -/
 lemma gs_pw_eq₄ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t : ℝ}
     (ht₁ : π / 2 - P.θ ≤ t) (ht₂ : t ≤ π / 2 - P.φ) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₄ t := by
   unfold gs_pw
@@ -226,6 +259,7 @@ lemma gs_pw_eq₄ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t 
   · rw [ite_eq_right (not_le.2 h), ite_eq_left ht₂]
   · rw [ite_eq_left le_rfl, hm.2.2.1]
 
+/-- On `[π/2 - φ, ∞)` the glued function is the fifth one. -/
 lemma gs_pw_eq₅ (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {t : ℝ}
     (ht₁ : π / 2 - P.φ ≤ t) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = f₅ t := by
   unfold gs_pw
@@ -279,6 +313,7 @@ def gs_sel {E : Type*} (f₁ f₂ f₃ f₄ f₅ : ℝ → E) : ℕ → ℝ → 
   | 3 => f₄
   | _ => f₅
 
+/-- On the `i`-th closed phase interval the glued function is the `i`-th one. -/
 lemma gs_pw_eq_sel (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) {i : ℕ} {t : ℝ}
     (h : gs_piece P i t) : gs_pw P f₁ f₂ f₃ f₄ f₅ t = gs_sel f₁ f₂ f₃ f₄ f₅ i t := by
   match i, h with
@@ -296,37 +331,26 @@ lemma gs_local (hO : gs_Ord P) (t : ℝ) :
   have o1 := hO.φ_lt_θ
   have o2 := hO.θ_lt
   have o3 := hO.lt_φ'
-  rcases lt_trichotomy t P.φ with h | h | h
-  · exact ⟨t - 1, P.φ, 0, 0, by linarith, h, fun s hs => (show s ≤ P.φ by linarith [hs.2]),
-      fun s hs => (show s ≤ P.φ from hs.2)⟩
-  · subst h
-    exact ⟨P.φ - 1, P.θ, 0, 1, by linarith, o1, fun s hs => (show s ≤ P.φ from hs.2),
-      fun s hs => (show P.φ ≤ s ∧ s ≤ P.θ from hs)⟩
-  rcases lt_trichotomy t P.θ with h₂ | h₂ | h₂
-  · exact ⟨P.φ, P.θ, 1, 1, h, h₂, fun s hs => (show P.φ ≤ s ∧ s ≤ P.θ from ⟨hs.1, by
-      linarith [hs.2]⟩), fun s hs => (show P.φ ≤ s ∧ s ≤ P.θ from ⟨by linarith [hs.1], hs.2⟩)⟩
-  · subst h₂
-    exact ⟨P.φ, π / 2 - P.θ, 1, 2, h, o2, fun s hs => (show P.φ ≤ s ∧ s ≤ P.θ from hs),
-      fun s hs => (show P.θ ≤ s ∧ s ≤ π / 2 - P.θ from hs)⟩
-  rcases lt_trichotomy t (π / 2 - P.θ) with h₃ | h₃ | h₃
-  · exact ⟨P.θ, π / 2 - P.θ, 2, 2, h₂, h₃, fun s hs => (show P.θ ≤ s ∧ s ≤ π / 2 - P.θ from
-      ⟨hs.1, by linarith [hs.2]⟩), fun s hs => (show P.θ ≤ s ∧ s ≤ π / 2 - P.θ from
-      ⟨by linarith [hs.1], hs.2⟩)⟩
-  · rw [h₃]
-    exact ⟨P.θ, π / 2 - P.φ, 2, 3, o2, o3, fun s hs => (show P.θ ≤ s ∧ s ≤ π / 2 - P.θ from hs),
-      fun s hs => (show π / 2 - P.θ ≤ s ∧ s ≤ π / 2 - P.φ from hs)⟩
-  rcases lt_trichotomy t (π / 2 - P.φ) with h₄ | h₄ | h₄
-  · exact ⟨π / 2 - P.θ, π / 2 - P.φ, 3, 3, h₃, h₄,
-      fun s hs => (show π / 2 - P.θ ≤ s ∧ s ≤ π / 2 - P.φ from ⟨hs.1, by linarith [hs.2]⟩),
-      fun s hs => (show π / 2 - P.θ ≤ s ∧ s ≤ π / 2 - P.φ from ⟨by linarith [hs.1], hs.2⟩)⟩
-  · rw [h₄]
-    exact ⟨π / 2 - P.θ, π / 2 - P.φ + 1, 3, 4, o3, by linarith,
-      fun s hs => (show π / 2 - P.θ ≤ s ∧ s ≤ π / 2 - P.φ from hs),
-      fun s hs => (show π / 2 - P.φ ≤ s from hs.1)⟩
-  · exact ⟨π / 2 - P.φ, t + 1, 4, 4, h₄, by linarith,
-      fun s hs => (show π / 2 - P.φ ≤ s from hs.1),
-      fun s hs => (show π / 2 - P.φ ≤ s by linarith [hs.1])⟩
+  rcases lt_trichotomy t P.φ with h₁ | rfl | h₁
+  · exact ⟨t - 1, P.φ, 0, 0, by linarith, h₁, fun s hs => hs.2.trans h₁.le, fun s hs => hs.2⟩
+  · exact ⟨P.φ - 1, P.θ, 0, 1, by linarith, o1, fun s hs => hs.2, fun s hs => hs⟩
+  rcases lt_trichotomy t P.θ with h₂ | rfl | h₂
+  · exact ⟨P.φ, P.θ, 1, 1, h₁, h₂, fun s hs => ⟨hs.1, hs.2.trans h₂.le⟩,
+      fun s hs => ⟨h₁.le.trans hs.1, hs.2⟩⟩
+  · exact ⟨P.φ, π / 2 - P.θ, 1, 2, h₁, o2, fun s hs => hs, fun s hs => hs⟩
+  rcases lt_trichotomy t (π / 2 - P.θ) with h₃ | rfl | h₃
+  · exact ⟨P.θ, π / 2 - P.θ, 2, 2, h₂, h₃, fun s hs => ⟨hs.1, hs.2.trans h₃.le⟩,
+      fun s hs => ⟨h₂.le.trans hs.1, hs.2⟩⟩
+  · exact ⟨P.θ, π / 2 - P.φ, 2, 3, o2, o3, fun s hs => hs, fun s hs => hs⟩
+  rcases lt_trichotomy t (π / 2 - P.φ) with h₄ | rfl | h₄
+  · exact ⟨π / 2 - P.θ, π / 2 - P.φ, 3, 3, h₃, h₄, fun s hs => ⟨hs.1, hs.2.trans h₄.le⟩,
+      fun s hs => ⟨h₃.le.trans hs.1, hs.2⟩⟩
+  · exact ⟨π / 2 - P.θ, π / 2 - P.φ + 1, 3, 4, o3, by linarith, fun s hs => hs, fun s hs => hs.1⟩
+  · exact ⟨π / 2 - P.φ, t + 1, 4, 4, h₄, by linarith, fun s hs => hs.1,
+      fun s hs => h₄.le.trans hs.1⟩
 
+/-- A function glued from five differentiable functions is differentiable when the functions and
+their derivatives agree at the breakpoints. -/
 lemma gs_hasDerivAt_pw [NormedAddCommGroup E] [NormedSpace ℝ E] {g₁ g₂ g₃ g₄ g₅ : ℝ → E}
     (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅) (hm' : gs_Match P g₁ g₂ g₃ g₄ g₅)
     (hd : ∀ i t, HasDerivAt (gs_sel f₁ f₂ f₃ f₄ f₅ i) (gs_sel g₁ g₂ g₃ g₄ g₅ i t) t) (t : ℝ) :
@@ -337,6 +361,8 @@ lemma gs_hasDerivAt_pw [NormedAddCommGroup E] [NormedSpace ℝ E] {g₁ g₂ g�
   · rw [gs_pw_eq_sel hO hm' (hi t ⟨ha.le, le_rfl⟩)]; exact hd i t
   · rw [gs_pw_eq_sel hO hm' (hj t ⟨le_rfl, hb.le⟩)]; exact hd j t
 
+/-- A function glued from five continuous functions that agree at the breakpoints is
+continuous. -/
 lemma gs_continuous_pw [TopologicalSpace E] (hO : gs_Ord P) (hm : gs_Match P f₁ f₂ f₃ f₄ f₅)
     (hc : ∀ i, Continuous (gs_sel f₁ f₂ f₃ f₄ f₅ i)) : Continuous (gs_pw P f₁ f₂ f₃ f₄ f₅) := by
   refine continuous_iff_continuousAt.2 fun t => ?_
@@ -346,16 +372,13 @@ lemma gs_continuous_pw [TopologicalSpace E] (hO : gs_Ord P) (hm : gs_Match P f�
 
 end pw
 
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
 namespace GerverParams
 
-variable (P : GerverParams)
-
 /-! ### The five phases in the rotating frame -/
+
+section phases
+
+variable (P : GerverParams)
 
 /-- Phase 1, Romik's (SOL1). -/
 noncomputable def gs_ph1 : gs_Phase where
@@ -413,6 +436,7 @@ lemma gs_x₃_eq : P.x₃ = P.gs_ph3.X := rfl
 lemma gs_x₄_eq : P.x₄ = P.gs_ph4.X := rfl
 lemma gs_x₅_eq : P.x₅ = P.gs_ph5.X := rfl
 
+/-- The derivative of `p cos s + q sin s + r`. -/
 lemma gs_hasDerivAt_trig {f : ℝ → ℝ} {t d : ℝ} (p q r : ℝ)
     (hf : ∀ s, f s = p * cos s + q * sin s + r) (hd : d = -p * sin t + q * cos t) :
     HasDerivAt f d t := by
@@ -420,13 +444,7 @@ lemma gs_hasDerivAt_trig {f : ℝ → ℝ} {t d : ℝ} (p q r : ℝ)
   rw [show f = fun s => p * cos s + q * sin s + r from funext hf, hd]
   exact this.congr_deriv (by ring)
 
-lemma gs_hasDerivAt_quad {f : ℝ → ℝ} {t d : ℝ} (p q r : ℝ)
-    (hf : ∀ s, f s = p * s ^ 2 + q * s + r) (hd : d = 2 * p * t + q) :
-    HasDerivAt f d t := by
-  have := (((hasDerivAt_pow 2 t).const_mul p).add ((hasDerivAt_id t).const_mul q)).add_const r
-  rw [show f = fun s => p * s ^ 2 + q * s + r from funext hf, hd]
-  exact this.congr_deriv (by simp; ring)
-
+/-- The derivatives recorded in the phases are correct. -/
 lemma gs_valid₁ : P.gs_ph1.Valid where
   d₁ _ := gs_hasDerivAt_trig P.a₁ P.a₂ (-1) (fun s => by simp only [gs_ph1]; ring)
     (by simp only [gs_ph1])
@@ -438,33 +456,33 @@ lemma gs_valid₁ : P.gs_ph1.Valid where
     (by simp only [gs_ph1]; ring)
 
 lemma gs_valid₂ : P.gs_ph2.Valid where
-  d₁ _ := gs_hasDerivAt_quad (-1 / 4) P.b₁ P.b₂ (fun s => by simp only [gs_ph2]; ring)
+  d₁ _ := hasDerivAt_quad (-1 / 4) P.b₁ P.b₂ (fun s => by simp only [gs_ph2]; ring)
     (by simp only [gs_ph2]; ring)
-  d₂ _ := gs_hasDerivAt_quad 0 (1 / 2) (-P.b₁ - 1) (fun s => by simp only [gs_ph2]; ring)
+  d₂ _ := hasDerivAt_quad 0 (1 / 2) (-P.b₁ - 1) (fun s => by simp only [gs_ph2]; ring)
     (by simp only [gs_ph2]; ring)
-  dd₁ _ := gs_hasDerivAt_quad 0 (-1 / 2) P.b₁ (fun s => by simp only [gs_ph2]; ring)
+  dd₁ _ := hasDerivAt_quad 0 (-1 / 2) P.b₁ (fun s => by simp only [gs_ph2]; ring)
     (by simp only [gs_ph2]; ring)
-  dd₂ _ := gs_hasDerivAt_quad 0 0 (1 / 2) (fun s => by simp only [gs_ph2]; ring)
+  dd₂ _ := hasDerivAt_quad 0 0 (1 / 2) (fun s => by simp only [gs_ph2]; ring)
     (by simp only [gs_ph2]; ring)
 
 lemma gs_valid₃ : P.gs_ph3.Valid where
-  d₁ _ := gs_hasDerivAt_quad 0 (-1) P.c₁ (fun s => by simp only [gs_ph3]; ring)
+  d₁ _ := hasDerivAt_quad 0 (-1) P.c₁ (fun s => by simp only [gs_ph3]; ring)
     (by simp only [gs_ph3]; ring)
-  d₂ _ := gs_hasDerivAt_quad 0 1 P.c₂ (fun s => by simp only [gs_ph3]; ring)
+  d₂ _ := hasDerivAt_quad 0 1 P.c₂ (fun s => by simp only [gs_ph3]; ring)
     (by simp only [gs_ph3]; ring)
-  dd₁ _ := gs_hasDerivAt_quad 0 0 (-1) (fun s => by simp only [gs_ph3]; ring)
+  dd₁ _ := hasDerivAt_quad 0 0 (-1) (fun s => by simp only [gs_ph3]; ring)
     (by simp only [gs_ph3]; ring)
-  dd₂ _ := gs_hasDerivAt_quad 0 0 1 (fun s => by simp only [gs_ph3]; ring)
+  dd₂ _ := hasDerivAt_quad 0 0 1 (fun s => by simp only [gs_ph3]; ring)
     (by simp only [gs_ph3]; ring)
 
 lemma gs_valid₄ : P.gs_ph4.Valid where
-  d₁ _ := gs_hasDerivAt_quad 0 (-1 / 2) (P.d₁ - 1) (fun s => by simp only [gs_ph4]; ring)
+  d₁ _ := hasDerivAt_quad 0 (-1 / 2) (P.d₁ - 1) (fun s => by simp only [gs_ph4]; ring)
     (by simp only [gs_ph4]; ring)
-  d₂ _ := gs_hasDerivAt_quad (-1 / 4) P.d₁ P.d₂ (fun s => by simp only [gs_ph4]; ring)
+  d₂ _ := hasDerivAt_quad (-1 / 4) P.d₁ P.d₂ (fun s => by simp only [gs_ph4]; ring)
     (by simp only [gs_ph4]; ring)
-  dd₁ _ := gs_hasDerivAt_quad 0 0 (-1 / 2) (fun s => by simp only [gs_ph4]; ring)
+  dd₁ _ := hasDerivAt_quad 0 0 (-1 / 2) (fun s => by simp only [gs_ph4]; ring)
     (by simp only [gs_ph4]; ring)
-  dd₂ _ := gs_hasDerivAt_quad 0 (-1 / 2) P.d₁ (fun s => by simp only [gs_ph4]; ring)
+  dd₂ _ := hasDerivAt_quad 0 (-1 / 2) P.d₁ (fun s => by simp only [gs_ph4]; ring)
     (by simp only [gs_ph4]; ring)
 
 lemma gs_valid₅ : P.gs_ph5.Valid where
@@ -477,14 +495,7 @@ lemma gs_valid₅ : P.gs_ph5.Valid where
   dd₂ _ := gs_hasDerivAt_trig P.e₁ P.e₂ 0 (fun s => by simp only [gs_ph5]; ring)
     (by simp only [gs_ph5]; ring)
 
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace GerverParams
+end phases
 
 variable {P : GerverParams}
 
@@ -502,11 +513,14 @@ lemma gs_κ₁₁ (hP : P.IsSolution) : P.κ₁.1 = 1 - P.a₁ := hP.2.2.2.2.2.2
 lemma gs_κ₁₂ (hP : P.IsSolution) : P.κ₁.2 = 1 / 4 := hP.2.2.2.2.2.2.2.2.2.1
 lemma gs_a₂ (hP : P.IsSolution) : P.a₂ = -1 / 4 := hP.2.2.2.2.2.2.2.2.2.2.1
 
+/-- The phase paths agree at the breakpoints (Romik's (35), (37), (39), (41)). -/
 lemma gs_matchX (hP : P.IsSolution) :
     gs_Match P P.gs_ph1.X P.gs_ph2.X P.gs_ph3.X P.gs_ph4.X P.gs_ph5.X := by
   obtain ⟨-, -, -, -, -, -, -, -, -, -, -, h1, -, h2, -, h3, -, h4, -, -, -⟩ := hP
   exact ⟨h1, h2, h3, h4⟩
 
+/-- The derivatives of the phase paths agree at the breakpoints (Romik's (36), (38), (40),
+(42)). -/
 lemma gs_matchX' (hP : P.IsSolution) :
     gs_Match P P.gs_ph1.X' P.gs_ph2.X' P.gs_ph3.X' P.gs_ph4.X' P.gs_ph5.X' := by
   obtain ⟨-, -, -, -, -, -, -, -, -, -, -, -, h1, -, h2, -, h3, -, h4, -, -⟩ := hP
@@ -534,12 +548,8 @@ noncomputable def gs_phase (i : ℕ) : gs_Phase :=
   | _ => P.gs_ph5
 
 lemma gs_valid (i : ℕ) : (P.gs_phase i).Valid := by
-  match i with
-  | 0 => exact P.gs_valid₁
-  | 1 => exact P.gs_valid₂
-  | 2 => exact P.gs_valid₃
-  | 3 => exact P.gs_valid₄
-  | n + 4 => exact P.gs_valid₅
+  rcases i with _ | _ | _ | _ | _
+  exacts [P.gs_valid₁, P.gs_valid₂, P.gs_valid₃, P.gs_valid₄, P.gs_valid₅]
 
 variable (P) in
 /-- The derivative of the rotation path. -/
@@ -551,30 +561,23 @@ lemma gs_path_eq : P.path = gs_pw P P.gs_ph1.X P.gs_ph2.X P.gs_ph3.X P.gs_ph4.X 
 
 lemma gs_sel_X (i : ℕ) :
     gs_sel P.gs_ph1.X P.gs_ph2.X P.gs_ph3.X P.gs_ph4.X P.gs_ph5.X i = (P.gs_phase i).X := by
-  match i with
-  | 0 => rfl
-  | 1 => rfl
-  | 2 => rfl
-  | 3 => rfl
-  | n + 4 => rfl
+  rcases i with _ | _ | _ | _ | _ <;> rfl
 
 lemma gs_sel_X' (i : ℕ) :
     gs_sel P.gs_ph1.X' P.gs_ph2.X' P.gs_ph3.X' P.gs_ph4.X' P.gs_ph5.X' i = (P.gs_phase i).X' := by
-  match i with
-  | 0 => rfl
-  | 1 => rfl
-  | 2 => rfl
-  | 3 => rfl
-  | n + 4 => rfl
+  rcases i with _ | _ | _ | _ | _ <;> rfl
 
+/-- On its `i`-th closed phase interval, Gerver's path is the `i`-th phase path. -/
 lemma gs_path_eq_phase (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
     P.path t = (P.gs_phase i).X t := by
   rw [gs_path_eq, gs_pw_eq_sel (gs_ord hP) (gs_matchX hP) h, gs_sel_X]
 
+/-- On the `i`-th closed phase interval, `gs_pathD` is the derivative of the `i`-th phase. -/
 lemma gs_pathD_eq_phase (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
     P.gs_pathD t = (P.gs_phase i).X' t := by
   rw [gs_pathD, gs_pw_eq_sel (gs_ord hP) (gs_matchX' hP) h, gs_sel_X']
 
+/-- Gerver's rotation path is differentiable everywhere, with derivative `gs_pathD`. -/
 lemma gs_hasDerivAt_path (hP : P.IsSolution) (t : ℝ) : HasDerivAt P.path (P.gs_pathD t) t := by
   rw [gs_path_eq]
   refine gs_hasDerivAt_pw (gs_ord hP) (gs_matchX hP) (gs_matchX' hP) (fun i s => ?_) t
@@ -588,38 +591,6 @@ lemma gs_deriv_path_eq (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i
     deriv P.path t = (P.gs_phase i).α t • uvec t + (P.gs_phase i).β t • vvec t := by
   rw [gs_deriv_path hP, gs_pathD_eq_phase hP h]; rfl
 
-lemma gs_dot_smul_vvec_vvec (c t : ℝ) : dot (c • vvec t) (vvec t) = c := by
-  rw [dot_smul_left, dot_vvec_self, mul_one]
-
-lemma gs_dot_smul_uvec_uvec (c t : ℝ) : dot (c • uvec t) (uvec t) = c := by
-  rw [dot_smul_left, dot_uvec_self, mul_one]
-
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace gs_Phase
-
-variable {Φ : gs_Phase}
-
-lemma continuous_X' (hΦ : Φ.Valid) : Continuous Φ.X' := by
-  have h₁ : Continuous Φ.w₁ := continuous_iff_continuousAt.2 fun t => (hΦ.d₁ t).continuousAt
-  have h₂ : Continuous Φ.w₂ := continuous_iff_continuousAt.2 fun t => (hΦ.d₂ t).continuousAt
-  have h₁' : Continuous Φ.w₁' := continuous_iff_continuousAt.2 fun t => (hΦ.dd₁ t).continuousAt
-  have h₂' : Continuous Φ.w₂' := continuous_iff_continuousAt.2 fun t => (hΦ.dd₂ t).continuousAt
-  have hu : Continuous uvec := continuous_cos.prodMk continuous_sin
-  have hv : Continuous vvec := continuous_sin.neg.prodMk continuous_cos
-  exact ((h₁'.sub h₂).smul hu).add ((h₂'.add h₁).smul hv)
-
-end gs_Phase
-
-namespace GerverParams
-
-variable {P : GerverParams}
-
 lemma gs_continuous_pathD (hP : P.IsSolution) : Continuous P.gs_pathD := by
   refine gs_continuous_pw (gs_ord hP) (gs_matchX' hP) fun i => ?_
   rw [gs_sel_X']
@@ -628,17 +599,21 @@ lemma gs_continuous_pathD (hP : P.IsSolution) : Continuous P.gs_pathD := by
 lemma gs_continuous_path (hP : P.IsSolution) : Continuous P.path :=
   continuous_iff_continuousAt.2 fun t => (gs_hasDerivAt_path hP t).continuousAt
 
+/-- Gerver's rotation path is continuously differentiable. -/
 lemma gs_contDiff_path (hP : P.IsSolution) : ContDiff ℝ 1 P.path := by
-  rw [contDiff_one_iff_deriv]
-  refine ⟨fun t => (gs_hasDerivAt_path hP t).differentiableAt, ?_⟩
-  have : deriv P.path = P.gs_pathD := funext (gs_deriv_path hP)
-  rw [this]
-  exact gs_continuous_pathD hP
+  rw [contDiff_one_iff_deriv, funext (gs_deriv_path hP)]
+  exact ⟨fun t => (gs_hasDerivAt_path hP t).differentiableAt, gs_continuous_pathD hP⟩
 
 /-- `α(t) = ⟨𝐱'(t), u_t⟩`. -/
 noncomputable def gs_α (t : ℝ) : ℝ := dot (deriv P.path t) (uvec t)
 /-- `β(t) = ⟨𝐱'(t), v_t⟩`. -/
 noncomputable def gs_β (t : ℝ) : ℝ := dot (deriv P.path t) (vvec t)
+
+/-- `𝐱'(t) = α(t) u_t + β(t) v_t`. -/
+lemma gs_hasDerivAt_path' (hP : P.IsSolution) (t : ℝ) :
+    HasDerivAt P.path (P.gs_α t • uvec t + P.gs_β t • vvec t) t := by
+  rw [gs_α, gs_β, ← eq_dot_uvec_smul_add]
+  exact (gs_hasDerivAt_path hP t).differentiableAt.hasDerivAt
 
 lemma gs_α_eq (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
     P.gs_α t = (P.gs_phase i).α t := by
@@ -649,21 +624,17 @@ lemma gs_β_eq (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
   rw [gs_β, gs_deriv_path hP, gs_pathD_eq_phase hP h, gs_Phase.dot_X'_vvec]
 
 lemma gs_continuous_α (hP : P.IsSolution) : Continuous P.gs_α := by
-  have : P.gs_α = fun t => dot (P.gs_pathD t) (uvec t) := funext fun t => by
-    rw [gs_α, gs_deriv_path hP]
-  rw [this]
-  have := gs_continuous_pathD hP
-  simp only [dot, uvec]
-  fun_prop
+  change Continuous fun t => dot (deriv P.path t) (uvec t)
+  rw [funext (gs_deriv_path hP)]
+  exact continuous_dot_pair.comp ((gs_continuous_pathD hP).prodMk continuous_uvec)
 
 lemma gs_continuous_β (hP : P.IsSolution) : Continuous P.gs_β := by
-  have : P.gs_β = fun t => dot (P.gs_pathD t) (vvec t) := funext fun t => by
-    rw [gs_β, gs_deriv_path hP]
-  rw [this]
-  have := gs_continuous_pathD hP
-  simp only [dot, vvec]
-  fun_prop
+  change Continuous fun t => dot (deriv P.path t) (vvec t)
+  rw [funext (gs_deriv_path hP)]
+  exact continuous_dot_pair.comp ((gs_continuous_pathD hP).prodMk continuous_vvec)
 
+/-- On its `i`-th closed phase interval, each contact curve of Gerver's path is the
+corresponding phase curve (and `gs_contactB_eq`, `gs_contactC_eq`, `gs_contactD_eq`). -/
 lemma gs_contactA_eq (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_piece P i t) :
     contactA P.path t = (P.gs_phase i).A t := by
   rw [contactA, gs_deriv_path hP, gs_pathD_eq_phase hP h, gs_Phase.dot_X'_uvec,
@@ -696,19 +667,11 @@ lemma gs_contactC_eq' (t : ℝ) :
 lemma gs_contactD_eq' (t : ℝ) :
     contactD P.path t = P.path t - P.gs_β t • uvec t := rfl
 
-lemma gs_continuous_contactA (hP : P.IsSolution) : Continuous (contactA P.path) := by
-  have h1 := gs_continuous_path hP
-  have h2 := gs_continuous_α hP
-  have hu : Continuous uvec := continuous_cos.prodMk continuous_sin
-  have hv : Continuous vvec := continuous_sin.neg.prodMk continuous_cos
-  exact (h1.add (h2.smul hv)).add hu
+lemma gs_continuous_contactA (hP : P.IsSolution) : Continuous (contactA P.path) :=
+  ((gs_continuous_path hP).add ((gs_continuous_α hP).smul continuous_vvec)).add continuous_uvec
 
-lemma gs_continuous_contactC (hP : P.IsSolution) : Continuous (contactC P.path) := by
-  have h1 := gs_continuous_path hP
-  have h2 := gs_continuous_β hP
-  have hu : Continuous uvec := continuous_cos.prodMk continuous_sin
-  have hv : Continuous vvec := continuous_sin.neg.prodMk continuous_cos
-  exact (h1.sub (h2.smul hu)).add hv
+lemma gs_continuous_contactC (hP : P.IsSolution) : Continuous (contactC P.path) :=
+  ((gs_continuous_path hP).sub ((gs_continuous_β hP).smul continuous_uvec)).add continuous_vvec
 
 /-! ### Open and half-open phase intervals -/
 
@@ -730,6 +693,7 @@ def gs_rpiece : ℕ → ℝ → Prop
   | 3, t => π / 2 - P.θ ≤ t ∧ t < π / 2 - P.φ
   | _, t => π / 2 - P.φ ≤ t
 
+/-- A point of an open phase interval has a neighbourhood inside the closed interval. -/
 lemma gs_opiece_nhds {i : ℕ} {t : ℝ} (h : gs_opiece P i t) : ∀ᶠ s in 𝓝 t, gs_piece P i s := by
   match i, h with
   | 0, h => filter_upwards [Iio_mem_nhds h] with s hs using (show s ≤ P.φ from le_of_lt hs)
@@ -742,6 +706,8 @@ lemma gs_opiece_nhds {i : ℕ} {t : ℝ} (h : gs_opiece P i t) : ∀ᶠ s in �
   | n + 4, h => filter_upwards [Ioi_mem_nhds h] with s hs using
       (show π / 2 - P.φ ≤ s from le_of_lt hs)
 
+/-- A point of a half-open phase interval has a right neighbourhood inside the closed
+interval. -/
 lemma gs_rpiece_nhds {i : ℕ} {t : ℝ} (h : gs_rpiece P i t) :
     ∀ᶠ s in 𝓝[≥] t, gs_piece P i s := by
   match i, h with
@@ -772,6 +738,7 @@ noncomputable def gs_ridx (t : ℝ) : ℕ :=
   if t < P.φ then 0 else if t < P.θ then 1 else if t < π / 2 - P.θ then 2
   else if t < π / 2 - P.φ then 3 else 4
 
+/-- `t` lies in the half-open phase interval of index `gs_ridx t`. -/
 lemma gs_rpiece_ridx (t : ℝ) : gs_rpiece P (P.gs_ridx t) t := by
   unfold gs_ridx
   split_ifs with h1 h2 h3 h4
@@ -781,8 +748,26 @@ lemma gs_rpiece_ridx (t : ℝ) : gs_rpiece P (P.gs_ridx t) t := by
   · exact ⟨not_lt.1 h3, h4⟩
   · exact not_lt.1 h4
 
+/-- There are five half-open phase intervals. -/
+lemma gs_ridx_lt (t : ℝ) : P.gs_ridx t < 5 := by
+  unfold gs_ridx; split_ifs <;> norm_num
+
+/-- A function that agrees at every point with one of the five continuous functions
+`g 0, …, g 4` is bounded on every compact interval. -/
+lemma gs_exists_bound_of_sel {f : ℝ → ℝ} {g : ℕ → ℝ → ℝ} (hg : ∀ i, Continuous (g i))
+    (hf : ∀ t, ∃ i < 5, f t = g i t) (a b : ℝ) : ∃ M, ∀ t ∈ Icc a b, ‖f t‖ ≤ M := by
+  choose M hM using fun i => (isCompact_Icc (a := a) (b := b)).exists_bound_of_continuousOn
+    (hg i).continuousOn
+  refine ⟨∑ i ∈ Finset.range 5, |M i|, fun t ht => ?_⟩
+  obtain ⟨i, hi, e⟩ := hf t
+  rw [e]
+  exact (hM i t ht).trans ((le_abs_self _).trans
+    (Finset.single_le_sum (fun j _ => abs_nonneg (M j)) (Finset.mem_range.2 hi)))
+
 /-! ### Derivatives of the contact curves -/
 
+/-- On the open phase intervals, `𝐀' = ρ_A v_t`, `𝐁' = (ρ_A - 1) v_t`, `𝐂' = -ρ_C u_t` and
+`𝐃' = (1 - ρ_C) u_t`, with the `ρ` of the phase. -/
 lemma gs_hasDerivAt_contactA (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_opiece P i t) :
     HasDerivAt (contactA P.path) ((P.gs_phase i).ρA t • vvec t) t :=
   (gs_Phase.hasDerivAt_A (gs_valid i) t).congr_of_eventuallyEq
@@ -803,6 +788,8 @@ lemma gs_hasDerivAt_contactD (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_opi
   (gs_Phase.hasDerivAt_D (gs_valid i) t).congr_of_eventuallyEq
     ((gs_opiece_nhds h).mono fun _ hs => gs_contactD_eq hP hs)
 
+/-- The right derivatives `𝐀' = ρ_A v_t` and `𝐂' = -ρ_C u_t` on the half-open phase intervals.
+-/
 lemma gs_hasDerivWithinAt_contactA (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : gs_rpiece P i t) :
     HasDerivWithinAt (contactA P.path) ((P.gs_phase i).ρA t • vvec t) (Ici t) t :=
   (gs_Phase.hasDerivAt_A (gs_valid i) t).hasDerivWithinAt.congr_of_eventuallyEq
@@ -814,17 +801,6 @@ lemma gs_hasDerivWithinAt_contactC (hP : P.IsSolution) {i : ℕ} {t : ℝ} (h : 
   (gs_Phase.hasDerivAt_C (gs_valid i) t).hasDerivWithinAt.congr_of_eventuallyEq
     ((gs_rpiece_nhds h).mono fun _ hs => gs_contactC_eq hP hs)
     (gs_contactC_eq hP (gs_piece_of_rpiece h))
-
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace GerverParams
-
-variable {P : GerverParams}
 
 /-! ### Elementary inequalities from the enclosures -/
 
@@ -949,17 +925,7 @@ lemma gs_ineq_y₃ (hB : P.Bounds) (hP : P.IsSolution) {t : ℝ} (ht₁ : P.θ �
   have h2 : cos t * (P.c₂ + t) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hcos (by linarith)
   linarith
 
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace GerverParams
-
-variable {P : GerverParams}
-
+/-- Every real number lies in one of the five phase intervals. -/
 lemma gs_cases (t : ℝ) : t ≤ P.φ ∨ (P.φ < t ∧ t ≤ P.θ) ∨ (P.θ < t ∧ t ≤ π / 2 - P.θ) ∨
     (π / 2 - P.θ < t ∧ t ≤ π / 2 - P.φ) ∨ π / 2 - P.φ < t := by
   rcases le_or_gt t P.φ with h1 | h1
@@ -972,6 +938,7 @@ lemma gs_cases (t : ℝ) : t ≤ P.φ ∨ (P.φ < t ∧ t ≤ P.θ) ∨ (P.θ < 
   · exact Or.inr (Or.inr (Or.inr (Or.inl ⟨h3, h4⟩)))
   · exact Or.inr (Or.inr (Or.inr (Or.inr h4)))
 
+/-- The explicit formulas for `α` and `β` on each phase. -/
 lemma gs_α₁_eq (hP : P.IsSolution) (t : ℝ) :
     (P.gs_phase 0).α t = (1 - cos t) / 2 - 2 * P.a₁ * sin t := by
   simp only [gs_phase, gs_Phase.α, gs_ph1, gs_a₂ hP]; ring
@@ -1014,6 +981,26 @@ lemma gs_β₅_eq (hP : P.IsSolution) (s : ℝ) :
   simp only [gs_phase, gs_Phase.β, gs_ph5, gs_e₁ hP, gs_e₂ hP, gs_a₂ hP, sin_pi_div_two_sub,
     cos_pi_div_two_sub]; ring
 
+/-- `gs_α₄_eq` in the variable `t`. -/
+lemma gs_α₄_eq' (hP : P.IsSolution) (t : ℝ) :
+    (P.gs_phase 3).α t = -(1 / 2 - (π / 2 - t) ^ 2 / 4 + P.b₁ * (π / 2 - t) + P.b₂) := by
+  simpa only [sub_sub_cancel] using gs_α₄_eq hP (π / 2 - t)
+
+/-- `gs_β₄_eq` in the variable `t`. -/
+lemma gs_β₄_eq' (hP : P.IsSolution) (t : ℝ) :
+    (P.gs_phase 3).β t = -(2 * P.b₁ + 1 - (π / 2 - t)) := by
+  simpa only [sub_sub_cancel] using gs_β₄_eq hP (π / 2 - t)
+
+/-- `gs_α₅_eq` in the variable `t`. -/
+lemma gs_α₅_eq' (hP : P.IsSolution) (t : ℝ) :
+    (P.gs_phase 4).α t = -(2 * P.a₁ * cos (π / 2 - t) - sin (π / 2 - t) / 2 - 1) := by
+  simpa only [sub_sub_cancel] using gs_α₅_eq hP (π / 2 - t)
+
+/-- `gs_β₅_eq` in the variable `t`. -/
+lemma gs_β₅_eq' (hP : P.IsSolution) (t : ℝ) :
+    (P.gs_phase 4).β t = -((1 - cos (π / 2 - t)) / 2 - 2 * P.a₁ * sin (π / 2 - t)) := by
+  simpa only [sub_sub_cancel] using gs_β₅_eq hP (π / 2 - t)
+
 lemma gs_piece₀ {t : ℝ} (h : t ≤ P.φ) : gs_piece P 0 t := h
 lemma gs_piece₁ {t : ℝ} (h₁ : P.φ ≤ t) (h₂ : t ≤ P.θ) : gs_piece P 1 t := ⟨h₁, h₂⟩
 lemma gs_piece₂ {t : ℝ} (h₁ : P.θ ≤ t) (h₂ : t ≤ π / 2 - P.θ) : gs_piece P 2 t := ⟨h₁, h₂⟩
@@ -1029,12 +1016,10 @@ lemma gs_α_neg (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ} (h0 : 0 < t) (h1 :
   · rw [gs_α_eq hP (gs_piece₀ h), gs_α₁_eq hP]; exact gs_ineq_α₁ hB h0 h
   · rw [gs_α_eq hP (gs_piece₁ ha.le hb), gs_α₂_eq]; exact gs_ineq_α₂ hB h0.le
   · rw [gs_α_eq hP (gs_piece₂ ha.le hb), gs_α₃_eq hP]; exact (gs_ineq₃ hB ha.le hb).1
-  · rw [gs_α_eq hP (gs_piece₃ ha.le hb), show t = π / 2 - (π / 2 - t) by ring, gs_α₄_eq hP]
-    have := gs_ineq_β₂ hB (s := π / 2 - t) (by linarith [hO.1]) (by linarith)
-    linarith
-  · rw [gs_α_eq hP (gs_piece₄ h.le), show t = π / 2 - (π / 2 - t) by ring, gs_α₅_eq hP]
-    have := gs_ineq_β₁ hB (s := π / 2 - t) (by linarith) (by linarith)
-    linarith
+  · rw [gs_α_eq hP (gs_piece₃ ha.le hb), gs_α₄_eq' hP]
+    linarith [gs_ineq_β₂ hB (s := π / 2 - t) (by linarith [hO.1]) (by linarith)]
+  · rw [gs_α_eq hP (gs_piece₄ h.le), gs_α₅_eq' hP]
+    linarith [gs_ineq_β₁ hB (s := π / 2 - t) (by linarith) (by linarith)]
 
 /-- **Injectivity signs.** `β > 0` on `[0, π/2)`. -/
 lemma gs_β_pos (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ} (h0 : 0 ≤ t) (h1 : t < π / 2) :
@@ -1044,44 +1029,36 @@ lemma gs_β_pos (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ} (h0 : 0 ≤ t) (h1
   · rw [gs_β_eq hP (gs_piece₀ h), gs_β₁_eq hP]; exact gs_ineq_β₁ hB h0 h
   · rw [gs_β_eq hP (gs_piece₁ ha.le hb), gs_β₂_eq]; exact gs_ineq_β₂ hB h0 hb
   · rw [gs_β_eq hP (gs_piece₂ ha.le hb), gs_β₃_eq]; exact (gs_ineq₃ hB ha.le hb).2
-  · rw [gs_β_eq hP (gs_piece₃ ha.le hb), show t = π / 2 - (π / 2 - t) by ring, gs_β₄_eq hP]
-    have := gs_ineq_α₂ hB (s := π / 2 - t) (by linarith [hO.1])
-    linarith
-  · rw [gs_β_eq hP (gs_piece₄ h.le), show t = π / 2 - (π / 2 - t) by ring, gs_β₅_eq hP]
-    have := gs_ineq_α₁ hB (s := π / 2 - t) (by linarith) (by linarith)
-    linarith
+  · rw [gs_β_eq hP (gs_piece₃ ha.le hb), gs_β₄_eq' hP]
+    linarith [gs_ineq_α₂ hB (s := π / 2 - t) (by linarith [hO.1])]
+  · rw [gs_β_eq hP (gs_piece₄ h.le), gs_β₅_eq' hP]
+    linarith [gs_ineq_α₁ hB (s := π / 2 - t) (by linarith) (by linarith)]
 
+/-- `α(0) = 0`. -/
 lemma gs_α_zero (hP : P.IsSolution) : P.gs_α 0 = 0 := by
   rw [gs_α_eq hP (gs_piece₀ (gs_ord hP).1.le), gs_α₁_eq hP]; simp
 
+/-- `β(π/2) = 0`. -/
 lemma gs_β_pi_div_two (hP : P.IsSolution) : P.gs_β (π / 2) = 0 := by
   have hO := gs_ord hP
   rw [gs_β_eq hP (gs_piece₄ (by linarith [hO.1])), show π / 2 = π / 2 - 0 by ring,
     gs_β₅_eq hP]; simp
 
+/-- `α ≤ 0` on `[0, π/2]`. -/
 lemma gs_α_nonpos (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ} (h0 : 0 ≤ t) (h1 : t ≤ π / 2) :
     P.gs_α t ≤ 0 := by
   rcases h0.lt_or_eq with h | rfl
   · exact (gs_α_neg hP hB h h1).le
   · rw [gs_α_zero hP]
 
+/-- `β ≥ 0` on `[0, π/2]`. -/
 lemma gs_β_nonneg (hP : P.IsSolution) (hB : P.Bounds) {t : ℝ} (h0 : 0 ≤ t) (h1 : t ≤ π / 2) :
     0 ≤ P.gs_β t := by
   rcases h1.lt_or_eq with h | rfl
   · exact (gs_β_pos hP hB h0 h).le
   · rw [gs_β_pi_div_two hP]
 
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace GerverParams
-
-variable {P : GerverParams}
-
+/-- The explicit formulas for `ρ_A` and `ρ_C` on each phase. -/
 lemma gs_ρA₁_eq (t : ℝ) : (P.gs_phase 0).ρA t = 0 := by
   simp only [gs_phase, gs_Phase.ρA, gs_ph1]; ring
 lemma gs_ρC₁_eq (t : ℝ) : (P.gs_phase 0).ρC t = 1 / 2 := by
@@ -1099,10 +1076,29 @@ lemma gs_ρA₄_eq (hP : P.IsSolution) (s : ℝ) : (P.gs_phase 3).ρA (π / 2 - 
 lemma gs_ρC₄_eq (hP : P.IsSolution) (s : ℝ) :
     (P.gs_phase 3).ρC (π / 2 - s) = 1 / 2 - s ^ 2 / 4 + P.b₁ * s + P.b₂ := by
   simp only [gs_phase, gs_Phase.ρC, gs_ph4, gs_d₁ hP, gs_d₂ hP]; ring
+/-- `gs_ρA₄_eq` in the variable `t`. -/
+lemma gs_ρA₄_eq' (hP : P.IsSolution) (t : ℝ) : (P.gs_phase 3).ρA t = (π / 2 - t) / 2 - P.b₁ := by
+  simpa only [sub_sub_cancel] using gs_ρA₄_eq hP (π / 2 - t)
+/-- `gs_ρC₄_eq` in the variable `t`. -/
+lemma gs_ρC₄_eq' (hP : P.IsSolution) (t : ℝ) :
+    (P.gs_phase 3).ρC t = 1 / 2 - (π / 2 - t) ^ 2 / 4 + P.b₁ * (π / 2 - t) + P.b₂ := by
+  simpa only [sub_sub_cancel] using gs_ρC₄_eq hP (π / 2 - t)
 lemma gs_ρA₅_eq (t : ℝ) : (P.gs_phase 4).ρA t = 1 / 2 := by
   simp only [gs_phase, gs_Phase.ρA, gs_ph5]; ring
 lemma gs_ρC₅_eq (t : ℝ) : (P.gs_phase 4).ρC t = 0 := by
   simp only [gs_phase, gs_Phase.ρC, gs_ph5]; ring
+
+/-- The function `ρ_A` of each phase is continuous. -/
+lemma gs_continuous_ρA (i : ℕ) : Continuous (P.gs_phase i).ρA := by
+  unfold gs_Phase.ρA
+  rcases i with _ | _ | _ | _ | i <;>
+    simp only [gs_phase, gs_ph1, gs_ph2, gs_ph3, gs_ph4, gs_ph5] <;> fun_prop
+
+/-- The function `ρ_C` of each phase is continuous. -/
+lemma gs_continuous_ρC (i : ℕ) : Continuous (P.gs_phase i).ρC := by
+  unfold gs_Phase.ρC
+  rcases i with _ | _ | _ | _ | i <;>
+    simp only [gs_phase, gs_ph1, gs_ph2, gs_ph3, gs_ph4, gs_ph5] <;> fun_prop
 
 /-- `ρ_A ≥ 0` and `ρ_C ≥ 0` on the half-open phase intervals inside `[0, π/2]`. -/
 lemma gs_ρ_nonneg (hP : P.IsSolution) (hB : P.Bounds) {i : ℕ} {t : ℝ} (h : gs_rpiece P i t)
@@ -1118,41 +1114,12 @@ lemma gs_ρ_nonneg (hP : P.IsSolution) (hB : P.Bounds) {i : ℕ} {t : ℝ} (h : 
     rw [gs_ρA₃_eq, gs_ρC₃_eq hP]
     exact ⟨(gs_ineq₃ hB h.1 h2).2.le, by linarith [(gs_ineq₃ hB h.1 h2).1]⟩
   | 3, h =>
-    rw [show t = π / 2 - (π / 2 - t) by ring, gs_ρA₄_eq hP, gs_ρC₄_eq hP]
+    rw [gs_ρA₄_eq' hP, gs_ρC₄_eq' hP]
     have h2 : π / 2 - t ≤ P.θ := by linarith [h.1]
     have h3 : 0 ≤ π / 2 - t := by linarith [h.2, hO.1]
     exact ⟨(gs_ineq_ρC₂ hB h3 h2).1.le, (gs_ineq_β₂ hB h3 h2).le⟩
   | n + 4, _ =>
     rw [show P.gs_phase (n + 4) = P.gs_phase 4 from rfl, gs_ρA₅_eq, gs_ρC₅_eq]; norm_num
-
-end GerverParams
-
-end MovingSofaOptimality
-
-
-namespace MovingSofaOptimality
-
-namespace gs_Phase
-
-variable {Φ : gs_Phase}
-
-lemma contactA_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactA Φ.X t = Φ.A t := by
-  rw [GerverParams.contactA, (hasDerivAt_X hΦ t).deriv, dot_X'_uvec, A_eq]
-
-lemma contactB_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactB Φ.X t = Φ.B t := by
-  rw [GerverParams.contactB, (hasDerivAt_X hΦ t).deriv, dot_X'_uvec, B_eq]
-
-lemma contactC_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactC Φ.X t = Φ.C t := by
-  rw [GerverParams.contactC, (hasDerivAt_X hΦ t).deriv, dot_X'_vvec, C_eq]
-
-lemma contactD_X (hΦ : Φ.Valid) (t : ℝ) : GerverParams.contactD Φ.X t = Φ.D t := by
-  rw [GerverParams.contactD, (hasDerivAt_X hΦ t).deriv, dot_X'_vvec, D_eq]
-
-end gs_Phase
-
-namespace GerverParams
-
-variable {P : GerverParams}
 
 /-- `𝐱(0) = 0` (Romik's (34)). -/
 lemma gs_path_zero (hP : P.IsSolution) : P.path 0 = 0 := by
@@ -1208,6 +1175,14 @@ lemma gs_contactB_pi_div_two_snd (hP : P.IsSolution) : (contactB P.path (π / 2)
 lemma gs_contactD_zero_snd (hP : P.IsSolution) : (contactD P.path 0).2 = 0 := by
   rw [gs_contactD_eq', Prod.snd_sub, gs_path_zero hP]
   simp [uvec]
+
+/-- `𝐂(0) = (1 - 2 a₁, 1)`. -/
+lemma gs_C_zero (hP : P.IsSolution) : contactC P.path 0 = (1 - 2 * P.a₁, 1) := by
+  rw [gs_contactC_eq hP (gs_piece₀ (gs_ord hP).φ_pos.le)]
+  simp only [gs_phase, gs_ph1, gs_Phase.C, rot, cos_zero, sin_zero, gs_a₂ hP]
+  ext
+  · simp only [Prod.fst_add, gs_κ₁₁ hP]; ring
+  · simp only [Prod.snd_add, gs_κ₁₂ hP]; ring
 
 end GerverParams
 

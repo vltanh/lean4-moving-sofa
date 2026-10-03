@@ -100,10 +100,10 @@ each, and the uniqueness of the constants from the library's analytic proof.
 The twelve theorems rest on the three libraries:
 
 - [`MovingSofaOptimality/`](../MovingSofaOptimality), Baek's paper: every numbered result of the paper, under its number (for
-  example [`MovingSofaOptimality.theorem2_3_2`](../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L408) for Theorem 2.3.2), with the main theorem [`MovingSofaOptimality.theorem1_1_1`](../MovingSofaOptimality/Main.lean#L318), the results it
-  cites (Schneider's area formula [`MovingSofaOptimality.area_eq_half_integral_supp`](../MovingSofaOptimality/External/AreaFormula.lean#L592), Romik's system [`MovingSofaOptimality.GerverParams.romik_exists`](../MovingSofaOptimality/External/Romik.lean#L387) and
-  [`MovingSofaOptimality.GerverParams.romik_unique`](../MovingSofaOptimality/External/Romik.lean#L393)), and the structure of Gerver's sofa (Theorem 8.4.1). [`scripts/Audit.lean`](../scripts/Audit.lean) lists them all.
-- [`MovingSofaUniqueness/`](../MovingSofaUniqueness), the uniqueness: [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L233), and one module per proposition of the
+  example [`MovingSofaOptimality.theorem2_3_2`](../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L395) for Theorem 2.3.2), with the main theorem [`MovingSofaOptimality.theorem1_1_1`](../MovingSofaOptimality/Main.lean#L301), the results it
+  cites (Schneider's area formula [`MovingSofaOptimality.area_eq_half_integral_supp`](../MovingSofaOptimality/External/AreaFormula.lean#L558), Romik's system [`MovingSofaOptimality.GerverParams.romik_exists`](../MovingSofaOptimality/External/Romik.lean#L354) and
+  [`MovingSofaOptimality.GerverParams.romik_unique`](../MovingSofaOptimality/External/Romik.lean#L360)), and the structure of Gerver's sofa (Theorem 8.4.1). [`scripts/Audit.lean`](../scripts/Audit.lean) lists them all.
+- [`MovingSofaUniqueness/`](../MovingSofaUniqueness), the uniqueness: [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L212), and one module per proposition of the
   informal proof ([Chapters 11 and 12](proof/11-selection.md)).
-- [`MovingSofaBridge/`](../MovingSofaBridge), the bridge: [`MovingSofaBridge.isMovingSofa_iff`](../MovingSofaBridge/Motion.lean#L590), [`MovingSofaBridge.sofaConstant_eq`](../MovingSofaBridge/Motion.lean#L627), [`MovingSofaBridge.gerversSofa_eq`](../MovingSofaBridge/GerverSofa.lean#L537) and
-  [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1283).
+- [`MovingSofaBridge/`](../MovingSofaBridge), the bridge: [`MovingSofaBridge.isMovingSofa_iff`](../MovingSofaBridge/Motion.lean#L562), [`MovingSofaBridge.sofaConstant_eq`](../MovingSofaBridge/Motion.lean#L600), [`MovingSofaBridge.gerversSofa_eq`](../MovingSofaBridge/GerverSofa.lean#L507) and
+  [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1143).

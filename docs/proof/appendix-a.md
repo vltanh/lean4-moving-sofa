@@ -5,25 +5,25 @@
 This appendix proves that Gerver's system
 ([Definition 13.3](13-bridge.md#definition-133-gervers-system-and-gervers-four-constants)) has at
 most one solution on its whole domain $0 \le \varphi \le \theta \le \pi/4$, $A, B \ge 0$ (Theorem
-A.1). formal-conjectures defines Gerver's four constants as the unique solution, so its Gerver's
-sofa rests on this theorem, together with the existence of a solution
+A.1). formal-conjectures defines Gerver's four constants as this solution, so its Gerver's sofa rests
+on this theorem and on the existence of a solution
 ([Theorem 13.13](13-bridge.md#theorem-1313-gervers-system-has-exactly-one-solution)). The proof uses
 only elementary bounds on the sine, the cosine and $\pi$, and no numerical certificate. Every
 algebraic identity below was checked symbolically, and every constant recomputed.
 
-The proof eliminates $A$ and $B$, which are explicit functions $\hat A$, $\hat B$ of the angles, and
-studies two functions of the angles on the triangle
-$\Delta = \lbrace 0 \le \varphi \le \theta \le \pi/4 \rbrace$: $F$, the third equation with
-$A = \hat A$ and $B = \hat B$, and $G$, the second. A solution is a common zero of $F$ and $G$. A
-chain of estimates confines every solution to the thin strip $\varphi < 1/20$ (Figure A.1). On that
-strip $F$ decreases strictly in $\varphi$ and increases in $\theta$, while $H = G + \tfrac{9}{10} F$
-decreases in $\varphi$ and strictly in $\theta$; two functions with these patterns have at most one
-common zero (Figures A.2 and A.3).
+The idea is to reduce the system to two equations in the angles and to show that their zero sets
+cross only once. The equations make $A$ and $B$ explicit functions $\hat A$, $\hat B$ of the angles.
+Substituting them into the third and the second equation gives two functions $F$ and $G$ on the
+triangle $\Delta = \lbrace 0 \le \varphi \le \theta \le \pi/4 \rbrace$, and a solution is a
+common zero of $F$ and $G$. A chain of estimates confines every solution to the thin strip
+$\varphi < 1/20$ (Figure A.1). On that strip $F$ decreases strictly in $\varphi$ and increases in
+$\theta$, while $H = G + \tfrac{9}{10} F$ decreases in $\varphi$ and strictly in $\theta$. Two
+functions with these patterns have at most one common zero (Figures A.2 and A.3).
 
 Throughout, $\varphi$ and $\theta$ are variables, $E_1, \dots, E_4$ are the left sides of Gerver's
-equations (Definition 13.3), and $g = \theta - \varphi$. The letters $F$, $G$, $H$ and $C$ denote
-functions of the angles in this appendix; they are not Gerver's sofa, the horizontal strip or a
-contact point.
+equations (Definition 13.3), and $g = \theta - \varphi$. In this appendix the letters $C$, $D$, $F$,
+$G$ and $H$ denote functions of the angles, not a contact point, a solution, Gerver's sofa or a
+strip.
 
 ### Theorem A.1 (Gerver's constants are unique)
 
@@ -31,8 +31,8 @@ If $(A, B, \varphi, \theta)$ and $(A', B', \varphi', \theta')$ both solve Gerver
 $A = A'$, $B = B'$, $\varphi = \varphi'$ and $\theta = \theta'$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.spec_unique`](../../MovingSofaBridge/GerverConstants.lean#L1283),
-[`MovingSofaBridge.GerverConstants.angles_unique`](../../MovingSofaBridge/GerverConstants.lean#L1269).*
+[`MovingSofaBridge.GerverConstants.spec_unique`](../../MovingSofaBridge/GerverConstants.lean#L1143),
+[`MovingSofaBridge.GerverConstants.angles_unique`](../../MovingSofaBridge/GerverConstants.lean#L1130).*
 
 *Outline of the proof.* The steps, with the key estimate of each:
 
@@ -43,7 +43,7 @@ $A = A'$, $B = B'$, $\varphi = \varphi'$ and $\theta = \theta'$.
 | A.3 | Every solution has $\varphi < 1/2$ | $3s^2 - \tfrac7{10} s - \tfrac3{10} > 0$ for $s \ge \tfrac{23}{48}$ |
 | A.4 | $Q$ decreases strictly in $\varphi$ for $\varphi \le 1/2$ | an upper bound of $\partial_\varphi Q$ that decreases in $\theta$ and is nonpositive on the diagonal |
 | A.5 | Every solution has $\varphi < 1/20$ | $Q(\tfrac1{20}, \tfrac\pi4) \le -0.0142$ |
-| A.6 | The residuals $F$, $G$, $H$ and their derivatives | $\partial_\theta F$, $\partial_\theta G$ share the factor $C = 1 - \hat A - g > 0$ |
+| A.6 | The residuals $F$, $G$, $H$ and their derivatives | $\partial_\theta F$, $\partial_\theta G$ share the factor $C = 1 - \hat A - g$ |
 | A.7 | Bounds on the strip $\varphi \le 1/20$ | $0 \le \hat A \le \tfrac4{25}$, $\tfrac7{10} \le \hat B \le 2$, $1.99 \le 3\cos\varphi - \cos\theta \le 2.3$ |
 | A.8 | The signs of the partial derivatives | $\partial_\varphi F \le -\tfrac23$, $\partial_\varphi G \le \tfrac35 = \tfrac9{10} \cdot \tfrac23$ |
 | A.9 | Uniqueness | the monotonicity of $F$ and $H$ |
@@ -76,13 +76,13 @@ let $\hat A = N / D$ and $\hat B = \hat A k + o$, and let
 Q(\varphi, \theta) = N \bigl(\cos\varphi - k \sin\varphi\bigr) - D \bigl(\sin\varphi + \tfrac12 - \tfrac12 \cos\varphi + o \sin\varphi\bigr).
 ```
 
-*Lean: [`MovingSofaBridge.GerverConstants.den`](../../MovingSofaBridge/GerverConstants.lean#L77),
-[`MovingSofaBridge.GerverConstants.num`](../../MovingSofaBridge/GerverConstants.lean#L79),
-[`MovingSofaBridge.GerverConstants.slope`](../../MovingSofaBridge/GerverConstants.lean#L82),
-[`MovingSofaBridge.GerverConstants.offset`](../../MovingSofaBridge/GerverConstants.lean#L84),
-[`MovingSofaBridge.GerverConstants.reconstructedA`](../../MovingSofaBridge/GerverConstants.lean#L96),
-[`MovingSofaBridge.GerverConstants.reconstructedB`](../../MovingSofaBridge/GerverConstants.lean#L98),
-[`MovingSofaBridge.GerverConstants.reducedQ`](../../MovingSofaBridge/GerverConstants.lean#L87).*
+*Lean: [`MovingSofaBridge.GerverConstants.den`](../../MovingSofaBridge/GerverConstants.lean#L154),
+[`MovingSofaBridge.GerverConstants.num`](../../MovingSofaBridge/GerverConstants.lean#L157),
+[`MovingSofaBridge.GerverConstants.slope`](../../MovingSofaBridge/GerverConstants.lean#L161),
+[`MovingSofaBridge.GerverConstants.offset`](../../MovingSofaBridge/GerverConstants.lean#L164),
+[`MovingSofaBridge.GerverConstants.reconstructedA`](../../MovingSofaBridge/GerverConstants.lean#L173),
+[`MovingSofaBridge.GerverConstants.reconstructedB`](../../MovingSofaBridge/GerverConstants.lean#L176),
+[`MovingSofaBridge.GerverConstants.reducedQ`](../../MovingSofaBridge/GerverConstants.lean#L168).*
 
 ### Lemma A.3 (elimination)
 
@@ -96,14 +96,16 @@ So every solution has $A = \hat A(\varphi, \theta)$, $B = \hat B(\varphi, \theta
 $Q(\varphi, \theta) = 0$, and two solutions with the same angles are equal.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.den_pos`](../../MovingSofaBridge/GerverConstants.lean#L101),
-[`MovingSofaBridge.GerverConstants.eliminate_B`](../../MovingSofaBridge/GerverConstants.lean#L111),
-[`MovingSofaBridge.GerverConstants.eliminate_eq4`](../../MovingSofaBridge/GerverConstants.lean#L117),
-[`MovingSofaBridge.GerverConstants.Spec.coefficients`](../../MovingSofaBridge/GerverConstants.lean#L144).*
+[`MovingSofaBridge.GerverConstants.den_pos`](../../MovingSofaBridge/GerverConstants.lean#L179),
+[`MovingSofaBridge.GerverConstants.eliminate_B`](../../MovingSofaBridge/GerverConstants.lean#L185),
+[`MovingSofaBridge.GerverConstants.eliminate_eq4`](../../MovingSofaBridge/GerverConstants.lean#L191),
+[`MovingSofaBridge.GerverConstants.Spec.coefficients`](../../MovingSofaBridge/GerverConstants.lean#L210),
+[`MovingSofaBridge.GerverConstants.reducedQ_identity`](../../MovingSofaBridge/GerverConstants.lean#L197),
+[`MovingSofaBridge.GerverConstants.Spec.reduced_zero`](../../MovingSofaBridge/GerverConstants.lean#L204).*
 
 *Proof.* On $\Delta$, $\cos\varphi > 0$ and $\cos\theta \le \cos\varphi$, so $D \ge 2\cos\varphi$.
 The three identities are polynomial identities in $A$, $B$, $\varphi$, $\theta$ and the sines and
-cosines. At a solution, $E_1 = E_3 = 0$ gives $A D = N$, so $A = \hat A$; then $E_4 = 0$ gives
+cosines. At a solution, $E_1 = E_3 = 0$ gives $A D = N$, so $A = \hat A$. Then $E_4 = 0$ gives
 $B = \hat A k + o = \hat B$, and the third identity gives $Q = 0$. $\square$
 
 The documentation of the Lean module compares these identities with those of RuifengCao/sofa-formal
@@ -117,18 +119,20 @@ The documentation of the Lean module compares these identities with those of Rui
 Every solution has $0 < \varphi < \theta$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.Spec.phi_pos`](../../MovingSofaBridge/GerverConstants.lean#L170),
-[`MovingSofaBridge.GerverConstants.Spec.phi_lt_theta`](../../MovingSofaBridge/GerverConstants.lean#L210).*
+[`MovingSofaBridge.GerverConstants.Spec.phi_pos`](../../MovingSofaBridge/GerverConstants.lean#L242),
+[`MovingSofaBridge.GerverConstants.baseNumerator`](../../MovingSofaBridge/GerverConstants.lean#L234),
+[`MovingSofaBridge.GerverConstants.Spec.phi_lt_theta`](../../MovingSofaBridge/GerverConstants.lean#L267).*
 
-*Proof.* *The edge $\varphi = 0$.* Then $E_3 = A$, so $A = 0$. If also $\theta = 0$, then
-$E_2 = 4 - 2B$ gives $B = 2$, and $E_4 = \pi/2 - 2$ would force $\pi = 4$. If $\theta > 0$, then
-$E_1 = f(\theta)$ with $f(t) = (t - 1)\cos t - \sin t + 1$. Now $f(0) = 0$ and
-$f'(t) = (1 - t)\sin t > 0$ on $(0, \theta)$, since $\theta \le \pi/4 < 1$; so $f(\theta) > 0$,
+*Proof.* *The edge $\varphi = 0$.* Then $E_3 = A$, so $A = 0$. If also $\theta = 0$, then $E_2 = 4 - 2B$
+gives $B = 2$, and $E_4 = \pi/2 - 2$ would force $\pi = 4$. If $\theta > 0$, then
+$E_1 = b(\theta)$ with $b(t) = (t - 1)\cos t - \sin t + 1$. Now $b(0) = 0$ and
+$b'(t) = (1 - t)\sin t > 0$ on $(0, \theta)$, since $\theta \le \pi/4 < 1$. So $b(\theta) > 0$,
 against $E_1 = 0$.
 
-*The edge $\varphi = \theta$.* Then $E_1 = -2B\sin\varphi$ with $\sin\varphi > 0$, so $B = 0$;
-$E_4 = A + \pi/2 - 2\varphi = 0$ gives $A = 2\varphi - \pi/2 \le 0$, so $A = 0$; and then
-$E_3 = -\sin\varphi - \tfrac12(1 - \cos\varphi) < 0$. $\square$
+*The edge $\varphi = \theta$.* Now $\varphi > 0$ by the first case, so $\sin\varphi > 0$, and
+$E_1 = -2B\sin\varphi$ gives $B = 0$. Then $E_4 = A + \pi/2 - 2\varphi = 0$ gives
+$A = 2\varphi - \pi/2 \le 0$, so $A = 0$, and $E_3 = -\sin\varphi - \tfrac12(1 - \cos\varphi) < 0$.
+$\square$
 
 ## A.3 A first bound on φ
 
@@ -141,12 +145,14 @@ Every solution has $A \le B$ and
 ```
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.Spec.A_le_B`](../../MovingSofaBridge/GerverConstants.lean#L272),
-[`MovingSofaBridge.GerverConstants.Spec.angle_inequality`](../../MovingSofaBridge/GerverConstants.lean#L282).*
+[`MovingSofaBridge.GerverConstants.Spec.A_le_B`](../../MovingSofaBridge/GerverConstants.lean#L300),
+[`MovingSofaBridge.GerverConstants.Spec.angle_inequality`](../../MovingSofaBridge/GerverConstants.lean#L307).*
 
-*Proof.* On $\Delta$: $0 \le \sin\varphi \le \cos\varphi$, $\cos\theta \le \cos\varphi$,
-$\cos\theta + \sin\theta \ge 1$ (its square is $1 + 2\sin\theta\cos\theta$), and $o \ge 0$, since
-$\pi/2 - \varphi - \theta \ge 0$. By Lemma A.3, $B = A k + o \ge A$, as $k \ge 1$ and $A \ge 0$.
+*Proof.* The idea is to bound $A$ from below with $E_3 = 0$ and from above with $A D = N$. On
+$\Delta$, $0 \le \sin\varphi \le \cos\varphi$, $\cos\theta \le \cos\varphi$ and
+$\cos\theta + \sin\theta \ge 1$ (its square is $1 + 2\sin\theta\cos\theta$). Also $o \ge 0$,
+since $\pi/2 - \varphi - \theta \ge 0$. By Lemma A.3, $B = A k + o \ge A$, as $k \ge 1$ and
+$A \ge 0$.
 
 From $E_3 = 0$ and $B \ge A$,
 $A\cos\varphi = \sin\varphi + \tfrac12(1 - \cos\varphi) + B\sin\varphi \ge \sin\varphi + A\sin\varphi$,
@@ -163,8 +169,8 @@ $\sin\theta + \cos\theta \ge 1$,
 2A\cos\varphi \le A(3\cos\varphi - \cos\theta) = N \le \theta - \varphi + 3\sin\varphi. \tag{A.2}
 ```
 
-Multiply (A.1) by $2\cos\varphi \ge 0$ and use (A.2) times $\cos\varphi - \sin\varphi \ge 0$:
-$2\sin\varphi\cos\varphi \le (\theta - \varphi + 3\sin\varphi)(\cos\varphi - \sin\varphi)$, which
+Multiply (A.1) by $2\cos\varphi \ge 0$, and use (A.2) multiplied by $\cos\varphi - \sin\varphi \ge 0$:
+$2\sin\varphi\cos\varphi \le (\theta - \varphi + 3\sin\varphi)(\cos\varphi - \sin\varphi)$. This
 rearranges to the claim. $\square$
 
 ### Lemma A.6 (φ < 1/2)
@@ -172,9 +178,10 @@ rearranges to the claim. $\square$
 Every solution has $\varphi < 1/2$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.Spec.phi_lt_half`](../../MovingSofaBridge/GerverConstants.lean#L305).*
+[`MovingSofaBridge.GerverConstants.Spec.phi_lt_half`](../../MovingSofaBridge/GerverConstants.lean#L331).*
 
-*Proof.* Suppose $\varphi \ge 1/2$, and let $s = \sin\varphi$. Then
+*Proof.* For $\varphi \ge 1/2$ the left side of Lemma A.5 is too large. Suppose $\varphi \ge 1/2$,
+and let $s = \sin\varphi$. Then
 $\theta - \varphi \le \pi/4 - 1/2 < 3/10$, as $\pi < 3.15$, and
 $s \ge \sin\tfrac12 \ge \tfrac12 - \tfrac1{48} = \tfrac{23}{48}$ by $\sin x \ge x - x^3/6$. Lemma
 A.5, with $s\cos\varphi \le s$ and $0 \le \cos\varphi - \sin\varphi \le 1 - s$, gives
@@ -193,13 +200,15 @@ $\tfrac{41}{768} > 0$ at $s = \tfrac{23}{48}$. $\square$
 For $0 \le \varphi \le 1/2$ and $\varphi < \theta \le \pi/4$, $\partial Q / \partial\varphi < 0$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.reducedQ_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L459),
+[`MovingSofaBridge.GerverConstants.reducedQ_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L457),
 [`MovingSofaBridge.GerverConstants.qPhi_le_min`](../../MovingSofaBridge/GerverConstants.lean#L524),
 [`MovingSofaBridge.GerverConstants.qPhiMinTheta_neg`](../../MovingSofaBridge/GerverConstants.lean#L497),
-[`MovingSofaBridge.GerverConstants.qPhiMin_diagonal_nonpos`](../../MovingSofaBridge/GerverConstants.lean#L513),
-[`MovingSofaBridge.GerverConstants.qPhi_neg`](../../MovingSofaBridge/GerverConstants.lean#L543).*
+[`MovingSofaBridge.GerverConstants.qPhiMin_diagonal_nonpos`](../../MovingSofaBridge/GerverConstants.lean#L514),
+[`MovingSofaBridge.GerverConstants.qPhi_neg`](../../MovingSofaBridge/GerverConstants.lean#L540).*
 
-*Proof.* Write $Q = N J - D Z$ with $J = \cos\varphi - k\sin\varphi$ and
+*Proof.* The idea is to bound $\partial_\varphi Q$ above by a function $q_{\min}$ that decreases in
+$\theta$ and is nonpositive on the diagonal $\theta = \varphi$. Write $Q = N J - D Z$ with
+$J = \cos\varphi - k\sin\varphi$ and
 $Z = \sin\varphi\,(1 + o) + \tfrac12(1 - \cos\varphi)$. With
 
 ```math
@@ -219,10 +228,11 @@ $m = \tfrac12 g + \tfrac14 g^2 = o - (\pi/2 - \varphi - \theta)$, also inside $Z
 q - q_{\min} = \bigl(3\sin^2\varphi - D\cos\varphi\bigr)\bigl(\tfrac\pi2 - \varphi - \theta\bigr) \le 0,
 ```
 
-since for $\varphi \le 1/2$, $\sin\varphi \le 1/2$ and $\cos\varphi \ge 1 - \varphi^2/2 \ge 7/8$, so
+since $\pi/2 - \varphi - \theta \ge 0$, and for $\varphi \le 1/2$, $\sin\varphi \le 1/2$ and
+$\cos\varphi \ge 1 - \varphi^2/2 \ge 7/8$, so
 $D\cos\varphi \ge 2\cos^2\varphi \ge 49/32 > 3/4 \ge 3\sin^2\varphi$. On the diagonal,
 $q_{\min}(\varphi, \varphi) = (\sin\varphi - \cos\varphi)(1 - \cos\varphi + 2\sin\varphi) \le 0$.
-And $q_{\min}$ decreases strictly in $\theta$ on $\Delta$: with $c = \cos\varphi$,
+And $q_{\min}$ decreases strictly in $\theta$ on $\Delta$: with $c = \cos\varphi$ and
 $s = \sin\varphi$,
 
 ```math
@@ -230,7 +240,7 @@ $s = \sin\varphi$,
 ```
 
 where every term is at most $0$, since $0 \le g \le \pi/4 < 1$, $0 \le s \le c$ and
-$\cos\theta \le c$, and $-2c < 0$. So for $\theta > \varphi$,
+$\cos\theta \le c$, and the term $-2c$ is negative. So for $\theta > \varphi$,
 $q(\varphi, \theta) \le q_{\min}(\varphi, \theta) < q_{\min}(\varphi, \varphi) \le 0$. $\square$
 
 ## A.5 Every solution has φ < 1/20
@@ -241,14 +251,16 @@ $q(\varphi, \theta) \le q_{\min}(\varphi, \theta) < q_{\min}(\varphi, \varphi) \
 2. $Q(1/20, \pi/4) < 0$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.cut_frame_bounds`](../../MovingSofaBridge/GerverConstants.lean#L570),
-[`MovingSofaBridge.GerverConstants.qTheta_cut_pos`](../../MovingSofaBridge/GerverConstants.lean#L597),
-[`MovingSofaBridge.GerverConstants.reducedQ_cut_boundary_neg`](../../MovingSofaBridge/GerverConstants.lean#L640).*
+[`MovingSofaBridge.GerverConstants.cut_frame_bounds`](../../MovingSofaBridge/GerverConstants.lean#L565),
+[`MovingSofaBridge.GerverConstants.qTheta_cut_pos`](../../MovingSofaBridge/GerverConstants.lean#L585),
+[`MovingSofaBridge.GerverConstants.reducedQ_cut_boundary_neg`](../../MovingSofaBridge/GerverConstants.lean#L614).*
 
-*Proof.* At $\varphi = 1/20$: $0.0499 \le \sin\tfrac1{20} \le \tfrac1{20}$ and
-$0.998 \le \cos\tfrac1{20} \le 1$, from $\sin x \ge x - x^3/6 = 0.049979\ldots$ and
-$\cos x \ge 1 - x^2/2 = 0.99875$. For $1/20 \le \theta \le \pi/4$, $g \in [0, 3/4]$, so $k \le 11/8$
-and $o \le \pi/2 - 1/10 < 2$; hence, with $J$ and $Z$ as in the proof of Lemma A.7,
+*Proof.* Both parts are estimates with the bounds $0.0499 \le \sin\tfrac1{20} \le \tfrac1{20}$
+and $0.998 \le \cos\tfrac1{20} \le 1$, which follow from $\sin x \ge x - x^3/6 = 0.049979\ldots$
+and $\cos x \ge 1 - x^2/2 = 0.99875$. Let $\varphi = 1/20$ and $1/20 \le \theta \le \pi/4$. Then
+$g \in [0, 3/4]$, so $k \le 11/8$, and
+$o = \tfrac\pi2 - \tfrac1{10} - \tfrac12 g + \tfrac14 g^2 \le \tfrac\pi2 - \tfrac1{10} < 2$ as
+$g^2 \le 2g$. Hence, with $J$ and $Z$ as in the proof of Lemma A.7,
 
 ```math
 J \ge 0.998 - \tfrac{11}8 \cdot \tfrac1{20} = 0.92925 \ge \tfrac9{10}, \qquad Z \le \tfrac1{20} \cdot 3 + \tfrac12 (1 - 0.998) = 0.151 .
@@ -262,10 +274,10 @@ $\partial_\theta J = -\tfrac12\sin\varphi$ and $\partial_\theta Z = \tfrac12 (g 
 ```
 
 The first term is nonnegative, since
-$(1 - g) J \ge \tfrac14 \cdot \tfrac9{10} = 0.225 > 0.151 \ge Z$. The second bracket is positive: if
-$\theta \le 1/2$, then $g \le 9/20$ and it is at least
-$3 \cdot \tfrac{11}{20} \cdot 0.998 - 0.15 - 1 = 0.4967$; if $\theta > 1/2$, then
-$\sin\theta \ge \tfrac{23}{48}$ and it is at least
+$(1 - g) J \ge \tfrac14 \cdot \tfrac9{10} = 0.225 > 0.151 \ge Z$. The second bracket is positive.
+If $\theta \le 1/2$, then $g \le 9/20$ and the bracket is at least
+$3 \cdot \tfrac{11}{20} \cdot 0.998 - 0.15 - 1 = 0.4967$. If $\theta > 1/2$, then
+$\sin\theta \ge \sin\tfrac12 \ge \tfrac{23}{48}$ and the bracket is at least
 $3 \cdot \tfrac14 \cdot 0.998 - 0.15 + \tfrac{23}{48} - 1 = 0.0777\ldots$.
 
 (2) With $3.14 < \pi < 3.144$, $g = \pi/4 - 1/20 \in [0.735, 0.736]$ and
@@ -288,12 +300,13 @@ $Q(1/20, \pi/4) = -0.0195845687\ldots$. $\square$
 Every solution has $\varphi < 1/20$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.Spec.phi_lt_twentieth`](../../MovingSofaBridge/GerverConstants.lean#L701).*
+[`MovingSofaBridge.GerverConstants.Spec.phi_lt_twentieth`](../../MovingSofaBridge/GerverConstants.lean#L671).*
 
-*Proof.* Suppose $\varphi \ge 1/20$. By Lemmas A.4 and A.6, $1/20 \le \varphi < 1/2$ and
-$\varphi < \theta \le \pi/4$. By Lemma A.7, $Q(\cdot, \theta)$ does not increase on
-$[1/20, \varphi]$, and by Lemma A.8 (1), $Q(1/20, \cdot)$ does not decrease on $[1/20, \pi/4]$. So,
-with Lemma A.3 and Lemma A.8 (2),
+*Proof.* Moving from $(\varphi, \theta)$ left to the line $\varphi = 1/20$ and then up to
+$\theta = \pi/4$ does not decrease $Q$. Suppose $\varphi \ge 1/20$. By Lemmas A.4 and A.6,
+$1/20 \le \varphi < 1/2$ and $\varphi < \theta \le \pi/4$. By Lemma A.7, $Q(\cdot, \theta)$ does not
+increase on $[1/20, \varphi]$, and by Lemma A.8 (1), $Q(1/20, \cdot)$ does not decrease on
+$[1/20, \pi/4]$. So, with Lemma A.3 and Lemma A.8 (2),
 
 ```math
 0 = Q(\varphi, \theta) \le Q(\tfrac1{20}, \theta) \le Q(\tfrac1{20}, \tfrac\pi4) < 0 . \qquad \square
@@ -314,10 +327,10 @@ H &= G + \tfrac9{10} F .
 ```
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.remainder`](../../MovingSofaBridge/GerverConstants.lean#L738),
-[`MovingSofaBridge.GerverConstants.firstResidual`](../../MovingSofaBridge/GerverConstants.lean#L740),
-[`MovingSofaBridge.GerverConstants.secondResidual`](../../MovingSofaBridge/GerverConstants.lean#L743),
-[`MovingSofaBridge.GerverConstants.separatingResidual`](../../MovingSofaBridge/GerverConstants.lean#L747).*
+[`MovingSofaBridge.GerverConstants.remainder`](../../MovingSofaBridge/GerverConstants.lean#L697),
+[`MovingSofaBridge.GerverConstants.firstResidual`](../../MovingSofaBridge/GerverConstants.lean#L700),
+[`MovingSofaBridge.GerverConstants.secondResidual`](../../MovingSofaBridge/GerverConstants.lean#L704),
+[`MovingSofaBridge.GerverConstants.separatingResidual`](../../MovingSofaBridge/GerverConstants.lean#L709).*
 
 The function $F$ is $Q / D$: both $Q$ and $D F$ equal $N J - D Z$.
 
@@ -339,15 +352,15 @@ The function $F$ is $Q / D$: both $Q$ and $D F$ equal $N J - D Z$.
    $D\,T = 3 + 3\cos^2\varphi + \sin\varphi\sin\theta - 10\cos\varphi\cos\theta - 2k\cos\varphi\sin\theta$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.Spec.residuals_zero`](../../MovingSofaBridge/GerverConstants.lean#L775),
-[`MovingSofaBridge.GerverConstants.firstResidual_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L820),
-[`MovingSofaBridge.GerverConstants.firstResidual_theta_deriv`](../../MovingSofaBridge/GerverConstants.lean#L831),
-[`MovingSofaBridge.GerverConstants.secondResidual_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L841),
-[`MovingSofaBridge.GerverConstants.secondResidual_theta_deriv`](../../MovingSofaBridge/GerverConstants.lean#L855),
-[`MovingSofaBridge.GerverConstants.secondThetaFactor_identity`](../../MovingSofaBridge/GerverConstants.lean#L872).*
+[`MovingSofaBridge.GerverConstants.Spec.residuals_zero`](../../MovingSofaBridge/GerverConstants.lean#L745),
+[`MovingSofaBridge.GerverConstants.firstResidual_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L781),
+[`MovingSofaBridge.GerverConstants.firstResidual_theta_deriv`](../../MovingSofaBridge/GerverConstants.lean#L792),
+[`MovingSofaBridge.GerverConstants.secondResidual_phi_deriv`](../../MovingSofaBridge/GerverConstants.lean#L799),
+[`MovingSofaBridge.GerverConstants.secondResidual_theta_deriv`](../../MovingSofaBridge/GerverConstants.lean#L813),
+[`MovingSofaBridge.GerverConstants.secondThetaFactor_identity`](../../MovingSofaBridge/GerverConstants.lean#L830).*
 
 *Proof.* (1) At a solution $A = \hat A$ and $B = \hat B$ (Lemma A.3), so $F = E_3 = 0$ and
-$G = E_2 = 0$. (2) The quotient and product rules, with $\partial_\varphi N = D$,
+$G = E_2 = 0$. (2) follows from the quotient and product rules, with $\partial_\varphi N = D$,
 $\partial_\theta N = (1 - g)\sin\theta$, $\partial_\varphi D = -3\sin\varphi$,
 $\partial_\theta D = \sin\theta$, $\partial_\varphi k = -\tfrac12$, $\partial_\theta k = \tfrac12$,
 $\partial_\varphi o = -k - \tfrac12$ and $\partial_\theta o = \tfrac12(g - 1)$. For instance
@@ -378,7 +391,7 @@ the bounds of Table A.1 hold.
 | Quantity | Bound | Reason |
 | --- | --- | --- |
 | $\sin\varphi$, $\cos\varphi$ | $[0, \tfrac1{20}]$, $[0.998, 1]$ | $\sin\varphi \le \varphi$; $\cos\varphi \ge 1 - \tfrac12 \varphi^2 \ge 1 - \tfrac1{800}$ |
-| $\sin\theta$, $\cos\theta$ | $[0, \tfrac45]$, $[\tfrac7{10}, 1]$ | $\theta \le \tfrac\pi4 < \tfrac45$; $\cos\theta \ge \cos\tfrac\pi4 = \tfrac{\sqrt2}2$ |
+| $\sin\theta$, $\cos\theta$ | $[0, \tfrac45]$, $[\tfrac7{10}, 1]$ | $\sin\theta \le \theta \le \tfrac\pi4 < \tfrac45$; $\cos\theta \ge \cos\tfrac\pi4 = \tfrac{\sqrt2}2$ |
 | $\cos\theta + \sin\theta$ | $\ge 1$ | its square is $1 + 2\sin\theta\cos\theta$ |
 | $k = 1 + \tfrac12 g$ | $[1, \tfrac75]$ | $0 \le g \le \tfrac45$ |
 | $D$ | $[1.99, 2.3]$ | $3 \cdot 0.998 - 1$ and $3 - 0.7$ |
@@ -392,18 +405,19 @@ the bounds of Table A.1 hold.
 *Table A.1.* Bounds on the strip $\Delta_{1/20}$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.smallBounds`](../../MovingSofaBridge/GerverConstants.lean#L983),
-[`MovingSofaBridge.GerverConstants.SmallBounds`](../../MovingSofaBridge/GerverConstants.lean#L969),
-[`MovingSofaBridge.GerverConstants.num_nonneg`](../../MovingSofaBridge/GerverConstants.lean#L950),
-[`MovingSofaBridge.GerverConstants.baseNumerator_le`](../../MovingSofaBridge/GerverConstants.lean#L934).*
+[`MovingSofaBridge.GerverConstants.smallBounds`](../../MovingSofaBridge/GerverConstants.lean#L898),
+[`MovingSofaBridge.GerverConstants.SmallBounds`](../../MovingSofaBridge/GerverConstants.lean#L884),
+[`MovingSofaBridge.GerverConstants.num_nonneg`](../../MovingSofaBridge/GerverConstants.lean#L871),
+[`MovingSofaBridge.GerverConstants.baseNumerator_le`](../../MovingSofaBridge/GerverConstants.lean#L859).*
 
 *Proof.* *The numerator.* $N(\varphi, \cdot)$ has the derivative $(1 - g)\sin\theta \ge 0$ on
-$[\varphi, \pi/4]$, and $N(\varphi, \varphi) = 2\sin\varphi + 1 - \cos\varphi \ge 0$; so $N \ge 0$.
-For the upper bound, $N = b(\theta) - \varphi\cos\theta + 3\sin\varphi$ with
-$b(t) = (t - 1)\cos t - \sin t + 1$. The difference $(\tfrac12 t^2 - \tfrac13 t^3) - b(t)$ vanishes
-at $0$ and has the derivative $(1 - t)(t - \sin t) \ge 0$ on $[0, 4/5]$, and
-$\tfrac12 t^2 - \tfrac13 t^3$ increases there to $\tfrac{56}{375} < \tfrac3{20}$ at $t = 4/5$; so
-$N \le \tfrac3{20} + \tfrac3{20}$.
+$[\varphi, \pi/4]$, and $N(\varphi, \varphi) = 2\sin\varphi + 1 - \cos\varphi \ge 0$. So $N \ge 0$.
+For the upper bound, $N = b(\theta) - \varphi\cos\theta + 3\sin\varphi$ with the function $b$ of
+Lemma A.4. For $0 \le t \le 4/5$, the bounds $\cos t \ge 1 - \tfrac12 t^2$ (multiplied by
+$t - 1 \le 0$) and $\sin t \ge t - \tfrac16 t^3$ give
+$b(t) \le (t - 1)(1 - \tfrac12 t^2) - t + \tfrac16 t^3 + 1 = \tfrac12 t^2 - \tfrac13 t^3$. This
+polynomial increases on $[0, 1]$, so $b(t) \le \tfrac{56}{375} < \tfrac3{20}$, its value at
+$t = 4/5$. As $\theta \le \pi/4 < 4/5$, $N \le b(\theta) + 3\sin\varphi \le \tfrac3{20} + \tfrac3{20}$.
 
 *The offset.* With $\theta = \varphi + g$, $o = \tfrac\pi2 - 2\varphi - \tfrac12 g + \tfrac14 g^2$.
 As $g \le \pi/4 - \varphi$, $o \ge \tfrac{3\pi}8 - \tfrac32\varphi \ge 1.125 - 0.075$; as
@@ -427,25 +441,25 @@ On $\Delta_{1/20}$,
 Hence $\partial_\varphi H \le 0$ and $\partial_\theta H < 0$.
 
 *Lean:
-[`MovingSofaBridge.GerverConstants.SmallBounds.firstPhi_le`](../../MovingSofaBridge/GerverConstants.lean#L1074),
-[`MovingSofaBridge.GerverConstants.SmallBounds.firstThetaFactor_bounds`](../../MovingSofaBridge/GerverConstants.lean#L1094),
-[`MovingSofaBridge.GerverConstants.SmallBounds.secondPhi_le`](../../MovingSofaBridge/GerverConstants.lean#L1107),
-[`MovingSofaBridge.GerverConstants.SmallBounds.secondThetaFactor_le`](../../MovingSofaBridge/GerverConstants.lean#L1130),
-[`MovingSofaBridge.GerverConstants.SmallBounds.separating_signs`](../../MovingSofaBridge/GerverConstants.lean#L1156).*
+[`MovingSofaBridge.GerverConstants.SmallBounds.firstPhi_le`](../../MovingSofaBridge/GerverConstants.lean#L974),
+[`MovingSofaBridge.GerverConstants.SmallBounds.firstThetaFactor_bounds`](../../MovingSofaBridge/GerverConstants.lean#L993),
+[`MovingSofaBridge.GerverConstants.SmallBounds.secondPhi_le`](../../MovingSofaBridge/GerverConstants.lean#L1006),
+[`MovingSofaBridge.GerverConstants.SmallBounds.secondThetaFactor_le`](../../MovingSofaBridge/GerverConstants.lean#L1027),
+[`MovingSofaBridge.GerverConstants.SmallBounds.separating_signs`](../../MovingSofaBridge/GerverConstants.lean#L1049).*
 
 *Proof.* All bounds come from Table A.1, with $C > 0$ and Lemma A.11.
 
 1. $\partial_\varphi F$. Here $\hat A\sin\varphi \le \tfrac4{25} \cdot \tfrac1{20} = \tfrac1{125}$
    and $3\cos\varphi + \cos\theta - 6k\sin\varphi \le 4$, so the second term is at most
-   $\tfrac4{125} / (2 \cdot 1.99) < \tfrac1{100}$; and
+   $\tfrac4{125} / (2 \cdot 1.99) < \tfrac1{100}$. And
    $\hat B\cos\varphi \ge 0.7 \cdot 0.998 = 0.6986$. So
    $\partial_\varphi F \le -0.6986 + 0.01 < -\tfrac23$.
 2. $\partial_\theta F = C\,(J\sin\theta / D + \tfrac12\sin\varphi)$, and
    $0 \le J\sin\theta / D \le 0.8 / 1.99 < \tfrac9{20}$ and $\tfrac12\sin\varphi \le \tfrac1{40}$,
    so the bracket lies in $[0, \tfrac12]$.
 3. $\partial_\varphi G$. Here $M \le 3 \cdot \tfrac45 + \tfrac1{20} \le \tfrac52$, so
-   $3\hat A M\sin\varphi / D \le (3 \cdot \tfrac1{125} \cdot \tfrac52) / 1.99 < \tfrac1{25}$;
-   $2\hat A\cos\varphi \le \tfrac8{25}$ and $2\hat B\sin\varphi \le \tfrac15$. So
+   $3\hat A M\sin\varphi / D \le (3 \cdot \tfrac1{125} \cdot \tfrac52) / 1.99 < \tfrac1{25}$.
+   Also $2\hat A\cos\varphi \le \tfrac8{25}$ and $2\hat B\sin\varphi \le \tfrac15$. So
    $\partial_\varphi G \le \tfrac{14}{25} < \tfrac35$.
 4. $\partial_\theta G = C\,T$. With $10\cos\varphi\cos\theta \ge 9.98\cos\theta$,
    $2k\cos\varphi\sin\theta \ge 1.996\sin\theta$ and
@@ -456,7 +470,7 @@ Hence $\partial_\varphi H \le 0$ and $\partial_\theta H < 0$.
    ```
 
    so $T \le -1.5698 / 2.3 = -0.6825\ldots < -\tfrac23$.
-5. $H$. By (1) and (3), $\partial_\varphi H \le \tfrac35 - \tfrac9{10} \cdot \tfrac23 = 0$; by (2)
+5. $H$. By (1) and (3), $\partial_\varphi H \le \tfrac35 - \tfrac9{10} \cdot \tfrac23 = 0$. By (2)
    and (4),
    $\partial_\theta H \le C\,\bigl(-\tfrac23 + \tfrac9{10} \cdot \tfrac12\bigr) = -\tfrac{13}{60} C < 0$.
    $\square$
@@ -468,17 +482,19 @@ stays negative. It tilts the zero set of $G$, which rises with $\varphi$, into o
 
 ## A.9 Uniqueness
 
-*Proof of Theorem A.1.* Let $(A, B, \varphi, \theta)$ and $(A', B', \varphi', \theta')$ solve
-Gerver's system. By Lemmas A.4 and A.9, $0 < \varphi < 1/20$, $\varphi < \theta \le \pi/4$, and the
-same for $\varphi'$, $\theta'$; by Lemma A.11 (1), $F$ and $H$ vanish at $(\varphi, \theta)$ and at
-$(\varphi', \theta')$. The segments used below lie in $\Delta_{1/20}$, where Lemma A.13 applies.
+*Proof of Theorem A.1.* The monotonicity of $F$ and $H$ along horizontal and vertical segments of
+the strip rules out a second common zero. Let $(A, B, \varphi, \theta)$ and
+$(A', B', \varphi', \theta')$ solve Gerver's system. By Lemmas A.4 and A.9, $0 < \varphi < 1/20$
+and $\varphi < \theta \le \pi/4$, and the same holds for $\varphi'$, $\theta'$. By Lemma A.11 (1),
+$F$ and $H$ vanish at $(\varphi, \theta)$ and at $(\varphi', \theta')$. The segments used below lie
+in $\Delta_{1/20}$, where Lemma A.13 applies.
 
 **Step 1. $\theta \ge \theta'$.** Suppose $\theta < \theta'$ (Figure A.3). As $F(\varphi, \cdot)$
 does not decrease on $[\varphi, \pi/4]$, $F(\varphi, \theta') \ge F(\varphi, \theta) = 0$. If
-$\varphi' < \varphi$, then $F(\cdot, \theta')$ decreases strictly on $[0, \varphi]$, and
-$F(\varphi', \theta') > F(\varphi, \theta') \ge 0$, against $F(\varphi', \theta') = 0$; so
+$\varphi' < \varphi$, then, as $F(\cdot, \theta')$ decreases strictly on $[0, \varphi]$,
+$F(\varphi', \theta') > F(\varphi, \theta') \ge 0$, against $F(\varphi', \theta') = 0$. So
 $\varphi \le \varphi'$. As $H(\varphi, \cdot)$ decreases strictly on $[\varphi, \pi/4]$,
-$H(\varphi, \theta') < H(\varphi, \theta) = 0$; and as $H(\cdot, \theta')$ does not increase on
+$H(\varphi, \theta') < H(\varphi, \theta) = 0$. As $H(\cdot, \theta')$ does not increase on
 $[0, \varphi']$, $H(\varphi', \theta') \le H(\varphi, \theta') < 0$, against
 $H(\varphi', \theta') = 0$.
 

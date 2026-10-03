@@ -5,10 +5,11 @@ public import MovingSofaOptimality.Gerver.Defs
 /-!
 # Enclosures of the parameters of Gerver's sofa
 
-`GerverBounds P` collects intervals of width `2 · 10⁻⁷` around Romik's numerical values (his Table 1)
-for the parameters that are not fixed exactly by his equations. The numerical verifications of
-Gerver's sofa assume `GerverBounds P` together with `P.IsSolution`; `MovingSofaOptimality.External.Romik`
-proves that every solution in the box satisfies these bounds.
+`P.Bounds` collects intervals of width about `2 · 10⁻⁷` around Romik's numerical values (his
+Table 1) for the parameters that are not fixed exactly by his equations. The numerical
+verifications of Gerver's sofa assume `P.Bounds` together with `P.IsSolution`;
+`MovingSofaOptimality.External.Romik` proves that every solution in the box satisfies these
+bounds.
 -/
 
 @[expose] public section

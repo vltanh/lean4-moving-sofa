@@ -2,8 +2,6 @@ module
 
 public import MovingSofaBridge.Motion
 public import MovingSofaBridge.RomikParams
-public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-public import Mathlib.Geometry.Euclidean.Angle.Oriented.Rotation
 
 /-!
 # The two Gerver's sofas agree
@@ -76,12 +74,6 @@ def shapeFromPrePath (p : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 /-- The sofa of Gerver's four constants, in coordinates. -/
 def shape (D : GerverConstants) : Set (ℝ × ℝ) := shapeFromPrePath D.prePath
 
-/-- A point is determined by its coordinates in the rotating frame. -/
-theorem rotate_dot_coordinates (t : ℝ) (q : ℝ × ℝ) :
-    rot t (dot q (uvec t), dot q (vvec t)) = q := by
-  rw [gs_rot_pair]
-  exact (eq_dot_uvec_smul_add q t).symm
-
 /-- If `p 0 = 0` and rotating `p t` by `t` gives `x t`, the two conventions give the same sofa. -/
 theorem shape_eq_of_rotated_path {p x : ℝ → ℝ × ℝ}
     (hzero : p 0 = 0)
@@ -101,17 +93,10 @@ theorem shape_eq_of_rotated_path {p x : ℝ → ℝ × ℝ}
   have hfinish := hmap (π / 2) ⟨hL, le_rfl⟩
   have hall : (⋂ t ∈ Icc 0 (π / 2),
       rotateTranslatePair t (p t) '' MovingSofaOptimality.hallway) =
-      ⋂ t ∈ Icc 0 (π / 2), (fun q => x t + rot t q) '' MovingSofaOptimality.hallway := by
-    apply Set.iInter_congr
-    intro t
-    apply Set.iInter_congr
-    intro ht
-    rw [hmap t ht]
+      ⋂ t ∈ Icc 0 (π / 2), (fun q => x t + rot t q) '' MovingSofaOptimality.hallway :=
+    iInter₂_congr fun t ht => by rw [hmap t ht]
   unfold shapeFromPrePath shapeOfPath
-  rw [hstart, hfinish, hall]
-  ext q
-  simp only [Set.mem_inter_iff]
-  tauto
+  rw [hstart, hfinish, hall, Set.inter_right_comm]
 
 /-! ## The radius is the speed of Romik's contact point `𝐂` -/
 
@@ -174,13 +159,10 @@ theorem rightRadius_mul_integrable (D : GerverConstants) {w : ℝ → ℝ} (hw :
               hw).intervalIntegrable a b
         · simp
 
+/-- The integrals against `radius` and `rightRadius` agree. -/
 theorem integral_radius_eq_rightRadius (D : GerverConstants) (w : ℝ → ℝ) (a b : ℝ) :
-    (∫ t in a..b, D.radius t * w t) = ∫ t in a..b, D.rightRadius t * w t := by
-  have he : (fun t => D.radius t * w t) =ᵐ[volume] (fun t => D.rightRadius t * w t) := by
-    filter_upwards [D.radius_ae_rightRadius] with t ht
-    rw [ht]
-  unfold intervalIntegral
-  congr 1 <;> apply integral_congr_ae <;> exact ae_restrict_of_ae he
+    (∫ t in a..b, D.radius t * w t) = ∫ t in a..b, D.rightRadius t * w t :=
+  intervalIntegral.integral_congr_ae (D.radius_ae_rightRadius.mono fun t ht _ => by rw [ht])
 
 /-- The right derivative of Romik's contact point `𝐂`. -/
 theorem contactC_right_deriv {D : GerverConstants} (hD : D.Valid) (t : ℝ) :
@@ -224,12 +206,6 @@ theorem contactC_integrals {D : GerverConstants} (hD : D.Valid) (a b : ℝ) :
 
 /-! ## The integrals are the coordinates of Romik's contact points -/
 
-private theorem rot_frame_constant (t a b : ℝ) :
-    rot t (a * cos t + b * sin t, -a * sin t + b * cos t) = (a, b) := by
-  have hframe : (a * cos t + b * sin t, -a * sin t + b * cos t) = rot (-t) (a, b) := by
-    ext <;> simp only [rot, cos_neg, sin_neg] <;> ring
-  rw [hframe, rot_rot_neg]
-
 /-- `𝐂` is constant on the last phase. -/
 theorem contactC_last {D : GerverConstants} (hD : D.Valid) {t : ℝ}
     (ht : π / 2 - D.φ ≤ t) :
@@ -245,7 +221,9 @@ theorem contactA_first {D : GerverConstants} (hD : D.Valid) {t : ℝ} (ht : t �
   rw [gs_contactA_eq (romik_solution hD).1 (show gs_piece D.toRomik 0 t from ht)]
   change rot t (D.a1 * cos t + (-1 / 4) * sin t - 1 + 1,
       -D.a1 * sin t + (-1 / 4) * cos t) + D.k1 = _
-  rw [sub_add_cancel, rot_frame_constant]
+  rw [sub_add_cancel, show (D.a1 * cos t + (-1 / 4) * sin t, -D.a1 * sin t + (-1 / 4) * cos t) =
+    (dot (D.a1, -1 / 4) (uvec t), dot (D.a1, -1 / 4) (vvec t)) by ext <;> simp [dot],
+    rot_frame_coords]
   ext <;> simp only [k1, Prod.fst_add, Prod.snd_add] <;> ring
 
 /-- The value of `𝐂` at `0`. -/
@@ -312,6 +290,7 @@ theorem contactA_integral_coordinates {D : GerverConstants} (hD : D.Valid) (t : 
   ext <;> simp only [reflect]
   ring
 
+/-- The value of `boundaryX` at `0`, from `𝐂 0`. -/
 theorem boundaryX_zero {D : GerverConstants} (hD : D.Valid) :
     D.boundaryX 0 = 2 * D.k3.1 - 1 + 2 * D.a1 := by
   have h := congrArg Prod.fst (contactC_integral_coordinates hD 0)
@@ -344,51 +323,39 @@ theorem prePath_eq_projections {D : GerverConstants} (hD : D.Valid) (t : ℝ) :
     D.prePath t = (dot (D.toRomik.path t) (uvec t), dot (D.toRomik.path t) (vvec t)) := by
   have hA := contactA_projection D t
   have hC := contactC_projection D t
-  refine Prod.ext ?_ ?_
-  · show (if t ≤ D.φ then cos t - 1 else
-        D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t - 1) =
-      dot (D.toRomik.path t) (uvec t)
-    by_cases ht : t ≤ D.φ
-    · rw [ite_eq_left ht]
-      rw [contactA_first hD ht] at hA
-      change 1 * cos t + 0 * sin t = dot (D.toRomik.path t) (uvec t) + 1 at hA
+  unfold prePath
+  congr 1
+  · -- The first coordinate, from `𝐀 t`: constant `(1, 0)` up to `φ`, then given by the integrals.
+    split_ifs with ht
+    · rw [contactA_first hD ht] at hA
+      simp only [dot, uvec] at hA ⊢
       linarith
-    · rw [ite_eq_right ht]
-      rw [contactA_integral_coordinates hD] at hA
-      change D.boundaryX (π / 2 - t) * cos t + D.boundaryY (π / 2 - t) * sin t =
-        dot (D.toRomik.path t) (uvec t) + 1 at hA
+    · rw [contactA_integral_coordinates hD] at hA
+      simp only [dot, uvec] at hA ⊢
       linarith
-  · show (if t ≤ π / 2 - D.φ then
-        D.boundaryY t * cos t - (4 * D.boundaryX 0 - 2 - D.boundaryX t) * sin t - 1
-      else -(4 * D.boundaryX 0 - 3) * sin t - 1) = dot (D.toRomik.path t) (vvec t)
-    by_cases ht : t ≤ π / 2 - D.φ
-    · rw [ite_eq_left ht]
-      rw [contactC_integral_coordinates hD, horizontal_normalization hD] at hC
-      change (4 * D.boundaryX 0 - 2 - D.boundaryX t) * (-sin t) +
-        D.boundaryY t * cos t = dot (D.toRomik.path t) (vvec t) + 1 at hC
+  · -- The second coordinate, from `𝐂 t`: given by the integrals up to `π/2 - φ`, then constant.
+    split_ifs with ht
+    · rw [contactC_integral_coordinates hD, horizontal_normalization hD] at hC
+      simp only [dot, vvec] at hC ⊢
       linarith
-    · rw [ite_eq_right ht]
-      rw [contactC_last hD (lt_of_not_ge ht).le, horizontal_normalization hD] at hC
-      change (4 * D.boundaryX 0 - 2 - 1) * (-sin t) + 0 * cos t =
-        dot (D.toRomik.path t) (vvec t) + 1 at hC
+    · rw [contactC_last hD (not_le.mp ht).le, horizontal_normalization hD] at hC
+      simp only [dot, vvec] at hC ⊢
       linarith
 
 /-- Rotating formal-conjectures' path by `t` gives Romik's path. -/
 theorem rotated_prePath {D : GerverConstants} (hD : D.Valid) (t : ℝ) :
     rot t (D.prePath t) = D.toRomik.path t := by
-  rw [prePath_eq_projections hD, rotate_dot_coordinates]
+  rw [prePath_eq_projections hD, rot_frame_coords]
 
 /-- Formal-conjectures' path starts at `0`. -/
 theorem prePath_zero_of_valid {D : GerverConstants} (hD : D.Valid) : D.prePath 0 = 0 := by
   have h := rotated_prePath hD 0
-  rw [rot_zero, gs_path_zero (romik_solution hD).1] at h
-  exact h
+  rwa [rot_zero, gs_path_zero (romik_solution hD).1] at h
 
 /-- The sofa of Gerver's constants is the sofa of the corresponding Romik parameters. -/
 theorem shape_eq_gerverSofa {D : GerverConstants} (hD : D.Valid) :
-    D.shape = gerverSofa D.toRomik := by
-  exact shape_eq_of_rotated_path (prePath_zero_of_valid hD)
-    (fun t _ => rotated_prePath hD t)
+    D.shape = gerverSofa D.toRomik :=
+  shape_eq_of_rotated_path (prePath_zero_of_valid hD) fun t _ => rotated_prePath hD t
 
 /-- The sofa of a solution of Gerver's system is the sofa of every solution of Romik's system in
 the box. -/
@@ -404,6 +371,7 @@ open FormalConjectures
 
 /-! ## Formal-conjectures' rotation in coordinates -/
 
+/-- Formal-conjectures' `rotateTranslate α p` translates by `p`, then rotates by `α`. -/
 theorem rotateTranslate_apply (α : Real.Angle) (p q : Point) :
     MovingSofa.rotateTranslate α p q = EuclideanGeometry.o.rotation α (q + p) := rfl
 
@@ -481,6 +449,7 @@ def gerverConstants : GerverConstants :=
   ⟨MovingSofa.GerversSofa.A, MovingSofa.GerversSofa.B, MovingSofa.GerversSofa.φ,
     MovingSofa.GerversSofa.θ⟩
 
+/-- The constants chosen by formal-conjectures solve Gerver's system. -/
 theorem gerverConstants_valid : gerverConstants.Valid :=
   MovingSofa.GerversSofa.ABφθSpec.existsUnique.choose_spec.1
 
@@ -516,13 +485,14 @@ theorem mem_gerversSofa_iff (q : Point) :
   have hL := fun t => mem_rotateTranslate_image_iff t q MovingSofa.hallway
     MovingSofaOptimality.hallway coordinates_mem_hallway
   simp only [MovingSofa.gerversSofa, MovingSofa.sofaOfRotateTranslatePath,
-    GerverConstants.shape, GerverConstants.shapeFromPrePath, mem_inter_iff, mem_iInter] at ⊢
+    GerverConstants.shape, GerverConstants.shapeFromPrePath, mem_inter_iff, mem_iInter]
   constructor
   · rintro ⟨⟨hh, hv⟩, hall⟩
     exact ⟨⟨hH.mp hh, hV.mp hv⟩, fun t ht => (hL t).mp (hall t ht)⟩
   · rintro ⟨⟨hh, hv⟩, hall⟩
     exact ⟨⟨hH.mpr hh, hV.mpr hv⟩, fun t ht => (hL t).mpr (hall t ht)⟩
 
+/-- In coordinates, formal-conjectures' Gerver's sofa is the sofa of Gerver's constants. -/
 theorem coordinates_gerversSofa :
     coordinates '' MovingSofa.gerversSofa = gerverConstants.shape := by
   ext q
@@ -530,7 +500,7 @@ theorem coordinates_gerversSofa :
   · rintro ⟨p, hp, rfl⟩
     exact (mem_gerversSofa_iff p).mp hp
   · intro hq
-    refine ⟨point q, (mem_gerversSofa_iff (point q)).mpr (by simpa using hq), coordinates_point q⟩
+    exact ⟨point q, (mem_gerversSofa_iff (point q)).mpr (by simpa using hq), coordinates_point q⟩
 
 /-- **The two Gerver's sofas agree.** In coordinates, formal-conjectures' Gerver's sofa is the
 Gerver's sofa of every solution of Romik's system in the box. -/

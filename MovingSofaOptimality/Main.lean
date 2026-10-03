@@ -9,6 +9,14 @@ public import MovingSofaOptimality.External.Romik
 Theorem 8.1.1 (`thm:cap-space-special`) parts (2)–(3), Theorem 8.5.7 (`thm:variation-a2-gerver`),
 Corollary 8.5.8 (`cor:gerver-max-cap`), the existence and uniqueness of the parameters of Gerver's
 sofa (implicit in Definition 8.1.2), and the main Theorem 1.1.1 (`thm:main`).
+
+*Proof of Theorem 1.1.1* (`gm_area_le`, `theorem1_1_1`). A moving sofa `S` of area at least `2.2`
+has a rotation angle `ω ∈ [arcsec 2.2, π/2]` (Theorem 1.5.1), so its area is at most that of a
+balanced maximum sofa `S_ω` with angle `ω` (Theorem 3.5.6). A rotation of `S_ω` is a moving sofa
+with angle `π/2` (Theorem 1.5.2), so its area is at most that of a balanced maximum sofa with angle
+`π/2`, whose cap `K` lies in `𝒦^i` (Theorem 8.1.1). Hence the area is at most `𝒬(K, B_K, D_K)`
+(Theorem 8.2.4), which is at most `𝒬` at Gerver's triple (Corollary 8.5.8), which is the area of
+Gerver's sofa (Theorem 8.4.6).
 -/
 
 @[expose] public section
@@ -53,42 +61,29 @@ theorem gerver_inL {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
   theorem8_1_8 hbox.1 (theorem8_1_1_gerver hP hbox)
 
 /-- Gerver's triple as an element of `𝓛`. -/
-noncomputable def gerverTriple {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) : LTriple P.φ :=
+noncomputable def gerverTriple {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    LTriple P.φ :=
   ⟨(⟨P.cap, (gerver_inL hP hbox).1.1.2.1⟩, ⟨rightBody P.φ P.cap, (gerver_inL hP hbox).2.1⟩,
     ⟨leftBody P.φ P.cap, (gerver_inL hP hbox).2.2.1⟩), gerver_inL hP hbox⟩
 
 lemma gm_restrict_Ico_split (μ : Measure ℝ) {a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c) :
     μ.restrict (Ico a c) = μ.restrict (Ico a b) + μ.restrict (Ico b c) := by
-  rw [← Ico_union_Ico_eq_Ico hab hbc, Measure.restrict_union Ico_disjoint_Ico_same measurableSet_Ico]
+  rw [← Ico_union_Ico_eq_Ico hab hbc,
+    Measure.restrict_union Ico_disjoint_Ico_same measurableSet_Ico]
 
 lemma gm_restrict_Ioc_split (μ : Measure ℝ) {a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c) :
     μ.restrict (Ioc a c) = μ.restrict (Ioc a b) + μ.restrict (Ioc b c) := by
   rw [← Ioc_union_Ioc_eq_Ioc hab hbc,
     Measure.restrict_union (Ioc_disjoint_Ioc_of_le le_rfl) measurableSet_Ioc]
 
+/-- Splitting a restriction to `[a, c]` at `b` into `[a, b)`, `{b}` and `(b, c]`. -/
 lemma gm_restrict_Icc_split (μ : Measure ℝ) {a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c) :
     μ.restrict (Icc a c) = μ.restrict (Ico a b) + μ.restrict {b} + μ.restrict (Ioc b c) := by
-  have e : Icc a c = (Ico a b ∪ {b}) ∪ Ioc b c := by
-    rw [Ico_union_right hab, Icc_union_Ioc_eq_Icc hab hbc]
-  rw [e, Measure.restrict_union (Set.disjoint_left.2 fun t h1 h2 => by
-      rcases h1 with h1 | h1
-      · exact absurd h2.1 (not_lt.2 h1.2.le)
-      · rw [mem_singleton_iff] at h1; rw [h1] at h2; exact lt_irrefl _ h2.1) measurableSet_Ioc,
-    Measure.restrict_union (Set.disjoint_left.2 fun t h1 h2 => by
-      rw [mem_singleton_iff] at h2; rw [h2] at h1; exact lt_irrefl _ h1.2)
+  rw [← Icc_union_Ioc_eq_Icc hab hbc,
+    Measure.restrict_union (Set.disjoint_left.2 fun _ h1 h2 => absurd h1.2 (not_le.2 h2.1))
+      measurableSet_Ioc, ← Ico_union_right hab,
+    Measure.restrict_union (disjoint_singleton_right.2 fun h => lt_irrefl b h.2)
       (measurableSet_singleton b)]
-
-lemma gm_restrict_Icc_eq_Ico {μ : Measure ℝ} {a b : ℝ} (hab : a ≤ b) (h : μ {b} = 0) :
-    μ.restrict (Icc a b) = μ.restrict (Ico a b) := by
-  rw [← Ico_union_right hab, Measure.restrict_union (Set.disjoint_left.2 fun t h1 h2 => by
-      rw [mem_singleton_iff] at h2; rw [h2] at h1; exact lt_irrefl _ h1.2)
-      (measurableSet_singleton b), Measure.restrict_eq_zero.2 h, add_zero]
-
-lemma gm_restrict_Icc_eq_Ioc {μ : Measure ℝ} {a b : ℝ} (hab : a ≤ b) (h : μ {a} = 0) :
-    μ.restrict (Icc a b) = μ.restrict (Ioc a b) := by
-  rw [← Ioc_union_left hab, Measure.restrict_union (Set.disjoint_left.2 fun t h1 h2 => by
-      rw [mem_singleton_iff] at h2; rw [h2] at h1; exact lt_irrefl _ h1.1)
-      (measurableSet_singleton a), Measure.restrict_eq_zero.2 h, add_zero]
 
 /-- The measure identity behind Theorem 8.5.7: `σ_K` on `[0, π]` splits into `ι_K` on
 `I ∪ (I + π/2)`, `σ̆_B` on `J_4 ∪ J_5`, `σ̆_D` on `J_6 ∪ J_7` and the top edge. -/
@@ -109,7 +104,8 @@ lemma gm_sigma_decomp {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
   rw [gm_jInt_7] at e7
   rw [gm_jInt_8, gm_jInt_9, Ioc_union_Ioc_eq_Ioc (by linarith) (by linarith)] at e89
   rw [gm_jInt_10] at e10
-  have hι : ∀ t, iota P.cap {t} = 0 := fun t => gm_withDensity_singleton _ _
+  have hι : ∀ t, iota P.cap {t} = 0 :=
+    fun t => measure_singleton (μ := (volume.restrict (Icc 0 π)).withDensity _) t
   rw [gm_restrict_Icc_split (sigma P.cap) (by linarith : (0 : ℝ) ≤ π / 2) (by linarith),
     gm_restrict_Ico_split (sigma P.cap) h01.le (by linarith : P.φ ≤ π / 2),
     gm_restrict_Ico_split (sigma P.cap) (h12.trans h23).le (by linarith : π / 2 - P.θ ≤ π / 2),
@@ -123,7 +119,8 @@ lemma gm_sigma_decomp {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     e1, e23, e4, e5, e6, e7, e89, e10,
     Measure.restrict_union (Set.disjoint_left.2 fun t h1 h2 => by
       linarith [h1.2, h2.1]) measurableSet_Icc,
-    gm_restrict_Icc_eq_Ico (by linarith) (hι _), gm_restrict_Icc_eq_Ioc (by linarith) (hι _),
+    ← Measure.restrict_congr_set (Ico_ae_eq_Icc' (hι _)),
+    ← Measure.restrict_congr_set (Ioc_ae_eq_Icc' (hι _)),
     gm_restrict_Ico_split (iota P.cap) (h12.trans h23).le h34.le,
     show P.φ + π / 2 = π / 2 + P.φ by ring,
     gm_restrict_Ioc_split (iota P.cap) (by linarith : π / 2 + P.φ ≤ π / 2 + P.θ)
@@ -137,9 +134,11 @@ lemma gm_sigma_decomp {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
 `𝒬` towards any `(K*, B*, D*) ∈ 𝓛` is nonpositive. -/
 theorem theorem8_5_7 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (xs : LTriple P.φ) :
     (lDomain P.φ).dirDeriv (upperQL P.φ) (gerverTriple hP hbox) xs ≤ 0 := by
-  have hφ := gm_φ_mem_Ioo hP hbox
+  -- Theorem 8.5.6 writes the derivative as
+  -- `⟨f, σ_K⟩_{[0, π]} - ⟨f, ι_K⟩ + ⟨g_B, σ̆_B⟩ + ⟨g_D, σ̆_D⟩`,
+  -- with `f = h_{K*} - h_K`, `g_B = h̆_{B*} - h̆_B`, `g_D = h̆_{D*} - h̆_D`.
   obtain ⟨h1, -, -, h4, -, -⟩ := theorem8_4_3_two hP hbox
-  rw [theorem8_5_6 hφ (gerverTriple hP hbox) xs h4.symm h1.symm]
+  rw [theorem8_5_6 (gm_φ_mem_Ioo hP hbox) (gerverTriple hP hbox) xs h4.symm h1.symm]
   have hL : InL P.φ xs.1.1.1 xs.1.2.1.1 xs.1.2.2.1 := xs.2
   have hKs : IsConvexBody xs.1.1.1 := xs.1.1.2
   have hBs : IsConvexBody xs.1.2.1.1 := xs.1.2.1.2
@@ -165,6 +164,10 @@ theorem theorem8_5_7 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (xs
   set β := (sigmaBreve (rightBody P.φ P.cap)).restrict (Ico (π / 2 - P.θ) (π / 2))
   set δ := (sigmaBreve (leftBody P.φ P.cap)).restrict (Ioc (π / 2) (π / 2 + P.θ))
   set τ := (sigma P.cap).restrict {π / 2}
+  -- By Theorem 8.4.5, `σ_K = ι + β + δ + τ` on `[0, π]` (`gm_sigma_decomp`), so the `ι`-terms
+  -- cancel, the `τ`-term vanishes (`f(π/2) = 0`), and the derivative is
+  -- `∫ (f + g_B) dβ + ∫ (f + g_D) dδ`, where both integrands are `≤ 0` by the constraints of `𝓛`
+  -- and Theorem 8.4.3 (3).
   have hdec : (sigma P.cap).restrict (Icc 0 π) = ι + β + δ + τ := gm_sigma_decomp hP hbox
   -- integrability
   have iσ : ∀ g : ℝ → ℝ, Continuous g → Integrable g ((sigma P.cap).restrict (Icc 0 π)) :=
@@ -244,52 +247,32 @@ theorem theorem8_5_7 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (xs
     have h1 := hL.2.2.2.2.2.2.2.2.1 (t - π / 2) ⟨by linarith [ht.1], by linarith [ht.2]⟩
     have h2 := (theorem8_4_3_three hP hbox).1 (t - π / 2)
       ⟨show (0 : ℝ) ≤ t - π / 2 by linarith [ht.1], show t - π / 2 ≤ P.θ by linarith [ht.2]⟩
-    rw [show π / 2 + (t - π / 2) = t by ring, show 3 * π / 2 + (t - π / 2) = t + π by ring] at h1 h2
+    rw [show π / 2 + (t - π / 2) = t by ring, show 3 * π / 2 + (t - π / 2) = t + π by ring]
+      at h1 h2
     simp only [hf, hgD, suppBreve]
     linarith
   linarith
 
-/-- **Corollary 8.5.8** (`cor:gerver-max-cap`). Gerver's triple `(K, B_K, D_K)` maximizes `𝒬` on `𝓛`. -/
-theorem corollary8_5_8 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) {K B D : Set (ℝ × ℝ)}
-    (h : InL P.φ K B D) :
+/-- **Corollary 8.5.8** (`cor:gerver-max-cap`). Gerver's triple `(K, B_K, D_K)` maximizes `𝒬` on
+`𝓛`. -/
+theorem corollary8_5_8 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    {K B D : Set (ℝ × ℝ)} (h : InL P.φ K B D) :
     upperQ P.φ K B D ≤ upperQ P.φ P.cap (rightBody P.φ P.cap) (leftBody P.φ P.cap) := by
+  -- `𝒬` is concave on the convex domain `𝓛` (Proposition 8.2.1, Theorem 8.3.8), so a point where
+  -- every directional derivative is nonpositive (Theorem 8.5.7) is a maximum (Theorem 7.1.5).
   have hφ := gm_φ_mem_Ioo hP hbox
-  have key := (theorem7_1_5 (lDomain P.φ) (proposition8_2_1 hφ) (theorem8_3_8 hφ)
-    (gerverTriple hP hbox)).2 (theorem8_5_7 hP hbox)
-  exact key ⟨(⟨K, h.1.1.2.1⟩, ⟨B, h.2.1⟩, ⟨D, h.2.2.1⟩), h⟩
-
-/-- The rotation `R_s` as a linear map. -/
-noncomputable def gm_rotLM (s : ℝ) : (ℝ × ℝ) →ₗ[ℝ] (ℝ × ℝ) where
-  toFun := rot s
-  map_add' := rot_add_vec s
-  map_smul' := fun a p => rot_smul s a p
-
-lemma gm_det_rotLM (s : ℝ) : LinearMap.det (gm_rotLM s) = 1 := by
-  rw [← LinearMap.det_toMatrix (Module.Basis.finTwoProd ℝ), Matrix.det_fin_two]
-  simp [LinearMap.toMatrix_apply, gm_rotLM, rot]
-  nlinarith [sin_sq_add_cos_sq s]
-
-/-- Rotations preserve areas. -/
-lemma gm_area_rot (s : ℝ) (X : Set (ℝ × ℝ)) : area (rot s '' X) = area X := by
-  unfold area
-  have := MeasureTheory.Measure.addHaar_image_linearMap volume (gm_rotLM s) X
-  have e : (⇑(gm_rotLM s) : ℝ × ℝ → ℝ × ℝ) = rot s := rfl
-  rw [e, gm_det_rotLM] at this
-  rw [this]; simp
-
-lemma gm_arcsec22_pos : 0 < arcsec22 := by
-  unfold arcsec22
-  exact Real.arccos_pos.2 (by norm_num)
+  exact (theorem7_1_5 (lDomain P.φ) (proposition8_2_1 hφ) (theorem8_3_8 hφ)
+    (gerverTriple hP hbox)).2 (theorem8_5_7 hP hbox) ⟨(⟨K, h.1.1.2.1⟩, ⟨B, h.2.1⟩, ⟨D, h.2.2.1⟩), h⟩
 
 /-- A moving sofa of area at least `2.2` has area at most that of Gerver's sofa. -/
 lemma gm_area_le {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) {S : Set (ℝ × ℝ)}
     (hS : IsMovingSofa S) (h22 : 2.2 ≤ area S) : area S ≤ area (gerverSofa P) := by
   obtain ⟨w, hw, hSw⟩ := theorem1_5_1 hS h22
-  have hw' : w ∈ Ioc 0 (π / 2) := ⟨gm_arcsec22_pos.trans_le hw.1, hw.2⟩
+  have hw' : w ∈ Ioc 0 (π / 2) := ⟨ang_arcsec22_pos.trans_le hw.1, hw.2⟩
   obtain ⟨Kw, -, hSKw, -, hmaxw⟩ := theorem3_5_6 hw'
   have e1 : area S ≤ area (Kw \ niche Kw w) := hmaxw S hSw
   obtain ⟨s, hs⟩ := theorem1_5_2 hSKw (h22.trans e1) hw
-  have e2 := gm_area_rot s (Kw \ niche Kw w)
+  have e2 := area_image_rot s (Kw \ niche Kw w)
   obtain ⟨K, hK, hSK, hcapK, hmaxK⟩ := theorem3_5_6 pi_div_two_mem_Ioc
   have e3 : area (rot s '' (Kw \ niche Kw w)) ≤ area (K \ niche K (π / 2)) := hmaxK _ hs
   have e4 : sofaArea (π / 2) K = area (K \ niche K (π / 2)) := by

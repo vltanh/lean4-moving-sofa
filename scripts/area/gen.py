@@ -178,16 +178,16 @@ class Chain:
             h, lo, hi = s.env[e.name]
             return (h, Fr(lo), Fr(hi))
         if isinstance(e, Const):
-            return ('(ga_iv_const %s)' % ('(' + strip(const_text(e.v)) + ' : ℝ)'), e.v, e.v)
+            return ('(iv_const %s)' % ('(' + strip(const_text(e.v)) + ' : ℝ)'), e.v, e.v)
         if isinstance(e, Neg):
             h, a, b = s.ev(e.a)
             L, U = rdown(-b), rup(-a)
-            return (s.step('ga_iv_neg', [h], L, U, None), L, U)
+            return (s.step('iv_neg', [h], L, U, None), L, U)
         if isinstance(e, Div):
             h, a, b = s.ev(e.a)
             L, U = rdown(a / e.k), rup(b / e.k)
             hh = s.fresh()
-            s.lines.append('  have %s := ga_iv_div %s (k := %d)\n    (L := %s) (U := %s) (by norm_num)' %
+            s.lines.append('  have %s := iv_div_const %s (k := %d)\n    (L := %s) (U := %s) (by norm_num)' %
                            (hh, h, e.k, lit(L), lit(U)))
             return (hh, L, U)
         if isinstance(e, Bin):
@@ -195,21 +195,21 @@ class Chain:
             h2, c, d = s.ev(e.b)
             if e.op == '+':
                 L, U = rdown(a + c), rup(b + d)
-                return (s.step('ga_iv_add', [h1, h2], L, U, None), L, U)
+                return (s.step('iv_add', [h1, h2], L, U, None), L, U)
             if e.op == '-':
                 L, U = rdown(a - d), rup(b - c)
-                return (s.step('ga_iv_sub', [h1, h2], L, U, None), L, U)
+                return (s.step('iv_sub', [h1, h2], L, U, None), L, U)
             if e.op == '*':
                 if a >= 0 and c >= 0:
-                    lem, lo, hi = 'ga_iv_mul_pp', a * c, b * d
+                    lem, lo, hi = 'iv_mul_nonneg', a * c, b * d
                 elif a >= 0 and d <= 0:
-                    lem, lo, hi = 'ga_iv_mul_pn', b * c, a * d
+                    lem, lo, hi = 'iv_mul_nonneg_nonpos', b * c, a * d
                 elif b <= 0 and c >= 0:
-                    lem, lo, hi = 'ga_iv_mul_np', a * d, b * c
+                    lem, lo, hi = 'iv_mul_nonpos_nonneg', a * d, b * c
                 elif b <= 0 and d <= 0:
-                    lem, lo, hi = 'ga_iv_mul_nn', b * d, a * c
+                    lem, lo, hi = 'iv_mul_nonpos', b * d, a * c
                 else:
-                    lem = 'ga_iv_mul'
+                    lem = 'iv_mul'
                     ps = [a * c, a * d, b * c, b * d]
                     lo, hi = min(ps), max(ps)
                 L, U = rdown(lo), rup(hi)
@@ -417,16 +417,16 @@ LEANARG = {  # atom -> (Lean term for the parameter, Lean proof of its enclosure
     'k51': ('P.κ₅.1', 'hB.κ₅₁_mem'), 'k52': ('P.κ₅.2', 'hB.κ₅₂_mem'),
 }
 ENDLEAN = {  # endpoint kind -> (Lean endpoint, hyps for t, c, s)
-    'zero': ('0', '(ga_iv_const 0)', '(by rw [cos_zero]; exact ga_iv_const 1)',
-             '(by rw [sin_zero]; exact ga_iv_const 0)'),
+    'zero': ('0', '(iv_const 0)', '(by rw [cos_zero]; exact iv_const 1)',
+             '(by rw [sin_zero]; exact iv_const 0)'),
     'phi': ('P.φ', 'hB.φ_mem', '(ga_cos_φ_mem hB)', '(ga_sin_φ_mem hB)'),
     'th': ('P.θ', 'hB.θ_mem', '(ga_cos_θ_mem hB)', '(ga_sin_θ_mem hB)'),
     'pth': ('(π / 2 - P.θ)', '(ga_pth_mem hB)', '(by rw [cos_pi_div_two_sub]; exact ga_sin_θ_mem hB)',
             '(by rw [sin_pi_div_two_sub]; exact ga_cos_θ_mem hB)'),
     'pphi': ('(π / 2 - P.φ)', '(ga_pphi_mem hB)', '(by rw [cos_pi_div_two_sub]; exact ga_sin_φ_mem hB)',
              '(by rw [sin_pi_div_two_sub]; exact ga_cos_φ_mem hB)'),
-    'p2': ('(π / 2)', 'ga_p2_mem', '(by rw [cos_pi_div_two]; exact ga_iv_const 0)',
-           '(by rw [sin_pi_div_two]; exact ga_iv_const 1)'),
+    'p2': ('(π / 2)', 'ga_p2_mem', '(by rw [cos_pi_div_two]; exact iv_const 0)',
+           '(by rw [sin_pi_div_two]; exact iv_const 1)'),
 }
 PHASEINFO = {  # Lean phase index -> (lower kind, upper kind, hab proof, piece proof, gs_ph, extra simp)
     0: ('zero', 'phi', 'hO.φ_pos', 'fun t ht => gs_piece₀ ht.2', 'gs_ph1',
@@ -438,10 +438,10 @@ PHASEINFO = {  # Lean phase index -> (lower kind, upper kind, hab proof, piece p
         ', gs_e₁ hP, gs_e₂ hP, gs_a₂ hP'),
 }
 CURVE = {  # curve -> (Lean curve, phase lemma, cross lemma, simp of the frame quantities, continuity)
-    'A': ('contactA P.path', 'ga_phase_A', 'ga_cross_A', 'gs_Phase.ρA', 'ga_continuous_ρA%s'),
-    'B': ('contactB P.path', 'ga_phase_B', 'ga_cross_B', 'gs_Phase.ρA', 'ga_continuous_ρA%s'),
-    'C': ('contactC P.path', 'ga_phase_C', 'ga_cross_C', 'gs_Phase.ρC', 'ga_continuous_ρC%s'),
-    'D': ('contactD P.path', 'ga_phase_D', 'ga_cross_D', 'gs_Phase.ρC', 'ga_continuous_ρC%s'),
+    'A': ('contactA P.path', 'ga_phase_A', 'ga_cross_A', 'gs_Phase.ρA', '(gs_continuous_ρA %d)'),
+    'B': ('contactB P.path', 'ga_phase_B', 'ga_cross_B', 'gs_Phase.ρA', '(gs_continuous_ρA %d)'),
+    'C': ('contactC P.path', 'ga_phase_C', 'ga_cross_C', 'gs_Phase.ρC', '(gs_continuous_ρC %d)'),
+    'D': ('contactD P.path', 'ga_phase_D', 'ga_cross_D', 'gs_Phase.ρC', '(gs_continuous_ρC %d)'),
     'X': ('P.path', 'ga_phase_X', 'ga_cross_X', 'gs_Phase.α, gs_Phase.β', None),
 }
 SUB = '₀₁₂₃₄'
@@ -489,7 +489,9 @@ def emit_num(nm):
     vs = r['vars'] + ['tA', 'cA', 'sA', 'tB', 'cB', 'sB']
     K = '(ga_K_%s %s)' % (nm, ' '.join(r['vars']))
     concl = '1 / 2 * (%s.F tB cB sB - %s.F tA cA sA) ∈\n      Icc %s %s' % (K, K, lit(r['lo']), lit(r['hi']))
-    return emit_chain_lemma('ga_num_' + nm, vs, r['env'], r['ch'], r['h'], concl)
+    doc = ('/-- Interval evaluation of `½ (F(t_B) - F(t_A))` for the antiderivative `ga_K_%s`, from '
+           'enclosures\nof its parameters and of `t`, `cos t`, `sin t` at the endpoints. -/\n' % nm)
+    return doc + emit_chain_lemma('ga_num_' + nm, vs, r['env'], r['ch'], r['h'], concl)
 
 def emit_phase(nm):
     r = RES[nm]
@@ -500,6 +502,8 @@ def emit_phase(nm):
     K = '(ga_K_%s %s)' % (nm, Kargs)
     a = ENDLEAN[lo_k][0]; b = ENDLEAN[hi_k][0]
     out = []
+    out.append('/-- `𝒥(%s)` on the phase %s, by the antiderivative `ga_K_%s`. -/'
+               % (CURVENAME[r['cv']], PHNAME[i], nm))
     out.append('lemma ga_%s (hP : P.IsSolution) :' % nm)
     cls = '(%s)' % cl if ' ' in cl else cl
     out.append('    curveArea %s %s %s = 1 / 2 *' % (cls, a, b))
@@ -513,9 +517,9 @@ def emit_phase(nm):
     out.append(l2)
     out.append('  have hO := gs_ord hP')
     if cont:
-        line = '  refine %s hP %s %s (%s) _ fun t => ?_' % (plem, hab, cont % SUB[i], pc)
+        line = '  refine %s hP %s %s (%s) _ fun t => ?_' % (plem, hab, cont % i, pc)
         if len(line) > 100:
-            line = '  refine %s hP %s %s (%s) _\n    fun t => ?_' % (plem, hab, cont % SUB[i], pc)
+            line = '  refine %s hP %s %s (%s) _\n    fun t => ?_' % (plem, hab, cont % i, pc)
     else:
         line = '  refine %s hP %s (%s) _ fun t => ?_' % (plem, hab, pc)
         if len(line) > 100:
@@ -534,7 +538,8 @@ def emit_mem(nm):
     a = ENDLEAN[lo_k][0]; b = ENDLEAN[hi_k][0]
     args = [LEANARG[r['vmap'][v]][1] for v in r['vars']]
     args += list(ENDLEAN[lo_k][1:]) + list(ENDLEAN[hi_k][1:])
-    out = ['lemma ga_%s_mem (hP : P.IsSolution) (hB : P.Bounds) :' % nm]
+    out = ['/-- Enclosure of `𝒥(%s)` on the phase %s. -/' % (CURVENAME[r['cv']], PHNAME[i]),
+           'lemma ga_%s_mem (hP : P.IsSolution) (hB : P.Bounds) :' % nm]
     cls = '(%s)' % cl if ' ' in cl else cl
     line = '    curveArea %s %s %s ∈ Icc %s %s := by' % (cls, a, b, lit(r['lo']), lit(r['hi']))
     if len(line) > 100:
@@ -564,37 +569,14 @@ def emit_seg():
 
 def trig_lemma(name):
     kind, ang, lo, hi = TRIG[name]
-    alo, ahi = ATOM[ang]
     lname = {'cphi': 'ga_cos_φ_mem', 'sphi': 'ga_sin_φ_mem', 'cth': 'ga_cos_θ_mem',
              'sth': 'ga_sin_θ_mem'}[name]
     pv = {'phi': 'P.φ', 'th': 'P.θ'}[ang]
     mem = {'phi': 'hB.φ_mem', 'th': 'hB.θ_mem'}[ang]
-    fn = kind
-    out = ['lemma %s (hB : P.Bounds) : %s %s ∈ Icc %s %s := by' % (lname, fn, pv, lit(lo), lit(hi))]
-    out.append('  have hx := %s' % mem)
-    out.append('  have hpi := pi_gt_three')
-    if kind == 'cos':
-        out.append('  have h1 : %s ≤ cos %s := by' % (lit(lo), lit(ahi)))
-        out.append('    refine le_trans ?_ (ga_cos_ge (by norm_num) (by norm_num) %d)' % TK)
-        out.append('    simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial]')
-        out.append('    norm_num')
-        out.append('  have h2 : cos %s ≤ %s := by' % (lit(alo), lit(hi)))
-        out.append('    refine (ga_cos_le (by norm_num) (by norm_num) %d).trans ?_' % TK)
-        out.append('    simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial]')
-        out.append('    norm_num')
-        out.append('  exact ⟨h1.trans (cos_le_cos_of_nonneg_of_le_pi (by linarith [hx.1]) (by linarith) hx.2),')
-        out.append('    (cos_le_cos_of_nonneg_of_le_pi (by norm_num) (by linarith [hx.2]) hx.1).trans h2⟩')
-    else:
-        out.append('  have h1 : %s ≤ sin %s := by' % (lit(lo), lit(alo)))
-        out.append('    refine le_trans ?_ (ga_sin_ge (by norm_num) (by norm_num) %d)' % TK)
-        out.append('    simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial]')
-        out.append('    norm_num')
-        out.append('  have h2 : sin %s ≤ %s := by' % (lit(ahi), lit(hi)))
-        out.append('    refine (ga_sin_le (by norm_num) (by norm_num) %d).trans ?_' % TK)
-        out.append('    simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial]')
-        out.append('    norm_num')
-        out.append('  exact ⟨h1.trans (sin_le_sin_of_le_of_le_pi_div_two (by linarith) (by linarith [hx.2]) hx.1),')
-        out.append('    (sin_le_sin_of_le_of_le_pi_div_two (by linarith [hx.1]) (by linarith) hx.2).trans h2⟩')
+    out = ['lemma %s (hB : P.Bounds) : %s %s ∈ Icc %s %s := by' % (lname, kind, pv, lit(lo), lit(hi))]
+    out.append('  refine iv_mono (%s_mem_taylor %d %s (by norm_num) (by norm_num)) ?_' % (kind, TK, mem))
+    out.append('  simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial]')
+    out.append('  norm_num')
     return '\n'.join(out)
 
 
@@ -625,7 +607,11 @@ DERIVED_USE = [
 ]
 
 def emit_params():
-    out = ['/-! ### Enclosures of the parameters, of the phase endpoints, and of `cos`, `sin` at `φ`, `θ` -/',
+    out = ['/-! ### Enclosures of `π`, of the parameters, of the phase endpoints, and of `cos`, `sin` at',
+           '`φ`, `θ` -/',
+           '',
+           'theorem ga_pi_mem : π ∈ Icc (3.14159265358 : ℝ) (3.14159265359 : ℝ) :=',
+           '  ⟨by linarith [pi_gt_d20], by linarith [pi_lt_d20]⟩',
            '']
     for (nm, lname, vars_, use) in DERIVED_USE:
         out.append(emit_derived(nm, lname, vars_))
@@ -683,7 +669,7 @@ def emit_tail(seg):
     out += stmt('ga_curveArea_A_mem', 'curveArea (contactA P.path) 0 (π / 2)', bounds['A'],
                 'The curve area `𝒥(𝐀|[0, π/2]) = 0.72016…`.')
     out += ['  have hO := gs_ord hP',
-            '  rw [ga_split_five hO.φ_pos.le hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (by linarith [hO.φ_pos])',
+            '  rw [curveArea_split_five hO.φ_pos.le hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (by linarith [hO.φ_pos])',
             '    (ga_isCBV_A hP), ga_A1 hP]']
     out += haves(['A2', 'A3', 'A4', 'A5'])
     out += ['  constructor <;> linarith [%s]' % hyps_list(['A2', 'A3', 'A4', 'A5']), '']
@@ -691,7 +677,7 @@ def emit_tail(seg):
     out += stmt('ga_curveArea_C_mem', 'curveArea (contactC P.path) 0 (π / 2)', bounds['C'],
                 'The curve area `𝒥(𝐂|[0, π/2]) = 1.33392…`.')
     out += ['  have hO := gs_ord hP',
-            '  rw [ga_split_five hO.φ_pos.le hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (by linarith [hO.φ_pos])',
+            '  rw [curveArea_split_five hO.φ_pos.le hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (by linarith [hO.φ_pos])',
             '    (ga_isCBV_C hP), ga_C5 hP]']
     out += haves(['C1', 'C2', 'C3', 'C4'])
     out += ['  constructor <;> linarith [%s]' % hyps_list(['C1', 'C2', 'C3', 'C4']), '']
@@ -706,7 +692,7 @@ def emit_tail(seg):
     out += stmt('ga_curveArea_x_mem', 'curveArea P.path P.φ (π / 2 - P.φ)', bounds['X'],
                 'The curve area `𝒥(𝐱|[t₁, t₄]) = 0.60139…` of the rotation path.')
     out += ['  have hO := gs_ord hP',
-            '  rw [ga_split_three hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (ga_isCBV_X hP)]']
+            '  rw [curveArea_split_three hO.φ_lt_θ.le hO.θ_lt.le hO.lt_φ\'.le (ga_isCBV_X hP)]']
     out += haves(['X2', 'X3', 'X4'])
     out += ['  constructor <;> linarith [%s]' % hyps_list(['X2', 'X3', 'X4']), '']
     # B
@@ -750,7 +736,7 @@ def emit_tail(seg):
 
 if __name__ == '__main__' and 'emit' in sys.argv:
     out = sys.argv[sys.argv.index('emit') + 1]
-    parts = [open('tpl_head.lean.in').read(), open('iv.lean.in').read(), open('tpl_generic.lean.in').read(),
+    parts = [open('tpl_head.lean.in').read(), open('tpl_generic.lean.in').read(),
              open('tpl_phase.lean.in').read(), emit_params(), emit_phases()]
     tail, bounds, s = emit_tail(emit_seg())
     parts.append(tail)

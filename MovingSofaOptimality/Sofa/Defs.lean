@@ -133,12 +133,13 @@ def qMinus (S : Set (ℝ × ℝ)) (t : ℝ) : Set (ℝ × ℝ) := hallwayMap S t
 
 /-! ### Monotone sofas (§2.3) -/
 
-/-- The intersection `𝓘(S) = P_ω ∩ ⋂_{t ∈ [0, ω]} L_S(t)` (Definition 2.3.6, `def:monotonization`). -/
+/-- The intersection `𝓘(S) = P_ω ∩ ⋂_{t ∈ [0, ω]} L_S(t)` (Definition 2.3.6,
+`def:monotonization`). -/
 def monotonization (S : Set (ℝ × ℝ)) (ω : ℝ) : Set (ℝ × ℝ) :=
   para ω ∩ ⋂ t ∈ Icc 0 ω, suppHallway S t
 
-/-- A monotone sofa with rotation angle `ω ∈ (0, π/2]`: the intersection `𝓘(S')` of some moving sofa
-`S'` with rotation angle `ω` in standard position (Definition 2.3.7, `def:monotone-sofa`). -/
+/-- A monotone sofa with rotation angle `ω ∈ (0, π/2]`: the intersection `𝓘(S')` of some moving
+sofa `S'` with rotation angle `ω` in standard position (Definition 2.3.7, `def:monotone-sofa`). -/
 def IsMonotoneSofa (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
   ω ∈ Ioc 0 (π / 2) ∧ ∃ S', IsMovingSofaWithAngle S' ω ∧ IsStandardPosition S' ω ∧
     S = monotonization S' ω

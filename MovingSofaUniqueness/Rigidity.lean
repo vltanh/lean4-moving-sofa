@@ -50,46 +50,6 @@ theorem integrable_sq_sub
   refine hsum.congr (Eventually.of_forall fun x => ?_)
   ring
 
-/-- `∫ (f - g)² = ∫ f² + ∫ g² - 2 ∫ f g`. -/
-theorem integral_sq_sub
-    (hf : Integrable (fun x => (f x) ^ 2) μ)
-    (hg : Integrable (fun x => (g x) ^ 2) μ)
-    (hfg : Integrable (fun x => f x * g x) μ) :
-    (∫ x, (f x - g x) ^ 2 ∂μ) =
-      (∫ x, (f x) ^ 2 ∂μ) + (∫ x, (g x) ^ 2 ∂μ) -
-        2 * (∫ x, f x * g x ∂μ) := by
-  calc
-    (∫ x, (f x - g x) ^ 2 ∂μ) =
-        ∫ x, (f x) ^ 2 + (g x) ^ 2 - 2 * (f x * g x) ∂μ := by
-      apply integral_congr_ae
-      exact Eventually.of_forall fun x => by ring
-    _ = _ := by
-      have hsum : Integrable (fun x => (f x) ^ 2 + (g x) ^ 2) μ := hf.add hg
-      rw [integral_sub hsum (hfg.const_mul 2), integral_add hf hg, integral_const_mul]
-
-/-- The expansion of `∫ ((1 - c) f + c g)²`, for every real `c`. -/
-theorem integral_sq_combo (c : ℝ)
-    (hf : Integrable (fun x => (f x) ^ 2) μ)
-    (hg : Integrable (fun x => (g x) ^ 2) μ)
-    (hfg : Integrable (fun x => f x * g x) μ) :
-    (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ) =
-      (1 - c) ^ 2 * (∫ x, (f x) ^ 2 ∂μ) +
-        (2 * c * (1 - c)) * (∫ x, f x * g x ∂μ) +
-        c ^ 2 * (∫ x, (g x) ^ 2 ∂μ) := by
-  calc
-    (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ) =
-        ∫ x, (1 - c) ^ 2 * (f x) ^ 2 +
-          (2 * c * (1 - c)) * (f x * g x) + c ^ 2 * (g x) ^ 2 ∂μ := by
-      apply integral_congr_ae
-      exact Eventually.of_forall fun x => by ring
-    _ = _ := by
-      have h12 : Integrable
-          (fun x => (1 - c) ^ 2 * (f x) ^ 2 + (2 * c * (1 - c)) * (f x * g x)) μ :=
-        (hf.const_mul ((1 - c) ^ 2)).add (hfg.const_mul (2 * c * (1 - c)))
-      rw [integral_add h12 (hg.const_mul (c ^ 2)),
-        integral_add (hf.const_mul ((1 - c) ^ 2)) (hfg.const_mul (2 * c * (1 - c))),
-        integral_const_mul, integral_const_mul, integral_const_mul]
-
 /-- The convexity gap of `halfSquareIntegral` at `c` is `c (1 - c) / 2 · ∫ (f - g)²`; at the
 midpoint the factor is `1/8`. -/
 theorem halfSquareIntegral_combo_gap (c : ℝ)
@@ -99,25 +59,32 @@ theorem halfSquareIntegral_combo_gap (c : ℝ)
     (1 - c) * halfSquareIntegral μ f + c * halfSquareIntegral μ g -
         halfSquareIntegral μ (fun x => (1 - c) * f x + c * g x) =
       (c * (1 - c) / 2) * (∫ x, (f x - g x) ^ 2 ∂μ) := by
+  -- Pointwise, `((1 - c) f + c g)² = (1 - c) f² + c g² - c (1 - c) (f - g)²`.
+  have hcombo : (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ) =
+      (1 - c) * (∫ x, (f x) ^ 2 ∂μ) + c * (∫ x, (g x) ^ 2 ∂μ) -
+        c * (1 - c) * (∫ x, (f x - g x) ^ 2 ∂μ) := by
+    have h₁ : Integrable (fun x => (1 - c) * (f x) ^ 2 + c * (g x) ^ 2) μ :=
+      (hf.const_mul _).add (hg.const_mul _)
+    have h₂ : Integrable (fun x => c * (1 - c) * (f x - g x) ^ 2) μ :=
+      (integrable_sq_sub μ hf hg hfg).const_mul _
+    calc (∫ x, ((1 - c) * f x + c * g x) ^ 2 ∂μ)
+        = ∫ x, ((1 - c) * (f x) ^ 2 + c * (g x) ^ 2) - c * (1 - c) * (f x - g x) ^ 2 ∂μ :=
+          integral_congr_ae (Eventually.of_forall fun x => by ring)
+      _ = _ := by
+        rw [integral_sub h₁ h₂, integral_add (hf.const_mul _) (hg.const_mul _),
+          integral_const_mul, integral_const_mul, integral_const_mul]
   unfold halfSquareIntegral
-  rw [integral_sq_combo μ c hf hg hfg, integral_sq_sub μ hf hg hfg]
+  rw [hcombo]
   ring
 
 /-- `∫ (f - g)² = 0` if and only if `f = g` almost everywhere. -/
 theorem integral_sq_sub_eq_zero_iff
     (hint : Integrable (fun x => (f x - g x) ^ 2) μ) :
     (∫ x, (f x - g x) ^ 2 ∂μ) = 0 ↔ f =ᵐ[μ] g := by
-  have hzero := integral_eq_zero_iff_of_nonneg
-    (fun x => sq_nonneg (f x - g x)) hint
-  constructor
-  · intro h
-    have hae := hzero.mp h
-    filter_upwards [hae] with x hx
-    exact sub_eq_zero.mp (sq_eq_zero_iff.mp hx)
-  · intro h
-    apply hzero.mpr
-    filter_upwards [h] with x hx
-    simp [hx]
+  rw [integral_eq_zero_iff_of_nonneg (fun x => sq_nonneg (f x - g x)) hint]
+  constructor <;> intro h <;> filter_upwards [h] with x hx
+  · simpa [sub_eq_zero] using hx
+  · simp [hx]
 
 /-- For `c ∈ (0, 1)`, the convexity inequality of `halfSquareIntegral` is an equality if and only
 if `f = g` almost everywhere. -/
@@ -197,6 +164,8 @@ translation. -/
 theorem CapKernel.eq_horizontal_translation {φ : ℝ} {f : ℝ → ℝ}
     (hφ : φ ∈ Ioo 0 (π / 4)) (h : CapKernel φ f) :
     EqOn f (fun t => -f π * cos t) (Icc 0 π) := by
+  -- Solve the equations in reverse order: on `[π/2, π]`, `[π/2 - φ, π/2]`, `[φ, π/2 - φ]` and
+  -- `[0, φ]`; each step fixes the constants of the next one.
   set a : ℝ := -f π
   have hleft : EqOn f (fun t => a * cos t) (Icc (π / 2) π) := h.upper_left
   have hcos : cos φ ≠ 0 := (cos_pos_of_mem_Ioo
@@ -259,13 +228,10 @@ end MovingSofaUniqueness
 end
 
 /-!
-## Equality in a concave quadratic functional
+## Equality in a concave functional
 
 A concave functional is constant on the segment between two of its global maximizers
-(`eq_on_segment_of_isMax`). For a quadratic functional, `f x - f y` is minus the first variation at
-`x` towards `y` plus four times the midpoint concavity gap (`quadratic_deficit_identity`). So the
-first variation at a maximizer towards another maximizer is zero (`dirDeriv_eq_zero_of_isMax`): it
-is at most zero by Baek's Theorem 7.1.5, and at least zero by concavity.
+(`eq_on_segment_of_isMax`).
 -/
 
 section
@@ -281,40 +247,9 @@ variable {V : Type} (D : ConvexDomain V) {f : V → ℝ}
 theorem eq_on_segment_of_isMax (hc : D.IsConcave f) {x y : V}
     (hmax : ∀ z, f z ≤ f x) (hxy : f y = f x) {c : ℝ} (hcm : c ∈ Icc (0 : ℝ) 1) :
     f (D.comb c x y) = f x := by
-  apply le_antisymm (hmax _)
   have h := hc x y c hcm
   rw [hxy] at h
-  nlinarith
-
-/-- For a quadratic functional, `f x - f y` is minus the first variation at `x` towards `y` plus
-four times the midpoint concavity gap. -/
-theorem quadratic_deficit_identity (hq : D.IsQuadratic f) (x y : V) :
-    f x - f y = -D.dirDeriv f x y +
-      4 * (f (D.comb (1 / 2) x y) - (f x + f y) / 2) := by
-  obtain ⟨g, hg, hfg⟩ := hq
-  have hf : f = fun v => g v v := funext hfg
-  have hhalf : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := by constructor <;> norm_num
-  rw [hf, lemma7_1_4 D hg]
-  change g x x - g y y = -(g x y + g y x - 2 * g x x) +
-    4 * (g (D.comb (1 / 2) x y) (D.comb (1 / 2) x y) - (g x x + g y y) / 2)
-  rw [cvx_bilin_comb D hg x y hhalf]
-  ring
-
-/-- A concave quadratic functional lies below its first-order affine approximation. -/
-theorem quadratic_tangent_bound (hq : D.IsQuadratic f) (hc : D.IsConcave f) (x y : V) :
-    f y ≤ f x + D.dirDeriv f x y := by
-  have h := hc x y (1 / 2) (by constructor <;> norm_num)
-  have he := D.quadratic_deficit_identity hq x y
-  nlinarith
-
-/-- The first variation of a concave quadratic functional at a global maximizer, towards another
-global maximizer, is zero. -/
-theorem dirDeriv_eq_zero_of_isMax (hq : D.IsQuadratic f) (hc : D.IsConcave f) {x y : V}
-    (hmax : ∀ z, f z ≤ f x) (hxy : f y = f x) : D.dirDeriv f x y = 0 := by
-  have hle := (theorem7_1_5 D hq hc x).1 hmax y
-  have hge := D.quadratic_tangent_bound hq hc x y
-  rw [hxy] at hge
-  linarith
+  linarith [hmax (D.comb c x y)]
 
 end ConvexDomain
 end MovingSofaOptimality
@@ -475,17 +410,12 @@ theorem support_hasDerivAt_of_injCond1 {K : Set (ℝ × ℝ)}
     (hK : IsConvexBody K) (h1 : InjCond1 K) {t : ℝ}
     (ht : t ∈ Ico 0 (π / 2) ∪ Ioc (π / 2) π) :
     HasDerivAt (supp K) (dot (vplus K t) (vvec t)) t := by
-  have hv := inj_vplus_eq_vminus_of_injCond1 hK h1 ht
   have hl := hasDerivWithinAt_supp_left hK t
-  have hr := hasDerivWithinAt_supp_right hK t
-  rw [← hv] at hl
-  have hu : Iic t ∪ Ici t = (univ : Set ℝ) := by
-    ext s
-    simp only [mem_union, mem_Iic, mem_Ici, mem_univ, iff_true]
-    exact le_total s t
-  have hd := hl.union hr
-  simpa only [hu, hasDerivWithinAt_univ] using hd
+  rw [← inj_vplus_eq_vminus_of_injCond1 hK h1 ht] at hl
+  simpa only [Iic_union_Ici, hasDerivWithinAt_univ] using
+    hl.union (hasDerivWithinAt_supp_right hK t)
 
+/-- An interior point of an upper arc is a normal in `[0, π/2) ∪ (π/2, π]`. -/
 theorem arc_mem_regular {a b t : ℝ} (h : UpperArc a b) (ht : t ∈ Ioo a b) :
     t ∈ Ico 0 (π / 2) ∪ Ioc (π / 2) π := by
   rcases h with ⟨ha, hb⟩ | ⟨ha, hb⟩
@@ -659,7 +589,7 @@ theorem tangentKernel_of_mamikon_eq {a b T : ℝ}
   let f : ℝ → ℝ := fun t => supp K₁.1 t - supp K₀.1 t
   let f' : ℝ → ℝ := fun t => dot (vplus K₁.1 t) (vvec t) -
     dot (vplus K₀.1 t) (vvec t)
-  have hf : Continuous f := (inj_continuous_supp K₁.2).sub (inj_continuous_supp K₀.2)
+  have hf : Continuous f := K₁.2.continuous_supp.sub K₀.2.continuous_supp
   have hd : ∀ t ∈ Ioo a b, HasDerivAt f (f' t) t := by
     intro t ht
     exact (support_hasDerivAt_of_injCond1 K₁.2 h1₁ (arc_mem_regular hArc ht)).sub
@@ -700,13 +630,13 @@ theorem middleKernel_of_mamikon_eq {a b : ℝ}
       z (convexBodyComb d K L) t = (1 - d) • z K t + d • z L t := by
     intro K L d hd t ht
     change outerCorner (convexBodyComb d K L).1 t = _
-    rw [opt_convexBodyComb_val hd, opt_outerCorner_comb K.2 L.2 hd]
+    rw [cvx_convexBodyComb_val hd, opt_outerCorner_comb K.2 L.2 hd]
     rfl
   have hdEq := displacement_eqOn_of_mamikon_eq hab hbπ z hz hzl hlin K₀ K₁ hc heq
     (displacement_continuousOn_arc hcap₀ h1₀ hArc (hz K₀).1)
     (displacement_continuousOn_arc hcap₁ h1₁ hArc (hz K₁).1)
   let f : ℝ → ℝ := fun t => supp K₁.1 t - supp K₀.1 t
-  have hf : Continuous f := (inj_continuous_supp K₁.2).sub (inj_continuous_supp K₀.2)
+  have hf : Continuous f := K₁.2.continuous_supp.sub K₀.2.continuous_supp
   apply integrated_middle_equation hf
   intro t ht
   have hd := (support_hasDerivAt_of_injCond1 K₁.2 h1₁ (arc_mem_regular hArc ht)).sub
@@ -761,6 +691,9 @@ theorem mamikonSegmentEquality_iff {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (x y : LTriple φ) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
     MamikonSegmentEquality φ x y c ↔
       upperQL φ ((lDomain φ).comb c x y) = (1 - c) * upperQL φ x + c * upperQL φ y := by
+  -- `𝒬 = (𝒫 + 𝒮) - 𝒮 - ℛ - ℒ`, where the first term is affine (Baek's Lemma 8.3.7) and the other
+  -- three are convex (Baek's Lemma 8.3.3); so `𝒬` is affine along the segment if and only if each
+  -- of the three convexity inequalities is an equality.
   obtain ⟨-, cS, -, cR, -, cL⟩ := lemma8_3_3 hφ
   have hLin := lemma8_3_7 hφ
   set z := (lDomain φ).comb c x y with hz
@@ -839,22 +772,6 @@ theorem upperQL_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox
     (x : LTriple P.φ) : upperQL P.φ x ≤ upperQL P.φ (gerverTriple hP hbox) :=
   corollary8_5_8 hP hbox x.2
 
-/-- Equality in the optimal upper bound forces zero first variation at Gerver's triple. -/
-theorem gerver_dirDeriv_eq_zero_of_upperQL_eq {P : GerverParams} (hP : P.IsSolution)
-    (hbox : P.InBox) {x : LTriple P.φ}
-    (hx : upperQL P.φ x = upperQL P.φ (gerverTriple hP hbox)) :
-    (lDomain P.φ).dirDeriv (upperQL P.φ) (gerverTriple hP hbox) x = 0 :=
-  (lDomain P.φ).dirDeriv_eq_zero_of_isMax (proposition8_2_1 (gm_φ_mem_Ioo hP hbox))
-    (theorem8_3_8 (gm_φ_mem_Ioo hP hbox)) (upperQL_le_gerver hP hbox) hx
-
-/-- A triple attaining Gerver's value of `𝒬` satisfies `MamikonSegmentEquality` with Gerver's
-triple for every `c ∈ [0, 1]`. -/
-theorem gerver_mamikonSegmentEquality {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    {x : LTriple P.φ} (hx : upperQL P.φ x = upperQL P.φ (gerverTriple hP hbox))
-    {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
-    MamikonSegmentEquality P.φ (gerverTriple hP hbox) x c :=
-  mamikonSegmentEquality_of_isMax (gm_φ_mem_Ioo hP hbox) (upperQL_le_gerver hP hbox) hx hc
-
 /-- The canonical triple `(K, B_K, D_K)` in `𝓛` of a cap `K` in `𝒦^i` (Baek's Theorem 8.1.8). -/
 noncomputable def kiExtensionTriple {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
     {K : Set (ℝ × ℝ)} (hK : IsKi K) : LTriple φ :=
@@ -875,19 +792,16 @@ theorem ki_upperQL_eq_gerver_of_sofaArea_eq {P : GerverParams} (hP : P.IsSolutio
   have hGarea := gm_sofaArea_cap hP hbox
   linarith
 
-/-- If a cap in `𝒦^i` has the sofa area of Gerver's sofa, the first variation of `𝒬` at Gerver's
-triple towards the cap's triple is zero, and the segment between the two triples satisfies
-`MamikonSegmentEquality`. -/
+/-- If a cap in `𝒦^i` has the sofa area of Gerver's sofa, the segment from Gerver's triple to the
+cap's triple satisfies `MamikonSegmentEquality`: both triples maximize `𝒬` (Baek's
+Corollary 8.5.8). -/
 theorem ki_maximizer_equality_conditions {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set (ℝ × ℝ)} (hK : IsKi K)
     (harea : sofaArea (π / 2) K = area (gerverSofa P)) :
-    (lDomain P.φ).dirDeriv (upperQL P.φ) (gerverTriple hP hbox)
-        (kiExtensionTriple hbox.1 hK) = 0 ∧
-      ∀ c ∈ Icc (0 : ℝ) 1,
-        MamikonSegmentEquality P.φ (gerverTriple hP hbox) (kiExtensionTriple hbox.1 hK) c := by
-  have hx := ki_upperQL_eq_gerver_of_sofaArea_eq hP hbox hK harea
-  exact ⟨gerver_dirDeriv_eq_zero_of_upperQL_eq hP hbox hx,
-    fun _ hc => gerver_mamikonSegmentEquality hP hbox hx hc⟩
+    ∀ c ∈ Icc (0 : ℝ) 1,
+      MamikonSegmentEquality P.φ (gerverTriple hP hbox) (kiExtensionTriple hbox.1 hK) c :=
+  fun _ hc => mamikonSegmentEquality_of_isMax (gm_φ_mem_Ioo hP hbox) (upperQL_le_gerver hP hbox)
+    (ki_upperQL_eq_gerver_of_sofaArea_eq hP hbox hK harea) hc
 
 end MovingSofaUniqueness
 
@@ -920,6 +834,8 @@ theorem capKernel_of_mamikonS_eq {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     CapKernel φ (fun t => supp K₁.1 t - supp K₀.1 t) := by
   have hπ := pi_pos
   have hc' : c ∈ Icc (0 : ℝ) 1 := ⟨hc.1.le, hc.2.le⟩
+  -- Step 1: `mamikonS φ` is the sum of four Mamikon terms, each convex (`opt_mamikon_tangent`,
+  -- `opt_mamikon_outer`), so equality for the sum forces equality in each term.
   let Kc := convexBodyComb c K₀ K₁
   let F₁ : ConvexBodySet → ℝ := fun K => mamikon K.1 0 φ (tangentParam K.1 (π / 2))
   let F₂ : ConvexBodySet → ℝ := fun K => mamikon K.1 φ (π / 2 - φ) (outerCorner K.1)
@@ -942,18 +858,14 @@ theorem capKernel_of_mamikonS_eq {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (by linarith) (by linarith) (by linarith) le_rfl).2 K₀ K₁ c hc'
   rw [hsum, hsum, hsum] at heq
   change F₁ Kc + F₂ Kc + F₃ Kc + F₄ Kc = _ at heq
-  have e₁ : F₁ Kc = (1 - c) * F₁ K₀ + c * F₁ K₁ := by
-    nlinarith only [heq, h₁, h₂, h₃, h₄]
-  have e₂ : F₂ Kc = (1 - c) * F₂ K₀ + c * F₂ K₁ := by
-    nlinarith only [heq, h₁, h₂, h₃, h₄]
-  have e₃ : F₃ Kc = (1 - c) * F₃ K₀ + c * F₃ K₁ := by
-    nlinarith only [heq, h₁, h₂, h₃, h₄]
-  have e₄ : F₄ Kc = (1 - c) * F₄ K₀ + c * F₄ K₁ := by
-    nlinarith only [heq, h₁, h₂, h₃, h₄]
+  have e₁ : F₁ Kc = (1 - c) * F₁ K₀ + c * F₁ K₁ := by linarith
+  have e₂ : F₂ Kc = (1 - c) * F₂ K₀ + c * F₂ K₁ := by linarith
+  have e₃ : F₃ Kc = (1 - c) * F₃ K₀ + c * F₃ K₁ := by linarith
+  have e₄ : F₄ Kc = (1 - c) * F₄ K₀ + c * F₄ K₁ := by linarith
+  -- Step 2: the four equalities give the equations of `CapKernel`; at `π/2` both supports are `1`.
   refine ⟨?_, ?_, ?_, ?_, ?_⟩
-  · have ht₀ : supp K₀.1 (π / 2) = 1 := hK₀.1.2.2.2.1
-    have ht₁ : supp K₁.1 (π / 2) = 1 := hK₁.1.2.2.2.1
-    rw [ht₀, ht₁, sub_self]
+  · show supp K₁.1 (π / 2) - supp K₀.1 (π / 2) = 0
+    rw [hK₀.1.2.2.2.1, hK₁.1.2.2.2.1, sub_self]
   · exact tangentKernel_of_mamikon_eq hφ.1 (by linarith) (by linarith [hφ.2])
       (Or.inl ⟨le_rfl, by linarith [hφ.2]⟩)
       K₀ K₁ hK₀.1 hK₁.1 hK₀.2.1.1 hK₁.2.1.1 hc e₁
@@ -1009,7 +921,7 @@ theorem mem_right_cap_iff {K : Set Plane} (hK : IsCap K (π / 2)) (p : Plane) :
     p ∈ K ↔ 0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ supp K t := by
   constructor
   · intro hp
-    exact ⟨(opt_cap_mem_strip hK hp).1,
+    exact ⟨(inj_cap_strip hK hp).1,
       fun t _ => dot_le_supp hK.2.1.2.1 hp t⟩
   · rintro ⟨hfloor, hupper⟩
     obtain ⟨hω, hbody, hωtop, htop, hωfloor, hbottom, hplanes⟩ := hK
@@ -1020,9 +932,9 @@ theorem mem_right_cap_iff {K : Set Plane} (hK : IsCap K (π / 2)) (p : Plane) :
     · exact hupper t ⟨ht.1, by linarith [ht.2, pi_pos]⟩
     · exact hupper t ⟨by linarith [ht.1, pi_pos], by linarith [ht.2]⟩
     · have he : t = 3 * π / 2 := by linarith
-      rw [he, hbottom, opt_uvec_three_pi_div_two]
+      rw [he, hbottom, uvec_three_pi_div_two]
       simpa [dot] using hfloor
-    · rw [ht, hbottom, opt_uvec_three_pi_div_two]
+    · rw [ht, hbottom, uvec_three_pi_div_two]
       simpa [dot] using hfloor
 
 /-- A point lies in the niche of a right-angle cap if and only if it lies above the floor and in
@@ -1032,7 +944,7 @@ theorem mem_right_niche_iff (K : Set Plane) (p : Plane) :
       dot p (uvec t) < supp K t - 1 ∧
       dot p (vvec t) < supp K (t + π / 2) - 1 := by
   have hf : p ∈ fan (π / 2) ↔ 0 ≤ p.2 := by
-    simp [fan, halfPlus, opt_uvec_pi_div_two, dot]
+    simp [fan, halfPlus, uvec_pi_div_two, dot]
   change (p ∈ fan (π / 2) ∧ p ∈ ⋃ t ∈ Ioo (0 : ℝ) (π / 2), qMinus K t) ↔ _
   rw [hf]
   simp only [mem_iUnion, exists_prop, ms_mem_qMinus_iff]
