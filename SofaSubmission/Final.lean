@@ -1,28 +1,25 @@
 module
 
 public import SofaSubmission.Uniqueness
+public import SofaSubmission.ReferenceFacts
 
 /-!
-# Shared uniqueness theorem and the concrete paper Gerver witness
+# Shared and exact-reference moving-sofa uniqueness endpoints
 
-These declarations use the exact identity-start Euclidean motion model and
-the local paper proof. They import neither an upstream statement placeholder
-nor a reference proof using a prohibited decision tactic.
+The same core proof supplies the reference-independent publication theorem,
+the corollary for the paper's Gerver construction, and the EXACT upstream
+`volume_eq_sofaConstant_iff_congruent_gerversSofa` declaration.
 
-`maximizers_congruent` is the unconditional unique-maximizer assertion, with
-both competitors stated explicitly. The second theorem identifies an arbitrary
-canonical maximizer with the actual pair-coordinate Gerver formula of the paper.
-It does not redefine Gerver's sofa as an arbitrary chosen maximizer.
+The concrete-reference dependencies are now local ordinary Lean modules:
+`ReferenceDefs` proves the full four-constant specification analytically;
+`Bridge/ReferenceShape` proves equality with the paper Gerver set in
+coordinates; `ReferenceFacts` derives the actual motion and optimal volume.
+No Challenge placeholder or rejected decision-kernel certificate is imported.
+The parameter/path correspondence does not depend on shape uniqueness.
 
-IMPORTANT: these are not the exact upstream declaration naming its different
-concrete `MovingSofa.gerversSofa`. The prototype of that specialization was
-withdrawn after auditing its proposed reference dependency and finding
-`decide +kernel`. See docs/uniqueness/21-reference-dependency-audit.md.
-The reference-formula integration remains unfinished under the requested
-source restrictions; it is not concealed as an extra theorem hypothesis.
-
-All proof scripts are uncompiled. Comparator and independent kernel checking
-have not been executed. No acceptance or successful elaboration is claimed.
+All source remains uncompiled. Explicit proof bodies are not a report of
+successful elaboration, a dependency audit, Comparator success, independent
+kernel verification, or Palomar acceptance. No such execution was performed.
 -/
 
 @[expose] public section
@@ -43,8 +40,8 @@ theorem maximizers_congruent (s t : Set ℝ²)
     ∃ g : E(2), s = g '' t := by
   exact IsMaximizer.congruent ⟨hs, hsvol⟩ ⟨ht, htvol⟩
 
-/-- Identify a canonical maximizer with the concrete Gerver witness of the
-paper, without assuming that witness is already in the horizontal hallway. -/
+/-- The publication's explicit pair-coordinate Gerver witness, without an
+assumption that it has already been placed in the horizontal hallway. -/
 theorem volume_eq_constant_iff_congruent_paper_gerver {P : MovingSofa.GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) (s : Set ℝ²)
     (hs : ∃ m, MovingSofa.IsMovingSofa s m) :
@@ -67,8 +64,7 @@ theorem volume_eq_constant_iff_congruent_paper_gerver {P : MovingSofa.GerverPara
     rw [volume_point_image] at hv
     exact hv.trans (constant_eq_paper_gerver hP hbox).symm
 
-/-- The canonical problem has a maximizing shape, and every maximizer is
-congruent to it. Existence is proved rather than assumed from the supremum. -/
+/-- Existence is proved rather than inferred from the definition of a supremum. -/
 theorem exists_unique_maximizer_modulo_isometry :
     ∃ G : Set ℝ², IsMaximizer G ∧
       ∀ s : Set ℝ², (∃ m, MovingSofa.IsMovingSofa s m) →
@@ -77,3 +73,15 @@ theorem exists_unique_maximizer_modulo_isometry :
   exact ⟨G, hG, fun s hs => volume_eq_constant_iff_congruent hs hG.1 hG.2.symm⟩
 
 end MovingSofa.Canonical
+
+namespace MovingSofa
+
+/-- The exact formal-conjectures statement, for its actual integral-defined
+Gerver reference. No extra hypotheses on the competing sofa are added. -/
+theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)
+    (hs : ∃ m, IsMovingSofa s m) :
+    volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa := by
+  exact Canonical.volume_eq_constant_iff_congruent hs
+    isMovingSofa_gerversSofa sofaConstant_eq_volume_gerversSofa
+
+end MovingSofa
