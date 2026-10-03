@@ -13,7 +13,7 @@ variation defects; it is controlled by the total sample weight.
 
 This module is scalar algebra. The application to actual support values and
 feasible polygons is separate. All estimates keep nonnegativity of the weights
-and finiteness of the sampling set explicit. Uncompiled, admission-free source.
+and finiteness of the sampling set explicit.
 -/
 
 @[expose] public section

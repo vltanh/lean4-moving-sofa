@@ -13,7 +13,6 @@ is ZERO, rather than merely tending to zero.
 
 The use of actual support values is essential. Assigned heights are used only
 for a comparison whose direction is justified separately in `PolygonPenalty`.
-Uncompiled source, without admissions or external evaluation.
 -/
 
 @[expose] public section

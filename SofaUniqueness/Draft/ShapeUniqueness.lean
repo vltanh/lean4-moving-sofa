@@ -10,9 +10,8 @@ existence supplies only the global numerical bound in `cap_area_le_gerver`.
 The positive-area premise needed for the pinned selection is proved from
 Gerver's established lower bound, not added to the final theorem.
 
-The historical `Draft` namespace is retained for source compatibility. These
-are uncompiled proof scripts; their elaboration and axiom closure have not
-been checked by executing Lean.
+The historical `Draft` namespace is retained for compatibility with the
+formal-conjectures adapter, which imports this module.
 -/
 
 @[expose] public section

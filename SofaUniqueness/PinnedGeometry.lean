@@ -16,8 +16,6 @@ This specific sandwich, rather than a false general diameter-to-height
 perturbation estimate, gives a mesh-independent support bound. Feasibility as
 a translated polygon cap is supplied by the existing Lemma 3.4.8. Width one
 then determines the normalization translation directly.
-
-Uncompiled source. No admissions or decision tactics.
 -/
 
 @[expose] public section

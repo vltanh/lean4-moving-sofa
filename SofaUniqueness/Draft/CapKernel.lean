@@ -4,12 +4,10 @@ public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 public import Mathlib.Tactic
 
 /-!
-# UNCOMPILED DRAFT: matching the four Mamikon equality intervals
+# Matching the four Mamikon equality intervals
 
 This file proves the algebraic/integral propagation step independently of caps.
-The analytic obligation of deriving `CapKernel` from vanishing Mamikon gaps is
-kept separately in `PaperReductions.lean`. `CapKernel` is input data, not an axiom
-or a typeclass with an asserted global instance.
+Deriving `CapKernel` from vanishing Mamikon gaps is done in `MamikonCapKernel.lean`.
 -/
 
 @[expose] public section

@@ -9,8 +9,6 @@ This generalizes the existing proofs of Theorems 4.2.5 and 1.5.2 by exposing
 exactly the pinned-edge hypotheses that they use. In particular no balanced
 maximum cap is substituted for the specified sofa. All geometry below comes
 from the existing, non-maximality-dependent lemmas in `Angle.RightAngle`.
-
-The scripts are uncompiled. They contain no admissions or external evaluation.
 -/
 
 @[expose] public section

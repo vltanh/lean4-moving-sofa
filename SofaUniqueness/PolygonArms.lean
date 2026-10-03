@@ -12,7 +12,6 @@ selected approximations of a specified cap.
 
 No assertion that penalized maximizers are balanced is made. The parameter
 D need not be the sharp Euclidean diameter; any nonnegative upper bound works.
-Uncompiled source, with no admissions or decision tactics.
 -/
 
 @[expose] public section

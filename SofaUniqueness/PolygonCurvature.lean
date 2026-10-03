@@ -15,8 +15,6 @@ Here D is an arbitrary uniform arm bound. Thus the diameter bound for specially
 chosen exact maximizers is not applied to the specified-cap approximations.
 The geometric proof follows `inj_sigmaAt_le_geom`, retaining its endpoint and
 zero-measure singleton cases but removing its use of Theorem 3.4.9.
-
-Uncompiled source. No admissions or decision tactics.
 -/
 
 @[expose] public section

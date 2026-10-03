@@ -13,18 +13,15 @@ public import SofaUniqueness.MirroredCurvature
 /-!
 # Variational reductions for the specified maximizing sofa
 
-The six paper-to-Lean reductions now have explicit proof bodies. In particular,
-the curvature and pinned bounds use polygons converging to the specified cap,
-not a different cap selected by a balanced-maximizer existence theorem.
+The six reductions P1-P6 of the uniqueness argument. The curvature and pinned
+bounds use polygons converging to the specified cap, not a different cap selected
+by a balanced-maximizer existence theorem.
 
 The pinned result takes a positive-area hypothesis because that is the exact
 hypothesis of the compact selection theorem. Its shape-uniqueness caller
 proves positivity from equality with Gerver's area; no assumption is added to
 the final sofa theorem. The right-angle result derives positivity directly by
 comparison with Gerver's cap.
-
-All scripts remain uncompiled. Explicit bodies are not a claim of successful
-elaboration, kernel verification, or Palomar certification.
 -/
 
 @[expose] public section

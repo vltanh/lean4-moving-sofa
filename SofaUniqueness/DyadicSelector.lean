@@ -18,8 +18,6 @@ penalty coefficients are required.
 
 Only the total stationarity error is required to vanish; a uniform per-facet
 O(delta) bound is not asserted for persistent coarse samples.
-
-Uncompiled source. No admissions, external scripts, or decision tactics.
 -/
 
 @[expose] public section

@@ -4,14 +4,12 @@ public import MovingSofa.Main
 public import SofaUniqueness.SetRecovery
 
 /-!
-# UNCOMPILED DRAFT: rigid maps in the library's coordinate plane
+# Rigid maps in the library's coordinate plane
 
 The product norm on `ℝ × ℝ` is not the Euclidean norm. We therefore represent
 rotations and translations explicitly, rather than asserting that an arbitrary
-plane rotation is an isometry for that norm. The upstream adapter separately
-realizes these formulas as affine isometries of EuclideanSpace.
-
-No Lean elaboration or execution has been performed for this draft.
+plane rotation is an isometry for that norm. A `Rigid` map is a rotation by `angle`
+about the origin followed by the translation by `shift`.
 -/
 
 @[expose] public section

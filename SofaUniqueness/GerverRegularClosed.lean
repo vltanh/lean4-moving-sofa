@@ -14,9 +14,8 @@ points of the cap, and convexity plus downward closure supplies the intervening
 rectangle. The existing phase enclosures give strict height below one, so no
 exceptional top contact or inverse graph parameterization is needed.
 
-This discharges the draft's P6 obligation with an explicit script. It uses no
-assumption about the boundary regularity of a competing sofa. It is uncompiled
-and has no admitted statements.
+This is Proposition 6 of the uniqueness argument. It uses no assumption about
+the boundary regularity of a competing sofa.
 -/
 
 @[expose] public section

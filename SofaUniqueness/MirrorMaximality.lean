@@ -8,7 +8,7 @@ public import MovingSofa.Injectivity.BoundingArms
 These lemmas concern the actual reflected cap, not a replacement obtained
 from existence of a balanced maximizer. They are independent of injectivity.
 The sofa-area identity uses the reflected niche, including its strict inner
-quadrants. Source-only development; no elaboration has been run.
+quadrants.
 -/
 
 @[expose] public section

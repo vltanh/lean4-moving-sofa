@@ -9,10 +9,8 @@ public import SofaUniqueness.TangentEquality
 The four scalar convexity gaps are nonnegative. Their sum can vanish only if
 each vanishes. The preceding modules prove the displacement equality,
 differentiability on regular arcs, the exact tangent kernel and the integrated
-middle equation. Thus this is a proof script for P1, not an assumption that
-cap supports are already equal.
-
-Uncompiled source; no admitted statements in this dependency extension.
+middle equation. Together they give the cap kernel used in Proposition 5 of the
+uniqueness argument.
 -/
 
 @[expose] public section

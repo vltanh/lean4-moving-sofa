@@ -11,9 +11,6 @@ normalization supplied by Lemma 3.4.8. The positive pinned defect is therefore
 O(eta), where eta is the uniform support distance to the target. The outer and
 completed inner boundary walks have the same horizontal displacement. Their
 weighted defect sum is zero, so the negative pinned defect is controlled too.
-
-Uncompiled source. No admissions, artificial feasibility assumptions, or
-unpenalized maximality hypotheses.
 -/
 
 @[expose] public section

@@ -9,8 +9,6 @@ These lemmas use only the existing `EnvHyp` geometry and a strict height bound
 for the rotation path. The endpoint matching and monotonicity prove the
 horizontal range and nonnegative height of the whole envelope, including both
 ends. No inverse graph parameterization is chosen.
-
-All proofs in this file are complete.
 -/
 
 @[expose] public section

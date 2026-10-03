@@ -14,8 +14,6 @@ endpoint weights need not shrink proportionally to the finest mesh.
 The estimate includes normal zero and extends to open intervals starting below
 zero. Thus passage to the limit can exclude an atom at zero rather than assume
 that it is absent. No balancedness or polygon maximality occurs in the hypotheses.
-
-Uncompiled source; no admissions or decision tactics.
 -/
 
 @[expose] public section

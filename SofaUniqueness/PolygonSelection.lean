@@ -15,8 +15,6 @@ The compactness argument is the finite-support-value argument used for
 Theorem 3.4.3, with the continuous finite penalty retained. It does not assume
 that the selected polygons are balanced, and it imposes no artificial box
 constraint whose later variations would have to be justified.
-
-Uncompiled source. No admissions, decision tactics, or external proof scripts.
 -/
 
 @[expose] public section

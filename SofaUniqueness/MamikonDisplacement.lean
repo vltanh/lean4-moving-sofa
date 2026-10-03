@@ -12,8 +12,6 @@ functions supplied by Theorem 7.4.1. Equality cannot arise from Lean's default
 value for a nonintegrable integral. The result is first almost-everywhere
  equality and then pointwise equality on any interval where both displacements
 are continuous.
-
-Uncompiled source; no admitted statements.
 -/
 
 @[expose] public section

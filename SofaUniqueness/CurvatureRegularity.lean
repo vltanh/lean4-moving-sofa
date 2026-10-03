@@ -11,7 +11,6 @@ included in the restricted measures; the possible atom at pi/2 is excluded.
 
 The second arm identity is derived directly, so reflection of a selected
 maximizer and an unproved mirrored density bound are unnecessary.
-Uncompiled proof scripts, with no admitted statements.
 -/
 
 @[expose] public section

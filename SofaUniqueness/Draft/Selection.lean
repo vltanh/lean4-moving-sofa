@@ -4,7 +4,7 @@ public import Mathlib.Topology.Order.Basic
 public import Mathlib.Tactic
 
 /-!
-# UNCOMPILED DRAFT: the algebra and limit step of specified-maximizer selection
+# The algebra and limit step of specified-maximizer selection
 
 The cap-space compactness, finite-angle approximation, and local variation
 arguments are NOT asserted by this abstract lemma. They must supply its explicit

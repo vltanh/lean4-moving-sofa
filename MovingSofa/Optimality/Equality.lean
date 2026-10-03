@@ -6,16 +6,16 @@ public import MovingSofa.Convex.QuadraticEquality
 /-!
 # Equality conditions for the optimal sofa
 
-This module begins the uniqueness argument, rather than asserting uniqueness of the shape.
-A competing maximizer of `upperQL` has zero first variation at Gerver's triple, and every
+This module is the first step of the uniqueness argument (`SofaUniqueness/`). A competing
+maximizer of `upperQL` has zero first variation at Gerver's triple, and every
 Minkowski segment joining it to Gerver's triple saturates all three Mamikon convexity
 inequalities separately. At the midpoint these equalities, together with zero first variation,
 are also sufficient for equality of `upperQL` values. The final lemmas apply the necessary
 conditions to caps in `𝒦^i` that attain Gerver's sofa area.
 
-What remains is geometric rigidity of these equality cases, modulo the relevant rigid
-motions, and equality in the reductions from arbitrary moving sofas to caps. In particular,
-uniqueness of Romik's parameters is not uniqueness of all area-maximizing moving sofas.
+Geometric rigidity of these equality cases, and equality in the reductions from arbitrary
+moving sofas to caps, are proved in `SofaUniqueness/`. Uniqueness of Romik's parameters is not
+by itself uniqueness of the area-maximizing moving sofas.
 -/
 
 @[expose] public section
@@ -188,7 +188,7 @@ theorem ki_upperQL_eq_gerver_of_sofaArea_eq {P : GerverParams} (hP : P.IsSolutio
   linarith
 
 /-- Necessary equality conditions for an area-maximizing cap in `𝒦^i`. Geometric rigidity
-and the passage back to the original moving sofa remain separate proof obligations. -/
+and the passage back to the original moving sofa are proved in `SofaUniqueness/`. -/
 theorem ki_maximizer_equality_conditions {P : GerverParams} (hP : P.IsSolution)
     (hbox : P.InBox) {K : Set (ℝ × ℝ)} (hK : IsKi K)
     (harea : sofaArea (π / 2) K = area (gerverSofa P)) :

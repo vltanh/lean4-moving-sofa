@@ -11,9 +11,6 @@ Actual penalized stationarity, the geometric inner-ray bound, the cellwise arm
 estimate, and the endpoint-safe limiting theorem are assembled here. Persistent
 coarse sample weights need not be O(delta); their total is at most one, and the
 new integrated estimate sums their errors just once.
-
-Uncompiled source. No admissions, balanced-maximizer substitution, or decision
-tactics.
 -/
 
 @[expose] public section

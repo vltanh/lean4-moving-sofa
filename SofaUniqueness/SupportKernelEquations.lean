@@ -12,8 +12,6 @@ Only open arcs avoiding the possible top atom are differentiated. The support
 function itself is continuous at all endpoints. A constant integrating factor
 is first proved on the open interval and then extended by continuity; this
 also handles a target normal equal to the interval's right endpoint.
-
-Uncompiled source; no admitted statements or decision procedures.
 -/
 
 @[expose] public section

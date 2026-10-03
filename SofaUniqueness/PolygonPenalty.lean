@@ -14,8 +14,6 @@ balancedness theorem is never used for a penalized maximizer.
 This module discharges the algebraic variational step. It does not manufacture
 the feasible candidates or the mesh-uniform penalty-growth bounds; those
 geometric inputs are explicit in the statements.
-
-Uncompiled source. No admissions or external evaluation.
 -/
 
 @[expose] public section

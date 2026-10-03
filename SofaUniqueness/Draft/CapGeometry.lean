@@ -3,7 +3,7 @@ module
 public import SofaUniqueness.Draft.Rigid
 
 /-!
-# UNCOMPILED DRAFT: recover caps and their niches as actual sets
+# Recover caps and their niches as actual sets
 
 These are geometric consequences of a support identity, not consequences of
 area equality alone. In particular, no regular-closedness assumption on an

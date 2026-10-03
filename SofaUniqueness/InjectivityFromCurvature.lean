@@ -11,12 +11,8 @@ maximizer. Only the two integrated inequalities and nonnegativity are used.
 
 For the final strict threshold we reuse the existing analytic Lemma 6.5.5.
 Its finite induction consists of real integral inequalities and rational
-algebraic proofs, not a Boolean evaluation, external numerical script, or
-native/kernel decision tactic. The alternative maximum-deficit argument in
-the research notes is not needed to discharge this formal obligation.
-
-This is an uncompiled source draft. There are no admissions in this module or
-in `CurvatureRegularity`.
+algebraic proofs, not a Boolean evaluation or a decision procedure. The
+alternative maximum-deficit argument of the notes is not needed here.
 -/
 
 @[expose] public section

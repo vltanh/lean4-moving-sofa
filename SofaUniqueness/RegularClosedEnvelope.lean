@@ -13,9 +13,7 @@ unique height-one contact can instead be approached along the top edge.
 
 This proves a general geometric lemma used to formalize paper note 07. It does
 not assume that the competing sofa is regular closed. The concrete Gerver
-hypotheses must still be supplied separately.
-
-All proofs in this file are complete; no external computation is used.
+hypotheses are supplied in `GerverRegularClosed`.
 -/
 
 @[expose] public section

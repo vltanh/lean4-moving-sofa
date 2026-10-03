@@ -14,10 +14,7 @@ of the objectives is assumed.
 
 Only a convergent subsequence is selected, which is all the subsequent
 variational arguments require. Its finite polygons remain exact maximizers of
-A_n-P_n, never falsely reclassified as unpenalized or balanced maxima.
-
-Uncompiled source. The geometric and compactness inputs are proved in the
-imported library and the preceding selector modules; this file has no admissions.
+A_n-P_n, never reclassified as unpenalized or balanced maxima.
 -/
 
 @[expose] public section

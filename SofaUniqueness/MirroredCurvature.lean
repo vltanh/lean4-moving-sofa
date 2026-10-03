@@ -9,11 +9,9 @@ public import Mathlib.MeasureTheory.Integral.Lebesgue.Map
 
 Reflection sends `[0, pi/2)` to `(pi/2, pi]`. The strict and non-strict
 endpoints are preserved explicitly below. The arm identity exchanges plus
-with minus, so no absence of atoms is assumed to prove absence of atoms.
-
-This is an uncompiled source proof. In particular the measure transport is
-written as ordinary equalities of restricted measures and lower integrals,
-not an external numerical calculation or a decision procedure.
+with minus, so no absence of atoms is assumed to prove absence of atoms. The
+measure transport is written as equalities of restricted measures and lower
+integrals.
 -/
 
 @[expose] public section

@@ -12,7 +12,7 @@ performs only rational linear/nonlinear arithmetic on them. No new numerical
 enclosure, evaluator or decision certificate is introduced.
 
 The strict bound removes the exceptional top-contact case from regular-closed
-recovery. All scripts are uncompiled; there are no admissions in this file.
+recovery.
 -/
 
 @[expose] public section

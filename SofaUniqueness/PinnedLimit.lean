@@ -14,8 +14,6 @@ edge length then gives the desired inequalities for their specified limit.
 Positive sofa-area is stated because it supplies the compact selector. In the
 shape-uniqueness application it follows from the already proved lower bound
 on Gerver's area, not from any additional assumption on the starting sofa.
-
-Uncompiled source. No admissions or decision tactics.
 -/
 
 @[expose] public section

@@ -15,8 +15,7 @@ of a pinned defect. These are the algebraic steps needed for a specified
 maximizer, whose approximating polygons are not unpenalized maxima.
 
 All feasibility, area-expansion and penalty-expansion hypotheses are visible.
-No existence or geometric regularity claim is smuggled into these lemmas.
-Uncompiled source, with no admissions or decision tactics.
+No existence or geometric regularity claim is hidden in these lemmas.
 -/
 
 @[expose] public section

@@ -9,8 +9,6 @@ Each convex-body family uses the continuous supporting curves already proved
 in Theorem 8.3.1 and the outer-corner lemmas. Square-integrability and pointwise
 interior equality come from `MamikonDisplacement`; support derivatives and
 endpoint-safe integration come from `SupportKernelEquations`.
-
-Uncompiled scripts; no admitted statements.
 -/
 
 @[expose] public section

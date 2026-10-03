@@ -11,8 +11,6 @@ with a vanishing total error. No maximum-polygon or balanced-cap predicate is
 used. Supporting-line intersections furnish lower bounds on open-interval
 curvature masses, so no absence of endpoint atoms is assumed in the passage
 to the limit. The interval comparison then yields domination on [0,pi/2).
-
-Uncompiled source. No admissions or decision tactics.
 -/
 
 @[expose] public section

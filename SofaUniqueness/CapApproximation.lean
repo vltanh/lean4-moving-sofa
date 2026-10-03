@@ -14,7 +14,6 @@ for the niche areas.
 
 Agreement on all persistent dyadic supports identifies a cap. There is no
 uniform convergence theorem for the area functionals hidden in that step.
-Uncompiled source, with no admissions or decision tactics.
 -/
 
 @[expose] public section

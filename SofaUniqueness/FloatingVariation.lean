@@ -13,7 +13,6 @@ formula, give the penalty bound needed for stationarity.
 
 The conclusion holds even for a zero-length floating facet. No unpenalized
 maximality, balancedness, or geometric regularity is assumed.
-Uncompiled source. No admissions or decision tactics.
 -/
 
 @[expose] public section
