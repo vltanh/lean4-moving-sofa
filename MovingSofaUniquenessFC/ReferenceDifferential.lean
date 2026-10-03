@@ -57,52 +57,90 @@ theorem reducedQ_frame (φ θ : ℝ) :
 
 theorem num_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => num p θ) (den φ θ) φ := by
-  sorry
+  have h := (((((hasDerivAt_id' φ).const_sub θ).mul_const (cos θ)).fun_add
+    ((hasDerivAt_sin φ).const_mul 3)).sub_const (sin θ)).sub_const (cos θ) |>.add_const 1
+  refine h.congr_deriv ?_
+  unfold den
+  ring
 
 theorem num_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => num φ t) ((1 - gap φ θ) * sin θ) θ := by
-  sorry
+  have h := (((((hasDerivAt_id' θ).sub_const φ).fun_mul (hasDerivAt_cos θ)).add_const
+    (3 * sin φ)).fun_sub (hasDerivAt_sin θ)).fun_sub (hasDerivAt_cos θ) |>.add_const 1
+  refine h.congr_deriv ?_
+  unfold gap
+  ring
 
 theorem den_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => den p θ) (-3 * sin φ) φ := by
-  sorry
+  have h := ((hasDerivAt_cos φ).const_mul 3).sub_const (cos θ)
+  refine h.congr_deriv ?_
+  ring
 
 theorem den_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => den φ t) (sin θ) θ := by
-  sorry
+  have h := (hasDerivAt_cos θ).const_sub (3 * cos φ)
+  refine h.congr_deriv ?_
+  ring
 
 theorem slope_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => slope p θ) (-1 / 2) φ := by
-  sorry
+  have h := (((hasDerivAt_id' φ).const_sub θ).div_const 2).const_add 1
+  refine h.congr_deriv ?_
+  ring
 
 theorem slope_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => slope φ t) (1 / 2) θ := by
-  sorry
+  have h := (((hasDerivAt_id' θ).sub_const φ).div_const 2).const_add 1
+  refine h.congr_deriv ?_
+  ring
 
 theorem offset_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => offset p θ) (-slope φ θ - 1 / 2) φ := by
-  sorry
+  have hg := (hasDerivAt_id' φ).const_sub θ
+  have h := ((((hasDerivAt_id' φ).const_sub (π / 2)).sub_const θ).fun_add
+    (hg.div_const 2)).fun_add ((hg.fun_pow 2).div_const 4)
+  refine h.congr_deriv ?_
+  unfold slope
+  norm_num
+  ring
 
 theorem offset_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => offset φ t) ((gap φ θ - 1) / 2) θ := by
-  sorry
+  have hg := (hasDerivAt_id' θ).sub_const φ
+  have h := ((((hasDerivAt_id' θ).const_sub (π / 2 - φ))).fun_add
+    (hg.div_const 2)).fun_add ((hg.fun_pow 2).div_const 4)
+  refine h.congr_deriv ?_
+  unfold gap
+  norm_num
+  ring
 
 theorem frameDen_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => frameDen p θ) (-sin φ / 2 - slope φ θ * cos φ) φ := by
-  sorry
+  have h := (hasDerivAt_cos φ).fun_sub ((slope_phi_deriv φ θ).fun_mul (hasDerivAt_sin φ))
+  refine h.congr_deriv ?_
+  ring
 
 theorem frameDen_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => frameDen φ t) (-sin φ / 2) θ := by
-  sorry
+  have h := ((slope_theta_deriv φ θ).mul_const (sin φ)).const_sub (cos φ)
+  refine h.congr_deriv ?_
+  ring
 
 theorem frameOffset_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => frameOffset p θ)
       (cos φ * (1 + offset φ θ) - slope φ θ * sin φ) φ := by
-  sorry
+  have h := ((hasDerivAt_sin φ).fun_mul ((offset_phi_deriv φ θ).const_add 1)).fun_add
+    (((hasDerivAt_cos φ).const_sub 1).div_const 2)
+  refine h.congr_deriv ?_
+  ring
 
 theorem frameOffset_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => frameOffset φ t) (sin φ * (gap φ θ - 1) / 2) θ := by
-  sorry
+  have h := (((offset_theta_deriv φ θ).const_add 1).const_mul (sin φ)).add_const
+    ((1 - cos φ) / 2)
+  refine h.congr_deriv ?_
+  ring
 
 theorem reducedQ_phi_deriv (φ θ : ℝ) :
     HasDerivAt (fun p => reducedQ p θ) (qPhi φ θ) φ := by
@@ -126,12 +164,37 @@ theorem reducedQ_theta_deriv (φ θ : ℝ) :
 
 theorem qPhiMin_theta_deriv (φ θ : ℝ) :
     HasDerivAt (fun t => qPhiMin φ t) (qPhiMinTheta φ θ) θ := by
-  sorry
+  have hg := (hasDerivAt_id' θ).sub_const φ
+  have hm : HasDerivAt (fun t => minOffset φ t) (1 / 2 + gap φ θ / 2) θ := by
+    refine ((hg.div_const 2).fun_add ((hg.fun_pow 2).div_const 4)).congr_deriv ?_
+    unfold gap
+    norm_num
+    ring
+  have h1 := ((den_theta_deriv φ θ).fun_neg.mul_const (cos φ)).fun_mul hm
+  have h2 := (num_theta_deriv φ θ).fun_mul
+    (((slope_theta_deriv φ θ).mul_const (cos φ)).const_add (sin φ / 2))
+  have h3 := (((hm.const_add 1).const_mul (sin φ)).add_const ((1 - cos φ) / 2)).const_mul
+    (3 * sin φ)
+  refine ((h1.fun_sub h2).fun_add h3).congr_deriv ?_
+  unfold qPhiMinTheta minOffset gap slope num den
+  ring
 
 /-- The sign proof is a sum of signed terms, not a finite computation. -/
 theorem qPhiMinTheta_neg {φ θ : ℝ} (hφ : 0 ≤ φ) (horder : φ ≤ θ)
     (hθ : θ ≤ π / 4) : qPhiMinTheta φ θ < 0 := by
-  sorry
+  obtain ⟨hs, hsc, hc, hcc, hts, -, -⟩ := triangle_trig hφ horder hθ
+  have hg0 : 0 ≤ gap φ θ := sub_nonneg.mpr horder
+  have hg1 : gap φ θ ≤ 1 := by unfold gap; linarith [pi_lt_four]
+  have hsq : 0 ≤ cos φ ^ 2 - sin φ ^ 2 := by nlinarith
+  have h0 : 0 ≤ gap φ θ * (cos φ ^ 2 - sin φ ^ 2) := mul_nonneg hg0 hsq
+  have h1 : 0 ≤ sin φ * (cos φ - sin φ) := mul_nonneg hs (sub_nonneg.mpr hsc)
+  have h2 : 0 ≤ cos φ * (cos φ - cos θ) := mul_nonneg hc.le (sub_nonneg.mpr hcc)
+  have h3 : 0 ≤ cos φ * sin θ * (2 - gap φ θ ^ 2) :=
+    mul_nonneg (mul_nonneg hc.le hts) (by nlinarith)
+  have h4 : 0 ≤ sin φ * sin θ * (1 - gap φ θ) :=
+    mul_nonneg (mul_nonneg hs hts) (by linarith)
+  unfold qPhiMinTheta
+  nlinarith [sq_nonneg (cos φ)]
 
 theorem qPhiMin_diagonal_nonpos {φ : ℝ} (hφ : 0 ≤ φ) (hφu : φ ≤ π / 4) :
     qPhiMin φ φ ≤ 0 := by
