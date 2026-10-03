@@ -215,7 +215,6 @@ theorem qPhi_neg {φ θ : ℝ} (hφ : 0 ≤ φ) (hφh : φ ≤ 1 / 2)
   have ha : StrictAntiOn (qPhiMin φ) (Icc φ θ) := by
     apply strictAntiOn_of_deriv_neg (convex_Icc φ θ)
     · exact fun t _ => (qPhiMin_theta_deriv φ t).continuousAt.continuousWithinAt
-    · exact fun t _ => (qPhiMin_theta_deriv φ t).differentiableAt.differentiableWithinAt
     · intro t ht
       rw [interior_Icc] at ht
       rw [(qPhiMin_theta_deriv φ t).deriv]
