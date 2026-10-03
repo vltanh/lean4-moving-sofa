@@ -10,7 +10,7 @@ for the rotation path. The endpoint matching and monotonicity prove the
 horizontal range and nonnegative height of the whole envelope, including both
 ends. No inverse graph parameterization is chosen.
 
-Uncompiled source; no admitted statements.
+All proofs in this file are complete.
 -/
 
 @[expose] public section
@@ -27,7 +27,19 @@ variable {x : ℝ → ℝ × ℝ} {α β ρA ρC : ℝ → ℝ}
 theorem envelope_endpoint_order (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     (envD x β 0).1 < (x t₄).1 ∧ (x t₄).1 < (x t₁).1 ∧
       (x t₁).1 < (envB x α (π / 2)).1 := by
-  sorry
+  obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
+  have hd := env_D₁_strictMono h
+    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : (0 : ℝ) < t₂)
+  simp only at hd
+  rw [h.D_t₂] at hd
+  have hx := env_x₁_strictAnti h
+    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : t₁ < t₄)
+  simp only at hx
+  have hb := env_B₁_strictMono h
+    ⟨le_rfl, by linarith⟩ ⟨by linarith, le_rfl⟩ (by linarith : t₃ < π / 2)
+  simp only at hb
+  rw [h.B_t₃] at hb
+  exact ⟨hd, hx, hb⟩
 
 theorem envelope_isCompact (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) :
     IsCompact (envCurve t₁ t₂ t₃ t₄ x α β) := by
