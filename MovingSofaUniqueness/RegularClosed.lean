@@ -7,7 +7,8 @@ public import MovingSofaOptimality.Gerver.Properties
 
 Gerver's sofa is its cap minus the region below the envelope of the inner corner. The rotation path
 stays strictly below the top of the cap (`path_snd_lt_one`), so every point of the sofa is a limit
-of interior points (`gerver_regularClosed`).
+of interior points (`gerver_regularClosed`). The same description shows that the width of Gerver's
+sofa exceeds one in every direction other than the vertical (`gerver_width_gt_one`).
 -/
 
 @[expose] public section
@@ -77,7 +78,9 @@ Under the hypotheses `EnvHyp`, the envelope `envCurve` is the union of the curve
 path `x` and the curve `B`. It is compact (`envelope_isCompact`), and its ends and junctions `D(0)`,
 `x(t₄)`, `x(t₁)` and `B(π/2)` have increasing abscissas (`envelope_endpoint_order`). If the path
 stays below height one, every point of the envelope has abscissa between those of `D(0)` and
-`B(π/2)` and height in `[0, 1)` (`envelope_bounds_of_path_height`).
+`B(π/2)` and height in `[0, 1)` (`envelope_bounds_of_path_height`). A point strictly under the
+envelope has abscissa strictly between those of `D(0)` and `B(π/2)`, which have height zero
+(`envUnderStrict_fst_mem_Ioo`).
 -/
 
 section
@@ -159,6 +162,49 @@ theorem envelope_bounds_of_path_height
     rw [h.D_end] at hylo
     have htopy := hheight t₄ ⟨by linarith, h4.le⟩
     exact ⟨⟨hxlo, hxhi.trans (hm.trans hb).le⟩, hylo, hyhi.trans_lt htopy⟩
+
+/-- A point strictly under the envelope has abscissa strictly between those of `D(0)` and
+`B(π/2)`: it lies below a point of the envelope of positive height, and the points of the envelope
+with these abscissas are `D(0)` and `B(π/2)`, of height zero. -/
+theorem envUnderStrict_fst_mem_Ioo (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC) {q : ℝ × ℝ}
+    (hq : q ∈ envUnderStrict (envCurve t₁ t₂ t₃ t₄ x α β)) :
+    q.1 ∈ Ioo (envD x β 0).1 (envB x α (π / 2)).1 := by
+  obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
+  obtain ⟨ha, hm, hb⟩ := envelope_endpoint_order h
+  obtain ⟨hq0, γ, hγ, hγx, hqγ⟩ := hq
+  have hγpos : 0 < γ.2 := hq0.trans_lt hqγ
+  rw [← hγx]
+  rcases hγ with (⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩) | ⟨t, ht, rfl⟩
+  · -- `γ = B(t)` with `t ∈ [t₃, π/2)`, as `B(π/2)` has height zero.
+    have hBstart : t₃ ∈ Icc t₃ (π / 2) := ⟨le_rfl, by linarith⟩
+    have hBend : π / 2 ∈ Icc t₃ (π / 2) := ⟨by linarith, le_rfl⟩
+    have htlt : t < π / 2 := by
+      refine lt_of_le_of_ne ht.2 fun he => ?_
+      rw [he, h.B_end] at hγpos
+      exact lt_irrefl _ hγpos
+    have hlo := (env_B₁_strictMono h).monotoneOn hBstart ht ht.1
+    have hhi := env_B₁_strictMono h ht hBend htlt
+    simp only at hlo hhi
+    rw [h.B_t₃] at hlo
+    exact ⟨(ha.trans hm).trans_le hlo, hhi⟩
+  · -- `γ = x(t)` with `t ∈ [t₁, t₄]`.
+    have hxstart : t₁ ∈ Icc t₁ t₄ := ⟨le_rfl, by linarith⟩
+    have hxend : t₄ ∈ Icc t₁ t₄ := ⟨by linarith, le_rfl⟩
+    have hlo := (env_x₁_strictAnti h).antitoneOn ht hxend ht.2
+    have hhi := (env_x₁_strictAnti h).antitoneOn hxstart ht ht.1
+    exact ⟨ha.trans_le hlo, hhi.trans_lt hb⟩
+  · -- `γ = D(t)` with `t ∈ (0, t₂]`, as `D(0)` has height zero.
+    have hDstart : (0 : ℝ) ∈ Icc 0 t₂ := ⟨le_rfl, by linarith⟩
+    have hDend : t₂ ∈ Icc 0 t₂ := ⟨by linarith, le_rfl⟩
+    have htpos : 0 < t := by
+      refine lt_of_le_of_ne ht.1 fun he => ?_
+      rw [← he, h.D_end] at hγpos
+      exact lt_irrefl _ hγpos
+    have hlo := env_D₁_strictMono h hDstart ht htpos
+    have hhi := (env_D₁_strictMono h).monotoneOn ht hDend ht.2
+    simp only at hlo hhi
+    rw [h.D_t₂] at hhi
+    exact ⟨hlo, hhi.trans_lt (hm.trans hb)⟩
 
 end MovingSofaUniqueness
 
@@ -277,6 +323,12 @@ downward closure put the rectangle `[a, b] × [0, 1]` in the cap; in particular 
 nonempty interior and is regular closed. Since the rotation path stays below height one, every point
 of `Γ` has height less than one, and `regularClosed_cap_sdiff_envelope` gives Proposition 6 of
 note 20 (`gerver_regularClosed`).
+
+The points of the niche have abscissa strictly between `a` and `b` (`envUnderStrict_fst_mem_Ioo`).
+So the ends `(a, 1)`, `(b, 1)` of the top edge of the cap and the ends `(x₋, 0)`, `(1, 0)` of its
+floor lie in Gerver's sofa (`gerver_corner_points`), and with `a < 0` and `b - x₋ > 1` they show that
+the width of Gerver's sofa exceeds one in every direction `u_r`, `r ∈ [0, π]`, `r ≠ π/2`
+(`gerver_width_gt_one`): `lem:gerver-width` of the manuscript `docs/paper`.
 -/
 
 section
@@ -284,6 +336,34 @@ section
 open Real Set MovingSofaOptimality MovingSofaOptimality.GerverParams
 
 namespace MovingSofaUniqueness
+
+/-- The niche of Gerver's cap is the region strictly under the envelope `Γ` of the inner corner. -/
+theorem gerver_niche_eq_envUnderStrict {P : GerverParams} (hP : P.IsSolution) (hB : P.Bounds) :
+    niche P.gs_K (π / 2) =
+      envUnderStrict (envCurve P.φ P.θ (π / 2 - P.θ) (π / 2 - P.φ) P.path P.gs_α P.gs_β) := by
+  calc
+    niche P.gs_K (π / 2) = niche (capOf (gerverSofa P) (π / 2)) (π / 2) := by
+      rw [(gs_monotone_K hP hB).2]
+    _ = envNiche P.path := gn_niche_eq hP hB
+    _ = _ := env_niche_eq (gn_envHyp hP hB)
+
+/-- The left end of the top edge of Gerver's cap is `𝐂(0) = 𝐃(0) + v_0 = (a, 1)`, with
+`a = 𝐃(0)_x`. -/
+theorem gerver_contactC_zero {P : GerverParams} (hP : P.IsSolution) (hB : P.Bounds) :
+    contactC P.path 0 = ((envD P.path P.gs_β 0).1, 1) := by
+  change envD P.path P.gs_β 0 + vvec 0 = _
+  apply Prod.ext
+  · simp [vvec]
+  · simp [vvec, (gn_envHyp hP hB).D_end]
+
+/-- The right end of the top edge of Gerver's cap is `𝐀(π/2) = 𝐁(π/2) + u_{π/2} = (b, 1)`, with
+`b = 𝐁(π/2)_x`. -/
+theorem gerver_contactA_pi_div_two {P : GerverParams} (hP : P.IsSolution) (hB : P.Bounds) :
+    contactA P.path (π / 2) = ((envB P.path P.gs_α (π / 2)).1, 1) := by
+  change envB P.path P.gs_α (π / 2) + uvec (π / 2) = _
+  apply Prod.ext
+  · simp [uvec]
+  · simp [uvec, (gn_envHyp hP hB).B_end]
 
 /-- Proposition 6 of note 20: Gerver's sofa is the closure of its interior. -/
 theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
@@ -307,20 +387,10 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
   have hconv : Convex ℝ P.gs_K := gs_convex_K
   have hleft : (a, 1) ∈ P.gs_K := by
     have hmem := gs_C_mem_K hP hB (τ := 0) le_rfl (by positivity)
-    have he : contactC P.path 0 = (a, 1) := by
-      change envD P.path P.gs_β 0 + vvec 0 = (a, 1)
-      apply Prod.ext
-      · simp [a, vvec]
-      · simp [vvec, henv.D_end]
-    rwa [he] at hmem
+    rwa [gerver_contactC_zero hP hB] at hmem
   have hright : (b, 1) ∈ P.gs_K := by
     have hmem := gs_A_mem_K hP hB (τ := π / 2) (by positivity) le_rfl
-    have he : contactA P.path (π / 2) = (b, 1) := by
-      change envB P.path P.gs_α (π / 2) + uvec (π / 2) = (b, 1)
-      apply Prod.ext
-      · simp [b, uvec]
-      · simp [uvec, henv.B_end]
-    rwa [he] at hmem
+    rwa [gerver_contactA_pi_div_two hP hB] at hmem
   have hrect : ∀ x ∈ Icc a b, ∀ y ∈ Icc (0 : ℝ) 1, (x, y) ∈ P.gs_K := by
     intro x hx y hy
     let c := (x - a) / (b - a)
@@ -351,18 +421,115 @@ theorem gerver_regularClosed {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
         hconv.closure_interior_eq_closure_of_nonempty_interior hne
       _ = P.gs_K := gs_isClosed_K.closure_eq
   -- Step 4: Gerver's sofa is the closed set obtained by removing the region under `Γ` from the cap.
-  have hn : niche P.gs_K (π / 2) = envUnderStrict Γ := by
-    calc
-      niche P.gs_K (π / 2) = niche (capOf (gerverSofa P) (π / 2)) (π / 2) := by
-        rw [(gs_monotone_K hP hB).2]
-      _ = envNiche P.path := gn_niche_eq hP hB
-      _ = envUnderStrict Γ := env_niche_eq henv
   have hG : gerverSofa P = P.gs_K \ envUnderStrict Γ := by
-    rw [gs_gerverSofa_eq hP hB, hn]
+    rw [gs_gerverSofa_eq hP hB, gerver_niche_eq_envUnderStrict hP hB]
   have hclosed : IsClosed (P.gs_K \ envUnderStrict Γ) := by
     rw [← hG]
     exact (gm_movingSofa_std hP hbox).1.1
   simpa only [← hG] using regularClosed_cap_sdiff_envelope hKreg hrect hΓc hΓbounds hclosed
+
+/-- The ends `(a, 1)` and `(b, 1)` of the top edge of Gerver's cap and the ends `(x₋, 0)` and
+`(1, 0)` of its floor lie in Gerver's sofa, with `a < 0` and `b - x₋ > 1`. Here `a = 𝐃(0)_x`,
+`b = 𝐁(π/2)_x` and `x₋ = 𝐱(π/2)_x - 1` (`xm` in the statement); the four points are `𝐂(0)`,
+`𝐀(π/2)`, `𝐂(π/2)` and `𝐀(0)`. The points of the niche have abscissa in `(a, b)`, and
+`x₋ ≤ a < b ≤ 1`, so the four points lie outside the niche. -/
+theorem gerver_corner_points {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    ∃ a b xm : ℝ, (a, 1) ∈ gerverSofa P ∧ (b, 1) ∈ gerverSofa P ∧ (xm, 0) ∈ gerverSofa P ∧
+      ((1 : ℝ), (0 : ℝ)) ∈ gerverSofa P ∧ a < 0 ∧ 1 < b - xm := by
+  have hB := GerverParams.romik_bounds hP hbox
+  have henv := gn_envHyp hP hB
+  obtain ⟨h1, h12, h23, h34, h4⟩ := henv.ht
+  set a := (envD P.path P.gs_β 0).1
+  set b := (envB P.path P.gs_α (π / 2)).1
+  set xm := (P.path (π / 2)).1 - 1 with hxm
+  -- Step 1: the four points are contact points of the cap.
+  have hC0 := gs_C_mem_K hP hB (τ := 0) le_rfl (by positivity)
+  have hA1 := gs_A_mem_K hP hB (τ := π / 2) (by positivity) le_rfl
+  have hC1 := gs_C_mem_K hP hB (τ := π / 2) (by positivity) le_rfl
+  have hA0 := gs_A_mem_K hP hB (τ := 0) le_rfl (by positivity)
+  rw [gerver_contactC_zero hP hB] at hC0
+  rw [gerver_contactA_pi_div_two hP hB] at hA1
+  rw [gs_C_pi_div_two hP] at hC1
+  rw [gs_A_zero hP] at hA0
+  -- Step 2: the points of the niche have abscissa in `(a, b)`, so a point of the cap with another
+  -- abscissa lies in the sofa; and `xm ≤ a < b ≤ 1`, as `(a, 1)` and `(b, 1)` lie in the cap.
+  have hsofa : ∀ p ∈ P.gs_K, p.1 ∉ Ioo a b → p ∈ gerverSofa P := by
+    intro p hp hpx
+    rw [gs_gerverSofa_eq hP hB, gerver_niche_eq_envUnderStrict hP hB]
+    exact ⟨hp, fun hn => hpx (envUnderStrict_fst_mem_Ioo henv hn)⟩
+  have hxa : xm ≤ a := (gs_K_bounds hP hC0).1
+  have hb1 : b ≤ 1 := (gs_K_bounds hP hA1).2.1
+  -- Step 3: `a < 𝐱(t₄)_x < 𝐱(t₁)_x ≤ 𝐱(0)_x = 0`, and `b > 𝐱(t₁)_x > 𝐱(t₄)_x ≥ 𝐱(π/2)_x = xm + 1`.
+  obtain ⟨ho1, ho2, ho3⟩ := envelope_endpoint_order henv
+  have hx₁ := (gs_path_fst_le hP hB h1.le (by linarith)).2
+  have hx₄ := (gs_path_fst_le hP hB (by linarith) h4.le).1
+  refine ⟨a, b, xm, hsofa _ hC0 fun h => lt_irrefl _ h.1, hsofa _ hA1 fun h => lt_irrefl _ h.2,
+    hsofa _ hC1 fun h => ?_, hsofa _ hA0 fun h => ?_, by linarith, by linarith⟩
+  · exact absurd h.1 (not_lt.mpr hxa)
+  · exact absurd h.2 (not_lt.mpr hb1)
+
+/-- The width of Gerver's sofa in every direction `u_r`, `r ∈ [0, π]`, `r ≠ π/2`, exceeds one: for
+`r < π/2` the points `(b, 1)` and `(x₋, 0)` of `gerver_corner_points` have
+`((b, 1) - (x₋, 0)) · u_r = (b - x₋) cos r + sin r > cos r + sin r ≥ 1`, and for `r > π/2` the
+points `(a, 1)` and `(1, 0)` have `((a, 1) - (1, 0)) · u_r = (1 - a) |cos r| + sin r > 1`. -/
+theorem gerver_width_gt_one {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) {r : ℝ}
+    (hr : r ∈ Icc 0 π) (hr2 : r ≠ π / 2) :
+    ∃ p ∈ gerverSofa P, ∃ q ∈ gerverSofa P, 1 < dot (p - q) (uvec r) := by
+  obtain ⟨a, b, xm, ha1, hb1, hx0, h10, ha, hbx⟩ := gerver_corner_points hP hbox
+  have hs : 0 ≤ sin r := sin_nonneg_of_nonneg_of_le_pi hr.1 hr.2
+  have hs1 : sin r * sin r ≤ sin r := mul_le_of_le_one_left hs (sin_le_one r)
+  have hsc := sin_sq_add_cos_sq r
+  rcases lt_or_gt_of_ne hr2 with hlt | hgt
+  · -- `r < π/2`: the points `(b, 1)` and `(xm, 0)`.
+    have hc : 0 < cos r := cos_pos_of_mem_Ioo ⟨by linarith [hr.1, pi_pos], hlt⟩
+    have hc1 : cos r * cos r ≤ cos r := mul_le_of_le_one_left hc.le (cos_le_one r)
+    refine ⟨(b, 1), hb1, (xm, 0), hx0, ?_⟩
+    have hdot : dot ((b, 1) - (xm, 0)) (uvec r) = (b - xm) * cos r + sin r := by
+      simp only [dot, uvec, Prod.mk_sub_mk]
+      ring
+    rw [hdot]
+    nlinarith [mul_lt_mul_of_pos_right hbx hc]
+  · -- `r > π/2`: the points `(a, 1)` and `(1, 0)`.
+    have hc : cos r < 0 := cos_neg_of_pi_div_two_lt_of_lt hgt (by linarith [hr.2, pi_pos])
+    have hc1 : cos r * cos r ≤ -cos r := by nlinarith [neg_one_le_cos r]
+    refine ⟨(a, 1), ha1, (1, 0), h10, ?_⟩
+    have hdot : dot ((a, 1) - (1, 0)) (uvec r) = (1 - a) * -cos r + sin r := by
+      simp only [dot, uvec, Prod.mk_sub_mk]
+      ring
+    rw [hdot]
+    nlinarith [mul_lt_mul_of_pos_right (show 1 < 1 - a by linarith) (neg_pos.mpr hc)]
+
+/-- If Gerver's sofa has width at most one in the direction of a unit vector `w`, then `w` is
+vertical: `w` or `-w` is `u_r` with `r = arccos (±w.1) ∈ [0, π]`, and `r = π/2` by
+`gerver_width_gt_one`. -/
+theorem fst_eq_zero_of_gerver_width_le_one {P : GerverParams} (hP : P.IsSolution)
+    (hbox : P.InBox) {w : ℝ × ℝ} (hw : w.1 ^ 2 + w.2 ^ 2 = 1)
+    (hwidth : ∀ p ∈ gerverSofa P, ∀ q ∈ gerverSofa P, dot (p - q) w ≤ 1) : w.1 = 0 := by
+  -- Step 1: for `w.2 ≥ 0`, `w = u_r` with `r = arccos w.1 ∈ [0, π]`, so `r = π/2`.
+  have hupper : ∀ w : ℝ × ℝ, w.1 ^ 2 + w.2 ^ 2 = 1 → 0 ≤ w.2 →
+      (∀ p ∈ gerverSofa P, ∀ q ∈ gerverSofa P, dot (p - q) w ≤ 1) → w.1 = 0 := by
+    intro w hw hw2 hwidth
+    have hlo : -1 ≤ w.1 := by nlinarith [sq_nonneg w.2]
+    have hhi : w.1 ≤ 1 := by nlinarith [sq_nonneg w.2]
+    have hu : uvec (arccos w.1) = w := by
+      apply Prod.ext
+      · exact cos_arccos hlo hhi
+      · rw [uvec_snd, sin_arccos, show 1 - w.1 ^ 2 = w.2 ^ 2 by linarith, sqrt_sq hw2]
+    by_contra hne
+    have hr : arccos w.1 ≠ π / 2 := fun h =>
+      hne (by rw [← cos_arccos hlo hhi, h, cos_pi_div_two])
+    obtain ⟨p, hp, q, hq, hlt⟩ :=
+      gerver_width_gt_one hP hbox ⟨arccos_nonneg _, arccos_le_pi _⟩ hr
+    rw [hu] at hlt
+    linarith [hwidth p hp q hq]
+  -- Step 2: for `w.2 < 0`, apply Step 1 to `-w`, as `(p - q) · (-w) = (q - p) · w`.
+  rcases le_or_gt 0 w.2 with h2 | h2
+  · exact hupper w hw h2 hwidth
+  · have h := hupper (-w) (by simpa using hw) (by simp only [Prod.snd_neg]; linarith)
+      fun p hp q hq => by
+        rw [dot_neg_right, ← dot_neg_left, neg_sub]
+        exact hwidth q hq p hp
+    simpa using h
 
 end MovingSofaUniqueness
 

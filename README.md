@@ -12,8 +12,8 @@ rigid motions:
   ([arXiv:2411.19826v1](https://arxiv.org/abs/2411.19826v1)), with the results it takes from the literature and the
   structure of Gerver's sofa (Theorem 8.4.1), which the paper states without proof;
 - **uniqueness:** every moving sofa with the area of Gerver's sofa is mapped onto it by a rotation
-  and a translation. Baek's paper does not prove this, and Google DeepMind's formal-conjectures lists
-  it as open. The argument was written by ChatGPT Pro 6 for this repository and has not been peer
+  and a translation (a translation suffices: [`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L364)).
+  Baek's paper does not prove this, and Google DeepMind's formal-conjectures lists it as open. The argument was written by ChatGPT Pro 6 for this repository and has not been peer
   reviewed;
 - **the bridge to formal-conjectures:** formal-conjectures states the problem with definitions of its
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
@@ -174,8 +174,9 @@ MovingSofaOptimality/     Baek's paper, one directory per chapter, with External
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument
 MovingSofaBridge/         the bridge to formal-conjectures' definitions
 REPORT.md                 the audit of Baek's paper
-docs/                     these pages, the illustrated text (docs/proof/) and the
-                          archived notes of the uniqueness proof (docs/archive/)
+docs/                     these pages, the illustrated text (docs/proof/), the
+                          manuscript (docs/paper/) and the archived notes of the
+                          uniqueness proof (docs/archive/)
 scripts/                  the axiom audit, generators, documentation tools, figures
 ```
 

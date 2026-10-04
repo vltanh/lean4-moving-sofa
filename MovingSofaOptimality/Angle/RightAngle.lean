@@ -989,11 +989,11 @@ lemma ang_image_rot (a : ℝ) (S : Set (ℝ × ℝ)) : rot a '' S = rot (-a) ⁻
   congrFun (image_eq_preimage_of_inverse (rot_neg_rot a) (rot_rot_neg a)) S
 
 /-- If a moving sofa with rotation angle `ω < π/2` has width at most one in every direction `u_t`,
-`t ∈ [ω, π/2]`, then a rotated copy of it has a movement with rotation angle `π/2`: it first
-rotates by `π/2 - ω` inside `H_L` (`ang_phase_one`). -/
+`t ∈ [ω, π/2]`, then its copy rotated by `π/2 - ω` has a movement with rotation angle `π/2`: it
+first rotates back by `π/2 - ω` inside `H_L` (`ang_phase_one`). -/
 theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsMovingSofaWithAngle S ω)
     (hω : ω < π / 2) (hwidth : ∀ p ∈ S, ∀ q ∈ S, ∀ t ∈ Icc ω (π / 2), dot (p - q) (uvec t) ≤ 1) :
-    ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
+    IsMovingSofaWithAngle (rot (π / 2 - ω) '' S) (π / 2) := by
   obtain ⟨hcl, hconn, θ, c, hm⟩ := hS
   have hSc : IsCompact S := isCompact_of_isMovingSofa ⟨ω, hcl, hconn, θ, c, hm⟩
   obtain ⟨R, hR⟩ := hSc.isBounded.exists_norm_le
@@ -1021,7 +1021,7 @@ theorem right_angle_motion_of_width {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsMo
   have hl0 : lf 0 = 0 := by simp only [hlf]; norm_num
   have hl1 : lf 1 = 1 := by simp only [hlf]; norm_num
   have hphase := fun φ (hφ : φ ∈ Icc 0 β) p (hp : p ∈ S) => ang_phase_one hSc hR hwidth hφ hp
-  refine ⟨β, ?_, ?_, fun s => θ (τf s) - β + φf s,
+  refine ⟨?_, ?_, fun s => θ (τf s) - β + φf s,
     fun s => (1 - lf s) • e (φf s) + lf s • c (τf s), ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩⟩
   · rw [ang_image_rot]; exact hcl.preimage (continuous_rot _)
   · exact hconn.image _ (continuous_rot _).continuousOn
@@ -1093,7 +1093,7 @@ theorem theorem1_5_2 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsBalancedMaxSofa S
   obtain ⟨hP1, hP2, -, -⟩ := proposition4_2_1 ⟨hmono.1.1.le, hlt⟩
   rw [hP1] at h2
   rw [hP2] at h3
-  refine right_angle_motion_of_width hmono.isMovingSofaWithAngle hlt fun p hp q hq t ht => ?_
+  refine ⟨_, right_angle_motion_of_width hmono.isMovingSofaWithAngle hlt fun p hp q hq t ht => ?_⟩
   rw [theorem2_4_3 hmono] at hp hq
   exact ang_width_le_one ⟨hmono.1.1, hlt⟩ hcap ht₀ h1 h2 h3 hp.1 hq ht
 

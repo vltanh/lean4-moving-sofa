@@ -15,6 +15,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
+| [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
 | [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof and ChatGPT Pro's notes |
 | [`scripts/`](../scripts) | the axiom audit, the generators of two Lean files, the figures, and the documentation tools |
 

@@ -74,7 +74,7 @@ Let $\omega \in (0, \pi/2]$. A cap $K \in \mathcal{K}^\mathrm{c}_\omega$ *maximi
 $\mathcal{A}_\omega$ if $\mathcal{A}_\omega(C) \le \mathcal{A}_\omega(K)$ for every cap
 $C \in \mathcal{K}^\mathrm{c}_\omega$.
 
-*Lean: [`MovingSofaUniqueness.IsMaxCap`](../../MovingSofaUniqueness/Main.lean#L37).*
+*Lean: [`MovingSofaUniqueness.IsMaxCap`](../../MovingSofaUniqueness/Main.lean#L51).*
 
 ### Lemma 11.2 (the maximum value)
 
@@ -91,8 +91,8 @@ $|G|$ by Theorem 9.33. $\square$
 
 Only the value of the maximum enters here; the cap $K$ is not replaced by $B$.
 
-*Lean: [`MovingSofaUniqueness.cap_area_le_gerver`](../../MovingSofaUniqueness/Main.lean#L48), [`MovingSofaUniqueness.isMaxCap_of_area_eq`](../../MovingSofaUniqueness/Main.lean#L59),
-[`MovingSofaUniqueness.area_le_gerver`](../../MovingSofaUniqueness/Main.lean#L41).*
+*Lean: [`MovingSofaUniqueness.cap_area_le_gerver`](../../MovingSofaUniqueness/Main.lean#L62), [`MovingSofaUniqueness.isMaxCap_of_area_eq`](../../MovingSofaUniqueness/Main.lean#L73),
+[`MovingSofaUniqueness.area_le_gerver`](../../MovingSofaUniqueness/Main.lean#L55).*
 
 ### Lemma 11.3 (the monotonization of a maximizing sofa)
 
@@ -110,7 +110,7 @@ $\mathcal{C}(T)$ is a cap
 ([Theorem 3.10](03-monotone.md#theorem-310-the-cap-of-a-moving-sofa-baek-theorem-241)) with
 $\mathcal{A}_\omega(\mathcal{C}(T)) = |T| = |G|$ (Theorem 3.29), and Lemma 11.2 applies. $\square$
 
-*Lean: [`MovingSofaUniqueness.maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L120), [`MovingSofaUniqueness.own_cap_isMax`](../../MovingSofaUniqueness/Main.lean#L139).*
+*Lean: [`MovingSofaUniqueness.maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L199), [`MovingSofaUniqueness.own_cap_isMax`](../../MovingSofaUniqueness/Main.lean#L218).*
 
 The cap of $T$ is the *given* maximizing cap of the rest of the proof. The following table lists
 the steps that turn it into a translate of Gerver's cap, with the corresponding propositions and
@@ -121,11 +121,11 @@ numbered inequalities of note 20; [Chapter 12](12-uniqueness.md) assembles them.
 | Penalized polygon caps converge to a given maximizing cap | Proposition 1 | Proposition 11.13 | [`exists_selectedCapSequence`](../../MovingSofaUniqueness/Selection.lean#L871) |
 | Their defects $\sigma - \tau$ are small | Proposition 2, (11)–(13) | Propositions 11.16, 11.19, Lemma 11.20, Corollary 11.21 | [`floating_defect_le`](../../MovingSofaUniqueness/Variation.lean#L280), [`pinned_defect_le`](../../MovingSofaUniqueness/Variation.lean#L580) |
 | The pinned bounds of the given cap | Proposition 4, (19) | Proposition 11.23 | [`pinned_bounds_of_maximal_positive`](../../MovingSofaUniqueness/Variation.lean#L750) |
-| Curvature bounds, injectivity | Proposition 3, (14)–(17) | Definition 12.2, Lemmas 12.3, 12.7, Propositions 12.6, 12.9, Corollary 12.10 | [`curvature_of_maximal_positive`](../../MovingSofaUniqueness/Curvature.lean#L1380), [`isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L77) |
-| A right-angle motion | Proposition 4 | Proposition 12.13 | [`maximal_monotone_has_right_angle`](../../MovingSofaUniqueness/Main.lean#L148) |
-| Equality in $\mathcal{Q}$ gives Gerver's cap | Proposition 5, (21) | Lemma 12.18, Proposition 12.19 | [`ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L92) |
-| $G$ is the closure of its interior | Proposition 6 | Proposition 12.22 | [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289) |
-| The theorem | Theorem | Theorem 12.1 | [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212) |
+| Curvature bounds, injectivity | Proposition 3, (14)–(17) | Definition 12.2, Lemmas 12.3, 12.7, Propositions 12.6, 12.9, Corollary 12.10 | [`curvature_of_maximal_positive`](../../MovingSofaUniqueness/Curvature.lean#L1380), [`isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L91) |
+| A right-angle motion | Proposition 4 | Proposition 12.13 | [`maximal_monotone_has_right_angle`](../../MovingSofaUniqueness/Main.lean#L228) |
+| Equality in $\mathcal{Q}$ gives Gerver's cap | Proposition 5, (21) | Lemma 12.18, Proposition 12.19 | [`ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L122) |
+| $G$ is the closure of its interior | Proposition 6 | Proposition 12.22 | [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L369) |
+| The theorem | Theorem | Theorem 12.1 | [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301) |
 
 For the rest of this chapter, $\omega \in (0, \pi/2]$ is fixed, and $K_*$ is a cap of angle
 $\omega$ that maximizes $\mathcal{A}_\omega$ with $\mathcal{A}_\omega(K_*) > 0$. The cap of

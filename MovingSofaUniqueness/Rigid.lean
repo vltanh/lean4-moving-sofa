@@ -132,6 +132,31 @@ theorem Rigid.continuous (g : Rigid) : Continuous g :=
   rw [Set.image_image]
   simp
 
+/-- The translation by `v` is the map `p ↦ p + v`. -/
+theorem Rigid.coe_translate (v : Plane) : (Rigid.translate v : Plane → Plane) = fun p => p + v :=
+  funext (Rigid.translate_apply v)
+
+/-- The rotation by `a` is the map `rot a`. -/
+theorem Rigid.coe_rotate (a : ℝ) : (Rigid.rotate a : Plane → Plane) = rot a :=
+  funext (Rigid.rotate_apply a)
+
+/-- `p` lies in the translate of `s` by `v` if and only if `p - v` lies in `s`. -/
+theorem Rigid.mem_translate_image {v p : Plane} {s : Set Plane} :
+    p ∈ Rigid.translate v '' s ↔ p - v ∈ s := by
+  constructor
+  · rintro ⟨q, hq, rfl⟩
+    simpa using hq
+  · intro hp
+    exact ⟨p - v, hp, by simp⟩
+
+/-- A rigid map with angle zero is the translation by its shift. -/
+theorem Rigid.eq_translate_of_angle_eq_zero {g : Rigid} (h : g.angle = 0) :
+    g = Rigid.translate g.shift := by
+  obtain ⟨a, v⟩ := g
+  dsimp only at h
+  subst h
+  rfl
+
 /-- A rigid map maps closed sets to closed sets: its image is the preimage under its inverse. -/
 theorem Rigid.isClosed_image (g : Rigid) {s : Set Plane} (hs : IsClosed s) :
     IsClosed (g '' s) := by

@@ -13,7 +13,9 @@ A right-angle cap in $\mathcal{K}^\mathrm{i}$ with the sofa area of Gerver's sof
 maximum of Baek's upper bound $\mathcal{Q}$. Equality in each of Mamikon's terms then forces its
 support function to differ from that of Gerver's cap by $a\cos t$, so the cap is a horizontal
 translate of Gerver's (§12.4). Finally, Gerver's sofa is the closure of its interior (§12.5), which
-recovers the given set from its area (§12.6).
+recovers the given set from its area (§12.6). The same arguments show that the maximizing
+right-angle caps are exactly the horizontal translates of Gerver's cap, and that the rotation in
+Theorem 12.1 can be taken to be the identity (§12.7).
 
 ## Theorem 12.1 (uniqueness of Gerver's sofa)
 
@@ -27,8 +29,8 @@ R_\theta S + v = G .
 So the moving sofas of maximum area are exactly the moving sofas that a rotation about the origin
 followed by a translation maps onto $G$.
 
-*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212),
-[`MovingSofaUniqueness.Rigid`](../../MovingSofaUniqueness/Rigid.lean).*
+*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301),
+[`MovingSofaUniqueness.Rigid`](../../MovingSofaUniqueness/Rigid.lean); the second sentence: [`isMaximal_iff_image_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L316).*
 
 Here $|\cdot|$ is the Lebesgue measure, $G$ is defined from the solution of Romik's system in the
 box of [Chapter 10](10-gerver.md), and a moving sofa is a closed connected set with a motion around
@@ -36,7 +38,7 @@ the corner of the hallway ([Chapter 2](02-preliminaries.md)). The equality is on
 a null set. The converse in the second sentence holds because rigid maps preserve area and $|G|$ is
 the maximum ([Theorem 9.33](09-optimality.md#theorem-933-optimality-of-gervers-sofa-baek-theorem-111)).
 Not every rigid image of $G$ is a moving sofa, since a moving sofa starts in the horizontal side of
-the hallway.
+the hallway (Remark 12.29). In fact the rotation can be taken to be the identity (Theorem 12.28).
 
 *Outline of the proof.* The proof follows the given sofa $S$, keeping a rigid image of it inside
 each new set (Figure 12.1).
@@ -48,8 +50,9 @@ each new set (Figure 12.1).
    in its monotonization $T$, a monotone sofa of angle $\omega$ with $|T| = |G|$, whose cap
    maximizes $\mathcal{A}_\omega$.
 2. *Right angle* (§12.3). If $\omega < \pi/2$, the pinned bounds of that cap give a right-angle
-   motion of a rotated copy $R_a T$ (Proposition 12.13). Monotonizing $R_a T$ gives a monotone sofa
-   $U$ of angle $\pi/2$ with $|U| = |G|$ that contains $R_a(S + v_0) + v_1$.
+   motion of the rotated copy $R_a T$, $a = \pi/2 - \omega$ (Proposition 12.13). Monotonizing
+   $R_a T$ gives a monotone sofa $U$ of angle $\pi/2$ with $|U| = |G|$ that contains
+   $R_a(S + v_0) + v_1$.
 3. *Gerver's cap* (§12.1, §12.2, §12.4). The cap of $U$ maximizes $\mathcal{A}_{\pi/2}$, so it
    satisfies the injectivity condition (Corollary 12.10), and equality in Baek's upper bound makes
    $U$ a horizontal translate $G + (b, 0)$ (Proposition 12.19).
@@ -343,7 +346,7 @@ Every right-angle cap $K$ with $\mathcal{A}_{\pi/2}(K) = |G|$ lies in $\mathcal{
 $\mathcal{A}_{\pi/2}(K) = |G| \ge 2.2 > 0$. Propositions 12.6 and 12.9 give the injectivity
 condition, and $|K| \ge |K| - |\mathcal{N}(K)| = |G| \ge 2.2$. $\square$
 
-*Lean: [`MovingSofaUniqueness.isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L77), [`MovingSofaUniqueness.sofaArea_pos_of_isMaxCap`](../../MovingSofaUniqueness/Main.lean#L67),
+*Lean: [`MovingSofaUniqueness.isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L91), [`MovingSofaUniqueness.sofaArea_pos_of_isMaxCap`](../../MovingSofaUniqueness/Main.lean#L81),
 [`IsKi`](../../MovingSofaOptimality/Optimality/Domain.lean#L205).*
 
 ## 12.3 The right-angle motion
@@ -379,26 +382,26 @@ The other steps use only that $K$ is a cap with $|K| \ge \mathcal{A}_\omega(K) \
 ### Lemma 12.12 (rotating inside the horizontal side; Baek, Theorem 1.5.2)
 
 Let $S$ be a moving sofa with rotation angle $\omega < \pi/2$ such that
-$(p - q) \cdot u_t \le 1$ for all $p, q \in S$ and $t \in [\omega, \pi/2]$. Then a rotated copy
-$R_a S$ moves with rotation angle $\pi/2$.
+$(p - q) \cdot u_t \le 1$ for all $p, q \in S$ and $t \in [\omega, \pi/2]$. Then the rotated copy
+$R_\beta S$, $\beta = \pi/2 - \omega$, moves with rotation angle $\pi/2$.
 
-*Proof.* Take $a = \beta = \pi/2 - \omega$; the motion is that of the proof of Theorem 5.2, which
-uses only this width bound. For $\varphi \in [0, \beta]$, the height of $R_\varphi S$, its width in
-the direction $u_{\pi/2}$, is the width of $S$ in the direction $u_{\pi/2 - \varphi}$, at most one.
-So $R_\beta S$ can first turn back by $\beta$ inside the horizontal side $H_L$, with each
-intermediate copy $R_\varphi S$ placed far to the left. Then it translates inside $H_L$ to the
-starting position of the motion of $S$, and finally it follows that motion. The total rotation is
-$\beta + \omega = \pi/2$. $\square$
+*Proof.* The motion is that of the proof of Theorem 5.2, which uses only this width bound. For
+$\varphi \in [0, \beta]$, the height of $R_\varphi S$, its width in the direction $u_{\pi/2}$, is
+the width of $S$ in the direction $u_{\pi/2 - \varphi}$, at most one. So $R_\beta S$ can first turn
+back by $\beta$ inside the horizontal side $H_L$, with each intermediate copy $R_\varphi S$ placed
+far to the left. Then it translates inside $H_L$ to the starting position of the motion of $S$, and
+finally it follows that motion. The total rotation is $\beta + \omega = \pi/2$. $\square$
 
 *Lean: [`right_angle_motion_of_width`](../../MovingSofaOptimality/Angle/RightAngle.lean#L994).*
 
 ### Proposition 12.13 (right-angle motion; note 20, Proposition 4)
 
 Let $S$ be a monotone sofa of angle $\omega \in [\sec^{-1}(2.2), \pi/2]$ with
-$|S| = |G|$. Then $R_a S$ moves with rotation angle $\pi/2$ for some angle $a$.
+$|S| = |G|$. Then $R_a S$ moves with rotation angle $\pi/2$, where $a = \pi/2 - \omega$.
 
-*Proof.* If $\omega = \pi/2$, take $a = 0$. Otherwise the cap $K = \mathcal{C}(S)$ maximizes
-$\mathcal{A}_\omega$, with $\mathcal{A}_\omega(K) = |S| = |G| \ge 11/5$ (Lemma 11.3). So
+*Proof.* If $\omega = \pi/2$, then $a = 0$, and $S$ moves with rotation angle $\pi/2$. Otherwise
+the cap $K = \mathcal{C}(S)$ maximizes $\mathcal{A}_\omega$, with
+$\mathcal{A}_\omega(K) = |S| = |G| \ge 11/5$ (Lemma 11.3). So
 Proposition 11.23 gives the pinned bounds, and Lemma 12.11 gives $t_0 \in (0, \omega)$ such that
 $O$, $c_\omega u_0$ and $c_\omega v_\omega$ lie in the closure of $Q_K^-(t_0)$. As
 $S = K \setminus \mathcal{N}(K)$
@@ -409,7 +412,7 @@ $(p - q) \cdot u_t \le 1$ for $p, q \in S$ and $t \in [\omega, \pi/2]$ (Figure 1
 sofa moves with its angle ([Theorem 3.3](03-monotone.md#theorem-33-monotonization-baek-theorem-232)),
 so Lemma 12.12 applies. $\square$
 
-*Lean: [`MovingSofaUniqueness.maximal_monotone_has_right_angle`](../../MovingSofaUniqueness/Main.lean#L148),
+*Lean: [`MovingSofaUniqueness.maximal_monotone_has_right_angle`](../../MovingSofaUniqueness/Main.lean#L228),
 [`right_angle_motion_of_pinned_bounds`](../../MovingSofaUniqueness/AngleExtension.lean#L87).*
 
 ![Top: a parallelogram P_ω, ω = 1.1, leaning left, filled blue except for a small orange triangle Δ at its obtuse bottom corner O; o_ω marks the opposite obtuse corner. Below: three horizontal strips of height one, each holding the pentagon P_ω minus Δ rotated by a different angle: by β (green, leaning right), by β/2 (purple, lying flat on the edge that Δ cut off) and by 0 (blue, leaning left as in the top panel)](figures/12-uniqueness/rotation.svg)
@@ -556,6 +559,7 @@ value at $\varphi$ gives $p'' = a$. $\square$
 ### Lemma 12.18 (caps with translated supports; note 20, (21))
 
 Let $K$ and $C$ be right-angle caps with $h_K(t) - h_C(t) = a\cos t$ for $t \in [0, \pi]$. Then
+$K = C + (a, 0)$ and
 
 ```math
 K \setminus \mathcal{N}(K) = \bigl(C \setminus \mathcal{N}(C)\bigr) + (a, 0) .
@@ -568,8 +572,8 @@ Since $(p - (a, 0)) \cdot u_t = p \cdot u_t - a\cos t$ and
 $(p - (a, 0)) \cdot v_t = p \cdot v_t - a\cos(t + \pi/2)$, both descriptions for $K$ at $p$ are those
 for $C$ at $p - (a, 0)$. $\square$
 
-*Lean: [`sofa_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigidity.lean#L1010), [`mem_right_cap_iff`](../../MovingSofaUniqueness/Rigidity.lean#L920), [`mem_right_niche_iff`](../../MovingSofaUniqueness/Rigidity.lean#L942),
-[`mem_cap_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L963), [`mem_niche_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L982).*
+*Lean: [`sofa_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigidity.lean#L1014), [`cap_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigidity.lean#L1033), [`mem_right_cap_iff`](../../MovingSofaUniqueness/Rigidity.lean#L924), [`mem_right_niche_iff`](../../MovingSofaUniqueness/Rigidity.lean#L946),
+[`mem_cap_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L967), [`mem_niche_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L986).*
 
 Note 20 obtains the lower supports from the bottom segment of the cap; the formal proof describes
 the cap by its upper supports and the floor, which amounts to the same.
@@ -589,7 +593,7 @@ $K \setminus \mathcal{N}(K) = (\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(
 $\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(G)) = G$ because $G$ is a monotone sofa
 (Theorem 3.13; Figure 12.5). $\square$
 
-*Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L92), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
+*Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L122), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
 [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L181), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
 
 ![Top: Gerver's cap filled blue and its horizontal translate drawn dashed in green, overlapping; at one normal t each has a dashed supporting line, the two lines parallel, and a double arrow between them is labelled a cos t. Bottom: the graph of f(t) = a cos t from 0 to π, positive up to π/2 and negative after](figures/12-uniqueness/translation.svg)
@@ -625,7 +629,7 @@ $0.99240672$ and $0.9500001$. $\square$
 
 Numerically, the path is highest at $t = \pi/4$, at height $0.6643$.
 
-*Lean: [`MovingSofaOptimality.GerverParams.path_snd_lt_one`](../../MovingSofaUniqueness/RegularClosed.lean#L36), [`gs_path_snd_le_one`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L255).*
+*Lean: [`MovingSofaOptimality.GerverParams.path_snd_lt_one`](../../MovingSofaUniqueness/RegularClosed.lean#L37), [`gs_path_snd_le_one`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L255).*
 
 ### Lemma 12.21 (removing the region under an envelope)
 
@@ -643,7 +647,7 @@ point of $\Gamma$ on its vertical line, so $p_x \in [a, b]$ and $p_y < 1$. The p
 $(p_x, p_y + s)$, $0 < s \le 1 - p_y$, lie in the rectangle and outside $\bar\Gamma_\le$, and tend
 to $p$. $\square$
 
-*Lean: [`regularClosed_cap_sdiff_envelope`](../../MovingSofaUniqueness/RegularClosed.lean#L231), [`isCompact_envUnder`](../../MovingSofaUniqueness/RegularClosed.lean#L185), [`outside_closed_envelope_subset`](../../MovingSofaUniqueness/RegularClosed.lean#L219).*
+*Lean: [`regularClosed_cap_sdiff_envelope`](../../MovingSofaUniqueness/RegularClosed.lean#L277), [`isCompact_envUnder`](../../MovingSofaUniqueness/RegularClosed.lean#L231), [`outside_closed_envelope_subset`](../../MovingSofaUniqueness/RegularClosed.lean#L265).*
 
 ### Proposition 12.22 (regular closedness; note 20, Proposition 6)
 
@@ -664,8 +668,8 @@ $[a, b] \times [0, 1]$ under it, since a right-angle cap contains the vertical s
 its points down to the floor. In particular $K_G$ is a convex set with nonempty interior, hence the
 closure of its interior. Finally $G$ is closed, being a moving sofa. $\square$
 
-*Lean: [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289), [`envelope_bounds_of_path_height`](../../MovingSofaUniqueness/RegularClosed.lean#L126), [`envelope_endpoint_order`](../../MovingSofaUniqueness/RegularClosed.lean#L93),
-[`envelope_isCompact`](../../MovingSofaUniqueness/RegularClosed.lean#L111), [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L103).*
+*Lean: [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L369), [`envelope_bounds_of_path_height`](../../MovingSofaUniqueness/RegularClosed.lean#L129), [`envelope_endpoint_order`](../../MovingSofaUniqueness/RegularClosed.lean#L96),
+[`envelope_isCompact`](../../MovingSofaUniqueness/RegularClosed.lean#L114), [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L103).*
 
 ![Gerver's sofa filled blue, with its niche bounded above by an orange arch Γ that meets the floor at a and b; the arch is highest near 0.664, below the dashed line at height one; a dashed rectangle from a to b of height one lies in the cap, with its top corners (a, 1) and (b, 1) marked; a point p on the arch has an arrow pointing up into the sofa](figures/12-uniqueness/regular-closed.svg)
 
@@ -693,7 +697,7 @@ $\square$
 Both hypotheses on $Y$ are needed (Figure 12.7).
 
 *Lean: [`eq_of_subset_of_measure_eq`](../../MovingSofaUniqueness/Rigid.lean#L54), [`eq_of_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L47),
-[`interior_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L38), [`Rigid.recover`](../../MovingSofaUniqueness/Rigid.lean#L155).*
+[`interior_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L38), [`Rigid.recover`](../../MovingSofaUniqueness/Rigid.lean#L180).*
 
 ![Left: a unit square E filled blue with a segment of length one attached to its lower right corner, labelled hair. Right: Gerver's sofa filled blue with a small dashed orange circle around an interior point q, inside which the sofa is removed](figures/12-uniqueness/recovery.svg)
 
@@ -714,19 +718,21 @@ $\mathcal{A}_{\pi/2}(K) = |U| = |G|$
 Corollary 12.10, $K \in \mathcal{K}^\mathrm{i}$, so $K \setminus \mathcal{N}(K) = G + (b, 0)$ by
 Proposition 12.19, and $U = K \setminus \mathcal{N}(K)$ by Theorem 3.13. $\square$
 
-*Lean: [`right_angle_monotone_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L167).*
+*Lean: [`right_angle_monotone_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L248).*
 
 ### Proposition 12.25 (containment)
 
 For every moving sofa $S$ with $|S| = |G|$ there is a rigid map $g$, a rotation about the origin
-followed by a translation, with $g(S) \subseteq G$.
+followed by a translation, with $g(S) \subseteq G$. Its rotation is by an angle
+$a = \pi/2 - \omega \in [0, \pi/2 - \sec^{-1}(2.2)]$, where $\omega$ is a rotation angle of $S$.
 
 *Proof.* As $|S| = |G| \ge 11/5$, Theorem 5.1 gives a rotation angle
 $\omega \in [\sec^{-1}(2.2), \pi/2]$ for $S$. By Lemma 11.3 there are a vector $v_0$
 and a monotone sofa $T$ of angle $\omega$ with $S + v_0 \subseteq T$ and $|T| = |G|$. By
-Proposition 12.13, $R_a T$ moves with rotation angle $\pi/2$ for some $a$, and $|R_a T| = |G|$. By
-Lemma 11.3 again, now at the angle $\pi/2$, there are $v_1$ and a monotone sofa $U$ of angle $\pi/2$
-with $R_a T + v_1 \subseteq U$ and $|U| = |G|$, and by Lemma 12.24, $U = G + (b, 0)$. So
+Proposition 12.13, $R_a T$ moves with rotation angle $\pi/2$, where $a = \pi/2 - \omega$, and
+$|R_a T| = |G|$. By Lemma 11.3 again, now at the angle $\pi/2$, there are $v_1$ and a monotone sofa
+$U$ of angle $\pi/2$ with $R_a T + v_1 \subseteq U$ and $|U| = |G|$, and by Lemma 12.24,
+$U = G + (b, 0)$. So
 
 ```math
 R_a(S + v_0) + v_1 \subseteq R_a T + v_1 \subseteq U = G + (b, 0) ,
@@ -734,7 +740,7 @@ R_a(S + v_0) + v_1 \subseteq R_a T + v_1 \subseteq U = G + (b, 0) ,
 
 and $g(p) = R_a p + R_a v_0 + v_1 - (b, 0)$ maps $S$ into $G$. $\square$
 
-*Lean: [`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L179), [`maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L120), [`Rigid.trans`](../../MovingSofaUniqueness/Rigid.lean#L101).*
+*Lean: [`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L199), [`Rigid.trans`](../../MovingSofaUniqueness/Rigid.lean#L101).*
 
 *Proof of Theorem 12.1.* Let $S$ be a moving sofa with $|S| = |G|$, and $g$ the rigid map of
 Proposition 12.25, with $g(S) \subseteq G$. The set $g(S)$ is closed, since $S$ is closed by the
@@ -742,11 +748,111 @@ definition of a moving sofa and $g$ is a homeomorphism; $|g(S)| = |S| = |G|$, si
 area; $|G|$ is finite; and $G$ is the closure of its interior (Proposition 12.22). By Lemma 12.23,
 $g(S) = G$, and writing $g(p) = R_\theta p + v$ gives the theorem. $\square$
 
-*Lean: [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212), [`Rigid.volume_image`](../../MovingSofaUniqueness/Rigid.lean#L143), [`Rigid.isClosed_image`](../../MovingSofaUniqueness/Rigid.lean#L136),
-[`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351).*
+*Lean: [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301), [`Rigid.volume_image`](../../MovingSofaUniqueness/Rigid.lean#L168), [`Rigid.isClosed_image`](../../MovingSofaUniqueness/Rigid.lean#L161),
+[`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L369), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351).*
 
 The Challenge's [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351) states the theorem with the definitions of Baek's paper
-in Mathlib's vocabulary; [`Solution.lean`](../../Solution.lean) derives it from [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212) through the
+in Mathlib's vocabulary; [`Solution.lean`](../../Solution.lean) derives it from [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301) through the
 identification of these definitions with the library's ([`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L31),
 [`Baek.gerverSofa_eq_lib`](../../Solution.lean#L54)). [Chapter 13](13-bridge.md) carries the theorem over to formal-conjectures'
 statement [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L396).
+
+## 12.7 The maximizing right-angle caps, and the rotation
+
+The equality case describes all maximizing right-angle caps (Theorem 12.26). The proof also shows
+that the rotation in Theorem 12.1 can be taken to be the identity: the rigid map of
+Proposition 12.25 turns by $\pi/2 - \omega \in [0, \pi/2 - \sec^{-1}(2.2)]$, and Gerver's sofa is
+wider than one in every direction other than the vertical (Lemma 12.27), so the map turns by zero
+(Theorem 12.28).
+
+### Theorem 12.26 (maximizing right-angle caps)
+
+A right-angle cap $K$ has $\mathcal{A}_{\pi/2}(K) = |G|$ if and only if $K = K_G + (s, 0)$ for some
+$s \in \mathbb{R}$, where $K_G = \mathcal{C}(G)$ is Gerver's cap. In this case
+$K \setminus \mathcal{N}(K) = G + (s, 0)$. So the caps that maximize $\mathcal{A}_{\pi/2}$ are
+exactly the horizontal translates of $K_G$, and every monotone sofa of angle $\pi/2$ with the area
+of $G$ is a horizontal translate of $G$ (Lemma 12.24).
+
+*Proof.* Let $\mathcal{A}_{\pi/2}(K) = |G|$. By Corollary 12.10, $K \in \mathcal{K}^\mathrm{i}$, and
+as in the proof of Proposition 12.19, $h_K(t) - h_{K_G}(t) = s\cos t$ on $[0, \pi]$ for some $s$.
+Lemma 12.18 with $C = K_G$ gives $K = K_G + (s, 0)$ and
+$K \setminus \mathcal{N}(K) = (K_G \setminus \mathcal{N}(K_G)) + (s, 0) = G + (s, 0)$. Conversely,
+the translate $C + (s, 0)$ of a right-angle cap $C$ has the support function $h_C(t) + s\cos t$. It
+keeps the support values at the normals $\pi/2$ and $3\pi/2$, and the translate of a half-plane is a
+half-plane with the same normal, so $C + (s, 0)$ is a right-angle cap. By the proof of Lemma 12.18,
+its niche is $\mathcal{N}(C) + (s, 0)$, so $\mathcal{A}_{\pi/2}(C + (s, 0)) = \mathcal{A}_{\pi/2}(C)$.
+Finally $\mathcal{A}_{\pi/2}(K_G) = |G|$
+([Theorem 3.29](03-monotone.md#theorem-329-the-area-of-a-monotone-sofa-baek-theorem-2510)), which
+is the maximum of $\mathcal{A}_{\pi/2}$ (Lemma 11.2). $\square$
+
+*Lean: [`sofaArea_eq_gerver_iff`](../../MovingSofaUniqueness/Main.lean#L167), [`cap_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L153), [`translate_gerver_cap_sdiff_niche`](../../MovingSofaUniqueness/Main.lean#L138),
+[`isMaxCap_iff_translate_gerver_cap`](../../MovingSofaUniqueness/Main.lean#L181), [`ki_supp_sub_gerver_eq`](../../MovingSofaUniqueness/Main.lean#L108), [`isCap_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1052),
+[`niche_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1070), [`sofaArea_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1078), [`right_angle_monotone_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L248).*
+
+### Lemma 12.27 (the width of Gerver's sofa)
+
+For every $r \in [0, \pi]$ with $r \ne \pi/2$ there are $p, q \in G$ with $(p - q) \cdot u_r > 1$:
+the width of $G$ exceeds one in every direction other than the vertical.
+
+*Proof.* Let $\Gamma$, $a = \mathbf{D}(0)_x$ and $b = \mathbf{B}(\pi/2)_x$ be as in §12.5, and
+$x_- = \mathbf{C}(\pi/2)_x = \mathbf{x}(\pi/2)_x - 1$. The points $(a, 1) = \mathbf{C}(0)$,
+$(b, 1) = \mathbf{A}(\pi/2)$, $(x_-, 0) = \mathbf{C}(\pi/2)$ and $(1, 0) = \mathbf{A}(0)$ lie in
+$K_G$ ([Lemma 10.10](10-gerver.md#lemma-1010-the-cap-k_g)). A point of the niche lies strictly
+below a point $\gamma$ of $\Gamma$ with the same abscissa, so $\gamma_y > 0$. The abscissa is
+strictly monotone along each of the three pieces of $\Gamma$, and the only points of $\Gamma$ with
+abscissa $a$ or $b$ are $\mathbf{D}(0)$ and $\mathbf{B}(\pi/2)$, of height zero. So the points of the
+niche have abscissas in $(a, b)$. Since $(a, 1)$ and $(b, 1)$ lie in $K_G$,
+$x_- = -h_{K_G}(\pi) \le a$ and $b \le h_{K_G}(0) = 1$, so none of the four points lies in the niche,
+and all four lie in $G$. The abscissas of $\mathbf{D}(0)$, $\mathbf{x}(\pi/2 - \varphi)$,
+$\mathbf{x}(\varphi)$ and $\mathbf{B}(\pi/2)$ increase (§12.5), and $\mathbf{x}_x$ decreases from $0$
+(Lemma 10.10 (3)), so $a < \mathbf{x}(\pi/2 - \varphi)_x < \mathbf{x}(\varphi)_x \le 0$ and
+$b > \mathbf{x}(\varphi)_x > \mathbf{x}(\pi/2 - \varphi)_x \ge \mathbf{x}(\pi/2)_x = x_- + 1$. For
+$r < \pi/2$,
+
+```math
+\bigl((b, 1) - (x_-, 0)\bigr) \cdot u_r = (b - x_-)\cos r + \sin r > \cos r + \sin r \ge 1 ,
+```
+
+and for $r > \pi/2$,
+
+```math
+\bigl((a, 1) - (1, 0)\bigr) \cdot u_r = (1 - a)\lvert\cos r\rvert + \sin r > \lvert\cos r\rvert + \sin r \ge 1 .
+```
+
+$\square$
+
+*Lean: [`gerver_width_gt_one`](../../MovingSofaUniqueness/RegularClosed.lean#L475), [`gerver_corner_points`](../../MovingSofaUniqueness/RegularClosed.lean#L436), [`envUnderStrict_fst_mem_Ioo`](../../MovingSofaUniqueness/RegularClosed.lean#L169),
+[`gerver_niche_eq_envUnderStrict`](../../MovingSofaUniqueness/RegularClosed.lean#L341), [`gerver_contactC_zero`](../../MovingSofaUniqueness/RegularClosed.lean#L352), [`gerver_contactA_pi_div_two`](../../MovingSofaUniqueness/RegularClosed.lean#L361).*
+
+### Theorem 12.28 (no rotation is needed)
+
+Every moving sofa $S$ with $|S| = |G|$ is a translate of $G$: $S + v = G$ for some vector $v$. In
+particular $S$ moves with rotation angle $\pi/2$.
+
+*Proof.* By Proposition 12.25 and the proof of Theorem 12.1, a rigid map $g(p) = R_\psi p + w$ with
+$\psi \in [0, \pi/2 - \sec^{-1}(2.2)]$ maps $S$ onto $G$. The motion of a moving sofa starts with a
+translate of it in $H_L$, so $(p - q) \cdot u_{\pi/2} \le 1$ for all $p, q \in S$. Since
+$(g(p) - g(q)) \cdot u_{\psi + \pi/2} = R_\psi(p - q) \cdot R_\psi u_{\pi/2} = (p - q) \cdot u_{\pi/2}$,
+the width of $G$ in the direction $u_{\psi + \pi/2}$ is at most one. If $\psi > 0$, then
+$\psi + \pi/2 \in (\pi/2, \pi)$, and this contradicts Lemma 12.27. So $\psi = 0$, and $g$ is the
+translation by $w$. Gerver's sofa moves with rotation angle $\pi/2$, and so does its translate
+$S$. $\square$
+
+*Lean: [`translate_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L364), [`isMovingSofaWithAngle_pi_div_two_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L396),
+[`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`snd_sub_le_one_of_isMovingSofa`](../../MovingSofaUniqueness/Main.lean#L332),
+[`dot_sub_vvec_le_one_of_mem_image`](../../MovingSofaUniqueness/Main.lean#L347), [`Rigid.eq_translate_of_angle_eq_zero`](../../MovingSofaUniqueness/Rigid.lean#L153).*
+
+### Remark 12.29 (rotated copies of Gerver's sofa)
+
+A rotated copy $R_\theta G$ fits into the horizontal side $H_L$, after a translation, only if
+$\theta$ is a multiple of $\pi$. Its height is the width of $G$ in the direction
+$R_{-\theta} u_{\pi/2} = (\sin\theta, \cos\theta)$, and by Lemma 12.27, applied to
+$\pm(\sin\theta, \cos\theta)$, this width is at most one only if $\sin\theta = 0$. A moving sofa starts
+in $H_L$, so $R_\theta G$ is a moving sofa only if $\sin\theta = 0$; for instance $R_{\pi/2} G$ is
+not one. So not every rigid image of $G$ is a moving sofa, and the moving sofas of maximum area are
+the moving sofas that a rigid map takes onto $G$ (Theorem 12.1), all of them translates of $G$
+(Theorem 12.28).
+
+*Lean: [`sin_eq_zero_of_rot_gerver_mem_horizSide`](../../MovingSofaUniqueness/Main.lean#L410), [`sin_eq_zero_of_isMovingSofa_rot_gerver`](../../MovingSofaUniqueness/Main.lean#L424),
+[`not_isMovingSofa_rot_pi_div_two_gerver`](../../MovingSofaUniqueness/Main.lean#L433), [`fst_eq_zero_of_gerver_width_le_one`](../../MovingSofaUniqueness/RegularClosed.lean#L505),
+[`isMaximal_iff_image_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L316).*

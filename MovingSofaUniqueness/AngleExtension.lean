@@ -8,8 +8,8 @@ public import MovingSofaOptimality.Angle.RightAngle
 Let `S` be a monotone sofa of rotation angle `ω ∈ [arcsec(11/5), π/2)` and area at least `11/5`,
 whose cap `K` satisfies the pinned bounds (19) of note 20. Then the points `O`, `o_ω - v_0` and
 `o_ω - u_ω` lie in the closure of one inner quadrant `Q_K⁻(t)` of `K` (`consumed_of_pinned`), so
-`S` has width at most one in every direction `u_t` with `t ∈ [ω, π/2]`, and a rotated copy of `S`
-has a right-angle motion (`right_angle_motion_of_pinned_bounds`, by the motion
+`S` has width at most one in every direction `u_t` with `t ∈ [ω, π/2]`, and the copy of `S`
+rotated by `π/2 - ω` has a right-angle motion (`right_angle_motion_of_pinned_bounds`, by the motion
 `right_angle_motion_of_width` of the proof of Theorem 1.5.2). This is Proposition 4 of note 20; the
 geometry is that of Baek's Theorems 4.2.5 and 1.5.2.
 -/
@@ -83,13 +83,13 @@ theorem consumed_of_pinned {K : Set (ℝ × ℝ)} {ω : ℝ}
       subset_closure m1, subset_closure m3, subset_closure m2⟩
 
 /-- A monotone sofa of angle `ω ∈ [arcsec(11/5), π/2)` and area at least `11/5`, whose cap satisfies
-the pinned bounds (19), has a rotated copy with a right-angle motion. -/
+the pinned bounds (19), has a right-angle motion after a rotation by `π/2 - ω`. -/
 theorem right_angle_motion_of_pinned_bounds {S : Set (ℝ × ℝ)} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Ico arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S)
     (hw : wedgeGapWInf (capOf S ω) ω ≤ sigmaAt (capOf S ω) (π / 2))
     (hz : wedgeGapZInf (capOf S ω) ω ≤ sigmaAt (capOf S ω) ω) :
-    ∃ a : ℝ, IsMovingSofaWithAngle (rot a '' S) (π / 2) := by
+    IsMovingSofaWithAngle (rot (π / 2 - ω) '' S) (π / 2) := by
   have hmove := hS.isMovingSofaWithAngle
   have hcap : IsCap (capOf S ω) ω := theorem2_4_1 hS.1 hmove hS.isStandardPosition
   have harea' : (2.2 : ℝ) ≤ sofaArea ω (capOf S ω) := by rwa [theorem2_5_10 hS]

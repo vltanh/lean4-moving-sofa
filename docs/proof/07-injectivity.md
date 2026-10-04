@@ -919,7 +919,7 @@ which is condition (3). The statement about a balanced maximum sofa is the case 
 The uniqueness proof shows more: every right-angle cap whose sofa area is that of Gerver's sofa,
 balanced or not, satisfies the injectivity condition
 ([Corollary 12.10](12-uniqueness.md#corollary-1210-maximizing-right-angle-caps-note-20-proposition-3);
-note 20, Proposition 3; [`MovingSofaUniqueness.isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L77)). It obtains the
+note 20, Proposition 3; [`MovingSofaUniqueness.isKi_of_maximal_area`](../../MovingSofaUniqueness/Main.lean#L91)). It obtains the
 integral form of the differential inequality from curvature bounds instead of polygon caps, and then
 runs the iteration of this section ([Chapter 11](11-selection.md) and
 [Chapter 12](12-uniqueness.md)).

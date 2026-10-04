@@ -312,8 +312,9 @@ meta def paperResults : List (String × Name) :=
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
 /-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/archive/uniqueness/20-complete-paper-proof.md`; and the bridge to formal-conjectures'
-definitions (`MovingSofaBridge/`). -/
+argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, and the refinements that the
+manuscript `docs/paper` states; and the bridge to formal-conjectures' definitions
+(`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
    ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
@@ -325,6 +326,12 @@ meta def uniquenessResults : List (String × Name) :=
    ("Uniqueness: Prop 4 (right-angle motion)", ``MovingSofaUniqueness.maximal_monotone_has_right_angle),
    ("Uniqueness: Prop 5", ``MovingSofaUniqueness.ki_sofa_eq_gerver_translate),
    ("Uniqueness: Prop 6", ``MovingSofaUniqueness.gerver_regularClosed),
+   ("Uniqueness: maximizing right-angle caps (manuscript `thm:caps`)",
+    ``MovingSofaUniqueness.sofaArea_eq_gerver_iff),
+   ("Uniqueness: the maximal sofas (manuscript `cor:all`)",
+    ``MovingSofaUniqueness.isMaximal_iff_image_eq_gerver),
+   ("Uniqueness: no rotation is needed (manuscript `cor:translate`)",
+    ``MovingSofaUniqueness.translate_eq_gerver_of_volume_eq),
    ("Bridge: moving sofas", ``MovingSofaBridge.isMovingSofa_iff),
    ("Bridge: the sofa constant", ``MovingSofaBridge.sofaConstant_eq),
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),

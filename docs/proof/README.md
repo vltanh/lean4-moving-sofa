@@ -106,6 +106,7 @@ that prove it.
   - [12.4 Equality in the upper bound](12-uniqueness.md#124-equality-in-the-upper-bound)
   - [12.5 Gerver's sofa is the closure of its interior](12-uniqueness.md#125-gervers-sofa-is-the-closure-of-its-interior)
   - [12.6 Proof of Theorem 12.1](12-uniqueness.md#126-proof-of-theorem-121)
+  - [12.7 The maximizing right-angle caps, and the rotation](12-uniqueness.md#127-the-maximizing-right-angle-caps-and-the-rotation)
 - [13. The bridge to formal-conjectures](13-bridge.md)
   - [13.1 The two sets of definitions](13-bridge.md#131-the-two-sets-of-definitions)
   - [13.2 Coordinates and rigid motions](13-bridge.md#132-coordinates-and-rigid-motions)
@@ -254,7 +255,7 @@ R_\theta S + v = G.
 *Proof.* This is [Theorem 12.1](12-uniqueness.md#theorem-121-uniqueness-of-gervers-sofa), proved in
 [§12.6](12-uniqueness.md#126-proof-of-theorem-121) from the results of Chapters 11 and 12. $\square$
 
-*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212).*
+*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301).*
 
 *Remarks.* (i) With Theorem 1.2, the moving sofas of maximum area are exactly the moving sofas that
 a rotation and a translation map onto $G$. Not every rotated copy of $G$ is a moving sofa: a motion
