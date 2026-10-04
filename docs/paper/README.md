@@ -77,12 +77,12 @@ These are the author's to settle; the text settles none of them.
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
    comments "63 pages, 9 figures. The proof, together with Baek's, is formalized in Lean 4:
-   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,245 characters, plain text) is:
+   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,240 characters, plain text) is:
 
-   > The moving sofa problem asks for the largest area of a closed connected planar set that can be moved
-   > around the right-angled corner of a hallway of unit width. Gerver found a set of area 2.2195... in 1992
-   > and conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the only
-   > optimal set: every moving sofa of the same area is the image of Gerver's sofa under a rotation and a
+   > The moving sofa problem asks for the largest area of a planar region that can be moved around the
+   > right-angled corner of a hallway of unit width. Gerver found a region of area 2.2195... in 1992 and
+   > conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the only optimal
+   > region: every moving sofa of the same area is the image of Gerver's sofa under a rotation and a
    > translation, as a set. Baek's proof studies one particular maximizer, produced by a compactness argument:
    > its sofa, rotated, turns through a right angle, and at the right angle it satisfies an injectivity
    > condition. A given maximizer need not be that one. We show that every maximizer has these properties, by
@@ -90,8 +90,8 @@ These are the author's to settle; the text settles none of them.
    > balanced, and passing to the limit. Equality in Baek's concave upper bound, whose nonlinear terms are
    > halves of integrals of squared lengths of tangent segments, then forces differential equations for the
    > difference of the support functions of the cap and of Gerver's cap, and these equations identify the cap.
-   > A last step recovers the set from its cap. The proof, together with Baek's, is formalized in Lean 4 with
-   > Mathlib.
+   > A last step recovers the region from its cap. The proof, together with Baek's, is formalized in Lean 4
+   > with Mathlib.
 
 7. `\date{October 2026}` in `main.tex`.
 8. [`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) list the four versions of the Palomar

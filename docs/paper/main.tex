@@ -58,10 +58,10 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
 \begin{document}
 
 \begin{abstract}
-The moving sofa problem asks for the largest area of a closed connected planar set that can be moved around the
-right-angled corner of a hallway of unit width. Gerver found a set of area $2.2195\ldots$ in 1992
+The moving sofa problem asks for the largest area of a planar region that can be moved around the
+right-angled corner of a hallway of unit width. Gerver found a region of area $2.2195\ldots$ in 1992
 and conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the
-only optimal set: every moving sofa of the same area is the image of Gerver's sofa under a
+only optimal region: every moving sofa of the same area is the image of Gerver's sofa under a
 rotation and a translation, as a set. Baek's proof studies one particular maximizer, produced by a
 compactness argument: its sofa, rotated, turns through a right angle, and at the right angle it satisfies an
 injectivity condition. A given maximizer need not be that one. We show that every maximizer has these
@@ -69,7 +69,7 @@ properties, by approximating a maximizing convex cap by polygonal maximizers of 
 which are almost balanced, and passing to the limit. Equality in Baek's concave upper bound, whose
 nonlinear terms are halves of integrals of squared lengths of tangent segments, then forces differential equations for the difference of the
 support functions of the cap and of Gerver's cap, and these equations identify the cap. A last step
-recovers the set from its cap. The proof, together with Baek's, is formalized in Lean~4 with Mathlib.
+recovers the region from its cap. The proof, together with Baek's, is formalized in Lean~4 with Mathlib.
 \end{abstract}
 
 \maketitle
