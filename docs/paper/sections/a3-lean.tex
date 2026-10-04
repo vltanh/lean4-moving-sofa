@@ -1,0 +1,64 @@
+\section{The Lean formalization: the statement and a dictionary}\label{app:lean}
+
+\subsection{The statement of \texorpdfstring{\cref{thm:main}}{the main theorem}}
+
+The statement of record is \path{Baek.gerver_sofa_unique} in \texttt{Challenge.lean}. It uses Mathlib's vocabulary and the definitions below, which \texttt{Challenge.lean}
+copies verbatim from \texttt{ChallengeDefs.lean}; they are those of this paper. In Lean the plane is $\R\times\R$, the area of a set is its Lebesgue measure \path{volume}, and
+\texttt{rot t} is the counterclockwise rotation by $t$.
+\begin{itemize}
+\item \path{horizSide} $=\{p:\ p_1\le1,\ 0\le p_2\le1\}=H_L$, \path{vertSide} $=\{p:\ 0\le p_1\le1,\ p_2\le1\}=V_L$, \path{hallway} $=H_L\cup V_L=L$.
+\item \texttt{IsMovingSofa S} holds if $S$ is closed and connected (hence nonempty) and there are $\theta:\R\to\R$ and $c:\R\to\R^2$, continuous on $[0,1]$, with $\theta(0)=0$,
+$\mathrm{rot}_{\theta(0)}p+c(0)\in H_L$ for $p\in S$, $\mathrm{rot}_{\theta(s)}p+c(s)\in L$ for $p\in S$ and $s\in[0,1]$, and $\mathrm{rot}_{\theta(1)}p+c(1)\in V_L$ for $p\in S$ (\cref{def:sofa}, the rotation
+angle $-\theta(1)$ being left free).
+\item \texttt{shapeOfPath x} $=H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)\cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr)$, written in Lean with images of the hallway sets under $p\mapsto \xx(t)+\mathrm{rot}_t\,p$.
+\item \path{GerverParams} holds the 22 parameters of Appendix~\ref{app:gerver}; \texttt{P.path} is the rotation path glued from the five curves of Appendix~\ref{app:gerver}; \texttt{P.IsSolution} is the conjunction of
+$0<\varphi<\theta<\pi/4$ and the four groups (1)--(4) of Appendix~\ref{app:gerver} (Romik's equations (27)--(44)); \texttt{P.InBox} says $\varphi\in[0.039,0.04]$, $\theta\in[0.68,0.69]$; and \texttt{gerverSofa P} $=$ \texttt{shapeOfPath P.path}.
+\end{itemize}
+The theorem: for every \texttt{P : GerverParams} with \texttt{P.IsSolution} and \texttt{P.InBox}, and every set $S\subset\R\times\R$ with \texttt{IsMovingSofa S} and
+\texttt{volume S = volume (gerverSofa P)}, there are $\theta\in\R$ and $v\in\R\times\R$ such that the image $\{\mathrm{rot}_\theta p+v:p\in S\}$ equals \texttt{gerverSofa P}. The theorems \path{Baek.gerver_params_exists}
+and \path{Baek.gerver_params_unique} say that the box contains exactly one solution, so that \texttt{gerverSofa P} is Gerver's sofa $\Gs$, and \path{Baek.gerver_sofa_area} says that its area
+lies between $2.2192$ and $2.2199$.
+
+\subsection{Dictionary}
+
+\cref{tab:dict} lists the declarations that prove the results of this paper. The modules are in the repository~\cite{Companion}: a name followed by a module in parentheses is in
+\texttt{MovingSofaUniqueness/} (\texttt{Main}, \texttt{Selection}, \texttt{Variation}, \texttt{AngleExtension}, \texttt{Curvature}, \texttt{Rigidity}, \texttt{RegularClosed}, \texttt{Rigid}) or, with a directory, in
+\texttt{MovingSofaOptimality/}. The results of~\cite{Baek} are in \texttt{MovingSofaOptimality/}, under the name \path{theorem}$n_1$\path{_}$n_2$\path{_}$n_3$ (also \path{lemma}, \path{proposition}, \path{corollary}) for the result number $n_1.n_2.n_3$ of~\cite{Baek}.
+Some statements are slightly different in Lean: \cref{lem:nichebox} has the box $[-R,R]\times[0,2R]$, \cref{lem:sum} has $2B$ for $B$, \cref{lem:triangle} has the closed quarter-plane in \path{consumed_of_pinned} (the open one is in the
+other declarations listed), \cref{lem:cell} is stated with $g_K^-(t+\delta)$, and \cref{fact:sides}\ref{fact:sides:identity} is formalized in its sine form (see \cref{sec:formalization} for the others). The converse part of \cref{thm:caps} (a translate of $\KG$ has sofa area $\abs\Gs$) and
+\cref{rem:translate} are not stated in Lean, and \cref{cor:all} only in the vocabulary of formal-conjectures (\path{FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa}).
+
+{\footnotesize
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
+\caption{The results of this paper and the Lean declarations that prove them.}\label{tab:dict}\\
+\toprule Result & Lean declarations\\ \midrule\endfirsthead
+\toprule Result & Lean declarations (continued)\\ \midrule\endhead
+\bottomrule\endlastfoot
+\cref{thm:main} & \path{Baek.gerver_sofa_unique} (\texttt{Challenge.lean}); \path{MovingSofaUniqueness.image_eq_gerver_of_volume_eq}, \path{maximizer_contained_in_gerver} (\texttt{Main})\\
+\cref{prop:reduction} & \path{maximal_envelope}, \path{own_cap_isMax}, \path{isMaxCap_of_area_eq}, \path{cap_area_le_gerver} (\texttt{Main}); \cref{fact:optimal}: \path{theorem1_1_1}, \path{theorem3_5_5}, \path{theorem3_5_6}\\
+\cref{lem:recovery}, \cref{lem:box}, \cref{lem:nichebox} & \path{SupportSamples.penalty_recovery_zero}, \path{dyadic_recovery_ge}, \path{polygon_subset_sampleBox}, \path{niche_subset_box}, \path{polyNiche_subset_box} (\texttt{Selection})\\
+\cref{prop:penmax} & \path{exists_penalizedMax}, \path{exists_dyadic_penalizedMax}, \path{selected_objective_ge}, \path{selected_sequence_bounded} (\texttt{Selection})\\
+\cref{lem:limsup}, \cref{lem:dyadic}, \cref{prop:selection} & \path{dyadic_objective_limsup}, \path{caps_eq_of_dyadic_supports}, \path{exists_selectedCapSequence}, \path{penalty_tendsto_zero_of_objective} (\texttt{Selection})\\
+\cref{lem:floating}, \cref{prop:floating} & \path{floatingCap}, \path{floatingCap_polygon}, \path{subset_floatingCap}, \path{floatingCap_support_bounds}, \path{floatingCap_support_other}, \path{floating_penalty_growth}, \path{floating_defect_le} (\texttt{Variation})\\
+\cref{lem:sandwich}, \cref{lem:back}, \cref{prop:pinned} & \path{pinned_contract_mem}, \path{pinned_div_mem}, \path{pinned_raw_support_bound}, \path{translated_strip_support}, \path{pinned_translation_bound}, \path{pinned_normalized_support_bound}, \path{pinned_defect_le} (\texttt{Variation})\\
+\cref{cor:twosided} & \path{polygon_weighted_defect_zero}, \path{abs_selected_defect_le}, \path{selectorDefectBound} (\texttt{Variation})\\
+\cref{lem:wedge}, \cref{lem:cont}, \cref{lem:usc}, \cref{prop:pinned-bounds} & \path{ang_wedgeGapWInf_le_tau}, \path{ang_wedgeGapZInf_le_tau}, \path{lemma4_1_1}, \path{ang_abs_wedgeGapZInf_sub_le}, \path{ang_le_sigmaAt_of_tendsto} (\texttt{Angle/HorizontalSide}); \path{pinned_bounds_of_maximal_positive} (\texttt{Variation})\\
+\cref{lem:triangle}, \cref{fact:corner}, \cref{lem:width}, \cref{lem:turn}, \cref{prop:U} & \path{consumed_of_pinned}, \path{right_angle_motion_of_pinned_bounds} (\texttt{AngleExtension}); \path{lemma4_2_2}, \path{lemma4_2_4}, \path{theorem4_2_5}, \path{ang_three_points_mem}, \path{ang_consumed_of_supp_zero}, \path{ang_mirror_mem_qMinus}, \path{ang_mem_niche_of_small}, \path{ang_width_le_one}, \path{right_angle_motion_of_width} (\texttt{Angle/RightAngle}); \path{maximal_monotone_has_right_angle} (\texttt{Main})\\
+\cref{lem:wall}, \cref{lem:tau}, \cref{lem:curv-defect} & \path{polygon_tau_le_geom}, \path{polygon_curvature_with_defect} (\texttt{Curvature}); \path{inj_param_minus}, \path{inj_param_plus}, \path{inj_polygon_sigmaAt_eq}, \path{inj_not_mem_qMinus} (\texttt{Injectivity/DiscreteIneq})\\
+\cref{lem:cell}, \cref{lem:sum} & \path{polygon_arm_cell}, \path{polygon_step_with_error}, \path{polygon_Ico_with_errors}, \path{polygon_Ioo_with_errors} (\texttt{Curvature})\\
+\cref{lem:lsc}, \cref{lem:limit} & \path{curvature_Ioo_limit}, \path{firstCurvature_of_Ioo}, \path{firstCurvature_of_polygon_errors} (\texttt{Curvature})\\
+\cref{prop:curvature} & \path{sampled_grid_error_le}, \path{diameter_le_box}, \path{firstCurvature_of_maximal_positive}, \path{secondCurvature_of_mirror_first}, \path{curvature_of_maximal_positive} (\texttt{Curvature})\\
+\cref{lem:integral}, \cref{lem:lower}, \cref{prop:inj}, \cref{cor:Ki} & \path{injCond1_of_curvature}, \path{first_arm_integral_lower}, \path{second_arm_integral_lower}, \path{lowerSeq_le_of_integral_bounds}, \path{arms_strict_of_curvature}, \path{injectivity_of_curvature} (\texttt{Curvature}); \path{isKi_of_maximal_area} (\texttt{Main})\\
+\cref{lem:equality}, \cref{lem:tangent} & \path{ki_maximizer_equality_conditions}, \path{halfSquareIntegral_combo_gap}, \path{displacement_eqOn_of_mamikon_eq}, \path{tangentKernel_of_mamikon_eq}, \path{middleKernel_of_mamikon_eq} (\texttt{Rigidity})\\
+\cref{prop:kernel}, \cref{lem:translate}, \cref{thm:caps} & \path{capKernel_of_mamikonS_eq}, \path{capKernel_of_triple_midpoint}, \path{CapKernel.eq_horizontal_translation}, \path{mem_cap_sub_horizontal_iff}, \path{sofa_eq_translate_of_upper_support} (\texttt{Rigidity}); \path{ki_sofa_eq_gerver_translate}, \path{right_angle_monotone_eq_gerver} (\texttt{Main})\\
+\cref{lem:recover}, \cref{lem:envelope}, \cref{prop:regular} & \path{eq_of_subset_of_measure_eq}, \path{Rigid.recover}, \path{Rigid.volume_image}, \path{Rigid.isClosed_image} (\texttt{Rigid}); \path{regularClosed_cap_sdiff_envelope}, \path{isCompact_envUnder}, \path{envelope_bounds_of_path_height}, \path{envelope_endpoint_order}, \path{gerver_regularClosed} (\texttt{RegularClosed})\\
+\cref{fact:height} & \path{GerverParams.path_snd_lt_one} (\texttt{RegularClosed}); \path{gb_x_pos} (\texttt{Gerver/NicheBounds})\\
+\midrule
+\cref{fact:convex} & \path{proposition2_1_2}, \path{theorem5_2_2}, \path{sigma_Ioc}, \path{sigma_periodic} (\texttt{Basic/SurfaceArea})\\
+\cref{fact:angle}, \cref{fact:monotone}, \cref{lem:contains}, \cref{lem:ends} & \path{theorem1_5_1}; \path{proposition2_3_1_exists}, \path{proposition2_3_1_subset}, \path{theorem2_3_2}, \path{lemma2_3_5_supp}, \path{theorem2_4_1}, \path{theorem2_4_2}, \path{theorem2_4_3}, \path{theorem2_5_9}, \path{theorem2_5_10}, \path{proposition2_5_4_isCap}, \path{proposition2_5_4_supp}, \path{proposition2_5_4_hallway}, \path{proposition2_5_4_sets}, \path{proposition2_5_4_sigma}, \path{sofaArea_mirror} (\texttt{Curvature}); \path{IsCap.zero_mem}, \path{IsCap.oPt_mem} (for \cref{lem:contains}); \path{IsCap.cPlus_eq_corner}, \path{IsCap.aMinus_eq_corner} (for \cref{lem:ends})\\
+\cref{fact:polygon}, \cref{fact:width}, \cref{fact:sides}, \cref{fact:push} & \path{proposition3_2_1}, \path{proposition3_2_2}, \path{theorem3_2_3}; \path{lemma3_4_2}; \path{lemma3_4_5_one}, \path{lemma3_4_5_two}, \path{mpc_walk_total}, \path{mpc_sum_sigma_sin}, \path{mpc_sum_tau_sin}; \path{lemma3_4_7}, \path{lemma3_4_8}, \path{proposition3_3_7}, \path{theorem3_3_6}, \path{theorem3_1_2}\\
+\cref{fact:arms}, \cref{fact:iteration} & \path{theorem6_2_3_right}, \path{theorem6_2_3_left}, \path{theorem6_2_5}, \path{proposition6_2_2}, \path{proposition6_4_5}, \path{proposition6_4_6_deriv}, \path{proposition6_4_6_continuous}; \path{lemma6_4_2}, \path{lemma6_5_5}\\
+\cref{fact:Q} & \path{theorem8_1_8}, \path{theorem8_2_4}, \path{lemma8_3_3}, \path{lemma8_3_4}, \path{lemma8_3_7}, \path{theorem8_3_1}, \path{theorem8_3_2}, \path{theorem8_3_8}, \path{corollary8_5_8}, \path{theorem8_4_6}, \path{theorem7_1_2_sigma}, \path{theorem7_1_2_supp}, \path{theorem7_1_2_vertices}, \path{theorem7_4_1}, \path{theorem7_4_2}\\
+\cref{fact:gerver} & \path{definition8_1_2_exists}, \path{definition8_1_2_unique}, \path{Baek.gerver_sofa_area}, \path{gerverSofa_area_mem}, \path{theorem8_4_1_monotone}, \path{theorem8_4_1_walls}, \path{theorem8_4_1_tangents}, \path{theorem8_4_1_niche} (the boundary curves and the area), \path{gn_niche_eq}, \path{env_niche_eq} (the exact description of the niche), the strict monotonicity lemmas for the abscissa along $\bD$, $\xx$ and $\bB$ (\texttt{Gerver/Envelope}), \path{theorem6_1_2}
+\end{longtable}
+}

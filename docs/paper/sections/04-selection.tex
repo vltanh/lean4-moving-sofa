@@ -1,0 +1,176 @@
+\section{Approximating a maximizing cap by polygon caps}\label{sec:selection}
+
+In this section and in \cref{sec:variations} we fix $\omega\in(0,\pi/2]$ and a maximizing cap
+$K_*\in\Kc_\omega$ with $\cA_\omega(K_*)>0$, and write $h_*=h_{K_*}$. \Cref{sec:right-angle} uses them for the cap of \cref{prop:reduction},
+which qualifies since $\abs\Gs>11/5$, and \cref{sec:injectivity} uses them again, with $\omega=\pi/2$, for the cap of the monotone sofa $U$ of \cref{prop:U}, which
+qualifies since its sofa area is $\abs\Gs>0$.
+
+Baek approximates a cap by maximum polygon caps and proves that these are balanced; he then takes the
+limit of a particular sequence of maximum polygon caps. A maximizing cap that is not such a limit is not
+reached this way: if $F_n\downarrow F$ uniformly on $[0,1]$, a maximizer of $F$ need not be a limit of
+maximizers of the $F_n$ (take $F_n(x)=x/n$ and $F=0$, whose maximizers are all of $[0,1]$ while those of
+$F_n$ are $\{1\}$). We repair this with a penalty that vanishes at the chosen maximizer, as in the
+example $F_n(x)-(x-x_*)^2$, whose maximizers converge to $x_*$. The penalty is a weighted sum of squared
+differences of support values at dyadic normals; \cref{sec:variations} shows how it spoils the balance.
+
+\subsection{Dyadic angles and the penalty}
+
+For $k\ge0$ let $\Theta_k=\{i\omega/2^{k+1}:0<i<2^{k+1}\}$, an angle set with $2^{k+1}$ intervals and
+$\abs{\Theta_k}=2^{k+1}-1$. Then $\Theta_k\subset\Theta_{k+1}$, $\omega/2\in\Theta_k$, and $\bigcup_k\Theta_k$
+is dense in $[0,\omega]$. Write $\Kc_k=\Kc_{\Theta_k}$ for the polygon caps with angle set $\Theta_k$ and
+$\Theta_k^\diamond$ for the defining normals.
+
+For $m\ge0$ let $\nu_m=2^{-m-1}/\bigl(2(2^{m+1}-1)\bigr)$. For a convex body $K$ and $k\ge0$ let
+\[
+  \Pi_k(K)=\sum_{m=0}^k\nu_m\sum_{t\in\Theta_m}\Bigl[\bigl(h_K(t)-h_*(t)\bigr)^2+\bigl(h_K(t+\tfrac\pi2)-h_*(t+\tfrac\pi2)\bigr)^2\Bigr].
+\]
+The terms are the \emph{samples}; an angle of level $m$ also lies in every later level, so it carries one
+sample from each level between its first and $k$. For $s\in\R$ let $\nu_k(s)\ge0$ be the total weight of the
+samples taken at the normal $s$, so that $\nu_k(s)=0$ unless $s\in\Theta_k\cup(\Theta_k+\pi/2)$. The samples of
+level $m$ have total weight $2\abs{\Theta_m}\nu_m=2^{-m-1}$, hence
+\begin{equation}\label{eq:weights}
+  \sum_s\nu_k(s)=\sum_{m=0}^k2^{-m-1}=1-2^{-k-1}<1 .
+\end{equation}
+Two elementary facts about $\Pi_k$ will be used. First, \emph{persistence}: if $m\le k$ and $t\in\Theta_m$, then
+\begin{equation}\label{eq:persistence}
+  \nu_m\bigl(h_K(s)-h_*(s)\bigr)^2\le\Pi_k(K)\qquad(s=t\text{ and }s=t+\pi/2),
+\end{equation}
+because every term of $\Pi_k$ is nonnegative. Second, if $\abs{h_K(s)-h_*(s)}\le\eta$ at every sample,
+and $K'$ is a convex body, then
+\begin{equation}\label{eq:penalty-change}
+  \bigl\lvert\Pi_k(K')-\Pi_k(K)\bigr\rvert\le\sum_s\nu_k(s)\,\bigl(2\eta r_s+r_s^2\bigr),\qquad r_s=\abs{h_{K'}(s)-h_K(s)},
+\end{equation}
+where the sum is over the sampled normals $s$; this is the identity
+$(b-c)^2-(a-c)^2=2(a-c)(b-a)+(b-a)^2$ applied to each term. In particular, if $K'$ has the same
+support values as $K$ at every sampled normal other than one normal $s_0$, where they differ by at most $r$, then
+$\abs{\Pi_k(K')-\Pi_k(K)}\le\nu_k(s_0)(2\eta r+r^2)$.
+
+\begin{definition}[penalized maximizer]\label{def:penmax}
+A polygon cap $K\in\Kc_k$ is a \emph{penalized maximizer at stage $k$} if
+$\cA_{\Theta_k}(C)-\Pi_k(C)\le\cA_{\Theta_k}(K)-\Pi_k(K)$ for every $C\in\Kc_k$.
+\end{definition}
+
+\begin{lemma}[recovery polygon]\label{lem:recovery}
+$K^{\mathrm r}_k=\cC_{\Theta_k}(K_*)\in\Kc_k$ has $\Pi_k(K^{\mathrm r}_k)=0$ and $\cA_{\Theta_k}(K^{\mathrm r}_k)\ge\cA_\omega(K_*)$.
+\end{lemma}
+
+\begin{proof}
+By \cref{fact:polygon}, $K^{\mathrm r}_k$ is a polygon cap with the support values of $K_*$ on $\Theta_k^\diamond$, which
+contain all the sampled normals; so $\Pi_k(K^{\mathrm r}_k)=0$. Also
+$\cA_{\Theta_k}(K^{\mathrm r}_k)=\cA_{\Theta_k}(K_*)\ge\cA_\omega(K_*)$.
+\end{proof}
+
+\begin{lemma}[two samples bound a cap]\label{lem:box}
+Let $K\in\Kc_k$, $t\in\Theta_k$, and suppose that $q\,(h_K(s)-h_*(s))^2\le c$ for $s=t$ and $s=t+\pi/2$,
+with $q>0$, $c\ge0$. Then $K\subset[-R,R]\times[0,1]$ with
+$R=H/\sin t+H/\cos t$, $H=\abs{h_*(t)}+\abs{h_*(t+\pi/2)}+c/q+1$.
+\end{lemma}
+
+\begin{proof}
+From $x^2\le c/q$ follows $\abs x\le c/q+1$, so $h_K(t)\le H$ and $h_K(t+\pi/2)\le H$. A point $(x,y)\in K$ has
+$0\le y\le1$, since $K\subset P_\omega$. As $t\in(0,\pi/2)$, $x\cos t+y\sin t\le H$ gives $x\le H/\cos t$,
+and $-x\sin t+y\cos t\le H$ gives $-x\le H/\sin t$.
+\end{proof}
+
+\begin{lemma}[the niche lies in a box]\label{lem:nichebox}
+If $K\in\Kc_\omega$ and $K\subset[-R,R]\times[0,1]$, then $\cN(K)\subset[-R,R]\times[0,R]$; the same holds
+for $\cN_\Theta(K)\subset\cN(K)$.
+\end{lemma}
+
+\begin{proof}
+Let $p\in\cN(K)$, so $p_y\ge0$ and $p\in Q^-_K(t)$ for some $t\in(0,\omega)$. As $K\subset[-R,R]\times[0,1]$,
+$h_K(t)\le R\cos t+\sin t\le R\cos t+1$ and $h_K(t+\pi/2)\le R\sin t+\cos t\le R\sin t+1$. So
+$\ip p{u_t}<R\cos t$ and $\ip p{v_t}<R\sin t$. Since $p_y\ge0$ and $\ip p{u_t}=p_x\cos t+p_y\sin t$, we get
+$p_x<R$; likewise $\ip p{v_t}=-p_x\sin t+p_y\cos t$ gives $p_x>-R$. Finally
+$p_y=\sin t\ip p{u_t}+\cos t\ip p{v_t}<2R\sin t\cos t\le R$.
+\end{proof}
+
+The proof of the next proposition uses the bounded width of polygon caps of positive area
+(\cref{fact:width}), whose proof needs the fan in the definition of $\cN_\Theta$ (E6).
+
+\begin{proposition}[penalized maximizers exist]\label{prop:penmax}
+For every $k\ge0$ there is a penalized maximizer $K^{(k)}$ at stage $k$, and
+\[
+  \cA_{\Theta_k}(K^{(k)})-\Pi_k(K^{(k)})\ge\cA_\omega(K_*).
+\]
+There is $R_0<\infty$ such that $K^{(k)}\subset[-R_0,R_0]\times[0,1]$ for every $k$.
+\end{proposition}
+
+\begin{proof}
+Let $\Psi_k=\cA_{\Theta_k}-\Pi_k$ on $\Kc_k$, and $\bar t=\omega/2\in\Theta_k$; the constant $c=c_{\omega,\bar t}$ of \cref{fact:width} does not
+depend on $k$. Let $C\in\Kc_k$ with $\Psi_k(C)>0$. Then $\cA_{\Theta_k}(C)>0$, so $C$ has width at most $c$ and, as it
+lies in a strip of height one, $\abs C\le c$; hence
+$\Pi_k(C)<\cA_{\Theta_k}(C)\le\abs C\le c$ and $\Psi_k(C)\le c$. The samples of level $0$ lie at $\bar t$ and $\bar t+\pi/2$ and have
+weight $\nu_0=1/4$ at every stage, so by \eqref{eq:persistence}
+$\nu_0(h_C(s)-h_*(s))^2\le\Pi_k(C)\le c$ for $s=\bar t,\bar t+\pi/2$, and \cref{lem:box} puts $C$ in
+$[-R_0,R_0]\times[0,1]$ with $R_0$ independent of $k$ and $C$.
+
+By \cref{lem:recovery}, $M_k=\sup\Psi_k\ge\Psi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*)>0$, and $M_k\le c$. Take $C_j\in\Kc_k$ with
+$\Psi_k(C_j)>0$ and $\Psi_k(C_j)\to M_k$. They lie in the box, so by Blaschke's theorem a subsequence converges
+in $\dH$ to a convex body $K_\infty$. We show that $K_\infty$ is a penalized maximizer. First, $K_\infty$ is a polygon cap
+with angle set $\Theta_k$. Its support values at $\omega,\pi/2,\omega+\pi,3\pi/2$ are $1,1,0,0$ as those of
+the $C_j$, and $\abs{K_\infty}=\lim\abs{C_j}\ge\lim\Psi_k(C_j)=M_k>0$ since $\abs{C_j}\ge\cA_{\Theta_k}(C_j)\ge\Psi_k(C_j)$, so $K_\infty$ has an
+interior point $q$. Let $p$ lie in $K'_\infty=\bigcap_sH_{K_\infty}(s)$, the intersection over
+$s\in\Theta_k^\diamond\cup\{\omega+\pi,3\pi/2\}$. For $0\le\lambda<1$ the point $q+\lambda(p-q)$ satisfies
+$\ip{\cdot}{u_s}<h_{K_\infty}(s)$ for all these $s$, hence $\ip\cdot{u_s}\le h_{C_j}(s)$ for large $j$, so it lies in
+$C_j$ (a polygon cap is the intersection of its supporting half-planes at these normals), hence in $K_\infty$. As
+$K_\infty$ is closed, $p\in K_\infty$; so $K_\infty=K'_\infty$ is a polygon cap. Second, $\Psi_k(K_\infty)\ge\limsup\Psi_k(C_j)$. The
+penalty is continuous in the support values. The area is continuous. Each point of $\cN_{\Theta_k}(K_\infty)$
+lies in $\cN_{\Theta_k}(C_j)$ for all large $j$: the two strict inequalities defining $Q^-_{K_\infty}(t)$ hold at the point,
+and persist when the support values converge. These niches lie in $[-R_0,R_0]\times[0,R_0]$ by \cref{lem:nichebox} (so their areas are finite), and Fatou's lemma gives
+$\abs{\cN_{\Theta_k}(K_\infty)}\le\liminf\abs{\cN_{\Theta_k}(C_j)}$. Hence $\cA_{\Theta_k}(K_\infty)\ge\limsup\cA_{\Theta_k}(C_j)$ and
+$\Psi_k(K_\infty)\ge M_k$. Put $K^{(k)}=K_\infty$.
+\end{proof}
+
+\subsection{Convergence to the given cap}
+
+\begin{lemma}[limits of polygon caps with nested angle sets]\label{lem:limsup}
+Let $k_1<k_2<\cdots$ and let $C_j\in\Kc_{k_j}$ lie in a common box $[-R,R]\times[0,1]$ and converge in $\dH$ to $K_\infty\in\Kc_\omega$.
+Then $\limsup_j\cA_{\Theta_{k_j}}(C_j)\le\cA_\omega(K_\infty)$.
+\end{lemma}
+
+\begin{proof}
+By continuity of the area, $\abs{C_j}\to\abs{K_\infty}$. Let $p\in\cN(K_\infty)$: $p\in F_\omega\cap Q_{K_\infty}^-(t)$ for some $t\in(0,\omega)$. The two
+strict inequalities that define $Q^-_{K_\infty}(t)$ hold at $p$ with a margin $\delta>0$ at some dyadic angle $t'$ near $t$,
+since $h_{K_\infty}$ is continuous. For large $j$, $t'\in\Theta_{k_j}$ and $\sup\abs{h_{C_j}-h_{K_\infty}}<\delta/2$, so
+$p\in F_\omega\cap Q^-_{C_j}(t')\subset\cN_{\Theta_{k_j}}(C_j)$. The sets $\cN_{\Theta_{k_j}}(C_j)$ lie in $[-R,R]\times[0,R]$ by \cref{lem:nichebox} (so their areas are finite), and Fatou's lemma gives
+$\abs{\cN(K_\infty)}\le\liminf\abs{\cN_{\Theta_{k_j}}(C_j)}$. Subtract.
+\end{proof}
+
+\begin{lemma}[dyadic supports determine a cap]\label{lem:dyadic}
+If $K,K'\in\Kc_\omega$ and $h_K(s)=h_{K'}(s)$ for all $s\in\bigcup_m\bigl(\Theta_m\cup(\Theta_m+\pi/2)\bigr)$, then $K=K'$.
+\end{lemma}
+
+\begin{proof}
+By continuity and density, $h_K=h_{K'}$ on $J_\omega$, and $h_K=h_{K'}=0$ at $\omega+\pi$ and $3\pi/2$. A cap is the
+intersection of its supporting half-planes at the normals of $J_\omega\cup\{\omega+\pi,3\pi/2\}$.
+\end{proof}
+
+\begin{proposition}[selection]\label{prop:selection}
+There are $k_1<k_2<\cdots$ and penalized maximizers $K_j$ at stage $k_j$, all in $[-R_0,R_0]\times[0,1]$, such that
+$K_j\to K_*$ in $\dH$.
+\end{proposition}
+
+\begin{proof}
+Take the penalized maximizers $K^{(k)}$ of \cref{prop:penmax}. By Blaschke's theorem there are $k_1<k_2<\cdots$
+with $K_j=K^{(k_j)}\to K_\infty$ for a convex body $K_\infty$.
+
+\emph{$K_\infty$ is a cap with rotation angle $\omega$.} The support values at $\omega,\pi/2,\omega+\pi,3\pi/2$ pass to
+the limit. Let $(a,b)$ be a gap of $J_\omega\cup\{\omega+\pi,3\pi/2\}$ in the circle; it has length at most
+$\pi/2$. A polygon cap $K_j$ has no normal angle strictly between $a$ and $b$, so the supporting lines
+$l_{K_j}(a)$ and $l_{K_j}(b)$ meet at a vertex $q$ of $K_j$ and $h_{K_j}(r)=\ip q{u_r}$ for $a\le r\le b$; with
+$\sin(b-a)u_r=\sin(b-r)u_a+\sin(r-a)u_b$ this gives
+$\sin(b-a)h_{K_j}(r)=\sin(b-r)h_{K_j}(a)+\sin(r-a)h_{K_j}(b)$. The identity passes to $h_{K_\infty}$, and its
+coefficients are nonnegative, so $H_{K_\infty}(a)\cap H_{K_\infty}(b)\subset H_{K_\infty}(r)$. Hence $K_\infty=\bigcap_rH_{K_\infty}(r)$ is the
+intersection of the $H_{K_\infty}(r)$ with $r\in J_\omega\cup\{\omega+\pi,3\pi/2\}$.
+
+\emph{The penalties tend to $0$.} By \cref{prop:penmax}, $0\le\Pi_{k_j}(K_j)\le\cA_{\Theta_{k_j}}(K_j)-\cA_\omega(K_*)$. By
+\cref{lem:limsup} and the maximality of $K_*$, $\limsup_j\cA_{\Theta_{k_j}}(K_j)\le\cA_\omega(K_\infty)\le\cA_\omega(K_*)$.
+So $\Pi_{k_j}(K_j)\to0$.
+
+\emph{$K_\infty=K_*$.} Let $t\in\Theta_m$. For $k_j\ge m$, \eqref{eq:persistence} gives
+$\nu_m(h_{K_j}(s)-h_*(s))^2\le\Pi_{k_j}(K_j)\to0$ for $s=t,t+\pi/2$, while $h_{K_j}(s)\to h_{K_\infty}(s)$. So
+$h_{K_\infty}=h_*$ at all dyadic normals, and $K_\infty=K_*$ by \cref{lem:dyadic}. The box is \cref{prop:penmax}.
+\end{proof}
+
+Put $\eta_j=\dH(K_j,K_*)\to0$. At every sampled normal, $\abs{h_{K_j}(s)-h_*(s)}\le\eta_j$.

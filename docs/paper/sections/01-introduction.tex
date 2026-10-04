@@ -1,0 +1,112 @@
+\section{Introduction}\label{sec:intro}
+
+\subsection{The moving sofa problem}
+
+Let $L$ be the L-shaped hallway of unit width, the union of the horizontal side
+$H_L=(-\infty,1]\times[0,1]$ and the vertical side $V_L=[0,1]\times(-\infty,1]$. A \emph{moving sofa} is a
+connected planar region that can be moved rigidly from the horizontal side to the vertical side without
+leaving $L$ (\cref{def:sofa}). Moser~\cite{Moser66} asked for the largest area of a moving sofa. A unit
+square has area $1$. Hammersley~\cite{Hammersley68} found a sofa of area $\pi/2+2/\pi=2.2074\ldots$, and
+Gerver~\cite{Gerver92} one of area $2.21953\ldots$, bounded by 18 analytic arcs and segments, which he
+conjectured to be optimal. Romik~\cite{Romik18} derived Gerver's sofa $\Gs$ from differential equations that
+express the local optimality of its sides, and described its boundary explicitly in terms of two angles that solve
+transcendental equations (\cref{fig:intro}, Appendix~\ref{app:gerver}). Kallus and Romik~\cite{KallusRomik18} proved by a computer-assisted method that no sofa has
+area more than $2.37$. Baek~\cite{Baek} proved Gerver's conjecture, in a paper of 119 pages:
+\emph{every moving sofa has area at most $\abs\Gs=2.2195\ldots$}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{figures/fig-intro}
+\caption{Gerver's sofa $\Gs$ in the hallway $L$. Left: it slides along the horizontal side (dashed), turns
+through a right angle around the inner corner (solid, halfway, turned by $\pi/4$) and leaves along the
+vertical side (dashed). Right: $\Gs$ with its niche, the hollow in its lower side that makes room for the
+corner, bounded by the path $\xx$ of the inner corner of the hallway as seen from the sofa (orange).}
+\label{fig:intro}
+\end{figure}
+
+\subsection{Uniqueness}
+
+We prove that Gerver's sofa is the only optimal sofa.
+
+\begin{theorem}[uniqueness of Gerver's sofa]\label{thm:main}
+Let $S$ be a moving sofa with $\abs S=\abs\Gs$. Then there are an angle $\theta$ and a vector $v$ such that
+\[
+  R_\theta S+v=\Gs .
+\]
+\end{theorem}
+
+In other words, the moving sofas of maximum area are exactly the moving sofas that are rotated and
+translated copies of $\Gs$ (\cref{cor:all}). Four remarks.
+
+(i) The conclusion is an equality of sets, not of sets up to a null set. This uses that a moving sofa is closed
+and that $\Gs$ is the closure of its interior (\cref{sec:recovery}); equality of areas alone would determine the
+set only up to a null set.
+
+(ii) The formal statement allows a rotation, and the rotation is trivial: the width of $\Gs$ exceeds one in every
+direction other than the vertical, so that a copy $R_\theta\Gs$ fits into the horizontal side of the hallway, where a moving sofa starts, only if $\theta$ is a multiple of $\pi$, and the proof of \cref{thm:main}
+produces $\theta\in[0,\pi/2-\omega_0]$. Hence every moving sofa of maximal area is a translate of $\Gs$ (\cref{rem:translate}; this refinement is not part of the formal statement). In particular not every rotated copy of $\Gs$ is a moving sofa.
+
+(iii) Baek's paper does not claim uniqueness. Google DeepMind's formal-conjectures project lists the statement as an
+open problem~\cite{FormalConjectures} (at the time of writing), and we know of no earlier proof.
+
+(iv) Along the way we obtain the following description of the extremal \emph{caps}, which does not mention
+sofas: the caps with rotation angle $\pi/2$ that maximize Baek's sofa area functional (\cref{sec:sofas}) are the horizontal
+translates of Gerver's cap (\cref{thm:caps}).
+
+\subsection{Why Baek's argument does not give uniqueness, and what we do}
+
+Baek's proof has four steps. (1) After a translation, a moving sofa lies in a \emph{monotone} sofa, which is a
+convex body $K$, its \emph{cap}, minus a \emph{niche} $\cN(K)$ cut out by the inner corners of the supporting
+hallways; so the problem becomes the maximization of $\cA_\omega(K)=\abs K-\abs{\cN(K)}$ over caps with
+rotation angle $\omega$. (2) For every $\omega$ he constructs a maximizing cap as a limit of \emph{maximum polygon
+caps}, which are \emph{balanced}: each side of the cap is as long as the corresponding side of the niche, since
+otherwise pushing one wall of one hallway would increase the area (Gerver's balancing argument). (3) From the balance he shows that, if the
+area is at least $11/5$, a rotated copy of the sofa $K\setminus\cN(K)$ of this cap turns through the full right angle, so that only the rotation angle $\pi/2$ matters, and that for the rotation angle $\pi/2$ the cap
+satisfies the \emph{injectivity condition}: the inner corner of the hallway, as seen from the sofa, moves
+steadily to the left and never crosses its own path. (4) For caps with the injectivity condition, a concave
+quadratic functional $\cQ$ bounds the area, and Gerver's cap maximizes it.
+
+Suppose now that $S$ has area $\abs\Gs$. Every inequality of the chain becomes an equality, but the chain compares
+$\abs S$ with the areas of \emph{other} sets: of its monotonization, and of Baek's special balanced maximum sofa. A
+maximizing cap given in advance need not be a limit of maximum polygon caps, and then nothing is known about it:
+the properties of steps (2) and (3) are available only for the cap that was constructed.
+
+We prove these properties for \emph{every} maximizing cap. Let $K_*$ be one. We approximate it by polygon caps
+$K_n$ that maximize the polygon sofa area minus a penalty for straying from $K_*$ (\cref{sec:selection}). The
+penalty is a weighted sum of squared differences of support values at dyadic normals, with weights that
+persist from one approximation to the next and add up to at most $1$. Pushing one side of $K_n$ as in
+Gerver's balancing argument shows that $K_n$ is almost balanced: at each normal the difference
+between the length $\sigma$ of the side of the cap and the length $\tau$ of the corresponding side of the niche is at most
+a multiple of the distance from $K_n$ to $K_*$ at the sampled normals, and by the choice of the weights these
+bounds add up to $O(\dH(K_n,K_*))$ (\cref{sec:variations}). In the limit this gives two inequalities between wedge gaps and side lengths of $K_*$ (the pinned bounds)
+that suffice for Baek's rotation argument (\cref{sec:right-angle}), which produces a second monotone sofa $U$ of area $\abs\Gs$ with rotation angle $\pi/2$
+that contains a rigid image of $S$. For the maximizing cap $K$ of $U$ the same selection gives the inequality
+$\sigma_{K}\le k_0(g_K^+(t))\dd t$ that gives the injectivity condition (\cref{sec:injectivity}). Then $\abs\Gs=\cA(K)\le\cQ(\xi_K)\le\abs\Gs$ is an equality, and equality in $\cQ$ forces equality in
+each of its convex Mamikon terms, each the area swept by tangent segments, $\frac12\int\varrho^2$ by Mamikon's theorem; this gives differential equations for the difference of the
+support functions of $K$ and of Gerver's cap, whose solutions are $s\cos t$: $K$, and so $U$, is a horizontal translate of
+Gerver's cap and sofa (\cref{sec:equality}). Finally $\Gs$ is the closure of its interior, which turns the inclusion of a
+rigid image of $S$ in $\Gs$ into an equality (\cref{sec:recovery}).
+
+What is new compared with~\cite{Baek} is \cref{thm:main} and its proof: the penalized selection with persistent samples, which gives the defect bounds for an arbitrary
+maximizer; the use of these bounds in place of the balance in Baek's arguments of his Chapters~4 and~6; the equality case of Baek's bound, with the description of the extremal caps (\cref{thm:caps}); and the
+regularity of $\Gs$ that recovers the set. The formalization of \cref{thm:main} is new; Baek's theorem is also formalized in~\cite{Cureton,Cao}, and twelve of the corrections to the statements of~\cite{Baek} (Appendix~\ref{app:corrections}) are due to the notes of~\cite{Cureton}.
+
+\subsection{Formal verification, and the use of AI}
+
+The proof, together with Baek's, is formalized in Lean~4 with Mathlib~\cite{Lean4,Mathlib20}, in the
+repository~\cite{Companion}: every result of~\cite{Baek} used here, with the corrections of Appendix~\ref{app:corrections}, and
+the proof of \cref{thm:main}. The statement of \cref{thm:main} is \path{Baek.gerver_sofa_unique} in
+\path{Challenge.lean}, and Appendix~\ref{app:lean} lists the Lean declarations behind each result of this paper, with the exceptions noted there. Three of the Facts of \cref{sec:setting}
+(\cref{fact:Q}\ref{fact:Q:triple}, \cref{fact:gerver} and \cref{fact:height}) are known to us only through the formalization. The argument was first written, as an informal note, by an AI model
+(ChatGPT Pro~6) at the author's request, and the formalization and this text were written by AI agents
+(Claude Opus~5.5 and Claude Sonnet~5.5) at the author's request; \cref{sec:formalization} says exactly what each system did and what has and has not been
+checked. In particular, \emph{the argument has not been peer reviewed, and no person has checked it independently of the formalization};
+Lean's kernel has checked the formalization.
+
+\subsection{Organization}
+
+\cref{sec:setting} recalls the definitions and the results of~\cite{Baek} that we use. \cref{sec:reduction}
+reduces the theorem to caps and outlines the rest; \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery} follow the steps above;
+\cref{sec:formalization} describes the formalization and the provenance of the argument, and lists open questions. The appendices give the
+explicit description of Gerver's sofa, the corrections to~\cite{Baek}, and the dictionary to the Lean
+declarations.

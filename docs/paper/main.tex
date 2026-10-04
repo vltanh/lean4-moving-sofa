@@ -1,0 +1,96 @@
+\pdfoutput=1
+\documentclass[11pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{aliascnt}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,pdftitle={Uniqueness of Gerver's sofa},pdfauthor={The-Anh Vu-Le}]{hyperref}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\input{macros}
+
+% ---------------------------------------------------------------- theorem environments
+% All environments share one counter (numbered within sections); the alias counters let cleveref
+% recover the type of each label.
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newcommand{\shared}[3]{%
+  \newaliascnt{#1}{theorem}\newtheorem{#1}[#1]{#2}\aliascntresetthe{#1}\crefname{#1}{#2}{#3}}
+\shared{proposition}{Proposition}{Propositions}
+\shared{lemma}{Lemma}{Lemmas}
+\shared{corollary}{Corollary}{Corollaries}
+\shared{fact}{Fact}{Facts}
+\theoremstyle{definition}
+\shared{definition}{Definition}{Definitions}
+\shared{example}{Example}{Examples}
+\theoremstyle{remark}
+\shared{remark}{Remark}{Remarks}
+
+\emergencystretch=1.5em
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\numberwithin{equation}{section}
+
+% ---------------------------------------------------------------- title
+\title{Uniqueness of Gerver's sofa}
+
+\author{The-Anh Vu-Le}
+% Affiliation and e-mail are the author's to fill in before submission:
+% \address{...}
+% \email{...}
+
+\date{October 2026}
+\subjclass[2020]{Primary 52A38, 52A40; Secondary 52A10, 49Q10, 68V20}
+\keywords{moving sofa problem, Gerver's sofa, extremal shapes, uniqueness, convex bodies,
+surface area measure, Mamikon's theorem, formal verification, Lean}
+
+\begin{document}
+
+\begin{abstract}
+The moving sofa problem asks for the largest area of a planar region that can be moved around the
+right-angled corner of a hallway of unit width. Gerver found a region of area $2.2195\ldots$ in 1992
+and conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the
+only optimal region: every moving sofa of the same area is the image of Gerver's sofa under a
+rotation and a translation, as a set. Baek's proof studies one particular maximizer, produced by a
+compactness argument: its sofa, rotated, turns through a right angle, and at the right angle it satisfies an
+injectivity condition; a given maximizer need not be that one. We show that every maximizer has these
+properties, by approximating a maximizing convex cap by polygonal maximizers of a penalized problem,
+which are almost balanced, and passing to the limit. Equality in Baek's concave upper bound, whose
+nonlinear terms are areas swept by tangent segments, then forces differential equations for the difference of the
+support functions of the cap and of Gerver's cap, which identify the cap, and a last argument
+recovers the region from its cap. The proof, together with Baek's, is formalized in Lean~4 with Mathlib.
+\end{abstract}
+
+\maketitle
+
+\input{sections/01-introduction}
+\input{sections/02-setting}
+\input{sections/03-reduction}
+\input{sections/04-selection}
+\input{sections/05-variations}
+\input{sections/06-right-angle}
+\input{sections/07-injectivity}
+\input{sections/08-equality}
+\input{sections/09-recovery}
+\input{sections/10-formalization}
+
+\appendix
+\input{sections/a1-gerver}
+\input{sections/a2-corrections}
+\input{sections/a3-lean}
+
+\bibliographystyle{amsplain}
+\bibliography{refs}
+
+\end{document}

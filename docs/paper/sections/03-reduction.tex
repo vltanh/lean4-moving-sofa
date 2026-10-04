@@ -1,0 +1,80 @@
+\section{From a maximal sofa to a maximizing cap}\label{sec:reduction}
+
+Throughout this section $S$ is a moving sofa with $\abs S=\abs\Gs$. We first reduce the problem to the
+caps, and then outline the rest of the proof.
+
+\begin{definition}[maximizing cap]\label{def:maximizing}
+Let $\omega\in(0,\pi/2]$. A cap $K\in\Kc_\omega$ is \emph{maximizing} if $\cA_\omega(C)\le\cA_\omega(K)$ for
+every $C\in\Kc_\omega$.
+\end{definition}
+
+By \cref{fact:optimal}, every cap with $\cA_\omega(K)=\abs\Gs$ is maximizing. Note that a maximizing cap is a
+maximizer of $\cA_\omega$ over \emph{all} caps, not only over those that contain their niche. Baek
+constructs a particular maximizing cap, a limit of maximum polygon caps; a given maximizing cap need not be
+such a limit, and this is the point where the argument of~\cite{Baek} does not give uniqueness.
+
+\begin{proposition}[the monotonization of a maximal sofa]\label{prop:reduction}
+Let $S'$ be a moving sofa with rotation angle $\omega\in(0,\pi/2]$ and $\abs{S'}=\abs\Gs$. Then there are $w\in\R^2$ and a monotone
+sofa $T$ with rotation angle $\omega$ such that
+\[
+  S'+w\subset T,\qquad \abs{T}=\abs\Gs,
+\]
+and the cap $K=\cC(T)$ is a maximizing cap, with $T=K\setminus\cN(K)$ and $\cA_\omega(K)=\abs\Gs$. In particular, if $S$ is
+any moving sofa with $\abs S=\abs\Gs$, there is such a $T$ for $S'=S$ and some $\omega\in[\omega_0,\pi/2]$.
+\end{proposition}
+
+\begin{proof}
+By \cref{fact:angle}(b), $S'+w$ is in standard position for some $w$, and is a moving sofa with rotation angle $\omega$. By
+\cref{fact:monotone}\ref{fact:monotone:envelope}, $T=\cI(S'+w)$ is a moving sofa in standard position containing $S'+w$, and it is a
+monotone sofa. So $\abs\Gs=\abs{S'+w}\le\abs{T}\le\abs\Gs$ by \cref{fact:optimal}. By \cref{fact:monotone}\ref{fact:monotone:cap}, $K=\cC(T)$ is a cap, and
+\cref{fact:monotone}\ref{fact:monotone:area} gives $T=K\setminus\cN(K)$ and $\cA_\omega(K)=\abs{T}=\abs\Gs$; $K$ is maximizing by
+\cref{fact:optimal}. Finally, if $\abs S=\abs\Gs$ then $\abs S>11/5$, so $S$ has a rotation angle $\omega\in[\omega_0,\pi/2]$ by
+\cref{fact:angle}(a).
+\end{proof}
+
+So the problem is to show that $S$ is a rigid image of $\Gs$. The proof follows $S$
+through a chain of sets, each of which contains a rigid image of $S$ and has area $\abs\Gs$
+(\cref{fig:chain}). Steps (1) and (2) are used twice: first for the maximizing cap $K$ of \cref{prop:reduction}, which has the rotation
+angle $\omega$, to obtain step (3), and then, after step (3), for the maximizing cap of the new monotone sofa $U$, which has the rotation
+angle $\pi/2$, to obtain step (4).
+\begin{enumerate}[label=(\arabic*)]
+\item \emph{Selection} (\cref{sec:selection}). A given maximizing cap $K_*$ with $\cA_\omega(K_*)>0$ is
+the Hausdorff limit of polygon caps $K_n$ that maximize the polygon sofa area minus a penalty for straying
+from $K_*$.
+\item \emph{Variations} (\cref{sec:variations}). Pushing one side of $K_n$ shows that $K_n$ is almost
+balanced: the defect $\sigma_{K_n}-\tau_{K_n}$ at a normal is bounded by a multiple of the distance
+from $K_n$ to $K_*$ at the sampled normals, and the weights are chosen so that these bounds add up.
+\item \emph{The right angle} (\cref{sec:right-angle}). If $\omega<\pi/2$, the limit of the defect bounds
+gives the two \emph{pinned bounds} $w^\circ_{K_*}\le\sigma_{K_*}(\pi/2)$ and $z^\circ_{K_*}\le\sigma_{K_*}(\omega)$ between wedge gaps and side lengths of $K_*$. They give $T$ width at most one in the
+directions $u_t$, $t\in[\omega,\pi/2]$, so that a rotated copy $R_\psi T$, $\psi=\pi/2-\omega$, turns through $\pi/2$. Monotonizing $R_\psi T$ gives
+a monotone sofa $U$ with rotation angle $\pi/2$ and $\abs U=\abs\Gs$ that contains a rigid image of $S$.
+\item \emph{Injectivity} (\cref{sec:injectivity}). For the cap $K$ of $U$, the defect bounds become an
+inequality $\sigma_K\le k_0(g_K^+(t))\dd t$ on $[0,\pi/2)$, and Baek's iteration gives the injectivity condition.
+\item \emph{Equality} (\cref{sec:equality}). Then $\abs\Gs=\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs$, and equality
+in the concave functional $\cQ$ forces equality in each Mamikon term, a convex integral $\frac12\int\varrho^2$. This gives differential equations for the difference of the support functions of $K$ and of Gerver's cap,
+whose solutions make $K$ a horizontal translate of Gerver's cap and $U$ a horizontal translate of $\Gs$.
+\item \emph{Recovery} (\cref{sec:recovery}). A closed subset of $\Gs$ with the area of $\Gs$ is $\Gs$, since
+$\Gs$ is the closure of its interior.
+\end{enumerate}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=7mm and 0mm,
+  box/.style={draw,rounded corners=2pt,inner sep=5pt,align=flush center,text width=0.78\linewidth,font=\small},
+  arr/.style={-{Latex[length=2.2mm]},thick},
+  lab/.style={font=\scriptsize,anchor=west,align=left}]
+  \node[box] (S) {$S$, a moving sofa with $\abs S=\abs\Gs$};
+  \node[box,below=of S] (T) {$S+w_0\subset T$, a monotone sofa with rotation angle $\omega$ and $\abs T=\abs\Gs$, whose cap $K$ maximizes $\cA_\omega$};
+  \node[box,below=of T] (R) {$R_\psi(S+w_0)\subset R_\psi T$, and $R_\psi T$ moves with rotation angle $\pi/2$};
+  \node[box,below=of R] (U) {$g_1(S)\subset U$, a monotone sofa with rotation angle $\pi/2$ and $\abs U=\abs\Gs$, whose cap lies in $\Ki$ and maximizes $\cA$};
+  \node[box,below=of U] (G) {$g_1(S)\subset U=\Gs+(s,0)$ (Sections~\ref{sec:injectivity}, \ref{sec:equality}), hence $g(S)=\Gs$ (Section~\ref{sec:recovery})};
+  \draw[arr] (S) -- node[lab,xshift=2mm]{translate by $w_0$ and monotonize (\cref{prop:reduction})} (T);
+  \draw[arr] (T) -- node[lab,xshift=2mm]{rotate by $\psi=\pi/2-\omega$ (\cref{sec:right-angle})} (R);
+  \draw[arr] (R) -- node[lab,xshift=2mm]{translate by $w_1$ and monotonize} (U);
+  \draw[arr] (U) -- node[lab,xshift=2mm]{injectivity, equality in $\cQ$, recovery} (G);
+\end{tikzpicture}
+\caption{The containment chain of the proof. Every set contains the image of $S$ under the maps so far, and all the sets have area
+$\abs\Gs$; the first three arrows are a translation, a rotation or a monotonization. Here $g_1(p)=R_\psi(p+w_0)+w_1$ and $g(p)=g_1(p)-(s,0)$.}
+\label{fig:chain}
+\end{figure}

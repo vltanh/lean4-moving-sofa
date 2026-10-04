@@ -1,0 +1,13 @@
+# LaTeX build products (main.pdf is kept: it is the readable version of the manuscript)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+# the arXiv source archive, built by `make arxiv`
+/arxiv/
+__pycache__/
