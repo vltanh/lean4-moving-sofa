@@ -3,10 +3,7 @@
 This section fixes the notation and records the results that the proof uses and does not prove; we call
 them \emph{Facts}. Most are results of Baek's paper~\cite{Baek}, quoted in the form in which we use them
 and with the numbering of version~1 of the preprint (chapter.section.number). A few printed statements need a
-correction, and a few are used for objects slightly more general than those of their printed statements.
-Each such place is noted with a label E$n$, the number of the correction in the audit that accompanies the
-formalization~\cite{Companion}; Appendix~\ref{app:corrections} lists them. Some corrections come from
-the notes of another formalization of Baek's proof~\cite{Cureton}. Three Facts are known to us only through
+correction. Each such place is noted with a label E$n$, the number of the correction in the list of Appendix~\ref{app:corrections}. Three Facts are known to us only through
 the formalization, because the printed proof is missing or invalid, or because the statement is not in~\cite{Baek}: \cref{fact:Q}\ref{fact:Q:triple} (E21),
 \cref{fact:gerver} (E12, E24) and \cref{fact:height}; they are proved in~\cite{Companion}, and
 \cref{sec:formalization} says what the machine check does and does not establish. The reader who knows~\cite{Baek} can skim this section and
@@ -27,7 +24,7 @@ A \emph{convex body} is a nonempty compact convex subset of $\R^2$; it may be a 
 \emph{support function} is $h_K(t)=\max_{p\in K}\ip p{u_t}$, its \emph{supporting line} is
 $l_K(t)=l(t,h_K(t))$, and $H_K(t)=H_-(t,h_K(t))$. Then $K=\bigcap_tH_K(t)$, so $h_K$ determines $K$;
 $h_{K+w}(t)=h_K(t)+\ip w{u_t}$ and $h_{(1-\lambda)K+\lambda L}=(1-\lambda)h_K+\lambda h_L$ for
-Minkowski combinations. The Hausdorff distance is $\dH(K,L)=\sup_t\abs{h_K(t)-h_L(t)}$, and
+Minkowski combinations with $\lambda\in[0,1]$. The Hausdorff distance is $\dH(K,L)=\sup_t\abs{h_K(t)-h_L(t)}$, and
 $K_n\to K$ means $\dH(K_n,K)\to0$. The \emph{edge} of $K$ with normal angle $t$ is the segment
 $e_K(t)=K\cap l_K(t)=[v_K^-(t),v_K^+(t)]$, where $v_K^+(t)$ is its endpoint farthest in the
 direction $v_t$; it may be a point. For angles $a,b$ with $\sin(b-a)\ne0$ the supporting lines
@@ -40,15 +37,15 @@ $l_K(a)$ and $l_K(b)$ meet at
 Let $K$ be a convex body.
 \begin{enumerate}[label=(\alph*)]
 \item\label{fact:convex:vertices} $h_K$ has the one-sided derivatives $h_K'(t^\pm)=\ip{v_K^\pm(t)}{v_t}$;
-$v_K^+$ is right-continuous and $v_K^-$ left-continuous; $v_K(t,s)\to v_K^+(t)$ as $s\downarrow t$ and
+$v_K^\pm(s)\to v_K^+(t)$ as $s\downarrow t$ and $v_K^\pm(s)\to v_K^-(t)$ as $s\uparrow t$; $v_K(t,s)\to v_K^+(t)$ as $s\downarrow t$ and
 $v_K(s,t)\to v_K^-(t)$ as $s\uparrow t$. \baek{Thm.~2.1.3}
 \item\label{fact:convex:sigma} The \emph{surface area measure} $\sigma_K$ is the Lebesgue--Stieltjes measure
 on $\R$ of $G_K(t)=\ip{v_K^+(t)}{v_t}+\int_0^th_K$ (formally $\sigma_K=h_K''+h_K$); it is
-$2\pi$-periodic. We write $\sigma_K(t)=\sigma_K(\{t\})$. Its atoms are the edge lengths:
-$\sigma_K(t)=\abs{e_K(t)}$ and $v_K^+(t)=v_K^-(t)+\sigma_K(t)v_t$. Moreover
+$2\pi$-periodic. We write $\sigma_K(t)=\sigma_K(\{t\})$. Its atoms are the lengths of the edges:
+$\sigma_K(t)=\norm{v_K^+(t)-v_K^-(t)}$ and $v_K^+(t)=v_K^-(t)+\sigma_K(t)v_t$. Moreover
 $v_K^+(d)-v_K^+(c)=\int_{(c,d]}v_s\dd\sigma_K(s)$ for $c\le d$, and
 $\abs K=\tfrac12\int_{[0,2\pi)}h_K\dd\sigma_K$.
-\baek{Prop.~2.1.2, Thm.~5.2.2}, \cite[Rem.~5.1.2]{Schneider14}
+\baek{Prop.~2.1.2, Thm.~5.2.2, Thm.~7.1.3}, \cite[Rem.~5.1.2]{Schneider14}
 \item\label{fact:convex:blaschke} Every sequence of convex bodies in a bounded set has a subsequence that
 converges to a convex body (Blaschke's selection theorem), and $K\mapsto\abs K$ is continuous for $\dH$.
 \cite[Section~1.8, in particular Thm.~1.8.20]{Schneider14}
@@ -57,8 +54,9 @@ converges to a convex body (Blaschke's selection theorem), and $K\mapsto\abs K$ 
 
 Baek's Thm.~2.1.3 states the limits in \ref{fact:convex:vertices}, and the printed statement has a misprint (E27). The formulas for the
 one-sided derivatives follow from these limits and from
-$\ip{v_K(t,s)}{v_t}=\bigl(h_K(s)-h_K(t)\cos(s-t)\bigr)/\sin(s-t)$.
-From \ref{fact:convex:sigma} one reads off, for $a<b$,
+$\ip{v_K(t,s)}{v_t}=\ip{v_K(s,t)}{v_t}=\bigl(h_K(s)-h_K(t)\cos(s-t)\bigr)/\sin(s-t)$.
+For $a<b$, \ref{fact:convex:sigma} gives $\sigma_K((a,b))=G_K(b^-)-G_K(a)$, and $G_K(b^-)=\ip{v_K^-(b)}{v_b}+\int_0^bh_K$ since
+$v_K^+(s)\to v_K^-(b)$ as $s\uparrow b$; so
 \begin{equation}\label{eq:sigma-open}
   \sigma_K\bigl((a,b)\bigr)=\ip{v_K^-(b)}{v_b}-\ip{v_K^+(a)}{v_a}+\int_a^bh_K .
 \end{equation}
@@ -82,8 +80,11 @@ movement with that rotation angle.
 
 This is \baek{Def.~1.1.2}: Baek moves the set along a continuous curve of orientation-preserving
 isometries that starts at a translation, and the angle of such a curve lifts to a continuous real
-function. A moving sofa is bounded, hence compact: the start and end positions bound it unless $\theta(1)\in\pi/2+2\pi\mathbb Z$, and then a
-position in the middle of the movement does (in Lean, \path{isBounded_of_isMovingSofa}). A translate of a moving sofa with
+function. A moving sofa $S$ is bounded, hence compact. Indeed, the start position $\Phi_0(S)\subset H_L$ bounds the
+ordinate on $S$ and bounds the abscissa from above. If $\theta(1)=0$, the end position $\Phi_1(S)\subset V_L$ bounds the
+abscissa from below. Otherwise, by the intermediate value theorem, $0<\abs{\theta(s)}\le1/2$ for some $s\in[0,1]$, with
+$\theta(s)$ of the sign of $\theta(1)$, and $\Phi_s(S)\subset L$ bounds the abscissa from below: through the bound $y\le1$ on $L$
+if $\theta(s)<0$, and because $L$ does not meet the open quarter-plane $\{x<0,\ y<0\}$ if $\theta(s)>0$. A translate of a moving sofa with
 rotation angle $\omega$ is again one. Let $\omega_0=\sec^{-1}(11/5)=\arccos(5/11)=1.0989\ldots$ ($63^\circ$ approximately).
 
 For $\omega\in(0,\pi/2]$ let $H=\R\times[0,1]$ be the horizontal strip, $V_\omega=\{p:0\le\ip p{u_\omega}\le1\}$,
@@ -120,7 +121,8 @@ from $\xx_S(t)$ in the directions $-v_t$ and $-u_t$ are $\vec b_S(t)$ and $\vec 
   Q_S^+(t)=H_S(t)\cap H_S(t+\tfrac\pi2),\\
   Q_S^-(t)&=H^\circ_-(t,h_S(t)-1)\cap H^\circ_-(t+\tfrac\pi2,h_S(t+\tfrac\pi2)-1).
 \end{align*}
-$Q_S^-(t)$ is the open quarter-plane below the inner corner. A moving sofa in standard position lies in
+$Q_S^-(t)$ is the open quarter-plane below the inner corner; the printed \baek{Prop.~2.2.2} lacks the $-1$ in its second
+half-plane (E27). A moving sofa in standard position lies in
 $L_S(t)$ for every $t\in[0,\omega]$, and the \emph{monotonization} of $S$ is
 \[
   \cI(S)=P_\omega\cap\bigcap_{t\in[0,\omega]}L_S(t).
@@ -134,8 +136,7 @@ rotation angle $\omega\in(0,\pi/2]$ is a convex body $K$ with
   h_K(\omega)=h_K(\pi/2)=1,\qquad h_K(\omega+\pi)=h_K(3\pi/2)=0,
 \]
 that is an intersection of closed half-planes with normal angles in $J_\omega\cup\{\omega+\pi,3\pi/2\}$.
-The caps with rotation angle $\omega$ form the set $\Kc_\omega$. A cap lies in $P_\omega$ and touches its
-four sides; and
+The caps with rotation angle $\omega$ form the set $\Kc_\omega$. A cap lies in $P_\omega$, and
 \begin{equation}\label{eq:cap-fan}
   K=F_\omega\cap\bigcap_{s\in J_\omega}H_K(s).
 \end{equation}
@@ -145,8 +146,9 @@ The \emph{niche} of a cap $K$ and its \emph{sofa area} are
 \]
 For $S$ in standard position, the \emph{cap} of $S$ is $\cC(S)=P_\omega\cap\bigcap_{t\in[0,\omega]}Q_S^+(t)$.
 The reflection $M_\omega(x,y)=(-x\sin\omega+y\cos\omega,\ x\cos\omega+y\sin\omega)$ in the line through
-$O$ at the angle $\pi/4+\omega/2$ (the line through $O$ and $o_\omega$ if $\omega<\pi/2$) maps $P_\omega$ and $F_\omega$ to themselves; for $\omega=\pi/2$ it is
-$(x,y)\mapsto(-x,y)$. The \emph{mirror image} of a cap $K$ is $K^{\mir}=M_\omega(K)$.
+$O$ at the angle $\pi/4+\omega/2$ (the line through $O$ and $o_\omega$ if $\omega<\pi/2$) maps $F_\omega$ to itself; for $\omega=\pi/2$ it is
+$(x,y)\mapsto(-x,y)$. The \emph{mirror image} of a cap $K$ is $K^{\mir}=M_\omega(K)$. For a convex body $K$ we write
+$A_K^\pm(t)=v_K^\pm(t)$ and $C_K^\pm(t)=v_K^\pm(t+\pi/2)$ \baek{Def.~2.5.1}.
 
 \begin{figure}[ht]
 \centering
@@ -170,7 +172,7 @@ $\cI(S)=K\setminus\cN(K)$. \baek{Lemma~2.3.5, Thm.~2.4.1, Thm.~2.4.2}
 \item\label{fact:monotone:area} If $T$ is a monotone sofa with rotation angle $\omega$ and $K=\cC(T)$,
 then $T=K\setminus\cN(K)$, $\cN(K)\subset K$ and $\abs T=\cA_\omega(K)$. \baek{Thm.~2.4.3, Thm.~2.5.9, Thm.~2.5.10}
 \item\label{fact:monotone:mirror} If $K$ is a cap, so is $K^{\mir}$, with $h_{K^{\mir}}(t)=h_K(\omega+\pi/2-t)$,
-$\cN(K^{\mir})=M_\omega(\cN(K))$, $\cA_\omega(K^{\mir})=\cA_\omega(K)$ and
+$C^+_{K^{\mir}}(t)=M_\omega(A^-_K(\omega-t))$, $\cN(K^{\mir})=M_\omega(\cN(K))$, $\cA_\omega(K^{\mir})=\cA_\omega(K)$ and
 $\sigma_{K^{\mir}}(E)=\sigma_K(\omega+\pi/2-E)$ for Borel sets $E$. \baek{Prop.~2.5.4}
 \end{enumerate}
 \end{fact}
@@ -180,42 +182,55 @@ for lines not parallel to the $y$-axis, where it needs the $x$-axis (E1). In \re
 Thm.~2.4.2 and the union over $(0,\omega)$ in the definition of the niche agree after intersection with $F_\omega$, and $\cC(S)$ is bounded also for $\omega=\pi/2$, which Baek does not show (E2). In
 \ref{fact:monotone:mirror}, Prop.~2.5.4 prints $?_{K^{\mir}}(t)=M_\omega(?_K(\omega-t))$ for each of the walls $a,b,c,d$ and the ends $W,Z$, whereas $M_\omega$
 exchanges $a\leftrightarrow c$, $b\leftrightarrow d$ and $W\leftrightarrow Z$, and the identity for the vertices has $K^{\mir}$ in place of $K$ on
-the right (E3). Part \ref{fact:monotone:mirror} uses none of this.
+the right (E3). Part \ref{fact:monotone:mirror} states the corrected identity $C^+_{K^{\mir}}(t)=v^+_{K^{\mir}}(t+\pi/2)=M_\omega(A^-_K(\omega-t))$.
 
-Two more facts about caps are used without proof in Baek's \baek{Lemma~2.5.6}, \baek{Lemma~3.4.8} and \baek{Thm.~2.5.8} (E4): that $O$ and $o_\omega$ lie in every cap if $\omega<\pi/2$
-(the statement about $o_\omega$ is not in the audit), and where the ends of the \emph{upper boundary} $\bigcup_{t\in[0,\omega+\pi/2]}e_K(t)$ of a cap $K$ are. Here
-$A_K^\pm(t)=v_K^\pm(t)$ and $C_K^\pm(t)=v_K^\pm(t+\pi/2)$ \baek{Def.~2.5.1, Def.~2.5.2}.
+Two more facts about caps are used without proof in Baek's \baek{Lemma~2.5.6}, \baek{Lemma~3.4.8} and \baek{Thm.~2.5.8} (E4): that $O$ and $o_\omega$ lie in every cap if $\omega<\pi/2$,
+and where the ends of the \emph{upper boundary} $\bigcup_{t\in[0,\omega+\pi/2]}e_K(t)$ of a cap $K$ \baek{Def.~2.5.2} are.
 
 \begin{lemma}[every cap contains $O$ and $o_\omega$]\label{lem:contains}
-If $\omega<\pi/2$, every cap $K\in\Kc_\omega$ contains $O$ and $o_\omega$; in particular $h_K\ge0$. For $\omega=\pi/2$ the origin need not lie in $K$ (take $K=[5,6]\times[0,1]$).
+If $\omega<\pi/2$, every cap $K\in\Kc_\omega$ contains $O$ and $o_\omega$.
 \end{lemma}
-
-\begin{proof}
-Let $q\in K\cap l(\pi/2,1)$ and $q'\in K\cap l(\omega,1)$. As $K\subset P_\omega$, $q=o_\omega-\lambda u_0$ and $q'=o_\omega-\mu v_\omega$ with $\lambda,\mu\ge0$.
-For $s\in[0,\omega]$, $\ip{o_\omega}{u_s}=\ip{q'}{u_s}+\mu\sin(s-\omega)\le\ip{q'}{u_s}\le h_K(s)$, and for $s\in[\pi/2,\omega+\pi/2]$,
-$\ip{o_\omega}{u_s}=\ip q{u_s}+\lambda\cos s\le\ip q{u_s}\le h_K(s)$. As $o_\omega\in F_\omega$, \eqref{eq:cap-fan} gives $o_\omega\in K$. Then $h_K(s)\ge\ip{o_\omega}{u_s}=c_\omega\cos s+\sin s=\sqrt{1+c_\omega^2}\,\sin\bigl(s+\tfrac\pi4-\tfrac\omega2\bigr)$, because
-$c_\omega=\tan(\pi/4-\omega/2)$, and $0<s+\pi/4-\omega/2<\pi$ for $s\in J_\omega$, so $h_K\ge0$ on $J_\omega$. Hence $O\in F_\omega$ satisfies $\ip O{u_s}=0\le h_K(s)$ for
-$s\in J_\omega$, and $O\in K$ by \eqref{eq:cap-fan}; and $h_K(s)\ge\ip O{u_s}=0$ for every $s$.
-\end{proof}
 
 \begin{lemma}[the ends of the upper boundary]\label{lem:ends}
 For every cap $K\in\Kc_\omega$,
 \begin{equation}\label{eq:ends}
-  A_K^-(0)=(h_K(0),0)\quad\text{and}\quad C_K^+(\omega)=h_K(\omega+\pi/2)\,v_\omega ;
+  A_K^-(0)=(h_K(0),0)\quad\text{and}\quad C_K^+(\omega)=h_K(\omega+\pi/2)\,v_\omega .
 \end{equation}
-they lie on $l(\pi/2,0)$ and on $l(\omega,0)$.
 \end{lemma}
 
-\begin{proof}
-Let $q\in e_K(\omega+\pi/2)$ and $p=q-\ip q{u_\omega}u_\omega=h_K(\omega+\pi/2)v_\omega$. Since $\ip q{u_\omega}\ge0$ ($K\subset P_\omega$) and $\cos(s-\omega)\ge0$ for $s\in J_\omega$, we have
-$\ip p{u_s}\le\ip q{u_s}\le h_K(s)$ for $s\in J_\omega$. Also $p\in F_\omega$, since $h_K(\omega+\pi/2)\ge0$ (\cref{lem:contains}; for $\omega=\pi/2$, $p_y=0$). So $p\in K$ by \eqref{eq:cap-fan}.
-As $\ip\cdot{u_\omega}\ge0=\ip p{u_\omega}$ on $K$, $p$ is the point of $e_K(\omega+\pi/2)$ farthest in the direction $v_{\omega+\pi/2}=-u_\omega$, that is $p=C_K^+(\omega)$.
-The mirror image $K^{\mir}$ is a cap (\cref{fact:monotone}\ref{fact:monotone:mirror}) with $h_{K^{\mir}}(\omega+\pi/2)=h_K(0)$, and $M_\omega$ maps $v_\omega$ to $u_0$ and reverses orientation, so that
-$C^+_{K^{\mir}}(\omega)=h_K(0)v_\omega$ is mapped to the lower end $A_K^-(0)$ of $e_K(0)$, which is $(h_K(0),0)$.
+\begin{proof}[Proof of \cref{lem:ends}]
+Put $m=h_K(\omega+\pi/2)$ and $p=mv_\omega$, so that $\ip p{u_\omega}=0$ and $\ip p{v_\omega}=m$. We show that $p\in K$, by \eqref{eq:cap-fan}.
+Let $q\in K\cap l(\pi/2,1)$. As $u_{\pi/2}=\sin\omega\,u_\omega+\cos\omega\,v_\omega$, $\ip q{u_\omega}\le h_K(\omega)=1$ and $\ip q{v_\omega}\le m$,
+\[
+  1=\ip q{u_{\pi/2}}=\sin\omega\,\ip q{u_\omega}+\cos\omega\,\ip q{v_\omega}\le\sin\omega+m\cos\omega ,
+\]
+so $p_y=m\cos\omega\ge1-\sin\omega\ge0$, and $p\in F_\omega$. Let $r\in e_K(\omega+\pi/2)$; then $\ip r{v_\omega}=m$, and $\ip r{u_\omega}\ge0$ as
+$K\subset P_\omega$. For $s\in J_\omega$, $\cos(s-\omega)\ge0$, so
+\[
+  \ip p{u_s}=m\sin(s-\omega)=\ip r{u_s}-\ip r{u_\omega}\cos(s-\omega)\le\ip r{u_s}\le h_K(s) .
+\]
+Hence $p\in K$ by \eqref{eq:cap-fan}, and $p\in e_K(\omega+\pi/2)$. The end $C=C_K^+(\omega)$ of this edge is its point farthest in the direction
+$v_{\omega+\pi/2}=-u_\omega$, so $\ip C{u_\omega}\le\ip p{u_\omega}=0$, while $\ip C{u_\omega}\ge0$ as $C\in K$. With $\ip C{v_\omega}=m$, this gives $C=mv_\omega$.
+
+By \cref{fact:monotone}\ref{fact:monotone:mirror}, the mirror image $K^{\mir}$ is a cap, with $h_{K^{\mir}}(\omega+\pi/2)=h_K(0)$ and
+$C^+_{K^{\mir}}(\omega)=M_\omega(A_K^-(0))$ (E3). The first part, applied to $K^{\mir}$, gives
+$M_\omega(A_K^-(0))=h_K(0)v_\omega$. As $M_\omega$ is a linear involution and $M_\omega(v_\omega)=u_0$, $A_K^-(0)=h_K(0)u_0=(h_K(0),0)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:contains}]
+Let $\omega<\pi/2$, so that $\cos\omega>0$. By \cref{lem:ends}, $A=A_K^-(0)=(h_K(0),0)$ and $C=C_K^+(\omega)=h_K(\omega+\pi/2)v_\omega$; they are ends
+of edges of $K$, so they lie in $K\subset P_\omega$. Hence $h_K(0)\cos\omega=\ip A{u_\omega}\ge0$ and $h_K(\omega+\pi/2)\cos\omega=C_y\ge0$, that is,
+$h_K(0)\ge0$ and $h_K(\omega+\pi/2)\ge0$. For $s\in[0,\omega]$, $h_K(s)\ge\ip A{u_s}=h_K(0)\cos s\ge0$, and for $s\in[\pi/2,\omega+\pi/2]$,
+$h_K(s)\ge\ip C{u_s}=h_K(\omega+\pi/2)\sin(s-\omega)\ge0$. So $O\in F_\omega$ satisfies $\ip O{u_s}=0\le h_K(s)$ for $s\in J_\omega$, and $O\in K$
+by \eqref{eq:cap-fan}.
+
+Let $q\in K\cap l(\pi/2,1)$ and $q'\in K\cap l(\omega,1)$. As $K\subset P_\omega$, $q=o_\omega-\lambda u_0$ and $q'=o_\omega-\mu v_\omega$ with $\lambda,\mu\ge0$.
+For $s\in[0,\omega]$, $\ip{o_\omega}{u_s}=\ip{q'}{u_s}+\mu\sin(s-\omega)\le\ip{q'}{u_s}\le h_K(s)$, and for $s\in[\pi/2,\omega+\pi/2]$,
+$\ip{o_\omega}{u_s}=\ip q{u_s}+\lambda\cos s\le\ip q{u_s}\le h_K(s)$. As $o_\omega\in F_\omega$, \eqref{eq:cap-fan} gives $o_\omega\in K$.
 \end{proof}
 
 The next fact is the main theorem of \cite{Baek}, in the form for caps. It assembles Baek's
-construction of a balanced maximum cap $K_\omega$ for every $\omega$ (\baek{Thm.~3.5.2, Thm.~3.5.4}), its
+construction of a balanced maximum cap $K_\omega$ for every $\omega$ (\baek{Thm.~3.5.2, Thm.~3.5.4}, whose proofs have minor gaps, E8), its
 maximality (\baek{Thm.~3.5.5}), and the optimality of Gerver's sofa $\Gs$ (\baek{Thm.~1.1.1}), which is
 recalled in \cref{sec:gerver}.
 
@@ -224,15 +239,17 @@ Every moving sofa $S$ has $\abs S\le\abs\Gs$, and $\abs\Gs>11/5$. For every $\om
 cap $K\in\Kc_\omega$, $\cA_\omega(K)\le\abs\Gs$.
 \end{fact}
 
-For the last claim, \baek{Thm.~3.5.6} gives a monotone sofa $S_\omega=K_\omega\setminus\cN(K_\omega)$ whose cap
-$K_\omega$ satisfies $\cA_\omega(K)\le\cA_\omega(K_\omega)$ for every cap $K$ \baek{Thm.~3.5.5}, and
-$\cA_\omega(K_\omega)=\abs{S_\omega}\le\abs\Gs$ by \baek{Thm.~1.1.1} and \cref{fact:monotone}\ref{fact:monotone:area}.
+For the last claim, \baek{Thm.~3.5.6} gives a monotone sofa $S_\omega=K_\omega\setminus\cN(K_\omega)$ with rotation angle $\omega$, whose cap
+$K_\omega$ satisfies $\cA_\omega(K)\le\cA_\omega(K_\omega)$ for every cap $K$ \baek{Thm.~3.5.5}. Then
+$\cA_\omega(K_\omega)=\abs{S_\omega}$ by \cref{fact:monotone}\ref{fact:monotone:area}, and $S_\omega$ is a moving sofa by
+\cref{fact:monotone}\ref{fact:monotone:envelope}, so that $\abs{S_\omega}\le\abs\Gs$ by \baek{Thm.~1.1.1}. The bound $\abs\Gs>11/5$ holds
+because $\abs\Gs\ge2.2192$ (\cref{fact:gerver}\ref{fact:gerver:def}).
 
 \subsection{Polygon caps}\label{sec:polygon}
 
 Let $\omega\in(0,\pi/2]$. An \emph{angle set} is a finite nonempty $\Theta\subset(0,\omega)$, and
 $\Theta^\diamond=\Theta\cup(\Theta+\pi/2)\cup\{\omega,\pi/2\}\subset(0,\pi)$ is its set of
-\emph{defining normals}; the two normals $\omega$ and $\pi/2$, which carry the two strips of $P_\omega$,
+\emph{defining normals}; the normals $\omega$ and $\pi/2$, which carry the strips of $P_\omega$,
 are \emph{pinned}, the others \emph{floating}. A \emph{polygon cap} with angle set $\Theta$ is a cap
 that is an intersection of closed half-planes with normal angles in
 $\Theta^\diamond\cup\{\omega+\pi,3\pi/2\}$; they form the set $\Kc_\Theta\subset\Kc_\omega$. A polygon cap
@@ -240,11 +257,11 @@ is the intersection of its supporting half-planes $H_K(s)$ at these normal angle
 \begin{align*}
   \cC_\Theta(K)&=P_\omega\cap\bigcap_{t\in\Theta}Q_K^+(t),\qquad
   \cN_\Theta(K)=F_\omega\cap\bigcup_{t\in\Theta}Q_K^-(t),\\
-  \cA_\Theta(K)&=\abs{\cC_\Theta(K)}-\abs{\cN_\Theta(K)} .
+  \cA_\Theta(K)&=\abs{\cC_\Theta(K)}-\abs{\cN_\Theta(K)} ,
 \end{align*}
-Here the fan $F_\omega$ cuts the polygon niche. The printed \baek{Def.~3.2.5} has the parallelogram $P_\omega$
-in place of $F_\omega$, and with that definition \baek{Prop.~3.3.5} and \baek{Lemma~3.4.2} are false, whereas the
-results of \baek{Ch.~3} hold with $F_\omega$, as the formalization proves (E6).
+with the fan $F_\omega$ in the polygon niche: the printed \baek{Def.~3.2.5} has the parallelogram $P_\omega$ in its place, and with
+that definition \baek{Prop.~3.3.5} and \baek{Lemma~3.4.2} are false, whereas with $F_\omega$ they hold (E6). \baek{Prop.~3.3.1\,(2)}, which
+characterizes the translates of polygon caps, omits the bottom normals $\omega+\pi$ and $3\pi/2$ from their normal angles (E7).
 
 \begin{fact}[the polygon bound]\label{fact:polygon}
 For every cap $K$ and angle set $\Theta$, $\cC_\Theta(K)$ is a polygon cap that contains $K$ and has the
@@ -255,8 +272,8 @@ for a polygon cap. \baek{Prop.~3.2.1, Prop.~3.2.2, Thm.~3.2.3}
 \end{fact}
 
 \begin{fact}[bounded width]\label{fact:width}
-For $t\in(0,\omega)$ there is a constant $c_{\omega,t}$ such that every polygon cap $K$ with an angle set $\Theta\ni t$
-and $\cA_\Theta(K)>0$ has width $h_K(0)+h_K(\pi)\le c_{\omega,t}$. \baek{Lemma~3.4.2}
+For $t\in(0,\omega)$ there is a constant $c_{\omega,t}>0$ such that every polygon cap $K$ with an angle set $\Theta\ni t$
+and $\cA_\Theta(K)>0$ has width $h_K(0)+h_K(\pi)\le c_{\omega,t}$. \baek{Lemma~3.4.2}, with $F_\omega$ (E6)
 \end{fact}
 
 \runin{Sides of the polygon niche.} For a polygon cap $K$ with angle set $\Theta$, the boundary of
@@ -264,8 +281,7 @@ $F_\omega\setminus\cN_\Theta(K)$ consists of an open half-line, a polyline $\mat
 $C_K^+(\omega)$ to $A_K^-(0)$ (see \eqref{eq:ends}), along which the abscissa increases and whose segments have normal angles in $\Theta^\diamond$,
 and an open half-line \baek{Thm.~3.4.4}.
 For $t\in\Theta^\diamond$ let $\tau_K(t)$ be the total length of the segments of $\mathbf p_K$ with normal
-angle $t$, and $\sigma_K(t)=\abs{e_K(t)}$ the length of the edge of $K$ with normal angle $t$.
-The following holds for every polygon cap, maximal or not.
+angle $t$; recall that $\sigma_K(t)$ is the length of the edge $e_K(t)$ of $K$.
 
 \begin{fact}[sides of the polygon niche]\label{fact:sides}
 Let $K\in\Kc_\Theta$.
@@ -274,13 +290,19 @@ Let $K\in\Kc_\Theta$.
 $\Hone(\partial\cN_\Theta(K)\cap\vec d_K(t))=\tau_K(t+\pi/2)$. \baek{Lemma~3.4.5\,(1)}
 \item\label{fact:sides:floor} For $t\in\{\omega,\pi/2\}$, $\Hone(\cN_\Theta(K)\cap l(t,0))=\sigma_K(t+\pi)-\tau_K(t)$.
 \baek{Lemma~3.4.5\,(2)}
-\item\label{fact:sides:identity}
-$\displaystyle\sum_{t\in\Theta^\diamond}\sin t\,\bigl(\sigma_K(t)-\tau_K(t)\bigr)=0$. \baek{Proof of Lemma~3.4.6}
+\item\label{fact:sides:identity} $\displaystyle C_K^+(\omega)-A_K^-(0)=\sum_{t\in\Theta^\diamond}\sigma_K(t)\,v_t$, and
+\[
+  \sum_{t\in\Theta^\diamond}\sigma_K(t)\sin t=A_K^-(0)_x-C_K^+(\omega)_x=\sum_{t\in\Theta^\diamond}\tau_K(t)\sin t .
+\]
+\baek{Proof of Lemma~3.4.6}
 \end{enumerate}
 \end{fact}
 
-Baek obtains \ref{fact:sides:identity} from the vector identity $\sum_t\tau_K(t)v_t=C_K^+(\omega)-A_K^-(0)=\sum_t\sigma_K(t)v_t$, by taking the inner product with $u_0$
-(note $\ip{v_t}{u_0}=-\sin t$); the formalization proves \ref{fact:sides:identity} in this sine form, and of the vector identity only its $\sigma$ half.
+In \ref{fact:sides:identity}, the vector identity is a sum along the upper boundary of $K$: taken in the increasing order of $t\in\Theta^\diamond$, the
+edges $e_K(t)$ go from $v_K^-(t)$ to $v_K^+(t)=v_K^-(t)+\sigma_K(t)v_t$, the first starts at $A_K^-(0)$, each ends where the next starts, and the last ends at
+$C_K^+(\omega)$. Its first coordinate is the first of the two equalities, as $\ip{v_t}{u_0}=-\sin t$. In the second, $\tau_K(t)\sin t$ is the total length of
+the projections to the $x$-axis of the segments of $\mathbf p_K$ with normal angle $t$; since the abscissa increases along $\mathbf p_K$, the projections of
+all its segments cover $[C_K^+(\omega)_x,A_K^-(0)_x]$ and meet only at their ends.
 
 \runin{Support values and first variations.} For $h:\Theta^\diamond\to\R$ let
 \begin{align*}
@@ -290,39 +312,42 @@ Baek obtains \ref{fact:sides:identity} from the vector identity $\sum_t\tau_K(t)
   \cN_\Theta(h)&=F_h\cap\bigcup_{t\in\Theta}\bigl(H^\circ_-(t,h(t)-1)\cap H^\circ_-(t+\tfrac\pi2,h(t+\tfrac\pi2)-1)\bigr),
 \end{align*}
 and $\cA_\Theta(h)=\abs{\cC_\Theta(h)}-\abs{\cN_\Theta(h)}$ (\baek{Def.~3.3.3}). For a polygon cap $K$ and
-$h=h_K|_{\Theta^\diamond}$ these are $K$, $\cN_\Theta(K)$ and $\cA_\Theta(K)$ (\baek{Prop.~3.3.4, Prop.~3.3.5}, with $F_\omega$, E6). For $\eps>0$ and
+$h=h_K|_{\Theta^\diamond}$, $\cC_\Theta(h)=K$, $\cN_\Theta(h)=\cN_\Theta(K)$ and $\cA_\Theta(h)=\cA_\Theta(K)$ (\baek{Prop.~3.3.4, Prop.~3.3.5}, with $F_\omega$, E6). For $\eps\ge0$ and
 $t\in\Theta^\diamond$ let $h^{t,\eps}_K$ be $h_K$ with the value at $t$ replaced by $h_K(t)+\eps$.
 
 \begin{fact}[pushing one side]\label{fact:push}
 Let $K\in\Kc_\Theta$ and $t\in\Theta^\diamond$.
 \begin{enumerate}[label=(\alph*)]
-\item\label{fact:push:derivative} There are $\eps_0>0$ and $M\ge0$ such that for $0<\eps\le\eps_0$
+\item\label{fact:push:derivative} There are $\eps_0>0$ and $M\in\R$ such that for $0<\eps\le\eps_0$
 \[
   \bigl\lvert\cA_\Theta(h^{t,\eps}_K)-\cA_\Theta(K)-(\sigma_K(t)-\tau_K(t))\eps\bigr\rvert\le M\eps^2 .
 \]
+\baek{Lemma~3.4.7} (E5)
 \item\label{fact:push:translate} If $\sigma_K(t)>0$, then for small $\eps>0$ the set $\cC_\Theta(h^{t,\eps}_K)$ is a translate $C+v$
-of a polygon cap $C\in\Kc_\Theta$.
+of a polygon cap $C\in\Kc_\Theta$. \baek{Lemma~3.4.8, Prop.~3.3.1} (E7)
 \item\label{fact:push:area} If $\cC_\Theta(h^{t,\eps}_K)=C+v$ with $C\in\Kc_\Theta$, then $\cA_\Theta(h^{t,\eps}_K)\le\cA_\Theta(C)$.
+\baek{Prop.~3.3.7, Thm.~3.3.6}
 \end{enumerate}
-\baek{Lemma~3.4.7, Lemma~3.4.8, Prop.~3.3.7, Thm.~3.3.6}
 \end{fact}
 
-Part \ref{fact:push:derivative} rests on \baek{Thm.~3.1.2}, which needs the Nef polygon (a set obtained from finitely many half-planes by intersections, unions and
-complements) to be bounded; every use is to bounded polygons (E5, and Section~4 of REPORT.md in~\cite{Companion}). In the proof of
+Part \ref{fact:push:derivative} rests on \baek{Thm.~3.1.2}, which is about simple Nef polygons, the sets
+$\{p:\mathcal E(p\in H_1,\dots,p\in H_n)\}$ for closed or open half-planes $H_1,\dots,H_n$ with distinct boundary lines and a monotone
+Boolean function $\mathcal E$, and needs them to be bounded; every use is to bounded sets (E5). In the proof of
 \baek{Lemma~3.4.7} the sign of the change of $\abs{\cN_\Theta}$ is misprinted (E27).
 
 \subsection{The injectivity condition and arm lengths}\label{sec:arms}
 
 The rest of this section, and \cref{sec:injectivity,sec:equality}, concern caps with rotation angle $\pi/2$, and
-$\cA=\cA_{\pi/2}$. For $K\in\Kc_{\pi/2}$ the \emph{arm lengths} are
+$\cA=\cA_{\pi/2}$. For a convex body $K$ the \emph{arm lengths} are
 \[
   f_K^\pm(t)=\ip{\yy_K(t)-A_K^\pm(t)}{v_t},\qquad g_K^\pm(t)=\ip{\yy_K(t)-C_K^\pm(t)}{u_t},
 \]
 with $\yy_K(t)=h_K(t)u_t+h_K(t+\pi/2)v_t$ the outer corner of the supporting hallway and
-$A_K^\pm,C_K^\pm$ as in \eqref{eq:ends}. Thus $\yy_K(t)=A_K^\pm(t)+f_K^\pm(t)v_t=C_K^\pm(t)+g_K^\pm(t)u_t$: these are
-the distances from the outer corner to the points where $K$ touches the two outer walls. They are
-nonnegative, $g_K^-\le g_K^+$, and $f_K^\pm,g_K^\pm$ are at most the diameter of $K$, because
-$A_K^\pm(t)-C_K^\pm(t)=g_K^\pm(t)u_t-f_K^\pm(t)v_t$ joins two points of $K$.
+$A_K^\pm,C_K^\pm$ as in \cref{sec:sofas}. Thus $\yy_K(t)=A_K^\pm(t)+f_K^\pm(t)v_t=C_K^\pm(t)+g_K^\pm(t)u_t$
+\baek{Prop.~6.2.1}. The arm lengths are nonnegative, since $A_K^\pm(t)$ and $C_K^\pm(t)$ lie in $K$, so that
+$\ip{A_K^\pm(t)}{v_t}\le h_K(t+\pi/2)$ and $\ip{C_K^\pm(t)}{u_t}\le h_K(t)$; they are the distances from the outer corner to the points
+where $K$ touches the two outer walls. Moreover $g_K^+(t)-g_K^-(t)=\sigma_K(t+\pi/2)\ge0$, by
+\cref{fact:convex}\ref{fact:convex:sigma} and $v_{t+\pi/2}=-u_t$.
 
 \begin{definition}[injectivity condition]\label{def:inj}
 A cap $K\in\Kc_{\pi/2}$ satisfies the \emph{injectivity condition} if
@@ -334,9 +359,6 @@ A cap $K\in\Kc_{\pi/2}$ satisfies the \emph{injectivity condition} if
 We write $\Ki$ for the set of caps in $\Kc_{\pi/2}$ that satisfy the injectivity condition and have
 $\abs K\ge11/5$.
 \end{definition}
-
-Condition (3) implies that the inner corner moves strictly to the left, so the path of the inner corner has
-no self-intersections.
 
 \begin{fact}[arms]\label{fact:arms}
 Let $K\in\Kc_{\pi/2}$.
@@ -350,25 +372,31 @@ $-(f_K^+(t)-1)u_t+(g_K^+(t)-1)v_t$, and the left derivative given by the same fo
 $g_{K^{\mir}}^\pm(t)=f_K^\mp(\pi/2-t)$. \baek{Prop.~6.2.2}
 \item\label{fact:arms:regular} If $K$ satisfies (1), then $A_K^+=A_K^-$ and $f_K^+=f_K^-$ on $[0,\pi/2)$,
 $C_K^+=C_K^-$ and $g_K^+=g_K^-$ on $(0,\pi/2]$. With $A_K=A_K^-$, $C_K=C_K^+$, $f_K=f_K^-$ and $g_K=g_K^+$ these four functions are continuous on
-$[0,\pi/2]$; $f_K(0)=g_K(\pi/2)=1$, and $\xx_K'(t)=-(f_K(t)-1)u_t+(g_K(t)-1)v_t$. In particular (2) holds, and
-(3) says that $f_K,g_K>1$ on $(0,\pi/2)$. \baek{Def.~6.4.1, Prop.~6.4.5, Prop.~6.4.6} The end values $f_K(0)=g_K(\pi/2)=1$ are not stated there (E17).
+$[0,\pi/2]$; $f_K(0)=g_K(\pi/2)=1$, and $\xx_K'(t)=-(f_K(t)-1)u_t+(g_K(t)-1)v_t$ for $t\in[0,\pi/2]$, the derivative being one-sided
+at $0$ and $\pi/2$. In particular (2) holds, and (3) holds if $f_K,g_K>1$ on $(0,\pi/2)$. \baek{Def.~6.4.1, Prop.~6.4.5, Prop.~6.4.6}
 \end{enumerate}
 \end{fact}
 
 In \ref{fact:arms:mirror} the printed statement omits that the reflection reverses the angle (E13). In \ref{fact:arms:deriv} the right derivative is called the left one, and the second display of the printed theorem is about the left derivative (E14).
+In \ref{fact:arms:regular}, the printed \baek{Def.~6.4.1} lets $f_K$ and $g_K$ map $[0,\pi/2]$ to $\R^2$ instead of $\R$ (E16).
+The end values $f_K(0)=g_K(\pi/2)=1$ in \ref{fact:arms:regular} are not stated in~\cite{Baek} (E4, E17), and they hold for every
+$K\in\Kc_{\pi/2}$. The half-planes whose intersection is $K$ have normal angles in $[0,\pi]\cup\{3\pi/2\}$, none of them strictly between
+$-\pi/2$ and $0$ modulo $2\pi$; so the supporting lines $l_K(-\pi/2)$ and $l_K(0)$ meet at a point of $K$, the vertex $v_K^-(0)$, and this
+point is $v_K(-\pi/2,0)=(h_K(0),0)$, as $h_K(-\pi/2)=h_K(3\pi/2)=0$. Hence $f_K(0)=f_K^-(0)=h_K(\pi/2)-\ip{v_K^-(0)}{v_0}=1$. The same
+holds for the cap $K^{\mir}$ (\cref{fact:monotone}\ref{fact:monotone:mirror}), and \ref{fact:arms:mirror} gives
+$g_K(\pi/2)=g_K^+(\pi/2)=f^-_{K^{\mir}}(0)=1$.
 Let
 \[
   k_0(x)=\max\Bigl(\abs{x-1},\tfrac{\abs{x-1}+1}2\Bigr),\qquad m_0(x)=x-k_0(x) .
 \]
-The function $k_0$ is $1$-Lipschitz, and $m_0$ is nondecreasing, with $m_0(x)=\frac32x-1$ on $[0,1]$,
-$m_0(x)=\frac x2$ on $[1,2]$ and $m_0(x)=1$ on $[2,\infty)$. For a continuous $f$ on $[0,\pi/2]$ let
-$\mathcal Ff(x)=1+\int_0^xm_0(f(\pi/2-u))\dd u$, and let $f_0=0$, $f_{j+1}=\max(f_j,\mathcal Ff_j)$.
+The function $k_0$ is $1$-Lipschitz, and $m_0$ is nondecreasing, with $m_0(x)=\frac32x-1$ on $[0,1]$. For a continuous $f$ on
+$[0,\pi/2]$ let $\mathcal Ff(x)=1+\int_0^xm_0(f(\pi/2-u))\dd u$, and let $f_0=0$, $f_{j+1}=\max(f_j,\mathcal Ff_j)$; each $f_j$ is continuous.
 
 \begin{fact}[convergence of arms and the iteration]\label{fact:iteration}
 \begin{enumerate}[label=(\alph*)]
-\item\label{fact:iteration:arms} If polygon caps $K_n$ with rotation angle $\pi/2$ converge in $\dH$ to a cap $K\in\Kc_{\pi/2}$, then
-$\int_0^{\pi/2}\abs{g_{K_n}^+-g_K^+}\to0$. \baek{Lemma~6.4.2}
-\item\label{fact:iteration:eleven} $f_{11}(x)>1$ for $x\in(0,\pi/2]$. \baek{Lemma~6.5.5}, which is printed for $x\in(0,1]$ and used on $(0,\pi/2]$ (E17)
+\item\label{fact:iteration:arms} Let $K_n$ be polygon caps, with any angle sets, and $K\in\Kc_{\pi/2}$ a cap with $\dH(K_n,K)\to0$.
+Then $\int_0^{\pi/2}\abs{g_{K_n}^+-g_K^+}\to0$. \baek{Lemma~6.4.2}
+\item\label{fact:iteration:eleven} $f_{11}(x)>1$ for $x\in(0,\pi/2]$. \baek{Lemma~6.5.5}, which is printed for $x\in(0,1]$ and used on $(0,\pi/2]$ (E17).
 \end{enumerate}
 \end{fact}
 
@@ -385,17 +413,24 @@ the side away from $Q^-_K(t)$, and
 Baek's upper bound is the functional $\cQ$ of \baek{Def.~8.2.2} on the set $\cT$ of triples $(K,B,D)$ of convex bodies with
 $K\in\Ki$, $B,D\subset K$, $h_K(t)+h_B(\pi+t)\le1$ on $[\varphi^{\mathrm R},\pi/2]$ with equality at the
 ends, and $h_K(\pi/2+t)+h_D(3\pi/2+t)\le1$ on $[0,\varphi^{\mathrm L}]$ with equality at the ends. The sets $\Ki$ and $\cT$ are closed under Minkowski combinations
-$c_\lambda((K,B,D),(K',B',D'))=((1-\lambda)K+\lambda K',\dots)$. A functional on such a set is
+$c_\lambda((K,B,D),(K',B',D'))=((1-\lambda)K+\lambda K',\dots)$, $\lambda\in[0,1]$ \baek{Thm.~8.1.1\,(1), Prop.~8.1.2}. A functional on such a set is
 \emph{convex-linear} if it commutes with $c_\lambda$, and \emph{convex} or \emph{concave} if it satisfies the
 corresponding inequality for $c_\lambda$. The \emph{canonical triple} of $K\in\Ki$ is $\xi_K=(K,B_K,D_K)$.
 For a convex body $K$, $a<b<a+\pi$, and a continuous curve $\mathbf z:[a,b]\to\R^2$ of bounded variation
-with $\mathbf z(t)\in l_K(t)$, put
+with $\mathbf z(t)\in l_K(t)$, \baek{Def.~7.4.2} defines the signed combination of curve areas
 \[
-  \varrho_{K,\mathbf z}(t)=\ip{\mathbf z(t)-v_K^+(t)}{v_t},\qquad
-  \cM_K(a,b;\mathbf z)=\tfrac12\int_a^b\varrho_{K,\mathbf z}(t)^2\dd t .
+  \cM_K(a,b;\mathbf z)=\mathcal J\bigl([v_K^+(a),\mathbf z(a)]\bigr)+\mathcal J(\mathbf z)+\mathcal J\bigl([\mathbf z(b),v_K^-(b)]\bigr)
+  -\tfrac12\int_{(a,b)}h_K\dd\sigma_K,
 \]
-By Mamikon's theorem \baek{Thm.~7.4.1} (see \cite{Mnatsakanian97}), $\cM_K(a,b;\mathbf z)$ is the area
-swept by the tangent segments from $v_K^+(t)$ to $\mathbf z(t)$; we use it only through the formula, which makes $\cM_K(a,b;\mathbf z)$ a convex function of $\varrho_{K,\mathbf z}$.
+where $\mathcal J(\gamma)=\frac12\int\gamma\times\dd\gamma$ for an oriented curve $\gamma$, with $p\times q=p_xq_y-p_yq_x$
+\baek{Def.~7.2.6, Def.~7.2.8}, and $[p,q]$ is the segment from $p$ to $q$; the last term is $\mathcal J$ of the arc $\mathbf u_K^{a,b}$ of
+the boundary of $K$ from $v_K^+(a)$ to $v_K^-(b)$ \baek{Def.~7.3.1, Thm.~7.3.2}. Mamikon's theorem, in Baek's form \baek{Thm.~7.4.1}
+(see \cite{Mnatsakanian97}), evaluates it:
+\[
+  \cM_K(a,b;\mathbf z)=\tfrac12\int_a^b\varrho_{K,\mathbf z}(t)^2\dd t,\qquad
+  \varrho_{K,\mathbf z}(t)=\ip{\mathbf z(t)-v_K^+(t)}{v_t} .
+\]
+We use $\cM$ only through this formula, which makes $\cM_K(a,b;\mathbf z)$ a convex function of $\varrho_{K,\mathbf z}$.
 The curves that occur are the outer corner $\yy_K$ and the tangent line parametrizations
 $\mathbf l_K^T(t)=v_K(t,T)$ for $T-\pi<t<T$ (the point where $l_K(t)$ meets $l_K(T)$) and $\mathbf l_K^T(T)=v_K^-(T)$.
 Let $\cS_K,\cR_B,\cL_D$ be the \emph{Mamikon terms}
@@ -415,21 +450,25 @@ There is a functional $\cQ$ on $\cT$ such that:
 \item\label{fact:Q:decomp} $\cQ(K,B,D)=\Lambda(K)-\cS_K-\cR_B-\cL_D$, where $\Lambda$ (Baek's $\cP_K+\cS_K$, \baek{Def.~8.3.4}) is
 convex-linear on $\Ki$. For each of the four terms of $\cS_K$ (resp.\ for $\cR_B$, for $\cL_D$) the
 curve $\mathbf z$ above is convex-linear in $K$ (resp.\ in $B$, in $D$), so that $\varrho(t)$ is convex-linear for every $t$, and each of the terms $\cM$, being $\frac12\int\varrho^2$,
-is convex. \baek{Lemma~8.3.3, Lemma~8.3.4, Lemma~8.3.7, Thm.~8.3.1, Thm.~8.3.2, Thm.~7.1.2, Thm.~7.4.1}
+is convex. \baek{Lemma~8.3.3, Lemma~8.3.4, Lemma~8.3.7, Thm.~8.3.1, Thm.~8.3.2, Thm.~7.1.2, Thm.~7.4.1, Thm.~7.4.2} (E20, E23)
 \item\label{fact:Q:max} $\cQ\le\cQ(\xi_G)=\abs\Gs$ on $\cT$, where $\xi_G=\xi_{\KG}$ is the canonical triple of Gerver's cap.
-\baek{Cor.~8.5.8, Thm.~8.4.6}
+\baek{Cor.~8.5.8, Thm.~8.4.6} (E25, E26)
 \end{enumerate}
 \end{fact}
 
 Part \ref{fact:Q:triple} is stated in \cite{Baek} with a proof that uses $\cN(K)\subset K$, which $\Ki$ does not
-provide. The statement is true, and~\cite{Companion} proves it without this inclusion (E21). Baek's \baek{Thm.~8.1.1} (convexity of $\Ki$), which uses
-the Brunn--Minkowski inequality, holds as stated.
+provide. The statement is true, and~\cite{Companion} proves it without this inclusion (E21). The proofs of \baek{Thm.~8.1.8} and
+\baek{Thm.~8.2.4} use \baek{Lemma~8.1.5}, whose proof deduces that the bottom edge $e_K(3\pi/2)$ has length $\sigma_K(3\pi/2)\ge2.2$ from
+$\abs K\ge2.2$ without a reason; this holds, since the horizontal width of a cap with rotation angle $\pi/2$ does not increase with the
+height, so that $\abs K\le\sigma_K(3\pi/2)$ (E19). In \ref{fact:Q:decomp}, the proof of
+\baek{Lemma~8.3.7} uses \baek{Lemma~8.3.5} and \baek{Lemma~8.3.6\,(3)}, which need the corrections E20 and E23. In \ref{fact:Q:max}, the
+proof of \baek{Thm.~8.4.6} uses \baek{Thm.~8.4.3\,(2)}, and that of \baek{Cor.~8.5.8} uses \baek{Thm.~8.4.3\,(2)} and, through
+\baek{Thm.~8.4.5}, \baek{Prop.~8.4.4\,(4)}; these need E25 and E26.
 
 \subsection{Gerver's sofa}\label{sec:gerver}
 
 Seen from a sofa that turns clockwise by $t\in[0,\pi/2]$, the hallway occupies $\xx(t)+R_tL$; the curve
-$\xx:[0,\pi/2]\to\R^2$ is the \emph{rotation path}. The largest set that moves along $\xx$ is its
-\emph{shape}
+$\xx:[0,\pi/2]\to\R^2$ is the \emph{rotation path}, and its \emph{shape} is
 \[
   \operatorname{shape}(\xx)=H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)\cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr).
 \]
@@ -449,30 +488,31 @@ for the contact points of the sofa with the walls of the hallway.
 $\theta\in[0.68,0.69]$, so $\Gs$ is well defined, and $2.2192\le\abs\Gs\le2.2199$. (Romik asserts, without proof, the uniqueness for $0<\varphi<\theta<\pi/4$; uniqueness in this box
 is proved in~\cite{Companion}.)
 \item\label{fact:gerver:cap} $\Gs$ is a monotone sofa with rotation angle $\pi/2$. Its cap $\KG=\cC(\Gs)$
-satisfies $\Gs=\KG\setminus\cN(\KG)$ and has $A_{\KG}=\bA$, $C_{\KG}=\bC$ and $\xx_{\KG}=\xx$ on $[0,\pi/2]$; and
-$\KG$ satisfies the injectivity condition; as $\abs\KG\ge\abs\Gs>11/5$, $\KG\in\Ki$. \baek{Thm.~8.4.1\,(1), Thm.~6.1.2}
+satisfies $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:monotone}\ref{fact:monotone:area}) and has $A_{\KG}=\bA$, $C_{\KG}=\bC$ and
+$\xx_{\KG}=\xx$ on $[0,\pi/2]$; and $\KG$ satisfies the injectivity condition; as $\abs\KG\ge\cA(\KG)=\abs\Gs>11/5$, $\KG\in\Ki$.
+\baek{Thm.~8.4.1\,(1), Thm.~6.1.2, Thm.~8.1.1\,(3)}
 \item\label{fact:gerver:niche} Let $\Gamma=\bD([t_0,t_2])\cup\xx([t_1,t_4])\cup\bB([t_3,t_5])$. Then
-$\bD(t_0)$ and $\bB(t_5)$ lie on the $x$-axis, $\bD(t_2)=\xx(t_4)$, $\bB(t_3)=\xx(t_1)$, the abscissa is
-strictly increasing along $\bD$ and $\bB$ and strictly decreasing along $\xx$ on $(0,\pi/2)$,
+$\bD(t_0)$ and $\bB(t_5)$ lie on the $x$-axis, $\bD(t_2)=\xx(t_4)$ and $\bB(t_3)=\xx(t_1)$; the abscissa is strictly increasing
+along $\bD$ on $[t_0,t_2]$, strictly decreasing along $\xx$ on $[t_1,t_4]$ and strictly increasing along $\bB$ on $[t_3,t_5]$;
 at every point of $[t_0,t_1]$ and of $[t_1,t_2]$ the curve $\bD$ has a derivative within that interval that is a positive multiple of $u_t$, and at every point of $[t_3,t_4]$ and of $[t_4,t_5]$ the curve $\bB$ has a
-derivative within that interval that is a negative multiple of $v_t$ (the derivatives are one-sided at the ends of the pieces, and jump at $t_1$ and $t_4$), and
+derivative within that interval that is a negative multiple of $v_t$ (one-sided at the ends of these intervals); and
 \[
   \cN(\KG)=\{q:\ q_y\ge0,\ q_y<\gamma_y\text{ for some }\gamma\in\Gamma\text{ with }\gamma_x=q_x\}.
 \]
-\baek{Thm.~8.4.1\,(2)--(4)}
+\baek{Thm.~8.4.1\,(2), (4)}
+\item\label{fact:gerver:endpoint} $\xx(\pi/2)_y=0$ and $\bC(\pi/2)=(\xx(\pi/2)_x-1,0)$.
 \end{enumerate}
 \end{fact}
 
 Baek states \baek{Thm.~8.4.1} without proof (his Remark~8.4.1: the properties are ``easy to verify
-numerically''), and proves \baek{Thm.~6.1.2} by a misreading of a theorem of Gerver (E12, E24). Both
-statements are true; the formalization proves them from Romik's equations by interval
-arithmetic~\cite{Companion}. Baek's \baek{Thm.~8.4.1\,(2)} describes the niche as the region enclosed by $\bB$ reversed, $\xx|_{[t_1,t_4]}$, $\bD$ reversed and the segment of
-the $x$-axis from $\bD(t_0)$ to $\bB(t_5)$. That open region omits the open segment of the $x$-axis between $\bD(t_0)$ and $\bB(t_5)$, which lies in $\cN(\KG)$ because $F_{\pi/2}$ is closed. Because of the monotonicity of the abscissa,
-$\cN(\KG)$ is the set of points of the closed upper half-plane that lie strictly below the curve $\Gamma$. This is the identity in \ref{fact:gerver:niche}, and~\cite{Companion} proves it in this form. We also use one
-numerical fact that is not in~\cite{Baek}:
+numerically''), and proves \baek{Thm.~6.1.2} by a misreading of a theorem of Gerver (E12, E24). The
+statements are true, with the niche of \baek{Thm.~8.4.1\,(2)} described as in \ref{fact:gerver:niche}, and the formalization proves them
+from Romik's equations~\cite{Companion}. Baek's \baek{Thm.~8.4.1\,(2)} describes the niche as the region enclosed by $\bB$ reversed, $\xx|_{[t_1,t_4]}$, $\bD$ reversed and the segment of
+the $x$-axis from $\bD(t_0)$ to $\bB(t_5)$. That open region omits the open segment of the $x$-axis between $\bD(t_0)$ and $\bB(t_5)$,
+which lies in $\cN(\KG)$: each of its points lies strictly below a point of $\Gamma$. Part \ref{fact:gerver:endpoint} is not in~\cite{Baek}; the
+formalization proves it from Romik's equations too, the second identity as $\bC(\pi/2)=\xx(\pi/2)-\beta(\pi/2)u_{\pi/2}+v_{\pi/2}$ with
+$\beta(\pi/2)=0$. We also use one numerical fact that is not in~\cite{Baek}:
 
 \begin{fact}[height of the rotation path]\label{fact:height}
-$\xx(t)_y<1$ for every $t\in[0,\pi/2]$, and $\xx(t)_y>0$ for $t\in[t_1,t_4]$. In fact $\max_t\xx(t)_y=\xx(\pi/4)_y=0.66426\ldots$ and
-$\xx(t_1)_y=\xx(t_4)_y=0.05518\ldots$, but we use only the two bounds, which the formalization proves by interval
-arithmetic~\cite{Companion}: $\xx(t)_y\le0.9925$ on each phase, and $\xx_y>0$ on $[t_1,t_4]$.
+$\xx(t)_y<1$ for every $t\in[0,\pi/2]$, and $\xx(t)_y>0$ for $t\in[t_1,t_4]$.
 \end{fact}

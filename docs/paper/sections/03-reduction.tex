@@ -10,8 +10,7 @@ every $C\in\Kc_\omega$.
 
 By \cref{fact:optimal}, every cap with $\cA_\omega(K)=\abs\Gs$ is maximizing. A maximizing cap maximizes
 $\cA_\omega$ over all caps, including those that do not contain their niche. Baek constructs a particular
-maximizing cap, a limit of maximum polygon caps. A given maximizing cap need not be such a limit, which is where
-the argument of~\cite{Baek} does not give uniqueness.
+maximizing cap, a limit of maximum polygon caps. A given maximizing cap need not be such a limit.
 
 \begin{proposition}[the monotonization of a maximal sofa]\label{prop:reduction}
 Let $S'$ be a moving sofa with rotation angle $\omega\in(0,\pi/2]$ and $\abs{S'}=\abs\Gs$. Then there are $w\in\R^2$ and a monotone
@@ -35,7 +34,7 @@ monotone sofa. So $\abs\Gs=\abs{S'+w}\le\abs{T}\le\abs\Gs$ by \cref{fact:optimal
 So the problem is to show that $S$ is a rigid image of $\Gs$. The proof follows $S$
 through a chain of sets, each of which contains a rigid image of $S$ and has area $\abs\Gs$
 (\cref{fig:chain}). Steps (1) and (2) are used twice: first for the maximizing cap $K$ of \cref{prop:reduction}, which has the rotation
-angle $\omega$, to obtain step (3), and then, after step (3), for the maximizing cap of the new monotone sofa $U$, which has the rotation
+angle $\omega$, to obtain step (3), and then, after step (3), for the maximizing cap of the new monotone sofa $U$ and for its mirror image, which have the rotation
 angle $\pi/2$, to obtain step (4).
 \begin{enumerate}[label=(\arabic*)]
 \item \emph{Selection} (\cref{sec:selection}). A given maximizing cap $K_*$ with $\cA_\omega(K_*)>0$ is
@@ -48,8 +47,8 @@ from $K_n$ to $K_*$ at the sampled normals, and the weights are chosen so that t
 gives the two \emph{pinned bounds} $w^\circ_{K_*}\le\sigma_{K_*}(\pi/2)$ and $z^\circ_{K_*}\le\sigma_{K_*}(\omega)$ between wedge gaps and side lengths of $K_*$. They give $T$ width at most one in the
 directions $u_t$, $t\in[\omega,\pi/2]$, so that a rotated copy $R_\psi T$, $\psi=\pi/2-\omega$, turns through $\pi/2$. Monotonizing $R_\psi T$ gives
 a monotone sofa $U$ with rotation angle $\pi/2$ and $\abs U=\abs\Gs$ that contains a rigid image of $S$.
-\item \emph{Injectivity} (\cref{sec:injectivity}). For the cap $K$ of $U$, the defect bounds become an
-inequality $\sigma_K\le k_0(g_K^+(t))\dd t$ on $[0,\pi/2)$, and Baek's iteration gives the injectivity condition.
+\item \emph{Injectivity} (\cref{sec:injectivity}). For the cap $K$ of $U$, the defect bounds become the
+curvature bounds $\sigma_K\le k_0(g_K^+(t))\dd t$ on $[0,\pi/2)$ and $\sigma_K\le k_0(f_K^-(t-\pi/2))\dd t$ on $(\pi/2,\pi]$, and Baek's iteration gives the injectivity condition.
 \item \emph{Equality} (\cref{sec:equality}). Then $\abs\Gs=\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs$, and equality
 in the concave functional $\cQ$ forces equality in each Mamikon term, a convex integral $\frac12\int\varrho^2$. This gives differential equations for the difference of the support functions of $K$ and of Gerver's cap,
 whose solutions make $K$ a horizontal translate of Gerver's cap and $U$ a horizontal translate of $\Gs$.
@@ -75,6 +74,6 @@ $\Gs$ is the closure of its interior.
   \draw[arr] (U) -- node[lab,xshift=2mm]{injectivity, equality in $\cQ$, recovery} (G);
 \end{tikzpicture}
 \caption{The containment chain of the proof. Every set contains the image of $S$ under the maps so far, and all the sets have area
-$\abs\Gs$; the first three arrows are a translation, a rotation or a monotonization. Here $g_1(p)=R_\psi(p+w_0)+w_1$ and $g(p)=g_1(p)-(s,0)$.}
+$\abs\Gs$; the first three arrows are a translation followed by a monotonization, a rotation, and a translation followed by a monotonization. Here $g_1(p)=R_\psi(p+w_0)+w_1$ and $g(p)=g_1(p)-(s,0)$.}
 \label{fig:chain}
 \end{figure}

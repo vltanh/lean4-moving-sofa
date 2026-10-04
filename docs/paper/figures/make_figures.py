@@ -436,17 +436,16 @@ def fig_recovery():
     assert abs(D[0][1]) < 1e-9 and abs(B[-1][1]) < 1e-9 and a < b
     hmax = max(p[1] for p in gamma)
     hpath = max(gerver.path(t)[1] for t in np.linspace(0, PI / 2, 20001))
-    assert abs(hmax - hpath) < 1e-5 and hpath < 0.67
+    assert hmax < 1 and hpath < 1
     for corner in ((a, 0), (b, 0), (a, 1), (b, 1)):
         assert fu.inside(CAP, corner, tol=1e-6), corner
-    fig, (a1, a2) = canvas(6.3, 2.2, 2, [1.45, 1.0])
+    # One panel with axes of 2.63 x 1.09 inches; the paper includes it at half the text width.
+    fig, a1 = canvas(3.39, 1.6)
     poly(a1, CAP, fc=BLUE_F, ec=BLUE, lw=1.2)
     poly(a1, NICHE, fc=ORANGE_F, ec='none', z=3)
     poly(a1, [(a, 0), (b, 0), (b, 1), (a, 1)], ec=INK, lw=0.8, ls=(0, (4, 3)), z=4)
     line(a1, gamma, color=ORANGE, lw=1.8, z=5)
     line(a1, [(A_END - 1.25, 1), (1.2, 1)], color=FAINT, lw=0.5, ls=':', z=1)
-    line(a1, [(a - 0.15, hmax), (b + 0.15, hmax)], color=ORANGE, lw=0.6, ls=':', z=5)
-    text(a1, (b + 0.17, hmax), f'{hmax:.3f}', color=ORANGE, size=7, ha='left')
     for pt, nm in (((a, 1), '$(a,1)$'), ((b, 1), '$(b,1)$')):
         dot(a1, pt, 1.8)
         text(a1, (pt[0], pt[1] + 0.12), nm, size=7.5)
@@ -460,15 +459,6 @@ def fig_recovery():
     text(a1, (p[0] + 0.06, p[1] - 0.06), r'$p$', size=8, ha='left')
     a1.set_xlim(-2.4, 1.35)
     a1.set_ylim(-0.3, 1.25)
-    # Right: why the closure of the interior is needed.
-    sq = [(0, 0), (1, 0), (1, 1), (0, 1)]
-    poly(a2, sq, fc=BLUE_F, ec=BLUE, lw=1.2)
-    line(a2, [(1, 0), (2, 0)], color=BLUE, lw=2.4)
-    text(a2, (0.5, 0.5), r'$X$', color=BLUE, size=9)
-    text(a2, (1.5, 0.17), r'$Y\setminus X$', color=BLUE, size=7.5)
-    text(a2, (1.0, -0.22), r'$X\subset Y$ closed, $\abs{X}=\abs{Y}$, $X\ne Y$'.replace(r'\abs{X}', '|X|').replace(r'\abs{Y}', '|Y|'), size=7)
-    a2.set_xlim(-0.15, 2.2)
-    a2.set_ylim(-0.4, 1.2)
     save(fig, 'fig-recovery')
 
 

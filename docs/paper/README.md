@@ -21,7 +21,7 @@ Baek's paper, and independent model runs checked it. No person has checked it.
 | [`sections/a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex) | Appendices A (Gerver's sofa), B (corrections to Baek's statements), C (the Lean statement and a dictionary) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws eight of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the ninth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (49 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (63 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -34,7 +34,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 49 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 63 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -43,17 +43,17 @@ undefined reference.
   used throughout, as `[1, Thm. x.y.z]`) which Section 2 records as Facts, with the corrections that the
   audit of that paper found (Appendix B). Section 3 reduces the theorem to caps and outlines the proof;
   Sections 4 to 9 prove it.
-- The same theorem, and Baek's, are proved in Lean 4 in the repository. Appendix C gives the statement in
-  mathematical notation, with the definitions that make it meaningful, and a dictionary from each result of the
-  text to its Lean declarations, with the places where the text and the Lean differ. Section 10 says what the
-  machine check does and does not give, and who and what wrote which part.
+- The text is a translation of the formalization. Every result of the paper is proved in Lean 4 in the
+  repository, and Appendix C gives the statement of record in mathematical notation, with the definitions that
+  make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
+  states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
+  4 October (commit `952812d`). Section 10 says what the machine check does and does not give, and who and
+  what wrote which part.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- Remark 9.6 (the rotation in Theorem 1.1 is trivial, so every maximal sofa is a translate of Gerver's sofa) was
-  added while checking the draft. The text proves it from the Facts and numerical values of the parameters of
-  Appendix A, and it is not formalized.
-- The links to the repository are pinned to commit `16653ae81e0e4f52a362bafae2ad3440100ad065`, which version 4
-  of the Palomar entry registers and on which the continuous integration and Palomar's preflight both passed.
+- The links to the repository are pinned to commit `952812dd097faa3565f042ed9172d40ec3c29848`, on which the
+  continuous integration and Palomar's preflight both passed. Version 4 of the Palomar entry registers the
+  earlier commit `16653ae`, which has the same Challenge.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
   by `assert`s in the scripts.
 
@@ -67,17 +67,17 @@ These are the author's to settle; the text settles none of them.
    formalization.
 2. `\address` and `\email` are commented out in `main.tex`.
 3. Lean's kernel has checked the formal proofs, not the text. The text is a translation of them by a model,
-   compared with the Lean statements and with Baek's paper by independent model runs (below). A human read of
-   Sections 4 to 9 is the check that is missing. Remark 9.6 and Appendix C's paraphrase of the Lean definitions
-   are the two places where nothing but model checks stand behind the text.
+   compared with the Lean statements, proof by proof, and with Baek's paper by independent model runs (below). A
+   human read of Sections 2 to 9 is the check that is missing, and Appendix C's paraphrase of the Lean
+   definitions is the place where nothing but model checks stand behind the text.
 4. Baek's paper is a preprint, and all the numbers of its results are those of arXiv version 1. If a later
    version renumbers, the citations `\baek{...}` and Appendices B and C need updating.
 5. The suggested primary category is math.MG (Metric Geometry), with MSC 2020 codes 52A38, 52A40 (primary) and
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "49 pages, 9 figures. The proof, together with Baek's, is formalized in Lean 4:
-   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,213 characters, plain text) is:
+   comments "63 pages, 9 figures. The proof, together with Baek's, is formalized in Lean 4:
+   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,240 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a planar region that can be moved around the
    > right-angled corner of a hallway of unit width. Gerver found a region of area 2.2195... in 1992 and
@@ -88,14 +88,16 @@ These are the author's to settle; the text settles none of them.
    > condition. A given maximizer need not be that one. We show that every maximizer has these properties, by
    > approximating a maximizing convex cap by polygonal maximizers of a penalized problem, which are almost
    > balanced, and passing to the limit. Equality in Baek's concave upper bound, whose nonlinear terms are
-   > areas swept by tangent segments, then forces differential equations for the difference of the support
-   > functions of the cap and of Gerver's cap, and these equations identify the cap. A last step recovers the
-   > region from its cap. The proof, together with Baek's, is formalized in Lean 4 with Mathlib.
+   > halves of integrals of squared lengths of tangent segments, then forces differential equations for the
+   > difference of the support functions of the cap and of Gerver's cap, and these equations identify the cap.
+   > A last step recovers the region from its cap. The proof, together with Baek's, is formalized in Lean 4
+   > with Mathlib.
 
 7. `\date{October 2026}` in `main.tex`.
 8. [`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) list the four versions of the Palomar
-   entry and date the rounds from 1 to 3 October. `CREDITS.md` has no section for this manuscript, and whether
-   to add one is for the author to decide; the log of the manuscript is below.
+   entry and date the rounds from 1 to 3 October; `CREDITS.md` has a section for the Lean results of 4 October.
+   Version 4 registers `16653ae`, and the libraries have grown since: whether to register a version 5, and to
+   update `formalization.yaml`, which does not mention the new results, is for the author to decide.
 
 ## How it was made
 
@@ -112,7 +114,7 @@ eight ran at once, after the first full draft:
 | --- | --- | --- | --- |
 | §2.1 to 2.3, §3 | Opus 5.5 | Facts against Baek's TeX and the Lean statements; Proposition 3.2 | "standard position" was false without "with rotation angle ω"; E3 described backwards; the polyline's abscissa increases, not decreases; "every cap contains O and o_ω" had no proof |
 | §2.4 to 2.6, Appendix A | Opus 5.5 | Facts; Romik's system re-solved from the appendix's 28 equations (residual 5·10⁻⁵¹) | every printed number correct to ten places; $\mathcal P_K$ and $\mathcal Q$ not defined; $\mathbf D'$ and $\mathbf B'$ jump at $t_1$, $t_4$; wrong dictionary entries |
-| §4, §5 | Opus 5.5 | every constant and the selection argument | no false step; the text's limit argument differs from the Lean's; notation clashes ($C$, $P$, $F$, $R$, $K_j$) |
+| §4, §5 | Opus 5.5 | every constant and the selection argument | no false step; the limit argument of the text followed another route than the Lean's; notation clashes ($C$, $P$, $F$, $R$, $K_j$) |
 | §6, Prop. 3.2, definitions | Opus 5.5 | the triangle lemma and Fact 6.5 numerically; the turning lemma | no false step; wrong range for Baek's Thm. 1.5.2; a wrong limit for $z^\circ$ |
 | §7 | Opus 5.5 | Lemmas 7.1 to 7.3 on about 2,100 random polygon caps; the rest by hand | Lemma 7.4 was false at the right endpoint of the interval; Lemma 7.5 needed $C\ge0$; a gap in Lemma 7.7 |
 | §8, §9 | Opus 5.5 | the equality argument, the tangent equations, regular closedness (numerically) | a sign error in Lemma 8.2; what Lean does not state; the niche's description omits the floor segment; the rotation in Theorem 1.1 is trivial |
@@ -120,10 +122,10 @@ eight ran at once, after the first full draft:
 | the whole manuscript, as a reader | Opus 5.5 | a cold read of the PDF without the Lean or Baek's TeX | the role of Mamikon's theorem was misdescribed; notation clashes; "Fact" was never defined; the machinery of §4 and §5 runs twice and the outline did not say so |
 
 A ninth sub-agent (Opus 5.5) then checked the passages rewritten after these reports. It found one false
-statement (the introduction's argument for Remark 9.6 missed rotations by $\pi$), one gap (the position of the
+statement (the introduction's argument that no rotation is needed, now Corollary 9.6, missed rotations by $\pi$), one gap (the position of the
 ends of the upper boundary had no proof; it is now Lemma 2.6), five wrong or misplaced citations, and a number of
 statements about what Lean does and does not state; they were applied by the main session, which no one has
-reviewed again. It confirmed Remark 9.6 and its numbers by an independent computation, and the rewritten
+reviewed again. It confirmed that claim and its numbers by an independent computation, and the rewritten
 Lemmas 7.1 to 7.7 and 8.1 to 8.2.
 
 The main session also ran its own numerical checks, with the scripts in the session's scratch directory
@@ -148,28 +150,58 @@ sentence was kept. The other compared the text before and after the pass for any
 the first it found a sentence that the rewrite had made false ("hold only for" where the text had said that the
 properties are known only for Baek's cap), a dropped claim (not every rotated copy of Gerver's sofa is a moving
 sofa), a pronoun that had lost its antecedent and several smaller points; in the second it found two wordings to
-tighten and a conclusion that needed "so that $\theta=0$". The main session applied all of them. No run has read
-the text after the last of these edits.
+tighten and a conclusion that needed "so that $\theta=0$". The main session applied all of them.
 
-Figures from the session transcript, from 08:04 to 11:09 CDT on 4 October (computed with the
-formalize-math-paper skill's `session_stats.py`; they include the writing of the first draft and the second pass):
+A third pass followed the same day, in the same session and at the author's request. The author asked that the
+text be a faithful translation of the formalization: that a result or a proof that the text has and the Lean does
+not be put into the Lean when it is better and be removed from the text otherwise, that the text list no
+differences from the Lean, and that it say nothing about the informal draft that preceded the formalization.
 
-- elapsed time: 3 hours 5 minutes;
-- sub-agents: 11 (one of them resumed once), at most 8 at once, about 3.9 hours of work;
-- tool calls: 797 by the sub-agents, 543 by the main session;
-- tokens of the sub-agents: 1.63 million output, 4.37 million input, 177 million cache reads; of the main
-  session: 1.00 million output, 2.15 million input, 215 million cache reads;
-- model calls: 653 by the sub-agents (542 to `claude-opus-5-5`, 111 to `claude-sonnet-5-5`) and 449 by the main
-  session (`claude-sonnet-5-5`).
+The Lean libraries were extended (commit `952812d`, by a sub-agent running Opus 5.5): a right-angle cap has the
+sofa area of Gerver's sofa if and only if it is a horizontal translate of Gerver's cap (Theorem 8.5), the maximal
+sofas are the moving sofas that a rigid map takes onto Gerver's sofa (Corollary 9.4), the width of Gerver's sofa
+exceeds one in every direction but the vertical (Lemma 9.5), and no rotation is needed (Corollary 9.6). Three
+helper lemmas that are not numbered results of Baek's paper now state the rotation angle; no numbered result and no
+statement of the Challenge changed. The continuous integration and Palomar's preflight passed on that commit.
+
+The text then followed the Lean. Sub-agents (Opus 5.5), one for each of Section 2, Sections 4 and 5, Section 6,
+Section 7 and Sections 8 and 9, rewrote them to state what the Lean states, with its hypotheses and constants, and
+to follow its proofs; the one for Section 2 first had four more sub-agents compare the section with the Lean line
+by line. The existence proof of the penalized maximizers, the box and the constants of the lemmas of Sections 4 and
+7, the cell lemma, the triangle lemma, the proofs that every cap contains $O$ and $o_\omega$ and the sine identity
+for the sides of the polygon niche now follow the Lean; what the Lean does not state was deleted or reduced to what
+it states (a remark with two counterexamples, an example of a cap, numerical values in the proof that no rotation is
+needed). Another sub-agent rebuilt Appendix C, now one row for each of the 67 results, and corrected Appendix B.
+Sections 1 and 10 no longer list differences or discuss the informal draft; ChatGPT Pro 6 is credited as the writer of
+the first version of the proof in one sentence of Section 1.4 and in Section 10.2. The paper grew from 49 to 63 pages.
+
+Five sub-agents (Opus 5.5), each assigned some sections and appendices, compared the text with the Lean in two
+rounds, without editing. The first round found no false step. It found many places where the text said more, less
+or something other than the Lean, some wrong E-labels and dictionary entries and a few claims that the Lean does
+not state; the second round found smaller points. They were applied by the main session or by the sub-agents that had
+rewritten the sections. The edits that followed the second round, about twenty small ones, were not checked again.
+
+Figures from the session transcript, from 08:04 to 14:15 CDT on 4 October (computed with the
+formalize-math-paper skill's `session_stats.py`; they include the writing of the first draft and the second and third
+passes):
+
+- elapsed time: 6 hours 11 minutes;
+- sub-agents: 27 (4 of them launched by another sub-agent), at most 10 at once, about 11.2 hours of work;
+- tool calls: 2,476 by the sub-agents, 710 by the main session;
+- tokens of the sub-agents: 4.63 million output, 22.40 million input, 646 million cache reads; of the main
+  session: 1.24 million output, 2.66 million input, 296 million cache reads;
+- model calls: 1,907 by the sub-agents (all to `claude-opus-5-5`) and 700 to `claude-sonnet-5-5`, of which 589 by the main session.
+
+The third pass alone, from 11:48 to 14:15: 2 hours 26 minutes, 16 sub-agents, about 7.3 hours of
+sub-agent work; [`CREDITS.md`](../../CREDITS.md) has its figures.
 
 ## What has not been done
 
 - No person has read the manuscript.
 - The manuscript was not compiled by arXiv; only the local build and the test build of the archive were run.
-- The statement and proofs of Section 2's Facts, which are Baek's, were compared with his TeX, not proved again;
-  Baek's paper is itself unrefereed.
-- Appendix C's paraphrase of the Lean definitions was compared with `Challenge.lean` by one model run.
-- The edits that answered the ninth sub-agent's report (Lemma 2.6, the rewritten Remark 9.6, Section 10 and
-  Appendices B and C) were not checked again.
-- The prose of the second pass was compared with the earlier text by one sub-agent in two rounds; the edits that
-  answered its second round, and this file, were not checked again.
+- The Facts of Section 2 state Baek's results as the Lean states them; the Lean statements were compared with his TeX
+  by the route check and by model runs, not proved again by hand. Baek's paper is itself unrefereed.
+- Appendix C's paraphrase of the Lean definitions was compared with `Challenge.lean` by model runs, in two rounds.
+- The edits after the second round of checks, the E-label marks added in it, and this file were not checked again.
+- Version 4 of the Palomar entry registers `16653ae`; the Lean results of 4 October are in the libraries but not in
+  a registered version.

@@ -1,66 +1,56 @@
-\section{Formalization, provenance and open questions}\label{sec:formalization}
+\section{Formalization, the use of AI, and open questions}\label{sec:formalization}
 
 \subsection{The formalization}
 
 The repository~\cite{Companion} (Apache-2.0) contains three Lean~4 libraries on top of Mathlib (Lean and Mathlib
 \texttt{v4.35.0-rc3}):
 \begin{itemize}
-\item \texttt{MovingSofaOptimality} (51 files, about 40,000 lines): Baek's paper~\cite{Baek}, one directory per chapter, with the results
+\item \texttt{MovingSofaOptimality} (51 files, about 40,000 lines): Baek's paper~\cite{Baek}, organized by its chapters, with the results
 that it cites (Schneider's area formula for planar convex bodies; the existence and uniqueness of the solution of Romik's system in the box
 of \cref{fact:gerver}) and the structure of Gerver's sofa (\cref{fact:gerver}\ref{fact:gerver:cap},\ref{fact:gerver:niche}), which \cite{Baek} states
 without proof (Thm.~8.4.1) or proves invalidly (Thm.~6.1.2);
-\item \texttt{MovingSofaUniqueness} (8 files, about 5,000 lines): \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery},
+\item \texttt{MovingSofaUniqueness} (8 files, about 5,500 lines): \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery},
 one module per step of the argument;
 \item \texttt{MovingSofaBridge} (4 files, about 2,600 lines): the connection with the definitions of formal-conjectures~\cite{FormalConjectures}, which are different (a motion there is a path of
 isometries that starts at the identity, and Gerver's sofa is defined from Gerver's four constants); it shows that a set is a moving sofa for formal-conjectures if and only if it lies in the horizontal side of
 the hallway and is a moving sofa in the sense of Appendix~\ref{app:lean}, and that the optimal areas and the Gerver's sofas of the two formulations agree, so that
-formal-conjectures' statements, the open uniqueness statement among them, follow from \cref{thm:main}.
+formal-conjectures' statements follow from Baek's theorem and from \cref{thm:main}, with the existence and uniqueness of Gerver's four constants, which the bridge proves; the uniqueness statement, which it lists as open, follows from \cref{thm:main}.
 \end{itemize}
 The file \texttt{Challenge.lean} states twelve theorems, among them Baek's theorem (\path{Baek.gerver_sofa_optimal}) and
 \cref{thm:main} (\path{Baek.gerver_sofa_unique}). The five theorems of the namespace \texttt{Baek} use only Mathlib's vocabulary and the definitions of Appendices~\ref{app:gerver} and~\ref{app:lean};
-the other seven use the definitions of formal-conjectures, restated verbatim (one topology instance is renamed), and the three theorems of the namespace \texttt{Bridge} also use Baek's definitions.
-\texttt{Solution.lean} proves them: the Challenge is a file of statements, so its twelve theorems end in \texttt{sorry} by design, and Comparator checks that \texttt{Solution.lean} proves exactly the
+the other seven use the definitions of formal-conjectures, restated verbatim in a namespace of their own (an anonymous topology instance is given a name), and the three theorems of the namespace \texttt{Bridge} also use Baek's definitions.
+\texttt{Solution.lean}, with the modules that it imports, proves them: the Challenge is a file of statements, so its twelve theorems end in \texttt{sorry} by design, and Comparator checks that \texttt{Solution.lean} proves exactly the
 statements of \texttt{Challenge.lean}. \texttt{lake build} succeeds, and
 an audit checks that every declaration of the three libraries depends only on the axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The project is registered in the
-Palomar registry (entry PALOMAR-2026-10-02-000008, whose version~4 registers the commit cited in~\cite{Companion}), and the continuous integration and Palomar's preflight both passed on that commit.
+Palomar registry as entry PALOMAR-2026-10-02-000008, whose version~4 registers an earlier commit with the same Challenge. The continuous integration and Palomar's preflight both passed on the commit cited in~\cite{Companion}.
 To rebuild, run \texttt{lake exe cache get \&\& lake build}, then the commands listed in the repository's \texttt{README.md}.
+The Challenge states \cref{thm:main}; the other results of this paper are proved in the libraries, and Appendix~\ref{app:lean} lists the declarations.
 
-The machine check shows that \cref{thm:main}, as the Lean statement formulates it, follows from Lean's axioms and Mathlib, with Baek's argument and the
-argument of this paper both included. It does not check that the definitions say what they should. Appendix~\ref{app:lean} reproduces the Lean definitions
+The machine check shows that \cref{thm:main}, as the Lean statement formulates it, follows from Lean's axioms and Mathlib. The formal proof contains Baek's argument and the
+argument of this paper. The machine check does not check that the definitions say what they should. Appendix~\ref{app:lean} reproduces the Lean definitions
 (moving sofa, hallway, the rotation path and Gerver's sofa) in mathematical notation, so that they can be read and compared with the intended meaning. Every proof of a result of~\cite{Baek} in the library follows
-Baek's argument, except at sixteen steps, each forced by an error or gap of the paper (E12, E15, E17, E20, E21, E24), by mathematics that Mathlib lacks
+Baek's argument, except at sixteen steps, each forced by an error or gap of the paper, by mathematics that Mathlib lacks
 (the Jordan curve theorem, Green's theorem, the Brunn--Minkowski inequality, mixed volumes), or by the representations chosen in the formalization (the surface area measure as a
 Lebesgue--Stieltjes measure, the area functional of a convex arc as $\frac12\int h\dd\sigma$, no orientations of curves). A route check in continuous integration compares the results used by each Lean proof with those cited by Baek's proof; the other details were compared with
 Baek's TeX source by AI agents, not by a person.
 
-The text of \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery} follows the formal proofs, but it is a translation of them, and it is not machine-checked.
-It differs from the Lean in the following places. The existence of penalized maximizers (\cref{prop:penmax}) takes a Hausdorff limit and shows that it is a polygon cap, whereas the Lean proof takes a subsequence along
-which the finitely many support values converge and forms the polygon cap from the limit values. Some statements are slightly sharper than their Lean versions: the box of
-\cref{lem:nichebox} is $[-R,R]\times[0,R]$ where Lean has $[-R,R]\times[0,2R]$, the constant of \cref{lem:sum} has $B$ where Lean has $2B$, and \cref{lem:triangle} puts the vertices in the open quarter-plane, which
-Lean proves with other declarations than the closed version. Of \cref{fact:sides}\ref{fact:sides:identity} only the sine form is formalized. \Cref{lem:cell} is stated in Lean in Baek's form, with $g_K^-(t+\delta)$, \cref{lem:lsc} is inlined in one declaration,
-and the Lean proof of \cref{lem:contains} derives $O\in K$ from \eqref{eq:ends}, not from $o_\omega\in K$. The converse part of \cref{thm:caps} and \cref{rem:translate} are proved only in the text, and \cref{cor:all} is stated in Lean only in the vocabulary of
-formal-conjectures, with isometries in place of rotations and translations.
+\subsection{The use of AI}
 
-The informal argument that preceded the formalization~\cite[note~20]{Companion} differs from both in the following places: the penalty is fixed and sampled at persistent
-dyadic normals instead of vanishing and continuous, and there is no box constraint at the right angle (\cref{sec:selection}); the selection needs $\cA_\omega(K_*)>0$;
-the arms are compared with Baek's lower sequence instead of by a maximum-deficit argument (\cref{sec:injectivity}); a cap is described by its upper support values and the floor (\cref{sec:equality});
-and the regular closedness of Gerver's sofa uses that its rotation path stays strictly below the top of the cap, which is proved by interval arithmetic (\cref{fact:height}).
-
-\subsection{Provenance of the argument, and the use of AI}
-
-ChatGPT Pro~6 (OpenAI) wrote the informal argument on 2 October 2026. The author had asked for a proof, in Baek's definitions,
-that every moving sofa of maximal area is congruent to Gerver's. The answer came with a draft of the formalization and a draft of the connection with formal-conjectures, neither of which had ever been compiled.
+ChatGPT Pro~6 (OpenAI) wrote the first version of the proof of \cref{thm:main} on 2 October 2026, at the author's request, together with drafts of its formalization
+and of the connection with formal-conjectures; neither Lean draft had ever been compiled.
 Claude Opus~5.5 (Anthropic), in Claude Code with sub-agents, formalized~\cite{Baek} and completed the two drafts, following the author's \texttt{formalize-math-paper} procedure, in rounds between 1 and 3 October 2026;
 54 proofs of the first draft and 78 proofs of the second did not compile and were replaced and proved again. The repository~\cite{Companion} records who did what, with times and
-sizes. Claude Sonnet~5.5 (Anthropic), in Claude Code, wrote this manuscript on 4 October 2026 from the Lean library, the illustrated text of the proofs in~\cite{Companion}
-and the text of~\cite{Baek}. The figures were computed from the definitions by the script \path{docs/paper/figures/make_figures.py} of the repository, which was added after the commit cited
-in~\cite{Companion}. The author asked for each of these steps and decided its scope. None of the three systems is an
+sizes. Claude Sonnet~5.5 (Anthropic), in Claude Code, wrote the first version of this manuscript on 4 October 2026 from the Lean library, the illustrated text of the proofs in~\cite{Companion}
+and the text of~\cite{Baek}. Eight of the nine figures were computed from the definitions by the script \path{docs/paper/figures/make_figures.py} of the repository, which was added after the commit cited
+in~\cite{Companion}; the ninth is drawn in TikZ. The author asked for each of these steps and decided its scope. None of the three systems is an
 author of this paper, since none of them can take responsibility for it.
 
 The text of this paper is not machine-checked; the dictionary of Appendix~\ref{app:lean} gives its correspondence with the Lean statements. On 4 October 2026,
-six runs of Claude Opus~5.5, each assigned some sections, compared the statements and proofs of this paper with the Lean statements and with the TeX source of~\cite{Baek}; a run of Claude Sonnet~5.5 checked
-the claims about the formalization, the dictionary and the references; and a run of Claude Opus~5.5 read the whole paper without access to either. The findings were corrected, and a further run of Claude Opus~5.5 checked the
-passages rewritten in response; the changes that followed its report were not checked again. This is not a refereeing: at the time of writing, the argument has not been refereed, and no person has
+six runs of Claude Opus~5.5, each assigned some sections, compared the statements and proofs of the first version of this paper with the Lean statements and with the TeX source of~\cite{Baek}; a run of Claude Sonnet~5.5 checked
+the claims about the formalization, the dictionary and the references; and a run of Claude Opus~5.5 read the whole paper without access to either. The findings were corrected, and a further run of Claude Opus~5.5 checked the passages rewritten in response.
+Two more runs of Claude Opus~5.5 checked a rewrite of the prose for the patterns of machine-written text and for changes of claim. The same day, the Lean library was extended
+with the results of this paper that it did not yet prove, and Sections~2 and 4 to 9 were rewritten, by sub-agents running Claude Opus~5.5, to state what the Lean states and to follow its proofs. Five runs of Claude Opus~5.5, each assigned some sections and appendices, then compared
+the result with the Lean, and a second round of the same runs compared the corrected text again. The changes that followed the second round were not checked again. At the time of writing, the argument has not been refereed, and no person has
 checked it independently of the formalization.
 
 \subsection{Open questions}
@@ -76,4 +66,4 @@ Baek's method has an analogue to prove, and its numerical inequalities, such as 
 known whether it is optimal. Baek's reduction to monotone sofas uses one hallway; for a sofa that must turn both ways, the cap, the niche and the bound $\cQ$ all need two-sided analogues.
 
 \subsection*{Acknowledgments}
-This paper builds on the results of~\cite{Baek}. The audit of the statements of~\cite{Baek} owes twelve findings to the notes of another formalization of that paper~\cite{Cureton}, and was also compared with the blueprint of a third~\cite{Cao}.
+This paper builds on the results of~\cite{Baek}. The audit of~\cite{Baek} owes twelve findings to the notes of another formalization of that paper~\cite{Cureton}, and was also compared with the blueprint of a third~\cite{Cao}.

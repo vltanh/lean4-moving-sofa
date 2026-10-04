@@ -11,8 +11,10 @@ was not recorded.
   for each later round below, and decided the scope, the names and the publication.
 - **Formalization:** Claude Opus 5.5 (Anthropic, model `claude-opus-5-5`), in Claude Code 2.1.285
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
-  documents and the figures. ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and
-  uncompiled Lean drafts of the uniqueness proof and of the connection with formal-conjectures.
+  documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
+  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below.
+  ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
+  uniqueness proof and of the connection with formal-conjectures.
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
   simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the last round.
@@ -20,7 +22,8 @@ was not recorded.
   agents checked the statements against the paper's LaTeX source before any proof was written, the
   audit's findings against the same source, the uniqueness statements against the informal
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
-  and the report's "What's next" section against its sources.
+  and the report's "What's next" section against its sources, and the manuscript against the Lean
+  statements and proofs.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -247,3 +250,32 @@ Figures, from 20:46 to 21:52:
 - tool calls: 222 by the sub-agents, 131 by the main session;
 - tokens of the sub-agents: 0.30 million output, 0.72 million input, 36 million cache reads; of the main session: 0.15 million output, 0.27 million input, 103 million cache reads;
 - model calls: 213 by the sub-agents and 133 by the main session, all to `claude-opus-5-5`.
+
+## The manuscript's results in Lean (4 October 2026)
+
+The owner asked that the manuscript of the uniqueness be a faithful translation of the formalization: a result that
+the text had and the Lean did not was to be proved in Lean, and the text was to state what the Lean states
+everywhere else.
+
+How it was made:
+- 11:48 to 14:15: Claude Sonnet 5.5, in Claude Code 2.1.289, the session that wrote the manuscript, coordinated
+  sub-agents running Claude Opus 5.5.
+- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L85)): a right-angle cap
+  has the sofa area of Gerver's sofa if and only if it is a horizontal translate of Gerver's cap; the maximal
+  sofas are the moving sofas that a rigid map takes onto Gerver's sofa; the width of Gerver's sofa exceeds one in
+  every direction but the vertical, so that no rotation is needed and a rotated copy of Gerver's sofa moves only if
+  the angle is a multiple of π. Three helper lemmas that are not numbered results of the paper now state the
+  rotation angle. No numbered result and no statement of the Challenge changed. Commit `952812d`; the audit, the
+  route check and the other checks pass, and so does Palomar's preflight (`status: pass`).
+- Six sub-agents rewrote Sections 2 and 4 to 9 of the manuscript and its Appendices B and C to state what the Lean
+  states and to follow its proofs; four more sub-agents compared Section 2 with the Lean line by line, and five
+  compared the whole manuscript with the Lean in two rounds. They found no false step, and many places where the text
+  said more, less or something other than the Lean; all were corrected.
+
+Figures, from 11:48 to 14:15:
+- elapsed time: 2 hours 26 minutes;
+- sub-agents: 16 (4 of them launched by another sub-agent), at most 10 at once, about 7.3 hours of work;
+- tool calls: 1,679 by the sub-agents, 142 by the main session;
+- tokens of the sub-agents: 3.00 million output, 18.03 million input, 469 million cache reads; of the main
+  session: 0.23 million output, 0.48 million input, 74 million cache reads;
+- model calls: 1,365 by the sub-agents (all to `claude-opus-5-5`) and 118 by the main session (`claude-sonnet-5-5`).
