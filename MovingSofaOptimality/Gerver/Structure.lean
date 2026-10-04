@@ -85,6 +85,41 @@ theorem gv_tangents (hP : P.IsSolution) (hB : P.Bounds) :
       rw [gs_ρC₂_eq]
       linarith [(gs_ineq_ρC₂ hB (s := t) ht.1.le ht.2.le).2]
 
+/-- Theorem 8.4.1 (4) under the enclosures, with one-sided derivatives on each closed phase
+`[t_3, t_4]`, `[t_4, t_5]` of `𝐁` and `[t_0, t_1]`, `[t_1, t_2]` of `𝐃`. On a closed phase the
+curve agrees with the phase formula `gs_Phase.B` (resp. `gs_Phase.D`), whose derivative
+`(ρ_A - 1) v_t` (resp. `(1 - ρ_C) u_t`) at every point of the phase, ends included, is a negative
+multiple of `v_t` (resp. a positive multiple of `u_t`). -/
+theorem gv_tangents_Icc (hP : P.IsSolution) (hB : P.Bounds) :
+    (∀ t ∈ Icc (π / 2 - P.θ) (π / 2 - P.φ), ∃ c < (0 : ℝ),
+        HasDerivWithinAt (contactB P.path) (c • vvec t) (Icc (π / 2 - P.θ) (π / 2 - P.φ)) t) ∧
+      (∀ t ∈ Icc (π / 2 - P.φ) (π / 2), ∃ c < (0 : ℝ),
+        HasDerivWithinAt (contactB P.path) (c • vvec t) (Icc (π / 2 - P.φ) (π / 2)) t) ∧
+      (∀ t ∈ Icc 0 P.φ, ∃ c > (0 : ℝ),
+        HasDerivWithinAt (contactD P.path) (c • uvec t) (Icc 0 P.φ) t) ∧
+      ∀ t ∈ Icc P.φ P.θ, ∃ c > (0 : ℝ),
+        HasDerivWithinAt (contactD P.path) (c • uvec t) (Icc P.φ P.θ) t := by
+  have hO := gs_ord hP
+  -- on a set inside the `i`-th closed phase, `𝐁` and `𝐃` are the formulas of the phase
+  have hBw : ∀ (i : ℕ) (s : Set ℝ) (t : ℝ), (∀ x ∈ s, gs_piece P i x) → t ∈ s →
+      HasDerivWithinAt (contactB P.path) (((P.gs_phase i).ρA t - 1) • vvec t) s t :=
+    fun i s t hs ht => (gs_Phase.hasDerivAt_B (gs_valid i) t).hasDerivWithinAt.congr_of_mem
+      (fun x hx => gs_contactB_eq hP (hs x hx)) ht
+  have hDw : ∀ (i : ℕ) (s : Set ℝ) (t : ℝ), (∀ x ∈ s, gs_piece P i x) → t ∈ s →
+      HasDerivWithinAt (contactD P.path) ((1 - (P.gs_phase i).ρC t) • uvec t) s t :=
+    fun i s t hs ht => (gs_Phase.hasDerivAt_D (gs_valid i) t).hasDerivWithinAt.congr_of_mem
+      (fun x hx => gs_contactD_eq hP (hs x hx)) ht
+  refine ⟨fun t ht => ⟨(P.gs_phase 3).ρA t - 1, ?_, hBw 3 _ t (fun x hx => hx) ht⟩,
+    fun t ht => ⟨(P.gs_phase 4).ρA t - 1, ?_, hBw 4 _ t (fun x hx => hx.1) ht⟩,
+    fun t ht => ⟨1 - (P.gs_phase 0).ρC t, ?_, hDw 0 _ t (fun x hx => hx.2) ht⟩,
+    fun t ht => ⟨1 - (P.gs_phase 1).ρC t, ?_, hDw 1 _ t (fun x hx => hx) ht⟩⟩
+  · rw [gs_ρA₄_eq' hP]
+    linarith [(gs_ineq_ρC₂ hB (s := π / 2 - t) (by linarith [hO.1, ht.2]) (by linarith [ht.1])).2]
+  · rw [gs_ρA₅_eq]; norm_num
+  · rw [gs_ρC₁_eq]; norm_num
+  · rw [gs_ρC₂_eq]
+    linarith [(gs_ineq_ρC₂ hB (s := t) (by linarith [hO.1, ht.1]) ht.2).2]
+
 /-- Theorem 8.4.2 (Romik's ODEs) under the enclosures. -/
 theorem gv_odes (hP : P.IsSolution) (hB : P.Bounds) :
     (∀ t ∈ Ioo 0 P.φ,

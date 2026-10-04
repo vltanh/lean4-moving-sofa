@@ -125,18 +125,31 @@ theorem theorem8_4_1_walls {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
   simp only [GerverParams.tPt]
   exact gv_walls hP (GerverParams.romik_bounds hP hbox)
 
-/-- **Theorem 8.4.1** (`thm:gerver-monotone`) (4): `𝐁'(t)` is a negative multiple of `v_t` and
-`𝐃'(t)` a positive multiple of `u_t`, on the open phases where these curves are differentiable.
+/-- **Theorem 8.4.1** (`thm:gerver-monotone`) (4): `𝐁'(t)` is a negative multiple of `v_t` for
+`t ∈ [t_3, t_5]`, and `𝐃'(t)` a positive multiple of `u_t` for `t ∈ [t_0, t_2]`. Inside the phases
+the derivatives are two-sided. At the junctions `t_4` (for `𝐁`) and `t_1` (for `𝐃`), where the
+curves have no two-sided derivative, and at the endpoints, the derivatives are one-sided: they are
+stated within each closed phase `[t_3, t_4]`, `[t_4, t_5]`, `[t_0, t_1]`, `[t_1, t_2]` (REPORT.md,
+Section 6).
 
 Departure from the paper: the paper gives no proof (see `theorem8_4_1_monotone`); this proof derives
 the statement from Romik's equations, because the paper gives no argument to follow. -/
 theorem theorem8_4_1_tangents {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Ioo (P.tPt 3) (P.tPt 5), t ≠ P.tPt 4 →
         ∃ c < (0 : ℝ), HasDerivAt P.curveB (c • vvec t) t) ∧
-      ∀ t ∈ Ioo (P.tPt 0) (P.tPt 2), t ≠ P.tPt 1 →
-        ∃ c > (0 : ℝ), HasDerivAt P.curveD (c • uvec t) t := by
+      (∀ t ∈ Ioo (P.tPt 0) (P.tPt 2), t ≠ P.tPt 1 →
+        ∃ c > (0 : ℝ), HasDerivAt P.curveD (c • uvec t) t) ∧
+      (∀ t ∈ Icc (P.tPt 3) (P.tPt 4), ∃ c < (0 : ℝ),
+        HasDerivWithinAt P.curveB (c • vvec t) (Icc (P.tPt 3) (P.tPt 4)) t) ∧
+      (∀ t ∈ Icc (P.tPt 4) (P.tPt 5), ∃ c < (0 : ℝ),
+        HasDerivWithinAt P.curveB (c • vvec t) (Icc (P.tPt 4) (P.tPt 5)) t) ∧
+      (∀ t ∈ Icc (P.tPt 0) (P.tPt 1), ∃ c > (0 : ℝ),
+        HasDerivWithinAt P.curveD (c • uvec t) (Icc (P.tPt 0) (P.tPt 1)) t) ∧
+      ∀ t ∈ Icc (P.tPt 1) (P.tPt 2), ∃ c > (0 : ℝ),
+        HasDerivWithinAt P.curveD (c • uvec t) (Icc (P.tPt 1) (P.tPt 2)) t := by
   simp only [GerverParams.tPt]
-  exact gv_tangents hP (GerverParams.romik_bounds hP hbox)
+  have hB := GerverParams.romik_bounds hP hbox
+  exact ⟨(gv_tangents hP hB).1, (gv_tangents hP hB).2, gv_tangents_Icc hP hB⟩
 
 /-- **Theorem 8.4.2** (`thm:gerver-odes`): Romik's balancing ODEs on the open phases. -/
 theorem theorem8_4_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
@@ -467,9 +480,9 @@ lemma gm_D_mem_hLeft {t : ℝ} (ht : t ∈ Icc 0 P.θ) : P.curveD t ∈ hLeft P.
   refine env_antitoneOn (f' := fun s => dot (deriv P.curveD s) (uvec w)) (finite_singleton P.φ)
     (continuousOn_dot (gm_continuous_curveD hP).continuousOn _) (fun s hs hsφ => ?_)
     (fun s hs hsφ => ?_) ht ⟨(gm_θ_pos hP).le, le_rfl⟩ ht.2
-  · obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2 s hs hsφ
+  · obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2.1 s hs hsφ
     simpa only [hd.deriv] using hasDerivAt_dot hd (uvec w)
-  · obtain ⟨c, hc, hd⟩ := (theorem8_4_1_tangents hP hbox).2 s hs hsφ
+  · obtain ⟨c, hc, hd⟩ := (theorem8_4_1_tangents hP hbox).2.1 s hs hsφ
     have h2 : s + P.φ < π / 2 := by linarith [hs.2, gm_θ_lt hP, gm_φ_lt_θ hP]
     have hcos := cos_pos_of_mem_Ioo ⟨by linarith [hs.1, gm_φ_pos hP, pi_pos], h2⟩
     show dot (deriv P.curveD s) (uvec w) ≤ 0
@@ -1188,7 +1201,7 @@ lemma gm_prop844_four :
         ⟨show 0 < t - π / 2 by linarith [ht.1.1], show t - π / 2 < P.θ by linarith [ht.1.2]⟩
       have hne : t - π / 2 ≠ P.tPt 1 := fun h => ht.2 (by
         rw [mem_singleton_iff]; change t - π / 2 = P.φ at h; linarith)
-      obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2 (t - π / 2) ht' hne
+      obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2.1 (t - π / 2) ht' hne
       exact hd.differentiableAt.hasDerivAt.comp_sub_const t (π / 2)
 
 end
@@ -1320,7 +1333,7 @@ lemma gm_rhoB_pos {t : ℝ} (ht : t ∈ Ioo (π / 2 - P.θ) (π / 2)) (htd : t �
 /-- The density `⟨𝐃', u_t⟩` of `σ̆_{D_K}` is nonnegative. -/
 lemma gm_rhoD_pos {t : ℝ} (ht : t ∈ Ioo 0 P.θ) (htd : t ≠ P.φ) :
     0 ≤ dot (deriv P.curveD t) (uvec t) := by
-  obtain ⟨c, hc, hd⟩ := (theorem8_4_1_tangents hP hbox).2 t ht htd
+  obtain ⟨c, hc, hd⟩ := (theorem8_4_1_tangents hP hbox).2.1 t ht htd
   rw [hd.deriv, dot_smul_left, dot_uvec_self]
   linarith
 
@@ -1544,7 +1557,7 @@ lemma gm_curveArea_D : curveArea P.curveD 0 P.θ =
       dot (deriv P.curveD t) (uvec t) * supp (leftBody P.φ P.cap) (3 * π / 2 + t) := by
   apply gm_curveArea_two (gm_φ_pos hP) (gm_φ_lt_θ hP) (gm_contDiffOn_D₁ hP) (gm_contDiffOn_D₂ hP)
   intro t ht htd
-  obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2 t ht htd
+  obtain ⟨c, -, hd⟩ := (theorem8_4_1_tangents hP hbox).2.1 t ht htd
   have hw := gm_D_wallD hP hbox ⟨ht.1.le, ht.2.le⟩
   rw [uvec_add_pi_div_two] at hw
   rw [hd.deriv, cross_smul_right, cross_uvec, hw, dot_smul_left, dot_uvec_self,

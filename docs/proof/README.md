@@ -4,7 +4,7 @@
 
 A companion text to the Lean 4 formalization in this repository
 ([lean4-moving-sofa](https://github.com/vltanh/lean4-moving-sofa)); for its authorship see
-[Contributors](../contributors.md).
+[Credits](../../CREDITS.md).
 
 **Abstract.** A moving sofa is a connected planar shape that can be moved around the right-angled
 corner of a hallway of unit width. The moving sofa problem asks for the largest area of a moving
@@ -13,7 +13,7 @@ proved this in 2024. This text gives a complete proof of Baek's theorem, includi
 Gerver's sofa that the paper takes from Gerver and Romik or states without proof. It then proves
 that Gerver's sofa is the only optimal sofa: a rotation and a translation map every moving sofa of
 maximum area onto it. Baek shows that some sofa of maximum area is monotone (a convex cap minus a
-niche), turns through a right angle and satisfies an injectivity condition, and he bounds the area
+niche), turns through a right angle and satisfies an injectivity condition, and bounds the area
 of such sofas by a concave quadratic functional that Gerver's sofa maximizes. The uniqueness proof
 shows that every sofa of maximum area lies, after a rigid motion, in a monotone sofa with these
 properties. The equality case of the bound makes that sofa a translate of Gerver's sofa. As Gerver's
@@ -313,9 +313,9 @@ Moser posed the problem in 1966 [1]. Hammersley [2] found a sofa of area
 $\pi/2 + 2/\pi \approx 2.2074$, a quarter-disk of radius 1 on each side of a $4/\pi \times 1$
 rectangle from which a half-disk of radius $2/\pi$ is removed, and showed that $\alpha_{\max} \le 2\sqrt2$.
 Gerver [3] found a sofa of area $2.21953\ldots$, bounded by 18 analytic curves and segments, and
-conjectured that it is optimal. His Theorem 1 states a balance condition that a sofa of maximum area
-satisfies, and his Theorem 2 shows that his sofa satisfies it. Romik [4] derived Gerver's sofa from
-differential equations that express the balance, and solved them in closed form; his description
+conjectured that it is optimal. Gerver's Theorem 1 states a balance condition that a sofa of maximum area
+satisfies, and Gerver's Theorem 2 shows that this sofa satisfies it. Romik [4] derived Gerver's sofa from
+differential equations that express the balance, and solved them in closed form; Romik's description
 defines Gerver's sofa here. Kallus and Romik [5] proved by a computer-assisted method that
 $\alpha_{\max} \le 2.37$. Baek [6] proved that $\alpha_{\max} = \lvert G \rvert$, in a paper of 119
 pages that needs a computer only for numerical evaluations that a scientific calculator can do.
@@ -323,7 +323,7 @@ Chapters 2 to 10 follow Baek's proof.
 
 That Gerver's sofa is the only moving sofa of maximum area is not proved in Baek's paper, and
 formal-conjectures lists it as an open problem. The proof of Chapters 11 and 12 was written for this
-formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Contributors](../contributors.md)); it
+formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../../CREDITS.md)); it
 reuses Baek's machinery and has not been peer reviewed. We know of no earlier proof, but have not
 searched the literature systematically. Two earlier Lean formalizations of Baek's proof prove
 formal-conjectures' statement of the optimality, but not the uniqueness; the

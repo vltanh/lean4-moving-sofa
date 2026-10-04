@@ -439,9 +439,9 @@ lemma opt_Bs_symm {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi
 `D|·|(K; K*) = ∫_{[0, π]} (h_{K*} - h_K) dσ_K`.
 
 Departure from the paper: the paper takes the symmetry of `𝓑(K₁, K₂) = ½ ∫_{S¹} h_{K₁} dσ_{K₂}`
-from Schneider's theory of the mixed volume `V(K₁, K₂)` (his Equation (5.19)); this proof shows the
-symmetry on `𝒦^i` by integration by parts against `σ_{K₂}` (`opt_Bs_symm`), because Mathlib has no
-mixed volumes. -/
+from Schneider's theory of the mixed volume `V(K₁, K₂)` (Schneider's Equation (5.19)); this proof
+shows the symmetry on `𝒦^i` by integration by parts against `σ_{K₂}` (`opt_Bs_symm`), because
+Mathlib has no mixed volumes. -/
 theorem theorem8_5_1 : kiDomain.IsQuadratic (fun K => area K.1.1) ∧
     ∀ K Ks : KiSet, kiDomain.dirDeriv (fun K => area K.1.1) K Ks =
       ∫ t in Icc 0 π, (supp Ks.1.1 t - supp K.1.1 t) ∂(sigma K.1.1) := by

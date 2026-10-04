@@ -185,9 +185,11 @@ if $H_i$ is open. There are $\varepsilon > 0$ and $C$ such that for $\lvert \del
 \Bigl\lvert\, \lvert X'_\delta \rvert - \lvert X \rvert - \mathcal{H}^1(\partial X \cap l_i)\, \delta \,\Bigr\rvert \le C \delta^2 .
 ```
 
-*Lean: [`theorem3_1_2`](../../MovingSofaOptimality/Balanced/NefPolygon.lean#L694).*
+*Lean: [`theorem3_1_2`](../../MovingSofaOptimality/Balanced/NefPolygon.lean#L697).*
 
-The paper leaves the boundedness of $X$ implicit. Here $\mathcal{H}^1$ is the length along a line
+The paper leaves out that $X$ is bounded; without it the areas can be infinite, as for a
+half-plane, and the statement fails (REPORT.md, Section 4). Every application, to the polygon caps
+and niches, is to bounded sets. Here $\mathcal{H}^1$ is the length along a line
 ([`lineLength`](../../MovingSofaOptimality/Basic/Plane.lean#L78)).
 
 *Proof sketch.* The area gained or lost lies in a thin strip along $l_i$, and its slices parallel to
@@ -707,7 +709,7 @@ $\lvert \mathcal{N}_\Theta(h^+) \rvert = \lvert \mathcal{N}_\Theta(h) \rvert - (
 *Lean: [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L570).*
 
 The paper's proof prints the change of $\lvert \mathcal{N}_\Theta \rvert$ in the second case with the
-opposite sign (REPORT.md, E26). It also applies Theorem 4.3 twice in a row, the second time to a
+opposite sign (REPORT.md, E27). It also applies Theorem 4.3 twice in a row, the second time to a
 polygon that the first application has changed. The disjointness of the two strips justifies this,
 as above (REPORT.md, E5).
 

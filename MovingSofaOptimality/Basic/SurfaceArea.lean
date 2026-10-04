@@ -394,7 +394,7 @@ measures on the half-open interval `(a, b]`. (The bound `b ≤ a + 2π` is not n
 
 Departure from the paper: the paper checks the identity on the intervals `(a, x]` for polygons,
 where `σ_K` is the sum of point masses at the edge lengths, and passes to a general `K` through
-polygons with the same edges at `a` and `x` converging to `K` (as in Schneider's proof of his
+polygons with the same edges at `a` and `x` converging to `K` (as in the proof of Schneider's
 Theorem 8.3.3), with the weak convergence of Theorem 4.1.3; this proof integrates by parts in the
 definition of `σ_K` (`vplus_sub_vplus`), because that approximation by polygons is not in Mathlib
 (reason 2), and because `σ_K` is defined as the Lebesgue–Stieltjes measure of

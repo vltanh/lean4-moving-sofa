@@ -118,11 +118,15 @@ declarations: [docs/proof/](docs/proof/README.md).
 [`REPORT.md`](REPORT.md) audits the paper against its LaTeX source and the formalization. Definition 3.2.5
 uses the parallelogram $P_\omega$ where the fan $F_\omega$ is meant, which makes Proposition 3.3.5 and
 Lemma 3.4.2 false as written (E6), and one direction of Proposition 5.1.4 is false (E11). Theorem
-8.4.1 has no proof (E23), and the proof of Theorem 6.1.2 misreads Gerver's Theorem 2 (E12). Every
-result holds in its intended form, the main theorem included, and the formalization proves it.
+8.4.1 has no proof (E24), and the proof of Theorem 6.1.2 misreads Gerver's Theorem 2 (E12). Two
+statements need a hypothesis that the paper leaves out: Schneider's theorem on the surface area
+measure, as the paper states it, needs convex bodies with interior points, and Theorem 3.1.2 needs a
+bounded Nef polygon; every use satisfies both. Every result holds in its intended form, the main
+theorem included, and the formalization proves it. Twelve of the findings come from the notes of
+another formalization, deancureton/MovingSofa, and are credited in the report.
 
 Every proof follows Baek's argument, except at the steps that REPORT.md lists in Section 7, each
-forced by an error or gap of the paper (E12, E15, E17, E19, E20, E23), by mathematics that
+forced by an error or gap of the paper (E12, E15, E17, E20, E21, E24), by mathematics that
 Mathlib lacks (the Jordan curve theorem and Green's theorem, the Brunn–Minkowski inequality, mixed
 volumes), or by the definition of the surface area measure as a Lebesgue–Stieltjes measure. A route
 check in CI compares the results that each Lean proof uses with those that Baek's proof cites, and
@@ -133,13 +137,29 @@ check in CI compares the results that each Lean proof uses with those that Baek'
 More on each earlier result, with references: [docs/prior-work.md](docs/prior-work.md).
 
 - Moser posed the problem in 1966. Hammersley found a sofa of area $\pi/2 + 2/\pi \approx 2.2074$;
-  Gerver found his sofa in 1992 and conjectured that it is optimal; Romik derived it from differential
+  Gerver found the sofa in 1992 and conjectured that it is optimal; Romik derived it from differential
   equations in 2018; Kallus and Romik proved by computer that the maximum is at most 2.37.
 - Baek proved Gerver's conjecture in 2024. That Gerver's sofa is the only optimal sofa is stated as
   open in formal-conjectures; we know of no earlier proof.
+- Concurrent with Baek's paper, in 2024: Baek's own conditional bound 1 + π²/8 for sofas with the
+  injectivity condition (arXiv:2406.10725, superseded by the paper), numerical evidence by neural
+  networks that Gerver's sofa is the global maximum (Leng, Bi, Cha, Pinilla and Thiyagalingam,
+  arXiv:2407.11106), and a calculus of variations approach that recovers Gerver's sofa under
+  convexity assumptions (Deng, arXiv:2407.02587).
 - Two Lean formalizations of Baek's proof appeared shortly before this one,
   [deancureton/MovingSofa](https://github.com/deancureton/MovingSofa) and [RuifengCao/sofa-formal](https://github.com/RuifengCao/sofa-formal). Both prove
   formal-conjectures' statement of the optimality; [docs/prior-work.md](docs/prior-work.md) compares the three.
+
+## What's next
+
+Baek's paper is still a preprint (arXiv version 1), reported in 2026 to be under review. No erratum
+or counterexample has appeared; the other formalizations, like this audit, found only repairable
+errors and gaps in its proofs. Since it appeared, two other Lean formalizations and this one have
+verified its result, and preprints have studied a three-dimensional sofa by computer search,
+rectangular sofas, and corridors with other corner angles. The report's
+[What's next](REPORT.md#10-whats-next) also lists open directions (stability, other angles, the
+ambidextrous sofa) and simpler arguments for several of Baek's proofs that came up while formalizing
+them.
 
 ## Layout
 
@@ -193,12 +213,14 @@ and version 2 adds the uniqueness (commit `cf4feff`). Palomar checks the proofs 
 
 Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
 
-## Contributors
+## Credits
 
-The Lean code, the informal uniqueness argument, the audit and the documentation were written by AI
-models: Claude Opus 5.5 formalized Baek's paper, wrote the audit and the documentation, with the
-illustrated text of the proofs, and completed the uniqueness proof and the bridge from Lean drafts
-by ChatGPT Pro 6, which also wrote the uniqueness argument. The work followed the
-[formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. The-Anh Vu-Le directed
-the work. No human has reviewed the proofs; Lean's kernel checks every one of them. Who did what,
-and when, with the time and effort: [docs/contributors.md](docs/contributors.md).
+- Claude Opus 5.5 (Anthropic), in Claude Code, formalized Baek's paper, wrote the audit and the
+  documentation with the illustrated text of the proofs, and completed the uniqueness proof and the
+  bridge from uncompiled Lean drafts by ChatGPT Pro 6 (OpenAI), which also wrote the informal
+  uniqueness argument. The work followed the
+  [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill, at the request of
+  The-Anh Vu-Le, who directed it.
+- No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
+  rounds between 1 and 4 October 2026, with up to 26 sub-agents in a round.
+- Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

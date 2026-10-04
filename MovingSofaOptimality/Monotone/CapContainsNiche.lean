@@ -779,7 +779,7 @@ the triangle `W_K(t) x_K(t) Z_K(t)`, and `W_K(t)`, `Z_K(t)` lie on the segment
 `[C_K⁺(ω), A_K⁻(0)]` of `l(π/2, 0)` by `w_K(t), z_K(t) > 0` (Theorem 2.5.5). For `ω < π/2` the
 cases are on whether `O` lies strictly below `b_K(t)` (`h_K(t) - 1 > 0`) and `d_K(t)`
 (`h_K(t + π/2) - 1 > 0`): neither (case 1), `d_K(t)` only (case 2) or both (case 4); `h3` excludes
-the third case. In case 1, `T_K(t)` is empty (the paper's contradiction there is a slip, E26).
+the third case. In case 1, `T_K(t)` is empty (the paper's contradiction there is a slip, E27).
 Points are compared through their coordinates in the frame `(u_t, v_t)`. -/
 private lemma cn_wedge_subset_aux {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {t : ℝ}
     (ht : t ∈ Ioo 0 ω) (hx : innerCorner K t ∈ K)

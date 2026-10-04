@@ -77,7 +77,7 @@ $V_L = [0, 1] \times (-\infty, 1]$. During the translation each point moves alon
 from a point of $L$ to a point of $V_L$, and $L$ meets every horizontal line in an interval, so the
 sofa stays in $L$. This movement has rotation angle $\pi/2$. $\square$
 
-Gerver's version of this argument gives the bound $\pi/3$ of his Theorem 1
+Gerver's version of this argument gives the bound $\pi/3$ of Gerver's Theorem 1
 ([§4.1](04-balanced.md#41-gervers-balancing-argument-and-its-gap)). The constant $2.2$ is below the
 area $2.2195$ of Gerver's sofa, so the theorem applies to every moving sofa of maximum area.
 

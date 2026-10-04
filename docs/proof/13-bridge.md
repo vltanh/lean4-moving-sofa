@@ -494,7 +494,7 @@ the components on the other phases.
    $\tfrac12 - \tfrac14\theta^2 + b_1\theta + b_2 = 1 + c_1 - \theta$, is then $E_4 = 0$.
 3. *The parameters.* The coefficients $a_1, b_1, b_2, c_1, c_2$ of $P$ are those of
    $\mathrm{toRomik}(A, B, \varphi, \theta)$ by steps 1 and 2. Romik's symmetry equations (27)–(31)
-   give $d_1, d_2, e_1, e_2$, and his start equations give $a_2$ and $\kappa_1$. The continuity of
+   give $d_1, d_2, e_1, e_2$, and Romik's start equations give $a_2$ and $\kappa_1$. The continuity of
    $\mathbf{x}$ at $\varphi$ and $\theta$ determines $\kappa_2$ and $\kappa_3$. With the symmetry of
    the rebuilt path, the continuity at $\pi/2 - \theta$ and $\pi/2 - \varphi$ determines $\kappa_4$
    and $\kappa_5$. So $\mathrm{toRomik}(A, B, \varphi, \theta) = P$.

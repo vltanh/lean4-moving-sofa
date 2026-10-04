@@ -224,8 +224,8 @@ against $\frac\pi4 = 0.7854$ for the disk. For $\omega = \pi/2$ the segment of s
 
 Baek proves step 2 by contradiction, as above: if no line through $p$ in a direction $u_\theta$,
 $\theta \in [\omega, \pi/2]$, met $S$, these lines would split $S$ into a nonempty part on their
-left and a nonempty part on their right. He asserts that the complement of the lines has exactly two
-components; the proof needs only that each of its points lies on one side of all the lines. His Definition 2.3.9 of the left and right sides of a line
+left and a nonempty part on their right. Baek asserts that the complement of the lines has exactly two
+components; the proof needs only that each of its points lies on one side of all the lines. Baek's Definition 2.3.9 of the left and right sides of a line
 should read "not parallel to the $x$-axis" where it says "$y$-axis" (REPORT.md, E1); the Lean
 definitions [`leftSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L154) and [`rightSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L157) follow the intended reading.
 
@@ -313,7 +313,7 @@ angles in $J_\omega \cup \lbrace \omega + \pi, 3\pi/2 \rbrace$. $\square$
 *Lean: [`theorem2_4_1`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L78).*
 
 In the paper's proof, the directions $v_0$ and $u_\omega$ in which $Q_S^+(t)$ is closed should be
-$-v_0$ and $-u_\omega$ (REPORT.md, E26).
+$-v_0$ and $-u_\omega$ (REPORT.md, E27).
 
 ### Definition 3.11 (fan and niche; Baek, Definitions 2.4.4 and 2.4.5)
 
@@ -708,7 +708,7 @@ $h_K(\omega + \pi) = h_K(3\pi/2) = 0$. Let $c_1 = h_K(t) - 1$ and $c_2 = h_K(t +
 *Lean: [`lemma2_5_6`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L930).*
 
 This is Baek's proof. It uses the two facts about caps without proof (E4), and in the case
-$c_1, c_2 \le 0$ it claims a contradiction where the wedge is in fact empty (E26). The formalization
+$c_1, c_2 \le 0$ it claims a contradiction where the wedge is in fact empty (E27). The formalization
 writes the points of each triangle in barycentric coordinates and cuts the quadrilateral along its
 diagonal $O\, \mathbf{x}_K(t)$.
 
@@ -821,7 +821,7 @@ Conversely, suppose $\mathcal{N}(K) \subseteq K$, and let $S = K \setminus \math
 
 In the paper's proof, "$\mathcal{N}(K)$ contains $K$" should read "$K$ contains $\mathcal{N}(K)$",
 and the paper cites Baek's Theorem 2.4.3 for $\mathcal{I}(S) = K \setminus \mathcal{N}(K)$, which
-assumes $S$ monotone; Theorem 2.4.2 (here Theorem 3.12) is the one that applies (REPORT.md, E26).
+assumes $S$ monotone; Theorem 2.4.2 (here Theorem 3.12) is the one that applies (REPORT.md, E27).
 
 ### Example 3.27 (a cap that does not contain its niche; Baek, Remark 2.5.2)
 

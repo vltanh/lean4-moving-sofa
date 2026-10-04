@@ -8,7 +8,7 @@ public import MovingSofaOptimality.External.Romik.Fix
 # Existence and uniqueness of the parameters of Gerver's sofa
 
 Romik (Section 4) computes the parameters of Gerver's sofa numerically and states that the solution
-of his system with `0 < φ < θ < π/4` is unique. This file proves that the system
+of the system with `0 < φ < θ < π/4` is unique. This file proves that the system
 `GerverParams.IsSolution` has exactly one solution with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]`,
 and gives tight enclosures of its parameters for the numerical verifications of
 `MovingSofaOptimality.Gerver.*`.

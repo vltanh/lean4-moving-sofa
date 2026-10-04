@@ -49,12 +49,12 @@ $f : \mathcal{V} \to \mathbb{R}$ is *quadratic* if $f(v) = g(v, v)$ for a convex
 $g : \mathcal{V} \times \mathcal{V} \to \mathbb{R}$. Here $\mathbb{R}$, and every real vector space,
 is a convex domain with $c_\lambda(x, y) = (1 - \lambda) x + \lambda y$.
 
-*Lean: [`ConvexDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L27),
-[`ConvexDomain.IsConvexLinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L38),
-[`ConvexDomain.IsConvexBilinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L43),
-[`ConvexDomain.IsQuadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L58),
-[`realDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L33),
-[`vectorDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L150).*
+*Lean: [`ConvexDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L26),
+[`ConvexDomain.IsConvexLinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L37),
+[`ConvexDomain.IsConvexBilinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L42),
+[`ConvexDomain.IsQuadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L57),
+[`realDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L32),
+[`vectorDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L149).*
 
 The Lean structure carries the operation for every real $\lambda$; only $\lambda \in [0, 1]$ is
 used. Baek remarks that convex domains are the cancellative convex spaces of Stone; nothing depends
@@ -79,11 +79,11 @@ A convex body is the intersection of its supporting half-planes
 ([Lemma 2.7](02-preliminaries.md#lemma-27-the-support-function) (3)), so $h_K$ determines $K$, and
 $K \mapsto h_K$ is injective. $\square$
 
-*Lean: [`theorem7_1_1`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L213),
-[`convexBodyDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L225),
-[`convexBodyComb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L197),
-[`supp_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L175),
-[`isConvexBody_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L169),
+*Lean: [`theorem7_1_1`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L247),
+[`convexBodyDomain`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L259),
+[`convexBodyComb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L231),
+[`supp_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L209),
+[`isConvexBody_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L203),
 [`eq_of_supp_eq`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L200).*
 
 ### Theorem 8.3 (convex-linear quantities; Baek, Theorem 7.1.2)
@@ -112,10 +112,10 @@ convex-linear in $K$, and the Lebesgue–Stieltjes measure of a combination of f
 variation is the combination of their measures (Baek's Proposition 5.1.1), so $dv_K^+$ and
 $\sigma_K$ are convex-linear in $K$. $\square$
 
-*Lean: [`theorem7_1_2_supp`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L230),
-[`theorem7_1_2_vertices`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L262),
-[`theorem7_1_2_sigma`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L359),
-[`cvx_vplus_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L243).*
+*Lean: [`theorem7_1_2_supp`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L264),
+[`theorem7_1_2_vertices`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L296),
+[`theorem7_1_2_sigma`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L393),
+[`cvx_vplus_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L277).*
 
 The paper assumes $a < b < a + \pi$ in (2). The Lean statement holds for all $a, b$, because the
 formalization defines $v_K(a, b)$ by the formula above for all $a$ and $b$
@@ -138,10 +138,10 @@ form $(K_1, K_2) \mapsto \frac12 \int_{[0, 2\pi)} h_{K_1} \, d\sigma_{K_2}$.
 by Theorem 8.3 (3). Its integrals are finite, as $h_{K_1}$ is continuous and $[0, 2\pi)$ is
 bounded. $\square$
 
-*Lean: [`theorem7_1_3`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L380),
-[`theorem7_1_3_quadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L411),
+*Lean: [`theorem7_1_3`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L414),
+[`theorem7_1_3_quadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L445),
 [`area_eq_half_integral_supp`](../../MovingSofaOptimality/External/AreaFormula.lean#L558),
-[`cvx_integral_supp_sigma_bilin`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L386).*
+[`cvx_integral_supp_sigma_bilin`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L420).*
 
 ### Definition 8.5 (directional derivative, concavity; Baek, Definitions 7.1.5, 7.1.6)
 
@@ -156,9 +156,9 @@ taken within $[0, 1]$. The functional $f$ is *concave* if
 $f(c_\lambda(K_1, K_2)) \ge (1 - \lambda) f(K_1) + \lambda f(K_2)$ for all $K_1, K_2$ and
 $\lambda \in [0, 1]$, and *convex* if the reverse inequality holds.
 
-*Lean: [`ConvexDomain.dirDeriv`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L63),
-[`ConvexDomain.IsConcave`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L95),
-[`ConvexDomain.IsConvexFun`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L99).*
+*Lean: [`ConvexDomain.dirDeriv`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L62),
+[`ConvexDomain.IsConcave`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L94),
+[`ConvexDomain.IsConvexFun`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L98).*
 
 ### Lemma 8.6 (derivative of a quadratic functional; Baek, Lemma 7.1.4)
 
@@ -175,8 +175,8 @@ polynomial in $\lambda$, the right side of (8.1) is
 $g(K, K) + \lambda\, \bigl(g(K, K') + g(K', K) - 2 g(K, K)\bigr) + \lambda^2 \bigl(g(K, K) - g(K, K') - g(K', K) + g(K', K')\bigr)$,
 whose derivative at $0$ is the stated one. $\square$
 
-*Lean: [`lemma7_1_4`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L83),
-[`cvx_bilin_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L69).*
+*Lean: [`lemma7_1_4`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L82),
+[`cvx_bilin_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L68).*
 
 The Lean statement gives the formula for $Df(K; K')$; the convex-linearity in $K'$ follows from it
 and is not stated separately.
@@ -213,24 +213,34 @@ A + \tfrac12 \delta + \tfrac14 E \ \ge\ A + \tfrac12 \delta + \tfrac12 E ,
 
 so $E \le 0$ (Figure 8.1). Then $f(K') = p(1) = A + \delta + E \le A = f(K)$. $\square$
 
-*Lean: [`theorem7_1_5`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L104).*
+*Lean: [`theorem7_1_5`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L103).*
 
 ### Definition 8.8 (equality modulo linear functionals; Baek, Definition 7.1.7)
 
 For functionals $f, g$ on a convex domain $\mathcal{V}$, write $f \equiv_{\mathcal{V}} g$ (or
 $f(K) \equiv_K g(K)$) if $f - g$ is convex-linear.
 
-*Lean: [`ConvexDomain.EqModLinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L146).*
+*Lean: [`ConvexDomain.EqModLinear`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L145).*
 
-### Lemma 8.9 (shifting the arguments of a bilinear form; Baek, Lemma 7.1.6)
+### Lemma 8.9 (shifting the arguments of a convex-bilinear map; Baek, Lemma 7.1.6)
 
-Let $h$ be a bilinear form on a real vector space $V$ and $c_1, c_2 \in V$. Then
+Let $h$ be a convex-bilinear map on a real vector space $V$ and $c_1, c_2 \in V$. Then
 $h(K, K) \equiv_K h(K + c_1, K + c_2)$.
 
-*Proof.* The difference $h(K + c_1, K + c_2) - h(K, K) = h(c_1, K) + h(K, c_2) + h(c_1, c_2)$ is
-affine in $K$. $\square$
+*Proof.* A convex-linear map $g$ on $V$ satisfies $g(x + d) = g(x) + g(d) - g(0)$: both sides are
+twice $g$ at the midpoint of $x$ and $d$. Applying this in each argument,
 
-*Lean: [`lemma7_1_6`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L156).*
+```math
+h(K + c_1, K + c_2) - h(K, K) = h(K, c_2) - h(K, 0) + h(c_1, K + c_2) - h(0, K + c_2) ,
+```
+
+and each term is convex-linear in $K$. $\square$
+
+For a bilinear $h$ the difference is $h(c_1, K) + h(K, c_2) + h(c_1, c_2)$, as in Baek's proof. Baek
+states the lemma on a convex domain, where $K + c$ is not defined, and the paper's proof treats $h$ as
+bilinear (REPORT.md, E18).
+
+*Lean: [`lemma7_1_6`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L163).*
 
 ## 8.2 The curve area functional
 
@@ -391,7 +401,7 @@ $\lbrace \langle \cdot, u_t \rangle = h_K(t) \rbrace$, so $e_K(t) = \lbrace P \r
 If $P \notin K$, then $\alpha, \beta > 0$, so $v_K^+(a) \ne v_K^-(b)$ and the three points are not
 collinear, which is (1). The difference $v_K^-(b) - v_K^+(a) = \alpha v_a + \beta v_b$ is a positive
 multiple of $v_{t'}$ for some $t' \in (a, b)$, which is (2). (Baek's proof writes this difference
-with the opposite sign; [`REPORT.md`](../../REPORT.md), E26.) Let $T = X \cap H'$, the triangle with
+with the opposite sign; [`REPORT.md`](../../REPORT.md), E27.) Let $T = X \cap H'$, the triangle with
 vertices $v_K^+(a)$, $P$, $v_K^-(b)$. Then $K'$ lies in $T$, contains the side of $T$ on $l'$, and
 meets the other two sides only at $v_K^+(a)$ and $v_K^-(b)$. This gives (i), (iii) and (iv). For
 (ii), let $t \in (a, b)$. The function $\langle \cdot, u_t \rangle$ decreases along both sides of
@@ -668,7 +678,7 @@ $d(\mathbf{z} \times \mathbf{v})((a, b)) = \mathbf{z}(b) \times v_K^-(b) - \math
 These are twice the terms of Definition 8.20. $\square$
 
 In the paper's last line $\alpha u_t$ should read $\alpha v_t$, with $dv_t = -u_t\, dt$; the result is
-unaffected (REPORT.md, E26). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is
+unaffected (REPORT.md, E27). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is
 constrained (REPORT.md, Section 6).
 
 ### Theorem 8.22 (Mamikon areas are convex; Baek, Theorem 7.4.2)

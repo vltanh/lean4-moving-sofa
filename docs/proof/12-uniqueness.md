@@ -590,7 +590,7 @@ $\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(G)) = G$ because $G$ is a mono
 (Theorem 3.13; Figure 12.5). $\square$
 
 *Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L92), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
-[`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L168), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
+[`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L181), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
 
 ![Top: Gerver's cap filled blue and its horizontal translate drawn dashed in green, overlapping; at one normal t each has a dashed supporting line, the two lines parallel, and a double arrow between them is labelled a cos t. Bottom: the graph of f(t) = a cos t from 0 to π, positive up to π/2 and negative after](figures/12-uniqueness/translation.svg)
 

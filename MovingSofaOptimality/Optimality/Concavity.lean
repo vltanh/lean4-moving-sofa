@@ -848,7 +848,7 @@ arc at `φ^R`, `φ^L` and `π/2` by Lemma 7.3.4; this proof splits `|K| = ½ ∫
 (Theorem 7.1.3) at the atom `π/2` into `𝒥(𝐮_K^{0,π/2}) + σ_K({π/2})/2 + 𝒥(𝐮_K^{π/2,π})`, these
 functionals being `½ ∫ h_K dσ_K` over the open arcs by definition, and splits `𝐮_K^{0,π/2}` at
 `φ^R` and `φ^L` by Lemma 7.3.4 (`opt_area_eq_cca`), because the arc `𝐮_K^{0,π}` lies outside the
-range `a < b < a + π` of Theorem 7.3.2 and Lemma 7.3.4 (reason 1, E19) and the functionals of
+range `a < b < a + π` of Theorem 7.3.2 and Lemma 7.3.4 (reason 1, E20) and the functionals of
 convex arcs are `½ ∫ h_K dσ_K` by definition (reason 3). The atom gives `σ_K({π/2})/2` directly,
 so the paper's `𝒥(A_K(π/2), C_K(0)) = σ_K({π/2})/2` (Propositions 2.1.2 and 7.2.4) is not needed. -/
 theorem lemma8_3_5 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) :

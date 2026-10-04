@@ -9,15 +9,16 @@ The paper takes Gerver's sofa `G`, its rotation path `𝐱` and the angles `φ, 
 Romik, *Differential equations and exact solutions in the moving sofa problem* (Experimental
 Mathematics, 2018), Equations (25)–(44) (Definitions 8.1.2, 8.4.1–8.4.3).
 
-Romik's rotation path is glued from the general solutions (SOL1)–(SOL5) of his ODEs on the five
+Romik's rotation path is glued from the general solutions (SOL1)–(SOL5) of Romik's ODEs on the five
 phases `[0, φ)`, `[φ, θ)`, `[θ, π/2 - θ]`, `(π/2 - θ, π/2 - φ]`, `(π/2 - φ, π/2]`, with 22 real
 parameters `φ, θ, a_i, b_i, c_i, d_i, e_i, κ_j` subject to the equations (27)–(44): left-right
 symmetry, `𝐀(0) = (1, 0)` and `𝐱(0) = 0`, continuous differentiability at the phase boundaries, and
 the two contact conditions. Gerver's sofa is the shape `S_𝐱` of Romik's Equation (8).
 
-Romik solves the system numerically (his Table 1: `φ = 0.0391773…`, `θ = 0.6813015…`) and states,
-without proof, that the solution with `0 < φ < θ < π/4` is unique. We state results for every
-solution with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]` (the paper quotes `φ ∈ [0.039, 0.040]`).
+Romik solves the system numerically (Table 1 of Romik's paper: `φ = 0.0391773…`,
+`θ = 0.6813015…`) and states, without proof, that the solution with `0 < φ < θ < π/4` is unique.
+We state results for every solution with `φ ∈ [0.039, 0.04]` and `θ ∈ [0.68, 0.69]` (the paper
+quotes `φ ∈ [0.039, 0.040]`).
 -/
 
 @[expose] public section

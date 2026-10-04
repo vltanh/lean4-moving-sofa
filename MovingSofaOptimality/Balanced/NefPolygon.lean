@@ -689,8 +689,11 @@ private lemma nef_area_add_strip {X₁ X₂ Y : Set (ℝ × ℝ)} {t d M : ℝ} 
   exact hest
 
 /-- **Theorem 3.1.2** (`thm:simple-nef-polygon`). Pushing the `i`-th defining half-plane of a
-bounded simple Nef polygon `X` by `δ` changes its area by `𝓗¹(∂X ∩ l_i) δ + O_{X,i}(δ²)`. The
-paper's statement leaves the boundedness of `X` (finiteness of its area) implicit. -/
+bounded simple Nef polygon `X` by `δ` changes its area by `𝓗¹(∂X ∩ l_i) δ + O_{X,i}(δ²)`.
+
+The paper's statement omits that `X` is bounded, without which it is false: for an unbounded Nef
+polygon, such as a half-plane, the areas are infinite. The hypothesis `hb` adds it, and every
+application of the theorem, to `C_Θ(h)` and `𝒩_Θ(h)`, satisfies it (REPORT.md, Section 4). -/
 theorem theorem3_1_2 {n : ℕ} {X : Set (ℝ × ℝ)} {E : BoolFun n} {H : Fin n → HalfPlaneData}
     (hX : IsSimpleNefPolygon X E H) (hb : Bornology.IsBounded X) (i : Fin n) :
     ∃ ε > 0, ∃ C : ℝ, ∀ δ : ℝ, |δ| ≤ ε →

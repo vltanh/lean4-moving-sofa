@@ -2,7 +2,6 @@ module
 
 public import MovingSofaOptimality.Injectivity.BoundingArms
 public import MovingSofaOptimality.External.AreaFormula
-public import Mathlib.LinearAlgebra.BilinearForm.Basic
 public import Mathlib.Analysis.Calculus.Deriv.Basic
 
 /-!
@@ -151,14 +150,49 @@ def vectorDomain (V : Type) [AddCommGroup V] [Module ℝ V] : ConvexDomain V whe
   comb c v w := (1 - c) • v + c • w
   embeds := ⟨V, inferInstance, inferInstance, id, Function.injective_id, fun _ _ _ _ => rfl⟩
 
-/-- **Lemma 7.1.6** (`lem:modulo-linear-const`). For a bilinear `h` and constants `c₁, c₂`,
-`h(K, K) ≡_K h(K + c₁, K + c₂)`. -/
-theorem lemma7_1_6 {V : Type} [AddCommGroup V] [Module ℝ V] (h : LinearMap.BilinForm ℝ V)
-    (c₁ c₂ : V) : (vectorDomain V).EqModLinear (fun K => h K K) (fun K => h (K + c₁) (K + c₂)) := by
-  intro c _ v w
-  simp only [vectorDomain, realDomain, map_add, map_smul, LinearMap.add_apply,
-    LinearMap.smul_apply, smul_eq_mul]
-  ring
+/-- **Lemma 7.1.6** (`lem:modulo-linear-const`). For a convex-bilinear `h` and constants `c₁, c₂`,
+`h(K, K) ≡_K h(K + c₁, K + c₂)`.
+
+The formalization reads the lemma in a real vector space, because `K + c` is not defined in a
+general convex domain, which has only the operations `c_λ` (REPORT.md, E18). The lemma holds there
+for every convex-bilinear `h`, while the paper's proof, `g - f = h(c₁, K) + h(K, c₂) + h(c₁, c₂)`,
+covers bilinear `h`. The proof expands `g - f` as the paper does, with the additivity of `h` in
+each argument replaced by `h(x + d, y) = h(x, y) + h(d, y) - h(0, y)` (and likewise in `y`), which a
+convex-linear map on a vector space satisfies; the terms of the expansion are convex-linear in `K`.
+-/
+theorem lemma7_1_6 {V : Type} [AddCommGroup V] [Module ℝ V] {h : V → V → ℝ}
+    (hh : (vectorDomain V).IsConvexBilinear (vectorDomain V) realDomain h) (c₁ c₂ : V) :
+    (vectorDomain V).EqModLinear (fun K => h K K) (fun K => h (K + c₁) (K + c₂)) := by
+  -- a convex-linear `g : V → ℝ` is additive up to `g 0`: `g (x + d) + g 0` and `g x + g d` are
+  -- both twice the value of `g` at the midpoint of `x` and `d`
+  have hadd : ∀ g : V → ℝ, (vectorDomain V).IsConvexLinear realDomain g →
+      ∀ x d, g (x + d) = g x + g d - g 0 := by
+    intro g hg x d
+    have hc : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
+    have e := hg (1 / 2) hc (x + d) 0
+    rw [show (vectorDomain V).comb (1 / 2) (x + d) 0 = (vectorDomain V).comb (1 / 2) x d by
+      simp only [vectorDomain]; module, hg (1 / 2) hc x d] at e
+    simp only [realDomain] at e
+    linear_combination -2 * e
+  -- the paper's expansion of `f - g`, into terms that are convex-linear in `K`
+  have hF : ∀ K, h K K - h (K + c₁) (K + c₂) =
+      h K 0 - h K c₂ + h 0 (K + c₂) - h c₁ (K + c₂) := by
+    intro K
+    have e₁ : h (K + c₁) (K + c₂) = h K (K + c₂) + h c₁ (K + c₂) - h 0 (K + c₂) :=
+      hadd (fun x => h x (K + c₂)) (hh.2 (K + c₂)) K c₁
+    have e₂ : h K (K + c₂) = h K K + h K c₂ - h K 0 := hadd (h K) (hh.1 K) K c₂
+    linear_combination -e₁ - e₂
+  have htr : ∀ (c : ℝ) (v w : V), (vectorDomain V).comb c (v + c₂) (w + c₂) =
+      (vectorDomain V).comb c v w + c₂ := fun c v w => by simp only [vectorDomain]; module
+  intro c hc v w
+  have E₁ := hh.2 0 c hc v w
+  have E₂ := hh.2 c₂ c hc v w
+  have E₃ := hh.1 0 c hc (v + c₂) (w + c₂)
+  have E₄ := hh.1 c₁ c hc (v + c₂) (w + c₂)
+  rw [htr] at E₃ E₄
+  simp only [realDomain] at E₁ E₂ E₃ E₄ ⊢
+  rw [hF, hF v, hF w]
+  linear_combination E₁ - E₂ + E₃ - E₄
 
 /-! ### The convex domain of planar convex bodies -/
 

@@ -124,7 +124,7 @@ isometry has the form $p \mapsto R_\theta\, p + c$. By path lifting in the circl
 continuous curve in $\mathrm{SE}(2)$ lifts to a continuous real function, which may start at
 $\theta(0) = 0$ because $\Phi_0$ is a translation. So the two definitions agree. The formalization
 uses the lifted form from the start; [Chapter 13](13-bridge.md) proves the lifting for the motions
-of formal-conjectures. Baek's rotation angle (his Definition 2.3.3) is the clockwise angle
+of formal-conjectures. Baek's rotation angle (Baek's Definition 2.3.3) is the clockwise angle
 $\theta(0) - \theta(1) = -\theta(1)$ through which the sofa turns. The Challenge states the
 definition as [`Baek.IsMovingSofa`](../../Challenge.lean#L105), which leaves $\theta(1)$ free, and
 [`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L31) identifies it with [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59).
@@ -255,7 +255,7 @@ In particular $v_K^+$ is right-continuous and $v_K^-$ is left-continuous.
 [`tendsto_vminus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L578), [`tendsto_vint_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L584).*
 
 As printed, the paper's first display takes the limits of $v_K^+(t)$ and $v_K^-(u)$, where
-$v_K^+(s)$ and $v_K^-(s)$ are meant (REPORT.md, E26).
+$v_K^+(s)$ and $v_K^-(s)$ are meant (REPORT.md, E27).
 
 ![A close-up of the convex body of Figure 2.3 at the vertex v_K plus of t, where the orange edge e_K(t) ends on the supporting line l_K(t) and the boundary of K turns into an arc; three dashed supporting lines l_K(s), for angles s decreasing to t, touch the arc at blue dots and cross l_K(t) at orange circles; both the dots and the circles approach v_K plus of t](figures/02-preliminaries/vertex-limits.svg)
 
@@ -380,7 +380,7 @@ $o_\omega$ and $(-\tan\omega, 1)$. Its two upper sides lie on the lines $y = 1$ 
 $\langle p, u_\omega \rangle = 1$ and meet at $o_\omega$, since
 $(1 - \sin\omega)/\cos\omega = \tan(\pi/4 - \omega/2)$; its two lower sides lie on $y = 0$ and
 $\langle p, u_\omega \rangle = 0$ and meet at $O$ (Figure 2.5). For $\omega = \pi/2$, $V_\omega = H$,
-and $P_{\pi/2} = H$ is a strip. (The paper's table of symbols swaps $H$ and $V$; REPORT.md, E26.)
+and $P_{\pi/2} = H$ is a strip. (The paper's table of symbols swaps $H$ and $V$; REPORT.md, E27.)
 
 ### Definition 2.14 (standard position; Baek, Definitions 1.2.4 and 2.3.4)
 
@@ -543,7 +543,7 @@ $L = Q_L^+ \setminus Q_L^-$ and $f_{S,t}$ is a bijection. $\square$
 [`proposition2_2_2_wallA`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L140), [`proposition2_2_2_wallB`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L146), [`proposition2_2_2_wallC`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L153),
 [`proposition2_2_2_wallD`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L160), [`proposition2_2_2_qPlus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L167), [`proposition2_2_2_qMinus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L177).*
 
-The paper's formula for $Q_S^-(t)$ lacks the "$- 1$" in its second half-plane (REPORT.md, E26); the
+The paper's formula for $Q_S^-(t)$ lacks the "$- 1$" in its second half-plane (REPORT.md, E27); the
 table gives the correct one. So $Q_S^+(t)$ is the closed quarter-plane bounded by the two outer
 walls, with corner $\mathbf{y}_S(t)$, and $Q_S^-(t)$ the open quarter-plane bounded by the two inner
 walls, with corner $\mathbf{x}_S(t)$; both lie on the side of the walls opposite to $u_t$ and $v_t$.

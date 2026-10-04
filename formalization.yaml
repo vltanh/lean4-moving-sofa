@@ -141,8 +141,9 @@ status:
     results from the literature that the proofs use (Schneider's area formula, the solution of
     Romik's system, the weak convergence of surface area measures, Blaschke selection via Mathlib),
     and Theorem 8.4.1, which the paper states without proof. The paper's statements that are false
-    or meaningless as printed (REPORT.md, E1, E3, E6, E7, E9, E11, E13, E20, E22, E24, E25) are
-    formalized in their intended form; no result is weakened. Not formalized, because the
+    or meaningless as printed (REPORT.md, E1, E3, E6, E7, E9, E11, E13, E18, E21, E23, E25, E26)
+    are formalized in their intended form, and Theorem 3.1.2 gets the boundedness hypothesis that
+    the paper leaves out (REPORT.md, Section 4); no other result is weakened. Not formalized, because the
     formalization does not use them: the Jordan curve theorem and the area enclosed by a Jordan curve
     (Theorems 7.2.1, 7.2.3, Proposition 7.2.7), whose uses are replaced by direct area computations;
     Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
@@ -198,6 +199,11 @@ automation:
         and three compared every changed proof with the LaTeX source. Three statements changed to
         match the paper (Theorem 8.5.2 regained its hypothesis b < a + pi; Lemma 6.2.4 lost an unused
         hypothesis; Theorem 8.4.3 (2) gained the curve-area equalities of "as oriented curves").
+        What's next: the same session, with version 2.1.0 of the skill (commit 397f71c) and 3
+        sub-agents, one at a time, wrote the report's What's next section from a literature search,
+        moved the run log to CREDITS.md, added to the audit the twelve findings of another
+        formalization's notes that it had missed, and restored two statements (Lemma 7.1.6, Theorem
+        8.4.1 (4)) that were weaker than the paper's.
       cost:
         wall_time: >-
           Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
@@ -210,7 +216,8 @@ automation:
           sub-agent working time. Simplification: about 3 hours 10 minutes (2026-10-03 12:35 to
           15:45), with about 12.5 hours of sub-agent working time. Following Baek's proofs: about
           4 hours 15 minutes (2026-10-03 16:30 to 20:45), with about 6.3 hours of sub-agent working
-          time
+          time. What's next: about 1 hour 6 minutes (2026-10-03 20:46 to 21:52), with about 0.8 hours of
+          sub-agent working time. CREDITS.md gives the figures of each round
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
@@ -227,7 +234,9 @@ automation:
         simplify the Lean and the text proofs and make them more human-friendly, then a check
         that the proofs remain faithful to Baek's before committing. For following Baek's proofs,
         one instruction: after the skill gained rules requiring the proofs to follow the paper's and
-        every departure to be reported, bring this formalization in line with them.
+        every departure to be reported, bring this formalization in line with them. For What's next,
+        two approvals: to run Palomar's preflight, and to bring the formalization in line with the
+        skill's later versions.
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
@@ -261,7 +270,9 @@ fidelity:
     density; proposition5_1_4_as_stated_false refutes the printed version); Proposition 6.2.2
     (argument pi/2 - t); Lemma 6.5.5 (range (0, pi/2]); Lemma 8.1.7 (4)
     (phi^L for phi^R); Definition 8.3.3 (pi + phi^R for pi/2 + phi^R); Lemma 8.3.6 (3) (evaluation at
-    pi/2); Theorem 8.4.3 (2) (B(t3) for D(t3)); Proposition 8.4.4 (4) (shifted by pi/2).
+    pi/2); Theorem 8.4.3 (2) (B(t3) for D(t3)); Proposition 8.4.4 (4) (shifted by pi/2); Theorem 3.1.2
+    (the Nef polygon is bounded, a hypothesis that the paper leaves out; REPORT.md, Section 4); Lemma
+    7.1.6 (in a real vector space, where K + c is defined, for every convex-bilinear h; E18).
     (2) Readings: the plane is R x R and area is Lebesgue measure; a rigid motion is a continuous
     angle and translation, with the angle 0 at time 0 (equivalent to a continuous curve in SE(2) by
     lifting); the one-dimensional Hausdorff measure, used only for subsets of lines, is the length
@@ -279,7 +290,8 @@ fidelity:
     curve, is stated as the area of the region it bounds, which is what the paper uses it for; in
     Theorem 8.4.3 (2), "the tails are the curves D and B as oriented curves" is stated as the equality
     of the sets together with the equality of their curve area functionals, which is what Theorem
-    8.4.6 uses.
+    8.4.6 uses; Theorem 8.4.1 (4) is stated with one-sided derivatives at the junctions and the
+    endpoints of the phases, where the curves have no two-sided derivative.
     (3) Results about Gerver's sofa are stated for every solution of Romik's system in the box
     phi in [0.039, 0.04], theta in [0.68, 0.69] (the paper quotes phi in [0.039, 0.040]); the box
     contains exactly one solution.
@@ -291,9 +303,9 @@ fidelity:
     is wrong or has a gap: Theorem 6.1.2 (from Romik's equations, since Gerver's Theorem 2 does not give it, E12);
     Lemma 6.3.1 (N_Theta(K) in K by Theorem 3.4.10, since Theorem 3.5.4 does not apply, E15);
     Theorem 6.5.6 (the bounds at the endpoints by continuity, E17); Lemma 8.1.7 (2), (4) and
-    Theorem 8.2.4 (without N(K) in K, which the cap space K^i does not provide, E20); Lemma 8.3.5
-    (the area split at the atom pi/2, outside the range of Theorem 7.3.2, E19); Theorem 8.4.1
-    (stated without proof; proved from Romik's equations by interval arithmetic, E23). The step
+    Theorem 8.2.4 (without N(K) in K, which the cap space K^i does not provide, E21); Lemma 8.3.5
+    (the area split at the atom pi/2, outside the range of Theorem 7.3.2, E20); Theorem 8.4.1
+    (stated without proof; proved from Romik's equations by interval arithmetic, E24). The step
     needs mathematics that Mathlib lacks: Theorem 7.3.2, Lemma 7.3.5 (1) and Lemmas 8.2.2, 8.2.3
     (areas computed directly instead of with Jordan curves and Green's theorem); Theorem 8.1.1 (1)
     (horizontal slices instead of the Brunn-Minkowski inequality); Theorem 8.5.1 (integration by

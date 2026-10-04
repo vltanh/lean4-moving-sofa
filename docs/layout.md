@@ -13,6 +13,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
 | [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configuration and the Palomar metadata |
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
+| [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof and ChatGPT Pro's notes |
 | [`scripts/`](../scripts) | the axiom audit, the generators of two Lean files, the figures, and the documentation tools |

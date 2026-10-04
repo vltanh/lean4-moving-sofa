@@ -398,7 +398,7 @@ theorem lemma3_5_3 {X Y : Set (ℝ × ℝ)} {Xs Ys : ℕ → Set (ℝ × ℝ)}
 
 open Pointwise in
 /-- A point `p` of a convex body `A` lies within `d = sup_t |h_A(t) - h_B(t)|` of a point of the
-convex body `B`, in the max metric of `ℝ × ℝ`. As in Schneider's proof of his Lemma 1.8.14, with
+convex body `B`, in the max metric of `ℝ × ℝ`. As in the proof of Schneider's Lemma 1.8.14, with
 the ball of the max metric: `p` lies in every supporting half-plane of the convex body
 `B + B̄(0, d)`, as `p · u_t ≤ h_A(t) ≤ h_B(t) + d` and `d u_t ∈ B̄(0, d)`, hence in this body. -/
 private lemma mpc_exists_dist_le_hausdorffDist {A B : Set (ℝ × ℝ)} (hA : IsConvexBody A)

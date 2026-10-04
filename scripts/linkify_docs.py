@@ -3,8 +3,11 @@
 
 Every inline code span that names a declaration, a module, a file or a directory of this
 repository becomes a relative link; the link of a declaration points at the line of its
-name. Existing links are kept, except links to a line of a Lean file, which are
-recomputed: running the script after editing the code brings them up to date.
+name. A code span that names a module of the pinned Mathlib links to the module's page in
+Mathlib's documentation. Existing links are kept, except links to a line of a Lean file and
+links to the page of a Mathlib module, which are recomputed: running the script after editing
+the code brings them up to date. Fenced code blocks, headings and table headers are left
+alone, and the text of a link may run over several lines of a paragraph.
 
 Run from the repository root, after `lake build`:
 
@@ -28,7 +31,7 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process (glob patterns; docs/archive/ is left as it was).
-DOCS = ['README.md', 'REPORT.md', 'docs/*.md', 'docs/proof/*.md']
+DOCS = ['README.md', 'REPORT.md', 'CREDITS.md', 'docs/*.md', 'docs/proof/*.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'MovingSofaUniqueness',
               'MovingSofaBridge', 'MovingSofaBridge.GerverConstants']
@@ -44,6 +47,7 @@ PATH_BASES = {'': ['.github/workflows']}
 
 ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / '.lake' / 'build' / 'lib' / 'lean'
+MATHLIB = ROOT / '.lake' / 'packages' / 'mathlib'
 DOCS_URL = 'https://leanprover-community.github.io/mathlib4_docs/'
 
 # Lean's standard axioms, and the core modules that declare them.
@@ -53,11 +57,13 @@ CORE = {'propext': 'Init.Core', 'Classical.choice': 'Init.Prelude', 'Quot.sound'
 # script letters, and subscripts.
 LETTER = 'A-Za-z_\u0391-\u03a9\u03b1-\u03c9\u1f00-\u1ffe\u2100-\u214f\U0001d49c-\U0001d59f'
 IDENT = re.compile("^[%s][%s0-9'!?.\u2080-\u2089\u2090-\u209c\u1d62-\u1d6a\u2c7c]*$" % (LETTER, LETTER))
-TOKEN = re.compile(r'\[`([^`\n]+)`\]\(([^)\s]+)\)'  # a link whose text is a code span
-                   r'|\[[^\]\n]*\]\([^)\s]*\)'       # any other link
-                   r'|`([^`\n]+)`')                  # a code span
+# A link's destination may be written in angle brackets, which lets it contain parentheses.
+TOKEN = re.compile(r'\[`([^`\n]+)`\]\((<[^>\n]*>|[^)\s]+)\)'  # a link whose text is a code span
+                   r'|\[[^\[\]]*\]\((?:<[^>\n]*>|[^)\s]*)\)'  # any other link, perhaps over lines
+                   r'|`([^`\n]+)`')                          # a code span
 LINE_LINK = re.compile(r'^[^:#]+\.lean#L\d+$')
 TABLE_RULE = re.compile(r'^\|\s*:?-{3}')
+FENCE = re.compile(r'^\s*(`{3,}|~{3,})')
 
 
 def warn(message):
@@ -66,6 +72,11 @@ def warn(message):
 
 def module_file(module):
     return '/'.join(module.split('.')) + '.lean'
+
+
+def mathlib_page(module):
+    """The page of a Mathlib module in Mathlib's documentation, or None for another name."""
+    return DOCS_URL + module.replace('.', '/') + '.html' if module.startswith('Mathlib.') else None
 
 
 def load_locations():
@@ -119,7 +130,10 @@ class Linker:
             if (ROOT / module_file(text)).is_file():
                 return module_file(text)
         if text.startswith('Mathlib.'):
-            return DOCS_URL + text.replace('.', '/') + '.html'
+            # Only a module of the pinned Mathlib has a page; a proposed module has none.
+            if (MATHLIB / module_file(text)).is_file():
+                return mathlib_page(text)
+            return None
         if text in CORE:
             return DOCS_URL + CORE[text].replace('.', '/') + '.html#' + text
         return self.declaration(text)
@@ -138,9 +152,10 @@ class Linker:
     def token(self, match, doc, doc_dir):
         text, old, span = match.groups()
         if text is not None:
-            recompute = LINE_LINK.match(old) or (
-                not old.startswith(('http:', 'https:', 'mailto:', '#'))
-                and not (ROOT / doc_dir / old.partition('#')[0]).exists())
+            dest = old[1:-1] if old.startswith('<') else old
+            recompute = LINE_LINK.match(dest) or dest == mathlib_page(text) or (
+                not dest.startswith(('http:', 'https:', 'mailto:', '#'))
+                and not (ROOT / doc_dir / dest.partition('#')[0]).exists())
             if not recompute:
                 return match.group(0)
             new = self.link(text, doc_dir)
@@ -157,16 +172,43 @@ class Linker:
     def rewrite(self, doc):
         doc_dir = os.path.dirname(doc)
         lines = (ROOT / doc).read_text(encoding='utf-8').split('\n')
-        fenced = False
+        out, block, fence = [], [], None
+
+        def flush():
+            # The lines of a paragraph are rewritten together, so that a link may span them.
+            if block:
+                out.append(TOKEN.sub(lambda m: self.token(m, doc, doc_dir), '\n'.join(block)))
+                block.clear()
+
         for i, line in enumerate(lines):
-            if line.startswith('```'):
-                fenced = not fenced
+            marker = FENCE.match(line)
+            # A backtick fence's info string has no backticks; otherwise the line is inline code.
+            if marker and marker.group(1)[0] == '`' and '`' in line[marker.end():]:
+                marker = None
+            if fence:
+                # Only a fence of the same character, at least as long, closes the block.
+                if (marker and marker.group(1)[0] == fence[0] and len(marker.group(1)) >= len(fence)
+                        and not line[marker.end():].strip()):
+                    fence = None
+                out.append(line)
+                continue
+            if marker:
+                flush()
+                fence = marker.group(1)
+                out.append(line)
                 continue
             header = line.startswith('|') and i + 1 < len(lines) and TABLE_RULE.match(lines[i + 1])
-            if fenced or line.startswith('#') or header:
-                continue
-            lines[i] = TOKEN.sub(lambda m: self.token(m, doc, doc_dir), line)
-        return '\n'.join(lines)
+            if not line.strip() or line.startswith('#') or header:
+                flush()
+                out.append(line)
+            elif line.startswith('|'):
+                flush()
+                block.append(line)  # a table row is rewritten on its own
+                flush()
+            else:
+                block.append(line)
+        flush()
+        return '\n'.join(out)
 
 
 def main():

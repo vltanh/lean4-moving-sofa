@@ -332,7 +332,10 @@ definition of $v_K^\pm(t)$. $\square$
 Baek derives Proposition 2.1.2 from Schneider's Theorem 4.2.3 (Baek's Theorem 2.1.1), the
 description of $\sigma_K$ by lengths of edges recalled at the start of the chapter. The
 formalization does not state that theorem in this form (REPORT.md, Sections 7 and 9). Its arc-length form
-is step 1 of the proof of the area formula (§6.4).
+is step 1 of the proof of the area formula (§6.4). As Baek states it, for convex bodies that may have
+empty interior, the theorem fails for a segment, whose two edges with opposite normal angles are the
+same set (REPORT.md, Section 4); Baek uses it only for single angles and for arcs shorter than $\pi$,
+where it holds.
 
 ## 6.3 The differential Gauss–Minkowski theorem
 
@@ -353,7 +356,7 @@ The functions $h_K$, its primitive, $u_t$ and $v_t$ are Lipschitz, and $G_K$ is 
 products of functions of bounded variation. $\square$
 
 Baek's proof cuts $[0, 2\pi]$ into intervals on which each coordinate of $v_K^+$ is monotone. Its
-last interval, $[3\pi/4, 2\pi]$, is not one of them and has to be cut further (REPORT.md, E26).
+last interval, $[3\pi/4, 2\pi]$, is not one of them and has to be cut further (REPORT.md, E27).
 
 ### Theorem 6.12 (differential Gauss–Minkowski theorem; Baek, Theorem 5.2.2)
 
@@ -426,7 +429,7 @@ Figure 6.3. A general $K$ is a Hausdorff limit of polygons with the same edges a
 the weak convergence of the surface area measures (Theorem 6.14) passes the identity to the limit.
 The formalization's proof uses neither polygons nor weak convergence, since $\sigma_K$ is defined
 from $v_K^+$ (REPORT.md, Section 7). Baek's proof once writes
-$u_t\,\sigma$ for $v_t\,\sigma$ (REPORT.md, E26).
+$u_t\,\sigma$ for $v_t\,\sigma$ (REPORT.md, E27).
 
 With $(c, d] = (0, 2\pi]$, the periodicity of $v_K^+$ gives
 $\int_{(0, 2\pi]} v_t\,\mathrm{d}\sigma_K(t) = 0$. Rotating by a quarter turn,
@@ -446,11 +449,11 @@ For every convex body $K$,
 
 *Lean: [`area_eq_half_integral_supp`](../../MovingSofaOptimality/External/AreaFormula.lean#L558).*
 
-Baek cites the formula from Schneider's Remark 5.1.2 as his Theorem 7.1.3
+Baek cites the formula from Schneider's Remark 5.1.2 as Theorem 7.1.3 of the paper
 ([Theorem 8.4](08-convex-curves.md#theorem-84-the-area-is-quadratic-baek-theorem-713)) and uses it
-in his Theorem 7.3.2 and Lemma 8.3.5
+in Theorem 7.3.2 and Lemma 8.3.5 of the paper
 ([Theorem 8.16](08-convex-curves.md#theorem-816-the-curve-area-functional-of-a-convex-arc-baek-theorem-732)
-and [Lemma 9.24](09-optimality.md#lemma-924-the-area-as-a-sum-over-arcs-baek-lemma-835)). His
+and [Lemma 9.24](09-optimality.md#lemma-924-the-area-as-a-sum-over-arcs-baek-lemma-835)). Baek's
 Theorem 8.5.1
 ([Theorem 9.29](09-optimality.md#theorem-929-directional-derivatives-of-the-pieces-baek-theorems-851855)
 (1)) uses its mixed-volume form, Schneider's Equation (5.19). It is one of the three results from
@@ -522,9 +525,9 @@ function $f$,
 *Lean: [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L844), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
 
 Baek cites this from Schneider (Theorem 4.2.1) and uses it in four places:
-his Theorem 4.1.4
+Theorem 4.1.4
 ([Theorem 5.6](05-rotation-angle.md#theorem-56-horizontal-sides-of-balanced-maximum-caps-baek-theorem-414)),
-his Lemma 6.4.2 and Theorem 6.4.3
+Lemma 6.4.2 and Theorem 6.4.3
 ([Lemma 7.17](07-injectivity.md#lemma-717-convergence-of-the-arms-baek-lemma-642) and
 [Theorem 7.18](07-injectivity.md#theorem-718-limit-inequality-baek-theorem-643)), and the proof of
 Theorem 6.12. The formalization proves the theorem and uses it as Baek does in the first three,
