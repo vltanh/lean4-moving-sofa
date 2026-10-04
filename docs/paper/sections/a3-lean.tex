@@ -14,7 +14,7 @@ angle $-\theta(1)$ being left free).
 \item \path{GerverParams} holds the 22 parameters of Appendix~\ref{app:gerver}; \texttt{P.path} is the rotation path glued from the five curves of Appendix~\ref{app:gerver}; \texttt{P.IsSolution} is the conjunction of
 $0<\varphi<\theta<\pi/4$ and the four groups (1)--(4) of Appendix~\ref{app:gerver} (Romik's equations (27)--(44)); \texttt{P.InBox} says $\varphi\in[0.039,0.04]$, $\theta\in[0.68,0.69]$; and \texttt{gerverSofa P} $=$ \texttt{shapeOfPath P.path}.
 \end{itemize}
-The theorem: for every \texttt{P : GerverParams} with \texttt{P.IsSolution} and \texttt{P.InBox}, and every set $S\subset\R\times\R$ with \texttt{IsMovingSofa S} and
+The theorem states that for every \texttt{P : GerverParams} with \texttt{P.IsSolution} and \texttt{P.InBox}, and every set $S\subset\R\times\R$ with \texttt{IsMovingSofa S} and
 \texttt{volume S = volume (gerverSofa P)}, there are $\theta\in\R$ and $v\in\R\times\R$ such that the image $\{\mathrm{rot}_\theta p+v:p\in S\}$ equals \texttt{gerverSofa P}. The theorems \path{Baek.gerver_params_exists}
 and \path{Baek.gerver_params_unique} say that the box contains exactly one solution, so that \texttt{gerverSofa P} is Gerver's sofa $\Gs$, and \path{Baek.gerver_sofa_area} says that its area
 lies between $2.2192$ and $2.2199$.

@@ -2,7 +2,7 @@
 
 By \eqref{eq:contained} and \cref{thm:caps}, a rigid image of $S$ lies in a horizontal translate of $\Gs$ and has
 the same area. A closed subset of a set of finite area, with the same area, is the whole set if that set
-is the closure of its interior (\cref{lem:recover}), but not in general (\cref{fig:recovery}, Remark~\ref{rem:needed}). So it remains to show that $\Gs$ is.
+is the closure of its interior (\cref{lem:recover}), but not in general (\cref{fig:recovery}, Remark~\ref{rem:needed}). So it remains to show that $\Gs$ is the closure of its interior.
 
 \begin{lemma}[recovering a set from its area]\label{lem:recover}
 Let $X\subset Y\subset\R^2$ with $X$ closed, $Y=\clos(\inter Y)$, $\abs Y<\infty$ and $\abs X=\abs Y$. Then $X=Y$.
@@ -68,7 +68,7 @@ $\KG=\clos(\inter\KG)$. \cref{lem:envelope} applies with $K=\KG$.
 \includegraphics[width=0.92\linewidth]{figures/fig-recovery}
 \caption{\cref{prop:regular}. Left: Gerver's cap $\KG$ with its niche (orange) below the curve $\Gamma$ formed by $\bD$, $\xx$ and $\bB$; the dashed rectangle
 $[a,b]\times[0,1]$ lies in $\KG$, and the greatest height of $\Gamma$ is $0.664\ldots$. Every point $p$ of $\Gamma$ is a limit of points of
-$\Gs$ above it. Right: why $\clos(\inter Y)=Y$ is needed in \cref{lem:recover}: a closed subset of $Y$ with the same area misses
+$\Gs$ above it. Right: the hypothesis $\clos(\inter Y)=Y$ of \cref{lem:recover} is needed, because a closed subset of $Y$ with the same area misses
 no interior point.}
 \label{fig:recovery}
 \end{figure}
@@ -95,13 +95,13 @@ One direction is \cref{thm:main} together with $\abs S=\abs\Gs$ being the maximu
 \end{proof}
 
 \begin{remark}[no rotation is needed]\label{rem:translate}
-In \cref{thm:main} one can take $\theta=0$: every moving sofa $S$ with $\abs S=\abs\Gs$ is a translate of $\Gs$, and so has the rotation angle $\pi/2$. This refinement is
-not part of the formal statement. Indeed, a moving sofa lies after a translation in the strip $\R\times[0,1]$, so
+In \cref{thm:main} one can take $\theta=0$ (this refinement is not part of the formal statement): every moving sofa $S$ with $\abs S=\abs\Gs$ is a translate of $\Gs$, and so has the rotation angle $\pi/2$.
+Indeed, a moving sofa lies after a translation in the strip $\R\times[0,1]$, so
 $\abs{\ip{p-q}{u_{\pi/2}}}\le1$ for $p,q\in S$. In the proof above $\theta=\psi\in[0,\pi/2-\omega_0]$ and $S=R_{-\psi}(\Gs-v)$, so the width of $\Gs$ in the direction $u_{\pi/2+\psi}$ is at most one.
 But the width of $\Gs$ in the direction $u_r$ exceeds one for every $r\in[0,\pi]\setminus\{\pi/2\}$, and $\pi/2+\psi\in[\pi/2,\pi)$; so $\psi=0$.
 
 To see the claim about the width, let $a<b$ be as in \cref{prop:regular}, and let $x_-=\bC(\pi/2)_x$. The points $(a,1)=\bC(0)$ and $(b,1)=\bA(\pi/2)$ (the ends of the top edge of $\KG$), $(1,0)=\bA(0)$ (Appendix~\ref{app:gerver}, condition~(2))
-and $(x_-,0)=\bC(\pi/2)$ (the ends of the floor, by \eqref{eq:ends}, \cref{fact:arms}\ref{fact:arms:regular} and \cref{fact:gerver}\ref{fact:gerver:cap}) lie in $\KG$, and not in $\cN(\KG)$: the points of $\cN(\KG)$ have height less than $1$ and abscissa in $(a,b)$ (the
+and $(x_-,0)=\bC(\pi/2)$ (the ends of the floor, by \eqref{eq:ends}, \cref{fact:arms}\ref{fact:arms:regular} and \cref{fact:gerver}\ref{fact:gerver:cap}) lie in $\KG$. They do not lie in $\cN(\KG)$, because the points of $\cN(\KG)$ have height less than $1$ and abscissa in $(a,b)$ (the
 only points of $\Gamma$ with abscissa $a$ or $b$ are $\bD(t_0)$ and $\bB(t_5)$, of height $0$), while $x_-=-h_{\KG}(\pi)\le a<b\le h_{\KG}(0)=1$. So they lie in $\Gs$.
 For $r\in[0,\pi/2)$ the width of $\Gs$ in the direction $u_r$ is at least $\ip{(b,1)-(x_-,0)}{u_r}=(b-x_-)\cos r+\sin r>\cos r+\sin r\ge1$, because $b-x_->1$: indeed $x_-=\bC(\pi/2)_x=\xx(\pi/2)_x-1$, and
 $b=\bB(t_5)_x>\bB(t_3)_x=\xx(t_1)_x>\xx(t_4)_x\ge\xx(\pi/2)_x$ by \cref{fact:gerver}\ref{fact:gerver:niche}.

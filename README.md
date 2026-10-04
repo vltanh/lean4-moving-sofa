@@ -203,7 +203,9 @@ the audit and the route check, and checks the documentation on every push.
 
 The library is registered in the [Palomar](https://palomar-registry.org) registry as
 [PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008): version 1 registers the optimality (commit `d0b42d2`),
-and version 2 adds the uniqueness (commit `cf4feff`). Palomar checks the proofs against
+version 2 adds the uniqueness (commit `cf4feff`), version 3 adds the bridge to formal-conjectures, which brings the
+Challenge to twelve theorems (commit `eb93296`), and version 4 registers the simplified proofs that follow Baek's
+arguments (commit `16653ae`). Palomar checks the proofs against
 [`Challenge.lean`](Challenge.lean), which imports only Mathlib; [`comparator.json`](comparator.json) selects its twelve theorems, and
 [`formalization.yaml`](formalization.yaml) records provenance, authorship and AI use. The workflow
 [`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's mechanical verification on a commit
@@ -222,5 +224,5 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill, at the request of
   The-Anh Vu-Le, who directed it.
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
-  rounds between 1 and 4 October 2026, with up to 26 sub-agents in a round.
+  rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

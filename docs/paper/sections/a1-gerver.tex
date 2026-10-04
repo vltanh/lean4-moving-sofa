@@ -3,7 +3,7 @@
 We recall Romik's description of Gerver's sofa~\cite[Section~4]{Romik18}, in the form used by~\cite{Baek} and by the formalization. Let
 $t_0=0<t_1=\varphi<t_2=\theta<t_3=\pi/2-\theta<t_4=\pi/2-\varphi<t_5=\pi/2$. A \emph{parameter tuple} consists of the angles $\varphi,\theta$,
 numbers $a_1,a_2,b_1,b_2,c_1,c_2,d_1,d_2,e_1,e_2$ and points $\kappa_1,\dots,\kappa_5\in\R^2$ (22 real parameters). The \emph{rotation path} $\xx:[0,\pi/2]\to\R^2$
-is $\xx=\xx_i$ on the $i$th phase, where the phases are $[0,t_1)$, $[t_1,t_2)$, $[t_2,t_3]$, $(t_3,t_4]$ and $(t_4,t_5]$ (for a solution the pieces agree at the ends of the phases, by condition~(3) below, so the conventions at the ends matter only for other tuples), and
+is $\xx=\xx_i$ on the $i$th phase, where the phases are $[0,t_1)$, $[t_1,t_2)$, $[t_2,t_3]$, $(t_3,t_4]$ and $(t_4,t_5]$, and
 \begin{align*}
   \xx_1(t)&=R_t\bigl(a_1\cos t+a_2\sin t-1,\ -a_2\cos t+a_1\sin t-\tfrac12\bigr)+\kappa_1,\\
   \xx_2(t)&=R_t\bigl(-\tfrac{t^2}4+b_1t+b_2,\ \tfrac t2-b_1-1\bigr)+\kappa_2,\\
@@ -11,6 +11,7 @@ is $\xx=\xx_i$ on the $i$th phase, where the phases are $[0,t_1)$, $[t_1,t_2)$, 
   \xx_4(t)&=R_t\bigl(-\tfrac t2+d_1-1,\ -\tfrac{t^2}4+d_1t+d_2\bigr)+\kappa_4,\\
   \xx_5(t)&=R_t\bigl(e_1\cos t+e_2\sin t-\tfrac12,\ -e_2\cos t+e_1\sin t-1\bigr)+\kappa_5 .
 \end{align*}
+The pieces of a solution agree at the ends of the phases, by condition~(3) below, so the conventions at the ends matter only for other tuples.
 For a differentiable curve $\xx$ let $\alpha=\ip{\xx'}{u_t}$, $\beta=\ip{\xx'}{v_t}$, and let $\bA,\bB,\bC,\bD$ be as in \cref{sec:gerver}. The tuple \emph{solves Romik's
 equations} if $0<\varphi<\theta<\pi/4$ and:
 \begin{enumerate}[label=(\arabic*)]

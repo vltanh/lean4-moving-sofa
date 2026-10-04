@@ -3,13 +3,13 @@
 This section fixes the notation and records the results that the proof uses and does not prove; we call
 them \emph{Facts}. Most are results of Baek's paper~\cite{Baek}, quoted in the form in which we use them
 and with the numbering of version~1 of the preprint (chapter.section.number). A few printed statements need a
-correction, and a few are used for objects slightly more general than those of their printed statements;
-each such place is noted with a label E$n$, the number of the correction in the audit that accompanies the
-formalization~\cite{Companion}, and Appendix~\ref{app:corrections} lists them. Some corrections come from
+correction, and a few are used for objects slightly more general than those of their printed statements.
+Each such place is noted with a label E$n$, the number of the correction in the audit that accompanies the
+formalization~\cite{Companion}; Appendix~\ref{app:corrections} lists them. Some corrections come from
 the notes of another formalization of Baek's proof~\cite{Cureton}. Three Facts are known to us only through
 the formalization, because the printed proof is missing or invalid, or because the statement is not in~\cite{Baek}: \cref{fact:Q}\ref{fact:Q:triple} (E21),
 \cref{fact:gerver} (E12, E24) and \cref{fact:height}; they are proved in~\cite{Companion}, and
-\cref{sec:formalization} says what that means. The reader who knows~\cite{Baek} can skim this section and
+\cref{sec:formalization} says what the machine check does and does not establish. The reader who knows~\cite{Baek} can skim this section and
 return to it for the notation.
 
 \subsection{Notation and convex bodies}
@@ -55,8 +55,9 @@ converges to a convex body (Blaschke's selection theorem), and $K\mapsto\abs K$ 
 \end{enumerate}
 \end{fact}
 
-Baek's Thm.~2.1.3 states the limits in \ref{fact:convex:vertices}; the formulas for the one-sided derivatives follow from them and
-from $\ip{v_K(t,s)}{v_t}=\bigl(h_K(s)-h_K(t)\cos(s-t)\bigr)/\sin(s-t)$, and the printed statement has a misprint (E27).
+Baek's Thm.~2.1.3 states the limits in \ref{fact:convex:vertices}, and the printed statement has a misprint (E27). The formulas for the
+one-sided derivatives follow from these limits and from
+$\ip{v_K(t,s)}{v_t}=\bigl(h_K(s)-h_K(t)\cos(s-t)\bigr)/\sin(s-t)$.
 From \ref{fact:convex:sigma} one reads off, for $a<b$,
 \begin{equation}\label{eq:sigma-open}
   \sigma_K\bigl((a,b)\bigr)=\ip{v_K^-(b)}{v_b}-\ip{v_K^+(a)}{v_a}+\int_a^bh_K .
@@ -151,8 +152,8 @@ $(x,y)\mapsto(-x,y)$. The \emph{mirror image} of a cap $K$ is $K^{\mir}=M_\omega
 \centering
 \includegraphics[width=0.74\linewidth]{figures/fig-cap}
 \caption{A cap, its niche and a supporting hallway: Gerver's cap $K=\KG$ (blue), its niche $\cN(K)$ (orange), and the
-supporting hallway $L_K(t)$ at $t=0.62$ (grey), whose outer walls $a_K(t)$ and $c_K(t)$ touch $K$ and meet at the outer
-corner $\yy_K(t)$, and whose inner walls $b_K(t)$ and $d_K(t)$ meet at the inner corner $\xx_K(t)$, on the boundary of the
+supporting hallway $L_K(t)$ at $t=0.62$ (grey). The outer walls $a_K(t)$ and $c_K(t)$ of the hallway touch $K$ and meet
+at the outer corner $\yy_K(t)$; its inner walls $b_K(t)$ and $d_K(t)$ meet at the inner corner $\xx_K(t)$, on the boundary of the
 niche. $Q^-_K(t)$ is the open quarter-plane below the inner corner; the niche is the union of these quarter-planes over
 $t\in(0,\pi/2)$, cut at the $x$-axis.}
 \label{fig:cap}
@@ -174,12 +175,12 @@ $\sigma_{K^{\mir}}(E)=\sigma_K(\omega+\pi/2-E)$ for Borel sets $E$. \baek{Prop.~
 \end{enumerate}
 \end{fact}
 
-Three places need a remark. The proof of \ref{fact:monotone:envelope} uses Def.~2.3.9, which defines the left and the right side of a line
+The proof of \ref{fact:monotone:envelope} uses Def.~2.3.9, which defines the left and the right side of a line
 for lines not parallel to the $y$-axis, where it needs the $x$-axis (E1). In \ref{fact:monotone:cap}, the union over $t\in[0,\omega]$ in
 Thm.~2.4.2 and the union over $(0,\omega)$ in the definition of the niche agree after intersection with $F_\omega$, and $\cC(S)$ is bounded also for $\omega=\pi/2$, which Baek does not show (E2). In
 \ref{fact:monotone:mirror}, Prop.~2.5.4 prints $?_{K^{\mir}}(t)=M_\omega(?_K(\omega-t))$ for each of the walls $a,b,c,d$ and the ends $W,Z$, whereas $M_\omega$
 exchanges $a\leftrightarrow c$, $b\leftrightarrow d$ and $W\leftrightarrow Z$, and the identity for the vertices has $K^{\mir}$ in place of $K$ on
-the right (E3); \ref{fact:monotone:mirror} uses none of this.
+the right (E3). Part \ref{fact:monotone:mirror} uses none of this.
 
 Two more facts about caps are used without proof in Baek's \baek{Lemma~2.5.6}, \baek{Lemma~3.4.8} and \baek{Thm.~2.5.8} (E4): that $O$ and $o_\omega$ lie in every cap if $\omega<\pi/2$
 (the statement about $o_\omega$ is not in the audit), and where the ends of the \emph{upper boundary} $\bigcup_{t\in[0,\omega+\pi/2]}e_K(t)$ of a cap $K$ are. Here
@@ -241,9 +242,9 @@ is the intersection of its supporting half-planes $H_K(s)$ at these normal angle
   \cN_\Theta(K)=F_\omega\cap\bigcup_{t\in\Theta}Q_K^-(t),\\
   \cA_\Theta(K)&=\abs{\cC_\Theta(K)}-\abs{\cN_\Theta(K)} .
 \end{align*}
-Here the \emph{fan} $F_\omega$, and not the parallelogram $P_\omega$, cuts the polygon niche: the
-printed \baek{Def.~3.2.5} has $P_\omega$ and with it \baek{Prop.~3.3.5} and \baek{Lemma~3.4.2} are
-false, whereas the results of \baek{Ch.~3} hold with $F_\omega$, as the formalization proves (E6).
+Here the fan $F_\omega$ cuts the polygon niche. The printed \baek{Def.~3.2.5} has the parallelogram $P_\omega$
+in place of $F_\omega$, and with that definition \baek{Prop.~3.3.5} and \baek{Lemma~3.4.2} are false, whereas the
+results of \baek{Ch.~3} hold with $F_\omega$, as the formalization proves (E6).
 
 \begin{fact}[the polygon bound]\label{fact:polygon}
 For every cap $K$ and angle set $\Theta$, $\cC_\Theta(K)$ is a polygon cap that contains $K$ and has the
@@ -264,7 +265,7 @@ $C_K^+(\omega)$ to $A_K^-(0)$ (see \eqref{eq:ends}), along which the abscissa in
 and an open half-line \baek{Thm.~3.4.4}.
 For $t\in\Theta^\diamond$ let $\tau_K(t)$ be the total length of the segments of $\mathbf p_K$ with normal
 angle $t$, and $\sigma_K(t)=\abs{e_K(t)}$ the length of the edge of $K$ with normal angle $t$.
-The following is about every polygon cap; maximality plays no role in it.
+The following holds for every polygon cap, maximal or not.
 
 \begin{fact}[sides of the polygon niche]\label{fact:sides}
 Let $K\in\Kc_\Theta$.
@@ -335,7 +336,7 @@ $\abs K\ge11/5$.
 \end{definition}
 
 Condition (3) implies that the inner corner moves strictly to the left, so the path of the inner corner has
-no self-intersections. We use the following.
+no self-intersections.
 
 \begin{fact}[arms]\label{fact:arms}
 Let $K\in\Kc_{\pi/2}$.
@@ -354,7 +355,7 @@ $[0,\pi/2]$; $f_K(0)=g_K(\pi/2)=1$, and $\xx_K'(t)=-(f_K(t)-1)u_t+(g_K(t)-1)v_t$
 \end{enumerate}
 \end{fact}
 
-In \ref{fact:arms:mirror} the printed statement forgets that the reflection reverses the angle (E13); in \ref{fact:arms:deriv} the right derivative is called the left one, and the second display of the printed theorem is about the left derivative (E14).
+In \ref{fact:arms:mirror} the printed statement omits that the reflection reverses the angle (E13). In \ref{fact:arms:deriv} the right derivative is called the left one, and the second display of the printed theorem is about the left derivative (E14).
 Let
 \[
   k_0(x)=\max\Bigl(\abs{x-1},\tfrac{\abs{x-1}+1}2\Bigr),\qquad m_0(x)=x-k_0(x) .
@@ -421,8 +422,8 @@ is convex. \baek{Lemma~8.3.3, Lemma~8.3.4, Lemma~8.3.7, Thm.~8.3.1, Thm.~8.3.2, 
 \end{fact}
 
 Part \ref{fact:Q:triple} is stated in \cite{Baek} with a proof that uses $\cN(K)\subset K$, which $\Ki$ does not
-provide; the statement is true and has a proof that avoids it, which is in~\cite{Companion} (E21). Also \baek{Thm.~8.1.1} (convexity of $\Ki$) uses
-the Brunn--Minkowski inequality, and it holds as stated.
+provide. The statement is true, and~\cite{Companion} proves it without this inclusion (E21). Baek's \baek{Thm.~8.1.1} (convexity of $\Ki$), which uses
+the Brunn--Minkowski inequality, holds as stated.
 
 \subsection{Gerver's sofa}\label{sec:gerver}
 
@@ -467,7 +468,7 @@ numerically''), and proves \baek{Thm.~6.1.2} by a misreading of a theorem of Ger
 statements are true; the formalization proves them from Romik's equations by interval
 arithmetic~\cite{Companion}. Baek's \baek{Thm.~8.4.1\,(2)} describes the niche as the region enclosed by $\bB$ reversed, $\xx|_{[t_1,t_4]}$, $\bD$ reversed and the segment of
 the $x$-axis from $\bD(t_0)$ to $\bB(t_5)$. That open region omits the open segment of the $x$-axis between $\bD(t_0)$ and $\bB(t_5)$, which lies in $\cN(\KG)$ because $F_{\pi/2}$ is closed. Because of the monotonicity of the abscissa,
-$\cN(\KG)$ is the set of points of the closed upper half-plane that lie strictly below the curve $\Gamma$, which is the identity in \ref{fact:gerver:niche}; this exact form is proved in~\cite{Companion}. We also use one
+$\cN(\KG)$ is the set of points of the closed upper half-plane that lie strictly below the curve $\Gamma$. This is the identity in \ref{fact:gerver:niche}, and~\cite{Companion} proves it in this form. We also use one
 numerical fact that is not in~\cite{Baek}:
 
 \begin{fact}[height of the rotation path]\label{fact:height}

@@ -134,6 +134,8 @@ How it was made:
 - Writing the text found a sign slip in the paper's proof of Lemma 7.3.1, two inaccuracies in the
   audit, now corrected in [`REPORT.md`](REPORT.md), and a few docstrings that misdescribed their
   declarations. No statement or proof changed.
+- Version 3 of the Palomar entry registers commit `eb93296`, the end of this round, at 11:46. Its
+  Challenge states twelve theorems, seven more than in version 2: the bridge to formal-conjectures.
 
 Figures, from 09:34 to 10:55:
 - elapsed time: 1 hour 21 minutes;
@@ -236,6 +238,8 @@ How it was made:
 - A third sub-agent restored two Lean statements that were weaker than the paper's: Lemma 7.1.6 now
   holds for every convex-bilinear map on a real vector space, and Theorem 8.4.1 (4) includes the
   one-sided derivatives at the junctions and at the ends of the phases.
+- Version 4 of the Palomar entry registers commit `16653ae`, the end of this round, on 4 October at
+  05:16: the Challenge of version 3, with the simplified proofs that follow Baek's arguments.
 
 Figures, from 20:46 to 21:52:
 - elapsed time: 1 hour 6 minutes;
