@@ -88,7 +88,7 @@ Condition (3) says that the arm lengths exceed 1. Indeed
 $\mathbf{x}_K'(t) = -(f_K(t) - 1)\, u_t + (g_K(t) - 1)\, v_t$
 ([Proposition 7.22](07-injectivity.md#proposition-722-regularity-of-the-corners-baek-proposition-646)),
 so (3) gives $f_K(t) > 1$ and $g_K(t) > 1$ on $(0, \pi/2)$
-([`opt_arm_gt_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L1044)).
+([`opt_arm_gt_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L1046)).
 
 ### Theorem 9.2 (these caps form a convex domain; Baek, Theorem 8.1.1)
 
@@ -123,9 +123,9 @@ $\lvert K \rvert \ge \mathcal{A}(K) \ge \mathcal{A}(K_G) = \lvert G \rvert = 2.2
 proves from Romik's equations), and
 $\lvert K_G \rvert \ge \mathcal{A}(K_G) = \lvert G \rvert \ge 2.2$. $\square$
 
-*Lean: [`theorem8_1_1_convex`](../../MovingSofaOptimality/Optimality/Domain.lean#L474),
-[`theorem8_1_1_balanced`](../../MovingSofaOptimality/Main.lean#L42),
-[`theorem8_1_1_gerver`](../../MovingSofaOptimality/Main.lean#L55),
+*Lean: [`theorem8_1_1_convex`](../../MovingSofaOptimality/Optimality/Domain.lean#L476),
+[`theorem8_1_1_balanced`](../../MovingSofaOptimality/Main.lean#L43),
+[`theorem8_1_1_gerver`](../../MovingSofaOptimality/Main.lean#L56),
 [`opt_comb_area`](../../MovingSofaOptimality/Optimality/Domain.lean#L396),
 [`opt_comb_isCap`](../../MovingSofaOptimality/Optimality/Domain.lean#L232),
 [`opt_comb_injectivity`](../../MovingSofaOptimality/Optimality/Domain.lean#L337),
@@ -139,7 +139,7 @@ Gerver's sofa $G$ is the shape of its rotation path ([Chapter 10](10-gerver.md))
 $\varphi^\mathrm{R} = \varphi$ and $\varphi^\mathrm{L} = \pi/2 - \varphi$.
 
 *Lean: [`definition8_1_2_exists`](../../MovingSofaOptimality/Main.lean#L32),
-[`definition8_1_2_unique`](../../MovingSofaOptimality/Main.lean#L36),
+[`definition8_1_2_unique`](../../MovingSofaOptimality/Main.lean#L37),
 [`GerverParams.IsSolution`](../../MovingSofaOptimality/Gerver/Defs.lean#L92),
 [`GerverParams.InBox`](../../MovingSofaOptimality/Gerver/Defs.lean#L108),
 [`gerverSofa`](../../MovingSofaOptimality/Gerver/Defs.lean#L119).*
@@ -161,8 +161,8 @@ $\mathcal{L}$ is the set of triples $(K, B, D)$ of convex bodies such that
 4. $h_K(\pi/2 + t) + h_D(3\pi/2 + t) \le 1$ for $t \in [0, \varphi^\mathrm{L}]$;
 5. equality holds in (4) at $t = 0$ and $t = \varphi^\mathrm{L}$.
 
-*Lean: [`MovingSofaOptimality.InL`](../../MovingSofaOptimality/Optimality/Domain.lean#L483),
-[`LTriple`](../../MovingSofaOptimality/Optimality/Domain.lean#L530).*
+*Lean: [`MovingSofaOptimality.InL`](../../MovingSofaOptimality/Optimality/Domain.lean#L485),
+[`LTriple`](../../MovingSofaOptimality/Optimality/Domain.lean#L532).*
 
 Condition (2) says that $B$ lies on the far side of the inner wall $b_K(t)$, the line at distance 1
 from $l_K(t)$; (4) is the same for $D$ and $d_K(t)$.
@@ -176,9 +176,9 @@ preserved, and conditions (2) to (5) are linear in the support functions
 ([Theorem 8.3](08-convex-curves.md#theorem-83-convex-linear-quantities-baek-theorem-712) (1)).
 $\square$
 
-*Lean: [`proposition8_1_2`](../../MovingSofaOptimality/Optimality/Domain.lean#L505),
-[`lDomain`](../../MovingSofaOptimality/Optimality/Domain.lean#L560),
-[`lTriple_embeds`](../../MovingSofaOptimality/Optimality/Domain.lean#L543).*
+*Lean: [`proposition8_1_2`](../../MovingSofaOptimality/Optimality/Domain.lean#L507),
+[`lDomain`](../../MovingSofaOptimality/Optimality/Domain.lean#L562),
+[`lTriple_embeds`](../../MovingSofaOptimality/Optimality/Domain.lean#L545).*
 
 ### Definition 9.6 (the right and left bodies; Baek, Definitions 8.1.4–8.1.6)
 
@@ -211,16 +211,16 @@ $P_K^\mathrm{L} = H \cap H_K(\pi/2 + \varphi^\mathrm{L}) \cap \breve H_K^\mathrm
 
 *Lean: [`halfB`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L350),
 [`halfD`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L354),
-[`rightBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L565),
-[`leftBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L568),
-[`hRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L572),
-[`hLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L575),
-[`wRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L577),
-[`zLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L581),
-[`xRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L579),
-[`xLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L583),
-[`paraR`](../../MovingSofaOptimality/Optimality/Domain.lean#L586),
-[`paraL`](../../MovingSofaOptimality/Optimality/Domain.lean#L588).*
+[`rightBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L567),
+[`leftBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L570),
+[`hRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L574),
+[`hLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L577),
+[`wRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L579),
+[`zLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L583),
+[`xRight`](../../MovingSofaOptimality/Optimality/Domain.lean#L581),
+[`xLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L585),
+[`paraR`](../../MovingSofaOptimality/Optimality/Domain.lean#L588),
+[`paraL`](../../MovingSofaOptimality/Optimality/Domain.lean#L590).*
 
 ![Gerver's cap K, light blue, between the x-axis and the line y = 1, with its niche shaded light orange under an orange arch, the core x_K. Two green bodies B and D fill the parts of the cap to the right of the dashed, nearly vertical line b_K^R and to the left of the dashed line d_K^L. The lower boundaries of B and D near the x-axis are short green curves, the tails b_B and d_D; the tail b_B runs from the end x_K^R = X_B of the core down to W_B on the x-axis, and d_D from Z_D on the axis up to the other end x_K^L = Y_D. The lines b_K^R and d_K^L meet the x-axis at W_K^R and Z_K^L](figures/09-optimality/bodies.svg)
 
@@ -242,7 +242,7 @@ on the $x$-axis is the segment from $W_K^\mathrm{R}$ to $W_K^\mathrm{R} + (\sec 
 *Proof.* The description is the definition. A point $(x, 0)$ lies in it if and only if
 $h_K(\varphi) - 1 \le x \cos \varphi \le h_K(\varphi)$. $\square$
 
-*Lean: [`lemma8_1_3`](../../MovingSofaOptimality/Optimality/Domain.lean#L641).*
+*Lean: [`lemma8_1_3`](../../MovingSofaOptimality/Optimality/Domain.lean#L643).*
 
 ### Lemma 9.8 (the cut half-planes are disjoint in the cap; Baek, Lemma 8.1.4)
 
@@ -264,7 +264,7 @@ h_K(\varphi) + h_K(\pi - \varphi) \le 2 + 2 p_y \sin \varphi \le 2 + 2 \sin \var
 if $p \in K$. Then $\lvert K \rvert \le 2 \sec \varphi + 2 \tan \varphi = 2.08\ldots < 2.2$, a
 contradiction. $\square$
 
-*Lean: [`lemma8_1_4`](../../MovingSofaOptimality/Optimality/Domain.lean#L675).*
+*Lean: [`lemma8_1_4`](../../MovingSofaOptimality/Optimality/Domain.lean#L677).*
 
 ### Lemma 9.9 (the feet of the cut lines; Baek, Lemma 8.1.5)
 
@@ -281,7 +281,7 @@ $[-h_K(\pi), h_K(\varphi)/\cos \varphi] \times [0, 1]$, a rectangle of width
 $h_K(\pi) + h_K(\varphi)/\cos \varphi \le \sec \varphi < 2.2$, against $\lvert K \rvert \ge 2.2$.
 The point $Z_K^\mathrm{L}$ is the mirror case. $\square$
 
-*Lean: [`lemma8_1_5`](../../MovingSofaOptimality/Optimality/Domain.lean#L795).*
+*Lean: [`lemma8_1_5`](../../MovingSofaOptimality/Optimality/Domain.lean#L797).*
 
 The paper argues that the bottom edge has length at least $\lvert K \rvert \ge 2.2$ without
 justification. This holds because the width of a cap with rotation angle $\pi/2$ does not increase
@@ -324,8 +324,8 @@ so $\langle p, u_\varphi \rangle < \langle \mathbf{x}_K(t), u_\varphi \rangle < 
 against $p \in \breve H_K^\mathrm{R}$. The statement on wedges follows by intersecting with
 $H_+(\pi/2, 0)$. (2) is the mirror argument. $\square$
 
-*Lean: [`lemma8_1_6_right`](../../MovingSofaOptimality/Optimality/Domain.lean#L879),
-[`lemma8_1_6_left`](../../MovingSofaOptimality/Optimality/Domain.lean#L914).*
+*Lean: [`lemma8_1_6_right`](../../MovingSofaOptimality/Optimality/Domain.lean#L881),
+[`lemma8_1_6_left`](../../MovingSofaOptimality/Optimality/Domain.lean#L916).*
 
 ### Lemma 9.11 (the constraints for the right and left bodies; Baek, Lemma 8.1.7)
 
@@ -338,14 +338,14 @@ Let $K \in \mathcal{K}^\mathrm{i}$, $B = B_K$ and $D = D_K$.
 4. Equality holds in (3) at $t = 0$ and $t = \varphi^\mathrm{L}$; so $l_D(3\pi/2)$ is the $x$-axis
    and $l_D(3\pi/2 + \varphi^\mathrm{L}) = d_K^\mathrm{L}$.
 
-*Lean: [`lemma8_1_7_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L954),
-[`lemma8_1_7_two`](../../MovingSofaOptimality/Optimality/Domain.lean#L1138),
-[`lemma8_1_7_three`](../../MovingSofaOptimality/Optimality/Domain.lean#L1175),
-[`lemma8_1_7_four`](../../MovingSofaOptimality/Optimality/Domain.lean#L1296),
-[`opt_exists_rightBody_on_line`](../../MovingSofaOptimality/Optimality/Domain.lean#L1061),
-[`opt_exists_normal_of_isMax`](../../MovingSofaOptimality/Optimality/Domain.lean#L969),
-[`opt_supp_interp`](../../MovingSofaOptimality/Optimality/Domain.lean#L1032),
-[`opt_arm_gt_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L1044).*
+*Lean: [`lemma8_1_7_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L956),
+[`lemma8_1_7_two`](../../MovingSofaOptimality/Optimality/Domain.lean#L1147),
+[`lemma8_1_7_three`](../../MovingSofaOptimality/Optimality/Domain.lean#L1184),
+[`lemma8_1_7_four`](../../MovingSofaOptimality/Optimality/Domain.lean#L1310),
+[`opt_exists_rightBody_on_line`](../../MovingSofaOptimality/Optimality/Domain.lean#L1063),
+[`opt_exists_normal_of_isMax`](../../MovingSofaOptimality/Optimality/Domain.lean#L971),
+[`opt_supp_interp`](../../MovingSofaOptimality/Optimality/Domain.lean#L1034),
+[`opt_arm_gt_one`](../../MovingSofaOptimality/Optimality/Domain.lean#L1046).*
 
 The paper writes "$t = 0, \varphi^\mathrm{R}$" in (4); $\varphi^\mathrm{L}$ is meant. Its proof of
 (2) and (4) uses $\mathcal{N}(K) \subseteq K$, which caps in $\mathcal{K}^\mathrm{i}$ need not
@@ -409,7 +409,7 @@ For $K \in \mathcal{K}^\mathrm{i}$, $(K, B_K, D_K) \in \mathcal{L}$.
 $A_K(0)$ and $C_K(\pi/2)$ (proof of Lemma 9.11). So they are convex bodies, and Definition 9.4 (1)
 holds. Conditions (2) to (5) are Lemma 9.11. $\square$
 
-*Lean: [`theorem8_1_8`](../../MovingSofaOptimality/Optimality/Domain.lean#L1335).*
+*Lean: [`theorem8_1_8`](../../MovingSofaOptimality/Optimality/Domain.lean#L1349).*
 
 The map $K \mapsto (K, B_K, D_K)$ is not convex-linear. Near its tail, $B_K$ is cut out by the
 half-planes $\langle p, u_{\pi + t} \rangle \le 1 - h_K(t)$: it is the Wulff shape (Aleksandrov
@@ -481,7 +481,7 @@ For $K \in \mathcal{K}^\mathrm{i}$, $B = B_K$ and $D = D_K$,
 \lvert \mathcal{N}(K) \cap \breve H_K^\mathrm{R} \rvert \ \ge\ \mathcal{J}(X_B, W_K^\mathrm{R}) - \mathcal{J}(\mathbf{b}_B) , \qquad \lvert \mathcal{N}(K) \cap \breve H_K^\mathrm{L} \rvert \ \ge\ \mathcal{J}(Z_K^\mathrm{L}, Y_D) - \mathcal{J}(\mathbf{d}_D) .
 ```
 
-*Lean: [`lemma8_2_2`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L522).*
+*Lean: [`lemma8_2_2`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L529).*
 
 ![A close-up of the right end of the niche of Gerver's sofa, near the x-axis. The green body B fills the upper right; its lower boundary, the green tail b_B, curves from x_K^R = X_B down to W_B on the x-axis. The dashed, nearly vertical line b_K^R passes through X_B and meets the axis at W_K^R. A dashed triangle has the vertices X_B, W_K^R and W_B; the orange region inside it and below the tail is swept by orange tangent segments, a fan at X_B followed by segments from the tail down to the axis. The orange core leaves X_B to the upper left](figures/09-optimality/tail.svg)
 
@@ -533,11 +533,11 @@ For $K \in \mathcal{K}^\mathrm{i}$,
 \lvert \mathcal{N}(K) \setminus \breve H_K^\mathrm{R} \setminus \breve H_K^\mathrm{L} \rvert \ \ge\ \mathcal{J}(W_K^\mathrm{R}, \mathbf{x}_K^\mathrm{R}) + \mathcal{J}(\mathbf{x}_K|_{[\varphi^\mathrm{R}, \varphi^\mathrm{L}]}) + \mathcal{J}(\mathbf{x}_K^\mathrm{L}, Z_K^\mathrm{L}) .
 ```
 
-*Lean: [`lemma8_2_3`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L840),
-[`opt_inj_X'_neg`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L779),
+*Lean: [`lemma8_2_3`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L876),
+[`opt_inj_X'_neg`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L810),
 [`opt_volume_under_curve`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L262),
-[`opt_curveArea_inner_eq`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L713),
-[`opt_integral_under_inner`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L754).*
+[`opt_curveArea_inner_eq`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L744),
+[`opt_integral_under_inner`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L785).*
 
 ![The core part of the niche of Gerver's sofa: the region under the orange core x_K, an arch from x_K^R on the right to x_K^L on the left, between the dashed lines b_K^R and d_K^L, shaded light orange down to the line y = -H, with dotted vertical segments from the line y = -H up to the core. The part below the x-axis, between the two dashed lines, is a grey trapezoid with the corners W_K^R and Z_K^L on the axis. Short green tails continue the core outward along the axis](figures/09-optimality/core.svg)
 
@@ -592,7 +592,7 @@ The full computation is in
 $\square$
 
 The paper encloses $G$ by a Jordan curve. The formalization describes it as a region between graphs,
-which needs the monotonicity of $X$ (REPORT.md, Section 6).
+which needs the monotonicity of $X$ (REPORT.md, Section 7).
 
 ### Lemma 9.17 (the niche avoids the overlap of the cut half-planes)
 
@@ -614,7 +614,7 @@ $\mathbf{x}_K(t)$ by $W_0 \sin t \cos t + 1 - \sin t - \cos t \le W_0 / 2$. Sinc
 $W_0 (\cos \varphi - \sin \varphi) \ge 2.2 \cdot 0.959 > 2$, we have
 $W_0 / 2 < (W_0 \cos \varphi - 2) / (2 \sin \varphi)$, and the two sets are disjoint. $\square$
 
-*Lean: [`opt_niche_hRight_hLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L705).*
+*Lean: [`opt_niche_hRight_hLeft`](../../MovingSofaOptimality/Optimality/Domain.lean#L707).*
 
 This lemma is not in the paper, which obtains the disjointness from Lemma 9.8 and
 $\mathcal{N}(K) \subseteq K$; the latter may fail on $\mathcal{K}^\mathrm{i}$ (Lemma 9.11,
@@ -645,8 +645,11 @@ What remains is
 
 which is $\mathcal{Q}(K, B_K, D_K)$. $\square$
 
-*Lean: [`theorem8_2_4`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L1050),
-[`segArea_add_of_mem_line`](../../MovingSofaOptimality/Convex/CurveArea.lean#L551).*
+The paper obtains the disjointness of the three parts from $\mathcal{N}(K) \subseteq K$, which may
+fail on $\mathcal{K}^\mathrm{i}$; Lemma 9.17 replaces it (REPORT.md, E20 and Section 7).
+
+*Lean: [`theorem8_2_4`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L1089),
+[`segArea_add_of_mem_line`](../../MovingSofaOptimality/Convex/CurveArea.lean#L767).*
 
 ## 9.3 Concavity of the upper bound
 
@@ -791,7 +794,7 @@ which is convex-linear in $K$ by
 [Theorem 8.3](08-convex-curves.md#theorem-83-convex-linear-quantities-baek-theorem-712) (3).
 $\square$
 
-*Lean: [`lemma8_3_5`](../../MovingSofaOptimality/Optimality/Concavity.lean#L842).*
+*Lean: [`lemma8_3_5`](../../MovingSofaOptimality/Optimality/Concavity.lean#L854).*
 
 The paper applies its Theorem 7.3.2 to the arc $\mathbf{u}_K^{0, \pi}$, outside its range
 $b < a + \pi$. The splitting above avoids this (REPORT.md, E19).
@@ -805,7 +808,7 @@ $I = [\varphi^\mathrm{R}, \varphi^\mathrm{L}]$:
 2. $\mathcal{J}(\mathbf{l}_K^{\pi/2}(\varphi^\mathrm{R}), \mathbf{y}_K(\varphi^\mathrm{R})) \equiv_K \mathcal{J}(W_K^\mathrm{R}, \mathbf{x}_K^\mathrm{R})$;
 3. $\mathcal{J}(\mathbf{l}_K^{\pi/2 + \varphi^\mathrm{L}}(\pi/2), \mathbf{y}_K(\varphi^\mathrm{L})) \equiv_K \mathcal{J}(Z_K^\mathrm{L}, \mathbf{x}_K^\mathrm{L})$.
 
-*Lean: [`lemma8_3_6`](../../MovingSofaOptimality/Optimality/Concavity.lean#L877).*
+*Lean: [`lemma8_3_6`](../../MovingSofaOptimality/Optimality/Concavity.lean#L889).*
 
 In (3) the paper evaluates $\mathbf{l}_K^{\pi/2 + \varphi^\mathrm{L}}$ at $\varphi^\mathrm{L}$,
 where it equals $\mathbf{y}_K(\varphi^\mathrm{L})$. The left side would then vanish, and the
@@ -872,7 +875,7 @@ Altogether
 $\mathcal{S}_K \equiv_K -\lvert K \rvert + \mathcal{J}(W_K^\mathrm{R}, \mathbf{x}_K^\mathrm{R}) + \mathcal{J}(\mathbf{x}_K|_I) + \mathcal{J}(\mathbf{x}_K^\mathrm{L}, Z_K^\mathrm{L}) = -\mathcal{P}_K$.
 $\square$
 
-*Lean: [`lemma8_3_7`](../../MovingSofaOptimality/Optimality/Concavity.lean#L1101).*
+*Lean: [`lemma8_3_7`](../../MovingSofaOptimality/Optimality/Concavity.lean#L1113).*
 
 In the paper's proof the last regrouping reads $\frac12 h_K(\pi/2)$ for $\frac12 h_K(\pi)$, and a
 factor $\frac12$ is missing in the second term of the first row. Both terms are linear anyway
@@ -893,7 +896,7 @@ $\mathcal{L}_D$ are convex (Lemma 9.22). The projections of $\mathcal{L}$ onto $
 convex-linear. So $\mathcal{Q}$ is a convex-linear functional minus convex ones, hence concave.
 $\square$
 
-*Lean: [`theorem8_3_8`](../../MovingSofaOptimality/Optimality/Concavity.lean#L1119),
+*Lean: [`theorem8_3_8`](../../MovingSofaOptimality/Optimality/Concavity.lean#L1131),
 [`kiDomain`](../../MovingSofaOptimality/Optimality/Concavity.lean#L306).*
 
 ## 9.4 The directional derivative at Gerver's sofa
@@ -910,10 +913,10 @@ i_K(t) = \langle \mathbf{x}_K'(t), v_t \rangle , \qquad i_K(t + \pi/2) = -\langl
 and $\iota_K = i_K(t)\, dt$ on $[0, \pi]$. By the injectivity condition (3), $i_K > 0$ on
 $(0, \pi) \setminus \lbrace \pi/2 \rbrace$.
 
-*Lean: [`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L69),
-[`suppBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L72),
-[`iFun`](../../MovingSofaOptimality/Optimality/Variation.lean#L76),
-[`iota`](../../MovingSofaOptimality/Optimality/Variation.lean#L82).*
+*Lean: [`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L68),
+[`suppBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L71),
+[`iFun`](../../MovingSofaOptimality/Optimality/Variation.lean#L75),
+[`iota`](../../MovingSofaOptimality/Optimality/Variation.lean#L81).*
 
 The density $i_K$ splits the velocity of the inner corner into its components along $v_t$ and
 $-u_t$, the directions of the inner walls $b_K(t)$ and $d_K(t)$. In Theorem 9.29 (5), the measure
@@ -925,7 +928,7 @@ Let $I = [\varphi^\mathrm{R}, \varphi^\mathrm{L}]$ with $0 < \varphi < \pi/4$.
 
 1. For $K, K^* \in \mathcal{K}^\mathrm{i}$:
    $D\lvert \cdot \rvert(K; K^*) = \int_{[0, \pi]} (h_{K^*} - h_K)\, d\sigma_K$.
-2. For convex bodies $K, K^*$ and $a < b$:
+2. For convex bodies $K, K^*$ and $a < b < a + \pi$:
 
    ```math
    D\mathcal{J}(\mathbf{u}^{a,b})(K; K^*) = \int_{(a, b)} (h_{K^*} - h_K)\, d\sigma_K + \bigl[\mathcal{J}(v_K^-(b), v_{K^*}^-(b)) - \mathcal{J}(v_K^+(a), v_{K^*}^+(a))\bigr] .
@@ -949,11 +952,11 @@ Let $I = [\varphi^\mathrm{R}, \varphi^\mathrm{L}]$ with $0 < \varphi < \pi/4$.
    D\mathcal{J}(\mathbf{x}_\cdot|_I)(K; K^*) = \int_{I \cup (I + \pi/2)} (h_{K^*} - h_K)\, i_K \, dt + \bigl[\mathcal{J}(\mathbf{x}_K^\mathrm{L}, \mathbf{x}_{K^*}^\mathrm{L}) - \mathcal{J}(\mathbf{x}_K^\mathrm{R}, \mathbf{x}_{K^*}^\mathrm{R})\bigr] .
    ```
 
-*Lean: [`theorem8_5_1`](../../MovingSofaOptimality/Optimality/Variation.lean#L554),
-[`theorem8_5_2`](../../MovingSofaOptimality/Optimality/Variation.lean#L587),
-[`theorem8_5_3`](../../MovingSofaOptimality/Optimality/Variation.lean#L617),
-[`theorem8_5_4`](../../MovingSofaOptimality/Optimality/Variation.lean#L679),
-[`theorem8_5_5`](../../MovingSofaOptimality/Optimality/Variation.lean#L699).*
+*Lean: [`theorem8_5_1`](../../MovingSofaOptimality/Optimality/Variation.lean#L445),
+[`theorem8_5_2`](../../MovingSofaOptimality/Optimality/Variation.lean#L479),
+[`theorem8_5_3`](../../MovingSofaOptimality/Optimality/Variation.lean#L501),
+[`theorem8_5_4`](../../MovingSofaOptimality/Optimality/Variation.lean#L551),
+[`theorem8_5_5`](../../MovingSofaOptimality/Optimality/Variation.lean#L611).*
 
 *Proof.* Each functional is quadratic, $f(K) = \beta(K, K)$, so by
 [Lemma 8.6](08-convex-curves.md#lemma-86-derivative-of-a-quadratic-functional-baek-lemma-714)
@@ -961,7 +964,7 @@ $Df(K; K^*) = \beta(K, K^*) + \beta(K^*, K) - 2 \beta(K, K)$. If $\beta$ is symm
 $2\beta(K^*, K) - 2\beta(K, K)$. In general, it remains to compute the asymmetry
 $\beta(K, K^*) - \beta(K^*, K)$, which gives the bracketed end point terms.
 
-(1) and (2): $\beta(K_1, K_2) = \frac12 \int h_{K_1}\, d\sigma_{K_2}$. Write
+(1): $\beta(K_1, K_2) = \frac12 \int h_{K_1}\, d\sigma_{K_2}$. Write
 $h_K'(t) = \langle v_K^+(t), v_t \rangle$, the right derivative of $h_K$. Since $\sigma_K$ is the
 Stieltjes measure of $h_K' + \int_0^t h_K$, integration by parts gives
 
@@ -973,14 +976,23 @@ whose integrals are symmetric in $K_1, K_2$. Over a full period the boundary ter
 $\beta$ is symmetric (it is the mixed area), and
 $D\lvert \cdot \rvert(K; K^*) = \int_{[0, 2\pi)} (h_{K^*} - h_K)\, d\sigma_K$. For two caps,
 $\sigma_K$ is carried by $[0, \pi] \cup \lbrace 3\pi/2 \rbrace$ and both support functions vanish
-at $3\pi/2$, which gives (1). Over $(a, b)$ the boundary terms are cross products of vertices, since
-$v_K^+(t) = h_K(t)\, u_t + h_K'(t)\, v_t$ and $v_K^-(t)$ is the same with the left derivative. They
-give
+at $3\pi/2$, which gives (1).
+
+(2), as in the paper: $\beta(K_1, K_2) = \frac12 \int_{(a, b)} h_{K_1}\, d\sigma_{K_2}$. Lemma 6.3 for
+the cross product $v_{K_1}^+ \times v_{K_2}^+$, whose left limits are $v_{K_1}^-$ and $v_{K_2}^-$
+(Theorem 2.9), gives, once the atoms at $b$ are removed,
+
+```math
+\int_{(a, b)} dv_{K_1}^+ \times v_{K_2}^+ + \int_{(a, b)} v_{K_1}^- \times dv_{K_2}^+ = v_{K_1}^-(b) \times v_{K_2}^-(b) - v_{K_1}^+(a) \times v_{K_2}^+(a) .
+```
+
+By [Lemma 8.17](08-convex-curves.md#lemma-817-the-bilinear-form-along-the-vertices-baek-lemma-733),
+which needs $b < a + \pi$, the two integrals are $-2\beta(K_2, K_1)$ and $2\beta(K_1, K_2)$, so
 $\beta(K_1, K_2) - \beta(K_2, K_1) = \mathcal{J}(v_{K_1}^-(b), v_{K_2}^-(b)) - \mathcal{J}(v_{K_1}^+(a), v_{K_2}^+(a))$,
 which is (2).
 
 (3) $\beta((p_1, q_1), (p_2, q_2)) = \mathcal{J}(p_1, q_2)$, and the formula is algebra. (4)
-$\beta = \mathcal{B}$, and integration by parts gives
+$\beta = \mathcal{B}$, and integration by parts (Lemma 6.3 for the cross product) gives
 $\int_a^b \mathbf{x} \times d\mathbf{x}^* = \mathbf{x}(b) \times \mathbf{x}^*(b) - \mathbf{x}(a) \times \mathbf{x}^*(a) + \int_a^b \mathbf{x}^* \times d\mathbf{x}$.
 
 (5) Apply (4) to $\mathbf{x} = \mathbf{x}_K|_I$ and $\mathbf{x}^* = \mathbf{x}_{K^*}|_I$. The inner
@@ -994,15 +1006,9 @@ $\mathbf{x}' = \langle \mathbf{x}', u_t \rangle u_t + \langle \mathbf{x}', v_t \
 
 Integrating over $I$ gives the integral over $I \cup (I + \pi/2)$. $\square$
 
-The paper proves (1) with Schneider's formula for mixed volumes, and (2) by integrating by parts
-along the vertex curves, $\int v_{K_1}^- \times dv_{K_2}^+$, with
-[Lemma 8.17](08-convex-curves.md#lemma-817-the-bilinear-form-along-the-vertices-baek-lemma-733).
-The formalization uses the integrations by parts above, for (1) and (2) on $h_K$ and its right
-derivative
-([`opt_Bs_symm`](../../MovingSofaOptimality/Optimality/Variation.lean#L522),
-[`opt_bilin_antisymm`](../../MovingSofaOptimality/Optimality/Variation.lean#L470),
-[`opt_curveBilin_antisymm`](../../MovingSofaOptimality/Optimality/Variation.lean#L643)). It does not
-need $b < a + \pi$ in (2) (REPORT.md, Section 5).
+The paper proves (1) with Schneider's formula for the mixed area, which Mathlib lacks; the
+formalization proves the symmetry of $\beta$ by the integration by parts above ([`opt_Bs_symm`](../../MovingSofaOptimality/Optimality/Variation.lean#L408);
+REPORT.md, Section 7). The proofs of (2) and (4) are the paper's ([`opt_curveBilin_antisymm`](../../MovingSofaOptimality/Optimality/Variation.lean#L527)).
 
 ### Theorem 9.30 (the directional derivative of the upper bound; Baek, Theorem 8.5.6)
 
@@ -1031,7 +1037,7 @@ $x$-axis, so both terms vanish. The other part of Theorem 9.29 (3) for the two s
 $\frac12 ((p^* + q^*) \times (q - p) - 2\, p \times q)$, vanishes because the segments have equal
 end points, $p = q$. $\square$
 
-*Lean: [`theorem8_5_6`](../../MovingSofaOptimality/Optimality/Variation.lean#L768).*
+*Lean: [`theorem8_5_6`](../../MovingSofaOptimality/Optimality/Variation.lean#L680).*
 
 ### Theorem 9.31 (Gerver's triple is a critical point; Baek, Theorem 8.5.7)
 
@@ -1039,12 +1045,12 @@ Let $K = K_G$ be the cap of Gerver's sofa, $B = B_K$ and $D = D_K$. For every
 $(K^*, B^*, D^*) \in \mathcal{L}$, the directional derivative of $\mathcal{Q}$ at $(K, B, D)$
 towards $(K^*, B^*, D^*)$ is at most 0.
 
-*Lean: [`theorem8_5_7`](../../MovingSofaOptimality/Main.lean#L135),
-[`gm_sigma_decomp`](../../MovingSofaOptimality/Main.lean#L90),
-[`theorem8_4_5`](../../MovingSofaOptimality/Gerver/Properties.lean#L1232),
-[`theorem8_4_3_two`](../../MovingSofaOptimality/Gerver/Properties.lean#L920),
-[`theorem8_4_3_three`](../../MovingSofaOptimality/Gerver/Properties.lean#L934),
-[`gm_sigmaBreve_B_restrict`](../../MovingSofaOptimality/Gerver/Properties.lean#L1444).*
+*Lean: [`theorem8_5_7`](../../MovingSofaOptimality/Main.lean#L136),
+[`gm_sigma_decomp`](../../MovingSofaOptimality/Main.lean#L91),
+[`theorem8_4_5`](../../MovingSofaOptimality/Gerver/Properties.lean#L1343),
+[`theorem8_4_3_two`](../../MovingSofaOptimality/Gerver/Properties.lean#L1680),
+[`theorem8_4_3_three`](../../MovingSofaOptimality/Gerver/Properties.lean#L979),
+[`gm_sigmaBreve_B_restrict`](../../MovingSofaOptimality/Gerver/Properties.lean#L1555).*
 
 *Proof.* Romik's equations say that, at Gerver's triple, $\sigma_K$ is the sum of $\iota_K$ and the
 reflected measures of the tails. Substituting this into Theorem 9.30 cancels the core term, and what
@@ -1074,7 +1080,7 @@ these intervals
 In one formula, $\sigma_K$ on $[0, \pi]$ is $\iota_K$ on $I \cup (I + \pi/2)$, plus
 $\breve\sigma_B$ on $[\pi/2 - \theta, \pi/2)$, plus $\breve\sigma_D$ on
 $(\pi/2, \pi/2 + \theta]$, plus the atom at $\pi/2$
-([`gm_sigma_decomp`](../../MovingSofaOptimality/Main.lean#L90)). Moreover $\breve\sigma_B$ vanishes
+([`gm_sigma_decomp`](../../MovingSofaOptimality/Main.lean#L91)). Moreover $\breve\sigma_B$ vanishes
 on $(\varphi, \pi/2 - \theta)$, where $B$ has the single vertex $\mathbf{x}_K^\mathrm{R}$, and
 likewise $\breve\sigma_D$ on $(\pi/2 + \theta, \pi - \varphi)$. Substituting, the derivative of
 Theorem 9.30 becomes
@@ -1111,9 +1117,9 @@ derivatives at Gerver's triple are at most 0 (Theorem 9.31).
 [Theorem 8.7](08-convex-curves.md#theorem-87-maximum-of-a-concave-quadratic-functional-baek-theorem-715)
 concludes. $\square$
 
-*Lean: [`corollary8_5_8`](../../MovingSofaOptimality/Main.lean#L258),
-[`gerverTriple`](../../MovingSofaOptimality/Main.lean#L64),
-[`gerver_inL`](../../MovingSofaOptimality/Main.lean#L59).*
+*Lean: [`corollary8_5_8`](../../MovingSofaOptimality/Main.lean#L259),
+[`gerverTriple`](../../MovingSofaOptimality/Main.lean#L65),
+[`gerver_inL`](../../MovingSofaOptimality/Main.lean#L60).*
 
 ## 9.5 The optimality of Gerver's sofa
 
@@ -1122,8 +1128,8 @@ concludes. $\square$
 Gerver's sofa $G$ is a moving sofa, and every moving sofa $S$ has
 $\lvert S \rvert \le \lvert G \rvert$.
 
-*Lean: [`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L301),
-[`gm_area_le`](../../MovingSofaOptimality/Main.lean#L268),
+*Lean: [`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302),
+[`gm_area_le`](../../MovingSofaOptimality/Main.lean#L269),
 [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344).*
 
 *Proof.* $G$ is a monotone sofa with rotation angle $\pi/2$
@@ -1166,8 +1172,8 @@ for the parameters whose existence and uniqueness are
 [`Baek.gerver_params_exists`](../../Challenge.lean#L328) and
 [`Baek.gerver_params_unique`](../../Challenge.lean#L332) (Definition 9.3);
 [`Solution.lean`](../../Solution.lean) derives it from
-[`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L301). The area of $G$ lies in
-$[2.2192, 2.2199]$ ([`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L290),
+[`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302). The area of $G$ lies in
+$[2.2192, 2.2199]$ ([`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L291),
 [Appendix B](appendix-b.md)).
 
 The choice of the angles matters only at the end (Baek, Remark 8.5.1). Other cut angles

@@ -126,23 +126,39 @@ theorem theorem2_4_1 {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π /
       simpa [ho2] using this
   refine ⟨hω, ⟨hCne, hCc, ms_convex_capOf S ω⟩, (hJ ω hωJ).trans hstd.1,
     (hJ (π / 2) hπJ).trans hstd.2, hsupp3, hsupp4, ?_⟩
-  -- Step 3: `𝓒(S)` is the intersection of its supporting half-planes with normal angles in
-  -- `J_ω ∪ {ω + π, 3π/2}`
-  refine ⟨↥(jSet ω ∪ {ω + π, 3 * π / 2}), fun i => i.1, fun i => supp (capOf S ω) i.1,
-    fun i => i.2, ?_⟩
+  -- Step 3: by Definition 2.3.10, `𝓒(S)` is an intersection of closed half-planes with normal
+  -- angles in `J_ω ∪ {ω + π, 3π/2}`: the half-planes `H_S(t)`, `H_S(t + π/2)` of the `Q_S⁺(t)`
+  -- (Proposition 2.2.2), and those of `P_ω`, which are `H_S(ω)`, `H_S(π/2)`, `H₋(ω + π, 0)` and
+  -- `H₋(3π/2, 0)`
+  classical
+  have hωπ : ω + π ∉ jSet ω := by
+    rintro (h | h) <;> linarith [h.2, pi_pos]
+  have h3π : 3 * π / 2 ∉ jSet ω := by
+    rintro (h | h) <;> linarith [h.2, hω.2, pi_pos]
+  refine ⟨↥(jSet ω ∪ {ω + π, 3 * π / 2}), fun i => i.1,
+    fun i => if i.1 ∈ jSet ω then supp S i.1 else 0, fun i => i.2, ?_⟩
   ext p
   simp only [mem_iInter, Subtype.forall]
   constructor
-  · intro hp s _
-    exact dot_le_supp hCc hp s
+  · rintro hp s (hs | hs | hs)
+    · rw [ite_eq_left hs]
+      exact ms_capOf_subset_suppHalf hs hp
+    · rw [hs, ite_eq_right hωπ]
+      show dot p (uvec (ω + π)) ≤ 0
+      rw [dot_uvec_add_pi]
+      linarith [((ms_mem_vStripRot_iff ω p).1 hp.1.2).1]
+    · rw [mem_singleton_iff.1 hs, ite_eq_right h3π]
+      show dot p (uvec (3 * π / 2)) ≤ 0
+      rw [dot_uvec_three_pi_div_two]
+      linarith [hp.1.1.1]
   · intro h
     have hJ' : ∀ s ∈ jSet ω, dot p (uvec s) ≤ supp S s := fun s hs => by
-      have := h s (Or.inl hs); rwa [halfMinus, mem_ofPred_eq, hJ s hs] at this
+      have := h s (Or.inl hs); rwa [ite_eq_left hs] at this
     have hA : dot p (uvec (ω + π)) ≤ 0 := by
-      have := h (ω + π) (Or.inr (mem_insert _ _)); rwa [halfMinus, mem_ofPred_eq, hsupp3] at this
+      have := h (ω + π) (Or.inr (mem_insert _ _)); rwa [ite_eq_right hωπ] at this
     have hB : dot p (uvec (3 * π / 2)) ≤ 0 := by
       have := h (3 * π / 2) (Or.inr (mem_insert_of_mem _ (mem_singleton _)))
-      rwa [halfMinus, mem_ofPred_eq, hsupp4] at this
+      rwa [ite_eq_right h3π] at this
     rw [dot_uvec_add_pi] at hA
     rw [dot_uvec_three_pi_div_two] at hB
     have hp2 := hJ' (π / 2) hπJ
@@ -220,11 +236,15 @@ theorem theorem2_4_3 {S : Set (ℝ × ℝ)} {ω : ℝ} (hS : IsMonotoneSofa S ω
 /-- **Theorem 2.4.4** (`thm:monotonization-idempotent`), first claim: `𝓘(𝓘(S')) = 𝓘(S')`. -/
 theorem theorem2_4_4 {S' : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S' ω) (hstd : IsStandardPosition S' ω) :
-    monotonization (monotonization S' ω) ω = monotonization S' ω :=
-  ms_monotonization_congr fun _ hs => (lemma2_3_5_supp hω hS hstd hs).1
+    monotonization (monotonization S' ω) ω = monotonization S' ω := by
+  -- `S := 𝓘(S')` is a monotone sofa with cap `K = 𝓒(S)`, and `𝓘(S) = K \ 𝒩(K) = S` by
+  -- Theorems 2.4.2 and 2.4.3
+  have hmono : IsMonotoneSofa (monotonization S' ω) ω := ⟨hω, S', hS, hstd, rfl⟩
+  rw [theorem2_4_2 hω hmono.isMovingSofaWithAngle hmono.isStandardPosition]
+  exact (theorem2_4_3 hmono).symm
 
-/-- **Theorem 2.4.4**, second claim: a moving sofa `S` in standard position satisfies `S = 𝓘(S)`
-if and only if it is a monotone sofa. -/
+/-- **Theorem 2.4.4** (`thm:monotonization-idempotent`), second claim: a moving sofa `S` in standard
+position satisfies `S = 𝓘(S)` if and only if it is a monotone sofa. -/
 theorem theorem2_4_4_iff {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (hstd : IsStandardPosition S ω) :
     S = monotonization S ω ↔ IsMonotoneSofa S ω := by

@@ -59,7 +59,7 @@ Central time (UTC−5); figures on effort come from the session transcripts, com
   [#6808](https://github.com/google-deepmind/formal-conjectures/pull/6808) links the proofs from
   formal-conjectures' file and marks the uniqueness statement solved.
 
-## 3 October 2026: consolidation, this text, and its simplification
+## 3 October 2026: consolidation, this text, its simplification, and Baek's proofs
 
 * **07:48 to 08:53: consolidation.** Claude Opus 5.5, in Claude Code 2.1.287, at the owner's
   request: the 75 files of the uniqueness and bridge libraries became 12 modules, one per step of the
@@ -114,3 +114,33 @@ Central time (UTC−5); figures on effort come from the session transcripts, com
   sub-agents took part, at most 18 at the same time, and worked about 12.5 hours; all agents
   together made about 3,210 tool calls (2,914 by sub-agents), generated 1.4 million output tokens
   and read 14.0 million input tokens, plus 1.0 billion tokens from the prompt cache.
+* **16:30 to 20:45: following Baek's proofs.** Claude Opus 5.5, in the same session. Version 1.4.0 of
+  the formalize-math-paper skill, written that afternoon at the owner's request, requires every
+  proof to follow the paper's argument and every departure from it to be necessary and reported;
+  the owner asked to bring this formalization in line with it. A new route check compares, for
+  every numbered result, the numbered results that its Lean proof uses, which the axiom audit now
+  records, with those that Baek's proof cites, extracted from the LaTeX source
+  ([`paper_routes.tsv`](paper_routes.tsv)); CI runs it. Of its first 269 differences, 132 came from
+  facts that the paper uses throughout without citing them. Three sub-agents reviewed the other 137
+  against the LaTeX source, one per group of chapters: they fixed about thirty proofs that reached a
+  cited result by a detour, recorded the uses that the paper leaves implicit and the citations it
+  makes in passing, and found the proofs that argued differently from Baek's with no reason to.
+  Nine sub-agents then rewrote about 25 proofs along Baek's arguments, among them Lemma 2.5.6 (the
+  vertices of the wedge), Theorem 3.4.3 (the Blaschke selection theorem), Theorems 3.4.10 and 4.1.4
+  (mirror symmetry and, for 4.1.4, the Portmanteau theorem), Lemmas 6.4.1 (Thales' circle) and 6.4.2
+  and Theorem 6.4.3 (the Portmanteau theorem, now derived from Theorem 4.1.3), Theorems 6.2.5 and
+  7.1.2 (3) (through Theorem 5.2.2), Theorem 7.4.1 (Mamikon's computation), and Theorems 8.5.2 and
+  8.5.4 (Lemma 5.1.2). Three more sub-agents compared every changed proof with the LaTeX source, and
+  their findings led to the last rewrites. Three statements changed: Theorem 8.5.2 regained the
+  paper's hypothesis b < a + π, which its proof needs; Lemma 6.2.4 lost a hypothesis that its proof
+  does not use; and Theorem 8.4.3 (2) gained the equalities of curve area functionals that the
+  paper's "as oriented curves" provides. Sixteen results still depart from Baek's proofs, each
+  because of an error or gap of the paper, mathematics that Mathlib lacks, or the definition of the
+  surface area measure; [`REPORT.md`](../REPORT.md) lists them in a new Section 7, and
+  [`route_differences.tsv`](route_differences.tsv) gives the reason for each of the 222 route
+  differences. The work also found a wrong citation in the proof of Theorem 2.5.9 (E26) and two
+  small gaps in the proof of Theorem 3.4.3 (E8). The three libraries went from 45,783 to 47,894
+  lines. The six sub-agents of a first attempt stopped at a usage limit and were run again.
+  Twenty-one sub-agents took part, at most six at the same time, and worked about 6.3 hours; all
+  agents together made about 1,560 tool calls (1,283 by sub-agents), generated 2.9 million output
+  tokens and read 7.9 million input tokens, plus 385 million tokens from the prompt cache.

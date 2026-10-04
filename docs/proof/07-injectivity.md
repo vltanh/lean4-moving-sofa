@@ -85,7 +85,7 @@ continuously differentiable on $[0, \pi/2]$, with
 $\langle \mathbf{x}'(t), u_t\rangle < 0 < \langle \mathbf{x}'(t), v_t\rangle$ for
 $t \in (0, \pi/2)$.
 
-*Lean: [`theorem6_1_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L445), [`theorem1_7_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L463), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L136), [`IsBalancedMaxSofa`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L602).*
+*Lean: [`theorem6_1_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L492), [`theorem1_7_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L510), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L137), [`IsBalancedMaxSofa`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L606).*
 
 A balanced maximum cap is a Hausdorff limit of maximum polygon caps with the uniform angle sets
 $\Theta_{n_i}$, where $n_1 < n_2 < \dots$ are powers of two
@@ -110,7 +110,7 @@ For every solution of Romik's system with $\varphi \in [0.039, 0.04]$ and
 $\theta \in [0.68, 0.69]$, the cap $K = \mathcal{C}(G)$ of Gerver's sofa $G$ satisfies the
 injectivity condition.
 
-*Lean: [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L145), [`GerverParams.gv_injectivity`](../../MovingSofaOptimality/Gerver/Structure.lean#L140).*
+*Lean: [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L168), [`GerverParams.gv_injectivity`](../../MovingSofaOptimality/Gerver/Structure.lean#L140).*
 
 The box contains exactly one solution of Romik's system
 ([Theorem 10.8](10-gerver.md#theorem-108-gervers-sofa-is-well-defined-romik-section-4)). Baek
@@ -294,13 +294,14 @@ of $-(f(t) - 1)\,u_t$ and $(g(t) - 1)\,v_t$.
 
 ### Lemma 7.8 (the arm as an integral; Baek, Lemma 6.2.4)
 
-For every cap $K \in \mathcal{K}^\mathrm{c}$ and every angle $t$,
+For every convex body $K$ and every angle $t$ (Baek states it for caps and $t \in [0, \pi/2]$; the
+proof uses neither, REPORT.md, Section 5),
 
 ```math
 g_K^+(t) = \int_{(t, t + \pi/2]} \sin(s - t)\,\mathrm{d}\sigma_K(s) .
 ```
 
-*Lean: [`lemma6_2_4`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L249).*
+*Lean: [`lemma6_2_4`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L251).*
 
 *Proof.* The points $\mathbf{y}_K(t)$ and $A_K^+(t) = v_K^+(t)$ lie on $l_K(t)$, so
 $g_K^+(t) = \langle A_K^+(t) - C_K^+(t), u_t\rangle = -\langle v_K^+(t + \pi/2) - v_K^+(t), u_t\rangle$.
@@ -319,7 +320,7 @@ $[0, \pi/2]$, and
 
 Equivalently, $f_K^+(b) - f_K^+(a) = \int_a^b g_K^+ - \sigma_K((a, b])$ for $a \le b$.
 
-*Lean: [`theorem6_2_5_regular`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L354), [`theorem6_2_5`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L393), [`fPlus_sub_fPlus`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L336).*
+*Lean: [`theorem6_2_5_regular`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L581), [`theorem6_2_5`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L625), [`fPlus_sub_fPlus`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L564).*
 
 *Proof.* The idea is to write $f_K^+$ as an absolutely continuous function minus the distribution
 function $G_K$ of [Definition 6.8](06-surface-area.md#definition-68-surface-area-measure):
@@ -328,18 +329,19 @@ function $G_K$ of [Definition 6.8](06-surface-area.md#definition-68-surface-area
 f_K^+(t) = h_K(t + \pi/2) - \langle v_K^+(t), v_t\rangle = \Bigl(h_K(t + \pi/2) + \int_0^t h_K\Bigr) - G_K(t) .
 ```
 
-The support function is the integral of its right derivative (the first consequence of
-[Lemma 6.7](06-surface-area.md#lemma-67-one-sided-derivatives-of-the-support-function)),
-so $h_K(t + \pi/2) = h_K(\pi/2) + \int_0^t \langle v_K^+(s + \pi/2), v_{s + \pi/2}\rangle\,\mathrm{d}s$.
+As in Baek's proof, $\mathrm{d}h_K = \langle v_K^+(t), v_t \rangle\,\mathrm{d}t$: write
+$h_K(t) = \langle v_K^+(t), u_t \rangle$ and apply the product rule
+([Lemma 6.4](06-surface-area.md#lemma-64-product-rule-baek-lemma-513)) coordinate by coordinate,
+with $\mathrm{d}v_K^+ = v_t\,\sigma_K$ (Theorem 6.12) and $\mathrm{d}u_t = v_t\,\mathrm{d}t$; the
+part with $\sigma_K$ is $\langle v_t, u_t \rangle \sigma_K = 0$. So
+$h_K(t + \pi/2) = h_K(\pi/2) + \int_0^t \langle v_K^+(s + \pi/2), v_{s + \pi/2}\rangle\,\mathrm{d}s$.
 By the support-function form of $g_K^+$, the bracket is therefore $h_K(\pi/2) + \int_0^t g_K^+$,
-an absolutely continuous function of $t$. As $G_K(b) - G_K(a) = \sigma_K((a, b])$, this gives the
-integrated form. It also shows that $f_K^+$ is an absolutely continuous function minus a
+an absolutely continuous function of $t$. Likewise the product rule, with
+$\mathrm{d}v_K^+ = v_t\,\sigma_K$ and $\mathrm{d}v_t = -u_t\,\mathrm{d}t$, gives
+$\mathrm{d}\langle v_K^+(t), v_t \rangle = \langle v_t, v_t \rangle \sigma_K - \langle v_K^+(t), u_t \rangle\,\mathrm{d}t = \sigma_K - h_K\,\mathrm{d}t$,
+that is, $G_K(b) - G_K(a) = \sigma_K((a, b])$, which gives the integrated form. It also shows that $f_K^+$ is an absolutely continuous function minus a
 nondecreasing right-continuous one, hence right-continuous and of bounded variation. Finally, the
 two measures agree on every interval $(a, b] \subseteq (0, \pi/2]$, so they are equal. $\square$
-
-Baek computes $\mathrm{d}f_K^+$ with the product rule
-([Lemma 6.4](06-surface-area.md#lemma-64-product-rule-baek-lemma-513)) and Theorem 6.12; the
-formalization reads it off the definition of $\sigma_K$.
 
 ## 7.3 The inequality on maximum polygon caps
 
@@ -360,8 +362,8 @@ $\vec b_K(t)$
 its niche
 ([Theorem 4.32](04-balanced.md#theorem-432-the-polygon-niche-lies-in-the-cap-baek-theorem-3410)).
 
-*Lean: [`IsPolygonCap`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L43), [`polyNiche`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L53), [`IsMaxPolygonCap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L34), [`MovingSofaOptimality.tau`](../../MovingSofaOptimality/Balanced/Polyline.lean#L478), [`theorem3_4_9`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L938),
-[`lemma3_4_5_one`](../../MovingSofaOptimality/Balanced/Polyline.lean#L995), [`theorem3_4_10`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L1062).*
+*Lean: [`IsPolygonCap`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L43), [`polyNiche`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L53), [`IsMaxPolygonCap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L44), [`MovingSofaOptimality.tau`](../../MovingSofaOptimality/Balanced/Polyline.lean#L478), [`theorem3_4_9`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L970),
+[`lemma3_4_5_one`](../../MovingSofaOptimality/Balanced/Polyline.lean#L999), [`theorem3_4_10`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L1240).*
 
 ### Definition 7.10 (steps; Baek, Definitions 6.3.1 and 6.3.2)
 
@@ -383,7 +385,7 @@ intersection of the two supporting lines.
 A maximum polygon cap $K$ with $n$ steps has diameter at most $5$. Consequently its arm lengths
 $f_K^\pm(t)$ and $g_K^\pm(t)$ are at most $5$ for $t \in [0, \pi/2]$.
 
-*Lean: [`lemma6_3_1`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L424).*
+*Lean: [`lemma6_3_1`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L430).*
 
 *Proof.* The hallway at $\pi/4$ confines $K$ to a bounded part of the strip $0 \le y \le 1$, once its
 inner corner is known to be low. Since $n \ge 2$ is even, $\pi/4 \in \Theta_n$. Let
@@ -437,7 +439,7 @@ of the parts of the inner half-wall $\vec b_K(t)$ in the half-planes of the neig
 1. $\mathcal{H}^1\bigl(\vec b_K(t) \cap H_K^\mathrm{d}(t - \delta)\bigr) = \tan\delta \cdot \max\bigl(0,\ g_K^-(t) - 1 + \tan(\delta/2)\bigr)$;
 2. $\mathcal{H}^1\bigl(\vec b_K(t) \cap H_K^\mathrm{d}(t + \delta)\bigr) = \tan\delta \cdot \max\bigl(0,\ 1 - g_K^+(t) + \tan(\delta/2)\bigr)$.
 
-*Lean: [`lemma6_3_2`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L664), [`lineLength`](../../MovingSofaOptimality/Basic/Plane.lean#L78).*
+*Lean: [`lemma6_3_2`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L677), [`lineLength`](../../MovingSofaOptimality/Basic/Plane.lean#L78).*
 
 Here $\mathcal{H}^1$ is the length of a subset of a line. In Baek's proof of (1), two occurrences of
 $t + \delta$ should read $t - \delta$ (REPORT.md, E26).
@@ -488,7 +490,7 @@ For real $x$, let
 k_0(x) = \max\Bigl(\lvert x - 1\rvert,\ \frac{\lvert x - 1\rvert + 1}{2}\Bigr) , \qquad m_0(x) = x - k_0(x) .
 ```
 
-*Lean: [`MovingSofaOptimality.k0`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L678), [`MovingSofaOptimality.m0`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L681).*
+*Lean: [`MovingSofaOptimality.k0`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L691), [`MovingSofaOptimality.m0`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L694).*
 
 Baek defines them for $x \ge 0$, the formalization for all real $x$. The function $k_0$ is
 $1$-Lipschitz, with its minimum $\frac12$ at $x = 1$. The function $m_0$ is nondecreasing and
@@ -510,7 +512,7 @@ size $\delta$ and every $t \in \lbrace 0\rbrace \cup \Theta_n$,
 \sigma_K(t) \le k_0\bigl(g_K^+(t)\bigr)\,\delta + C\,\delta^2 .
 ```
 
-*Lean: [`theorem6_3_3`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L882).*
+*Lean: [`theorem6_3_3`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L902).*
 
 The formalization proves it with $C = 7$.
 
@@ -594,42 +596,47 @@ $t \in \lbrace 0\rbrace \cup \Theta_n$. Then
 1. $g_K^+(t) \ge g_K^+(t') = g_K^-(t') \ge g_K^-(t + \delta)$ for every $t' \in (t, t + \delta)$;
 2. $g_K^+(t) - g_K^-(t + \delta) \le 5\delta$.
 
-*Lean: [`lemma6_4_1`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L47).*
+*Lean: [`lemma6_4_1`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L39).*
 
-*Proof.* On $[t, t + \delta]$ all these arms are values of one explicit function with a bounded
-derivative. The normal angles $t$ and $t + \delta$ are consecutive, and so are $t + \pi/2$ and
-$t + \delta + \pi/2$. So one corner $A$ of $K$ lies on every line $l_K(s)$, and one corner $C$ on
-every line $l_K(s + \pi/2)$, for $s \in [t, t + \delta]$ (Definition 7.10). Hence
-$h_K(s) = \langle A, u_s\rangle$, and the arms at $t$ from the right, at $t + \delta$ from the left
-and at $t'$ from both sides are values of $g(s) = \langle A - C, u_s\rangle$. Its derivative $\langle A - C, v_s\rangle$ lies in $[-5, 0]$.
-It is at most $0$ because $\langle A, v_s\rangle \le h_K(s + \pi/2) = \langle C, v_s\rangle$, and at
-least $-5$ because $\lvert A - C\rvert \le 5$ (Lemma 7.11). So $g$ is nonincreasing, and
-$g(s) + 5s$ is nondecreasing on $[t, t + \delta]$. $\square$
+*Proof.* As in Baek's proof, the outer corner moves on a circle. The normal angles $t$ and
+$t + \delta$ are consecutive, and so are $t + \pi/2$ and $t + \delta + \pi/2$. So one corner $A$ of
+$K$ lies on every line $l_K(s)$, and one corner $C$ on every line $l_K(s + \pi/2)$, for
+$s \in [t, t + \delta]$ (Definition 7.10). The outer corner $\mathbf{y}_K(s)$, where these two
+perpendicular lines meet, therefore lies on the circle with diameter $AC$ (Thales' theorem), and the
+arms at $t$ from the right, at $t + \delta$ from the left and at $t'$ from both sides are values of
+$g(s) = \langle A - C, u_s\rangle = \lvert \mathbf{y}_K(s) - C \rvert$.
 
-Baek's proof follows the outer corner along the circle with diameter $AC$, on which it moves by
-Thales' theorem.
+1. For $x < y$ in $[t, t + \delta]$,
+   $g(y) - g(x) = 2 \sin\frac{y - x}{2}\, \langle A - C, v_{(x + y)/2}\rangle \le 0$, because
+   $\langle A, v_s\rangle \le h_K(s + \pi/2) = \langle C, v_s\rangle$.
+2. As $s$ runs over $[t, t + \delta]$, the point $\mathbf{y}_K(s)$ runs over an arc of central angle
+   $2\delta$, so $\lvert \mathbf{y}_K(t) - \mathbf{y}_K(t + \delta)\rvert = \lvert A - C\rvert \sin\delta \le 5\delta$,
+   as $\lvert A - C\rvert \le 5$ (Lemma 7.11). By the triangle inequality,
+   $g(t) - g(t + \delta) \le 5\delta$. $\square$
 
 ### Lemma 7.17 (convergence of the arms; Baek, Lemma 6.4.2)
 
 If polygon caps $K_n$ converge to a cap $K \in \mathcal{K}^\mathrm{c}$ in the Hausdorff distance,
 then $\int_0^{\pi/2} \lvert g_{K_n}^+ - g_K^+\rvert \to 0$.
 
-*Lean: [`lemma6_4_2`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L221).*
+*Lean: [`lemma6_4_2`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L329).*
 
 *Proof.* The arms are nonnegative and at most the widths $h(t) + h(t + \pi)$, which are bounded
 uniformly in $n$. So by dominated convergence it suffices to show $g_{K_n}^+(t) \to g_K^+(t)$ for
-almost every $t$. Let $t$ be an angle with $\sigma_K(t + \pi/2) = 0$, which excludes only countably
-many $t$, and put $s = t + \pi/2$. Since $g_L^+(t) = h_L(t) + \langle v_L^+(s), v_s\rangle$ and
-$h_{K_n} \to h_K$ uniformly, it suffices that
-$\langle v_{K_n}^+(s), v_s\rangle \to \langle v_K^+(s), v_s\rangle$. This is step 1 of the proof of
-[Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413), from the sandwich
-after Lemma 6.7. $\square$
+almost every $t$. Let $t$ be an angle at which none of $\sigma_K, \sigma_{K_1}, \sigma_{K_2}, \ldots$
+has an atom at $t + \pi/2$, which excludes only countably many $t$. By Lemma 7.8,
+$g_L^+(t) = \int s\,\mathrm{d}\sigma_L$, where $s(u) = \sin(u - t)$ on the closed arc
+$[t, t + \pi/2]$ and $s(u) = 0$ elsewhere, and $g_L^-(t) = \int s^-\,\mathrm{d}\sigma_L$, with $s^-$
+the same on the open arc; at this $t$, $g_L^-(t) = g_L^+(t)$ for $L = K, K_1, K_2, \ldots$
+([Proposition 6.10](06-surface-area.md#proposition-610-atoms-baek-proposition-212)). The function
+$s$ is upper semicontinuous and $s^-$ is lower semicontinuous, so the Portmanteau theorem for the
+weak convergence $\sigma_{K_n} \to \sigma_K$
+([Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413)) gives
+$\limsup_n g_{K_n}^+(t) \le g_K^+(t)$ and $\liminf_n g_{K_n}^-(t) \ge g_K^-(t)$. Hence
+$g_{K_n}^+(t) \to g_K^+(t)$. $\square$
 
-Baek's proof writes $g^\pm$ as integrals against $\sigma$ (Lemma 7.8) and applies the Portmanteau
-theorem to the weak convergence $\sigma_{K_n} \to \sigma_K$; the proof above, like the
-formalization, uses the sandwich instead. The polygon caps need not have rotation angle $\pi/2$
-(REPORT.md, Section 5). In Baek's proof, $\sigma(\lbrace t\rbrace) = 0$ should read
-$\sigma(\lbrace t + \pi/2\rbrace) = 0$ (REPORT.md, E26).
+The polygon caps need not have rotation angle $\pi/2$ (REPORT.md, Section 5). In Baek's proof,
+$\sigma(\lbrace t\rbrace) = 0$ should read $\sigma(\lbrace t + \pi/2\rbrace) = 0$ (REPORT.md, E26).
 
 ### Theorem 7.18 (limit inequality; Baek, Theorem 6.4.3)
 
@@ -641,7 +648,7 @@ $X \subseteq [0, \pi/2)$,
 \sigma_K(X) \le \int_X k_0\bigl(g_K^+(t)\bigr)\,\mathrm{d}t .
 ```
 
-*Lean: [`theorem6_4_3`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L704).*
+*Lean: [`theorem6_4_3`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L869).*
 
 *Proof sketch.* Sum Theorem 7.15 over the steps in an interval, and pass to the limit on both sides.
 Let $K_i \to K$ be maximum polygon caps with $n_i$ steps of size $\delta_i \to 0$.
@@ -662,32 +669,25 @@ Let $K_i \to K$ be maximum polygon caps with $n_i$ steps of size $\delta_i \to 0
    the integral.
 2. *The right side.* By Lemma 7.17 and the $1$-Lipschitz $k_0$,
    $\int_a^b k_0(g_{K_i}^+) \to \int_a^b k_0(g_K^+)$.
-3. *The left side.* For every convex body $L$, Definition 6.8 and Theorem 2.9 give
-   $\sigma_L((a, b)) = \langle v_L^-(b), v_b\rangle - \langle v_L^+(a), v_a\rangle + \int_a^b h_L$.
-   For $0 < \varepsilon < \pi$, the sandwich after
-   [Lemma 6.7](06-surface-area.md#lemma-67-one-sided-derivatives-of-the-support-function) bounds
-   this below by
-   $\langle v_L(b - \varepsilon, b), v_b\rangle - \langle v_L(a, a + \varepsilon), v_a\rangle + \int_a^b h_L$.
-   This lower bound depends only on support values. So for $L = K_i$ it converges to the same
-   expression for $K$ as $i \to \infty$, and that tends to $\sigma_K((a, b))$ as
-   $\varepsilon \to 0^+$. Hence $\sigma_K((a, b)) \le \liminf_i \sigma_{K_i}((a, b))$, and with
-   steps 1 and 2, $\sigma_K((a, b)) \le \int_{\max(a, 0)}^b k_0(g_K^+)$ for every open interval
-   $(a, b)$ with $-\pi/2 \le a < b \le \pi/2$.
+3. *The left side.* The interval $(a, b)$ is an open arc of the circle, so
+   $\sigma_K((a, b)) \le \liminf_i \sigma_{K_i}((a, b))$ by the Portmanteau theorem for the weak
+   convergence $\sigma_{K_i} \to \sigma_K$
+   ([Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413)); on
+   $[0, 2\pi)$ the arc also contains a part of $(3\pi/2, 2\pi)$ when $a < 0$, where caps have no
+   mass. With steps 1 and 2, $\sigma_K((a, b)) \le \int_{\max(a, 0)}^b k_0(g_K^+)$ for every open
+   interval $(a, b)$ with $-\pi/2 \le a < b \le \pi/2$.
 4. *All Borel sets.* Two finite measures on $\mathbb{R}$ that compare on all open intervals compare on
    all Borel sets. $\square$
 
-*Lean: [`inj_step_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L428), [`inj_polygon_Ico_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L456), [`inj_sigma_Ioo_toReal`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L349), [`inj_measure_le_of_Ioo`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L274).*
+*Lean: [`inj_step_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L577), [`inj_polygon_Ico_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L605), [`inj_limit_Ioo_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L768), [`ang_portmanteau_open`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1034), [`inj_measure_le_of_Ioo`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L423).*
 
-Baek takes the limit of the left side with the Portmanteau theorem: $\sigma_{K_i} \to \sigma_K$
-weakly ([Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413)), so
-$\sigma_K(I) \le \liminf \sigma_{K_i}(I)$ for open $I$. Step 3 proves this inequality directly. In
-the paper the difference $g_{K_n}^+ - g_{K_n}^+$ should read $g_{K_n}^+ - g_K^+$ (REPORT.md, E26).
+In the paper the difference $g_{K_n}^+ - g_{K_n}^+$ should read $g_{K_n}^+ - g_K^+$ (REPORT.md, E26).
 
 ### Corollary 7.19 (condition (1); Baek, Corollary 6.4.4)
 
 Every balanced maximum cap satisfies condition (1) of the injectivity condition.
 
-*Lean: [`corollary6_4_4`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L793).*
+*Lean: [`corollary6_4_4`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L958).*
 
 *Proof.* By Theorem 7.18, $\sigma_K$ restricted to $[0, \pi/2)$ is absolutely continuous with respect
 to $\mathrm{d}t$. So by the Radon–Nikodym theorem it is $r_K(t)\,\mathrm{d}t$ for a measurable
@@ -696,7 +696,7 @@ $r_K \ge 0$. The mirror image $K^\mathrm{m}$ is a balanced maximum cap
 $\sigma_{K^\mathrm{m}}(E) = \sigma_K(\pi - E)$ (Proposition 3.21 (6)). So $\sigma_K$ restricted to
 $(\pi/2, \pi]$ is absolutely continuous too, with a density $s_K(t - \pi/2)$. $\square$
 
-*Lean: [`proposition3_5_1`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L174), [`proposition2_5_4_sigma`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L589).*
+*Lean: [`proposition3_5_1`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L175), [`proposition2_5_4_sigma`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L583).*
 
 ### Proposition 7.20 (single contact points; Baek, Proposition 6.4.5)
 
@@ -704,7 +704,7 @@ Let $K \in \mathcal{K}^\mathrm{c}$ satisfy condition (1). Then $A_K^+(t) = A_K^-
 $f_K^+(t) = f_K^-(t)$ for $t \in [0, \pi/2)$, and $C_K^+(t) = C_K^-(t)$ and
 $g_K^+(t) = g_K^-(t)$ for $t \in (0, \pi/2]$.
 
-*Lean: [`proposition6_4_5`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L877).*
+*Lean: [`proposition6_4_5`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1042).*
 
 *Proof.* Condition (1) gives $\sigma_K(t) = 0$ for $t \in [0, \pi/2) \cup (\pi/2, \pi]$, and
 $v_K^+(t) = v_K^-(t) + \sigma_K(t)\,v_t$ by Proposition 6.10. $\square$
@@ -715,8 +715,8 @@ For $K \in \mathcal{K}^\mathrm{c}$ satisfying condition (1), let $A_K = A_K^-$, 
 $C_K = C_K^+$ and $g_K = g_K^+$ on $[0, \pi/2]$. By Proposition 7.20 these are the common values of
 $A_K^\pm$ and $f_K^\pm$ on $[0, \pi/2)$, and of $C_K^\pm$ and $g_K^\pm$ on $(0, \pi/2]$.
 
-*Lean: [`MovingSofaOptimality.aK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L890), [`MovingSofaOptimality.fK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L892), [`MovingSofaOptimality.cK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L895),
-[`MovingSofaOptimality.gK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L897).*
+*Lean: [`MovingSofaOptimality.aK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1055), [`MovingSofaOptimality.fK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1057), [`MovingSofaOptimality.cK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1060),
+[`MovingSofaOptimality.gK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1062).*
 
 Baek's definition gives $f_K$ and $g_K$ the values $\mathbb{R}^2$ by a slip (REPORT.md, E16).
 
@@ -730,7 +730,7 @@ Let $K \in \mathcal{K}^\mathrm{c}$ satisfy condition (1).
    \mathbf{x}_K'(t) = -\bigl(f_K(t) - 1\bigr)\,u_t + \bigl(g_K(t) - 1\bigr)\,v_t , \qquad \mathbf{y}_K'(t) = -f_K(t)\,u_t + g_K(t)\,v_t .
    ```
 
-*Lean: [`proposition6_4_6_continuous`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L901), [`proposition6_4_6_deriv`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L951).*
+*Lean: [`proposition6_4_6_continuous`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1066), [`proposition6_4_6_deriv`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1117).*
 
 *Proof.* (1) By [Theorem 2.9](02-preliminaries.md#theorem-29-limits-of-vertices-baek-theorem-213),
 $v_K^-$ is left-continuous, and as $s \to t^+$ it tends to $v_K^+(t)$. For $t \in [0, \pi/2)$ this is
@@ -748,20 +748,23 @@ derivatives (one-sided at the ends), which are continuous by (1). $\square$
 For every balanced maximum cap $K$, the arm length $f_K$ is absolutely continuous on $[0, \pi/2]$, and
 $f_K'(t) \ge m_0(g_K(t))$ for almost every $t \in [0, \pi/2]$.
 
-*Lean: [`theorem6_5_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L91).*
+*Lean: [`theorem6_5_1`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L71).*
 
 *Proof.* By Corollary 7.19, $\sigma_K = r_K(t)\,\mathrm{d}t$ on $[0, \pi/2)$, and by Theorem 7.18,
-$r_K \le k_0(g_K)$ almost everywhere on $[0, \pi/2)$. On $[0, \pi/2)$ we have $f_K = f_K^+$ and
+$r_K \le k_0(g_K)$ almost everywhere on $[0, \pi/2)$; replacing $r_K$ by $\min(r_K, k_0(g_K))$
+changes it only on a null set and makes it bounded. On $[0, \pi/2)$ we have $f_K = f_K^+$ and
 $g_K = g_K^+$ (Proposition 7.20), so by Theorem 7.9
 
 ```math
 f_K(t) - f_K(0) = \int_0^t g_K - \sigma_K\bigl((0, t]\bigr) = \int_0^t \bigl(g_K - r_K\bigr) \qquad \text{for } t \in [0, \pi/2) ,
 ```
 
-and at $t = \pi/2$ by continuity (Proposition 7.22). So $f_K$ is absolutely continuous, with
-$f_K' = g_K - r_K$ almost everywhere
-([Proposition 6.5](06-surface-area.md#proposition-65-absolutely-continuous-functions-baek-proposition-514)),
-and $g_K - r_K \ge g_K - k_0(g_K) = m_0(g_K)$. $\square$
+and the same holds at $t = \pi/2$, where $f_K(\pi/2) = f_K^+(\pi/2) + \sigma_K(\lbrace \pi/2 \rbrace)$.
+So $\mathrm{d}f_K = (g_K - r_K)\,\mathrm{d}t$ on $[0, \pi/2]$. As $f_K = f_K^+ + \sigma_K(\lbrace \cdot \rbrace)$
+is of bounded variation and right-continuous on $[0, \pi/2]$, Proposition 6.5
+([Baek, Proposition 5.1.4](06-surface-area.md#proposition-65-absolutely-continuous-functions-baek-proposition-514))
+shows that $f_K$ is absolutely continuous, with $f_K' = g_K - r_K$ almost everywhere, and
+$g_K - r_K \ge g_K - k_0(g_K) = m_0(g_K)$. $\square$
 
 ### Definition 7.24 (the iteration; Baek, Definitions 6.5.1 and 6.5.2)
 
@@ -774,7 +777,7 @@ For a continuous function $f$ on $[0, \pi/2]$, let
 and define the continuous functions $f_0 = 0$ and $f_{n + 1} = \max(f_n, \mathcal{F}f_n)$ on
 $[0, \pi/2]$.
 
-*Lean: [`lowerOp`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L198), [`lowerSeq`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L202).*
+*Lean: [`lowerOp`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L240), [`lowerSeq`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L244).*
 
 Since $m_0(0) = -1$, $f_1(x) = \max(0, 1 - x)$.
 
@@ -783,7 +786,7 @@ Since $m_0(0) = -1$, $f_1(x) = \max(0, 1 - x)$.
 For every $n \ge 0$ and every balanced maximum cap $K$, $f_K(t) \ge f_n(t)$ for $t \in [0, \pi/2)$,
 and $g_K(t) \ge f_n(\pi/2 - t)$ for $t \in (0, \pi/2]$.
 
-*Lean: [`lemma6_5_2`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L241).*
+*Lean: [`lemma6_5_2`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L283).*
 
 *Proof.* By induction on $n$, for all balanced maximum caps at once. The bound on $g_K$ is the bound
 on $f$ for the mirror image, and the bound on $f_K$ integrates Theorem 7.23.
@@ -804,7 +807,7 @@ f_K(t) = 1 + \int_0^t f_K' \ \ge\ 1 + \int_0^t m_0\bigl(g_K(u)\bigr)\,\mathrm{d}
 With $f_K \ge f_n$, this gives $f_K \ge f_{n + 1}$ on $[0, \pi/2)$. The same holds for
 $K^\mathrm{m}$, which gives the bound on $g_K$. $\square$
 
-*Lean: [`inj_fK_zero`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L29), [`inj_gK_eq_fK_mirror`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L78).*
+*Lean: [`inj_fK_zero`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L30), [`inj_gK_eq_fK_mirror`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L54).*
 
 The paper uses $f_K(0) = 1$ without stating it (REPORT.md, E17), and writes
 $m_0(f_K(\pi/2 - u))$ for $m_0(f_n(\pi/2 - u))$ in the last integral (E26).
@@ -814,7 +817,7 @@ $m_0(f_K(\pi/2 - u))$ for $m_0(f_n(\pi/2 - u))$ in the last integral (E26).
 For $c \in [0, 1]$ let $j_c(x) = \max(1 - x, c)$ (Baek, Definition 6.5.3). If $c \in [0, 2/3]$, then
 $\mathcal{F}j_c(x) \ge j_{c + 1/12}(x)$ for every $x \in [0, \pi/2]$.
 
-*Lean: [`jFun`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L275), [`lemma6_5_3`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L279).*
+*Lean: [`jFun`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L317), [`lemma6_5_3`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L321).*
 
 Baek states the lemma on $[0, \pi/2]$, the range that Lemma 7.28 needs. The first line of his proof
 speaks of $[0, 1]$, but the argument covers all of $[0, \pi/2]$.
@@ -856,7 +859,7 @@ $-\frac12 + \frac{3\pi}4 - \frac{3\pi^2}{16} = 0.005644\ldots > 0$. $\square$
 If $f$ and $g$ are continuous on $[0, \pi/2]$ and $f \le g$ there, then $\mathcal{F}f \le \mathcal{F}g$
 on $[0, \pi/2]$.
 
-*Lean: [`lemma6_5_4`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L346).*
+*Lean: [`lemma6_5_4`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L388).*
 
 *Proof.* $m_0$ is nondecreasing, so the integrand of $\mathcal{F}f$ is at most that of
 $\mathcal{F}g$. $\square$
@@ -868,7 +871,7 @@ needs neither sign.
 
 $f_{11}(x) > 1$ for every $x \in (0, \pi/2]$.
 
-*Lean: [`lemma6_5_5`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L366).*
+*Lean: [`lemma6_5_5`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L408).*
 
 Baek states it on $(0, 1]$; Theorem 7.29 needs $(0, \pi/2]$, which the proof gives (REPORT.md, E17).
 
@@ -896,7 +899,7 @@ is a short computation.
 For every balanced maximum cap $K$, $f_K(t) > 1$ for $t \in (0, \pi/2]$ and $g_K(t) > 1$ for
 $t \in [0, \pi/2)$.
 
-*Lean: [`theorem6_5_6`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L424).*
+*Lean: [`theorem6_5_6`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L471).*
 
 *Proof.* For $t \in (0, \pi/2)$, $f_K(t) \ge f_{11}(t) > 1$ by Lemmas 7.25 and 7.28. At
 $t = \pi/2$, Lemma 7.25 gives no bound, but $f_K$ and $f_{11}$ are continuous

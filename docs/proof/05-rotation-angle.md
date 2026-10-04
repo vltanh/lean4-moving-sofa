@@ -110,7 +110,7 @@ which are positive by
 For a cap $K$ with rotation angle $\omega$, $w^\circ_K = \inf_{t \in (0, \omega)} w_K(t)$ and
 $z^\circ_K = \inf_{t \in (0, \omega)} z_K(t)$.
 
-*Lean: [`wedgeGapWInf`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L34), [`wedgeGapZInf`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L37), [`wedgeGapW`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L67), [`wedgeGapZ`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L70).*
+*Lean: [`wedgeGapWInf`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L38), [`wedgeGapZInf`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L41), [`wedgeGapW`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L67), [`wedgeGapZ`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L70).*
 
 ### Lemma 5.4 (continuity of the wedge gap; Baek, Lemma 4.1.1)
 
@@ -122,7 +122,7 @@ $t \in (0, \omega)$. By the formula for $w_K(t)$,
 $\lvert w_K(t) - w_{K'}(t) \rvert \le \varepsilon + \varepsilon \sec t \le (1 + \sec \omega)\, \varepsilon$
 for every $t$, and the infima differ by at most as much. $\square$
 
-*Lean: [`lemma4_1_1`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L261).*
+*Lean: [`lemma4_1_1`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L265).*
 
 The same holds for $z^\circ$, by the formula for $z_K(t)$ and $\cos(\omega - t) \ge \cos\omega$.
 
@@ -156,7 +156,7 @@ that is, $w^\circ_K \le \tau_K(\pi/2)$. Since $K$ is balanced
 ([Theorem 4.31](04-balanced.md#theorem-431-maximum-polygon-caps-are-balanced-baek-theorem-349)),
 $\tau_K(\pi/2) = \sigma_K(\pi/2)$. $\square$
 
-*Lean: [`theorem4_1_2`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L471).*
+*Lean: [`theorem4_1_2`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L470).*
 
 ![A blue polygon cap with rotation angle 1.3 between the x-axis and the line y = 1, with an orange niche near the origin O. Three orange ticks on the x-axis mark the ends W_K(t) of the wedges; below the axis, three black bars run from each tick to the corner A at the right end of the bottom side. The part of the bottom side from the rightmost tick to A is thick green, and so is the top side of the cap; the two green segments have the same length](figures/05-rotation-angle/horizontal-side.svg)
 
@@ -171,31 +171,20 @@ the length $\sigma_K(\pi/2)$ of the top side (green).
 For $\omega < \pi/2$, every balanced maximum cap $K$ with rotation angle $\omega$ satisfies
 $w^\circ_K \le \sigma_K(\pi/2)$ and $z^\circ_K \le \sigma_K(\omega)$.
 
-*Proof.* Pass to the limit in Theorem 5.5, using that edge lengths are upper semicontinuous. Let
-$K_i \to K$ be the maximum polygon caps of
+*Proof.* Pass to the limit in Theorem 5.5. Let $K_i \to K$ be the maximum polygon caps of
 [Definition 4.33](04-balanced.md#definition-433-balanced-maximum-cap-baek-definitions-351352). By
 Theorem 5.5, $w^\circ_{K_i} \le \sigma_{K_i}(\pi/2)$, and $w^\circ_{K_i} \to w^\circ_K$ by Lemma 5.4.
+The surface area measures $\sigma_{K_i}$ converge weakly to $\sigma_K$
+([Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413)), so the
+Portmanteau theorem for the closed set $\lbrace \pi/2 \rbrace$ gives
+$\limsup_i \sigma_{K_i}(\pi/2) \le \sigma_K(\pi/2)$. Hence $w^\circ_K \le \sigma_K(\pi/2)$. The bound
+for $z^\circ_K$ is this bound for the mirror image $K^m$, a balanced maximum cap
+([Proposition 4.34](04-balanced.md#proposition-434-mirror-image-baek-proposition-351)), since
+$z^\circ_K = w^\circ_{K^m}$ and $\sigma_K(\omega) = \sigma_{K^m}(\pi/2)$
+([Proposition 3.21](03-monotone.md#proposition-321-mirror-symmetry-baek-proposition-254)).
+$\square$
 
-For a convex body $L$, an angle $t$ and $\delta \in (0, \pi)$, the sandwich after
-[Lemma 6.7](06-surface-area.md#lemma-67-one-sided-derivatives-of-the-support-function) bounds
-$\sigma_L(t) = \langle v^+_L(t) - v^-_L(t), v_t \rangle$ by support values:
-
-```math
-\sigma_L(t) \sin\delta \le h_L(t + \delta) + h_L(t - \delta) - 2 h_L(t) \cos\delta ,
-```
-
-and the right side divided by $\sin\delta$ tends to $\sigma_L(t)$ as $\delta \to 0^+$. Apply the
-inequality to $L = K_i$ and $t = \pi/2$, and let $i \to \infty$. The support functions converge, so
-$w^\circ_K \sin\delta \le h_K(\pi/2 + \delta) + h_K(\pi/2 - \delta) - 2 h_K(\pi/2) \cos\delta$. Divide
-by $\sin\delta$ and let $\delta \to 0^+$: $w^\circ_K \le \sigma_K(\pi/2)$. The bound for $z^\circ_K$ is
-the same argument at $t = \omega$. $\square$
-
-*Lean: [`theorem4_1_4`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L908), [`ang_le_sigmaAt_of_tendsto`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L888), [`ang_sigmaAt_mul_sin_le`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L496).*
-
-The paper deduces the upper semicontinuity of edge lengths from the weak convergence of surface area
-measures ([Theorem 6.14](06-surface-area.md#theorem-614-weak-convergence-baek-theorem-413);
-Schneider's Theorem 4.2.1 [7]). The formalization does not use that theorem here; it argues with
-the sandwich, as above.
+*Lean: [`theorem4_1_4`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1062), [`ang_portmanteau_closed`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1048), [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L844).*
 
 ## 5.3 The triangle at the corner
 
@@ -511,5 +500,5 @@ $S_{\pi/2} = K \setminus \mathcal{N}(K)$ with rotation angle $\pi/2$. So
 
 and [Chapter 9](09-optimality.md) bounds $\mathcal{A}_{\pi/2}(K)$ by the area of Gerver's sofa for this
 balanced maximum cap $K$. The Lean proof assembles this chain in
-[`gm_area_le`](../../MovingSofaOptimality/Main.lean#L268). A moving sofa of area less than $2.2$ is
+[`gm_area_le`](../../MovingSofaOptimality/Main.lean#L269). A moving sofa of area less than $2.2$ is
 smaller than Gerver's sofa anyway.

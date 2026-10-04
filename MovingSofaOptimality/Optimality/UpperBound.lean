@@ -518,7 +518,14 @@ lemma opt_tail_area_le {C K S : Set (ℝ × ℝ)} (hC : IsConvexBody C) {a b : �
     · exact fun hpC => hp.2 (mem_iInter₂.mpr fun t _ => dot_le_supp hC.2.1 hpC t)
 
 /-- **Lemma 8.2.2** (`lem:cap-left-right-tail`). For `K ∈ 𝒦^i`, `B = B_K`, `D = D_K`:
-`|𝒩(K) ∩ H̆_K^R| ≥ 𝒥(X_B, W_K^R) - 𝒥(𝐛_B)` and `|𝒩(K) ∩ H̆_K^L| ≥ 𝒥(Z_K^L, Y_D) - 𝒥(𝐝_D)`. -/
+`|𝒩(K) ∩ H̆_K^R| ≥ 𝒥(X_B, W_K^R) - 𝒥(𝐛_B)` and `|𝒩(K) ∩ H̆_K^L| ≥ 𝒥(Z_K^L, Y_D) - 𝒥(𝐝_D)`.
+
+Departure from the paper: the paper takes the region `R` enclosed by the Jordan curve made of `𝐛_B`
+and the segments `[X_B, W_K^R]`, `[W_K^R, W_B]` (Lemma 7.3.5) and evaluates
+`|R| = 𝒥(X_B, W_K^R) - 𝒥(𝐛_B)` by Green's theorem (Theorem 7.2.3) and Proposition 7.2.6; this
+proof takes `R` as the part of the triangle `X_B W_K^R W_B` outside `B`, whose area Lemma 7.3.5
+computes through Theorem 7.1.3 (`opt_tail_area_le`), because Mathlib has neither the Jordan curve
+theorem nor Green's theorem. -/
 theorem lemma8_2_2 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     segArea (xB φ (rightBody φ K)) (wRight φ K) -
           convexCurveArea (rightBody φ K) (π + φ) (3 * π / 2) ≤
@@ -530,9 +537,23 @@ theorem lemma8_2_2 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (�
   have hpi := two_le_pi
   have hcap := hK.1
   have hφ' : φ ∈ Ioo 0 (π / 4) := ⟨hφ0, hφ4⟩
-  have hL := theorem8_1_8 hφ hK
-  obtain ⟨hB3, hD3, hBa, hDb⟩ := opt_inL_supp hL
-  obtain ⟨-, hBcb, hDcb, hBK, hDK, -⟩ := hL
+  -- `B_K ⊆ K` and `D_K ⊆ K` are convex bodies (Definition 8.1.4) with `l_B(3π/2) = l(π/2, 0)`,
+  -- `l_B(π + φ^R) = b_K^R` (Lemma 8.1.7 (2)) and `l_D(3π/2) = l(π/2, 0)`,
+  -- `l_D(3π/2 + φ^L) = d_K^L` (Lemma 8.1.7 (4))
+  have hBcb := opt_rightBody_isConvexBody hφ0.le hcap
+  have hDcb := opt_leftBody_isConvexBody hφ0.le hcap
+  have hBK : rightBody φ K ⊆ K := inter_subset_left
+  have hDK : leftBody φ K ⊆ K := inter_subset_left
+  obtain ⟨e1, e1', -, -⟩ := lemma8_1_7_two hφ hK
+  obtain ⟨e2, e2', -, -⟩ := lemma8_1_7_four hφ hK
+  have hK2 : supp K (π / 2) = 1 := hcap.2.2.2.1
+  have hB3 : supp (rightBody φ K) (3 * π / 2) = 0 := by
+    rw [show 3 * π / 2 = π + π / 2 by ring]; linarith
+  have hD3 : supp (leftBody φ K) (3 * π / 2) = 0 := by
+    rw [add_zero, add_zero, hK2] at e2; linarith
+  have hBa : supp (rightBody φ K) (π + φ) = 1 - supp K φ := by linarith
+  have hDb : supp (leftBody φ K) (3 * π / 2 + (π / 2 - φ)) = 1 - supp K (π - φ) := by
+    rw [show π / 2 + (π / 2 - φ) = π - φ by ring] at e2'; linarith
   have hfin : ∀ S ⊆ niche K (π / 2), MeasureTheory.volume S ≠ ⊤ := fun S hS =>
     ne_top_of_le_ne_top (nef_niche_isBounded hcap).measure_lt_top.ne
       (MeasureTheory.measure_mono hS)
@@ -638,8 +659,13 @@ lemma opt_l823_curve_pt {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ �
   have hst : 0 < sin t := sin_pos_of_pos_of_lt_pi ht'.1 (by linarith [ht'.2])
   have hct : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht'.1], ht'.2⟩
   have hs0 : 0 < sin φ := sin_pos_of_pos_of_lt_pi hφ.1 (by linarith [hφ.2])
-  have e1 := opt_innerCorner_lt_right hφ hK (t := t) ⟨ht.1, by linarith [ht.2, hφ.1]⟩
-  have e2 := opt_innerCorner_lt_left hφ hK (t := t) ⟨ht'.1.le, ht.2⟩
+  -- `𝐱_K(t)` lies outside `H̆_K^R` and `H̆_K^L` (Lemma 8.1.6)
+  have e1 : dot (innerCorner K t) (uvec φ) < supp K φ - 1 := by
+    simpa only [hRight, halfB, halfPlus, mem_ofPred_eq, not_le] using
+      (lemma8_1_6_right hφ hK (t := t) ⟨ht.1, by linarith [ht.2, hφ.1]⟩).1
+  have e2 : dot (innerCorner K t) (vvec (π / 2 - φ)) < supp K (π / 2 - φ + π / 2) - 1 := by
+    simpa only [hLeft, halfD, halfPlus, mem_ofPred_eq, not_le, uvec_add_pi_div_two] using
+      (lemma8_1_6_left hφ hK (t := t) ⟨ht'.1.le, ht.2⟩).1
   have e3 := (cn_innerCorner_dot K t).1
   have e4 := opt_innerCorner_dot_v K t
   simp only [dot, uvec, vvec] at e1 e2 e3 e4
@@ -663,7 +689,10 @@ lemma opt_l823_tri1_pt {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ ×
   have hpi := pi_pos
   have hs0 : 0 < sin φ := sin_pos_of_pos_of_lt_pi hφ.1 (by linarith [hφ.2])
   have hc0 : 0 < cos φ := cos_pos_of_mem_Ioo ⟨by linarith [hφ.1], by linarith [hφ.2]⟩
-  have e2 := opt_innerCorner_lt_left hφ hK (t := φ) ⟨hφ.1.le, by linarith [hφ.2]⟩
+  -- `𝐱_K^R` lies outside `H̆_K^L` (Lemma 8.1.6 (2))
+  have e2 : dot (innerCorner K φ) (vvec (π / 2 - φ)) < supp K (π / 2 - φ + π / 2) - 1 := by
+    simpa only [hLeft, halfD, halfPlus, mem_ofPred_eq, not_le, uvec_add_pi_div_two] using
+      (lemma8_1_6_left hφ hK (t := φ) ⟨hφ.1.le, by linarith [hφ.2]⟩).1
   have e4 := opt_innerCorner_dot_v K φ
   simp only [dot, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub] at e2 e4
   refine ⟨?_, ?_⟩
@@ -686,8 +715,10 @@ lemma opt_l823_tri2_pt {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ ×
   have hpi := pi_pos
   have hs0 : 0 < sin φ := sin_pos_of_pos_of_lt_pi hφ.1 (by linarith [hφ.2])
   have hc0 : 0 < cos φ := cos_pos_of_mem_Ioo ⟨by linarith [hφ.1], by linarith [hφ.2]⟩
-  have e1 := opt_innerCorner_lt_right hφ hK (t := π / 2 - φ)
-    ⟨by linarith [hφ.2], by linarith [hφ.1]⟩
+  -- `𝐱_K^L` lies outside `H̆_K^R` (Lemma 8.1.6 (1))
+  have e1 : dot (innerCorner K (π / 2 - φ)) (uvec φ) < supp K φ - 1 := by
+    simpa only [hRight, halfB, halfPlus, mem_ofPred_eq, not_le] using
+      (lemma8_1_6_right hφ hK (t := π / 2 - φ) ⟨by linarith [hφ.2], by linarith [hφ.1]⟩).1
   have e3 := (cn_innerCorner_dot K (π / 2 - φ)).1
   simp only [dot, uvec, sin_pi_div_two_sub, cos_pi_div_two_sub] at e1 e3
   refine ⟨?_, ?_⟩
@@ -836,7 +867,12 @@ lemma opt_l823_numerics {Xφ Yφ Xψ Yψ τ H w z B : ℝ} (hτ : 0 < τ) (hH : 
 The proof compares areas below a low line `y = -H`: the region `G₀` between the core curve
 `𝐱_K|_{[φ, φ^L]}` and that line, with the triangles `T₁` below `𝐱_K^R` and `T₂` below `𝐱_K^L`, minus
 the trapezoid `R` below `y = 0` between the lines `b_K^R` and `d_K^L`, lies in
-`𝒩(K) \ H̆_K^R \ H̆_K^L`, and its signed area is the right side. -/
+`𝒩(K) \ H̆_K^R \ H̆_K^L`, and its signed area is the right side.
+
+Departure from the paper: the paper takes the region `G` enclosed by the Jordan curve made of
+`𝐱_K|_{[φ^R, φ^L]}` and three segments, and gets `|G| - |R|` by Green's theorem (Theorem 7.2.3);
+this proof replaces `G` by `G₀ ∪ T₁ ∪ T₂`, regions between graphs whose areas Fubini gives, because
+Mathlib has neither the Jordan curve theorem nor Green's theorem. -/
 theorem lemma8_2_3 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     segArea (wRight φ K) (xRight φ K) + curveArea (innerCorner K) φ (π / 2 - φ) +
         segArea (xLeft φ K) (zLeft φ K) ≤
@@ -1045,8 +1081,11 @@ theorem lemma8_2_3 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (�
   linarith
 
 /-- **Theorem 8.2.4** (`thm:upper-bound-q`). For `K ∈ 𝒦^i`, `𝒜(K) ≤ 𝒬(K, B_K, D_K)`.
-(The decomposition of `𝒩(K)` uses `𝒩(K) ∩ H̆_K^R ∩ H̆_K^L = ∅`, `opt_niche_hRight_hLeft`; the paper
-derives it from Lemma 8.1.4, which needs `𝒩(K) ⊆ K`.) -/
+
+Departure from the paper: the paper splits `|𝒩(K)|` into its parts in `H̆_K^R`, in `H̆_K^L` and
+outside both as if they were disjoint, which with `𝒩(K) ⊆ K` would follow from Lemma 8.1.4; this
+proof shows `𝒩(K) ∩ H̆_K^R ∩ H̆_K^L = ∅` by comparing heights (`opt_niche_hRight_hLeft`), because
+`𝒩(K) ⊆ K` fails on `𝒦^i` (see the module docstring of `MovingSofaOptimality.Optimality.Domain`). -/
 theorem theorem8_2_4 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     sofaArea (π / 2) K ≤ upperQ φ K (rightBody φ K) (leftBody φ K) := by
   obtain ⟨hφ0, hφ4, hs4, hc9, hs0⟩ := opt_phi_bounds hφ

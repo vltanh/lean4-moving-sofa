@@ -14,14 +14,18 @@ Definition 4.1.1 (`def:wedge-gap-infimum`), Lemma 4.1.1 (`lem:wedge-gap-limit`),
 Theorem 4.2.1) and Theorem 4.1.4 (`thm:balanced-maximum-sofa-ineq`).
 
 **Proofs.** Theorem 4.1.2 bounds the part of the polygon niche on the `x`-axis (Lemma 3.4.5 (2))
-by the wedge endpoints `W_K(t)`, `t ∈ Θ`, and uses balancedness (Theorem 3.4.9); the `z`-part is
-the same argument on the line `l(ω, 0)` (instead of the mirror symmetry used in the paper), and the
-`z`-part of Theorem 4.1.4 uses the analogue of Lemma 4.1.1 for the left wedge gaps. Theorem 4.1.3
+by the wedge endpoints `W_K(t)`, `t ∈ Θ`, and uses balancedness (Theorem 3.4.9). As in the paper,
+the `z`-parts of Theorems 4.1.2 and 4.1.4 are the `w`-parts for the mirror image `K^m`, a maximum
+polygon cap by Lemma 3.4.1 and a balanced maximum cap by Proposition 3.5.1, with
+`w_{K^m}° = z_K°` and `σ_{K^m}(π/2) = σ_K(ω)` (Proposition 2.5.4). Theorem 4.1.3
 is proved by integration by parts against the Stieltjes function `sigmaFun` for `C¹` integrands,
 dominated convergence (the vertices `v_{K_n}⁺(t)` converge at every `t` where `K` has no edge) and
-uniform approximation by averages over short intervals. Theorem 4.1.4 uses the upper
-semicontinuity of edge lengths directly: `σ_K(t) sin δ ≤ h_K(t + δ) + h_K(t - δ) - 2 h_K(t) cos δ`,
-and the right-hand side divided by `sin δ` tends to `σ_K(t)` as `δ → 0⁺`.
+uniform approximation by averages over short intervals. The Portmanteau theorem, which the paper
+takes as standard, follows from Theorem 4.1.3 for lower and upper semicontinuous integrands and for
+open and closed subsets of `S¹` (`ang_portmanteau_lsc`, `ang_portmanteau_usc`,
+`ang_portmanteau_open`, `ang_portmanteau_closed`). As in the paper, Theorem 4.1.4 is the limit of
+Theorem 4.1.2 with `w_{K_n}° → w_K°` (Lemma 4.1.1) and `limsup σ_{K_n}(π/2) ≤ σ_K(π/2)` (the
+Portmanteau theorem for the closed set `{π/2}`).
 -/
 
 @[expose] public section
@@ -431,12 +435,6 @@ lemma ang_wedgeGapZInf_le_tau {Θ : AngleSet} {K : Set (ℝ × ℝ)}
   · rw [max_eq_left hW] at hℓ
     linarith
 
-/-- The `z`-part of Theorem 4.1.2: `ang_wedgeGapZInf_le_tau`, with `τ_K(ω) = σ_K(ω)` by
-balancedness (Theorem 3.4.9). -/
-lemma ang_theorem4_1_2_z {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap Θ K)
-    (hω : Θ.ω < π / 2) : wedgeGapZInf K Θ.ω ≤ sigmaAt K Θ.ω :=
-  (theorem3_4_9 hK Θ.ω (Or.inr (Or.inl rfl))) ▸ ang_wedgeGapZInf_le_tau hK.1 hω
-
 /-! ### Mirror symmetry -/
 
 /-- The reflection `t ↦ ω - t` of `(0, ω)`. -/
@@ -467,11 +465,17 @@ lemma ang_sigmaAt_mirror {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (t 
   constructor <;> intro h <;> linarith
 
 /-- **Theorem 4.1.2** (`thm:balanced-polygon-sofa-ineq`). For a maximum polygon cap with rotation
-angle `ω < π/2`, `w_K° ≤ σ_K(π/2)` and `z_K° ≤ σ_K(ω)`. -/
+angle `ω < π/2`, `w_K° ≤ σ_K(π/2)` and `z_K° ≤ σ_K(ω)`. As in the paper, the second inequality is
+the first one for the mirror image `K^m` (Lemma 3.4.1). -/
 theorem theorem4_1_2 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap Θ K)
     (hω : Θ.ω < π / 2) :
-    wedgeGapWInf K Θ.ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K Θ.ω ≤ sigmaAt K Θ.ω :=
-  ⟨ang_theorem4_1_2_w hK hω, ang_theorem4_1_2_z hK hω⟩
+    wedgeGapWInf K Θ.ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K Θ.ω ≤ sigmaAt K Θ.ω := by
+  refine ⟨ang_theorem4_1_2_w hK hω, ?_⟩
+  -- by mirror symmetry: `K^m` is a maximum polygon cap (Lemma 3.4.1), and
+  -- `z_K° = w_{K^m}° ≤ σ_{K^m}(π/2) = σ_K(ω)` (Proposition 2.5.4)
+  have h : wedgeGapWInf (mirrorCap K Θ.ω) Θ.ω ≤ sigmaAt (mirrorCap K Θ.ω) (π / 2) :=
+    ang_theorem4_1_2_w (Θ := Θ.mirror) (lemma3_4_1 hK) hω
+  rwa [ang_wedgeGapWInf_mirror, ang_sigmaAt_mirror hK.1.1, add_sub_cancel_right] at h
 
 /-! ### Upper semicontinuity of edge lengths and weak convergence of `σ_K` -/
 
@@ -903,24 +907,195 @@ lemma ang_le_sigmaAt_of_tendsto {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ ×
   refine ge_of_tendsto (ang_tendsto_edge_quotient hK t) ?_
   filter_upwards [Ioo_mem_nhdsGT pi_pos] with δ hδ using hQ δ hδ
 
+/-! ### The Portmanteau theorem
+
+The paper takes the Portmanteau theorem on finite measures as standard. The forms that
+Theorem 4.1.4, Lemma 6.4.2 and Theorem 6.4.3 use follow from Theorem 4.1.3: a lower semicontinuous
+`g ≥ 0` is the increasing limit of the continuous functions `g_k(x) = inf_y (g(y) + k |x - y|)`. A
+function or a set on `S¹` is a `2π`-periodic one on `ℝ`, and the measure `σ_K` on `S¹` is `σ_K` on
+`[0, 2π)`. -/
+
+/-- For `g ≥ 0`, the values `g(y) + k |x - y|` with infimum `g_k(x)` are bounded below by `0`. -/
+private lemma ang_bddBelow_infConv {g : ℝ → ℝ} (h0 : ∀ x, 0 ≤ g x) (k : ℕ) (x : ℝ) :
+    BddBelow (range fun y => g y + k * |x - y|) :=
+  ⟨0, by rintro _ ⟨y, rfl⟩; have := h0 y; positivity⟩
+
+/-- The functions `g_k(x) = inf_y (g(y) + k |x - y|)` of a `2π`-periodic `g ≥ 0` are continuous
+(`k`-Lipschitz), `2π`-periodic, nonnegative and at most `g`. -/
+private lemma ang_infConv {g : ℝ → ℝ} (h0 : ∀ x, 0 ≤ g x) (hper : Function.Periodic g (2 * π))
+    (k : ℕ) : Continuous (fun x => ⨅ y, (g y + k * |x - y|)) ∧
+      Function.Periodic (fun x => ⨅ y, (g y + k * |x - y|)) (2 * π) ∧
+      ∀ x, 0 ≤ ⨅ y, (g y + k * |x - y|) ∧ ⨅ y, (g y + k * |x - y|) ≤ g x := by
+  refine ⟨(LipschitzWith.of_le_add_mul' (k : ℝ) fun x x' => ?_).continuous, fun x => ?_,
+    fun x => ⟨le_ciInf fun y => by have := h0 y; positivity,
+      (ciInf_le (ang_bddBelow_infConv h0 k x) x).trans (by simp)⟩⟩
+  · rw [← sub_le_iff_le_add]
+    refine le_ciInf fun y => ?_
+    rw [sub_le_iff_le_add, Real.dist_eq]
+    refine (ciInf_le (ang_bddBelow_infConv h0 k x) y).trans ?_
+    have := mul_le_mul_of_nonneg_left (abs_sub_le x x' y) (Nat.cast_nonneg (α := ℝ) k)
+    rw [mul_add] at this
+    linarith
+  · show ⨅ y, (g y + k * |x + 2 * π - y|) = ⨅ y, (g y + k * |x - y|)
+    rw [← (Equiv.addRight (2 * π)).iInf_comp]
+    congr 1
+    ext y
+    simp only [Equiv.coe_addRight, hper y, add_sub_add_right_eq_sub]
+
+/-- The functions `g_k` of a lower semicontinuous `g ≥ 0` converge to `g` pointwise. -/
+private lemma ang_tendsto_infConv {g : ℝ → ℝ} (hg : LowerSemicontinuous g) (h0 : ∀ x, 0 ≤ g x)
+    (x : ℝ) : Tendsto (fun k : ℕ => ⨅ y, (g y + k * |x - y|)) atTop (𝓝 (g x)) := by
+  refine tendsto_order.2 ⟨fun a ha => ?_, fun b hb => Eventually.of_forall fun k =>
+    ((ciInf_le (ang_bddBelow_infConv h0 k x) x).trans (by simp)).trans_lt hb⟩
+  -- `g > a'` on a ball of radius `δ` around `x`, and `k |x - y| ≥ k δ > a'` off it
+  obtain ⟨a', ha', ha'x⟩ := exists_between ha
+  obtain ⟨δ, hδ, hball⟩ := Metric.eventually_nhds_iff.1 (hg x a' ha'x)
+  obtain ⟨N, hN⟩ := exists_nat_gt (a' / δ)
+  rw [div_lt_iff₀ hδ] at hN
+  filter_upwards [eventually_ge_atTop N] with k hk
+  refine ha'.trans_le (le_ciInf fun y => ?_)
+  have hk0 : (0 : ℝ) ≤ k * |x - y| := by positivity
+  by_cases hy : dist y x < δ
+  · linarith [hball hy]
+  · rw [not_lt, Real.dist_eq, abs_sub_comm] at hy
+    have h1 : (N : ℝ) * δ ≤ k * δ := mul_le_mul_of_nonneg_right (by exact_mod_cast hk) hδ.le
+    have h2 : (k : ℝ) * δ ≤ k * |x - y| := mul_le_mul_of_nonneg_left hy (Nat.cast_nonneg k)
+    linarith [h0 y]
+
+/-- **The Portmanteau theorem** for a lower semicontinuous integrand, from Theorem 4.1.3. If
+`K_n → K` and `g ≥ 0` is bounded, lower semicontinuous and `2π`-periodic, then
+`∫ g dσ_K ≤ liminf_n ∫ g dσ_{K_n}` (integrals over `[0, 2π)`): every `a < ∫ g dσ_K` is eventually
+less than `∫ g dσ_{K_n}`. -/
+lemma ang_portmanteau_lsc {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
+    (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K) (hlim : HausdorffTendsto Ks K)
+    {g : ℝ → ℝ} (hg : LowerSemicontinuous g) (hper : Function.Periodic g (2 * π))
+    (h0 : ∀ x, 0 ≤ g x) {M : ℝ} (hM : ∀ x, g x ≤ M) {a : ℝ}
+    (ha : a < ∫ t in Ico 0 (2 * π), g t ∂(sigma K)) :
+    ∀ᶠ n in atTop, a < ∫ t in Ico 0 (2 * π), g t ∂(sigma (Ks n)) := by
+  have hG := ang_infConv h0 hper
+  have : IsFiniteMeasure ((sigma K).restrict (Ico 0 (2 * π))) :=
+    isFiniteMeasure_restrict.2 measure_Ico_lt_top.ne
+  -- `∫ g_k dσ_K → ∫ g dσ_K` by dominated convergence, so `a < ∫ g_k dσ_K` for some `k`
+  have hconv : Tendsto (fun k : ℕ => ∫ t in Ico 0 (2 * π), ⨅ y, (g y + k * |t - y|) ∂(sigma K))
+      atTop (𝓝 (∫ t in Ico 0 (2 * π), g t ∂(sigma K))) := by
+    refine tendsto_integral_of_dominated_convergence (fun _ => M)
+      (fun k => (hG k).1.aestronglyMeasurable) (integrable_const M)
+      (fun k => ae_of_all _ fun x => ?_) (ae_of_all _ (ang_tendsto_infConv hg h0))
+    rw [Real.norm_eq_abs, abs_of_nonneg ((hG k).2.2 x).1]
+    exact ((hG k).2.2 x).2.trans (hM x)
+  obtain ⟨k, hk⟩ := (hconv.eventually (lt_mem_nhds ha)).exists
+  -- Theorem 4.1.3 for the continuous `g_k ≤ g`
+  filter_upwards [(theorem4_1_3 hKs hK hlim (hG k).1 (hG k).2.1).eventually (lt_mem_nhds hk)]
+    with n hn
+  refine hn.trans_le (setIntegral_mono_on ?_ ?_ measurableSet_Ico fun x _ => ((hG k).2.2 x).2)
+  · exact ((hG k).1.continuousOn.integrableOn_compact isCompact_Icc).mono_set Ico_subset_Icc_self
+  · exact IntegrableOn.of_bound measure_Ico_lt_top hg.measurable.aestronglyMeasurable M
+      (ae_of_all _ fun x => by rw [Real.norm_eq_abs, abs_of_nonneg (h0 x)]; exact hM x)
+
+/-- **The Portmanteau theorem** for an upper semicontinuous integrand. If `K_n → K` and `g ≥ 0` is
+bounded, upper semicontinuous and `2π`-periodic, then `limsup_n ∫ g dσ_{K_n} ≤ ∫ g dσ_K`
+(integrals over `[0, 2π)`): every `b > ∫ g dσ_K` is eventually greater than `∫ g dσ_{K_n}`. This
+is `ang_portmanteau_lsc` for `M - g`, as the total masses converge (Theorem 4.1.3 for `f = M`). -/
+lemma ang_portmanteau_usc {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
+    (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K) (hlim : HausdorffTendsto Ks K)
+    {g : ℝ → ℝ} (hg : UpperSemicontinuous g) (hper : Function.Periodic g (2 * π))
+    (h0 : ∀ x, 0 ≤ g x) {M : ℝ} (hM : ∀ x, g x ≤ M) {b : ℝ}
+    (hb : ∫ t in Ico 0 (2 * π), g t ∂(sigma K) < b) :
+    ∀ᶠ n in atTop, ∫ t in Ico 0 (2 * π), g t ∂(sigma (Ks n)) < b := by
+  have hsub : ∀ L : Set (ℝ × ℝ), ∫ t in Ico 0 (2 * π), (M - g t) ∂(sigma L) =
+      (∫ t in Ico 0 (2 * π), M ∂(sigma L)) - ∫ t in Ico 0 (2 * π), g t ∂(sigma L) := fun L =>
+    integral_sub (integrableOn_const measure_Ico_lt_top.ne)
+      (IntegrableOn.of_bound measure_Ico_lt_top hg.measurable.aestronglyMeasurable M
+        (ae_of_all _ fun x => by rw [Real.norm_eq_abs, abs_of_nonneg (h0 x)]; exact hM x))
+  set η := (b - ∫ t in Ico 0 (2 * π), g t ∂(sigma K)) / 2 with hη
+  have hη0 : 0 < η := by rw [hη]; linarith
+  have h1 := ang_portmanteau_lsc hKs hK hlim (g := fun x => M - g x)
+    (fun x y hy => (hg x (M - y) (by linarith [show y < M - g x from hy])).mono fun z hz =>
+      show y < M - g z by linarith)
+    (fun x => by simp only [hper x]) (fun x => sub_nonneg.2 (hM x)) (M := M)
+    (fun x => by linarith [h0 x]) (a := ∫ t in Ico 0 (2 * π), (M - g t) ∂(sigma K) - η)
+    (by linarith)
+  have h2 := (theorem4_1_3 hKs hK hlim (f := fun _ => M) continuous_const fun _ => rfl).eventually
+    (gt_mem_nhds (lt_add_of_pos_right (∫ t in Ico 0 (2 * π), M ∂(sigma K)) hη0))
+  filter_upwards [h1, h2] with n hn1 hn2
+  rw [hsub, hsub] at hn1
+  linarith
+
+/-- `∫_{[0, 2π)} 1_U dσ_L = σ_L(U ∩ [0, 2π))`. -/
+private lemma ang_integral_indicator_one {U : Set ℝ} (hU : MeasurableSet U) (L : Set (ℝ × ℝ)) :
+    ∫ t in Ico 0 (2 * π), U.indicator (fun _ => (1 : ℝ)) t ∂(sigma L) =
+      (sigma L (U ∩ Ico 0 (2 * π))).toReal := by
+  rw [integral_indicator_const _ hU, smul_eq_mul, mul_one, measureReal_restrict_apply hU,
+    Measure.real]
+
+/-- **The Portmanteau theorem** for an open set. If `K_n → K` and `U ⊆ ℝ` is open and `2π`-periodic
+(an open subset of `S¹`), then `σ_K(U) ≤ liminf_n σ_{K_n}(U)` (on `[0, 2π)`): every
+`a < σ_K(U)` is eventually less than `σ_{K_n}(U)`. -/
+lemma ang_portmanteau_open {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
+    (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K) (hlim : HausdorffTendsto Ks K)
+    {U : Set ℝ} (hU : IsOpen U) (hper : ∀ x, x + 2 * π ∈ U ↔ x ∈ U) {a : ℝ}
+    (ha : a < (sigma K (U ∩ Ico 0 (2 * π))).toReal) :
+    ∀ᶠ n in atTop, a < (sigma (Ks n) (U ∩ Ico 0 (2 * π))).toReal := by
+  simp only [← ang_integral_indicator_one hU.measurableSet] at ha ⊢
+  exact ang_portmanteau_lsc hKs hK hlim (hU.lowerSemicontinuous_indicator zero_le_one)
+    (fun x => by classical rw [indicator_apply, indicator_apply]; exact if_congr (hper x) rfl rfl)
+    (fun x => by by_cases hx : x ∈ U <;> simp [hx])
+    (M := 1) (fun x => by by_cases hx : x ∈ U <;> simp [hx]) ha
+
+/-- **The Portmanteau theorem** for a closed set. If `K_n → K` and `F ⊆ ℝ` is closed and
+`2π`-periodic (a closed subset of `S¹`), then `limsup_n σ_{K_n}(F) ≤ σ_K(F)` (on `[0, 2π)`): every
+`b > σ_K(F)` is eventually greater than `σ_{K_n}(F)`. -/
+lemma ang_portmanteau_closed {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
+    (hKs : ∀ n, IsConvexBody (Ks n)) (hK : IsConvexBody K) (hlim : HausdorffTendsto Ks K)
+    {F : Set ℝ} (hF : IsClosed F) (hper : ∀ x, x + 2 * π ∈ F ↔ x ∈ F) {b : ℝ}
+    (hb : (sigma K (F ∩ Ico 0 (2 * π))).toReal < b) :
+    ∀ᶠ n in atTop, (sigma (Ks n) (F ∩ Ico 0 (2 * π))).toReal < b := by
+  simp only [← ang_integral_indicator_one hF.measurableSet] at hb ⊢
+  exact ang_portmanteau_usc hKs hK hlim (hF.upperSemicontinuous_indicator zero_le_one)
+    (fun x => by classical rw [indicator_apply, indicator_apply]; exact if_congr (hper x) rfl rfl)
+    (fun x => by by_cases hx : x ∈ F <;> simp [hx])
+    (M := 1) (fun x => by by_cases hx : x ∈ F <;> simp [hx]) hb
+
 /-- **Theorem 4.1.4** (`thm:balanced-maximum-sofa-ineq`). For `ω < π/2`, a balanced maximum cap
-satisfies `σ_K(π/2) ≥ w_K°` and `σ_K(ω) ≥ z_K°`. -/
+satisfies `σ_K(π/2) ≥ w_K°` and `σ_K(ω) ≥ z_K°`. As in the paper, the second inequality is the
+first one for the mirror image `K^m` (Proposition 3.5.1). -/
 theorem theorem4_1_4 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K ω) (hω : ω < π / 2) :
     wedgeGapWInf K ω ≤ sigmaAt K (π / 2) ∧ wedgeGapZInf K ω ≤ sigmaAt K ω := by
-  obtain ⟨hω', hcap, k, Ks, -, hmax, hlim⟩ := hK
-  have hcapn : ∀ i, IsCap (Ks i) ω := fun i => (hmax i).1.1
-  have hcbn : ∀ i, IsConvexBody (Ks i) := fun i => (hcapn i).2.1
-  have h0 : Tendsto (fun i => (1 + 1 / cos ω) * hausdorffDist (Ks i) K) atTop (𝓝 0) := by
-    simpa using hlim.const_mul (1 + 1 / cos ω)
-  constructor
-  · have hw : Tendsto (fun i => wedgeGapWInf (Ks i) ω) atTop (𝓝 (wedgeGapWInf K ω)) := by
+  -- the `w`-part, for every balanced maximum cap: the limit of Theorem 4.1.2 for the maximum
+  -- polygon caps `K_i → L`, with `w_{K_i}° → w_L°` (Lemma 4.1.1) and
+  -- `limsup_i σ_{K_i}(π/2) ≤ σ_L(π/2)` (Theorem 4.1.3 and the Portmanteau theorem)
+  have hw : ∀ {L : Set (ℝ × ℝ)}, IsBalancedMaxCap L ω → wedgeGapWInf L ω ≤ sigmaAt L (π / 2) := by
+    intro L hL
+    obtain ⟨_, hcap, k, Ks, _, hmax, hlim⟩ := hL
+    have hcapn : ∀ i, IsCap (Ks i) ω := fun i => (hmax i).1.1
+    have h0 : Tendsto (fun i => (1 + 1 / cos ω) * hausdorffDist (Ks i) L) atTop (𝓝 0) := by
+      simpa using hlim.const_mul (1 + 1 / cos ω)
+    have hw : Tendsto (fun i => wedgeGapWInf (Ks i) ω) atTop (𝓝 (wedgeGapWInf L ω)) := by
       rw [tendsto_iff_norm_sub_tendsto_zero]
       exact squeeze_zero (fun _ => norm_nonneg _) (fun i => lemma4_1_1 hω (hcapn i) hcap) h0
-    exact ang_le_sigmaAt_of_tendsto hcbn hcap.2.1 hlim hw fun i => ang_theorem4_1_2_w (hmax i) hω
-  · have hz : Tendsto (fun i => wedgeGapZInf (Ks i) ω) atTop (𝓝 (wedgeGapZInf K ω)) := by
-      rw [tendsto_iff_norm_sub_tendsto_zero]
-      exact squeeze_zero (fun _ => norm_nonneg _)
-        (fun i => ang_abs_wedgeGapZInf_sub_le hω (hcapn i) hcap) h0
-    exact ang_le_sigmaAt_of_tendsto hcbn hcap.2.1 hlim hz fun i => ang_theorem4_1_2_z (hmax i) hω
+    -- the point `π/2` of `S¹` is the closed `2π`-periodic set `F = {x | cos (x - π/2) = 1}`
+    have hF : ∀ M : Set (ℝ × ℝ),
+        (sigma M ({x : ℝ | cos (x - π / 2) = 1} ∩ Ico 0 (2 * π))).toReal = sigmaAt M (π / 2) := by
+      intro M
+      have e : {x : ℝ | cos (x - π / 2) = 1} ∩ Ico 0 (2 * π) = {π / 2} := by
+        ext x
+        simp only [mem_inter_iff, mem_ofPred_eq, mem_Ico, mem_singleton_iff]
+        refine ⟨fun ⟨h, h0, h2⟩ => ?_, fun h => ⟨by simp [h], by rw [h]; positivity,
+          by rw [h]; linarith [pi_pos]⟩⟩
+        have := (cos_eq_one_iff_of_lt_of_lt (x := x - π / 2) (by linarith [pi_pos])
+          (by linarith)).1 h
+        linarith
+      rw [e, sigmaAt]
+    refine le_of_forall_gt_imp_ge_of_dense fun b hb => le_of_tendsto hw ?_
+    filter_upwards [ang_portmanteau_closed (fun i => (hcapn i).2.1) hcap.2.1 hlim
+      (isClosed_eq (by fun_prop) continuous_const)
+      (fun x => by simp only [mem_ofPred_eq, add_sub_right_comm, cos_add_two_pi])
+      ((hF L).trans_lt hb)] with i hi
+    exact (theorem4_1_2 (hmax i) hω).1.trans ((hF (Ks i)).symm.trans_lt hi).le
+  refine ⟨hw hK, ?_⟩
+  -- by mirror symmetry: `K^m` is a balanced maximum cap (Proposition 3.5.1), and
+  -- `z_K° = w_{K^m}° ≤ σ_{K^m}(π/2) = σ_K(ω)` (Proposition 2.5.4)
+  have h := hw (proposition3_5_1 hK)
+  rwa [ang_wedgeGapWInf_mirror, ang_sigmaAt_mirror hK.2.1, add_sub_cancel_right] at h
 
 end MovingSofaOptimality

@@ -318,7 +318,7 @@ $c = c_{\omega, \omega/2}$ independent of $n$, since $\omega/2$ lies in every $\
 Lemma 11.7 (2) and Lemma 11.9 with $q = w_0$, all the $K_n$ lie in one box. $\square$
 
 *Lean: [`exists_penalizedMax`](../../MovingSofaUniqueness/Selection.lean#L528), [`penalty_and_area_le_of_positive`](../../MovingSofaUniqueness/Selection.lean#L513), [`exists_dyadic_penalizedMax`](../../MovingSofaUniqueness/Selection.lean#L801),
-[`selected_objective_ge`](../../MovingSofaUniqueness/Selection.lean#L818), [`selected_sequence_bounded`](../../MovingSofaUniqueness/Selection.lean#L829), [`lemma3_4_2`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L316), [`mpc_limit_polycap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L662).*
+[`selected_objective_ge`](../../MovingSofaUniqueness/Selection.lean#L818), [`selected_sequence_bounded`](../../MovingSofaUniqueness/Selection.lean#L829), [`lemma3_4_2`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L343), [`mpc_limit_polycap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L688).*
 
 ## 11.4 Convergence to the given cap
 
@@ -345,7 +345,7 @@ These niches lie in the bounded box $[-R, R] \times [0, 2R]$, so by Fatou's lemm
 $|\mathcal{N}(L)| \le |\mathcal{N}_{\Theta^{(k_n)}}(K_n)| + \varepsilon/2$. $\square$
 
 *Lean: [`dyadic_objective_limsup`](../../MovingSofaUniqueness/Selection.lean#L692), [`niche_subset_box`](../../MovingSofaUniqueness/Selection.lean#L623), [`polyNiche_subset_box`](../../MovingSofaUniqueness/Selection.lean#L684), [`mpc_area_usc`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L282),
-[`mpc_area_lsc`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L296), [`mpc_niche_eventually`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L499).*
+[`mpc_area_lsc`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L296), [`mpc_niche_eventually`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L444).*
 
 ### Lemma 11.12 (dyadic supports determine a cap)
 
@@ -397,7 +397,7 @@ $h_{K_n}(t) \to h_L(t)$. So $h_L(t) = h_{K_*}(t)$, and in the same way
 $h_L(t + \pi/2) = h_{K_*}(t + \pi/2)$. By Lemma 11.12, $L = K_*$. $\square$
 
 *Lean: [`exists_selectedCapSequence`](../../MovingSofaUniqueness/Selection.lean#L871), [`SelectedCapSequence`](../../MovingSofaUniqueness/Selection.lean#L858), [`selected_sequence_bounded`](../../MovingSofaUniqueness/Selection.lean#L829),
-[`mpc_blaschke`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L245), [`mpc_limit_isCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L333), [`penalty_tendsto_zero_of_objective`](../../MovingSofaUniqueness/Selection.lean#L715).*
+[`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846), [`mpc_limit_isCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L236), [`penalty_tendsto_zero_of_objective`](../../MovingSofaUniqueness/Selection.lean#L715).*
 
 *Remark (the formal route).* Note 20 maximizes $\mathcal{A}_n(C) - \lambda_n \int (h_C - h_{K_*})^2$
 with $\lambda_n \to 0$, chooses $\lambda_n$ with $e_n / \lambda_n \to 0$ for the uniform
@@ -475,8 +475,8 @@ Divide by $\varepsilon$ and let $\varepsilon \to 0$. If $\sigma_K(t) = 0$, the d
 $-\tau_K(t) \le 0 \le b$. $\square$
 
 *Lean: [`polygon_defect_le_penalty_growth`](../../MovingSofaUniqueness/Variation.lean#L133), [`le_zero_of_mul_le_sq`](../../MovingSofaUniqueness/Variation.lean#L37),
-[`assigned_comparison_of_actual`](../../MovingSofaUniqueness/Variation.lean#L114), [`polygon_defect_le_of_zero_facet`](../../MovingSofaUniqueness/Variation.lean#L157), [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L538),
-[`proposition3_3_7`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L906).*
+[`assigned_comparison_of_actual`](../../MovingSofaUniqueness/Variation.lean#L114), [`polygon_defect_le_of_zero_facet`](../../MovingSofaUniqueness/Variation.lean#L157), [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L570),
+[`proposition3_3_7`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L926).*
 
 ## 11.6 Floating normals
 
@@ -616,7 +616,7 @@ $P(C_\varepsilon) - P(K) \le W(2\eta G_\omega \varepsilon + G_\omega^2 \varepsil
 maximality compares $K$ with $C_\varepsilon$, and Lemma 11.14 with $b = 2W\eta\, G_\omega$ gives the
 bound. $\square$
 
-*Lean: [`pinned_defect_le`](../../MovingSofaUniqueness/Variation.lean#L580), [`lemma3_4_8`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L923).*
+*Lean: [`pinned_defect_le`](../../MovingSofaUniqueness/Variation.lean#L580), [`lemma3_4_8`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L955).*
 
 ### Lemma 11.20 (the balance identity)
 
@@ -685,7 +685,7 @@ $w_K^\circ \le h_K(0)$, as $w_K(t) \to h_K(0)$ when $t \to \omega$. So the niche
 length $w_K^\circ$ of the bottom edge that ends at $A$, and $\tau_K(\pi/2) \ge w_K^\circ$. The bound
 for $z$ is the same argument on the left side, along the line $l(\omega, 0)$. $\square$
 
-*Lean: [`ang_wedgeGapWInf_le_tau`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L341), [`ang_wedgeGapZInf_le_tau`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L417), [`lemma3_4_5_two`](../../MovingSofaOptimality/Balanced/Polyline.lean#L1034).*
+*Lean: [`ang_wedgeGapWInf_le_tau`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L345), [`ang_wedgeGapZInf_le_tau`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L421), [`lemma3_4_5_two`](../../MovingSofaOptimality/Balanced/Polyline.lean#L1040).*
 
 ![A polygon cap K with three wedges, in a dashed parallelogram; its polygon niche in orange meets the floor in a segment from O to the rightmost of three orange wedge endpoints, marked W*; the rest of the bottom edge, from W* to the vertex A, is drawn thick in green, with a bracket below it labelled tau(π/2) = w(t*)](figures/11-selection/gap.svg)
 
@@ -721,12 +721,12 @@ w_{K_n}^\circ - e_n \le \tau_{K_n}(\pi/2) - e_n \le \sigma_{K_n}(\pi/2) .
 By [Lemma 5.4](05-rotation-angle.md#lemma-54-continuity-of-the-wedge-gap-baek-lemma-411),
 $|w_{K_n}^\circ - w_{K_*}^\circ| \le (1 + \sec\omega)\eta_n \to 0$, so the left side tends to
 $w_{K_*}^\circ$. The length of the edge at a fixed normal is upper semicontinuous under Hausdorff
-convergence (proof of
-[Theorem 5.6](05-rotation-angle.md#theorem-56-horizontal-sides-of-balanced-maximum-caps-baek-theorem-414)),
+convergence, by the sandwich after
+[Lemma 6.7](06-surface-area.md#lemma-67-one-sided-derivatives-of-the-support-function),
 so the limit is at most $\sigma_{K_*}(\pi/2)$. The bound for $z$ is the same at $t = \omega$, where
 Corollary 11.21 divides by $\sin\omega > 0$. $\square$
 
-*Lean: [`pinned_bounds_of_maximal_positive`](../../MovingSofaUniqueness/Variation.lean#L750), [`lemma4_1_1`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L261), [`ang_le_sigmaAt_of_tendsto`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L888).*
+*Lean: [`pinned_bounds_of_maximal_positive`](../../MovingSofaUniqueness/Variation.lean#L750), [`lemma4_1_1`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L265), [`ang_le_sigmaAt_of_tendsto`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L892).*
 
 Theorem 5.6 proves these bounds for a balanced maximum cap; here they hold for every maximizing cap
 of positive sofa area. [Chapter 12](12-uniqueness.md) uses them to rotate the monotone sofa of $K_*$

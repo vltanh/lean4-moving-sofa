@@ -719,6 +719,24 @@ lemma nef_mem_nicheH_iff (Θ : AngleSet) (h : ℝ → ℝ) (p : ℝ × ℝ) :
     nef_toSet_open, halfPlus, halfMinus, mem_ofPred_eq, dot_uvec_add_pi, exists_prop]
   constructor <;> rintro ⟨hf, ht⟩ <;> exact ⟨fun s hs => by linarith [hf s hs], ht⟩
 
+/-- The value of the conjunction `e ∧ a₁ ∧ ⋯ ∧ a_k` folded over a list: an intersection of
+half-planes in Definition 3.3.3 as a positive boolean expression (proof of Proposition 3.3.3). -/
+private lemma nef_eval_foldl_and {n : ℕ} (P : Fin n → Bool) (l : List (PosBoolExpr n))
+    (e : PosBoolExpr n) :
+    (l.foldl .and e).eval P = true ↔ e.eval P = true ∧ ∀ a ∈ l, a.eval P = true := by
+  induction l generalizing e with
+  | nil => simp
+  | cons a l ih => simp [ih, PosBoolExpr.eval, and_assoc]
+
+/-- The value of the disjunction `e ∨ a₁ ∨ ⋯ ∨ a_k` folded over a list: the union over `t ∈ Θ` in
+Definition 3.3.3 as a positive boolean expression (proof of Proposition 3.3.3). -/
+private lemma nef_eval_foldl_or {n : ℕ} (P : Fin n → Bool) (l : List (PosBoolExpr n))
+    (e : PosBoolExpr n) :
+    (l.foldl .or e).eval P = true ↔ e.eval P = true ∨ ∃ a ∈ l, a.eval P = true := by
+  induction l generalizing e with
+  | nil => simp
+  | cons a l ih => simp [ih, PosBoolExpr.eval, or_assoc]
+
 /-- **Proposition 3.3.3** (`pro:cap-niche-nef-polygons`). `𝓒_Θ(h)` and `𝒩_Θ(h)` are simple Nef
 polygons with the listed defining half-planes. -/
 theorem proposition3_3_3 (Θ : AngleSet) (h : ℝ → ℝ) :
@@ -728,19 +746,25 @@ theorem proposition3_3_3 (Θ : AngleSet) (h : ℝ → ℝ) :
         Set.range H = nicheHalfPlanes Θ h) := by
   classical
   constructor
-  · obtain ⟨n, H, hinj, hrange⟩ := (nef_capHalfPlanes_finite Θ h).fin_param
-    refine ⟨n, fun P => decide (∀ j, P j = true), H, ⟨?_, ?_, ?_⟩, hrange⟩
-    · intro P Q hPQ hP
-      simp only [decide_eq_true_eq] at hP ⊢
-      exact fun j => hPQ j (hP j)
+  · -- `𝓒_Θ(h)` is the intersection of its defining half-planes: `𝓔` is the conjunction of all the
+    -- variables, monotone by Proposition 3.1.1
+    obtain ⟨n, H, hinj, hrange⟩ := (nef_capHalfPlanes_finite Θ h).fin_param
+    obtain ⟨j₀, -⟩ : (⟨Θ.ω + π, 1 - h Θ.ω, false⟩ : HalfPlaneData) ∈ Set.range H :=
+      hrange ▸ Or.inr ⟨Θ.ω, by simp, rfl, rfl, rfl⟩
+    refine ⟨n, (((List.finRange n).map PosBoolExpr.var).foldl PosBoolExpr.and (.var j₀)).eval, H,
+      ⟨proposition3_1_1 _, ?_, ?_⟩, hrange⟩
     · intro i j hij
       exact nef_capHalfPlanes_boundary_ne (hrange ▸ mem_range_self i)
         (hrange ▸ mem_range_self j) (hinj.ne hij)
     · ext p
-      simp only [nefPolygon, mem_ofPred_eq, decide_eq_true_eq]
       rw [nef_mem_capH_iff_halfPlanes, ← hrange]
-      simp only [mem_range, forall_exists_index, forall_apply_eq_imp_iff]
-  · obtain ⟨n, H, hinj, hrange⟩ := (nef_nicheHalfPlanes_finite Θ h).fin_param
+      simp only [nefPolygon, mem_ofPred_eq, nef_eval_foldl_and, List.forall_mem_map,
+        List.mem_finRange, forall_const, PosBoolExpr.eval, decide_eq_true_eq, mem_range,
+        forall_exists_index, forall_apply_eq_imp_iff]
+      exact ⟨fun hp => ⟨hp j₀, hp⟩, fun hp => hp.2⟩
+  · -- `𝒩_Θ(h) = F_h ∩ ⋃_{t ∈ Θ} (H₋°(t, ·) ∩ H₋°(t + π/2, ·))`: `𝓔` is
+    -- `(x_ω ∧ x_{π/2}) ∧ ⋁_{t ∈ Θ} (x_t ∧ x_{t + π/2})`, monotone by Proposition 3.1.1
+    obtain ⟨n, H, hinj, hrange⟩ := (nef_nicheHalfPlanes_finite Θ h).fin_param
     have hmemF : ∀ s ∈ ({Θ.ω, π / 2} : Set ℝ),
         (⟨s + π, 1 - h s, false⟩ : HalfPlaneData) ∈ Set.range H := fun s hs =>
       hrange ▸ Or.inr ⟨s, hs, rfl, rfl, rfl⟩
@@ -749,39 +773,35 @@ theorem proposition3_3_3 (Θ : AngleSet) (h : ℝ → ℝ) :
     have hmemB : ∀ t ∈ Θ.angles,
         (⟨t + π / 2, h (t + π / 2) - 1, true⟩ : HalfPlaneData) ∈ Set.range H :=
       fun t ht => hrange ▸ Or.inl ⟨Or.inr ⟨t, ht, rfl⟩, rfl, rfl⟩
-    refine ⟨n, fun P => decide ((∀ j, (∃ s ∈ ({Θ.ω, π / 2} : Set ℝ),
-        H j = ⟨s + π, 1 - h s, false⟩) → P j = true) ∧
-      ∃ t ∈ Θ.angles, ∀ j, (H j = ⟨t, h t - 1, true⟩ ∨
-        H j = ⟨t + π / 2, h (t + π / 2) - 1, true⟩) → P j = true), H, ⟨?_, ?_, ?_⟩, hrange⟩
-    · intro P Q hPQ hP
-      simp only [decide_eq_true_eq] at hP ⊢
-      obtain ⟨h1, t, ht, h2⟩ := hP
-      exact ⟨fun j hj => hPQ j (h1 j hj), t, ht, fun j hj => hPQ j (h2 j hj)⟩
+    obtain ⟨jω, hjω⟩ := hmemF Θ.ω (by simp)
+    obtain ⟨jπ, hjπ⟩ := hmemF (π / 2) (by simp)
+    obtain ⟨t₀, ht₀⟩ := Θ.nonempty
+    have : Nonempty (Fin n) := ⟨jω⟩
+    -- the variables of `H₋°(t, h(t) - 1)` and `H₋°(t + π/2, h(t + π/2) - 1)`
+    let x : ℝ → PosBoolExpr n := fun t => .and (.var (Function.invFun H ⟨t, h t - 1, true⟩))
+      (.var (Function.invFun H ⟨t + π / 2, h (t + π / 2) - 1, true⟩))
+    refine ⟨n, (PosBoolExpr.and (.and (.var jω) (.var jπ))
+      ((Θ.angles.toList.map x).foldl PosBoolExpr.or (x t₀))).eval, H, ⟨proposition3_1_1 _, ?_, ?_⟩,
+      hrange⟩
     · intro i j hij
       exact nef_nicheHalfPlanes_boundary_ne (hrange ▸ mem_range_self i)
         (hrange ▸ mem_range_self j) (hinj.ne hij)
     · ext p
-      simp only [nefPolygon, mem_ofPred_eq, decide_eq_true_eq]
+      have hx : ∀ t ∈ Θ.angles, (x t).eval (fun i => decide (p ∈ (H i).toSet)) = true ↔
+          p ∈ (⟨t, h t - 1, true⟩ : HalfPlaneData).toSet ∧
+            p ∈ (⟨t + π / 2, h (t + π / 2) - 1, true⟩ : HalfPlaneData).toSet := fun t ht => by
+        simp only [x, PosBoolExpr.eval, Bool.and_eq_true, decide_eq_true_eq,
+          Function.invFun_eq (hmemA t ht), Function.invFun_eq (hmemB t ht)]
       rw [nef_mem_nicheH_iff]
+      simp only [nefPolygon, mem_ofPred_eq, PosBoolExpr.eval, Bool.and_eq_true, nef_eval_foldl_or,
+        List.mem_map, Finset.mem_toList, decide_eq_true_eq, hjω, hjπ, mem_insert_iff,
+        mem_singleton_iff, forall_eq_or_imp, forall_eq, exists_exists_and_eq_and]
       constructor
-      · rintro ⟨hf, t, ht, hA, hB⟩
-        refine ⟨?_, t, ht, ?_⟩
-        · rintro j ⟨s, hs, hj⟩
-          rw [hj]; exact hf s hs
-        · rintro j (hj | hj)
-          · rw [hj]; exact hA
-          · rw [hj]; exact hB
-      · rintro ⟨hf, t, ht, hAB⟩
-        refine ⟨fun s hs => ?_, t, ht, ?_, ?_⟩
-        · obtain ⟨j, hj⟩ := hmemF s hs
-          have := hf j ⟨s, hs, hj⟩
-          rwa [hj] at this
-        · obtain ⟨j, hj⟩ := hmemA t ht
-          have := hAB j (Or.inl hj)
-          rwa [hj] at this
-        · obtain ⟨j, hj⟩ := hmemB t ht
-          have := hAB j (Or.inr hj)
-          rwa [hj] at this
+      · rintro ⟨hF, t, ht, hAB⟩
+        exact ⟨hF, Or.inr ⟨t, ht, (hx t ht).2 hAB⟩⟩
+      · rintro ⟨hF, hx₀ | ⟨t, ht, hxt⟩⟩
+        · exact ⟨hF, t₀, ht₀, (hx t₀ ht₀).1 hx₀⟩
+        · exact ⟨hF, t, ht, (hx t ht).1 hxt⟩
 
 /-- **Proposition 3.3.4** (`pro:cap-extension-compatible`). `𝓒_Θ(h_{K'}) = K'` for a polygon cap
 translate `K'`. -/

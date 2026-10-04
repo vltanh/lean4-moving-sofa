@@ -27,12 +27,13 @@ namespace MovingSofaOptimality
 
 open GerverParams
 
-/-- Romik's system has a solution in the box (implicit in Definition 8.1.2; Romik, Section 4 and
-Table 1). -/
+/-- **Definition 8.1.2** (`def:gerver-constants`), existence, which the definition takes for
+granted: Romik's system has a solution in the box (Romik, Section 4 and Table 1). -/
 theorem definition8_1_2_exists : ∃ P : GerverParams, P.IsSolution ∧ P.InBox :=
   romik_exists
 
-/-- The solution of Romik's system in the box is unique, so Gerver's sofa is well defined. -/
+/-- **Definition 8.1.2** (`def:gerver-constants`), uniqueness, which the definition takes for
+granted: the solution of Romik's system in the box is unique, so Gerver's sofa is well defined. -/
 theorem definition8_1_2_unique {P Q : GerverParams} (hP : P.IsSolution) (hPb : P.InBox)
     (hQ : Q.IsSolution) (hQb : Q.InBox) : P = Q :=
   romik_unique hP hPb hQ hQb
@@ -51,7 +52,7 @@ theorem theorem8_1_1_balanced {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (�
     linarith
   linarith
 
-/-- **Theorem 8.1.1** (3): the cap of Gerver's sofa lies in `𝒦^i`. -/
+/-- **Theorem 8.1.1** (`thm:cap-space-special`) (3): the cap of Gerver's sofa lies in `𝒦^i`. -/
 theorem theorem8_1_1_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) : IsKi P.cap :=
   gm_isKi hP hbox
 
@@ -137,7 +138,7 @@ theorem theorem8_5_7 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) (xs
   -- Theorem 8.5.6 writes the derivative as
   -- `⟨f, σ_K⟩_{[0, π]} - ⟨f, ι_K⟩ + ⟨g_B, σ̆_B⟩ + ⟨g_D, σ̆_D⟩`,
   -- with `f = h_{K*} - h_K`, `g_B = h̆_{B*} - h̆_B`, `g_D = h̆_{D*} - h̆_D`.
-  obtain ⟨h1, -, -, h4, -, -⟩ := theorem8_4_3_two hP hbox
+  obtain ⟨h1, -, -, -, h4, -, -, -⟩ := theorem8_4_3_two hP hbox
   rw [theorem8_5_6 (gm_φ_mem_Ioo hP hbox) (gerverTriple hP hbox) xs h4.symm h1.symm]
   have hL : InL P.φ xs.1.1.1 xs.1.2.1.1 xs.1.2.2.1 := xs.2
   have hKs : IsConvexBody xs.1.1.1 := xs.1.1.2

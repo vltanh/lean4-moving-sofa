@@ -6,7 +6,6 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
 import Mathlib.MeasureTheory.Integral.Prod
-import Mathlib.MeasureTheory.VectorMeasure.IntegrationByParts
 
 /-!
 # Directional derivatives of `𝒬` (§8.5, general part)
@@ -88,27 +87,6 @@ noncomputable def iota (K : Set (ℝ × ℝ)) : Measure ℝ :=
 noncomputable def opt_J (K₁ K₂ : Set (ℝ × ℝ)) (a b : ℝ) : ℝ :=
   ∫ t in a..b, cross (innerCorner K₁ t) (deriv (innerCorner K₂) t)
 
-/-- Under the injectivity condition, `𝐱_K'` is linear under Minkowski combinations. -/
-lemma opt_inj_deriv_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi K₂) {c : ℝ}
-    (hc : c ∈ Icc (0 : ℝ) 1) {t : ℝ} (ht : t ∈ Ioo 0 (π / 2)) :
-    deriv (innerCorner ((1 - c) • K₁ + c • K₂)) t =
-      (1 - c) • deriv (innerCorner K₁) t + c • deriv (innerCorner K₂) t := by
-  rw [opt_innerCorner_comb h₁.1.2.1 h₂.1.2.1 hc]
-  exact (((opt_inj_hasDerivAt h₁.2.1.2.1 ht).const_smul (1 - c)).add
-    ((opt_inj_hasDerivAt h₂.2.1.2.1 ht).const_smul c)).deriv
-
-/-- `𝒥(𝐱_K|_{[a,b]}) = ½ ∫_a^b 𝐱_K × 𝐱_K'`. -/
-lemma opt_curveArea_inner_J {K : Set (ℝ × ℝ)} (h2 : InjCond2 K) {a b : ℝ} (ha : 0 < a)
-    (hab : a < b) (hb : b < π / 2) : curveArea (innerCorner K) a b = (1 / 2) * opt_J K K a b := by
-  rw [curveArea_eq_integral hab.le (h2.mono (Icc_subset_Icc ha.le hb.le)), opt_J]
-  congr 1
-  apply intervalIntegral.integral_congr
-  intro t ht
-  rw [uIcc_of_le hab.le] at ht
-  simp only
-  rw [((opt_inj_hasDerivAt h2 ⟨by linarith [ht.1], by linarith [ht.2]⟩).hasDerivWithinAt
-    ).derivWithin (uniqueDiffOn_Icc hab t ht)]
-
 /-- The integrand of `opt_J` is integrable. -/
 lemma opt_J_integrable {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi K₂) {a b : ℝ} (ha : 0 < a)
     (hab : a < b) (hb : b < π / 2) :
@@ -116,63 +94,6 @@ lemma opt_J_integrable {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ :
       MeasureTheory.volume a b :=
   (continuousOn_cross (opt_innerCorner_continuous h₁.1.2.1).continuousOn
     (opt_inj_deriv_continuousOn h₂.2.1.2.1 ha hb)).intervalIntegrable_of_Icc hab.le
-
-/-- `opt_J` of a Minkowski combination expands bilinearly. -/
-lemma opt_J_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi K₂) {c : ℝ}
-    (hc : c ∈ Icc (0 : ℝ) 1) {a b : ℝ} (ha : 0 < a) (hab : a < b) (hb : b < π / 2) :
-    opt_J ((1 - c) • K₁ + c • K₂) ((1 - c) • K₁ + c • K₂) a b =
-      (1 - c) * ((1 - c) * opt_J K₁ K₁ a b + c * opt_J K₁ K₂ a b) +
-        c * ((1 - c) * opt_J K₂ K₁ a b + c * opt_J K₂ K₂ a b) := by
-  simp only [opt_J]
-  rw [intervalIntegral.integral_congr (g := fun t =>
-      (1 - c) * ((1 - c) * cross (innerCorner K₁ t) (deriv (innerCorner K₁) t) +
-        c * cross (innerCorner K₁ t) (deriv (innerCorner K₂) t)) +
-      c * ((1 - c) * cross (innerCorner K₂ t) (deriv (innerCorner K₁) t) +
-        c * cross (innerCorner K₂ t) (deriv (innerCorner K₂) t)))]
-  · have i11 := opt_J_integrable h₁ h₁ ha hab hb
-    have i12 := opt_J_integrable h₁ h₂ ha hab hb
-    have i21 := opt_J_integrable h₂ h₁ ha hab hb
-    have i22 := opt_J_integrable h₂ h₂ ha hab hb
-    rw [intervalIntegral.integral_add (((i11.const_mul _).add (i12.const_mul _)).const_mul _)
-      (((i21.const_mul _).add (i22.const_mul _)).const_mul _),
-      intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul,
-      intervalIntegral.integral_add (i11.const_mul _) (i12.const_mul _),
-      intervalIntegral.integral_add (i21.const_mul _) (i22.const_mul _),
-      intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul,
-      intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul]
-  · intro t ht
-    rw [uIcc_of_le hab.le] at ht
-    have ht' : t ∈ Ioo 0 (π / 2) := ⟨by linarith [ht.1], by linarith [ht.2]⟩
-    simp only
-    rw [opt_inj_deriv_comb h₁ h₂ hc ht', opt_innerCorner_comb h₁.1.2.1 h₂.1.2.1 hc]
-    simp only [Pi.add_apply, Pi.smul_apply, cross, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
-      Prod.smul_snd, smul_eq_mul]
-    ring
-
-/-- Integration by parts: `∫ 𝐱₁ × 𝐱₂' - ∫ 𝐱₂ × 𝐱₁' = [𝐱₁ × 𝐱₂]_a^b`. -/
-lemma opt_J_swap {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi K₂) {a b : ℝ} (ha : 0 < a)
-    (hab : a < b) (hb : b < π / 2) :
-    opt_J K₁ K₂ a b - opt_J K₂ K₁ a b = cross (innerCorner K₁ b) (innerCorner K₂ b) -
-      cross (innerCorner K₁ a) (innerCorner K₂ a) := by
-  have hd : ∀ t ∈ uIcc a b, HasDerivAt (fun s => cross (innerCorner K₁ s) (innerCorner K₂ s))
-      (cross (deriv (innerCorner K₁) t) (innerCorner K₂ t) +
-        cross (innerCorner K₁ t) (deriv (innerCorner K₂) t)) t := by
-    intro t ht
-    rw [uIcc_of_le hab.le] at ht
-    have ht' : t ∈ Ioo 0 (π / 2) := ⟨by linarith [ht.1], by linarith [ht.2]⟩
-    exact hasDerivAt_cross (opt_inj_hasDerivAt h₁.2.1.2.1 ht')
-      (opt_inj_hasDerivAt h₂.2.1.2.1 ht')
-  have i12 := opt_J_integrable h₁ h₂ ha hab hb
-  have i' : IntervalIntegrable (fun t => cross (deriv (innerCorner K₁) t) (innerCorner K₂ t))
-      MeasureTheory.volume a b :=
-    (continuousOn_cross (opt_inj_deriv_continuousOn h₁.2.1.2.1 ha hb)
-      (opt_innerCorner_continuous h₂.1.2.1).continuousOn).intervalIntegrable_of_Icc hab.le
-  rw [← intervalIntegral.integral_eq_sub_of_hasDerivAt hd (i'.add i12),
-    intervalIntegral.integral_add i' i12, opt_J, opt_J,
-    show (∫ t in a..b, cross (deriv (innerCorner K₁) t) (innerCorner K₂ t)) =
-      -∫ t in a..b, cross (innerCorner K₂ t) (deriv (innerCorner K₁) t) by
-    rw [← intervalIntegral.integral_neg]; congr 1; funext t; exact cross_anticomm _ _]
-  ring
 
 /-- The variation of `opt_J` in its first argument against the density `i_K` (proof of
 Theorem 8.5.5): `∫_I 𝐱_{K*} × 𝐱_K' - ∫_I 𝐱_K × 𝐱_K' = ⟨h_{K*} - h_K, ι_K⟩_{I ∪ (I + π/2)}`. -/
@@ -354,9 +275,6 @@ lemma opt_stieltjes_ibp (F : StieltjesFunction ℝ) {a b : ℝ} (hab : a ≤ b) 
 /-- The right derivative `v_K⁺(t) · v_t` of the support function. -/
 noncomputable def opt_g (K : Set (ℝ × ℝ)) (t : ℝ) : ℝ := dot (vplus K t) (vvec t)
 
-/-- The left derivative `v_K⁻(t) · v_t` of the support function. -/
-noncomputable def opt_gm (K : Set (ℝ × ℝ)) (t : ℝ) : ℝ := dot (vminus K t) (vvec t)
-
 /-- The primitive `∫_0^t h_K` of the support function. -/
 noncomputable def opt_H (K : Set (ℝ × ℝ)) (t : ℝ) : ℝ := ∫ s in (0 : ℝ)..t, supp K s
 
@@ -427,89 +345,57 @@ lemma opt_supp_ibp {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
   rw [intervalIntegral.integral_add hgg hgH]
   linarith
 
-/-- The atom `σ_K({b}) = g_K(b) - g_K⁻(b)`. -/
-lemma opt_sigma_real_singleton {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (b : ℝ) :
-    (sigma K).real {b} = opt_g K b - opt_gm K b :=
-  sigmaAt_eq_dot_sub hK b
-
-/-- `∫_{(a,b)} h_{K₁} dσ_{K₂} = h_{K₁}(b) g_{K₂}⁻(b) - h_{K₁}(a) g_{K₂}(a) - ∫ g₁ g₂ + ∫ h₁ h₂`. -/
-lemma opt_supp_ibp_Ioo {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h₂ : IsConvexBody K₂)
-    {a b : ℝ} (hab : a < b) :
-    ∫ t in Ioo a b, supp K₁ t ∂(sigma K₂) =
-      supp K₁ b * opt_gm K₂ b - supp K₁ a * opt_g K₂ a - (∫ t in a..b, opt_g K₁ t * opt_g K₂ t) +
-        ∫ t in a..b, supp K₁ t * supp K₂ t := by
-  have hs₁ := continuous_supp h₁.2.1
-  have hI : IntegrableOn (supp K₁) (Icc a b) (sigma K₂) :=
-    hs₁.continuousOn.integrableOn_compact isCompact_Icc
-  have h := opt_supp_ibp h₁ h₂ hab.le
-  rw [← Ioo_union_right hab, setIntegral_union (by simp) (measurableSet_singleton _)
-    (hI.mono_set Ioo_subset_Icc_self)
-    (hI.mono_set (by intro t ht; rw [mem_singleton_iff.mp ht]; exact ⟨hab.le, le_rfl⟩)),
-    integral_singleton, opt_sigma_real_singleton h₂, smul_eq_mul] at h
+/-- The antisymmetry of `𝓑(K₁, K₂) = ½ ∫_{(a,b)} h_{K₁} dσ_{K₂}` in the proof of Theorem 8.5.2:
+integration by parts (Lemma 5.1.2) for `v_{K₁}⁺ × v_{K₂}⁺`, whose left limits are `v_{K₁}⁻`
+(Theorem 2.1.3), gives `∫_{(a,b)} dv_{K₁}⁺ × v_{K₂}⁺ + ∫_{(a,b)} v_{K₁}⁻ × dv_{K₂}⁺ =
+v_{K₁}⁻(b) × v_{K₂}⁻(b) - v_{K₁}⁺(a) × v_{K₂}⁺(a)`, and Lemma 7.3.3 turns the two integrals into
+`-2𝓑(K₂, K₁)` and `2𝓑(K₁, K₂)`. -/
+private lemma opt_convexCurveBilin_antisymm {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁)
+    (h₂ : IsConvexBody K₂) {a b : ℝ} (hab : a < b) (hb : b < a + π) :
+    convexCurveBilin K₁ K₂ a b - convexCurveBilin K₂ K₁ a b =
+      segArea (vminus K₁ b) (vminus K₂ b) - segArea (vplus K₁ a) (vplus K₂ a) := by
+  have hr : ∀ {K}, IsConvexBody K → ∀ t ∈ Ico a b, ContinuousWithinAt (vplus K) (Ici t) t :=
+    fun hK t _ => continuousWithinAt_Ioi_iff_Ici.1 (tendsto_vplus_right hK t)
+  -- the left limits of `v_K⁺` are `v_K⁻` (Theorem 2.1.3)
+  have hl : ∀ {K}, IsConvexBody K →
+      EqOn (Function.leftLim (clampFun (vplus K) a b)) (vminus K) (Ioc a b) := by
+    intro K hK t ht
+    apply leftLim_eq_of_tendsto
+    apply (tendsto_vplus_left hK t).congr'
+    filter_upwards [Ioo_mem_nhdsLT ht.1] with s hs
+    exact (clampFun_of_mem ⟨hs.1.le, hs.2.le.trans ht.2⟩).symm
+  -- Lemma 5.1.2 for `v_{K₁}⁺ × v_{K₂}⁺` on `(a, b]`
+  have h := lemma5_1_2_cross hab.le (lemma5_2_1 h₁ a b) (lemma5_2_1 h₂ a b) (hr h₁) (hr h₂)
+  rw [VectorMeasure.setIntegral_congr_fun (hl h₁)] at h
+  -- remove the atoms `dv_K⁺({b}) = v_K⁺(b) - v_K⁻(b)`
+  have hatom : ∀ {K}, IsConvexBody K → lsMeasure (vplus K) a b {b} = vplus K b - vminus K b := by
+    intro K hK
+    have hV := boundedVariationOn_clampFun hab.le (lemma5_2_1 hK a b)
+    rw [lsMeasure_eq_vectorMeasure hV, hV.vectorMeasure_singleton, rightLim_clampFun hab.le (hr hK),
+      clampFun_of_mem ⟨hab.le, le_rfl⟩, hl hK ⟨hab, le_rfl⟩]
+  have hI : ∀ {K L : Set (ℝ × ℝ)} {w : ℝ → ℝ × ℝ}, IsConvexBody K → StronglyMeasurable w →
+      (∀ t, w t ∈ K) → (lsMeasure (vplus L) a b).Integrable w := by
+    intro K L w hK hw hwK
+    obtain ⟨R, hR⟩ := cvx_exists_bound hK
+    exact Integrable.of_bound hw.aestronglyMeasurable R (Eventually.of_forall fun t => hR _ (hwK t))
+  have hi₁ : (lsMeasure (vplus K₁) a b).Integrable (vplus K₂) :=
+    hI h₂ (cvx_stronglyMeasurable_vplus h₂) fun t => (vplus_mem_edge h₂ t).1
+  have hi₂ : (lsMeasure (vplus K₂) a b).Integrable (vminus K₁) :=
+    hI h₁ (cvx_stronglyMeasurable_vminus h₁) fun t => (vminus_mem_edge h₁ t).1
+  have hd : Disjoint (Ioo a b) {b} := by simp
+  rw [← Ioo_union_right hab, VectorMeasure.setIntegral_union hd measurableSet_Ioo
+      (measurableSet_singleton b) hi₁.restrict hi₁.restrict,
+    VectorMeasure.setIntegral_union hd measurableSet_Ioo (measurableSet_singleton b)
+      hi₂.restrict hi₂.restrict, VectorMeasure.integral_singleton, VectorMeasure.integral_singleton,
+    hatom h₁, hatom h₂, cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm] at h
+  simp only [neg_apply, crossCLM_apply] at h
+  -- Lemma 7.3.3 and the anticommutativity of the cross product
+  rw [(lemma7_3_3 h₁ h₂ hab hb).2, (lemma7_3_3 h₂ h₁ hab hb).1]
+  simp only [segArea, cross, Prod.fst_sub, Prod.snd_sub] at h ⊢
   linarith
-
-/-- The cross product in the frame `(u_b, v_b)`. -/
-lemma opt_cross_frame (h₁ m₁ h₂ m₂ b : ℝ) :
-    cross (h₁ • uvec b + m₁ • vvec b) (h₂ • uvec b + m₂ • vvec b) = h₁ * m₂ - m₁ * h₂ := by
-  simp only [cross, uvec, vvec, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
-    smul_eq_mul]
-  linear_combination (h₁ * m₂ - m₁ * h₂) * sin_sq_add_cos_sq b
-
-/-- `v_K⁻(b) = h_K(b) u_b + g_K⁻(b) v_b`. -/
-lemma opt_vminus_frame (K : Set (ℝ × ℝ)) (b : ℝ) :
-    vminus K b = supp K b • uvec b + opt_gm K b • vvec b := by
-  conv_lhs => rw [eq_dot_uvec_smul_add (vminus K b) b]
-  rw [dot_vminus_uvec]; rfl
-
-/-- `v_K⁺(b) = h_K(b) u_b + g_K(b) v_b`. -/
-lemma opt_vplus_frame (K : Set (ℝ × ℝ)) (b : ℝ) :
-    vplus K b = supp K b • uvec b + opt_g K b • vvec b :=
-  vplus_eq_frame K b
-
-/-- The antisymmetry of `𝓑(K₁, K₂) = ∫_{(a,b)} h_{K₁} dσ_{K₂}` (proof of Theorem 8.5.2). -/
-lemma opt_bilin_antisymm {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h₂ : IsConvexBody K₂)
-    {a b : ℝ} (hab : a < b) :
-    (∫ t in Ioo a b, supp K₁ t ∂(sigma K₂)) - (∫ t in Ioo a b, supp K₂ t ∂(sigma K₁)) =
-      cross (vminus K₁ b) (vminus K₂ b) - cross (vplus K₁ a) (vplus K₂ a) := by
-  rw [opt_supp_ibp_Ioo h₁ h₂ hab, opt_supp_ibp_Ioo h₂ h₁ hab, opt_vminus_frame K₁ b,
-    opt_vminus_frame K₂ b, opt_vplus_frame K₁ a, opt_vplus_frame K₂ a, opt_cross_frame,
-    opt_cross_frame]
-  have e1 : ∫ t in a..b, opt_g K₂ t * opt_g K₁ t = ∫ t in a..b, opt_g K₁ t * opt_g K₂ t := by
-    congr 1; funext t; ring
-  have e2 : ∫ t in a..b, supp K₂ t * supp K₁ t = ∫ t in a..b, supp K₁ t * supp K₂ t := by
-    congr 1; funext t; ring
-  rw [e1, e2]
-  ring
 
 /-- The integral of `h_{K₁}` against `σ_{K₂}` over a set `S` contained in a compact interval. -/
 noncomputable def opt_Bs (S : Set ℝ) (K₁ K₂ : Set (ℝ × ℝ)) : ℝ := ∫ t in S, supp K₁ t ∂(sigma K₂)
-
-/-- `opt_Bs S K K` of a Minkowski combination expands bilinearly. -/
-lemma opt_Bs_comb {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h₂ : IsConvexBody K₂) {c : ℝ}
-    (hc : c ∈ Icc (0 : ℝ) 1) {S : Set ℝ} {a b : ℝ} (hS : S ⊆ Icc a b) :
-    opt_Bs S ((1 - c) • K₁ + c • K₂) ((1 - c) • K₁ + c • K₂) =
-      (1 - c) * ((1 - c) * opt_Bs S K₁ K₁ + c * opt_Bs S K₂ K₁) +
-        c * ((1 - c) * opt_Bs S K₁ K₂ + c * opt_Bs S K₂ K₂) := by
-  have hs₁ := continuous_supp h₁.2.1
-  have hs₂ := continuous_supp h₂.2.1
-  have hI : ∀ (f : ℝ → ℝ), Continuous f → ∀ (μ : Measure ℝ) [IsLocallyFiniteMeasure μ],
-      Integrable f (μ.restrict S) := fun f hf μ _ =>
-    (hf.continuousOn.integrableOn_compact (μ := μ) isCompact_Icc).mono_set hS
-  have hc0 := hc.1
-  have hc1 : 0 ≤ 1 - c := sub_nonneg.mpr hc.2
-  simp only [opt_Bs]
-  rw [opt_sigma_comb h₁ h₂ hc, Measure.restrict_add, Measure.restrict_smul, Measure.restrict_smul,
-    integral_add_measure
-      ((hI _ (continuous_supp (isConvexBody_comb (c := c) h₁ h₂).2.1) _).smul_measure
-        ENNReal.ofReal_ne_top)
-      ((hI _ (continuous_supp (isConvexBody_comb (c := c) h₁ h₂).2.1) _).smul_measure
-        ENNReal.ofReal_ne_top),
-    integral_smul_measure, integral_smul_measure, ENNReal.toReal_ofReal hc1,
-    ENNReal.toReal_ofReal hc0]
-  simp only [supp_comb h₁ h₂ hc, smul_eq_mul]
-  rw [integral_add ((hI _ hs₁ _).const_mul _) ((hI _ hs₂ _).const_mul _),
-    integral_add ((hI _ hs₁ _).const_mul _) ((hI _ hs₂ _).const_mul _),
-    integral_const_mul, integral_const_mul, integral_const_mul, integral_const_mul]
 
 /-- `g_K` is `2π`-periodic. -/
 lemma opt_g_two_pi (K : Set (ℝ × ℝ)) : opt_g K (2 * π) = opt_g K 0 := by
@@ -550,66 +436,64 @@ lemma opt_Bs_symm {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi
   rw [e1, e2]
 
 /-- **Theorem 8.5.1** (`thm:variation-convex-body`). The area is quadratic on `𝒦^i`, with
-`D|·|(K; K*) = ∫_{[0, π]} (h_{K*} - h_K) dσ_K`. -/
+`D|·|(K; K*) = ∫_{[0, π]} (h_{K*} - h_K) dσ_K`.
+
+Departure from the paper: the paper takes the symmetry of `𝓑(K₁, K₂) = ½ ∫_{S¹} h_{K₁} dσ_{K₂}`
+from Schneider's theory of the mixed volume `V(K₁, K₂)` (his Equation (5.19)); this proof shows the
+symmetry on `𝒦^i` by integration by parts against `σ_{K₂}` (`opt_Bs_symm`), because Mathlib has no
+mixed volumes. -/
 theorem theorem8_5_1 : kiDomain.IsQuadratic (fun K => area K.1.1) ∧
     ∀ K Ks : KiSet, kiDomain.dirDeriv (fun K => area K.1.1) K Ks =
       ∫ t in Icc 0 π, (supp Ks.1.1 t - supp K.1.1 t) ∂(sigma K.1.1) := by
   refine ⟨opt_isQuadratic_comp opt_projKi_linear theorem7_1_3_quadratic, fun K Ks => ?_⟩
   have hd : HasDerivWithinAt (fun c => area (kiDomain.comb c K Ks).1.1)
-      (opt_Bs (Ico 0 (2 * π)) Ks.1.1 K.1.1 / 2 + opt_Bs (Ico 0 (2 * π)) K.1.1 Ks.1.1 / 2 -
-        2 * (opt_Bs (Ico 0 (2 * π)) K.1.1 K.1.1 / 2)) (Icc 0 1) 0 := by
-    apply opt_poly_hasDerivWithinAt (D := opt_Bs (Ico 0 (2 * π)) Ks.1.1 Ks.1.1 / 2)
-    intro c hc
-    have hcomb := theorem8_1_1_convex K.2 Ks.2 hc
-    show area (kiComb c K Ks).1.1 = _
-    rw [opt_kiComb_val hc, theorem7_1_3 hcomb.1.2.1]
-    have := opt_Bs_comb K.1.2 Ks.1.2 hc (S := Ico 0 (2 * π)) (a := 0) (b := 2 * π)
-      Ico_subset_Icc_self
-    simp only [opt_Bs] at this
-    rw [this]
-    simp only [opt_Bs]
-    ring
-  rw [opt_dirDeriv_eq hd, opt_Bs_symm K.2 Ks.2]
+      (convexBodyDomain.dirDeriv (fun K => area K.1) K.1 Ks.1) (Icc 0 1) 0 :=
+    opt_hasDerivWithinAt_comp (x := K) (xs := Ks) (f := fun K : ConvexBodySet => area K.1)
+      opt_projKi_linear (opt_quadratic_hasDerivWithinAt theorem7_1_3_quadratic K.1 Ks.1)
+  -- `|K| = 𝓑(K, K)` with `𝓑(K₁, K₂) = ½ ∫_{S¹} h_{K₁} dσ_{K₂}` (Theorem 7.1.3), so Lemma 7.1.4
+  -- gives `D|·|(K; K*) = 𝓑(K, K*) + 𝓑(K*, K) - 2𝓑(K, K)`
+  have hf : (fun K : ConvexBodySet => area K.1) =
+      fun K => (1 / 2) * ∫ t in Ico 0 (2 * π), supp K.1 t ∂(sigma K.1) :=
+    funext fun K => theorem7_1_3 K.2
+  rw [opt_dirDeriv_eq hd]
+  refine ((congrArg (fun f => convexBodyDomain.dirDeriv f K.1 Ks.1) hf).trans
+    (lemma7_1_4 convexBodyDomain
+      ((cvx_integral_supp_sigma_bilin (Metric.isBounded_Ico 0 (2 * π))).const_mul (1 / 2))
+      K.1 Ks.1)).trans ?_
+  -- `𝓑` is symmetric on `𝒦^i`
+  have hsymm := opt_Bs_symm K.2 Ks.2
+  simp only [opt_Bs] at hsymm
+  rw [hsymm]
   have hs := continuous_supp K.1.2.2.1
   have hss := continuous_supp Ks.1.2.2.1
   have hcap := K.2.1
   have e1 := opt_Ico_eq_Icc hcap hss Ks.2.1.2.2.2.2.2.1
   have e2 := opt_Ico_eq_Icc hcap hs K.2.1.2.2.2.2.2.1
   rw [integral_sub ((hss.continuousOn.integrableOn_compact isCompact_Icc))
-    ((hs.continuousOn.integrableOn_compact isCompact_Icc))]
-  simp only [opt_Bs]
-  rw [e1, e2]
+    ((hs.continuousOn.integrableOn_compact isCompact_Icc)), e1, e2]
   ring
 
 /-- **Theorem 8.5.2** (`thm:convex-curve-area-variation`). For `a < b < a + π`, `𝒥(𝐮_K^{a,b})` is
 quadratic on `𝒦` with directional derivative
 `∫_{(a,b)} (h_{K*} - h_K) dσ_K + [𝒥(v_K⁻(b), v_{K*}⁻(b)) - 𝒥(v_K⁺(a), v_{K*}⁺(a))]`. -/
-theorem theorem8_5_2 {a b : ℝ} (hab : a < b) :
+theorem theorem8_5_2 {a b : ℝ} (hab : a < b) (hb : b < a + π) :
     convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) ∧
       ∀ K Ks : ConvexBodySet, convexBodyDomain.dirDeriv (fun K => convexCurveArea K.1 a b) K Ks =
         (∫ t in Ioo a b, (supp Ks.1 t - supp K.1 t) ∂(sigma K.1)) +
           (segArea (vminus K.1 b) (vminus Ks.1 b) - segArea (vplus K.1 a) (vplus Ks.1 a)) := by
   refine ⟨theorem7_3_2_quadratic, fun K Ks => ?_⟩
-  have hd : HasDerivWithinAt (fun c => convexCurveArea (convexBodyDomain.comb c K Ks).1 a b)
-      (opt_Bs (Ioo a b) Ks.1 K.1 / 2 + opt_Bs (Ioo a b) K.1 Ks.1 / 2 -
-        2 * (opt_Bs (Ioo a b) K.1 K.1 / 2)) (Icc 0 1) 0 := by
-    apply opt_poly_hasDerivWithinAt (D := opt_Bs (Ioo a b) Ks.1 Ks.1 / 2)
-    intro c hc
-    show convexCurveArea (convexBodyComb c K Ks).1 a b = _
-    rw [cvx_convexBodyComb_val hc]
-    have := opt_Bs_comb K.2 Ks.2 hc (S := Ioo a b) Ioo_subset_Icc_self
-    simp only [opt_Bs] at this
-    rw [convexCurveArea, this]
-    simp only [opt_Bs]
-    ring
-  rw [opt_dirDeriv_eq hd]
-  have hanti := opt_bilin_antisymm K.2 Ks.2 hab
+  -- `f(K) = 𝓑(K, K)` with `𝓑(K₁, K₂) = ½ ∫_{(a,b)} h_{K₁} dσ_{K₂}`, so Lemma 7.1.4 gives
+  -- `Df(K; K*) = 𝓑(K, K*) + 𝓑(K*, K) - 2𝓑(K, K)`
+  refine (lemma7_1_4 convexBodyDomain
+    ((cvx_integral_supp_sigma_bilin (Metric.isBounded_Ioo a b)).const_mul (1 / 2)) K Ks).trans ?_
+  -- `𝓑(K, K*) - 𝓑(K*, K) = 𝒥(v_K⁻(b), v_{K*}⁻(b)) - 𝒥(v_K⁺(a), v_{K*}⁺(a))`
+  have hanti := opt_convexCurveBilin_antisymm K.2 Ks.2 hab hb
+  unfold convexCurveBilin at hanti
   have hs := continuous_supp K.2.2.1
   have hss := continuous_supp Ks.2.2.1
   rw [integral_sub ((hss.continuousOn.integrableOn_compact isCompact_Icc).mono_set
       Ioo_subset_Icc_self) ((hs.continuousOn.integrableOn_compact isCompact_Icc).mono_set
       Ioo_subset_Icc_self)]
-  simp only [opt_Bs, segArea] at hanti ⊢
   linarith
 
 /-- **Theorem 8.5.3** (`thm:variation-segment`). `𝒥(p, q)` is quadratic on `ℝ² × ℝ²` with
@@ -638,40 +522,28 @@ theorem theorem8_5_3 :
 
 /-! ### The curve area functional on `C^BV[a, b]` -/
 
-/-- Integration by parts for the curve bilinear form:
+/-- Integration by parts for the curve bilinear form (Lemma 5.1.2 for the cross product):
 `𝓑(x, y) - 𝓑(y, x) = ½ (x(b) × y(b) - x(a) × y(a))`. -/
 lemma opt_curveBilin_antisymm {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b) (hx : IsCBV x a b)
     (hy : IsCBV y a b) :
     curveBilin x y a b - curveBilin y x a b =
       (1 / 2) * (cross (x b) (y b) - cross (x a) (y a)) := by
-  have hfx := boundedVariationOn_clampFun hab hx.2
-  have hfy := boundedVariationOn_clampFun hab hy.2
-  have hcx := continuous_clampFun hab hx.1
-  have hcy := continuous_clampFun hab hy.1
-  -- integration by parts for the clamped curves, whose one-sided limits are their values
-  have key := hfx.setIntegral_Icc_leftLim_vectorMeasure_eq_sub hfy (B := crossCLM) hab
-  have e1 : ∫ᵛ t in Icc a b, Function.leftLim (clampFun x a b) t ∂[crossCLM; hfy.vectorMeasure] =
-      ∫ᵛ t in Icc a b, x t ∂[crossCLM; lsMeasure y a b] := by
-    rw [lsMeasure_eq_vectorMeasure hfy]
-    apply VectorMeasure.setIntegral_congr_fun
-    intro t ht
-    rw [hcx.continuousAt.continuousWithinAt.leftLim_eq, clampFun_of_mem ht]
-  have e2 : ∫ᵛ t in Icc a b, Function.rightLim (clampFun y a b) t
-      ∂[crossCLM.flip; hfx.vectorMeasure] = -∫ᵛ t in Icc a b, y t ∂[crossCLM; lsMeasure x a b] := by
-    rw [cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm, lsMeasure_eq_vectorMeasure hfx]
-    congr 1
-    apply VectorMeasure.setIntegral_congr_fun
-    intro t ht
-    rw [hcy.continuousAt.continuousWithinAt.rightLim_eq, clampFun_of_mem ht]
-  rw [e1, e2, hcx.continuousAt.continuousWithinAt.rightLim_eq,
-    hcy.continuousAt.continuousWithinAt.rightLim_eq,
-    hcx.continuousAt.continuousWithinAt.leftLim_eq, hcy.continuousAt.continuousWithinAt.leftLim_eq,
-    clampFun_of_mem ⟨hab, le_rfl⟩, clampFun_of_mem ⟨hab, le_rfl⟩,
-    clampFun_of_mem ⟨le_rfl, hab⟩, clampFun_of_mem ⟨le_rfl, hab⟩] at key
+  have h := lemma5_1_2_cross hab hx.2 hy.2 (cvx_rightCont_of_continuousOn hx.1)
+    (cvx_rightCont_of_continuousOn hy.1)
+  -- the left limit of the continuous `x` is `x`, and `dx`, `dy` give no mass to `{a}`
+  have hl : ∫ᵛ t in Ioc a b, Function.leftLim (clampFun x a b) t ∂[crossCLM; lsMeasure y a b] =
+      ∫ᵛ t in Ioc a b, x t ∂[crossCLM; lsMeasure y a b] :=
+    VectorMeasure.setIntegral_congr_fun fun t ht => by
+      rw [leftLim_clampFun hab hx.1, clampFun_of_mem (Ioc_subset_Icc_self ht)]
+  have hIoc : ∀ {u v : ℝ → ℝ × ℝ}, IsCBV v a b →
+      ∫ᵛ t in Icc a b, u t ∂[crossCLM; lsMeasure v a b] =
+        ∫ᵛ t in Ioc a b, u t ∂[crossCLM; lsMeasure v a b] := fun hv =>
+    VectorMeasure.setIntegral_congr_set measurableSet_Icc measurableSet_Ioc
+      (Ioc_ae_eq_Icc' (cvx_lsMeasure_variation_singleton hab hv.2 hv.1 a)).symm
+  rw [hl, cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm] at h
   unfold curveBilin
-  rw [key]
-  simp only [crossCLM_apply]
-  ring
+  rw [hIoc hy, hIoc hx]
+  linarith
 
 /-- **Theorem 8.5.4** (`thm:variation-curve`). The curve area functional is quadratic on
 `C^BV[a, b]` with directional derivative
@@ -693,6 +565,46 @@ theorem theorem8_5_4 {a b : ℝ} (hab : a ≤ b) :
   simp only [curveBilin, segArea] at hanti ⊢
   linarith
 
+/-- For `K ∈ 𝒦^i` and `0 < a < b < π/2`, `d𝐱_K = 𝐱_K' dt` on `[a, b]`, so
+`∫_{[a,b]} (𝐱_{K*} - 𝐱_K) × d𝐱_K = ∫_a^b 𝐱_{K*} × 𝐱_K' - ∫_a^b 𝐱_K × 𝐱_K'` (the computation in the
+proof of Theorem 8.5.5). -/
+lemma opt_integral_inner_lsMeasure {K Ks : Set (ℝ × ℝ)} (hK : IsKi K) (hKs : IsKi Ks) {a b : ℝ}
+    (ha : 0 < a) (hab : a < b) (hb : b < π / 2) :
+    ∫ᵛ t in Icc a b, (innerCorner Ks t - innerCorner K t)
+        ∂[crossCLM; lsMeasure (innerCorner K) a b] =
+      opt_J Ks K a b - opt_J K K a b := by
+  have h2 := hK.2.1.2.1
+  have hψc : ContinuousOn (deriv (innerCorner K)) (Icc a b) :=
+    opt_inj_deriv_continuousOn h2 ha hb
+  have hψ : IntegrableOn (deriv (innerCorner K)) (Icc a b) := hψc.integrableOn_Icc
+  obtain ⟨M, hM⟩ := isCompact_Icc.exists_bound_of_continuousOn hψc
+  have hψM : ∀ t ∈ Icc a b, ‖deriv (innerCorner K) t‖ ≤ M.toNNReal := fun t ht =>
+    (hM t ht).trans (Real.le_coe_toNNReal M)
+  -- `𝐱_K` is the primitive of `𝐱_K'` on `[a, b]`
+  have hx : ∀ t ∈ Icc a b,
+      innerCorner K t = innerCorner K a + ∫ s in a..t, deriv (innerCorner K) s := by
+    intro t ht
+    rw [intervalIntegral.integral_eq_sub_of_hasDerivAt (fun s hs => by
+        rw [uIcc_of_le ht.1] at hs
+        exact opt_inj_hasDerivAt h2 ⟨by linarith [hs.1], by linarith [hs.2, ht.2]⟩)
+      ((hψc.mono (Icc_subset_Icc le_rfl ht.2)).intervalIntegrable_of_Icc ht.1)]
+    abel
+  obtain ⟨hbv, hxc⟩ := cvx_bv_of_primitive hab.le hψ hψM hx
+  have hg : IntegrableOn (fun t => innerCorner Ks t - innerCorner K t) (Icc a b) :=
+    ((opt_innerCorner_continuous hKs.1.2.1).sub
+      (opt_innerCorner_continuous hK.1.2.1)).continuousOn.integrableOn_Icc
+  rw [cvx_lsMeasure_eq_withDensityᵥ hab.le hψ hx hbv hxc,
+    cvx_withDensityᵥ_restrict hψ measurableSet_Icc,
+    Measure.restrict_restrict_of_subset subset_rfl,
+    cvx_integral_withDensityᵥ hψ (ae_restrict_of_forall_mem measurableSet_Icc hψM) crossCLM hg,
+    integral_Icc_eq_integral_Ioc, opt_J, opt_J,
+    ← intervalIntegral.integral_sub (opt_J_integrable hKs hK ha hab hb)
+      (opt_J_integrable hK hK ha hab hb), intervalIntegral.integral_of_le hab.le]
+  congr 1
+  funext t
+  simp only [crossCLM_apply, cross, Prod.fst_sub, Prod.snd_sub]
+  ring
+
 /-- **Theorem 8.5.5** (`thm:variation-inner-corner`). With `I = [φ^R, φ^L]`, `𝒥(𝐱_K|_I)` is
 quadratic on `𝒦^i` with directional derivative
 `⟨h_{K*} - h_K, ι_K⟩_{I ∪ (I + π/2)} + [𝒥(𝐱_K^L, 𝐱_{K*}^L) - 𝒥(𝐱_K^R, 𝐱_{K*}^R)]`. -/
@@ -708,24 +620,24 @@ theorem theorem8_5_5 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) :
   obtain ⟨hφ0, hφ4⟩ := hφ
   have hab : φ < π / 2 - φ := by linarith
   have hb : π / 2 - φ < π / 2 := by linarith
-  refine ⟨opt_isQuadratic_comp
-    (opt_isConvexLinear_comp opt_projKi_linear (opt_innerCBV_linear φ (π / 2 - φ)))
-    (proposition7_2_2 hab.le), fun K Ks => ?_⟩
+  -- `K ↦ 𝐱_K|_I` is convex-linear from `𝒦^i` to `C^BV(I)`, so Theorem 8.5.4 applies
+  have hlin := opt_isConvexLinear_comp opt_projKi_linear (opt_innerCBV_linear φ (π / 2 - φ))
+  have hT := theorem8_5_4 hab.le
+  refine ⟨opt_isQuadratic_comp hlin hT.1, fun K Ks => ?_⟩
   have hd : HasDerivWithinAt
       (fun c => curveArea (innerCorner (kiDomain.comb c K Ks).1.1) φ (π / 2 - φ))
-      (opt_J K.1.1 Ks.1.1 φ (π / 2 - φ) / 2 + opt_J Ks.1.1 K.1.1 φ (π / 2 - φ) / 2 -
-        2 * (opt_J K.1.1 K.1.1 φ (π / 2 - φ) / 2)) (Icc 0 1) 0 := by
-    apply opt_poly_hasDerivWithinAt (D := opt_J Ks.1.1 Ks.1.1 φ (π / 2 - φ) / 2)
-    intro c hc
-    have hcomb := theorem8_1_1_convex K.2 Ks.2 hc
-    show curveArea (innerCorner (kiComb c K Ks).1.1) φ (π / 2 - φ) = _
-    rw [opt_kiComb_val hc, opt_curveArea_inner_J hcomb.2.1.2.1 hφ0 hab hb,
-      opt_J_comb K.2 Ks.2 hc hφ0 hab hb]
-    ring
-  rw [opt_dirDeriv_eq hd, ← opt_J_iota ⟨hφ0, hφ4⟩ K.2 Ks.2]
-  have hs := opt_J_swap K.2 Ks.2 hφ0 hab hb
-  simp only [xLeft, xRight, segArea]
-  linarith
+      ((∫ᵛ t in Icc φ (π / 2 - φ), (innerCorner Ks.1.1 t - innerCorner K.1.1 t)
+          ∂[crossCLM; lsMeasure (innerCorner K.1.1) φ (π / 2 - φ)]) +
+        (segArea (xLeft φ K.1.1) (xLeft φ Ks.1.1) - segArea (xRight φ K.1.1) (xRight φ Ks.1.1)))
+      (Icc 0 1) 0 := by
+    have h := opt_quadratic_hasDerivWithinAt hT.1 (opt_innerCBV φ (π / 2 - φ) K.1)
+      (opt_innerCBV φ (π / 2 - φ) Ks.1)
+    rw [hT.2] at h
+    exact opt_hasDerivWithinAt_comp (x := K) (xs := Ks)
+      (f := fun x : CBV φ (π / 2 - φ) => curveArea x.1 φ (π / 2 - φ)) hlin h
+  -- with `d𝐱_K = 𝐱_K' dt`, `∫_I (𝐱_{K*} - 𝐱_K) × d𝐱_K = ⟨h_{K*} - h_K, ι_K⟩_{I ∪ (I + π/2)}`
+  rw [opt_dirDeriv_eq hd, opt_integral_inner_lsMeasure K.2 Ks.2 hφ0 hab hb,
+    opt_J_iota ⟨hφ0, hφ4⟩ K.2 Ks.2]
 
 /-! ### Assembling the directional derivative of `𝒬` -/
 
@@ -794,6 +706,7 @@ theorem theorem8_5_6 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) (x xs : LTriple φ
         (segArea (yD φ x.1.2.2.1) (yD φ xs.1.2.2.1) -
           segArea (vplus x.1.2.2.1 (3 * π / 2)) (vplus xs.1.2.2.1 (3 * π / 2)))) (Icc 0 1) 0 := by
     have hT := theorem8_5_2 (a := 3 * π / 2) (b := 3 * π / 2 + (π / 2 - φ)) (by linarith)
+      (by linarith)
     have h := opt_quadratic_hasDerivWithinAt hT.1 x.1.2.2 xs.1.2.2
     rw [hT.2] at h
     exact opt_hasDerivWithinAt_comp (x := x) (xs := xs)
@@ -862,7 +775,7 @@ theorem theorem8_5_6 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) (x xs : LTriple φ
       ((∫ t in Ioo (π + φ) (3 * π / 2), (supp xs.1.2.1.1 t - supp x.1.2.1.1 t) ∂(sigma x.1.2.1.1)) +
         (segArea (vminus x.1.2.1.1 (3 * π / 2)) (vminus xs.1.2.1.1 (3 * π / 2)) -
           segArea (xB φ x.1.2.1.1) (xB φ xs.1.2.1.1))) (Icc 0 1) 0 := by
-    have hT := theorem8_5_2 (a := π + φ) (b := 3 * π / 2) (by linarith)
+    have hT := theorem8_5_2 (a := π + φ) (b := 3 * π / 2) (by linarith) (by linarith)
     have h := opt_quadratic_hasDerivWithinAt hT.1 x.1.2.1 xs.1.2.1
     rw [hT.2] at h
     exact opt_hasDerivWithinAt_comp (x := x) (xs := xs)

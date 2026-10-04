@@ -10,11 +10,10 @@ Proposition 2.3.1 (`pro:standard-position-shape`, also Proposition 1.2.1), Theor
 and Theorem 2.3.6 (`thm:monotonization-is-connected`).
 
 **Proof of Theorem 2.3.6.** As in the paper, every `p ∈ 𝓘(S)` is joined to the connected set
-`S ⊆ 𝓘(S)` by a segment `[p, q] ⊆ 𝓘(S)`, `q ∈ S`, in a direction `u_θ`, `θ ∈ [ω, π/2]`. The
-paper's contradiction argument (the lines `l_θ` through `p` separating `S`) is replaced by the
-intermediate value theorem for the continuous function `(q, θ) ↦ (q - p) · v_θ` on the connected
-set `S × [ω, π/2]`: it is `≤ 0` at `(a, π/2)` for `a ∈ e_S(0)` and `≥ 0` at `(b, ω)` for
-`b ∈ e_S(ω + π/2)`, so it vanishes somewhere.
+`S ⊆ 𝓘(S)` by a segment `[p, q] ⊆ 𝓘(S)`, `q ∈ S`, in a direction `u_θ`, `θ ∈ [ω, π/2]`. Such a `q`
+exists: otherwise `S` lies in the complement `Y` of the lines `l_θ` through `p`, whose points lie on
+the left of every `l_θ` or on the right of every `l_θ`; these two disjoint open sets cover `S` and
+meet it in `e_S(ω + π/2)` and `e_S(0)` respectively, which contradicts the connectedness of `S`.
 -/
 
 @[expose] public section
@@ -141,7 +140,8 @@ theorem proposition2_3_1_exists {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ 
   · refine ⟨(0, b), ?_, rfl⟩
     simp [dot, uvec, heq, b, a]
 
-/-- **Proposition 2.3.1** (i): for `ω < π/2` the translation in standard position is unique. -/
+/-- **Proposition 2.3.1** (`pro:standard-position-shape`) (i): for `ω < π/2` the translation in
+standard position is unique. -/
 theorem proposition2_3_1_unique {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioo 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) {v v' : ℝ × ℝ}
     (hv : IsStandardPosition ((fun p => p + v) '' S) ω)
@@ -156,7 +156,8 @@ theorem proposition2_3_1_unique {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ 
   rw [sin_pi_div_two_sub]
   exact (cos_pos_of_mem_Ioo ⟨by linarith [hω.1, pi_pos], hω.2⟩).ne'
 
-/-- **Proposition 2.3.1** (ii): for `ω = π/2` it is unique up to horizontal translations. -/
+/-- **Proposition 2.3.1** (`pro:standard-position-shape`) (ii): for `ω = π/2` it is unique up to
+horizontal translations. -/
 theorem proposition2_3_1_unique_horizontal {S : Set (ℝ × ℝ)}
     (hS : IsMovingSofaWithAngle S (π / 2)) {v v' : ℝ × ℝ}
     (hv : IsStandardPosition ((fun p => p + v) '' S) (π / 2))
@@ -168,7 +169,8 @@ theorem proposition2_3_1_unique_horizontal {S : Set (ℝ × ℝ)}
   rw [supp_translate S _ _ hcpt hne, dot_uvec_pi_div_two] at h2 h2'
   linarith
 
-/-- **Proposition 2.3.1**, last claim: a moving sofa in standard position lies in `P_ω`. -/
+/-- **Proposition 2.3.1** (`pro:standard-position-shape`), last claim: a moving sofa in standard
+position lies in `P_ω`. -/
 theorem proposition2_3_1_subset {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (hstd : IsStandardPosition S ω) : S ⊆ para ω := by
   obtain ⟨h1, -, h3⟩ := proposition1_2_2 hω hS hstd
@@ -234,8 +236,8 @@ lemma ms_hallwayMap_congr_jSet {X Y : Set (ℝ × ℝ)} {ω t : ℝ}
     hallwayMap X t = hallwayMap Y t :=
   ms_hallwayMap_congr (h t (ms_mem_jSet_left ht)) (h _ (ms_mem_jSet_right ht))
 
-/-- **Lemma 2.3.5**, consequence: the supporting hallways of `S`, `𝓘(S)` and `𝓒(S)` agree for
-`t ∈ [0, ω]`. -/
+/-- **Lemma 2.3.5** (`lem:cap-same-support-function`), consequence: the supporting hallways of `S`,
+`𝓘(S)` and `𝓒(S)` agree for `t ∈ [0, ω]`. -/
 theorem lemma2_3_5_hallway {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (hstd : IsStandardPosition S ω) {t : ℝ} (ht : t ∈ Icc 0 ω) :
     suppHallway (monotonization S ω) t = suppHallway S t ∧
@@ -313,28 +315,61 @@ theorem theorem2_3_6 {S : Set (ℝ × ℝ)} {ω : ℝ} (hω : ω ∈ Ioc 0 (π /
   have hsub := proposition2_3_3 hω hS hstd
   obtain ⟨x₀, hx₀⟩ := hconn.nonempty
   refine ⟨⟨x₀, hsub hx₀⟩, isPreconnected_of_forall x₀ fun p hp => ?_⟩
-  -- points `a ∈ e_S(0)` and `b ∈ e_S(ω + π/2)`
-  obtain ⟨a, ha, ha1⟩ := exists_dot_eq_supp hcpt ⟨x₀, hx₀⟩ 0
-  obtain ⟨b, hb, hb1⟩ := exists_dot_eq_supp hcpt ⟨x₀, hx₀⟩ (ω + π / 2)
-  have hpq := mem_iInter₂.1 (ms_monotonization_subset_capOf S ω hp).2
-  have hp0 := (ms_mem_qPlus_iff S 0 p).1 (hpq 0 ⟨le_rfl, hω.1.le⟩)
-  have hpω := (ms_mem_qPlus_iff S ω p).1 (hpq ω ⟨hω.1.le, le_rfl⟩)
-  -- the signed distance of `q ∈ S` to the line through `p` with direction `u_θ`
-  set F : (ℝ × ℝ) × ℝ → ℝ := fun z => dot (z.1 - p) (vvec z.2) with hF
-  have hFc : Continuous F := by simp only [hF, dot, vvec]; fun_prop
-  have hpre : IsPreconnected (S ×ˢ Icc ω (π / 2)) := hconn.isPreconnected.prod isPreconnected_Icc
-  -- `a` is on the right of the vertical line through `p`
-  have hFa : F (a, π / 2) ≤ 0 := by
-    rw [dot_uvec_zero] at ha1 hp0
-    simp only [hF, dot, vvec, sin_pi_div_two, cos_pi_div_two, Prod.fst_sub, Prod.snd_sub]
-    linarith [hp0.1]
-  -- `b` is on the left of the line through `p` with direction `u_ω`
-  have hFb : 0 ≤ F (b, ω) := by
-    rw [uvec_add_pi_div_two] at hb1
-    simp only [hF, dot_sub_left]
-    linarith [hpω.2]
-  obtain ⟨⟨q, θ⟩, ⟨hq, hθ⟩, hz⟩ := hpre.intermediate_value (a := (a, π / 2)) (b := (b, ω))
-    ⟨ha, hω.2, le_rfl⟩ ⟨hb, le_rfl, hω.2⟩ hFc.continuousOn ⟨hFa, hFb⟩
+  -- `h_{𝓘(S)} = h_S` on `J_ω` (Lemma 2.3.5), so `p ∈ 𝓘(S)` lies on the left of `l_S(0)` and on
+  -- the right of `l_S(ω + π/2)`
+  have hI := ms_isCompact_monotonization (S := S) hω
+  have hp0 : dot p (uvec 0) ≤ supp S 0 := by
+    rw [← (lemma2_3_5_supp hω hS hstd (ms_mem_jSet_left ⟨le_rfl, hω.1.le⟩)).1]
+    exact dot_le_supp hI hp 0
+  have hpω : dot p (uvec (ω + π / 2)) ≤ supp S (ω + π / 2) := by
+    rw [← (lemma2_3_5_supp hω hS hstd (ms_mem_jSet_right ⟨hω.1.le, le_rfl⟩)).1]
+    exact dot_le_supp hI hp _
+  -- some line `l_θ` through `p` in the direction `u_θ`, `θ ∈ [ω, π/2]`, meets `S`
+  obtain ⟨q, hq, θ, hθ, hz⟩ : ∃ q ∈ S, ∃ θ ∈ Icc ω (π / 2), dot (q - p) (vvec θ) = 0 := by
+    by_contra hne
+    push Not at hne
+    -- then `S` lies in `Y = ℝ² \ ⋃_θ l_θ`; by the intermediate value theorem in `θ`, every point
+    -- of `Y` lies on the left of both `l_ω` and `l_{π/2}` (in `Y_L`) or on the right of both (in
+    -- `Y_R`)
+    have hY : ∀ z ∈ S, (0 < dot (z - p) (vvec ω) ∧ 0 < dot (z - p) (vvec (π / 2))) ∨
+        (dot (z - p) (vvec ω) < 0 ∧ dot (z - p) (vvec (π / 2)) < 0) := by
+      intro z hz
+      have hcθ : ContinuousOn (fun θ => dot (z - p) (vvec θ)) (uIcc ω (π / 2)) := by
+        simp only [dot, vvec]; fun_prop
+      have h0 : (0 : ℝ) ∉ uIcc (dot (z - p) (vvec ω)) (dot (z - p) (vvec (π / 2))) := fun h => by
+        obtain ⟨θ, hθ, hθ0⟩ := intermediate_value_uIcc hcθ h
+        rw [uIcc_of_le hω.2] at hθ
+        exact hne z hz θ hθ hθ0
+      rw [mem_uIcc] at h0
+      rcases (hne z hz ω ⟨le_rfl, hω.2⟩).lt_or_gt with ha | ha <;>
+        rcases (hne z hz (π / 2) ⟨hω.2, le_rfl⟩).lt_or_gt with hb | hb
+      · exact Or.inr ⟨ha, hb⟩
+      · exact absurd (Or.inl ⟨ha.le, hb.le⟩) h0
+      · exact absurd (Or.inr ⟨hb.le, ha.le⟩) h0
+      · exact Or.inl ⟨ha, hb⟩
+    have hcont : ∀ θ, Continuous fun z : ℝ × ℝ => dot (z - p) (vvec θ) := fun θ =>
+      (continuous_dot _).comp (continuous_sub_right p)
+    -- a point `b ∈ e_S(ω + π/2)` lies on the left of `l_ω`, so in `Y_L`; a point `a ∈ e_S(0)` lies
+    -- on the right of `l_{π/2}`, so in `Y_R`
+    obtain ⟨b, hb, hb1⟩ := exists_dot_eq_supp hcpt ⟨x₀, hx₀⟩ (ω + π / 2)
+    obtain ⟨a, ha, ha1⟩ := exists_dot_eq_supp hcpt ⟨x₀, hx₀⟩ 0
+    have hbL : b ∈ S ∩ {z | 0 < dot (z - p) (vvec ω) ∧ 0 < dot (z - p) (vvec (π / 2))} := by
+      refine ⟨hb, (hY b hb).resolve_right fun h => ?_⟩
+      rw [dot_sub_left, ← uvec_add_pi_div_two] at h
+      linarith [h.1]
+    have haR : a ∈ S ∩ {z | dot (z - p) (vvec ω) < 0 ∧ dot (z - p) (vvec (π / 2)) < 0} := by
+      refine ⟨ha, (hY a ha).resolve_left fun h => ?_⟩
+      rw [dot_uvec_zero] at ha1 hp0
+      have h2 := h.2
+      simp only [dot, vvec, sin_pi_div_two, cos_pi_div_two, Prod.fst_sub, Prod.snd_sub] at h2
+      linarith
+    -- `S` is connected, but meets the disjoint open sets `Y_L` and `Y_R`, which cover it
+    obtain ⟨z, -, hzL, hzR⟩ := hconn.isPreconnected _ _
+      ((isOpen_lt continuous_const (hcont ω)).inter (isOpen_lt continuous_const (hcont _)))
+      ((isOpen_lt (hcont ω) continuous_const).inter (isOpen_lt (hcont _) continuous_const))
+      hY ⟨b, hbL⟩ ⟨a, haR⟩
+    exact absurd hzL.1 (not_lt.2 hzR.1.le)
+  -- the segment `s_θ` from `p` to `q ∈ S ∩ l_θ` lies in `𝓘(S)`, which is therefore connected
   refine ⟨S ∪ segment ℝ p q,
     union_subset hsub (ms_segment_subset_monotonization hθ hp (hsub hq) hz), Or.inl hx₀,
     Or.inr (left_mem_segment ℝ p q), ?_⟩

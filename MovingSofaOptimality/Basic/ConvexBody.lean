@@ -32,8 +32,8 @@ Theorem `thm:limits-converging-to-vertex` is proved by compactness rather than b
 `ε`-triangle: for `s → t⁺`, any point `w` of `e_K(s)` satisfies `w · u_s ≥ v_K⁺(t) · u_s`, which
 forces `w · u_t → h_K(t)` and `w · v_t ≥ v_K⁺(t) · v_t`, so every cluster point of `w` lies on
 `e_K(t)` and is at least as far as `v_K⁺(t)` in the direction `v_t`, hence equals `v_K⁺(t)`
-(`cb_tendsto_core`). The one-sided derivatives of `h_K` follow from the limit of the
-`v_t`-coordinate of `v_K(t, s)`.
+(`cb_tendsto_core`). The one-sided derivatives of `h_K` follow from Theorem
+`thm:limits-converging-to-vertex`: the `v_t`-coordinate of `v_K(t, s)` tends to that of `v_K⁺(t)`.
 -/
 
 @[expose] public section
@@ -518,43 +518,16 @@ private lemma cb_tendsto_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K
   rw [← cb_dot_uvec_left, ← cb_dot_uvec_left, (hw s).2]
   exact dot_le_supp hK hP.1 s
 
-/-- The `v_t`-coordinate `(h(s) - h(t) cos (s - t)) / sin (s - t)` of `v_K(t, s)` tends to
-`v_K⁺(t) · v_t` as `s → t⁺`. -/
-private lemma cb_coef_right {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ) :
-    Tendsto (fun s => (supp K s - supp K t * cos (s - t)) / sin (s - t)) (𝓝[>] t)
-      (𝓝 (dot (vplus K t) (vvec t))) := by
-  have hP := cb_vplus_mem_edge hK hne t
-  have h := cb_coef_core hK (fun x => eq_dot_uvec_smul_add x t) hP.1
-    (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK hx t)
-    (fun x hx hxu => dot_le_dot_vplus hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
-    (cb_tendsto_cos_right t) (cb_tendsto_sin_right t) (cb_sin_pos_right t)
-    (F := supp K) (w := vplus K)
-    (Eventually.of_forall fun s => (cb_vplus_mem_edge hK hne s).1)
-    (Eventually.of_forall fun s => by
-      rw [← dot_uvec_eq_cos_add_sin, (cb_vplus_mem_edge hK hne s).2])
-    (Eventually.of_forall fun s => by
-      rw [← dot_uvec_eq_cos_add_sin]; exact dot_le_supp hK hP.1 s)
-  rwa [dot_vplus_uvec] at h
-
-/-- The mirror statement: `(h(s) - h(t) cos (t - s)) / sin (t - s) → v_K⁻(t) · (-v_t)` as
-`s → t⁻`. -/
-private lemma cb_coef_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ) :
-    Tendsto (fun s => (supp K s - supp K t * cos (t - s)) / sin (t - s)) (𝓝[<] t)
-      (𝓝 (dot (vminus K t) (-vvec t))) := by
-  have hP := cb_vminus_mem_edge hK hne t
-  have h := cb_coef_core hK (fun x => cb_frame_left x t) hP.1
-    (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK hx t)
-    (fun x hx hxu => by
-      rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]
-      exact dot_vminus_le_dot hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
-    (cb_tendsto_cos_left t) (cb_tendsto_sin_left t) (cb_sin_pos_left t)
-    (F := supp K) (w := vminus K)
-    (Eventually.of_forall fun s => (cb_vminus_mem_edge hK hne s).1)
-    (Eventually.of_forall fun s => by
-      rw [← cb_dot_uvec_left, (cb_vminus_mem_edge hK hne s).2])
-    (Eventually.of_forall fun s => by
-      rw [← cb_dot_uvec_left]; exact dot_le_supp hK hP.1 s)
-  rwa [dot_vminus_uvec] at h
+/-- The `v_t`-coordinate of `v_K(s, t)`, read off the two lines `l_K(s)` and `l_K(t)` through it:
+`v_K(s, t) · (-v_t) = (h(s) - h(t) cos (t - s)) / sin (t - s)` when `sin (t - s) ≠ 0`. -/
+private lemma cb_dot_vint_left (K : Set (ℝ × ℝ)) {s t : ℝ} (hs : sin (t - s) ≠ 0) :
+    dot (vint K s t) (-vvec t) = (supp K s - supp K t * cos (t - s)) / sin (t - s) := by
+  have h1 : dot (vint K s t) (uvec s) = supp K s := vint_mem_line_left K s t
+  have h2 : dot (vint K s t) (uvec t) = supp K t := vint_mem_line_right K hs
+  rw [cb_dot_uvec_left _ s t, h2] at h1
+  rw [← h1]
+  field_simp
+  ring
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits. For a convex body `K` and
 an angle `t`, the vertices `v_K^±(s)` and the intersections `v_K(t, s)` converge to `v_K⁺(t)` as
@@ -563,19 +536,35 @@ theorem tendsto_vplus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : �
     Tendsto (vplus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
   cb_tendsto_right hK.2.1 hK.1 t (vplus_mem_edge hK)
 
-/-- **Theorem 2.1.3**, right limits: `v_K⁻(s) → v_K⁺(t)` as `s → t⁺`. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits: `v_K⁻(s) → v_K⁺(t)` as
+`s → t⁺`. -/
 theorem tendsto_vminus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vminus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
   cb_tendsto_right hK.2.1 hK.1 t (vminus_mem_edge hK)
 
-/-- **Theorem 2.1.3**, right limits: `v_K(t, s) → v_K⁺(t)` as `s → t⁺`. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits: `v_K(t, s) → v_K⁺(t)` as
+`s → t⁺`. -/
 theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (fun s => vint K t s) (𝓝[>] t) (𝓝 (vplus K t)) := by
   refine cb_tendsto_of_dot (fun x => eq_dot_uvec_smul_add x t) ?_ ?_
   · rw [dot_vplus_uvec]
     refine tendsto_const_nhds.congr (fun s => ?_)
     exact (vint_mem_line_left K t s).symm
-  · refine (cb_coef_right hK.2.1 hK.1 t).congr (fun s => ?_)
+  · -- the `v_t`-coordinate `(h(s) - h(t) cos (s - t)) / sin (s - t)` of `v_K(t, s)`
+    have hP := cb_vplus_mem_edge hK.2.1 hK.1 t
+    have h := cb_coef_core hK.2.1 (fun x => eq_dot_uvec_smul_add x t) hP.1
+      (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK.2.1 hx t)
+      (fun x hx hxu => dot_le_dot_vplus hK.2.1
+        (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
+      (cb_tendsto_cos_right t) (cb_tendsto_sin_right t) (cb_sin_pos_right t)
+      (F := supp K) (w := vplus K)
+      (Eventually.of_forall fun s => (vplus_mem_edge hK s).1)
+      (Eventually.of_forall fun s => by
+        rw [← dot_uvec_eq_cos_add_sin, (vplus_mem_edge hK s).2])
+      (Eventually.of_forall fun s => by
+        rw [← dot_uvec_eq_cos_add_sin]; exact dot_le_supp hK.2.1 hP.1 s)
+    rw [dot_vplus_uvec] at h
+    refine h.congr (fun s => ?_)
     simp [vint, dot_add_left, dot_smul_left]
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K⁺(s) → v_K⁻(t)` as
@@ -584,13 +573,14 @@ theorem tendsto_vplus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ
     Tendsto (vplus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
   cb_tendsto_left hK.2.1 hK.1 t (vplus_mem_edge hK)
 
-/-- **Theorem 2.1.3**, left limits: `v_K⁻(s) → v_K⁻(t)` as `s → t⁻`; so `v_K⁻` is
-left-continuous. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K⁻(s) → v_K⁻(t)` as
+`s → t⁻`; so `v_K⁻` is left-continuous. -/
 theorem tendsto_vminus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vminus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
   cb_tendsto_left hK.2.1 hK.1 t (vminus_mem_edge hK)
 
-/-- **Theorem 2.1.3**, left limits: `v_K(s, t) → v_K⁻(t)` as `s → t⁻`. -/
+/-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K(s, t) → v_K⁻(t)` as
+`s → t⁻`. -/
 theorem tendsto_vint_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (fun s => vint K s t) (𝓝[<] t) (𝓝 (vminus K t)) := by
   refine cb_tendsto_of_dot (fun x => cb_frame_left x t) ?_ ?_
@@ -598,15 +588,23 @@ theorem tendsto_vint_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ)
     refine tendsto_const_nhds.congr' ?_
     filter_upwards [cb_sin_pos_left t] with s hs
     exact (vint_mem_line_right K hs.ne').symm
-  · refine (cb_coef_left hK.2.1 hK.1 t).congr' ?_
-    filter_upwards [cb_sin_pos_left t] with s hs
-    -- `v_K(s, t)` lies on both `l_K(s)` and `l_K(t)`, which determines its `v_t`-coordinate
-    have h1 : dot (vint K s t) (uvec s) = supp K s := vint_mem_line_left K s t
-    have h2 : dot (vint K s t) (uvec t) = supp K t := vint_mem_line_right K hs.ne'
-    rw [cb_dot_uvec_left _ s t, h2] at h1
-    rw [← h1]
-    field_simp
-    ring
+  · -- the `(-v_t)`-coordinate `(h(s) - h(t) cos (t - s)) / sin (t - s)` of `v_K(s, t)`
+    have hP := cb_vminus_mem_edge hK.2.1 hK.1 t
+    have h := cb_coef_core hK.2.1 (fun x => cb_frame_left x t) hP.1
+      (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK.2.1 hx t)
+      (fun x hx hxu => by
+        rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]
+        exact dot_vminus_le_dot hK.2.1 (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
+      (cb_tendsto_cos_left t) (cb_tendsto_sin_left t) (cb_sin_pos_left t)
+      (F := supp K) (w := vminus K)
+      (Eventually.of_forall fun s => (vminus_mem_edge hK s).1)
+      (Eventually.of_forall fun s => by
+        rw [← cb_dot_uvec_left, (vminus_mem_edge hK s).2])
+      (Eventually.of_forall fun s => by
+        rw [← cb_dot_uvec_left]; exact dot_le_supp hK.2.1 hP.1 s)
+    rw [dot_vminus_uvec] at h
+    refine h.congr' ?_
+    filter_upwards [cb_sin_pos_left t] with s hs using (cb_dot_vint_left K hs.ne').symm
 
 /-! ### One-sided derivatives of the support function -/
 
@@ -634,7 +632,12 @@ theorem hasDerivWithinAt_supp_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
   have hsub := (cb_tendsto_sub t).mono_left (nhdsGT_le_nhdsNE t)
   have h1 := cb_tendsto_sin_div.comp hsub
   have h2 := cb_tendsto_cos_sub_div.comp hsub
-  have h := (h1.mul (cb_coef_right hK.2.1 hK.1 t)).add (h2.const_mul (supp K t))
+  -- the `v_t`-coordinate of `v_K(t, s)` tends to `v_K⁺(t) · v_t` (Theorem 2.1.3)
+  have hc : Tendsto (fun s => (supp K s - supp K t * cos (s - t)) / sin (s - t)) (𝓝[>] t)
+      (𝓝 (dot (vplus K t) (vvec t))) :=
+    (((continuous_dot (vvec t)).tendsto _).comp (tendsto_vint_right hK t)).congr fun s => by
+      simp [vint, dot_add_left, dot_smul_left]
+  have h := (h1.mul hc).add (h2.const_mul (supp K t))
   rw [one_mul, mul_zero, add_zero] at h
   refine h.congr' ?_
   filter_upwards [cb_sin_pos_right t, self_mem_nhdsWithin] with s hs hst
@@ -651,7 +654,12 @@ theorem hasDerivWithinAt_supp_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) 
   have hsub := (cb_tendsto_sub t).mono_left (nhdsLT_le_nhdsNE t)
   have h1 := cb_tendsto_sin_div.comp hsub
   have h2 := cb_tendsto_cos_sub_div.comp hsub
-  have h := ((h1.mul (cb_coef_left hK.2.1 hK.1 t)).neg).add (h2.const_mul (supp K t))
+  -- the `(-v_t)`-coordinate of `v_K(s, t)` tends to `v_K⁻(t) · (-v_t)` (Theorem 2.1.3)
+  have hc : Tendsto (fun s => (supp K s - supp K t * cos (t - s)) / sin (t - s)) (𝓝[<] t)
+      (𝓝 (dot (vminus K t) (-vvec t))) := by
+    refine (((continuous_dot (-vvec t)).tendsto _).comp (tendsto_vint_left hK t)).congr' ?_
+    filter_upwards [cb_sin_pos_left t] with s hs using cb_dot_vint_left K hs.ne'
+  have h := ((h1.mul hc).neg).add (h2.const_mul (supp K t))
   rw [one_mul, mul_zero, add_zero, dot_neg_right, neg_neg] at h
   refine h.congr' ?_
   filter_upwards [cb_sin_pos_left t, self_mem_nhdsWithin] with s hs hst

@@ -3,7 +3,6 @@ module
 public import MovingSofaOptimality.Balanced.MaximumPolygonCap
 public import Mathlib.Topology.MetricSpace.HausdorffDistance
 import Mathlib.MeasureTheory.Group.Measure
-import Mathlib.Topology.MetricSpace.Closeds
 
 /-!
 # Balanced maximum sofas (§3.5)
@@ -11,14 +10,16 @@ import Mathlib.Topology.MetricSpace.Closeds
 Definitions 3.5.1–3.5.3, Proposition 3.5.1, Theorem 3.5.2 (`thm:balanced-maximum-cap`), Lemma 3.5.3
 (`lem:hausdorff-distance-containment`), Theorems 3.5.4–3.5.6.
 
-**Proofs.** Theorem 3.5.2 uses the Blaschke selection theorem (`mpc_blaschke`), obtained from the
-compactness of the nonempty compact subsets of a compact set in the Hausdorff metric together with
-the estimate `|h_A - h_B| ≤ 2 d_H(A, B)` (sup metric on `ℝ × ℝ`); the limit is a cap because the
-support functions of the approximating polygon caps are "linear" on the gaps of
-`J_ω ∪ {ω + π, 3π/2}` (`mpc_gap_limit`). Theorems 3.5.4 and 3.5.5 do not need Lemma 3.5.3: a point
-of the niche lies in the open quarter-planes `Q_K⁻(t)` for a dyadic `t`, hence in the polygon niches
-of the approximating caps (`mpc_niche_eventually`); the area is upper semicontinuous under Hausdorff
-convergence (`mpc_area_usc`) and lower semicontinuous along eventual membership (`mpc_area_lsc`).
+**Proofs.** Theorem 3.5.2 uses the Blaschke selection theorem (`mpc_blaschke`, proved in
+`MaxPolygonCapExists` for Theorem 3.4.3); the limit is a cap because the support functions of the
+approximating polygon caps are "linear" on the gaps of `J_ω ∪ {ω + π, 3π/2}` (`mpc_gap_limit`).
+Theorem 3.5.4 applies Lemma 3.5.3 pointwise, as E8 repairs the paper's step: a point of the niche
+lies in the open quarter-planes `Q_K⁻(t)` for a dyadic `t`, hence in the polygon niches of the
+approximating caps for all large `i` (`mpc_niche_eventually`); the caps converge also in Mathlib's
+`Metric.hausdorffDist`, used by Lemma 3.5.3 (`mpc_tendsto_metric_hausdorffDist`, by one direction of
+Schneider's Lemma 1.8.14). Theorem 3.5.5 follows the paper's double limit: `|K_i| → |K|`
+(`mpc_tendsto_area`), `|𝒩_{Θ_m}(K_i)| → |𝒩_{Θ_m}(K)|` as `i → ∞` (`mpc_tendsto_area_polyNiche`), and
+`|𝒩_{Θ_m}(K)| → |𝒩(K)|` as `m → ∞`.
 -/
 
 @[expose] public section
@@ -179,105 +180,7 @@ theorem proposition3_5_1 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCa
     rwa [mpc_dyadic_mirror] at this
   · simpa only [HausdorffTendsto, mpc_hausdorffDist_mirror] using hlim
 
-/-! ### Blaschke selection and limits of polygon caps -/
-
-
-/-- Support functions are controlled by the (Mathlib) Hausdorff distance. -/
-lemma mpc_supp_le_add_hausdorff {A B : Set (ℝ × ℝ)} (hA : IsCompact A) (hAne : A.Nonempty)
-    (hB : IsCompact B) (hBne : B.Nonempty) (t : ℝ) :
-    supp A t ≤ supp B t + 2 * Metric.hausdorffDist A B := by
-  have hfin := Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded hAne hBne hA.isBounded
-    hB.isBounded
-  refine supp_le_of_forall hAne fun p hp => le_of_forall_pos_lt_add fun δ hδ => ?_
-  -- a point `q ∈ B` with `d(p, q) < d_H(A, B) + δ/2`
-  obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt hp
-    (lt_add_of_pos_right (Metric.hausdorffDist A B) (half_pos hδ)) hfin
-  -- `p · u_t ≤ q · u_t + |(p - q)₁| + |(p - q)₂| ≤ h_B(t) + 2 d(p, q)`
-  have h1 : |(p - q).1| ≤ dist p q := by
-    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_fst_le (p - q)
-  have h2 : |(p - q).2| ≤ dist p q := by
-    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_snd_le (p - q)
-  have h3 := (abs_le.1 (abs_dot_uvec_le (p - q) t)).2
-  rw [dot_sub_left] at h3
-  linarith [dot_le_supp hB hq t]
-
-/-- The distance `sup_t |h_A(t) - h_B(t)|` of the support functions is at most twice the
-(Mathlib) Hausdorff distance. -/
-private lemma mpc_hausdorffDist_le_two_mul {A B : Set (ℝ × ℝ)} (hA : IsCompact A)
-    (hAne : A.Nonempty) (hB : IsCompact B) (hBne : B.Nonempty) :
-    hausdorffDist A B ≤ 2 * Metric.hausdorffDist A B :=
-  ciSup_le fun t => abs_le.2
-    ⟨by linarith [mpc_supp_le_add_hausdorff hB hBne hA hAne t,
-        Metric.hausdorffDist_comm (s := A) (t := B)],
-      by linarith [mpc_supp_le_add_hausdorff hA hAne hB hBne t]⟩
-
-/-- A nonempty closed set which is the limit, in the Hausdorff distance, of convex sets is
-convex. -/
-private lemma mpc_convex_of_tendsto {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, Convex ℝ (Ks i))
-    {L : Set (ℝ × ℝ)} (hLc : IsClosed L) (hLne : L.Nonempty)
-    (hd : Tendsto (fun i => Metric.hausdorffDist (Ks i) L) atTop (𝓝 0))
-    (hfin : ∀ i, Metric.hausdorffEDist (Ks i) L ≠ ⊤) : Convex ℝ L := by
-  intro p hp q hq a b ha hb hab
-  rw [← hLc.closure_eq, Metric.mem_closure_iff_infDist_zero hLne]
-  refine le_antisymm (le_of_forall_pos_le_add fun ε hε => ?_) Metric.infDist_nonneg
-  -- `p, q` are within `ε/2` of points `p', q'` of some `K_i`, which contains `a p' + b q'`
-  obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds (show 0 < ε / 2 by positivity))).exists
-  obtain ⟨p', hp', hpp'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
-  obtain ⟨q', hq', hqq'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hq hi (hfin i)
-  have h1 : Metric.infDist (a • p' + b • q') L ≤ Metric.hausdorffDist (Ks i) L :=
-    Metric.infDist_le_hausdorffDist_of_mem ((hKs i) hp' hq' ha hb hab) (hfin i)
-  have h2 : dist (a • p + b • q) (a • p' + b • q') ≤ a * dist p' p + b * dist q' q := by
-    rw [dist_comm p', dist_comm q']
-    refine (dist_add_add_le _ _ _ _).trans_eq ?_
-    rw [dist_smul₀, dist_smul₀, Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
-  have h3 := Metric.infDist_le_infDist_add_dist (x := a • p + b • q) (y := a • p' + b • q')
-    (s := L)
-  have h4 : a * dist p' p + b * dist q' q ≤ ε / 2 := by
-    have e1 := mul_le_mul_of_nonneg_left hpp'.le ha
-    have e2 := mul_le_mul_of_nonneg_left hqq'.le hb
-    have e3 : a * (ε / 2) + b * (ε / 2) = ε / 2 := by rw [← add_mul, hab, one_mul]
-    linarith
-  linarith
-
-open TopologicalSpace in
-/-- **Blaschke selection theorem** for convex bodies in a compact set, with convergence of the
-support functions. -/
-lemma mpc_blaschke {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (Ks i)) {B : Set (ℝ × ℝ)}
-    (hB : IsCompact B) (hsub : ∀ i, Ks i ⊆ B) :
-    ∃ L, IsConvexBody L ∧ L ⊆ B ∧ ∃ φ : ℕ → ℕ, StrictMono φ ∧ HausdorffTendsto (Ks ∘ φ) L := by
-  -- the nonempty compact subsets of `B` form a compact set in the Hausdorff metric
-  set C : ℕ → NonemptyCompacts (ℝ × ℝ) := fun i => ⟨⟨Ks i, (hKs i).2.1⟩, (hKs i).1⟩ with hC
-  set S := {D : NonemptyCompacts (ℝ × ℝ) | (D : Set (ℝ × ℝ)) ⊆ B}
-  have hS : TotallyBounded S :=
-    NonemptyCompacts.totallyBounded_subsets_of_totallyBounded hB.totallyBounded
-  have hSc : IsCompact (closure S) :=
-    (TotallyBounded.closure hS).isCompact_of_isComplete isClosed_closure.isComplete
-  obtain ⟨Lc, -, φ, hφ, hlim⟩ := hSc.tendsto_subseq
-    (fun i => subset_closure (show C i ∈ S from hsub i))
-  set L : Set (ℝ × ℝ) := (Lc : Set (ℝ × ℝ)) with hLdef
-  have hLc : IsCompact L := Lc.isCompact
-  have hLne : L.Nonempty := Lc.nonempty
-  have hd : Tendsto (fun i => Metric.hausdorffDist (Ks (φ i)) L) atTop (𝓝 0) := by
-    have := tendsto_iff_dist_tendsto_zero.1 hlim
-    simpa [NonemptyCompacts.dist_eq, hC] using this
-  have hfin : ∀ i, Metric.hausdorffEDist (Ks (φ i)) L ≠ ⊤ := fun i =>
-    Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded (hKs _).1 hLne (hKs _).2.1.isBounded
-      hLc.isBounded
-  -- the limit lies in `B` and is convex
-  have hLB : L ⊆ B := by
-    intro p hp
-    rw [← hB.isClosed.closure_eq, Metric.mem_closure_iff]
-    intro ε hε
-    obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds hε)).exists
-    obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
-    exact ⟨q, hsub _ hq, by rw [dist_comm]; exact hpq⟩
-  have hLconv : Convex ℝ L :=
-    mpc_convex_of_tendsto (fun i => (hKs (φ i)).2.2) hLc.isClosed hLne hd hfin
-  refine ⟨L, ⟨hLne, hLc, hLconv⟩, hLB, φ, hφ, ?_⟩
-  -- the support functions converge, since `sup_t |h_{K_i}(t) - h_L(t)| ≤ 2 d_H(K_i, L)`
-  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-    (by simpa using hd.const_mul 2) (fun i => Real.iSup_nonneg fun _ => abs_nonneg _)
-    (fun i => mpc_hausdorffDist_le_two_mul (hKs (φ i)).2.1 (hKs (φ i)).1 hLc hLne)
+/-! ### Limits of polygon caps -/
 
 /-- The cap angles lie in `(0, 3π/2]`. -/
 lemma mpc_capAngles_bounds {Θ : AngleSet} {c : ℝ} (hc : c ∈ Θ.capAngles) :
@@ -493,6 +396,48 @@ theorem lemma3_5_3 {X Y : Set (ℝ × ℝ)} {Xs Ys : ℕ → Set (ℝ × ℝ)}
     Metric.infDist_le_infDist_add_dist
   linarith
 
+open Pointwise in
+/-- A point `p` of a convex body `A` lies within `d = sup_t |h_A(t) - h_B(t)|` of a point of the
+convex body `B`, in the max metric of `ℝ × ℝ`. As in Schneider's proof of his Lemma 1.8.14, with
+the ball of the max metric: `p` lies in every supporting half-plane of the convex body
+`B + B̄(0, d)`, as `p · u_t ≤ h_A(t) ≤ h_B(t) + d` and `d u_t ∈ B̄(0, d)`, hence in this body. -/
+private lemma mpc_exists_dist_le_hausdorffDist {A B : Set (ℝ × ℝ)} (hA : IsConvexBody A)
+    (hB : IsConvexBody B) {p : ℝ × ℝ} (hp : p ∈ A) : ∃ q ∈ B, dist p q ≤ hausdorffDist A B := by
+  have hd := hausdorffDist_nonneg A B
+  have hC : IsConvexBody (B + Metric.closedBall 0 (hausdorffDist A B)) :=
+    ⟨hB.1.add (Metric.nonempty_closedBall.2 hd), hB.2.1.add (isCompact_closedBall 0 _),
+      hB.2.2.add (convex_closedBall 0 _)⟩
+  have hpC : p ∈ B + Metric.closedBall 0 (hausdorffDist A B) := by
+    refine (mem_iff_forall_dot_le_supp hC p).2 fun t => ?_
+    obtain ⟨b, hb, hbt⟩ := exists_dot_eq_supp hB.2.1 hB.1 t
+    have hw : hausdorffDist A B • uvec t ∈ Metric.closedBall 0 (hausdorffDist A B) := by
+      rw [mem_closedBall_zero_iff, norm_smul, Real.norm_of_nonneg hd]
+      exact mul_le_of_le_one_right hd (norm_uvec_le t)
+    have h1 := dot_le_supp hC.2.1 (Set.add_mem_add hb hw) t
+    rw [dot_add_left, dot_smul_left, dot_uvec_uvec, sub_self, cos_zero, mul_one, hbt] at h1
+    linarith [dot_le_supp hA.2.1 hp t, (abs_le.1 (abs_supp_sub_le_hausdorffDist hA hB t)).2]
+  obtain ⟨q, hq, w, hw, rfl⟩ := Set.mem_add.1 hpC
+  exact ⟨q, hq, by rwa [dist_eq_norm, add_sub_cancel_left, ← mem_closedBall_zero_iff]⟩
+
+/-- One direction of Schneider's Lemma 1.8.14 (`d_H(A, B) = sup_t |h_A(t) - h_B(t)|` in the
+Euclidean metric), on which the paper's reading of `d_H` rests: for convex bodies, Mathlib's
+`Metric.hausdorffDist` for the max metric of `ℝ × ℝ`, which Lemma 3.5.3 uses, is at most
+`sup_t |h_A(t) - h_B(t)|`. -/
+private lemma mpc_metric_hausdorffDist_le {A B : Set (ℝ × ℝ)} (hA : IsConvexBody A)
+    (hB : IsConvexBody B) : Metric.hausdorffDist A B ≤ hausdorffDist A B :=
+  Metric.hausdorffDist_le_of_mem_dist (hausdorffDist_nonneg A B)
+    (fun _ hp => mpc_exists_dist_le_hausdorffDist hA hB hp) fun _ hp => by
+      obtain ⟨q, hq, h⟩ := mpc_exists_dist_le_hausdorffDist hB hA hp
+      exact ⟨q, hq, h.trans_eq (iSup_congr fun t => abs_sub_comm _ _)⟩
+
+/-- Convex bodies `K_i → K` in `sup_t |h_{K_i}(t) - h_K(t)|` converge to `K` in the Hausdorff
+distance of Lemma 3.5.3 (`mpc_metric_hausdorffDist_le`). -/
+private lemma mpc_tendsto_metric_hausdorffDist {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
+    {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (Ks i)) (hlim : HausdorffTendsto Ks K) :
+    Tendsto (fun i => Metric.hausdorffDist (Ks i) K) atTop (𝓝 0) :=
+  squeeze_zero (fun _ => Metric.hausdorffDist_nonneg)
+    (fun i => mpc_metric_hausdorffDist_le (hKs i) hK) hlim
+
 /-- A point of the niche of the limit `K` of convex bodies `K_i` lies in the polygon niches
 `𝒩_{Θ_{k_i}}(K_i)` for all large `i`: the quarter-planes `Q_K⁻(t)` are open conditions on the
 support function, and the dyadic angles are dense in `(0, ω)`. -/
@@ -530,26 +475,70 @@ lemma mpc_niche_eventually {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {K : Set (�
     show dot p (uvec (s + π / 2)) < supp (Ks i) (s + π / 2) - 1 by linarith⟩
 
 /-- **Theorem 3.5.4** (`thm:limiting-maximum-cap-connected`). A balanced maximum cap contains its
-niche. -/
+niche.
+
+As in the paper, with the repair of E8: the paper applies Lemma 3.5.3 to
+`𝒩_{Θ_j}(K_i) ⊆ K_i`, with `𝒩_{Θ_j}(K_i) → 𝒩_{Θ_j}(K)`, a convergence that need not hold, but
+the lemma only needs each point of `𝒩_{Θ_j}(K)` to lie in `𝒩_{Θ_j}(K_i)` for large `i`. So each
+point `p` of `𝒩(K)` lies in `𝒩_{Θ_{k_i}}(K_i) ⊆ K_i` (Theorem 3.4.10) for all large `i`
+(`mpc_niche_eventually`: `p ∈ 𝒩_{Θ_j}(K)` for some `j`, and the quarter-planes `Q⁻` are open), and
+Lemma 3.5.3 applied to the singletons `{p} ⊆ K_i` puts `p` in `K`. -/
 theorem theorem3_5_4 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K ω) : niche K ω ⊆ K := by
   obtain ⟨hω, hcap, k, Ks, hk, hmax, hlim⟩ := hK
   have hKs : ∀ i, IsConvexBody (Ks i) := fun i => (hmax i).1.1.2.1
   intro p hp
-  apply mpc_mem_of_eventually_mem hcap.2.1 hKs hlim
-  filter_upwards [mpc_niche_eventually hω hcap.2.1 hk hKs hlim hp] with i hi
-  exact theorem3_4_10 (hmax i) hi
+  -- `p ∈ 𝒩_{Θ_{k_i}}(K_i) ⊆ K_i` (Theorem 3.4.10) for all `i ≥ N`
+  obtain ⟨N, hN⟩ := eventually_atTop.1 (mpc_niche_eventually hω hcap.2.1 hk hKs hlim hp)
+  -- Lemma 3.5.3 for `{p} ⊆ K_{i + N}`, where `{p} → {p}` and `K_{i + N} → K`
+  refine lemma3_5_3 (X := {p}) (Y := K) (Xs := fun _ => {p}) (Ys := fun i => Ks (i + N))
+    Bornology.isBounded_singleton (singleton_nonempty p) hcap.2.1.2.1 hcap.2.1.1
+    (fun _ => ⟨Bornology.isBounded_singleton, singleton_nonempty p⟩)
+    (fun i => ⟨(hKs (i + N)).isBounded, (hKs (i + N)).1⟩) (by simp)
+    ((mpc_tendsto_metric_hausdorffDist hcap.2.1 hKs hlim).comp (tendsto_add_atTop_nat N))
+    (fun i => singleton_subset_iff.2 (theorem3_4_10 (hmax (i + N)) (hN _ (Nat.le_add_left N i))))
+    (mem_singleton p)
+
+/-- `|𝒩_{Θ_m}(K)| → |𝒩(K)|` as `m → ∞`, for the dyadic angle sets `Θ_m = Θ_{ω, 2^(k_m + 1)}`
+(proof of Theorem 3.5.5): the polygon niches `𝒩_{Θ_m}(K) ⊆ 𝒩(K)` increase to `𝒩(K)`, as each point
+of `𝒩(K)` lies in `Q_K⁻(t)` for a dyadic angle `t` (the proof of Theorem 3.5.4 notes
+`⋃_j 𝒩_{Θ_j}(K) = 𝒩(K)`; `mpc_niche_eventually` for the constant sequence `K`). -/
+private lemma mpc_tendsto_area_polyNiche_dyadic {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
+    {K : Set (ℝ × ℝ)} (hK : IsCap K ω) {k : ℕ → ℕ} (hk : StrictMono k) :
+    Tendsto (fun m => area (polyNiche (dyadicAngleSet ω hω (k m)) K)) atTop
+      (𝓝 (area (niche K ω))) := by
+  have hsub : ∀ m, polyNiche (dyadicAngleSet ω hω (k m)) K ⊆ niche K ω := by
+    rintro m p ⟨hf, hu⟩
+    obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hu
+    exact ⟨hf, mem_iUnion₂.2 ⟨t, (dyadicAngleSet ω hω (k m)).subset t ht, hq⟩⟩
+  have hconst : HausdorffTendsto (fun _ => K) K := by
+    simp [HausdorffTendsto, hausdorffDist]
+  have hfin : MeasureTheory.volume (niche K ω) ≠ ⊤ :=
+    (nef_niche_isBounded hK).measure_lt_top.ne
+  refine tendsto_order.2 ⟨fun x hx => ?_, fun x hx => Eventually.of_forall fun m =>
+    (ENNReal.toReal_mono hfin (MeasureTheory.measure_mono (hsub m))).trans_lt hx⟩
+  filter_upwards [mpc_area_lsc
+    (fun p hp => mpc_niche_eventually hω hK.2.1 hk (fun _ => hK.2.1) hconst hp)
+    (nef_niche_isBounded hK) (Eventually.of_forall hsub) (half_pos (sub_pos.2 hx))] with m hm
+  linarith
 
 /-- **Theorem 3.5.5** (`thm:limiting-maximum-cap-max`). A balanced maximum cap maximizes the sofa
-area functional `𝒜_ω` over all caps with rotation angle `ω`. -/
+area functional `𝒜_ω` over all caps with rotation angle `ω`.
+
+As in the paper, `𝒜_{Θ_i}(K_i) → 𝒜_ω(K)`: `|K_i| → |K|` (Schneider, Theorem 1.8.20;
+`mpc_tendsto_area`); `lim sup |𝒩_{Θ_i}(K_i)| ≤ |𝒩(K)|`, since `𝒜_{Θ_i}(K_i) ≥ 𝒜_{Θ_i}(K) ≥ 𝒜_ω(K)`
+(Definition 3.4.1, Theorem 3.2.3); and `lim inf |𝒩_{Θ_i}(K_i)| ≥ |𝒩(K)|` by the double limit through
+`|𝒩_{Θ_m}(K_i)| → |𝒩_{Θ_m}(K)|` as `i → ∞` (`mpc_tendsto_area_polyNiche`, as `h_{K_i} → h_K`) and
+`|𝒩_{Θ_m}(K)| → |𝒩(K)|` as `m → ∞`. Then `𝒜_ω(K') ≤ 𝒜_{Θ_i}(K') ≤ 𝒜_{Θ_i}(K_i)` for every cap
+`K'`. The inner limit is one of areas, which holds also when a wedge is empty for `K` but not for
+the `K_i`, the case that breaks the Hausdorff convergence of the niches in Theorem 3.5.4 (E8). -/
 theorem theorem3_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K ω) :
     ∀ K', IsCap K' ω → sofaArea ω K' ≤ sofaArea ω K := by
   obtain ⟨hω, hcap, k, Ks, hk, hmax, hlim⟩ := hK
   have hKs : ∀ i, IsConvexBody (Ks i) := fun i => (hmax i).1.1.2.1
-  intro K' hK'
   -- `𝒜_ω(K') ≤ 𝒜_Θ(𝓒_Θ(K')) ≤ 𝒜_Θ(K_i) = |K_i| - |𝒩_Θ(K_i)|` for `Θ = Θ_{k_i}`
-  have hbound : ∀ i, sofaArea ω K' ≤
+  have hbound : ∀ K', IsCap K' ω → ∀ i, sofaArea ω K' ≤
       area (Ks i) - area (polyNiche (dyadicAngleSet ω hω (k i)) (Ks i)) := by
-    intro i
+    intro K' hK' i
     set Θ := dyadicAngleSet ω hω (k i)
     have h1 : sofaArea ω K' ≤ polyArea Θ K' := theorem3_2_3_le (Θ := Θ) hK'
     have hpc := proposition3_2_1 (Θ := Θ) hK'
@@ -560,22 +549,37 @@ theorem theorem3_5_5 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsBalancedMaxCap K 
     have h4 : polyArea Θ (Ks i) = area (Ks i) - area (polyNiche Θ (Ks i)) :=
       theorem3_2_3 (hmax i).1
     linarith
-  -- for large `i`, `|K_i| ≤ |K| + ε/2` and `|𝒩_Θ(K_i)| ≥ |𝒩(K)| - ε/2`
-  apply le_of_forall_pos_le_add
-  intro ε hε
-  have hev1 := mpc_area_usc hcap.2.1 hKs hlim (half_pos hε)
-  have hNs : ∀ᶠ i in atTop,
-      polyNiche (dyadicAngleSet ω hω (k i)) (Ks i) ⊆ mpcOuter univ (supp K) 1 := by
-    filter_upwards [mpc_eventually_subset_outer hcap.2.1 hKs hlim one_pos] with i hi
-    exact (theorem3_4_10 (hmax i)).trans hi
-  have hev2 := mpc_area_lsc (N := niche K ω)
-    (fun p hp => mpc_niche_eventually hω hcap.2.1 hk hKs hlim hp)
-    (mpc_isBounded_outer hcap.2.1 1) hNs (half_pos hε)
-  obtain ⟨i, hi1, hi2⟩ := (hev1.and hev2).exists
-  have := hbound i
-  have e : sofaArea ω K = area K - area (niche K ω) := rfl
-  rw [e]
-  linarith
+  have hsofa : sofaArea ω K = area K - area (niche K ω) := rfl
+  -- `|K_i| → |K|`
+  have harea := mpc_tendsto_area hcap.2.1 hKs hlim
+  -- `|𝒩_{Θ_i}(K_i)| → |𝒩(K)|`
+  have hniche : Tendsto (fun i => area (polyNiche (dyadicAngleSet ω hω (k i)) (Ks i))) atTop
+      (𝓝 (area (niche K ω))) := by
+    refine tendsto_order.2 ⟨fun x hx => ?_, fun x hx => ?_⟩
+    · -- `lim inf`: fix `m` with `|𝒩_{Θ_m}(K)| > x`; then `|𝒩_{Θ_m}(K_i)| > x` for large `i`, and
+      -- `𝒩_{Θ_m}(K_i) ⊆ 𝒩_{Θ_i}(K_i)` for `i ≥ m`
+      obtain ⟨m, hm⟩ :=
+        ((mpc_tendsto_area_polyNiche_dyadic hω hcap hk).eventually (lt_mem_nhds hx)).exists
+      filter_upwards [(mpc_tendsto_area_polyNiche (Θ := dyadicAngleSet ω hω (k m))
+        (tendsto_supp hKs hcap.2.1 hlim)).eventually (lt_mem_nhds hm),
+        eventually_ge_atTop m] with i hi him
+      have hsub : polyNiche (dyadicAngleSet ω hω (k m)) (Ks i) ⊆
+          polyNiche (dyadicAngleSet ω hω (k i)) (Ks i) := by
+        rintro p ⟨hf, hu⟩
+        obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hu
+        exact ⟨hf, mem_iUnion₂.2 ⟨t, mpc_dyadic_mono hω (hk.monotone him) ht, hq⟩⟩
+      exact hi.trans_le (ENNReal.toReal_mono
+        (mpc_polyNiche_isBounded _ _).measure_lt_top.ne (MeasureTheory.measure_mono hsub))
+    · -- `lim sup`: `|𝒩_{Θ_i}(K_i)| ≤ |K_i| - 𝒜_ω(K)`, and `|K_i| → |K|`
+      filter_upwards [harea.eventually (gt_mem_nhds
+        (show area K < area K + (x - area (niche K ω)) by linarith))] with i hi
+      linarith [hbound K hcap i]
+  -- `𝒜_{Θ_i}(K_i) → 𝒜_ω(K)`, and `𝒜_ω(K') ≤ 𝒜_{Θ_i}(K_i)` for every cap `K'`
+  have hlimA : Tendsto (fun i => area (Ks i) -
+      area (polyNiche (dyadicAngleSet ω hω (k i)) (Ks i))) atTop (𝓝 (sofaArea ω K)) := by
+    rw [hsofa]
+    exact harea.sub hniche
+  exact fun K' hK' => ge_of_tendsto' hlimA (hbound K' hK')
 
 /-- A translate of a moving sofa with rotation angle `ω` is a moving sofa with rotation angle
 `ω`. -/

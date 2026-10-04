@@ -64,16 +64,8 @@ end Cap
 
 /-! ### Helper lemmas: trigonometry -/
 
-/-- If `p` is not further than `q` in the directions `u_a` and `u_b`, then neither in any direction
-`u_s` between them. -/
-private lemma cn_dot_le_of_between {p q : ℝ × ℝ} {a b s : ℝ} (hab : 0 < sin (b - a))
-    (h1 : 0 ≤ sin (b - s)) (h2 : 0 ≤ sin (s - a)) (ha : dot p (uvec a) ≤ dot q (uvec a))
-    (hb : dot p (uvec b) ≤ dot q (uvec b)) : dot p (uvec s) ≤ dot q (uvec s) := by
-  refine le_of_mul_le_mul_left ?_ hab
-  linarith [dot_uvec_comb p a b s, dot_uvec_comb q a b s, mul_le_mul_of_nonneg_left ha h1,
-    mul_le_mul_of_nonneg_left hb h2]
-
-/-- The strict version of `cn_dot_le_of_between`. -/
+/-- If `p` is strictly less far than `q` in the directions `u_a` and `u_b`, then also in any
+direction `u_s` strictly between them. -/
 private lemma cn_dot_lt_of_between {p q : ℝ × ℝ} {a b s : ℝ} (hab : 0 < sin (b - a))
     (h1 : 0 < sin (b - s)) (h2 : 0 < sin (s - a)) (ha : dot p (uvec a) < dot q (uvec a))
     (hb : dot p (uvec b) < dot q (uvec b)) : dot p (uvec s) < dot q (uvec s) := by
@@ -492,14 +484,15 @@ theorem proposition2_5_4_isCap {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
       · rfl
       · ext p; simp only [halfMinus, mem_ofPred_eq, uvec_add_two_pi]
 
-/-- **Proposition 2.5.4**, the support function: `h_{K^m}(t) = h_K(ω + π/2 - t)`. -/
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the support function:
+`h_{K^m}(t) = h_K(ω + π/2 - t)`. -/
 theorem proposition2_5_4_supp {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     supp (mirrorCap K ω) t = supp K (ω + π / 2 - t) :=
   cn_supp_mirror ω t K
 
-/-- **Proposition 2.5.4**, the supporting hallway: `L_{K^m}(t) = M_ω(L_K(ω - t))`, with its inner
-and outer corners, and with the walls `a ↔ c`, `b ↔ d` and the wedge endpoints `W ↔ Z`
-exchanged. -/
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the supporting hallway:
+`L_{K^m}(t) = M_ω(L_K(ω - t))`, with its inner and outer corners, and with the walls `a ↔ c`,
+`b ↔ d` and the wedge endpoints `W ↔ Z` exchanged. -/
 theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     suppHallway (mirrorCap K ω) t = mirror ω '' suppHallway K (ω - t) ∧
       innerCorner (mirrorCap K ω) t = mirror ω (innerCorner K (ω - t)) ∧
@@ -526,8 +519,8 @@ theorem proposition2_5_4_hallway {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     · simp [vvec]; ring
     · simp [vvec]; ring
 
-/-- **Proposition 2.5.4**, the vertices: `A_{K^m}^±(t) = M_ω(C_K^∓(ω - t))` and
-`C_{K^m}^±(t) = M_ω(A_K^∓(ω - t))`. -/
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the vertices:
+`A_{K^m}^±(t) = M_ω(C_K^∓(ω - t))` and `C_{K^m}^±(t) = M_ω(A_K^∓(ω - t))`. -/
 theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     aPlus (mirrorCap K ω) t = mirror ω (cMinus K (ω - t)) ∧
       aMinus (mirrorCap K ω) t = mirror ω (cPlus K (ω - t)) ∧
@@ -537,7 +530,7 @@ theorem proposition2_5_4_vertices {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     show ω - t + π / 2 = ω + π / 2 - t by ring, show ω + π / 2 - (t + π / 2) = ω - t by ring,
     and_self]
 
-/-- **Proposition 2.5.4**, the wedge gaps: `w_{K^m}(t) = z_K(ω - t)` and
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the wedge gaps: `w_{K^m}(t) = z_K(ω - t)` and
 `z_{K^m}(t) = w_K(ω - t)`. -/
 theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     wedgeGapW (mirrorCap K ω) t = wedgeGapZ K ω (ω - t) ∧
@@ -551,8 +544,9 @@ theorem proposition2_5_4_gaps {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
   · rw [wedgeGapW, wedgeGapZ, hCω, hZ, ← cn_mirror_sub, cn_dot_mirror_vvec, sub_self,
       show ω + π / 2 - ω = 0 + π / 2 by ring, vvec_add_pi_div_two, dot_neg_right, neg_neg]
 
-/-- **Proposition 2.5.4**, the sets: the upper boundary, the wedge `T_{K^m}(t)` and the niche of
-`K^m` are the reflections of the upper boundary, the wedge `T_K(ω - t)` and the niche of `K`. -/
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the sets: the upper boundary, the wedge
+`T_{K^m}(t)` and the niche of `K^m` are the reflections of the upper boundary, the wedge
+`T_K(ω - t)` and the niche of `K`. -/
 theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
     upperBoundary (mirrorCap K ω) ω = mirror ω '' upperBoundary K ω ∧
       wedge (mirrorCap K ω) ω t = mirror ω '' wedge K ω (ω - t) ∧
@@ -584,8 +578,8 @@ theorem proposition2_5_4_sets {K : Set (ℝ × ℝ)} {ω : ℝ} (t : ℝ) :
       refine ⟨h1, ω - s, ⟨by linarith [hs.2], by linarith [hs.1]⟩, ?_⟩
       rwa [show ω - (ω - s) = s by ring]
 
-/-- **Proposition 2.5.4**, the surface area measure: `σ_{K^m}` is the image of `σ_K` under
-`t ↦ ω + π/2 - t`. -/
+/-- **Proposition 2.5.4** (`pro:mirror-reflection`), the surface area measure: `σ_{K^m}` is the
+image of `σ_K` under `t ↦ ω + π/2 - t`. -/
 theorem proposition2_5_4_sigma {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     sigma (mirrorCap K ω) = (sigma K).map (fun s => ω + π / 2 - s) := by
   have hKc := hK.isConvexBody
@@ -662,83 +656,295 @@ lemma cn_innerCorner_dot (K : Set (ℝ × ℝ)) (t : ℝ) :
     dot_vvec_self]
   constructor <;> ring
 
-/-- Every point of a wedge satisfies the supporting constraints of `K` with normal angles in
-`[0, t]` (this uses only `w_K(t) > 0`). -/
-private lemma cn_wedge_dot_le_low {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCap K ω) (ht : t ∈ Ioo 0 ω)
-    {p : ℝ × ℝ} (hp : p ∈ wedge K ω t) {s : ℝ} (hs0 : 0 ≤ s) (hst : s ≤ t) :
-    dot p (uvec s) ≤ supp K s := by
-  obtain ⟨hc, hsn, -, -, -, -⟩ := cn_trig_of_mem hK.omega_mem ht
-  have hgap := hK.gapW_ineq ht
-  obtain ⟨hpF, hpQ⟩ := hp
-  rw [cn_mem_qMinus] at hpQ
-  have hp2 := (mem_fan_iff.1 hpF).2
-  obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty 0
-  rw [dot_uvec_zero] at hq
-  have hq2 := hK.snd_nonneg hqK
-  have ht1 : t < π := by linarith [ht.2, hK.omega_mem.2, pi_pos]
-  refine (cn_dot_le_of_between (a := 0) (b := t) (q := q) ?_ ?_ ?_ ?_ ?_).trans (hK.dot_le hqK s)
-  · rw [sub_zero]; exact hsn
-  · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith)
-  · rw [sub_zero]; exact sin_nonneg_of_nonneg_of_le_pi hs0 (by linarith)
-  · -- `p.1 < h_K(0) = q.1`
-    rw [dot_uvec_zero, dot_uvec_zero, hq]
-    have h1 : dot p (uvec t) = p.1 * cos t + p.2 * sin t := rfl
-    have h2 : p.1 * cos t < supp K 0 * cos t := by nlinarith [mul_nonneg hp2 hsn.le]
-    exact (lt_of_mul_lt_mul_right h2 hc.le).le
-  · have h1 : dot q (uvec t) = q.1 * cos t + q.2 * sin t := rfl
-    rw [h1, hq]
-    nlinarith [mul_nonneg hq2 hsn.le]
-
-/-- Every point of a wedge satisfies the supporting constraints of `K` with normal angles in
-`[t + π/2, ω + π/2]` (this uses only `z_K(t) > 0`). -/
-private lemma cn_wedge_dot_le_high {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCap K ω) (ht : t ∈ Ioo 0 ω)
-    {p : ℝ × ℝ} (hp : p ∈ wedge K ω t) {s : ℝ} (hs0 : t + π / 2 ≤ s) (hst : s ≤ ω + π / 2) :
-    dot p (uvec s) ≤ supp K s := by
-  obtain ⟨-, -, -, hc, hsn, -⟩ := cn_trig_of_mem hK.omega_mem ht
-  have hgap := hK.gapZ_ineq ht
-  obtain ⟨hpF, hpQ⟩ := hp
-  rw [cn_mem_qMinus] at hpQ
-  have hp1 := (mem_fan_iff.1 hpF).1
+/-- The corner `h_K(ω + π/2) v_ω` of a cap, on the line `l(ω, 0)`, lies in the cap. -/
+lemma IsCap.corner_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
+    supp K (ω + π / 2) • vvec ω ∈ K := by
+  set H := supp K (ω + π / 2)
+  obtain ⟨hω0, hω1⟩ := hK.omega_mem
+  have hpu : dot (H • vvec ω) (uvec ω) = 0 := by
+    rw [dot_smul_left, dot_vvec_uvec, mul_zero]
+  have hpv : dot (H • vvec ω) (vvec ω) = H := by
+    rw [dot_smul_left, dot_vvec_self, mul_one]
   obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (ω + π / 2)
+  rw [uvec_add_pi_div_two] at hq
   have hq1 := hK.dot_omega_nonneg hqK
-  have hω := hK.omega_mem
-  refine (cn_dot_le_of_between (a := t + π / 2) (b := ω + π / 2) (q := q) ?_ ?_ ?_ ?_ ?_).trans
-    (hK.dot_le hqK s)
-  · rw [show ω + π / 2 - (t + π / 2) = ω - t by ring]; exact hsn
-  · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [ht.1, ht.2, hω.2, pi_pos])
-  · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [ht.1, ht.2, hω.2, pi_pos])
-  · rw [cn_dot_uvec_decomp q ω t, hq]
-    nlinarith [mul_nonneg hsn.le hq1]
-  · -- `p · u_{ω+π/2} < h_K(ω + π/2)`
-    rw [hq]
-    have h1 := cn_dot_uvec_decomp p ω t
-    have h2 : cos (ω - t) * dot p (uvec (ω + π / 2)) < cos (ω - t) * supp K (ω + π / 2) := by
-      nlinarith [mul_nonneg hsn.le hp1]
-    exact (lt_of_mul_lt_mul_left h2 hc.le).le
+  rw [hK.mem_iff, mem_fan_iff]
+  refine ⟨⟨hpu.ge, ?_⟩, fun s hs => ?_⟩
+  · -- `H cos ω ≥ 1 - sin ω ≥ 0`, using a point `q'` of `K` with `q' · u_{π/2} = 1`
+    obtain ⟨q', hq'K, hq'⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (π / 2)
+    rw [hK.supp_pi_div_two, dot_uvec_eq_cos_add_sin _ _ ω, cos_pi_div_two_sub,
+      sin_pi_div_two_sub] at hq'
+    have h1 := hK.dot_omega_le_one hq'K
+    have h2 := hK.dot_le hq'K (ω + π / 2)
+    rw [uvec_add_pi_div_two] at h2
+    have hs : 0 ≤ sin ω := sin_nonneg_of_nonneg_of_le_pi hω0.le (by linarith [pi_pos])
+    have hc : 0 ≤ cos ω := cos_nonneg_of_mem_Icc ⟨by linarith [pi_pos], hω1⟩
+    simp only [Prod.smul_snd, vvec_snd, smul_eq_mul]
+    nlinarith [mul_le_mul_of_nonneg_left h1 hs, mul_le_mul_of_nonneg_left h2 hc, sin_le_one ω]
+  · have hsI := cn_jSet_subset hs
+    have hc : 0 ≤ cos (s - ω) := cos_nonneg_of_mem_Icc ⟨by linarith [hsI.1], by linarith [hsI.2]⟩
+    refine le_trans ?_ (hK.dot_le hqK s)
+    rw [dot_uvec_eq_cos_add_sin _ s ω, dot_uvec_eq_cos_add_sin q s ω, hpu, hpv, hq]
+    nlinarith [mul_nonneg hc hq1]
+
+/-- `C_K⁺(ω) = h_K(ω + π/2) v_ω`: the vertex `C_K⁺(ω)` lies on the line `l(ω, 0)`, which the paper
+uses without proof (E4 (a)). The corner `h_K(ω + π/2) v_ω` lies on the edge `e_K(ω + π/2)`, of which
+`C_K⁺(ω)` is the point farthest in the direction `v_{ω+π/2} = -u_ω`, and `K ⊆ H₊(ω, 0)`. -/
+private lemma IsCap.cPlus_eq_corner {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
+    cPlus K ω = supp K (ω + π / 2) • vvec ω := by
+  have hce : supp K (ω + π / 2) • vvec ω ∈ edge K (ω + π / 2) := by
+    refine mem_edge_iff.2 ⟨hK.corner_mem, ?_⟩
+    rw [uvec_add_pi_div_two, dot_smul_left, dot_vvec_self, mul_one]
+  have h1 := dot_le_dot_vplus hK.isCompact hce
+  have h2 := hK.dot_omega_nonneg (vplus_mem_edge hK.isConvexBody (ω + π / 2)).1
+  rw [vvec_add_pi_div_two, dot_neg_right, dot_neg_right, dot_smul_left, dot_vvec_uvec,
+    mul_zero, neg_zero] at h1
+  have h3 := dot_vplus_uvec K (ω + π / 2)
+  rw [uvec_add_pi_div_two] at h3
+  rw [cPlus, eq_dot_uvec_smul_add (vplus K (ω + π / 2)) ω, h3,
+    le_antisymm (by linarith) h2, zero_smul, zero_add]
+
+/-- `A_K⁻(0) = (h_K(0), 0)`: the vertex `A_K⁻(0)` lies on the line `l(π/2, 0)`, which the paper uses
+without proof (E4 (a)). By Proposition 2.5.4 it is the reflection of the vertex `C_{K^m}⁺(ω)` of the
+mirror cap, which lies on `l(ω, 0)`. -/
+private lemma IsCap.aMinus_eq_corner {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
+    aMinus K 0 = (supp K 0, 0) := by
+  have h := (proposition2_5_4_vertices (K := K) (ω := ω) ω).2.2.1
+  rw [sub_self, (proposition2_5_4_isCap hK).cPlus_eq_corner, proposition2_5_4_supp, sub_self] at h
+  rw [← cn_mirror_mirror ω (aMinus K 0), ← h, cn_mirror_smul, cn_mirror_vvec,
+    show ω + π / 2 - ω = 0 + π / 2 by ring, vvec_add_pi_div_two, neg_neg, uvec_zero]
+  simp
+
+/-- The origin `O` lies in every cap with `ω < π/2`, which the paper uses without proof (E4 (b)):
+every defining half-plane `H₋(s, h_K(s))`, `s ∈ J_ω`, contains `O`, as `h_K(s) ≥ A_K⁻(0) · u_s ≥ 0`
+for `s ∈ [0, ω]` and `h_K(s) ≥ C_K⁺(ω) · u_s ≥ 0` for `s ∈ [π/2, ω + π/2]` (by E4 (a), and as both
+vertices lie in `F_ω`). -/
+private lemma IsCap.zero_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (hω : ω < π / 2) :
+    (0 : ℝ × ℝ) ∈ K := by
+  have hA := (vminus_mem_edge hK.isConvexBody 0).1
+  have hC := (vplus_mem_edge hK.isConvexBody (ω + π / 2)).1
+  rw [← aMinus, hK.aMinus_eq_corner] at hA
+  rw [← cPlus, hK.cPlus_eq_corner] at hC
+  obtain ⟨hω0, -⟩ := hK.omega_mem
+  have hcos : 0 < cos ω := cos_pos_of_mem_Ioo ⟨by linarith [pi_pos], hω⟩
+  have hA0 : 0 ≤ supp K 0 := by
+    have h := hK.dot_omega_nonneg hA
+    simp only [dot, uvec, zero_mul, add_zero] at h
+    exact nonneg_of_mul_nonneg_left h hcos
+  have hC0 : 0 ≤ supp K (ω + π / 2) := by
+    have h := hK.snd_nonneg hC
+    simp only [Prod.smul_snd, vvec_snd, smul_eq_mul] at h
+    exact nonneg_of_mul_nonneg_left h hcos
+  rw [hK.mem_iff]
+  refine ⟨mem_fan_iff.2 (by simp), fun s hs => ?_⟩
+  rw [dot_zero_left]
+  rcases hs with hs | hs
+  · refine le_trans ?_ (hK.dot_le hA s)
+    simp only [dot, uvec, zero_mul, add_zero]
+    exact mul_nonneg hA0 (cos_nonneg_of_mem_Icc ⟨by linarith [hs.1, pi_pos], by linarith [hs.2]⟩)
+  · refine le_trans ?_ (hK.dot_le hC s)
+    rw [dot_smul_left, dot_vvec_uvec']
+    exact mul_nonneg hC0 (sin_nonneg_of_nonneg_of_le_pi (by linarith [hs.1])
+      (by linarith [hs.2, pi_pos]))
+
+/-- The step "a polygon whose vertices lie in the convex set `K` lies in `K`" of Lemma 2.5.6, for a
+triangle `P₀ P₁ P₂`: a point `q` whose coordinates in the frame `(u_t, v_t)` are those of
+`P₀ + a (P₁ - P₀) + b (P₂ - P₀)`, with `a, b ≥ 0` and `a + b ≤ 1`, lies in `K`. -/
+private lemma cn_mem_of_combo {K : Set (ℝ × ℝ)} (hK : Convex ℝ K) {P₀ P₁ P₂ q : ℝ × ℝ}
+    (h₀ : P₀ ∈ K) (h₁ : P₁ ∈ K) (h₂ : P₂ ∈ K) {t a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
+    (hab : a + b ≤ 1)
+    (hu : dot q (uvec t) = dot P₀ (uvec t) + a * (dot P₁ (uvec t) - dot P₀ (uvec t)) +
+      b * (dot P₂ (uvec t) - dot P₀ (uvec t)))
+    (hv : dot q (vvec t) = dot P₀ (vvec t) + a * (dot P₁ (vvec t) - dot P₀ (vvec t)) +
+      b * (dot P₂ (vvec t) - dot P₀ (vvec t))) : q ∈ K := by
+  have hq : q = P₀ + a • (P₁ - P₀) + b • (P₂ - P₀) := eq_of_dot_frame (t := t)
+    (by simp only [dot_add_left, dot_smul_left, dot_sub_left, hu])
+    (by simp only [dot_add_left, dot_smul_left, dot_sub_left, hv])
+  have h := hK.sum_mem (t := Finset.univ) (w := ![1 - a - b, a, b]) (z := ![P₀, P₁, P₂])
+    (fun i _ => by fin_cases i <;> simp <;> linarith) (by simp [Fin.sum_univ_three]; ring)
+    (fun i _ => by fin_cases i <;> simpa)
+  rw [hq]; convert h using 1
+  simp [Fin.sum_univ_three]; module
+
+/-- A point of the line `l(π/2, 0)` between two points of a convex set on that line lies in the
+set. -/
+private lemma cn_axis_mem {K : Set (ℝ × ℝ)} (hK : Convex ℝ K) {r s y : ℝ}
+    (hr : ((r, 0) : ℝ × ℝ) ∈ K) (hs : ((s, 0) : ℝ × ℝ) ∈ K) (h1 : r ≤ y) (h2 : y ≤ s) :
+    ((y, 0) : ℝ × ℝ) ∈ K :=
+  (hK.linear_preimage (LinearMap.inl ℝ ℝ ℝ)).ordConnected.out hr hs ⟨h1, h2⟩
+
+/-- **Lemma 2.5.6** (`lem:niche-in-cap`) outside its third case, by the paper's argument: every
+vertex of the wedge `T_K(t)` lies in `K`, so `T_K(t) ⊆ K` by convexity. For `ω = π/2`, `T_K(t)` is
+the triangle `W_K(t) x_K(t) Z_K(t)`, and `W_K(t)`, `Z_K(t)` lie on the segment
+`[C_K⁺(ω), A_K⁻(0)]` of `l(π/2, 0)` by `w_K(t), z_K(t) > 0` (Theorem 2.5.5). For `ω < π/2` the
+cases are on whether `O` lies strictly below `b_K(t)` (`h_K(t) - 1 > 0`) and `d_K(t)`
+(`h_K(t + π/2) - 1 > 0`): neither (case 1), `d_K(t)` only (case 2) or both (case 4); `h3` excludes
+the third case. In case 1, `T_K(t)` is empty (the paper's contradiction there is a slip, E26).
+Points are compared through their coordinates in the frame `(u_t, v_t)`. -/
+private lemma cn_wedge_subset_aux {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {t : ℝ}
+    (ht : t ∈ Ioo 0 ω) (hx : innerCorner K t ∈ K)
+    (h3 : ¬(ω < π / 2 ∧ supp K (t + π / 2) - 1 ≤ 0 ∧ 0 < supp K t - 1)) :
+    wedge K ω t ⊆ K := by
+  obtain ⟨hc, hs, -, hC, hS, -⟩ := cn_trig_of_mem hK.omega_mem ht
+  have hKc := hK.convex
+  -- the coordinates of `x_K(t)`, `W_K(t)` and `Z_K(t)` in the frame `(u_t, v_t)`
+  obtain ⟨hx1, hx2⟩ := cn_innerCorner_dot K t
+  rw [uvec_add_pi_div_two] at hx2
+  have hWu : dot (wedgeW K t) (uvec t) = supp K t - 1 := by
+    simp only [wedgeW, dot, uvec]; field_simp; ring
+  have hWv : dot (wedgeW K t) (vvec t) = -((supp K t - 1) * sin t / cos t) := by
+    simp only [wedgeW, dot, vvec]; ring
+  have hZu : dot (wedgeZ K ω t) (uvec t) =
+      -((supp K (t + π / 2) - 1) * sin (ω - t) / cos (ω - t)) := by
+    rw [wedgeZ, dot_smul_left, dot_vvec_uvec', ← neg_sub ω t, sin_neg]; ring
+  have hZv : dot (wedgeZ K ω t) (vvec t) = supp K (t + π / 2) - 1 := by
+    rw [wedgeZ, dot_smul_left, dot_vvec_vvec]; field_simp
+  -- `w_K(t), z_K(t) > 0` (Theorem 2.5.5), with `A_K⁻(0) = (h_K(0), 0)` and
+  -- `C_K⁺(ω) = h_K(ω + π/2) v_ω` in `K` (E4 (a))
+  obtain ⟨hw, hz⟩ := theorem2_5_5 hK ht
+  rw [wedgeGapW, hK.aMinus_eq_corner, dot_uvec_zero, wedgeW, Prod.mk_sub_mk, sub_pos] at hw
+  rw [wedgeGapZ, hK.cPlus_eq_corner, wedgeZ, ← sub_smul, dot_smul_left, dot_vvec_self, mul_one,
+    sub_pos] at hz
+  have hAK : ((supp K 0, 0) : ℝ × ℝ) ∈ K :=
+    hK.aMinus_eq_corner ▸ (vminus_mem_edge hK.isConvexBody 0).1
+  have hCK : supp K (ω + π / 2) • vvec ω ∈ K :=
+    hK.cPlus_eq_corner ▸ (vplus_mem_edge hK.isConvexBody (ω + π / 2)).1
+  -- the conditions `p ∈ F_ω` in the frame
+  have hy : ∀ p : ℝ × ℝ, p.2 = sin t * dot p (uvec t) + cos t * dot p (vvec t) := fun p => by
+    rw [← dot_uvec_pi_div_two, dot_uvec_eq_cos_add_sin p _ t, cos_pi_div_two_sub,
+      sin_pi_div_two_sub]
+  obtain ⟨hxω, hxy⟩ := mem_fan_iff.1 (hK.subset_fan hx)
+  rw [dot_uvec_eq_cos_add_sin _ ω t, hx1, hx2] at hxω
+  rw [hy, hx1, hx2] at hxy
+  rintro q ⟨hqF, hqQ⟩
+  obtain ⟨hqω, hqy⟩ := mem_fan_iff.1 hqF
+  rw [dot_uvec_eq_cos_add_sin _ ω t] at hqω
+  rw [hy] at hqy
+  rw [cn_mem_qMinus, uvec_add_pi_div_two] at hqQ
+  obtain ⟨hA, hB⟩ := hqQ
+  set c₁ := supp K t - 1
+  set c₂ := supp K (t + π / 2) - 1
+  set A := dot q (uvec t)
+  set B := dot q (vvec t)
+  rcases hK.omega_mem.2.lt_or_eq with hω | rfl
+  · -- `ω < π/2`: `O ∈ K` (E4 (b)), and `Z_K(t)` lies on the segment `[O, C_K⁺(ω)]` when
+    -- `c₂ ≥ 0`, as `z_K(t) > 0`
+    have hO := hK.zero_mem hω
+    have hZK : 0 ≤ c₂ → wedgeZ K ω t ∈ K := fun h2 => by
+      have hH : 0 < supp K (ω + π / 2) := lt_of_le_of_lt (div_nonneg h2 hC.le) hz
+      have := hKc.smul_mem_of_zero_mem hO hCK (t := c₂ / cos (ω - t) / supp K (ω + π / 2))
+        ⟨div_nonneg (div_nonneg h2 hC.le) hH.le, (div_le_one hH).2 hz.le⟩
+      rwa [smul_smul, div_mul_cancel₀ _ hH.ne'] at this
+    rcases le_or_gt c₁ 0 with h1 | h1 <;> rcases le_or_gt c₂ 0 with h2 | h2
+    · -- case 1: `O` lies on or above `b_K(t)` and `d_K(t)`, so `Q_K⁻(t)` lies strictly below
+      -- `l(π/2, 0)` and `T_K(t)` is empty
+      nlinarith [mul_lt_mul_of_pos_left hA hs, mul_lt_mul_of_pos_left hB hc]
+    · -- case 2: `T_K(t)` is the triangle `x_K(t) Z_K(t) p` with `p = l(ω, 0) ∩ b_K(t)` on the
+      -- segment `[O, Z_K(t)]`
+      have hZK := hZK h2.le
+      have hY : 0 < cos (ω - t) * c₁ + sin (ω - t) * c₂ := by
+        nlinarith [mul_pos hC (sub_pos.2 hA), mul_pos hS (sub_pos.2 hB)]
+      have hpK : (-c₁ / sin (ω - t)) • vvec ω ∈ K := by
+        have hz0 : 0 < c₂ / cos (ω - t) := div_pos h2 hC
+        have := hKc.smul_mem_of_zero_mem hO hZK (t := -c₁ / sin (ω - t) / (c₂ / cos (ω - t)))
+          ⟨div_nonneg (div_nonneg (neg_nonneg.2 h1) hS.le) hz0.le, by
+            rw [div_le_one hz0, div_le_div_iff₀ hS hC]; nlinarith⟩
+        rwa [wedgeZ, smul_smul, div_mul_cancel₀ _ hz0.ne'] at this
+      have hpu : dot ((-c₁ / sin (ω - t)) • vvec ω) (uvec t) = c₁ := by
+        rw [dot_smul_left, dot_vvec_uvec', ← neg_sub ω t, sin_neg]; field_simp
+      have hpv : dot ((-c₁ / sin (ω - t)) • vvec ω) (vvec t) = -c₁ / sin (ω - t) * cos (ω - t) := by
+        rw [dot_smul_left, dot_vvec_vvec]
+      refine cn_mem_of_combo hKc hx hZK hpK (t := t)
+        (a := (c₁ - A) * cos (ω - t) / (cos (ω - t) * c₁ + sin (ω - t) * c₂))
+        (b := (c₂ - B) * sin (ω - t) / (cos (ω - t) * c₁ + sin (ω - t) * c₂))
+        (div_nonneg (mul_nonneg (by linarith) hC.le) hY.le)
+        (div_nonneg (mul_nonneg (by linarith) hS.le) hY.le) ?_ ?_ ?_
+      · rw [← add_div, div_le_one hY]; nlinarith
+      all_goals
+        generalize hYd : cos (ω - t) * c₁ + sin (ω - t) * c₂ = Y at hY ⊢
+      · rw [hx1, hZu, hpu]; field_simp; rw [← hYd]; ring
+      · rw [hx2, hZv, hpv]; field_simp; rw [← hYd]; ring
+    · exact absurd ⟨hω, h2, h1⟩ h3
+    · -- case 4: `T_K(t)` is the quadrilateral `x_K(t) Z_K(t) O W_K(t)`, with `W_K(t)` on the
+      -- segment `[O, A_K⁻(0)]` as `w_K(t) > 0`; its diagonal `O x_K(t)` cuts it into two triangles
+      have hZK := hZK h2.le
+      have hA0 : 0 < supp K 0 := lt_trans (div_pos h1 hc) hw
+      have hWK : wedgeW K t ∈ K := by
+        have := hKc.smul_mem_of_zero_mem hO hAK (t := c₁ / cos t / supp K 0)
+          ⟨div_nonneg (div_nonneg h1.le hc.le) hA0.le, (div_le_one hA0).2 hw.le⟩
+        rw [Prod.smul_mk, smul_eq_mul, smul_zero, div_mul_cancel₀ _ hA0.ne'] at this
+        exact this
+      have hX : 0 < sin t * c₁ + cos t * c₂ := add_pos (mul_pos hs h1) (mul_pos hc h2)
+      have hY : 0 < cos (ω - t) * c₁ + sin (ω - t) * c₂ := add_pos (mul_pos hC h1) (mul_pos hS h2)
+      rcases le_total (B * c₁) (A * c₂) with hBA | hAB
+      · -- the triangle `O x_K(t) W_K(t)`
+        refine cn_mem_of_combo hKc hO hx hWK (t := t)
+          (a := (sin t * A + cos t * B) / (sin t * c₁ + cos t * c₂))
+          (b := A / c₁ - (sin t * A + cos t * B) / (sin t * c₁ + cos t * c₂))
+          (div_nonneg hqy hX.le) ?_ (by rw [add_sub_cancel, div_le_one h1]; exact hA.le) ?_ ?_
+        · rw [sub_nonneg, div_le_div_iff₀ hX h1]; nlinarith [mul_le_mul_of_nonneg_left hBA hc.le]
+        · rw [dot_zero_left, hx1, hWu]; field_simp; ring
+        · rw [dot_zero_left, hx2, hWv]; field_simp; ring
+      · -- the triangle `O x_K(t) Z_K(t)`
+        refine cn_mem_of_combo hKc hO hx hZK (t := t)
+          (a := (cos (ω - t) * A + sin (ω - t) * B) / (cos (ω - t) * c₁ + sin (ω - t) * c₂))
+          (b := B / c₂ - (cos (ω - t) * A + sin (ω - t) * B) /
+            (cos (ω - t) * c₁ + sin (ω - t) * c₂))
+          (div_nonneg hqω hY.le) ?_ (by rw [add_sub_cancel, div_le_one h2]; exact hB.le) ?_ ?_
+        · rw [sub_nonneg, div_le_div_iff₀ hY h2]; nlinarith [mul_le_mul_of_nonneg_left hAB hC.le]
+        · rw [dot_zero_left, hx1, hZu]; field_simp; ring
+        · rw [dot_zero_left, hx2, hZv]; field_simp; ring
+  · -- `ω = π/2`: `T_K(t)` is the triangle `W_K(t) x_K(t) Z_K(t)`; `W_K(t)` and `Z_K(t)` lie on the
+    -- segment `[C_K⁺(ω), A_K⁻(0)]` of `l(π/2, 0)`, as `w_K(t), z_K(t) > 0` and `W_K(t)` is further
+    -- than `Z_K(t)` in the direction `u_0`
+    rw [cos_pi_div_two_sub] at hz
+    rw [sin_pi_div_two_sub, cos_pi_div_two_sub] at hZu
+    rw [vvec_pi_div_two, Prod.smul_mk, smul_eq_mul, smul_eq_mul, mul_neg, mul_one, mul_zero] at hCK
+    have hZ : wedgeZ K (π / 2) t = (-(c₂ / sin t), 0) := by
+      simp only [wedgeZ, cos_pi_div_two_sub, vvec_pi_div_two, Prod.smul_mk, smul_eq_mul, mul_neg,
+        mul_one, mul_zero]
+      rfl
+    have hX : 0 < sin t * c₁ + cos t * c₂ := by
+      nlinarith [mul_pos hs (sub_pos.2 hA), mul_pos hc (sub_pos.2 hB)]
+    have hZW : -(c₂ / sin t) ≤ c₁ / cos t := by
+      rw [neg_le_iff_add_nonneg, div_add_div _ _ hc.ne' hs.ne']
+      exact div_nonneg (by linarith) (mul_pos hc hs).le
+    have hWK : wedgeW K t ∈ K := cn_axis_mem hKc hCK hAK (by linarith) hw.le
+    have hZK : wedgeZ K (π / 2) t ∈ K := by
+      rw [hZ]; exact cn_axis_mem hKc hCK hAK (by linarith) (by linarith)
+    refine cn_mem_of_combo hKc hx hWK hZK (t := t)
+      (a := (c₂ - B) * cos t / (sin t * c₁ + cos t * c₂))
+      (b := (c₁ - A) * sin t / (sin t * c₁ + cos t * c₂))
+      (div_nonneg (mul_nonneg (by linarith) hc.le) hX.le)
+      (div_nonneg (mul_nonneg (by linarith) hs.le) hX.le) ?_ ?_ ?_
+    · rw [← add_div, div_le_one hX]; nlinarith
+    all_goals
+      generalize hXd : sin t * c₁ + cos t * c₂ = X at hX ⊢
+    · rw [hx1, hWu, hZu]; field_simp; rw [← hXd]; ring
+    · rw [hx2, hWv, hZv]; field_simp; rw [← hXd]; ring
 
 /-- **Lemma 2.5.6** (`lem:niche-in-cap`). If the inner corner `x_K(t)` lies in `K`, then so does the
-wedge `T_K(t)`. -/
+wedge `T_K(t)`. As in the paper, every vertex of `T_K(t)` lies in `K`, so `T_K(t) ⊆ K` by convexity
+(`cn_wedge_subset_aux`); the third case follows from the second, applied to the mirror reflection
+`K^m` (Proposition 2.5.4). -/
 theorem lemma2_5_6 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) {t : ℝ} (ht : t ∈ Ioo 0 ω)
     (hx : innerCorner K t ∈ K) : wedge K ω t ⊆ K := by
-  intro p hp
-  rw [hK.mem_iff]
-  refine ⟨hp.1, fun s hs => ?_⟩
-  have hsI := cn_jSet_subset hs
-  rcases le_total s t with hst | hts
-  · exact cn_wedge_dot_le_low hK ht hp hsI.1 hst
-  rcases le_total s (t + π / 2) with hst' | hts'
-  · -- between `t` and `t + π/2`: compare with the inner corner
-    obtain ⟨hx1, hx2⟩ := cn_innerCorner_dot K t
-    have hpQ := hp.2
-    rw [cn_mem_qMinus] at hpQ
-    refine (cn_dot_le_of_between (a := t) (b := t + π / 2) (q := innerCorner K t)
-      ?_ ?_ ?_ ?_ ?_).trans (hK.dot_le hx s)
-    · rw [show t + π / 2 - t = π / 2 by ring, sin_pi_div_two]; exact one_pos
-    · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [pi_pos])
-    · exact sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [pi_pos])
-    · rw [hx1]; exact hpQ.1.le
-    · rw [hx2]; exact hpQ.2.le
-  · exact cn_wedge_dot_le_high hK ht hp hts' hsI.2
+  by_cases h3 : ω < π / 2 ∧ supp K (t + π / 2) - 1 ≤ 0 ∧ 0 < supp K t - 1
+  · -- case 3: apply the second case to `K^m` with angle `ω - t`, and reflect back
+    have ht' : ω - t ∈ Ioo 0 ω := ⟨by linarith [ht.2], by linarith [ht.1]⟩
+    have hx' : innerCorner (mirrorCap K ω) (ω - t) ∈ mirrorCap K ω := by
+      rw [(proposition2_5_4_hallway (K := K) (ω - t)).2.1, sub_sub_cancel]
+      exact mem_image_of_mem _ hx
+    have hsub := cn_wedge_subset_aux (proposition2_5_4_isCap hK) ht' hx' (by
+      rw [proposition2_5_4_supp, proposition2_5_4_supp,
+        show ω + π / 2 - (ω - t + π / 2) = t by ring, show ω + π / 2 - (ω - t) = t + π / 2 by ring]
+      exact fun h => absurd h3.2.2 (not_lt.2 h.2.1))
+    intro q hq
+    have hq' : mirror ω q ∈ wedge (mirrorCap K ω) ω (ω - t) := by
+      rw [(proposition2_5_4_sets (K := K) (ω - t)).2.1, sub_sub_cancel]
+      exact mem_image_of_mem _ hq
+    simpa only [mirrorCap, cn_mem_mirror_image, cn_mirror_mirror] using hsub hq'
+  · exact cn_wedge_subset_aux hK ht hx h3
 
 /-- **Lemma 2.5.7** (`lem:cap-ends-not-in-niche`). The endpoints `A_K⁻(0)` and `C_K⁺(ω)` lie in
 `K \ 𝒩(K)`. -/
@@ -752,7 +958,8 @@ theorem lemma2_5_7 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     have h0 : (aMinus K 0).1 = supp K 0 := by
       rw [← dot_uvec_zero, aMinus, dot_vminus_uvec]
     have h2 : 0 ≤ (aMinus K 0).2 := hK.snd_nonneg (vminus_mem_edge hKc 0).1
-    have hgap := hK.gapW_ineq ht
+    -- `w_K(t) > 0` (Theorem 2.5.5): `A_K⁻(0)` is on the right side of `b_K(t)`
+    have hgap := (theorem2_5_5_supp hK ht).1
     obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hK.omega_mem ht
     have h3 : dot (aMinus K 0) (uvec t) = (aMinus K 0).1 * cos t + (aMinus K 0).2 * sin t := rfl
     rw [h3, h0] at hq
@@ -763,7 +970,8 @@ theorem lemma2_5_7 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     have hq1 := hq.2
     rw [cn_dot_uvec_decomp _ ω t, cPlus, dot_vplus_uvec] at hq1
     have hω0 := hK.dot_omega_nonneg (vplus_mem_edge hKc (ω + π / 2)).1
-    have hgap := hK.gapZ_ineq ht
+    -- `z_K(t) > 0` (Theorem 2.5.5): `C_K⁺(ω)` is on the left side of `d_K(t)`
+    have hgap := (theorem2_5_5_supp hK ht).2
     obtain ⟨-, -, -, hc', hs', -⟩ := cn_trig_of_mem hK.omega_mem ht
     nlinarith [mul_nonneg hs'.le hω0]
 
@@ -826,37 +1034,6 @@ private lemma IsCap.up_not_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K �
   have h3 : dot z (uvec s) = z.1 * cos s + z.2 * sin s := rfl
   nlinarith [mul_le_mul_of_nonneg_right hy hsin]
 
-/-- The corner `h_K(ω + π/2) v_ω` of a cap, on the line `l(ω, 0)`, lies in the cap. -/
-lemma IsCap.corner_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
-    supp K (ω + π / 2) • vvec ω ∈ K := by
-  set H := supp K (ω + π / 2)
-  obtain ⟨hω0, hω1⟩ := hK.omega_mem
-  have hpu : dot (H • vvec ω) (uvec ω) = 0 := by
-    rw [dot_smul_left, dot_vvec_uvec, mul_zero]
-  have hpv : dot (H • vvec ω) (vvec ω) = H := by
-    rw [dot_smul_left, dot_vvec_self, mul_one]
-  obtain ⟨q, hqK, hq⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (ω + π / 2)
-  rw [uvec_add_pi_div_two] at hq
-  have hq1 := hK.dot_omega_nonneg hqK
-  rw [hK.mem_iff, mem_fan_iff]
-  refine ⟨⟨hpu.ge, ?_⟩, fun s hs => ?_⟩
-  · -- `H cos ω ≥ 1 - sin ω ≥ 0`, using a point `q'` of `K` with `q' · u_{π/2} = 1`
-    obtain ⟨q', hq'K, hq'⟩ := exists_dot_eq_supp hK.isCompact hK.nonempty (π / 2)
-    rw [hK.supp_pi_div_two, dot_uvec_eq_cos_add_sin _ _ ω, cos_pi_div_two_sub,
-      sin_pi_div_two_sub] at hq'
-    have h1 := hK.dot_omega_le_one hq'K
-    have h2 := hK.dot_le hq'K (ω + π / 2)
-    rw [uvec_add_pi_div_two] at h2
-    have hs : 0 ≤ sin ω := sin_nonneg_of_nonneg_of_le_pi hω0.le (by linarith [pi_pos])
-    have hc : 0 ≤ cos ω := cos_nonneg_of_mem_Icc ⟨by linarith [pi_pos], hω1⟩
-    simp only [Prod.smul_snd, vvec_snd, smul_eq_mul]
-    nlinarith [mul_le_mul_of_nonneg_left h1 hs, mul_le_mul_of_nonneg_left h2 hc, sin_le_one ω]
-  · have hsI := cn_jSet_subset hs
-    have hc : 0 ≤ cos (s - ω) := cos_nonneg_of_mem_Icc ⟨by linarith [hsI.1], by linarith [hsI.2]⟩
-    refine le_trans ?_ (hK.dot_le hqK s)
-    rw [dot_uvec_eq_cos_add_sin _ s ω, dot_uvec_eq_cos_add_sin q s ω, hpu, hpv, hq]
-    nlinarith [mul_nonneg hc hq1]
-
 /-- The vertex `o_ω = (tan(π/4 - ω/2), 1)` of `P_ω` lies on the line `l(ω, 1)`. -/
 lemma oPt_dot_uvec {ω : ℝ} (hω : ω ∈ Icc 0 (π / 2)) : dot (oPt ω) (uvec ω) = 1 := by
   -- `tan(π/4 - ω/2) cos ω = 1 - sin ω` is `tan(δ/2) sin δ = 1 - cos δ` for `δ = π/2 - ω`
@@ -903,17 +1080,6 @@ lemma IsCap.oPt_mem {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) (hω : �
     rw [dot_sub_left] at h1
     linarith [hK.dot_le hp t]
 
-private lemma IsCap.corner_not_mem_niche {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
-    supp K (ω + π / 2) • vvec ω ∉ niche K ω := by
-  rintro ⟨-, hU⟩
-  obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hU
-  rw [cn_mem_qMinus] at hq
-  have hq2 := hq.2
-  rw [cn_dot_uvec_decomp _ ω t, uvec_add_pi_div_two, dot_smul_left, dot_vvec_self, mul_one,
-    dot_smul_left, dot_vvec_uvec, mul_zero, mul_zero, add_zero] at hq2
-  have := hK.gapZ_ineq ht
-  linarith
-
 /-- A highest point of `K` on a vertical line lies on the upper boundary `δK`. -/
 private lemma IsCap.mem_upperBoundary_of_top {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω)
     {q : ℝ × ℝ} (hqK : q ∈ K) (hmax : ∀ z ∈ K, z.1 = q.1 → z.2 ≤ q.2) :
@@ -934,7 +1100,7 @@ private lemma IsCap.innerCorner_fst_lt {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK :
     (ht : t ∈ Ioo 0 ω) (hx : 0 < (innerCorner K t).2) :
     (innerCorner K t).1 < (aMinus K 0).1 := by
   obtain ⟨hc, hs, -⟩ := cn_trig_of_mem hK.omega_mem ht
-  have hgap := hK.gapW_ineq ht
+  have hgap := (theorem2_5_5_supp hK ht).1
   have hxt : dot (innerCorner K t) (uvec t) =
       (innerCorner K t).1 * cos t + (innerCorner K t).2 * sin t := rfl
   rw [(cn_innerCorner_dot K t).1] at hxt
@@ -951,7 +1117,7 @@ private lemma IsCap.corner_fst_lt {K : Set (ℝ × ℝ)} {ω t : ℝ} (hK : IsCa
   obtain ⟨hc, -, -, hc', -, -⟩ := cn_trig_of_mem hK.omega_mem ht
   have hsω : 0 < sin ω :=
     sin_pos_of_pos_of_lt_pi hK.omega_mem.1 (by linarith [hK.omega_mem.2, pi_pos])
-  have hgap := hK.gapZ_ineq ht
+  have hgap := (theorem2_5_5_supp hK ht).2
   have hid : ∀ d : ℝ × ℝ, d.1 * cos (ω - t) =
       cos t * dot d (uvec ω) - sin ω * dot d (uvec (t + π / 2)) := by
     intro d
@@ -974,20 +1140,14 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       IsConnected (K \ niche K ω)] := by
   have hω := hK.omega_mem
   tfae_have 1 → 2 := by
-    -- a point of `δK ∩ 𝒩(K)` could be pushed out of `K` inside the open niche
+    -- `𝒩(K)` is open in `F_ω`, and `δK` is the boundary of `K` in `F_ω` (Proposition 2.5.1)
     intro h1 p hp
     refine ⟨h1 hp, fun hpδ => ?_⟩
-    obtain ⟨s, hs, -, hpl⟩ := mem_iUnion₂.1 hpδ
+    rw [proposition2_5_1 hK] at hpδ
     obtain ⟨hpF, hpU⟩ := hp
-    obtain ⟨t, ht, hpt⟩ := mem_iUnion₂.1 hpU
-    have hev := (cn_tendsto_add_smul p (uvec s)).eventually_mem
-      ((ms_isOpen_qMinus K t).mem_nhds hpt)
-    obtain ⟨ε, hεQ, hε : 0 < ε⟩ := (hev.and self_mem_nhdsWithin).exists
-    have hmem : p + ε • uvec s ∈ K :=
-      h1 ⟨cn_add_smul_uvec_mem_fan hω hs hε.le hpF, mem_iUnion₂.2 ⟨t, ht, hεQ⟩⟩
-    have := hK.dot_le hmem s
-    rw [dot_add_left, dot_smul_left, dot_uvec_self, hpl] at this
-    linarith
+    obtain ⟨r, hrU, hrF, hrK⟩ :=
+      mem_closure_iff.1 hpδ.2 _ (cn_isOpen_iUnion_qMinus K ω) hpU
+    exact hrK (h1 ⟨hrF, hrU⟩)
   tfae_have 2 → 1 := fun h2 p hp => (h2 hp).1
   tfae_have 1 → 3 := by
     -- the points just below an inner corner `x_K(t) ∈ F_ω° \ K` are in `𝒩(K) \ K`
@@ -1066,7 +1226,8 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     rwa [hz1] at this
   tfae_have 4 → 3 := by
     -- the vertical line through `x_K(t) ∈ F_ω° \ K` would separate `K \ 𝒩(K)`: no point of
-    -- `K \ 𝒩(K)` lies on it, `A_K⁻(0)` lies to its right and `h_K(ω + π/2) v_ω` to its left
+    -- `K \ 𝒩(K)` lies on it, while `A_K⁻(0)` lies to its right and `C_K⁺(ω)` to its left, both in
+    -- `K \ 𝒩(K)` by Lemma 2.5.7
     intro h4 t ht
     by_contra hcon
     push Not at hcon
@@ -1096,8 +1257,8 @@ theorem theorem2_5_8 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
     · have hA := h (lemma2_5_7 hK).1
       rw [mem_ofPred_eq] at hA
       exact lt_asymm hA (hK.innerCorner_fst_lt ht hx2)
-    · have hP := h ⟨hK.corner_mem, hK.corner_not_mem_niche⟩
-      rw [mem_ofPred_eq] at hP
+    · have hP := h (lemma2_5_7 hK).2
+      rw [mem_ofPred_eq, hK.cPlus_eq_corner] at hP
       exact lt_asymm hP (hK.corner_fst_lt ht hxω)
   tfae_finish
 
@@ -1222,8 +1383,10 @@ theorem theorem2_5_9 {K : Set (ℝ × ℝ)} {ω : ℝ} (hK : IsCap K ω) :
       ⟨(hsuppJ ω (Or.inl ⟨hω.1.le, le_rfl⟩)).trans hK.supp_omega,
         (hsuppJ (π / 2) (Or.inr ⟨le_rfl, by linarith [hω.1]⟩)).trans hK.supp_pi_div_two⟩
     have hcap : capOf (K \ niche K ω) ω = K := (ms_capOf_congr hsuppJ).trans hK.capOf_self
-    refine ⟨K \ niche K ω, ⟨hω, K \ niche K ω, hSofa, hstd, ?_⟩, hcap⟩
-    rw [theorem2_4_2 hω hSofa hstd, hcap]
+    -- `S = K \ 𝒩(K) = 𝓘(S)` (Theorem 2.4.2), so `S` is monotone (Theorem 2.4.4)
+    have hI : K \ niche K ω = monotonization (K \ niche K ω) ω := by
+      rw [theorem2_4_2 hω hSofa hstd, hcap]
+    exact ⟨K \ niche K ω, (theorem2_4_4_iff hω hSofa hstd).1 hI, hcap⟩
 
 /-- **Remark 2.5.2** (`rem:niche-not-in-cap`). The cap `[0, 100] × [0, 1]` with rotation angle `π/2`
 does not contain its niche. -/

@@ -33,14 +33,6 @@ lemma inj_grid_of_mem {k : ℕ} {t : ℝ} (ht : t ∈ insert 0 ((rightAngleSet k
   · obtain ⟨j, -, hjn, rfl⟩ := inj_mem_angles.1 ht
     exact ⟨j, hjn, rfl⟩
 
-/-- A vector of length at most `5` has `w · v_s ≥ -5`. -/
-lemma inj_dot_le_of_norm2 {w : ℝ × ℝ} (h : norm2 w ≤ 5) (s : ℝ) : -5 ≤ dot w (vvec s) := by
-  have h1 : dot w w ≤ 25 := by
-    have := (Real.sqrt_le_left (by norm_num : (0 : ℝ) ≤ 5)).1 h
-    linarith
-  have e := inj_dot_self_eq w s
-  nlinarith [sq_nonneg (dot w (uvec s))]
-
 /-- **Lemma 6.4.1** (`lem:arm-length-discrete-bound`). For a maximum polygon cap with step size `δ`,
 `t ∈ {0} ∪ Θ_n` and `t' ∈ (t, t + δ)`: (1) `g_K⁺(t) ≥ g_K⁺(t') = g_K⁻(t') ≥ g_K⁻(t + δ)`;
 (2) `g_K⁺(t) - g_K⁻(t + δ) ≤ 5δ`. -/
@@ -102,48 +94,63 @@ theorem lemma6_4_1 {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap (right
     · rw [gMinus, dot_sub_left, inj_dot_outerCorner_uvec, cMinus, hC.2.2,
         hsuppA s ⟨hs'.1.le, hs'.2.le⟩]
       exact (dot_sub_left _ _ _).symm
-  -- Step 3: `G'(s) = (A - C) · v_s ∈ [-5, 0]`, so `G` is antitone and `G(s) + 5s` is monotone
-  -- on `[t, t + δ]`.
-  have hGd : ∀ s, HasDerivAt G (dot (A - C) (vvec s)) s := fun s =>
-    hasDerivAt_dot_uvec (A - C) s
+  -- Step 3 (Thales' circle): the lines `a_K(s) ∋ A` and `c_K(s) ∋ C` meet orthogonally at
+  -- `y_K(s) = C + G(s) u_s`, so for `s ∈ [t, t + δ]` the point `y_K(s)` runs over an arc of central
+  -- angle `2δ` of the circle of diameter `AC`. Its distance `G(s)` from `C` decreases along the
+  -- arc: `G(y) - G(x) = 2 sin ((y - x)/2) (A - C) · v_{(y+x)/2} ≤ 0`, as `A ∈ K` lies in the
+  -- supporting half-plane bounded by `c_K((y+x)/2)`.
   have hGneg : ∀ s ∈ Icc t (t + stepSize k), dot (A - C) (vvec s) ≤ 0 := by
     intro s hs'
     rw [dot_sub_left, ← uvec_add_pi_div_two, ← hsuppC s hs']
     linarith [dot_le_supp hKc.2.1 hAK (s + π / 2)]
-  have hG5 : ∀ s, -5 ≤ dot (A - C) (vvec s) := fun s =>
-    inj_dot_le_of_norm2 ((lemma6_3_1 hK).1 A hAK C hCK) s
-  have hGc : Continuous G := by
-    simp only [hG, dot, uvec]; fun_prop
-  have hanti : AntitoneOn G (Icc t (t + stepSize k)) := by
-    apply antitoneOn_of_deriv_nonpos (convex_Icc _ _) hGc.continuousOn
-      (fun s _ => (hGd s).differentiableAt.differentiableWithinAt)
-    intro s hs'
-    rw [interior_Icc] at hs'
-    rw [(hGd s).deriv]
-    exact hGneg s ⟨hs'.1.le, hs'.2.le⟩
-  have hmono : MonotoneOn (fun s => G s + 5 * s) (Icc t (t + stepSize k)) := by
-    have hd : ∀ s, HasDerivAt (fun s => G s + 5 * s) (dot (A - C) (vvec s) + 5) s := fun s => by
-      have := (hGd s).add ((hasDerivAt_id' s).const_mul 5)
-      rwa [mul_one] at this
-    have hc5 : Continuous (fun s => G s + 5 * s) := hGc.add (continuous_const.mul continuous_id)
-    apply monotoneOn_of_deriv_nonneg (f := fun s => G s + 5 * s) (convex_Icc _ _)
-      hc5.continuousOn (fun s _ => (hd s).differentiableAt.differentiableWithinAt)
-    intro s _
-    rw [(hd s).deriv]
-    linarith [hG5 s]
-  -- Step 4: conclude.
+  have hanti : ∀ x ∈ Icc t (t + stepSize k), ∀ y ∈ Icc t (t + stepSize k), x ≤ y → G y ≤ G x := by
+    intro x hx y hy hxy
+    have e : G y - G x = 2 * sin ((y - x) / 2) * dot (A - C) (vvec ((y + x) / 2)) := by
+      have h1 := cos_sub_cos y x
+      have h2 := sin_sub_sin y x
+      simp only [hG, dot, uvec, vvec]
+      linear_combination (A - C).1 * h1 + (A - C).2 * h2
+    have h1 : 0 ≤ sin ((y - x) / 2) := sin_nonneg_of_nonneg_of_le_pi (by linarith)
+      (by linarith [hx.1, hy.2, inj_stepSize_le k, pi_pos])
+    have h2 := hGneg ((y + x) / 2) ⟨by linarith [hx.1, hy.1], by linarith [hx.2, hy.2]⟩
+    nlinarith
+  -- Step 4 (the chord of the arc): `|y_K(t) - y_K(t + δ)| = |A - C| sin δ ≤ 5δ`, as `|A - C| ≤ 5`
+  -- (Lemma 6.3.1); by the triangle inequality,
+  -- `g_K⁺(t) - g_K⁻(t + δ) = |C - y_K(t)| - |C - y_K(t + δ)| ≤ |y_K(t) - y_K(t + δ)| ≤ 5δ`.
+  have hchord : G t - G (t + stepSize k) ≤ 5 * stepSize k := by
+    have hG0 : 0 ≤ G t := hgt ▸ (inj_arm_nonneg hKc t).2.2.1
+    have hG1 : 0 ≤ G (t + stepSize k) := hgtd ▸ (inj_arm_nonneg hKc (t + stepSize k)).2.2.2
+    set δ := stepSize k with hδdef
+    set H := dot (A - C) (vvec t) with hH
+    have hAC : dot (A - C) (A - C) ≤ 25 := by
+      have := (Real.sqrt_le_left (by norm_num : (0 : ℝ) ≤ 5)).1 ((lemma6_3_1 hK).1 A hAK C hCK)
+      linarith
+    have e1 : dot (A - C) (A - C) = G t ^ 2 + H ^ 2 := inj_dot_self_eq (A - C) t
+    have e2 : G (t + δ) = G t * cos δ + H * sin δ := by
+      simp only [hG, hH, dot, uvec, vvec, cos_add, sin_add]
+      ring
+    -- `(G(t) - G(t + δ))² ≤ |G(t) u_t - G(t + δ) u_{t+δ}|² = |A - C|² sin² δ`
+    have hsq : (G t - G (t + δ)) ^ 2 ≤ dot (A - C) (A - C) * sin δ ^ 2 := by
+      have h1 := mul_nonneg (mul_nonneg hG0 hG1) (sub_nonneg.2 (cos_le_one δ))
+      have h2 : G t ^ 2 + G (t + δ) ^ 2 - 2 * G t * G (t + δ) * cos δ =
+          dot (A - C) (A - C) * sin δ ^ 2 := by
+        rw [e1, e2]
+        linear_combination (-(G t ^ 2)) * sin_sq_add_cos_sq δ
+      nlinarith
+    have h3 : dot (A - C) (A - C) * sin δ ^ 2 ≤ (5 * δ) ^ 2 := by
+      have h4 : sin δ ^ 2 ≤ δ ^ 2 := by nlinarith [sin_le hδ.le]
+      have h5 : 0 ≤ dot (A - C) (A - C) := by rw [e1]; positivity
+      nlinarith
+    exact (abs_le_of_sq_le_sq' (hsq.trans h3) (by positivity)).2
+  -- Step 5: conclude.
   have htI : t ∈ Icc t (t + stepSize k) := ⟨le_rfl, by linarith⟩
   have htdI : t + stepSize k ∈ Icc t (t + stepSize k) := ⟨by linarith, le_rfl⟩
-  refine ⟨fun t' ht' => ?_, ?_⟩
-  · have ht'I : t' ∈ Icc t (t + stepSize k) := ⟨ht'.1.le, ht'.2.le⟩
-    obtain ⟨hp, hm'⟩ := hgs t' ht'
-    refine ⟨?_, by rw [hp, hm'], ?_⟩
-    · rw [hp, hgt]; exact hanti htI ht'I ht'.1.le
-    · rw [hm', hgtd]; exact hanti ht'I htdI ht'.2.le
-  · rw [hgt, hgtd]
-    have := hmono htI htdI (by linarith)
-    simp only at this
-    linarith
+  refine ⟨fun t' ht' => ?_, by rw [hgt, hgtd]; exact hchord⟩
+  have ht'I : t' ∈ Icc t (t + stepSize k) := ⟨ht'.1.le, ht'.2.le⟩
+  obtain ⟨hp, hm'⟩ := hgs t' ht'
+  refine ⟨?_, by rw [hp, hm'], ?_⟩
+  · rw [hp, hgt]; exact hanti t htI t' ht'I ht'.1.le
+  · rw [hm', hgtd]; exact hanti t' ht'I (t + stepSize k) htdI ht'.2.le
 
 /-! ### Hausdorff convergence and the support function -/
 
@@ -216,32 +223,174 @@ lemma inj_gPlus_le_width {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) 
   rw [uvec_add_pi, dot_neg_right] at this
   linarith
 
-/-- **Lemma 6.4.2** (`lem:leg-convergence`). If polygon caps `K_n` (rotation angle `π/2`) converge
-to a cap `K` in the Hausdorff distance, then `∫_0^{π/2} |g_{K_n}⁺ - g_K⁺| → 0`. -/
+/-! ### Lemma 6.4.2 -/
+
+/-- `g_L⁺(t) - g_L⁻(t) = σ_L(t + π/2)`: Proposition 2.1.2 at the vertices `C_L^±(t)`. -/
+private lemma inj_gPlus_sub_gMinus {L : Set (ℝ × ℝ)} (hL : IsConvexBody L) (t : ℝ) :
+    gPlus L t - gMinus L t = sigmaAt L (t + π / 2) := by
+  rw [inj_gPlus_eq, inj_gMinus_eq, sigmaAt_eq_dot_sub hL]; ring
+
+/-- `F.indicator f` is upper semicontinuous for a closed `F` and a continuous `f ≥ 0` on `F`. -/
+private lemma inj_usc_indicator {F : Set ℝ} (hF : IsClosed F) {f : ℝ → ℝ} (hf : Continuous f)
+    (h0 : ∀ x ∈ F, 0 ≤ f x) : UpperSemicontinuous (F.indicator f) := by
+  intro x y hy
+  by_cases hx : x ∈ F
+  · rw [indicator_of_mem hx] at hy
+    filter_upwards [(hf.tendsto x).eventually (gt_mem_nhds hy)] with z hz
+    by_cases hz' : z ∈ F
+    · rwa [indicator_of_mem hz']
+    · rw [indicator_of_notMem hz']; linarith [h0 x hx]
+  · rw [indicator_of_notMem hx] at hy
+    filter_upwards [hF.isOpen_compl.mem_nhds hx] with z hz
+    rwa [indicator_of_notMem hz]
+
+/-- `V.indicator f` is lower semicontinuous for an open `V` and a continuous `f ≥ 0` on `V`. -/
+private lemma inj_lsc_indicator {V : Set ℝ} (hV : IsOpen V) {f : ℝ → ℝ} (hf : Continuous f)
+    (h0 : ∀ x ∈ V, 0 ≤ f x) : LowerSemicontinuous (V.indicator f) := by
+  intro x y hy
+  by_cases hx : x ∈ V
+  · rw [indicator_of_mem hx] at hy
+    filter_upwards [(hf.tendsto x).eventually (lt_mem_nhds hy), hV.mem_nhds hx] with z hz hzV
+    rwa [indicator_of_mem hzV]
+  · rw [indicator_of_notMem hx] at hy
+    exact Eventually.of_forall fun z => hy.trans_le (indicator_nonneg h0 z)
+
+/-- On `[0, 2π)`, the closed arc `{u | 0 ≤ sin (u - t), 0 ≤ cos (u - t)}` and the open arc
+`{u | 0 < sin (u - t), 0 < cos (u - t)}` of `S¹` are `[t, t + π/2]` and `(t, t + π/2)`, for
+`t ∈ (0, π/2]`. -/
+private lemma inj_arc_inter {t : ℝ} (ht : t ∈ Ioc 0 (π / 2)) :
+    {u : ℝ | 0 ≤ sin (u - t)} ∩ {u | 0 ≤ cos (u - t)} ∩ Ico 0 (2 * π) = Icc t (t + π / 2) ∧
+      {u : ℝ | 0 < sin (u - t)} ∩ {u | 0 < cos (u - t)} ∩ Ico 0 (2 * π) = Ioo t (t + π / 2) := by
+  obtain ⟨ht0, ht1⟩ := ht
+  have hπ := pi_pos
+  constructor <;> ext u <;> simp only [mem_inter_iff, mem_ofPred_eq, mem_Ico, mem_Icc, mem_Ioo]
+  · constructor
+    · rintro ⟨⟨hs, hc⟩, hu0, hu2⟩
+      refine ⟨not_lt.1 fun h => ?_, not_lt.1 fun h => ?_⟩
+      · linarith [sin_neg_of_neg_of_neg_pi_lt (x := u - t) (by linarith) (by linarith)]
+      · by_cases h3 : u - t < π + π / 2
+        · linarith [cos_neg_of_pi_div_two_lt_of_lt (x := u - t) (by linarith) h3]
+        · have := sin_pos_of_pos_of_lt_pi (x := u - t - π) (by linarith) (by linarith)
+          rw [sin_sub_pi] at this
+          linarith
+    · rintro ⟨h1, h2⟩
+      exact ⟨⟨sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith),
+        cos_nonneg_of_mem_Icc ⟨by linarith, by linarith⟩⟩, by linarith, by linarith⟩
+  · constructor
+    · rintro ⟨⟨hs, hc⟩, hu0, hu2⟩
+      refine ⟨not_le.1 fun h => ?_, not_le.1 fun h => ?_⟩
+      · linarith [sin_nonpos_of_nonpos_of_neg_pi_le (x := u - t) (by linarith) (by linarith)]
+      · by_cases h3 : u - t ≤ π + π / 2
+        · linarith [cos_nonpos_of_pi_div_two_le_of_le (x := u - t) (by linarith) h3]
+        · have := sin_nonneg_of_nonneg_of_le_pi (x := u - t - π) (by linarith) (by linarith)
+          rw [sin_sub_pi] at this
+          linarith
+    · rintro ⟨h1, h2⟩
+      exact ⟨⟨sin_pos_of_pos_of_lt_pi (by linarith) (by linarith),
+        cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩⟩, by linarith, by linarith⟩
+
+/-- The integrands of Lemma 6.4.2 on `S¹`: `s = sin (· - t)` on the closed arc `F`, which meets
+`[0, 2π)` in `[t, t + π/2]`, and `s⁻ = sin (· - t)` on the open arc `V`, which meets `[0, 2π)` in
+`(t, t + π/2)`, both zero elsewhere. Then `∫ s dσ_L = g_L⁺(t)` (Lemma 6.2.4, given as `hg`) and
+`∫ s⁻ dσ_L = g_L⁻(t)` (with Proposition 2.1.2), integrals over `[0, 2π)`. -/
+private lemma inj_integral_arc {L : Set (ℝ × ℝ)} (hL : IsConvexBody L) {t : ℝ}
+    (hg : gPlus L t = ∫ u in Ioc t (t + π / 2), sin (u - t) ∂(sigma L)) {F V : Set ℝ}
+    (hFm : MeasurableSet F) (hVm : MeasurableSet V) (hF : F ∩ Ico 0 (2 * π) = Icc t (t + π / 2))
+    (hV : V ∩ Ico 0 (2 * π) = Ioo t (t + π / 2)) :
+    ∫ u in Ico 0 (2 * π), F.indicator (fun u => sin (u - t)) u ∂(sigma L) = gPlus L t ∧
+      ∫ u in Ico 0 (2 * π), V.indicator (fun u => sin (u - t)) u ∂(sigma L) = gMinus L t := by
+  have hπ := pi_pos
+  have hint : IntegrableOn (fun u => sin (u - t)) (Icc t (t + π / 2)) (sigma L) :=
+    (by fun_prop : Continuous fun u => sin (u - t)).continuousOn.integrableOn_compact isCompact_Icc
+  rw [integral_indicator hFm, integral_indicator hVm, Measure.restrict_restrict hFm,
+    Measure.restrict_restrict hVm, hF, hV]
+  constructor
+  · -- `[t, t + π/2] = {t} ∪ (t, t + π/2]`, and the integrand vanishes at `t`
+    rw [← Ioc_insert_left (by linarith), insert_eq, setIntegral_union
+      (disjoint_singleton_left.2 fun h => lt_irrefl _ h.1) measurableSet_Ioc
+      (hint.mono_set (singleton_subset_iff.2 ⟨le_rfl, by linarith⟩))
+      (hint.mono_set Ioc_subset_Icc_self), integral_singleton, sub_self, sin_zero, smul_zero,
+      zero_add, hg]
+  · -- `(t, t + π/2] = (t, t + π/2) ∪ {t + π/2}`, and `σ_L(t + π/2) = g_L⁺(t) - g_L⁻(t)`
+    have h := setIntegral_union (μ := sigma L) (f := fun u => sin (u - t))
+      (disjoint_singleton_right.2 fun h => lt_irrefl _ h.2) (measurableSet_singleton (t + π / 2))
+      (hint.mono_set Ioo_subset_Icc_self)
+      (hint.mono_set (singleton_subset_iff.2 ⟨by linarith, le_rfl⟩))
+    rw [Ioo_union_right (by linarith), integral_singleton, add_sub_cancel_left, sin_pi_div_two,
+      smul_eq_mul, mul_one, ← hg] at h
+    have h2 := inj_gPlus_sub_gMinus hL t
+    rw [sigmaAt] at h2
+    simp only [Measure.real] at h
+    linarith
+
+/-- **Lemma 6.4.2** (`lem:leg-convergence`). If polygon caps `K_n` converge to a cap `K` with
+rotation angle `π/2` in the Hausdorff distance, then `∫_0^{π/2} |g_{K_n}⁺ - g_K⁺| → 0`. (In the
+paper the `K_n` also have rotation angle `π/2`; the statement allows any.) -/
 theorem lemma6_4_2 {Θs : ℕ → AngleSet} {Ks : ℕ → Set (ℝ × ℝ)} {K : Set (ℝ × ℝ)}
     (hKs : ∀ n, IsPolygonCap (Θs n) (Ks n)) (hK : IsCap K (π / 2))
     (hlim : HausdorffTendsto Ks K) :
     Tendsto (fun n => ∫ t in (0 : ℝ)..(π / 2), |gPlus (Ks n) t - gPlus K t|) atTop (𝓝 0) := by
   have hKc : IsConvexBody K := hK.2.1
   have hKsc : ∀ n, IsConvexBody (Ks n) := fun n => (hKs n).1.2.1
-  have hsupp := tendsto_supp hKsc hKc hlim
   obtain ⟨R, hR⟩ := exists_abs_supp_le hKc.2.1 hKc.1
   have hev : ∀ᶠ n in atTop, hausdorffDist (Ks n) K ≤ 1 := hlim.eventually (ge_mem_nhds one_pos)
-  -- the pointwise limit, off the countable set of atoms of `σ_K`
-  have hcount : Set.Countable {t : ℝ | sigma K {t + π / 2} ≠ 0} :=
-    ((countable_sigma_singleton_ne K).image (fun x => x - π / 2)).mono
-      (fun t ht => show t ∈ (fun x => x - π / 2) '' {x : ℝ | sigma K {x} ≠ 0} from
-        ⟨t + π / 2, ht, by ring⟩)
-  have hae : ∀ᵐ t ∂(volume : Measure ℝ), sigma K {t + π / 2} = 0 := by
+  -- the pointwise limit at almost every `t`: all `t` but the countably many where `σ_K` or some
+  -- `σ_{K_n}` has an atom at `t + π/2`
+  have hae : ∀ L, ∀ᵐ t ∂(volume : Measure ℝ), sigma L {t + π / 2} = 0 := fun L => by
     rw [ae_iff]
-    exact hcount.measure_zero _
+    exact (((countable_sigma_singleton_ne L).image (fun x => x - π / 2)).mono fun t ht =>
+      show t ∈ (fun x => x - π / 2) '' {x : ℝ | sigma L {x} ≠ 0} from
+        ⟨t + π / 2, ht, by ring⟩).measure_zero _
   have hlimit : ∀ᵐ t ∂(volume : Measure ℝ), t ∈ Ι (0 : ℝ) (π / 2) →
       Tendsto (fun n => |gPlus (Ks n) t - gPlus K t|) atTop (𝓝 0) := by
-    filter_upwards [hae] with t ht _
+    filter_upwards [hae K, ae_all_iff.2 fun n => hae (Ks n)] with t htK htn ht
+    rw [uIoc_of_le (by positivity)] at ht
+    -- `g⁻ = g⁺` at `t` for `K` and every `K_n` (Proposition 2.1.2)
+    have hgm : ∀ L, IsConvexBody L → sigma L {t + π / 2} = 0 → gMinus L t = gPlus L t :=
+      fun L hL h => by
+        have := inj_gPlus_sub_gMinus hL t
+        rw [sigmaAt, h, ENNReal.toReal_zero] at this
+        linarith
+    -- the upper semicontinuous `s` and the lower semicontinuous `s⁻` on `S¹`
+    set F := {u : ℝ | 0 ≤ sin (u - t)} ∩ {u | 0 ≤ cos (u - t)} with hFdef
+    set V := {u : ℝ | 0 < sin (u - t)} ∩ {u | 0 < cos (u - t)} with hVdef
+    have hFc : IsClosed F := (isClosed_le continuous_const (by fun_prop)).inter
+      (isClosed_le continuous_const (by fun_prop))
+    have hVo : IsOpen V :=
+      (isOpen_lt continuous_const (by fun_prop)).inter (isOpen_lt continuous_const (by fun_prop))
+    have hsc : ∀ u, sin (u + 2 * π - t) = sin (u - t) ∧ cos (u + 2 * π - t) = cos (u - t) := by
+      intro u
+      rw [show u + 2 * π - t = u - t + 2 * π by ring, sin_add_two_pi, cos_add_two_pi]
+      exact ⟨rfl, rfl⟩
+    have hper : ∀ S : Set ℝ, (∀ u, u + 2 * π ∈ S ↔ u ∈ S) →
+        Function.Periodic (S.indicator fun u => sin (u - t)) (2 * π) := fun S hS u => by
+      classical
+      simp only [indicator_apply, (hsc u).1]
+      exact if_congr (hS u) rfl rfl
+    have hle : ∀ S : Set ℝ, ∀ u, S.indicator (fun u => sin (u - t)) u ≤ 1 := fun S u => by
+      by_cases hu : u ∈ S <;> simp [hu, sin_le_one]
+    obtain ⟨hFi, hVi⟩ := inj_arc_inter ht
+    have harc := fun L (hL : IsConvexBody L) hg =>
+      inj_integral_arc hL hg hFc.measurableSet hVo.measurableSet hFi hVi
+    -- `g_K⁺(t) = ∫ s dσ_K` (Lemma 6.2.4), `g_{K_n}⁺(t) = ∫ s dσ_{K_n}` and the same for `s⁻`, `g⁻`
+    obtain ⟨hsK, hsK'⟩ := harc K hKc (lemma6_2_4 hKc)
+    have hsn := fun n => harc (Ks n) (hKsc n) (lemma6_2_4 (hKsc n))
     have hg : Tendsto (fun n => gPlus (Ks n) t) atTop (𝓝 (gPlus K t)) := by
-      simp_rw [inj_gPlus_eq]
-      exact (hsupp t).add
-        (ang_tendsto_dplus hKsc hKc hlim (by rw [sigmaAt, ht, ENNReal.toReal_zero]))
+      refine tendsto_order.2 ⟨fun a ha => ?_, fun b hb => ?_⟩
+      · -- `liminf_n g_{K_n}⁻(t) ≥ g_K⁻(t)`: Theorem 4.1.3 and the Portmanteau theorem for `s⁻`
+        rw [← hgm K hKc htK, ← hsK'] at ha
+        filter_upwards [ang_portmanteau_lsc hKsc hKc hlim
+          (inj_lsc_indicator hVo (by fun_prop) fun u hu => le_of_lt hu.1)
+          (hper V fun u => by simp only [hVdef, mem_inter_iff, mem_ofPred_eq, hsc u])
+          (indicator_nonneg fun u hu => le_of_lt hu.1) (hle V) ha] with n hn
+        rwa [(hsn n).2, hgm (Ks n) (hKsc n) (htn n)] at hn
+      · -- `limsup_n g_{K_n}⁺(t) ≤ g_K⁺(t)`: Theorem 4.1.3 and the Portmanteau theorem for `s`
+        rw [← hsK] at hb
+        filter_upwards [ang_portmanteau_usc hKsc hKc hlim
+          (inj_usc_indicator hFc (by fun_prop) fun u hu => hu.1)
+          (hper F fun u => by simp only [hFdef, mem_inter_iff, mem_ofPred_eq, hsc u])
+          (indicator_nonneg fun u hu => hu.1) (hle F) hb] with n hn
+        rwa [(hsn n).1] at hn
     simpa using (hg.sub_const (gPlus K t)).abs
   -- the domination
   have hbound : ∀ᶠ n in atTop, ∀ᵐ t ∂(volume : Measure ℝ), t ∈ Ι (0 : ℝ) (π / 2) →
@@ -580,6 +729,19 @@ lemma inj_polygon_Ico_bound {C : ℝ} (hC : ∀ k : ℕ, ∀ K, IsMaxPolygonCap 
       _ = π / 2 * (C + 5) * δ := by rw [hn]
   linarith
 
+/-- A cap with rotation angle `π/2` has no edge with normal angle in `(-π/2, 0)`, nor by periodicity
+in `(3π/2, 2π)`. -/
+private lemma inj_sigma_cap_null {L : Set (ℝ × ℝ)} (hL : IsCap L (π / 2)) :
+    sigma L (Ioo (-(π / 2)) 0) = 0 ∧ sigma L ((fun x => x + 2 * π) '' Ioo (-(π / 2)) 0) = 0 := by
+  obtain ⟨-, hc2, hc3⟩ := inj_cap_consecutive hL
+  have h0 : sigma L (Ioo (-(π / 2)) 0) = 0 := by
+    apply sigma_Ioo_eq_zero_of_vplus_const hL.2.1 (by linarith [pi_pos]) (q := (supp L 0, 0))
+    intro s hs
+    rcases eq_or_lt_of_le hs.1 with rfl | h1
+    · exact hc2
+    · exact hc3 s ⟨h1, hs.2⟩
+  exact ⟨h0, (sigma_periodic hL.2.1 _).trans h0⟩
+
 /-- The discrete inequality on an open interval `(a, b) ⊆ (-π/2, π/2]`. -/
 lemma inj_polygon_Ioo_bound {C : ℝ} (hC : ∀ k : ℕ, ∀ K, IsMaxPolygonCap (rightAngleSet k) K →
       ∀ t ∈ insert 0 ((rightAngleSet k).angles : Set ℝ),
@@ -588,15 +750,7 @@ lemma inj_polygon_Ioo_bound {C : ℝ} (hC : ∀ k : ℕ, ∀ K, IsMaxPolygonCap 
     (ha : -(π / 2) ≤ a) (hab : max a 0 ≤ b) (hb : b ≤ π / 2) :
     (sigma K (Ioo a b)).toReal ≤
       (∫ u in (max a 0)..b, k0 (gPlus K u)) + (8 + π / 2 * (C + 5)) * stepSize k := by
-  have hcap : IsCap K (π / 2) := hK.1.1
-  have hKc : IsConvexBody K := hcap.2.1
-  obtain ⟨-, hc2, hc3⟩ := inj_cap_consecutive hcap
-  have h0 : sigma K (Ioo (-(π / 2)) 0) = 0 := by
-    apply sigma_Ioo_eq_zero_of_vplus_const hKc (by linarith [pi_pos]) (q := (supp K 0, 0))
-    intro s hs
-    rcases eq_or_lt_of_le hs.1 with rfl | h1
-    · exact hc2
-    · exact hc3 s ⟨h1, hs.2⟩
+  have h0 := (inj_sigma_cap_null hK.1.1).1
   have hsub : Ioo a b ⊆ Ioo (-(π / 2)) 0 ∪ Ico (max a 0) b := by
     intro x hx
     by_cases hx0 : x < 0
@@ -615,9 +769,9 @@ lemma inj_limit_Ioo_bound {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
     (ha : -(π / 2) ≤ a) (hab : a < b) (hab' : max a 0 ≤ b) (hb : b ≤ π / 2) :
     (sigma K (Ioo a b)).toReal ≤ ∫ u in (max a 0)..b, k0 (gPlus K u) := by
   -- `K` is the Hausdorff limit of maximum polygon caps `K_i`, which satisfy the discrete bound
-  -- `inj_polygon_Ioo_bound`. The left side `σ_{K_i}((a, b))` is bounded below by a quantity
-  -- `Φ_i(ε)` built from the vertices `v_{K_i}(b - ε, b)` and `v_{K_i}(a, a + ε)`; we let `i → ∞`,
-  -- then `ε → 0⁺`.
+  -- `inj_polygon_Ioo_bound`. The right side converges by Lemma 6.4.2; the left side passes to the
+  -- limit by `σ_K(I) ≤ liminf_i σ_{K_i}(I)` for the open arc `I = (a, b)` of `S¹` (Theorem 4.1.3
+  -- and the Portmanteau theorem).
   obtain ⟨_, hcap, k, Ks, hk, hKs, hlim⟩ := hK
   have hKs' : ∀ i, IsMaxPolygonCap (rightAngleSet (k i)) (Ks i) := hKs
   obtain ⟨C, hC⟩ := theorem6_3_3
@@ -631,7 +785,6 @@ lemma inj_limit_Ioo_bound {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
     linarith
   have hKc : IsConvexBody K := hcap.2.1
   have hKsc : ∀ i, IsConvexBody (Ks i) := fun i => (hKs' i).1.1.2.1
-  have hsupp := tendsto_supp hKsc hKc hlim
   set C₂ := 8 + π / 2 * (max C 0 + 5)
   set a' := max a 0 with ha'
   have ha'0 : 0 ≤ a' := le_max_right _ _
@@ -666,38 +819,50 @@ lemma inj_limit_Ioo_bound {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
     have h2 : Tendsto (fun i => C₂ * stepSize (k i)) atTop (𝓝 0) := by
       simpa using hδ.const_mul C₂
     simpa using h1.add h2
-  -- the integrals of the support functions converge
-  have hI : Tendsto (fun i => ∫ t in a..b, supp (Ks i) t) atTop (𝓝 (∫ t in a..b, supp K t)) := by
-    rw [tendsto_iff_norm_sub_tendsto_zero]
-    have hd : Tendsto (fun i => hausdorffDist (Ks i) K * |b - a|) atTop (𝓝 0) := by
-      simpa using hlim.mul_const |b - a|
-    refine squeeze_zero (fun i => norm_nonneg _) (fun i => ?_) hd
-    rw [← intervalIntegral.integral_sub
-      ((IsConvexBody.continuous_supp (hKsc i)).intervalIntegrable _ _)
-      ((IsConvexBody.continuous_supp hKc).intervalIntegrable _ _)]
-    exact intervalIntegral.norm_integral_le_of_norm_le_const
-      (fun t _ => by rw [Real.norm_eq_abs]; exact abs_supp_sub_le_hausdorffDist (hKsc i) hKc t)
-  -- the lower bounds `Φ(ε)`
-  set Φ : ℝ → ℝ := fun ε => dot (vint K (b - ε) b) (vvec b) - dot (vint K a (a + ε)) (vvec a) +
-    ∫ t in a..b, supp K t with hΦ
-  have hΦle : ∀ ε, 0 < ε → ε < π → Φ ε ≤ ∫ u in a'..b, k0 (gPlus K u) := by
-    intro ε hε0 hεπ
-    have hΦi : Tendsto (fun i => dot (vint (Ks i) (b - ε) b) (vvec b) -
-        dot (vint (Ks i) a (a + ε)) (vvec a) + ∫ t in a..b, supp (Ks i) t) atTop (𝓝 (Φ ε)) :=
-      ((inj_tendsto_dot (inj_tendsto_vint hsupp _ _) tendsto_const_nhds).sub
-        (inj_tendsto_dot (inj_tendsto_vint hsupp _ _) tendsto_const_nhds)).add hI
-    refine le_of_tendsto_of_tendsto' hΦi hU (fun i => ?_)
-    calc _ ≤ (sigma (Ks i) (Ioo a b)).toReal := by
-          rw [inj_sigma_Ioo_toReal (hKsc i) hab]
-          linarith [inj_vint_le_dot_vminus (hKsc i) b hε0 hεπ,
-            inj_dot_vplus_le_vint (hKsc i) a hε0 hεπ]
-      _ ≤ _ := inj_polygon_Ioo_bound hC' (le_max_right _ _) (hKs' i) ha hab' hb
-  have hΦlim : Tendsto Φ (𝓝[>] 0) (𝓝 ((sigma K (Ioo a b)).toReal)) := by
-    rw [inj_sigma_Ioo_toReal hKc hab]
-    exact ((inj_tendsto_vint_left_dot hKc b).sub (inj_tendsto_vint_right_dot hKc a)).add
-      tendsto_const_nhds
-  exact le_of_tendsto hΦlim
-    (by filter_upwards [inj_eventually_pos_lt_pi] with ε hε using hΦle ε hε.1 hε.2)
+  -- the open arc `I` of `S¹` is the `2π`-periodic open set `U = ⋃ₘ (a + 2πm, b + 2πm)`; on
+  -- `[0, 2π)` it is `(a, b) ∩ [0, 2π)` and possibly a part of `(3π/2, 2π)`, where caps have no mass
+  set U : Set ℝ := ⋃ m : ℤ, Ioo (a + m * (2 * π)) (b + m * (2 * π)) with hUdef
+  have hUo : IsOpen U := isOpen_iUnion fun m => isOpen_Ioo
+  have hUp : ∀ x, x + 2 * π ∈ U ↔ x ∈ U := fun x => by
+    simp only [hUdef, mem_iUnion, mem_Ioo]
+    constructor
+    · rintro ⟨m, h1, h2⟩; exact ⟨m - 1, by push_cast; linarith, by push_cast; linarith⟩
+    · rintro ⟨m, h1, h2⟩; exact ⟨m + 1, by push_cast; linarith, by push_cast; linarith⟩
+  have hsup : Ioo a b ⊆ Ioo (-(π / 2)) 0 ∪ U ∩ Ico 0 (2 * π) := by
+    intro x hx
+    by_cases hx0 : x < 0
+    · exact Or.inl ⟨by linarith [hx.1], hx0⟩
+    · exact Or.inr ⟨mem_iUnion.2 ⟨0, by simpa using hx⟩, not_lt.1 hx0, by linarith [hx.2, pi_pos]⟩
+  have hsub : U ∩ Ico 0 (2 * π) ⊆ Ioo a b ∪ (fun x => x + 2 * π) '' Ioo (-(π / 2)) 0 := by
+    rintro x ⟨hx, hx0, hx2⟩
+    obtain ⟨m, h1, h2⟩ := mem_iUnion.1 hx
+    have hπ := pi_pos
+    -- `m ∈ {0, 1}`, from `0 ≤ x < b + 2πm` and `a + 2πm < x < 2π`
+    have hm0 : (-1 : ℤ) < m := by
+      have : ((-1 : ℤ) : ℝ) < m := by push_cast; nlinarith
+      exact_mod_cast this
+    have hm1 : m < 2 := by
+      have : (m : ℝ) < ((2 : ℤ) : ℝ) := by push_cast; nlinarith
+      exact_mod_cast this
+    obtain rfl | rfl : m = 0 ∨ m = 1 := by omega
+    · push_cast at h1 h2
+      exact Or.inl ⟨by linarith, by linarith⟩
+    · push_cast at h1 h2
+      exact Or.inr ⟨x - 2 * π, ⟨by linarith, by linarith⟩, by ring⟩
+  have hK0 : (sigma K (Ioo a b)).toReal ≤ (sigma K (U ∩ Ico 0 (2 * π))).toReal := by
+    refine ENNReal.toReal_mono ((measure_mono inter_subset_right).trans_lt measure_Ico_lt_top).ne
+      ((measure_mono hsup).trans ((measure_union_le _ _).trans ?_))
+    rw [(inj_sigma_cap_null hcap).1, zero_add]
+  have hKi : ∀ i, (sigma (Ks i) (U ∩ Ico 0 (2 * π))).toReal ≤ (sigma (Ks i) (Ioo a b)).toReal :=
+    fun i => by
+      refine ENNReal.toReal_mono measure_Ioo_lt_top.ne
+        ((measure_mono hsub).trans ((measure_union_le _ _).trans ?_))
+      rw [(inj_sigma_cap_null (hKs' i).1.1).2, add_zero]
+  -- `σ_K(I) ≤ liminf_i σ_{K_i}(I) ≤ lim_i (∫_{a'}^b k₀(g_{K_i}⁺) + C₂ δ_i) = ∫_{a'}^b k₀(g_K⁺)`
+  refine hK0.trans (le_of_forall_lt_imp_le_of_dense fun c hc => ge_of_tendsto hU ?_)
+  filter_upwards [ang_portmanteau_open hKsc hKc hlim hUo hUp hc] with i hi
+  exact hi.le.trans
+    ((hKi i).trans (inj_polygon_Ioo_bound hC' (le_max_right _ _) (hKs' i) ha hab' hb))
 
 /-- **Theorem 6.4.3** (`thm:balanced-ineq-limit`). A balanced maximum cap satisfies
 `σ_K ≤ k₀(g_K⁺(t)) dt` on `[0, π/2)`. -/
@@ -946,8 +1111,9 @@ theorem proposition6_4_6_continuous {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2
   · exact continuous_dot_pair.comp_continuousOn
       ((hy.continuousOn.sub hC).prodMk continuous_uvec.continuousOn)
 
-/-- **Proposition 6.4.6** (2): under condition (1), `x_K` and `y_K` are continuously differentiable
-on `[0, π/2]` with `x_K' = -(f_K - 1) u_t + (g_K - 1) v_t` and `y_K' = -f_K u_t + g_K v_t`. -/
+/-- **Proposition 6.4.6** (`pro:cap-nondegenerate-continuity`) (2): under condition (1), `x_K` and
+`y_K` are continuously differentiable on `[0, π/2]` with `x_K' = -(f_K - 1) u_t + (g_K - 1) v_t` and
+`y_K' = -f_K u_t + g_K v_t`. -/
 theorem proposition6_4_6_deriv {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) (h1 : InjCond1 K) :
     ContDiffOn ℝ 1 (innerCorner K) (Icc 0 (π / 2)) ∧
       ContDiffOn ℝ 1 (outerCorner K) (Icc 0 (π / 2)) ∧

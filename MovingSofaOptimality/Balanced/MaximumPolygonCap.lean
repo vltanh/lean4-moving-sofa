@@ -21,12 +21,16 @@ earlier ones:
 
 **Organization.**
 * Definition 3.4.5 (`IsBalanced`) and Lemma 3.4.6 (`lem:not-balanced-positive`).
-* Lemma 3.4.7 (`lem:balancing`): Theorem 3.1.2 applied to explicit simple Nef representations of
-  `𝓒_Θ(h)` and `𝒩_Θ(h)` (`mpcCapData`, `mpcNicheData`); moving `l(t, h(t))` and `l(t, h(t) - 1)`
-  together is reduced to two separate moves (`mpc_capH2_two_shift`).
-* Lemma 3.4.8 (`lem:height-positive-increment`), Theorem 3.4.9, and Theorem 3.4.10 (through
-  `mpc_vertex_dot_le`: the vertices of the polyline of a balanced cap lie in its supporting
-  half-planes).
+* Lemma 3.4.7 (`lem:balancing`): Theorem 3.1.2 applied to the simple Nef polygons `𝓒_Θ(h)` and
+  `𝒩_Θ(h)` of Proposition 3.3.3, written with the defining half-planes and Boolean functions of
+  Definition 3.3.3 (`mpcCapData`, `mpcNicheData`), the same for every `h`, so that pushing one
+  half-plane of `𝓒_Θ(h)` gives `𝓒_Θ(h⁺)`; moving `l(t, h(t))` and `l(t, h(t) - 1)` together is
+  reduced to two separate moves (`mpc_capH2_two_shift`).
+* Lemma 3.4.8 (`lem:height-positive-increment`), Theorem 3.4.9, and Theorem 3.4.10: the walk
+  along the polyline (`mpc_walk_vertex_dot_le`) puts the vertices of `𝐩_K` that Theorem 3.4.4
+  gives in `H_K(s)`, `s ∈ Θ ∪ {ω}`, with `τ_K` computed from these vertices (`mpc_tau_eq_edges`);
+  the other angles of `Θ^◇` come from the mirror image (Lemma 3.4.1), whose polyline is `M_ω(𝐩_K)`
+  (`mpc_polyline_mirror`).
 * Remark: the original statement of Theorem 3.4.4, whose edge lengths `∃ ℓ > 0` Lean elaborated
   with `ℓ : ℕ`, is false (`mpc_theorem3_4_4_nat_false`; see the statement fix in `Polyline`).
 -/
@@ -269,44 +273,72 @@ section NefData
 
 variable {Θ : AngleSet} {K : Set (ℝ × ℝ)}
 
-/-- The defining half-planes of `𝓒_Θ(h)` have distinct boundary lines. -/
+/-- The defining half-planes of `𝓒_Θ(h)` have distinct boundary lines: they are the defining
+half-planes of the simple Nef polygon `𝓒_Θ(h)` of Proposition 3.3.3 (1). -/
 lemma mpc_capData_pairwise (Θ : AngleSet) (h : ℝ → ℝ) :
     Pairwise fun i j => (mpcCapData Θ h h i).boundary ≠ (mpcCapData Θ h h j).boundary := by
+  obtain ⟨_, _, H, ⟨-, hH, -⟩, hrange⟩ := (proposition3_3_3 Θ h).1
+  have hmem : ∀ i, mpcCapData Θ h h i ∈ Set.range H := by
+    rw [hrange]
+    rintro (⟨s, hs⟩ | ⟨b, hb⟩)
+    · exact Or.inl ⟨mpc_mem_mpcDiamond.1 hs, rfl, rfl⟩
+    · exact Or.inr ⟨b, mpc_mem_mpcBot.1 hb, rfl, rfl, rfl⟩
+  -- `mpcCapData` is injective: the normal angles `s ∈ Θ^◇` lie in `(0, π)`, the normal angles
+  -- `b + π` of the bottom half-planes in `(π, 2π)`
   have hD : ∀ s ∈ mpcDiamond Θ, s ∈ Ioo 0 π := fun s hs =>
     nef_mem_diamond_Ioo (mpc_mem_mpcDiamond.1 hs)
   have hB : ∀ b ∈ mpcBot Θ, b ∈ Ioo 0 π := fun b hb => nef_mem_diamond_Ioo (mpc_bot_diamond hb)
-  -- the boundary of a bottom half-plane is `l(b + π, 1 - h(b)) = l(b, h(b) - 1)`
+  have hinj : Function.Injective (mpcCapData Θ h h) := by
+    intro i j he
+    have ht := congrArg HalfPlaneData.t he
+    rcases i with ⟨s, hs⟩ | ⟨b, hb⟩ <;> rcases j with ⟨s', hs'⟩ | ⟨b', hb'⟩ <;>
+      simp only [mpcCapData] at ht
+    · exact congrArg Sum.inl (Subtype.ext ht)
+    · linarith [(hD s hs).2, (hB b' hb').1]
+    · linarith [(hB b hb).1, (hD s' hs').2]
+    · exact congrArg Sum.inr (Subtype.ext (by linarith))
   intro i j hij heq
-  simp only [HalfPlaneData.boundary] at heq
-  rcases i with ⟨s, hs⟩ | ⟨b, hb⟩ <;> rcases j with ⟨s', hs'⟩ | ⟨b', hb'⟩ <;>
-    simp only [mpcCapData, nef_line_add_pi] at heq
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hD s hs) (hD s' hs') heq
-    exact hij rfl
-  · obtain ⟨rfl, h2⟩ := nef_line_inj (hD s hs) (hB b' hb') heq
-    linarith
-  · obtain ⟨rfl, h2⟩ := nef_line_inj (hB b hb) (hD s' hs') heq
-    linarith
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hB b hb) (hB b' hb') heq
-    exact hij rfl
+  obtain ⟨k, hk⟩ := hmem i
+  obtain ⟨l, hl⟩ := hmem j
+  have hkl : k ≠ l := by
+    rintro rfl
+    exact hij (hinj (hk.symm.trans hl))
+  exact hH hkl (by rw [hk, hl]; exact heq)
 
-/-- The defining half-planes of `𝒩_Θ(h)` have distinct boundary lines. -/
+/-- The defining half-planes of `𝒩_Θ(h)` have distinct boundary lines: they are the defining
+half-planes of the simple Nef polygon `𝒩_Θ(h)` of Proposition 3.3.3 (2). -/
 lemma mpc_nicheData_pairwise (Θ : AngleSet) (h : ℝ → ℝ) :
     Pairwise fun i j => (mpcNicheData Θ h i).boundary ≠ (mpcNicheData Θ h j).boundary := by
+  obtain ⟨_, _, H, ⟨-, hH, -⟩, hrange⟩ := (proposition3_3_3 Θ h).2
+  have hmem : ∀ i, mpcNicheData Θ h i ∈ Set.range H := by
+    rw [hrange]
+    rintro (⟨s, hs⟩ | ⟨b, hb⟩)
+    · refine Or.inl ⟨?_, rfl, rfl⟩
+      rcases mpc_mem_mpcInner.1 hs with hs' | ⟨t, ht, rfl⟩
+      · exact Or.inl hs'
+      · exact Or.inr ⟨t, ht, rfl⟩
+    · exact Or.inr ⟨b, mpc_mem_mpcBot.1 hb, rfl, rfl, rfl⟩
+  -- `mpcNicheData` is injective: the inner normal angles lie in `(0, π)`, the normal angles
+  -- `b + π` of the bottom half-planes in `(π, 2π)`
   have hI : ∀ s ∈ mpcInner Θ, s ∈ Ioo 0 π := fun s hs =>
     nef_mem_diamond_Ioo (mpc_inner_diamond hs)
   have hB : ∀ b ∈ mpcBot Θ, b ∈ Ioo 0 π := fun b hb => nef_mem_diamond_Ioo (mpc_bot_diamond hb)
+  have hinj : Function.Injective (mpcNicheData Θ h) := by
+    intro i j he
+    have ht := congrArg HalfPlaneData.t he
+    rcases i with ⟨s, hs⟩ | ⟨b, hb⟩ <;> rcases j with ⟨s', hs'⟩ | ⟨b', hb'⟩ <;>
+      simp only [mpcNicheData] at ht
+    · exact congrArg Sum.inl (Subtype.ext ht)
+    · linarith [(hI s hs).2, (hB b' hb').1]
+    · linarith [(hB b hb).1, (hI s' hs').2]
+    · exact congrArg Sum.inr (Subtype.ext (by linarith))
   intro i j hij heq
-  simp only [HalfPlaneData.boundary] at heq
-  rcases i with ⟨s, hs⟩ | ⟨b, hb⟩ <;> rcases j with ⟨s', hs'⟩ | ⟨b', hb'⟩ <;>
-    simp only [mpcNicheData, nef_line_add_pi] at heq
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hI s hs) (hI s' hs') heq
-    exact hij rfl
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hI s hs) (hB b' hb') heq
-    exact mpc_inner_not_bot hs hb'
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hB b hb) (hI s' hs') heq
-    exact mpc_inner_not_bot hs' hb
-  · obtain ⟨rfl, -⟩ := nef_line_inj (hB b hb) (hB b' hb') heq
-    exact hij rfl
+  obtain ⟨k, hk⟩ := hmem i
+  obtain ⟨l, hl⟩ := hmem j
+  have hkl : k ≠ l := by
+    rintro rfl
+    exact hij (hinj (hk.symm.trans hl))
+  exact hH hkl (by rw [hk, hl]; exact heq)
 
 /-- Pushing the upper side `l(t, h_T(t))` of `mpcCapH2` raises `h_T(t)`. -/
 lemma mpc_capData_update_inl (hT hB : ℝ → ℝ) {t : ℝ} (ht : t ∈ mpcDiamond Θ) (δ : ℝ) :
@@ -967,39 +999,115 @@ theorem theorem3_4_9 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCa
   have h6 := hK.2.2 K₀ hK₀
   linarith
 
-/-- **The vertices of the polyline of a balanced polygon cap** lie in the supporting half-planes
-`H₋(s, h_K(s))`, `s ∈ Θ^◇`. Walking back from `A_K⁻(0)` to the vertex `P_k` along the polyline moves
-in the direction `u_s` by at most the walk from `A_K⁻(0)` to `v_K⁺(s)` along the upper boundary of
-`K` (`mpc_walk`): both walks use edges of the same total lengths `τ_K(t) = σ_K(t)` in each
-direction `v_t`. -/
-lemma mpc_vertex_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K)
-    (hbal : IsBalanced Θ K) {n : ℕ} {xs : Fin (n + 1) → ℝ} {sp : Fin n → ℝ} (hn : 0 < n)
-    (hmono : StrictMono xs) (h0 : xs 0 = (cPlus K Θ.ω).1)
-    (hlast : xs (Fin.last n) = (aMinus K 0).1) (hsp : ∀ i, sp i ∈ Θ.diamond)
-    (hspG : ∀ i, ∀ x ∈ Icc (xs i.castSucc) (xs i.succ), mpcG Θ K x = mpcL K (sp i) x)
-    (k : Fin (n + 1)) {s : ℝ} (hs : s ∈ Θ.diamond) :
-    dot (xs k, mpcG Θ K (xs k)) (uvec s) ≤ supp K s := by
-  obtain ⟨-, hPlast, -, hedge⟩ := mpc_polyline_vertices hK hn hmono h0 hlast hsp hspG
-  obtain ⟨P, hP⟩ : ∃ P : Fin (n + 1) → ℝ × ℝ, ∀ i, P i = (xs i, mpcG Θ K (xs i)) :=
-    ⟨_, fun _ => rfl⟩
-  obtain ⟨ℓ, hℓ⟩ : ∃ ℓ : Fin n → ℝ, ∀ i, ℓ i = (xs i.succ - xs i.castSucc) / sin (sp i) :=
-    ⟨_, fun _ => rfl⟩
-  have hℓpos : ∀ i, 0 < ℓ i := fun i => by
-    rw [hℓ]
-    exact div_pos (by linarith [hmono (Fin.castSucc_lt_succ (i := i))])
-      (mpc_sin_pos_of_diamond (hsp i))
-  have hsd := mpc_mem_mpcDiamond.2 hs
-  have hsb := mpc_diamond_bounds hs
-  have hsπ := mpc_diamond_lt_pi hs
+/-! ### The proof of Theorem 3.4.10 -/
+
+/-- `τ_K(t)` from the vertices `p_0, …, p_n` of `𝐩_K` that Theorem 3.4.4 gives, with
+`p_i - p_{i+1} = ℓ_i v_{s_i}`: the total length `∑_{s_i = t} ℓ_i` of the edges with normal angle
+`t` (Definition 3.4.4), as the walk in the proof of Theorem 3.4.10 uses it. The edge
+`[p_i, p_{i+1}]` lies on the line `l(s_i, c_i)`, `c_i = p_{i+1} · u_{s_i}`, and meets every other
+line `l(t, c)` in at most one point. -/
+private lemma mpc_tau_eq_edges {Θ : AngleSet} {K : Set (ℝ × ℝ)} {n : ℕ}
+    {p : Fin (n + 1) → ℝ × ℝ} {sp ℓ : Fin n → ℝ} (hmono : StrictMono fun i => (p i).1)
+    (hunion : polyline Θ K = ⋃ i : Fin n, segment ℝ (p i.castSucc) (p i.succ))
+    (hsp : ∀ i, sp i ∈ Θ.diamond) (hedge : ∀ i, p i.castSucc - p i.succ = ℓ i • vvec (sp i))
+    {t : ℝ} (ht : t ∈ Θ.diamond) :
+    tau Θ K t = ∑ i ∈ Finset.univ.filter (fun i => sp i = t), ℓ i := by
+  classical
+  have hst := mpc_sin_pos_of_diamond ht
+  obtain ⟨c, hc⟩ : ∃ c : Fin n → ℝ, ∀ i, c i = dot (p i.succ) (uvec (sp i)) := ⟨_, fun _ => rfl⟩
+  -- the edge `[p_i, p_{i+1}]` is the graph of the line `l(s_i, c_i)` over `[x_i, x_{i+1}]`, and
+  -- `x_{i+1} - x_i = ℓ_i sin s_i`
+  have hon : ∀ (i : Fin n) (q : ℝ × ℝ), dot q (uvec (sp i)) = c i →
+      q = (q.1, mpcLineY (sp i) (c i) q.1) := by
+    intro i q hq
+    refine Prod.ext rfl ?_
+    simp only [dot, uvec, mpcLineY] at hq ⊢
+    rw [eq_div_iff (mpc_sin_pos_of_diamond (hsp i)).ne']
+    linarith
+  have hseg : ∀ i, segment ℝ (p i.castSucc) (p i.succ) =
+      {q | (p i.castSucc).1 ≤ q.1 ∧ q.1 ≤ (p i.succ).1 ∧ q.2 = mpcLineY (sp i) (c i) q.1} := by
+    intro i
+    have h1 : dot (p i.castSucc) (uvec (sp i)) = c i := by
+      rw [hc, ← sub_add_cancel (p i.castSucc) (p i.succ), hedge, dot_add_left, dot_smul_left,
+        dot_vvec_uvec, mul_zero, zero_add]
+    rw [hon i (p i.castSucc) h1, hon i (p i.succ) (hc i).symm]
+    exact mpc_segment_graph _ _ _ _ (hmono (Fin.castSucc_lt_succ (i := i))).le
+  have hlen : ∀ i, (p i.succ).1 - (p i.castSucc).1 = ℓ i * sin (sp i) := fun i => by
+    have := congrArg Prod.fst (hedge i)
+    simp only [Prod.fst_sub, Prod.smul_fst, vvec_fst, smul_eq_mul] at this
+    linarith
+  -- the length of `𝐩_K` on the line `l(t, c₀)`: the edges on it, up to finitely many crossings
+  have hline : ∀ c₀ : ℝ, lineLength t c₀ (polyline Θ K) =
+      ∑ i ∈ (Finset.univ.filter (fun i => sp i = t)).filter (fun i => c i = c₀), ℓ i := by
+    intro c₀
+    set A := (Finset.univ.filter (fun i => sp i = t)).filter (fun i => c i = c₀)
+    set U := ⋃ i ∈ A, Icc (p i.castSucc).1 (p i.succ).1
+    set F : Finset ℝ := Finset.univ.image (fun i => mpcCrossX t c₀ (sp i) (c i))
+    have hA : ∀ i, i ∈ A ↔ sp i = t ∧ c i = c₀ := fun i => by
+      simp only [A, Finset.mem_filter, Finset.mem_univ, true_and]
+    have hsub : {x : ℝ | (x, mpcLineY t c₀ x) ∈ polyline Θ K} ⊆ U ∪ (F : Set ℝ) := by
+      intro x hx
+      rw [mem_ofPred_eq, hunion, mem_iUnion] at hx
+      obtain ⟨i, hi⟩ := hx
+      rw [hseg] at hi
+      obtain ⟨h1, h2, h3⟩ := hi
+      dsimp only at h1 h2 h3
+      by_cases hit : sp i = t
+      · rw [hit] at h3
+        exact Or.inl (mem_iUnion₂.2 ⟨i, (hA i).2 ⟨hit, (mpc_lineY_inj hst.ne' h3).symm⟩, h1, h2⟩)
+      · right
+        have := mpc_lineY_eq_imp hst.ne' (mpc_sin_pos_of_diamond (hsp i)).ne'
+          (mpc_diamond_sin_sub_ne ht (hsp i) (Ne.symm hit)) h3
+        exact Finset.mem_coe.2 (Finset.mem_image.2 ⟨i, Finset.mem_univ _, this.symm⟩)
+    have hUS : U ⊆ {x : ℝ | (x, mpcLineY t c₀ x) ∈ polyline Θ K} := by
+      intro x hx
+      obtain ⟨i, hi, hx'⟩ := mem_iUnion₂.1 hx
+      obtain ⟨hi1, hi2⟩ := (hA i).1 hi
+      rw [mem_ofPred_eq, hunion, mem_iUnion]
+      refine ⟨i, ?_⟩
+      rw [hseg]
+      exact ⟨hx'.1, hx'.2, by rw [hi1, hi2]⟩
+    rw [mpc_lineLength_eq hst, mpc_volume_eq_of_finite_diff F.finite_toSet finite_empty hsub
+      (fun x hx => Or.inl (hUS hx)), mpc_measure_union_Icc hmono,
+      ENNReal.toReal_sum (fun i _ => ENNReal.ofReal_ne_top), Finset.sum_div]
+    refine Finset.sum_congr rfl fun i hi => ?_
+    rw [ENNReal.toReal_ofReal (by linarith [hmono (Fin.castSucc_lt_succ (i := i))]), hlen,
+      ((hA i).1 hi).1, mul_div_cancel_right₀ _ hst.ne']
+  -- summing over the parallel lines `l(t, c₀)`
+  rw [tau, tsum_congr hline, tsum_eq_sum (s := (Finset.univ.filter (fun i => sp i = t)).image c)]
+  · exact Finset.sum_fiberwise_of_maps_to (fun i hi => Finset.mem_image_of_mem c hi) ℓ
+  · intro c₀ hc₀
+    refine Finset.sum_eq_zero fun i hi => absurd ?_ hc₀
+    obtain ⟨hi1, hi2⟩ := Finset.mem_filter.1 hi
+    exact hi2 ▸ Finset.mem_image_of_mem c hi1
+
+/-- **The walk along `𝐩_K`** in the proof of Theorem 3.4.10. Let `K` be a balanced polygon cap,
+`p_0, …, p_n` the vertices of `𝐩_K` as Theorem 3.4.4 gives them (`p_n = A_K⁻(0)`,
+`p_i - p_{i+1} = ℓ_i v_{s_i}`), and `s ∈ Θ ∪ {ω}`. Then `p_k ∈ H_K(s)`. Following `𝐩_K` from
+`A_K⁻(0)` back to `p_k` gives `p_k - A_K⁻(0) = ∑_t c_t v_t` with `c_t ∈ [0, τ_K(t)]` (the paper
+writes `A_K⁻(0) - p_k`, a typo); `∑_t c_t (v_t · u_s)` is largest for `c_t = τ_K(t)`, `t < s`, and
+`c_t = 0` otherwise, and then, as `τ_K = σ_K`, the sum is the walk from `A_K⁻(0)` to `v_K⁺(s)` along
+the upper boundary of `K` (`mpc_walk`). -/
+private lemma mpc_walk_vertex_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K)
+    (hbal : IsBalanced Θ K) {n : ℕ} {p : Fin (n + 1) → ℝ × ℝ} {sp ℓ : Fin n → ℝ}
+    (hlast : p (Fin.last n) = aMinus K 0) (hsp : ∀ i, sp i ∈ Θ.diamond) (hℓpos : ∀ i, 0 < ℓ i)
+    (hedge : ∀ i, p i.castSucc - p i.succ = ℓ i • vvec (sp i))
+    (hτ : ∀ t ∈ Θ.diamond, tau Θ K t = ∑ i ∈ Finset.univ.filter (fun i => sp i = t), ℓ i)
+    (k : Fin (n + 1)) {s : ℝ} (hs : s ∈ (Θ.angles : Set ℝ) ∪ {Θ.ω}) :
+    dot (p k) (uvec s) ≤ supp K s := by
+  have hs' : s ∈ Θ.diamond := by
+    rcases hs with h | h
+    exacts [Or.inl (Or.inl h), Or.inr (Or.inl h)]
+  have hsd := mpc_mem_mpcDiamond.2 hs'
+  have hsb := mpc_diamond_bounds hs'
+  have hsπ := mpc_diamond_lt_pi hs'
   set F := Finset.univ.filter (fun i : Fin n => k ≤ i.castSucc)
   set f : Fin n → ℝ := fun i => ℓ i * sin (s - sp i) with hf
-  -- Step 1: `P_k · u_s = A_K⁻(0) · u_s + ∑_{i ≥ k} ℓ_i sin (s - s_i)`.
-  have hdot : dot (P k) (uvec s) = dot (aMinus K 0) (uvec s) + ∑ i ∈ F, f i := by
-    have hedge' : ∀ i : Fin n, P i.castSucc - P i.succ = ℓ i • vvec (sp i) := fun i => by
-      rw [hP, hP, hℓ]; exact hedge i
-    have hPk : P k = aMinus K 0 + ∑ i ∈ F, ℓ i • vvec (sp i) := by
-      have := mpc_sum_telescope_from P k
-      rw [Finset.sum_congr rfl (fun i _ => hedge' i), hP (Fin.last n), hPlast] at this
+  -- Step 1: `p_k · u_s = A_K⁻(0) · u_s + ∑_{i ≥ k} ℓ_i sin (s - s_i)`.
+  have hdot : dot (p k) (uvec s) = dot (aMinus K 0) (uvec s) + ∑ i ∈ F, f i := by
+    have hPk : p k = aMinus K 0 + ∑ i ∈ F, ℓ i • vvec (sp i) := by
+      have := mpc_sum_telescope_from p k
+      rw [Finset.sum_congr rfl (fun i _ => hedge i), hlast] at this
       rw [this]; abel
     rw [hPk, dot_add_left, mpc_dot_sum]
     exact congrArg _ (Finset.sum_congr rfl fun i _ => by rw [dot_smul_left, dot_vvec_uvec'])
@@ -1031,10 +1139,7 @@ lemma mpc_vertex_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCa
     refine Finset.sum_congr rfl fun t ht => ?_
     obtain ⟨htD, hts⟩ := Finset.mem_filter.1 ht
     have htd := mpc_mem_mpcDiamond.1 htD
-    have htau : tau Θ K t = ∑ i ∈ Finset.univ.filter (fun i => sp i = t), ℓ i := by
-      rw [mpc_tau_eq hK hn hmono h0 hlast hsp hspG htd, Finset.sum_div]
-      exact Finset.sum_congr rfl fun i hi => by rw [hℓ, (Finset.mem_filter.1 hi).2]
-    rw [hbal t htd, htau, Finset.sum_mul, Finset.filter_filter]
+    rw [hbal t htd, hτ t htd, Finset.sum_mul, Finset.filter_filter]
     refine Finset.sum_congr ?_ fun i hi => by simp only [hf, (Finset.mem_filter.1 hi).2]
     ext i
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
@@ -1052,26 +1157,107 @@ lemma mpc_vertex_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCa
         · exact ⟨ht, hts.le⟩
     rw [mpc_walk hK hsd, mpc_dot_sum, hsplit, Finset.sum_insert (by simp)]
     simp only [dot_smul_left, dot_vvec_uvec', sub_self, sin_zero, mul_zero, zero_add]
-  rw [← hP, hdot, ← dot_vplus_uvec K s,
+  rw [hdot, ← dot_vplus_uvec K s,
     show dot (vplus K s) (uvec s) = dot (aMinus K 0) (uvec s) +
       dot (vplus K s - aMinus K 0) (uvec s) by rw [dot_sub_left]; ring, hwalk, ← hgroup]
   linarith
+
+/-- The claim in the proof of Theorem 3.4.10: for a maximum polygon cap `K` and `s ∈ Θ ∪ {ω}`, the
+polyline `𝐩_K` lies in `H_K(s)`. By Theorem 3.4.4, `𝐩_K` is the union of the segments between its
+vertices, which lie in `H_K(s)` by the walk (`mpc_walk_vertex_dot_le`; `K` is balanced by
+Theorem 3.4.9). -/
+private lemma mpc_polyline_dot_le {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap Θ K)
+    {q : ℝ × ℝ} (hq : q ∈ polyline Θ K) {s : ℝ} (hs : s ∈ (Θ.angles : Set ℝ) ∪ {Θ.ω}) :
+    dot q (uvec s) ≤ supp K s := by
+  obtain ⟨-, -, -, n, p, -, hlast, hmono, hunion, hedge⟩ := theorem3_4_4 hK.1
+  choose sp hsp ℓ hℓ hedge using hedge
+  have hv := fun k => mpc_walk_vertex_dot_le hK.1 (theorem3_4_9 hK) hlast hsp hℓ hedge
+    (fun t ht => mpc_tau_eq_edges hmono hunion hsp hedge ht) k hs
+  rw [hunion] at hq
+  obtain ⟨i, hi⟩ := mem_iUnion.1 hq
+  exact (convex_halfMinus s (supp K s)).segment_subset (hv _) (hv _) hi
+
+/-- The polyline of the mirror image `K^m = M_ω(K)`, with angle set `ω - Θ` (Lemma 3.4.1), is
+`𝐩_{K^m} = M_ω(𝐩_K)`: by Proposition 2.5.4, `M_ω` maps `F_ω` to itself and `𝒩_Θ(K)` to
+`𝒩_{ω - Θ}(K^m)`, and exchanges the half-lines `l⃗` and `r⃗`
+(`C_{K^m}⁺(ω) = M_ω(A_K⁻(0))`, `A_{K^m}⁻(0) = M_ω(C_K⁺(ω))`). -/
+private lemma mpc_polyline_mirror (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
+    polyline Θ.mirror (mirrorCap K Θ.ω) = mirror Θ.ω '' polyline Θ K := by
+  let e : ℝ × ℝ ≃ₜ ℝ × ℝ :=
+    { toFun := mirror Θ.ω, invFun := mirror Θ.ω, left_inv := cn_mirror_mirror Θ.ω,
+      right_inv := cn_mirror_mirror Θ.ω, continuous_toFun := by unfold mirror; fun_prop,
+      continuous_invFun := by unfold mirror; fun_prop }
+  have hfr : ∀ X, mirror Θ.ω '' frontier X = frontier (mirror Θ.ω '' X) :=
+    fun X => e.image_frontier X
+  have hfan : mirror Θ.ω '' fan Θ.ω = fan Θ.ω := by
+    ext q
+    rw [cn_mem_mirror_image]
+    simp only [fan, halfPlus, mem_inter_iff, mem_ofPred_eq, cn_dot_mirror_uvec,
+      show Θ.ω + π / 2 - Θ.ω = π / 2 by ring, show Θ.ω + π / 2 - π / 2 = Θ.ω by ring]
+    exact and_comm
+  have hniche : polyNiche Θ.mirror (mirrorCap K Θ.ω) = mirror Θ.ω '' polyNiche Θ K := by
+    have e : ∀ (Θ' : AngleSet) L, polyNiche Θ' L = ⋃ t ∈ Θ'.angles, wedge L Θ'.ω t :=
+      fun Θ' L => by simp only [polyNiche, wedge, inter_iUnion₂]
+    have hw : ∀ t, wedge (mirrorCap K Θ.ω) Θ.ω t = mirror Θ.ω '' wedge K Θ.ω (Θ.ω - t) :=
+      fun t => (proposition2_5_4_sets t).2.1
+    rw [e, e, image_iUnion₂]
+    simp only [AngleSet.mirror, Finset.set_biUnion_finset_image, hw, sub_sub_cancel]
+  have hray : ∀ c v : ℝ × ℝ, mirror Θ.ω '' {q | ∃ a : ℝ, 0 < a ∧ q = c + a • v} =
+      {q | ∃ a : ℝ, 0 < a ∧ q = mirror Θ.ω c + a • mirror Θ.ω v} := by
+    intro c v
+    have hlin : ∀ a : ℝ, mirror Θ.ω (c + a • v) = mirror Θ.ω c + a • mirror Θ.ω v := fun a => by
+      ext <;> simp only [mirror, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
+        smul_eq_mul] <;> ring
+    ext q
+    constructor
+    · rintro ⟨_, ⟨a, ha, rfl⟩, rfl⟩
+      exact ⟨a, ha, hlin a⟩
+    · rintro ⟨a, ha, rfl⟩
+      exact ⟨_, ⟨a, ha, rfl⟩, hlin a⟩
+  have hvu : mirror Θ.ω (vvec Θ.ω) = uvec 0 := by
+    rw [mirror, add_comm (π / 2), cos_add_pi_div_two, sin_add_pi_div_two]
+    ext
+    · simp only [vvec_fst, vvec_snd, uvec_fst, cos_zero]
+      linear_combination sin_sq_add_cos_sq Θ.ω
+    · simp only [vvec_fst, vvec_snd, uvec_snd, sin_zero]
+      ring
+  have huv : mirror Θ.ω (uvec 0) = vvec Θ.ω := by rw [← hvu, cn_mirror_mirror]
+  have hA : mirror Θ.ω (cPlus K Θ.ω) = aMinus (mirrorCap K Θ.ω) 0 := by
+    rw [(proposition2_5_4_vertices 0).2.1, sub_zero]
+  have hC : mirror Θ.ω (aMinus K 0) = cPlus (mirrorCap K Θ.ω) Θ.ω := by
+    rw [(proposition2_5_4_vertices Θ.ω).2.2.1, sub_self]
+  have hl : mirror Θ.ω '' rayLeft K Θ.ω = rayRight (mirrorCap K Θ.ω) := by
+    rw [rayLeft, hray, hA, hvu]; rfl
+  have hr : mirror Θ.ω '' rayRight K = rayLeft (mirrorCap K Θ.ω) Θ.ω := by
+    rw [rayRight, hray, hC, huv]; rfl
+  have hinj : Function.Injective (mirror Θ.ω) := e.injective
+  rw [polyline, polyline, image_sdiff hinj, image_union, hl, hr, hfr, image_sdiff hinj, hfan,
+    ← hniche, union_comm]
+  rfl
 
 /-- **Theorem 3.4.10** (`thm:balanced-polygon-sofa-connected`). Every maximum polygon cap contains
 its polygon niche. -/
 theorem theorem3_4_10 {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap Θ K) :
     polyNiche Θ K ⊆ K := by
   have hK' := hK.1
-  obtain ⟨n, xs, sp, hn, hmono, h0, hlast, hsp, hspG⟩ := mpc_polyline_data hK'
-  obtain ⟨-, -, hunion, -⟩ := mpc_polyline_vertices hK' hn hmono h0 hlast hsp hspG
-  -- Step 1: the polyline lies in the supporting half-planes of `K` with normal angles in `Θ^◇`,
-  -- since its vertices do (the cap is balanced, Theorem 3.4.9).
+  -- Step 1: the polyline lies in `H_K(s)` for every `s ∈ Θ^◇`. For `s ∈ Θ ∪ {ω}` this is the walk
+  -- along `𝐩_K`; for `s = ω + π/2 - t`, `t ∈ (ω - Θ) ∪ {ω}`, it is the walk along the polyline
+  -- `𝐩_{K^m} = M_ω(𝐩_K)` of the mirror image, a maximum polygon cap with angle set `ω - Θ`
+  -- (Lemma 3.4.1), reflected back with `h_{K^m}(t) = h_K(ω + π/2 - t)` (Proposition 2.5.4).
   have hline : ∀ q ∈ polyline Θ K, ∀ s ∈ Θ.diamond, dot q (uvec s) ≤ supp K s := by
     intro q hq s hs
-    rw [hunion] at hq
-    obtain ⟨i, hi⟩ := mem_iUnion.1 hq
-    have hv := fun k => mpc_vertex_dot_le hK' (theorem3_4_9 hK) hn hmono h0 hlast hsp hspG k hs
-    exact (convex_halfMinus s (supp K s)).segment_subset (hv _) (hv _) hi
+    have hqm : mirror Θ.ω q ∈ polyline Θ.mirror (mirrorCap K Θ.ω) := by
+      rw [mpc_polyline_mirror]; exact mem_image_of_mem _ hq
+    have hm := fun t ht => mpc_polyline_dot_le (lemma3_4_1 hK) hqm (s := t) ht
+    rcases mpc_diamond_cases hs with h | ⟨t, ht, rfl⟩ | rfl | rfl
+    · exact mpc_polyline_dot_le hK hq (Or.inl h)
+    · have := hm (Θ.ω - t) (Or.inl (mpc_mem_mirror_angles.2 (by rwa [sub_sub_cancel])))
+      rwa [cn_dot_mirror_uvec, proposition2_5_4_supp,
+        show Θ.ω + π / 2 - (Θ.ω - t) = t + π / 2 by ring] at this
+    · exact mpc_polyline_dot_le hK hq (Or.inr rfl)
+    · have := hm Θ.ω (Or.inr rfl)
+      rwa [cn_dot_mirror_uvec, proposition2_5_4_supp,
+        show Θ.ω + π / 2 - Θ.ω = π / 2 by ring] at this
   -- Step 2: the polygon niche lies in the fan, below the polyline.
   intro p hp
   rw [mpc_polyNiche_eq hK'] at hp

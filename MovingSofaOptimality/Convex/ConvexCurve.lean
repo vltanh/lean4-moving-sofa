@@ -1049,49 +1049,40 @@ lemma cvxArc_curveArea (hK : IsConvexBody K) (hab : a < b) (hLpos : 0 < cvxArcL 
     (continuous_supp hK.2.1) MeasurableSet.univ, univ_inter, smul_eq_mul, ← mul_assoc,
     mul_inv_cancel₀ hLpos.ne', one_mul, ← sigma_eq_measure]
 
-/-- If the arc degenerates to a point, it carries no surface area measure. -/
-lemma cvxArcL_eq_zero (hK : IsConvexBody K) (hab : a < b) (hb : b < a + π)
-    (h : vplus K a = vminus K b) : cvxArcL K a b = 0 := by
-  have hint := cvx_integral_vvec_Ioo hK hab
-  rw [← h, sub_self] at hint
-  have : IsFiniteMeasure ((sigma K).restrict (Ioo a b)) :=
-    isFiniteMeasure_restrict.2 measure_Ioo_lt_top.ne
-  have hcos : 0 < cos ((b - a) / 2) := cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩
-  have hvi : IntegrableOn vvec (Ioo a b) (sigma K) :=
-    continuous_vvec.integrableOn_Icc.mono_set Ioo_subset_Icc_self
-  have hdot : dotCLM (vvec ((a + b) / 2)) (∫ t in Ioo a b, vvec t ∂(sigma K)) =
-      ∫ t in Ioo a b, cos (t - (a + b) / 2) ∂(sigma K) := by
-    rw [← (dotCLM _).integral_comp_comm hvi]
-    congr 1
-    funext t
-    rw [dotCLM_apply, dot_vvec_vvec]
-  rw [hint, map_zero] at hdot
-  have hge : (sigma K).real (Ioo a b) * cos ((b - a) / 2) ≤
-      ∫ t in Ioo a b, cos (t - (a + b) / 2) ∂(sigma K) := by
-    rw [← smul_eq_mul, ← setIntegral_const]
-    apply setIntegral_mono_on (integrableOn_const (measure_Ioo_lt_top.ne))
-      ((continuous_cos.comp (continuous_id.sub continuous_const)).integrableOn_Icc.mono_set
-        Ioo_subset_Icc_self) measurableSet_Ioo
-    intro t ht
-    exact cvx_cos_ge ⟨ht.1.le, ht.2.le⟩ hb
-  rw [← hdot, measureReal_def, cvx_sigma_Ioo, ENNReal.toReal_ofReal (cvxArcL_nonneg hab)] at hge
-  nlinarith [cvxArcL_nonneg (K := K) hab]
-
 end param
 
 end arc
 
 /-- **Theorem 7.3.2** (`thm:convex-curve-area-functional`). For `a < b < a + π`, the convex curve
 `𝐮_K^{a,b}` is the image of a continuous curve of bounded variation from `v_K⁺(a)` to `v_K⁻(b)`,
-injective unless the curve is a point, whose curve area functional is `½ ∫_{(a,b)} h_K dσ_K`. -/
+injective unless the curve is a point, whose curve area functional is `½ ∫_{(a,b)} h_K dσ_K`.
+
+Departure from the paper: the paper computes the area of the cut body `K'` of Lemma 7.3.1 twice,
+by Green's theorem for the Jordan curve `∂K'` (Theorem 7.2.3; Proposition 7.2.4 when `K'` is a
+segment) and by Theorem 7.1.3, comparing `σ_K` with `σ_{K'}` by Schneider's Theorem 2.1.1; this
+proof takes the normalized arc-length parametrization of the arc, through the generalized inverse of
+`t ↦ σ_K((a, t])`, and computes its curve area functional by a change of variables, because
+Mathlib has neither the Jordan curve theorem nor Green's theorem (reason 2). When the arc is a
+point `p`, the edges `e_K(t)`, `t ∈ (a, b)`, are `{p}` as in the paper, so `v_K⁺ = p` on `[a, b)`,
+and `σ_K((a, b)) = 0` follows by `sigma_Ioo_eq_zero_of_vplus_const` in place of Schneider's
+Theorem 2.1.1, which is not formalized: `σ_K` is defined as a Lebesgue–Stieltjes measure, not
+through Theorem 2.1.1 (reason 3). -/
 theorem theorem7_3_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) :
     ∃ γ : ℝ → ℝ × ℝ, IsCBV γ 0 1 ∧ γ '' Icc 0 1 = convexCurve K a b ∧ γ 0 = vplus K a ∧
       γ 1 = vminus K b ∧ (vplus K a ≠ vminus K b → InjOn γ (Icc 0 1)) ∧
       curveArea γ 0 1 = convexCurveArea K a b := by
   by_cases hdeg : vplus K a = vminus K b
-  · have hσ0 : sigma K (Ioo a b) = 0 := by
-      rw [cvx_sigma_Ioo, cvxArcL_eq_zero hK hab hb hdeg, ENNReal.ofReal_zero]
+  · -- the edges `e_K(t)`, `t ∈ (a, b)`, are the single point `p = v_K⁺(a)` (Lemma 7.3.1), so
+    -- `v_K⁺ = p` on `[a, b)` and `σ_K((a, b)) = 0`
+    have hp : ∀ t ∈ Ico a b, vplus K t = vplus K a := by
+      intro t ht
+      rcases ht.1.eq_or_lt with rfl | hat
+      · rfl
+      have hmem : vplus K t ∈ convexCurve K a b :=
+        Or.inl (Or.inr (mem_biUnion ⟨hat, ht.2⟩ (vplus_mem_edge hK t)))
+      rwa [(lemma7_3_1_degenerate hK hab hb hdeg).2, mem_singleton_iff] at hmem
+    have hσ0 : sigma K (Ioo a b) = 0 := sigma_Ioo_eq_zero_of_vplus_const hK hab hp
     refine ⟨fun _ => vplus K a, ⟨continuousOn_const, ?_⟩, ?_, rfl, hdeg, fun h => absurd hdeg h, ?_⟩
     · exact ((eVariationOn.constant_on (by simp)).trans_lt ENNReal.zero_lt_top).ne
     · rw [(lemma7_3_1_degenerate hK hab hb hdeg).2]
@@ -1120,7 +1111,8 @@ theorem theorem7_3_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (h
       cvxArc_one hK hab hLpos, fun _ => cvxArc_injOn hab hb hLpos, cvxArc_curveArea hK hab hLpos⟩
 
 
-/-- **Theorem 7.3.2**, last claim: `𝒥(𝐮_K^{a,b})` is quadratic in `K`. -/
+/-- **Theorem 7.3.2** (`thm:convex-curve-area-functional`), last claim: `𝒥(𝐮_K^{a,b})` is quadratic
+in `K`. -/
 theorem theorem7_3_2_quadratic {a b : ℝ} :
     convexBodyDomain.IsQuadratic (fun K => convexCurveArea K.1 a b) :=
   ⟨fun K₁ K₂ => convexCurveBilin K₁.1 K₂.1 a b,
@@ -1145,7 +1137,8 @@ theorem lemma7_3_3 {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsConvexBody K₁) (h�
       (fun t => (vminus_mem_edge h₁ t).1) (dot_vminus_uvec K₁)]
     rfl
 
-/-- **Lemma 7.3.3**, the case `K₁ = K₂ = K`: `𝒥(𝐮_K^{a,b}) = ½ ∫_{(a,b)} v_K⁺ × dv_K⁺`. -/
+/-- **Lemma 7.3.3** (`lem:convex-curve-bilinear-computation`), the case `K₁ = K₂ = K`:
+`𝒥(𝐮_K^{a,b}) = ½ ∫_{(a,b)} v_K⁺ × dv_K⁺`. -/
 theorem lemma7_3_3_self {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) :
     convexCurveArea K a b =
@@ -1626,7 +1619,17 @@ def convexCurveRegion (K : Set (ℝ × ℝ)) (a b : ℝ) : Set (ℝ × ℝ) :=
 /-- **Lemma 7.3.5** (`lem:convex-curve-jordan-curve`) (2) and (3), with (1) replaced by the area of
 the region (see the module docstring): the region lies in the interior of `H_K(a) ∩ H_K(b)`, is
 disjoint from `⋂_{t ∈ [a,b]} H_K(t)`, and has area
-`𝒥(v_K⁺(a), v_K(a,b)) + 𝒥(v_K(a,b), v_K⁻(b)) - 𝒥(𝐮_K^{a,b})`. -/
+`𝒥(v_K⁺(a), v_K(a,b)) + 𝒥(v_K(a,b), v_K⁻(b)) - 𝒥(𝐮_K^{a,b})`.
+
+Departure from the paper: the paper shows that the boundary `Γ` of the region is a Jordan curve and
+takes its orientation from Proposition 7.2.7; this proof replaces (1) by the area of the region,
+`|T| - |K'|` for the triangle `T` and the cut body `K'` of Lemma 7.3.1, with `|K'|` from
+Theorem 7.1.3, which is what the paper uses (1) for, because Mathlib has neither the Jordan curve
+theorem nor Green's theorem (reason 2). The region enclosed by `Γ` is taken as
+`T° \ ⋂_{t ∈ [a,b]} H_K(t)` (`convexCurveRegion`), so (3) holds by definition, and the paper's
+argument for (3), that the region lies in the simply connected set `ℝ² \ X°` for
+`X = ⋂_{t ∈ [a,b]} H_K(t)`, is not used: Mathlib has no Jordan curve theorem, so the region
+enclosed by `Γ` is not available (reason 2). -/
 theorem lemma7_3_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) (h : vplus K a ≠ vminus K b) :
     convexCurveRegion K a b ⊆ interior (suppHalf K a ∩ suppHalf K b) ∧

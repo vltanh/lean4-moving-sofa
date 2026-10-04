@@ -6,6 +6,8 @@
 lake exe cache get                                  # Mathlib's compiled files
 lake build                                          # the three libraries, Challenge and Solution
 lake env lean scripts/Audit.lean                    # axioms and dependencies
+python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
+                                                    # the proofs follow the routes of Baek's proofs
 python3 scripts/sync_challenge_defs.py --check      # the Challenge's copy of the definitions
 lake env lake comparator --config=comparator.json   # the Solution proves the Challenge
 ```
@@ -26,6 +28,14 @@ alone.
   It reaches the proofs through one `import all` line per module (the module system hides proofs
   from a plain import), and CI checks that these lines name exactly the modules of the three
   libraries.
+- The audit also writes the *route* of every numbered result of Baek's paper: the other numbered
+  results that its Lean proof uses. `python3 scripts/route_check.py check docs/paper_routes.tsv
+  --accept docs/route_differences.tsv` compares the routes with the results that the paper's own
+  proofs cite, which [`docs/paper_routes.tsv`](paper_routes.tsv) records (extracted from the
+  paper's LaTeX source by `route_check.py extract`). It fails on any difference that
+  [`docs/route_differences.tsv`](route_differences.tsv) does not record with its reason: a result
+  that the paper uses without citing it, a citation made only in passing, or a departure from the
+  paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
   import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
@@ -41,7 +51,7 @@ axioms only, and replays the proofs through Lean's kernel and the NanoDa kernel.
 ## Continuous integration and the Palomar preflight
 
 [`.github/workflows/lean_action_ci.yml`](../.github/workflows/lean_action_ci.yml) builds the project on every push and pull request, checks that the
-axiom audit imports every module, runs the audit and the check of the Challenge's definitions, and checks that the links from the documentation
+axiom audit imports every module, runs the audit, the route check and the check of the Challenge's definitions, and checks that the links from the documentation
 to the code are current and that the Markdown tables are well formed.
 [`.github/workflows/palomar_preflight.yml`](../.github/workflows/palomar_preflight.yml), run by hand with `gh workflow run palomar_preflight.yml --ref main`,
 runs Palomar's complete mechanical verification of a commit without submitting it; its report, the

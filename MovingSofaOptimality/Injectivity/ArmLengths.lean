@@ -220,8 +220,8 @@ theorem theorem6_2_3_right {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : �
   convert inj_hasDerivWithinAt_innerCorner hy using 1
   ext <;> simp <;> ring
 
-/-- **Theorem 6.2.3**, left derivatives, with `f_K⁻` and `g_K⁻`. The paper states this for
-`t ∈ (0, π/2]`; it holds at every `t`. -/
+/-- **Theorem 6.2.3** (`thm:inner-corner-deriv`), left derivatives, with `f_K⁻` and `g_K⁻`. The
+paper states this for `t ∈ (0, π/2]`; it holds at every `t`. -/
 theorem theorem6_2_3_left {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} :
     HasDerivWithinAt (outerCorner K) (-fMinus K t • uvec t + gMinus K t • vvec t) (Iic t) t ∧
       HasDerivWithinAt (innerCorner K) (-(fMinus K t - 1) • uvec t + (gMinus K t - 1) • vvec t)
@@ -245,17 +245,27 @@ theorem theorem6_2_3_left {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : �
   ext <;> simp <;> ring
 
 /-- **Lemma 6.2.4** (`lem:arm-length-convolution`).
-`g_K⁺(t) = ∫_{(t, t+π/2]} sin(u - t) σ_K(du)`. -/
-theorem lemma6_2_4 {K : Set (ℝ × ℝ)} (hK : IsCap K (π / 2)) {t : ℝ} :
+`g_K⁺(t) = ∫_{(t, t+π/2]} sin(u - t) σ_K(du)`. Stated for a convex body `K`: the paper's
+hypothesis `K ∈ 𝒦^c` is not used by the proof, and Lemma 6.4.2 applies the lemma to its polygon
+caps `K_n`, whose rotation angle need not be `π/2`. -/
+theorem lemma6_2_4 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {t : ℝ} :
     gPlus K t = ∫ u in Ioc t (t + π / 2), sin (u - t) ∂(sigma K) := by
-  have hKc : IsConvexBody K := hK.2.1
   have hint : IntegrableOn vvec (Ioc t (t + π / 2)) (sigma K) :=
     continuous_vvec.integrableOn_Icc.mono_set Ioc_subset_Icc_self
   have hs : IntegrableOn sin (Ioc t (t + π / 2)) (sigma K) :=
     (continuous_sin.integrableOn_Icc).mono_set Ioc_subset_Icc_self
   have hc : IntegrableOn cos (Ioc t (t + π / 2)) (sigma K) :=
     (continuous_cos.integrableOn_Icc).mono_set Ioc_subset_Icc_self
-  have hv := vplus_sub_vplus hKc (show t ≤ t + π / 2 by linarith [pi_pos])
+  -- `v_K⁺(t + π/2) - v_K⁺(t) = ∫_{(t, t+π/2]} d v_K⁺ = ∫_{(t, t+π/2]} v_s σ_K(ds)` (Theorem 5.2.2)
+  have hlt : t < t + π / 2 := by linarith [pi_pos]
+  have hv : vplus K (t + π / 2) - vplus K t = ∫ u in Ioc t (t + π / 2), vvec u ∂(sigma K) := by
+    have h := congrArg (fun μ : VectorMeasure ℝ (ℝ × ℝ) => μ (Ioc t (t + π / 2)))
+      (theorem5_2_2 hK hlt)
+    rwa [VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc, inter_self,
+      lsMeasure_Ioc_of_le hlt.le le_rfl hlt.le le_rfl (lemma5_2_1 hK t (t + π / 2))
+        (fun x _ => continuousWithinAt_Ioi_iff_Ici.1 (tendsto_vplus_right hK x)),
+      withDensityᵥ_apply hint measurableSet_Ioc, Measure.restrict_restrict measurableSet_Ioc,
+      inter_self] at h
   have e1 : gPlus K t = -dot (vplus K (t + π / 2) - vplus K t) (uvec t) := by
     rw [gPlus, dot_sub_left, inj_dot_outerCorner_uvec, cPlus, dot_sub_left, dot_vplus_uvec]; ring
   rw [e1, hv]
@@ -302,15 +312,233 @@ lemma inj_intervalIntegrable_dvplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
   simp_rw [inj_dot_vplus_vvec_eq]
   exact h1.sub h2
 
-/-- The fundamental theorem of calculus for the support function:
-`h_K(b) - h_K(a) = ∫_a^b v_K⁺(s) · v_s ds`. -/
+/-- `v_K⁺` is measurable, as `v_K⁺(t) = h_K(t) u_t + (σ_K(t) - ∫₀ᵗ h_K) v_t` with a monotone
+distribution function `σ_K(t)`; used for the integrals of Lemma 5.1.3 in the proof of
+Theorem 6.2.5. -/
+private lemma inj_measurable_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
+    Measurable (vplus K) := by
+  have e : vplus K = fun t =>
+      supp K t • uvec t + (sigmaFun K t - ∫ s in (0 : ℝ)..t, supp K s) • vvec t := by
+    funext t; rw [← inj_dot_vplus_vvec_eq]; exact vplus_eq_frame K t
+  rw [e]
+  exact (hK.continuous_supp.measurable.smul continuous_uvec.measurable).add
+    (((monotone_sigmaFun hK).measurable.sub (continuous_integral_supp hK).measurable).smul
+      continuous_vvec.measurable)
+
+/-- Integration against a signed measure with a density, `∫ g d(f μ) = ∫ g f dμ`, for a finite
+measure `μ`, a measurable density `f` and a bounded measurable `g`: the integrals of Lemma 5.1.3
+against `d⟨v_K⁺, w⟩ = ⟨v_t, w⟩ σ_K` and `d⟨u_t, w⟩ = ⟨v_t, w⟩ dt` in the proof of Theorem 6.2.5,
+and those of `v_t · d v_K⁺(t)` in the proof of Theorem 7.1.2 (3). -/
+lemma inj_integral_withDensityᵥ {μ : Measure ℝ} [IsFiniteMeasure μ] {f g : ℝ → ℝ}
+    (hf : Integrable f μ) (hfm : Measurable f) (hg : Measurable g) {C : ℝ}
+    (hC : ∀ x, |g x| ≤ C) :
+    ∫ᵛ x, g x ∂• μ.withDensityᵥ f = ∫ x, g x * f x ∂μ := by
+  have := isFiniteMeasure_withDensity_ofReal (μ := μ) hf.2
+  have := isFiniteMeasure_withDensity_ofReal (μ := μ) hf.neg.2
+  have hgb : ∀ ν : Measure ℝ, ∀ᵐ x ∂ν, ‖g x‖ ≤ C := fun ν =>
+    Filter.Eventually.of_forall fun x => by rw [Real.norm_eq_abs]; exact hC x
+  have hgi : ∀ (ν : Measure ℝ) [IsFiniteMeasure ν], Integrable g ν := fun ν _ =>
+    Integrable.of_bound hg.aestronglyMeasurable C (hgb ν)
+  have hfl : (ContinuousLinearMap.lsmul ℝ ℝ : ℝ →L[ℝ] ℝ →L[ℝ] ℝ).flip =
+      ContinuousLinearMap.lsmul ℝ ℝ := by
+    ext; simp
+  -- `f μ = f⁺ μ - f⁻ μ`, and `∫ g d(f^± μ) = ∫ f^± g dμ`
+  have e : ∀ x, g x * f x = (ENNReal.ofReal (f x)).toReal • g x -
+      (ENNReal.ofReal (-f x)).toReal • g x := fun x => by
+    rw [ENNReal.toReal_ofReal', ENNReal.toReal_ofReal', smul_eq_mul, smul_eq_mul, ← sub_mul,
+      max_zero_sub_eq_self, mul_comm]
+  have hi : ∀ k : ℝ → ℝ, Integrable k μ →
+      Integrable (fun x => (ENNReal.ofReal (k x)).toReal • g x) μ := fun k hk => by
+    simpa only [ENNReal.toReal_ofReal', smul_eq_mul] using
+      hk.pos_part.mul_bdd hg.aestronglyMeasurable (hgb μ)
+  rw [withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part hf,
+    VectorMeasure.integral_sub_vectorMeasure
+      (by rw [VectorMeasure.Integrable, Measure.variation_toSignedMeasure]; exact hgi _)
+      (by rw [VectorMeasure.Integrable, Measure.variation_toSignedMeasure]; exact hgi _), ← hfl,
+    VectorMeasure.integral_toSignedMeasure, VectorMeasure.integral_toSignedMeasure,
+    integral_withDensity_eq_integral_toReal_smul hfm.ennreal_ofReal
+      (Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top),
+    integral_withDensity_eq_integral_toReal_smul (f := fun x => ENNReal.ofReal (-f x))
+      hfm.neg.ennreal_ofReal (Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top),
+    ← integral_sub (hi f hf) (hi (fun x => -f x) hf.neg)]
+  exact integral_congr_ae (Filter.Eventually.of_forall fun x => (e x).symm)
+
+/-- A coordinate of Theorem 5.2.2: `d⟨v_K⁺, w⟩ = ⟨v_t, w⟩ σ_K` on `(a, b]`, for a fixed `w`. -/
+lemma inj_lsMeasure_dot_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
+    (hab : a < b) (w : ℝ × ℝ) :
+    (lsMeasure (fun t => dot (vplus K t) w) a b).restrict (Ioc a b) =
+      ((sigma K).restrict (Ioc a b)).withDensityᵥ fun t => dot (vvec t) w := by
+  have hrc : ∀ x ∈ Ico a b, ContinuousWithinAt (vplus K) (Ici x) x := fun x _ =>
+    continuousWithinAt_Ioi_iff_Ici.1 (tendsto_vplus_right hK x)
+  have hFbv : BoundedVariationOn (fun t => dot (vplus K t) w) (Icc a b) := by
+    simpa [Function.comp_def, dotCLM_apply] using
+      (dotCLM w).lipschitzWith.comp_boundedVariationOn (lemma5_2_1 hK a b)
+  have hFrc : ∀ x ∈ Ico a b, ContinuousWithinAt (fun t => dot (vplus K t) w) (Ici x) x :=
+    fun x hx => (continuous_dot w).continuousAt.comp_continuousWithinAt (hrc x hx)
+  have hvi : Integrable vvec ((sigma K).restrict (Ioc a b)) :=
+    continuous_vvec.integrableOn_Icc.mono_set Ioc_subset_Icc_self
+  have hwi : Integrable (fun t => dot (vvec t) w) ((sigma K).restrict (Ioc a b)) :=
+    ((continuous_dot w).comp continuous_vvec).integrableOn_Icc.mono_set Ioc_subset_Icc_self
+  apply vectorMeasure_ext_Ioc
+  intro c d _
+  -- the `w`-component of `d v_K⁺ = v_t σ_K` (Theorem 5.2.2) on `(c, d]`
+  have e := congrArg (fun μ : VectorMeasure ℝ (ℝ × ℝ) => dotCLM w (μ (Ioc c d)))
+    (theorem5_2_2 hK hab)
+  rw [withDensityᵥ_apply hvi measurableSet_Ioc, ← (dotCLM w).integral_comp_comm hvi.integrableOn]
+    at e
+  simp only [dotCLM_apply] at e
+  rw [withDensityᵥ_apply hwi measurableSet_Ioc, ← e,
+    VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc,
+    VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc, Ioc_inter_Ioc]
+  rcases le_or_gt (max c a) (min d b) with h | h
+  · rw [lsMeasure_Ioc_of_le hab.le (le_max_right _ _) h (min_le_right _ _) hFbv hFrc,
+      lsMeasure_Ioc_of_le hab.le (le_max_right _ _) h (min_le_right _ _) (lemma5_2_1 hK a b) hrc,
+      dot_sub_left]
+  · rw [Ioc_eq_empty_of_le h.le]; simp
+
+/-- One coordinate of the paper's computations of `d h_K` and `d⟨v_K⁺(t), v_t⟩`: for a fixed
+vector `w` and `g = u` or `g = v` (with `g' = v` or `g' = -u`), the product rule (Lemma 5.1.3) for
+`⟨v_K⁺(t), w⟩ ⟨g(t), w⟩`, with `d⟨v_K⁺, w⟩ = ⟨v_t, w⟩ σ_K` (Theorem 5.2.2) and
+`d⟨g(t), w⟩ = ⟨g'(t), w⟩ dt`, gives on `(a, b]`
+`d(⟨v_K⁺, w⟩⟨g, w⟩) = ⟨g(t), w⟩⟨v_t, w⟩ σ_K + ⟨v_K⁺(t), w⟩⟨g'(t), w⟩ dt`. -/
+private lemma inj_product_coord {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
+    (w : ℝ × ℝ) {g g' : ℝ → ℝ × ℝ} (hg : ∀ x, HasDerivAt g (g' x) x) (hg' : Continuous g')
+    (hgL : LipschitzWith 1 g) (hgb : ∀ t, ‖g t‖ ≤ 1) :
+    dot (vplus K b) w * dot (g b) w - dot (vplus K a) w * dot (g a) w =
+      (∫ t in Ioc a b, dot (g t) w * dot (vvec t) w ∂(sigma K)) +
+        ∫ t in Ioc a b, dot (vplus K t) w * dot (g' t) w := by
+  have hGc : Continuous fun t => dot (g t) w := (continuous_dot w).comp hgL.continuous
+  have hfc : Continuous fun t => dot (vvec t) w := (continuous_dot w).comp continuous_vvec
+  have hf'c : Continuous fun t => dot (g' t) w := (continuous_dot w).comp hg'
+  have hFbv : BoundedVariationOn (fun t => dot (vplus K t) w) (Icc a b) := by
+    simpa [Function.comp_def, dotCLM_apply] using
+      (dotCLM w).lipschitzWith.comp_boundedVariationOn (lemma5_2_1 hK a b)
+  have hGbv : BoundedVariationOn (fun t => dot (g t) w) (Icc a b) := by
+    simpa [Function.comp_def, dotCLM_apply] using (dotCLM w).lipschitzWith.comp_boundedVariationOn
+      (boundedVariationOn_of_lipschitz hgL a b)
+  have hFr : ∀ x ∈ Ico a b, ContinuousWithinAt (fun t => dot (vplus K t) w) (Ici x) x :=
+    fun x _ => (continuous_dot w).continuousAt.comp_continuousWithinAt
+      (continuousWithinAt_Ioi_iff_Ici.1 (tendsto_vplus_right hK x))
+  have hGr : ∀ x ∈ Ico a b, ContinuousWithinAt (fun t => dot (g t) w) (Ici x) x :=
+    fun x _ => hGc.continuousWithinAt
+  obtain ⟨R, hR⟩ := hK.2.1.exists_bound_of_continuousOn (continuous_dot w).continuousOn
+  have hFb : ∀ t, |dot (vplus K t) w| ≤ R := fun t => by
+    simpa using hR _ (vplus_mem_edge hK t).1
+  have hGb : ∀ t, |dot (g t) w| ≤ 2 * ‖w‖ := fun t => by
+    have h1 := abs_dot_le (g t) w
+    have h2 := hgb t
+    nlinarith [norm_nonneg w]
+  have : IsFiniteMeasure ((sigma K).restrict (Ioc a b)) :=
+    isFiniteMeasure_restrict.2 measure_Ioc_lt_top.ne
+  -- `d⟨g(t), w⟩ = ⟨g'(t), w⟩ dt` on `(a, b]`
+  have hdG : (lsMeasure (fun t => dot (g t) w) a b).restrict (Ioc a b) =
+      (volume.restrict (Ioc a b)).withDensityᵥ fun t => dot (g' t) w := by
+    rw [lsMeasure_eq_withDensityᵥ hab.le hGbv hGr hf'c.integrableOn_Icc fun t ht =>
+      (intervalIntegral.integral_eq_sub_of_hasDerivAt
+        (fun x _ => hasDerivAt_dot (hg x) w) (hf'c.intervalIntegrable _ _)).symm]
+    ext S hS
+    rw [VectorMeasure.restrict_apply _ measurableSet_Ioc hS,
+      withDensityᵥ_apply hf'c.integrableOn_Icc (hS.inter measurableSet_Ioc),
+      withDensityᵥ_apply hf'c.integrableOn_Ioc hS, Measure.restrict_restrict
+        (hS.inter measurableSet_Ioc), Measure.restrict_restrict hS, inter_assoc,
+      inter_eq_left.2 Ioc_subset_Icc_self]
+  -- Lemma 5.1.3 on `(a, b]`
+  have hPbv : BoundedVariationOn (fun t => dot (vplus K t) w * dot (g t) w) (Icc a b) := by
+    simpa using hFbv.bilinear_comp hGbv (ContinuousLinearMap.lsmul ℝ ℝ)
+  have h := lemma5_1_3 hab.le hFbv hGbv hFr hGr (Or.inr hGc.continuousOn) Ioc_subset_Icc_self
+  rw [lsMeasure_Ioc hab.le ⟨hab.le, le_rfl⟩ hPbv (fun x hx => (hFr x hx).mul (hGr x hx)),
+    inj_lsMeasure_dot_vplus hK hab w, hdG,
+    inj_integral_withDensityᵥ hfc.integrableOn_Ioc hfc.measurable hGc.measurable hGb,
+    inj_integral_withDensityᵥ (g := fun t => dot (vplus K t) w) hf'c.integrableOn_Ioc
+      hf'c.measurable ((continuous_dot w).measurable.comp (inj_measurable_vplus hK)) hFb] at h
+  exact h
+
+/-- The integrand `⟨v_K⁺(t), w⟩ ⟨g(t), w⟩` of `inj_product_coord` is integrable on `(a, b]`. -/
+private lemma inj_integrableOn_vplus_mul {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {g : ℝ → ℝ × ℝ}
+    (hg : Continuous g) (a b : ℝ) (w : ℝ × ℝ) :
+    IntegrableOn (fun t => dot (vplus K t) w * dot (g t) w) (Ioc a b) := by
+  obtain ⟨R, hR⟩ := hK.2.1.exists_bound_of_continuousOn (continuous_dot w).continuousOn
+  exact ((continuous_dot w).comp hg).integrableOn_Ioc.bdd_mul
+    ((continuous_dot w).measurable.comp (inj_measurable_vplus hK)).aestronglyMeasurable
+    (Filter.Eventually.of_forall fun t => hR _ (vplus_mem_edge hK t).1)
+
+/-- `d h_K = ⟨v_K⁺(t), v_t⟩ dt`, in integrated form: `h_K(b) - h_K(a) = ∫_a^b v_K⁺(s) · v_s ds`.
+This is the paper's computation in the proof of Theorem 6.2.5: `h_K(t) = ⟨v_K⁺(t), u_t⟩`, and,
+coordinate by coordinate (`inj_product_coord`), the product rule (Lemma 5.1.3) with
+`d v_K⁺ = v_t σ_K` (Theorem 5.2.2) gives `d h_K = ⟨u_t, v_t⟩ σ_K + ⟨v_K⁺(t), v_t⟩ dt`, where
+`⟨u_t, v_t⟩ = 0`. -/
 lemma inj_supp_sub_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
     supp K b - supp K a = ∫ s in a..b, dot (vplus K s) (vvec s) := by
-  symm
-  apply intervalIntegral.integral_eq_sub_of_hasDeriv_right hK.continuous_supp.continuousOn
-  · intro x _
-    exact (hasDerivWithinAt_supp_right hK x).mono Ioi_subset_Ici_self
-  · simpa using inj_intervalIntegrable_dvplus hK 0 a b
+  wlog hab : a < b generalizing a b
+  · rcases (not_lt.1 hab).eq_or_lt with rfl | hba
+    · simp
+    · rw [intervalIntegral.integral_symm, ← this b a hba]; ring
+  -- the two coordinates `w = (1, 0)` and `w = (0, 1)`
+  have e : ∀ p q : ℝ × ℝ, dot p (1, 0) * dot q (1, 0) + dot p (0, 1) * dot q (0, 1) = dot p q :=
+    fun p q => by simp [dot]
+  have h1 := inj_product_coord hK hab (1, 0) hasDerivAt_uvec continuous_vvec lipschitz_uvec
+    norm_uvec_le
+  have h2 := inj_product_coord hK hab (0, 1) hasDerivAt_uvec continuous_vvec lipschitz_uvec
+    norm_uvec_le
+  have hσi : ∀ w : ℝ × ℝ,
+      IntegrableOn (fun t => dot (uvec t) w * dot (vvec t) w) (Ioc a b) (sigma K) := fun w =>
+    (((continuous_dot w).comp continuous_uvec).mul
+      ((continuous_dot w).comp continuous_vvec)).integrableOn_Ioc
+  have hvi := inj_integrableOn_vplus_mul hK continuous_vvec a b
+  -- the `σ_K`-parts add up to `∫ ⟨u_t, v_t⟩ dσ_K = 0`
+  have h0 : (∫ t in Ioc a b, dot (uvec t) (1, 0) * dot (vvec t) (1, 0) ∂(sigma K)) +
+      ∫ t in Ioc a b, dot (uvec t) (0, 1) * dot (vvec t) (0, 1) ∂(sigma K) = 0 := by
+    rw [← integral_add (hσi _) (hσi _)]
+    simp_rw [e, dot_uvec_vvec, integral_zero]
+  have h3 : (∫ t in Ioc a b, dot (vplus K t) (1, 0) * dot (vvec t) (1, 0)) +
+      ∫ t in Ioc a b, dot (vplus K t) (0, 1) * dot (vvec t) (0, 1) =
+        ∫ s in a..b, dot (vplus K s) (vvec s) := by
+    rw [← integral_add (hvi _) (hvi _), intervalIntegral.integral_of_le hab.le]
+    simp_rw [e]
+  rw [← h3, ← dot_vplus_uvec K b, ← dot_vplus_uvec K a, ← e (vplus K b) (uvec b),
+    ← e (vplus K a) (uvec a)]
+  linarith
+
+/-- `d⟨v_K⁺(t), v_t⟩ = σ_K - h_K(t) dt`, in integrated form:
+`v_K⁺(b) · v_b - v_K⁺(a) · v_a = σ_K((a, b]) - ∫_a^b h_K`. This is the paper's computation in the
+proof of Theorem 6.2.5: coordinate by coordinate (`inj_product_coord`), the product rule
+(Lemma 5.1.3) with `d v_K⁺ = v_t σ_K` (Theorem 5.2.2) and `d v_t = -u_t dt` gives
+`d⟨v_K⁺(t), v_t⟩ = ⟨v_t, v_t⟩ σ_K - ⟨v_K⁺(t), u_t⟩ dt`, where `⟨v_t, v_t⟩ = 1` and
+`⟨v_K⁺(t), u_t⟩ = h_K(t)`. -/
+private lemma inj_dot_vplus_vvec_sub {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
+    (hab : a < b) :
+    dot (vplus K b) (vvec b) - dot (vplus K a) (vvec a) =
+      (sigma K (Ioc a b)).toReal - ∫ s in a..b, supp K s := by
+  -- the two coordinates `w = (1, 0)` and `w = (0, 1)`
+  have e : ∀ p q : ℝ × ℝ, dot p (1, 0) * dot q (1, 0) + dot p (0, 1) * dot q (0, 1) = dot p q :=
+    fun p q => by simp [dot]
+  have h1 := inj_product_coord hK hab (1, 0) hasDerivAt_vvec continuous_uvec.neg lipschitz_vvec
+    norm_vvec_le
+  have h2 := inj_product_coord hK hab (0, 1) hasDerivAt_vvec continuous_uvec.neg lipschitz_vvec
+    norm_vvec_le
+  have : IsFiniteMeasure ((sigma K).restrict (Ioc a b)) :=
+    isFiniteMeasure_restrict.2 measure_Ioc_lt_top.ne
+  have hσi : ∀ w : ℝ × ℝ,
+      IntegrableOn (fun t => dot (vvec t) w * dot (vvec t) w) (Ioc a b) (sigma K) := fun w =>
+    (((continuous_dot w).comp continuous_vvec).mul
+      ((continuous_dot w).comp continuous_vvec)).integrableOn_Ioc
+  have hvi := inj_integrableOn_vplus_mul hK (g := fun t => -uvec t) continuous_uvec.neg a b
+  -- the `σ_K`-parts add up to `∫ ⟨v_t, v_t⟩ dσ_K = σ_K((a, b])`
+  have h0 : (∫ t in Ioc a b, dot (vvec t) (1, 0) * dot (vvec t) (1, 0) ∂(sigma K)) +
+      ∫ t in Ioc a b, dot (vvec t) (0, 1) * dot (vvec t) (0, 1) ∂(sigma K) =
+        (sigma K (Ioc a b)).toReal := by
+    rw [← integral_add (hσi _) (hσi _)]
+    simp_rw [e, dot_vvec_self]
+    rw [integral_const, smul_eq_mul, mul_one, Measure.real,
+      Measure.restrict_apply MeasurableSet.univ, univ_inter]
+  -- the `dt`-parts add up to `-∫ ⟨v_K⁺(t), u_t⟩ dt = -∫_a^b h_K`
+  have h3 : (∫ t in Ioc a b, dot (vplus K t) (1, 0) * dot (-uvec t) (1, 0)) +
+      ∫ t in Ioc a b, dot (vplus K t) (0, 1) * dot (-uvec t) (0, 1) =
+        -∫ s in a..b, supp K s := by
+    rw [← integral_add (hvi _) (hvi _), intervalIntegral.integral_of_le hab.le, ← integral_neg]
+    simp_rw [e, dot_neg_right, dot_vplus_uvec]
+  rw [← e (vplus K b) (vvec b), ← e (vplus K a) (vvec a)]
+  linarith
 
 /-- `g_K⁺` is interval integrable. -/
 lemma inj_intervalIntegrable_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ) :
@@ -335,13 +563,12 @@ lemma inj_integral_gPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (a b : ℝ
 `f_K⁺(b) - f_K⁺(a) = ∫_a^b g_K⁺ - σ_K((a, b])` for `a ≤ b`. -/
 theorem fPlus_sub_fPlus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a ≤ b) :
     fPlus K b - fPlus K a = (∫ t in a..b, gPlus K t) - (sigma K (Ioc a b)).toReal := by
-  have hc := hK.continuous_supp
-  have hsig : (sigma K (Ioc a b)).toReal = sigmaFun K b - sigmaFun K a := by
-    rw [sigma_Ioc hK, ENNReal.toReal_ofReal (sub_nonneg.2 (monotone_sigmaFun hK hab))]
-  have h3 := intervalIntegral.integral_interval_sub_left (hc.intervalIntegrable (μ := volume) 0 b)
-    (hc.intervalIntegrable 0 a)
-  rw [inj_integral_gPlus hK, hsig, inj_fPlus_eq, inj_fPlus_eq, inj_dot_vplus_vvec_eq,
-    inj_dot_vplus_vvec_eq]
+  rcases hab.eq_or_lt with rfl | hab
+  · simp
+  -- `f_K⁺(t) = h_K(π/2 + t) - ⟨v_K⁺(t), v_t⟩`, with `d h_K(π/2 + t)` from `inj_integral_gPlus`
+  -- and `d⟨v_K⁺(t), v_t⟩ = σ_K - h_K(t) dt`
+  have h := inj_dot_vplus_vvec_sub hK hab
+  rw [inj_integral_gPlus hK, inj_fPlus_eq, inj_fPlus_eq]
   linarith
 
 /-- The continuous part `h_K(t + π/2) + ∫₀ᵗ h_K` of `f_K⁺`. -/
@@ -389,7 +616,12 @@ theorem theorem6_2_5_regular {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     exact hAc.continuousAt.continuousWithinAt.sub (continuousWithinAt_sigmaFun hK t)
 
 /-- **Theorem 6.2.5** (`thm:arm-length-differentiation`). On `(0, π/2]`,
-`d f_K⁺(t) = g_K⁺(t) dt - σ_K` as signed measures. -/
+`d f_K⁺(t) = g_K⁺(t) dt - σ_K` as signed measures.
+
+As in the paper, `f_K⁺(t) = h_K(π/2 + t) - ⟨v_K⁺(t), v_t⟩`, and the product rule (Lemma 5.1.3)
+with `d v_K⁺ = v_t σ_K` (Theorem 5.2.2), coordinate by coordinate, gives
+`d h_K = ⟨v_K⁺(t), v_t⟩ dt` (`inj_supp_sub_supp`) and `d⟨v_K⁺(t), v_t⟩ = σ_K - h_K(t) dt`
+(`inj_dot_vplus_vvec_sub`); both sides agree on the intervals `(a, b]` (`fPlus_sub_fPlus`). -/
 theorem theorem6_2_5 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
     (lsMeasure (fPlus K) 0 (π / 2)).restrict (Ioc 0 (π / 2)) =
       (volume.restrict (Ioc 0 (π / 2))).withDensityᵥ (gPlus K) -

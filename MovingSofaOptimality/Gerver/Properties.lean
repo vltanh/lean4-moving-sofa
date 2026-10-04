@@ -21,7 +21,7 @@ Throughout, `P` is a solution of Romik's system in the box of `GerverParams.InBo
 `gerverSofa P`, `K = 𝓒(G)` its cap, and `φ = P.φ`, `θ = P.θ`.
 
 **Theorem 8.4.1.** The paper states it without proof (its Remark 8.4.1 notes that the properties
-are verified numerically and assumed in the earlier literature); it is proved in
+are easy to verify numerically and implicitly assumed in the earlier literature); it is proved in
 `MovingSofaOptimality.Gerver.Structure` and `MovingSofaOptimality.Gerver.Niche`. Part (2), that the
 niche is the region enclosed by the curves `𝐁` (reversed), `𝐱|_{[t_1, t_4]}`, `𝐃` (reversed) and a
 segment of the `x`-axis, is stated here as what the paper uses from it: the curves lie on the
@@ -36,9 +36,12 @@ The helper lemmas (prefix `gm_`) establish, in order:
   (resp. `π + t`) (`gm_D_edge`, `gm_B_edge`), and that `D_K` (resp. `B_K`) has a single vertex
   `𝐱_K^L` (resp. `𝐱_K^R`) between these angles and `3π/2 + φ^L` (resp. `π + φ^R`)
   (`gm_D_corner`, `gm_B_corner`);
-* the surface area measures on intervals, from the distribution function `sigmaFun` and the
-  fundamental theorem of calculus (`gm_sigma_Ioc`);
-* the curve areas `𝒥(𝐁)`, `𝒥(𝐃)`, from the piecewise `C¹` parametrizations (`gm_curveArea_two`).
+* the surface area measures on intervals, as in the paper's proof of Proposition 8.4.4: the
+  `v_t`-component of `d v⁺ = v_t σ` (Theorem 5.2.2) along the piecewise `C¹` curves, whose
+  Lebesgue–Stieltjes measures are `𝐀' dt`, …, `𝐃' dt` (`gm_sigma_Ioc`);
+* the curve areas `𝒥(𝐁)`, `𝒥(𝐃)`, from the piecewise `C¹` parametrizations (`gm_curveArea_two`),
+  and `𝒥(𝐛_{B_K})`, `𝒥(𝐝_{D_K})` from the densities of Proposition 8.4.4: their equality is the part
+  of Theorem 8.4.3 (2) that Theorem 8.4.6 uses, so `theorem8_4_3_two` comes after these helpers.
 -/
 
 @[expose] public section
@@ -77,17 +80,26 @@ end GerverParams
 open GerverParams
 
 /-- **Theorem 8.4.1** (`thm:gerver-monotone`): Gerver's sofa is a monotone sofa, and (1) its cap has
-vertices `A_K(t) = 𝐀(t)`, `C_K(t) = 𝐂(t)` and inner corner `𝐱_K(t) = 𝐱(t)` for `t ∈ [0, π/2]`. -/
+vertices `A_K(t) = 𝐀(t)`, `C_K(t) = 𝐂(t)` and inner corner `𝐱_K(t) = 𝐱(t)` for `t ∈ [0, π/2]`.
+
+Departure from the paper: the paper states Theorem 8.4.1 without proof, as properties easy to verify
+numerically and implicitly assumed in the earlier literature (Remark 8.4.1); this proof derives all
+four parts from Romik's equations (`MovingSofaOptimality.Gerver.Structure`,
+`MovingSofaOptimality.Gerver.Niche`), because the paper gives no argument to follow. -/
 theorem theorem8_4_1_monotone {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     IsMonotoneSofa (gerverSofa P) (π / 2) ∧
       ∀ t ∈ Icc 0 (π / 2), aK P.cap t = P.curveA t ∧ cK P.cap t = P.curveC t ∧
         innerCorner P.cap t = P.path t :=
   gv_monotone hP (GerverParams.romik_bounds hP hbox)
 
-/-- **Theorem 8.4.1** (2), as used by the paper (see the module docstring): the curves `𝐁`,
-`𝐱|_{[t_1, t_4]}`, `𝐃` lie on the boundary of the niche, with matching endpoints
+/-- **Theorem 8.4.1** (`thm:gerver-monotone`) (2), as used by the paper (see the module docstring):
+the curves `𝐁`, `𝐱|_{[t_1, t_4]}`, `𝐃` lie on the boundary of the niche, with matching endpoints
 `𝐁(t_3) = 𝐱(t_1)` and `𝐱(t_4) = 𝐃(t_2)`, `𝐃(t_0)` and `𝐁(t_5)` on the `x`-axis, and
-`|𝒩(K)| = 𝒥(𝐱|_{[t_1, t_4]}) - 𝒥(𝐁|_{[t_3, t_5]}) - 𝒥(𝐃|_{[t_0, t_2]})`. -/
+`|𝒩(K)| = 𝒥(𝐱|_{[t_1, t_4]}) - 𝒥(𝐁|_{[t_3, t_5]}) - 𝒥(𝐃|_{[t_0, t_2]})`.
+
+Departure from the paper: the paper gives no proof (see `theorem8_4_1_monotone`); this proof shows
+from Romik's equations that the niche is the region under the curves and computes its area
+directly, because the paper gives no argument to follow. -/
 theorem theorem8_4_1_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Icc (P.tPt 3) (P.tPt 5),
         P.curveB t ∈ closure (niche P.cap (π / 2)) \ niche P.cap (π / 2)) ∧
@@ -102,16 +114,22 @@ theorem theorem8_4_1_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
   simp only [GerverParams.tPt]
   exact gv_niche hP (GerverParams.romik_bounds hP hbox)
 
-/-- **Theorem 8.4.1** (3): `b⃗_K(t)` passes through `𝐁(t)` for `t ∈ [t_3, t_5]`, and `d⃗_K(t)`
-through `𝐃(t)` for `t ∈ [t_0, t_2]`. -/
+/-- **Theorem 8.4.1** (`thm:gerver-monotone`) (3): `b⃗_K(t)` passes through `𝐁(t)` for
+`t ∈ [t_3, t_5]`, and `d⃗_K(t)` through `𝐃(t)` for `t ∈ [t_0, t_2]`.
+
+Departure from the paper: the paper gives no proof (see `theorem8_4_1_monotone`); this proof derives
+the statement from Romik's equations, because the paper gives no argument to follow. -/
 theorem theorem8_4_1_walls {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Icc (P.tPt 3) (P.tPt 5), P.curveB t ∈ wallBVec P.cap t) ∧
       ∀ t ∈ Icc (P.tPt 0) (P.tPt 2), P.curveD t ∈ wallDVec P.cap t := by
   simp only [GerverParams.tPt]
   exact gv_walls hP (GerverParams.romik_bounds hP hbox)
 
-/-- **Theorem 8.4.1** (4): `𝐁'(t)` is a negative multiple of `v_t` and `𝐃'(t)` a positive
-multiple of `u_t`, on the open phases where these curves are differentiable. -/
+/-- **Theorem 8.4.1** (`thm:gerver-monotone`) (4): `𝐁'(t)` is a negative multiple of `v_t` and
+`𝐃'(t)` a positive multiple of `u_t`, on the open phases where these curves are differentiable.
+
+Departure from the paper: the paper gives no proof (see `theorem8_4_1_monotone`); this proof derives
+the statement from Romik's equations, because the paper gives no argument to follow. -/
 theorem theorem8_4_1_tangents {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Ioo (P.tPt 3) (P.tPt 5), t ≠ P.tPt 4 →
         ∃ c < (0 : ℝ), HasDerivAt P.curveB (c • vvec t) t) ∧
@@ -141,7 +159,12 @@ theorem theorem8_4_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
   exact gv_odes hP (GerverParams.romik_bounds hP hbox)
 
 /-- **Theorem 6.1.2** (`thm:injectivity-gerver`). The cap of Gerver's sofa satisfies the
-injectivity condition. -/
+injectivity condition.
+
+Departure from the paper: the paper reads from Theorem 2 of Gerver (1992) that Gerver's sofa is a
+balanced maximum sofa and applies Theorem 6.1.1; this proof checks the injectivity condition from
+Romik's equations (`gv_injectivity`), because Gerver's Theorem 2 shows only that Gerver's sofa is
+balanced, not that it is a limit of maximum polygon sofas. -/
 theorem theorem6_1_2 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     SatisfiesInjectivity P.cap :=
   gv_injectivity hP (GerverParams.romik_bounds hP hbox)
@@ -527,8 +550,10 @@ lemma gm_D_corner : ∀ s ∈ Ioo (3 * π / 2 + P.θ) (3 * π / 2 + (π / 2 - P.
   have hx := gm_D_mem_leftBody hP hbox ⟨(gm_θ_pos hP).le, le_rfl⟩
   refine gm_corner (gm_isConvexBody_D hP hbox) hx (by linarith) (by linarith)
     (gm_D_edge hP hbox ⟨(gm_θ_pos hP).le, le_rfl⟩).2.2 ?_
-  refine (gm_supp_leftBody_of (s := π / 2 - P.φ) ⟨by linarith, le_rfl⟩ hx ?_).2.2
-  rw [gm_D_θ hP hbox]; exact (cn_innerCorner_dot P.cap (π / 2 - P.φ)).2
+  -- `𝐃(t_2) = 𝐱_K^L` lies on `d_K^L`, the supporting line `l_{D_K}(3π/2 + φ^L)` (Lemma 8.1.7 (4))
+  show P.curveD P.θ ∈ suppLine (leftBody P.φ P.cap) (3 * π / 2 + (π / 2 - P.φ))
+  rw [(lemma8_1_7_four hbox.1 (gm_isKi hP hbox)).2.2.2, proposition2_2_2_wallD, gm_D_θ hP hbox]
+  exact (cn_innerCorner_dot P.cap (π / 2 - P.φ)).2
 
 /-- `v_{D_K}⁺(3π/2 + t_2) = 𝐃(t_2)`, by the vertex `gm_D_corner`. -/
 lemma gm_D_vplus_θ : vplus (leftBody P.φ P.cap) (3 * π / 2 + P.θ) = P.curveD P.θ := by
@@ -546,15 +571,6 @@ lemma gm_D_vminus_end :
   refine gm_vminus_eq_of_left hD (a := 3 * π / 2 + P.θ) (by linarith) fun s hs => ?_
   have := vminus_mem_edge hD s
   rwa [gm_D_corner hP hbox s hs] at this
-
-/-- `v_{D_K}⁺(3π/2 + t) = 𝐃(t)` on `[t_0, t_2]`. -/
-lemma gm_D_vplus {t : ℝ} (ht : t ∈ Icc 0 P.θ) :
-    vplus (leftBody P.φ P.cap) (3 * π / 2 + t) = P.curveD t := by
-  rcases ht.1.lt_or_eq with h0 | rfl
-  · rcases ht.2.lt_or_eq with h1 | rfl
-    · exact (gm_D_vplus_vminus hP hbox ⟨h0, h1⟩).1.symm
-    · exact gm_D_vplus_θ hP hbox
-  · rw [add_zero]; exact gm_D_vplus_zero hP hbox
 
 /-- The edge `e_{D_K}(3π/2 + t_2)` is the single point `𝐃(t_2)`. -/
 lemma gm_D_edge_θ : edge (leftBody P.φ P.cap) (3 * π / 2 + P.θ) = {P.curveD P.θ} := by
@@ -664,8 +680,10 @@ lemma gm_B_corner : ∀ s ∈ Ioo (π + P.φ) (π + (π / 2 - P.θ)),
   have hx := gm_B_mem_rightBody hP hbox ⟨le_rfl, hcd.le⟩
   refine gm_corner (gm_isConvexBody_B hP hbox) hx (by linarith) (by linarith) ?_
     (gm_B_edge hP hbox ⟨le_rfl, hcd.le⟩).2.2
-  refine (gm_supp_rightBody_of (s := P.φ) ⟨le_rfl, by linarith⟩ hx ?_).2.2
-  rw [gm_B_c hP hbox]; exact (cn_innerCorner_dot P.cap P.φ).1
+  -- `𝐁(t_3) = 𝐱_K^R` lies on `b_K^R`, the supporting line `l_{B_K}(π + φ^R)` (Lemma 8.1.7 (2))
+  show P.curveB (π / 2 - P.θ) ∈ suppLine (rightBody P.φ P.cap) (π + P.φ)
+  rw [(lemma8_1_7_two hbox.1 (gm_isKi hP hbox)).2.2.2, proposition2_2_2_wallB, gm_B_c hP hbox]
+  exact (cn_innerCorner_dot P.cap P.φ).1
 
 /-- `X_{B_K} = v_{B_K}⁺(π + φ^R) = 𝐁(t_3)`, by the vertex `gm_B_corner`. -/
 lemma gm_B_vplus_φ : vplus (rightBody P.φ P.cap) (π + P.φ) = P.curveB (π / 2 - P.θ) := by
@@ -689,13 +707,6 @@ lemma gm_B_edge_c :
     edge (rightBody P.φ P.cap) (π + (π / 2 - P.θ)) = {P.curveB (π / 2 - P.θ)} := by
   rw [edge_eq_segment (gm_isConvexBody_B hP hbox), gm_B_vminus_c hP hbox,
     gm_B_vplus_c hP hbox, segment_same]
-
-/-- `v_{B_K}⁺(π + t) = 𝐁(t)` on `[t_3, t_5)`. -/
-lemma gm_B_vplus {t : ℝ} (ht : t ∈ Ico (π / 2 - P.θ) (π / 2)) :
-    vplus (rightBody P.φ P.cap) (π + t) = P.curveB t := by
-  rcases ht.1.lt_or_eq with h0 | rfl
-  · exact (gm_B_vplus_vminus hP hbox ⟨h0, ht.2⟩).1.symm
-  · exact gm_B_vplus_c hP hbox
 
 /-! ### The tails `𝐝_{D_K}` and `𝐛_{B_K}` -/
 
@@ -852,59 +863,107 @@ lemma gm_withDensity_Ioc {S : Set ℝ} (f : ℝ → ℝ≥0∞) {a b : ℝ} (hab
 
 /-- The surface area measure of an interval of angles along which `v_C⁺` follows a curve `γ`:
 if `v_C⁺(t + ψ) = γ(t)` on `[a, b]`, with `γ` continuous and differentiable off a countable set,
-then `σ_C((a + ψ, b + ψ]) = ∫_{(a, b]} ⟨γ'(t), v_{t + ψ}⟩ dt`. -/
-lemma gm_sigma_Ioc {C : Set (ℝ × ℝ)} (hC : IsConvexBody C) {ψ a b : ℝ} (hab : a ≤ b)
+with a bounded measurable derivative `γ'`, then
+`σ_C((a + ψ, b + ψ]) = ∫_{(a, b]} ⟨γ'(t), v_{t + ψ}⟩ dt`. This is the paper's argument for
+Proposition 8.4.4: `d v_C⁺ = v_t σ_C` (Theorem 5.2.2); on `[a + ψ, b + ψ]`, `v_C⁺ = γ(· - ψ)`, so
+`d v_C⁺ = γ'(· - ψ) dt`; and the `v_t`-components of the two sides are `σ_C` (as `⟨v_t, v_t⟩ = 1`)
+and `⟨γ'(t - ψ), v_t⟩ dt`. -/
+private lemma gm_sigma_Ioc {C : Set (ℝ × ℝ)} (hC : IsConvexBody C) {ψ a b : ℝ} (hab : a ≤ b)
     {γ γ' : ℝ → ℝ × ℝ} {E : Set ℝ} (hE : E.Countable)
     (hv : ∀ t ∈ Icc a b, vplus C (t + ψ) = γ t) (hc : ContinuousOn γ (Icc a b))
-    (hd : ∀ t ∈ Ioo a b \ E, HasDerivAt γ (γ' t) t) :
+    (hd : ∀ t ∈ Ioo a b \ E, HasDerivAt γ (γ' t) t) (hm : Measurable γ') {M : ℝ}
+    (hM : ∀ t ∈ Icc a b, ‖γ' t‖ ≤ M) :
     sigma C (Ioc (a + ψ) (b + ψ)) =
       ∫⁻ t in Ioc a b, ENNReal.ofReal (dot (γ' t) (vvec (t + ψ))) := by
-  set ρ : ℝ → ℝ := fun t => dot (γ' t) (vvec (t + ψ)) with hρ
-  set F : ℝ → ℝ := fun t => sigmaFun C (t + ψ) with hF
-  set I : ℝ → ℝ := fun t => ∫ s in (0 : ℝ)..(t + ψ), supp C s with hI
-  set G : ℝ → ℝ := fun t => dot (γ t) (vvec (t + ψ)) + I t with hG
-  have hIoc : ∀ t ∈ Ioc a b, t ∉ E ∪ {b} → t ∈ Ioo a b \ E := fun t ht htE =>
-    ⟨⟨ht.1, lt_of_le_of_ne ht.2 fun h => htE (Or.inr h)⟩, fun h => htE (Or.inl h)⟩
-  -- Step 1: on `[a, b]`, the distribution function `F(t) = σ_C(t + ψ)` is
-  -- `G(t) = ⟨γ(t), v_{t + ψ}⟩ + ∫_0^{t + ψ} h_C`, whose derivative is `ρ(t) = ⟨γ'(t), v_{t + ψ}⟩`.
-  have hId : ∀ t, HasDerivAt I (supp C (t + ψ)) t := fun t =>
-    (hasDerivAt_integral_supp hC (t + ψ)).comp_add_const t ψ
-  have hFG : ∀ t ∈ Icc a b, F t = G t := by
-    intro t ht; simp only [hF, hG, hI, sigmaFun, hv t ht]
-  have hGd : ∀ t ∈ Ioo a b \ E, HasDerivAt G (ρ t) t := by
-    intro t ht
-    convert (hasDerivAt_dot' (hd t ht)
-      ((hasDerivAt_vvec (t + ψ)).comp_add_const t ψ)).add (hId t) using 1
-    have : dot (γ t) (uvec (t + ψ)) = supp C (t + ψ) := by
-      rw [← hv t ⟨ht.1.1.le, ht.1.2.le⟩]; exact dot_vplus_uvec C _
-    simp only [hρ, dot_neg_right, this]; ring
-  have hFd : ∀ t ∈ Ioo a b \ E, HasDerivAt F (ρ t) t := fun t ht =>
-    (hGd t ht).congr_of_eventuallyEq <| eventually_of_mem (Ioo_mem_nhds ht.1.1 ht.1.2)
-      fun s hs => hFG s (Ioo_subset_Icc_self hs)
-  -- Step 2: `F` is monotone, so `ρ ≥ 0` and `ρ = F'` is integrable.
-  have hmono : Monotone F := fun x y hxy => monotone_sigmaFun hC (by linarith : x + ψ ≤ y + ψ)
-  have hint : IntervalIntegrable ρ volume a b := by
-    refine ((hmono.monotoneOn _).intervalIntegrable_deriv).congr_ae ?_
-    rw [uIoc_of_le hab]
-    exact gm_ae_restrict_of_countable measurableSet_Ioc (hE.union (countable_singleton b))
-      fun t ht htE => (hFd t (hIoc t ht htE)).deriv
-  -- Step 3: the fundamental theorem of calculus for `G` gives `F(b) - F(a) = ∫_a^b ρ`.
-  have hGc : ContinuousOn G (Icc a b) := by
-    have hv' : Continuous (fun t => vvec (t + ψ)) := by unfold vvec; fun_prop
-    have : ContinuousOn (fun t => dot (γ t) (vvec (t + ψ))) (Icc a b) := by
-      unfold dot
-      exact (hc.fst.mul hv'.fst.continuousOn).add (hc.snd.mul hv'.snd.continuousOn)
-    exact this.add (continuous_iff_continuousAt.2 fun t => (hId t).continuousAt).continuousOn
-  have hftc : ∫ t in a..b, ρ t = G b - G a :=
-    integral_eq_of_hasDerivAt_off_countable_of_le G ρ hab hE hGc hGd hint
-  rw [sigma_Ioc hC, show sigmaFun C (b + ψ) - sigmaFun C (a + ψ) = F b - F a from rfl,
-    hFG b ⟨hab, le_rfl⟩, hFG a ⟨le_rfl, hab⟩, ← hftc, intervalIntegral.integral_of_le hab]
-  refine ofReal_integral_eq_lintegral_ofReal
-    ((intervalIntegrable_iff_integrableOn_Ioc_of_le hab).1 hint) ?_
-  refine gm_ae_restrict_of_countable measurableSet_Ioc (hE.union (countable_singleton b))
-    fun t ht htE => ?_
-  rw [← (hFd t (hIoc t ht htE)).deriv]
-  exact hmono.deriv_nonneg
+  rcases hab.eq_or_lt with rfl | hab
+  · simp
+  have hcd : a + ψ < b + ψ := by linarith
+  have hmem : ∀ s ∈ Icc (a + ψ) (b + ψ), s - ψ ∈ Icc a b := fun s hs =>
+    ⟨by linarith [hs.1], by linarith [hs.2]⟩
+  -- `v_C⁺ = γ(· - ψ)` on `[a + ψ, b + ψ]`, with the bounded derivative `γ'(· - ψ)`
+  have hvx : ∀ s ∈ Icc (a + ψ) (b + ψ), vplus C s = γ (s - ψ) := fun s hs => by
+    rw [← hv _ (hmem s hs), sub_add_cancel]
+  have hm' : Measurable fun s => γ' (s - ψ) := hm.comp (measurable_id.sub_const ψ)
+  have hi : IntegrableOn (fun s => γ' (s - ψ)) (Icc (a + ψ) (b + ψ)) :=
+    Measure.integrableOn_of_bounded (M := M) measure_Icc_lt_top.ne hm'.aestronglyMeasurable
+      ((ae_restrict_iff' measurableSet_Icc).2
+        (Filter.Eventually.of_forall fun s hs => hM _ (hmem s hs)))
+  have hgc : ContinuousOn (fun s => γ (s - ψ)) (Icc (a + ψ) (b + ψ)) :=
+    hc.comp (continuous_sub_right ψ).continuousOn hmem
+  -- `d v_C⁺ = γ'(· - ψ) dt` on `[a + ψ, b + ψ]` (fundamental theorem of calculus for `γ(· - ψ)`)
+  have hls : lsMeasure (vplus C) (a + ψ) (b + ψ) =
+      (volume.restrict (Icc (a + ψ) (b + ψ))).withDensityᵥ fun s => γ' (s - ψ) := by
+    refine cvx_lsMeasure_eq_withDensityᵥ hcd.le hi (fun s hs => ?_) (lemma5_2_1 hC _ _)
+      (hgc.congr hvx)
+    have hsub : Icc (a + ψ) s ⊆ Icc (a + ψ) (b + ψ) := Icc_subset_Icc_right hs.2
+    rw [hvx s hs, hvx _ ⟨le_rfl, hcd.le⟩, integral_eq_of_hasDerivAt_off_countable_of_le
+      (fun s => γ (s - ψ)) _ hs.1 (hE.image fun t => t + ψ) (hgc.mono hsub) (fun u hu => ?_)
+      ((hi.mono_set (by rw [uIcc_of_le hs.1]; exact hsub)).intervalIntegrable)]
+    · abel
+    · have hu' : u - ψ ∈ Ioo a b \ E := ⟨⟨by linarith [hu.1.1], by linarith [hu.1.2, hs.2]⟩,
+        fun h => hu.2 ⟨u - ψ, h, sub_add_cancel u ψ⟩⟩
+      exact (hd _ hu').comp_sub_const u ψ
+  -- Theorem 5.2.2: `d v_C⁺ = v_t σ_C` on `(a + ψ, b + ψ]`
+  have key : (volume.restrict (Ioc (a + ψ) (b + ψ))).withDensityᵥ (fun s => γ' (s - ψ)) =
+      ((sigma C).restrict (Ioc (a + ψ) (b + ψ))).withDensityᵥ vvec := by
+    rw [← theorem5_2_2 hC hcd, hls, cvx_withDensityᵥ_restrict hi measurableSet_Ioc,
+      Measure.restrict_restrict_of_subset Ioc_subset_Icc_self]
+  -- the `v_t`-components: `∫_X ⟨γ'(s - ψ), v_s⟩ ds = σ_C(X)` for `X ⊆ (a + ψ, b + ψ]`
+  have : IsFiniteMeasure ((sigma C).restrict (Ioc (a + ψ) (b + ψ))) :=
+    isFiniteMeasure_restrict.2 measure_Ioc_lt_top.ne
+  have hi' : Integrable (fun s => γ' (s - ψ)) (volume.restrict (Ioc (a + ψ) (b + ψ))) :=
+    hi.mono_set Ioc_subset_Icc_self
+  have hvi : Integrable vvec ((sigma C).restrict (Ioc (a + ψ) (b + ψ))) :=
+    continuous_vvec.integrableOn_Icc.mono_set Ioc_subset_Icc_self
+  have hρi : Integrable (fun s => dot (γ' (s - ψ)) (vvec s))
+      (volume.restrict (Ioc (a + ψ) (b + ψ))) :=
+    Measure.integrableOn_of_bounded (M := 2 * M) measure_Ioc_lt_top.ne
+      (gm_measurable_dot hm' continuous_vvec.measurable).aestronglyMeasurable
+      ((ae_restrict_iff' measurableSet_Ioc).2 (Filter.Eventually.of_forall fun s hs => by
+        have h1 := abs_dot_le (γ' (s - ψ)) (vvec s)
+        have h2 := hM _ (hmem s (Ioc_subset_Icc_self hs))
+        have h3 := norm_vvec_le s
+        rw [Real.norm_eq_abs]
+        nlinarith [norm_nonneg (γ' (s - ψ)), norm_nonneg (vvec s)]))
+  have hcomp : ∀ X, MeasurableSet X →
+      ∫ s in X, dot (γ' (s - ψ)) (vvec s) ∂(volume.restrict (Ioc (a + ψ) (b + ψ))) =
+        ((sigma C).restrict (Ioc (a + ψ) (b + ψ))).real X := by
+    intro X hX
+    have hg : ∀ (ν : Measure ℝ) [IsFiniteMeasure ν], Integrable (X.indicator uvec) ν :=
+      fun ν _ => (Integrable.of_bound continuous_uvec.aestronglyMeasurable 1
+        (Filter.Eventually.of_forall norm_uvec_le)).indicator hX
+    have h := congrArg (fun ν => ∫ᵛ s, X.indicator uvec s ∂[crossCLM; ν]) key
+    rw [cvx_integral_withDensityᵥ hi' (M := M.toNNReal) ((ae_restrict_iff' measurableSet_Ioc).2
+        (Filter.Eventually.of_forall fun s hs => (hM _ (hmem s (Ioc_subset_Icc_self hs))).trans
+          (Real.le_coe_toNNReal M))) crossCLM (hg _),
+      cvx_integral_withDensityᵥ hvi (M := 1)
+        (Filter.Eventually.of_forall fun s => by simpa using norm_vvec_le s) crossCLM (hg _)] at h
+    have e1 : ∀ s, crossCLM (X.indicator uvec s) (γ' (s - ψ)) =
+        X.indicator (fun s => dot (γ' (s - ψ)) (vvec s)) s := fun s => by
+      by_cases hs : s ∈ X
+      · simp [hs, cross_anticomm (uvec s), cross_uvec]
+      · simp [hs]
+    have e2 : ∀ s, crossCLM (X.indicator uvec s) (vvec s) = X.indicator 1 s := fun s => by
+      by_cases hs : s ∈ X
+      · simp [hs, cross_vvec]
+      · simp [hs]
+    simp_rw [e1, e2] at h
+    rwa [integral_indicator hX, integral_indicator_one hX] at h
+  -- `σ_C ≥ 0` makes the density nonnegative
+  have hnn : 0 ≤ᵐ[volume.restrict (Ioc (a + ψ) (b + ψ))] fun s => dot (γ' (s - ψ)) (vvec s) :=
+    ae_nonneg_of_forall_setIntegral_nonneg hρi fun X hX _ => (hcomp X hX).symm ▸ measureReal_nonneg
+  have h1 : sigma C (Ioc (a + ψ) (b + ψ)) =
+      ∫⁻ s in Ioc (a + ψ) (b + ψ), ENNReal.ofReal (dot (γ' (s - ψ)) (vvec s)) := by
+    have h := hcomp univ MeasurableSet.univ
+    rw [Measure.restrict_univ, measureReal_restrict_apply_univ] at h
+    rw [← ofReal_integral_eq_lintegral_ofReal hρi hnn, h, ofReal_measureReal measure_Ioc_lt_top.ne]
+  -- translate by `ψ`
+  have htr := (measurePreserving_add_right volume ψ).setLIntegral_comp_preimage_emb
+    (measurableEmbedding_addRight ψ) (fun s => ENNReal.ofReal (dot (γ' (s - ψ)) (vvec s)))
+    (Ioc (a + ψ) (b + ψ))
+  rw [preimage_add_const_Ioc, add_sub_cancel_right, add_sub_cancel_right] at htr
+  rw [h1, ← htr]
+  simp only [add_sub_cancel_right]
 
 /-- **Theorem 8.4.3** (`thm:gerver-left-right`) (1): `𝐃(t) = v_{D_K}^±(3π/2 + t)` on `(t_0, t_2)`
 and `𝐁(t) = v_{B_K}^±(π + t)` on `(t_3, t_5)`. -/
@@ -915,22 +974,8 @@ theorem theorem8_4_3_one {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
         P.curveB t = vminus (rightBody P.φ P.cap) (π + t) :=
   ⟨fun _ ht => gm_D_vplus_vminus hP hbox ht, fun _ ht => gm_B_vplus_vminus hP hbox ht⟩
 
-/-- **Theorem 8.4.3** (2): `𝐱_K^L = Y_{D_K} = 𝐃(t_2)` and `𝐝_{D_K}` is the curve `𝐃`;
-`𝐱_K^R = X_{B_K} = 𝐁(t_3)` (the paper writes `𝐃(t_3)`) and `𝐛_{B_K}` is the curve `𝐁`. -/
-theorem theorem8_4_3_two {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
-    xLeft P.φ P.cap = yD P.φ (leftBody P.φ P.cap) ∧
-      yD P.φ (leftBody P.φ P.cap) = P.curveD (P.tPt 2) ∧
-      tailD P.φ (leftBody P.φ P.cap) = P.curveD '' Icc (P.tPt 0) (P.tPt 2) ∧
-      xRight P.φ P.cap = xB P.φ (rightBody P.φ P.cap) ∧
-      xB P.φ (rightBody P.φ P.cap) = P.curveB (P.tPt 3) ∧
-      tailB P.φ (rightBody P.φ P.cap) = P.curveB '' Icc (P.tPt 3) (P.tPt 5) := by
-  have hyD : yD P.φ (leftBody P.φ P.cap) = P.curveD P.θ := gm_D_vminus_end hP hbox
-  have hxB : xB P.φ (rightBody P.φ P.cap) = P.curveB (π / 2 - P.θ) := gm_B_vplus_φ hP hbox
-  exact ⟨by rw [hyD, gm_D_θ hP hbox], hyD, gm_tailD hP hbox, by rw [hxB, gm_B_c hP hbox], hxB,
-    gm_tailB hP hbox⟩
-
-/-- **Theorem 8.4.3** (3): `h_K(π/2 + t) + h_{D_K}(3π/2 + t) = 1` on `[t_0, t_2]` and
-`h_K(t) + h_{B_K}(π + t) = 1` on `[t_3, t_5]`. -/
+/-- **Theorem 8.4.3** (`thm:gerver-left-right`) (3): `h_K(π/2 + t) + h_{D_K}(3π/2 + t) = 1` on
+`[t_0, t_2]` and `h_K(t) + h_{B_K}(π + t) = 1` on `[t_3, t_5]`. -/
 theorem theorem8_4_3_three {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     (∀ t ∈ Icc (P.tPt 0) (P.tPt 2),
         supp P.cap (π / 2 + t) + supp (leftBody P.φ P.cap) (3 * π / 2 + t) = 1) ∧
@@ -956,11 +1001,57 @@ namespace GerverParams
 
 variable {P : GerverParams}
 
+/-- A curve whose right derivative at every `t` is `ρ_i(t) w(t)`, for the half-open phase interval
+`i` of `t`, with continuous `ρ_i` and `‖w‖ ≤ 1`, has a bounded derivative on `[0, π/2]`: where the
+curve is differentiable, its derivative is that right derivative, and elsewhere it is `0`. This
+bounds the densities `𝐀' dt`, …, `𝐃' dt` in the proof of Proposition 8.4.4. -/
+private lemma gm_exists_bound_deriv {γ w : ℝ → ℝ × ℝ} {ρ : ℕ → ℝ → ℝ}
+    (hρ : ∀ i, Continuous (ρ i)) (hw : ∀ t, ‖w t‖ ≤ 1)
+    (hγ : ∀ t, HasDerivWithinAt γ (ρ (P.gs_ridx t) t • w t) (Ici t) t) :
+    ∃ M, ∀ t ∈ Icc 0 (π / 2), ‖deriv γ t‖ ≤ M := by
+  obtain ⟨M, hM⟩ := gs_exists_bound_of_sel (f := fun t => ρ (P.gs_ridx t) t) hρ
+    (fun t => ⟨_, gs_ridx_lt t, rfl⟩) 0 (π / 2)
+  refine ⟨max M 0, fun t ht => ?_⟩
+  by_cases hd : DifferentiableAt ℝ γ t
+  · rw [(uniqueDiffWithinAt_Ici t).eq_deriv _ hd.hasDerivAt.hasDerivWithinAt (hγ t), norm_smul]
+    exact le_max_of_le_left ((mul_le_of_le_one_right (norm_nonneg _) (hw t)).trans (hM t ht))
+  · rw [deriv_zero_of_not_differentiableAt hd, norm_zero]
+    exact le_max_right _ _
+
 section
 variable (hP : P.IsSolution) (hbox : P.InBox)
 include hP hbox
 
 lemma gm_injCond1 : InjCond1 P.cap := (theorem6_1_2 hP hbox).1
+
+omit hbox in
+/-- The piecewise `C¹` curves `𝐀`, `𝐁`, `𝐂`, `𝐃` have bounded derivatives on `[0, π/2]`
+(`𝐀' = ρ_A v_t`, `𝐁 = 𝐀 - u_t`, `𝐂' = -ρ_C u_t`, `𝐃 = 𝐂 - v_t` on the phases), so that their
+Lebesgue–Stieltjes measures are `𝐀' dt`, …, `𝐃' dt` with bounded densities (Proposition 8.4.4). -/
+private lemma gm_bound_deriv :
+    (∃ M, ∀ t ∈ Icc 0 (π / 2), ‖deriv P.curveA t‖ ≤ M) ∧
+      (∃ M, ∀ t ∈ Icc 0 (π / 2), ‖deriv P.curveB t‖ ≤ M) ∧
+      (∃ M, ∀ t ∈ Icc 0 (π / 2), ‖deriv P.curveC t‖ ≤ M) ∧
+      ∃ M, ∀ t ∈ Icc 0 (π / 2), ‖deriv P.curveD t‖ ≤ M := by
+  have hA := fun t => gs_hasDerivWithinAt_contactA hP (gs_rpiece_ridx (P := P) t)
+  have hC := fun t => gs_hasDerivWithinAt_contactC hP (gs_rpiece_ridx (P := P) t)
+  have eB : P.curveB = fun t => P.curveA t - uvec t := by
+    funext t; simp only [curveA, curveB, gs_contactA_eq', gs_contactB_eq']; abel
+  have eD : P.curveD = fun t => P.curveC t - vvec t := by
+    funext t; simp only [curveC, curveD, gs_contactC_eq', gs_contactD_eq']; abel
+  refine ⟨gm_exists_bound_deriv (ρ := fun i => (P.gs_phase i).ρA) gs_continuous_ρA norm_vvec_le hA,
+    ?_, gm_exists_bound_deriv (ρ := fun i t => -(P.gs_phase i).ρC t)
+      (fun i => (gs_continuous_ρC i).neg) norm_uvec_le hC, ?_⟩
+  · rw [eB]
+    refine gm_exists_bound_deriv (P := P) (ρ := fun i t => (P.gs_phase i).ρA t - 1)
+      (fun i => (gs_continuous_ρA i).sub continuous_const) norm_vvec_le fun t => ?_
+    exact ((hA t).sub (hasDerivAt_uvec t).hasDerivWithinAt).congr_deriv
+      (by simp only [sub_smul, one_smul])
+  · rw [eD]
+    refine gm_exists_bound_deriv (P := P) (ρ := fun i t => 1 - (P.gs_phase i).ρC t)
+      (fun i => continuous_const.sub (gs_continuous_ρC i)) norm_uvec_le fun t => ?_
+    exact ((hC t).sub (hasDerivAt_vvec t).hasDerivWithinAt).congr_deriv
+      (by simp only [sub_smul, one_smul, neg_smul]; abel)
 
 lemma gm_vplus_cap_A {t : ℝ} (ht : t ∈ Ico 0 (π / 2)) : vplus P.cap t = P.curveA t :=
   ((proposition6_4_5 (gm_isCap hP hbox) (gm_injCond1 hP hbox)).1 t ht).1.trans
@@ -983,6 +1074,7 @@ lemma gm_sigma_cap_zero : sigma P.cap {0} = 0 := by
 lemma gm_prop844_one : (sigma P.cap).restrict (Ico 0 (π / 2)) =
     (volume.restrict (Ico 0 (π / 2))).withDensity
       (fun t => ENNReal.ofReal (dot (deriv P.curveA t) (vvec t))) := by
+  obtain ⟨M, hM⟩ := (gm_bound_deriv hP).1
   rw [← gm_withDensity_restrict_self measurableSet_Ico]
   apply gm_restrict_Ico_eq (by positivity) (gm_sigma_cap_zero hP hbox) (measure_singleton _)
   · intro a b _ _ _; exact measure_Ioc_lt_top.ne
@@ -994,7 +1086,8 @@ lemma gm_prop844_one : (sigma P.cap).restrict (Ico 0 (π / 2)) =
       (fun t ht => by
         rw [add_zero]; exact gm_vplus_cap_A hP hbox ⟨by linarith [ht.1], by linarith [ht.2]⟩)
       (gs_continuous_contactA hP).continuousOn
-      (fun t ht => (gm_differentiableAt_curveA hP ht.2).hasDerivAt)
+      (fun t ht => (gm_differentiableAt_curveA hP ht.2).hasDerivAt) (measurable_deriv _)
+      (fun t ht => hM t ⟨by linarith [ht.1], by linarith [ht.2]⟩)
 
 /-- Proposition 8.4.4 (2): `σ̆_{B_K} = ⟨-𝐁', v_t⟩ dt` on `[t_3, t_5)`. -/
 lemma gm_prop844_two :
@@ -1003,6 +1096,7 @@ lemma gm_prop844_two :
         (fun t => ENNReal.ofReal (dot (-deriv P.curveB t) (vvec t))) := by
   have hB := gm_isConvexBody_B hP hbox
   have hcd : π / 2 - P.θ < π / 2 := (gm_c_lt_d hP).trans (gm_d_lt hP)
+  obtain ⟨M, hM⟩ := (gm_bound_deriv hP).2.1
   rw [← gm_withDensity_restrict_self measurableSet_Ico]
   apply gm_restrict_Ico_eq hcd ?_ (measure_singleton _)
   · intro a b _ _ _
@@ -1015,8 +1109,13 @@ lemma gm_prop844_two :
     have := gm_sigma_Ioc (ψ := π) (γ := P.curveB) (γ' := deriv P.curveB)
       (E := {π / 2 - P.φ}) hB hab.le (countable_singleton _)
       (fun t ht => by
-        rw [add_comm]; exact gm_B_vplus hP hbox ⟨by linarith [ht.1], by linarith [ht.2]⟩)
-      (gm_continuous_curveB hP).continuousOn (fun t ht => ?_)
+        -- `𝐁(t) = v_{B_K}⁺(π + t)` on `(t_3, t_5)` (Theorem 8.4.3 (1)) and at `t_3`
+        rw [add_comm]
+        rcases (show π / 2 - P.θ ≤ t by linarith [ht.1]).lt_or_eq with h | h
+        · exact ((theorem8_4_3_one hP hbox).2 t ⟨h, show t < π / 2 by linarith [ht.2]⟩).1.symm
+        · rw [← h]; exact gm_B_vplus_c hP hbox)
+      (gm_continuous_curveB hP).continuousOn (fun t ht => ?_) (measurable_deriv _)
+      (fun t ht => hM t ⟨by linarith [ht.1, gm_θ_lt hP, pi_pos], by linarith [ht.2]⟩)
     · rw [this]
       congr 1; funext t; congr 1
       rw [vvec_add_pi, dot_neg_right, dot_neg_left]
@@ -1030,6 +1129,7 @@ lemma gm_prop844_two :
 lemma gm_prop844_three : (sigma P.cap).restrict (Ioc (π / 2) π) =
     (volume.restrict (Ioc (π / 2) π)).withDensity
       (fun t => ENNReal.ofReal (dot (-deriv P.curveC (t - π / 2)) (uvec (t - π / 2)))) := by
+  obtain ⟨M, hM⟩ := (gm_bound_deriv hP).2.2.1
   rw [← gm_withDensity_restrict_self measurableSet_Ioc]
   apply gm_restrict_Ioc_eq
   · intro a b _ _ _; exact measure_Ioc_lt_top.ne
@@ -1042,7 +1142,8 @@ lemma gm_prop844_three : (sigma P.cap).restrict (Ioc (π / 2) π) =
       (fun t ht => by
         rw [add_zero]; exact gm_vplus_cap_C hP hbox ⟨by linarith [ht.1], by linarith [ht.2]⟩)
       ((gs_continuous_contactC hP).comp (continuous_sub_right _)).continuousOn
-      (fun t ht => ?_)
+      (fun t ht => ?_) ((measurable_deriv _).comp (measurable_id.sub_const _))
+      (fun t ht => hM _ ⟨by linarith [ht.1], by linarith [ht.2]⟩)
     · simp only [add_zero] at this
       rw [this]
       congr 1; funext t; congr 1
@@ -1058,6 +1159,7 @@ lemma gm_prop844_four :
       (volume.restrict (Ioc (π / 2) (π / 2 + P.θ))).withDensity
         (fun t => ENNReal.ofReal (dot (deriv P.curveD (t - π / 2)) (uvec (t - π / 2)))) := by
   have hD := gm_isConvexBody_D hP hbox
+  obtain ⟨M, hM⟩ := (gm_bound_deriv hP).2.2.2
   rw [← gm_withDensity_restrict_self measurableSet_Ioc]
   apply gm_restrict_Ioc_eq
   · intro a b _ _ _
@@ -1069,12 +1171,19 @@ lemma gm_prop844_four :
       (γ' := fun t => deriv P.curveD (t - π / 2)) (E := {π / 2 + P.φ}) hD hab.le
       (countable_singleton _) (fun t ht => ?_)
       ((gm_continuous_curveD hP).comp (continuous_sub_right _)).continuousOn
-      (fun t ht => ?_)
+      (fun t ht => ?_) ((measurable_deriv _).comp (measurable_id.sub_const _))
+      (fun t ht => hM _ ⟨by linarith [ht.1], by linarith [ht.2, gm_θ_lt hP, pi_pos]⟩)
     · rw [this]
       congr 1; funext t; congr 1
       rw [vvec_add_pi, gm_vvec_sub_pi_div_two, neg_neg]
-    · have := gm_D_vplus hP hbox (t := t - π / 2) ⟨by linarith [ht.1], by linarith [ht.2]⟩
-      rwa [show 3 * π / 2 + (t - π / 2) = t + π by ring] at this
+    · -- `𝐃(s) = v_{D_K}⁺(3π/2 + s)` on `(t_0, t_2)` (Theorem 8.4.3 (1)) and at `t_0`, `t_2`
+      have key : vplus (leftBody P.φ P.cap) (3 * π / 2 + (t - π / 2)) = P.curveD (t - π / 2) := by
+        rcases (show 0 ≤ t - π / 2 by linarith [ht.1]).lt_or_eq with h0 | h0
+        · rcases (show t - π / 2 ≤ P.θ by linarith [ht.2]).lt_or_eq with h1 | h1
+          · exact ((theorem8_4_3_one hP hbox).1 (t - π / 2) ⟨h0, h1⟩).1.symm
+          · rw [h1]; exact gm_D_vplus_θ hP hbox
+        · rw [← h0, add_zero]; exact gm_D_vplus_zero hP hbox
+      rwa [show 3 * π / 2 + (t - π / 2) = t + π by ring] at key
     · have ht' : t - π / 2 ∈ Ioo (P.tPt 0) (P.tPt 2) :=
         ⟨show 0 < t - π / 2 by linarith [ht.1.1], show t - π / 2 < P.θ by linarith [ht.1.2]⟩
       have hne : t - π / 2 ≠ P.tPt 1 := fun h => ht.2 (by
@@ -1149,24 +1258,26 @@ include hP hbox
 lemma gm_sigma_restrict_A {T : Set ℝ} (hT : MeasurableSet T) (hTS : T ⊆ Ico 0 (π / 2)) :
     (sigma P.cap).restrict T = (volume.restrict T).withDensity
       (fun t => ENNReal.ofReal (dot (deriv P.curveA t) (vvec t))) :=
-  gm_restrict_eq_withDensity_of_subset (gm_prop844_one hP hbox) hT hTS
+  gm_restrict_eq_withDensity_of_subset (proposition8_4_4 hP hbox).1 hT hTS
 
 lemma gm_sigma_restrict_C {T : Set ℝ} (hT : MeasurableSet T) (hTS : T ⊆ Ioc (π / 2) π) :
     (sigma P.cap).restrict T = (volume.restrict T).withDensity
       (fun t => ENNReal.ofReal (dot (-deriv P.curveC (t - π / 2)) (uvec (t - π / 2)))) :=
-  gm_restrict_eq_withDensity_of_subset (gm_prop844_three hP hbox) hT hTS
+  gm_restrict_eq_withDensity_of_subset (proposition8_4_4 hP hbox).2.2.1 hT hTS
 
 lemma gm_sigmaBreve_restrict_B {T : Set ℝ} (hT : MeasurableSet T)
     (hTS : T ⊆ Ico (π / 2 - P.θ) (π / 2)) :
     (sigmaBreve (rightBody P.φ P.cap)).restrict T = (volume.restrict T).withDensity
       (fun t => ENNReal.ofReal (dot (-deriv P.curveB t) (vvec t))) :=
-  gm_restrict_eq_withDensity_of_subset (gm_prop844_two hP hbox) hT hTS
+  gm_restrict_eq_withDensity_of_subset (proposition8_4_4 hP hbox).2.1 hT hTS
 
 lemma gm_sigmaBreve_restrict_D {T : Set ℝ} (hT : MeasurableSet T)
     (hTS : T ⊆ Ioc (π / 2) (π / 2 + P.θ)) :
     (sigmaBreve (leftBody P.φ P.cap)).restrict T = (volume.restrict T).withDensity
-      (fun t => ENNReal.ofReal (dot (deriv P.curveD (t - π / 2)) (uvec (t - π / 2)))) :=
-  gm_restrict_eq_withDensity_of_subset (gm_prop844_four hP hbox) hT hTS
+      (fun t => ENNReal.ofReal (dot (deriv P.curveD (t - π / 2)) (uvec (t - π / 2)))) := by
+  have h := (proposition8_4_4 hP hbox).2.2.2
+  rw [show π / 2 + P.tPt 0 = π / 2 from add_zero _] at h
+  exact gm_restrict_eq_withDensity_of_subset h hT hTS
 
 omit hP hbox in
 lemma gm_iota_restrict {K : Set (ℝ × ℝ)} {T : Set ℝ} (hT : MeasurableSet T)
@@ -1555,11 +1666,40 @@ end
 
 end GerverParams
 
+/-- **Theorem 8.4.3** (`thm:gerver-left-right`) (2): `𝐱_K^L = Y_{D_K} = 𝐃(t_2)` and `𝐝_{D_K}` is the
+curve `𝐃`; `𝐱_K^R = X_{B_K} = 𝐁(t_3)` (the paper writes `𝐃(t_3)`) and `𝐛_{B_K}` is the curve `𝐁`.
+That `𝐝_{D_K}` is `𝐃` as oriented curves is formalized as the equality of the sets together with
+the equality `𝒥(𝐝_{D_K}) = 𝒥(𝐃)` of the curve area functionals, and the same for `𝐛_{B_K}` and `𝐁`.
+
+Departure from the paper: the paper does not prove the two equalities of curve area functionals
+separately (they follow from `𝐝_{D_K} = 𝐃` as oriented curves). This proof computes `𝒥(𝐝_{D_K})`
+and `𝒥(𝐛_{B_K})` from the densities of `σ̆` (the computation of Proposition 8.4.4, through
+Theorem 5.2.2), and `𝒥(𝐃)`, `𝒥(𝐁)` from the derivatives of the curves (Theorem 8.4.1 (3), (4)),
+which give the same integrals, because `𝒥` of a convex arc is defined as `½ ∫ h dσ` and
+orientations of curves are not formalized (reason 3). -/
+theorem theorem8_4_3_two {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    xLeft P.φ P.cap = yD P.φ (leftBody P.φ P.cap) ∧
+      yD P.φ (leftBody P.φ P.cap) = P.curveD (P.tPt 2) ∧
+      tailD P.φ (leftBody P.φ P.cap) = P.curveD '' Icc (P.tPt 0) (P.tPt 2) ∧
+      convexCurveArea (leftBody P.φ P.cap) (3 * π / 2) (3 * π / 2 + (π / 2 - P.φ)) =
+        curveArea P.curveD 0 P.θ ∧
+      xRight P.φ P.cap = xB P.φ (rightBody P.φ P.cap) ∧
+      xB P.φ (rightBody P.φ P.cap) = P.curveB (P.tPt 3) ∧
+      tailB P.φ (rightBody P.φ P.cap) = P.curveB '' Icc (P.tPt 3) (P.tPt 5) ∧
+      convexCurveArea (rightBody P.φ P.cap) (π + P.φ) (3 * π / 2) =
+        curveArea P.curveB (π / 2 - P.θ) (π / 2) := by
+  have hyD : yD P.φ (leftBody P.φ P.cap) = P.curveD P.θ := gm_D_vminus_end hP hbox
+  have hxB : xB P.φ (rightBody P.φ P.cap) = P.curveB (π / 2 - P.θ) := gm_B_vplus_φ hP hbox
+  exact ⟨by rw [hyD, gm_D_θ hP hbox], hyD, gm_tailD hP hbox,
+    (gm_convexCurveArea_D hP hbox).trans (gm_curveArea_D hP hbox).symm,
+    by rw [hxB, gm_B_c hP hbox], hxB, gm_tailB hP hbox,
+    (gm_convexCurveArea_B hP hbox).trans (gm_curveArea_B hP hbox).symm⟩
+
 /-- **Theorem 8.4.6** (`thm:upper-bound-q-gerver-match`). `𝒜(K) = 𝒬(K, B_K, D_K)` for the cap of
 Gerver's sofa. -/
 theorem theorem8_4_6 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     sofaArea (π / 2) P.cap = upperQ P.φ P.cap (rightBody P.φ P.cap) (leftBody P.φ P.cap) := by
-  obtain ⟨h1, -, -, h4, -, -⟩ := theorem8_4_3_two hP hbox
+  obtain ⟨h1, -, -, eD, h4, -, -, eB⟩ := theorem8_4_3_two hP hbox
   have hN : area (niche P.cap (π / 2)) = curveArea P.path P.φ (π / 2 - P.φ) -
       curveArea P.curveB (π / 2 - P.θ) (π / 2) - curveArea P.curveD 0 P.θ :=
     (theorem8_4_1_niche hP hbox).2.2.2.2.2.2.2
@@ -1569,12 +1709,6 @@ theorem theorem8_4_6 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
       curveArea P.path P.φ (π / 2 - P.φ) :=
     curveArea_congr (by linarith [gm_φ_lt_θ hP, gm_θ_lt hP])
       fun t ht => gm_innerCorner hP hbox (hsub ht)
-  have eB : convexCurveArea (rightBody P.φ P.cap) (π + P.φ) (3 * π / 2) =
-      curveArea P.curveB (π / 2 - P.θ) (π / 2) :=
-    (gm_convexCurveArea_B hP hbox).trans (gm_curveArea_B hP hbox).symm
-  have eD : convexCurveArea (leftBody P.φ P.cap) (3 * π / 2) (3 * π / 2 + (π / 2 - P.φ)) =
-      curveArea P.curveD 0 P.θ :=
-    (gm_convexCurveArea_D hP hbox).trans (gm_curveArea_D hP hbox).symm
   unfold sofaArea upperQ
   rw [hN, ← h1, ← h4, hx, eB, eD]
   simp only [segArea, cross_self, zero_div]

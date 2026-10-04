@@ -196,7 +196,7 @@ these open intervals, including those that start below $0$, determine the inequa
 $[0, \pi/2)$, including the normal $0$ (Step 4). $\square$
 
 *Lean: [`k0_integral_tendsto`](../../MovingSofaUniqueness/Curvature.lean#L964), [`curvature_Ioo_limit`](../../MovingSofaUniqueness/Curvature.lean#L995), [`firstCurvature_of_Ioo`](../../MovingSofaUniqueness/Curvature.lean#L1039),
-[`firstCurvature_of_polygon_errors`](../../MovingSofaUniqueness/Curvature.lean#L1104), [`lemma6_4_2`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L221).*
+[`firstCurvature_of_polygon_errors`](../../MovingSofaUniqueness/Curvature.lean#L1104), [`lemma6_4_2`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L329).*
 
 Because the intervals may start below $0$, the bound rules out an atom of $\sigma_K$ at the normal
 $0$; note 20 stresses that the curvature bounds prove the absence of such an atom rather than
@@ -302,7 +302,7 @@ $\int_0^t m_0(f_n(\pi/2 - u))\,\mathrm{d}u \le \int_0^t m_0(g(u))\,\mathrm{d}u \
 $\mathcal{F}f_n(t) \le f(t)$; the bound for $g$ is symmetric. (2) is
 [Lemma 7.28](07-injectivity.md#lemma-728-the-eleventh-bound-baek-lemma-655). $\square$
 
-*Lean: [`lowerSeq_le_of_integral_bounds`](../../MovingSofaUniqueness/Curvature.lean#L619), [`lowerSeq`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L202), [`lowerOp`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L198), [`lemma6_5_5`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L366).*
+*Lean: [`lowerSeq_le_of_integral_bounds`](../../MovingSofaUniqueness/Curvature.lean#L619), [`lowerSeq`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L244), [`lowerOp`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L240), [`lemma6_5_5`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L408).*
 
 ![A graph over the interval from 0 to π/2 of the functions f1 to f11 of Baek's lower sequence, in grey from light to dark; f1 falls linearly from 1 to 0 and stays at 0, the next ones dip below the dashed line at height 1 less and less, and from f6 on they rise above it; f11 is orange and ends near 2.31. A blue dashed curve, the arm f of Gerver's cap, runs above f11 and ends near 2.42](figures/12-uniqueness/lower-sequence.svg)
 
@@ -327,7 +327,7 @@ corner is continuously differentiable with
 (Proposition 7.22), which is condition (2), and the strict inequalities give condition (3).
 $\square$
 
-*Lean: [`injectivity_of_curvature`](../../MovingSofaUniqueness/Curvature.lean#L691), [`arms_strict_of_curvature`](../../MovingSofaUniqueness/Curvature.lean#L674), [`proposition6_4_6_deriv`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L951).*
+*Lean: [`injectivity_of_curvature`](../../MovingSofaUniqueness/Curvature.lean#L691), [`arms_strict_of_curvature`](../../MovingSofaUniqueness/Curvature.lean#L674), [`proposition6_4_6_deriv`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1117).*
 
 *Remark (the formal route).* From (17), note 20 shows $f, g \ge 1$ by a maximum-deficit argument,
 with $m_0(x) \ge \frac12 - \frac32(1 - x)_+$, and then $f(t) \ge 1 + t/2$ and
@@ -590,7 +590,7 @@ $\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(G)) = G$ because $G$ is a mono
 (Theorem 3.13; Figure 12.5). $\square$
 
 *Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L92), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
-[`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L145), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L214).*
+[`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L168), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
 
 ![Top: Gerver's cap filled blue and its horizontal translate drawn dashed in green, overlapping; at one normal t each has a dashed supporting line, the two lines parallel, and a double arrow between them is labelled a cos t. Bottom: the graph of f(t) = a cos t from 0 to π, positive up to π/2 and negative after](figures/12-uniqueness/translation.svg)
 
@@ -665,7 +665,7 @@ its points down to the floor. In particular $K_G$ is a convex set with nonempty 
 closure of its interior. Finally $G$ is closed, being a moving sofa. $\square$
 
 *Lean: [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289), [`envelope_bounds_of_path_height`](../../MovingSofaUniqueness/RegularClosed.lean#L126), [`envelope_endpoint_order`](../../MovingSofaUniqueness/RegularClosed.lean#L93),
-[`envelope_isCompact`](../../MovingSofaUniqueness/RegularClosed.lean#L111), [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L91).*
+[`envelope_isCompact`](../../MovingSofaUniqueness/RegularClosed.lean#L111), [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L103).*
 
 ![Gerver's sofa filled blue, with its niche bounded above by an orange arch Γ that meets the floor at a and b; the arch is highest near 0.664, below the dashed line at height one; a dashed rectangle from a to b of height one lies in the cap, with its top corners (a, 1) and (b, 1) marked; a point p on the arch has an arrow pointing up into the sofa](figures/12-uniqueness/regular-closed.svg)
 

@@ -420,7 +420,13 @@ lemma inj_arm_le_of_diam {K : Set (ℝ × ℝ)} (hK : IsConvexBody K)
   refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
 
 /-- **Lemma 6.3.1** (`lem:leg-bounded`). A maximum polygon cap with `n` steps has diameter at most
-`5`; consequently its arm lengths are at most `5`. -/
+`5`; consequently its arm lengths are at most `5`.
+
+Departure from the paper: the paper takes `𝒩(K) ⊆ K` from Theorem 3.5.4 and then the bound
+`y ≤ 1` on the inner corner `𝐱_K(π/4)` from Theorem 2.5.8 ((1) ⇒ (3)); this proof bounds the height
+of `𝐱_K(π/4)` by the part of the quadrant `Q⁻_K(π/4)` (`π/4 ∈ Θ_n`) in `F_{π/2}`, which lies in
+`𝒩_Θ(K) ⊆ K` (Theorem 3.4.10), because Theorem 3.5.4 is about balanced maximum caps and does not
+apply to a maximum polygon cap (reason 1, E15). -/
 theorem lemma6_3_1 {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap (rightAngleSet k) K) :
     (∀ p ∈ K, ∀ q ∈ K, norm2 (p - q) ≤ 5) ∧
       ∀ t ∈ Icc 0 (π / 2), fPlus K t ≤ 5 ∧ fMinus K t ≤ 5 ∧ gPlus K t ≤ 5 ∧ gMinus K t ≤ 5 := by
@@ -589,15 +595,22 @@ lemma inj_polygon_g_eq {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap (righ
       gPlus K t = supp K t + (supp K (t + π / 2 + stepSize k) -
         supp K (t + π / 2) * cos (stepSize k)) / sin (stepSize k) := by
   obtain ⟨-, -, hV1, hV2⟩ := inj_polygon_vertices_at hK ht
+  -- `C_K^±(t) + g_K^±(t) u_t = y_K(t)` (Proposition 6.2.1), so
+  -- `g_K^±(t) = (y_K(t) - C_K^±(t)) · u_t`
+  have hg : ∀ (C : ℝ × ℝ) (g : ℝ), outerCorner K t = C + g • uvec t →
+      g = dot (outerCorner K t) (uvec t) - dot C (uvec t) := by
+    intro C g h
+    rw [h, dot_add_left, dot_smul_left, dot_uvec_self]; ring
+  obtain ⟨-, -, h621p, h621m⟩ := proposition6_2_1 (K := K) (t := t)
   constructor
-  · rw [gMinus, dot_sub_left, inj_dot_outerCorner_uvec, hV1, vint, dot_add_left, dot_smul_left,
+  · rw [hg _ _ h621m, inj_dot_outerCorner_uvec, hV1, vint, dot_add_left, dot_smul_left,
       dot_smul_left, dot_uvec_uvec, dot_vvec_uvec']
     have e1 : t + π / 2 - stepSize k - t = π / 2 - stepSize k := by ring
     have e2 : t - (t + π / 2 - stepSize k) = -(π / 2 - stepSize k) := by ring
     have e3 : t + π / 2 - (t + π / 2 - stepSize k) = stepSize k := by ring
     rw [e1, e2, e3, cos_pi_div_two_sub, sin_neg, sin_pi_div_two_sub]
     ring
-  · rw [gPlus, dot_sub_left, inj_dot_outerCorner_uvec, hV2, vint, dot_add_left, dot_smul_left,
+  · rw [hg _ _ h621p, inj_dot_outerCorner_uvec, hV2, vint, dot_add_left, dot_smul_left,
       dot_smul_left, dot_uvec_uvec, dot_vvec_uvec']
     have e1 : t + π / 2 - t = π / 2 := by ring
     have e2 : t - (t + π / 2) = -(π / 2) := by ring
@@ -782,6 +795,12 @@ lemma inj_sigmaAt_le_geom {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap
         (tan (stepSize k) * (1 - gPlus K t + tan (stepSize k / 2)))) 0 +
       max (2 * tan (stepSize k / 2) - sigmaAt K t) 0 := by
   obtain ⟨hc, hs, htan, hT0, hT⟩ := inj_step_trig k
+  -- the lengths `max(s₀ - s₁, 0)`, `max(s₀ - s₁', 0)` of `b⃗_K(t) ∩ H_K^d(t ∓ δ)` (Lemma 6.3.2)
+  obtain ⟨hL1, hL2⟩ := lemma6_3_2 hK ht
+  rw [lineLength, inj_param_minus hc, Real.volume_Icc, ENNReal.toReal_ofReal',
+    mul_max_of_nonneg _ _ htan.le, mul_zero, max_comm 0] at hL1
+  rw [lineLength, inj_param_plus hc, Real.volume_Icc, ENNReal.toReal_ofReal',
+    mul_max_of_nonneg _ _ htan.le, mul_zero, max_comm 0] at hL2
   have hKp : IsPolygonCap (rightAngleSet k) K := hK.1
   have hcap : IsCap K (π / 2) := hKp.1
   have htI := (rightAngleSet k).subset t ht
@@ -872,7 +891,8 @@ lemma inj_sigmaAt_le_geom {k : ℕ} {K : Set (ℝ × ℝ)} (hK : IsMaxPolygonCap
       _ = _ := by
           rw [ENNReal.toReal_add ENNReal.ofReal_ne_top ENNReal.ofReal_ne_top,
             ENNReal.toReal_ofReal', ENNReal.toReal_ofReal']
-  rw [← max_sub_sub_left, inj_param_minus_length hKp ht, inj_param_plus_length hKp ht,
+  -- `𝓗¹(b⃗_K(t) ∩ R)` is the larger of the two lengths of Lemma 6.3.2
+  rw [← max_sub_sub_left, sup_sup_distrib_right, hL1, hL2, ← sup_sup_distrib_right,
     inj_polygon_sigmaAt_eq hKp ht] at hreal
   exact hreal
 

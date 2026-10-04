@@ -105,24 +105,21 @@ v_K(a, b) = h_K(a)\, u_a + \frac{h_K(b) - h_K(a) \cos(b - a)}{\sin(b - a)}\, v_a
 This is linear in $h_K(a)$ and $h_K(b)$. The vertices $v_K^+(a)$ and $v_K^-(a)$ are the limits of
 $v_K(a, b)$ as $b \to a$ from above and from below
 ([Theorem 2.9](02-preliminaries.md#theorem-29-limits-of-vertices-baek-theorem-213)), and limits
-preserve combinations. (3) In the formalization, $\sigma_K$ is the Lebesgue–Stieltjes measure of
-$G_K(t) = \langle v_K^+(t), v_t \rangle + \int_0^t h_K$
-([Definition 6.8](06-surface-area.md#definition-68-surface-area-measure)), which is convex-linear in
-$K$ by (1) and (2). The Lebesgue–Stieltjes measure of a combination of nondecreasing functions is
-the combination of their measures. $\square$
+preserve combinations. (3) By
+[Theorem 6.12](06-surface-area.md#theorem-612-differential-gaussminkowski-theorem-baek-theorem-522),
+$\sigma_K = \langle v_t, dv_K^+ \rangle$ on each interval $(a, b]$. By (2), $v_K^+$ is
+convex-linear in $K$, and the Lebesgue–Stieltjes measure of a combination of functions of bounded
+variation is the combination of their measures (Baek's Proposition 5.1.1), so $dv_K^+$ and
+$\sigma_K$ are convex-linear in $K$. $\square$
 
 *Lean: [`theorem7_1_2_supp`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L230),
 [`theorem7_1_2_vertices`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L262),
-[`theorem7_1_2_sigma`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L284),
-[`cvx_vplus_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L243),
-[`cvx_sigmaFun_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L270).*
+[`theorem7_1_2_sigma`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L359),
+[`cvx_vplus_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L243).*
 
 The paper assumes $a < b < a + \pi$ in (2). The Lean statement holds for all $a, b$, because the
 formalization defines $v_K(a, b)$ by the formula above for all $a$ and $b$
-([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78); REPORT.md, Section 5). For (3),
-Baek, whose $\sigma_K$ is Schneider's, argues from (2) and $\sigma_K = \langle v_t, dv_K^+ \rangle$,
-which follows from
-[Theorem 6.12](06-surface-area.md#theorem-612-differential-gaussminkowski-theorem-baek-theorem-522).
+([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78); REPORT.md, Section 5).
 
 ### Theorem 8.4 (the area is quadratic; Baek, Theorem 7.1.3)
 
@@ -141,10 +138,10 @@ form $(K_1, K_2) \mapsto \frac12 \int_{[0, 2\pi)} h_{K_1} \, d\sigma_{K_2}$.
 by Theorem 8.3 (3). Its integrals are finite, as $h_{K_1}$ is continuous and $[0, 2\pi)$ is
 bounded. $\square$
 
-*Lean: [`theorem7_1_3`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L301),
-[`theorem7_1_3_quadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L331),
+*Lean: [`theorem7_1_3`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L380),
+[`theorem7_1_3_quadratic`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L411),
 [`area_eq_half_integral_supp`](../../MovingSofaOptimality/External/AreaFormula.lean#L558),
-[`cvx_integral_supp_sigma_bilin`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L307).*
+[`cvx_integral_supp_sigma_bilin`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L386).*
 
 ### Definition 8.5 (directional derivative, concavity; Baek, Definitions 7.1.5, 7.1.6)
 
@@ -255,16 +252,16 @@ points $p, q$, $\mathcal{J}(p, q) = \frac12 (p \times q)$.
 
 *Lean: [`cross`](../../MovingSofaOptimality/Basic/Plane.lean#L49),
 [`crossCLM`](../../MovingSofaOptimality/Convex/CurveArea.lean#L286),
-[`IsCBV`](../../MovingSofaOptimality/Convex/CurveArea.lean#L305),
-[`MovingSofaOptimality.CBV`](../../MovingSofaOptimality/Convex/CurveArea.lean#L317),
+[`IsCBV`](../../MovingSofaOptimality/Convex/CurveArea.lean#L521),
+[`MovingSofaOptimality.CBV`](../../MovingSofaOptimality/Convex/CurveArea.lean#L533),
 [`lsMeasure`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57),
-[`curveBilin`](../../MovingSofaOptimality/Convex/CurveArea.lean#L309),
-[`curveArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L314),
-[`segArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L452).*
+[`curveBilin`](../../MovingSofaOptimality/Convex/CurveArea.lean#L525),
+[`curveArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L530),
+[`segArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L668).*
 
 For a continuously differentiable curve,
 $\mathcal{J}(\mathbf{x}) = \frac12 \int_a^b \mathbf{x}(t) \times \mathbf{x}'(t) \, dt$
-([`curveArea_eq_integral`](../../MovingSofaOptimality/Convex/CurveArea.lean#L436)). The integrand is
+([`curveArea_eq_integral`](../../MovingSofaOptimality/Convex/CurveArea.lean#L652)). The integrand is
 twice the rate at which the segment from the origin $O$ to $\mathbf{x}(t)$ sweeps area, counted
 positively when it turns counterclockwise. So $\mathcal{J}(\mathbf{x})$ is the signed area swept by
 that segment. If $\mathbf{x}$ runs once counterclockwise around the boundary of a region, it is the
@@ -280,10 +277,10 @@ linear in $\mathbf{x}_2$, since the Lebesgue–Stieltjes measure of a linear com
 the combination of their measures
 ([Proposition 6.2](06-surface-area.md#proposition-62-linearity-baek-proposition-511)). $\square$
 
-*Lean: [`proposition7_2_2`](../../MovingSofaOptimality/Convex/CurveArea.lean#L393),
-[`cbvDomain`](../../MovingSofaOptimality/Convex/CurveArea.lean#L356),
-[`cvx_lsMeasure_comb`](../../MovingSofaOptimality/Convex/CurveArea.lean#L343),
-[`cvx_curveBilin_comb_left`](../../MovingSofaOptimality/Convex/CurveArea.lean#L362).*
+*Lean: [`proposition7_2_2`](../../MovingSofaOptimality/Convex/CurveArea.lean#L609),
+[`cbvDomain`](../../MovingSofaOptimality/Convex/CurveArea.lean#L572),
+[`cvx_lsMeasure_comb`](../../MovingSofaOptimality/Convex/CurveArea.lean#L559),
+[`cvx_curveBilin_comb_left`](../../MovingSofaOptimality/Convex/CurveArea.lean#L578).*
 
 ### Proposition 8.12 (segments; Baek, Propositions 7.2.4, 7.2.5)
 
@@ -298,9 +295,9 @@ Since $p \times v_t = \langle p, u_t \rangle$,
 $p \times q = p \times (q - p) = d\,(p \times v_t) = hd$. (3) A line through $O$ is
 $\lbrace \langle \cdot, u_t \rangle = 0 \rbrace$ for some $t$, so (3) is (2) with $h = 0$. $\square$
 
-*Lean: [`proposition7_2_4`](../../MovingSofaOptimality/Convex/CurveArea.lean#L456),
-[`proposition7_2_4_line`](../../MovingSofaOptimality/Convex/CurveArea.lean#L470),
-[`proposition7_2_5`](../../MovingSofaOptimality/Convex/CurveArea.lean#L479).*
+*Lean: [`proposition7_2_4`](../../MovingSofaOptimality/Convex/CurveArea.lean#L672),
+[`proposition7_2_4_line`](../../MovingSofaOptimality/Convex/CurveArea.lean#L686),
+[`proposition7_2_5`](../../MovingSofaOptimality/Convex/CurveArea.lean#L695).*
 
 Baek's Proposition 7.2.4 also assumes that $q$ lies on the line $l(t, h)$; this follows from the
 other hypotheses (REPORT.md, Section 5).
@@ -314,7 +311,7 @@ $\mathcal{J}(\mathbf{x}|_{[a, c]}) = \mathcal{J}(\mathbf{x}|_{[a, b]}) + \mathca
 since $\mathbf{x}$ is continuous. Its restriction to $[a', b'] \subseteq [a, c]$ is the
 Lebesgue–Stieltjes measure of $\mathbf{x}|_{[a', b']}$. $\square$
 
-*Lean: [`proposition7_2_6`](../../MovingSofaOptimality/Convex/CurveArea.lean#L487).*
+*Lean: [`proposition7_2_6`](../../MovingSofaOptimality/Convex/CurveArea.lean#L703).*
 
 **What is not formalized.** The paper continues §7.2 with Jordan arcs and curves and their
 orientations (its Definitions 7.2.1–7.2.3, 7.2.7, 7.2.9), the Jordan curve theorem (Theorem 7.2.1),
@@ -326,7 +323,7 @@ from below (Lemmas 8.2.2 and 8.2.3) and to compute the niche of Gerver's sofa (T
 The formalization replaces them, in this order, by an explicit parametrization (Theorem 8.16), a
 difference of areas (Lemma 8.19), regions between graphs and Fubini's theorem
 ([Chapter 9](09-optimality.md)), and a description of the niche as the region under a curve
-([Theorem 10.19](10-gerver.md)) (REPORT.md, Section 6).
+([Theorem 10.19](10-gerver.md)) (REPORT.md, Section 7).
 
 ## 8.3 Convex curves
 
@@ -422,8 +419,8 @@ unless $\mathbf{u}_K^{a,b}$ is a single point, such that
 Moreover $K \mapsto \mathcal{J}(\mathbf{u}_K^{a,b})$ is a quadratic functional on $\mathcal{K}$,
 with the convex-bilinear form $\mathcal{B}$ of Definition 8.14.
 
-*Lean: [`theorem7_3_2`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1087),
-[`theorem7_3_2_quadratic`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1124),
+*Lean: [`theorem7_3_2`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1070),
+[`theorem7_3_2_quadratic`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1116),
 [`cvxArc`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L720),
 [`cvxQuantile`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L540),
 [`cvx_map_cvxQuantile`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L641),
@@ -445,11 +442,11 @@ shown at $s = 0, \frac1{12}, \dots, 1$.
 $L = \sigma_K((a, b))$, and its tangent at arc length $Lr$ is $v_{\theta(r)}$, where $\theta(r)$ is
 the normal angle there.
 
-If $L = 0$, then $v_K^-(b) - v_K^+(a) = \int_{(a, b)} v_t \, \sigma_K(dt) = 0$. The arc is then a
-single point by Lemma 8.15, the constant curve has the required properties, and both sides of the
-formula vanish.
-
-Let $L > 0$. The generalized inverse
+If $v_K^+(a) = v_K^-(b)$, the arc is a single point $p$ (Lemma 8.15): the edges $e_K(t)$,
+$t \in (a, b)$, are $\lbrace p \rbrace$, so $v_K^+ = p$ on $[a, b)$ and $\sigma_K((a, b)) = 0$, as in the
+paper (which reads this off Schneider's description of $\sigma_K$, here off its definition). The
+constant curve has the required properties, and both sides of the formula vanish. Otherwise $L > 0$,
+since $L = 0$ would give $v_K^-(b) - v_K^+(a) = \int_{(a, b)} v_t \, \sigma_K(dt) = 0$. The generalized inverse
 
 ```math
 \theta(r) = \inf \lbrace t \in [a, b] : \sigma_K((a, t]) \ge L r \rbrace \quad (\text{or } b), \qquad r \in [0, 1],
@@ -506,7 +503,7 @@ second:
 ```
 
 The formalization proves only the second equality
-([`cvx_area_cut`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1391)), and uses it in Lemma
+([`cvx_area_cut`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1384)), and uses it in Lemma
 8.19. It follows from Theorem 8.4 for $K'$ and Lemma 8.15 (3): on the period
 $(t' - \pi, t' + \pi]$, the measure $\sigma_{K'}$ equals $\sigma_K$ on $(a, b)$, has an atom of mass
 $\lvert v_K^+(a) - v_K^-(b) \rvert$ at $t' + \pi$, and vanishes elsewhere. By Proposition 8.12 (2),
@@ -526,8 +523,8 @@ In particular $\mathcal{J}(\mathbf{u}_K^{a,b}) = \frac12 \int_{(a, b)} v_K^+ \ti
 $l_{K_1}(t)$, so $v_{K_1}^\pm(t) \times v_t = \langle v_{K_1}^\pm(t), u_t \rangle = h_{K_1}(t)$.
 $\square$
 
-*Lean: [`lemma7_3_3`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1132),
-[`lemma7_3_3_self`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1149),
+*Lean: [`lemma7_3_3`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1124),
+[`lemma7_3_3_self`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1142),
 [`cvx_integral_cross_dvplus`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L524).*
 
 ### Lemma 8.18 (concatenation; Baek, Lemma 7.3.4)
@@ -546,7 +543,7 @@ atom at $b$ contributes $\frac12 h_K(b)\, \sigma_K(\lbrace b \rbrace)$. The edge
 $v_K^-(b)$ to $v_K^+(b)$ in the direction $v_b$ and has length $\sigma_K(\lbrace b \rbrace)$, so by
 Proposition 8.12 (2) this is $\mathcal{J}(v_K^-(b), v_K^+(b))$. $\square$
 
-*Lean: [`lemma7_3_4`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1158).*
+*Lean: [`lemma7_3_4`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1151).*
 
 ### Lemma 8.19 (the region between an arc and its tangents; Baek, Lemma 7.3.5)
 
@@ -564,15 +561,17 @@ $\bigcap_{t \in [a, b]} H_K(t)$, and
 \lvert R \rvert = \mathcal{J}\bigl(v_K^+(a), v_K(a, b)\bigr) + \mathcal{J}\bigl(v_K(a, b), v_K^-(b)\bigr) - \mathcal{J}(\mathbf{u}_K^{a,b}) .
 ```
 
-*Lean: [`lemma7_3_5`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1630),
-[`convexCurveRegion`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1623),
-[`cvx_area_cut`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1391),
-[`cvx_area_triangle`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1591).*
+*Lean: [`lemma7_3_5`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1633),
+[`convexCurveRegion`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1616),
+[`cvx_area_cut`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1384),
+[`cvx_area_triangle`](../../MovingSofaOptimality/Convex/ConvexCurve.lean#L1584).*
 
 The paper's statement (1) is that the boundary of $R$, the two tangent segments followed by the arc
 backwards, is a counterclockwise Jordan curve; the paper then reads $\lvert R \rvert$ off it with
-Green's theorem. The Lean statement defines $R$ directly and states its area, which is how the paper
-uses (1).
+Green's theorem. The Lean statement defines $R$ directly, as $T^\circ$ minus the half-planes, and
+states its area, which is how the paper uses (1); so (3) holds by definition, and the paper's
+argument for it (the region enclosed by $\Gamma$ is simply connected) is not needed. Mathlib has
+neither the Jordan curve theorem nor Green's theorem (REPORT.md, Sections 6 and 7).
 
 *Proof.* The idea is that $R$ is the triangle $T$ minus the body $K'$ of Lemma 8.15 (Figure 8.3).
 The vertices of $T$ lie in $H_K(a) \cap H_K(b)$, hence so does $T$, and $R \subseteq T^\circ$ lies
@@ -607,8 +606,8 @@ $\mathbf{z} \in C^\mathrm{BV}[a, b]$ with $\mathbf{z}(t) \in l_K(t)$ for every $
 \mathcal{M}_K(a, b; \mathbf{z}) = \mathcal{J}\bigl(v_K^+(a), \mathbf{z}(a)\bigr) + \mathcal{J}(\mathbf{z}|_{[a, b]}) + \mathcal{J}\bigl(\mathbf{z}(b), v_K^-(b)\bigr) - \mathcal{J}(\mathbf{u}_K^{a,b}) .
 ```
 
-*Lean: [`mamikonRegion`](../../MovingSofaOptimality/Convex/Mamikon.lean#L488),
-[`mamikon`](../../MovingSofaOptimality/Convex/Mamikon.lean#L493).*
+*Lean: [`mamikonRegion`](../../MovingSofaOptimality/Convex/Mamikon.lean#L558),
+[`mamikon`](../../MovingSofaOptimality/Convex/Mamikon.lean#L563).*
 
 $\mathcal{M}_K(a, b; \mathbf{z})$ is $\mathcal{J}$ of the closed path that goes out along the first
 tangent segment, along $\mathbf{z}$, back along the last tangent segment, and back along the arc.
@@ -635,10 +634,9 @@ $\mathbf{z}(t) = v_K^+(t) + \alpha(t)\, v_t$, and
 \mathcal{M}_K(a, b; \mathbf{z}) = \frac12 \int_a^b \alpha(t)^2 \, dt .
 ```
 
-*Lean: [`theorem7_4_1`](../../MovingSofaOptimality/Convex/Mamikon.lean#L499),
-[`cvx_mamikon_core`](../../MovingSofaOptimality/Convex/Mamikon.lean#L390),
-[`cvx_integral_vvec_cross_dz`](../../MovingSofaOptimality/Convex/Mamikon.lean#L275),
-[`cvx_ibp_cross_vplus`](../../MovingSofaOptimality/Convex/Mamikon.lean#L225).*
+*Lean: [`theorem7_4_1`](../../MovingSofaOptimality/Convex/Mamikon.lean#L569),
+[`cvx_mamikon_core`](../../MovingSofaOptimality/Convex/Mamikon.lean#L425),
+[`cvx_ibp_cross_vplus`](../../MovingSofaOptimality/Convex/Mamikon.lean#L171).*
 
 For a smooth convex curve this is Mnatsakanian's theorem, known as Mamikon's theorem: the region
 swept by tangent segments has the area of the region swept by the same vectors moved to a common
@@ -647,47 +645,31 @@ coordinates. Baek's version holds for every convex body. Across a corner of $K$ 
 about the corner and sweep a fan of area $\frac12 \int \alpha^2$. Across an edge, $\alpha$ jumps
 down by the length of the edge while $\mathbf{z}$ stays continuous.
 
-*Proof.* The idea is to compute $2\mathcal{M}_K$ as $\int (\mathbf{z} - \mathbf{v}) \times d\mathbf{z}$,
-where $\mathbf{v} = v_K^+$, and then to show that $v_t \times d\mathbf{z} = \alpha\, dt$. Both
-$\mathbf{z}(t)$ and $\mathbf{v}(t)$ lie on $l_K(t)$, so their difference is a multiple of $v_t$,
-namely $\alpha(t)\, v_t$. The function $\alpha$ is measurable since $v_K^+$ is, and bounded since
-$K$ is bounded and $\mathbf{z}$ is continuous on a compact interval.
-
-*Step 1: the arc term.* As in the proof of Lemma 8.17, $\mathbf{z}(t) \in l_K(t)$ gives
-$\int_{(a, b)} \mathbf{z} \times d\mathbf{v} = \int_{(a, b)} h_K \, d\sigma_K = 2\mathcal{J}(\mathbf{u}_K^{a,b})$.
-Integration by parts for $\mathbf{z}$ and $\mathbf{v}$, whose left limit at $b$ is $v_K^-(b)$, gives
+*Proof.* Write $\mathbf{v} = v_K^+$. Both $\mathbf{z}(t)$ and $\mathbf{v}(t)$ lie on $l_K(t)$, so
+$\mathbf{z}(t) - \mathbf{v}(t) = \alpha(t)\, v_t$. The function $\alpha$ is measurable since $v_K^+$
+is, bounded since $K$ is bounded and $\mathbf{z}$ is continuous on a compact interval, and
+right-continuous and of bounded variation since $\mathbf{z}$ and $\mathbf{v}$ are (Theorem 2.9,
+Lemma 6.11). As measures on $(a, b)$,
 
 ```math
-\int_{(a, b)} \mathbf{z} \times d\mathbf{v} = \mathbf{z}(b) \times v_K^-(b) - \mathbf{z}(a) \times v_K^+(a) + \int_{(a, b)} \mathbf{v} \times d\mathbf{z} .
+\mathbf{z} \times d\mathbf{z} - \mathbf{v} \times d\mathbf{v} + d(\mathbf{z} \times \mathbf{v}) = (\mathbf{z} - \mathbf{v}) \times d(\mathbf{z} + \mathbf{v}) = (\mathbf{z} - \mathbf{v}) \times d(\mathbf{z} - \mathbf{v}) = \alpha v_t \times d(\alpha v_t) = \alpha v_t \times (v_t\, d\alpha + \alpha\, dv_t) = \alpha^2\, dt .
 ```
 
-Substitute this into Definition 8.20. The two boundary cross products cancel against
-$\mathcal{J}(v_K^+(a), \mathbf{z}(a))$ and $\mathcal{J}(\mathbf{z}(b), v_K^-(b))$, and
+The first equality is the product rule $d(\mathbf{z} \times \mathbf{v}) = d\mathbf{z} \times \mathbf{v} + \mathbf{z} \times d\mathbf{v}$
+([Lemma 6.4](06-surface-area.md#lemma-64-product-rule-baek-lemma-513), as $\mathbf{z}$ is
+continuous) with the bilinearity of $\times$. The second uses
+$(\mathbf{z} - \mathbf{v}) \times d\mathbf{v} = 0$, as $d\mathbf{v} = v_t\, \sigma_K$ (Theorem 6.12)
+is parallel to $\mathbf{z} - \mathbf{v}$. The last two are the product rule for $\alpha v_t$, with
+$v_t$ continuous, $v_t \times v_t = 0$, $dv_t = -u_t\, dt$ and $v_t \times (-u_t) = 1$. Integrate
+over $(a, b)$: $\int \mathbf{z} \times d\mathbf{z} = 2\mathcal{J}(\mathbf{z})$;
+$\int \mathbf{v} \times d\mathbf{v} = \int h_K\, d\sigma_K = 2\mathcal{J}(\mathbf{u}_K^{a,b})$
+(Lemma 8.17); and
+$d(\mathbf{z} \times \mathbf{v})((a, b)) = \mathbf{z}(b) \times v_K^-(b) - \mathbf{z}(a) \times v_K^+(a)$.
+These are twice the terms of Definition 8.20. $\square$
 
-```math
-2\, \mathcal{M}_K(a, b; \mathbf{z}) = \int_{(a, b)} (\mathbf{z} - \mathbf{v}) \times d\mathbf{z} = \int_{(a, b)} \alpha(t) \, \bigl(v_t \times d\mathbf{z}(t)\bigr) .
-```
-
-*Step 2: $v_t \times d\mathbf{z} = \alpha(t)\, dt$.* Since $\mathbf{z}(t) \in l_K(t)$,
-$v_t \times \mathbf{z}(t) = -\langle \mathbf{z}(t), u_t \rangle = -h_K(t)$. Apply the product rule
-to $v_t \times \mathbf{z}(t)$, with $dv_t = -u_t\, dt$ and
-$u_t \times \mathbf{z} = \langle \mathbf{z}, v_t \rangle$:
-
-```math
-v_t \times d\mathbf{z}(t) = -\,dh_K(t) + \langle \mathbf{z}(t), v_t \rangle \, dt .
-```
-
-The support function is Lipschitz with derivative $\langle v_K^+(t), v_t \rangle$ almost everywhere
-([`cvx_supp_primitive`](../../MovingSofaOptimality/Convex/Mamikon.lean#L181)), so
-$dh_K(t) = \langle \mathbf{v}(t), v_t \rangle\, dt$ and
-$v_t \times d\mathbf{z} = \langle \mathbf{z} - \mathbf{v}, v_t \rangle \, dt = \alpha\, dt$.
-Together, $2\mathcal{M}_K(a, b; \mathbf{z}) = \int_a^b \alpha^2 \, dt$. $\square$
-
-The paper's proof computes the same measure as
-$\mathbf{z} \times d\mathbf{z} - \mathbf{v} \times d\mathbf{v} + d(\mathbf{z} \times \mathbf{v}) = (\mathbf{z} - \mathbf{v}) \times d(\mathbf{z} - \mathbf{v})$.
-In its last line $\alpha u_t$ should read $\alpha v_t$, which does not affect the result (REPORT.md,
-E26). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is constrained (REPORT.md,
-Section 6).
+In the paper's last line $\alpha u_t$ should read $\alpha v_t$, with $dv_t = -u_t\, dt$; the result is
+unaffected (REPORT.md, E26). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is
+constrained (REPORT.md, Section 6).
 
 ### Theorem 8.22 (Mamikon areas are convex; Baek, Theorem 7.4.2)
 
@@ -707,4 +689,4 @@ each $t$,
 (1 - \lambda)\, \alpha_{K_1}^2 + \lambda\, \alpha_{K_2}^2 - \bigl((1 - \lambda)\, \alpha_{K_1} + \lambda\, \alpha_{K_2}\bigr)^2 = \lambda (1 - \lambda)\, (\alpha_{K_1} - \alpha_{K_2})^2 \ \ge\ 0 . \qquad \square
 ```
 
-*Lean: [`theorem7_4_2`](../../MovingSofaOptimality/Convex/Mamikon.lean#L541).*
+*Lean: [`theorem7_4_2`](../../MovingSofaOptimality/Convex/Mamikon.lean#L611).*

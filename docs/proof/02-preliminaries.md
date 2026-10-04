@@ -157,11 +157,11 @@ and $\sin\varphi < 0$, so this bounds $x$ from below. If $\varphi > 0$, both coo
 negative for $x$ very negative, but no point of $L$ has both coordinates negative. A closed bounded
 set is compact. $\square$
 
-*Lean: [`isBounded_of_isMovingSofa`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L241), [`isCompact_of_isMovingSofa`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L305).*
+*Lean: [`isBounded_of_isMovingSofa`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L259), [`isCompact_of_isMovingSofa`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L323).*
 
 The paper takes areas and support functions of moving sofas without saying that they are bounded;
 Proposition 2.5 supplies this. A translate of a moving sofa with rotation angle $\omega$ is again
-one, with the movement $p \mapsto \Phi_s(p - v)$ ([`mpc_isMovingSofaWithAngle_translate`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L582)).
+one, with the movement $p \mapsto \Phi_s(p - v)$ ([`mpc_isMovingSofaWithAngle_translate`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L586)).
 
 ## 2.3 Planar convex bodies
 
@@ -238,7 +238,7 @@ Baek's §2.1 also introduces the *surface area measure* $\sigma_K$ of a convex b
 angles that records the lengths of the sides of $K$ by their normal angles: $\sigma_K(\lbrace t \rbrace)$
 is the length of $e_K(t)$, so $v_K^+(t) = v_K^-(t) + \sigma_K(\lbrace t \rbrace)\, v_t$ (Baek's
 Proposition 2.1.2). [Chapter 6](06-surface-area.md) constructs $\sigma_K$ and proves its properties
-([`sigma`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L169), [`proposition2_1_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L294)). Chapters 2 and 3 use it only in
+([`sigma`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L169), [`proposition2_1_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L299)). Chapters 2 and 3 use it only in
 [Proposition 3.21](03-monotone.md#proposition-321-mirror-symmetry-baek-proposition-254) (6).
 
 ### Theorem 2.9 (limits of vertices; Baek, Theorem 2.1.3)
@@ -251,8 +251,8 @@ Let $K$ be a convex body and $t$ an angle. Then
 
 In particular $v_K^+$ is right-continuous and $v_K^-$ is left-continuous.
 
-*Lean: [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L562), [`tendsto_vminus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L567), [`tendsto_vint_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L572), [`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L583),
-[`tendsto_vminus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L589), [`tendsto_vint_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L594).*
+*Lean: [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L535), [`tendsto_vminus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L541), [`tendsto_vint_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L547), [`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L572),
+[`tendsto_vminus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L578), [`tendsto_vint_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L584).*
 
 As printed, the paper's first display takes the limits of $v_K^+(t)$ and $v_K^-(u)$, where
 $v_K^+(s)$ and $v_K^-(s)$ are meant (REPORT.md, E26).
@@ -314,7 +314,7 @@ The middle factor is the $v_t$-coordinate of $v_K(t, s)$, which tends to
 $\langle v_K^+(t), v_t \rangle$ by Theorem 2.9, while $\sin\delta / \delta \to 1$ and
 $(\cos\delta - 1)/\delta \to 0$. The left derivative is computed in the same way. $\square$
 
-*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L630), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L647).*
+*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L628), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L650).*
 
 The two one-sided derivatives differ by $\langle v_K^+(t) - v_K^-(t), v_t \rangle$, the length of
 the edge $e_K(t)$; so $h_K$ is differentiable at $t$ exactly when $e_K(t)$ is a single point.
@@ -354,7 +354,7 @@ $\lvert \langle p - q, u_t \rangle \rvert \le \lvert p_1 - q_1 \rvert + \lvert p
 gives $\lvert h_A(t) - h_{A'}(t) \rvert \le 2\, d(A, A')$ for nonempty compact sets $A, A'$, so the
 support functions converge uniformly. $\square$
 
-*Lean: [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L245), [`mpc_supp_le_add_hausdorff`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L186).*
+*Lean: [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846), [`mpc_supp_le_add_hausdorff`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L787).*
 
 The theorem is used in [Chapter 4](04-balanced.md), to take limits of maximum polygon caps, and in
 [Chapter 11](11-selection.md).
@@ -373,7 +373,7 @@ V_\omega = R_\omega(V) = \lbrace p : 0 \le \langle p, u_\omega \rangle \le 1 \rb
 For $\omega \in (0, \pi/2]$, the *parallelogram* is $P_\omega = H \cap V_\omega$, with lower left
 vertex $O = (0, 0)$ and upper right vertex $o_\omega = (\tan(\pi/4 - \omega/2), 1)$.
 
-*Lean: [`hStrip`](../../MovingSofaOptimality/Sofa/Defs.lean#L64), [`vStrip`](../../MovingSofaOptimality/Sofa/Defs.lean#L67), [`vStripRot`](../../MovingSofaOptimality/Sofa/Defs.lean#L70), [`para`](../../MovingSofaOptimality/Sofa/Defs.lean#L77), [`MovingSofaOptimality.oPt`](../../MovingSofaOptimality/Sofa/Defs.lean#L80), [`ms_mem_vStripRot_iff`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L316).*
+*Lean: [`hStrip`](../../MovingSofaOptimality/Sofa/Defs.lean#L64), [`vStrip`](../../MovingSofaOptimality/Sofa/Defs.lean#L67), [`vStripRot`](../../MovingSofaOptimality/Sofa/Defs.lean#L70), [`para`](../../MovingSofaOptimality/Sofa/Defs.lean#L77), [`MovingSofaOptimality.oPt`](../../MovingSofaOptimality/Sofa/Defs.lean#L80), [`ms_mem_vStripRot_iff`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L334).*
 
 For $\omega < \pi/2$, $P_\omega$ is the parallelogram with vertices $O$, $(\sec\omega, 0)$,
 $o_\omega$ and $(-\tan\omega, 1)$. Its two upper sides lie on the lines $y = 1$ and
@@ -440,7 +440,7 @@ $\Phi_s(p) = R_{\theta(s)}\, p + c(s)$, and write $c = (c_1, c_2)$. Recall that 
    $h_S(\omega) = 1$ in place of $h_S(\pi/2) = 1$, this gives
    $0 \le \langle p, u_\omega \rangle \le 1$ on $S$. $\square$
 
-*Lean: [`proposition1_2_2`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L342).*
+*Lean: [`proposition1_2_2`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L360).*
 
 By (1) and (3), a moving sofa in standard position lies in $P_\omega = H \cap V_\omega$.
 
@@ -539,9 +539,9 @@ quarter-plane $Q_L^-$ is $X < 0$ and $Y < 0$, and so on. Substituting $X$ and $Y
 column; for instance $X < 0$ reads $\langle q, u_t \rangle < h_S(t) - 1$. Finally
 $L = Q_L^+ \setminus Q_L^-$ and $f_{S,t}$ is a bijection. $\square$
 
-*Lean: [`proposition2_2_2_hallway`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L109), [`proposition2_2_2_innerCorner`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L125), [`proposition2_2_2_outerCorner`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L129),
-[`proposition2_2_2_wallA`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L133), [`proposition2_2_2_wallB`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L138), [`proposition2_2_2_wallC`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L143),
-[`proposition2_2_2_wallD`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L150), [`proposition2_2_2_qPlus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L156), [`proposition2_2_2_qMinus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L163).*
+*Lean: [`proposition2_2_2_hallway`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L110), [`proposition2_2_2_innerCorner`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L128), [`proposition2_2_2_outerCorner`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L134),
+[`proposition2_2_2_wallA`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L140), [`proposition2_2_2_wallB`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L146), [`proposition2_2_2_wallC`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L153),
+[`proposition2_2_2_wallD`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L160), [`proposition2_2_2_qPlus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L167), [`proposition2_2_2_qMinus`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L177).*
 
 The paper's formula for $Q_S^-(t)$ lacks the "$- 1$" in its second half-plane (REPORT.md, E26); the
 table gives the correct one. So $Q_S^+(t)$ is the closed quarter-plane bounded by the two outer
@@ -568,7 +568,7 @@ Hence $X \ge 0$ or $Y \ge 0$. Also $X \le 1$ and $Y \le 1$, because
 $\langle p, u_t \rangle \le h_S(t)$ and $\langle p, v_t \rangle \le h_S(t + \pi/2)$. So
 $p \in L_S(t)$. $\square$
 
-*Lean: [`proposition2_2_3`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L173).*
+*Lean: [`proposition2_2_3`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L187).*
 
 By Propositions 2.15 and 2.20, a moving sofa $S$ with rotation angle $\omega \in (0, \pi/2]$ in
 standard position lies in $P_\omega$ and in each of its supporting hallways $L_S(t)$,

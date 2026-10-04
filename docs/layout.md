@@ -81,7 +81,8 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 
 | Path | Content |
 | --- | --- |
-| [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit |
+| [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
+| [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |
 | [`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py) | copies the shared definitions into the Challenge, or checks the copy |

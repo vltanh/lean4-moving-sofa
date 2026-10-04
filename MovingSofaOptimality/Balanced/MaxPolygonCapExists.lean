@@ -1,6 +1,9 @@
 module
 
 public import MovingSofaOptimality.Balanced.CapGeometry
+public import Mathlib.Topology.MetricSpace.HausdorffDistance
+import Mathlib.Topology.MetricSpace.Closeds
+import Mathlib.Analysis.Convex.Measure
 
 /-!
 # Existence of maximum polygon caps (§3.4)
@@ -16,9 +19,16 @@ second of the four modules of §3.4 (see `MaximumPolygonCap`).
   (`mpc_mirror_polycap`).
 * Lemma 3.4.2 (width): for `ω < π/2` the width is at most that of `P_ω` (`mpc_width_le_of_lt`); for
   `ω = π/2` a wide cap has a rectangle in its niche (`mpc_wedge_rect`) larger than the cap.
-* Theorem 3.4.3: instead of the Blaschke selection theorem, a subsequence along which the support
-  values converge on the finite set `Θ^◇` (`mpc_limit_polycap`, `mpc_exists_limit_polycap`), along
-  which `𝒜_Θ` is upper semicontinuous (`mpc_le_limit_objective`).
+* Theorem 3.4.3, as in the paper: `𝒜_Θ` is continuous in the Hausdorff distance on `𝒦_Θ^c`
+  (`mpc_tendsto_polyArea`), since the area is (Schneider, Theorem 1.8.20; `mpc_tendsto_area`) and
+  so is the area of the polygon niche `𝒩_Θ(K) = ⋃_{t ∈ Θ} T_K(t)` (Proposition 2.5.3), the
+  symmetric differences of the wedges having areas tending to zero (`mpc_tendsto_area_polyNiche`).
+  The polygon caps `K ∋ o_ω` with `𝒜_Θ(K) > 0` lie in a fixed box (Lemma 3.4.2), so the Blaschke
+  selection theorem (`mpc_blaschke`) gives a limit of a maximizing sequence, a polygon cap
+  (`mpc_limit_isPolygonCap`) at which `𝒜_Θ` attains its supremum.
+* `mpc_exists_limit_polycap` and `mpc_le_limit_objective`, used by `MovingSofaUniqueness`: a
+  sequence of polygon caps in a box has a subsequence whose support values converge on the finite
+  set `Θ^◇`, to those of a polygon cap, along which `𝒜_Θ` is upper semicontinuous.
 -/
 
 @[expose] public section
@@ -310,6 +320,23 @@ lemma mpc_wedge_rect {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap �
 
 end Width
 
+/-- The polygon niche `𝒩_Θ(K) = F_ω ∩ ⋃_{t ∈ Θ} Q_K⁻(t)` is bounded: it is the finite union of the
+wedges `F_ω ∩ Q_K⁻(t)`, each bounded. -/
+lemma mpc_polyNiche_isBounded (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
+    Bornology.IsBounded (polyNiche Θ K) := by
+  have hsub : polyNiche Θ K ⊆ ⋃ t ∈ Θ.angles, {p : ℝ × ℝ | 0 ≤ dot p (uvec Θ.ω) ∧
+      0 ≤ dot p (uvec (π / 2)) ∧ dot p (uvec t) < supp K t - 1 ∧
+        dot p (vvec t) < supp K (t + π / 2) - 1} := by
+    rintro p ⟨hf, hu⟩
+    obtain ⟨t, ht, hq⟩ := mem_iUnion₂.1 hu
+    rw [proposition2_2_2_qMinus] at hq
+    simp only [halfMinusOpen, mem_inter_iff, mem_ofPred_eq, uvec_add_pi_div_two] at hq
+    exact mem_iUnion₂.2 ⟨t, ht, hf.1, hf.2, hq.1, hq.2⟩
+  refine Bornology.IsBounded.subset ?_ hsub
+  refine (Bornology.isBounded_biUnion_finset _).2 fun t ht => ?_
+  obtain ⟨ht0, htω, hω⟩ := nef_angle_mem ht
+  exact nef_wedge_isBounded ht0 htω hω
+
 /-- **Lemma 3.4.2** (`lem:polygon-cap-bounded`). For `t ∈ (0, ω)` there is `c_{ω,t} > 0` such that
 every polygon cap `K` with an angle set containing `t` and with `𝒜_Θ(K) > 0` has width at most
 `c_{ω,t}` along `u_0`. -/
@@ -351,7 +378,7 @@ theorem lemma3_4_2 {ω t : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (ht : t ∈ Ioo 0 
       linarith
     have hareaN : L / 2 * (L * m / 4) ≤ area (polyNiche Θ K) := by
       rw [← hvolR]
-      exact ENNReal.toReal_mono (mpc_isBounded_polyNiche hK).measure_lt_top.ne
+      exact ENNReal.toReal_mono (mpc_polyNiche_isBounded Θ K).measure_lt_top.ne
         (MeasureTheory.measure_mono hsub)
     have hpoly : polyArea Θ K = area K - area (polyNiche Θ K) := theorem3_2_3 hK
     have hareaK := mpc_area_le_width hK.1
@@ -360,15 +387,14 @@ theorem lemma3_4_2 {ω t : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) (ht : t ∈ Ioo 0 
 
 /-! ## Existence of maximum polygon caps (Theorem 3.4.3)
 
-The paper takes a maximizing sequence and applies the Blaschke selection theorem. Here the
-maximizing sequence lies in a fixed box (Lemma 3.4.2), and it suffices to extract a subsequence
-along which the support values converge on the finite set `Θ^◇`: the limit is the polygon cap
-`𝓒_Θ(h_∞)` (`mpc_limit_polycap`), and the area and the niche area are semicontinuous along the
-subsequence. -/
+As in the paper: `𝒜_Θ` is continuous in the Hausdorff distance, the polygon caps `K ∋ o_ω` with
+`𝒜_Θ(K) > 0` lie in a fixed box (Lemma 3.4.2), and the Blaschke selection theorem gives a maximizer.
+-/
 
 section Existence
 
 open Filter Topology MeasureTheory
+open scoped symmDiff
 
 /-- `o_ω · u_s ≤ 1` for the angles `s ∈ (0, π)` outside `(ω, π/2)`. -/
 lemma mpc_oPt_dot_le {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) {s : ℝ} (hs0 : 0 < s) (hsπ : s < π)
@@ -755,65 +781,465 @@ lemma mpc_le_limit_objective {Θ : AngleSet} {K : ℕ → Set (ℝ × ℝ)}
   rw [theorem3_2_3 (hK (φ n))] at h1
   linarith
 
-/-- **Theorem 3.4.3** (`thm:maximum-polygon-cap`). A maximum polygon cap exists for every angle
+/-! ### The Blaschke selection theorem -/
+
+/-- Support functions are controlled by the (Mathlib) Hausdorff distance. -/
+lemma mpc_supp_le_add_hausdorff {A B : Set (ℝ × ℝ)} (hA : IsCompact A) (hAne : A.Nonempty)
+    (hB : IsCompact B) (hBne : B.Nonempty) (t : ℝ) :
+    supp A t ≤ supp B t + 2 * Metric.hausdorffDist A B := by
+  have hfin := Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded hAne hBne hA.isBounded
+    hB.isBounded
+  refine supp_le_of_forall hAne fun p hp => le_of_forall_pos_lt_add fun δ hδ => ?_
+  -- a point `q ∈ B` with `d(p, q) < d_H(A, B) + δ/2`
+  obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt hp
+    (lt_add_of_pos_right (Metric.hausdorffDist A B) (half_pos hδ)) hfin
+  -- `p · u_t ≤ q · u_t + |(p - q)₁| + |(p - q)₂| ≤ h_B(t) + 2 d(p, q)`
+  have h1 : |(p - q).1| ≤ dist p q := by
+    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_fst_le (p - q)
+  have h2 : |(p - q).2| ≤ dist p q := by
+    rw [dist_eq_norm]; exact Real.norm_eq_abs _ ▸ norm_snd_le (p - q)
+  have h3 := (abs_le.1 (abs_dot_uvec_le (p - q) t)).2
+  rw [dot_sub_left] at h3
+  linarith [dot_le_supp hB hq t]
+
+/-- The distance `sup_t |h_A(t) - h_B(t)|` of the support functions is at most twice the
+(Mathlib) Hausdorff distance. -/
+private lemma mpc_hausdorffDist_le_two_mul {A B : Set (ℝ × ℝ)} (hA : IsCompact A)
+    (hAne : A.Nonempty) (hB : IsCompact B) (hBne : B.Nonempty) :
+    hausdorffDist A B ≤ 2 * Metric.hausdorffDist A B :=
+  ciSup_le fun t => abs_le.2
+    ⟨by linarith [mpc_supp_le_add_hausdorff hB hBne hA hAne t,
+        Metric.hausdorffDist_comm (s := A) (t := B)],
+      by linarith [mpc_supp_le_add_hausdorff hA hAne hB hBne t]⟩
+
+/-- A nonempty closed set which is the limit, in the Hausdorff distance, of convex sets is
+convex. -/
+private lemma mpc_convex_of_tendsto {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, Convex ℝ (Ks i))
+    {L : Set (ℝ × ℝ)} (hLc : IsClosed L) (hLne : L.Nonempty)
+    (hd : Tendsto (fun i => Metric.hausdorffDist (Ks i) L) atTop (𝓝 0))
+    (hfin : ∀ i, Metric.hausdorffEDist (Ks i) L ≠ ⊤) : Convex ℝ L := by
+  intro p hp q hq a b ha hb hab
+  rw [← hLc.closure_eq, Metric.mem_closure_iff_infDist_zero hLne]
+  refine le_antisymm (le_of_forall_pos_le_add fun ε hε => ?_) Metric.infDist_nonneg
+  -- `p, q` are within `ε/2` of points `p', q'` of some `K_i`, which contains `a p' + b q'`
+  obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds (show 0 < ε / 2 by positivity))).exists
+  obtain ⟨p', hp', hpp'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
+  obtain ⟨q', hq', hqq'⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hq hi (hfin i)
+  have h1 : Metric.infDist (a • p' + b • q') L ≤ Metric.hausdorffDist (Ks i) L :=
+    Metric.infDist_le_hausdorffDist_of_mem ((hKs i) hp' hq' ha hb hab) (hfin i)
+  have h2 : dist (a • p + b • q) (a • p' + b • q') ≤ a * dist p' p + b * dist q' q := by
+    rw [dist_comm p', dist_comm q']
+    refine (dist_add_add_le _ _ _ _).trans_eq ?_
+    rw [dist_smul₀, dist_smul₀, Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
+  have h3 := Metric.infDist_le_infDist_add_dist (x := a • p + b • q) (y := a • p' + b • q')
+    (s := L)
+  have h4 : a * dist p' p + b * dist q' q ≤ ε / 2 := by
+    have e1 := mul_le_mul_of_nonneg_left hpp'.le ha
+    have e2 := mul_le_mul_of_nonneg_left hqq'.le hb
+    have e3 : a * (ε / 2) + b * (ε / 2) = ε / 2 := by rw [← add_mul, hab, one_mul]
+    linarith
+  linarith
+
+open TopologicalSpace in
+/-- **Blaschke selection theorem** for convex bodies in a compact set, with convergence of the
+support functions. -/
+lemma mpc_blaschke {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsConvexBody (Ks i)) {B : Set (ℝ × ℝ)}
+    (hB : IsCompact B) (hsub : ∀ i, Ks i ⊆ B) :
+    ∃ L, IsConvexBody L ∧ L ⊆ B ∧ ∃ φ : ℕ → ℕ, StrictMono φ ∧ HausdorffTendsto (Ks ∘ φ) L := by
+  -- the nonempty compact subsets of `B` form a compact set in the Hausdorff metric
+  set C : ℕ → NonemptyCompacts (ℝ × ℝ) := fun i => ⟨⟨Ks i, (hKs i).2.1⟩, (hKs i).1⟩ with hC
+  set S := {D : NonemptyCompacts (ℝ × ℝ) | (D : Set (ℝ × ℝ)) ⊆ B}
+  have hS : TotallyBounded S :=
+    NonemptyCompacts.totallyBounded_subsets_of_totallyBounded hB.totallyBounded
+  have hSc : IsCompact (closure S) :=
+    (TotallyBounded.closure hS).isCompact_of_isComplete isClosed_closure.isComplete
+  obtain ⟨Lc, -, φ, hφ, hlim⟩ := hSc.tendsto_subseq
+    (fun i => subset_closure (show C i ∈ S from hsub i))
+  set L : Set (ℝ × ℝ) := (Lc : Set (ℝ × ℝ)) with hLdef
+  have hLc : IsCompact L := Lc.isCompact
+  have hLne : L.Nonempty := Lc.nonempty
+  have hd : Tendsto (fun i => Metric.hausdorffDist (Ks (φ i)) L) atTop (𝓝 0) := by
+    have := tendsto_iff_dist_tendsto_zero.1 hlim
+    simpa [NonemptyCompacts.dist_eq, hC] using this
+  have hfin : ∀ i, Metric.hausdorffEDist (Ks (φ i)) L ≠ ⊤ := fun i =>
+    Metric.hausdorffEDist_ne_top_of_nonempty_of_bounded (hKs _).1 hLne (hKs _).2.1.isBounded
+      hLc.isBounded
+  -- the limit lies in `B` and is convex
+  have hLB : L ⊆ B := by
+    intro p hp
+    rw [← hB.isClosed.closure_eq, Metric.mem_closure_iff]
+    intro ε hε
+    obtain ⟨i, hi⟩ := (hd.eventually (gt_mem_nhds hε)).exists
+    obtain ⟨q, hq, hpq⟩ := Metric.exists_dist_lt_of_hausdorffDist_lt' hp hi (hfin i)
+    exact ⟨q, hsub _ hq, by rw [dist_comm]; exact hpq⟩
+  have hLconv : Convex ℝ L :=
+    mpc_convex_of_tendsto (fun i => (hKs (φ i)).2.2) hLc.isClosed hLne hd hfin
+  refine ⟨L, ⟨hLne, hLc, hLconv⟩, hLB, φ, hφ, ?_⟩
+  -- the support functions converge, since `sup_t |h_{K_i}(t) - h_L(t)| ≤ 2 d_H(K_i, L)`
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (by simpa using hd.const_mul 2) (fun i => Real.iSup_nonneg fun _ => abs_nonneg _)
+    (fun i => mpc_hausdorffDist_le_two_mul (hKs (φ i)).2.1 (hKs (φ i)).1 hLc hLne)
+
+/-! ### Continuity of `𝒜_Θ` in the Hausdorff distance -/
+
+/-- **Continuity of the area** in the Hausdorff distance of convex bodies (Schneider, Theorem
+1.8.20, cited in the proofs of Theorems 3.4.3 and 3.5.5). The area is upper semicontinuous
+(`mpc_area_usc`); an interior point of `K` lies in `K_i` for all large `i`, and the boundary of `K`
+is a null set, so it is also lower semicontinuous (`mpc_area_lsc`). -/
+lemma mpc_tendsto_area {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {Ks : ℕ → Set (ℝ × ℝ)}
+    (hKs : ∀ i, IsConvexBody (Ks i)) (hlim : HausdorffTendsto Ks K) :
+    Tendsto (fun i => area (Ks i)) atTop (𝓝 (area K)) := by
+  -- a point `q` with `B(q, ρ) ⊆ K` has `q · u_r + ρ/2 ≤ h_K(r)` for all `r`, so it lies in `K_i`
+  -- as soon as `|h_{K_i} - h_K| < ρ/2`
+  have hint : ∀ q ∈ interior K, ∀ᶠ i in atTop, q ∈ Ks i := by
+    intro q hq
+    obtain ⟨ρ, hρ, hball⟩ := Metric.isOpen_iff.1 isOpen_interior q hq
+    have hmargin : ∀ r, dot q (uvec r) + ρ / 2 ≤ supp K r := by
+      intro r
+      have hmem : q + (ρ / 2) • uvec r ∈ K := by
+        refine interior_subset (hball ?_)
+        rw [Metric.mem_ball, dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
+          abs_of_pos (half_pos hρ)]
+        nlinarith [norm_uvec_le r, norm_nonneg (uvec r)]
+      have := dot_le_supp hK.2.1 hmem r
+      rwa [dot_add_left, dot_smul_left, dot_uvec_self, mul_one] at this
+    filter_upwards [mpc_supp_uniform hK hKs hlim (half_pos hρ)] with i hi
+    rw [mem_iff_forall_dot_le_supp (hKs i)]
+    exact fun r => by linarith [hmargin r, (abs_lt.1 (hi r)).1]
+  -- `|int K| = |K|`, the boundary of a convex set being a null set
+  have hKint : area (interior K) = area K := by
+    have : Measure.IsAddHaarMeasure (volume : Measure (ℝ × ℝ)) :=
+      Measure.prod.instIsAddHaarMeasure _ _
+    have h : volume K ≤ volume (interior K) :=
+      calc volume K ≤ volume (interior K ∪ frontier K) := measure_mono (by
+            rw [← closure_eq_interior_union_frontier]; exact subset_closure)
+        _ ≤ volume (interior K) + volume (frontier K) := measure_union_le _ _
+        _ = volume (interior K) := by rw [Convex.addHaar_frontier volume hK.2.2, add_zero]
+    rw [area, area, le_antisymm (measure_mono interior_subset) h]
+  refine tendsto_order.2 ⟨fun x hx => ?_, fun x hx => ?_⟩
+  · filter_upwards [mpc_area_lsc hint (mpc_isBounded_outer hK 1)
+      (mpc_eventually_subset_outer hK hKs hlim one_pos) (half_pos (sub_pos.2 hx))] with i hi
+    rw [hKint] at hi
+    linarith
+  · filter_upwards [mpc_area_usc hK hKs hlim (half_pos (sub_pos.2 hx))] with i hi
+    linarith
+
+/-- `||A| - |B|| ≤ |A ∆ B|` for sets of finite area. -/
+private lemma mpc_abs_area_sub_le {A B : Set (ℝ × ℝ)} (hA : volume A ≠ ⊤) (hB : volume B ≠ ⊤) :
+    |area A - area B| ≤ (volume (A ∆ B)).toReal := by
+  have key : ∀ X Y : Set (ℝ × ℝ), volume X ≠ ⊤ → volume Y ≠ ⊤ →
+      area Y ≤ area X + (volume (X ∆ Y)).toReal := by
+    intro X Y hX hY
+    have hXY := measure_symmDiff_ne_top hX hY
+    rw [area, area, ← ENNReal.toReal_add hX hXY]
+    refine ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨hX, hXY⟩)
+      ((measure_mono fun p hp => ?_).trans (measure_union_le X (X ∆ Y)))
+    by_cases h : p ∈ X
+    · exact Or.inl h
+    · exact Or.inr (Set.mem_symmDiff.2 (Or.inr ⟨hp, h⟩))
+  have h1 := key A B hA hB
+  have h2 := key B A hB hA
+  rw [symmDiff_comm] at h2
+  rw [abs_le]
+  constructor <;> linarith
+
+/-- Proposition 2.5.3 (`pro:wedge`) for the polygon niche, as the proof of Theorem 3.4.3 applies
+it: `𝒩_Θ(K) = ⋃_{t ∈ Θ} T_K(t)`, immediate from Definition 3.2.5 as Proposition 2.5.3 is from
+Definition 2.4.5. -/
+private lemma mpc_polyNiche_eq_iUnion_wedge (Θ : AngleSet) (K : Set (ℝ × ℝ)) :
+    polyNiche Θ K = ⋃ t ∈ Θ.angles, wedge K Θ.ω t := by
+  rw [polyNiche, inter_iUnion₂]
+  rfl
+
+/-- Membership in the wedge `T_K(t) = F_ω ∩ Q_K⁻(t)` (Definition 2.5.3, Proposition 2.2.2). -/
+private lemma mpc_mem_wedge {K : Set (ℝ × ℝ)} {ω t : ℝ} {p : ℝ × ℝ} :
+    p ∈ wedge K ω t ↔ (0 ≤ dot p (uvec ω) ∧ 0 ≤ dot p (uvec (π / 2))) ∧
+      dot p (uvec t) < supp K t - 1 ∧ dot p (vvec t) < supp K (t + π / 2) - 1 := by
+  rw [wedge, proposition2_2_2_qMinus, ← uvec_add_pi_div_two]
+  exact Iff.rfl
+
+/-- The area of a box `[l, u] × [l', u']`. -/
+private lemma mpc_volume_box {l u : ℝ} (h : l ≤ u) (l' u' : ℝ) :
+    volume (Icc l u ×ˢ Icc l' u') = ENNReal.ofReal ((u - l) * (u' - l')) := by
+  rw [mpc_volume_prod, Real.volume_Icc, Real.volume_Icc, ENNReal.ofReal_mul (by linarith)]
+
+/-- The step `|Δ(t)| → 0` of the proof of Theorem 3.4.3: if `h_{K_i}(t) → h_K(t)` and
+`h_{K_i}(t + π/2) → h_K(t + π/2)`, then the symmetric difference `Δ_i(t)` of the wedges `T_{K_i}(t)`
+and `T_K(t)` has area tending to zero. In the coordinates `(p · u_t, p · v_t)`, `Δ_i(t)` lies in two
+strips of widths `2|h_{K_i}(t) - h_K(t)|` and `2|h_{K_i}(t + π/2) - h_K(t + π/2)|`, cut off by a
+square. -/
+private lemma mpc_tendsto_wedge_symmDiff {ω t : ℝ} (ht0 : 0 < t) (htω : t < ω) (hω : ω ≤ π / 2)
+    {K : Set (ℝ × ℝ)} {Ks : ℕ → Set (ℝ × ℝ)}
+    (h1 : Tendsto (fun i => supp (Ks i) t) atTop (𝓝 (supp K t)))
+    (h2 : Tendsto (fun i => supp (Ks i) (t + π / 2)) atTop (𝓝 (supp K (t + π / 2)))) :
+    Tendsto (fun i => volume (wedge (Ks i) ω t ∆ wedge K ω t)) atTop (𝓝 0) := by
+  set a := supp K t with ha
+  set b := supp K (t + π / 2) with hb
+  -- the wedges with `|h(t) - a|, |h(t + π/2) - b| ≤ 1` lie in the square `|p · u_t|, |p · v_t| ≤ R`
+  obtain ⟨R₀, hR₀, hR⟩ := (nef_wedge_isBounded (a := 0) (b := 0) (c := a) (d := b) ht0 htω
+    hω).exists_pos_norm_le
+  have hsq : ∀ p : ℝ × ℝ, (0 ≤ dot p (uvec ω) ∧ 0 ≤ dot p (uvec (π / 2))) →
+      dot p (uvec t) < a → dot p (vvec t) < b →
+      |dot p (uvec t)| ≤ 2 * R₀ ∧ |dot p (vvec t)| ≤ 2 * R₀ := by
+    intro p hf hu hv
+    have hp := hR p ⟨hf.1, hf.2, hu, hv⟩
+    have e1 : |p.1| ≤ R₀ := (norm_fst_le p).trans hp
+    have e2 : |p.2| ≤ R₀ := (norm_snd_le p).trans hp
+    refine ⟨(abs_dot_uvec_le p t).trans (by linarith), ?_⟩
+    rw [← uvec_add_pi_div_two]
+    exact (abs_dot_uvec_le p _).trans (by linarith)
+  -- `Δ_i(t)` lies in two strips cut off by the square, so `|Δ_i(t)| ≤ 8 R₀ (d_i + e_i)`
+  have hvol : ∀ i, |supp (Ks i) t - a| ≤ 1 → |supp (Ks i) (t + π / 2) - b| ≤ 1 →
+      volume (wedge (Ks i) ω t ∆ wedge K ω t) ≤
+        ENNReal.ofReal (8 * R₀ * (|supp (Ks i) t - a| + |supp (Ks i) (t + π / 2) - b|)) := by
+    intro i hd he
+    set d := |supp (Ks i) t - a| with hd_def
+    set e := |supp (Ks i) (t + π / 2) - b| with he_def
+    have l1 := neg_abs_le (supp (Ks i) t - a)
+    have l2 := le_abs_self (supp (Ks i) t - a)
+    have l3 := neg_abs_le (supp (Ks i) (t + π / 2) - b)
+    have l4 := le_abs_self (supp (Ks i) (t + π / 2) - b)
+    have hsub : wedge (Ks i) ω t ∆ wedge K ω t ⊆ rot t ''
+        (Icc (a - 1 - d) (a - 1 + d) ×ˢ Icc (-(2 * R₀)) (2 * R₀) ∪
+          Icc (-(2 * R₀)) (2 * R₀) ×ˢ Icc (b - 1 - e) (b - 1 + e)) := by
+      intro p hp
+      refine ⟨(dot p (uvec t), dot p (vvec t)), ?_, rot_frame_coords t p⟩
+      simp only [Set.mem_symmDiff, mpc_mem_wedge] at hp
+      -- in both cases `p` lies in the square
+      have hin : (0 ≤ dot p (uvec ω) ∧ 0 ≤ dot p (uvec (π / 2))) ∧ dot p (uvec t) < a ∧
+          dot p (vvec t) < b := by
+        rcases hp with ⟨⟨hf, hu, hv⟩, -⟩ | ⟨⟨hf, hu, hv⟩, -⟩
+        · exact ⟨hf, by linarith, by linarith⟩
+        · exact ⟨hf, by linarith, by linarith⟩
+      obtain ⟨hx, hy⟩ := hsq p hin.1 hin.2.1 hin.2.2
+      rw [abs_le] at hx hy
+      -- and one of its two coordinates lies in a strip
+      rcases hp with ⟨⟨hf, hu, hv⟩, hn⟩ | ⟨⟨hf, hu, hv⟩, hn⟩
+      · by_cases hc : dot p (uvec t) < a - 1
+        · have hc' : b - 1 ≤ dot p (vvec t) := not_lt.1 fun h => hn ⟨hf, hc, h⟩
+          exact Or.inr ⟨hx, by linarith, by linarith⟩
+        · exact Or.inl ⟨⟨by linarith, by linarith⟩, hy⟩
+      · by_cases hc : dot p (uvec t) < supp (Ks i) t - 1
+        · have hc' : supp (Ks i) (t + π / 2) - 1 ≤ dot p (vvec t) :=
+            not_lt.1 fun h => hn ⟨hf, hc, h⟩
+          exact Or.inr ⟨hx, by linarith, by linarith⟩
+        · exact Or.inl ⟨⟨by linarith, by linarith⟩, hy⟩
+    refine (measure_mono hsub).trans ?_
+    rw [volume_image_rot]
+    refine (measure_union_le _ _).trans (le_of_eq ?_)
+    rw [mpc_volume_box (by linarith), mpc_volume_box (by linarith),
+      ← ENNReal.ofReal_add (by nlinarith) (by nlinarith)]
+    congr 1
+    ring
+  have hde : Tendsto (fun i => 8 * R₀ * (|supp (Ks i) t - a| + |supp (Ks i) (t + π / 2) - b|))
+      atTop (𝓝 0) := by
+    simpa using (((h1.sub_const a).abs).add ((h2.sub_const b).abs)).const_mul (8 * R₀)
+  have hev : ∀ᶠ i in atTop, |supp (Ks i) t - a| ≤ 1 ∧ |supp (Ks i) (t + π / 2) - b| ≤ 1 := by
+    filter_upwards [Metric.tendsto_nhds.1 h1 1 one_pos, Metric.tendsto_nhds.1 h2 1 one_pos]
+      with i hi1 hi2
+    rw [Real.dist_eq] at hi1 hi2
+    exact ⟨hi1.le, hi2.le⟩
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
+    (by simpa using ENNReal.tendsto_ofReal hde) (Eventually.of_forall fun _ => zero_le) ?_
+  filter_upwards [hev] with i hi
+  exact hvol i hi.1 hi.2
+
+/-- `|𝒩_Θ(K_i)| → |𝒩_Θ(K)|` when `h_{K_i} → h_K` pointwise (proofs of Theorems 3.4.3 and 3.5.5):
+by Proposition 2.5.3, `𝒩_Θ(K_i) ∆ 𝒩_Θ(K)` lies in the union over `t ∈ Θ` of the symmetric
+differences `Δ_i(t)` of the wedges `T_{K_i}(t)` and `T_K(t)`, whose areas tend to zero. -/
+lemma mpc_tendsto_area_polyNiche {Θ : AngleSet} {K : Set (ℝ × ℝ)} {Ks : ℕ → Set (ℝ × ℝ)}
+    (hlim : ∀ s, Tendsto (fun i => supp (Ks i) s) atTop (𝓝 (supp K s))) :
+    Tendsto (fun i => area (polyNiche Θ (Ks i))) atTop (𝓝 (area (polyNiche Θ K))) := by
+  -- `|𝒩_Θ(K_i) ∆ 𝒩_Θ(K)| ≤ ∑_{t ∈ Θ} |Δ_i(t)| → 0`
+  have hsum : Tendsto (fun i => ∑ t ∈ Θ.angles, volume (wedge (Ks i) Θ.ω t ∆ wedge K Θ.ω t))
+      atTop (𝓝 0) := by
+    simpa using tendsto_finsetSum (a := fun _ => (0 : ENNReal)) Θ.angles fun t ht => by
+      obtain ⟨ht0, htω, hω⟩ := nef_angle_mem ht
+      exact mpc_tendsto_wedge_symmDiff ht0 htω hω (hlim t) (hlim _)
+  have hsd : Tendsto (fun i => volume (polyNiche Θ (Ks i) ∆ polyNiche Θ K)) atTop (𝓝 0) := by
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hsum
+      (fun i => zero_le) fun i => ?_
+    rw [mpc_polyNiche_eq_iUnion_wedge, mpc_polyNiche_eq_iUnion_wedge]
+    exact (measure_mono (iUnion_symmDiff_iUnion_subset.trans
+      (iUnion_mono fun t => iUnion_symmDiff_iUnion_subset))).trans
+      (measure_biUnion_finset_le _ _)
+  have hfin : ∀ L, volume (polyNiche Θ L) ≠ ⊤ := fun L =>
+    (mpc_polyNiche_isBounded Θ L).measure_lt_top.ne
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  refine squeeze_zero (fun i => norm_nonneg _)
+    (fun i => mpc_abs_area_sub_le (hfin _) (hfin _)) ?_
+  simpa [Function.comp_def] using (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp hsd
+
+/-- `𝒜_Θ` is continuous in the Hausdorff distance on `𝒦_Θ^c` (first step of the proof of Theorem
+3.4.3): `𝒜_Θ(K) = |K| - |𝒩_Θ(K)|` (Theorem 3.2.3), where `|K|` is continuous (`mpc_tendsto_area`)
+and so is `|𝒩_Θ(K)|` (`mpc_tendsto_area_polyNiche`). -/
+private lemma mpc_tendsto_polyArea {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K)
+    {Ks : ℕ → Set (ℝ × ℝ)} (hKs : ∀ i, IsPolygonCap Θ (Ks i)) (hlim : HausdorffTendsto Ks K) :
+    Tendsto (fun i => polyArea Θ (Ks i)) atTop (𝓝 (polyArea Θ K)) := by
+  have hKb : ∀ i, IsConvexBody (Ks i) := fun i => (hKs i).1.2.1
+  rw [theorem3_2_3 hK, show (fun i => polyArea Θ (Ks i)) =
+    fun i => area (Ks i) - area (polyNiche Θ (Ks i)) from funext fun i => theorem3_2_3 (hKs i)]
+  exact (mpc_tendsto_area hK.1.2.1 hKb hlim).sub
+    (mpc_tendsto_area_polyNiche (tendsto_supp hKb hK.1.2.1 hlim))
+
+/-! ### Limits of polygon caps and the maximizer -/
+
+/-- A convex body of positive area has interior points: otherwise it is its own boundary, a null
 set. -/
+private lemma mpc_interior_nonempty {L : Set (ℝ × ℝ)} (hL : IsConvexBody L) (hpos : 0 < area L) :
+    (interior L).Nonempty := by
+  by_contra h
+  rw [not_nonempty_iff_eq_empty] at h
+  have hfr : frontier L = L := by
+    rw [frontier, hL.isClosed.closure_eq, h, sdiff_empty]
+  have : Measure.IsAddHaarMeasure (volume : Measure (ℝ × ℝ)) :=
+    Measure.prod.instIsAddHaarMeasure _ _
+  have h0 := Convex.addHaar_frontier volume hL.2.2
+  rw [hfr] at h0
+  simp [area, h0] at hpos
+
+/-- A Hausdorff limit `L` of polygon caps `K_n` with angle set `Θ` which has an interior point `q`
+is a polygon cap with angle set `Θ` (the paper's "`ℬ_Θ` is compact in `𝒦_Θ^c`" in the proof of
+Theorem 3.4.3): the support values of a cap pass to the limit, and a point `p` satisfying the
+constraints `p · u_s ≤ h_L(s)`, `s ∈ Θ^◇ ∪ {ω + π, 3π/2}`, is the limit of the points of the
+segment `(p, q]`, which satisfy them strictly, hence lie in `K_n` for all large `n`. -/
+private lemma mpc_limit_isPolygonCap {Θ : AngleSet} {Ks : ℕ → Set (ℝ × ℝ)}
+    (hKs : ∀ n, IsPolygonCap Θ (Ks n)) {L : Set (ℝ × ℝ)} (hL : IsConvexBody L)
+    (hlim : HausdorffTendsto Ks L) (hint : (interior L).Nonempty) : IsPolygonCap Θ L := by
+  have hKb : ∀ n, IsConvexBody (Ks n) := fun n => (hKs n).1.2.1
+  have hconst : ∀ t c, (∀ n, supp (Ks n) t = c) → supp L t = c := fun t c h =>
+    tendsto_nhds_unique ((tendsto_supp hKb hL hlim t).congr h) tendsto_const_nhds
+  -- an interior point `q`, with `B(q, ρ) ⊆ L`, has `q · u_s + ρ/2 ≤ h_L(s)` for all `s`
+  obtain ⟨q, hq⟩ := hint
+  obtain ⟨ρ, hρ, hball⟩ := Metric.isOpen_iff.1 isOpen_interior q hq
+  have hmargin : ∀ s, dot q (uvec s) + ρ / 2 ≤ supp L s := by
+    intro s
+    have hmem : q + (ρ / 2) • uvec s ∈ L := by
+      refine interior_subset (hball ?_)
+      rw [Metric.mem_ball, dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
+        abs_of_pos (half_pos hρ)]
+      nlinarith [norm_uvec_le s, norm_nonneg (uvec s)]
+    have := dot_le_supp hL.2.1 hmem s
+    rwa [dot_add_left, dot_smul_left, dot_uvec_self, mul_one] at this
+  -- `L = ⋂_{s ∈ Θ^◇ ∪ {ω + π, 3π/2}} H₋(s, h_L(s))`
+  have hhalf : IsHalfPlaneInter L Θ.capAngles := by
+    refine ⟨Θ.capAngles, fun s => s.1, fun s => supp L s.1, fun s => s.2, ?_⟩
+    ext p
+    simp only [mem_iInter, halfMinus, mem_ofPred_eq]
+    refine ⟨fun hp s => dot_le_supp hL.2.1 hp s.1, fun hp => ?_⟩
+    -- the points `p + l (q - p)`, `l ∈ (0, 1]`, lie in `K_n` for large `n`, hence in `L`
+    have hpl : ∀ l : ℝ, 0 < l → l ≤ 1 → p + l • (q - p) ∈ L := by
+      intro l hl0 hl1
+      apply mpc_mem_of_eventually_mem hL hKb hlim
+      filter_upwards [mpc_supp_uniform hL hKb hlim (show 0 < l * (ρ / 2) by positivity)]
+        with n hn
+      rw [nef_eq_setOf_supp (hKb n) (hKs n).2, mem_ofPred_eq]
+      intro s hs
+      have m1 := mul_le_mul_of_nonneg_left (hp ⟨s, hs⟩) (sub_nonneg.2 hl1)
+      have m2 := mul_le_mul_of_nonneg_left (hmargin s) hl0.le
+      have e3 := (abs_lt.1 (hn s)).1
+      rw [dot_add_left, dot_smul_left, dot_sub_left]
+      nlinarith
+    -- and they tend to `p` as `l → 0`
+    have hseq : Tendsto (fun m : ℕ => p + (1 / ((m : ℝ) + 1)) • (q - p)) atTop (𝓝 p) := by
+      simpa using tendsto_const_nhds.add
+        ((tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).smul_const (q - p))
+    refine hL.isClosed.mem_of_tendsto hseq (Eventually.of_forall fun m => hpl _ (by positivity) ?_)
+    rw [div_le_one (by positivity)]
+    linarith [(Nat.cast_nonneg m : (0 : ℝ) ≤ m)]
+  exact ⟨⟨Θ.hω, hL, hconst _ _ fun n => (hKs n).1.2.2.1, hconst _ _ fun n => (hKs n).1.2.2.2.1,
+    hconst _ _ fun n => (hKs n).1.2.2.2.2.1, hconst _ _ fun n => (hKs n).1.2.2.2.2.2.1,
+    nef_isHalfPlaneInter_mono (nef_capAngles_subset Θ) hhalf⟩, hhalf⟩
+
+/-- **Theorem 3.4.3** (`thm:maximum-polygon-cap`). A maximum polygon cap exists for every angle
+set.
+
+As in the paper: `𝒜_Θ` is continuous in the Hausdorff distance on `𝒦_Θ^c`
+(`mpc_tendsto_polyArea`); the polygon caps `K ∋ o_ω` with `𝒜_Θ(K) > 0` form a set `ℬ_Θ`, nonempty
+as it contains `K₁ = 𝓒_Θ(1)`, of caps of width at most `c_{ω,t}` (Lemma 3.4.2), so the Blaschke
+selection theorem (`mpc_blaschke`) gives a limit of a maximizing sequence in `ℬ_Θ`, which maximizes
+`𝒜_Θ` on `ℬ_Θ`; and every polygon cap with `𝒜_Θ > 0` has a horizontal translate in `ℬ_Θ`
+(`mpc_exists_oPt_mem`). The paper's `ℬ_Θ` asks `𝒜_Θ(K) ≥ 0`; `𝒜_Θ(K) > 0` is the hypothesis under
+which Lemma 3.4.2 bounds the width. -/
 theorem theorem3_4_3 (Θ : AngleSet) : ∃ K, IsMaxPolygonCap Θ K := by
   classical
-  -- Step 1: `𝒜_Θ` is bounded above (Lemma 3.4.2), and positive at `K₁ = 𝓒_Θ(1)`.
-  obtain ⟨hK₁, -, hN₁, harea₁⟩ := mpc_K1 Θ
+  -- `K₁ = 𝓒_Θ(1)` has an empty niche, so `𝒜_Θ(K₁) = |K₁| > 0`
+  obtain ⟨hK₁, ho₁, hN₁, harea₁⟩ := mpc_K1 Θ
   have hpa₁ : polyArea Θ (capH Θ fun _ => 1) = area (capH Θ fun _ => 1) := by
     rw [theorem3_2_3 hK₁, hN₁]; simp [area]
+  -- the members of `ℬ_Θ` have width at most `c` (Lemma 3.4.2) and contain `o_ω`, so they lie in a
+  -- fixed box
   obtain ⟨t₀, ht₀⟩ := Θ.nonempty
   obtain ⟨c, hc, hcK⟩ := lemma3_4_2 Θ.hω (mpc_angles_bounds ht₀)
-  have hbound : ∀ K, IsPolygonCap Θ K → polyArea Θ K ≤ c := by
-    intro K hK
-    by_cases hpos : 0 < polyArea Θ K
-    · have h2 : 0 ≤ area (polyNiche Θ K) := ENNReal.toReal_nonneg
-      rw [theorem3_2_3 hK]
-      linarith [hcK Θ rfl ht₀ K hK hpos, mpc_area_le_width hK.1]
-    · linarith
-  set A : Set ℝ := {x | ∃ K, IsPolygonCap Θ K ∧ polyArea Θ K = x} with hA
-  have hAbdd : BddAbove A := ⟨c, by rintro _ ⟨K, hK, rfl⟩; exact hbound K hK⟩
-  have hA₁ : polyArea Θ (capH Θ fun _ => 1) ∈ A := ⟨_, hK₁, rfl⟩
-  set M := sSup A with hM
-  have hMpos : 0 < M := by linarith [le_csSup hAbdd hA₁]
-  -- Step 2: a maximizing sequence of polygon caps `K_n` containing `o_ω`, with `𝒜_Θ(K_n) > 0`.
-  have hseq : ∀ n : ℕ, ∃ K, IsPolygonCap Θ K ∧ oPt Θ.ω ∈ K ∧
-      M - 1 / (n + 1) < polyArea Θ K ∧ 0 < polyArea Θ K := by
-    intro n
-    have hn : (0 : ℝ) < 1 / (n + 1) := by positivity
-    have hlt : max (M - 1 / (n + 1)) (M / 2) < M := max_lt (by linarith) (by linarith)
-    obtain ⟨_, ⟨K, hK, rfl⟩, hK2⟩ := exists_lt_of_lt_csSup ⟨_, hA₁⟩ hlt
-    obtain ⟨K', hK', ho, hA'⟩ := mpc_exists_oPt_mem hK
-    rw [← hA'] at hK2
-    exact ⟨K', hK', ho, (le_max_left _ _).trans_lt hK2,
-      by linarith [(le_max_right (M - 1 / (n + 1)) (M / 2)).trans_lt hK2]⟩
-  choose Ks hKs hoKs hlowKs hposKs using hseq
-  -- Step 3: the `K_n` lie in a fixed box: they contain `o_ω` and have width at most `c`.
   set R := |(oPt Θ.ω).1| + c with hR
-  have hbox : ∀ n, Ks n ⊆ Icc (-R) R ×ˢ Icc 0 1 := by
-    intro n p hp
-    have hw := hcK Θ rfl ht₀ (Ks n) (hKs n) (hposKs n)
-    have hKc := (hKs n).1.2.1.2.1
+  have hbox : ∀ K, IsPolygonCap Θ K → oPt Θ.ω ∈ K → 0 < polyArea Θ K →
+      K ⊆ Icc (-R) R ×ˢ Icc 0 1 := by
+    intro K hK ho hpos p hp
+    have hw := hcK Θ rfl ht₀ K hK hpos
+    have hKc := hK.1.2.1.2.1
     have e1 := dot_le_supp hKc hp 0
-    have e2 := dot_le_supp hKc (hoKs n) π
+    have e2 := dot_le_supp hKc ho π
     have e3 := dot_le_supp hKc hp π
-    have e4 := dot_le_supp hKc (hoKs n) 0
+    have e4 := dot_le_supp hKc ho 0
     rw [dot_uvec_zero] at e1 e4
     rw [dot_uvec_pi] at e2 e3
     rw [width, zero_add] at hw
     have a1 := neg_abs_le (oPt Θ.ω).1
     have a2 := le_abs_self (oPt Θ.ω).1
-    exact ⟨⟨by linarith, by linarith⟩, (hKs n).1.snd_nonneg hp,
-      (hKs n).1.snd_le_one hp⟩
-  -- Step 4: along a subsequence the `K_n` converge to a polygon cap `𝓒_Θ(h_∞)`, which contains
-  -- `o_ω`, and `𝒜_Θ(𝓒_Θ(h_∞)) ≥ M` by semicontinuity.
-  obtain ⟨φ, hinf, hφ, -, hLcap, -, hmemL, husc, hlsc⟩ := mpc_exists_limit_polycap hKs hbox
-  refine ⟨capH Θ hinf, hLcap, hmemL _ (Eventually.of_forall fun n => hoKs (φ n)),
-    fun K' hK' => ?_⟩
-  have hML := mpc_le_limit_objective hKs hLcap hφ husc hlsc (P := fun _ => 0)
-    tendsto_const_nhds fun n => by simpa using hlowKs n
-  linarith [le_csSup hAbdd ⟨K', hK', rfl⟩]
+    exact ⟨⟨by linarith, by linarith⟩, hK.1.snd_nonneg hp, hK.1.snd_le_one hp⟩
+  -- the supremum `M` of `𝒜_Θ` on `ℬ_Θ` is finite, as `𝒜_Θ(K) ≤ |K| ≤ w_K(0) ≤ c`, and positive
+  set A : Set ℝ := {x | ∃ K, (IsPolygonCap Θ K ∧ oPt Θ.ω ∈ K ∧ 0 < polyArea Θ K) ∧
+    polyArea Θ K = x} with hA
+  have hAbdd : BddAbove A := by
+    refine ⟨c, ?_⟩
+    rintro _ ⟨K, ⟨hK, -, hpos⟩, rfl⟩
+    have h2 : 0 ≤ area (polyNiche Θ K) := ENNReal.toReal_nonneg
+    rw [theorem3_2_3 hK]
+    linarith [hcK Θ rfl ht₀ K hK hpos, mpc_area_le_width hK.1]
+  have hA₁ : polyArea Θ (capH Θ fun _ => 1) ∈ A := ⟨_, ⟨hK₁, ho₁, hpa₁ ▸ harea₁⟩, rfl⟩
+  set M := sSup A with hM
+  have hMpos : 0 < M := by linarith [le_csSup hAbdd hA₁]
+  -- a maximizing sequence `K_n` in `ℬ_Θ`
+  have hseq : ∀ n : ℕ, ∃ K, (IsPolygonCap Θ K ∧ oPt Θ.ω ∈ K ∧ 0 < polyArea Θ K) ∧
+      M - 1 / ((n : ℝ) + 1) < polyArea Θ K := by
+    intro n
+    have hn : (0 : ℝ) < 1 / ((n : ℝ) + 1) := by positivity
+    obtain ⟨_, ⟨K, hK, rfl⟩, hlt⟩ := exists_lt_of_lt_csSup ⟨_, hA₁⟩
+      (show M - 1 / ((n : ℝ) + 1) < M by linarith)
+    exact ⟨K, hK, hlt⟩
+  choose Ks hKs hlow using hseq
+  have hKφ : ∀ n, IsPolygonCap Θ (Ks n) := fun n => (hKs n).1
+  -- the Blaschke selection theorem: a subsequence `K_{φ(n)}` converges to a convex body `L`
+  obtain ⟨L, hLb, -, φ, hφ, hlim⟩ := mpc_blaschke (fun n => (hKφ n).1.2.1)
+    (isCompact_Icc.prod isCompact_Icc) (fun n => hbox _ (hKs n).1 (hKs n).2.1 (hKs n).2.2)
+  have hAM : Tendsto (fun n => polyArea Θ (Ks (φ n))) atTop (𝓝 M) := by
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le (g := fun n => M - 1 / ((φ n : ℝ) + 1)) ?_
+      tendsto_const_nhds (fun n => (hlow (φ n)).le)
+      (fun n => le_csSup hAbdd ⟨_, hKs (φ n), rfl⟩)
+    simpa using (tendsto_one_div_add_atTop_nhds_zero_nat.comp hφ.tendsto_atTop).const_sub M
+  -- `|L| ≥ M > 0`, so `L` has interior points, and it is a polygon cap
+  have hLpos : 0 < area L := by
+    have hle : ∀ n, polyArea Θ (Ks (φ n)) ≤ area (Ks (φ n)) := fun n => by
+      have : 0 ≤ area (polyNiche Θ (Ks (φ n))) := ENNReal.toReal_nonneg
+      rw [theorem3_2_3 (hKφ (φ n))]
+      linarith
+    linarith [le_of_tendsto_of_tendsto' hAM (mpc_tendsto_area hLb (fun n => (hKφ (φ n)).1.2.1)
+      hlim) hle]
+  have hL : IsPolygonCap Θ L :=
+    mpc_limit_isPolygonCap (fun n => hKφ (φ n)) hLb hlim (mpc_interior_nonempty hLb hLpos)
+  -- `𝒜_Θ(L) = M` by continuity, and `o_ω ∈ L`, so `L` maximizes `𝒜_Θ` on `ℬ_Θ`
+  have hAL : polyArea Θ L = M :=
+    tendsto_nhds_unique (mpc_tendsto_polyArea hL (fun n => hKφ (φ n)) hlim) hAM
+  have hoL : oPt Θ.ω ∈ L := mpc_mem_of_eventually_mem hLb (fun n => (hKφ (φ n)).1.2.1) hlim
+    (Eventually.of_forall fun n => (hKs (φ n)).2.1)
+  -- `L` maximizes `𝒜_Θ` on `𝒦_Θ^c`: a polygon cap with `𝒜_Θ > 0` has a translate in `ℬ_Θ`
+  refine ⟨L, hL, hoL, fun K' hK' => ?_⟩
+  rw [hAL]
+  by_cases hpos : 0 < polyArea Θ K'
+  · obtain ⟨K'', hK'', ho'', hA''⟩ := mpc_exists_oPt_mem hK'
+    rw [← hA'']
+    exact le_csSup hAbdd ⟨K'', ⟨hK'', ho'', hA''.symm ▸ hpos⟩, rfl⟩
+  · linarith
 
 end Existence
 

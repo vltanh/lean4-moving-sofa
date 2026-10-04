@@ -161,11 +161,6 @@ lemma lsMeasure_eq_vectorMeasure {f : ℝ → E} {a b : ℝ}
     (h : BoundedVariationOn (clampFun f a b) univ) : lsMeasure f a b = h.vectorMeasure := by
   simp [lsMeasure, h]
 
-/-- The vector measure of a function of bounded variation depends only on the function. -/
-lemma vectorMeasure_congr {f g : ℝ → E} (hfg : f = g) (hf : BoundedVariationOn f univ)
-    (hg : BoundedVariationOn g univ) : hf.vectorMeasure = hg.vectorMeasure := by
-  subst hfg; rfl
-
 private lemma Icc_eq_iInter_Ioc (c d : ℝ) :
     Icc c d = ⋂ n : ℕ, Ioc (c - 1 / ((n : ℝ) + 1)) d := by
   ext x
@@ -295,8 +290,120 @@ theorem lemma5_1_2 {f g : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
   rw [this, smul_eq_mul, smul_eq_mul]
   abel
 
+private lemma Iic_sdiff_Iic {c d : ℝ} : Iic d \ Iic c = Ioc c d := by
+  ext x; simp only [Set.mem_sdiff, mem_Iic, not_le, mem_Ioc]; tauto
+
+/-- Two vector measures agree on the subsets of `[a, b]` when they agree on `{a}` and on the
+intervals `(a, x]`, `x ∈ [a, b]` (the uniqueness of Definition 5.1.3, used in the proof of
+Lemma 5.1.3). -/
+private lemma vectorMeasure_eq_of_Ioc {F : Type*} [NormedAddCommGroup F]
+    {μ ν : VectorMeasure ℝ F} {a b : ℝ} (hab : a ≤ b) (ha : μ {a} = ν {a})
+    (h : ∀ x ∈ Icc a b, μ (Ioc a x) = ν (Ioc a x)) {X : Set ℝ} (hX : X ⊆ Icc a b) :
+    μ X = ν X := by
+  by_cases hXm : MeasurableSet X
+  swap
+  · rw [μ.not_measurable hXm, ν.not_measurable hXm]
+  -- `(-∞, y] ∩ [a, b]` is empty or `{a} ∪ (a, min y b]`
+  have hI : ∀ y, μ (Iic y ∩ Icc a b) = ν (Iic y ∩ Icc a b) := by
+    intro y
+    rcases lt_or_ge y a with hy | hy
+    · have e : Iic y ∩ Icc a b = ∅ := by
+        ext t; simp only [mem_inter_iff, mem_Iic, mem_Icc, mem_empty_iff_false, iff_false]
+        rintro ⟨h1, h2, -⟩; linarith
+      rw [e, VectorMeasure.empty, VectorMeasure.empty]
+    · have e : Iic y ∩ Icc a b = {a} ∪ Ioc a (min y b) := by
+        ext t
+        simp only [mem_inter_iff, mem_Iic, mem_Icc, mem_union, mem_singleton_iff, mem_Ioc,
+          le_min_iff]
+        constructor
+        · rintro ⟨h1, h2, h3⟩
+          rcases h2.eq_or_lt with h | h
+          · exact Or.inl h.symm
+          · exact Or.inr ⟨h, h1, h3⟩
+        · rintro (rfl | ⟨h1, h2, h3⟩)
+          · exact ⟨hy, le_rfl, hab⟩
+          · exact ⟨h2, h1.le, h3⟩
+      have hd : Disjoint {a} (Ioc a (min y b)) := by simp
+      rw [e, VectorMeasure.of_union hd (measurableSet_singleton a) measurableSet_Ioc,
+        VectorMeasure.of_union hd (measurableSet_singleton a) measurableSet_Ioc, ha,
+        h _ ⟨le_min hy hab, min_le_right _ _⟩]
+  have hr : μ.restrict (Icc a b) = ν.restrict (Icc a b) := by
+    apply vectorMeasure_ext_Ioc
+    intro c d hcd
+    have hm : ∀ y, MeasurableSet (Iic y ∩ Icc a b) := fun y => measurableSet_Iic.inter
+      measurableSet_Icc
+    have hs : Iic c ∩ Icc a b ⊆ Iic d ∩ Icc a b :=
+      inter_subset_inter_left _ (Iic_subset_Iic.2 hcd.le)
+    rw [VectorMeasure.restrict_apply _ measurableSet_Icc measurableSet_Ioc,
+      VectorMeasure.restrict_apply _ measurableSet_Icc measurableSet_Ioc, ← Iic_sdiff_Iic,
+      inter_sdiff_distrib_right, VectorMeasure.of_sdiff (hm c) (hm d) hs,
+      VectorMeasure.of_sdiff (hm c) (hm d) hs, hI, hI]
+  rw [← inter_eq_left.2 hX, ← VectorMeasure.restrict_apply _ measurableSet_Icc hXm, hr,
+    VectorMeasure.restrict_apply _ measurableSet_Icc hXm]
+
+/-- `df` on `[a, x]` and `df` on `[a, b]` agree on `(a, x]`, for `a ≤ x ≤ b` (to apply Lemma 5.1.2
+on `[a, x]` in the proof of Lemma 5.1.3). -/
+private lemma lsMeasure_restrict_Ioc {f : ℝ → E} {a b x : ℝ} (hax : a ≤ x) (hxb : x ≤ b)
+    (hf : BoundedVariationOn f (Icc a b)) (hfr : ∀ y ∈ Ico a b, ContinuousWithinAt f (Ici y) y) :
+    (lsMeasure f a x).restrict (Ioc a x) = (lsMeasure f a b).restrict (Ioc a x) := by
+  apply vectorMeasure_ext_Ioc
+  intro c d _
+  rw [VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc,
+    VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc, Ioc_inter_Ioc]
+  rcases le_total (c ⊔ a) (d ⊓ x) with h | h
+  · rw [lsMeasure_Ioc_of_le hax le_sup_right h inf_le_right (hf.mono (Icc_subset_Icc_right hxb))
+        (fun y hy => hfr y ⟨hy.1, hy.2.trans_le hxb⟩),
+      lsMeasure_Ioc_of_le (hax.trans hxb) le_sup_right h (inf_le_right.trans hxb) hf hfr]
+  · rw [Ioc_eq_empty (not_lt.2 h), VectorMeasure.empty, VectorMeasure.empty]
+
+/-- Lemma 5.1.3 for a continuous `f`: both sides agree on `(a, x]` for every `x ∈ [a, b]` by
+Lemma 5.1.2 on `[a, x]`, and both vanish on `{a}`. -/
+private lemma lemma5_1_3_of_continuous {f g : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hf : BoundedVariationOn f (Icc a b)) (hg : BoundedVariationOn g (Icc a b))
+    (hfr : ∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x)
+    (hgr : ∀ x ∈ Ico a b, ContinuousWithinAt g (Ici x) x) (hfc : ContinuousOn f (Icc a b))
+    {X : Set ℝ} (hXab : X ⊆ Icc a b) :
+    lsMeasure (fun t => f t * g t) a b X =
+      (∫ᵛ t in X, g t ∂• lsMeasure f a b) + (∫ᵛ t in X, f t ∂• lsMeasure g a b) := by
+  have hF := boundedVariationOn_clampFun hab hf
+  have hG := boundedVariationOn_clampFun hab hg
+  have hGi : (lsMeasure f a b).Integrable (clampFun g a b) := by
+    rw [lsMeasure_eq_vectorMeasure hF]; exact hG.integrable
+  have hFi : (lsMeasure g a b).Integrable (clampFun f a b) := by
+    rw [lsMeasure_eq_vectorMeasure hG]; exact hF.integrable
+  have hfgr : ∀ x ∈ Ico a b, ContinuousWithinAt (fun t => f t * g t) (Ici x) x :=
+    fun x hx => (hfr x hx).mul (hgr x hx)
+  -- the right-hand side `g df + f dg` as a vector measure
+  set ν := (lsMeasure f a b).withDensity (clampFun g a b) (ContinuousLinearMap.lsmul ℝ ℝ) +
+    (lsMeasure g a b).withDensity (clampFun f a b) (ContinuousLinearMap.lsmul ℝ ℝ) with hν
+  have hνY : ∀ Y ⊆ Icc a b,
+      ν Y = (∫ᵛ t in Y, g t ∂• lsMeasure f a b) + (∫ᵛ t in Y, f t ∂• lsMeasure g a b) := by
+    intro Y hY
+    rw [hν, add_apply, VectorMeasure.withDensity_apply hGi, VectorMeasure.withDensity_apply hFi]
+    congr 1 <;> exact VectorMeasure.setIntegral_congr_fun fun t ht => clampFun_of_mem (hY ht)
+  rw [← hνY X hXab]
+  refine vectorMeasure_eq_of_Ioc hab ?_ (fun x hx => ?_) hXab
+  · -- both sides vanish on `{a}`
+    rw [hνY {a} (singleton_subset_iff.2 ⟨le_rfl, hab⟩), VectorMeasure.integral_singleton,
+      VectorMeasure.integral_singleton, lsMeasure_singleton_left hab hfr,
+      lsMeasure_singleton_left hab hgr, lsMeasure_singleton_left hab hfgr]
+    simp
+  · -- on `(a, x]`, by Lemma 5.1.2 on `[a, x]`, where the left limit of `f` is `f`
+    have hsub : Icc a x ⊆ Icc a b := Icc_subset_Icc_right hx.2
+    have h := lemma5_1_2 hx.1 (hf.mono hsub) (hg.mono hsub)
+      (fun y hy => hfr y ⟨hy.1, hy.2.trans_le hx.2⟩) (fun y hy => hgr y ⟨hy.1, hy.2.trans_le hx.2⟩)
+    have e : ∫ᵛ t in Ioc a x, Function.leftLim (clampFun f a x) t ∂• lsMeasure g a b =
+        ∫ᵛ t in Ioc a x, f t ∂• lsMeasure g a b :=
+      VectorMeasure.setIntegral_congr_fun fun t ht => by
+        rw [leftLim_clampFun hx.1 (hfc.mono hsub), clampFun_of_mem (Ioc_subset_Icc_self ht)]
+    rw [lsMeasure_restrict_Ioc hx.1 hx.2 hf hfr, lsMeasure_restrict_Ioc hx.1 hx.2 hg hgr, e] at h
+    have hfg : BoundedVariationOn (fun t => f t * g t) (Icc a b) := hf.mul hg
+    rw [lsMeasure_Ioc hab hx hfg hfgr, hνY _ (Ioc_subset_Icc_self.trans hsub)]
+    exact h.symm
+
 /-- **Lemma 5.1.3** (`lem:lebesgue-stieltjes-product`). If one of `f, g` is continuous, then
-`d(fg) = g df + f dg` on `[a, b]`; stated on every Borel subset of `[a, b]`. -/
+`d(fg) = g df + f dg` on `[a, b]`; stated on every Borel subset of `[a, b]`. As in the paper, both
+sides agree on the intervals `(a, x]` by Lemma 5.1.2. -/
 theorem lemma5_1_3 {f g : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     (hf : BoundedVariationOn f (Icc a b)) (hg : BoundedVariationOn g (Icc a b))
     (hfr : ∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x)
@@ -305,29 +412,11 @@ theorem lemma5_1_3 {f g : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     {X : Set ℝ} (hXab : X ⊆ Icc a b) :
     lsMeasure (fun t => f t * g t) a b X =
       (∫ᵛ t in X, g t ∂• lsMeasure f a b) + (∫ᵛ t in X, f t ∂• lsMeasure g a b) := by
-  have hF := boundedVariationOn_clampFun hab hf
-  have hG := boundedVariationOn_clampFun hab hg
-  have hFG := hF.bilinear_comp hG (ContinuousLinearMap.lsmul ℝ ℝ)
-  have e : clampFun (fun t => f t * g t) a b =
-      fun x => ContinuousLinearMap.lsmul ℝ ℝ (clampFun f a b x) (clampFun g a b x) := by
-    ext x; simp [clampFun]
-  have hH : BoundedVariationOn (clampFun (fun t => f t * g t) a b) univ := e ▸ hFG
-  rw [lsMeasure_eq_vectorMeasure hH, vectorMeasure_congr e hH hFG, lsMeasure_eq_vectorMeasure hF,
-    lsMeasure_eq_vectorMeasure hG]
-  -- Mathlib's product rule, with the one-sided limits of the continuous factor equal to itself
+  -- without loss of generality `f` is continuous
   rcases hcont with hfc | hgc
-  · rw [hF.vectorMeasure_bilinear_comp_eq hG, add_apply,
-      VectorMeasure.withDensity_apply hG.rightLim.integrable,
-      VectorMeasure.withDensity_apply hF.leftLim.integrable, lsmul_flip]
-    congr 1 <;> refine VectorMeasure.setIntegral_congr_fun fun x hx => ?_
-    · rw [rightLim_clampFun hab hgr, clampFun_of_mem (hXab hx)]
-    · rw [leftLim_clampFun hab hfc, clampFun_of_mem (hXab hx)]
-  · rw [hF.vectorMeasure_bilinear_comp_eq' hG, add_apply,
-      VectorMeasure.withDensity_apply hG.leftLim.integrable,
-      VectorMeasure.withDensity_apply hF.rightLim.integrable, lsmul_flip]
-    congr 1 <;> refine VectorMeasure.setIntegral_congr_fun fun x hx => ?_
-    · rw [leftLim_clampFun hab hgc, clampFun_of_mem (hXab hx)]
-    · rw [rightLim_clampFun hab hfr, clampFun_of_mem (hXab hx)]
+  · exact lemma5_1_3_of_continuous hab hf hg hfr hgr hfc hXab
+  · have e : (fun t => f t * g t) = fun t => g t * f t := funext fun t => mul_comm _ _
+    rw [e, lemma5_1_3_of_continuous hab hg hf hgr hfr hgc hXab, add_comm]
 
 /-! ### Integration by parts against a Stieltjes function -/
 
@@ -396,12 +485,9 @@ theorem integral_Ioc_stieltjes {F' : Type*} [NormedAddCommGroup F'] [NormedSpace
 
 /-! ### Absolutely continuous functions -/
 
-private lemma Iic_sdiff_Iic {c d : ℝ} : Iic d \ Iic c = Ioc c d := by
-  ext x; simp only [Set.mem_sdiff, mem_Iic, not_le, mem_Ioc]; tauto
-
 /-- A right-continuous `f` of bounded variation with `f t - f a = ∫_a^t r` on `[a, b]` has
 `df = r dt`. -/
-private lemma lsMeasure_eq_withDensityᵥ {f r : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
+lemma lsMeasure_eq_withDensityᵥ {f r : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     (hf : BoundedVariationOn f (Icc a b)) (hfr : ∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x)
     (hr : IntegrableOn r (Icc a b))
     (hint : ∀ t ∈ Icc a b, f t - f a = ∫ x in a..t, r x) :
@@ -489,8 +575,8 @@ theorem absolutelyContinuousOnInterval_of_lsMeasure_eq {f r : ℝ → ℝ} {a b 
   obtain ⟨C, hC⟩ := hrb
   exact (proposition5_1_4 hab hf hfr).2 ⟨r, hr, integrableOn_Icc_of_abs_le hr hC, h⟩
 
-/-- **Proposition 5.1.4**, last claim: if `df = r dt` for a bounded measurable `r`, then `f' = r`
-almost everywhere on `[a, b]`. -/
+/-- **Proposition 5.1.4** (`pro:lebesgue-stieltjes-abs-cont`), last claim: if `df = r dt` for a
+bounded measurable `r`, then `f' = r` almost everywhere on `[a, b]`. -/
 theorem proposition5_1_4_deriv {f r : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     (hf : BoundedVariationOn f (Icc a b)) (hfr : ∀ x ∈ Ico a b, ContinuousWithinAt f (Ici x) x)
     (hr : Measurable r) (hrb : ∃ C, ∀ t, |r t| ≤ C)

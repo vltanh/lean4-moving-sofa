@@ -300,6 +300,222 @@ noncomputable def crossCLM : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ) →L[ℝ] ℝ :
 
 @[simp] lemma crossCLM_apply (p q : ℝ × ℝ) : crossCLM p q = cross p q := rfl
 
+/-- The cross product is antisymmetric. -/
+lemma cvx_crossCLM_flip : crossCLM.flip = -crossCLM := by
+  refine ContinuousLinearMap.ext fun p => ContinuousLinearMap.ext fun q => ?_
+  rw [ContinuousLinearMap.flip_apply, neg_apply, neg_apply, crossCLM_apply, crossCLM_apply,
+    cross_anticomm]
+
+/-! ### Lemmas 5.1.2 and 5.1.3 for the cross product
+
+The paper applies the scalar Lemmas 5.1.2 and 5.1.3 to cross products of plane curves, coordinate
+by coordinate. The integrals against `dx` paired by the cross product split into integrals against
+the Lebesgue–Stieltjes measures of the coordinates of `x`. -/
+
+section crossForms
+
+/-- Composing the integrand with a continuous linear map `L` is composing the pairing with `L`
+(to take coordinates of the integrands in the cross forms of Lemmas 5.1.2 and 5.1.3). -/
+private lemma cvx_integral_comp_left {X E E' F : Type*} [MeasurableSpace X]
+    [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup F] [NormedSpace ℝ F] {μ : VectorMeasure X F}
+    (B : E →L[ℝ] F →L[ℝ] ℝ) (L : E' →L[ℝ] E) {f : X → E'} (hf : μ.Integrable f) :
+    ∫ᵛ x, L (f x) ∂[B; μ] = ∫ᵛ x, f x ∂[B.comp L; μ] := by
+  refine hf.induction (P := fun f => ∫ᵛ x, L (f x) ∂[B; μ] = ∫ᵛ x, f x ∂[B.comp L; μ])
+    ?_ ?_ ?_ ?_
+  · intro c s hs hμs
+    have : IsFiniteMeasure (μ.variation.restrict s) := isFiniteMeasure_restrict.2 hμs.ne
+    have e : (fun x => L (s.indicator (fun _ => c) x)) = s.indicator fun _ => L c := by
+      ext x; by_cases hx : x ∈ s <;> simp [hx]
+    rw [e, VectorMeasure.integral_indicator_const _ hs, VectorMeasure.integral_indicator_const _ hs]
+    rfl
+  · intro f g _ hf hg h₁ h₂
+    simp only [Pi.add_apply, map_add]
+    rw [VectorMeasure.integral_fun_add (L.integrable_comp hf) (L.integrable_comp hg),
+      VectorMeasure.integral_fun_add hf hg, h₁, h₂]
+  · refine isClosed_eq (((VectorMeasure.continuous_integral (μ := μ) (B := B)).comp
+      (L.compLpL 1 μ.variation).continuous).congr fun f => ?_) VectorMeasure.continuous_integral
+    exact VectorMeasure.integral_congr_ae (L.coeFn_compLpL f)
+  · intro f g hfg _ h
+    have hL : (fun x => L (f x)) =ᵐ[μ.variation] fun x => L (g x) := hfg.fun_comp L
+    rw [← VectorMeasure.integral_congr_ae hL, h, VectorMeasure.integral_congr_ae hfg]
+
+/-- Two pairing integrals agree when the pairings composed with the vector measures agree (to
+take coordinates of the measures in the cross forms of Lemmas 5.1.2 and 5.1.3). -/
+private lemma cvx_integral_congr_transpose {X E F F' : Type*} [MeasurableSpace X]
+    [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup F'] [NormedSpace ℝ F'] {μ : VectorMeasure X F} {ν : VectorMeasure X F'}
+    {B : E →L[ℝ] F →L[ℝ] ℝ} {C : E →L[ℝ] F' →L[ℝ] ℝ}
+    (h : ∀ s, MeasurableSet s → ∀ e, B e (μ s) = C e (ν s)) {f : X → E}
+    (hμ : μ.Integrable f) (hν : ν.Integrable f) :
+    ∫ᵛ x, f x ∂[B; μ] = ∫ᵛ x, f x ∂[C; ν] := by
+  have hT : μ.transpose B = ν.transpose C :=
+    VectorMeasure.ext fun s hs => ContinuousLinearMap.ext fun e => by
+      simp only [transpose_eq_cbmApplyMeasure, cbmApplyMeasure_apply, h s hs e]
+  rw [VectorMeasure.integral_eq_setToFun_transpose hμ,
+    VectorMeasure.integral_eq_setToFun_transpose hν]
+  simp only [hT]
+
+/-- The integral of `y` against `μ = (μ₁, μ₂)` paired by the cross product, in coordinates:
+`∫_X y × dμ = ∫_X y₁ dμ₂ - ∫_X y₂ dμ₁` (the coordinate-by-coordinate reading of the cross forms
+of Lemmas 5.1.2 and 5.1.3). -/
+private lemma cvx_setIntegral_cross_coord {μ : VectorMeasure ℝ (ℝ × ℝ)} {μ₁ μ₂ : VectorMeasure ℝ ℝ}
+    (hμ : ∀ s, μ s = (μ₁ s, μ₂ s)) {y : ℝ → ℝ × ℝ} (hy : μ.Integrable y)
+    (hy₁ : μ₁.Integrable y) (hy₂ : μ₂.Integrable y) (X : Set ℝ) :
+    ∫ᵛ t in X, y t ∂[crossCLM; μ] = ∫ᵛ t in X, (y t).1 ∂• μ₂ - ∫ᵛ t in X, (y t).2 ∂• μ₁ := by
+  by_cases hX : MeasurableSet X
+  swap
+  · simp [VectorMeasure.setIntegral_eq_zero_of_not_measurableSet hX]
+  -- `p × q = P(p₁, q) - Q(p₂, q)` with `P(r, q) = r q₂` and `Q(r, q) = r q₁`
+  set P : ℝ →L[ℝ] (ℝ × ℝ) →L[ℝ] ℝ := (ContinuousLinearMap.lsmul ℝ ℝ).bilinearComp
+    (ContinuousLinearMap.id ℝ ℝ) (ContinuousLinearMap.snd ℝ ℝ ℝ) with hP
+  set Q : ℝ →L[ℝ] (ℝ × ℝ) →L[ℝ] ℝ := (ContinuousLinearMap.lsmul ℝ ℝ).bilinearComp
+    (ContinuousLinearMap.id ℝ ℝ) (ContinuousLinearMap.fst ℝ ℝ ℝ) with hQ
+  have hc : crossCLM = P.comp (ContinuousLinearMap.fst ℝ ℝ ℝ) -
+      Q.comp (ContinuousLinearMap.snd ℝ ℝ ℝ) := by
+    refine ContinuousLinearMap.ext fun p => ContinuousLinearMap.ext fun q => ?_
+    simp [hP, hQ, cross]
+  have hyX := hy.restrict (s := X)
+  rw [hc, VectorMeasure.integral_sub_cbm hyX,
+    ← cvx_integral_comp_left P (ContinuousLinearMap.fst ℝ ℝ ℝ) hyX,
+    ← cvx_integral_comp_left Q (ContinuousLinearMap.snd ℝ ℝ ℝ) hyX]
+  congr 1
+  · refine cvx_integral_congr_transpose (fun s hs e => ?_) hyX.fst hy₂.restrict.fst
+    simp [hP, VectorMeasure.restrict_apply _ hX hs, hμ]
+  · refine cvx_integral_congr_transpose (fun s hs e => ?_) hyX.snd hy₁.restrict.snd
+    simp [hQ, VectorMeasure.restrict_apply _ hX hs, hμ]
+
+/-- A function continuous on `[a, b]` is right-continuous on `[a, b)` (the right-continuity
+hypothesis of Lemmas 5.1.2 and 5.1.3 for a continuous curve). -/
+lemma cvx_rightCont_of_continuousOn {α : Type*} [TopologicalSpace α] {f : ℝ → α} {a b : ℝ}
+    (hf : ContinuousOn f (Icc a b)) : ∀ t ∈ Ico a b, ContinuousWithinAt f (Ici t) t :=
+  fun t ht => (hf t (Ico_subset_Icc_self ht)).mono_of_mem_nhdsWithin
+    (mem_nhdsWithin.2 ⟨Iio b, isOpen_Iio, ht.2, fun _ hs => ⟨ht.1.trans hs.2, hs.1.le⟩⟩)
+
+/-- One-sided limits of a function of bounded variation commute with continuous linear maps (the
+coordinates of the left limit in Lemma 5.1.2 for the cross product). -/
+private lemma cvx_lim_comp {x : ℝ → ℝ × ℝ} (hx : BoundedVariationOn x univ)
+    (L : (ℝ × ℝ) →L[ℝ] ℝ) (t : ℝ) :
+    Function.rightLim (fun s => L (x s)) t = L (Function.rightLim x t) ∧
+      Function.leftLim (fun s => L (x s)) t = L (Function.leftLim x t) :=
+  ⟨rightLim_eq_of_tendsto ((L.continuous.tendsto _).comp (hx.tendsto_rightLim t)),
+    leftLim_eq_of_tendsto ((L.continuous.tendsto _).comp (hx.tendsto_leftLim t))⟩
+
+/-- A coordinate of a curve of bounded variation has bounded variation (to apply Lemmas 5.1.2 and
+5.1.3 to the coordinates). -/
+private lemma cvx_bv_coord {x : ℝ → ℝ × ℝ} {s : Set ℝ} (hx : BoundedVariationOn x s)
+    (L : (ℝ × ℝ) →L[ℝ] ℝ) : BoundedVariationOn (fun t => L (x t)) s :=
+  L.lipschitzWith.lipschitzOnWith.comp_boundedVariationOn (mapsTo_univ _ _) hx
+
+/-- The coordinates of `dx` are the Lebesgue–Stieltjes measures `dx₁, dx₂` of the coordinates of
+`x` (to apply Lemmas 5.1.2 and 5.1.3 coordinate by coordinate). -/
+private lemma cvx_lsMeasure_coord {x : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hx : BoundedVariationOn x (Icc a b)) (s : Set ℝ) :
+    lsMeasure x a b s =
+      (lsMeasure (fun t => (x t).1) a b s, lsMeasure (fun t => (x t).2) a b s) := by
+  have hX := boundedVariationOn_clampFun hab hx
+  have key : ∀ L : (ℝ × ℝ) →L[ℝ] ℝ,
+      lsMeasure (fun t => L (x t)) a b s = L (lsMeasure x a b s) := by
+    intro L
+    have hL := boundedVariationOn_clampFun hab (cvx_bv_coord hx L)
+    have h : hL.vectorMeasure = hX.vectorMeasure.mapRange (L : (ℝ × ℝ) →+ ℝ) L.continuous := by
+      apply VectorMeasure.ext_of_Icc
+      intro c d hcd
+      rw [VectorMeasure.mapRange_apply, hL.vectorMeasure_Icc hcd, hX.vectorMeasure_Icc hcd,
+        AddMonoidHom.coe_ofClass, map_sub]
+      exact congrArg₂ (· - ·) (cvx_lim_comp hX L d).1 (cvx_lim_comp hX L c).2
+    rw [lsMeasure_eq_vectorMeasure hL, lsMeasure_eq_vectorMeasure hX, h,
+      VectorMeasure.mapRange_apply, AddMonoidHom.coe_ofClass]
+  exact Prod.ext (key (ContinuousLinearMap.fst ℝ ℝ ℝ)).symm
+    (key (ContinuousLinearMap.snd ℝ ℝ ℝ)).symm
+
+/-- `∫_X y × dx = ∫_X y₁ dx₂ - ∫_X y₂ dx₁` for `X ⊆ [a, b]` and `x, y` of bounded variation on
+`[a, b]`: the cross-product integrals of Lemmas 5.1.2 and 5.1.3 in coordinates. -/
+private lemma cvx_setIntegral_cross {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hx : BoundedVariationOn x (Icc a b)) (hy : BoundedVariationOn y (Icc a b)) {X : Set ℝ}
+    (hX : X ⊆ Icc a b) :
+    ∫ᵛ t in X, y t ∂[crossCLM; lsMeasure x a b] =
+      ∫ᵛ t in X, (y t).1 ∂• lsMeasure (fun t => (x t).2) a b -
+        ∫ᵛ t in X, (y t).2 ∂• lsMeasure (fun t => (x t).1) a b := by
+  -- replace `y` by its clamp to `[a, b]`, which has bounded variation on `ℝ`
+  have hY := boundedVariationOn_clampFun hab hy
+  have hXY : EqOn (clampFun y a b) y X := fun t ht => clampFun_of_mem (hX ht)
+  rw [← VectorMeasure.setIntegral_congr_fun hXY,
+    ← VectorMeasure.setIntegral_congr_fun (f := fun t => (clampFun y a b t).1)
+      fun t ht => congrArg Prod.fst (hXY ht),
+    ← VectorMeasure.setIntegral_congr_fun (f := fun t => (clampFun y a b t).2)
+      fun t ht => congrArg Prod.snd (hXY ht)]
+  exact cvx_setIntegral_cross_coord (cvx_lsMeasure_coord hab hx) hY.integrable hY.integrable
+    hY.integrable X
+
+/-- **Lemma 5.1.2** (`lem:integration-by-parts`) for the cross product, coordinate by coordinate:
+for right-continuous `x, y` of bounded variation on `[a, b]`,
+`∫_{(a,b]} dx × y + ∫_{(a,b]} x(t-) × dy = x(b) × y(b) - x(a) × y(a)`. -/
+theorem lemma5_1_2_cross {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hx : BoundedVariationOn x (Icc a b)) (hy : BoundedVariationOn y (Icc a b))
+    (hxr : ∀ t ∈ Ico a b, ContinuousWithinAt x (Ici t) t)
+    (hyr : ∀ t ∈ Ico a b, ContinuousWithinAt y (Ici t) t) :
+    (∫ᵛ t in Ioc a b, y t ∂[crossCLM.flip; lsMeasure x a b]) +
+      (∫ᵛ t in Ioc a b, Function.leftLim (clampFun x a b) t ∂[crossCLM; lsMeasure y a b]) =
+      cross (x b) (y b) - cross (x a) (y a) := by
+  have hX := boundedVariationOn_clampFun hab hx
+  -- Lemma 5.1.2 for `x₁, y₂` and for `x₂, y₁`
+  have h₁ := lemma5_1_2 hab (cvx_bv_coord hx (ContinuousLinearMap.fst ℝ ℝ ℝ))
+    (cvx_bv_coord hy (ContinuousLinearMap.snd ℝ ℝ ℝ)) (fun t ht => (hxr t ht).fst)
+    (fun t ht => (hyr t ht).snd)
+  have h₂ := lemma5_1_2 hab (cvx_bv_coord hx (ContinuousLinearMap.snd ℝ ℝ ℝ))
+    (cvx_bv_coord hy (ContinuousLinearMap.fst ℝ ℝ ℝ)) (fun t ht => (hxr t ht).snd)
+    (fun t ht => (hyr t ht).fst)
+  -- the coordinates of the left limit of `x` are the left limits of its coordinates
+  have hl : ∀ L : (ℝ × ℝ) →L[ℝ] ℝ, (fun t => L (Function.leftLim (clampFun x a b) t)) =
+      Function.leftLim (clampFun (fun t => L (x t)) a b) :=
+    fun L => funext fun t => ((cvx_lim_comp hX L t).2).symm
+  rw [cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm,
+    cvx_setIntegral_cross hab hx hy Ioc_subset_Icc_self,
+    cvx_setIntegral_cross hab hy (hX.leftLim.mono (subset_univ _)) Ioc_subset_Icc_self]
+  have e₁ := hl (ContinuousLinearMap.fst ℝ ℝ ℝ)
+  have e₂ := hl (ContinuousLinearMap.snd ℝ ℝ ℝ)
+  simp only [ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd'] at e₁ e₂ h₁ h₂
+  rw [e₁, e₂]
+  simp only [cross]
+  linarith
+
+/-- **Lemma 5.1.3** (`lem:lebesgue-stieltjes-product`) for the cross product, coordinate by
+coordinate: if one of the right-continuous curves `x, y` of bounded variation is continuous, then
+`d(x × y) = dx × y + x × dy` on `[a, b]`; stated on every Borel subset of `[a, b]`. -/
+theorem lemma5_1_3_cross {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hx : BoundedVariationOn x (Icc a b)) (hy : BoundedVariationOn y (Icc a b))
+    (hxr : ∀ t ∈ Ico a b, ContinuousWithinAt x (Ici t) t)
+    (hyr : ∀ t ∈ Ico a b, ContinuousWithinAt y (Ici t) t)
+    (hcont : ContinuousOn x (Icc a b) ∨ ContinuousOn y (Icc a b))
+    {X : Set ℝ} (hXab : X ⊆ Icc a b) :
+    lsMeasure (fun t => cross (x t) (y t)) a b X =
+      (∫ᵛ t in X, y t ∂[crossCLM.flip; lsMeasure x a b]) +
+        (∫ᵛ t in X, x t ∂[crossCLM; lsMeasure y a b]) := by
+  have hx₁ := cvx_bv_coord hx (ContinuousLinearMap.fst ℝ ℝ ℝ)
+  have hx₂ := cvx_bv_coord hx (ContinuousLinearMap.snd ℝ ℝ ℝ)
+  have hy₁ := cvx_bv_coord hy (ContinuousLinearMap.fst ℝ ℝ ℝ)
+  have hy₂ := cvx_bv_coord hy (ContinuousLinearMap.snd ℝ ℝ ℝ)
+  simp only [ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd'] at hx₁ hx₂ hy₁ hy₂
+  -- Lemma 5.1.3 for `x₁ y₂` and for `x₂ y₁`
+  have h₁ := lemma5_1_3 hab hx₁ hy₂ (fun t ht => (hxr t ht).fst) (fun t ht => (hyr t ht).snd)
+    (hcont.imp (fun h => h.fst) fun h => h.snd) hXab
+  have h₂ := lemma5_1_3 hab hx₂ hy₁ (fun t ht => (hxr t ht).snd) (fun t ht => (hyr t ht).fst)
+    (hcont.imp (fun h => h.snd) fun h => h.fst) hXab
+  -- `x × y = x₁ y₂ - x₂ y₁` and Proposition 5.1.1
+  have e : (fun t => cross (x t) (y t)) =
+      fun t => 1 * ((x t).1 * (y t).2) + (-1) * ((x t).2 * (y t).1) := by
+    funext t; simp only [cross]; ring
+  have hp₁ : BoundedVariationOn (fun t => (x t).1 * (y t).2) (Icc a b) := hx₁.mul hy₂
+  have hp₂ : BoundedVariationOn (fun t => (x t).2 * (y t).1) (Icc a b) := hx₂.mul hy₁
+  rw [e, proposition5_1_1 hab hp₁ hp₂, add_apply, smul_apply, smul_apply,
+    h₁, h₂, cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm, cvx_setIntegral_cross hab hx hy hXab,
+    cvx_setIntegral_cross hab hy hx hXab]
+  simp only [smul_eq_mul]
+  ring
+
+end crossForms
+
 /-- The space `C^BV[a, b]` of continuous maps of bounded variation `[a, b] → ℝ²`
 (Definition 7.2.5, `def:bounded-variation-space`). -/
 def IsCBV (x : ℝ → ℝ × ℝ) (a b : ℝ) : Prop :=
@@ -465,8 +681,8 @@ theorem proposition7_2_4 (p q : ℝ × ℝ) :
   · intro t _
     simp [smul_sub]
 
-/-- **Proposition 7.2.4**, second claim: if `p ∈ l(t, h)` and `q - p = d v_t`, then
-`𝒥(p, q) = hd/2`. -/
+/-- **Proposition 7.2.4** (`pro:curve-area-line-segment`), second claim: if `p ∈ l(t, h)` and
+`q - p = d v_t`, then `𝒥(p, q) = hd/2`. -/
 theorem proposition7_2_4_line {p q : ℝ × ℝ} {t h d : ℝ} (hp : p ∈ line t h)
     (hd : q - p = d • vvec t) : segArea p q = h * d / 2 := by
   have hq' : q = p + d • vvec t := by rw [← hd]; abel

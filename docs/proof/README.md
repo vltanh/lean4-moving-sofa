@@ -240,7 +240,7 @@ So $\alpha_{\max} = \lvert G \rvert$.
 
 *Proof.* This is [Theorem 9.33](09-optimality.md#theorem-933-optimality-of-gervers-sofa-baek-theorem-111). $\square$
 
-*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L301).*
+*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302).*
 
 #### Theorem 1.3 (uniqueness)
 

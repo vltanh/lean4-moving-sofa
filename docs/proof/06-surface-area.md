@@ -58,7 +58,7 @@ bounded measurable function $g$ and a measure $\mu$, $g\,\mu$ is the measure
 $X \mapsto \int_X g \,\mathrm{d}\mu$, and $\int_X g\,\mathrm{d}f$ is the integral of $g$ against
 $\mathrm{d}f$ (Baek, Definitions 5.1.1 and 5.1.4). For pairs, both are taken componentwise.
 
-*Lean: [`lsMeasure`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57), [`clampFun`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L51), [`lsMeasure_singleton_left`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L200), [`lsMeasure_Ioc`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L212).*
+*Lean: [`lsMeasure`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57), [`clampFun`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L51), [`lsMeasure_singleton_left`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L195), [`lsMeasure_Ioc`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L207).*
 
 The measure $\mathrm{d}f$ is the differential of $f$ made rigorous. For example
 $\mathrm{d}(t^2) = 2t\,\mathrm{d}t$ on $[a, b]$, where $\mathrm{d}t$ is the Lebesgue measure: both
@@ -76,7 +76,7 @@ the indicator function of $(0, \infty)$ on $[0, 1]$ it would be $1$.
 For functions $f, g$ of bounded variation on $[a, b]$ and real numbers $r, s$,
 $\mathrm{d}(rf + sg) = r\,\mathrm{d}f + s\,\mathrm{d}g$.
 
-*Lean: [`proposition5_1_1`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L248).*
+*Lean: [`proposition5_1_1`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L243).*
 
 *Proof.* Mathlib's vector measure of a function $F$ of bounded variation gives an interval $[c, d]$
 the mass $F(d+) - F(c-)$, and one-sided limits are linear in $F$. So the two sides agree on every
@@ -95,7 +95,7 @@ For right-continuous functions $f, g$ of bounded variation on $[a, b]$,
 
 where $f(t-)$ is the left limit of $f$ at $t$.
 
-*Lean: [`lemma5_1_2`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L276).*
+*Lean: [`lemma5_1_2`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L271).*
 
 *Proof.* This is Proposition 4.5 of Revuz and Yor. Mathlib proves it for the vector measures of
 functions of bounded variation on $\mathbb{R}$
@@ -113,14 +113,19 @@ continuous. Then $\mathrm{d}(fg) = g\,\mathrm{d}f + f\,\mathrm{d}g$ as measures 
 \mathrm{d}(fg)(X) = \int_X g\,\mathrm{d}f + \int_X f\,\mathrm{d}g \qquad \text{for every Borel set } X \subseteq [a, b] .
 ```
 
-*Lean: [`lemma5_1_3`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L300).*
+*Lean: [`lemma5_1_3`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L407).*
 
-*Proof.* Mathlib writes the vector measure of a product of two functions of bounded variation as
-$g(t+)\,\mathrm{d}f + f(t-)\,\mathrm{d}g$, and also as $g(t-)\,\mathrm{d}f + f(t+)\,\mathrm{d}g$.
-If $f$ is continuous, use the first form: $f(t-) = f(t)$, and $g(t+) = g(t)$ by right-continuity. If
-$g$ is continuous, use the second. $\square$
+*Proof.* Suppose that $f$ is continuous; otherwise exchange $f$ and $g$. Both sides are measures on
+$[a, b]$ that vanish on $\lbrace a \rbrace$, so it suffices that they agree on each interval
+$(a, x]$, $x \in [a, b]$. There $\mathrm{d}f$ and $\mathrm{d}g$ are the measures of $f$ and $g$ on
+$[a, x]$, and $f(t-) = f(t)$, so Lemma 6.3 on $[a, x]$ gives
 
-Baek's proof checks the identity on the intervals $(a, x]$ with Lemma 6.3.
+```math
+\int_{(a, x]} g\,\mathrm{d}f + \int_{(a, x]} f\,\mathrm{d}g = f(x) g(x) - f(a) g(a) = \mathrm{d}(fg)((a, x]) . \qquad \square
+```
+
+Lemmas 6.3 and 6.4 hold for the cross product of two plane curves, coordinate by coordinate
+([`lemma5_1_2_cross`](../../MovingSofaOptimality/Convex/CurveArea.lean#L454), [`lemma5_1_3_cross`](../../MovingSofaOptimality/Convex/CurveArea.lean#L486)).
 
 ### Proposition 6.5 (absolutely continuous functions; Baek, Proposition 5.1.4)
 
@@ -131,8 +136,8 @@ Let $f$ be right-continuous and of bounded variation on $[a, b]$.
 2. If $\mathrm{d}f = r\,\mathrm{d}t$ with $r$ measurable and bounded, then $f'(t) = r(t)$ for almost
    every $t \in [a, b]$.
 
-*Lean: [`proposition5_1_4`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L455), [`proposition5_1_4_deriv`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L494),
-[`absolutelyContinuousOnInterval_of_lsMeasure_eq`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L484).*
+*Lean: [`proposition5_1_4`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L541), [`proposition5_1_4_deriv`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L580),
+[`absolutelyContinuousOnInterval_of_lsMeasure_eq`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L570).*
 
 Baek asks for a *bounded* density in (1). Then the "only if" direction is false
 (Proposition 6.6), so the text asks for an integrable density (REPORT.md, E11). The paper uses the
@@ -155,7 +160,7 @@ theorem, this indefinite integral has derivative $r(t)$ at almost every $t$. $\s
 The function $f(t) = 2\sqrt t$ on $[0, 1]$ is right-continuous, of bounded variation and
 absolutely continuous, but there is no bounded measurable $r$ with $\mathrm{d}f = r\,\mathrm{d}t$.
 
-*Lean: [`proposition5_1_4_as_stated_false`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L521).*
+*Lean: [`proposition5_1_4_as_stated_false`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L607).*
 
 *Proof.* $f(t) = \int_0^t x^{-1/2}\,\mathrm{d}x$ is the indefinite integral of an integrable
 function. So it is absolutely continuous, hence continuous and of bounded variation. Suppose that
@@ -190,15 +195,15 @@ $e_K(t)$ from $v_K^-(t)$ to $v_K^+(t)$. The support value $h_K(t)$ is the signed
 origin to $l_K(t)$. The edge $e_K(s)$ of a supporting line through a curved part of the boundary is a
 single point.
 
-*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L49), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L64), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L68), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L73), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78), [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L562),
-[`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L583).*
+*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L49), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L64), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L68), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L73), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78), [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L535),
+[`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L572).*
 
 ### Lemma 6.7 (one-sided derivatives of the support function)
 
 For every convex body $K$ and every angle $t$, the support function $h_K$ has the right derivative
 $\langle v_K^+(t), v_t\rangle$ and the left derivative $\langle v_K^-(t), v_t\rangle$ at $t$.
 
-*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L630), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L647).*
+*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L628), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L650).*
 
 *Proof.* This is
 [Corollary 2.10](02-preliminaries.md#corollary-210-one-sided-derivatives-of-the-support-function),
@@ -208,7 +213,9 @@ Two consequences are used below and in [Chapter 7](07-injectivity.md).
 
 - *The support function is the integral of its right derivative.* The function $h_K$ is Lipschitz,
   and a Lipschitz function with a right derivative everywhere is the integral of it. So
-  $h_K(d) - h_K(c) = \int_c^d \langle v_K^+(t), v_t\rangle\,\mathrm{d}t$ for $c \le d$.
+  $h_K(d) - h_K(c) = \int_c^d \langle v_K^+(t), v_t\rangle\,\mathrm{d}t$ for $c \le d$. In the proof
+  of Theorem 7.9 the formalization derives this identity as Baek does, from the product rule and
+  Theorem 6.12.
 - *The sandwich.* For $0 < \delta < \pi$,
   ```math
   \frac{h_K(t)\cos\delta - h_K(t - \delta)}{\sin\delta} \ \le\ \langle v_K^-(t), v_t\rangle \ \le\ \langle v_K^+(t), v_t\rangle \ \le\ \frac{h_K(t + \delta) - h_K(t)\cos\delta}{\sin\delta} .
@@ -219,8 +226,8 @@ Two consequences are used below and in [Chapter 7](07-injectivity.md).
   inequality is the same argument for $v_K^-(t)$ and $u_{t - \delta}$. The outer terms are the
   $v_t$-coordinates of $v_K(t - \delta, t)$ and $v_K(t, t + \delta)$. They depend only on support
   values, and as $\delta \to 0^+$ they tend to the inner terms, by Theorem 2.9. The formalization
-  passes to limits with this sandwich: in the proof of Theorem 6.14, and in Chapters 5 and 7, where
-  Baek uses weak convergence and the Portmanteau theorem instead.
+  passes to limits with this sandwich in step 1 of the proof of Theorem 6.14, and in Chapters 11
+  and 12.
 
 ### Definition 6.8 (surface area measure)
 
@@ -308,7 +315,7 @@ For every convex body $K$ and every angle $t$, $\sigma_K(t)$ is the length of th
 v_K^+(t) = v_K^-(t) + \sigma_K(t)\,v_t .
 ```
 
-*Lean: [`proposition2_1_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L294).*
+*Lean: [`proposition2_1_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L299).*
 
 *Proof.* The atom of a Lebesgue–Stieltjes measure at $t$ is the jump $G_K(t) - G_K(t-)$ of its
 distribution function. As $s \to t^-$, $v_K^+(s) \to v_K^-(t)$ by Theorem 2.9, so
@@ -324,7 +331,7 @@ definition of $v_K^\pm(t)$. $\square$
 
 Baek derives Proposition 2.1.2 from Schneider's Theorem 4.2.3 (Baek's Theorem 2.1.1), the
 description of $\sigma_K$ by lengths of edges recalled at the start of the chapter. The
-formalization does not state that theorem in this form (REPORT.md, Section 8). Its arc-length form
+formalization does not state that theorem in this form (REPORT.md, Sections 7 and 9). Its arc-length form
 is step 1 of the proof of the area formula (§6.4).
 
 ## 6.3 The differential Gauss–Minkowski theorem
@@ -333,7 +340,7 @@ is step 1 of the proof of the area formula (§6.4).
 
 For every convex body $K$, the vertex $v_K^+$ has bounded variation on every interval $[a, b]$.
 
-*Lean: [`lemma5_2_1`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L326).*
+*Lean: [`lemma5_2_1`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L331).*
 
 *Proof.* In the frame $u_t, v_t$,
 
@@ -364,7 +371,7 @@ $c \le d$,
 v_K^+(d) - v_K^+(c) = \int_{(c, d]} v_t \,\mathrm{d}\sigma_K(t) .
 ```
 
-*Lean: [`theorem5_2_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L389), [`vplus_sub_vplus`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L378).*
+*Lean: [`theorem5_2_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L403), [`vplus_sub_vplus`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L383).*
 
 Baek assumes $b \le a + 2\pi$; the formalization does not need it (REPORT.md, Section 5). On the left
 endpoint $\lbrace a\rbrace$ the identity fails in general: $\mathrm{d}v_K^+$ gives it no mass by
@@ -417,7 +424,8 @@ Proposition 6.10 each atom contributes the edge vector $\sigma_K(t)\,v_t = v_K^+
 sum over the edges with normal angles in $(a, b]$ telescopes to $v_K^+(b) - v_K^+(a)$, as in
 Figure 6.3. A general $K$ is a Hausdorff limit of polygons with the same edges at $a$ and $b$, and
 the weak convergence of the surface area measures (Theorem 6.14) passes the identity to the limit.
-The formalization's proof uses neither polygons nor weak convergence. Baek's proof once writes
+The formalization's proof uses neither polygons nor weak convergence, since $\sigma_K$ is defined
+from $v_K^+$ (REPORT.md, Section 7). Baek's proof once writes
 $u_t\,\sigma$ for $v_t\,\sigma$ (REPORT.md, E26).
 
 With $(c, d] = (0, 2\pi]$, the periodicity of $v_K^+$ gives
@@ -511,7 +519,7 @@ function $f$,
 \int_{[0, 2\pi)} f\,\mathrm{d}\sigma_{K_n} \to \int_{[0, 2\pi)} f\,\mathrm{d}\sigma_K .
 ```
 
-*Lean: [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L840), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
+*Lean: [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L844), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
 
 Baek cites this from Schneider (Theorem 4.2.1) and uses it in four places:
 his Theorem 4.1.4
@@ -519,9 +527,13 @@ his Theorem 4.1.4
 his Lemma 6.4.2 and Theorem 6.4.3
 ([Lemma 7.17](07-injectivity.md#lemma-717-convergence-of-the-arms-baek-lemma-642) and
 [Theorem 7.18](07-injectivity.md#theorem-718-limit-inequality-baek-theorem-643)), and the proof of
-Theorem 6.12. The formalization proves the theorem but uses it nowhere. Theorem 6.12 has a direct
-proof, and the other three pass to the limit with the sandwich after Lemma 6.7, as step 1 below
-does. Figure 6.5 shows an example.
+Theorem 6.12. The formalization proves the theorem and uses it as Baek does in the first three,
+through the Portmanteau theorem, which it derives from it. A bounded lower semicontinuous periodic
+function $g \ge 0$ is the increasing limit of the continuous functions
+$g_k(x) = \inf_y \bigl(g(y) + k \lvert x - y \rvert\bigr)$; the upper semicontinuous case applies
+this to $M - g$; and indicator functions give the forms for open and closed sets
+([`ang_portmanteau_lsc`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L969), [`ang_portmanteau_usc`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L999), [`ang_portmanteau_open`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1034), [`ang_portmanteau_closed`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1048)).
+Theorem 6.12 has a direct proof (REPORT.md, Section 7). Figure 6.5 shows an example.
 
 ![A graph over the angles from 0 to 2π: the straight line G(t) = t of the unit disk, and the staircases of the regular 4-gon, 8-gon and 16-gon inscribed in the unit circle, with jumps at the angles 2πk/n; the finer the polygon, the closer its staircase to the line](figures/06-surface-area/weak-convergence.svg)
 
@@ -553,5 +565,5 @@ full proof is in [`MovingSofaOptimality/Angle/HorizontalSide.lean`](../../Moving
    continuous $2\pi$-periodic $f$ is a uniform limit of functions $g$ as in step 2 (its averages over
    short intervals), and the bounded masses make the approximation uniform in $n$. $\square$
 
-*Lean: [`ang_dplus_mul_sin_le`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L480), [`ang_le_dminus_mul_sin`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L488), [`ang_tendsto_sigmaFun`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L692),
-[`ang_integral_sigma_eq`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L596), [`ang_tendsto_integral_sigmaFun`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L719), [`ang_exists_C1_approx`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L757).*
+*Lean: [`ang_dplus_mul_sin_le`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L484), [`ang_le_dminus_mul_sin`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L492), [`ang_tendsto_sigmaFun`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L696),
+[`ang_integral_sigma_eq`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L600), [`ang_tendsto_integral_sigmaFun`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L723), [`ang_exists_C1_approx`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L761).*

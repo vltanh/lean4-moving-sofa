@@ -100,8 +100,8 @@ and $(t_4, t_5]$. Its contact paths are written $\mathbf{A}, \mathbf{B}, \mathbf
 *Lean: [`Baek.GerverParams`](../../Challenge.lean#L122), [`MovingSofaOptimality.GerverParams`](../../MovingSofaOptimality/Gerver/Defs.lean#L30), [`MovingSofaOptimality.GerverParams.x₁`](../../MovingSofaOptimality/Gerver/Defs.lean#L54),
 [`MovingSofaOptimality.GerverParams.x₂`](../../MovingSofaOptimality/Gerver/Defs.lean#L57), [`MovingSofaOptimality.GerverParams.x₃`](../../MovingSofaOptimality/Gerver/Defs.lean#L60),
 [`MovingSofaOptimality.GerverParams.x₄`](../../MovingSofaOptimality/Gerver/Defs.lean#L62), [`MovingSofaOptimality.GerverParams.x₅`](../../MovingSofaOptimality/Gerver/Defs.lean#L65),
-[`MovingSofaOptimality.GerverParams.path`](../../MovingSofaOptimality/Gerver/Defs.lean#L69), [`MovingSofaOptimality.GerverParams.tPt`](../../MovingSofaOptimality/Gerver/Properties.lean#L55),
-[`MovingSofaOptimality.GerverParams.curveA`](../../MovingSofaOptimality/Gerver/Properties.lean#L67).*
+[`MovingSofaOptimality.GerverParams.path`](../../MovingSofaOptimality/Gerver/Defs.lean#L69), [`MovingSofaOptimality.GerverParams.tPt`](../../MovingSofaOptimality/Gerver/Properties.lean#L58),
+[`MovingSofaOptimality.GerverParams.curveA`](../../MovingSofaOptimality/Gerver/Properties.lean#L70).*
 
 ### Definition 10.4 (Romik's equations; Gerver's sofa)
 
@@ -336,7 +336,7 @@ and its other parameters lie in explicit intervals of width at most $1.5 \cdot 1
 values of Table 10.2.
 
 *Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L328), [`Baek.gerver_params_unique`](../../Challenge.lean#L332), [`romik_exists`](../../MovingSofaOptimality/External/Romik.lean#L354), [`romik_unique`](../../MovingSofaOptimality/External/Romik.lean#L360),
-[`rom_angles_mem`](../../MovingSofaOptimality/External/Romik.lean#L372), [`romik_bounds`](../../MovingSofaOptimality/External/Romik.lean#L522), [`definition8_1_2_exists`](../../MovingSofaOptimality/Main.lean#L32), [`definition8_1_2_unique`](../../MovingSofaOptimality/Main.lean#L36).*
+[`rom_angles_mem`](../../MovingSofaOptimality/External/Romik.lean#L372), [`romik_bounds`](../../MovingSofaOptimality/External/Romik.lean#L522), [`definition8_1_2_exists`](../../MovingSofaOptimality/Main.lean#L32), [`definition8_1_2_unique`](../../MovingSofaOptimality/Main.lean#L37).*
 
 *Proof sketch.* By Proposition 10.7, $(\varphi, \theta) \mapsto P(\varphi, \theta)$ is a bijection from
 the zeros of $H$ in the box onto the solutions in the box. So it suffices to show that $H$ has
@@ -468,7 +468,7 @@ $G = K \setminus \mathcal{N}(K)$. Moreover:
 - (4) $\mathbf{B}'(t)$ is a negative multiple of $v_t$ for $t \in (t_3, t_5)$, $t \ne t_4$, and
   $\mathbf{D}'(t)$ a positive multiple of $u_t$ for $t \in (t_0, t_2)$, $t \ne t_1$.
 
-*Lean: [`theorem8_4_1_monotone`](../../MovingSofaOptimality/Gerver/Properties.lean#L81), [`theorem8_4_1_walls`](../../MovingSofaOptimality/Gerver/Properties.lean#L107), [`theorem8_4_1_tangents`](../../MovingSofaOptimality/Gerver/Properties.lean#L115), [`gv_monotone`](../../MovingSofaOptimality/Gerver/Structure.lean#L34),
+*Lean: [`theorem8_4_1_monotone`](../../MovingSofaOptimality/Gerver/Properties.lean#L89), [`theorem8_4_1_walls`](../../MovingSofaOptimality/Gerver/Properties.lean#L122), [`theorem8_4_1_tangents`](../../MovingSofaOptimality/Gerver/Properties.lean#L133), [`gv_monotone`](../../MovingSofaOptimality/Gerver/Structure.lean#L34),
 [`gv_walls`](../../MovingSofaOptimality/Gerver/Structure.lean#L46), [`gv_tangents`](../../MovingSofaOptimality/Gerver/Structure.lean#L65), [`gs_monotone_K`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L531), [`gs_gerverSofa_eq`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L477), [`gs_niche_subset`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L453), [`gs_vminus_K`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L564),
 [`gs_vplus_K'`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L598).*
 
@@ -543,7 +543,7 @@ On the open phases, the contact curves satisfy:
 | 4 | $\langle \mathbf{A}', v_t \rangle = \langle -\mathbf{B}' + \mathbf{x}', v_t \rangle$, $\ \langle -\mathbf{C}', u_t \rangle = \langle -\mathbf{x}', u_t \rangle$ |
 | 5 | $\langle \mathbf{A}', v_t \rangle = \langle -\mathbf{B}', v_t \rangle$, $\ \langle -\mathbf{C}', u_t \rangle = 0$ |
 
-*Lean: [`theorem8_4_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L124), [`gv_odes`](../../MovingSofaOptimality/Gerver/Structure.lean#L89).*
+*Lean: [`theorem8_4_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L142), [`gv_odes`](../../MovingSofaOptimality/Gerver/Structure.lean#L89).*
 
 Each equation balances the differential side lengths at the contact points of the phase: the first
 of each pair on the walls $a(t)$, $b(t)$ with normal $u_t$, the second on the walls $c(t)$, $d(t)$
@@ -569,7 +569,7 @@ corner $\mathbf{x}_K$ is continuously differentiable on $[0, \pi/2]$; and
 $\langle \mathbf{x}_K'(t), u_t \rangle < 0 < \langle \mathbf{x}_K'(t), v_t \rangle$ for
 $t \in (0, \pi/2)$.
 
-*Lean: [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L145), [`gv_injectivity`](../../MovingSofaOptimality/Gerver/Structure.lean#L140), [`gs_InjCond1`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L857), [`gs_InjCond2`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L635), [`gs_InjCond3`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L639).*
+*Lean: [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L168), [`gv_injectivity`](../../MovingSofaOptimality/Gerver/Structure.lean#L140), [`gs_InjCond1`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L857), [`gs_InjCond2`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L635), [`gs_InjCond3`](../../MovingSofaOptimality/Gerver/StructureCap.lean#L639).*
 
 This is [Theorem 7.3](07-injectivity.md#theorem-73-gervers-sofa-baek-theorem-612), and this is
 where it is proved; [§7.6](07-injectivity.md#76-gervers-sofa) explains why the paper's proof does
@@ -804,7 +804,7 @@ $\mathbf{x}(t_4) = \mathbf{D}(t_2)$, and $\mathbf{D}(t_0)$, $\mathbf{B}(t_5)$ on
 \lvert \mathcal{N}(K) \rvert = \mathcal{J}(\mathbf{x}|_{[t_1, t_4]}) - \mathcal{J}(\mathbf{B}|_{[t_3, t_5]}) - \mathcal{J}(\mathbf{D}|_{[t_0, t_2]}) .
 ```
 
-*Lean: [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L91), [`gv_niche`](../../MovingSofaOptimality/Gerver/Niche.lean#L125), [`env_area`](../../MovingSofaOptimality/Gerver/EnvelopeArea.lean#L530), [`env_niche_eq_union`](../../MovingSofaOptimality/Gerver/EnvelopeArea.lean#L520).*
+*Lean: [`theorem8_4_1_niche`](../../MovingSofaOptimality/Gerver/Properties.lean#L103), [`gv_niche`](../../MovingSofaOptimality/Gerver/Niche.lean#L125), [`env_area`](../../MovingSofaOptimality/Gerver/EnvelopeArea.lean#L530), [`env_niche_eq_union`](../../MovingSofaOptimality/Gerver/EnvelopeArea.lean#L520).*
 
 The paper states that the niche is the region enclosed counterclockwise by $\mathbf{B}$ reversed,
 $\mathbf{x}|_{[t_1, t_4]}$, $\mathbf{D}$ reversed and the segment of the $x$-axis from
@@ -847,7 +847,7 @@ $\frac12$ there.
 where $\mathcal{J}(p, q) = \frac12\, p \times q$ is the curve area functional of the segment from $p$
 to $q$.
 
-*Lean: [`gv_cap_area`](../../MovingSofaOptimality/Gerver/Niche.lean#L371), [`gn_K_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L354), [`segArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L452).*
+*Lean: [`gv_cap_area`](../../MovingSofaOptimality/Gerver/Niche.lean#L371), [`gn_K_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L354), [`segArea`](../../MovingSofaOptimality/Convex/CurveArea.lean#L668).*
 
 *Proof.* $K$ is the region between the $x$-axis and the curve made of $\mathbf{A}|_{[0, \pi/2]}$, the
 top edge and $\mathbf{C}|_{[0, \pi/2]}$ ([`gn_K_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L354)).
@@ -869,8 +869,8 @@ and $\mathbf{A}(\pi/2)_y = \mathbf{C}(0)_y = 1$. $\square$
 
 and $2.2192 \le \lvert G \rvert \le 2.2199$; in particular $\lvert G \rvert \ge 2.2$.
 
-*Lean: [`Baek.gerver_sofa_area`](../../Challenge.lean#L338), [`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L290), [`gv_area_mem`](../../MovingSofaOptimality/Gerver/Niche.lean#L467), [`gv_area_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L444),
-[`gerverSofa_area`](../../MovingSofaOptimality/Gerver/Properties.lean#L151), [`gv_area`](../../MovingSofaOptimality/Gerver/Niche.lean#L461), [`gerverSofa_volume_ne_top`](../../MovingSofaOptimality/Main.lean#L295).*
+*Lean: [`Baek.gerver_sofa_area`](../../Challenge.lean#L338), [`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L291), [`gv_area_mem`](../../MovingSofaOptimality/Gerver/Niche.lean#L467), [`gv_area_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L444),
+[`gerverSofa_area`](../../MovingSofaOptimality/Gerver/Properties.lean#L174), [`gv_area`](../../MovingSofaOptimality/Gerver/Niche.lean#L461), [`gerverSofa_volume_ne_top`](../../MovingSofaOptimality/Main.lean#L296).*
 
 | Term | Lean enclosure | Value |
 | --- | --- | --- |
@@ -901,7 +901,7 @@ The value is $\lvert G \rvert = 2.21953166887\ldots$, as computed by Gerver and 
 Theorem 10.13, the bound $\lvert K \rvert \ge \lvert G \rvert \ge 2.2$ puts the cap of Gerver's sofa in
 the space $\mathcal{K}^\mathrm{i}$ of Chapter 9
 ([Theorem 9.2](09-optimality.md#theorem-92-these-caps-form-a-convex-domain-baek-theorem-811) (3),
-[`theorem8_1_1_gerver`](../../MovingSofaOptimality/Main.lean#L55)).
+[`theorem8_1_1_gerver`](../../MovingSofaOptimality/Main.lean#L56)).
 
 ## 10.7 The left and right bodies (Baek, §8.4.3–8.4.4)
 
@@ -918,7 +918,7 @@ $\mathcal{Q}(K, B, D)$
 It also uses the reflected surface area measure $\breve\sigma_C(X) = \sigma_C(X + \pi)$ and support
 function $\breve h_C(t) = h_C(t + \pi)$ of a convex body $C$
 ([Definition 9.28](09-optimality.md#definition-928-reflected-measures-and-the-measure-of-the-core-baek-definitions-845-846);
-[`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L69), [`suppBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L72)).
+[`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L68), [`suppBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L71)).
 This section identifies these objects for the cap $K$ of Gerver's sofa.
 
 ### Theorem 10.22 (left, middle and right parts; Baek, Theorem 8.4.3)
@@ -929,15 +929,22 @@ Let $B = B_K$ and $D = D_K$.
    $\mathbf{B}(t) = v_B^\pm(\pi + t)$ for $t \in (t_3, t_5)$.
 2. $\mathbf{x}_K^\mathrm{L} = Y_D = \mathbf{D}(t_2)$, and the tail $\mathbf{d}_D$ is the curve
    $\mathbf{D}([t_0, t_2])$; $\mathbf{x}_K^\mathrm{R} = X_B = \mathbf{B}(t_3)$, and the tail
-   $\mathbf{b}_B$ is the curve $\mathbf{B}([t_3, t_5])$.
+   $\mathbf{b}_B$ is the curve $\mathbf{B}([t_3, t_5])$; as oriented curves, so that
+   $\mathcal{J}(\mathbf{d}_D) = \mathcal{J}(\mathbf{D}|_{[t_0, t_2]})$ and
+   $\mathcal{J}(\mathbf{b}_B) = \mathcal{J}(\mathbf{B}|_{[t_3, t_5]})$.
 3. $h_K(\frac\pi2 + t) + h_D(\frac{3\pi}2 + t) = 1$ for $t \in [t_0, t_2]$, and
    $h_K(t) + h_B(\pi + t) = 1$ for $t \in [t_3, t_5]$.
 
-*Lean: [`theorem8_4_3_one`](../../MovingSofaOptimality/Gerver/Properties.lean#L911), [`theorem8_4_3_two`](../../MovingSofaOptimality/Gerver/Properties.lean#L920), [`theorem8_4_3_three`](../../MovingSofaOptimality/Gerver/Properties.lean#L934), [`rightBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L565), [`leftBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L568),
-[`gm_D_mem_leftBody`](../../MovingSofaOptimality/Gerver/Properties.lean#L459), [`gm_D_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L488), [`gm_B_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L624), [`gm_tailD`](../../MovingSofaOptimality/Gerver/Properties.lean#L704), [`gm_tailB`](../../MovingSofaOptimality/Gerver/Properties.lean#L733), [`lemma8_1_6_left`](../../MovingSofaOptimality/Optimality/Domain.lean#L914).*
+*Lean: [`theorem8_4_3_one`](../../MovingSofaOptimality/Gerver/Properties.lean#L970), [`theorem8_4_3_two`](../../MovingSofaOptimality/Gerver/Properties.lean#L1680), [`theorem8_4_3_three`](../../MovingSofaOptimality/Gerver/Properties.lean#L979), [`rightBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L567), [`leftBody`](../../MovingSofaOptimality/Optimality/Domain.lean#L570),
+[`gm_D_mem_leftBody`](../../MovingSofaOptimality/Gerver/Properties.lean#L482), [`gm_D_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L511), [`gm_B_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L640), [`gm_tailD`](../../MovingSofaOptimality/Gerver/Properties.lean#L715), [`gm_tailB`](../../MovingSofaOptimality/Gerver/Properties.lean#L744), [`lemma8_1_6_left`](../../MovingSofaOptimality/Optimality/Domain.lean#L916).*
 
 Baek's paper writes $\mathbf{x}_K^\mathrm{R} = X_{B_K} = \mathbf{D}(t_3)$ in (2); $\mathbf{B}(t_3)$ is
-meant, as $\mathbf{D}$ is defined on $[t_0, t_2]$ only (REPORT.md, E24).
+meant, as $\mathbf{D}$ is defined on $[t_0, t_2]$ only (REPORT.md, E24). The formalization reads
+"as oriented curves" as the equality of the sets together with the equality of the curve area
+functionals, which is what Theorem 10.26 uses. Orientations of curves are not formalized, and
+$\mathcal{J}$ of a convex arc is $\frac12 \int h\, d\sigma$, so both sides are computed: from the
+density of $\breve\sigma$ (Proposition 10.23) and from the pieces of $\mathbf{D}$ and $\mathbf{B}$
+(REPORT.md, Section 7).
 
 *Proof sketch.* The proof follows the paper. We treat the left body $D$; the right body is the
 mirror image. The idea is that $\mathbf{D}(t)$ lies in $D$ and on its supporting line $d_K(t)$.
@@ -979,7 +986,7 @@ $\mathbf{D}([t_0, t_2])$. $\square$
 4. $\breve\sigma_D = \langle \mathbf{D}'(t - \frac\pi2), u_{t - \pi/2} \rangle\, dt$ on
    $(\frac\pi2 + t_0, \frac\pi2 + t_2]$.
 
-*Lean: [`proposition8_4_4`](../../MovingSofaOptimality/Gerver/Properties.lean#L1094), [`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L69).*
+*Lean: [`proposition8_4_4`](../../MovingSofaOptimality/Gerver/Properties.lean#L1203), [`sigmaBreve`](../../MovingSofaOptimality/Optimality/Variation.lean#L68).*
 
 Baek's paper states (4) on $(t_0, t_2]$ with the density $\langle \mathbf{D}'(t), u_t \rangle$. As
 $\mathbf{D}(s) = v_D(\frac{3\pi}2 + s)$, the measure $\breve\sigma_D$ lives on
@@ -988,14 +995,22 @@ Theorem 10.25 and
 [Theorem 9.30](09-optimality.md#theorem-930-the-directional-derivative-of-the-upper-bound-baek-theorem-856)
 use. As printed, the left side is $\breve\sigma_D$ on $(t_0, t_2]$, which vanishes (REPORT.md, E25).
 
-*Proof.* Items (1) and (3) are the computation in the proof of Theorem 10.13. Item (2) is the same
-computation for $B$: $v_B^+(\pi + t) = \mathbf{B}(t)$ for $t \in [t_3, t_5)$ (Theorem 10.22 and its
-proof), and $\mathbf{B}' = (\rho_A - 1)\, v_t = (1 - \rho_A)\, v_{\pi + t}$. So $\sigma_B$ has the
-density $1 - \rho_A(t) = \langle -\mathbf{B}'(t), v_t \rangle$ at the angle $\pi + t$. There is no
-atom at $\pi + t_3$, where the edge of $B$ is the single point $\mathbf{B}(t_3)$. Shifting by $\pi$
-gives $\breve\sigma_B$. Item (4) is the same for $D$: $v_D^+(\frac{3\pi}2 + t) = \mathbf{D}(t)$ for
-$t \in [t_0, t_2]$, and $\mathbf{D}' = (1 - \rho_C)\, u_t = (1 - \rho_C)\, v_{3\pi/2 + t}$; the shift
-by $\pi$ moves the angle $\frac{3\pi}2 + t$ to $\frac\pi2 + t$. $\square$
+*Proof.* As in Baek's proof, $dv_K^+ = v_t\, \sigma_K$ (Theorem 6.12). On an interval where the
+vertex $v_K^+(t)$ follows one of the curves $\mathbf{A}, \mathbf{B}, \mathbf{C}, \mathbf{D}$, which
+are piecewise continuously differentiable with bounded derivatives, its Lebesgue–Stieltjes measure
+is the derivative of the curve times $dt$, and its $v_t$-component gives the density of $\sigma_K$.
+
+- (1): $v_K^+ = \mathbf{A}$ on $[0, \pi/2)$, and $\sigma_K$ has no atom at $0$ (Theorem 10.13).
+- (3): $v_K^+(t) = \mathbf{C}(t - \frac\pi2)$ on $[\pi/2, \pi]$, and
+  $\langle \mathbf{C}'(t - \frac\pi2), v_t \rangle = \langle -\mathbf{C}'(t - \frac\pi2), u_{t - \pi/2} \rangle$.
+- (2): $v_B^+(\pi + t) = \mathbf{B}(t)$ for $t \in [t_3, t_5)$ (Theorem 10.22 and its proof), and
+  $\mathbf{B}' = (\rho_A - 1)\, v_t = (1 - \rho_A)\, v_{\pi + t}$. So $\sigma_B$ has the density
+  $1 - \rho_A(t) = \langle -\mathbf{B}'(t), v_t \rangle$ at the angle $\pi + t$. There is no atom at
+  $\pi + t_3$, where the edge of $B$ is the single point $\mathbf{B}(t_3)$. Shifting by $\pi$ gives
+  $\breve\sigma_B$.
+- (4): the same for $D$: $v_D^+(\frac{3\pi}2 + t) = \mathbf{D}(t)$ for $t \in [t_0, t_2]$, and
+  $\mathbf{D}' = (1 - \rho_C)\, u_t = (1 - \rho_C)\, v_{3\pi/2 + t}$; the shift by $\pi$ moves the
+  angle $\frac{3\pi}2 + t$ to $\frac\pi2 + t$. $\square$
 
 ### Definition 10.24 (the measure $\iota_K$ and the intervals $J_i$; Baek, Definitions 8.4.6 and 8.4.7)
 
@@ -1005,7 +1020,7 @@ $i_K(t + \frac\pi2) = \langle -\mathbf{x}_K'(t), u_t \rangle$ for $t \in (0, \pi
 $J_i = [t_{i-1}, t_i)$ for $1 \le i \le 5$ and $J_i = \pi - J_{11 - i}$ for $6 \le i \le 10$. The
 intervals $J_1, \dots, J_{10}$ and the point $\lbrace \pi/2 \rbrace$ partition $[0, \pi]$.
 
-*Lean: [`iFun`](../../MovingSofaOptimality/Optimality/Variation.lean#L76), [`iota`](../../MovingSofaOptimality/Optimality/Variation.lean#L82), [`MovingSofaOptimality.GerverParams.jInt`](../../MovingSofaOptimality/Gerver/Properties.lean#L1112).*
+*Lean: [`iFun`](../../MovingSofaOptimality/Optimality/Variation.lean#L75), [`iota`](../../MovingSofaOptimality/Optimality/Variation.lean#L81), [`MovingSofaOptimality.GerverParams.jInt`](../../MovingSofaOptimality/Gerver/Properties.lean#L1221).*
 
 ### Theorem 10.25 (Romik's equations as measures; Baek, Theorem 8.4.5)
 
@@ -1018,7 +1033,7 @@ With $B = B_K$ and $D = D_K$:
 | $J_4$ | $\breve\sigma_B + \iota_K$ | $J_8 \cup J_9$ | $\iota_K$ |
 | $J_5$ | $\breve\sigma_B$ | $J_{10}$ | $0$ |
 
-*Lean: [`theorem8_4_5`](../../MovingSofaOptimality/Gerver/Properties.lean#L1232), [`gm_sigma_restrict_A`](../../MovingSofaOptimality/Gerver/Properties.lean#L1149), [`gm_sigma_restrict_C`](../../MovingSofaOptimality/Gerver/Properties.lean#L1154), [`gm_iota_restrict`](../../MovingSofaOptimality/Gerver/Properties.lean#L1172).*
+*Lean: [`theorem8_4_5`](../../MovingSofaOptimality/Gerver/Properties.lean#L1343), [`gm_sigma_restrict_A`](../../MovingSofaOptimality/Gerver/Properties.lean#L1258), [`gm_sigma_restrict_C`](../../MovingSofaOptimality/Gerver/Properties.lean#L1263), [`gm_iota_restrict`](../../MovingSofaOptimality/Gerver/Properties.lean#L1283).*
 
 *Proof.* On $J_i$, $i \le 5$, translate the first equation of phase $i$ of Theorem 10.12 by
 Proposition 10.23 (1), (2) and Definition 10.24: on $J_4$, for instance,
@@ -1034,7 +1049,7 @@ and none of the measures has an atom on these intervals. $\square$
 
 $\mathcal{A}(K) = \mathcal{Q}(K, B_K, D_K)$.
 
-*Lean: [`theorem8_4_6`](../../MovingSofaOptimality/Gerver/Properties.lean#L1560), [`sofaArea`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L83), [`upperQ`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L359), [`gm_convexCurveArea_B`](../../MovingSofaOptimality/Gerver/Properties.lean#L1487), [`gm_convexCurveArea_D`](../../MovingSofaOptimality/Gerver/Properties.lean#L1514).*
+*Lean: [`theorem8_4_6`](../../MovingSofaOptimality/Gerver/Properties.lean#L1700), [`sofaArea`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L83), [`upperQ`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L359), [`gm_convexCurveArea_B`](../../MovingSofaOptimality/Gerver/Properties.lean#L1598), [`gm_convexCurveArea_D`](../../MovingSofaOptimality/Gerver/Properties.lean#L1625).*
 
 *Proof.* By Definition 9.13,
 

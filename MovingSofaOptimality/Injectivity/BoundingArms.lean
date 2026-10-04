@@ -4,6 +4,7 @@ public import MovingSofaOptimality.Injectivity.LimitIneq
 public import Mathlib.Analysis.Real.Pi.Bounds
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.LebesgueDifferentiationThm
 public import Mathlib.MeasureTheory.Function.AEEqOfLIntegral
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
 
 /-!
 # Bounding the arm lengths (§6.5); Theorem 6.1.1 and Theorem 1.7.1
@@ -49,31 +50,6 @@ theorem interval_mass_le_integral {μ : Measure ℝ} {J : Set ℝ} {k : ℝ → 
   exact ENNReal.toReal_le_of_le_ofReal
     (intervalIntegral.integral_nonneg hab fun t _ => hk0 t) hi
 
-/-- `σ_K((a, b]) ≤ ∫_a^b k₀(g_K)` for a balanced maximum cap and `0 ≤ a ≤ b < π/2`. -/
-lemma inj_sigma_Ioc_le {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) {a b : ℝ}
-    (ha : 0 ≤ a) (hab : a ≤ b) (hb : b < π / 2) :
-    (sigma K (Ioc a b)).toReal ≤ ∫ u in a..b, k0 (gPlus K u) :=
-  interval_mass_le_integral (J := Ico 0 (π / 2)) hab
-    (fun x hx => ⟨by linarith [hx.1], by linarith [hx.2]⟩)
-    (theorem6_4_3 hK) (inj_intervalIntegrable_k0_gPlus hK.2.1.2.1 a b) fun _ => inj_k0_nonneg _
-
-/-- The integrated form of Theorem 6.5.1: `f_K(t) - f_K(0) ≥ ∫₀ᵗ m₀(g_K)` on `[0, π/2)`. -/
-lemma inj_fK_sub_ge {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) {t : ℝ}
-    (ht : t ∈ Ico 0 (π / 2)) : ∫ u in (0 : ℝ)..t, m0 (gK K u) ≤ fK K t - fK K 0 := by
-  have hcap : IsCap K (π / 2) := hK.2.1
-  have hKc : IsConvexBody K := hcap.2.1
-  have h1 := corollary6_4_4 hK
-  have h5 := (proposition6_4_5 hcap h1).1
-  rw [fK, fK, ← (h5 t ht).2, ← (h5 0 ⟨le_rfl, by positivity⟩).2,
-    fPlus_sub_fPlus hKc ht.1]
-  have hσ := inj_sigma_Ioc_le hK le_rfl ht.1 ht.2
-  have e : ∫ u in (0 : ℝ)..t, m0 (gK K u) =
-      (∫ u in (0 : ℝ)..t, gPlus K u) - ∫ u in (0 : ℝ)..t, k0 (gPlus K u) := by
-    simp only [m0, gK]
-    exact intervalIntegral.integral_sub (inj_intervalIntegrable_gPlus hKc 0 t)
-      (inj_intervalIntegrable_k0_gPlus hKc 0 t)
-  linarith
-
 /-- `g_K(t) = f_{K^m}(π/2 - t)` for `t ∈ (0, π/2]`. -/
 lemma inj_gK_eq_fK_mirror {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) {t : ℝ}
     (ht : t ∈ Ioc 0 (π / 2)) : gK K t = fK (mirrorCap K (π / 2)) (π / 2 - t) := by
@@ -87,7 +63,11 @@ lemma inj_gK_eq_fK_mirror {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 
     sub_sub_cancel]
 
 /-- **Theorem 6.5.1** (`thm:leg-length-bounds`). For a balanced maximum cap, `f_K` is absolutely
-continuous on `[0, π/2]` and `f_K'(t) ≥ m₀(g_K(t))` for almost every `t`. -/
+continuous on `[0, π/2]` and `f_K'(t) ≥ m₀(g_K(t))` for almost every `t`.
+
+The proof is the paper's: `σ_K = r(t) dt` on `[0, π/2)` with `r ≤ k₀(g_K)` (Corollary 6.4.4 and
+Theorem 6.4.3), `d f_K = (g_K - r) dt` on `[0, π/2]` (Theorem 6.2.5, with the endpoints checked
+separately), and Proposition 5.1.4 gives the absolute continuity of `f_K` and `f_K' = g_K - r`. -/
 theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
     AbsolutelyContinuousOnInterval (fK K) 0 (π / 2) ∧
       ∀ᵐ t ∂(volume.restrict (Icc 0 (π / 2))), m0 (gK K t) ≤ deriv (fK K) t := by
@@ -95,21 +75,32 @@ theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
   have hKc : IsConvexBody K := hcap.2.1
   have h1 := corollary6_4_4 hK
   have h5 := (proposition6_4_5 hcap h1).1
-  -- `σ_K = r(t) dt` on `[0, π/2)` (Corollary 6.4.4)
-  obtain ⟨r, -, hrm, -, hr0, -, hr, -⟩ := id h1
   have hπ : (0 : ℝ) < π / 2 := by positivity
-  -- Step 1: `r ≤ k₀(g_K)` almost everywhere on `[0, π/2)`, by Theorem 6.4.3
-  have hrk : ∀ᵐ t ∂(volume.restrict (Ico 0 (π / 2))), r t ≤ k0 (gPlus K t) := by
+  -- Step 1: `σ_K = r₀(t) dt` on `[0, π/2)` (Corollary 6.4.4) with `r₀ ≤ k₀(g_K)` almost everywhere
+  -- (Theorem 6.4.3); we choose the bounded density `r = min r₀ k₀(g_K)`
+  obtain ⟨r₀, -, hr₀m, -, hr₀0, -, hr₀, -⟩ := id h1
+  have hkm : Measurable fun t => k0 (gPlus K t) :=
+    inj_continuous_k0.measurable.comp (inj_measurable_gPlus hKc)
+  have hrk : ∀ᵐ t ∂(volume.restrict (Ico 0 (π / 2))), r₀ t ≤ k0 (gPlus K t) := by
     have hle := theorem6_4_3 hK
-    rw [hr] at hle
+    rw [hr₀] at hle
     have := ae_le_of_forall_setLIntegral_le_of_sigmaFinite
-      (μ := volume.restrict (Ico 0 (π / 2))) (f := fun t => ENNReal.ofReal (r t))
-      (g := fun t => ENNReal.ofReal (k0 (gPlus K t))) hrm.ennreal_ofReal
+      (μ := volume.restrict (Ico 0 (π / 2))) (f := fun t => ENNReal.ofReal (r₀ t))
+      (g := fun t => ENNReal.ofReal (k0 (gPlus K t))) hr₀m.ennreal_ofReal
       (fun s hs _ => by
         rw [← withDensity_apply _ hs, ← withDensity_apply _ hs]
         exact Measure.le_iff'.1 hle s)
     filter_upwards [this] with t ht
     exact (ENNReal.ofReal_le_ofReal_iff (inj_k0_nonneg _)).1 ht
+  set r : ℝ → ℝ := fun t => min (r₀ t) (k0 (gPlus K t)) with hr_def
+  have hrm : Measurable r := hr₀m.min hkm
+  have hr0 : ∀ t, 0 ≤ r t := fun t => le_min (hr₀0 t) (inj_k0_nonneg _)
+  have hr : (sigma K).restrict (Ico 0 (π / 2)) =
+      (volume.restrict (Ico 0 (π / 2))).withDensity (fun t => ENNReal.ofReal (r t)) := by
+    rw [hr₀]
+    refine withDensity_congr_ae ?_
+    filter_upwards [hrk] with t ht
+    simp only [hr_def, min_eq_left ht]
   -- Step 2: `r` is integrable on `[0, π/2)` and `σ_K((0, t)) = ∫₀ᵗ r`
   have hfin : (sigma K) (Ico 0 (π / 2)) < ⊤ := measure_Ico_lt_top
   have hrint : IntegrableOn r (Ico 0 (π / 2)) volume := by
@@ -131,7 +122,8 @@ theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
     rw [e, ← ofReal_integral_eq_lintegral_ofReal (hrint.mono_set hsub)
       (Filter.Eventually.of_forall hr0), ENNReal.toReal_ofReal (integral_nonneg hr0),
       intervalIntegral.integral_of_le ht.1, integral_Ioc_eq_integral_Ioo]
-  -- Step 3: `f_K(t) = f_K(0) + ∫₀ᵗ (g_K - r)` on `[0, π/2]`, from Theorem 6.2.5 (integrated form)
+  -- Step 3: `d f_K = (g_K - r) dt` on `[0, π/2]`, that is `f_K(t) = f_K(0) + ∫₀ᵗ (g_K - r)`, from
+  -- Theorem 6.2.5 (integrated form)
   set φ : ℝ → ℝ := fun u => gK K u - r u with hφ
   have hgint : IntervalIntegrable (gK K) volume 0 (π / 2) := inj_intervalIntegrable_gPlus hKc 0 _
   have hφint : IntervalIntegrable φ volume 0 (π / 2) := hgint.sub hrint'
@@ -149,7 +141,23 @@ theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
       rw [← Ioo_union_right h0, measure_union (by simp) (measurableSet_singleton t),
         ENNReal.toReal_add measure_Ioo_lt_top.ne measure_singleton_lt_top.ne,
         sigmaAt]
-    have hFP := fPlus_sub_fPlus hKc h0.le
+    -- `f_K⁺(t) - f_K⁺(0) = ∫₀ᵗ g_K⁺ - σ_K((0, t])`, from `d f_K⁺ = g_K⁺ dt - σ_K` (Theorem 6.2.5)
+    have hFP : fPlus K t - fPlus K 0 =
+        (∫ u in (0 : ℝ)..t, gPlus K u) - (sigma K (Ioc 0 t)).toReal := by
+      obtain ⟨hbv, hrc⟩ := theorem6_2_5_regular hKc
+      have hsub : Ioc 0 t ⊆ Ioc 0 (π / 2) := Ioc_subset_Ioc_right ht.2
+      have hgi : Integrable (gPlus K) (volume.restrict (Ioc 0 (π / 2))) :=
+        (inj_intervalIntegrable_gPlus hKc 0 (π / 2)).1
+      have h1i : Integrable (fun _ => (1 : ℝ)) ((sigma K).restrict (Ioc 0 (π / 2))) :=
+        integrableOn_const measure_Ioc_lt_top.ne
+      have h := congrArg (fun μ : VectorMeasure ℝ ℝ => μ (Ioc 0 t)) (theorem6_2_5 hKc)
+      rwa [VectorMeasure.restrict_apply _ measurableSet_Ioc measurableSet_Ioc,
+        inter_eq_left.2 hsub, lsMeasure_Ioc_of_le hπ.le le_rfl h0.le ht.2 hbv hrc, sub_apply,
+        withDensityᵥ_apply hgi measurableSet_Ioc, withDensityᵥ_apply h1i measurableSet_Ioc,
+        Measure.restrict_restrict measurableSet_Ioc, Measure.restrict_restrict measurableSet_Ioc,
+        inter_eq_left.2 hsub, ← intervalIntegral.integral_of_le h0.le, integral_const,
+        smul_eq_mul, mul_one, Measure.real, Measure.restrict_apply MeasurableSet.univ,
+        univ_inter] at h
     rcases eq_or_lt_of_le ht.2 with hπt | hπt
     · -- `t = π/2`: `f_K(π/2) = f_K⁻(π/2) = f_K⁺(π/2) + σ_K(π/2)`
       have hfm : fK K t = fPlus K t + sigmaAt K t := by
@@ -164,34 +172,68 @@ theorem theorem6_5_1 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
       rw [hft, hf0]
       simp only [gK] at *
       linarith
-  -- Step 4: hence `f_K` is absolutely continuous
-  have hAC0 :
-      AbsolutelyContinuousOnInterval (fun t => fK K 0 + ∫ u in (0 : ℝ)..t, φ u) 0 (π / 2) := by
-    have h0 : AbsolutelyContinuousOnInterval (fun _ : ℝ => fK K 0) 0 (π / 2) :=
-      (LipschitzWith.const (fK K 0)).lipschitzOnWith.absolutelyContinuousOnInterval
-    have h2 := hφint.absolutelyContinuousOnInterval_intervalIntegral left_mem_uIcc
-    exact h0.add h2
-  refine ⟨hAC0.congr (fun t ht => (hFTC t (by rwa [uIcc_of_le hπ.le] at ht)).symm), ?_⟩
-  -- Step 5: and `f_K' = g_K - r ≥ g_K - k₀(g_K) = m₀(g_K)` almost everywhere
-  have hd := hφint.ae_hasDerivAt_integral
-  have hne0 : ∀ᵐ t ∂(volume : Measure ℝ), t ≠ 0 := by simp [ae_iff, measure_singleton]
-  have hneπ : ∀ᵐ t ∂(volume : Measure ℝ), t ≠ π / 2 := by simp [ae_iff, measure_singleton]
-  have hrk' : ∀ᵐ t ∂(volume : Measure ℝ), t ∈ Ico 0 (π / 2) → r t ≤ k0 (gPlus K t) :=
-    (ae_restrict_iff' measurableSet_Ico).1 hrk
-  rw [ae_restrict_iff' measurableSet_Icc]
-  filter_upwards [hd, hne0, hneπ, hrk'] with t hdt ht0 htπ hrt htI
-  have htI' : t ∈ Ioo 0 (π / 2) := ⟨lt_of_le_of_ne htI.1 (Ne.symm ht0), lt_of_le_of_ne htI.2 htπ⟩
-  have hmem : t ∈ uIcc 0 (π / 2) := by rw [uIcc_of_le hπ.le]; exact htI
-  have hD : HasDerivAt (fun x => ∫ u in (0 : ℝ)..x, φ u) (φ t) t := hdt hmem 0 left_mem_uIcc
-  have hD' : HasDerivAt (fK K) (φ t) t := by
-    have := hD.const_add (fK K 0)
-    apply this.congr_of_eventuallyEq
-    filter_upwards [Ioo_mem_nhds htI'.1 htI'.2] with x hx
-    exact hFTC x ⟨hx.1.le, hx.2.le⟩
-  rw [hD'.deriv]
-  have := hrt ⟨htI.1, htI'.2⟩
+  -- Step 4: `f_K = f_K⁺ + σ_K({·})` has bounded variation on `[0, π/2]` and is right-continuous on
+  -- `[0, π/2)`, where it is `f_K⁺` (Theorem 6.2.5, Proposition 6.4.5)
+  obtain ⟨hbvP, hrcP⟩ := theorem6_2_5_regular hKc
+  have hat : ∀ t ∈ Ico 0 (π / 2), sigmaAt K t = 0 := fun t ht => by
+    rw [sigmaAt, inj_sigma_singleton_of_injCond1 h1 (Or.inl ht), ENNReal.toReal_zero]
+  have hbv : BoundedVariationOn (fK K) (Icc 0 (π / 2)) := by
+    have hmono : MonotoneOn (sigmaAt K) (Icc 0 (π / 2)) := by
+      intro x hx y hy hxy
+      rcases eq_or_lt_of_le hx.2 with hxπ | hxπ
+      · rw [le_antisymm hy.2 (hxπ ▸ hxy), ← hxπ]
+      · rw [hat x ⟨hx.1, hxπ⟩]; exact ENNReal.toReal_nonneg
+    have hσbv : BoundedVariationOn (sigmaAt K) (Icc 0 (π / 2)) := by
+      simpa using hmono.locallyBoundedVariationOn 0 (π / 2) ⟨le_rfl, hπ.le⟩ ⟨hπ.le, le_rfl⟩
+    have e : fK K = fun t => fPlus K t + sigmaAt K t := by
+      funext t; rw [fK, inj_fMinus_eq, inj_fPlus_eq, sigmaAt_eq_dot_sub hKc]; ring
+    rw [e]
+    exact boundedVariationOn_add hbvP hσbv
+  have hrc : ∀ x ∈ Ico 0 (π / 2), ContinuousWithinAt (fK K) (Ici x) x := fun x hx =>
+    (hrcP x hx).congr_of_eventuallyEq
+      (by filter_upwards [Ico_mem_nhdsGE hx.2] with y hy using
+        ((h5 y ⟨hx.1.trans hy.1, hy.2⟩).2).symm) ((h5 x hx).2).symm
+  -- Step 5: `g_K - r` is bounded and measurable, and `d f_K = (g_K - r) dt` on `[0, π/2]`
+  have hφm : Measurable φ := (inj_measurable_gPlus hKc).sub hrm
+  have hφb : ∃ C, ∀ t, |φ t| ≤ C := by
+    obtain ⟨R, hR⟩ := exists_abs_supp_le hKc.2.1 hKc.1
+    refine ⟨2 * R + 1, fun t => abs_le.2 ⟨?_, ?_⟩⟩
+    · have := inj_k0_le (gPlus K t)
+      have g0 := (inj_arm_nonneg hKc t).2.2.1
+      rw [abs_of_nonneg g0] at this
+      have r1 := abs_le.1 (hR 0)
+      simp only [hφ, gK]
+      linarith [min_le_right (r₀ t) (k0 (gPlus K t))]
+    · have g1 := inj_gPlus_le_width hKc t
+      have r1 := abs_le.1 (hR t)
+      have r2 := abs_le.1 (hR (t + π))
+      simp only [hφ, gK]
+      linarith [hr0 t]
+  have hφi : IntegrableOn φ (Icc 0 (π / 2)) :=
+    (intervalIntegrable_iff_integrableOn_Icc_of_le hπ.le).1 hφint
+  have hls : lsMeasure (fK K) 0 (π / 2) = (volume.restrict (Icc 0 (π / 2))).withDensityᵥ φ :=
+    lsMeasure_eq_withDensityᵥ hπ.le hbv hrc hφi fun t ht => by rw [hFTC t ht]; ring
+  -- Step 6: by Proposition 5.1.4, `f_K` is absolutely continuous with `f_K' = g_K - r`
+  -- almost everywhere, and `g_K - r ≥ g_K - k₀(g_K) = m₀(g_K)`
+  refine ⟨(proposition5_1_4 hπ.le hbv hrc).2 ⟨φ, hφm, hφi, hls⟩, ?_⟩
+  filter_upwards [proposition5_1_4_deriv hπ.le hbv hrc hφm hφb hls] with t ht
+  rw [ht.deriv]
   simp only [hφ, m0, gK]
-  linarith
+  linarith [min_le_right (r₀ t) (k0 (gPlus K t))]
+
+/-- The integrated form of Theorem 6.5.1: `f_K(t) - f_K(0) = ∫₀ᵗ f_K' ≥ ∫₀ᵗ m₀(g_K)` on
+`[0, π/2)`, since `f_K` is absolutely continuous with `f_K' ≥ m₀(g_K)` almost everywhere. -/
+lemma inj_fK_sub_ge {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) {t : ℝ}
+    (ht : t ∈ Ico 0 (π / 2)) : ∫ u in (0 : ℝ)..t, m0 (gK K u) ≤ fK K t - fK K 0 := by
+  obtain ⟨hac, hder⟩ := theorem6_5_1 hK
+  have hsub : uIcc 0 t ⊆ uIcc 0 (π / 2) :=
+    uIcc_subset_uIcc left_mem_uIcc (by rw [uIcc_of_le (by positivity)]; exact ⟨ht.1, ht.2.le⟩)
+  have hact := hac.mono hsub
+  rw [← AbsolutelyContinuousOnInterval.integral_deriv_eq_sub hact]
+  exact intervalIntegral.integral_mono_ae_restrict ht.1
+    (inj_intervalIntegrable_m0_gK hK.2.1.2.1 0 t)
+    (AbsolutelyContinuousOnInterval.intervalIntegrable_deriv hact)
+    (ae_restrict_of_ae_restrict_of_subset (Icc_subset_Icc_right ht.2.le) hder)
 
 /-- The operator `𝓕 f(x) = 1 + ∫_0^x m₀(f(π/2 - u)) du` (Definition 6.5.1,
 `def:integral-operator`). -/
@@ -420,7 +462,12 @@ theorem lemma6_5_5 {x : ℝ} (hx : x ∈ Ioc 0 (π / 2)) : 1 < lowerSeq 11 x := 
   nlinarith [hx.1]
 
 /-- **Theorem 6.5.6** (`thm:lower-bound-one`). For a balanced maximum cap, `f_K > 1` on `(0, π/2]`
-and `g_K > 1` on `[0, π/2)`. -/
+and `g_K > 1` on `[0, π/2)`.
+
+Departure from the paper: the paper concludes from Lemmas 6.5.2 and 6.5.5 alone; this proof also
+extends the bounds `f_K ≥ f_11` and `g_K ≥ f_11(π/2 - ·)` of Lemma 6.5.2 to the endpoints
+`t = π/2` and `t = 0` by the continuity of `f_K` and `g_K` (Proposition 6.4.6), because Lemma 6.5.2
+gives them only on `[0, π/2)` and `(0, π/2]` (reason 1, E17 (b)). -/
 theorem theorem6_5_6 {K : Set (ℝ × ℝ)} (hK : IsBalancedMaxCap K (π / 2)) :
     (∀ t ∈ Ioc 0 (π / 2), 1 < fK K t) ∧ ∀ t ∈ Ico 0 (π / 2), 1 < gK K t := by
   have hcap : IsCap K (π / 2) := hK.2.1

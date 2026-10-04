@@ -8,8 +8,8 @@ arXiv source; the chapter directories `01, 05, 10, 15, 17, 20, 22, 25` hold the 
 
 Status of the formalization:
 
-- Every numbered result the paper proves is proved in Lean, with the deviations listed in Sections 3
-  and 6, and so is the main theorem (Theorem 1.1.1): Gerver's sofa is a moving sofa, and every moving
+- Every numbered result the paper proves is proved in Lean, with the deviations listed in Sections 3,
+  6 and 7, and so is the main theorem (Theorem 1.1.1): Gerver's sofa is a moving sofa, and every moving
   sofa has area at most that of Gerver's sofa.
 - The results the paper takes from the literature and uses in its proofs are proved too:
   - Schneider's area formula for planar convex bodies, in [`MovingSofaOptimality/External/`](MovingSofaOptimality/External);
@@ -24,7 +24,7 @@ Status of the formalization:
   `implemented_by`.
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the library, every paper result and the
   Challenge theorems depend only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). It also lists the
-  results from prior work that each paper result uses (Section 7).
+  results from prior work that each paper result uses (Section 8).
 - [`Challenge.lean`](Challenge.lean) restates Theorem 1.1.1, together with the existence and uniqueness of Gerver's
   parameters and the area of Gerver's sofa (between 2.2192 and 2.2199), using Mathlib's vocabulary
   only. [`Solution.lean`](Solution.lean) proves these statements from the
@@ -32,6 +32,10 @@ Status of the formalization:
   the optimal sofa, which is not a result of the paper; the README describes it.
 - Statements of the paper that are false as printed are formalized in their intended form; Section 6
   lists every such correction. No result had to be weakened.
+- Every proof follows the paper's argument, except at the steps that Section 7 lists, each forced by
+  an error or gap of the paper, by mathematics that Mathlib lacks, or by the formalization's
+  representation of the surface area measure. A route check in CI compares the results that each
+  proof uses with those that the paper's proof cites (Section 8).
 
 ## 1. Summary
 
@@ -70,7 +74,7 @@ Status of the formalization:
 | --- | --- | --- | --- |
 | \|K\| = ½ ∫ h_K dσ_K for a planar convex body K | Theorem 7.1.3, and through it Chapter 8 (Lemma 8.3.5, Theorems 8.2.4, 8.3.8, 8.5.7) | Schneider, *Convex Bodies*, Remark 5.1.2 and Eq. (5.19) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) ([`MovingSofaOptimality/External/AreaFormula.lean`](MovingSofaOptimality/External/AreaFormula.lean)) |
 | Romik's system (27)–(44) has a solution with 0 < φ < θ < π/4 (his Table 1: φ = 0.0391773…, θ = 0.6813015…) | Definition 8.1.2 (Gerver's sofa G) | Romik 2018, Section 4 | [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354) ([`MovingSofaOptimality/External/Romik.lean`](MovingSofaOptimality/External/Romik.lean)), [`definition8_1_2_exists`](MovingSofaOptimality/Main.lean#L32) |
-| This solution is unique | Definition 8.1.2 ("the" solution) | Romik 2018, asserted without proof | [`GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L360), [`definition8_1_2_unique`](MovingSofaOptimality/Main.lean#L36) |
+| This solution is unique | Definition 8.1.2 ("the" solution) | Romik 2018, asserted without proof | [`GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L360), [`definition8_1_2_unique`](MovingSofaOptimality/Main.lean#L37) |
 
 - [`MovingSofaOptimality/External/AreaFormula.lean`](MovingSofaOptimality/External/AreaFormula.lean) proves the area formula by a change of variables from an
   interior point along the arc-length parametrization of ∂K. The parametrization is built in
@@ -89,15 +93,15 @@ Status of the formalization:
 | Cited result | Where the paper uses it | In the formalization |
 | --- | --- | --- |
 | Schneider Theorem 4.2.3: σ_K(X) is the length of ⋃_{t∈X} e_K(t) (the paper's Theorem 2.1.1) | Proposition 2.1.2 and the side lengths throughout | σ_K is defined directly, as the Lebesgue–Stieltjes measure of t ↦ ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K ([`sigma`](MovingSofaOptimality/Basic/SurfaceArea.lean#L169), [`MovingSofaOptimality/Basic/SurfaceArea.lean`](MovingSofaOptimality/Basic/SurfaceArea.lean)). Proposition 2.1.2 (σ_K({t}) is the length of e_K(t)) and Theorem 5.2.2 (dv_K⁺ = v_t dσ_K) are proved from this definition. [`MovingSofaOptimality/External/AreaFormula/Param.lean`](MovingSofaOptimality/External/AreaFormula/Param.lean) shows that the normal angle along the arc-length parametrization of ∂K pushes Lebesgue measure forward to σ_K, which is Theorem 2.1.1 in arc-length form. |
-| Schneider Lemma 1.8.14: d_H(K, L) = sup_t \|h_K(t) − h_L(t)\| | Chapter 3 (limits of caps) | Hausdorff distance is defined in this support-function form ([`hausdorffDist`](MovingSofaOptimality/Basic/ConvexBody.lean#L83)). The comparison with Mathlib's Hausdorff distance needed for Blaschke's theorem is proved in [`mpc_blaschke`](MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L245). |
-| Blaschke selection theorem | Theorem 3.5.2 | Mathlib (compactness of nonempty compact sets in the Hausdorff metric), via [`mpc_blaschke`](MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L245) |
-| Schneider Theorem 1.8.20: area is continuous in d_H | Theorems 3.4.3, 3.5.2 | proved in the one-sided forms the proofs need ([`mpc_area_usc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L282), [`mpc_area_lsc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L296) in [`MovingSofaOptimality/Balanced/CapGeometry.lean`](MovingSofaOptimality/Balanced/CapGeometry.lean), and [`MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean`](MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean)) |
-| Schneider Theorem 4.2.1: σ is weakly continuous in K (the paper's Theorem 4.1.3) | Theorems 4.1.4, 6.4.3 | [`theorem4_1_3`](MovingSofaOptimality/Angle/HorizontalSide.lean#L840), proved by integration by parts against the distribution function of σ and dominated convergence; the formal proofs of Theorems 4.1.4 and 6.4.3 do not use it, as they bound the vertex terms by support values directly |
-| Schneider Eq. (4.14): σ of a reflected body | Proposition 2.5.4 | proved directly ([`proposition2_5_4_sigma`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L589)) |
+| Schneider Lemma 1.8.14: d_H(K, L) = sup_t \|h_K(t) − h_L(t)\| | Chapter 3 (limits of caps) | Hausdorff distance is defined in this support-function form ([`hausdorffDist`](MovingSofaOptimality/Basic/ConvexBody.lean#L83)). The comparison with Mathlib's Hausdorff distance needed for Blaschke's theorem is proved in [`mpc_blaschke`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846). |
+| Blaschke selection theorem | Theorems 3.4.3, 3.5.2 | Mathlib (compactness of nonempty compact sets in the Hausdorff metric), via [`mpc_blaschke`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846) |
+| Schneider Theorem 1.8.20: area is continuous in d_H | Theorems 3.4.3, 3.5.5 | proved ([`mpc_tendsto_area`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L889), from the one-sided forms [`mpc_area_usc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L282) and [`mpc_area_lsc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L296)) |
+| Schneider Theorem 4.2.1: σ is weakly continuous in K (the paper's Theorem 4.1.3) | Theorem 4.1.4, Lemma 6.4.2, Theorem 6.4.3 | [`theorem4_1_3`](MovingSofaOptimality/Angle/HorizontalSide.lean#L844), proved by integration by parts against the distribution function of σ and dominated convergence; the three results use it as the paper does, through the Portmanteau theorem |
+| Schneider Eq. (4.14): σ of a reflected body | Proposition 2.5.4 | proved directly ([`proposition2_5_4_sigma`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L583)) |
 | Schneider Theorem 1.7.5(a) and Remark 1.7.7: h_{K+L} = h_K + h_L | Theorem 7.1.2 | proved ([`cvx_supp_convexBodyComb`](MovingSofaOptimality/Convex/ConvexDomain.lean#L206)) |
-| Revuz–Yor Theorem 4.3 (Lebesgue–Stieltjes measures) and Proposition 4.5 (integration by parts) | Chapter 5, Lemma 8.5.4 | Mathlib's measures of functions of bounded variation (`BoundedVariationOn.vectorMeasure`) and their integration by parts (`setIntegral_Icc_leftLim_vectorMeasure_eq_sub`) |
-| Jordan curve theorem; Green's theorem (Apostol, Theorem 10.43) | Theorems 7.2.1, 7.2.3, Proposition 7.2.7, and through them Lemmas 7.3.5, 8.2.2, 8.2.3 and Theorem 8.4.1(2) | not used: each area these results are used for is computed directly (Section 6) |
-| Brunn–Minkowski inequality | Theorem 8.1.1 (1) | not used: the area condition of 𝒦^i is shown to be preserved by a slicing argument ([`opt_comb_area`](MovingSofaOptimality/Optimality/Domain.lean#L396)) |
+| Revuz–Yor Theorem 4.3 (Lebesgue–Stieltjes measures) and Proposition 4.5 (integration by parts) | Chapter 5: the measures df, and Lemma 5.1.2, through which the later integrations by parts go | Mathlib's measures of functions of bounded variation (`BoundedVariationOn.vectorMeasure`) and their integration by parts (`BoundedVariationOn.setIntegral_Ioc_leftLim_smul_vectorMeasure_eq_sub`), used in the proof of Lemma 5.1.2; the integrations by parts of Lemma 5.1.3 and Theorems 7.4.1, 8.5.2 and 8.5.4 go through Lemma 5.1.2, for cross products coordinate by coordinate |
+| Jordan curve theorem; Green's theorem (Apostol, Theorem 10.43) | Theorems 7.2.1, 7.2.3, Proposition 7.2.7, and through them Lemmas 7.3.5, 8.2.2, 8.2.3 and Theorem 8.4.1(2) | not used: each area these results are used for is computed directly (Section 7) |
+| Brunn–Minkowski inequality | Theorem 8.1.1 (1) | not used: the area condition of 𝒦^i is shown to be preserved by a slicing argument ([`opt_comb_area`](MovingSofaOptimality/Optimality/Domain.lean#L396); Section 7) |
 | Gerver 1992, Theorem 2 | Theorem 6.1.2 | not used: Theorem 6.1.2 is proved from Romik's equations (E12) |
 
 ### Standard facts used without citation
@@ -109,9 +113,9 @@ Status of the formalization:
 | Cavalieri's principle, Fubini–Tonelli | Theorems 1.5.1, 3.1.2, 8.1.1, Chapter 8 | `MeasureTheory.Measure.prod_apply`, `MeasureTheory.lintegral_prod`, `volume_regionBetween_eq_integral` |
 | Change of variables in the plane | Theorem 7.1.3, the niche of Gerver's sofa | `lintegral_abs_det_fderiv_eq_addHaar_image` |
 | Radon–Nikodym theorem | Corollary 6.4.4 | `MeasureTheory.Measure.withDensity_rnDeriv_eq` |
-| Lebesgue differentiation theorem | Proposition 5.1.4, Theorem 6.5.1 | Mathlib (`Mathlib/MeasureTheory/Integral/IntervalIntegral/LebesgueDifferentiationThm.lean`) |
+| Lebesgue differentiation theorem | Proposition 5.1.4, and Theorem 6.5.1 through it | Mathlib (`Mathlib/MeasureTheory/Integral/IntervalIntegral/LebesgueDifferentiationThm.lean`) |
 | Dominated convergence | Theorem 4.1.3 | `intervalIntegral.tendsto_integral_filter_of_dominated_convergence` |
-| Portmanteau theorem | Lemma 6.4.2, Theorem 6.4.3 | not used: the limits are taken through support-function difference quotients |
+| Portmanteau theorem | Theorem 4.1.4, Lemma 6.4.2, Theorem 6.4.3 | derived from Theorem 4.1.3 for the measures σ_K on the circle: for lower and upper semicontinuous functions, open and closed sets ([`ang_portmanteau_lsc`](MovingSofaOptimality/Angle/HorizontalSide.lean#L969), [`ang_portmanteau_usc`](MovingSofaOptimality/Angle/HorizontalSide.lean#L999), [`ang_portmanteau_open`](MovingSofaOptimality/Angle/HorizontalSide.lean#L1034), [`ang_portmanteau_closed`](MovingSofaOptimality/Angle/HorizontalSide.lean#L1048)) |
 | Banach fixed point theorem | (Romik's system) | `ContractingWith.exists_fixedPoint'` |
 
 ### Does the paper use each cited result correctly?
@@ -146,7 +150,7 @@ say so. Trivial gap; the theorem holds.
 ?_{K^m}(t) = M_ω(?_K(ω − t)) for ? = L, 𝐱, 𝐲, a, b, c, d, W, Z, but the reflection M_ω exchanges a ↔ c,
 b ↔ d and W ↔ Z; only L, 𝐱, 𝐲 map to themselves. The second bullet should have K, not K^m, on the right:
 A^±_{K^m}(t) = M_ω(C^∓_K(ω − t)). The third bullet is consistent with the exchanges. Slips in the
-statement; the Lean statements ([`proposition2_5_4_hallway`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L503), [`proposition2_5_4_vertices`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L531)) are the
+statement; the Lean statements ([`proposition2_5_4_hallway`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L496), [`proposition2_5_4_vertices`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L524)) are the
 corrected ones.
 
 **E4. Lemma 2.5.6 and Theorem 2.5.8 (4 ⇒ 3)** (`lem:niche-in-cap`, `05/15:151–168`; `05/15:212`). The
@@ -159,8 +163,8 @@ proofs use, without proof, two facts about every cap K:
 Both hold. For (b): A⁻_K(0) = (a, 0) with a ≥ 0 and C⁺_K(ω) = λv_ω with λ ≥ 0, so every half-plane
 H₋(s, k) defining K with s in J_ω has k ≥ 0. For ω = π/2, O need not lie in K (K = [5, 6] × [0, 1] is a
 cap), but the paper's proof of that case does not use O. Minor gap; both results hold. The Lean proof
-of Lemma 2.5.6 checks directly that every point of the wedge satisfies the half-plane conditions of
-the cap.
+of Lemma 2.5.6 follows the paper's cases and proves (a) (`IsCap.cPlus_eq_corner`, and
+`IsCap.aMinus_eq_corner` from it by Proposition 2.5.4) and (b) (`IsCap.zero_mem`).
 
 **E5. Theorem 3.1.2 and Lemma 3.4.7** (`thm:simple-nef-polygon`, `lem:balancing`, `10/15:215–223`).
 Lemma 3.4.7 applies Theorem 3.1.2 twice, the second time to the polygon already modified by the first
@@ -187,8 +191,12 @@ normal angles there. The bottom normals ω + π and 3π/2 are missing; the proof
 uses Θ^◇ ∪ {ω + π, 3π/2}. Slip in the statement; the Lean statement ([`proposition3_3_1`](MovingSofaOptimality/Balanced/PolygonCap.lean#L423), through
 [`AngleSet.capAngles`](MovingSofaOptimality/Balanced/PolygonCap.lean#L38)) includes the bottom normals.
 
-**E8. Theorems 3.5.2, 3.5.4 and 3.5.5** (`10/20:47`, `10/20:69`, `10/20:80–90`).
+**E8. Theorems 3.4.3, 3.5.2 and 3.5.4** (`10/15:49`, `10/20:47`, `10/20:69`).
 
+- In Theorem 3.4.3, the domain ℬ_Θ is compact by the Blaschke selection theorem only if a Hausdorff
+  limit of its members is again a polygon cap with angle set Θ, which the proof does not show. It
+  holds for the limit of a maximizing sequence, whose area is at least 𝒜_Θ(K₁) > 0, so that it has
+  an interior point. Also, ℬ_Θ should require 𝒜_Θ(K) > 0, as Lemma 3.4.2 does; K₁ is still in it.
 - "Checking K ∈ 𝒦^c_ω is easy" in Theorem 3.5.2: a Hausdorff limit of caps is a cap. The value
   conditions follow from uniform convergence of the support functions, but the closedness condition
   K = ⋂_{t∈J_ω∪{ω+π,3π/2}} H_K(t) is not proved. It holds: the normal cones of the approximating caps
@@ -225,8 +233,8 @@ df = r dt for a measurable and *bounded* r. The direction (1) ⇒ (2) is false.
   Theorem 6.5.1, in the direction (2) ⇒ (1) together with the a.e.-derivative clause, for a bounded r.
   That use is correct.
 
-Error; Theorem 6.5.1 survives. [`proposition5_1_4`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L455) is the correct version (r integrable), and
-[`proposition5_1_4_deriv`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L494) is the derivative clause with bounded r. [`proposition5_1_4_as_stated_false`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L521)
+Error; Theorem 6.5.1 survives. [`proposition5_1_4`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L541) is the correct version (r integrable), and
+[`proposition5_1_4_deriv`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L580) is the derivative clause with bounded r. [`proposition5_1_4_as_stated_false`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L607)
 refutes the statement as printed, with the counterexample above.
 
 **E12. Theorem 6.1.2** (`thm:injectivity-gerver`, `20/02:39–48`). The proof reads: "Theorem 2 of
@@ -240,7 +248,7 @@ So G is a balanced maximum sofa, and Theorem 6.1.1 proves the claim."
   satisfies the local optimality (balancedness) condition, not that it is a limit of maximizers.
 - Remark 6.1.1 notes that the statement can be checked from Romik's equations.
 
-Gap: the proof is invalid as written; the statement is true. [`theorem6_1_2`](MovingSofaOptimality/Gerver/Properties.lean#L145) is proved from Romik's
+Gap: the proof is invalid as written; the statement is true. [`theorem6_1_2`](MovingSofaOptimality/Gerver/Properties.lean#L168) is proved from Romik's
 formulas ([`gv_injectivity`](MovingSofaOptimality/Gerver/Structure.lean#L140)): σ_K is absolutely continuous on [0, π/2) and on (π/2, π], with densities
 ⟨𝐀′(t), v_t⟩ and ⟨−𝐂′(t − π/2), u_{t−π/2}⟩; the inner corner is the path 𝐱, which is C¹; and
 𝐱′·u_t < 0 < 𝐱′·v_t on (0, π/2).
@@ -321,7 +329,7 @@ these arguments.
 parametrization 𝐥_K^{π/2+φ^L} at φ^L, where it equals 𝐲_K(φ^L), so its left side 𝒥(𝐲_K(φ^L), 𝐲_K(φ^L))
 is 0. The statement would then claim that 𝒥(Z^L_K, 𝐱^L_K) is linear in K, which is false (it contains
 the term −c² cot φ^L/2 with c = h_K(π/2 + φ^L) − 1). The term the paper uses later (`25/10:197`) evaluates
-at π/2. Slip in the statement (false as printed); [`lemma8_3_6`](MovingSofaOptimality/Optimality/Concavity.lean#L877) evaluates at π/2.
+at π/2. Slip in the statement (false as printed); [`lemma8_3_6`](MovingSofaOptimality/Optimality/Concavity.lean#L889) evaluates at π/2.
 
 **E23. Theorem 8.4.1** (`thm:gerver-monotone`, `25/12:43–74`). The theorem is stated without proof.
 Remark 8.4.1 notes that its properties are "easy to verify numerically and implicitly assumed" in the
@@ -348,13 +356,13 @@ Gap (an unproved theorem; true). The formalization proves it from Romik's equati
   𝒥(𝐱|[t₁,t₄]) − 𝒥(𝐁) − 𝒥(𝐃).
 
 **E24. Theorem 8.4.3 (2)** (`thm:gerver-left-right`, `25/12:151`): "𝐱^R_K = X_{B_K} = 𝐃(t₃)" should be
-𝐁(t₃); 𝐃 is defined on [t₀, t₂] only. Slip in the statement; [`theorem8_4_3_two`](MovingSofaOptimality/Gerver/Properties.lean#L920) uses 𝐁(t₃).
+𝐁(t₃); 𝐃 is defined on [t₀, t₂] only. Slip in the statement; [`theorem8_4_3_two`](MovingSofaOptimality/Gerver/Properties.lean#L1680) uses 𝐁(t₃).
 
 **E25. Proposition 8.4.4 (4)** (`pro:measure-translation`, `25/12:202`): "⟨𝐃′(t), u_t⟩ dt = σ̆_D as
 measures on t ∈ (t₀, t₂]". Since 𝐃(t) = v_{D_K}(3π/2 + t), σ̆_D lives on (π/2 + t₀, π/2 + t₂], with density
 ⟨𝐃′(τ − π/2), u_{τ−π/2}⟩, the same shifted form as item (3). Theorems 8.4.5 and 8.5.6 use this form. As
 printed, the left side is σ_{D_K} on (π, π + θ], which is 0. Slip in the statement;
-[`proposition8_4_4`](MovingSofaOptimality/Gerver/Properties.lean#L1094) is the shifted form.
+[`proposition8_4_4`](MovingSofaOptimality/Gerver/Properties.lean#L1203) is the shifted form.
 
 **E26. Typos.**
 
@@ -366,7 +374,9 @@ printed, the left side is σ_{D_K} on (π, π + θ], which is 0. Slip in the sta
 - Theorem 2.4.1, proof (`05/12:40`): the directions v₀, u_ω should be −v₀, −u_ω.
 - Lemma 2.5.6, proof (`05/15:159`): in case 1, x_K(t) ∈ K forces x_K(t) = O and T_K(t) = ∅; this is not
   a contradiction, but the conclusion holds.
-- Theorem 2.5.9, proof (`05/15:225`): "𝒩(K) contains K" for "K contains 𝒩(K)".
+- Theorem 2.5.9, proof (`05/15:225`): "𝒩(K) contains K" for "K contains 𝒩(K)"; and
+  K \ 𝒩(K) = 𝓘(S) is Theorem 2.4.2 (S is a moving sofa with cap K), not Theorem 2.4.3, which
+  assumes S monotone.
 - Theorem 3.1.2, proof (`10/10:97`): H₋(t, x) for H₋(t_i, x).
 - Lemma 3.4.7, proof (`10/15:221`): the sign of the change of \|𝒩_Θ\| is reversed; with the printed sign
   the lemma does not follow.
@@ -423,19 +433,18 @@ omit them, so they are more general than the paper's.
 
 | Result | Hypothesis that is not needed | Lean |
 | --- | --- | --- |
-| Proposition 2.5.4 (all identities except that K^m is a cap) | K is a cap | [`proposition2_5_4_supp`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L496), `_hallway`, `_vertices`, `_gaps`, `_sets` hold for every set K |
-| Theorem 5.2.2 | b ≤ a + 2π | [`theorem5_2_2`](MovingSofaOptimality/Basic/SurfaceArea.lean#L389) assumes only a < b |
+| Proposition 2.5.4 (all identities except that K^m is a cap) | K is a cap | [`proposition2_5_4_supp`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L489), `_hallway`, `_vertices`, `_gaps`, `_sets` hold for every set K |
+| Theorem 5.2.2 | b ≤ a + 2π | [`theorem5_2_2`](MovingSofaOptimality/Basic/SurfaceArea.lean#L403) assumes only a < b |
 | Proposition 6.2.1 | K is a cap; t ∈ [0, π/2] | [`proposition6_2_1`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L123) holds for every K and t |
 | Proposition 6.2.2 | K is a cap; t ∈ [0, π/2] | [`proposition6_2_2`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L158) |
 | Theorem 6.2.3 | t ∈ [0, π/2) (right derivatives); t ∈ (0, π/2] (left derivatives) | [`theorem6_2_3_right`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L201), [`theorem6_2_3_left`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L225) |
-| Lemma 6.2.4 | t ∈ [0, π/2] | [`lemma6_2_4`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L249) |
-| Lemma 6.4.2 | the polygon caps K_n have rotation angle π/2 | [`lemma6_4_2`](MovingSofaOptimality/Injectivity/LimitIneq.lean#L221) |
-| Lemma 6.5.4 | f ≥ 0 and g ≥ 0 (the codomain ℝ≥0) | [`lemma6_5_4`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L346) holds for all continuous f ≤ g |
+| Lemma 6.2.4 | K is a cap; t ∈ [0, π/2] | [`lemma6_2_4`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L251) holds for every convex body K and every t |
+| Lemma 6.4.2 | the polygon caps K_n have rotation angle π/2 | [`lemma6_4_2`](MovingSofaOptimality/Injectivity/LimitIneq.lean#L329) |
+| Lemma 6.5.4 | f ≥ 0 and g ≥ 0 (the codomain ℝ≥0) | [`lemma6_5_4`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L388) holds for all continuous f ≤ g |
 | Theorem 7.1.2 (2) | a < b < a + π, for the vertices v_K^±(a), v_K(a, b) | [`theorem7_1_2_vertices`](MovingSofaOptimality/Convex/ConvexDomain.lean#L262) |
-| Proposition 7.2.4 | q ∈ l(t, h) (it follows from p ∈ l(t, h) and q − p = d v_t) | [`proposition7_2_4_line`](MovingSofaOptimality/Convex/CurveArea.lean#L470) |
-| Theorem 7.3.2, last claim | a < b < a + π, for the quadraticity of 𝒥(𝐮_K^{a,b}) | [`theorem7_3_2_quadratic`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1124) |
+| Proposition 7.2.4 | q ∈ l(t, h) (it follows from p ∈ l(t, h) and q − p = d v_t) | [`proposition7_2_4_line`](MovingSofaOptimality/Convex/CurveArea.lean#L686) |
+| Theorem 7.3.2, last claim | a < b < a + π, for the quadraticity of 𝒥(𝐮_K^{a,b}) | [`theorem7_3_2_quadratic`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1116) |
 | Theorem 8.3.2 | a > t − π | [`theorem8_3_2`](MovingSofaOptimality/Optimality/Concavity.lean#L256) assumes a ≤ b ≤ t |
-| Theorem 8.5.2 | b < a + π | [`theorem8_5_2`](MovingSofaOptimality/Optimality/Variation.lean#L587) assumes a < b |
 
 ## 6. How the formalization reads the paper
 
@@ -452,13 +461,19 @@ omit them, so they are more general than the paper's.
   sides of polygons). It is formalized as the Lebesgue measure along the line, `lineLength t c X`.
 - **The surface area measure** σ_K is the Lebesgue–Stieltjes measure on ℝ of
   t ↦ ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K, which is 2π-periodic. Measures on S¹ are read as periodic measures on ℝ
-  or as measures on [0, 2π). See Section 2 for its relation to Schneider's definition.
+  or as measures on [0, 2π). See Section 2 for its relation to Schneider's definition. The paper
+  derives the atoms of σ_K and dv_K⁺ = v_t σ_K from Schneider's description; here they follow from the
+  definition, and Section 7 lists the proofs where this matters.
 - **The Lebesgue–Stieltjes measure** df of a function of bounded variation on [a, b] is Mathlib's
   vector measure of the function extended by constants outside [a, b] ([`lsMeasure`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57)). Its mass at the
   left endpoint is 0, as in Definition 5.1.3.
 - **The Hausdorff distance** of convex bodies is defined as sup_t \|h_K(t) − h_L(t)\| (Section 2).
+- **The polyline of a cap** (Definitions 3.4.3 and 3.4.4). The paper defines 𝐩_K as the set
+  ∂(F_ω \ 𝒩_Θ(K)) \ l⃗_K \ r⃗_K, which Theorem 3.4.4 shows to be a polyline, and τ_K(t) as the total
+  length of its edges with normal angle t. Edges are not formalized: τ_K(t) is the sum, over the
+  lines l(t, c), of the length of 𝐩_K on l(t, c) (`tau`, in [`Polyline.lean`](MovingSofaOptimality/Balanced/Polyline.lean)).
 - **The curve area functional** 𝒥 of a curve of bounded variation is the vector integral
-  ½ ∫ 𝐱 × d𝐱 against [`lsMeasure`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57) ([`curveArea`](MovingSofaOptimality/Convex/CurveArea.lean#L314)). The functional of the convex arc 𝐮_K^{a,b} is
+  ½ ∫ 𝐱 × d𝐱 against [`lsMeasure`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L57) ([`curveArea`](MovingSofaOptimality/Convex/CurveArea.lean#L530)). The functional of the convex arc 𝐮_K^{a,b} is
   ½ ∫_{(a,b)} h_K dσ_K ([`convexCurveArea`](MovingSofaOptimality/Convex/ConvexCurve.lean#L33)). Theorem 7.3.2 shows that it is the curve area functional
   of an injective parametrization of the arc.
 - **Gerver's sofa** follows Romik:
@@ -471,40 +486,20 @@ omit them, so they are more general than the paper's.
 - **Chapter 8** is stated for a parameter φ ∈ [0.039, 0.04] standing for φ^R, with φ^L = π/2 − φ, rather
   than for Gerver's angle itself. This is how Lemma 8.1.7 (1), (3) get their hypothesis on φ; the
   paper's statements hold for Gerver's φ, which lies in that interval.
-- **Jordan curves and Green's theorem** (Theorems 7.2.1, 7.2.3, Proposition 7.2.7) are not formalized.
-  Each area the paper computes with them is computed directly, by Fubini or by a change of variables:
-  - Lemma 7.3.5 (1) is replaced by the area of the region between the convex arc and its tangent
-    triangle ([`lemma7_3_5`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1630));
-  - in Lemma 8.2.2, the region is the one of Lemma 7.3.5, a triangle minus the cut body, whose area
-    Theorem 7.1.3 gives; in Lemma 8.2.3, the regions bounded by curves are written as regions between
-    graphs, whose areas Fubini gives;
-  - the niche of Gerver's sofa is shown to be a region under a curve whose first coordinate is
-    monotone ([`env_niche_eq`](MovingSofaOptimality/Gerver/Envelope.lean#L775), [`env_volume_region_of_monotoneOn`](MovingSofaOptimality/Gerver/EnvelopeArea.lean#L419)).
+- **Jordan curves and Green's theorem** (Theorems 7.2.1, 7.2.3, Proposition 7.2.7) are not formalized
+  (Section 9). Lemma 7.3.5 (1), that the boundary Γ of the region between a convex arc and its two
+  tangent segments is a counterclockwise Jordan curve, is stated as what the paper uses it for, the
+  area of that region ([`lemma7_3_5`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1633)); the region enclosed by Γ is taken to be
+  T° \ ⋂_{t∈[a,b]} H_K(t), with T the triangle of the tangent segments, so that (3) holds by
+  definition. The areas that the paper computes with Green's theorem are computed directly; Section 7
+  lists these proofs.
 - **Theorem 8.4.1 (2)** is stated as what the paper uses from it:
   - the curves 𝐁, 𝐱|[t₁,t₄] and 𝐃 lie on the boundary of the niche;
   - they have the stated endpoints;
   - the niche has area 𝒥(𝐱|[t₁,t₄]) − 𝒥(𝐁) − 𝒥(𝐃).
 
   The proof shows more: the niche is exactly the region strictly under these curves.
-- **Theorem 8.1.1 (1)** (𝒦^i is convex) is proved without the Brunn–Minkowski inequality. Every cap
-  with ω = π/2 spans the heights 0 ≤ y ≤ 1, so each horizontal slice of (1 − c)K₁ + cK₂ contains the
-  combination of the slices of K₁ and K₂, and Fubini gives
-  \|(1 − c)K₁ + cK₂\| ≥ (1 − c)\|K₁\| + c\|K₂\| ≥ 2.2 ([`opt_comb_area`](MovingSofaOptimality/Optimality/Domain.lean#L396)).
-- **Proofs that follow a different route** from the paper, with the same statements:
-  - Lemma 2.5.6 and Theorem 2.5.8 (direct half-plane checks);
-  - Theorem 3.4.3 (compactness of finitely many support values instead of Blaschke selection);
-  - Theorems 3.5.4–3.5.5 (pointwise convergence of niches);
-  - the mirror halves of Theorems 4.1.2, 4.1.4 and 4.2.5 (proved directly);
-  - Theorem 4.1.4 (difference quotients of support functions instead of the weak convergence of
-    Theorem 4.1.3);
-  - Theorem 6.2.5 (read off the definition of σ_K instead of the product rule with Theorem 5.2.2);
-  - Lemma 6.4.1 (a bound on the derivative of t ↦ ⟨A − C, u_t⟩ instead of Thales' circle);
-  - Lemma 6.4.2 and Theorem 6.4.3 (difference quotients of support functions instead of the
-    Portmanteau theorem);
-  - Lemma 8.1.7 (2), (4) and Theorem 8.2.4 (the corrected arguments of E20);
-  - Theorem 8.5.1 (the symmetry of ½ ∫ h dσ by integration by parts instead of Schneider's mixed
-    volumes);
-  - Theorem 6.1.2 and Theorem 8.4.1 (from Romik's equations).
+- **Proofs.** Where a proof departs from the paper's argument, Section 7 says how and why.
 
 **Corrections of the paper's statements.** Each is the minimal change that makes the statement true,
 and each is explained in the module docstring of its file.
@@ -512,31 +507,66 @@ and each is explained in the module docstring of its file.
 | Result | Correction | Lean | See |
 | --- | --- | --- | --- |
 | Definition 2.3.9 | "not parallel to the x-axis" | [`leftSide`](MovingSofaOptimality/Sofa/Defs.lean#L154), [`rightSide`](MovingSofaOptimality/Sofa/Defs.lean#L157) | E1 |
-| Proposition 2.2.2 | Q⁻_S(t) = H°₋(t, h_S(t) − 1) ∩ H°₋(t + π/2, h_S(t + π/2) − 1) | [`proposition2_2_2_qMinus`](MovingSofaOptimality/Monotone/SupportingHallway.lean#L163) | E26 |
-| Proposition 2.5.4 | a ↔ c, b ↔ d, W ↔ Z exchanged; K, not K^m, on the right | [`proposition2_5_4_hallway`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L503), [`proposition2_5_4_vertices`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L531) | E3 |
+| Proposition 2.2.2 | Q⁻_S(t) = H°₋(t, h_S(t) − 1) ∩ H°₋(t + π/2, h_S(t + π/2) − 1) | [`proposition2_2_2_qMinus`](MovingSofaOptimality/Monotone/SupportingHallway.lean#L177) | E26 |
+| Proposition 2.5.4 | a ↔ c, b ↔ d, W ↔ Z exchanged; K, not K^m, on the right | [`proposition2_5_4_hallway`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L496), [`proposition2_5_4_vertices`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L524) | E3 |
 | Definition 3.2.5 | F_ω instead of P_ω | [`polyNiche`](MovingSofaOptimality/Balanced/PolygonCap.lean#L53) | E6 |
 | Proposition 3.3.1 (2) | normal angles in Θ^◇ ∪ {ω + π, 3π/2} | [`proposition3_3_1`](MovingSofaOptimality/Balanced/PolygonCap.lean#L423) | E7 |
 | Lemma 4.2.4 | ω ∈ [sec⁻¹(2.2), π/2) | [`lemma4_2_4`](MovingSofaOptimality/Angle/RightAngle.lean#L517) | E9 |
-| Proposition 5.1.4 | r integrable instead of bounded | [`proposition5_1_4`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L455) | E11 |
+| Proposition 5.1.4 | r integrable instead of bounded | [`proposition5_1_4`](MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L541) | E11 |
 | Proposition 6.2.2 | g^∓_K(π/2 − t), f^∓_K(π/2 − t) | [`proposition6_2_2`](MovingSofaOptimality/Injectivity/ArmLengths.lean#L158) | E13 |
-| Lemma 6.5.5 | range (0, π/2] | [`lemma6_5_5`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L366) | E17 |
-| Lemma 8.1.7 (4) | equality at t = 0, φ^L | [`lemma8_1_7_four`](MovingSofaOptimality/Optimality/Domain.lean#L1296) | E20 |
+| Lemma 6.5.5 | range (0, π/2] | [`lemma6_5_5`](MovingSofaOptimality/Injectivity/BoundingArms.lean#L408) | E17 |
+| Lemma 8.1.7 (4) | equality at t = 0, φ^L | [`lemma8_1_7_four`](MovingSofaOptimality/Optimality/Domain.lean#L1310) | E20 |
 | Definition 8.3.3 | ℛ_B = 𝓜_B(π + φ^R, 3π/2; 𝐥_B^{3π/2}) | [`mamikonR`](MovingSofaOptimality/Optimality/Concavity.lean#L278) | E26 |
-| Lemma 8.3.6 (3) | the tangent-line parametrization evaluated at π/2 | [`lemma8_3_6`](MovingSofaOptimality/Optimality/Concavity.lean#L877) | E22 |
-| Theorem 8.4.3 (2) | 𝐁(t₃) instead of 𝐃(t₃) | [`theorem8_4_3_two`](MovingSofaOptimality/Gerver/Properties.lean#L920) | E24 |
-| Proposition 8.4.4 (4) | σ̆_D on (π/2 + t₀, π/2 + t₂] with density ⟨𝐃′(t − π/2), u_{t−π/2}⟩ | [`proposition8_4_4`](MovingSofaOptimality/Gerver/Properties.lean#L1094) | E25 |
+| Lemma 8.3.6 (3) | the tangent-line parametrization evaluated at π/2 | [`lemma8_3_6`](MovingSofaOptimality/Optimality/Concavity.lean#L889) | E22 |
+| Theorem 8.4.3 (2) | 𝐁(t₃) instead of 𝐃(t₃) | [`theorem8_4_3_two`](MovingSofaOptimality/Gerver/Properties.lean#L1680) | E24 |
+| Proposition 8.4.4 (4) | σ̆_D on (π/2 + t₀, π/2 + t₂] with density ⟨𝐃′(t − π/2), u_{t−π/2}⟩ | [`proposition8_4_4`](MovingSofaOptimality/Gerver/Properties.lean#L1203) | E25 |
 
-Three further readings concern conjuncts that are vague in the paper or follow from the rest:
+Four further readings concern conjuncts that are vague in the paper or follow from the rest:
 
 - Lemma 7.1.4 is stated as the formula for the one-sided derivative Df(K; K'). The paper's closing
   remark, that Df(K; −) is well defined and linear, is not stated separately: the proof shows that
   the derivative exists, and the linearity follows from the formula
   ([`lemma7_1_4`](MovingSofaOptimality/Convex/ConvexDomain.lean#L83));
 - the measurability claim of Mamikon's Theorem 7.4.1 is read on [a, b], where 𝐳 is constrained
-  ([`theorem7_4_1`](MovingSofaOptimality/Convex/Mamikon.lean#L499));
-- Theorem 8.4.1 (2) is read as described above.
+  ([`theorem7_4_1`](MovingSofaOptimality/Convex/Mamikon.lean#L569));
+- Theorem 8.4.1 (2) is read as described above;
+- in Theorem 8.4.3 (2), the tails 𝐝_{D_K} and 𝐛_{B_K} are the curves 𝐃 and 𝐁 "as oriented curves":
+  this is stated as the equality of the sets together with 𝒥(𝐝_{D_K}) = 𝒥(𝐃) and
+  𝒥(𝐛_{B_K}) = 𝒥(𝐁), which is what Theorem 8.4.6 uses from it; orientations of curves are not
+  formalized, and 𝒥 of a convex arc is ½∫ h dσ ([`theorem8_4_3_two`](MovingSofaOptimality/Gerver/Properties.lean#L1680)).
 
-## 7. What each result depends on
+## 7. Departures from the paper's proofs
+
+Every proof follows the paper's argument: the same intermediate claims and constructions, and the
+results that the paper's proof cites, which the route check verifies (Section 8). The exceptions are
+the steps below. Each is necessary for one of three reasons: (1) the paper's step is wrong, or has a
+gap that cannot be repaired along its lines; (2) the step needs mathematics that Lean lacks and that
+this project cannot reasonably build; (3) the step has no meaning in a representation that the
+formalization uses (Section 6). Gaps that can be repaired along the paper's lines are repaired there
+and are not listed (for example E4, E5, and E8 for Theorems 3.4.3, 3.5.2 and 3.5.4). The docstring of each
+Lean declaration describes its departure ("Departure from the paper"), and so do
+[`formalization.yaml`](formalization.yaml) and [`docs/route_differences.tsv`](docs/route_differences.tsv).
+
+| Result | The paper's argument | The formalization's | Why it is necessary | E-item |
+| --- | --- | --- | --- | --- |
+| Proposition 2.1.2 | σ_K({t}) is the length of e_K(t) by Schneider's Theorem 2.1.1 with X = {t} | the atom of σ_K at t is the jump at t of ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K | (3) σ_K is defined as the Lebesgue–Stieltjes measure of that function, not through Theorem 2.1.1 | – |
+| Theorem 5.2.2 | dv_K⁺ = v_t σ_K for polygons, then a limit along polygons with the same edges at the ends of the interval (as in Schneider's proof of his Theorem 8.3.3), by Theorem 4.1.3 and the Portmanteau theorem | integration by parts in the definition of σ_K | (2) that approximation by polygons is not in Mathlib; (3) σ_K is defined from v_K⁺ and h_K, so that the identity follows from the definition, while the paper's limit serves to relate Schneider's σ_K to v_K⁺ | – |
+| Theorem 6.1.2 | Theorem 6.1.1, for Gerver's sofa taken as a balanced maximum sofa by Gerver's Theorem 2 | the three conditions of the injectivity condition, checked from Romik's equations; Gerver's sofa is the monotone sofa of its cap by Theorems 2.5.9 and 2.4.3 | (1) Gerver's Theorem 2 does not make Gerver's sofa a balanced maximum sofa | E12 |
+| Lemma 6.3.1 | 𝒩(K) ⊆ K by Theorem 3.5.4, then the height of 𝐱_K(π/4) by (1) ⇒ (3) of Theorem 2.5.8 | 𝒩_Θ(K) ⊆ K by Theorem 3.4.10, and the height of 𝐱_K(π/4) bounded by the part of Q⁻_K(π/4) in F_{π/2}, which lies in 𝒩_Θ(K) ⊆ K | (1) Theorem 3.5.4 is about balanced maximum caps, and K is a maximum polygon cap | E15 |
+| Theorem 6.5.6 | Lemmas 6.5.2 and 6.5.5 | also f_K(π/2) > 1 and g_K(0) > 1, by the continuity of f_K and g_K (Proposition 6.4.6) | (1) Lemma 6.5.2 gives its bounds only on [0, π/2) and (0, π/2] | E17 |
+| Theorem 7.3.2 | \|K′\| for the cut body K′ by Green's theorem (Theorem 7.2.3, Proposition 7.2.4) and by Theorem 7.1.3; σ_K((a, b)) = 0 for an arc that is a point, by Schneider's Theorem 2.1.1 | the curve area functional of a parametrization of the arc by arc length, by a change of variables; for an arc that is a point p, v_K⁺ = p on [a, b), hence σ_K((a, b)) = 0 | (2) Mathlib has neither the Jordan curve theorem nor Green's theorem; (3) σ_K is not defined through Theorem 2.1.1 | – |
+| Lemma 7.3.5 | (1): Γ is a counterclockwise Jordan curve, by Proposition 7.2.7; (3): the region enclosed by Γ is disjoint from ⋂_{t∈[a,b]} H_K(t), as it is simply connected | (1) is replaced by the area \|T\| − \|K′\| of the region, with \|K′\| by Theorem 7.1.3, which is what the paper uses (1) for; the region is T° \ ⋂_{t∈[a,b]} H_K(t), so that (3) holds by definition | (2) as for Theorem 7.3.2 | – |
+| Theorem 8.1.1 (1) | \|(1 − c)K₁ + cK₂\| ≥ 2.2 by the Brunn–Minkowski inequality | horizontal slices and Fubini give \|(1 − c)K₁ + cK₂\| ≥ (1 − c)\|K₁\| + c\|K₂\| | (2) Mathlib has no Brunn–Minkowski inequality | – |
+| Lemma 8.1.7 (2), (4) | the point p of δK on b_K^R is outside 𝒩(K) by Theorem 2.5.8 (2), hence in B_K by Lemma 8.1.6 | the topmost point of K on b_K^R (on d_K^L) lies in B_K (in D_K): a normal angle of K there beyond φ^R + π/2 (below φ^L) would contradict g_K(φ^R) > 1 (f_K(φ^L) > 1, Theorem 6.2.3); otherwise the sublinearity of h_K bounds h_K(t) − ⟨p, u_t⟩ by 1 on [φ^R, π/2] | (1) Theorem 2.5.8 (2) needs 𝒩(K) ⊆ K, which 𝒦^i does not provide | E20 |
+| Lemma 8.2.2 | the region R bounded by 𝐛_B and two segments; \|R\| by Green's theorem (Theorem 7.2.3) and Proposition 7.2.6 | R is the part of the triangle X_B W_K^R W_B outside B, with area by Lemma 7.3.5 and Theorem 7.1.3 | (2) as for Theorem 7.3.2 | – |
+| Lemma 8.2.3 | the region G bounded by 𝐱_K\|[φ^R, φ^L] and three segments; \|G\| − \|R\| by Green's theorem | regions between graphs, with areas by Fubini | (2) as for Theorem 7.3.2 | – |
+| Theorem 8.2.4 | splits \|𝒩(K)\| into three parts, disjoint by Lemma 8.1.4 and 𝒩(K) ⊆ K | 𝒩(K) ∩ H̆^R ∩ H̆^L = ∅, by comparing heights | (1) 𝒩(K) ⊆ K fails on 𝒦^i | E20 |
+| Lemma 8.3.5 | \|K\| = 𝒥(𝐮_K^{0,π}) by Theorem 7.3.2, then split by Lemma 7.3.4, with 𝒥(A_K(π/2), C_K(0)) = σ_K({π/2})/2 by Propositions 2.1.2 and 7.2.4 | ½∫_{[0,π]} h_K dσ_K split at the atom π/2, which gives σ_K({π/2})/2 directly, then Lemma 7.3.4 at φ^R and φ^L | (1) 𝐮_K^{0,π} is outside the range a < b < a + π of Theorem 7.3.2 and Lemma 7.3.4; (3) 𝒥(𝐮_K^{a,b}) is ½∫_{(a,b)} h_K dσ_K by definition (Section 6) | E19 |
+| Theorem 8.4.1 | none: the theorem is stated without proof | proved from Romik's equations by interval arithmetic; the niche is the region under the curves of (2) | (1) there is no argument to follow | E23 |
+| Theorem 8.4.3 (2), the equalities of 𝒥 | none: they follow from the equality of the curves as oriented curves | both sides computed, from the densities of σ (the computation of Proposition 8.4.4, through Theorem 5.2.2) and from the pieces of 𝐃 and 𝐁 | (3) 𝒥 of a convex arc is ½∫ h dσ, and orientations of curves are not formalized | – |
+| Theorem 8.5.1 | the symmetry of Schneider's mixed area V(K₁, K₂) = ½∫ h_{K₁} dσ_{K₂} (Schneider (5.19)) | the symmetry of ½∫ h_{K₁} dσ_{K₂} on 𝒦^i, by integration by parts | (2) Mathlib has neither mixed volumes nor Schneider's formula (5.19) | – |
+
+## 8. What each result depends on
 
 [`scripts/Audit.lean`](scripts/Audit.lean) lists, for every numbered result, the axioms it uses and the results from prior
 work its proof reaches. Every result uses exactly [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). The
@@ -544,20 +574,27 @@ results whose proofs use results from prior work are these; no other result uses
 
 | Result | Lean | Results from prior work used |
 | --- | --- | --- |
-| Theorem 1.1.1 | [`theorem1_1_1`](MovingSofaOptimality/Main.lean#L301) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558), [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354) |
-| Theorem 7.1.3 | [`theorem7_1_3`](MovingSofaOptimality/Convex/ConvexDomain.lean#L301), [`theorem7_1_3_quadratic`](MovingSofaOptimality/Convex/ConvexDomain.lean#L331) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
-| Lemma 7.3.5 | [`lemma7_3_5`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1630) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
-| Theorem 8.1.1 (2) | [`theorem8_1_1_balanced`](MovingSofaOptimality/Main.lean#L42) | [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354) |
-| Definition 8.1.2 (existence, uniqueness) | [`definition8_1_2_exists`](MovingSofaOptimality/Main.lean#L32), [`definition8_1_2_unique`](MovingSofaOptimality/Main.lean#L36) | [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354), [`GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L360) |
-| Proposition 8.2.1, Lemma 8.2.2, Theorem 8.2.4 | [`proposition8_2_1`](MovingSofaOptimality/Optimality/UpperBound.lean#L368), [`lemma8_2_2`](MovingSofaOptimality/Optimality/UpperBound.lean#L522), [`theorem8_2_4`](MovingSofaOptimality/Optimality/UpperBound.lean#L1050) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
-| Lemmas 8.3.5, 8.3.7, Theorem 8.3.8 | [`lemma8_3_5`](MovingSofaOptimality/Optimality/Concavity.lean#L842), [`lemma8_3_7`](MovingSofaOptimality/Optimality/Concavity.lean#L1101), [`theorem8_3_8`](MovingSofaOptimality/Optimality/Concavity.lean#L1119) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
-| Theorems 8.5.1, 8.5.6, 8.5.7, Corollary 8.5.8 | [`theorem8_5_1`](MovingSofaOptimality/Optimality/Variation.lean#L554), [`theorem8_5_6`](MovingSofaOptimality/Optimality/Variation.lean#L768), [`theorem8_5_7`](MovingSofaOptimality/Main.lean#L135), [`corollary8_5_8`](MovingSofaOptimality/Main.lean#L258) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
+| Theorem 1.1.1 | [`theorem1_1_1`](MovingSofaOptimality/Main.lean#L302) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558), [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354) |
+| Theorem 7.1.3 | [`theorem7_1_3`](MovingSofaOptimality/Convex/ConvexDomain.lean#L380), [`theorem7_1_3_quadratic`](MovingSofaOptimality/Convex/ConvexDomain.lean#L411) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
+| Lemma 7.3.5 | [`lemma7_3_5`](MovingSofaOptimality/Convex/ConvexCurve.lean#L1633) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
+| Theorem 8.1.1 (2) | [`theorem8_1_1_balanced`](MovingSofaOptimality/Main.lean#L43) | [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354) |
+| Definition 8.1.2 (existence, uniqueness) | [`definition8_1_2_exists`](MovingSofaOptimality/Main.lean#L32), [`definition8_1_2_unique`](MovingSofaOptimality/Main.lean#L37) | [`GerverParams.romik_exists`](MovingSofaOptimality/External/Romik.lean#L354), [`GerverParams.romik_unique`](MovingSofaOptimality/External/Romik.lean#L360) |
+| Proposition 8.2.1, Lemma 8.2.2, Theorem 8.2.4 | [`proposition8_2_1`](MovingSofaOptimality/Optimality/UpperBound.lean#L368), [`lemma8_2_2`](MovingSofaOptimality/Optimality/UpperBound.lean#L529), [`theorem8_2_4`](MovingSofaOptimality/Optimality/UpperBound.lean#L1089) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
+| Lemmas 8.3.5, 8.3.7, Theorem 8.3.8 | [`lemma8_3_5`](MovingSofaOptimality/Optimality/Concavity.lean#L854), [`lemma8_3_7`](MovingSofaOptimality/Optimality/Concavity.lean#L1113), [`theorem8_3_8`](MovingSofaOptimality/Optimality/Concavity.lean#L1131) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
+| Theorems 8.5.1, 8.5.6, 8.5.7, Corollary 8.5.8 | [`theorem8_5_1`](MovingSofaOptimality/Optimality/Variation.lean#L445), [`theorem8_5_6`](MovingSofaOptimality/Optimality/Variation.lean#L680), [`theorem8_5_7`](MovingSofaOptimality/Main.lean#L136), [`corollary8_5_8`](MovingSofaOptimality/Main.lean#L259) | [`area_eq_half_integral_supp`](MovingSofaOptimality/External/AreaFormula.lean#L558) |
 
 The results about Gerver's sofa (Theorems 6.1.2, 8.1.1 (3), 8.4.1–8.4.6) are stated for any solution
 of Romik's system in the box. Their proofs use no result from prior work; the existence of a solution
 enters only through Definition 8.1.2.
 
-## 8. Not formalized
+The audit also records, for every numbered result, the numbered results that its Lean proof uses.
+[`scripts/route_check.py`](scripts/route_check.py), run in CI, compares them with the results that
+the paper's proof cites, extracted from the TeX source into
+[`docs/paper_routes.tsv`](docs/paper_routes.tsv). Every difference is recorded, with its reason, in
+[`docs/route_differences.tsv`](docs/route_differences.tsv): a departure of Section 7, a result that
+the paper uses without citing it, or a citation that the paper makes in passing.
+
+## 9. Not formalized
 
 - **Theorems 7.2.1 and 7.2.3, Proposition 7.2.7, and Definitions 7.2.1–7.2.3, 7.2.7 and 7.2.9:** the
   Jordan curve theorem, the area enclosed by a Jordan curve, and the orientation and concatenation of

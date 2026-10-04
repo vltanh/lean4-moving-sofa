@@ -406,7 +406,7 @@ function is monotone (Proposition 4.2). The boundary lines differ. Lines with di
 angles in $(0, \pi)$ differ, and $H_+(t, h(t) - 1) = H_-(t + \pi, 1 - h(t))$ is bounded by the line
 $l(t, h(t) - 1)$, at distance one from $l(t, h(t))$. $\square$
 
-*Lean: [`proposition3_3_3`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L724), [`capHalfPlanes`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L509), [`nicheHalfPlanes`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L515).*
+*Lean: [`proposition3_3_3`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L742), [`capHalfPlanes`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L509), [`nicheHalfPlanes`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L515).*
 
 ### Proposition 4.15 (compatibility of caps; Baek, Proposition 3.3.4)
 
@@ -415,7 +415,7 @@ For $K' \in \mathcal{K}^\mathrm{t}_\Theta$, $\mathcal{C}_\Theta(h_{K'}) = K'$.
 *Proof.* By Definition 4.13, $\mathcal{C}_\Theta(h_{K'})$ is the right-hand side of the formula for
 $K'$ in the proof of Proposition 4.12. $\square$
 
-*Lean: [`proposition3_3_4`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L788).*
+*Lean: [`proposition3_3_4`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L808).*
 
 ### Proposition 4.16 (compatibility of niches; Baek, Proposition 3.3.5)
 
@@ -428,14 +428,14 @@ $t$ of the union in $\mathcal{N}_\Theta(h_K)$ is the quarter-plane $Q^-_K(t)$
 So the niches agree. The areas agree because $\mathcal{C}_\Theta(h_K) = K$ (Proposition 4.15) and
 $\mathcal{A}_\Theta(K) = \lvert K \rvert - \lvert \mathcal{N}_\Theta(K) \rvert$ (Theorem 4.9). $\square$
 
-*Lean: [`proposition3_3_5`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L813).*
+*Lean: [`proposition3_3_5`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L833).*
 
 ### Definition 4.17 (niches of cap translates; Baek, Definition 3.3.4)
 
 For $K' \in \mathcal{K}^\mathrm{t}_\Theta$, $\mathcal{N}_\Theta(K') = \mathcal{N}_\Theta(h_{K'})$ and
 $\mathcal{A}_\Theta(K') = \mathcal{A}_\Theta(h_{K'})$.
 
-*Lean: [`nicheT`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L830), [`areaT`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L833).*
+*Lean: [`nicheT`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L850), [`areaT`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L853).*
 
 ### Theorem 4.18 (translation invariance; Baek, Theorem 3.3.6)
 
@@ -449,7 +449,7 @@ claim follows from Proposition 4.16. By Proposition 4.15 and the translation inv
 $\mathcal{A}_\Theta(K + v) = \lvert K + v \rvert - \lvert \mathcal{N}_\Theta(K) + v \rvert =
 \mathcal{A}_\Theta(K)$. $\square$
 
-*Lean: [`theorem3_3_6`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L848).*
+*Lean: [`theorem3_3_6`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L868).*
 
 ### Proposition 4.19 (reduction to a cap translate; Baek, Proposition 3.3.7)
 
@@ -466,7 +466,7 @@ $\mathcal{N}_\Theta(h_{K^+}) \subseteq \mathcal{N}_\Theta(h^+)$, while
 $\mathcal{C}_\Theta(h_{K^+}) = K^+ = \mathcal{C}_\Theta(h^+)$ by Proposition 4.15. Subtracting the
 areas gives the claim. $\square$
 
-*Lean: [`proposition3_3_7`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L906).*
+*Lean: [`proposition3_3_7`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L926).*
 
 ## 4.5 Maximum polygon caps
 
@@ -475,7 +475,7 @@ areas gives the claim. $\square$
 A *maximum polygon cap* with angle set $\Theta$ is a polygon cap $K_\Theta \in \mathcal{K}^\mathrm{c}_\Theta$
 with $o_\omega \in K_\Theta$ that maximizes $\mathcal{A}_\Theta$ over $\mathcal{K}^\mathrm{c}_\Theta$.
 
-*Lean: [`IsMaxPolygonCap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L34).*
+*Lean: [`IsMaxPolygonCap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L44).*
 
 For $\omega < \pi/2$ every cap contains $o_\omega$. For $\omega = \pi/2$ the caps can slide
 horizontally, and the condition $o_\omega = (0, 1) \in K_\Theta$ keeps them from sliding away.
@@ -492,7 +492,7 @@ $M_\omega$ maps the polygon caps with angle set $\Theta$ onto those with angle s
 and their polygon niches, the unions of the wedges, onto each other. It preserves areas and fixes
 $o_\omega$. $\square$
 
-*Lean: [`lemma3_4_1`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L166), [`AngleSet.mirror`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L38), [`mirrorCap`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L79).*
+*Lean: [`lemma3_4_1`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L176), [`AngleSet.mirror`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L48), [`mirrorCap`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L79).*
 
 ### Lemma 4.22 (bounded width; Baek, Lemma 3.4.2)
 
@@ -521,38 +521,50 @@ $L^2 \sin(2t)/4$. As $T_K(t) \subseteq \mathcal{N}_\Theta(K)$, Theorem 4.9 gives
 which is negative for all large $d$. The Lean proof uses a rectangle inside the wedge instead of the
 triangle. $\square$
 
-*Lean: [`lemma3_4_2`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L316).*
+*Lean: [`lemma3_4_2`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L343).*
 
 ### Theorem 4.23 (existence of maximum polygon caps; Baek, Theorem 3.4.3)
 
 For every angle set $\Theta$ a maximum polygon cap exists.
 
-*Proof sketch.* The caps worth considering lie in a bounded box. So the support values of a
-maximizing sequence on the finite set $\Theta^\diamond$ have a convergent subsequence, and the limit
-is a maximum. Let $K^{\mathbf 1} = \mathcal{C}_\Theta(\mathbf 1)$, where $\mathbf 1$ is the constant
-function $1$. It is a polygon cap that contains $o_\omega$ and the points $u_s$,
-$s \in \Theta^\diamond$. Its support values on $\Theta^\diamond$ are therefore all $1$, and its inner
-corners are all at $O$. Its niche is empty, because the open quarter-planes below $O$ miss
-$F_\omega$, so $\mathcal{A}_\Theta(K^{\mathbf 1}) = \lvert K^{\mathbf 1} \rvert > 0$. Let $\mathcal{B}_\Theta$ be the
-set of polygon caps $K \ni o_\omega$ with $\mathcal{A}_\Theta(K) \ge \mathcal{A}_\Theta(K^{\mathbf 1})$.
-It suffices to maximize over $\mathcal{B}_\Theta$. Indeed, a polygon cap outside $\mathcal{B}_\Theta$
-has $\mathcal{A}_\Theta < \mathcal{A}_\Theta(K^{\mathbf 1})$, or, for $\omega = \pi/2$, a horizontal
-translate in $\mathcal{B}_\Theta$ with the same value (Theorem 4.18). The caps in
-$\mathcal{B}_\Theta$ contain $o_\omega$, lie between $y = 0$ and $y = 1$, and have bounded width by
-Lemma 4.22, so they lie in one bounded box.
+*Proof sketch.* As in the paper: $\mathcal{A}_\Theta$ is continuous in the Hausdorff distance, the
+caps worth considering lie in one bounded box, and a maximizing sequence has a limit by the Blaschke
+selection theorem.
 
-Take a sequence $K_n$ in $\mathcal{B}_\Theta$ along which $\mathcal{A}_\Theta$ tends to its supremum.
-The support values of $K_n$ on $\Theta^\diamond$ are bounded, so along a subsequence they converge
-to some $h_\infty$. Then $L = \mathcal{C}_\Theta(h_\infty)$ is a polygon cap containing $o_\omega$,
-with the support values $h_\infty$ on $\Theta^\diamond$. A point that lies in infinitely many $K_n$
-lies in $L$, so $\limsup \lvert K_n \rvert \le \lvert L \rvert$. A point of $\mathcal{N}_\Theta(L)$
-satisfies strict inequalities in the support values, so it lies in the niches of all late $K_n$, and
-$\liminf \lvert \mathcal{N}_\Theta(K_n) \rvert \ge \lvert \mathcal{N}_\Theta(L) \rvert$ by Fatou's
-lemma. Hence $\mathcal{A}_\Theta(L) \ge \lim \mathcal{A}_\Theta(K_n)$, the supremum. The paper
-instead uses the continuity of $\mathcal{A}_\Theta$ in the Hausdorff distance and the Blaschke
-selection theorem. $\square$
+1. *Continuity.* Area is continuous in the Hausdorff distance (Schneider, Theorem 1.8.20). The
+   polygon niche $\mathcal{N}_\Theta(K)$ is the union of the wedges $T_K(t)$, $t \in \Theta$, as in
+   Proposition 3.19, so
+   $\lvert \lvert \mathcal{N}_\Theta(K') \rvert - \lvert \mathcal{N}_\Theta(K) \rvert \rvert$ is at
+   most the sum over $t \in \Theta$ of the areas of the symmetric differences of $T_{K'}(t)$ and
+   $T_K(t)$. In the coordinates $(\langle p, u_t \rangle, \langle p, v_t \rangle)$ each of them lies
+   in two strips, of widths $2 \lvert h_{K'}(t) - h_K(t) \rvert$ and
+   $2 \lvert h_{K'}(t + \pi/2) - h_K(t + \pi/2) \rvert$, cut off by a bounded square, so its area
+   tends to $0$ as $K' \to K$.
+2. *A bounded domain.* Let $K^{\mathbf 1} = \mathcal{C}_\Theta(\mathbf 1)$, where $\mathbf 1$ is the
+   constant function $1$. It is a polygon cap that contains $o_\omega$ and the points $u_s$,
+   $s \in \Theta^\diamond$. Its support values on $\Theta^\diamond$ are therefore all $1$, and its
+   inner corners are all at $O$. Its niche is empty, because the open quarter-planes below $O$ miss
+   $F_\omega$, so $\mathcal{A}_\Theta(K^{\mathbf 1}) = \lvert K^{\mathbf 1} \rvert > 0$. Let
+   $\mathcal{B}_\Theta$ be the set of polygon caps $K \ni o_\omega$ with $\mathcal{A}_\Theta(K) > 0$.
+   It contains $K^{\mathbf 1}$, and its members lie between $y = 0$ and $y = 1$ and have bounded
+   width by Lemma 4.22, so they lie in one bounded box.
+3. *The maximum on $\mathcal{B}_\Theta$.* Take a sequence $K_n$ in $\mathcal{B}_\Theta$ along which
+   $\mathcal{A}_\Theta$ tends to its supremum on $\mathcal{B}_\Theta$. By the Blaschke selection
+   theorem (Theorem 2.12), a subsequence converges to a convex body $L$. Its area is at least
+   $\mathcal{A}_\Theta(K^{\mathbf 1}) > 0$, so it has an interior point $q$. A point $p$ that
+   satisfies the constraints of $L$ with normal angles in
+   $\Theta^\diamond \cup \lbrace \omega + \pi, 3\pi/2 \rbrace$ is a limit of points of the segment
+   $(p, q]$, which lie in the late $K_n$, so $L$ is a polygon cap with angle set $\Theta$. It
+   contains $o_\omega$, and $\mathcal{A}_\Theta(L)$ is the supremum, by continuity.
+4. *Every polygon cap.* A polygon cap $K'$ with $\mathcal{A}_\Theta(K') \le 0$ is no better than
+   $L$. If $\mathcal{A}_\Theta(K') > 0$, then $K' \in \mathcal{B}_\Theta$ when $\omega < \pi/2$, since
+   $K'$ then contains $o_\omega$, and for $\omega = \pi/2$ a horizontal translate of $K'$ lies in
+   $\mathcal{B}_\Theta$ and has the same value (Theorem 4.18). $\square$
 
-*Lean: [`theorem3_4_3`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L760), [`mpc_limit_polycap`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L662).*
+*Lean: [`theorem3_4_3`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L1164), [`mpc_tendsto_area_polyNiche`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L1050), [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846).*
+
+The paper requires only $\mathcal{A}_\Theta(K) \ge 0$ in $\mathcal{B}_\Theta$, while Lemma 4.22 needs
+$\mathcal{A}_\Theta(K) > 0$, and it does not show that the limit is a polygon cap (REPORT.md, E8).
 
 ## 4.6 Balanced polygon caps
 
@@ -601,7 +613,7 @@ For $t \in \Theta^\diamond$, $\tau_K(t)$ is the total length of the segments of 
 angle $t$. The polygon cap $K$ is *balanced* if $\sigma_K(t) = \tau_K(t)$ for every
 $t \in \Theta^\diamond$.
 
-*Lean: [`polyline`](../../MovingSofaOptimality/Balanced/Polyline.lean#L55), [`MovingSofaOptimality.tau`](../../MovingSofaOptimality/Balanced/Polyline.lean#L478), [`IsBalanced`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L44), [`sigmaAt`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L172).*
+*Lean: [`polyline`](../../MovingSofaOptimality/Balanced/Polyline.lean#L55), [`MovingSofaOptimality.tau`](../../MovingSofaOptimality/Balanced/Polyline.lean#L478), [`IsBalanced`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L48), [`sigmaAt`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L172).*
 
 The upper boundary $\delta K$ runs from $A^-_K(0)$ to $C^+_K(\omega)$ through sides of lengths
 $\sigma_K(t)$, $t \in \Theta^\diamond$, and the polyline runs back below the sofa through segments
@@ -629,7 +641,7 @@ Let $K \in \mathcal{K}^\mathrm{c}_\Theta$.
 2. For $t \in \lbrace \omega, \pi/2 \rbrace$,
    $\mathcal{H}^1(\partial \mathcal{N}_\Theta(K) \cap l(t, 0)) = \mathcal{H}^1(\mathcal{N}_\Theta(K) \cap l(t, 0)) = \sigma_K(t + \pi) - \tau_K(t)$.
 
-*Lean: [`lemma3_4_5_one`](../../MovingSofaOptimality/Balanced/Polyline.lean#L995), [`lemma3_4_5_two`](../../MovingSofaOptimality/Balanced/Polyline.lean#L1034).*
+*Lean: [`lemma3_4_5_one`](../../MovingSofaOptimality/Balanced/Polyline.lean#L999), [`lemma3_4_5_two`](../../MovingSofaOptimality/Balanced/Polyline.lean#L1040).*
 
 *Proof sketch.* By Theorem 4.25, the boundary of $\mathcal{N}_\Theta(K)$ consists of the pieces of
 the polyline inside the open fan, which lie on the walls, the part of $\partial F_\omega$ covered by
@@ -656,7 +668,7 @@ Take the inner product with $u_0$. As $\langle v_t, u_0 \rangle = -\sin t < 0$ o
 gives $\sum_{t} (\tau_K(t) - \sigma_K(t)) \sin t = 0$. If $\sigma_K \le \tau_K$ everywhere, every term
 is nonnegative, so every term vanishes and $K$ is balanced. $\square$
 
-*Lean: [`lemma3_4_6`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L48), [`mpc_walk`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L658).*
+*Lean: [`lemma3_4_6`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L52), [`mpc_walk`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L658).*
 
 ### Lemma 4.29 (the balancing step; Baek, Lemma 3.4.7)
 
@@ -692,7 +704,7 @@ the strip along $l(t, 0)$. So by Lemma 4.27 (2)
 $\lvert \mathcal{N}_\Theta(h^+) \rvert = \lvert \mathcal{N}_\Theta(h) \rvert - (\sigma_K(t + \pi) -
 \tau_K(t))\,\varepsilon + O(\varepsilon^2)$. Subtract again. $\square$
 
-*Lean: [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L538).*
+*Lean: [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L570).*
 
 The paper's proof prints the change of $\lvert \mathcal{N}_\Theta \rvert$ in the second case with the
 opposite sign (REPORT.md, E26). It also applies Theorem 4.3 twice in a row, the second time to a
@@ -722,7 +734,7 @@ on its bottom line (as in the proof of
 have $\langle p, u_t \rangle > 0 = h(t) - 1$, so they lie in $K^+$ for small $\varepsilon$, and $K^+$
 has width one in the direction $u_{t'}$ too. $\square$
 
-*Lean: [`lemma3_4_8`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L923).*
+*Lean: [`lemma3_4_8`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L955).*
 
 For $t \in \lbrace \omega, \pi/2 \rbrace$ and $\sigma_K(t) = 0$, the line $l(t, h(t) + \varepsilon)$
 would miss $K^+$, and the width of $K^+$ along $u_t$ would drop below one. This is why Lemma 4.28
@@ -744,7 +756,7 @@ $K_0 + v$ of a polygon cap $K_0$, and
 by Proposition 4.16, Lemma 4.29 (for $\varepsilon < (\sigma_K(t) - \tau_K(t))/C$), Proposition 4.19
 and Theorem 4.18. This contradicts the maximality of $K$. $\square$
 
-*Lean: [`theorem3_4_9`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L938).*
+*Lean: [`theorem3_4_9`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L970).*
 
 The comparison cap $K_0$ is a polygon cap whose niche may stick out. No connectedness is needed,
 and this closes the gap of §4.1.
@@ -761,7 +773,7 @@ in $K$.
 In detail, let $p$ be a vertex of $\mathbf{p}_K$ and $A = A^-_K(0)$. Walking along $\mathbf{p}_K$
 from $A$ to $p$ gives $p = A + \sum_i \ell_i v_{s_i}$, summed over the segments to the right of $p$;
 the lengths $\ell_i$ of the segments with normal angle $t$ add up to at most $\tau_K(t)$. Let
-$s \in \Theta^\diamond$. Since $\langle v_{s_i}, u_s \rangle = \sin(s - s_i)$ and all angles lie in
+$s \in \Theta \cup \lbrace \omega \rbrace$. Since $\langle v_{s_i}, u_s \rangle = \sin(s - s_i)$ and all angles lie in
 $(0, \pi)$, the terms with $s_i < s$ are positive and the others are not. So
 
 ```math
@@ -770,18 +782,20 @@ $(0, \pi)$, the terms with $s_i < s$ are positive and the others are not. So
 
 where the sums run over $t \in \Theta^\diamond$. The first equality is the balance of $K$
 (Theorem 4.31). The second walks along the upper boundary from $A$ to the vertex $v^+_K(s)$, through
-the sides $e_K(t)$, $t \le s$, each in the direction $v_t$. So $p$ lies in every supporting
-half-plane of $K$ with normal angle in $\Theta^\diamond$. It also lies in $F_\omega$, whose two
-half-planes are the other supporting half-planes of $K$, so $p \in K$. By convexity
+the sides $e_K(t)$, $t \le s$, each in the direction $v_t$. So $p$, and by convexity
+$\mathbf{p}_K$, lies in $H_K(s)$ for $s \in \Theta \cup \lbrace \omega \rbrace$. The mirror image
+$K^m$ is a maximum polygon cap with angle set $\omega - \Theta$ (Lemma 4.21), and $M_\omega$ maps
+$F_\omega$ and $\mathcal{N}_\Theta(K)$ to $F_\omega$ and $\mathcal{N}_{\omega - \Theta}(K^m)$ and
+exchanges the two half-lines of Theorem 4.25, so $M_\omega(\mathbf{p}_K) = \mathbf{p}_{K^m}$. The
+same argument for $K^m$, with $h_{K^m}(t) = h_K(\omega + \pi/2 - t)$ (Proposition 3.21), gives
+$\mathbf{p}_K \subseteq H_K(s)$ for $s \in (\Theta + \pi/2) \cup \lbrace \pi/2 \rbrace$ as well. So
+$\mathbf{p}_K$ lies in every supporting half-plane of $K$ with normal angle in $\Theta^\diamond$, and
+in $F_\omega$, whose two half-planes are the other supporting half-planes of $K$; so
 $\mathbf{p}_K \subseteq K$. By Theorem 4.25 the niche lies in $F_\omega$ below the polyline, between
 $C^+_K(\omega)$ and $A^-_K(0)$. So each point of the niche lies on a vertical segment from a point of
 a bottom side of $K$ up to a point of $\mathbf{p}_K$, and this segment lies in $K$. $\square$
 
-*Lean: [`theorem3_4_10`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L1062), [`mpc_walk`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L658).*
-
-The paper proves $\langle p, u_s \rangle \le h_K(s)$ for $s \in \Theta \cup \lbrace \omega \rbrace$ and
-obtains the other angles from the mirror image. The estimate above holds for all
-$s \in \Theta^\diamond$ at once, as in the Lean proof.
+*Lean: [`theorem3_4_10`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L1240), [`theorem3_4_4`](../../MovingSofaOptimality/Balanced/Polyline.lean#L436), [`lemma3_4_1`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L176), [`mpc_walk`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L658).*
 
 ## 4.7 Balanced maximum sofas
 
@@ -795,7 +809,7 @@ $\Theta_{\omega, n_i}$ such that $K_i \to K_\omega$ in the Hausdorff distance
 $d_\mathrm{H}(K, K') = \sup_t \lvert h_K(t) - h_{K'}(t) \rvert$
 ([Definition 2.11](02-preliminaries.md#definition-211-hausdorff-distance-baek-definition-2112)).
 
-*Lean: [`uniformAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L32), [`dyadicAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L50), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L136), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83),
+*Lean: [`uniformAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L33), [`dyadicAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L51), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L137), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83),
 [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
 
 ![Three rows, for n = 4, 8 and 16, each showing a blue polygon sofa between faint lines y = 0 and y = 1 with a dashed outline of Gerver's sofa centred on the same vertical line. For n = 4 the polygon sofa is visibly wider, with straight slanted ends and a jagged notch; for n = 8 it is closer; for n = 16 its ends and its notch nearly follow the dashed outline](figures/04-balanced/limit.svg)
@@ -821,7 +835,7 @@ Lemma 4.21 to the maximum polygon caps $K_i$: the uniform angle sets satisfy
 $\omega - \Theta_{\omega, n} = \Theta_{\omega, n}$, and $M_\omega$ preserves the Hausdorff distance,
 since $h_{K^\mathrm{m}}(t) = h_K(\omega + \pi/2 - t)$. $\square$
 
-*Lean: [`proposition3_5_1`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L174).*
+*Lean: [`proposition3_5_1`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L175).*
 
 ### Theorem 4.35 (existence of balanced maximum caps; Baek, Theorem 3.5.2)
 
@@ -854,7 +868,7 @@ $H_K(r)$ with $r$ in a gap can be dropped from $K = \bigcap_r H_K(r)$
 ([Lemma 2.7](02-preliminaries.md#lemma-27-the-support-function)). The paper calls this check easy
 (REPORT.md, E8). $\square$
 
-*Lean: [`theorem3_5_2`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L423), [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L245), [`mpc_gap_limit`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L294).*
+*Lean: [`theorem3_5_2`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L326), [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846), [`mpc_gap_limit`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L197).*
 
 ### Lemma 4.36 (limits of nested sets; Baek, Lemma 3.5.3)
 
@@ -866,13 +880,10 @@ $X \subseteq Y$.
 and $d(p_i, Y) \le d_\mathrm{H}(Y_i, Y) \to 0$. So $d(p, Y) = 0$, and $p \in Y$ as $Y$ is closed.
 $\square$
 
-*Lean: [`lemma3_5_3`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L470).*
+*Lean: [`lemma3_5_3`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L373).*
 
-The formal proofs of the next two theorems use that each point of the niche lies in the polygon
-niches of all late $K_i$, as follows. In Theorem 4.37 this replaces Lemma 4.36. In Theorem 4.38 it
-replaces the paper's comparison of $\mathcal{N}_{\Theta_i}(K_i)$ with $\mathcal{N}_{\Theta_m}(K_i)$
-for a fixed $m$, whose area tends to $\lvert \mathcal{N}_{\Theta_m}(K_\omega) \rvert$ as
-$i \to \infty$.
+The proof of Theorem 4.37 applies Lemma 4.36 to single points, which lie in the polygon niches of all
+late $K_i$ (REPORT.md, E8).
 
 ### Theorem 4.37 (the niche lies in the cap; Baek, Theorem 3.5.4)
 
@@ -889,16 +900,16 @@ for some $t \in (0, \omega)$:
 The support function is continuous, so both strict inequalities hold, with a margin $\delta > 0$, at
 some dyadic angle $s = j\omega/2^k$ near $t$. For large $i$ the angle $s$ lies in $\Theta_i$, since
 these sets increase, and $\lvert h_{K_i} - h_K \rvert < \delta$. So
-$p \in \mathcal{N}_{\Theta_i}(K_i) \subseteq K_i$ by Theorem 4.32. Then
-$\langle p, u_r \rangle \le h_{K_i}(r)$ for all angles $r$ and all large $i$, and in the limit
-$\langle p, u_r \rangle \le h_K(r)$. So $p \in K$
-([Lemma 2.7](02-preliminaries.md#lemma-27-the-support-function)). $\square$
+$p \in \mathcal{N}_{\Theta_i}(K_i) \subseteq K_i$ by Theorem 4.32. The convex bodies $K_i$
+converge to $K$ also in the Hausdorff distance of sets, which for convex bodies is at most the
+distance of their support functions (Schneider, Lemma 1.8.14). So Lemma 4.36, applied to
+$\lbrace p \rbrace \subseteq K_i$, gives $p \in K$. $\square$
 
-*Lean: [`theorem3_5_4`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L534), [`mpc_niche_eventually`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L499).*
+*Lean: [`theorem3_5_4`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L486), [`mpc_niche_eventually`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L444), `mpc_tendsto_metric_hausdorffDist`.*
 
 The paper argues that the polygon niches $\mathcal{N}_{\Theta_j}(K_i)$ converge to $\mathcal{N}_{\Theta_j}(K)$
 unless the latter is empty. This can fail when a wedge is empty for $K$ but not for the $K_i$; the
-eventual membership above is what the argument needs (REPORT.md, E8).
+eventual membership above is what Lemma 4.36 needs (REPORT.md, E8).
 
 ### Theorem 4.38 (maximality; Baek, Theorem 3.5.5)
 
@@ -911,23 +922,26 @@ caps with rotation angle $\omega$.
 \mathcal{A}_\omega(K') \le \mathcal{A}_{\Theta_i}(K') \le \mathcal{A}_{\Theta_i}(K_i) = \lvert K_i \rvert - \lvert \mathcal{N}_{\Theta_i}(K_i) \rvert .
 ```
 
-Area is upper semicontinuous in the Hausdorff distance, so
-$\limsup \lvert K_i \rvert \le \lvert K_\omega \rvert$. By the proof of Theorem 4.37, each point of
-$\mathcal{N}(K_\omega)$ lies in $\mathcal{N}_{\Theta_i}(K_i)$ for all large $i$. These sets lie in one
-bounded set, so $\liminf \lvert \mathcal{N}_{\Theta_i}(K_i) \rvert \ge \lvert \mathcal{N}(K_\omega) \rvert$
-by Fatou's lemma. Hence
-$\mathcal{A}_\omega(K') \le \limsup_i \mathcal{A}_{\Theta_i}(K_i) \le \mathcal{A}_\omega(K_\omega)$.
-Taking $K' = K_\omega$ shows moreover that $\mathcal{A}_{\Theta_i}(K_i) \to \mathcal{A}_\omega(K_\omega)$,
-as the paper states. $\square$
+The right-hand side tends to $\mathcal{A}_\omega(K_\omega)$, which proves the theorem. First,
+$\lvert K_i \rvert \to \lvert K_\omega \rvert$, since area is continuous in the Hausdorff distance.
+With $K' = K_\omega$, the inequality gives
+$\limsup \lvert \mathcal{N}_{\Theta_i}(K_i) \rvert \le \lvert \mathcal{N}(K_\omega) \rvert$. Conversely,
+fix $m$. For $i \ge m$ the angle set $\Theta_i$ contains $\Theta_m$, so
+$\mathcal{N}_{\Theta_m}(K_i) \subseteq \mathcal{N}_{\Theta_i}(K_i)$, and
+$\lvert \mathcal{N}_{\Theta_m}(K_i) \rvert \to \lvert \mathcal{N}_{\Theta_m}(K_\omega) \rvert$ by the
+estimate of the wedges in the proof of Theorem 4.23. So
+$\liminf_i \lvert \mathcal{N}_{\Theta_i}(K_i) \rvert \ge \lvert \mathcal{N}_{\Theta_m}(K_\omega) \rvert$
+for every $m$, and these niches increase to $\mathcal{N}(K_\omega)$ (proof of Theorem 4.37). Hence
+$\mathcal{A}_{\Theta_i}(K_i) \to \mathcal{A}_\omega(K_\omega)$. $\square$
 
-*Lean: [`theorem3_5_5`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L544), [`mpc_area_usc`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L282), [`mpc_area_lsc`](../../MovingSofaOptimality/Balanced/CapGeometry.lean#L296).*
+*Lean: [`theorem3_5_5`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L534), [`mpc_tendsto_area`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L889), [`mpc_tendsto_area_polyNiche`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L1050).*
 
 ### Definition 4.39 (balanced maximum sofa; Baek, Definition 3.5.3)
 
 A *balanced maximum sofa* with rotation angle $\omega$ is a monotone sofa $S_\omega$ whose cap
 $\mathcal{C}(S_\omega)$ is a balanced maximum cap.
 
-*Lean: [`IsBalancedMaxSofa`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L602).*
+*Lean: [`IsBalancedMaxSofa`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L606).*
 
 ### Theorem 4.40 (balanced maximum sofas; Baek, Theorem 3.5.6)
 
@@ -949,4 +963,4 @@ monotonization has $\mathcal{A}_\omega(K')$ equal to its area (Theorem 3.29). So
 $\lvert S \rvert \le \mathcal{A}_\omega(K') \le \mathcal{A}_\omega(K_\omega) = \lvert S_\omega \rvert$ by
 Theorem 4.38. $\square$
 
-*Lean: [`theorem3_5_6`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L607).*
+*Lean: [`theorem3_5_6`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L611).*

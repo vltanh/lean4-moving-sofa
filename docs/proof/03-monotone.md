@@ -55,9 +55,9 @@ sofa is a moving sofa with the same rotation angle. Finally, (4) is
 [Proposition 2.15](02-preliminaries.md#proposition-215-the-sofa-in-its-own-frame-baek-proposition-122)
 (1) and (3): $S \subseteq H \cap V_\omega = P_\omega$. $\square$
 
-*Lean: [`proposition2_3_1_exists`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L122), [`proposition2_3_1_unique`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L145),
-[`proposition2_3_1_unique_horizontal`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L160), [`proposition2_3_1_subset`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L172),
-[`mpc_isMovingSofaWithAngle_translate`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L582).*
+*Lean: [`proposition2_3_1_exists`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L121), [`proposition2_3_1_unique`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L145),
+[`proposition2_3_1_unique_horizontal`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L161), [`proposition2_3_1_subset`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L174),
+[`mpc_isMovingSofaWithAngle_translate`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L586).*
 
 In the rest of this section, $S$ is a moving sofa with rotation angle $\omega \in (0, \pi/2]$ in
 standard position.
@@ -77,7 +77,7 @@ $\mathcal{I}(S')$, for a moving sofa $S'$ with rotation angle $\omega$ in standa
 
 Gerver's sofa is a monotone sofa with rotation angle $\pi/2$: it is the part of the strip $H$ that
 lies in all its supporting hallways (Figure 3.1), a fact that Baek's paper states without proof
-(its Theorem 8.4.1) and that [Chapter 10](10-gerver.md) proves ([`theorem8_4_1_monotone`](../../MovingSofaOptimality/Gerver/Properties.lean#L81)).
+(its Theorem 8.4.1) and that [Chapter 10](10-gerver.md) proves ([`theorem8_4_1_monotone`](../../MovingSofaOptimality/Gerver/Properties.lean#L89)).
 
 ![Gerver's sofa, in translucent blue, between the dashed lines y = 0 and y = 1 that bound the strip H, with seven of its supporting hallways, turned by 0, 15, 30, 45, 60, 75 and 90 degrees, each shaded in translucent grey with its walls drawn; the shading is darkest where all the hallways overlap, which is the sofa](figures/03-monotone/intersection.svg)
 
@@ -90,7 +90,7 @@ the top and the rounded ends of $G$, and the inner corners trace the arch of its
 $\mathcal{I}(S)$ is a moving sofa with rotation angle $\omega$, in standard position, and
 $S \subseteq \mathcal{I}(S)$.
 
-*Lean: [`theorem2_3_2`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L395).*
+*Lean: [`theorem2_3_2`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L430).*
 
 *Outline of the proof.* The inclusion is Proposition 3.4. The supporting hallways of
 $\mathcal{I}(S)$ are those of $S$ (Lemma 3.7), and following the hallways $L_S(t)$ as $t$ runs
@@ -113,7 +113,7 @@ translate of $R_t(L)$ by
 [Proposition 2.20](02-preliminaries.md#proposition-220-the-supporting-hallway-contains-the-sofa-baek-proposition-223).
 $\square$
 
-*Lean: [`proposition2_3_3`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L178).*
+*Lean: [`proposition2_3_3`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L180).*
 
 ### Definition 3.5 (the region below the outer walls; Baek, Definitions 2.3.8, 2.3.10 and 2.3.11)
 
@@ -146,8 +146,8 @@ $x \ge -h_S(\omega + \pi/2)/\sin\omega$ (from $Q_S^+(\omega)$ and $y \ge 0$), so
 set $\mathcal{I}(S)$ is closed, since each $L_S(t)$ is a closed set minus an open one, and it lies
 in the compact set $\mathcal{C}(S)$. $\square$
 
-*Lean: [`proposition2_3_4`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L189), [`ms_capOf_bounds`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L85), [`ms_isCompact_capOf`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L105), [`ms_convex_capOf`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L68),
-[`ms_isCompact_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L115).*
+*Lean: [`proposition2_3_4`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L191), [`ms_capOf_bounds`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L84), [`ms_isCompact_capOf`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L104), [`ms_convex_capOf`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L67),
+[`ms_isCompact_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L114).*
 
 ### Lemma 3.7 (the same supporting hallways; Baek, Lemma 2.3.5)
 
@@ -162,7 +162,7 @@ $\mathcal{C}(S)$ lies in $H_S(s)$, so $h_{\mathcal{C}(S)}(s) \le h_S(s)$. The su
 $L_X(t)$ depends only on $h_X(t)$ and $h_X(t + \pi/2)$, and both $t$ and $t + \pi/2$ lie in
 $J_\omega$ when $t \in [0, \omega]$. $\square$
 
-*Lean: [`lemma2_3_5_supp`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L207), [`lemma2_3_5_hallway`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L239).*
+*Lean: [`lemma2_3_5_supp`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L209), [`lemma2_3_5_hallway`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L241).*
 
 ### Theorem 3.8 (the monotonization is connected; Baek, Theorem 2.3.6)
 
@@ -187,28 +187,31 @@ $\langle \cdot, v_t \rangle < h_S(t + \pi/2) - 1$, is closed in the direction $-
 the endpoints $p$, $q$ is $z - \lambda u_\theta$ with $\lambda \ge 0$; it would lie in $Q_S^-(t)$,
 which $L_S(t)$ avoids. So no point of the segment lies in any $Q_S^-(t)$.
 
-**Step 2. A segment that reaches $S$.** Fix $p \in \mathcal{I}(S)$, and consider the continuous
-function $F(q, \theta) = \langle q - p, v_\theta \rangle$ on the connected set
-$S \times [\omega, \pi/2]$; $F(q, \theta) = 0$ says that $q$ lies on the line through $p$ in the
-direction $u_\theta$. Take points $a, b \in S$ with $a_1 = h_S(0)$ and
+**Step 2. A segment that reaches $S$.** Fix $p \in \mathcal{I}(S)$. For
+$\theta \in [\omega, \pi/2]$ let $l_\theta$ be the line through $p$ in the direction $u_\theta$; a
+point $z$ lies on $l_\theta$, on its left or on its right when $\langle z - p, v_\theta \rangle$ is
+$0$, positive or negative. Suppose that no $l_\theta$ meets $S$. For $z \in S$, the function
+$\theta \mapsto \langle z - p, v_\theta \rangle$ then has no zero on $[\omega, \pi/2]$, so by the
+intermediate value theorem its values at $\omega$ and $\pi/2$ have the same sign: $z$ lies in the
+open set $Y_L$ of the points on the left of both $l_\omega$ and $l_{\pi/2}$, or in the disjoint open
+set $Y_R$ of the points on the right of both. Take $a, b \in S$ with $a_1 = h_S(0)$ and
 $\langle b, v_\omega \rangle = h_S(\omega + \pi/2)$. As $v_{\pi/2} = (-1, 0)$ and $p \in Q_S^+(0)$,
 
 ```math
-F(a, \pi/2) = p_1 - a_1 = p_1 - h_S(0) \le 0 ,
+\langle a - p, v_{\pi/2} \rangle = p_1 - h_S(0) \le 0 ,
 ```
 
-and as $v_\omega = u_{\omega + \pi/2}$ and $p \in Q_S^+(\omega)$,
+and as $v_\omega = u_{\omega + \pi/2}$ and $p \in Q_S^+(\omega)$ (Lemma 3.7),
 
 ```math
-F(b, \omega) = h_S(\omega + \pi/2) - \langle p, v_\omega \rangle \ge 0 .
+\langle b - p, v_\omega \rangle = h_S(\omega + \pi/2) - \langle p, v_\omega \rangle \ge 0 .
 ```
 
-By the intermediate value theorem on the connected set $S \times [\omega, \pi/2]$, $F(q, \theta) = 0$
-for some $q \in S$ and $\theta \in [\omega, \pi/2]$. By step 1, $[p, q] \subseteq \mathcal{I}(S)$,
-and $S \cup [p, q]$ is a connected subset of $\mathcal{I}(S)$ that contains $p$ and $S$
-(Figure 3.2). $\square$
+So $a \in Y_R$ and $b \in Y_L$, which contradicts the connectedness of $S$. Hence some $l_\theta$
+meets $S$, at a point $q$. By step 1, $[p, q] \subseteq \mathcal{I}(S)$, and $S \cup [p, q]$ is a
+connected subset of $\mathcal{I}(S)$ that contains $p$ and $S$ (Figure 3.2). $\square$
 
-*Lean: [`theorem2_3_6`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L308), [`ms_segment_subset_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L276), [`ms_qMinus_sub`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L260).*
+*Lean: [`theorem2_3_6`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L310), [`ms_segment_subset_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L278), [`ms_qMinus_sub`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L262).*
 
 ![A disk S of diameter 1, between the dashed lines y = 0 and y = 1, inside its monotonization I(S): the upper half of the disk on top of a rectangle of width 1 and height one half, bounded by the outer walls of the supporting hallways, three of which are drawn as grey lines tangent to the disk; the orange dashed arc of the inner corners x(t) runs below the line y = 0; a short vertical black segment joins a point p in the lower right corner of I(S), outside the disk, to the point q of the disk above it](figures/03-monotone/monotonization.svg)
 
@@ -219,12 +222,12 @@ which lie on or below the line $y = 0$. So $\mathcal{I}(S)$ is the upper half of
 the rectangle $[-\frac12, \frac12] \times [0, \frac12]$, of area $\frac12 + \frac\pi8 = 0.8927$,
 against $\frac\pi4 = 0.7854$ for the disk. For $\omega = \pi/2$ the segment of step 2 is vertical.
 
-Baek proves step 2 by contradiction: if no line through $p$ in a direction $u_\theta$,
+Baek proves step 2 by contradiction, as above: if no line through $p$ in a direction $u_\theta$,
 $\theta \in [\omega, \pi/2]$, met $S$, these lines would split $S$ into a nonempty part on their
-left and a nonempty part on their right. His Definition 2.3.9 of the left and right sides of a line
+left and a nonempty part on their right. He asserts that the complement of the lines has exactly two
+components; the proof needs only that each of its points lies on one side of all the lines. His Definition 2.3.9 of the left and right sides of a line
 should read "not parallel to the $x$-axis" where it says "$y$-axis" (REPORT.md, E1); the Lean
-definitions [`leftSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L154) and [`rightSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L157) follow the intended reading. The formalization replaces the
-contradiction by the intermediate value theorem above.
+definitions [`leftSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L154) and [`rightSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L157) follow the intended reading.
 
 *Proof of Theorem 3.3.* For $s \in [0, 1]$ let $\theta(s) = -s\omega$ and
 $\Phi_s(p) = R_{-s\omega}(p - \mathbf{x}_S(s\omega))$, a rigid motion of the form
@@ -249,7 +252,7 @@ with rotation angle $\omega$. By Lemma 3.7, $h_{\mathcal{I}(S)}(\omega) = h_S(\o
 $h_{\mathcal{I}(S)}(\pi/2) = h_S(\pi/2) = 1$, since $\omega, \pi/2 \in J_\omega$: it is in standard
 position. Finally $S \subseteq \mathcal{I}(S)$ by Proposition 3.4. $\square$
 
-*Lean: [`theorem2_3_2`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L395), [`ms_isMovement_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L357), [`ms_isClosed_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L65).*
+*Lean: [`theorem2_3_2`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L430), [`ms_isMovement_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L392), [`ms_isClosed_monotonization`](../../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L64).*
 
 ## 3.2 Caps and niches
 
@@ -400,7 +403,7 @@ $\langle p, u_\omega \rangle < h_S(\omega) - 1 = 0$. As $K \subseteq P_\omega \s
 removing $\bigcup_{t \in (0, \omega)} Q_S^-(t)$ from $K$ is the same as removing its intersection
 with $F_\omega$. Finally $Q_S^-(t) = Q_K^-(t)$ for $t \in [0, \omega]$ by Lemma 3.7. $\square$
 
-*Lean: [`theorem2_4_2`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L175).*
+*Lean: [`theorem2_4_2`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L191).*
 
 The paper's proof takes the union over $[0, \omega]$ while the niche is a union over $(0, \omega)$;
 the end angles contribute nothing, as shown above (REPORT.md, E2).
@@ -424,7 +427,7 @@ position. By Lemma 3.7, $h_S = h_{S'}$ on $J_\omega$, and $\mathcal{C}$ depends 
 function on $J_\omega$, so $\mathcal{C}(S) = \mathcal{C}(S')$. Theorem 3.12 for $S'$ gives
 $S = \mathcal{I}(S') = K \setminus \mathcal{N}(K)$. $\square$
 
-*Lean: [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L214).*
+*Lean: [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
 
 So a monotone sofa is determined by its cap.
 
@@ -439,7 +442,7 @@ are the same for $X = S'$ and $X = \mathcal{I}(S')$ by Lemma 3.7. If $S = \mathc
 a monotone sofa, with $S' = S$; conversely, if $S = \mathcal{I}(S')$, then
 $\mathcal{I}(S) = \mathcal{I}(\mathcal{I}(S')) = S$. $\square$
 
-*Lean: [`theorem2_4_4`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L221), [`theorem2_4_4_iff`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L228).*
+*Lean: [`theorem2_4_4`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L237), [`theorem2_4_4_iff`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L248).*
 
 The paper derives the first claim from Theorems 3.12 and 3.13; the formalization uses Lemma 3.7
 directly.
@@ -488,7 +491,7 @@ $s - \omega \in [0, \pi/2]$. So $\langle O, u_s \rangle = 0 \le h_K(s)$ for ever
 $O \in K$ by (3.1). For $\omega = \pi/2$ this can fail: $[5, 6] \times [0, 1]$ is a cap of angle
 $\pi/2$.
 
-*Lean: [`MovingSofaOptimality.ang_cap_origin_mem`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L94).*
+*Lean: [`MovingSofaOptimality.ang_cap_origin_mem`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L98).*
 
 ### Proposition 3.16 (the upper boundary; Baek, Proposition 2.5.1)
 
@@ -504,7 +507,7 @@ compactness the difference is at least some $m > 0$. A point $p \in F_\omega$ wi
 $m/2$ of $z$ satisfies $\langle p, u_s \rangle < h_K(s)$ for $s \in J_\omega$, so $p \in K$ by (3.1).
 Hence $z \notin \overline{F_\omega \setminus K}$. $\square$
 
-*Lean: [`proposition2_5_1`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L164).*
+*Lean: [`proposition2_5_1`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L156).*
 
 ### Proposition 3.17 (the upper boundary is connected; Baek, Proposition 2.5.2)
 
@@ -520,7 +523,7 @@ near $t$, and then $e_K(r) \subseteq U$. So $\lbrace t \in I : e_K(t) \subseteq 
 $\lbrace t \in I : e_K(t) \subseteq V \rbrace$ are disjoint, open in $I$, and cover $I$. As $I$ is
 connected, one of them is all of $I$, and $\delta K$ lies in $U$ or in $V$. $\square$
 
-*Lean: [`proposition2_5_2`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L195).*
+*Lean: [`proposition2_5_2`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L187).*
 
 ### Definition 3.18 (wedges, their ends and gaps; Baek, Definitions 2.5.3–2.5.5)
 
@@ -554,7 +557,7 @@ $\mathcal{N}(K) = \bigcup_{t \in (0, \omega)} T_K(t)$.
 
 *Proof.* Distribute the intersection with $F_\omega$ over the union. $\square$
 
-*Lean: [`proposition2_5_3`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L255).*
+*Lean: [`proposition2_5_3`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L247).*
 
 ### Definition 3.20 (mirror reflection; Baek, Definition 2.5.6)
 
@@ -593,9 +596,9 @@ Let $t \in \mathbb{R}$.
 6. If $K$ is a cap, $\sigma_{K^{\mathrm m}}(E) = \sigma_K(\omega + \pi/2 - E)$ for every Borel set $E$
    of angles.
 
-*Lean: [`proposition2_5_4_isCap`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L455), [`proposition2_5_4_supp`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L496), [`proposition2_5_4_hallway`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L503),
-[`proposition2_5_4_vertices`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L531), [`proposition2_5_4_gaps`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L542), [`proposition2_5_4_sets`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L556),
-[`proposition2_5_4_sigma`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L589).*
+*Lean: [`proposition2_5_4_isCap`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L447), [`proposition2_5_4_supp`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L489), [`proposition2_5_4_hallway`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L496),
+[`proposition2_5_4_vertices`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L524), [`proposition2_5_4_gaps`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L535), [`proposition2_5_4_sets`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L550),
+[`proposition2_5_4_sigma`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L583).*
 
 The paper's first item claims $?_{K^{\mathrm m}}(t) = M_\omega(?_K(\omega - t))$ also for the walls
 $a, b, c, d$ and the ends $W, Z$, and its second item has $K^{\mathrm m}$ on the right. The
@@ -671,7 +674,7 @@ h_K(t + \pi/2) \le h_K(\omega + \pi/2) \cos(\omega - t) + \sin(\omega - t) < h_K
 
 Dividing by $\cos t$ and $\cos(\omega - t)$ gives $w_K(t) > 0$ and $z_K(t) > 0$. $\square$
 
-*Lean: [`theorem2_5_5`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L622).*
+*Lean: [`theorem2_5_5`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L616).*
 
 Baek argues geometrically: the outer wall $a_K(t)$ meets the line $y = 1$ strictly further than
 $W_K(t)$ in the direction $u_0$, since $a_K(t)$ and $b_K(t)$ bound a strip of width 1 turned by $t$,
@@ -682,43 +685,32 @@ and convexity carries this to $A_K^-(t)$ and then to $A_K^-(0)$.
 Let $t \in (0, \omega)$. If the inner corner $\mathbf{x}_K(t)$ lies in $K$, then the wedge $T_K(t)$
 lies in $K$.
 
-*Proof.* Let $p \in T_K(t)$. By (3.1) it suffices to show $\langle p, u_s \rangle \le h_K(s)$ for
-$s \in J_\omega$. Split $J_\omega$ into three ranges of angles, and in each compare $p$ with a point
-of $K$ that is further than $p$ in the two extreme directions of the range. This suffices by a fact
-about directions: if $0 < b - a < \pi$ and $s \in [a, b]$, then
+*Proof.* Every vertex of $T_K(t)$ lies in $K$, so $T_K(t) \subseteq K$ by convexity. Two facts
+about caps are used (REPORT.md, E4): $A_K^-(0) = (h_K(0), 0)$ and
+$C_K^+(\omega) = h_K(\omega + \pi/2)\, v_\omega$; and $O \in K$ when $\omega < \pi/2$, since
+$h_K(s) \ge \langle A_K^-(0), u_s \rangle \ge 0$ for $s \in [0, \pi/2]$,
+$h_K(s) \ge \langle C_K^+(\omega), u_s \rangle \ge 0$ for $s \in [\omega, \omega + \pi/2]$, and
+$h_K(\omega + \pi) = h_K(3\pi/2) = 0$. Let $c_1 = h_K(t) - 1$ and $c_2 = h_K(t + \pi/2) - 1$.
 
-```math
-\sin(b - a)\, u_s = \sin(b - s)\, u_a + \sin(s - a)\, u_b
-```
+- *$\omega = \pi/2$.* $T_K(t)$ is the triangle $W_K(t)\, \mathbf{x}_K(t)\, Z_K(t)$. The point
+  $W_K(t)$ is further than $Z_K(t)$ in the direction $u_0$, as $\mathbf{x}_K(t)_2 \ge 0$, and both
+  lie on the segment $[C_K^+(\omega), A_K^-(0)]$ of the $x$-axis, by $w_K(t), z_K(t) > 0$
+  (Theorem 3.22).
+- *$c_1 \le 0$ and $c_2 \le 0$.* $Q_K^-(t)$ lies strictly below the $x$-axis, so $T_K(t) = \emptyset$.
+- *$c_1 \le 0 < c_2$.* $T_K(t)$ is the triangle $\mathbf{x}_K(t)\, Z_K(t)\, p$, where
+  $p = l(\omega, 0) \cap b_K(t)$ lies on $[O, Z_K(t)]$, and $Z_K(t) \in [O, C_K^+(\omega)]$ as
+  $z_K(t) > 0$.
+- *$c_2 \le 0 < c_1$.* The previous case for the mirror image $K^m$ at the angle $\omega - t$
+  (Proposition 3.21).
+- *$c_1, c_2 > 0$.* $T_K(t)$ is the quadrilateral $\mathbf{x}_K(t)\, Z_K(t)\, O\, W_K(t)$, with
+  $W_K(t) \in [O, A_K^-(0)]$ and $Z_K(t) \in [O, C_K^+(\omega)]$. $\square$
 
-with nonnegative coefficients, so a point that is not further than $q$ in the directions $u_a$ and
-$u_b$ is not further than $q$ in any direction $u_s$ between them. The three ranges cover $J_\omega$:
-$J_\omega \subseteq [0, t] \cup [t, t + \pi/2] \cup [t + \pi/2, \omega + \pi/2]$.
+*Lean: [`lemma2_5_6`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L930).*
 
-- *$s \in [0, t]$.* Let $q \in e_K(0)$, so that $q_1 = h_K(0)$ and $q_2 \ge 0$. Since
-  $p \in Q_K^-(t)$, (3.2) gives
-  $\langle p, u_t \rangle < h_K(t) - 1 < h_K(0) \cos t \le \langle q, u_t \rangle$; and since
-  $p_2 \ge 0$, $p_1 \cos t \le \langle p, u_t \rangle < h_K(0) \cos t$, so
-  $\langle p, u_0 \rangle < \langle q, u_0 \rangle$. Hence
-  $\langle p, u_s \rangle \le \langle q, u_s \rangle \le h_K(s)$.
-- *$s \in [t, t + \pi/2]$.* The corner $\mathbf{x} = \mathbf{x}_K(t)$ has
-  $\langle \mathbf{x}, u_t \rangle = h_K(t) - 1$ and $\langle \mathbf{x}, v_t \rangle = h_K(t + \pi/2) - 1$,
-  and $p \in Q_K^-(t)$ is not further than $\mathbf{x}$ in the directions $u_t$ and
-  $u_{t + \pi/2} = v_t$. Hence $\langle p, u_s \rangle \le \langle \mathbf{x}, u_s \rangle \le h_K(s)$,
-  because $\mathbf{x} \in K$.
-- *$s \in [t + \pi/2, \omega + \pi/2]$.* The same argument in the frame $(u_\omega, v_\omega)$, with
-  a point $q \in e_K(\omega + \pi/2)$ and the second inequality of (3.2). $\square$
-
-*Lean: [`lemma2_5_6`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L721).*
-
-Only the middle range uses the hypothesis $\mathbf{x}_K(t) \in K$; the positive gaps take care of
-the normal angles near $0$ and $\omega + \pi/2$. Baek's proof instead shows that the vertices of the
-wedge lie in $K$: for $\omega = \pi/2$ the wedge is the triangle
-$W_K(t)\, \mathbf{x}_K(t)\, Z_K(t)$, and for $\omega < \pi/2$ the proof splits into four cases by the
-position of $O$ relative to the inner walls. It uses without proof that $O \in K$ when
-$\omega < \pi/2$ and that $A_K^-(0)$ and $C_K^+(\omega)$ lie on the lower sides of the fan; both
-hold (REPORT.md, E4). In its first case, $\mathbf{x}_K(t) \in K$ forces $\mathbf{x}_K(t) = O$ and
-$T_K(t) = \emptyset$; the paper claims a contradiction there, but the conclusion holds (E26).
+This is Baek's proof. It uses the two facts about caps without proof (E4), and in the case
+$c_1, c_2 \le 0$ it claims a contradiction where the wedge is in fact empty (E26). The formalization
+writes the points of each triangle in barycentric coordinates and cuts the quadrilateral along its
+diagonal $O\, \mathbf{x}_K(t)$.
 
 ### Lemma 3.24 (the ends of the upper boundary; Baek, Lemma 2.5.7)
 
@@ -730,7 +722,7 @@ and $A \notin Q_K^-(t)$. In the same way
 $\langle C_K^+(\omega), u_{t + \pi/2} \rangle \ge h_K(\omega + \pi/2) \cos(\omega - t) > h_K(t + \pi/2) - 1$.
 $\square$
 
-*Lean: [`lemma2_5_7`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L745).*
+*Lean: [`lemma2_5_7`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L951).*
 
 ### Theorem 3.25 (when the cap contains its niche; Baek, Theorem 2.5.8)
 
@@ -742,7 +734,7 @@ The following are equivalent:
    $F_\omega^\circ$ of the fan, or in $K$;
 4. $K \setminus \mathcal{N}(K)$ is connected.
 
-*Lean: [`theorem2_5_8`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L971).*
+*Lean: [`theorem2_5_8`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1137).*
 
 *Proof.* We prove (1) ⇔ (2), (1) ⇔ (3), (2) ⇒ (4) and (4) ⇒ (3).
 
@@ -825,10 +817,11 @@ Conversely, suppose $\mathcal{N}(K) \subseteq K$, and let $S = K \setminus \math
    $\mathcal{I}(S) = K \setminus \mathcal{N}(K) = S$, so $S$ is a monotone sofa, with cap $K$.
    $\square$
 
-*Lean: [`theorem2_5_9`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1169).*
+*Lean: [`theorem2_5_9`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1330).*
 
-In the paper's proof, "$\mathcal{N}(K)$ contains $K$" should read "$K$ contains $\mathcal{N}(K)$"
-(REPORT.md, E26).
+In the paper's proof, "$\mathcal{N}(K)$ contains $K$" should read "$K$ contains $\mathcal{N}(K)$",
+and the paper cites Baek's Theorem 2.4.3 for $\mathcal{I}(S) = K \setminus \mathcal{N}(K)$, which
+assumes $S$ monotone; Theorem 2.4.2 (here Theorem 3.12) is the one that applies (REPORT.md, E26).
 
 ### Example 3.27 (a cap that does not contain its niche; Baek, Remark 2.5.2)
 
@@ -845,7 +838,7 @@ below it, satisfies $\langle (50, 2), u_{\pi/4} \rangle = 52/\sqrt2 < 101/\sqrt2
 $\langle (50, 2), v_{\pi/4} \rangle = -48/\sqrt2 < 1/\sqrt2 - 1$. It lies in $F_{\pi/2}$, so in
 $T_K(\pi/4)$, and not in $K$, as $2 > 1$. $\square$
 
-*Lean: [`remark2_5_2`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1230).*
+*Lean: [`remark2_5_2`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1393).*
 
 ![The rectangle K with corners (0, 0) and (6, 1), outlined dashed blue, whose niche, shaded orange, rises far above it as a dome with its top at the inner corner x_K(pi/4) = (3, 2.59); the wedge T_K(pi/4), a large triangle on the x-axis with its apex at that corner, is outlined orange; what remains of K, two small blue pieces labelled S at the left and right ends, is separated by the dashed vertical line through x_K(pi/4); the ends C_K plus of omega at the origin and A_K minus of 0 at (6, 0) are marked](figures/03-monotone/wide-cap.svg)
 
@@ -881,7 +874,7 @@ by Theorem 3.3), $S = K \setminus \mathcal{N}(K)$ (Theorem 3.13), and $\mathcal{
 (Theorem 3.26). The niche is measurable, the intersection of a closed set and an open one, and $K$
 is compact, so $\lvert S \rvert = \lvert K \rvert - \lvert \mathcal{N}(K) \rvert$. $\square$
 
-*Lean: [`theorem2_5_10`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1307).*
+*Lean: [`theorem2_5_10`](../../MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1470).*
 
 For Gerver's sofa (Figure 3.4), numerically $\lvert K \rvert = 2.861$ and
 $\lvert \mathcal{N}(K) \rvert = 0.641$, and their difference is $\lvert G \rvert = 2.2195\ldots$.

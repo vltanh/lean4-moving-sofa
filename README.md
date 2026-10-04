@@ -121,6 +121,13 @@ Lemma 3.4.2 false as written (E6), and one direction of Proposition 5.1.4 is fal
 8.4.1 has no proof (E23), and the proof of Theorem 6.1.2 misreads Gerver's Theorem 2 (E12). Every
 result holds in its intended form, the main theorem included, and the formalization proves it.
 
+Every proof follows Baek's argument, except at the steps that REPORT.md lists in Section 7, each
+forced by an error or gap of the paper (E12, E15, E17, E19, E20, E23), by mathematics that
+Mathlib lacks (the Jordan curve theorem and Green's theorem, the Brunn–Minkowski inequality, mixed
+volumes), or by the definition of the surface area measure as a Lebesgue–Stieltjes measure. A route
+check in CI compares the results that each Lean proof uses with those that Baek's proof cites, and
+[`docs/route_differences.tsv`](docs/route_differences.tsv) gives the reason for every difference.
+
 ## Prior work
 
 More on each earlier result, with references: [docs/prior-work.md](docs/prior-work.md).
@@ -160,15 +167,17 @@ More on each check: [docs/verification.md](docs/verification.md).
 lake exe cache get
 lake build
 lake env lean scripts/Audit.lean
+python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
 lake env lake comparator --config=comparator.json
 ```
 
 The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean-toolchain) and [`lake-manifest.json`](lake-manifest.json).
 `lake build` succeeds, and its only `sorry`s are the twelve statements of [`Challenge.lean`](Challenge.lean). The audit
 checks that every declaration of the three libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
-[`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and Comparator that [`Solution.lean`](Solution.lean) proves exactly the statements of
-[`Challenge.lean`](Challenge.lean). GitHub Actions builds the project, runs the audit and checks the documentation on
-every push.
+[`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
+results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
+that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). GitHub Actions builds the project, runs
+the audit and the route check, and checks the documentation on every push.
 
 ## Palomar registry
 

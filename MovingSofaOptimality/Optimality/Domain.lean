@@ -467,10 +467,12 @@ lemma opt_comb_area (h₁ : IsCap K₁ (π / 2)) (h₂ : IsCap K₂ (π / 2)) (h
 end Comb
 
 /-- **Theorem 8.1.1** (`thm:cap-space-special`) (1): `𝒦^i` is closed under Minkowski combinations.
-(The paper's proof uses the Brunn–Minkowski inequality for the area condition. We use instead that
-the horizontal slices of `(1 - c) K₁ + c K₂` contain the combinations of the slices of `K₁` and
-`K₂`, which with Fubini gives `|(1 - c) K₁ + c K₂| ≥ (1 - c) |K₁| + c |K₂|`; see
-`opt_comb_area`.) -/
+
+Departure from the paper: the paper gets `|(1 - c) K₁ + c K₂| ≥ 2.2` from the Brunn–Minkowski
+inequality; this proof uses that the horizontal slices of `(1 - c) K₁ + c K₂` contain the
+combinations of the slices of `K₁` and `K₂`, which with Fubini gives
+`|(1 - c) K₁ + c K₂| ≥ (1 - c) |K₁| + c |K₂|` (`opt_comb_area`), because Mathlib has no
+Brunn–Minkowski inequality. -/
 theorem theorem8_1_1_convex {K₁ K₂ : Set (ℝ × ℝ)} (h₁ : IsKi K₁) (h₂ : IsKi K₂) {c : ℝ}
     (hc : c ∈ Icc (0 : ℝ) 1) : IsKi ((1 - c) • K₁ + c • K₂) := by
   refine ⟨opt_comb_isCap h₁.1 h₂.1 hc, opt_comb_injectivity h₁ h₂ hc,
@@ -910,7 +912,7 @@ theorem lemma8_1_6_right {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ 
     simp only [wedge, fan, mem_inter_iff, mem_sdiff] at h2' ⊢
     tauto
 
-/-- **Lemma 8.1.6** (2), the mirror statement for `t ∈ [0, φ^L)`. -/
+/-- **Lemma 8.1.6** (`lem:monotonicity-intervals`) (2), the mirror statement for `t ∈ [0, φ^L)`. -/
 theorem lemma8_1_6_left {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × ℝ)} (hK : IsKi K) {t : ℝ}
     (ht : t ∈ Ico 0 (π / 2 - φ)) :
     innerCorner K t ∉ hLeft φ K ∧ hLeft φ K ∩ qMinus K t = hLeft φ K \ halfD K t ∧
@@ -1133,8 +1135,15 @@ lemma opt_exists_rightBody_on_line {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.
     have hp2' : 0 ≤ p.2 := hp2.1
     nlinarith [mul_le_mul_of_nonneg_left hp2.2 hs1, mul_nonneg hs1 hp2']
 
-/-- **Lemma 8.1.7** (2): equality at `t = φ^R, π/2`, so `l_B(3π/2) = l(π/2, 0)` and
-`l_B(π + φ^R) = b_K^R` (see the module docstring for the proof). -/
+/-- **Lemma 8.1.7** (`lem:right-left-body`) (2): equality at `t = φ^R, π/2`, so
+`l_B(3π/2) = l(π/2, 0)` and `l_B(π + φ^R) = b_K^R`.
+
+Departure from the paper: the paper puts the point `p` where `δK` meets `b_K^R` in `B_K` by placing
+it outside the niche (Theorem 2.5.8 (2)) and applying Lemma 8.1.6 (1); this proof takes the topmost
+point `p` of `K` on `b_K^R` and a normal angle `θ` of `K` at `p`, excludes `θ > φ^R + π/2` by the
+injectivity condition (`g_K(φ^R) > 1`, through Theorem 6.2.3), and otherwise bounds
+`h_K(t) - ⟨p, u_t⟩` on `[φ^R, π/2]` by the sublinearity of `h_K`, because Theorem 2.5.8 (2) needs
+`𝒩(K) ⊆ K`, which fails on `𝒦^i` (see the module docstring). -/
 theorem lemma8_1_7_two {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     supp K φ + supp (rightBody φ K) (π + φ) = 1 ∧
       supp K (π / 2) + supp (rightBody φ K) (π + π / 2) = 1 ∧
@@ -1168,7 +1177,7 @@ theorem lemma8_1_7_two {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set
     rw [e]
     constructor <;> intro h <;> linarith
 
-/-- **Lemma 8.1.7** (3): `h_K(π/2 + t) + h_D(3π/2 + t) ≤ 1` on `[0, φ^L]`.
+/-- **Lemma 8.1.7** (`lem:right-left-body`) (3): `h_K(π/2 + t) + h_D(3π/2 + t) ≤ 1` on `[0, φ^L]`.
 
 **Added hypothesis `φ ∈ [0.039, 0.04]`**, for the same reason as in Lemma 8.1.7 (1): for `φ = -π`
 the set `D_K` is empty. -/
@@ -1291,8 +1300,13 @@ lemma opt_exists_leftBody_on_line {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.0
   simp only [halfD, halfPlus, mem_ofPred_eq]
   exact key (s + π / 2) ⟨by linarith [hs.1], by linarith [hs.2]⟩
 
-/-- **Lemma 8.1.7** (4): equality at `t = 0, φ^L` (the paper writes `φ^R`), so
-`l_D(3π/2) = l(π/2, 0)` and `l_D(3π/2 + φ^L) = d_K^L`. -/
+/-- **Lemma 8.1.7** (`lem:right-left-body`) (4): equality at `t = 0, φ^L` (the paper writes `φ^R`),
+so `l_D(3π/2) = l(π/2, 0)` and `l_D(3π/2 + φ^L) = d_K^L`.
+
+Departure from the paper: the paper argues as for (2), through Theorem 2.5.8 (2) and Lemma 8.1.6
+(2); this proof is the mirror image of the proof of (2), with `f_K(φ^L) > 1` (through
+Theorem 6.2.3), because Theorem 2.5.8 (2) needs `𝒩(K) ⊆ K`, which fails on `𝒦^i` (see the module
+docstring). -/
 theorem lemma8_1_7_four {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     supp K (π / 2 + 0) + supp (leftBody φ K) (3 * π / 2 + 0) = 1 ∧
       supp K (π / 2 + (π / 2 - φ)) + supp (leftBody φ K) (3 * π / 2 + (π / 2 - φ)) = 1 ∧

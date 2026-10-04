@@ -106,6 +106,7 @@ theorem proposition2_2_1 (S : Set (ℝ × ℝ)) (t : ℝ) (c : ℝ × ℝ) :
 support function. The paper's last formula, for `Q_S⁻(t)`, misses a `- 1` in its second
 half-plane; the statement below is the corrected one. -/
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): `L_S(t) = Q_S⁺(t) \ Q_S⁻(t)`. -/
 theorem proposition2_2_2_hallway (S : Set (ℝ × ℝ)) (t : ℝ) :
     suppHallway S t = qPlus S t \ qMinus S t := by
   ext q
@@ -122,37 +123,47 @@ theorem proposition2_2_2_hallway (S : Set (ℝ × ℝ)) (t : ℝ) :
     push Not at hc
     exact h3 ⟨hc.1, hc.2⟩
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the inner corner
+`𝐱_S(t) = (h_S(t) - 1) u_t + (h_S(t + π/2) - 1) v_t`. -/
 theorem proposition2_2_2_innerCorner (S : Set (ℝ × ℝ)) (t : ℝ) :
     innerCorner S t = (supp S t - 1) • uvec t + (supp S (t + π / 2) - 1) • vvec t := by
   simp [innerCorner, hallwayMap, xL, rot]
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the outer corner
+`𝐲_S(t) = h_S(t) u_t + h_S(t + π/2) v_t`. -/
 theorem proposition2_2_2_outerCorner (S : Set (ℝ × ℝ)) (t : ℝ) :
     outerCorner S t = supp S t • uvec t + supp S (t + π / 2) • vvec t := by
   ext <;> simp [outerCorner, hallwayMap, yL, rot, uvec, vvec] <;> ring
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the outer wall `a_S(t)` is the supporting
+line `l_S(t)`. -/
 theorem proposition2_2_2_wallA (S : Set (ℝ × ℝ)) (t : ℝ) : wallA S t = suppLine S t := by
-  ext q
-  simp only [wallA, ms_mem_hallwayMap_image, aL, suppLine, line, mem_ofPred_eq]
-  constructor <;> intro h <;> linarith
+  rw [wallA, ms_hallwayMap_eq]
+  exact ((proposition2_2_1 S t _).2 (ms_hallwayMap_eq S t).symm).1
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the inner wall `b_S(t)` is
+`l(t, h_S(t) - 1)`. -/
 theorem proposition2_2_2_wallB (S : Set (ℝ × ℝ)) (t : ℝ) : wallB S t = line t (supp S t - 1) := by
   ext q
   simp only [wallB, ms_mem_hallwayMap_image, bL, line, mem_ofPred_eq]
   constructor <;> intro h <;> linarith
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the outer wall `c_S(t)` is the supporting
+line `l_S(t + π/2)`. -/
 theorem proposition2_2_2_wallC (S : Set (ℝ × ℝ)) (t : ℝ) :
     wallC S t = suppLine S (t + π / 2) := by
-  ext q
-  simp only [wallC, ms_mem_hallwayMap_image, cL, suppLine, line, mem_ofPred_eq,
-    uvec_add_pi_div_two]
-  constructor <;> intro h <;> linarith
+  rw [wallC, ms_hallwayMap_eq]
+  exact ((proposition2_2_1 S t _).2 (ms_hallwayMap_eq S t).symm).2
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): the inner wall `d_S(t)` is
+`l(t + π/2, h_S(t + π/2) - 1)`. -/
 theorem proposition2_2_2_wallD (S : Set (ℝ × ℝ)) (t : ℝ) :
     wallD S t = line (t + π / 2) (supp S (t + π / 2) - 1) := by
   ext q
   simp only [wallD, ms_mem_hallwayMap_image, dL, line, mem_ofPred_eq, uvec_add_pi_div_two]
   constructor <;> intro h <;> linarith
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`): `Q_S⁺(t) = H_S(t) ∩ H_S(t + π/2)`. -/
 theorem proposition2_2_2_qPlus (S : Set (ℝ × ℝ)) (t : ℝ) :
     qPlus S t = suppHalf S t ∩ suppHalf S (t + π / 2) := by
   ext q
@@ -160,6 +171,9 @@ theorem proposition2_2_2_qPlus (S : Set (ℝ × ℝ)) (t : ℝ) :
     mem_ofPred_eq, uvec_add_pi_div_two]
   constructor <;> rintro ⟨h1, h2⟩ <;> constructor <;> linarith
 
+/-- **Proposition 2.2.2** (`pro:rotating-hallway-parts`):
+`Q_S⁻(t) = H₋°(t, h_S(t) - 1) ∩ H₋°(t + π/2, h_S(t + π/2) - 1)`, with the `- 1` that the paper omits
+in its second half-plane. -/
 theorem proposition2_2_2_qMinus (S : Set (ℝ × ℝ)) (t : ℝ) :
     qMinus S t =
       halfMinusOpen t (supp S t - 1) ∩ halfMinusOpen (t + π / 2) (supp S (t + π / 2) - 1) := by
@@ -178,20 +192,24 @@ theorem proposition2_2_3 {S : Set (ℝ × ℝ)} (hS : IsCompact S) (hne : S.None
     have := h hp
     rw [ms_mem_image_iff, ms_mem_hallway_iff] at this
     simpa only [dot_sub_left] using this
-  -- the outer walls of the given hallway lie beyond the supporting lines
+  -- `Q'⁺` is a convex cone containing `S` with walls of normal angles `t` and `t + π/2`, and
+  -- `Q_S⁺(t)` is the intersection of the supporting half-planes of `S` with these normal angles
+  -- (Proposition 2.2.2), so `Q_S⁺(t) ⊆ Q'⁺`: the walls of `Q_S⁺(t)` lie inside those of `Q'⁺`
   have h1 : supp S t ≤ dot c (uvec t) + 1 :=
     supp_le_of_forall hne fun p hp => by linarith [(hmem p hp).1]
   have h2 : supp S (t + π / 2) ≤ dot c (vvec t) + 1 :=
     supp_le_of_forall hne fun p hp => by rw [uvec_add_pi_div_two]; linarith [(hmem p hp).2.1]
+  -- `S ⊆ Q_S⁺(t) \ Q_S⁻(t) = L_S(t)`: shifting `Q_S⁺(t) ⊆ Q'⁺` by `-u_t - v_t` gives
+  -- `Q_S⁻(t) ⊆ Q'⁻`, which `S ⊆ L'` avoids
   intro q hq
-  have hq1 := dot_le_supp hS hq t
-  have hq2 := dot_le_supp hS hq (t + π / 2)
-  rw [uvec_add_pi_div_two] at hq2
-  rw [suppHallway, ms_mem_hallwayMap_image, ms_mem_hallway_iff]
-  refine ⟨by simp only; linarith, by simp only; linarith, ?_⟩
-  rcases (hmem q hq).2.2 with h3 | h3
-  · left; simp only; linarith
-  · right; simp only; linarith
+  rw [proposition2_2_2_hallway]
+  refine ⟨?_, ?_⟩
+  · rw [proposition2_2_2_qPlus]
+    exact ⟨dot_le_supp hS hq t, dot_le_supp hS hq (t + π / 2)⟩
+  · rw [proposition2_2_2_qMinus]
+    rintro ⟨hu, hv⟩
+    simp only [halfMinusOpen, mem_ofPred_eq, uvec_add_pi_div_two] at hu hv
+    rcases (hmem q hq).2.2 with h3 | h3 <;> linarith
 
 /-! ### Boundedness and compactness of moving sofas -/
 

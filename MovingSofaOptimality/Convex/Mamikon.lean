@@ -152,42 +152,6 @@ lemma cvx_vvec_primitive (a t : ℝ) : vvec t = vvec a + ∫ s in a..t, -uvec s 
 lemma cvx_measurable_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) : Measurable (vplus K) :=
   (cvx_stronglyMeasurable_vplus hK).measurable
 
-/-- The right derivative `v_K⁺(t) · v_t` of the support function. -/
-lemma cvx_measurable_suppDeriv {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
-    Measurable fun s => dot (vplus K s) (vvec s) :=
-  continuous_dot_pair.measurable.comp ((cvx_measurable_vplus hK).prodMk continuous_vvec.measurable)
-
-/-- The right derivative `v_K⁺(t) · v_t` of `h_K` is bounded. -/
-lemma cvx_suppDeriv_bound {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) :
-    ∃ C : NNReal, ∀ s, ‖dot (vplus K s) (vvec s)‖ ≤ C := by
-  obtain ⟨R, hR⟩ := cvx_exists_bound hK
-  refine ⟨2 * R, fun s => ?_⟩
-  rw [Real.norm_eq_abs]
-  refine (abs_dot_le _ _).trans ?_
-  have := hR _ (vplus_mem_edge hK s).1
-  have h2 := norm_vvec_le s
-  push_cast
-  calc 2 * ‖vplus K s‖ * ‖vvec s‖ ≤ 2 * R * 1 := by gcongr
-    _ = 2 * R := by ring
-
-/-- `t ↦ v_K⁺(t) · v_t` is integrable on every set of finite measure. -/
-lemma cvx_integrableOn_suppDeriv {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {s : Set ℝ}
-    (hs : volume s ≠ ⊤) : IntegrableOn (fun t => dot (vplus K t) (vvec t)) s := by
-  obtain ⟨C, hC⟩ := cvx_suppDeriv_bound hK
-  exact Measure.integrableOn_of_bounded (M := C) hs
-    (cvx_measurable_suppDeriv hK).aestronglyMeasurable (Eventually.of_forall hC)
-
-/-- `h_K` is the primitive of its right derivative `v_K⁺(t) · v_t`. -/
-lemma cvx_supp_primitive {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a t : ℝ} (hat : a ≤ t) :
-    supp K t = supp K a + ∫ s in a..t, dot (vplus K s) (vvec s) := by
-  have hint : IntervalIntegrable (fun s => dot (vplus K s) (vvec s)) volume a t :=
-    (cvx_integrableOn_suppDeriv hK
-      (by rw [Real.volume_interval]; exact ENNReal.ofReal_ne_top)).intervalIntegrable
-  rw [intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hat
-    (continuous_supp hK.2.1).continuousOn
-    (fun s _ => (hasDerivWithinAt_supp_right hK s).mono Ioi_subset_Ici_self) hint]
-  abel
-
 /-- `v_t` is continuous and of bounded variation on `[a, b]`. -/
 lemma cvx_bv_vvec {a b : ℝ} (hab : a ≤ b) :
     BoundedVariationOn vvec (Icc a b) ∧ ContinuousOn vvec (Icc a b) :=
@@ -200,142 +164,233 @@ lemma cvx_lsMeasure_vvec {a b : ℝ} (hab : a ≤ b) :
   cvx_lsMeasure_eq_withDensityᵥ hab (continuous_uvec.neg).integrableOn_Icc
     (fun t _ => cvx_vvec_primitive a t) (cvx_bv_vvec hab).1 (cvx_bv_vvec hab).2
 
-/-- `-h_K` has bounded variation on `[a, b]` and `d(-h_K) = -(v_K⁺(t) · v_t) dt`. -/
-lemma cvx_lsMeasure_neg_supp {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a ≤ b) :
-    BoundedVariationOn (fun t => -supp K t) (Icc a b) ∧ lsMeasure (fun t => -supp K t) a b =
-      (volume.restrict (Icc a b)).withDensityᵥ (fun t => -dot (vplus K t) (vvec t)) := by
-  obtain ⟨C, hC⟩ := cvx_suppDeriv_bound hK
-  have hψ : IntegrableOn (fun t => -dot (vplus K t) (vvec t)) (Icc a b) :=
-    (cvx_integrableOn_suppDeriv hK (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)).neg
-  have hx : ∀ t ∈ Icc a b, -supp K t = -supp K a + ∫ s in a..t, -dot (vplus K s) (vvec s) := by
-    intro t ht
-    rw [cvx_supp_primitive hK ht.1, intervalIntegral.integral_neg]
-    ring
-  obtain ⟨hbv, hc⟩ := cvx_bv_of_primitive (x := fun t => -supp K t) (M := C) hab hψ
-    (fun t _ => by rw [norm_neg]; exact hC t) hx
-  exact ⟨hbv, cvx_lsMeasure_eq_withDensityᵥ hab hψ hx hbv hc⟩
-
-/-- The cross product is antisymmetric. -/
-lemma cvx_crossCLM_flip : crossCLM.flip = -crossCLM := by
-  refine ContinuousLinearMap.ext fun p => ContinuousLinearMap.ext fun q => ?_
-  rw [ContinuousLinearMap.flip_apply, neg_apply, neg_apply, crossCLM_apply, crossCLM_apply,
-    cross_anticomm]
-
-/-- Integration by parts for `𝐳 × v_K⁺` on `(a, b)`. -/
+/-- Integration by parts for `𝐳 × v_K⁺` on `(a, b)`: by Lemma 5.1.3 for the cross product (`𝐳` is
+continuous), `d(𝐳 × v_K⁺) = d𝐳 × v_K⁺ + 𝐳 × dv_K⁺`, and `d(𝐳 × v_K⁺)((a, b))` is
+`𝐳(b) × v_K⁻(b) - 𝐳(a) × v_K⁺(a)`, as `v_K⁺` is right-continuous with left limits `v_K⁻`
+(Theorem 2.1.3). -/
 lemma cvx_ibp_cross_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     {z : ℝ → ℝ × ℝ} (hzc : ContinuousOn z (Icc a b)) (hzbv : BoundedVariationOn z (Icc a b)) :
     cross (z b) (vminus K b) - cross (z a) (vplus K a) =
       ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM.flip; lsMeasure z a b] +
         ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure (vplus K) a b] := by
-  -- integration by parts for the clamped functions, evaluated on `(a, b)`
-  have hfz := boundedVariationOn_clampFun hab.le hzbv
-  have hvbv := boundedVariationOn_clampFun hab.le (lemma5_2_1 hK a b)
-  have hzcl := continuous_clampFun hab.le hzc
-  have key := hfz.vectorMeasure_bilinear_comp_eq hvbv (B := crossCLM)
-  have hI := congrArg (fun μ : VectorMeasure ℝ ℝ => μ (Ioo a b)) key
-  rw [BoundedVariationOn.vectorMeasure_Ioo _ hab, add_apply,
-    VectorMeasure.withDensity_apply hvbv.rightLim.integrable,
-    VectorMeasure.withDensity_apply hfz.leftLim.integrable,
-    BoundedVariationOn.leftLim_bilinear_comp hfz hvbv,
-    BoundedVariationOn.rightLim_bilinear_comp hfz hvbv] at hI
-  simp only [crossCLM_apply] at hI
-  -- the one-sided limits of the clamped functions
-  have h1 : Function.leftLim (clampFun z a b) b = z b := by
-    rw [hzcl.continuousWithinAt.leftLim_eq, clampFun_of_mem ⟨hab.le, le_rfl⟩]
-  have h2 : Function.rightLim (clampFun z a b) a = z a := by
-    rw [hzcl.continuousWithinAt.rightLim_eq, clampFun_of_mem ⟨le_rfl, hab.le⟩]
-  have h3 : Function.leftLim (clampFun (vplus K) a b) b = vminus K b := by
+  have hvbv := lemma5_2_1 hK a b
+  have hzr := cvx_rightCont_of_continuousOn hzc
+  have hvr : ∀ t ∈ Ico a b, ContinuousWithinAt (vplus K) (Ici t) t := fun t _ =>
+    continuousWithinAt_Ioi_iff_Ici.1 (tendsto_vplus_right hK t)
+  rw [← lemma5_1_3_cross hab.le hzbv hvbv hzr hvr (Or.inl hzc) Ioo_subset_Icc_self]
+  -- the mass of `(a, b)` under `d(𝐳 × v_K⁺)`
+  have hφ : BoundedVariationOn (fun t => cross (z t) (vplus K t)) (Icc a b) :=
+    hzbv.bilinear_comp hvbv crossCLM
+  have hΦ := boundedVariationOn_clampFun hab.le hφ
+  have hφr : ∀ t ∈ Ico a b, ContinuousWithinAt (fun t => cross (z t) (vplus K t)) (Ici t) t :=
+    fun t ht => ((hzr t ht).fst.mul (hvr t ht).snd).sub ((hzr t ht).snd.mul (hvr t ht).fst)
+  have hzb : Tendsto z (𝓝[<] b) (𝓝 (z b)) :=
+    (hzc b ⟨hab.le, le_rfl⟩).mono_of_mem_nhdsWithin
+      (mem_nhdsWithin.2 ⟨Ioi a, isOpen_Ioi, hab, fun _ hs => ⟨hs.1.le, hs.2.le⟩⟩)
+  have hlim : Tendsto (fun t => cross (z t) (vplus K t)) (𝓝[<] b)
+      (𝓝 (cross (z b) (vminus K b))) :=
+    ((hzb.fst_nhds.mul (tendsto_vplus_left hK b).snd_nhds).sub
+      (hzb.snd_nhds.mul (tendsto_vplus_left hK b).fst_nhds))
+  have hl : Function.leftLim (clampFun (fun t => cross (z t) (vplus K t)) a b) b =
+      cross (z b) (vminus K b) := by
     apply leftLim_eq_of_tendsto
-    apply (tendsto_vplus_left hK b).congr'
+    refine hlim.congr' ?_
     filter_upwards [Ioo_mem_nhdsLT hab] with t ht
-    exact (clampFun_of_mem ⟨ht.1.le, ht.2.le⟩).symm
-  have h4 : Function.rightLim (clampFun (vplus K) a b) a = vplus K a := by
-    apply rightLim_eq_of_tendsto
-    apply (tendsto_vplus_right hK a).congr'
-    filter_upwards [Ioo_mem_nhdsGT hab] with t ht
-    exact (clampFun_of_mem ⟨ht.1.le, ht.2.le⟩).symm
-  have h5 : EqOn (Function.rightLim (clampFun (vplus K) a b)) (vplus K) (Ioo a b) := by
-    intro t ht
-    apply rightLim_eq_of_tendsto
-    apply (tendsto_vplus_right hK t).congr'
-    filter_upwards [Ioo_mem_nhdsGT ht.2] with s hs
-    exact (clampFun_of_mem ⟨(ht.1.trans hs.1).le, hs.2.le⟩).symm
-  have h6 : EqOn (Function.leftLim (clampFun z a b)) z (Ioo a b) := by
-    intro t ht
-    rw [hzcl.continuousWithinAt.leftLim_eq, clampFun_of_mem ⟨ht.1.le, ht.2.le⟩]
-  rwa [h1, h2, h3, h4, VectorMeasure.setIntegral_congr_fun h5,
-    VectorMeasure.setIntegral_congr_fun h6, ← lsMeasure_eq_vectorMeasure hfz,
-    ← lsMeasure_eq_vectorMeasure hvbv] at hI
+    exact (clampFun_of_mem (f := fun t => cross (z t) (vplus K t)) ⟨ht.1.le, ht.2.le⟩).symm
+  rw [lsMeasure_eq_vectorMeasure hΦ, hΦ.vectorMeasure_Ioo hab, hl, rightLim_clampFun hab.le hφr,
+    clampFun_of_mem ⟨le_rfl, hab.le⟩]
 
-/-- `(-u_t) × p = -(p · v_t)`. -/
-lemma cvx_cross_neg_uvec (p : ℝ × ℝ) (t : ℝ) : cross (-uvec t) p = -dot p (vvec t) := by
-  simp only [cross, dot, uvec, vvec, Prod.fst_neg, Prod.snd_neg]; ring
-
-/-- **The key identity** `v_t × d𝐳(t) = α(t) dt` on `(a, b)`, for `𝐳` on the supporting lines. -/
-lemma cvx_integral_vvec_cross_dz {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
-    {z : ℝ → ℝ × ℝ} (hzc : Continuous z) (hzbv : BoundedVariationOn z (Icc a b))
-    (hzl : ∀ t ∈ Icc a b, z t ∈ suppLine K t) {I : Set ℝ} (hI : MeasurableSet I)
-    (hIab : I ⊆ Ioo a b) :
-    ∫ᵛ t in I, vvec t ∂[crossCLM; lsMeasure z a b] =
-      ∫ t in I, dot (z t - vplus K t) (vvec t) := by
-  have hIcc : I ⊆ Icc a b := hIab.trans Ioo_subset_Icc_self
-  obtain ⟨hFbv, hFc⟩ := cvx_bv_vvec hab.le
-  -- Step 1: integration by parts for `v_t × 𝐳(t)`; since `𝐳(t) ∈ l_K(t)`, `v_t × 𝐳(t) = -h_K(t)`.
-  have hF := boundedVariationOn_clampFun hab.le hFbv
-  have hG := boundedVariationOn_clampFun hab.le hzbv
-  have hFcl := continuous_clampFun hab.le hFc
-  have hGcl := continuous_clampFun hab.le hzc.continuousOn
-  have key := hF.vectorMeasure_bilinear_comp_eq hG (B := crossCLM)
-  obtain ⟨hsbv, hsls⟩ := cvx_lsMeasure_neg_supp hK hab.le
-  have hP : (hF.bilinear_comp hG crossCLM).vectorMeasure = lsMeasure (fun t => -supp K t) a b := by
-    rw [lsMeasure_eq_vectorMeasure (boundedVariationOn_clampFun hab.le hsbv)]
-    apply vectorMeasure_congr
+/-- `d(x - y) = dx - dy` for curves of bounded variation on `[a, b]` (Proposition 5.1.1, for
+curves): `d(𝐳 - 𝐯) = d𝐳 - d𝐯` in the proof of Theorem 7.4.1. -/
+private lemma cvx_lsMeasure_sub {x y : ℝ → ℝ × ℝ} {a b : ℝ} (hab : a ≤ b)
+    (hx : BoundedVariationOn x (Icc a b)) (hy : BoundedVariationOn y (Icc a b)) :
+    lsMeasure (fun t => x t - y t) a b = lsMeasure x a b - lsMeasure y a b := by
+  have hX := boundedVariationOn_clampFun hab hx
+  have hY := boundedVariationOn_clampFun hab hy
+  have hXY : BoundedVariationOn (clampFun (fun t => x t - y t) a b) univ := by
+    convert boundedVariationOn_add hX (cvx_bv_const_smul hY (-1)) using 1
     funext t
-    simp only [clampFun, crossCLM_apply]
-    rw [cross_anticomm, cross_vvec, hzl _ (clamp_mem hab.le t)]
-  rw [hP, hsls] at key
-  have h := congrArg (fun μ : VectorMeasure ℝ ℝ => μ I) key
-  have hgi : Integrable (fun t => -dot (vplus K t) (vvec t)) (volume.restrict (Icc a b)) :=
-    (cvx_integrableOn_suppDeriv hK (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)).neg
-  rw [withDensityᵥ_apply hgi hI, add_apply, VectorMeasure.withDensity_apply hG.rightLim.integrable,
-    VectorMeasure.withDensity_apply hF.leftLim.integrable] at h
-  have h5 : EqOn (Function.rightLim (clampFun z a b)) z I := by
-    intro t ht
-    rw [hGcl.continuousWithinAt.rightLim_eq, clampFun_of_mem (hIcc ht)]
-  have h6 : EqOn (Function.leftLim (clampFun vvec a b)) vvec I := by
-    intro t ht
-    rw [hFcl.continuousWithinAt.leftLim_eq, clampFun_of_mem (hIcc ht)]
-  rw [VectorMeasure.setIntegral_congr_fun h5, VectorMeasure.setIntegral_congr_fun h6,
-    ← lsMeasure_eq_vectorMeasure hF, ← lsMeasure_eq_vectorMeasure hG,
-    cvx_lsMeasure_vvec hab.le] at h
-  -- Step 2: compute `∫ 𝐳 × d v_t` with `d v_t = -u_t dt`, and solve for `∫ v_t × d𝐳`.
-  have hui : Integrable (fun t => -uvec t) (volume.restrict (Icc a b)) :=
+    simp only [clampFun, Pi.smul_apply, neg_smul, one_smul, sub_eq_add_neg]
+  rw [lsMeasure_eq_vectorMeasure hXY, lsMeasure_eq_vectorMeasure hX, lsMeasure_eq_vectorMeasure hY]
+  refine VectorMeasure.ext_of_Icc _ _ fun c d hcd => ?_
+  rw [sub_apply, hXY.vectorMeasure_Icc hcd, hX.vectorMeasure_Icc hcd, hY.vectorMeasure_Icc hcd,
+    rightLim_eq_of_tendsto (f := clampFun (fun t => x t - y t) a b)
+      ((hX.tendsto_rightLim d).sub (hY.tendsto_rightLim d)),
+    leftLim_eq_of_tendsto (f := clampFun (fun t => x t - y t) a b)
+      ((hX.tendsto_leftLim c).sub (hY.tendsto_leftLim c))]
+  abel
+
+/-- `φ V × (V dμ) = 0` for a real measure `μ` of finite variation: the vector measure `V dμ` is
+parallel to `V`. This is the vanishing of the term `α v_t × v_t dα` in the last chain of equalities
+in the proof of Theorem 7.4.1, checked coordinate by coordinate (`p × q = p₁ q₂ - p₂ q₁`). -/
+private lemma cvx_integral_cross_withDensity_self {μ : VectorMeasure ℝ ℝ}
+    [IsFiniteMeasure μ.variation] {V : ℝ → ℝ × ℝ} (hV : Continuous V) (hV1 : ∀ t, ‖V t‖ ≤ 1)
+    {φ : ℝ → ℝ} (hφ : Measurable φ) {C : ℝ} (hφC : ∀ t, ‖φ t‖ ≤ C) :
+    ∫ᵛ t, φ t • V t ∂[crossCLM; μ.withDensity V (ContinuousLinearMap.lsmul ℝ ℝ).flip] = 0 := by
+  have hV1' : ∀ᵐ t ∂μ.variation, ‖V t‖ ≤ (1 : NNReal) :=
+    Eventually.of_forall fun t => by exact_mod_cast hV1 t
+  have hvar := cvx_variation_withDensity_le hV1'
+    ((ContinuousLinearMap.lsmul ℝ ℝ).flip : (ℝ × ℝ) →L[ℝ] ℝ →L[ℝ] (ℝ × ℝ))
+  -- bounded measurable functions are integrable against `μ` and against `V dμ`
+  have hμ : ∀ {g : ℝ → ℝ}, Measurable g → (∀ t, ‖g t‖ ≤ C) → Integrable g μ.variation :=
+    fun hg hgC => Integrable.of_bound hg.aestronglyMeasurable C (Eventually.of_forall hgC)
+  have hμ₂ : ∀ {g : ℝ → ℝ × ℝ}, Measurable g → (∀ t, ‖g t‖ ≤ C) → Integrable g μ.variation :=
+    fun hg hgC => Integrable.of_bound hg.aestronglyMeasurable C (Eventually.of_forall hgC)
+  have hν : ∀ {g : ℝ → ℝ}, Measurable g → (∀ t, ‖g t‖ ≤ C) →
+      Integrable g (μ.withDensity V (ContinuousLinearMap.lsmul ℝ ℝ).flip).variation :=
+    fun hg hgC => ((hμ hg hgC).smul_measure ENNReal.coe_ne_top).mono_measure hvar
+  have hν₂ : ∀ {g : ℝ → ℝ × ℝ}, Measurable g → (∀ t, ‖g t‖ ≤ C) →
+      Integrable g (μ.withDensity V (ContinuousLinearMap.lsmul ℝ ℝ).flip).variation :=
+    fun hg hgC => ((hμ₂ hg hgC).smul_measure ENNReal.coe_ne_top).mono_measure hvar
+  have hsm : ∀ {g : ℝ → ℝ}, (∀ t, ‖g t‖ ≤ C) → ∀ t, ‖g t • V t‖ ≤ C := fun hgC t =>
+    (norm_smul _ _).trans_le ((mul_le_of_le_one_right (norm_nonneg _) (hV1 t)).trans (hgC t))
+  -- a coordinate `L` of `∫ g d(V dμ)` is `∫ g L(V) dμ`
+  have hcoord : ∀ (L : (ℝ × ℝ) →L[ℝ] ℝ) {g : ℝ → ℝ}, Measurable g → (∀ t, ‖g t‖ ≤ C) →
+      ∫ᵛ t, g t ∂[(ContinuousLinearMap.compL ℝ (ℝ × ℝ) (ℝ × ℝ) ℝ L) ∘L
+        ContinuousLinearMap.lsmul ℝ ℝ; μ.withDensity V (ContinuousLinearMap.lsmul ℝ ℝ).flip] =
+        ∫ᵛ t, g t * L (V t) ∂•μ := by
+    intro L g hg hgC
+    have hgV : Integrable (fun t => g t • V t) μ.variation := hμ₂ (hg.smul hV.measurable) (hsm hgC)
+    have hL : (ContinuousLinearMap.compL ℝ ℝ (ℝ × ℝ) ℝ L) ∘L
+        ((ContinuousLinearMap.lsmul ℝ ℝ).flip : (ℝ × ℝ) →L[ℝ] ℝ →L[ℝ] (ℝ × ℝ)) =
+        (ContinuousLinearMap.lsmul ℝ ℝ : ℝ →L[ℝ] ℝ →L[ℝ] ℝ) ∘L L :=
+      ContinuousLinearMap.ext fun p => ContinuousLinearMap.ext fun r => by simp [mul_comm]
+    rw [← VectorMeasure.continuousLinearMap_apply_integral (hν hg hgC),
+      ← cvx_integral_smul_eq_integral_withDensity hV.aestronglyMeasurable hV1' _ (hμ hg hgC),
+      VectorMeasure.continuousLinearMap_apply_integral hgV, hL,
+      ← VectorMeasure.integral_continuousLinearMap_comp hgV]
+    simp only [map_smul, smul_eq_mul]
+  -- `p × q = p₁ q₂ - p₂ q₁`
+  have hc : crossCLM = ((ContinuousLinearMap.compL ℝ (ℝ × ℝ) (ℝ × ℝ) ℝ
+      (ContinuousLinearMap.snd ℝ ℝ ℝ)) ∘L ContinuousLinearMap.lsmul ℝ ℝ) ∘L
+        ContinuousLinearMap.fst ℝ ℝ ℝ - ((ContinuousLinearMap.compL ℝ (ℝ × ℝ) (ℝ × ℝ) ℝ
+      (ContinuousLinearMap.fst ℝ ℝ ℝ)) ∘L ContinuousLinearMap.lsmul ℝ ℝ) ∘L
+        ContinuousLinearMap.snd ℝ ℝ ℝ :=
+    ContinuousLinearMap.ext fun p => ContinuousLinearMap.ext fun q => by simp [cross]
+  have hφV : Integrable (fun t => φ t • V t)
+      (μ.withDensity V (ContinuousLinearMap.lsmul ℝ ℝ).flip).variation :=
+    hν₂ (hφ.smul hV.measurable) (hsm hφC)
+  rw [hc, VectorMeasure.integral_sub_cbm hφV,
+    ← VectorMeasure.integral_continuousLinearMap_comp hφV,
+    ← VectorMeasure.integral_continuousLinearMap_comp hφV]
+  simp only [ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd']
+  rw [hcoord _ (g := fun t => (φ t • V t).1) (hφ.smul hV.measurable).fst
+      fun t => (norm_fst_le _).trans (hsm hφC t),
+    hcoord _ (g := fun t => (φ t • V t).2) (hφ.smul hV.measurable).snd
+      fun t => (norm_snd_le _).trans (hsm hφC t), sub_eq_zero]
+  congr 1
+  funext t
+  simp only [ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd', Prod.smul_fst,
+    Prod.smul_snd, smul_eq_mul]
+  ring
+
+/-- The last chain of equalities in the proof of Theorem 7.4.1: for `α` right-continuous and of
+bounded variation on `[a, b]`, `α v_t × d(α v_t) = α v_t × (v_t dα + α dv_t) = α² dt` on `(a, b)`.
+The product rule `d(α v_t) = v_t dα + α dv_t` is Lemma 5.1.3 for the pairing `(α, v) ↦ α v`, in
+Mathlib's form for a general pairing (`BoundedVariationOn.vectorMeasure_bilinear_comp_eq'`; `v_t` is
+continuous). Then `α v_t × v_t dα = 0` (`cvx_integral_cross_withDensity_self`), and
+`α v_t × α dv_t = α² (v_t × (-u_t)) dt = α² dt` as `dv_t = -u_t dt`. -/
+private lemma cvx_integral_cross_d_smul_vvec {α : ℝ → ℝ} {a b : ℝ} (hab : a < b)
+    (hα : BoundedVariationOn α (Icc a b)) (hαr : ∀ t ∈ Ico a b, ContinuousWithinAt α (Ici t) t)
+    (hαm : Measurable α) {M : NNReal} (hαM : ∀ t ∈ Icc a b, ‖α t‖ ≤ M) :
+    ∫ᵛ t in Ioo a b, α t • vvec t ∂[crossCLM; lsMeasure (fun t => α t • vvec t) a b] =
+      ∫ t in Ioo a b, α t ^ 2 := by
+  obtain ⟨hvbv, hvc⟩ := cvx_bv_vvec hab.le
+  have hF : BoundedVariationOn (clampFun α a b) univ := boundedVariationOn_clampFun hab.le hα
+  have hV : BoundedVariationOn (clampFun vvec a b) univ := boundedVariationOn_clampFun hab.le hvbv
+  have hVc : Continuous (clampFun vvec a b) := continuous_clampFun hab.le hvc
+  have hV1 : ∀ t, ‖clampFun vvec a b t‖ ≤ 1 := fun t => norm_vvec_le _
+  have hFm : Measurable (clampFun α a b) :=
+    hαm.comp (by fun_prop : Continuous fun t : ℝ => max a (min b t)).measurable
+  have hFM : ∀ t, ‖clampFun α a b t‖ ≤ M := fun t => hαM _ (clamp_mem hab.le t)
+  have hFu : ∀ t, ‖clampFun α a b t • -uvec t‖ ≤ M := fun t => by
+    rw [norm_smul, norm_neg]
+    exact (mul_le_of_le_one_right (norm_nonneg _) (norm_uvec_le t)).trans (hFM t)
+  have hFV : ∀ t, ‖clampFun α a b t • clampFun vvec a b t‖ ≤ M := fun t => by
+    rw [norm_smul]
+    exact (mul_le_of_le_one_right (norm_nonneg _) (hV1 t)).trans (hFM t)
+  have hFVm : Measurable fun t => clampFun α a b t • clampFun vvec a b t :=
+    hFm.smul hVc.measurable
+  have hIcc : volume (Icc a b) ≠ ⊤ := by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top
+  have hu : Integrable (fun t => -uvec t) (volume.restrict (Icc a b)) :=
     (continuous_uvec.neg).integrableOn_Icc
-  have hL2 : ∫ᵛ t in I, z t ∂[crossCLM.flip;
-      (volume.restrict (Icc a b)).withDensityᵥ (fun t => -uvec t)] =
-      ∫ t in I, -dot (z t) (vvec t) := by
-    rw [cvx_withDensityᵥ_restrict hui hI, cvx_integral_withDensityᵥ hui.restrict (M := 1)
-      (Eventually.of_forall fun t => by simpa using norm_uvec_le t) crossCLM.flip
-      (hzc.integrableOn_Icc.mono_set hIcc).restrict]
-    rw [Measure.restrict_restrict hI, inter_eq_left.2 hIcc]
+  have hFi : Integrable (clampFun α a b) (volume.restrict (Icc a b)) :=
+    Measure.integrableOn_of_bounded (M := M) hIcc hFm.aestronglyMeasurable
+      (Eventually.of_forall hFM)
+  have hFui : Integrable (fun t => clampFun α a b t • -uvec t) (volume.restrict (Icc a b)) :=
+    Measure.integrableOn_of_bounded (M := M) hIcc
+      (hFm.smul continuous_uvec.neg.measurable).aestronglyMeasurable (Eventually.of_forall hFu)
+  have hFVi : Integrable (fun t => clampFun α a b t • clampFun vvec a b t)
+      (volume.restrict (Icc a b)) :=
+    Measure.integrableOn_of_bounded (M := M) hIcc hFVm.aestronglyMeasurable
+      (Eventually.of_forall hFV)
+  -- Step 1: the product rule `d(α v_t) = v_t dα + α dv_t` (Lemma 5.1.3), with `dv_t = -u_t dt`
+  have hPR : lsMeasure (fun t => α t • vvec t) a b =
+      (lsMeasure α a b).withDensity (clampFun vvec a b) (ContinuousLinearMap.lsmul ℝ ℝ).flip +
+        (volume.restrict (Icc a b)).withDensityᵥ (fun t => clampFun α a b t • -uvec t) := by
+    have hFV' : BoundedVariationOn (clampFun (fun t => α t • vvec t) a b) univ := hF.smul hV
+    have hl : Function.leftLim (clampFun vvec a b) = clampFun vvec a b :=
+      funext (leftLim_clampFun hab.le hvc)
+    have hr : Function.rightLim (clampFun α a b) = clampFun α a b :=
+      funext (rightLim_clampFun hab.le hαr)
+    rw [lsMeasure_eq_vectorMeasure hFV', show hFV'.vectorMeasure =
+        (hF.bilinear_comp hV (ContinuousLinearMap.lsmul ℝ ℝ)).vectorMeasure from rfl,
+      hF.vectorMeasure_bilinear_comp_eq' hV, hl, hr, ← lsMeasure_eq_vectorMeasure hF,
+      ← lsMeasure_eq_vectorMeasure hV]
     congr 1
-    funext t
-    rw [ContinuousLinearMap.flip_apply, crossCLM_apply, cvx_cross_neg_uvec]
-  rw [hL2, Measure.restrict_restrict hI, inter_eq_left.2 hIcc] at h
-  have hwi : IntegrableOn (fun t => dot (z t) (vvec t)) I :=
-    ((by unfold dot vvec; fun_prop : Continuous fun t => dot (z t) (vvec t)).integrableOn_Icc
-      (a := a) (b := b)).mono_set hIcc
-  have hgi' : IntegrableOn (fun t => dot (vplus K t) (vvec t)) I := by
-    have h1 : IntegrableOn (fun t => -dot (vplus K t) (vvec t)) (Icc a b) := hgi
-    have := h1.neg.mono_set hIcc
-    simpa using this
-  have e : ∫ t in I, dot (z t - vplus K t) (vvec t) =
-      (∫ t in I, dot (z t) (vvec t)) - ∫ t in I, dot (vplus K t) (vvec t) := by
-    simp_rw [dot_sub_left]
-    exact integral_sub hwi hgi'
-  rw [e]
-  rw [integral_neg, integral_neg] at h
-  linarith
+    refine VectorMeasure.ext fun s hs => ?_
+    rw [VectorMeasure.withDensity_apply (Integrable.of_bound hFm.aestronglyMeasurable M
+        (Eventually.of_forall hFM)), cvx_lsMeasure_vvec hab.le, cvx_withDensityᵥ_restrict hu hs,
+      cvx_integral_withDensityᵥ hu.restrict (M := 1)
+        (Eventually.of_forall fun t => by simpa using norm_uvec_le t) _ hFi.restrict,
+      withDensityᵥ_apply hFui hs]
+    rfl
+  -- Step 2: `α v_t × v_t dα = 0`
+  have hVi : (lsMeasure α a b).Integrable (clampFun vvec a b) :=
+    Integrable.of_bound hVc.aestronglyMeasurable 1 (Eventually.of_forall hV1)
+  have hQ₁ : ∫ᵛ t, clampFun α a b t • clampFun vvec a b t ∂[crossCLM;
+      ((lsMeasure α a b).withDensity (clampFun vvec a b)
+        (ContinuousLinearMap.lsmul ℝ ℝ).flip).restrict (Ioo a b)] = 0 := by
+    have : IsFiniteMeasure ((lsMeasure α a b).restrict (Ioo a b)).variation := by
+      rw [VectorMeasure.variation_restrict measurableSet_Ioo]; infer_instance
+    rw [VectorMeasure.restrict_withDensity hVi]
+    exact cvx_integral_cross_withDensity_self hVc hV1 hFm hFM
+  -- Step 3: `α v_t × α dv_t = α² (v_t × (-u_t)) dt = α² dt`
+  have hQ₂ : ∫ᵛ t, clampFun α a b t • clampFun vvec a b t ∂[crossCLM;
+      ((volume.restrict (Icc a b)).withDensityᵥ
+        (fun t => clampFun α a b t • -uvec t)).restrict (Ioo a b)] = ∫ t in Ioo a b, α t ^ 2 := by
+    have hle : volume.restrict (Ioo a b) ≤ volume.restrict (Icc a b) :=
+      Measure.restrict_mono Ioo_subset_Icc_self le_rfl
+    rw [cvx_withDensityᵥ_restrict hFui measurableSet_Ioo,
+      Measure.restrict_restrict measurableSet_Ioo, inter_eq_left.2 Ioo_subset_Icc_self,
+      cvx_integral_withDensityᵥ (hFui.mono_measure hle)
+        (M := M) (Eventually.of_forall hFu) crossCLM (hFVi.mono_measure hle)]
+    refine setIntegral_congr_fun measurableSet_Ioo fun t ht => ?_
+    have h1 : cross (vvec t) (-uvec t) = 1 := by
+      simp only [cross, vvec, uvec, Prod.fst_neg, Prod.snd_neg]
+      linear_combination sin_sq_add_cos_sq t
+    simp only [crossCLM_apply, clampFun_of_mem (Ioo_subset_Icc_self ht), cross_smul_left,
+      cross_smul_right, h1]
+    ring
+  have hcongr : ∫ᵛ t in Ioo a b, α t • vvec t ∂[crossCLM; lsMeasure (fun t => α t • vvec t) a b] =
+      ∫ᵛ t in Ioo a b, clampFun α a b t • clampFun vvec a b t ∂[crossCLM;
+        lsMeasure (fun t => α t • vvec t) a b] :=
+    VectorMeasure.setIntegral_congr_fun fun t ht => by
+      simp only [clampFun_of_mem (Ioo_subset_Icc_self ht)]
+  have h₁ : (((lsMeasure α a b).withDensity (clampFun vvec a b)
+      (ContinuousLinearMap.lsmul ℝ ℝ).flip).restrict (Ioo a b)).Integrable
+        (fun t => clampFun α a b t • clampFun vvec a b t) :=
+    VectorMeasure.Integrable.restrict (((Integrable.of_bound hFVm.aestronglyMeasurable M
+      (Eventually.of_forall hFV) : (lsMeasure α a b).Integrable _).smul_measure
+        ENNReal.coe_ne_top).mono_measure (cvx_variation_withDensity_le (M := 1)
+          (Eventually.of_forall fun t => by exact_mod_cast hV1 t) _))
+  have h₂ : (((volume.restrict (Icc a b)).withDensityᵥ
+      (fun t => clampFun α a b t • -uvec t)).restrict (Ioo a b)).Integrable
+        (fun t => clampFun α a b t • clampFun vvec a b t) :=
+    VectorMeasure.Integrable.restrict ((hFVi.smul_measure ENNReal.coe_ne_top).mono_measure
+      (cvx_variation_withDensityᵥ_le hFui (Eventually.of_forall hFu)))
+  rw [hcongr, hPR, VectorMeasure.restrict_add, VectorMeasure.integral_add_vectorMeasure h₁ h₂, hQ₁,
+    hQ₂, zero_add]
 
 /-- A bound for `α(t) = (𝐳(t) - v_K⁺(t)) · v_t` on `[a, b]`. -/
 lemma cvx_alpha_bound {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} {z : ℝ → ℝ × ℝ}
@@ -364,29 +419,9 @@ lemma cvx_measurable_alpha {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {z : ℝ
   continuous_dot_pair.measurable.comp ((hzc.measurable.sub (cvx_measurable_vplus hK)).prodMk
     continuous_vvec.measurable)
 
-/-- `v_t × d𝐳 = α dt` as vector measures on `(a, b)`. -/
-lemma cvx_withDensity_vvec_eq {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
-    {z : ℝ → ℝ × ℝ} (hzc : Continuous z) (hzbv : BoundedVariationOn z (Icc a b))
-    (hzl : ∀ t ∈ Icc a b, z t ∈ suppLine K t) :
-    ((lsMeasure z a b).restrict (Ioo a b)).withDensity vvec crossCLM =
-      (volume.restrict (Ioo a b)).withDensityᵥ (fun t => dot (z t - vplus K t) (vvec t)) := by
-  obtain ⟨M, hM⟩ := cvx_alpha_bound hK hzc.continuousOn (a := a) (b := b)
-  have hαi : Integrable (fun t => dot (z t - vplus K t) (vvec t)) (volume.restrict (Ioo a b)) :=
-    Measure.integrableOn_of_bounded (M := M) (by rw [Real.volume_Ioo]; exact ENNReal.ofReal_ne_top)
-      (cvx_measurable_alpha hK hzc).aestronglyMeasurable
-      (ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => hM t ⟨ht.1.le, ht.2.le⟩)
-  have hvi : ((lsMeasure z a b).restrict (Ioo a b)).Integrable vvec :=
-    Integrable.of_bound continuous_vvec.aestronglyMeasurable 1
-      (Eventually.of_forall norm_vvec_le)
-  apply VectorMeasure.ext_of_Icc
-  intro c d _
-  rw [VectorMeasure.withDensity_apply hvi, withDensityᵥ_apply hαi measurableSet_Icc,
-    VectorMeasure.restrict_restrict _ measurableSet_Icc measurableSet_Ioo,
-    Measure.restrict_restrict measurableSet_Icc]
-  exact cvx_integral_vvec_cross_dz hK hab hzc hzbv hzl (measurableSet_Icc.inter measurableSet_Ioo)
-    inter_subset_right
-
-/-- **Mamikon's theorem** for a curve `𝐳` continuous on the whole line. -/
+/-- **Mamikon's theorem** for a curve `𝐳` continuous on the whole line. As in the paper, with
+`𝐯 = v_K⁺`: `𝐳 × d𝐳 - 𝐯 × d𝐯 + d(𝐳 × 𝐯) = (𝐳 - 𝐯) × d(𝐳 + 𝐯) = (𝐳 - 𝐯) × d(𝐳 - 𝐯)
+= α v_t × d(α v_t) = α² dt` on `(a, b)`. -/
 theorem cvx_mamikon_core {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
     (hb : b < a + π) {z : ℝ → ℝ × ℝ} (hzc : Continuous z) (hzbv : BoundedVariationOn z (Icc a b))
     (hzl : ∀ t ∈ Icc a b, z t ∈ suppLine K t) :
@@ -394,7 +429,8 @@ theorem cvx_mamikon_core {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ
         convexCurveArea K a b =
       (1 / 2) * ∫ t in a..b, dot (z t - vplus K t) (vvec t) ^ 2 := by
   obtain ⟨M, hM⟩ := cvx_alpha_bound hK hzc.continuousOn (a := a) (b := b)
-  have hαm := cvx_measurable_alpha hK hzc
+  obtain ⟨R, hR⟩ := cvx_exists_bound hK
+  have hvbv := lemma5_2_1 hK a b
   -- Step 1: the curve area functional of `𝐳` as an integral over `(a, b)`
   have h1 : curveArea z a b = (1 / 2) * ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure z a b] := by
     unfold curveArea curveBilin
@@ -411,21 +447,43 @@ theorem cvx_mamikon_core {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ
     rcases ht.1.2.eq_or_lt with h' | h'
     · exact Or.inr h'
     exact absurd ⟨h, h'⟩ ht.2
-  -- Step 2: integration by parts for `𝐳 × v_K⁺`
+  -- Step 2: `d(𝐳 × 𝐯) = d𝐳 × 𝐯 + 𝐳 × d𝐯` on `(a, b)` (Lemma 5.1.3, `𝐳` continuous)
   have h2 := cvx_ibp_cross_vplus hK hab hzc.continuousOn hzbv
-  -- Step 3: `∫ 𝐳 × dv_K⁺ = ∫ h_K dσ_K`
-  have h3 : ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure (vplus K) a b] =
-      ∫ t in Ioo a b, supp K t ∂(sigma K) := by
+  -- Step 3: `(𝐳 - 𝐯) × d𝐯 = 0`, as `d𝐯 = v_t σ_K` (Theorem 5.2.2) and `𝐳 - 𝐯` is parallel to `v_t`
+  have hzi' : ((lsMeasure (vplus K) a b).restrict (Ioo a b)).Integrable z :=
+    VectorMeasure.IntegrableOn.mono measurableSet_Icc Ioo_subset_Icc_self
+      (cvx_integrable_restrict_Icc (lsMeasure (vplus K) a b) hzc.continuousOn)
+  have hvi' : ((lsMeasure (vplus K) a b).restrict (Ioo a b)).Integrable (vplus K) :=
+    Integrable.of_bound (cvx_stronglyMeasurable_vplus hK).aestronglyMeasurable R
+      (Eventually.of_forall fun t => hR _ (vplus_mem_edge hK t).1)
+  have h0 : ∫ᵛ t in Ioo a b, (z t - vplus K t) ∂[crossCLM; lsMeasure (vplus K) a b] = 0 := by
     have : IsFiniteMeasure ((sigma K).restrict (Ioo a b)) :=
       isFiniteMeasure_restrict.2 measure_Ioo_lt_top.ne
-    rw [cvx_integral_cross_dvplus' hK hab hb
-      (hzc.integrableOn_Icc.mono_set Ioo_subset_Icc_self)]
-    exact setIntegral_congr_fun measurableSet_Ioo fun t ht => hzl t ⟨ht.1.le, ht.2.le⟩
+    have hzσ : Integrable z ((sigma K).restrict (Ioo a b)) :=
+      hzc.integrableOn_Icc.mono_set Ioo_subset_Icc_self
+    have hvσ : Integrable (vplus K) ((sigma K).restrict (Ioo a b)) :=
+      Integrable.of_bound (cvx_stronglyMeasurable_vplus hK).aestronglyMeasurable R
+        (Eventually.of_forall fun t => hR _ (vplus_mem_edge hK t).1)
+    rw [cvx_integral_cross_dvplus' hK hab hb (g := fun t => z t - vplus K t) (hzσ.sub hvσ)]
+    refine (setIntegral_congr_fun (g := fun _ => (0 : ℝ)) measurableSet_Ioo fun t ht => ?_).trans
+      (integral_zero _ _)
+    rw [dot_sub_left, dot_vplus_uvec, show dot (z t) (uvec t) = supp K t from
+      hzl t ⟨ht.1.le, ht.2.le⟩, sub_self]
+  -- so `∫ 𝐳 × d𝐯 = ∫ 𝐯 × d𝐯 = 2 𝒥(𝐮_K^{a,b}) = ∫ h_K dσ_K` (Lemma 7.3.3)
+  have h3 : ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure (vplus K) a b] =
+      ∫ t in Ioo a b, supp K t ∂(sigma K) := by
+    have hsplit : ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure (vplus K) a b] -
+        ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM; lsMeasure (vplus K) a b] =
+        ∫ᵛ t in Ioo a b, (z t - vplus K t) ∂[crossCLM; lsMeasure (vplus K) a b] := by
+      rw [← VectorMeasure.integral_fun_sub hzi' hvi']
+    have e := lemma7_3_3_self hK hab hb
+    unfold convexCurveArea at e
+    linarith
   have hflip : ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM.flip; lsMeasure z a b] =
       -∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM; lsMeasure z a b] := by
     rw [cvx_crossCLM_flip, VectorMeasure.integral_neg_cbm]
-  -- Step 4: `(𝐳 - v_K⁺) = α v_t`
-  obtain ⟨R, hR⟩ := cvx_exists_bound hK
+  -- Step 4: by bilinearity, `𝐳 × d𝐳 + d𝐳 × 𝐯 = (𝐳 - 𝐯) × d𝐳`, which is `(𝐳 - 𝐯) × d(𝐳 - 𝐯)` by
+  -- Step 3, as `d(𝐳 - 𝐯) = d𝐳 - d𝐯`
   have hzi : ((lsMeasure z a b).restrict (Ioo a b)).Integrable z :=
     VectorMeasure.IntegrableOn.mono measurableSet_Icc Ioo_subset_Icc_self
       (cvx_integrable_restrict_Icc (lsMeasure z a b) hzc.continuousOn)
@@ -434,33 +492,45 @@ theorem cvx_mamikon_core {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ
       (Eventually.of_forall fun t => hR _ (vplus_mem_edge hK t).1)
   have hsub : ∫ᵛ t in Ioo a b, z t ∂[crossCLM; lsMeasure z a b] -
       ∫ᵛ t in Ioo a b, vplus K t ∂[crossCLM; lsMeasure z a b] =
-      ∫ᵛ t in Ioo a b, dot (z t - vplus K t) (vvec t) • vvec t ∂[crossCLM; lsMeasure z a b] := by
-    rw [← VectorMeasure.integral_fun_sub hzi hvi]
-    apply VectorMeasure.setIntegral_congr_fun
-    intro t ht
-    exact sub_eq_smul_vvec (((vplus_mem_edge hK t).2).trans (hzl t ⟨ht.1.le, ht.2.le⟩).symm)
-  -- Step 5: `∫ α v_t × d𝐳 = ∫ α² dt`
-  have hαi : Integrable (fun t => dot (z t - vplus K t) (vvec t)) (volume.restrict (Ioo a b)) :=
-    Measure.integrableOn_of_bounded (M := M) (by rw [Real.volume_Ioo]; exact ENNReal.ofReal_ne_top)
-      hαm.aestronglyMeasurable
-      (ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => hM t ⟨ht.1.le, ht.2.le⟩)
-  have hαi' : Integrable (fun t => dot (z t - vplus K t) (vvec t))
-      ((lsMeasure z a b).restrict (Ioo a b)).variation := by
-    rw [VectorMeasure.variation_restrict measurableSet_Ioo]
-    exact Measure.integrableOn_of_bounded (M := M) (measure_ne_top _ _) hαm.aestronglyMeasurable
-      (ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => hM t ⟨ht.1.le, ht.2.le⟩)
-  have h6 : ∫ᵛ t in Ioo a b, dot (z t - vplus K t) (vvec t) • vvec t ∂[crossCLM; lsMeasure z a b] =
-      ∫ t in Ioo a b, dot (z t - vplus K t) (vvec t) ^ 2 := by
-    rw [cvx_integral_smul_eq_integral_withDensity (M := 1) continuous_vvec.aestronglyMeasurable
-      (Eventually.of_forall fun t => by exact_mod_cast norm_vvec_le t) crossCLM hαi',
-      cvx_withDensity_vvec_eq hK hab hzc hzbv hzl,
-      cvx_integral_withDensityᵥ hαi (M := M)
-        (ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => hM t ⟨ht.1.le, ht.2.le⟩)
-        (ContinuousLinearMap.lsmul ℝ ℝ) hαi]
-    congr 1
+      ∫ᵛ t in Ioo a b, (z t - vplus K t) ∂[crossCLM;
+        lsMeasure (fun t => z t - vplus K t) a b] := by
+    rw [← VectorMeasure.integral_fun_sub hzi hvi, cvx_lsMeasure_sub hab.le hzbv hvbv,
+      VectorMeasure.restrict_sub, VectorMeasure.integral_sub_vectorMeasure
+        (f := fun t => z t - vplus K t) (hzi.sub hvi) (hzi'.sub hvi'), h0, sub_zero]
+  -- Step 5: `𝐳 - 𝐯 = α v_t` on `[a, b]`; `α` is right-continuous and of bounded variation, as
+  -- `𝐳` is and `𝐯` is by Lemma 5.2.1; and `α v_t × d(α v_t) = α² dt`
+  have hw : ∀ t ∈ Icc a b, z t - vplus K t = dot (z t - vplus K t) (vvec t) • vvec t :=
+    fun t ht => sub_eq_smul_vvec (((vplus_mem_edge hK t).2).trans (hzl t ht).symm)
+  have hd : ∫ᵛ t in Ioo a b, (z t - vplus K t) ∂[crossCLM;
+      lsMeasure (fun t => z t - vplus K t) a b] =
+      ∫ᵛ t in Ioo a b, dot (z t - vplus K t) (vvec t) • vvec t ∂[crossCLM;
+        lsMeasure (fun t => dot (z t - vplus K t) (vvec t) • vvec t) a b] := by
+    have e : lsMeasure (fun t => z t - vplus K t) a b =
+        lsMeasure (fun t => dot (z t - vplus K t) (vvec t) • vvec t) a b := by
+      unfold lsMeasure
+      rw [clampFun_congr hab.le fun t ht => hw t ht]
+    rw [e]
+    exact VectorMeasure.setIntegral_congr_fun fun t ht => hw t ⟨ht.1.le, ht.2.le⟩
+  have hwbv : BoundedVariationOn (fun t => z t - vplus K t) (Icc a b) := by
+    convert boundedVariationOn_add hzbv (cvx_bv_const_smul hvbv (-1)) using 1
     funext t
-    simp [sq]
-  rw [h1, intervalIntegral.integral_of_le hab.le, integral_Ioc_eq_integral_Ioo, ← h6, ← hsub]
+    simp only [Pi.smul_apply, neg_smul, one_smul, sub_eq_add_neg]
+  have hubv : BoundedVariationOn uvec (Icc a b) :=
+    boundedVariationOn_of_lipschitz (lipschitzWith_of_nnnorm_deriv_le (C := 1)
+      (fun t => (hasDerivAt_uvec t).differentiableAt) fun t => by
+        rw [(hasDerivAt_uvec t).deriv]; exact_mod_cast norm_vvec_le t) a b
+  have hαbv : BoundedVariationOn (fun t => dot (z t - vplus K t) (vvec t)) (Icc a b) := by
+    convert cvx_bv_const_smul (hwbv.bilinear_comp hubv crossCLM) (-1) using 1
+    funext t
+    simp only [Pi.smul_apply, crossCLM_apply, cross_uvec, smul_eq_mul]
+    ring
+  have hαr : ∀ t ∈ Ico a b,
+      ContinuousWithinAt (fun t => dot (z t - vplus K t) (vvec t)) (Ici t) t :=
+    fun t _ => continuous_dot_pair.continuousAt.comp_continuousWithinAt
+      ((hzc.continuousWithinAt.sub (continuousWithinAt_Ioi_iff_Ici.1
+        (tendsto_vplus_right hK t))).prodMk continuous_vvec.continuousWithinAt)
+  have h6 := cvx_integral_cross_d_smul_vvec hab hαbv hαr (cvx_measurable_alpha hK hzc) hM
+  rw [h1, intervalIntegral.integral_of_le hab.le, integral_Ioc_eq_integral_Ioo, ← h6, ← hd, ← hsub]
   rw [hflip, h3] at h2
   unfold segArea convexCurveArea
   rw [cross_anticomm (vplus K a) (z a)]
@@ -554,7 +624,10 @@ theorem theorem7_4_2 {a b : ℝ} (hab : a < b) (hb : b < a + π) (z : ConvexBody
       α (convexBodyComb c K₁ K₂) t = (1 - c) * α K₁ t + c * α K₂ t := by
     intro K₁ K₂ c hc t ht
     simp only [hαdef]
-    rw [hlin K₁ K₂ c hc t ht, cvx_vplus_comb hc K₁ K₂ t]
+    -- `𝐳_K(t)` and `v_K⁺(t)` are convex-linear in `K` (Theorem 7.1.2 (2))
+    have hv : vplus (convexBodyComb c K₁ K₂).1 t = (1 - c) • vplus K₁.1 t + c • vplus K₂.1 t :=
+      (theorem7_1_2_vertices t t).1 c hc K₁ K₂
+    rw [hlin K₁ K₂ c hc t ht, hv]
     simp only [dot_sub_left, dot_add_left, dot_smul_left]
     ring
   -- `α_{K₁} α_{K₂}` is bounded and measurable, hence integrable

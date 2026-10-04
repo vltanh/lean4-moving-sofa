@@ -1,6 +1,7 @@
 module
 
 public meta import Lean.Elab.Command
+public meta import Lean.DocString
 -- One `import all` line per module of the library, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
 --   find PaperName -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all /'
@@ -81,6 +82,12 @@ of the library and the theorems that Palomar's comparator checks. The run fails 
 depends on an axiom other than Lean's standard `propext`, `Classical.choice` and `Quot.sound` (a
 `sorry` shows up as the axiom `sorryAx`). Its table of results is the source of the report's
 dependency table.
+
+It also writes the route of every numbered result of the paper to `.lake/route_deps.tsv`: the
+other numbered results that its proof uses, found by following the proof through the library's
+helper lemmas and stopping at numbered results, with the TeX label that the result's docstring
+names in backticks. `scripts/route_check.py` compares these routes with the results that the
+paper's proofs cite (`docs/paper_routes.tsv`).
 
 The library's modules are imported with `import all`, which makes the proofs of their theorems
 available: the module system does not export them otherwise. The traversal tests membership in a
@@ -395,6 +402,43 @@ meta def externalUses (env : Environment) (library : NameSet) (deps : NameMap (A
         if !visited.contains d then stack := d :: stack
   return (externalResults.filterMap fun (_, n) => if found.contains n then some n else none, deps)
 
+/-- Where `#audit` writes the routes, relative to the project root (`.lake/` is not committed). -/
+meta def routeFile : System.FilePath := ".lake/route_deps.tsv"
+
+/-- The numbered results that the proof of `root` uses: those reached from it through constants
+of the library, without looking inside the proofs of numbered results themselves. -/
+meta def resultUses (env : Environment) (library results : NameSet) (root : Name) :
+    Array Name := Id.run do
+  let mut visited : NameSet := {}
+  let mut stack : List Name := (usedConstants env root).toList
+  let mut found : Array Name := #[]
+  while true do
+    match stack with
+    | [] => break
+    | c :: rest =>
+      stack := rest
+      if visited.contains c || c == root then continue
+      visited := visited.insert c
+      if results.contains c then
+        found := found.push c
+        continue
+      if !library.contains c then continue
+      for d in usedConstants env c do
+        if !visited.contains d then stack := d :: stack
+  return found
+
+/-- The code spans of the docstring of `c` that contain no space or comma: the candidates for its
+TeX label. -/
+meta def docLabels (env : Environment) (c : Name) : IO (Array String) := do
+  let some doc ← findDocString? env c | return #[]
+  let mut out : Array String := #[]
+  let mut inside := false
+  for part in doc.splitOn "`" do
+    if inside && !part.isEmpty && !part.any (fun ch => ch.isWhitespace || ch == ',') then
+      out := out.push part
+    inside := !inside
+  return out
+
 elab "#audit" : command => do
   let env ← getEnv
   let mut bad : Array Name := #[]
@@ -417,6 +461,16 @@ elab "#audit" : command => do
   for c in library do
     let axs ← liftCoreM <| collectAxioms c
     if axs.any (!standardAxioms.contains ·) then bad := bad.push c
+  -- The routes: for each numbered result, its docstring's labels and the results it uses.
+  let results : NameSet := paperResults.foldl (fun s p => s.insert p.2) {}
+  let mut routes : Array String := #[]
+  for (label, n) in paperResults do
+    let labels ← docLabels env n
+    let uses := resultUses env library results n
+    routes := routes.push (s!"{label}\t{n}\t{",".intercalate labels.toList}\t" ++
+      ",".intercalate (uses.map toString).toList)
+  IO.FS.createDirAll ".lake"
+  IO.FS.writeFile routeFile ("\n".intercalate routes.toList ++ "\n")
   logInfo ("\n".intercalate rows.toList ++
     s!"\n\nChecked {library.size} declarations of the library: " ++
     (if bad.isEmpty then "all use only the standard axioms." else "see the error."))

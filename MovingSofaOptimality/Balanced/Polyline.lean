@@ -991,7 +991,11 @@ end NicheWalls
 
 /-- **Lemma 3.4.5** (`lem:polyline-length`) (1). For `t ∈ Θ`, the sides of `𝒩_Θ(K)` on `b_K(t)`
 (all on the half-line `b⃗_K(t)`) have total length `τ_K(t)`, and those on `d_K(t)` (all on
-`d⃗_K(t)`) have total length `τ_K(t + π/2)`. -/
+`d⃗_K(t)`) have total length `τ_K(t + π/2)`.
+
+The paper cites Theorem 3.4.4 for `𝐩_K = ∂(F_ω \ 𝒩_Θ(K)) \ l⃗_K \ r⃗_K`, which is how its
+Definition 3.4.3 defines `𝐩_K`; `polyline` is defined as this set, and Theorem 3.4.4 proves that
+it is an `x`-monotone polyline. -/
 theorem lemma3_4_5_one {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) {t : ℝ}
     (ht : t ∈ Θ.angles) :
     lineLength t (supp K t - 1) (frontier (polyNiche Θ K)) = tau Θ K t ∧
@@ -1029,8 +1033,10 @@ theorem lemma3_4_5_one {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap
       finite_empty (hfin _) (fun x hx => Or.inl hx.1) (mpc_wallD_vec hK ht)
 
 open MeasureTheory in
-/-- **Lemma 3.4.5** (2). For `t ∈ {ω, π/2}`, the sides of `𝒩_Θ(K)` on `l(t, 0)` have total length
-`σ_K(t + π) - τ_K(t)`. -/
+/-- **Lemma 3.4.5** (`lem:polyline-length`) (2). For `t ∈ {ω, π/2}`, the sides of `𝒩_Θ(K)` on
+`l(t, 0)` have total length `σ_K(t + π) - τ_K(t)`.
+
+As in (1), `𝐩_K = ∂(F_ω \ 𝒩_Θ(K)) \ l⃗_K \ r⃗_K` is the definition of `polyline`. -/
 theorem lemma3_4_5_two {Θ : AngleSet} {K : Set (ℝ × ℝ)} (hK : IsPolygonCap Θ K) {t : ℝ}
     (ht : t ∈ ({Θ.ω, π / 2} : Set ℝ)) :
     lineLength t 0 (frontier (polyNiche Θ K)) = sigmaAt K (t + π) - tau Θ K t ∧

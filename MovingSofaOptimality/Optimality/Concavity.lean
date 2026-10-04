@@ -785,7 +785,9 @@ end SigmaCap
 
 /-- For `K ∈ 𝒦^i`: `|K| = 𝒥(𝐮_K^{0,φ}) + 𝒥(𝐮_K^{φ,φ^L}) + 𝒥(𝐮_K^{φ^L,π/2}) + 𝒥(𝐮_K^{π/2,π})
 + σ_K(π/2)/2`: by Theorem 7.1.3, `|K| = ½ ∫_{[0, π]} h_K dσ_K` (`σ_K` has no mass below the
-`x`-axis but at `3π/2`, where `h_K = 0`), and `σ_K` has no atoms in `[0, π]` but at `π/2`. -/
+`x`-axis but at `3π/2`, where `h_K = 0`), which splits at the atom `π/2` into
+`𝒥(𝐮_K^{0,π/2}) + σ_K(π/2)/2 + 𝒥(𝐮_K^{π/2,π})` (`σ_K` has no atoms at `0`, `π`); then Lemma 7.3.4
+splits `𝐮_K^{0,π/2}` at `φ` and `φ^L`, where the edges are single points. -/
 lemma opt_area_eq_cca {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × ℝ)} (hK : IsKi K) :
     area K = convexCurveArea K 0 φ + convexCurveArea K φ (π / 2 - φ) +
       convexCurveArea K (π / 2 - φ) (π / 2) + convexCurveArea K (π / 2) π +
@@ -796,6 +798,14 @@ lemma opt_area_eq_cca {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × 
   have hcb := hcap.2.1
   have h1 := hK.2.1.1
   have hf := continuous_supp hcb.2.1
+  -- Lemma 7.3.4 at `φ^R` and `φ^L`, where the edges are single points (injectivity condition (1))
+  have c1 := (lemma7_3_4 hcb hφ0 (by linarith : φ < π / 2) (by linarith)).2.2.2
+  have c2 := (lemma7_3_4 hcb (by linarith : φ < π / 2 - φ) (by linarith : π / 2 - φ < π / 2)
+    (by linarith)).2.2.2
+  rw [inj_vplus_eq_vminus_of_injCond1 hcb h1 (t := φ) (Or.inl ⟨hφ0.le, by linarith⟩),
+    segArea_self] at c1
+  rw [inj_vplus_eq_vminus_of_injCond1 hcb h1 (t := π / 2 - φ) (Or.inl ⟨by linarith, by linarith⟩),
+    segArea_self] at c2
   set σ := sigma K with hσ
   have hint' : ∀ {S : Set ℝ} (a b : ℝ), S ⊆ Icc a b → IntegrableOn (supp K) S σ :=
     fun a b hS => (hf.continuousOn.integrableOn_compact isCompact_Icc).mono_set hS
@@ -807,10 +817,9 @@ lemma opt_area_eq_cca {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × 
       ∫ t in a..b, supp K t ∂σ = ∫ t in Ioo a b, supp K t ∂σ := by
     intro a b hab hb
     rw [intervalIntegral.integral_of_le hab.le, integral_Ioc_eq_integral_Ioo' hb]
-  -- split `[0, π]` at `φ`, `φ^L`, `π/2`; only `π/2` carries an atom
+  -- split `[0, π]` at `π/2`, which carries the only atom
   have hup : ∫ t in Icc 0 π, supp K t ∂σ =
-      (∫ t in Ioo 0 φ, supp K t ∂σ) + (∫ t in Ioo φ (π / 2 - φ), supp K t ∂σ) +
-        ((∫ t in Ioo (π / 2 - φ) (π / 2), supp K t ∂σ) + σ.real {π / 2}) +
+      ((∫ t in Ioo 0 (π / 2), supp K t ∂σ) + σ.real {π / 2}) +
         ∫ t in Ioo (π / 2) π, supp K t ∂σ := by
     rw [← Ioc_union_left (by linarith : (0 : ℝ) ≤ π),
       setIntegral_union (by simp) (measurableSet_singleton _)
@@ -818,27 +827,30 @@ lemma opt_area_eq_cca {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) {K : Set (ℝ × 
         (hint' 0 π (by intro t ht; rw [mem_singleton_iff.mp ht]; constructor <;> linarith)),
       integral_singleton, measureReal_def, hnull 0 (Or.inl ⟨le_rfl, by linarith⟩),
       ENNReal.toReal_zero, zero_smul, add_zero, ← intervalIntegral.integral_of_le (by linarith),
-      ← intervalIntegral.integral_add_adjacent_intervals (hii 0 φ) (hii φ π),
-      ← intervalIntegral.integral_add_adjacent_intervals (hii φ (π / 2 - φ)) (hii (π / 2 - φ) π),
-      ← intervalIntegral.integral_add_adjacent_intervals (hii (π / 2 - φ) (π / 2))
-        (hii (π / 2) π),
-      hIoo 0 φ hφ0 (hnull φ (Or.inl ⟨hφ0.le, by linarith⟩)),
-      hIoo φ (π / 2 - φ) (by linarith) (hnull _ (Or.inl ⟨by linarith, by linarith⟩)),
+      ← intervalIntegral.integral_add_adjacent_intervals (hii 0 (π / 2)) (hii (π / 2) π),
       hIoo (π / 2) π (by linarith) (hnull π (Or.inr ⟨by linarith, le_rfl⟩)),
-      intervalIntegral.integral_of_le (by linarith : π / 2 - φ ≤ π / 2),
-      ← Ioo_union_right (by linarith : π / 2 - φ < π / 2),
+      intervalIntegral.integral_of_le (by linarith : (0 : ℝ) ≤ π / 2),
+      ← Ioo_union_right (by linarith : (0 : ℝ) < π / 2),
       setIntegral_union (by simp) (measurableSet_singleton _)
-        (hint' (π / 2 - φ) (π / 2) Ioo_subset_Icc_self)
-        (hint' (π / 2 - φ) (π / 2) (by
+        (hint' 0 (π / 2) Ioo_subset_Icc_self)
+        (hint' 0 (π / 2) (by
           intro t ht; rw [mem_singleton_iff.mp ht]; constructor <;> linarith)),
       integral_singleton, hcap.2.2.2.1, smul_eq_mul, mul_one]
-    ring
   rw [theorem7_1_3 hcb, opt_Ico_eq_Icc hcap hf hcap.2.2.2.2.2.1, hup]
-  simp only [convexCurveArea]
-  ring
+  simp only [convexCurveArea] at c1 c2 ⊢
+  linarith
 
 /-- **Lemma 8.3.5** (`lem:upper-boundary-tracing`). On `𝒦^i`,
-`|K| ≡_K 𝒥(𝐮_K^{0,φ^R}) + 𝒥(𝐮_K^{φ^R,φ^L}) + 𝒥(𝐮_K^{φ^L,π/2}) + 𝒥(𝐮_K^{π/2,π})`. -/
+`|K| ≡_K 𝒥(𝐮_K^{0,φ^R}) + 𝒥(𝐮_K^{φ^R,φ^L}) + 𝒥(𝐮_K^{φ^L,π/2}) + 𝒥(𝐮_K^{π/2,π})`.
+
+Departure from the paper: the paper writes `|K| = 𝒥(𝐮_K^{0,π})` by Theorem 7.3.2 and splits this
+arc at `φ^R`, `φ^L` and `π/2` by Lemma 7.3.4; this proof splits `|K| = ½ ∫_{[0,π]} h_K dσ_K`
+(Theorem 7.1.3) at the atom `π/2` into `𝒥(𝐮_K^{0,π/2}) + σ_K({π/2})/2 + 𝒥(𝐮_K^{π/2,π})`, these
+functionals being `½ ∫ h_K dσ_K` over the open arcs by definition, and splits `𝐮_K^{0,π/2}` at
+`φ^R` and `φ^L` by Lemma 7.3.4 (`opt_area_eq_cca`), because the arc `𝐮_K^{0,π}` lies outside the
+range `a < b < a + π` of Theorem 7.3.2 and Lemma 7.3.4 (reason 1, E19) and the functionals of
+convex arcs are `½ ∫ h_K dσ_K` by definition (reason 3). The atom gives `σ_K({π/2})/2` directly,
+so the paper's `𝒥(A_K(π/2), C_K(0)) = σ_K({π/2})/2` (Propositions 2.1.2 and 7.2.4) is not needed. -/
 theorem lemma8_3_5 {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) :
     kiDomain.EqModLinear (fun K => area K.1.1)
       (fun K => convexCurveArea K.1.1 0 φ + convexCurveArea K.1.1 φ (π / 2 - φ) +

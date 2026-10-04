@@ -290,7 +290,12 @@ private lemma sa_vplus_sub_vminus (K : Set (ℝ × ℝ)) (t : ℝ) :
   abel
 
 /-- **Proposition 2.1.2** (`pro:surface-area-measure-side-length`). `σ_K(t)` is the length of the
-edge `e_K(t)`, and `v_K⁺(t) = v_K⁻(t) + σ_K(t) v_t`. -/
+edge `e_K(t)`, and `v_K⁺(t) = v_K⁻(t) + σ_K(t) v_t`.
+
+Departure from the paper: the paper takes `X = {t}` in Schneider's Theorem 2.1.1; this proof
+computes the atom of `σ_K` at `t` as the jump at `t` of `t ↦ ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K`, because
+`σ_K` is defined directly as the Lebesgue–Stieltjes measure of that function, not through
+Theorem 2.1.1 (reason 3). -/
 theorem proposition2_1_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     sigmaAt K t = norm2 (vplus K t - vminus K t) ∧
       vplus K t = vminus K t + sigmaAt K t • vvec t := by
@@ -385,7 +390,16 @@ theorem vplus_sub_vplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ}
   abel
 
 /-- **Theorem 5.2.2** (`thm:boundary-measure`). For `a < b ≤ a + 2π`, `d v_K⁺(t) = v_t σ_K` as
-measures on the half-open interval `(a, b]`. (The bound `b ≤ a + 2π` is not needed.) -/
+measures on the half-open interval `(a, b]`. (The bound `b ≤ a + 2π` is not needed.)
+
+Departure from the paper: the paper checks the identity on the intervals `(a, x]` for polygons,
+where `σ_K` is the sum of point masses at the edge lengths, and passes to a general `K` through
+polygons with the same edges at `a` and `x` converging to `K` (as in Schneider's proof of his
+Theorem 8.3.3), with the weak convergence of Theorem 4.1.3; this proof integrates by parts in the
+definition of `σ_K` (`vplus_sub_vplus`), because that approximation by polygons is not in Mathlib
+(reason 2), and because `σ_K` is defined as the Lebesgue–Stieltjes measure of
+`t ↦ ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K`, not through Schneider's Theorem 2.1.1, so that the identity is a
+computation from the definition (reason 3). -/
 theorem theorem5_2_2 {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) :
     (lsMeasure (vplus K) a b).restrict (Ioc a b) =
       ((sigma K).restrict (Ioc a b)).withDensityᵥ vvec := by

@@ -261,7 +261,7 @@ $\mathbf{x} = R_t\, w + \kappa$ as in [Lemma 10.5](10-gerver.md#lemma-105-the-ph
 [`ga_phase_A`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L214), [`ga_phase_X`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L256).*
 
 *Proof.* The first claim is the formula $\mathcal{J}(Z|_{[a, b]}) = \frac12 \int_a^b Z \times Z'$ for a
-continuously differentiable curve ([`curveArea_eq_integral`](../../MovingSofaOptimality/Convex/CurveArea.lean#L436); [Chapter 8](08-convex-curves.md)). For the formulas, $p \times v_t = \langle p, u_t \rangle$ and
+continuously differentiable curve ([`curveArea_eq_integral`](../../MovingSofaOptimality/Convex/CurveArea.lean#L652); [Chapter 8](08-convex-curves.md)). For the formulas, $p \times v_t = \langle p, u_t \rangle$ and
 $p \times u_t = -\langle p, v_t \rangle$, and by Lemma 10.5,
 $\mathbf{A} \times \mathbf{A}' = \rho_A \langle \mathbf{A}, u_t \rangle$ with
 $\langle \mathbf{A}, u_t \rangle = w_1 + 1 + \langle \kappa, u_t \rangle$; the others are alike. $\square$
@@ -279,11 +279,11 @@ constant contribute nothing: $\mathbf{A}$ on phase 1 and $\mathbf{C}$ on phase 5
 The six curve areas of Theorem 10.21 lie in the intervals of Table B.1.
 
 *Lean: [`ga_curveArea_A_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L2954), [`ga_curveArea_C_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L2966), [`ga_segArea_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L2999), [`ga_curveArea_x_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3006),
-[`ga_curveArea_B_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3016), [`ga_curveArea_D_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3025), [`curveArea_split_five`](../../MovingSofaOptimality/Convex/CurveArea.lean#L516), [`ga_A2_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L682), [`ga_num_A2`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L498),
+[`ga_curveArea_B_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3016), [`ga_curveArea_D_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3025), [`curveArea_split_five`](../../MovingSofaOptimality/Convex/CurveArea.lean#L732), [`ga_A2_mem`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L682), [`ga_num_A2`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L498),
 [`ga_segArea_eq`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L368), [`ga_area_lower`](../../MovingSofaOptimality/Gerver/AreaBounds.lean#L3037), [`gv_area_mem`](../../MovingSofaOptimality/Gerver/Niche.lean#L467).*
 
 *Proof.* Additivity of $\mathcal{J}$ splits each curve area at the phase boundaries
-([`curveArea_split_five`](../../MovingSofaOptimality/Convex/CurveArea.lean#L516), [`proposition7_2_6`](../../MovingSofaOptimality/Convex/CurveArea.lean#L487)), and Lemmas B.8 and B.9 write each phase's part as
+([`curveArea_split_five`](../../MovingSofaOptimality/Convex/CurveArea.lean#L732), [`proposition7_2_6`](../../MovingSofaOptimality/Convex/CurveArea.lean#L703)), and Lemmas B.8 and B.9 write each phase's part as
 $\frac12 (F(t_B) - F(t_A))$. An interval chain `ga_num_*` encloses this number from the enclosures
 of the parameters ([`GerverParams.Bounds`](../../MovingSofaOptimality/Gerver/Bounds.lean#L24)), of the endpoints $t_A, t_B \in \lbrace 0, \varphi,
 \theta, \frac\pi2 - \theta, \frac\pi2 - \varphi, \frac\pi2 \rbrace$ and of their cosines and sines

@@ -257,8 +257,8 @@ lemma cvx_vminus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : Convex
   simp only [cvx_vint_comb hc] at h₁
   exact tendsto_nhds_unique h₁ h₂
 
-/-- **Theorem 7.1.2** (2): for `a < b < a + π`, the vertices `v_K^±(a)` and `v_K(a, b)` are
-convex-linear in `K`. -/
+/-- **Theorem 7.1.2** (`thm:convex-body-linear`) (2): for `a < b < a + π`, the vertices `v_K^±(a)`
+and `v_K(a, b)` are convex-linear in `K`. -/
 theorem theorem7_1_2_vertices (a b : ℝ) :
     convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vplus K.1 a) ∧
       convexBodyDomain.IsConvexLinear (vectorDomain (ℝ × ℝ)) (fun K => vminus K.1 a) ∧
@@ -266,35 +266,114 @@ theorem theorem7_1_2_vertices (a b : ℝ) :
   ⟨fun _ hc v w => cvx_vplus_comb hc v w a, fun _ hc v w => cvx_vminus_comb hc v w a,
     fun _ hc v w => cvx_vint_comb hc v w a b⟩
 
-/-- The distribution function of `σ` is convex-linear in `K`. -/
-lemma cvx_sigmaFun_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet) (t : ℝ) :
-    sigmaFun (convexBodyComb c K₁ K₂).1 t =
-      (1 - c) * sigmaFun K₁.1 t + c * sigmaFun K₂.1 t := by
-  have hi₁ : IntervalIntegrable (supp K₁.1) volume 0 t :=
-    (continuous_supp K₁.2.2.1).intervalIntegrable _ _
-  have hi₂ : IntervalIntegrable (supp K₂.1) volume 0 t :=
-    (continuous_supp K₂.2.2.1).intervalIntegrable _ _
-  simp only [sigmaFun, cvx_vplus_comb hc, cvx_supp_convexBodyComb hc, dot_add_left,
-    dot_smul_left]
-  rw [intervalIntegral.integral_add (hi₁.const_mul _) (hi₂.const_mul _),
-    intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul]
-  ring
+/-- A bounded measurable function is integrable against the signed measure `f μ`, for a finite
+measure `μ` and an integrable density `f`: the integrands of `v_t · d v_K⁺(t)` in the proof of
+Theorem 7.1.2 (3). -/
+private lemma cvx_integrable_withDensityᵥ {μ : Measure ℝ} [IsFiniteMeasure μ] {f g : ℝ → ℝ}
+    (hf : Integrable f μ) (hg : Measurable g) {C : ℝ} (hC : ∀ x, |g x| ≤ C) :
+    (μ.withDensityᵥ f).Integrable g := by
+  have := isFiniteMeasure_withDensity (μ := μ) hf.2.ne
+  rw [VectorMeasure.Integrable, Measure.variation_withDensityᵥ hf]
+  exact Integrable.of_bound hg.aestronglyMeasurable C
+    (Filter.Eventually.of_forall fun x => by rw [Real.norm_eq_abs]; exact hC x)
 
-/-- **Theorem 7.1.2** (3): the surface area measure is convex-linear in `K`. -/
+/-- A coordinate of `σ_K = v_t · d v_K⁺(t)`, which follows from Theorem 5.2.2: for a fixed `w`,
+`d⟨v_K⁺, w⟩ = ⟨v_t, w⟩ σ_K` on `(a, b]` (`inj_lsMeasure_dot_vplus`), so `⟨v_t, w⟩` is integrable
+against `d⟨v_K⁺, w⟩` there and `∫_{(a, b]} ⟨v_t, w⟩ d⟨v_K⁺, w⟩ = ∫_{(a, b]} ⟨v_t, w⟩² dσ_K`. -/
+private lemma cvx_integral_dvplus {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b)
+    (w : ℝ × ℝ) :
+    ((lsMeasure (fun t => dot (vplus K t) w) a b).restrict (Ioc a b)).Integrable
+        (fun t => dot (vvec t) w) ∧
+      ∫ᵛ t in Ioc a b, dot (vvec t) w ∂• lsMeasure (fun t => dot (vplus K t) w) a b =
+        ∫ t in Ioc a b, dot (vvec t) w * dot (vvec t) w ∂(sigma K) := by
+  have : IsFiniteMeasure ((sigma K).restrict (Ioc a b)) :=
+    isFiniteMeasure_restrict.2 measure_Ioc_lt_top.ne
+  have hfc : Continuous fun t => dot (vvec t) w := (continuous_dot w).comp continuous_vvec
+  have hb : ∀ t, |dot (vvec t) w| ≤ 2 * ‖w‖ := fun t => by
+    have h1 := abs_dot_le (vvec t) w
+    have h2 := norm_vvec_le t
+    nlinarith [norm_nonneg w]
+  rw [inj_lsMeasure_dot_vplus hK hab w]
+  exact ⟨cvx_integrable_withDensityᵥ hfc.integrableOn_Ioc hfc.measurable hb,
+    inj_integral_withDensityᵥ hfc.integrableOn_Ioc hfc.measurable hfc.measurable hb⟩
+
+/-- `σ_K = v_t · d v_K⁺(t)` on `(a, b]`, which follows from Theorem 5.2.2, coordinate by
+coordinate: `σ_K((a, b]) = Σ_w ∫_{(a, b]} ⟨v_t, w⟩ d⟨v_K⁺, w⟩` over `w = (1, 0), (0, 1)`, as
+`⟨v_t, v_t⟩ = 1`. -/
+private lemma cvx_sigma_Ioc_eq {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) {a b : ℝ} (hab : a < b) :
+    (sigma K (Ioc a b)).toReal =
+      (∫ᵛ t in Ioc a b, dot (vvec t) (1, 0) ∂• lsMeasure (fun t => dot (vplus K t) (1, 0)) a b) +
+        ∫ᵛ t in Ioc a b, dot (vvec t) (0, 1) ∂•
+          lsMeasure (fun t => dot (vplus K t) (0, 1)) a b := by
+  have : IsFiniteMeasure ((sigma K).restrict (Ioc a b)) :=
+    isFiniteMeasure_restrict.2 measure_Ioc_lt_top.ne
+  have hi : ∀ w : ℝ × ℝ,
+      IntegrableOn (fun t => dot (vvec t) w * dot (vvec t) w) (Ioc a b) (sigma K) := fun w =>
+    (((continuous_dot w).comp continuous_vvec).mul
+      ((continuous_dot w).comp continuous_vvec)).integrableOn_Ioc
+  have e : ∀ t, dot (vvec t) (1, 0) * dot (vvec t) (1, 0) +
+      dot (vvec t) (0, 1) * dot (vvec t) (0, 1) = 1 := fun t => by
+    have h := dot_vvec_self t
+    simp only [dot, mul_one, mul_zero, add_zero, zero_add] at h ⊢
+    linarith
+  rw [(cvx_integral_dvplus hK hab _).2, (cvx_integral_dvplus hK hab _).2,
+    ← integral_add (hi _) (hi _)]
+  simp_rw [e]
+  rw [integral_const, smul_eq_mul, mul_one, Measure.real,
+    Measure.restrict_apply MeasurableSet.univ, univ_inter]
+
+/-- `d v_K⁺` is convex-linear in `K`: `⟨v_K⁺(t), w⟩` is by (2), and the Lebesgue–Stieltjes measure
+is linear in the function (Proposition 5.1.1); hence so is `∫_{(a, b]} ⟨v_t, w⟩ d⟨v_K⁺, w⟩`. -/
+private lemma cvx_integral_dvplus_comb {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) (K₁ K₂ : ConvexBodySet)
+    {a b : ℝ} (hab : a < b) (w : ℝ × ℝ) :
+    ∫ᵛ t in Ioc a b, dot (vvec t) w ∂•
+        lsMeasure (fun t => dot (vplus (convexBodyComb c K₁ K₂).1 t) w) a b =
+      (1 - c) * (∫ᵛ t in Ioc a b, dot (vvec t) w ∂•
+          lsMeasure (fun t => dot (vplus K₁.1 t) w) a b) +
+        c * ∫ᵛ t in Ioc a b, dot (vvec t) w ∂• lsMeasure (fun t => dot (vplus K₂.1 t) w) a b := by
+  have hbv : ∀ K : ConvexBodySet, BoundedVariationOn (fun t => dot (vplus K.1 t) w) (Icc a b) :=
+    fun K => by
+      simpa [Function.comp_def, dotCLM_apply] using
+        (dotCLM w).lipschitzWith.comp_boundedVariationOn (lemma5_2_1 K.2 a b)
+  have e : (fun t => dot (vplus (convexBodyComb c K₁ K₂).1 t) w) =
+      fun t => (1 - c) * dot (vplus K₁.1 t) w + c * dot (vplus K₂.1 t) w := by
+    funext t
+    have h : vplus (convexBodyComb c K₁ K₂).1 t = (1 - c) • vplus K₁.1 t + c • vplus K₂.1 t :=
+      (theorem7_1_2_vertices t t).1 c hc K₁ K₂
+    rw [h, dot_add_left, dot_smul_left, dot_smul_left]
+  rw [e, proposition5_1_1 hab.le (hbv K₁) (hbv K₂), VectorMeasure.restrict_add,
+    VectorMeasure.restrict_smul, VectorMeasure.restrict_smul,
+    VectorMeasure.integral_add_vectorMeasure
+      ((cvx_integral_dvplus K₁.2 hab w).1.smul_vectorMeasure _)
+      ((cvx_integral_dvplus K₂.2 hab w).1.smul_vectorMeasure _),
+    VectorMeasure.integral_smul_vectorMeasure, VectorMeasure.integral_smul_vectorMeasure,
+    smul_eq_mul, smul_eq_mul]
+
+/-- **Theorem 7.1.2** (`thm:convex-body-linear`) (3): the surface area measure is convex-linear in
+`K`.
+
+As in the paper, (3) comes from (2) and `σ_K = v_t · d v_K⁺(t)`, which follows from
+Theorem 5.2.2 (`cvx_sigma_Ioc_eq`, coordinate by coordinate): `d v_K⁺` is convex-linear in `K` by
+(2) and Proposition 5.1.1 (`cvx_integral_dvplus_comb`). Both sides agree on the intervals
+`(a, b]`. -/
 theorem theorem7_1_2_sigma (K₁ K₂ : ConvexBodySet) {c : ℝ} (hc : c ∈ Icc (0 : ℝ) 1) :
     sigma (convexBodyComb c K₁ K₂).1 =
       ENNReal.ofReal (1 - c) • sigma K₁.1 + ENNReal.ofReal c • sigma K₂.1 := by
-  have hS : sigmaStieltjes (convexBodyComb c K₁ K₂).1 =
-      (1 - c).toNNReal • sigmaStieltjes K₁.1 + c.toNNReal • sigmaStieltjes K₂.1 := by
-    ext t
-    have h1 : (0 : ℝ) ≤ 1 - c := by linarith [hc.2]
-    simp only [sigmaStieltjes, (convexBodyComb c K₁ K₂).2, K₁.2, K₂.2, dite_true,
-      StieltjesFunction.add_apply]
-    change sigmaFun _ t = ((1 - c).toNNReal : ℝ) * sigmaFun _ t + (c.toNNReal : ℝ) * sigmaFun _ t
-    rw [Real.coe_toNNReal _ h1, Real.coe_toNNReal _ hc.1]
-    exact cvx_sigmaFun_comb hc K₁ K₂ t
-  simp only [sigma, hS, StieltjesFunction.measure_add, StieltjesFunction.measure_smul]
-  rfl
+  refine Measure.ext_of_Ioc _ _ fun a b hab => ?_
+  have h1 : (0 : ℝ) ≤ 1 - c := by linarith [hc.2]
+  -- `σ_K = v_t · d v_K⁺(t)`, with `d v_K⁺` convex-linear in `K`
+  have key : (sigma (convexBodyComb c K₁ K₂).1 (Ioc a b)).toReal =
+      (1 - c) * (sigma K₁.1 (Ioc a b)).toReal + c * (sigma K₂.1 (Ioc a b)).toReal := by
+    rw [cvx_sigma_Ioc_eq (convexBodyComb c K₁ K₂).2 hab, cvx_sigma_Ioc_eq K₁.2 hab,
+      cvx_sigma_Ioc_eq K₂.2 hab, cvx_integral_dvplus_comb hc K₁ K₂ hab,
+      cvx_integral_dvplus_comb hc K₁ K₂ hab]
+    ring
+  rw [Measure.add_apply, Measure.smul_apply, Measure.smul_apply, smul_eq_mul, smul_eq_mul,
+    ← ENNReal.ofReal_toReal (measure_Ioc_lt_top (μ := sigma K₁.1) (a := a) (b := b)).ne,
+    ← ENNReal.ofReal_toReal (measure_Ioc_lt_top (μ := sigma K₂.1) (a := a) (b := b)).ne,
+    ← ENNReal.ofReal_mul h1, ← ENNReal.ofReal_mul hc.1,
+    ← ENNReal.ofReal_add (mul_nonneg h1 ENNReal.toReal_nonneg)
+      (mul_nonneg hc.1 ENNReal.toReal_nonneg), ← key, ENNReal.ofReal_toReal measure_Ioc_lt_top.ne]
 
 /-- **Theorem 7.1.3** (`thm:area-quadratic-expression`, Schneider Remark 5.1.2).
 `|K| = ½ ∫_{S¹} h_K dσ_K`. -/
@@ -327,7 +406,8 @@ lemma cvx_integral_supp_sigma_bilin {X : Set ℝ} (hXb : Bornology.IsBounded X) 
     rw [integral_add ((hint v K₂).const_mul _) ((hint w K₂).const_mul _), integral_const_mul,
       integral_const_mul]
 
-/-- **Theorem 7.1.3**, second claim: the area is a quadratic functional on `𝒦`. -/
+/-- **Theorem 7.1.3** (`thm:area-quadratic-expression`), second claim: the area is a quadratic
+functional on `𝒦`. -/
 theorem theorem7_1_3_quadratic : convexBodyDomain.IsQuadratic (fun K => area K.1) :=
   ⟨_, (cvx_integral_supp_sigma_bilin (Metric.isBounded_Ico 0 (2 * π))).const_mul (1 / 2),
     fun K => theorem7_1_3 K.2⟩

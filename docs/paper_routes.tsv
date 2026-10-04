@@ -1,0 +1,153 @@
+# label	environment	proved	cited statements (from route_check.py extract)
+thm:main	theorem	1	cor:gerver-max-cap,thm:angle,thm:cap-space-special,thm:cap-tail-extension,thm:limiting-maximum-sofa,thm:rotation-angle-simple-bound,thm:sofa-area-functional,thm:upper-bound-q,thm:upper-bound-q-gerver-match
+pro:standard-position-shape-intro	proposition	1	
+pro:moving-sofa-common-subset	proposition	1	
+thm:gerver	theorem	0	
+thm:rotation-angle-simple-bound	theorem	1	
+thm:angle	theorem	1	thm:balanced-consumed
+thm:injectivity-abridged	theorem	0	
+thm:surface-area-measure	theorem	0	
+pro:surface-area-measure-side-length	proposition	1	thm:surface-area-measure
+thm:limits-converging-to-vertex	theorem	1	
+pro:tangent-hallway	proposition	1	
+pro:rotating-hallway-parts	proposition	1	pro:tangent-hallway
+pro:tangent-hallway-contains	proposition	1	pro:rotating-hallway-parts
+pro:standard-position-shape	proposition	1	pro:moving-sofa-common-subset
+thm:monotonization	theorem	1	lem:cap-same-support-function,pro:monotonization-contains-sofa,thm:monotonization-is-connected
+pro:monotonization-contains-sofa	proposition	1	pro:moving-sofa-common-subset,pro:standard-position-shape,pro:tangent-hallway-contains
+pro:cap-contains-sofa	proposition	1	pro:monotonization-contains-sofa
+lem:cap-same-support-function	lemma	1	pro:cap-contains-sofa
+thm:monotonization-is-connected	theorem	1	lem:cap-same-support-function,pro:rotating-hallway-parts,pro:standard-position-shape
+thm:cap-hallway-intersection	theorem	1	pro:cap-contains-sofa
+thm:monotonization-structure	theorem	1	lem:cap-same-support-function
+thm:monotone-sofa-structure	theorem	1	lem:cap-same-support-function,thm:monotonization-structure
+thm:monotonization-idempotent	theorem	1	thm:monotone-sofa-structure,thm:monotonization-structure
+pro:upper-boundary-interior	proposition	1	
+pro:upper-boundary-connected	proposition	1	thm:limits-converging-to-vertex
+pro:wedge	proposition	1	
+pro:mirror-reflection	proposition	1	
+thm:wedge-ends-in-cap	theorem	1	
+lem:niche-in-cap	lemma	1	thm:wedge-ends-in-cap
+lem:cap-ends-not-in-niche	lemma	1	thm:wedge-ends-in-cap
+thm:monotonization-connected-iff	theorem	1	lem:cap-ends-not-in-niche,lem:niche-in-cap,pro:upper-boundary-connected,pro:upper-boundary-interior
+thm:niche-in-cap	theorem	1	thm:monotone-sofa-structure,thm:monotonization-connected-iff,thm:monotonization-idempotent
+thm:sofa-area-functional	theorem	1	thm:monotone-sofa-structure,thm:niche-in-cap
+pro:monotone-boolean-function	proposition	1	
+thm:simple-nef-polygon	theorem	1	
+pro:angled-cap	proposition	1	
+pro:angled-niche-polygon-cap	proposition	1	
+thm:polygon-upper-bound	theorem	1	pro:angled-cap,pro:angled-niche-polygon-cap
+pro:cap-trans-space	proposition	1	
+pro:height-space-embedding	proposition	1	pro:cap-trans-space
+pro:cap-niche-nef-polygons	proposition	1	pro:monotone-boolean-function
+pro:cap-extension-compatible	proposition	1	pro:cap-trans-space
+pro:niche-extension-compatible	proposition	1	pro:cap-extension-compatible,pro:rotating-hallway-parts
+thm:height-extensions	theorem	1	pro:cap-extension-compatible,pro:cap-niche-nef-polygons,pro:niche-extension-compatible
+pro:cap-translate-reduction	proposition	1	pro:cap-extension-compatible
+lem:maximum-polygon-cap-mirror	lemma	1	
+lem:polygon-cap-bounded	lemma	1	
+thm:maximum-polygon-cap	theorem	1	lem:polygon-cap-bounded,pro:wedge
+thm:polyline	theorem	1	thm:wedge-ends-in-cap
+lem:polyline-length	lemma	1	thm:polyline
+lem:not-balanced-positive	lemma	1	
+lem:balancing	lemma	1	lem:polyline-length,pro:cap-niche-nef-polygons,thm:simple-nef-polygon
+lem:height-positive-increment	lemma	1	lem:not-balanced-positive,pro:cap-trans-space
+thm:balanced-polygon-sofa	theorem	1	lem:balancing,lem:height-positive-increment,lem:not-balanced-positive,pro:cap-translate-reduction,pro:niche-extension-compatible
+thm:balanced-polygon-sofa-connected	theorem	1	lem:maximum-polygon-cap-mirror,thm:balanced-polygon-sofa,thm:polyline
+pro:balanced-maximum-cap-mirror	proposition	1	lem:maximum-polygon-cap-mirror
+thm:balanced-maximum-cap	theorem	1	lem:polygon-cap-bounded,thm:maximum-polygon-cap
+lem:hausdorff-distance-containment	lemma	1	
+thm:limiting-maximum-cap-connected	theorem	1	lem:hausdorff-distance-containment,thm:balanced-polygon-sofa-connected
+thm:limiting-maximum-cap-max	theorem	1	thm:limiting-maximum-cap-connected,thm:polygon-upper-bound
+thm:limiting-maximum-sofa	theorem	1	thm:balanced-maximum-cap,thm:limiting-maximum-cap-connected,thm:limiting-maximum-cap-max,thm:niche-in-cap,thm:sofa-area-functional
+lem:wedge-gap-limit	lemma	1	
+thm:balanced-polygon-sofa-ineq	theorem	1	lem:maximum-polygon-cap-mirror,lem:polyline-length,thm:balanced-polygon-sofa,thm:wedge-ends-in-cap
+thm:surface-area-weak-convergence	theorem	0	
+thm:balanced-maximum-sofa-ineq	theorem	1	lem:wedge-gap-limit,thm:balanced-polygon-sofa-ineq,thm:surface-area-weak-convergence
+pro:omega-gap	proposition	1	
+lem:cap-support-elementary-bound	lemma	1	
+lem:calculation-convex	lemma	1	
+lem:calculation-inequalities	lemma	1	lem:calculation-convex
+thm:balanced-consumed	theorem	1	lem:calculation-inequalities,lem:cap-support-elementary-bound,pro:omega-gap,thm:balanced-maximum-sofa-ineq
+pro:lebesgue-stieltjes-sum	proposition	0	
+lem:integration-by-parts	lemma	0	
+lem:lebesgue-stieltjes-product	lemma	1	lem:integration-by-parts
+pro:lebesgue-stieltjes-abs-cont	proposition	1	
+lem:vertex-bounded-variation	lemma	1	
+thm:boundary-measure	theorem	1	thm:surface-area-weak-convergence
+thm:injectivity	theorem	1	cor:cap-nondegenerate,pro:cap-nondegenerate-continuity,thm:lower-bound-one
+thm:injectivity-gerver	theorem	1	thm:injectivity
+pro:cap-tangent-arm-length	proposition	1	
+pro:cap-tangent-arm-mirror	proposition	1	pro:mirror-reflection
+thm:inner-corner-deriv	theorem	1	thm:limits-converging-to-vertex
+lem:arm-length-convolution	lemma	1	thm:boundary-measure
+thm:arm-length-differentiation	theorem	1	lem:lebesgue-stieltjes-product,thm:boundary-measure
+lem:leg-bounded	lemma	1	thm:limiting-maximum-cap-connected,thm:monotonization-connected-iff
+lem:leg-computation	lemma	1	pro:cap-tangent-arm-length
+thm:balanced-discrete-ineq	theorem	1	lem:leg-bounded,lem:leg-computation,lem:polyline-length,thm:balanced-polygon-sofa
+lem:arm-length-discrete-bound	lemma	1	lem:leg-bounded
+lem:leg-convergence	lemma	1	lem:arm-length-convolution,pro:surface-area-measure-side-length,thm:surface-area-weak-convergence
+thm:balanced-ineq-limit	theorem	1	lem:arm-length-discrete-bound,lem:leg-convergence,thm:balanced-discrete-ineq,thm:surface-area-weak-convergence
+cor:cap-nondegenerate	corollary	1	pro:balanced-maximum-cap-mirror,thm:balanced-ineq-limit
+pro:cap-nondegenerate	proposition	1	pro:surface-area-measure-side-length
+pro:cap-nondegenerate-continuity	proposition	1	thm:inner-corner-deriv,thm:limits-converging-to-vertex
+thm:leg-length-bounds	theorem	1	cor:cap-nondegenerate,pro:lebesgue-stieltjes-abs-cont,thm:arm-length-differentiation,thm:balanced-ineq-limit
+lem:lower-bound-sequence	lemma	1	thm:leg-length-bounds
+lem:lower-bound-j-iter	lemma	1	
+lem:operator-monotonicity	lemma	1	
+lem:lower-bound-threshold	lemma	1	lem:lower-bound-j-iter,lem:operator-monotonicity
+thm:lower-bound-one	theorem	1	lem:lower-bound-sequence,lem:lower-bound-threshold
+thm:convex-body-space	theorem	1	
+thm:convex-body-linear	theorem	1	thm:boundary-measure,thm:limits-converging-to-vertex
+thm:area-quadratic-expression	theorem	0	
+lem:derivative-calculation	lemma	1	
+thm:quadratic-variation	theorem	1	
+lem:modulo-linear-const	lemma	1	
+thm:jordan-curve	theorem	0	
+pro:curve-area-functional-quadratic	proposition	1	
+thm:curve-area-functional-area	theorem	1	
+pro:curve-area-line-segment	proposition	1	
+pro:curve-area-line-segment-colinear	proposition	1	pro:curve-area-line-segment
+pro:curve-area-functional-additive	proposition	1	
+pro:jordan-curve-orientation	proposition	1	
+lem:convex-curve-cut	lemma	1	
+thm:convex-curve-area-functional	theorem	1	lem:convex-curve-cut,pro:curve-area-line-segment,thm:area-quadratic-expression,thm:convex-body-linear,thm:curve-area-functional-area,thm:surface-area-measure
+lem:convex-curve-bilinear-computation	lemma	1	thm:boundary-measure
+lem:convex-curve-concat	lemma	1	
+lem:convex-curve-jordan-curve	lemma	1	lem:convex-curve-cut,pro:jordan-curve-orientation
+thm:mamikon	theorem	1	lem:convex-curve-bilinear-computation,lem:lebesgue-stieltjes-product,lem:vertex-bounded-variation,thm:boundary-measure,thm:limits-converging-to-vertex
+thm:mamikon-convex	theorem	1	thm:convex-body-linear,thm:mamikon
+thm:cap-space-special	theorem	1	thm:injectivity,thm:injectivity-gerver
+pro:cap-tail-space	proposition	1	thm:convex-body-linear
+lem:cap-right-left-parallelogram	lemma	1	
+lem:cap-left-right-disjoint	lemma	1	
+lem:cap-wz-in-edge	lemma	1	thm:wedge-ends-in-cap
+lem:monotonicity-intervals	lemma	1	
+lem:right-left-body	lemma	1	lem:cap-wz-in-edge,lem:monotonicity-intervals,thm:monotonization-connected-iff,thm:wedge-ends-in-cap
+thm:cap-tail-extension	theorem	1	lem:right-left-body
+pro:upper-bound-q-quadratic	proposition	1	pro:curve-area-functional-quadratic,pro:rotating-hallway-parts,thm:convex-body-linear,thm:convex-curve-area-functional
+lem:cap-left-right-tail	lemma	1	lem:cap-wz-in-edge,lem:convex-curve-cut,lem:convex-curve-jordan-curve,lem:monotonicity-intervals,lem:right-left-body,pro:curve-area-functional-additive,thm:curve-area-functional-area
+lem:cap-middle-lower-estimate	lemma	1	lem:monotonicity-intervals,thm:curve-area-functional-area
+thm:upper-bound-q	theorem	1	lem:cap-left-right-tail,lem:cap-middle-lower-estimate
+thm:tangent-line-parametrization	theorem	1	thm:limits-converging-to-vertex
+thm:tangent-line-param-linear	theorem	1	thm:convex-body-linear
+lem:mamikon-sofa-convex	lemma	1	thm:convex-body-linear,thm:mamikon-convex,thm:tangent-line-param-linear
+lem:upper-bound-decomposition	lemma	1	
+lem:upper-boundary-tracing	lemma	1	lem:convex-curve-concat,pro:curve-area-line-segment,pro:surface-area-measure-side-length,thm:area-quadratic-expression,thm:convex-curve-area-functional
+lem:linvals	lemma	1	
+lem:mamikon-middle-eq	lemma	1	lem:linvals,lem:upper-boundary-tracing,thm:convex-body-linear
+thm:upper-bound-concave	theorem	1	lem:mamikon-middle-eq,lem:mamikon-sofa-convex,lem:upper-bound-decomposition
+thm:gerver-monotone	theorem	0	
+thm:gerver-odes	theorem	1	
+thm:gerver-left-right	theorem	1	lem:monotonicity-intervals,lem:right-left-body,thm:gerver-monotone,thm:injectivity-gerver,thm:limits-converging-to-vertex,thm:niche-in-cap
+pro:measure-translation	proposition	1	thm:boundary-measure,thm:gerver-left-right,thm:gerver-monotone,thm:injectivity-gerver
+thm:upper-bound-q-gerver	theorem	1	pro:measure-translation,thm:gerver-monotone,thm:gerver-odes
+thm:upper-bound-q-gerver-match	theorem	1	thm:gerver-left-right,thm:gerver-monotone
+thm:variation-convex-body	theorem	1	lem:derivative-calculation
+thm:convex-curve-area-variation	theorem	1	lem:convex-curve-bilinear-computation,lem:derivative-calculation,lem:integration-by-parts,thm:limits-converging-to-vertex
+thm:variation-segment	theorem	1	lem:derivative-calculation
+thm:variation-curve	theorem	1	lem:derivative-calculation,lem:integration-by-parts
+thm:variation-inner-corner	theorem	1	thm:variation-curve
+thm:variation-a2	theorem	1	thm:convex-curve-area-variation,thm:variation-convex-body,thm:variation-inner-corner,thm:variation-segment
+thm:variation-a2-gerver	theorem	1	lem:right-left-body,thm:gerver-left-right,thm:upper-bound-q-gerver,thm:variation-a2
+cor:gerver-max-cap	corollary	1	thm:quadratic-variation,thm:variation-a2-gerver
