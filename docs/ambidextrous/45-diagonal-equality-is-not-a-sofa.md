@@ -36,9 +36,9 @@ n=(7,1)/(5T),\qquad m=(-1,7)/(5T).
 
 ## 45.2 A retained point falls strictly inside the canonical forbidden quadrant
 
-The vertex (1,-d) of K_0 maximizes n dot z, while (-d,1) maximizes m dot z. To check the first assertion, maximize 7U+V under U<=1 and U+V<=a: the objective is 6U+(U+V)<=6+a=7-d, with equality at that vertex. The second objective -U+7V is maximized at V=1 and U=-1 (not at the upper-strip endpoint). The following proof uses the retained point (-d,1) only as a **lower bound** on that support; it does not need to identify the maximizer of m.
+The vertex (1,-d) of K_0 maximizes n dot z. Indeed 7U+V=6U+(U+V)<=6+a=7-d, with equality there. The point (-d,1) is also retained, but it need not maximize m dot z: that maximum is attained at (-1,1). The proof only needs a lower bound on each support from a retained witness point.
 
-Take P=(0,-a), which belongs to F_0. The two retained points A=(1,-d) and B=(-d,1) satisfy
+Take P=(0,-a), which belongs to F_0, and use A=(1,-d), B=(-d,1). Then
 
 \[
 n\cdot(A-P)=\frac{6+T}{5T}>1,
@@ -57,7 +57,7 @@ h_{K_0}(n)-1>P\cdot n,
 
 These are the two strict inner inequalities for the canonical forbidden quadrant. Thus F_0 fails the supporting hallway at t_+.
 
-For clarity, no asserted equality h_{K_0}(m)=m dot B is used: a single retained point B already supplies the sufficient lower bound. The proof is a three-point obstruction and is insensitive to a larger support in that direction.
+No asserted equality h_{K_0}(m)=m dot B is used. The three-point obstruction is insensitive to a larger support in that direction.
 
 ## 45.3 Why a different translation or an early exit cannot avoid the test
 
