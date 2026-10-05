@@ -26,7 +26,7 @@ def endpoint_certificate(hlo,hhi,center,radii,Y,geometry=True):
     H=I(hlo,hhi);hm=(hlo+hhi)/2
     X=[I(down(c-r),up(c+r)) for c,r in zip(center,radii)]
     phi,b,W=X
-    if not(0<=H.lo and H.hi<phi.lo and 0<phi.lo and phi.hi<=I.exact_rational(1,12).lo and W.lo>1.5 and W.hi<1.6 and b.lo>W.hi/2 and b.hi<(I(W.lo)-I(phi.hi)).lo):
+    if not(0<=H.lo and H.hi<=I.exact_rational(1,32).lo and H.hi<phi.lo and 0<phi.lo and phi.hi<=I.exact_rational(1,12).lo and W.lo>1.5 and W.hi<I.exact_rational(8,5).lo and b.lo>W.hi/2 and b.hi<(I(W.lo)-I(phi.hi)).lo):
         return {'ok':False,'reason':'ordering'}
     Delta=[X[j]-I(center[j]) for j in range(3)]+[H-I(hm)]
     full=endpoint_shoot(H,X,Jet);base=endpoint_shoot(I(hm),[I(c) for c in center],AD)
