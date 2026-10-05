@@ -1,33 +1,28 @@
 # Ambidextrous sofa: pen-and-paper research
 
-**The unrestricted optimality and uniqueness problem is not proved in this branch.** The work now contains an explicit sharp functional, its exact maximization and equality kernel, and a completed geometric optimality-and-uniqueness theorem on a stated support-function class. It also records explicit counterexamples to unsuccessful proof routes.
+**The unrestricted optimality and uniqueness problem is not proved in this branch.** The work contains a sharp geometric theorem on a specified curvature/contact class, a newer protected-arc theorem without an input curvature cap, general approximation and attainment results, and explicit counterexamples to failed proof routes.
 
-These are written, self-reviewed mathematical proofs, not independent refereeing or Lean verification. No novelty or priority claim is made.
+These are written, self-reviewed proofs, not independent refereeing or Lean verification. No novelty or priority claim is made.
 
 Research branch: `research/ambidextrous-pen-and-paper`.
 Draft PR: [#3](https://github.com/vltanh/lean4-moving-sofa/pull/3).
 Base: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`.
-The existing uniqueness manuscript, Lean files, dependencies, and workflows are unchanged.
+All changes are Markdown in this directory. The existing manuscript, Lean files, dependencies, and workflows are unchanged.
 
-**Start with the [current proof ledger](24-current-proof-ledger.md) and [Theorem 52](23-sobolev-geometric-theorem.md).** Notes are chronological; the current ledger supersedes the initial task list in Note 7.
+**Start with [the current proof ledger, Note 43](43-current-proof-status.md).** Notes are chronological. Notes 7, 24, and 34 are earlier status snapshots, not the current task list.
 
-## Strongest geometric result proved
+## Current geometric results
 
-Let K be the convex hull of a compact connected sofa S, normalized to vertical span one. Suppose S follows both canonical full conventional quarter turns. On both h_K and its reflected support function, write
+### Global bound on the stated curvature/contact class
 
-$$
-f(t)=h(t),\qquad g(t)=h(t+\pi/2),\qquad
-p=f'-g+1,\qquad q=g'+f-1.
-$$
-
-If the quarter functions are H^2 and satisfy
+[Theorem 65](31-closed-curvature-class-theorem.md) applies to a compact connected S with common hull K, normalized to vertical span one, and with both canonical full quarter turns feasible. Assume the curvature measure h_K+h_K'' is dominated by dtheta on each open coordinate quarter. For both h_K and its reflected support function, set
 
 $$
-0\leq f''+f<1,\qquad0\leq g''+g<1\quad\text{almost everywhere},
-\qquad p\leq q,
+f(t)=h(t),\quad g(t)=h(t+\pi/2),\quad
+p=f'-g+1,\quad q=g'+f-1,
 $$
 
-then [Theorem 52](23-sobolev-geometric-theorem.md) proves
+and assume p<=q. Then
 
 $$
 |S|\leq M=1+4Y^2+\arctan Y,
@@ -36,66 +31,64 @@ $$
 
 with equality exactly for bodies congruent to Romik's candidate.
 
-The theorem does **not** assume symmetric competitors, fixed contact switches, aligned horizontal faces, ordinary monotonicity of both velocities, or finitely many analytic boundary pieces. The proof derives the required contact structure and face alignment from its remaining hypotheses.
+The curvature bound is non-strict and supplies the quarter Sobolev regularity. Symmetry, fixed switches, aligned faces, ordinary velocity monotonicity, and finitely many analytic pieces are not hypotheses. The missing unrestricted task is to derive or replace the remaining full-turn, curvature, and contact assumptions for arbitrary maximizers.
 
-## What is already reduced for arbitrary competitive bodies
+### A new local theorem without assuming the curvature cap
 
-For every body with area greater than sqrt(2), [Notes 8–10](10-wrong-angle-exclusion.md) and [Note 15](15-unit-span-normalization.md) prove a containment-preserving reduction to one common convex hull, unit incoming span, and canonical monotone motions with correct turning signs. The two endpoint magnitudes remain variables in (0,pi/2].
+[Theorem 83](42-independent-arc-repairs.md) permits independent, nonsymmetric, C^1-small convex support perturbations in protected arc windows away from the candidate's axis normals and switching neighborhoods. Their curvature may exceed one and their second derivatives need not be small.
 
-Connectedness forces the two niches to be disjoint inside this actual common hull. The entire canonical saturation is compact, connected, vertically convex, and has the same hull. Thus its area is exactly the hull area minus the two full niche areas. No symmetry assumption or maximizer-existence theorem is needed for these reductions.
+A convex-minorant construction repairs the excessive curvature while preserving the relevant wall envelope. The proof separately accounts for the moving corner graph and shows that every nonzero repair strictly increases actual feasible area. The repaired body satisfies Theorem 65. Consequently the original perturbed body has area at most M, with equality only for the candidate.
 
-What remains is to justify full-quarter endpoints and the support-curvature/contact hypotheses for arbitrary relevant maximizers or for a covering comparison class. The [visible-side balance obstruction](21-visible-side-balance-obstruction.md) explains why the single-turn variation theorem cannot simply be imported unchanged.
+This is not an unrestricted Hausdorff-local theorem; the protected-window and C^1 conditions remain. It does resolve the area sign of the earlier high-frequency family: [Note 41](41-resolving-the-high-curvature-family.md) proves **|S_n|<M for all sufficiently large n**, while |S_n| tends to M. The old statements in Notes 28 and 34 that the sign was undetermined are superseded.
 
-## The sharp functional and its rigidity
+## General results that do not assume the candidate contact pattern
 
-Let c_h=(f-1)mu+(g-1)nu and I(h)=one half of the integral of det(c_h,c_h'). The adaptive functional is
+Notes 8–10, 15, and 25 prove a containment-preserving common-hull reduction for all competitive bodies, unit incoming span, correct turning signs, connected separated saturation, a uniform bounding box, and global attainment. The endpoint magnitudes remain variables in (0,pi/2].
 
-$$
-\widetilde{\mathcal Q}(h)
-=|K|+I(h)+I(h^\rho)
--\frac12\sum_{j\in\{h,h^\rho\}}
-\left[\int\min(p_j,0)^2+\int\max(q_j,0)^2\right].
-$$
+[Note 38](38-quantitative-angle-completion.md) now gives a quantitative full-motion repair: if a radius-R connected body satisfies canonical constraints on an angular mesh of maximum gap Delta, then S/(1+R Delta) satisfies the complete motions between the same endpoints.
 
-[Notes 13–14](14-sharp-quadratic-calibration.md) derive an exact sum-of-squares Hessian, match the explicit candidate, prove stationarity against all normalized support variations, and evaluate the maximum as M. [Notes 16](16-adaptive-contact-functional.md) and [22](22-weaker-contact-hypotheses.md) allow the contact switches to move while preserving concavity on an explicit convex domain. Equality forces h-h_* to be a horizontal-translation support function a cos(theta).
-
-[Notes 17–20](20-forced-face-alignment.md) turn this functional statement into a geometric one. They prove the niche roof rather than assume its contact pattern, identify the potential clipping error, and then eliminate that error using retention of extreme points in a feasible common hull. Exact body recovery uses a separate regular-closedness proof. [Note 23](23-sobolev-geometric-theorem.md) removes the finite-piece regularity restriction.
-
-## Negative results are part of the record
-
-The fixed-switch quadratic has the correct maximum M but is **not** a direct area majorant. [Note 19](19-near-candidate-counterexample.md) constructs actual feasible bodies S_epsilon whose areas approach M and satisfy
+For the exact finite-angle upper values v_n with N=2^n,
 
 $$
-|S_\varepsilon|>\mathcal Q_{\beta,\pi/2-\beta}(h_\varepsilon).
+V\leq v_n\leq(1+e_n)^2V,
+\qquad e_n=\sqrt{4+2\sqrt2}\,(\pi/2)/N.
 $$
 
-The moving-switch adaptive functional gives their correct area instead. Thus neither a high-area threshold nor proximity to the candidate repairs the frozen-contact argument.
+No v_n is numerically evaluated here. [Note 39](39-effective-maximizer-selection.md) uses this rate to select any prescribed maximizing hull with the explicit penalty N^-1/2. It gives hull error O(N^-1/2) and genuinely feasible polygonal approximants with area error O(N^-1).
 
-Other recorded failures include the wrong sign from double niche subtraction without separation, signed corner area counting regions outside the hull, nonconcavity of the raw partition relaxation, and a width-only argument that does not establish full-angle completion. The reflected Hammersley family is solved exactly and ruled out as a candidate for the sharp value. See the [negative-results table](24-current-proof-ledger.md).
+Other unrestricted results include coupled endpoint-angle bounds, localization of strictly hidden boundary measure to edge atoms, and the motion-preserving rounding operation from Note 33. The rounding yields Per(S)<=4|S| for every global maximizer, but this is not a sharp equality certificate for the candidate.
+
+## The sharp functional and curvature calculations
+
+The adaptive functional adds the two signed corner integrals to hull area and subtracts the negative-p and positive-q squared contact terms. Its switches move with the support function. Notes 13–16 and 22–31 prove its sharp maximum M on the stated convex function domain and identify its equality kernel as horizontal translation.
+
+[Notes 35–37](37-excluding-buried-endpoint-corners.md) derive the curvature cap from actual criticality in a regular full-turn model. The moving-angle contribution at a corner is retained. Any excessive-curvature interval would reach an endpoint and bury an active limiting corner inside another forbidden quadrant. This is not yet a theorem for arbitrary maximizing measures: its C^2 and stable-contact/admissible-variation hypotheses do not cover curvature jumps, atoms, or changing contact topology automatically.
+
+[Notes 40–42](42-independent-arc-repairs.md) give the separate, actual feasible repair near protected candidate arcs. Preserving one wall envelope alone is insufficient; the corner-area cost is included explicitly. The two approaches should not be conflated.
+
+## Negative findings retained
+
+The fixed-switch quadratic has maximum M but is not an area majorant, even for feasible bodies whose areas tend to M; Note 19 gives an exact counterexample. High area alone does not imply the curvature cap; Note 28 remains a valid counterexample to that inference, with its strict area deficit now established in Note 41.
+
+Other recorded failures include signed corner area counting outside the hull, nonconcavity of the raw partition relaxation, a width-only argument that does not prove full turns, and the difference between full and visible outer-edge length. Note 35 adds a max-min derivative counterexample: freezing the active angle loses the first-order motion of a crossing contact.
+
+The [current ledger](43-current-proof-status.md) records which repairs are proved and which gaps remain. No failed route is silently reused as an unrestricted upper bound.
 
 ## Reading map
 
 | Notes | Contents |
 |---|---|
-| [1](01-two-motion-envelopes.md)–[3](03-partition-certificate.md) | General two-motion envelopes, overlap signs, and a universally valid partition majorant. |
-| [4](04-romik-candidate.md)–[7](07-proof-ledger.md) | First-pass candidate separation, visible variations, conditional certificate, and historical ledger. |
-| [8](08-common-hull-tightening.md)–[10](10-wrong-angle-exclusion.md) | Canonical common-hull reduction, connectedness-based separation, and wrong-angle exclusion. |
-| [11](11-negative-tests-and-benchmarks.md)–[12](12-explicit-quadratic-kernel.md) | Exact benchmark family, counterexamples, and the first explicit quadratic kernel. |
-| [13](13-contact-quadratic.md)–[14](14-sharp-quadratic-calibration.md) | Contact quadratic, positive factorization, exact candidate stationarity, value, and rigidity. |
-| [15](15-unit-span-normalization.md)–[16](16-adaptive-contact-functional.md) | Unit-span normalization and the moving-contact replacement. |
-| [17](17-exact-niche-profile.md)–[18](18-restricted-optimality-and-uniqueness.md) | Exact niche geometry and the first completed restricted area/uniqueness theorem. |
-| [19](19-near-candidate-counterexample.md)–[20](20-forced-face-alignment.md) | Feasible near-candidate counterexamples and automatic face alignment. |
-| [21](21-visible-side-balance-obstruction.md)–[23](23-sobolev-geometric-theorem.md) | Balance-transfer obstruction, weaker hypotheses, and the strongest geometric theorem. |
-| [24](24-current-proof-ledger.md) | Current dependencies, audit, positive and negative findings, and exact remaining obligations. |
+| [1](01-two-motion-envelopes.md)–[7](07-proof-ledger.md) | Initial envelopes, overlap/partition identities, candidate separation, and historical first-pass program. |
+| [8](08-common-hull-tightening.md)–[12](12-explicit-quadratic-kernel.md) | Canonical reduction, separation, wrong-angle exclusion, exact benchmarks, and initial quadratic tests. |
+| [13](13-contact-quadratic.md)–[24](24-current-proof-ledger.md) | Sharp quadratic/adaptive analysis, exact niche geometry, restricted body uniqueness, and early audit. |
+| [25](25-compactness-and-attainment.md)–[34](34-current-proof-status.md) | Attainment, endpoint coupling, curvature counterexamples, weak-bound theorem, selection, and rounding. |
+| [35](35-active-wall-and-corner-tests.md)–[37](37-excluding-buried-endpoint-corners.md) | Correct moving-corner variation and a regular-critical curvature theorem. |
+| [38](38-quantitative-angle-completion.md)–[39](39-effective-maximizer-selection.md) | Explicit finite-angle error and quantified selection of every maximizing hull. |
+| [40](40-curvature-repair-by-convexification.md)–[42](42-independent-arc-repairs.md) | Convex-minorant repairs, strict suboptimality of the high-curvature family, and independent protected-arc comparison. |
+| [43](43-current-proof-status.md) | Current statements, dependencies, negative findings, audit, and unrestricted obligations. |
 
-## Sources and attribution
+## Sources and execution
 
-- Dan Romik, *Differential equations and exact solutions in the moving sofa problem*, [arXiv:1606.08111v3](https://arxiv.org/html/1606.08111v3). His explicit paths identify the candidate. Notes 14 and 18 provide a written functional evaluation and feasibility/area derivation for the corresponding normalized construction.
-- Jineon Baek, *Optimality of Gerver's Sofa*, [arXiv:2411.19826](https://arxiv.org/abs/2411.19826). The sharp-majorant/equality-case organization is motivated by this work, not an application of its single-turn bound twice.
-- The repository's [uniqueness manuscript](../paper/), particularly its arbitrary-maximizer and equality-case strategy. Its single-turn maximality hypotheses are not silently transferred to this different objective.
+Romik's [explicit construction](https://arxiv.org/html/1606.08111v3) identifies the candidate. Baek's [sharp-majorant approach](https://arxiv.org/abs/2411.19826) and the repository's [uniqueness manuscript](../paper/) motivate the proof organization. Their single-turn optimality hypotheses are not silently imported into this different problem. This is not a comprehensive literature or priority review.
 
-This is not a comprehensive literature review. Theorems, examples, and failures are committed for further scrutiny; the branch does not claim an independently verified new solution of the unrestricted problem.
-
-## Execution constraints
-
-Documentation only. No CI run was requested or used. No Lean/Lake compilation, dependency installation, numerical experiment, CAS calculation, or manuscript build was performed. Every research commit includes `[skip ci]`; workflow definitions are untouched. Keep the PR in draft while the unrestricted reduction and independent proof review remain unfinished.
+No CI was requested or used. No Lean/Lake compilation, dependency installation, numerical experiment, CAS calculation, or manuscript build was performed. Every research commit includes `[skip ci]`; workflow definitions are untouched. The PR remains open and draft because the unrestricted proof and independent review are unfinished.
