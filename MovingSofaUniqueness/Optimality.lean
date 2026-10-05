@@ -5,22 +5,23 @@ public import MovingSofaUniqueness.Maximizers
 /-!
 # Optimality from the maximizer principles
 
-The global bound is derived here, before equality with Gerver's area is used to infer
-maximality. This is an alternative assembly from Baek's intermediate machinery and the
-uniqueness development's maximizer principles, not a replacement for the formalization of
-Baek's proof. In particular, `MovingSofaOptimality/` is left unchanged.
+This is a parallel proof, not a replacement for either original formalization.
+`MovingSofaOptimality/`, `MovingSofaUniqueness.Main`, and `Solution` remain unchanged.
+The global bound is derived here before equality with Gerver's area is used to infer maximality.
 
-The first bound is for right-angle caps. Existence of a maximizing cap and the maximizer-value
-theorem suffice. For a large arbitrary sofa, choose a fixed-angle maximizer, use the pinned
-bounds to give that sofa a right-angle motion, and apply the right-angle bound. Small sofas
-are below Gerver by the explicit lower bound for its area. The bound for all caps is deduced
-last, using fixed-angle existence and maximality.
+First, fixed-angle existence and the value of every right-angle maximizer give the bound for
+all right-angle caps. Mamikon rigidity classifies the maximizing caps and the equality cases.
+For a large arbitrary sofa, choose a fixed-angle maximizer, use the pinned bounds to give that
+sofa a right-angle motion, and apply the right-angle bound. Small sofas are below Gerver by the
+explicit lower bound for its area. The all-angle cap bound is deduced last.
 
-No theorem of `MovingSofaUniqueness.Main` is imported. No use is made of Baek's final
-`theorem1_1_1` or `gm_area_le`. See `docs/maximizer-first/README.md` for the distinction between
-source-level inspection and a future transitive proof-dependency audit.
+This module does not import `MovingSofaUniqueness.Main`; its statements use the primitive
+maximality predicate rather than the `IsMaxCap` definition owned by that original entry point.
+No use is made of Baek's final `theorem1_1_1` or `gm_area_le`. Baek's intermediate machinery,
+including the maximum of the quadratic functional, is retained. The separate audit script
+`scripts/AuditMaximizerRoute.lean` is intended to check transitive proof dependencies later.
 
-Status: this new assembly has not been compiled or kernel-audited in this refactor.
+Status: this new assembly has not been compiled or kernel-audited in this work.
 -/
 
 @[expose] public section
@@ -36,6 +37,46 @@ theorem right_angle_cap_area_le_gerver {P : GerverParams}
     sofaArea (π / 2) C ≤ area (gerverSofa P) := by
   obtain ⟨K, hK, _, _, hmax, _⟩ := exists_maximizing_cap pi_div_two_mem_Ioc
   exact (hmax C hC).trans_eq (right_angle_maximizer_value hP hbox hK hmax)
+
+/-- The complete maximizer classification, using only the right-angle bound just proved.
+The predicate is written out to avoid importing the original uniqueness entry point. -/
+theorem right_angle_maximizes_iff_translate_gerver {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) {K : Set Plane} (hK : IsCap K (π / 2)) :
+    (∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) ↔
+      ∃ a : ℝ, K = Rigid.translate (a, 0) '' P.cap := by
+  constructor
+  · intro hmax
+    obtain ⟨a, hcap, -⟩ := right_angle_maximizer_eq_gerver hP hbox hK hmax
+    exact ⟨a, hcap⟩
+  · rintro ⟨a, rfl⟩ C hC
+    rw [sofaArea_translate_horizontal (GerverParams.gm_isConvexBody_cap hP hbox),
+      GerverParams.gm_sofaArea_cap hP hbox]
+    exact right_angle_cap_area_le_gerver hP hbox hC
+
+/-- The equality cases of the universal right-angle bound are the same translates. This
+corollary does not assume the optimal value in order to prove the bound. -/
+theorem right_angle_sofaArea_eq_gerver_iff {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) {K : Set Plane} (hK : IsCap K (π / 2)) :
+    sofaArea (π / 2) K = area (gerverSofa P) ↔
+      ∃ a : ℝ, K = Rigid.translate (a, 0) '' P.cap := by
+  constructor
+  · intro heq
+    apply (right_angle_maximizes_iff_translate_gerver hP hbox hK).1
+    intro C hC
+    exact (right_angle_cap_area_le_gerver hP hbox hC).trans_eq heq.symm
+  · rintro ⟨a, rfl⟩
+    rw [sofaArea_translate_horizontal (GerverParams.gm_isConvexBody_cap hP hbox)]
+    exact GerverParams.gm_sofaArea_cap hP hbox
+
+/-- A single statement of the right-angle inequality and its cap-rigidity equality case. -/
+theorem right_angle_optimality_and_rigidity {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    (∀ K, IsCap K (π / 2) → sofaArea (π / 2) K ≤ area (gerverSofa P)) ∧
+      (∀ K, IsCap K (π / 2) →
+        (sofaArea (π / 2) K = area (gerverSofa P) ↔
+          ∃ a : ℝ, K = Rigid.translate (a, 0) '' P.cap)) :=
+  ⟨fun _ hK => right_angle_cap_area_le_gerver hP hbox hK,
+    fun _ hK => right_angle_sofaArea_eq_gerver_iff hP hbox hK⟩
 
 /-- All moving sofas with a right-angle motion satisfy the bound. The selected maximizing
 sofa is only a numerical comparator; no containment of the original sofa in it is asserted. -/
@@ -81,8 +122,7 @@ theorem area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     have hsmall := lt_of_not_ge h22
     linarith
 
-/-- The measure-valued bound. Both measures are finite before passing between volume and
-its real value; no inequality is inferred from `toReal` for an infinite measure. -/
+/-- Both measures are finite before passing between volume and its real value. -/
 theorem volume_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} (hS : MovingSofaOptimality.IsMovingSofa S) :
     volume S ≤ volume (gerverSofa P) := by
@@ -91,16 +131,16 @@ theorem volume_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   rw [← ENNReal.toReal_le_toReal hSfin hGfin]
   exact area_le_gerver hP hbox hS
 
-/-- Gerver is feasible and optimal, by the maximizer-first route. Its feasibility comes
-from the explicit Gerver motion, not from a conjunction containing the old optimality proof. -/
+/-- Gerver is feasible and optimal by the parallel route. Feasibility comes directly from
+the explicit motion, not from a conjunction containing Baek's final optimality proof. -/
 theorem gerver_sofa_optimal {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     MovingSofaOptimality.IsMovingSofa (gerverSofa P) ∧
       ∀ S, MovingSofaOptimality.IsMovingSofa S → volume S ≤ volume (gerverSofa P) :=
   ⟨⟨π / 2, (GerverParams.gm_movingSofa_std hP hbox).1⟩,
     fun _ hS => volume_le_gerver hP hbox hS⟩
 
-/-- Only after global optimality has been proved do we bound the cap functional at every
-angle, including caps whose niche need not be contained in the cap. -/
+/-- Only after global optimality do we bound the cap functional at every angle, including
+caps whose niche need not be contained in the cap. -/
 theorem cap_area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {C : Set Plane} {ω : ℝ} (hC : IsCap C ω) :
     sofaArea ω C ≤ area (gerverSofa P) := by
