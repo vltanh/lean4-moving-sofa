@@ -59,6 +59,8 @@ import all MovingSofaOptimality.Sofa.Defs
 import all MovingSofaUniqueness.AngleExtension
 import all MovingSofaUniqueness.Curvature
 import all MovingSofaUniqueness.Main
+import all MovingSofaUniqueness.Maximizers
+import all MovingSofaUniqueness.Optimality
 import all MovingSofaUniqueness.RegularClosed
 import all MovingSofaUniqueness.Rigid
 import all MovingSofaUniqueness.Rigidity
@@ -96,6 +98,11 @@ precomputed set of the library's constants; looking up each constant's module in
 
 To adapt: generate the `import all` lines, fill in the three lists, and set the library's root
 name in `isLibraryModule`.
+
+The additional maximizer-route guard traverses through numbered intermediate results, stopping
+only at the forbidden final optimality declarations. It does not alter the route extraction for
+Baek's paper. Its negative control must detect `gm_area_le` inside Baek's original main theorem.
+This guard and the new proof assembly have not been compiled or run in the refactoring work.
 -/
 
 open Lean Elab Command
@@ -337,6 +344,28 @@ meta def uniquenessResults : List (String × Name) :=
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
    ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
+/-- The new route and its public equality-case consumers. These are separate from Baek's
+numbered results, so adding them does not change the original paper's route table. -/
+meta def maximizerResults : List (String × Name) :=
+  [("Maximizer route: existence", ``MovingSofaUniqueness.MaximizerRoute.exists_maximizing_cap),
+   ("Maximizer route: injectivity", ``MovingSofaUniqueness.MaximizerRoute.isKi_of_maximizes),
+   ("Maximizer route: value", ``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_value),
+   ("Maximizer route: cap rigidity", ``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_eq_gerver),
+   ("Maximizer route: motion", ``MovingSofaUniqueness.MaximizerRoute.maximizing_monotone_has_right_angle),
+   ("Maximizer route: global optimality", ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal),
+   ("Maximizer route: all-angle cap bound", ``MovingSofaUniqueness.MaximizerRoute.cap_area_le_gerver),
+   ("Maximizer route: cap classification", ``MovingSofaUniqueness.isMaxCap_iff_translate_gerver_cap),
+   ("Maximizer route: equality-case injectivity", ``MovingSofaUniqueness.isKi_of_maximal_area),
+   ("Maximizer route: set recovery", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
+   ("Maximizer route: maximal sofas", ``MovingSofaUniqueness.isMaximal_iff_image_eq_gerver),
+   ("Maximizer route: translation", ``MovingSofaUniqueness.translate_eq_gerver_of_volume_eq),
+   ("Maximizer route: optimality and uniqueness", ``MovingSofaUniqueness.gerver_sofa_optimal_and_unique)]
+
+/-- Forbidden proof dependencies of the alternative route, not forbidden imports. -/
+meta def forbiddenMaximizerDependencies : NameSet :=
+  [``MovingSofaOptimality.theorem1_1_1, ``MovingSofaOptimality.gm_area_le].foldl
+    (fun s n => s.insert n) {}
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
@@ -453,7 +482,7 @@ elab "#audit" : command => do
   let mut deps : NameMap (Array Name) := {}
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
-  for (label, n) in paperResults ++ uniquenessResults do
+  for (label, n) in paperResults ++ uniquenessResults ++ maximizerResults do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n
@@ -468,6 +497,16 @@ elab "#audit" : command => do
   for c in library do
     let axs ← liftCoreM <| collectAxioms c
     if axs.any (!standardAxioms.contains ·) then bad := bad.push c
+  -- Unlike the paper-route traversal below, this passes through every numbered intermediate
+  -- result. Only the two forbidden final optimality declarations stop the search.
+  let control := resultUses env library forbiddenMaximizerDependencies
+    ``MovingSofaOptimality.theorem1_1_1
+  unless control.contains ``MovingSofaOptimality.gm_area_le do
+    throwError "maximizer dependency audit: negative control failed; old proof dependencies are not visible"
+  for (_, n) in maximizerResults do
+    let uses := resultUses env library forbiddenMaximizerDependencies n
+    unless uses.isEmpty do
+      throwError m!"maximizer route {n} uses forbidden optimality dependencies: {uses}"
   -- The routes: for each numbered result, its docstring's labels and the results it uses.
   let results : NameSet := paperResults.foldl (fun s p => s.insert p.2) {}
   let mut routes : Array String := #[]
