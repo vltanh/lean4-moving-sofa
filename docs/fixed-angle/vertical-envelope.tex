@@ -40,12 +40,16 @@ Suppose $p,k$ are twice differentiable. Write $\gamma=(p-1)u_t+(k-1)v_t$, $f=k-p
 \end{align*}
 Moreover
 \[
- z_b'=(p+p''-1)\sin t,\qquad z_d'=(1-k-k'')\cos t.
+ z_b'=(1-p-p'')\sin t,\qquad z_d'=(1-k-k'')\cos t.
 \]
-A strict smooth local maximum over angle on the first branch therefore requires $p+p''>1$ at its stationary point; on the second branch it requires $k+k''<1$.
+At a stationary point, a negative second angle derivative on the first branch is equivalent to $p+p''<1$; on the second it is equivalent to $k+k''<1$. At a degenerate local maximum the corresponding non-strict inequalities are necessary, but they are not a sufficient local-maximum test.
 \end{lemma}
 \begin{proof}
-Differentiate the displayed affine branches. They give $z_b=a\cos t-a'\sin t$ and $z_d=-b'\cos t-b\sin t$, which are the claimed arm expressions. Differentiating once more proves the formulas for $z_b',z_d'$. At a stationary angle the second angle derivatives are respectively $-z_b'/\sin^2t$ and $-z_d'/\cos^2t$. The stated strict inequalities follow when the second derivative is strictly negative. A local maximum with zero second derivative is not ruled out by this test.
+Differentiate the displayed affine branches. They give $z_b=a\cos t-a'\sin t$ and $z_d=-b'\cos t-b\sin t$, which are the claimed arm expressions. In particular
+\[
+ (a\cos t-a'\sin t)'=-(a+a'')\sin t=(1-p-p'')\sin t.
+\]
+This explicit line fixes the sign: the derivative is not $(p+p''-1)\sin t$. At a stationary angle the second angle derivatives are respectively $-z_b'/\sin^2t$ and $-z_d'/\cos^2t$. The claims follow. An isolated strict maximum may have zero second derivative and is not excluded by the nondegenerate test.
 \end{proof}
 
 \begin{lemma}[A one-angle area is not a convex quadratic]
@@ -66,6 +70,9 @@ whose determinant is negative: since $t+(\omega-t)<\pi/2$, the product of the tw
 \begin{remark}[What has and has not been reduced]
 The exact envelope replaces sampled unions by one explicit one-dimensional upper envelope, but it does not make the full problem convex. For each fixed angle the tent is a minimum of two affine functions of the supports. A supremum of such minima cannot be exchanged with a minimum, and the one-angle area calculation prevents claiming convexity merely by integrating a quadratic. These observations neither prove nor disprove convexity of the complete correction $|N|-I(\gamma)$ on a suitably restricted cap class. That remains a separate obligation.
 \end{remark}
+
+\paragraph{Correction record.}
+The first version of this note reversed the sign of $z_b'$ and consequently reversed the first-branch curvature test. The explicit derivative calculation above corrects both. It also distinguishes a nondegenerate maximum from a strict maximum with zero second derivative. No earlier optimum or perturbation theorem used this new local-wall test.
 
 \paragraph{Validation.}
 All formulas above are elementary exact identities. No CI, Lean compilation, TeX compilation, or sampled geometry is used as a proof premise.
