@@ -92,13 +92,14 @@ def area_gradient(motion: Motion, subdivisions: int = 1):
     angles, corners = motion.sample(subdivisions)
     ns = normals(motion.beta, angles).reshape(-1, 2)
     offsets = np.sum(ns*np.repeat(corners, 2, axis=0), axis=1)
-    cap = cap_polygon(motion.bounding_rectangle(), ns, offsets)
+    base = motion.bounding_rectangle()
+    cap = cap_polygon(base, ns, offsets)
     grad = np.zeros_like(corners)
     if len(cap) < 3:
         return 0.0, grad, {"unassigned_length": 0., "tied_length": 0., "components": 0}
     cuts = []
     for i in range(len(corners)):
-        w = clip(clip(cap, ns[2*i], offsets[2*i]), ns[2*i+1], offsets[2*i+1])
+        w = clip(clip(base, ns[2*i], offsets[2*i]), ns[2*i+1], offsets[2*i+1])
         if len(w) >= 3:
             cuts.append(Polygon(w))
     shape = Polygon(cap).difference(unary_union(cuts)) if cuts else Polygon(cap)
