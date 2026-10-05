@@ -84,14 +84,14 @@
   ],
   "source_sha256": {
     "contact_core.py": "de9175b2f134da720d92cc18409ef6e459786c0e21e08e82b26d7cc353d60ecf",
-    "interval_contact.py": "ca623dd4d4d3c8d2c76f7da9fba496a76216f82d18e8e86bbdef2ab8bfacf8a5",
+    "interval_contact.py": "ca7e84df048e1c5dc36389c9bc172c3674393cf564d126a4c34716a46817b289",
     "jet_contact.py": "fb6e776df3c2ddc5bd8288668cff53b67d2640ed71b9e5408860469f29e3c072",
     "endpoint_contact.py": "c4b8d8523394a268d02d26811484b4f47edb6939d704c0997576ad9e19b9cbaa",
     "verify_contact_cover.py": "73cc89b60e8ec0c8aea818f95556183d6f38c8fddd93121cc5b59c255e4ca68d"
   },
   "source_git_blob_sha": {
     "contact_core.py": "9555114d54f82cdc99d51b6e4aac9df5e11de6e7",
-    "interval_contact.py": "49dc91acfc3bb4c231d9bed76bcf66412d87de20",
+    "interval_contact.py": "c743065bd19da949f1476403bb18868001ae04fe",
     "jet_contact.py": "a43bc3ecb490b4aa7d01ce102d15e73e9cd61180",
     "endpoint_contact.py": "462b87f46e0778f14187f986963f7912b3cb4c20",
     "verify_contact_cover.py": "8549964a85f850736260e76f40f04dcca4c631d9",
@@ -102,5 +102,7 @@
   "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
   "arithmetic_assumptions": "IEEE-754 binary64 basic arithmetic and nextafter; interval Taylor trigonometry, not libm sin/cos, for verification",
   "not_performed": ["CI", "Lean compilation", "TeX compilation", "independent referee review"],
-  "trust_boundary": "This is a computer-assisted proof certificate, not a Lean/kernel certificate. Floating Newton proposals are not trusted."
+  "trust_boundary": "This is a computer-assisted proof certificate, not a Lean/kernel certificate. Floating Newton proposals are not trusted.",
+  "primitive_regression": "Passed 49 interval-pair cases, 1640 rational conversions, mixed Hessian division, and all eight flow pieces.",
+  "primitive_regression_source_sha256": "ff6ded38d73f48c5b1becdddd98ed90be7a46212dd5449ad62d565be43cfb24e"
 }
