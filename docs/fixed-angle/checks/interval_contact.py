@@ -41,7 +41,7 @@ class I:
         return I(down(min(v)),up(max(v)))
     __rmul__=__mul__
     def __truediv__(a,b):
-        if isinstance(b,AD): return AD(a)/b
+        if isinstance(b,AD): return b.__rtruediv__(a)
         b=I(b)
         if b.lo<=0<=b.hi: raise ArithmeticError(('division through zero',b))
         return a*I(down(1/b.hi),up(1/b.lo))
@@ -117,7 +117,7 @@ def all_orders(w,x,limit=64):
         for k in sorted(left):
             if not (preds[k]&left): rec(order+[k],left-{k})
     rec([],set(keys))
-    # Event pairs are exact reflections about w/2.  Non-symmetric orders
+    # Event pairs are exact reflections about w/2. Non-symmetric orders
     # have no open parameter region and cannot be actual propagations.
     mirror={'0':'w','w':'0','a':'za','za':'a','b':'db','db':'b',
             'c':'dc','dc':'c','m':'m'}
