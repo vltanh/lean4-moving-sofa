@@ -15,9 +15,13 @@ rigid motions:
   and a translation (a translation suffices: [`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L364)).
   Baek's paper does not prove this, and Google DeepMind's formal-conjectures lists it as open. The argument was written by ChatGPT Pro 6 for this repository and has not been peer
   reviewed;
+- **a second proof of optimality:** the uniqueness argument proves, for every cap of maximal sofa area, the two
+  properties that Baek's proof derives from the balance of one particular cap. With Gerver's cap as a competitor,
+  this proves Baek's theorem again without Baek's Theorem 1.1.1 ([`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](MovingSofaUniqueness/Optimality.lean#L141)),
+  and the uniqueness from it;
 - **the bridge to formal-conjectures:** formal-conjectures states the problem with definitions of its
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
-  Baek's. Its statements, the open one included, follow from the first two results.
+  Baek's. Its statements, the open one included, follow from the optimality and the uniqueness.
 
 ![Gerver's sofa sliding along the horizontal side of the hallway, turning the corner, and leaving along the vertical side](docs/proof/figures/01-introduction/gerver-moving.gif)
 
@@ -171,13 +175,14 @@ ChallengeDefs.lean        the definitions that Challenge.lean copies
 Solution.lean             the proofs of the statements of record
 MovingSofaOptimality/     Baek's paper, one directory per chapter, with External/ for
                           the results it cites and Gerver/ for Gerver's sofa
-MovingSofaUniqueness/     the uniqueness, one module per step of the argument
+MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
+                          second proof of Baek's theorem (Maximizers, Optimality, Alternative)
 MovingSofaBridge/         the bridge to formal-conjectures' definitions
 REPORT.md                 the audit of Baek's paper
 docs/                     these pages, the illustrated text (docs/proof/), the
                           manuscript (docs/paper/) and the archived notes of the
                           uniqueness proof (docs/archive/)
-scripts/                  the axiom audit, generators, documentation tools, figures
+scripts/                  the axiom audits, generators, documentation tools, figures
 ```
 
 ## Verification
@@ -189,6 +194,7 @@ lake exe cache get
 lake build
 lake env lean scripts/Audit.lean
 python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
+lake env lean scripts/AuditMaximizerRoute.lean
 lake env lake comparator --config=comparator.json
 ```
 
@@ -197,8 +203,9 @@ The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean
 checks that every declaration of the three libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
 results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
-that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). GitHub Actions builds the project, runs
-the audit and the route check, and checks the documentation on every push.
+that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). A second audit checks that the second proof
+of Baek's theorem does not use Baek's Theorem 1.1.1. GitHub Actions builds the project, runs the two audits and the
+route check, and checks the documentation on every push.
 
 ## Palomar registry
 
@@ -224,6 +231,8 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
   uniqueness argument. The work followed the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill, at the request of
   The-Anh Vu-Le, who directed it.
+- ChatGPT Pro 6 also wrote, in Lean, the second proof of Baek's theorem (pull request #5, 5 October
+  2026); it compiled without change, and Claude Opus 5.5 merged it and extended its audit.
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
   rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

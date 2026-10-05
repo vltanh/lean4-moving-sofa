@@ -28,6 +28,8 @@ jobs:
         run: >-
           python3 scripts/route_check.py check docs/paper_routes.tsv
           --accept docs/route_differences.tsv
+      - name: Check that the second proof of optimality does not use Baek's Theorem 1.1.1
+        run: lake env lean scripts/AuditMaximizerRoute.lean
       - name: Check the Challenge's copy of the shared definitions
         run: python3 scripts/sync_challenge_defs.py --check
       - name: Check that the documentation's links to the code are current

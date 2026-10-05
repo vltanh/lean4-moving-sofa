@@ -8,6 +8,7 @@ lake build                                          # the three libraries, Chall
 lake env lean scripts/Audit.lean                    # axioms and dependencies
 python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
                                                     # the proofs follow the routes of Baek's proofs
+lake env lean scripts/AuditMaximizerRoute.lean      # the second proof of optimality avoids Baek's theorem
 python3 scripts/sync_challenge_defs.py --check      # the Challenge's copy of the definitions
 lake env lake comparator --config=comparator.json   # the Solution proves the Challenge
 ```
@@ -36,6 +37,14 @@ alone.
   [`docs/route_differences.tsv`](route_differences.tsv) does not record with its reason: a result
   that the paper uses without citing it, a citation made only in passing, or a departure from the
   paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
+- [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks the second proof of Baek's optimality theorem, in
+  [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean), [`Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) and [`Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) (Section 8.4 of the
+  [manuscript](paper/README.md)). It fails if a declaration of these modules uses an axiom other than the three
+  standard ones, or if, following the proofs through the whole library without stopping at numbered results, it
+  reaches Baek's Theorem 1.1.1, the results from which Baek derives the right-angle motion and the injectivity
+  condition of Baek's cap from its balance (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6,
+  Corollary 6.4.4 and Theorem 8.1.1 (2)), or a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean). Negative controls
+  check that the traversal finds these results in the first proof.
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
   import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
@@ -51,7 +60,7 @@ axioms only, and replays the proofs through Lean's kernel and the NanoDa kernel.
 ## Continuous integration and the Palomar preflight
 
 [`.github/workflows/lean_action_ci.yml`](../.github/workflows/lean_action_ci.yml) builds the project on every push and pull request, checks that the
-axiom audit imports every module, runs the audit, the route check and the check of the Challenge's definitions, and checks that the links from the documentation
+axiom audit imports every module, runs the audit, the route check, the audit of the second proof of optimality and the check of the Challenge's definitions, and checks that the links from the documentation
 to the code are current and that the Markdown tables are well formed.
 [`.github/workflows/palomar_preflight.yml`](../.github/workflows/palomar_preflight.yml), run by hand with `gh workflow run palomar_preflight.yml --ref main`,
 runs Palomar's complete mechanical verification of a commit without submitting it; its report, the

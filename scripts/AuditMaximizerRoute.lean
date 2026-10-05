@@ -70,29 +70,28 @@ import all MovingSofaUniqueness.Optimality
 import all MovingSofaUniqueness.Alternative
 
 /-!
-# Separate audit of the parallel maximizer-first route
+# Audit of the second proof of optimality
 
-Prepared for a later authorized verification pass; not compiled or run in this work.
-After building the required library modules, run:
+Run with `lake env lean scripts/AuditMaximizerRoute.lean` after `lake build`; CI runs it after
+`scripts/Audit.lean`.
 
-    lake env lean scripts/AuditMaximizerRoute.lean
+The modules `MovingSofaUniqueness.Maximizers`, `Optimality` and `Alternative` prove Baek's
+optimality theorem a second time, from the maximizing caps (`thm:second` of the manuscript
+`docs/paper`, Section 8.4), and assemble the uniqueness theorem from that proof. This script checks
+every declaration of the three modules, private and auxiliary ones included, and fails if one of
+them
 
-This script does not import or execute `scripts.Audit`, write the paper's route table, alter
-workflows, or change the Challenge/Solution proof route. It checks every declaration owned by
-the three new modules, not only the headline theorems.
+- depends on an axiom other than `propext`, `Classical.choice` and `Quot.sound`, or
+- reaches, through the proofs of the library's declarations, Baek's final theorem
+  (`theorem1_1_1`, `gm_area_le`), the results by which Baek derives the right-angle motion and the
+  injectivity condition of Baek's cap from its balance (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1,
+  6.3.3, 6.4.3, 6.5.6, Corollary 6.4.4 and Theorem 8.1.1 (2)), or any declaration of
+  `MovingSofaUniqueness.Main`, the module of the first proof, which uses Baek's theorem.
 
-Axiom audit: only `propext`, `Classical.choice`, and `Quot.sound` are accepted.
-Dependency audit: traverse types and proof bodies through all repository helpers and numbered
-results. Reject Baek's final global bound (`theorem1_1_1`, `gm_area_le`) and *every declaration*
-owned by the original `MovingSofaUniqueness.Main`. This excludes indirect reuse of its
-bound-dependent wrappers and final uniqueness theorem, not just literal calls to those names.
-
-The original proofs are deliberately present in this audit environment. Negative controls
-must detect their known dependencies, demonstrating that the traversal can see proof bodies.
-Their dependence on the old bound is expected and is not a failure of the original route.
-Importing both routes for this test does not make one a proof dependency of the other.
+Unlike the route traversal of `scripts/Audit.lean`, the traversal does not stop at numbered results.
+Both proofs are imported, with `import all` so that the proofs are visible; negative controls check
+that the traversal finds the known uses of the forbidden results in the first proof.
 -/
-
 open Lean Elab Command
 
 namespace MaximizerRouteAudit
@@ -116,6 +115,16 @@ meta def entryPoints : List Name :=
    ``MovingSofaUniqueness.MaximizerRoute.volume_eq_gerver_iff,
    ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal_and_unique,
    ``MovingSofaUniqueness.MaximizerRoute.isMaximal_iff_image_eq_gerver]
+
+/-- Baek's final theorem, and the results by which Baek derives the right-angle motion (step (3a))
+and the injectivity condition (step (3b)) of Baek's cap from its balance. -/
+meta def baekForbidden : List Name :=
+  [``MovingSofaOptimality.theorem1_1_1, ``MovingSofaOptimality.gm_area_le,
+   ``MovingSofaOptimality.theorem1_5_2, ``MovingSofaOptimality.theorem4_1_2,
+   ``MovingSofaOptimality.theorem4_1_4, ``MovingSofaOptimality.theorem4_2_5,
+   ``MovingSofaOptimality.theorem6_1_1, ``MovingSofaOptimality.theorem6_3_3,
+   ``MovingSofaOptimality.theorem6_4_3, ``MovingSofaOptimality.corollary6_4_4,
+   ``MovingSofaOptimality.theorem6_5_6, ``MovingSofaOptimality.theorem8_1_1_balanced]
 
 /-- Ownership rather than namespace matching includes private/generated declarations. -/
 meta def constantsIn (env : Environment) (select : Name → Bool) : NameSet := Id.run do
@@ -166,8 +175,7 @@ elab "#audit_maximizer_route" : command => do
   let library := constantsIn env isRepositoryModule
   let originals := constantsIn env (fun m => m == `MovingSofaUniqueness.Main)
   let alternatives := constantsIn env alternativeModules.contains
-  let forbidden := (originals.insert ``MovingSofaOptimality.theorem1_1_1).insert
-    ``MovingSofaOptimality.gm_area_le
+  let forbidden := baekForbidden.foldl (fun s n => s.insert n) originals
   let standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
   for m in alternativeModules do
     let owned := constantsIn env (fun n => n == m)
@@ -181,6 +189,13 @@ elab "#audit_maximizer_route" : command => do
   let oldBound := forbiddenUses env library forbidden ``MovingSofaOptimality.theorem1_1_1
   unless oldBound.contains ``MovingSofaOptimality.gm_area_le do
     throwError "negative control failed: Baek's original optimality proof body is not visible"
+  let oldSteps := forbiddenUses env library forbidden ``MovingSofaOptimality.gm_area_le
+  unless oldSteps.contains ``MovingSofaOptimality.theorem1_5_2 &&
+      oldSteps.contains ``MovingSofaOptimality.theorem8_1_1_balanced do
+    throwError "negative control failed: Baek's steps (3a) and (3b) are not visible in Baek's proof"
+  let oldAngle := forbiddenUses env library forbidden ``MovingSofaOptimality.theorem1_5_2
+  unless oldAngle.contains ``MovingSofaOptimality.theorem4_2_5 do
+    throwError "negative control failed: the proof of Baek's Theorem 1.5.2 is not visible"
   let oldWrapper := forbiddenUses env library forbidden ``MovingSofaUniqueness.area_le_gerver
   unless oldWrapper.contains ``MovingSofaOptimality.theorem1_1_1 do
     throwError "negative control failed: original uniqueness bound no longer exposes Baek's theorem"
@@ -195,7 +210,7 @@ elab "#audit_maximizer_route" : command => do
     let uses := forbiddenUses env library forbidden n
     unless uses.isEmpty do
       throwError m!"alternative declaration {n} reaches forbidden original dependencies: {uses}"
-  logInfo m!"Checked {alternatives.size} alternative declarations: standard axioms only; no dependency on Baek's final bound or the original uniqueness entry point. Negative controls passed."
+  logInfo m!"Checked {alternatives.size} declarations of the second proof: standard axioms only; no dependency on Baek's final theorem, on Baek's steps (3a) and (3b) from the balance, or on MovingSofaUniqueness.Main. Negative controls passed."
 
 end MaximizerRouteAudit
 

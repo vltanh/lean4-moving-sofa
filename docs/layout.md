@@ -17,7 +17,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
 | [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof and ChatGPT Pro's notes |
-| [`scripts/`](../scripts) | the axiom audit, the generators of two Lean files, the figures, and the documentation tools |
+| [`scripts/`](../scripts) | the axiom audits, the generators of two Lean files, the figures, and the documentation tools |
 
 ### `MovingSofaOptimality/`: Baek's paper
 
@@ -68,6 +68,16 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 | [`MovingSofaUniqueness/RegularClosed.lean`](../MovingSofaUniqueness/RegularClosed.lean) | Proposition 6: Gerver's sofa is the closure of its interior |
 | [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean) | the theorem |
 
+Three more modules give a second proof of Baek's optimality theorem, which does not use Baek's Theorem 1.1.1, and
+prove the theorem again from it (Section 8.4 of the [manuscript](paper/README.md)); their declarations are in the
+namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
+
+| Module | Content |
+| --- | --- |
+| [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean) | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap; the right-angle motion of the sofa of a maximizing cap |
+| [`MovingSofaUniqueness/Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) | Baek's optimality theorem from the maximizing caps |
+| [`MovingSofaUniqueness/Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) | the theorem again, from the second proof of optimality |
+
 ### `MovingSofaBridge/`: the bridge to formal-conjectures
 
 [Chapter 13](proof/13-bridge.md) and [Appendix A](proof/appendix-a.md) of the text:
@@ -84,6 +94,7 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 | Path | Content |
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
+| [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |

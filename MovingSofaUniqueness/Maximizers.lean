@@ -5,23 +5,24 @@ public import MovingSofaUniqueness.AngleExtension
 public import MovingSofaUniqueness.Curvature
 
 /-!
-# Maximizer-level geometry and rigidity
+# Maximizing caps: the largest sofa area at the right angle
 
-This module starts with maximality, not with equality to a previously known optimal value.
-It deliberately does not import `MovingSofaUniqueness.Main`. The primitive maximality hypothesis
-is the one accepted by the selection, curvature, and pinned-bound lemmas. The existing public
-`IsMaxCap` definition remains in `Main` and can supply these hypotheses without an import cycle.
+The first half of the second proof of Baek's optimality theorem (`thm:second` of the manuscript
+`docs/paper`), which does not use Baek's Theorem 1.1.1. For every rotation angle there is a
+maximizing cap whose cap minus niche is a monotone sofa (`exists_maximizing_cap`, Baek's Theorems
+3.5.5 and 3.5.6). A maximizing right-angle cap `K` has `|G| ≤ 𝒜(K)`, as Gerver's cap is a
+competitor; it satisfies the curvature bounds, so it lies in `𝒦^i` (`isKi_of_maximizes`), and
+`𝒜(K) ≤ 𝒬(K, B_K, D_K) ≤ 𝒬(K_G, B_G, D_G) = |G|`. So `𝒜(K) = |G|`
+(`right_angle_maximizer_value`), and the equality case makes `K` a horizontal translate of Gerver's
+cap (`right_angle_maximizer_eq_gerver`). A monotone sofa of area at least `11/5` whose cap is
+maximizing has a rotated copy that turns by a right angle (`maximizing_monotone_has_right_angle`).
 
-The order is: existence at a fixed angle; Gerver as a competitor; injectivity for every
-right-angle maximizer; the value from Baek's quadratic bound; rigidity of the equality case.
-The right-angle motion lemma applies to a specified maximizing monotone sofa of area at least
-`11/5`, not merely to one already known to have Gerver's area.
-
-Baek's library is unchanged. Its intermediate theorems are used here, but not its final global
-optimality theorem. `Rigidity` imports the upstream `Main` for the quadratic bound; this is not
-an assertion of an import-level separation. See `docs/maximizer-first/README.md`.
-
-Status: the new assembly has not been compiled or kernel-audited in this refactor.
+The declarations are in the namespace `MovingSofaUniqueness.MaximizerRoute`. The module does not
+import `MovingSofaUniqueness.Main`, whose results use Baek's theorem, and it writes maximality as
+`∀ C, IsCap C ω → sofaArea ω C ≤ sofaArea ω K` instead of `IsMaxCap`, which `Main` defines. It
+imports Baek's `MovingSofaOptimality.Main` (through `Rigidity`) for Corollary 8.5.8, which that
+module shares with Theorem 1.1.1; `scripts/AuditMaximizerRoute.lean` checks that the second proof
+does not use Theorem 1.1.1.
 -/
 
 @[expose] public section
@@ -31,8 +32,9 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness.MaximizerRoute
 
-/-- Fixed-angle maximizers exist and one is the cap of a monotone sofa. We retain this part of
-Baek's compactness construction, without using the selected cap's balancedness for geometry. -/
+/-- `fact:exists` of the manuscript `docs/paper` (Baek's Theorems 3.5.5 and 3.5.6): for every
+`ω ∈ (0, π/2]` there is a maximizing cap `K` such that `K \ 𝒩(K)` is a monotone sofa with cap `K`,
+and every moving sofa with rotation angle `ω` has area at most `|K \ 𝒩(K)|`. -/
 theorem exists_maximizing_cap {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) :
     ∃ K : Set Plane, IsCap K ω ∧ IsMonotoneSofa (K \ niche K ω) ω ∧
       capOf (K \ niche K ω) ω = K ∧
@@ -41,7 +43,7 @@ theorem exists_maximizing_cap {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2)) :
   obtain ⟨K, hK, hS, hcap, hmax⟩ := theorem3_5_6 hω
   exact ⟨K, hK.2.1, hS.1, hcap, theorem3_5_5 hK, hmax⟩
 
-/-- The lower comparison uses only that Gerver's cap is a competitor. -/
+/-- A maximizing right-angle cap has sofa area at least `|G|`: Gerver's cap is a competitor. -/
 theorem gerver_le_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Plane}
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -49,8 +51,9 @@ theorem gerver_le_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.
   have h := hmax P.cap (GerverParams.gm_isCap hP hbox)
   rwa [GerverParams.gm_sofaArea_cap hP hbox] at h
 
-/-- Every maximizing right-angle cap is in the injectivity domain. Neither its optimal value
-nor a global upper bound for moving sofas is assumed. -/
+/-- `lem:max-right` of the manuscript `docs/paper`, first part: a maximizing right-angle cap lies
+in `𝒦^i`. Its sofa area is at least `|G| > 0`, so it satisfies the curvature bounds
+(`curvature_of_maximal_positive`) and the injectivity condition (`injectivity_of_curvature`). -/
 theorem isKi_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Plane} (hK : IsCap K (π / 2))
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -64,8 +67,9 @@ theorem isKi_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox
   unfold sofaArea at hge
   linarith
 
-/-- The value of a right-angle maximizer follows from the two opposite comparisons:
-Gerver is a competitor, and `A(K) ≤ Q(x_K) ≤ Q(x_G) = |G|`. -/
+/-- `lem:max-right` of the manuscript `docs/paper`: a maximizing right-angle cap has the sofa area
+of Gerver's sofa, as `|G| ≤ 𝒜(K) ≤ 𝒬(K, B_K, D_K) ≤ 𝒬(K_G, B_G, D_G) = |G|` (Baek's Theorems
+8.2.4, 8.1.8 and 8.4.6 and Corollary 8.5.8). -/
 theorem right_angle_maximizer_value {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Plane} (hK : IsCap K (π / 2))
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -78,9 +82,9 @@ theorem right_angle_maximizer_value {P : GerverParams} (hP : P.IsSolution) (hbox
   have hGA := GerverParams.gm_sofaArea_cap hP hbox
   linarith
 
-/-- A specified right-angle maximizer is a horizontal translate of Gerver's cap, and its
-cap-minus-niche set is the same translate of Gerver's sofa. This classifies the maximizer
-without first invoking the global optimality theorem. -/
+/-- `lem:max-right` of the manuscript `docs/paper`, last part: a maximizing right-angle cap is a
+horizontal translate `K_G + (a, 0)` of Gerver's cap, and its sofa is `G + (a, 0)`, by `prop:kernel`
+and `lem:translate` of the manuscript. -/
 theorem right_angle_maximizer_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {K : Set Plane} (hK : IsCap K (π / 2))
     (hmax : ∀ C, IsCap C (π / 2) → sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
@@ -103,8 +107,10 @@ theorem right_angle_maximizer_eq_gerver {P : GerverParams}
   rw [hGset]
   exact sofa_eq_translate_of_upper_support hK hGcap a hsupp
 
-/-- The same specified maximizing monotone sofa has a right-angle motion, after rotation by
-`π/2 - ω`. Its area need only be at least `11/5`; no comparison with Gerver's area is used. -/
+/-- `lem:right-motion` of the manuscript `docs/paper`: a monotone sofa with rotation angle
+`ω ∈ [arcsec(11/5), π/2]` and area at least `11/5` whose cap is maximizing has a rotated copy, by
+`π/2 - ω`, that moves with the rotation angle `π/2`. For `ω < π/2` its cap satisfies the pinned
+bounds (`pinned_bounds_of_maximal_positive`). -/
 theorem maximizing_monotone_has_right_angle {S : Set Plane} {ω : ℝ}
     (hS : IsMonotoneSofa S ω) (hω : ω ∈ Icc arcsec22 (π / 2))
     (harea : (2.2 : ℝ) ≤ area S)

@@ -56,9 +56,12 @@ import all MovingSofaOptimality.Optimality.Domain
 import all MovingSofaOptimality.Optimality.UpperBound
 import all MovingSofaOptimality.Optimality.Variation
 import all MovingSofaOptimality.Sofa.Defs
+import all MovingSofaUniqueness.Alternative
 import all MovingSofaUniqueness.AngleExtension
 import all MovingSofaUniqueness.Curvature
 import all MovingSofaUniqueness.Main
+import all MovingSofaUniqueness.Maximizers
+import all MovingSofaUniqueness.Optimality
 import all MovingSofaUniqueness.RegularClosed
 import all MovingSofaUniqueness.Rigid
 import all MovingSofaUniqueness.Rigidity
@@ -312,9 +315,9 @@ meta def paperResults : List (String × Name) :=
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
 /-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, and the refinements that the
-manuscript `docs/paper` states; and the bridge to formal-conjectures' definitions
-(`MovingSofaBridge/`). -/
+argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, the refinements that the
+manuscript `docs/paper` states, and the second proof of optimality of its Section 8.4; and the
+bridge to formal-conjectures' definitions (`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
    ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
@@ -332,6 +335,10 @@ meta def uniquenessResults : List (String × Name) :=
     ``MovingSofaUniqueness.isMaximal_iff_image_eq_gerver),
    ("Uniqueness: no rotation is needed (manuscript `cor:translate`)",
     ``MovingSofaUniqueness.translate_eq_gerver_of_volume_eq),
+   ("Uniqueness: a second proof of optimality (manuscript `thm:second`)",
+    ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal),
+   ("Uniqueness: the theorem from the second proof (manuscript `sec:second`)",
+    ``MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq),
    ("Bridge: moving sofas", ``MovingSofaBridge.isMovingSofa_iff),
    ("Bridge: the sofa constant", ``MovingSofaBridge.sofaConstant_eq),
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),

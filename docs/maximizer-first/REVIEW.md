@@ -1,5 +1,12 @@
 # Source review of the parallel maximizer-first route
 
+> **Note (5 October 2026, after the merge).** These are the review notes of pull request #5 as written before
+> the code was compiled. Since then the three modules have compiled without change, the audit has passed, and it
+> was extended to the results behind Baek's steps (3a) and (3b); `scripts/Audit.lean` now imports the three
+> modules, as CI requires, and CI runs both audits. The plan for the manuscript has moved to
+> [`paper-plan.md`](paper-plan.md) and is carried out in Section 8.4 of the manuscript. [README.md](README.md)
+> describes the current state.
+
 ## Status
 
 **Uncompiled draft.** No Lean executable, Lake build, Lean audit, Comparator,
@@ -8,7 +15,7 @@ separate audit still require elaboration and kernel/dependency checking.
 There is no claim of a successful build or successful dependency audit.
 
 The paper TeX and PDF are unchanged. The
-[paper notes](../paper/optimality-reorganization.md) now recommend a compact
+[paper notes](paper-plan.md) now recommend a compact
 side subsection backed by the separate formalization, not a rewrite of the
 main proof. [README.md](README.md) records the current architecture.
 

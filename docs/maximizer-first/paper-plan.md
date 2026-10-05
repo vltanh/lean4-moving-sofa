@@ -1,5 +1,11 @@
 # Paper integration: a parallel proof, presented in a side subsection
 
+> **Note (5 October 2026, after the merge).** This is the plan of pull request #5 for the manuscript, as written
+> before the code was compiled; it was at `docs/paper/optimality-reorganization.md`. The code has since compiled
+> without change and its audit has passed. Section 8.4 of the manuscript ("A second proof of optimality") carries
+> out the plan, with Fact 2.7 for Baek's existence of a maximizing cap, a paragraph at the end of Section 1.4, and
+> the matching changes to Section 10 and Appendices C to E. [README.md](README.md) describes the current state.
+
 **Status.** PR #5 now preserves both original formalizations. Its earlier
 changes to `MovingSofaUniqueness/Main.lean` and `scripts/Audit.lean` were
 reverted exactly. The new route is implemented in three added modules, with
