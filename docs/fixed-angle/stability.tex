@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\title{Qualitative Stability of the Unique Fixed-Angle Sofa}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Fix $0<\omega\le1$ and use the endpoint-strip normalization of \texttt{optimality-uniqueness.tex}. Let $S_\omega^*$ be its unique normalized optimum, $K_\omega^*$ its cap, and $M=1+\omega^2/2$. Hausdorff distance is taken between nonempty compact subsets of the plane.
+
+\begin{theorem}[Stability of arbitrary near-maximizers]
+Let $S_n$ be normalized feasible sofas at the fixed angle $\omega$ with $|S_n|\to M$, and let $K_n$ be their caps. Then
+\[
+ d_H(K_n,K_\omega^*)\longrightarrow0,\qquad
+ d_H(S_n,S_\omega^*)\longrightarrow0.
+\]
+No convexity or uniform boundary regularity of the sofas $S_n$ is assumed.
+\end{theorem}
+\begin{proof}
+Let $T_n$ be the same-angle monotone envelope of $S_n$. Then
+\[
+ |S_n|\le |T_n|=\mathcal A_\omega(K_n)\le M.
+\]
+Hence $\mathcal A_\omega(K_n)\to M$. The cap class is compact and its functional is upper semicontinuous, as proved in \texttt{optimality-uniqueness.tex}. Every Hausdorff limit of a subsequence of the caps is therefore a global maximizing cap. Uniqueness identifies each such limit with $K_\omega^*$, so the entire cap sequence converges to that cap.
+
+All $S_n$ lie in the fixed compact parallelogram $P_\omega$. The hyperspace of its nonempty compact subsets is Hausdorff compact; this follows, for example, by selecting successive finite-net approximations and taking a diagonal subsequence. Thus every subsequence has a further subsequence, still denoted $S_n$, converging to a nonempty compact set $S_\infty$. We show $S_\infty=S_\omega^*$ without needing to prove that $S_\infty$ is itself feasible.
+
+First $S_\infty\subset K_\omega^*$ because $S_n\subset K_n$ and the caps converge. If $z\in S_\infty\cap N_\omega(K_\omega^*)$, an interior angle witnesses two strict quarter-plane inequalities at $z$. Choose $z_n\in S_n$ with $z_n\to z$. Uniform support convergence preserves both strict inequalities at $z_n$ for all sufficiently large $n$. Also $z_n\in F_\omega$ because $S_n\subset P_\omega$. Hence $z_n\in N_\omega(K_n)$, contrary to $S_n\subset T_n=K_n\setminus N_\omega(K_n)$. Therefore
+\[
+ S_\infty\subset K_\omega^*\setminus N_\omega(K_\omega^*)=S_\omega^*.
+\]
+
+Area is upper semicontinuous under Hausdorff convergence of compact sets in a fixed bounded region. Indeed, for every $\varepsilon>0$, all sufficiently large $S_n$ lie in the closed $\varepsilon$-neighborhood of $S_\infty$. These neighborhoods decrease to $S_\infty$ as $\varepsilon\downarrow0$, so continuity of measure from above gives $\limsup|S_n|\le|S_\infty|$. Thus $|S_\infty|\ge M$. The preceding inclusion gives the reverse inequality. The limit is a closed subset of the regular-closed set $S_\omega^*$ with the same area, so the equality-recovery lemma gives $S_\infty=S_\omega^*$. Every subsequential limit is therefore the same, proving convergence of the entire sofa sequence.
+\end{proof}
+
+\begin{corollary}[A qualitative area-gap modulus]
+For every $\varepsilon>0$ there exists $\delta>0$ such that every normalized feasible sofa $S$ at this fixed angle with
+\[
+ |S|\ge M-\delta
+\]
+satisfies $d_H(S,S_\omega^*)<\varepsilon$.
+\end{corollary}
+\begin{proof}
+Otherwise choose a sequence of area deficits tending to zero while the Hausdorff distances remain at least $\varepsilon$, contradicting the theorem.
+\end{proof}
+
+\paragraph{Scope.}
+This is qualitative stability at a fixed angle. It gives no explicit rate and no uniform modulus as the angle varies. It does not extend exact uniqueness to angles above one radian. The proof uses the unrestricted value and uniqueness theorem, compactness, and strict niche witnesses, not the false assertion that $\mathcal A_1$ majorizes every near-maximizer. No CI or compilation was run.
+\end{document}
