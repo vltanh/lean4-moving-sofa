@@ -189,8 +189,10 @@ theorem nearby_niche_horizontal_localization {P : GerverParams}
         ⟨by linarith [ht.1, pi_pos], by linarith [ht.2]⟩)).2
       have he : wedgeLeftFoot P.cap t - η ≤ wedgeLeftFoot K t := by
         unfold wedgeLeftFoot
-        apply (div_le_div_iff₀ hsin hsin).2
+        apply (le_div_iff₀ hsin).2
         have hηden := mul_le_mul_of_nonneg_left hden hη.le
+        have hcanc : ((1 - supp P.cap (t + π / 2)) / sin t) * sin t =
+            1 - supp P.cap (t + π / 2) := div_mul_cancel₀ _ hsin.ne'
         nlinarith
       linarith
   · by_cases hnear : π / 2 - ρ ≤ t
