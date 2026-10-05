@@ -21,7 +21,7 @@ The following requirements define the competitors considered here:
 - the incoming and outgoing strip conditions and the selected box constraint hold;
 - when using the original finite class of Note 39, its exact-span normalization holds too.
 
-The area threshold is inactive in a small neighborhood of a selected optimizer, since its area is at least V>M>8/5. These are genuine finite-angle competitors; no full continuous motion is being inferred.
+The area threshold is inactive in a small neighborhood of a selected optimizer, since its area is at least V>=M>8/5. No strict comparison V>M is asserted. These are genuine finite-angle competitors; no full continuous motion is being inferred.
 
 **Lemma 98 (finite polyhedral charts).** A neighborhood of z_0 can be subdivided into finitely many polyhedral charts on which the above conditions are given by affine equalities and inequalities, the sampled support penalty is piecewise affine, and |E(z)| is a quadratic polynomial. Lower-dimensional charts and zero-width connections are allowed.
 
