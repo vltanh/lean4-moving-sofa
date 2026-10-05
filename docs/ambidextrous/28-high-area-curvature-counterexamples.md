@@ -1,8 +1,10 @@
 # 28. Arbitrarily high-area feasible bodies need not satisfy the curvature cap
 
-This is a new negative result about a proposed structural reduction. Full quarter turns, symmetry, aligned faces, smooth quarter supports, the contact inequality p<=q, and area arbitrarily close to M do **not** force h''+h<=1. The missing curvature theorem must use actual maximality or a valid area-improving replacement, not just feasibility and a fixed area threshold below M.
+**Subsequent result:** [Note 41](41-resolving-the-high-curvature-family.md) now proves that these bodies have area strictly below M for all sufficiently large n, using an actual feasible curvature repair. The construction and its negative conclusion below remain valid: area arbitrarily close to M does not force the curvature cap. The former unresolved area-sign question is no longer open for this family.
 
-The construction is analytic. No numerical experiment, symbolic computation, or assertion about the sign of the area difference from M is used.
+This is a negative result about a proposed structural reduction. Full quarter turns, symmetry, aligned faces, smooth quarter supports, the contact inequality p<=q, and area arbitrarily close to M do **not** force h''+h<=1. The missing curvature theorem must use actual maximality or a valid area-improving replacement, not just feasibility and a fixed area threshold below M.
+
+The construction is analytic. No numerical experiment or symbolic computation is used. The strict area comparison is supplied separately by the repair argument in Note 41, rather than inferred from convergence of areas.
 
 ## 28.1 A protected candidate interval
 
@@ -101,7 +103,7 @@ Both niches remain inside the central rectangle and separated, so exact subtract
 
 In particular, for every A_0<M all sufficiently large S_n have area above A_0 while their hull curvature exceeds one on a set of positive angular measure.
 
-## 28.5 The precise negative conclusion
+## 28.5 The precise negative conclusion and its later refinement
 
 **Theorem 60 (no suboptimal-threshold curvature reduction).** No assertion of the following form is valid for any fixed A_0<M:
 
@@ -109,6 +111,6 @@ In particular, for every A_0<M all sufficiently large S_n have area above A_0 wh
 
 The bodies S_n disprove it. Their high-frequency support perturbations are small in C^1 but not in second derivative, which is exactly the distinction the false inference misses.
 
-This note does **not** claim |S_n|>M, nor |S_n|<M: convergence alone establishes neither inequality. It is not a counterexample to candidate optimality. It proves that a missing maximizing-body theorem cannot be replaced by a high-area feasibility lemma, even very near the candidate.
+The convergence proof above alone establishes neither sign of |S_n|-M. The subsequent convex-minorant repair in [Theorem 81](41-resolving-the-high-curvature-family.md) now establishes |S_n|<M for all sufficiently large n. Thus the family remains a counterexample to the threshold-based structural inference, not to candidate optimality.
 
-Theorem 52 is unaffected because these bodies violate one of its explicit hypotheses. The global attainment result in Note 25 makes a genuinely maximality-based argument available, but does not supply that argument.
+Theorem 52 and its weak-bound extension, Theorem 65, are unaffected because the original S_n violate their curvature hypothesis. The new repair raises their support, restores that bound, and strictly increases actual area while preserving feasibility; its corner-area cost is included explicitly. It has not yet been extended to every unrestricted maximizing hull.
