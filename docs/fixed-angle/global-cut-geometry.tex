@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Uniform Cut Geometry for Every Larger-Angle Maximizer}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Throughout $1\le w<\pi/2$, and $K$ is any positive global maximizing cap. Use the active supports $p,k$, arms $f,g$, corner $\gamma$, and $c_w=\sec w-\tan w$ of the preceding notes. No symmetry of $K$ is assumed.
+
+\section{Two trace bounds for the quadratic gap}
+For $F(w)=G(0)=0$ let
+\[
+ J_w(F,G)=\frac12\int_0^w(F'^2+G'^2+FG'-GF').
+\]
+\begin{lemma}[Exact trace estimates]\label{lem:trace}
+For every such pair in $H^1$,
+\[
+ J_w(F,G)\ge\frac12\cot w\,F(0)^2,
+ \qquad J_w(F,G)\ge\frac{(F(0)+G(w))^2}{4(1-c_w)}.
+\]
+\end{lemma}
+\begin{proof}
+Complete the square as $2J_w=\int(F'^2-F^2)+\int(G'+F)^2$. The fixed-endpoint sine interpolation bounds the first integral below by $F(0)^2\cot w$, proving the first assertion.
+
+For the second, put $S=F(0)+G(w)$, $\lambda=S/[2(1-c_w)]$, and
+\[
+ F_0(t)=\lambda(1-c_w\cos t-\sin t),\qquad
+ G_0(t)=\lambda(1+c_w\sin t-\cos t).
+\]
+These have the prescribed pinned traces, endpoint sum $S$, and solve $F_0''=G_0'$, $G_0''=-F_0'$. Their free endpoint derivatives are $F_0'(0)=-\lambda$, $G_0'(w)=\lambda$. Integration by parts shows that the bilinear cross term between this pair and any difference with zero endpoint sum vanishes. Direct evaluation gives $J_w(F_0,G_0)=S^2/[4(1-c_w)]$. The remaining quadratic gap is nonnegative by the one-ended Poincare estimate already proved for $w<\pi/2$.
+\end{proof}
+
+\section{A uniform endpoint margin through the small gap in the arm bound}
+The pinned-endpoint note already gives $p(0)-1,k(w)-1\ge1/14$ for $w\ge w_0=4\arctan(1/3)$. We fill the interval below $w_0$ without a numerical optimization.
+
+\begin{lemma}[A quantitative relaxed-candidate deficit]\label{lem:trial}
+For $w=1+\delta$, $0\le\delta\le3/10$, let $K^*$ be the relaxed cap and put $r=w+c_w-1$. Its actual feasible sofa has area $M_w-C_w$, where $M_w=1+w^2/2$ and
+\[
+ 0\le C_w\le
+ \frac{(91/50+299\delta/800)\delta^5}{r-23\delta^4/80}.
+\]
+\end{lemma}
+\begin{proof}
+For this cap the arms are $f=1+t$, $g=1+w-t$ and the first curvature density is $w-t$. The sine-kernel calculation from \texttt{transition-recovery.tex} gives
+\[
+ \gamma(s)\cdot u_t-(p^*(t)-1)
+ \ge(s-\delta^2/2)\sin(t-s),\qquad s\le t.
+\]
+Reflection therefore shows that any niche area beyond the convex radial corner region occurs only in the two endpoint radial sectors with parameters $0\le s\le h=\delta^2/2$ and $w-h\le s\le w$. In the first sector,
+\[
+ r-\gamma_x(s)\le(1+w)s^2/2\le23\delta^4/80,
+ \qquad 0\le\gamma_y(s)\le ws\le13\delta^2/20.
+\]
+The niche lies in a disk of radius strictly less than one, by the all-angle feasibility proof for this relaxed cap. Thus every niche point in that sector has ordinate at most $(13\delta^2/20)/(r-23\delta^4/80)$.
+
+Its rightmost abscissa is at most the largest floor intercept $W(t)=(p^*(t)-1)/\cos t$, or the initial corner abscissa $r$. The exact intercept identity is
+\[
+ W(t)-r=\frac{\delta(1-\cos t)+\sin t-t}{\cos t}.
+\]
+For $0\le t\le13/10$, its numerator is at most $t^2[\delta/2-(1831/12000)t]$, by alternating Taylor bounds. Positivity therefore requires $t<(6000/1831)\delta<1$. On that smaller interval it is at most $\delta t^2/2-(19/120)t^3$, whose maximum is $(800/1083)\delta^3$. Also $\cos t\ge\cos1>27/50$. Hence $W(t)-r\le(7/5)\delta^3$ wherever it is positive.
+
+The excess in this endpoint sector is consequently contained in a rectangle of width $(7/5)\delta^3+(23/80)\delta^4$ and the height already bounded. The other sector is reflected and has the same bound. Their sum gives the stated inequality. Subtracting the niche from the cap is actual sofa area, since feasibility and niche containment were proved for the relaxed family independently.
+\end{proof}
+
+\begin{theorem}[Uniformly positive endpoint corner lengths]\label{thm:endpoints}
+For every global maximizing cap with $1\le w<\pi/2$,
+\[
+ \boxed{p(0)-1\ge1/14,\qquad k(w)-1\ge1/14.}
+\]
+Its whole canonical corner curve lies in the fan.
+\end{theorem}
+\begin{proof}
+Only $1\le w\le13/10$ remains to be checked, since $w_0<13/10$. Write $r_0=29/100+9\delta/20$. Alternating Taylor estimates give $29/100<c_1<3/10$ and $\cot(13/10)>1/4$. As $r'=(1-c_w^2)/2>9/20$, one has $r\ge r_0$. Also $23\delta^4/80<r_0/100$ and $91/50+299\delta/800<2$ on this interval. Lemma~\ref{lem:trial} yields
+\[
+ C_w\le\frac{200\delta^5}{99r_0}<\frac18(r_0-1/14)^2\le\frac12\cot w\,(r-1/14)^2.
+\]
+For the strict middle inequality, the function $\delta^5/[r_0(r_0-1/14)^2]$ increases on $[0,3/10]$, since its logarithmic derivative is greater than $2/\delta$. At the endpoint the required exact rational comparison is
+\[
+ 1600(3/10)^5=486/125
+ <99(17/40)(17/40-1/14)^2=16495083/3136000.
+\]
+The zero endpoint is immediate. The elementary trigonometric bounds used above follow, for example, from the alternating polynomials through degree five for sine and degree six for cosine; no decimal values are needed.
+
+For a maximizing cap let $F,G$ be its support differences from the relaxed cap. The actual feasible trial gives $J_w(F,G)\le M_w-\mathcal A_w(K)\le C_w$, because the maximizing-cap niche correction is nonnegative. If $p(0)-1\le1/14$, then $F(0)\le-(r-1/14)$, contradicting the first estimate of Lemma~\ref{lem:trace}. Reflection proves the other endpoint bound. The argument gives strict bounds in this small-angle subinterval; the stated non-strict uniform bound also covers the larger-angle result.
+
+Fan containment follows from the increasing tangent-angle argument in \texttt{pinned-endpoint-bounds.tex}: each of the two fan coordinates of $\gamma$ has its minimum at an endpoint, where it is nonnegative.
+\end{proof}
+
+\section{Uniform arm size and two separated cuts}
+\begin{lemma}[A width estimate that stays bounded as $w\uparrow\pi/2$]\label{lem:width}
+Every such maximizing cap satisfies
+\[
+ p(0)+k(w)<11/2,\qquad g(0)<11,\qquad f(w)<11.
+\]
+\end{lemma}
+\begin{proof}
+The explicit corner-rotation competitor has area at least one for $w\ge1$, so $J_w(F,G)\le M_w-1=w^2/2$. The second trace estimate gives
+\[
+ p(0)+k(w)\le2(w+c_w)+\sqrt2\,w\sqrt{1-c_w}
+ <\pi(1+1/\sqrt2)<11/2.
+\]
+Here $w+c_w$ increases to $\pi/2$. The last numerical inequality follows from $\pi<22/7$ and $1/\sqrt2<5/7$. Both endpoint supports are nonnegative since the cap contains the origin. The pinned inequalities $g(0)+c_w\le2p(0)$ and its reflection now give the other bounds.
+\end{proof}
+
+\begin{theorem}[Uniform admissible cut geometry]\label{thm:cuts}
+Let $0<a\le1/12$ and $b=w-a$. Put $A=p(a)-1$, $B=k(b)-1$ and
+\[
+ H_R=\{z:z\cdot u_a\ge A\},\qquad H_L=\{z:z\cdot v_b\ge B\}.
+\]
+Then $A,B\ge13/192>0$, and
+\[
+ \boxed{N_w(K)\cap H_R\cap H_L=\varnothing.}
+\]
+\end{theorem}
+\begin{proof}
+Convexity and $p'(0)=0$ give $p(a)\ge p(0)\cos a$. Thus $A\ge(15/14)(1-1/288)-1=13/192$. Reflection gives the same bound for $B$.
+
+Since $f'=g-r_p\le g\le g(0)<11$, one has $f(t)<1+11a<2$ on $[0,a]$. Consequently the second active curvature density satisfies $r_k\le\kappa(f)=f/2<1$ there. Reflection gives $r_p<1$ on $[b,w]$. The sine-kernel support identity therefore shows
+\[
+ \gamma(a)\cdot v_t\ge k(t)-1\quad(0\le t\le a),\qquad
+ \gamma(b)\cdot u_t\ge p(t)-1\quad(b\le t\le w).
+\]
+The initial derivatives in these identities are respectively $g(a)-1\ge0$ and $f(b)-1\ge0$ with the appropriate backward or forward orientation.
+
+Suppose $z\in H_R\cap H_L$. For $t\in[a,b]$, the corner satisfies $\gamma(t)\cdot u_a\le A$ and $\gamma(t)\cdot v_b\le B$, by its arm derivative formula. The vector $u_a+v_b$ has direction $w/2+\pi/4$, which lies strictly between $t$ and $t+\pi/2$ for every $t\in[0,w]$. It is therefore a positive linear combination of $u_t,v_t$. The two cut inequalities give $z\cdot(u_a+v_b)\ge\gamma(t)\cdot(u_a+v_b)$, so $z$ cannot lie strictly below both inner walls at that $t$.
+
+For $0<t<a$, the cut intersection implies $z\cdot v_a\ge\gamma(a)\cdot v_a$: indeed
+\[
+ v_b=-\sin(b-a)u_a+\cos(b-a)v_a,
+\]
+and $\gamma(a)\cdot v_b\le B$, while $\cos(b-a)>0$. Together with $z\cdot u_a\ge A=\gamma(a)\cdot u_a$, and
+$v_t=\sin(a-t)u_a+\cos(a-t)v_a$, this yields $z\cdot v_t\ge\gamma(a)\cdot v_t\ge k(t)-1$. Thus the earlier quarter-planes also miss $z$. Reflection handles $t>b$. No open quarter-plane defining the niche contains $z$, proving the claim.
+\end{proof}
+
+\paragraph{Scope.}
+These are uniform statements for every maximizing cap at every $1\le w<\pi/2$, not estimates only for the numerically continued candidate. The fan-containment and cut-separation arguments do not assume positivity of every interior threshold. The geometric lifting lemma must therefore be stated with exactly the hypotheses used; a corresponding strengthened version is supplied separately. No CI or compilation was run.
+\end{document}
