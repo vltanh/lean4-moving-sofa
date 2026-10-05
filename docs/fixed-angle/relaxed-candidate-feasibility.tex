@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Feasibility of the Relaxed-Cap Sofa Beyond the Sharp Regime}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Fix $0<\omega<\pi/2$ and use the cap $K_1$, supports $p_*,k_*$, fan $F_\omega$ and corner $\gamma$ of \texttt{beyond-one-radian.tex}. Put $c=\sec\omega-\tan\omega$, $r=\omega+c-1$, $a(t)=p_*(t)-1$, $b(t)=k_*(t)-1$, and $N_1=N_\omega(K_1)$.
+
+\begin{lemma}[Uniformly short fan intercepts]
+For every $0\le t\le\omega$,
+\[
+ 0\le W(t):=\frac{a(t)}{\cos t}<1,\qquad
+ 0\le Z(t):=\frac{b(t)}{\cos(\omega-t)}<1.
+\]
+Moreover $\|\gamma(t)\|\le\sqrt2 r<1$.
+\end{lemma}
+\begin{proof}
+The supports are at least one, so both intercepts are nonnegative. At fixed $t$, regard
+\[
+ W(\omega,t)=c(\omega)+\frac{\omega-t-1+\sin t}{\cos t}
+\]
+as a function of $\omega\in[t,\pi/2)$. Since $c'=-(1+c^2)/2\ge-1$, its derivative is $c'+\sec t\ge0$. Hence
+\[
+ W(\omega,t)\le\frac{\pi/2-t-1+\sin t}{\cos t}<1.
+\]
+For the strict inequality, the function $\pi/2-1-t+\sin t-\cos t$ increases strictly from a negative value to zero on $[0,\pi/2]$, because its derivative is $-1+\cos t+\sin t>0$ in the interior. Reflection gives the claim for $Z$.
+
+The thresholds $a,b$ lie in $[0,r]$, so $\|\gamma\|=\sqrt{a^2+b^2}\le\sqrt2 r$. The function $r$ increases to $\pi/2-1<4/7$, using $\pi<22/7$. Since $\sqrt2<3/2$, $\sqrt2r<6/7<1$.
+\end{proof}
+
+\begin{theorem}[A feasible family throughout the open angle interval]
+The set $S_1=K_1\setminus N_1$ is a compact path-connected monotone sofa of net angle $\omega$, with cap $K_1$. For each fixed $\omega<\pi/2$ there is $\rho<1$ such that
+\[
+ N_1\subset F_\omega\cap\{z:\|z\|\le\rho\}\subset K_1.
+\]
+It has area $\mathcal A_\omega(K_1)=|K_1|-|N_1|$. For $\omega\le1$ this equals $1+\omega^2/2$; for $\omega>1$ it is strictly smaller than that value.
+\end{theorem}
+\begin{proof}
+For $0<t<\omega$, the closure in the fan of the contributing quarter-plane is the quadrilateral with vertices
+\[
+ O,\quad W(t)u_0,\quad\gamma(t),\quad Z(t)v_\omega.
+\]
+This follows by intersecting its two wall lines with the fan rays; the corner lies in the fan by the preceding cap analysis. The functions $W,Z,\gamma$ extend continuously to the compact parameter interval. The lemma therefore bounds all these vertices by a single radius $\rho<1$. Convexity of the disk bounds every quadrilateral and hence the niche. Every defining active support of $K_1$ is at least one, so $K_1$ contains the unit disk sector in the fan. Thus $N_1\subset K_1$.
+
+The niche is relatively open in the fan and star-shaped about $O$, since both thresholds are positive at every interior angle and every contributing fan intersection is convex and contains $O$. Its removal from $K_1$ leaves a compact set. The unit fan arc survives. Every remaining point joins radially to this arc inside the remaining set: outward motion cannot enter a star-shaped removed set, while inward motion from norm at least one misses the niche altogether. The radial segment lies in the cap by convexity. The arc joins these paths, proving path-connectedness.
+
+The continuous motion is $z\mapsto R_{-t}(z-\gamma(t))$. Its two coordinates are at most one by the cap support inequalities. They cannot both be negative for interior $t$ by deletion of the niche. At $t=0$ the second coordinate belongs to $[0,1]$, and at $t=\omega$ the first belongs to $[0,1]$, giving the required endpoint strips. Each active support point has norm at least one and survives the deletion, so the resulting sofa has exactly the cap $K_1$ and equals its monotone envelope.
+
+Area subtraction is now justified by the proved niche containment. The equality and strict inequality for the two angle regimes were proved in \texttt{relaxation.tex} and \texttt{beyond-one-radian.tex}, respectively. Feasibility here must not be mistaken for optimality in the second regime.
+\end{proof}
+
+\paragraph{Status.}
+This result extends the direct feasibility proof, not the sharp value theorem. No sampled polygon areas are used as proof certificates. No CI, Lean compilation or TeX compilation was run.
+\end{document}
