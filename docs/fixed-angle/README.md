@@ -1,47 +1,73 @@
-# Fixed net rotation angle: paper-first research
+# Fixed net rotation angle: paper proofs and research record
 
-This directory starts a separate investigation of the optimal sofa with a prescribed **net rotation angle** in the usual unit-width, right-angled hallway. It does not alter the existing uniqueness manuscript or formalization.
+This directory studies the prescribed **net rotation angle** in the usual unit-width, right-angled hallway. It does not change the hallway corner angle. The original uniqueness manuscript, Lean sources, and workflows are unchanged.
 
-## Read in this order
+## Current result
 
-1. [PEM.md](PEM.md): proof-exploration memo, current results, dependency audit, and the precise remaining global hypothesis.
-2. [relaxation.tex](relaxation.tex): the strongest exact result in this first pass. It verifies feasibility of Baek's relaxed candidate for `0 < omega <= 1` radian, derives a strict quadratic gap, and proves optimality plus uniqueness in the injective monotone class.
-3. [small-angle.tex](small-angle.tex): the unrestricted small-angle expansion and uniqueness of the limiting rescaled missing corner, without an injectivity assumption.
-4. [paper.tex](paper.tex): elementary bounds for every `0 < omega < pi/2`, the zero-angle equality case, and an abstract sharp-majorant interface.
-5. [REVIEW.md](REVIEW.md): adversarial proof checks, sources, exploratory symbolic/numerical checks, and validation limits.
+For arbitrary nonempty compact connected sofas and admissible motions, including backtracking, the paper proofs establish
 
-The three `.tex` files are standalone paper sources, not additions to the main uniqueness paper. Their chronology matters: the elementary competitor in `paper.tex` is improved by `small-angle.tex`, and the explicit relaxed candidate in `relaxation.tex` gives a still stronger exact lower bound. All remain useful for separating assumptions and proof dependencies.
+**`m(omega) = 1 + omega^2/2` for `0 <= omega <= 1` radian, with a unique normalized optimizer.**
 
-## What the notes establish at paper level
+At zero angle the optimizer is the unit square. At positive angles through one radian it is the sofa obtained from Baek's relaxed cap `K_(omega,1)` by deleting its actual niche. After fixing the two upper endpoint supports to one, the optimizer is unique as a set; without a fixed initial coordinate orientation, it is unique up to congruence.
 
-Let `m(omega)` be the unrestricted supremal sofa area for the prescribed net angle.
+The full angle problem is **not** declared closed: the optimal shape and uniqueness for `1 < omega < pi/2` are still unclassified in these notes. What is proved there is stronger than failure of one proof technique: `m(omega) < 1 + omega^2/2`, and the actual relaxed-cap sofa admits a strict feasible improvement for every angle in that interval.
 
-| Scope | Result | Source |
-| --- | --- | --- |
-| Zero angle | `m(0) = 1`, attained only by a square up to translation in the fixed initial orientation | `paper.tex` |
-| `0 < omega < pi/2` | An explicit feasible lower bound and a quantitative strict upper bound below `sec(omega)` | `paper.tex` |
-| `omega -> 0+`, unrestricted | `m(omega) = 1 + omega^2/2 + o(omega^4)` | `small-angle.tex` |
-| `o(omega^4)`-near-maximizers | A unique limiting rescaled missing-corner region in symmetric-difference area | `small-angle.tex` |
-| `0 < omega <= 1`, unrestricted | A directly feasible sofa with exact area `1 + omega^2/2`, hence this is a lower bound for `m(omega)` | `relaxation.tex` |
-| `0 < omega <= 1`, relaxed cap problem | A quantitative gap and a unique normalized maximizer of Baek's `A_1` | `relaxation.tex` |
-| `0 < omega <= 1`, injective monotone class | Exact optimum `1 + omega^2/2` and a unique normalized optimizer, using Baek's explicitly stated conditional majorization | `relaxation.tex` |
+These are paper-proof drafts with explicit imported inputs, not independently refereed or Lean-verified results.
 
-The limiting missing region is
+## Start here
 
-`D_0 = { (x,y) : x >= 0, y >= 0, x+y+(x-y)^2 < 3/4 }`,
+- [optimality-uniqueness.tex](optimality-uniqueness.tex): main unrestricted theorem on `[0,1]`, cap attainment, and equality recovery of arbitrary original sofas.
+- [PEM.md](PEM.md): current proof-exploration memo, dependency audit, positive and negative results, and the remaining larger-angle problem.
+- [beyond-one-radian.tex](beyond-one-radian.tex): all-angle strict relaxation gap and proof that the sharp value regime ends exactly at one radian.
+- [redundant-angle-improvement.tex](redundant-angle-improvement.tex): an exact feasible perturbation proving that the relaxed-cap sofa itself is suboptimal above one radian.
+- [REVIEW.md](REVIEW.md): mathematical audit and limits of the validation.
 
-with area `5/24`. The spatial scale is `omega^2`, so the missing-area scale is `omega^4`. This asymptotic rigidity result is not an exact positive-angle uniqueness theorem.
+## Proof components
 
-## What is not yet proved
+| File | Content and role |
+| --- | --- |
+| [fixed-angle-curvature.tex](fixed-angle-curvature.tex) | Transfers the companion's fixed-angle selection and floating variations to curvature bounds for **every** positive maximizing cap. Explicitly rules out the two outer endpoint atoms. |
+| [arm-bootstrap.tex](arm-bootstrap.tex) | Three elementary bootstrap steps give strict arm inequalities on intervals of length at most one. |
+| [all-angle-bootstrap.tex](all-angle-bootstrap.tex) | An exact rational certificate extends the arm inequalities to every physical angle below `pi/2`. |
+| [monotone-majorization.tex](monotone-majorization.tex) | Horizontal monotonicity of the corner implies `A_omega <= A_1` without assuming fan containment. Equality recovers fan containment. |
+| [relaxation.tex](relaxation.tex) | Concrete candidate geometry, feasibility and exact area through one radian, and the original strict quadratic gap. Its restricted-class theorem is a component, now strengthened by the continuation. |
+| [relaxed-candidate-feasibility.tex](relaxed-candidate-feasibility.tex) | Direct feasibility of the cap-minus-niche family for every `0 < omega < pi/2`, without confusing feasibility with optimality. |
+| [negative-results.tex](negative-results.tex) | An explicit feasible convex quadrilateral disproves universal `A_omega <= A_1`; endpoint atoms explain why maximizing-cap structure matters. |
+| [stability.tex](stability.tex) | Qualitative Hausdorff convergence of arbitrary near-maximizers to the unique optimizer, at each fixed `0 < omega <= 1`. |
+| [checks/arm_certificate.py](checks/arm_certificate.py) | Optional standard-library exact check of the printed rational certificate, independently using integer and Fraction arithmetic. Not CI. |
 
-**The exact unrestricted maximum and unrestricted uniqueness at positive angles are not established.** In particular, the feasible area `1 + omega^2/2` must not be reported as the unrestricted optimum.
+The non-circular proof chain is:
 
-The remaining majorization target is `A_omega(K) <= A_1(K)` for the relevant global fixed-angle maximizing caps. Baek's injectivity and fan-containment condition is one sufficient route. To obtain uniqueness for arbitrary original sofas, the argument must cover every maximizing envelope and include a valid equality recovery from that envelope.
+`cap attainment -> penalized selection -> floating defects -> fixed-angle curvature -> arm bootstrap -> monotone-corner area majorization -> strict relaxation gap -> regular-closedness recovery`.
 
-A fixed-angle maximizer that also has a right-angle motion need not maximize the right-angle problem. The existing right-angle rigidity theorem cannot be used to bypass this missing step.
+The imported geometric inputs are the companion's fixed-angle cap/monotonization identities and its selection/first-variation results. The final Gerver optimality theorem and right-angle equality theorem are not inputs to the new small-angle result.
+
+## What is established, by scope
+
+| Scope | Paper result |
+| --- | --- |
+| `0 <= omega <= 1` | Exact unrestricted optimum `1 + omega^2/2` and uniqueness of the normalized sofa. |
+| Fixed `0 < omega <= 1` | Every normalized near-maximizing sequence converges to that sofa in Hausdorff distance. No explicit rate is asserted. |
+| Every `0 < omega < pi/2` | Every positive global maximizing cap satisfies the corner monotonicity and `A_omega <= A_1`. |
+| Every `0 < omega < pi/2` | Baek's `A_1` has a unique normalized maximizing cap, by a strict quadratic gap and a one-ended Poincare inequality. |
+| `1 < omega < pi/2` | The unrestricted optimum is strictly below the relaxed value `1 + omega^2/2`. |
+| `1 < omega < pi/2` | The actual relaxed-cap sofa is feasible but strictly suboptimal; a smooth support bump leaves its niche unchanged and increases area. |
+| General feasible caps | Universal `A_omega <= A_1` is false, even for a convex monotone sofa. |
+
+## Earlier independent notes
+
+[paper.tex](paper.tex) contains the zero-angle proof, elementary competitors, a quantitative strict endpoint-strip bound, and the abstract sharp-majorant interface. [small-angle.tex](small-angle.tex) gives an independent unrestricted asymptotic argument and the limiting missing-corner region
+
+`D_0 = {x,y >= 0 : x+y+(x-y)^2 < 3/4}`, with area `5/24`.
+
+The asymptotic value is superseded by the exact theorem on `[0,1]`; its geometric rescaling result remains separate. These earlier standalone notes describe their own original scope. Read this README and the PEM for the current project status.
+
+## Remaining larger-angle task
+
+The relaxed candidate cannot simply be continued past one radian. A whole early interval of its hallway constraints becomes redundant, allowing a strictly area-improving perturbation. The next exact optimization must account for the exposed niche walls and the positive correction `|N|-I(x_K)`. No convexity of that correction, new optimizer formula, or larger-angle uniqueness theorem is asserted here.
 
 ## Attribution and validation
 
-Baek's *A Conditional Upper Bound for the Moving Sofa Problem*, arXiv:2406.10725v1, already contains `A_1`, the candidate cap `K_(omega,1)`, and its relaxed value `1 + omega^2/2`. These are explicitly attributed in `relaxation.tex`; the note does not claim to discover them. That note retains both hypotheses of Baek's Theorem 5.5 in its restricted-class application.
+Baek's *A Conditional Upper Bound for the Moving Sofa Problem*, arXiv:2406.10725v1, already contains the functional `A_1`, the candidate cap, and its relaxed maximum value. They are explicitly credited. The new notes supply the fixed-angle all-maximizer route, direct signed-area comparison, strict equality calculations, equality recovery, and the stated negative results.
 
-The starting repository reference is branch `paper/uniqueness-arxiv`, commit `1ade045936f32cf76572ee668ed8aa1627772bde`. The new paper proofs have not been independently refereed or formalized. TeX was not compiled. No Lean compilation, CI, workflow dispatch, or axiom audit was run. Every research commit uses `[skip ci]`; workflow files are unchanged.
+Starting reference: `paper/uniqueness-arxiv`, commit `1ade045936f32cf76572ee668ed8aa1627772bde`. No CI, workflow dispatch, Lean compilation, axiom audit, or TeX compilation was run. Every research commit uses `[skip ci]`. Local symbolic and exact-arithmetic checks are described in the review; sampled geometry is not treated as a proof certificate.
