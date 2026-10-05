@@ -1,8 +1,22 @@
 # Original sofa: numerical recovery using Baek's Q
 
-**Status:** a working numerical experiment, not a theorem, certified bound, or candidate-independent derivation of the objective. Changes are confined to this directory. No CI or Lean build was run; every research commit carries `[skip ci]`.
+**Status:** numerical experiments plus a written analytic cap-stability deduction. The numerical outputs are not certified bounds or a candidate-independent derivation of the objective. The analytic deduction has not been Lean-checked or independently reviewed. Changes are confined to this directory. No CI or Lean build was run; every research commit carries `[skip ci]`.
 
-## Result
+## Follow-up: cut/contact discovery and cap stability
+
+Start with [FOLLOWUP_RESULTS.md](FOLLOWUP_RESULTS.md) for the current results and reproduction commands. [CAP_STABILITY.md](CAP_STABILITY.md) derives
+
+```
+inf_s d_H(K, K_G + (s,0)) <= (12/5) sqrt(|G| - A(K))
+```
+
+for normalized caps in Baek's injective class Ki. This is not yet a stability theorem for arbitrary near-optimal moving sofas. The proof uses the four cap-square residuals and does not require controlling flat auxiliary-body directions.
+
+The follow-up corrects the outer cut search to min_phi sup Q_phi, runs common-fan scans, detects a geometric exposure cut 0.0391963 from the finest baseline cap whose input cut was 0.04, and records mesh-biased cut-feedback iterations. Exact cut/contact constants and an automatic ODE derivation have not been recovered. [CONTACT_FAILURES.md](CONTACT_FAILURES.md) and [SOLVER_FAILURES.md](SOLVER_FAILURES.md) preserve rejected fits and failed solves; later repairs are reported separately, including a remaining failed restart. Compact data for all successful and failed runs are in [results/followup_summary.json](results/followup_summary.json).
+
+**The current local test suite has 31 passing tests**, including 20 new contact, coercivity, identity, common-fan and feasibility-repair tests. All material below describes the original fixed-cut baseline, before this follow-up.
+
+## Baseline result
 
 A direct three-body quadratic program recovers caps approaching Gerver's cap, without supplying its boundary, support values, reference area, or reflection symmetry to the solver. The cut parameter is fixed at 0.04. Gerver's analytic path is loaded **after** optimization, only by the comparison script.
 
@@ -55,7 +69,7 @@ python experiments/original_sofa/motion_validation.py /tmp/sofa64.json \
 
 The 64-grid solve used 661 variables and 157 SLSQP iterations, taking about 50 seconds in the recorded environment. This is a dense prototype, not a scalable implementation or a performance comparison with other algorithms. Solver details and small residuals may vary with numerical libraries. A `success` flag is never a mathematical certificate. Each completed run is written before starting the next one.
 
-For cut sensitivity, repeat the solver with `--intervals 16 --phi VALUE` for the values in `results/cut_sensitivity.csv`. Some tested cuts lie outside the interval used in the source's geometric reduction; those are explicitly exploratory.
+For the original cut sensitivity experiment, repeat the solver with `--intervals 16 --phi VALUE` for the values in `results/cut_sensitivity.csv`. Some tested cuts lie outside the interval used in the source's geometric reduction; those are explicitly exploratory. The follow-up common-fan scan is a different experiment and controls the changing approximation space.
 
 ## What is implemented
 
@@ -73,15 +87,15 @@ area(K) + J(left tail of D) + J(Y_D, x_K^L)
 
 Polygon areas and tail arc areas are quadratic in the support numbers. The inner-corner term is integrated cellwise by Gauss-Legendre quadrature; its value is also checked under quadrature refinement. Linear equalities are eliminated, constant inequalities are checked and removed, and remaining inequalities are normalized. A random-objective LP supplies the initial feasible point; the LP alone uses a [-10,10] search box in reduced coordinates. The final SLSQP optimization does not use that box. The program saves original-coordinate feasibility residuals and the equality-reduced Hessian spectrum.
 
-## Limitations established by the experiments
+## Limitations established by the baseline experiments
 
 **This is not yet a certified discretization of the continuous optimization problem.** Polygonal support restrictions shrink the search space, while finitely sampled wall inequalities relax some constraints. Those effects do not have the same sign. In particular the computed maximum of Q is not automatically a continuum upper bound, and an arbitrary (K,B,D) triple does not inherit the canonical-triple area bound. Polygonal arms are only a nonsmooth analogue of the source's regularity/injectivity hypotheses. The source's cap-area condition is checked at the reported solutions, not enforced throughout the feasible region.
 
 **Finite motion sampling overestimates area.** For the fixed grid-64 cap, using 4,096, 16,384, and 65,536 motion subdivisions gives areas 2.21960023, 2.21949243, and 2.21946549. The first apparently beats Gerver only because it misses forbidden points. None is a certified lower bound. The exact within-cell sinusoidal check separately detects wall-constraint violation 8.37e-6, despite tiny residuals at imposed nodes.
 
-**The full triple is not strictly concave after removing translation.** There are many auxiliary-body null directions. The uniqueness theorem for extremal caps does not imply uniqueness or good conditioning for every variable in this discretized triple. Quadrature near tangent endpoints can also be delicate: a 12-point square audit failed on coarse meshes; 64-point quadrature resolved that diagnostic discrepancy.
+**The full triple is not strictly concave after removing translation.** There are many auxiliary-body null directions. The uniqueness theorem for extremal caps does not imply uniqueness or good conditioning for every variable in this discretized triple. Quadrature near tangent endpoints can also be delicate: a 12-point square audit failed on coarse meshes; 64-point quadrature resolved that diagnostic discrepancy. The follow-up cap-only argument avoids the auxiliary-body null directions instead of penalizing them.
 
-**The exact cut angle was not recovered.** A coarse-grid scan has its smallest tested Q at phi=0.02, not at Gerver's angle. Treating the discretized value as a rigorous upper bound and minimizing it over cuts would be unjustified. Baek's chosen objective architecture remains an input.
+**The exact cut angle was not recovered.** The original coarse-grid scan had its smallest tested Q at phi=0.02, not at Gerver's angle. Treating the discretized value as a rigorous upper bound and minimizing it over cuts would be unjustified. The follow-up common-fan scan and geometric contact analysis improve this situation without certifying exact recovery. Baek's objective architecture remains an input.
 
 ## A conservative continuous-angle construction
 
@@ -104,8 +118,8 @@ Both are 2R-Lipschitz: the unit-vector term is R-Lipschitz and so is the support
 
 This is a way to avoid treating a sampled apparent improvement as a solution. It is not an interval-certified lower bound or a new proof of optimality.
 
-## Local checks and next mathematical question
+## Baseline local checks
 
-All 11 local tests passed: parameter validation, support interpolation, independent shoelace area, analytic gradient, main quadrature refinement, Mamikon decomposition, affine concavity and null directions, multi-start feasibility, nested sampling, conservative off-grid motion checks, and rejection of infeasible validation input.
+The original 11 local tests passed: parameter validation, support interpolation, independent shoelace area, analytic gradient, main quadrature refinement, Mamikon decomposition, affine concavity and null directions, multi-start feasibility, nested sampling, conservative off-grid motion checks, and rejection of infeasible validation input. The current suite contains 31 tests; see the follow-up report above.
 
-The evidence supports practical shape recovery using the existing concave Q framework. The next substantive step is a one-sided, error-controlled discretization (including continuous wall constraints) and a cap-level error estimate. Until those exist, there is no demonstrated convergence theorem, exact recovery of Gerver's constants, or measured advantage over established sofa-search methods.
+A one-sided, error-controlled discretization and an extension of cap stability to arbitrary near-optimal sofas remain substantive next steps. There is still no demonstrated discretization convergence theorem, exact recovery of Gerver's constants, or measured advantage over established sofa-search methods.
