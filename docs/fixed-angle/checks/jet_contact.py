@@ -1,6 +1,6 @@
 """Second-order centered interval enclosures for the contact residual."""
 import math
-from interval_contact import I,AD,all_orders,down,up
+from interval_contact import I,AD,all_orders,down,up,HALF_PI
 from contact_core import events,shooting,step,flags_between
 
 class Jet(AD):
@@ -44,6 +44,8 @@ def hull(a,b):return a.hull(b)
 
 def certificate(wlo,whi,center,radii,Y,geometry=True):
     W=I(wlo,whi); wm=(wlo+whi)/2
+    if not (1 < W.lo and W.hi < HALF_PI.lo):
+        return {'ok':False,'reason':'angle-domain'}
     X=[I(down(c-r),up(c+r)) for c,r in zip(center,radii)]
     if not(0<X[0].lo and X[0].hi<=I.exact_rational(1,12).lo and X[0].hi<X[1].lo and X[1].hi<X[2].lo and X[2].hi<W.lo and X[1].hi<(I(W.lo)-I(X[0].hi)).lo):
         return {'ok':False,'reason':'ordering-box'}
