@@ -1,127 +1,109 @@
 # Ambidextrous sofa: pen-and-paper research
 
-**The unrestricted optimality and uniqueness problem is not closed.** This branch contains written arguments with self-review, not independent refereeing or Lean verification. No novelty or best-known-bound claim is made.
+**The unrestricted optimality and uniqueness proof is not closed.** This branch contains written, self-reviewed arguments, not independent refereeing or Lean verification. No novelty or best-known-bound claim is made.
 
-Start with **[Note 57: focused structural status](57-focused-structural-status.md)**, now updated through Notes 64–65, and **[Corollary 123: the sharp comparison from two support conditions](31-closed-curvature-class-theorem.md)**. Earlier ledgers remain historical snapshots.
+Start with **[Note 57: the current structural ledger](57-focused-structural-status.md)**, through Note 67 and the width-gate supplement, and **[Corollary WG4: sharp comparison from two support conditions](31-closed-curvature-class-theorem.md)**. Earlier ledgers remain historical snapshots.
 
 Research branch: `research/ambidextrous-pen-and-paper`.
 Draft PR: [#3](https://github.com/vltanh/lean4-moving-sofa/pull/3).
 Base: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`.
-All changes are Markdown in this directory. The existing manuscript, Lean sources, dependencies, and workflows are unchanged.
+All changes are Markdown in this directory. The existing uniqueness manuscript, Lean sources, dependencies, and workflows are unchanged.
 
-## Latest advance: full turns follow from the other two support conditions
+## What is still required for unrestricted closure
 
-The earlier sufficient route listed three separate structural outputs. [Note 64](64-width-gate-from-curvature-and-contact.md) shows that full-quarter endpoints follow once the curvature and contact conditions are available for a competitive body.
+It suffices to establish, for a relevant maximizing hull K in **one common unit-span normalization**,
 
-For a unit-span convex hull K with those two conditions, Theorem 119 proves
+$$
+\sigma_K=h_K+h_K''\leq d\theta
+\quad\text{on every open coordinate quarter},
+$$
+
+and, for both h_K and its reflected support function,
+
+$$
+f(t)=h(t),\quad g(t)=h(t+\pi/2),\qquad
+p=f'-g+1\leq q=g'+f-1.
+$$
+
+The first condition includes exclusion/control of all singular and atomic parts and the sharp bound on the remaining density. Neither condition has been proved for every unrestricted maximizer. A proof for one attained maximizer would identify the optimal value; a proof for every maximizer, or an equality-preserving comparison, would give exact uniqueness.
+
+The statements below reduce these obligations but do not replace them with a completed global proof.
+
+## Full turns follow from those two conditions
+
+The [width-gate supplement](64-width-gate-from-curvature-and-contact.md), Theorem WG2, proves
 
 $$
 \boxed{w_K(t)\geq(2-\sqrt2)|\cos t|+|\sin t|.}
 $$
 
-The proof uses the centrally symmetric auxiliary body
+Its centrally symmetric auxiliary body C=(K+((0,1)-K))/2 has the same widths as K. Quarter-moment bounds and the inherited contact traces put a unit-height rectangle of width 2-sqrt(2) inside C. **C is not asserted to be a feasible sofa.** No symmetry of the actual body is assumed.
 
-$$
-C=\tfrac12(K+((0,1)-K)),
-$$
+Every body of area greater than sqrt(2) already has correctly signed canonical endpoint magnitudes greater than pi/4. The displayed width is strictly greater than one from pi/4 up to, but not including, pi/2. Its outgoing unit-strip conditions therefore force both full quarter turns.
 
-whose widths equal those of K. Quarter-moment inequalities and the inherited endpoint contact conditions show that C contains a unit-height rectangle of width 2-sqrt(2). **C is not assumed feasible**, and the original hull is not assumed symmetric or to contain that rectangle.
-
-For a body with area greater than sqrt(2), the general canonical reduction already gives endpoint magnitudes greater than pi/4. The displayed width is greater than one for pi/4<=|t|<pi/2, so the outgoing unit strips force both endpoints to be pi/2.
-
-This removes an independent premise of the sharp theorem. It does not establish the two remaining support conditions for arbitrary maximizers, and it does not turn the older width-continuity-only argument into a valid proof.
-
-## Strongest sharp statement now in the branch
-
-[Corollary 123](31-closed-curvature-class-theorem.md) applies to a compact connected ambidextrous body S with arbitrary original motions. In one common unit-span normalization let K=conv(S), and assume
-
-$$
-\sigma_K=h_K+h_K''\leq d\theta
-$$
-
-on the four open coordinate quarters. For both h_K and its horizontal reflection, write
-
-$$
-f(t)=h(t),\qquad g(t)=h(t+\pi/2),
-$$
-
-and assume
-
-$$
-f'-g+1\leq g'+f-1.
-$$
-
-Then the written proof gives
+Corollary WG4 then applies the earlier sharp adaptive-functional theorem and proves
 
 $$
 |S|\leq M=1+4Y^2+\arctan Y,
-\qquad4Y^3+3Y-1=0,\quad Y>0,
+\qquad 4Y^3+3Y-1=0,\quad Y>0,
 $$
 
-with equality exactly for bodies congruent to Romik's candidate.
+with equality exactly for bodies congruent to Romik's candidate. Full turns are no longer a third independent assumption. Non-strict curvature is allowed; symmetry, fixed switches, face alignment, ordinary velocity monotonicity, and a finite analytic arc decomposition are not assumed.
 
-Full turns are a consequence, not a third hypothesis. The curvature bound may be non-strict and supplies the quarter Sobolev regularity. The theorem does not assume symmetry, fixed contact switches, aligned faces, ordinary velocity monotonicity, or a finite analytic decomposition.
+This implication does not supply the two support conditions themselves. In particular, a partial terminal normal can be pinned yet lie inside an open quarter, so domination proved only at floating normals is not the complete required measure bound.
 
-The proof after the width gate uses the earlier exact adaptive functional, its sum-of-squares equality kernel, the weak niche-profile/no-clipping argument, and regular-closed exact-set recovery. The entire preceding chain has not been independently verified in this pass.
+## New maximizer-specific progress: fiber clearance is unnecessary for clear singular-continuous contacts
 
-## One residual singular-contact case has also been eliminated
+[Theorem 130 in Note 67](67-removing-the-fiber-clearance-hypothesis.md) proves that a maximizing hull's singular-continuous curvature gives zero mass to floating normals whose exposed outer point is strictly clear of both closed swept niches. It no longer assumes a positive surviving-fiber gap near the affected source corner.
 
-[Note 65](65-active-corners-stay-inside-the-projection.md) proves, without regularity or maximality, that a lower canonical corner of nonnegative height at an interior angle must lie strictly inside the horizontal projection of the hull. Its distances from the left and right endpoints are at least
+The proof combines three different mechanisms rather than treating every pinch as the same case.
 
-$$
-\tan(t/2),\qquad\tan((\pi/2-t)/2),
-$$
+**Transverse corner graphs.** [Note 65](65-two-corner-pinch-measures.md) derives the second-derivative measures of the two moving graphs, including exact jump terms and the orientation of the parameter map. Their gap is nonnegative by connected feasibility. Level-set locality then bounds the positively weighted source curvature on the pinch set. Note 67 extends the comparison to charts where the required coefficient signs hold only at actual contacts.
 
-respectively. A corner at or beyond a projection endpoint is strictly below the incoming strip, so its quadrant and sufficiently small local replacements remove no strip points. Reflection gives the upper-turn case.
+**Vanishing sensitivity.** [Note 66](66-zero-sensitivity-singular-repair.md) treats source singular mass where its other contact coefficient vanishes. For a circular support replacement on a radius-r interval with central mass m(r), the retained hull gain is at least c m(r)^2r, while the uniform hallway error is e_r=o(m(r)^2r). The old-niche comparison body is connected; scaling it by 1/(1+e_r) restores the exact motions at a smaller area cost. No infeasible variation is declared cost-free.
 
-Consequently projection-endpoint source corners cannot protect clear singular curvature from the existing improvement operations. The residual singular-continuous cases from Theorem 117 reduce to outer/inner corner coincidences and actual collapsed source-corner fibers without an oblique touching affine ceiling. **These remaining cases are not proved null.** Edge atoms and the sharp density bound also remain unresolved.
+**Stationary blocking corners.** Two retained extreme-point tests show that an opposite corner coinciding with a stationary corner has velocity traces p=-1 and q=1 at an interior angle. BV level-set locality excludes source singular-continuous measure there. Countable blocker images handle terminal and jump parameters only for nonatomic source measures.
 
-## Previous structural results and their limits
+The earlier inactive-corner improvements, oblique affine-ceiling bound, and roof continuity supply the remaining cases. The new proof permits partial endpoint angles and arbitrary input curvature measures; it is not restricted to a neighborhood of the candidate.
 
-The general reductions provide common-hull canonicalization, unit-span normalization, correct turning signs, connected niche separation, a uniform bounding box, attainment, and quantitative selection of any prescribed maximizing hull.
+### What remains of singular-continuous curvature
 
-[Notes 52–55](55-slack-span-selection-and-normal-work.md) give mesh-independent finite variation estimates and an exact normal-cone equation. Only the selection penalty is known to vanish; the contact multipliers have not been shown to vanish. Bounded normal work is not substituted for zero work.
+Corollary 131 now localizes any remaining singular-continuous curvature to **outer points that themselves coincide with canonical inner corners**. That residual set has not been proved null.
 
-[Notes 56](56-atomic-improvement-away-from-obstructions.md) and [58](58-singular-curvature-away-from-obstructions.md) give genuine improvements at clear atomic and singular-continuous contacts. [Notes 59–63](63-roof-continuity-and-singular-residual.md) establish the width-one diffuse-curvature bound, classify ordinary outer/inner contact, handle inactive source corners and oblique pinches, and prove roof continuity. Note 65 removes the unnecessary projection-endpoint residual case. None of these statements asserts the complete global curvature bound.
+The previous independent source-corner pinch obstruction is removed at clear outer points. This is not a statement that every outer point is clear, nor a proof of the sharp density cap. Hidden/coincident edge atoms and pinned normals remain separate issues. Countability arguments used for singular-continuous curvature cannot discard atoms.
 
-The non-sharp unrestricted upper bound is in [Note 46](46-explicit-unrestricted-gap.md). The protected local comparison with singular inputs is in [Note 48](48-singular-protected-optimality.md). Neither places every global maximizer near the candidate.
+[Theorem 118 in Note 64](64-positive-corners-are-interior.md) also removes the projection-endpoint source-corner case: a nonnegative-height lower corner is strictly inside the horizontal projection; a corner at an endpoint lies strictly below the strip and its small changes remove no strip points.
 
-## Failed routes remain recorded
+## Earlier framework and failed routes remain relevant
 
-The fixed-switch quadratic is not an area majorant even for feasible bodies with areas tending to M. High-area feasible bodies can violate curvature domination through smooth oscillations, atoms, or singular-continuous measures. The dominated class is closed, so arbitrary smoothing cannot impose that condition while approximating a fixed violating hull.
+The branch contains common-hull canonicalization, unit-span normalization, correct-angle reductions, connected niche separation, a uniform bounding box, attainment, and quantitative selection of any prescribed maximizing hull. The finite optimality equation retains its contact normal cone; vanishing selection penalties and bounded normal work do not imply that its constraint terms vanish.
 
-Other recorded failures include signed corner area counting outside the hull, raw-partition nonconcavity, freezing the active parameter of a max-min roof, replacing visible edge length with full edge length, and deleting finite contact-normal terms just because the selection penalty vanishes.
+The exact adaptive functional and its sum-of-squares equality kernel are recorded in Notes 13–16 and their extensions. The weak niche geometry connects it to actual area on the stated support class. Exact body recovery uses regular closedness of the identified candidate, not just zero area loss.
 
-The new width argument is different from a failed earlier shortcut: it proves a quantitative bound from curvature **and** contact assumptions, uses a symmetral only for widths, and does not suppose that all admissible strip orientations form a connected set.
+The fixed-switch quadratic is not an area majorant even for actual feasible bodies with areas tending to M. High-area feasible hulls can violate curvature domination through smooth oscillations, atoms, or singular-continuous measures. The dominated class is closed, so ordinary smoothing cannot impose the missing bound while staying arbitrarily close to a fixed violating hull.
 
-## The exact remaining closure target
-
-It is sufficient to prove, for a relevant maximizing hull in one common normalization:
-
-1. curvature-measure domination on every open quarter, including the residual singular/atomic configurations and the sharp density bound;
-2. both contact-order inequalities.
-
-A result for one attained maximizer settles the value. A result for every maximizer, or an equality-preserving comparison, gives exact uniqueness. Full turns follow from these conditions by Note 64.
-
-These remain substantial geometric obligations. In particular, bounds proved only at floating normals are not automatically domination on the entire open quarters: a partial terminal direction can itself lie in an open quarter and be pinned in a variational argument. The new implication does not remove that distinction.
-
-The branch is not a completed unrestricted proof awaiting compilation.
+Other recorded failures include signed corner area counting outside the hull, raw-partition nonconcavity, freezing an active max-min parameter, replacing visible edge length by full edge length, and silently deleting connectivity/contact multipliers. The non-sharp unrestricted bound of Note 46 and the protected local theorem of Note 48 do not localize every maximizer near the candidate.
 
 ## Reading map
 
 | Notes | Contents |
 |---|---|
-| [1](01-two-motion-envelopes.md)–[24](24-current-proof-ledger.md) | Envelopes, initial reductions, sharp functional, niche geometry, restricted uniqueness, and early counterexamples. |
+| [1](01-two-motion-envelopes.md)–[24](24-current-proof-ledger.md) | Envelopes, initial reductions, sharp functional, restricted geometric theorem, and early counterexamples. |
 | [25](25-compactness-and-attainment.md)–[39](39-effective-maximizer-selection.md) | Attainment, weak curvature theorem, selection, rounding, and finite-angle error rates. |
-| [40](40-curvature-repair-by-convexification.md)–[51](51-current-proof-status.md) | Protected repairs, a non-sharp global bound, singular examples, and approximation obstructions. |
-| [52](52-uniform-support-variation-control.md)–[58](58-singular-curvature-away-from-obstructions.md) | Finite optimality constraints and general maximizer improvements at clear singular contacts. |
-| [59](59-width-level-curvature.md)–[63](63-roof-continuity-and-singular-residual.md) | Width-level measures, contact classification, oblique pinches, and roof continuity. |
-| [64](64-width-gate-from-curvature-and-contact.md) | Full turns derived from the curvature and contact hypotheses. |
-| [65](65-active-corners-stay-inside-the-projection.md) | Active-corner projection margins and removal of an unnecessary residual case. |
-| [31](31-closed-curvature-class-theorem.md), [57](57-focused-structural-status.md) | Strongest sharp corollary and current dependency/obligation ledger. |
+| [40](40-curvature-repair-by-convexification.md)–[51](51-current-proof-status.md) | Protected repairs, non-sharp global bound, singular examples, and approximation obstructions. |
+| [52](52-uniform-support-variation-control.md)–[58](58-singular-curvature-away-from-obstructions.md) | Constrained finite optimality and actual singular-curvature improvements under initial clearance assumptions. |
+| [59](59-width-level-curvature.md)–[63](63-roof-continuity-and-singular-residual.md) | Width-level measures, outer-contact classification, oblique pinches, and roof continuity. |
+| [64](64-positive-corners-are-interior.md) | Projection margins and the harmless endpoint source-corner case. |
+| [Width-gate supplement](64-width-gate-from-curvature-and-contact.md) | WG1–WG3: full turns follow from curvature and contact; WG4 in Note 31 gives the strengthened sharp corollary. |
+| [65](65-two-corner-pinch-measures.md) | Exact BV measures at two-corner pinches, including atoms. |
+| [66](66-zero-sensitivity-singular-repair.md) | Lower-order uniform-error correction at vanishing contact coefficients. |
+| [67](67-removing-the-fiber-clearance-hypothesis.md) | Stationary-corner reciprocity, the clear-contact singular theorem, and the remaining outer-corner residual. |
+| [57](57-focused-structural-status.md) | Current dependency ledger, audit, and precise remaining obligations. |
+
+Concurrent notes originally shared numerical labels. The width-gate supplement now uses WG1–WG4; the duplicate projection-corner file is a pointer preserving old links. The numbered results in Notes 64–67 use 118–131.
 
 ## Sources and execution
 
-Romik's [explicit construction](https://arxiv.org/html/1606.08111v3) identifies the candidate. Baek's [sharp-majorant approach](https://arxiv.org/abs/2411.19826) and the repository's [uniqueness manuscript](../paper/) motivate the organization. Standard measure-theory inputs are cited where used. This is not a comprehensive literature or priority review.
+Romik's [explicit construction](https://arxiv.org/html/1606.08111v3) identifies the candidate. Baek's [sharp-majorant approach](https://arxiv.org/abs/2411.19826) and the repository's [uniqueness manuscript](../paper/) motivate the organization. Standard measure and BV inputs are cited where used. This is not a comprehensive literature or priority review.
 
 No CI was requested or used. No Lean/Lake compilation, dependency installation, numerical experiment, computer algebra, or manuscript build was performed. Every research commit includes `[skip ci]`. The PR remains open and draft because unrestricted closure and independent proof review remain unfinished.
