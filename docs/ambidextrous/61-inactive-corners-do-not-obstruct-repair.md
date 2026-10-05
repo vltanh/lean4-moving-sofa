@@ -33,7 +33,7 @@ then there are a neighborhood U of x_0 and a number delta>0 such that every (x,y
 
 If the hull's lower boundary at x_0 exceeds y_0, take a nonvertical supporting line to the lower boundary there. Such a line exists at an interior projection coordinate; convexity of that boundary gives an affine lower bound attaining its value at x_0. Continuity of this line supplies the required neighborhood and margin.
 
-Otherwise some fixed lower constraint has threshold strictly above y_0 at x_0, by the definition of a supremum. At an interior angular parameter its threshold is min(R_t(x),L_t(x)), a continuous function of x. The endpoint quadrants do not contribute a positive-height obstruction above the incoming baseline in the projection interior; the fixed baseline itself can be used when it supplies the strict gap. Shrink the neighborhood and choose delta so that the chosen fixed bound remains above y_0+2delta. Every point of S satisfies that bound. QED.
+Otherwise some fixed lower constraint has threshold strictly above y_0 at x_0, by the definition of a supremum. At any angle strictly between 0 and pi/2 its threshold is min(R_t(x),L_t(x)), a continuous function of x. This includes a partial terminal angle alpha<pi/2: such a terminal constraint is not discarded. Only the axis-angle quadrants at 0 and pi/2 have no positive-height part above the incoming baseline; the baseline itself can be used when it supplies the strict gap. Shrink the neighborhood and choose delta so that the chosen fixed bound remains above y_0+2delta. Every point of S satisfies that bound. QED.
 
 The proof does not assume continuity of the entire swept envelope, and does not assume that the fiber length is positive. The fiber can be a single point strictly above the inactive corner.
 
@@ -70,9 +70,9 @@ Connectedness is not inferred just from area. The old S is retained, the horizon
 
 The second-quarter and upper-turn versions follow by exchanging the two roof families or reflecting the vertical coordinate. For an upper-turn change, strict inactivity means that the changed corner lies strictly above the old highest surviving point, not below it.
 
-## 61.4 The remaining zero-gap case is now exact
+## 61.4 Exact scope of the zero-gap observation
 
-At a possibly obstructed source angle one must have both
+When the old fiber at x_0 is collapsed, strict inactivity leaves no obstruction by the preceding proof. The remaining collapsed-fiber case has
 
 \[
 \lambda_S(x_0)=y_0
@@ -80,8 +80,8 @@ At a possibly obstructed source angle one must have both
 \max\{y:(x_0,y)\in S\}=y_0.
 \]
 
-That is, the changed corner itself is the pinching point. An unrelated inactive corner sharing the same horizontal coordinate is not an obstruction.
+That is, the changed corner itself is the pinching point. An unrelated inactive corner sharing the same horizontal coordinate is not an obstruction. Turning positivity of the fiber at one point into a uniform neighborhood gap is a separate continuity assertion; it must not be inferred solely from compactness. Note 63 supplies that assertion for these canonical envelopes.
 
-The next contact calculation treats such a pinching point when a nonparallel affine ceiling is available. Corner/corner pinches and parallel degeneracies are not assumed away.
+Note 62 treats an actual pinching point when a nonparallel affine ceiling is available. Corner/corner pinches and parallel degeneracies are not assumed away.
 
 This is a continuation of the global structural argument, not a new candidate-local result. No CI, Lean/Lake compilation, numerical experiment, or computer algebra was used.
