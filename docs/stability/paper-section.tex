@@ -1,0 +1,240 @@
+% Proposed insertion after the recovery section. NOT included by main.tex.
+% These new results are not Lean-checked. Before inclusion, revise the abstract,
+% formalization scope, and correspondence table rather than extending their
+% kernel-verification claim silently. The geometric envelope-rate extension is
+% proved separately in 03-nonconvex-recovery.md and is not included here.
+\section{Stability}\label{sec:stability}
+
+Write $M=\abs\Gs$. The equality argument has a quantitative form: the deficit
+in $\cQ$ controls the support function of the cap, modulo horizontal
+translation. We first give an explicit estimate on $\cT$, and then a
+qualitative stability theorem for arbitrary moving sofas. The latter has no
+injectivity hypothesis, but supplies no rate.
+
+\begin{theorem}[quantitative cap rigidity]\label{thm:stability-cap}
+Let $\xi=(K,B,D)\in\cT$, put $\Delta=h_K-h_{\KG}$ and $s=-\Delta(\pi)$.
+Then
+\begin{equation}\label{eq:stability-Q}
+  \dH\bigl(K,\KG+(s,0)\bigr)
+    \le 2\sec\varphi\,\sqrt{M-\cQ(\xi)}.
+\end{equation}
+In particular, every $K\in\Ki$ satisfies
+\begin{equation}\label{eq:stability-area}
+  \dH\bigl(K,\KG+(s,0)\bigr)
+    \le 2\sec\varphi\,\sqrt{M-\cA(K)}.
+\end{equation}
+On the parameter interval $\varphi\in[0.039,0.04]$, the constant
+$2\sec\varphi$ is less than $1001/500=2.002$.
+\end{theorem}
+
+\begin{lemma}[the pinned residual estimate]\label{lem:stability-residual}
+Let $0<\varphi<\pi/4$, $v=\pi/2$, $b=v-\varphi$ and $T=\pi-\varphi$.
+Let $f:[0,\pi]\to\R$ be absolutely continuous, with $f(v)=f(\pi)=0$.
+Define, almost everywhere on the indicated intervals,
+\begin{align*}
+ r_1(t)&=-\tan t\,f(t)-f'(t), &&0<t<\varphi,\\
+ r_2(t)&=f(t+v)-f'(t), &&\varphi<t<b,\\
+ r_3(t)&=\frac{f(T)}{\sin(T-t)}-\cot(T-t)f(t)-f'(t), &&b<t<v,\\
+ r_4(t)&=\cot t\,f(t)-f'(t), &&v<t<\pi.
+\end{align*}
+Suppose these residuals are square integrable, and let
+$R^2=\sum_{j=1}^4\norm{r_j}_{L^2}^2$. Then
+\begin{equation}\label{eq:stability-residual}
+  \norm f_\infty\le\sqrt2\sec\varphi\,R.
+\end{equation}
+The constant is sharp for this pinned residual-space inequality.
+\end{lemma}
+
+\begin{proof}
+The last residual equation and $f(v)=0$ give, for $v\le t<\pi$,
+\[
+ f(t)=-\sin t\int_v^t\frac{r_4(u)}{\sin u}\dd u.
+\]
+Cauchy--Schwarz bounds its square by
+$-\sin t\cos t\,\norm{r_4}_{L^2}^2$. This tends to zero at $\pi$, so the
+endpoint singularity is harmless. On $[b,v]$ another integrating factor gives
+\[
+ f(t)=-\frac{f(T)\cos t}{\cos\varphi}
+       +\sin(T-t)\int_t^v\frac{r_3(u)}{\sin(T-u)}\dd u.
+\]
+On $[\varphi,b]$, substitute these identities into
+$f(t)=f(b)-\int_t^b f(u+v)\dd u+\int_t^b r_2(u)\dd u$. Interchanging the
+integrals yields
+\begin{equation}\label{eq:stability-green-middle}
+ f(t)=\int_t^b r_2(u)\dd u
+     +\int_b^v\frac{r_3(u)}{\sin(T-u)}\dd u
+     +\int_v^T k_t(u)r_4(u)\dd u,
+\end{equation}
+where
+\[
+ k_t(u)=
+ \begin{cases}
+  (\sec\varphi-\sin t)/\sin u,&v\le u\le v+t,\\
+  (\sec\varphi+\cos u)/\sin u,&v+t\le u\le T.
+ \end{cases}
+\]
+All denominators in this calculation are bounded away from zero. Finally,
+on $[0,\varphi]$,
+\[
+ f(t)=\cos t\left(\frac{f(\varphi)}{\cos\varphi}
+                    +\int_t^\varphi\frac{r_1(u)}{\cos u}\dd u\right).
+\]
+
+Each displayed formula expresses evaluation at $t$ as a linear functional
+of $(r_1,r_2,r_3,r_4)$ in the direct sum of their four $L^2$ spaces. Its squared
+norm is
+\begin{equation}\label{eq:stability-diagonal}
+ D(t)=
+ \begin{cases}
+ \cos^2t\,(2\sec^2\varphi-\tan t),&0\le t\le\varphi,\\
+ \cos t\,(2\sec\varphi-\sin t),&\varphi\le t\le b,\\
+ \sin t\cos t+2\tan\varphi\cos^2t,&b\le t\le v,\\
+ -\sin t\cos t,&v\le t\le\pi.
+ \end{cases}
+\end{equation}
+Here is the middle-interval computation, which also determines the first
+interval. With $a=\sec\varphi$, the squared norm in
+\eqref{eq:stability-green-middle} is
+\[
+ (b-t)+\tan\varphi+(a-\sin t)^2\tan t
+       +\int_t^b(a-\sin w)^2\sec^2w\dd w.
+\]
+An antiderivative of the last integrand is
+$(a^2+1)\tan w-2a\sec w-w$. Substituting
+$\tan b=\cot\varphi$ and $\sec b=\csc\varphi$ gives the second line of
+\eqref{eq:stability-diagonal}; in particular
+$D(\varphi)=2-\sin\varphi\cos\varphi$. The first line follows by multiplying
+this norm by $\cos^2t\sec^2\varphi$ and adding
+$\cos^2t\int_t^\varphi\sec^2u\dd u$. On $[b,v]$, the two squared coefficient
+norms are $\tan\varphi\cos^2t$ and
+$\sin^2(T-t)(\tan\varphi-\cot(T-t))$, giving the third line.
+
+The adjacent formulas agree at their endpoints. The first is at most
+$2\sec^2\varphi$. The derivative of the second is
+$-1-2\sin t(\sec\varphi-\sin t)\le-1$; the derivative of the third is
+$\cos(2t)-4\tan\varphi\sin t\cos t\le0$, since $t\ge b>\pi/4$.
+The last is at most $1/2$. Hence $\max D=D(0)=2\sec^2\varphi$, and
+$|f(t)|^2\le D(t)R^2$ proves \eqref{eq:stability-residual}.
+
+For sharpness, take the residual tuple to be the coefficient tuple for
+evaluation at zero in these formulas. Its squared norm and the reconstructed
+value $f(0)$ both equal $D(0)$. The coefficients are bounded and piecewise
+smooth, with $r_4=0$ on $(T,\pi)$; reconstruction gives an absolutely
+continuous $f$ with the prescribed endpoint values. Equality is therefore
+attained. This does not assert sharpness within feasible cap perturbations,
+or after minimizing over translations.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:stability-cap}]
+Let $\xi_0=\xi_G$ and $\xi_1=\xi$. Write
+$\mathcal E=\frac12\sum_{j=1}^6\int(\varrho_j(\xi_1)-\varrho_j(\xi_0))^2$,
+where the six terms are those of $\cS,\cR,\cL$. The affine decomposition
+in \cref{fact:Q}\ref{fact:Q:decomp} and \eqref{eq:gap} give
+\[
+ \cQ((1-\lambda)\xi_0+\lambda\xi_1)
+ =(1-\lambda)M+\lambda\cQ(\xi_1)+\lambda(1-\lambda)\mathcal E.
+\]
+The left side is at most $M$. Dividing by $\lambda>0$ and letting
+$\lambda\downarrow0$ yields $M-\cQ(\xi_1)\ge\mathcal E$.
+
+Put $f(t)=\Delta(t)-s\cos t$. Then $f(v)=f(\pi)=0$ by the top normalization
+and the choice of $s$. Support functions are Lipschitz. The tangent-displacement
+formulas used in \cref{lem:tangent} identify the differences in the four
+cap terms with $r_1,\ldots,r_4$ of \cref{lem:stability-residual}. Translation
+cancels from these differences. The Mamikon identities supply their square
+integrability, so
+\[
+ \norm f_\infty^2
+ \le 2\sec^2\varphi\sum_{j=1}^4\norm{r_j}_{L^2}^2
+ \le4\sec^2\varphi\,\mathcal E
+ \le4\sec^2\varphi\,(M-\cQ(\xi)).
+\]
+The two auxiliary-body squares were only discarded as nonnegative; no
+strict-concavity assertion for all triple variables is needed.
+
+On the lower semicircle the cap supports are determined by the two bottom
+endpoints, so the same bound controls the full support functions. The
+support-function formula for $\dH$ gives \eqref{eq:stability-Q}. Apply it to
+the canonical triple and use $\cA(K)\le\cQ(\xi_K)$ to obtain
+\eqref{eq:stability-area}. Finally
+$\cos\varphi\ge1-\varphi^2/2\ge1249/1250$ implies
+$2\sec\varphi\le2500/1249<1001/500$.
+\end{proof}
+
+\subsection{Qualitative stability without injectivity}
+
+For nonempty compact sets, write
+$d_{\rm rig}(S,G)=\inf_{\alpha,z}\dH(S,R_\alpha G+z)$, where here $\dH$
+denotes the ordinary Hausdorff distance, not a support-function formula for
+nonconvex sets.
+
+\begin{theorem}[qualitative sofa stability]\label{thm:stability-global}
+For every $\eta>0$ there is $\varepsilon>0$ such that every moving sofa $S$
+with $\abs S\ge M-\varepsilon$ satisfies $d_{\rm rig}(S,\Gs)<\eta$.
+Consequently any sequence with $\abs{S_n}\to M$ has rigid images converging
+to $\Gs$ both in Hausdorff distance and in symmetric-difference area.
+\end{theorem}
+
+\begin{proof}
+First we obtain a uniform bound on large sofas modulo translation. If a
+compact connected set $S\subset\R\times[0,1]$ lies in its supporting hallway
+at $t\in(0,\pi/2)$, its inner corner has height at most one. Indeed, in the
+wall coordinates $a(p),b(p)$ relative to that corner, hallway membership says
+$a,b\le1$ and $\max(a,b)\ge0$; both upper values are attained. If the corner
+were above height one, the sets $\{a\ge0\}$ and $\{b\ge0\}$ would be disjoint,
+nonempty, closed subsets covering $S$, contrary to connectedness.
+
+By \cref{fact:angle}, sofas of area at least $11/5$ may be normalized into
+the horizontal strip with top support one and rotation angle
+$\omega\in[\omega_0,\pi/2]$. Since $\omega_0>\pi/4$, the preceding observation
+applies at $\pi/4$. Writing $h_1=h_S(\pi/4)$ and $h_2=h_S(3\pi/4)$, it gives
+$h_1+h_2\le2+\sqrt2$. The outer walls and the floor bound the abscissae by
+$-\sqrt2h_2\le x\le\sqrt2h_1$. Center this interval by a horizontal translation.
+Every such sofa then lies in
+\[
+ B=[-(1+\sqrt2),1+\sqrt2]\times[0,1].
+\]
+This preserves top support one, all supporting-hallway containments, and the
+endpoint width inequality $h_S(\omega)+h_S(\omega+\pi)\le1$.
+
+Suppose now $\abs{S_n}\to M$ but $d_{\rm rig}(S_n,\Gs)\ge\eta>0$. Normalize
+as above. Compactness of the space of nonempty compact subsets of $B$ gives
+a subsequence $S_n\to S$, with $S$ nonempty, compact and connected; also
+$\omega_n\to\omega\in[\omega_0,\pi/2]$ after a further subsequence.
+This is compact-hyperspace selection, not a claim that the sets are convex.
+It follows, for example, by uniform subsequential convergence of their
+bounded, $1$-Lipschitz distance functions on $B$.
+
+Supports converge uniformly, even for nonconvex compact sets. They are
+uniformly Lipschitz in angle because the sets lie in $B$. For each
+$s\in[0,1]$ put $t_n=s\omega_n$ and $t=s\omega$. Passing to the limit in the
+closed wall inequalities $a_n\le1$, $b_n\le1$, $\max(a_n,b_n)\ge0$ gives
+$S\subset L_S(t)$. Top normalization and the endpoint width bound also pass
+to the limit. Thus
+\[
+ \Phi_s(p)=R_{-s\omega}\bigl(p-\xx_S(s\omega)\bigr)
+\]
+is a continuous movement of $S$: the start lies in $H_L$, and at the end the
+first wall coordinate lies in $[0,1]$ by the width bound and the second is at
+most one. This constructs a motion of the limit rather than assuming
+compactness of the original motion paths.
+
+Area is upper semicontinuous here. For every $r>0$, eventually $S_n$ lies in
+the closed $r$-neighborhood of $S$; continuity of measure from above as
+$r\downarrow0$ gives $\abs S\ge\limsup_n\abs{S_n}=M$. Optimality gives
+$\abs S=M$, and \cref{thm:main} makes $S$ a rigid image of $\Gs$.
+Then $d_{\rm rig}(S_n,\Gs)\le\dH(S_n,S)\to0$, a contradiction.
+
+Finally choose rigid images with $S_n\to\Gs$. Their excess outside $\Gs$ is
+bounded by the area of a shrinking outer neighborhood of $\Gs$ minus $\Gs$,
+hence tends to zero. The identity
+$\abs{\Gs\setminus S_n}=M-\abs{S_n}+\abs{S_n\setminus\Gs}$ gives the same
+conclusion for the missing area. No continuity of nonconvex area is assumed.
+\end{proof}
+
+\begin{remark}
+The quantitative cap estimate does not supply an injectivity hypothesis or a
+right-angle reduction for arbitrary near-maximizers. Accordingly
+\cref{thm:stability-global} asserts no uniform power-law rate. The results of
+this proposed section have not yet been included in the Lean formalization.
+\end{remark}
