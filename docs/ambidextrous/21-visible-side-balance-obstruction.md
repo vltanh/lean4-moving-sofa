@@ -1,6 +1,6 @@
 # 21. Why the single-turn side-balance proof does not yet give the missing regularity
 
-The restricted theorem now has no face-alignment gap. The remaining task is to control endpoint angles and the regularity/curvature/contact conditions for arbitrary maximizers. This note records a concrete obstruction to importing the existing single-turn polygon balance calculation unchanged.
+The restricted theorem now has no face-alignment gap. The remaining task is to control endpoint angles and the regularity/curvature/contact conditions for arbitrary maximizers. This note records a concrete obstruction to importing the existing single-turn polygon balance calculation unchanged. The strongest subsequent geometric statement is [Theorem 52](23-sobolev-geometric-theorem.md).
 
 The source being compared is the repository's [single-turn variation section](../paper/sections/05-variations.tex). Its outer-side term is a full cap edge length. For a two-turn intersection the correct term is initially the **visible** part of that edge, and equality with the full length requires a geometric proof.
 
@@ -35,7 +35,7 @@ K=\{(x,y):-d\leq x\leq d,\quad0\leq y\leq\tfrac34+\tfrac14x\}.
 \tag{21.2}
 \]
 
-This compact convex trapezoid lies in the incoming unit strip: d<1, so its upper height is less than one and its lower height is positive. At the upper-turn dual angle -pi/4, take the frame
+This compact convex trapezoid lies in the incoming unit strip: d<1, so its sloping upper edge stays strictly between y=0 and y=1, while its bottom edge is y=0. At the upper-turn dual angle -pi/4, take the frame
 
 \[
 u=(1,-1)/\sqrt2,\qquad v=(-1,-1)/\sqrt2.
@@ -79,4 +79,4 @@ The finite example does not refute the desired regularity theorem. It records wh
 
 ## 21.4 Current stopping point of the derivation
 
-The exact adaptive maximum, its equality kernel, and the geometric theorem on R_0 are proved in writing. The unrestricted conclusion is not proved because a justified reduction of arbitrary competitive bodies or maximizers to that regular full-turn class is still missing. The missing step is now a concrete geometric/variational theorem, rather than an unspecified search for the sharp constant or for an equality argument.
+The exact adaptive maximum, its equality kernel, and the geometric theorem on the stated regular class are proved in writing; Notes 22–23 further weaken that class's assumptions. The unrestricted conclusion is not proved because a justified reduction of arbitrary competitive bodies or maximizers to that full-turn support-function class is still missing. The missing step is now a concrete geometric/variational theorem, rather than an unspecified search for the sharp constant or for an equality argument.
