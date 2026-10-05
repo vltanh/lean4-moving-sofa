@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Redundant Angles Give a Strictly Better Sofa Above One Radian}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Fix $1<\omega<\pi/2$. Use Baek's relaxed cap $K_1=K_{\omega,1}$ and its supports $p_*,k_*$ from \texttt{beyond-one-radian.tex}. Write $c=\sec\omega-\tan\omega$, $r=\omega+c-1$, $a(t)=p_*(t)-1$, $b(t)=k_*(t)-1$ and $N_1=N_\omega(K_1)$. The actual sofa $S_1=K_1\setminus N_1$ is feasible by \texttt{relaxed-candidate-feasibility.tex}.
+
+\begin{lemma}[A whole interval of redundant quarter-planes]\label{lem:redundant}
+There are $s\in(0,\omega)$ and $\delta\in(0,s)$ such that, for every $t\in(0,\delta]$, the closure in the fan of the contributing quarter-plane $Q^-_{K_1}(t)$ is contained in the open quarter-plane $Q^-_{K_1}(s)$. The containment has a uniform strictly positive margin in both defining inequalities.
+\end{lemma}
+\begin{proof}
+The intercept identity in \texttt{beyond-one-radian.tex} supplies an $s\in(0,\omega)$ with $W(s)=a(s)/\cos s>r$. Every point $(x,0)$ with $0\le x\le r$ then satisfies
+\[
+ x\cos s\le r\cos s<a(s),\qquad -x\sin s\le0<b(s).
+\]
+Thus the entire compact segment $[O,r u_0]$ lies strictly in $Q^-_{K_1}(s)$, with a uniform positive margin.
+
+For $0<t<\omega$, the closure in the fan of $Q^-_{K_1}(t)$ is the quadrilateral with vertices
+\[
+ O,\quad W(t)u_0,\quad\gamma(t),\quad Z(t)v_\omega.
+\]
+As $t\downarrow0$, these four vertices converge respectively to $O,r u_0,r u_0,O$, because $b(0)=0$, $a(0)=r$ and $\cos\omega>0$. Hence these quadrilaterals converge in Hausdorff distance to $[O,r u_0]$. For sufficiently small $\delta<s$, they all lie in the same open quarter-plane with at least half the preceding margin. This proves the assertion.
+\end{proof}
+
+\begin{theorem}[Strictly improving a feasible sofa]\label{thm:improvement}
+For every $1<\omega<\pi/2$ there exists a smooth nonnegative function $\psi$, not identically zero and supported in a compact subinterval of $(0,\omega)$, such that for every sufficiently small $\varepsilon>0$ the following holds. Increasing the active support $p_*$ to $p_*+\varepsilon\psi$, and leaving every other circular support value unchanged, produces a normalized cap $K_\varepsilon$ with
+\[
+ K_1\subset K_\varepsilon,\qquad
+ N_\omega(K_\varepsilon)=N_1,
+\]
+and a feasible compact path-connected sofa $S_\varepsilon=K_\varepsilon\setminus N_1$ satisfying
+\[
+ |S_\varepsilon|-|S_1|
+ =\varepsilon\int_0^\omega(\omega-t)\psi(t)\,dt
+  +\frac{\varepsilon^2}{2}\int_0^\omega(\psi^2-\psi'^2)\,dt>0.
+\]
+Consequently Baek's relaxed-cap sofa itself, not merely its relaxed value, is strictly suboptimal in this interval.
+\end{theorem}
+\begin{proof}
+Choose a nonzero nonnegative smooth bump $\psi$ supported in a closed interval $J\subset(0,\delta)$ from Lemma~\ref{lem:redundant}. On the first active arc the cap's curvature density is $p_*+p_*''=\omega-t>0$. Since $J$ is compactly contained in this arc, for sufficiently small $\varepsilon$ the perturbed density
+\[
+ \omega-t+\varepsilon(\psi+\psi'')
+\]
+remains nonnegative. Elsewhere the circular support function and its curvature measure are unchanged. The standard planar support-function criterion $h+h''\ge0$ therefore gives a convex body with the proposed support function. For this piecewise smooth case the criterion also follows directly by tracing $h u+h'v$: its derivative is the nonnegative curvature density times $v$, with positive atoms inserted as straight edges; the tangent turns monotonically once around a closed convex boundary. The bump vanishes near every endpoint, so all pinned supports and normal gaps remain unchanged. Thus this body is a normalized cap. Since its entire support function is pointwise at least the original one, it contains $K_1$.
+
+For angles outside $J$ the niche quarter-planes are unchanged. On $J$ their closed fan intersections vary continuously with $\varepsilon$, uniformly in $t$: the four-vertex formulas apply, and all denominators are bounded away from zero. The positive margin from Lemma~\ref{lem:redundant} therefore puts every perturbed quadrilateral inside the fixed, unchanged $Q^-_{K_1}(s)$ for small $\varepsilon$. Those perturbed quarter-planes add nothing to the niche. Conversely the original niche is contained in the new niche because the perturbed support only increases. Hence the niches are exactly equal, not merely equal to first order.
+
+The previous feasibility note gives $N_1\subset F_\omega\cap\{\|z\|\le\rho\}$ for some $\rho<1$, and $K_1$ contains the unit fan sector. Both facts remain true with $K_\varepsilon$ as the outer cap. The niche is star-shaped and relatively open in the fan. The same radial paths to the unit fan arc prove compactness and path-connectedness of its complement in $K_\varepsilon$. The perturbed canonical motion $z\mapsto R_{-t}(z-x_{K_\varepsilon}(t))$ is feasible: supports give the outer-wall inequalities and deletion of the exact niche gives the inner-wall condition. The unchanged endpoint supports give the required starting and ending strips. Thus $S_\varepsilon$ is an actual feasible sofa, not just a cap-area competitor.
+
+Since the niche is unchanged, the area improvement equals the cap-area improvement. Expanding the support-area identity yields
+\[
+ |K_\varepsilon|-|K_1|
+ =\varepsilon\int_0^\omega(p_*\psi-p_*'\psi')
+  +\frac{\varepsilon^2}{2}\int_0^\omega(\psi^2-\psi'^2).
+\]
+Integration by parts has no endpoint term because $\psi$ is compactly supported, and $p_*+p_*''=\omega-t$. The linear coefficient is strictly positive. The quadratic coefficient is finite, so the displayed expression is positive for all sufficiently small positive $\varepsilon$.
+\end{proof}
+
+\paragraph{Implications and limits.}
+For $0\le\omega\le1$ the relaxed candidate is the unique unrestricted optimizer. For every $1<\omega<\pi/2$ it admits the strict improvement above, while the unrestricted maximum remains strictly below $1+\omega^2/2$. This identifies an exact obstruction to continuing the same candidate past one radian. It does not identify the new optimizer or prove uniqueness in the remaining interval. Neither finite-angle polygon sampling nor numerical optimization is used in this negative result.
+\end{document}
