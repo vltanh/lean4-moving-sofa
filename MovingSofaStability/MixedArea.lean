@@ -81,7 +81,17 @@ theorem mixedArea_symm {K₁ K₂ : Set (ℝ × ℝ)}
       opt_g_two_pi, hs]
     ring
   rw [key h₁ h₂, key h₂ h₁]
-  congr 1 <;> congr 1 <;> funext t <;> ring
+  have e1 : (∫ t in (0 : ℝ)..(2 * π), opt_g K₂ t * opt_g K₁ t) =
+      ∫ t in (0 : ℝ)..(2 * π), opt_g K₁ t * opt_g K₂ t := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    ring
+  have e2 : (∫ t in (0 : ℝ)..(2 * π), supp K₂ t * supp K₁ t) =
+      ∫ t in (0 : ℝ)..(2 * π), supp K₁ t * supp K₂ t := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    ring
+  rw [e1, e2]
 
 /-- The area first variation on the full convex-body domain. -/
 theorem area_firstVariation_convex (K Ks : ConvexBodySet) :
