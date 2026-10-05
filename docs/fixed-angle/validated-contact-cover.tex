@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{fact}[theorem]{Computer-assisted lemma}
+\title{A Verified Continuous-Parameter Cover for the Contact Equations}
+\author{}\date{October 5, 2026 --- computer-assisted paper-proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+We give the mathematical acceptance criterion and implementation boundary for the finite contact certificates. The reference execution verifies 750 compact-angle boxes, sixteen endpoint-parameter boxes, and fifteen endpoint joining boxes. These are boxes over continuous parameter intervals, not roots sampled at finitely many angles. Every accepted box contains a root for every parameter in its interval and verifies the cap-admissibility inequalities over every coefficient interval. The files can be regenerated and replayed using only the Python standard library. The computation is not Lean-checked; the analytic reductions, implementation, and arithmetic model remain explicit parts of the proof requiring independent review.
+\end{abstract}
+
+\section{Exact residuals, not an approximate ODE integration}
+Use the reflected contact construction from \texttt{contact-equations.tex}. On a coefficient interval let $C,B,D\in\{0,1\}$ be the core, right-wall and reflected-wall indicators. The state is $(f,g,\bar p,\bar p')$, where $p=\bar p+p_0\cos t$ and initially $(f,g,\bar p,\bar p')=(1,g_0,0,0)$. The arm equations have the following elementary propagations over a length $s$:
+\[
+\begin{array}{c|c|c}
+(C,B,D)&f(s)&g(s)\\\hline
+(0,B,D)&D/2+(f_0-D/2)\cos s+(g_0-B/2)\sin s
+&B/2-(f_0-D/2)\sin s+(g_0-B/2)\cos s\\
+(1,0,0)&f_0+s&g_0-s\\
+(1,1,0)&f_0+g_0s/2-s^2/4&g_0-s\\
+(1,0,1)&f_0+s&g_0-f_0s/2-s^2/4\\
+(1,1,1)&f_0\cos(s/2)+g_0\sin(s/2)&g_0\cos(s/2)-f_0\sin(s/2).
+\end{array}
+\]
+The support is propagated by the exact sine-kernel formula
+\[
+ \bar p(t+s)=\bar p(t)\cos s+\bar p'(t)\sin s
+            +\int_0^s r_p(t+u)\sin(s-u)\,du.
+\]
+In each row $r_p$ is a constant, a polynomial of degree at most two, or a linear combination of $\sin(u/2),\cos(u/2)$. The integrals in \texttt{checks/contact\_core.py} are their elementary antiderivatives. Differentiation verifies the state equation and initial values. No discretization error from an ODE solver enters the certificate.
+
+Two arm propagations with initial $g_0=0,1$ determine the unique affine shooting coefficient making $f(w/2)=g(w/2)$. With $\bar p,\bar p'$ so obtained,
+\[
+ p_0=\frac{f(w/2)+\bar p'(w/2)-\bar p(w/2)}{\cos(w/2)+\sin(w/2)}.
+\]
+The nonsingularity on actual parameter orderings follows from \texttt{order-independent-shooting.tex}; interval evaluation also rejects any box in which a denominator enclosure contains zero.
+
+The three residuals are the two coordinates of $e(b)-\gamma(\phi)$ and the ordinate of $e(c)$. Before $\phi$, $r_p=0$, so the common horizontal translation cancels. Stable formulas used in the verifier are
+\begin{align*}
+ R_1={}&\bar p(b)\cos b-\bar p'(b)\sin b
+       +2\sin((b+\phi)/2)\sin((b-\phi)/2)+(f(\phi)-1)\sin\phi,\\
+ R_2={}&\bar p(b)\sin b+\bar p'(b)\cos b-\sin b+\sin\phi
+       -(f(\phi)-1)\cos\phi,\\
+ R_3={}&(\bar p(c)-1)\sin c+\bar p'(c)\cos c.
+\end{align*}
+At the right-angle endpoint the external parameter is $h=w-c$, the unknowns are $(\phi,b,w)$, and the last residual is instead the exact harmonic expression in \texttt{endpoint-bridge.tex}.
+
+\section{The acceptance criterion}
+Let $z\in\mathbb R^3$ be the shooting unknown, $s$ the external parameter, and $R(z,s)$ the residual. A record specifies a closed parameter interval $S$, a rectangular root box $X$ with center $z_0$, and a real matrix $Y$. Stored binary floating-point numbers are interpreted as exact dyadic numbers when defining the record. $Y$ is only a proposed preconditioner; it need not be an exact inverse of anything.
+
+\begin{lemma}[Uniform contraction certificate]\label{lem:contraction}
+Suppose interval enclosures verify, for every $s\in S$,
+\[
+ T_s(X)\subset\operatorname{int}X,\qquad
+ T_s(z)=z-YR(z,s),\qquad
+ \sup\|I-YD_zR\|_r<1,
+\]
+where $\|v\|_r=\max_i|v_i|/r_i$ for fixed positive weights. At points with multiple event orderings, the derivative bound includes all relevant one-sided analytic derivatives. Then for every $s\in S$ there is a unique root in $X$. Its position depends continuously on $s$.
+\end{lemma}
+\begin{proof}
+The residual is continuous and piecewise analytic: exchanging coincident events changes only zero-length propagations. On each straight segment its analytic pieces obey the derivative bound. Integration, with continuity at the finite event-order boundaries, gives the same Lipschitz constant for $T_s$ on all of $X$. Segments lying in an order boundary follow by approximation. Thus $T_s$ is a contraction of the complete metric space $X$ into itself and has a unique fixed point.
+
+The strict bound on $I-YD_zR$ also implies $Y$ is nonsingular: for any derivative in the enclosure the matrix $YD_zR$ is invertible by its convergent Neumann inverse. A fixed point is therefore a zero of $R$, not merely a zero after a singular projection. Continuous dependence follows from the uniform contraction bound and uniform continuity of $T_s$ on the compact parameter-box product.
+\end{proof}
+
+The checker encloses the centered Newton map, rather than evaluating a wide uncentered residual. At $s_0$ the center parameter, write $\Delta z=X-z_0$, $\Delta s=S-s_0$. Interval automatic differentiation gives the value and gradient at the center and the Hessian on $X\times S$. Taylor's theorem bounds
+\[
+ -YR(z_0,s)\in-YR_0-YR_{s,0}\Delta s
+                     -\tfrac12Y[R_{ss}](\Delta s)^2
+\]
+and
+\[
+ I-YD_zR(z,s)\in I-YD_zR_0
+ -\sum_{j=1}^3Y[R_{z z_j}]\Delta z_j-Y[R_{zs}]\Delta s.
+\]
+Their interval sum with the second enclosure applied to $\Delta z$ bounds $T_s(X)-z_0$. Strict containment is compared directly with the outward root-box endpoints. The weighted row-sum bound for the derivative is itself rounded outward. The printed diagnostic ratio is not substituted for these acceptance tests.
+
+\section{Crossings and geometric inequalities}
+The event set is
+\[
+ \{0,\phi,b,c,w-c,w-b,w-\phi,w/2,w\}.
+\]
+The compact verifier enumerates every ordering compatible with its interval bounds and the strict contact inequalities. It retains only reflected orderings: the sorted event list is the reflection of its reversal about $w/2$. Every actual ordering has such a resolution, including ties. Non-reflected permutations correspond to no open parameter region and cannot be actual flows.
+
+For every retained ordering, the formulas extend analytically to the whole box as oriented-interval formulas, even if some durations become negative away from that ordering's physical region. The interval bounds may be conservative there, but remain valid bounds for the branch. The checker takes the hull over all these branches. It never continues the first contact-order formula through a crossing without this enumeration.
+
+After root inclusion and contraction succeed, centered value/gradient enclosures bound $p_0,g_0$ and the state at every event. Each coefficient interval is divided into sixteen relative-time intervals in the compact checker and twenty in the endpoint checker. Exact propagation over an entire relative-time interval encloses every time in it. The tested inequalities are
+\[
+ 1<p_0<5/3,\qquad 0<g_0-p_0<1,\qquad r_p(t)-p(t)<0.
+\]
+The endpoint checker strengthens the second lower bound to $g_0-p_0>1/2$. Together with the certified contact ordering, these are precisely the sufficient conditions in \texttt{finite-admissibility-tests.tex}. Negative second derivatives are therefore certified on whole intervals, not merely sampled at mesh points.
+
+\section{Arithmetic and implementation boundary}
+The small interval layer assumes IEEE-754 binary64 basic arithmetic and \texttt{nextafter}; it checks the float format and subnormal behavior on startup. Each addition, multiplication, reciprocal and division is enclosed outward. Division through an interval containing zero is rejected.
+
+Verification does not trust the platform's sine or cosine values. On $|x|\le2$ it uses the Taylor polynomials of degrees 31 and 30, respectively, with rational coefficient enclosures and a remainder bounded by $2^{-65}$. The inequalities
+\[
+ 2^{33}/33!<2^{-65},\qquad 2^{32}/32!<2^{-65}
+\]
+are checked with integer arithmetic. The range on an interval is enclosed by endpoint values and any intervening critical values $\pm1$. The critical arguments are enclosed using Machin's identity and eighty terms of each alternating arctangent series. Arguments outside the certified Taylor range and nonfinite intervals cause failure.
+
+First- and second-order interval automatic differentiation uses the sum, product, reciprocal, sine and cosine chain rules. The state formulas contain only these operations. This implementation, the arithmetic model and the mathematical formulas are explicit proof dependencies; the code has not been verified by a proof-assistant kernel.
+
+\section{The verified cover}
+\begin{fact}[Executed compact-angle and endpoint certificates]\label{fact:cover}
+For every $101/100\le w\le7853/5000$, there is an exact contact root satisfying all the ordering and admissibility tests above. There is also a continuous endpoint root branch for $0\le h\le1/32$ with the properties stated in \texttt{endpoint-bridge.tex}.
+\end{fact}
+\begin{proof}[Finite verification]
+The standard-library builder produced the following compact cover. The stored boxes were then replayed from their coordinates and preconditioners without trusting the stored success flags or bounds.
+\[
+\begin{array}{c|r}
+\text{requested closed angle interval}&\text{accepted parameter boxes}\\\hline
+[1.01,1.10]&189\\
+[1.10,1.30]&157\\
+[1.30,1.50]&203\\
+[1.50,1.565]&166\\
+[1.565,1.5706]&35
+\end{array}
+\]
+The actual dyadic intervals extend outward at the requested decimal endpoints. Exact \texttt{Fraction} comparisons verify that their union covers $[101/100,7853/5000]$ without a gap. Lemma~\ref{lem:contraction} gives roots at every angle in each interval, while the geometry checks give the required strict inequalities.
+
+The endpoint calculation verifies sixteen boxes over $[j/512,(j+1)/512]$, $0\le j<16$, and fifteen additional root boxes at their shared parameters. Each joining box is verified to lie in both neighboring root boxes. Uniqueness in the two larger boxes identifies the shared root, so their continuous branches join. This establishes the stated endpoint branch.
+
+All 781 root-and-geometry records passed replay. The largest outward contraction bound was less than $0.439$, the largest upper bound on $p''$ was less than $-0.093$, and the largest checked upper bounds on $p_0$ and $g_0-p_0$ were less than $1.615$ and $0.905$, respectively. The precise output, certificate-file SHA-256 digests, and verified source blob hashes are recorded in \texttt{checks/CERTIFICATE\_REPORT.json}. The execution was performed in batches; their exact coverage and joining containment were then checked together.
+\end{proof}
+
+\section{Reproduction and scope}
+From the \texttt{checks} directory, the commands
+\begin{verbatim}
+python build_contact_cover.py --part all --output-dir certificates
+python verify_contact_cover.py certificates/*.json --report replay.json
+\end{verbatim}
+generate and replay the complete certificate. The builder uses only standard-library floating-point Newton steps to propose boxes. A proposal is accepted only after the outward interval checks succeed. A failed or incomplete run is not a certificate. The verifier can alternatively replay saved JSON records without running Newton at all, and its \texttt{--partial} mode explicitly does not assert global coverage.
+
+Different platforms may generate different proposed boxes. Byte-for-byte identity with the reference records is not a mathematical premise; satisfaction of every acceptance test and the exact coverage test is. The reference source hashes make the performed run auditable. No continuous-integration workflow, Lean compilation, or TeX compilation was used. The result is computer-assisted, not a purely symbolic hand proof or a claim of independent referee validation.
+\end{document}
