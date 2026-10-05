@@ -1,0 +1,17 @@
+{
+  "description": "Successful coarse optimization is not a continuous-motion certificate.",
+  "bend_degrees": 90,
+  "mode": "forward",
+  "corners": [[0.6523218140706271, 0.0], [0.5811306515898281, 0.271085025116502], [0.4396054988262537, 0.4894764251535123], [0.23614254437680962, 0.6325281047377511], [0.0, 0.683737636983311], [-0.23622535607875564, 0.6325300278938506], [-0.43971200784170716, 0.48948462772206885], [-0.5812513101596893, 0.271090414012045], [-0.6524361968292944, 0.0]],
+  "knots": 9,
+  "optimization_subdivisions": 4,
+  "optimization_restarts": 1,
+  "optimization_maxiter": 50,
+  "seed": 0,
+  "optimizer_success": true,
+  "observations": [
+    {"subdivisions": 4, "sampled_area": 2.2316541712516575},
+    {"subdivisions": 32, "sampled_area": 2.214886142563717},
+    {"subdivisions": 128, "sampled_area": 2.213028228128224, "inner_area": 2.187465851663766}
+  ]
+}
