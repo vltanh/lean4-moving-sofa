@@ -94,6 +94,6 @@ The penalty schedule and small angular separations are not a further obstruction
 
 An arbitrary component of a perturbed envelope may lose an entire lobe at a pinching contact. Theorem 96 controls the outer convex polygon and does not rule that out. Nor does an intersection of perturbed half-planes automatically retain every prescribed support height as an equality. The theorem needs only reconstruction of the original polygon; any later support-attainment claim must be proved independently.
 
-For the first variation itself, the threshold |S|>=8/5 is inactive at the selected maxima because |C_n|>=V>M>8/5. The geometric endpoint/connectedness restrictions are not thereby inactive.
+For the first variation itself, the threshold |S|>=8/5 is inactive at the selected maxima because |C_n|>=V>=M>8/5. The geometric endpoint/connectedness restrictions are not thereby inactive. Only V>=M is known; the strict inequality V>M is neither assumed nor established.
 
 No CI, Lean, numerical experiment, or symbolic computation was used. These are elementary pen-and-paper estimates applied to the already stated selection framework, with no claim of unrestricted optimality.
