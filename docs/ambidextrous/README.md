@@ -1,124 +1,142 @@
 # Ambidextrous sofa: pen-and-paper research
 
-**The unrestricted optimality and uniqueness proof is not closed.** The sharp adaptive-functional optimization is now proved on all normalized real H^1 profiles of horizontal width at least one, without curvature or contact assumptions. The missing step is a justified comparison with ordinary sofa area. A committed near-candidate counterexample shows why that comparison cannot be presumed from feasibility alone.
+**The unrestricted optimality and uniqueness proof is not closed.** The branch has a sharp auxiliary-functional calibration, geometric theorems on stated classes, and explicit failures of universal functional enclosure. The latest pass uses the method in PR #8 to quantify the auxiliary deficit and its ordinary-area error, and proves a direct area exclusion for one narrow-hull configuration.
 
-These are written, self-reviewed arguments, not independent refereeing or Lean verification. No novelty or best-known-bound claim is made.
-
-Start with the **[global adaptive calibration, AF3](adaptive-functional-global-calibration.md)**, the **[exact enclosure counterexample, AF4](adaptive-functional-enclosure-counterexample.md)**, and **[Note 57: the current ledger](57-focused-structural-status.md)**. The structural route and its [two-condition sharp corollary WG4](31-closed-curvature-class-theorem.md) remain available. Earlier ledgers are historical snapshots.
+These are written, self-reviewed arguments, not independently refereed or Lean-verified results. The earlier proof chain has not been independently audited in full. No novelty or best-known-bound claim is made.
 
 Research branch: `research/ambidextrous-pen-and-paper`.
 Draft PR: [#3](https://github.com/vltanh/lean4-moving-sofa/pull/3).
-Base: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`.
-All edits are Markdown in this directory. The existing uniqueness manuscript, Lean sources, dependencies, and workflows are unchanged.
+Original base: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`; that base branch may since have advanced. All edits here are Markdown. Existing manuscript files, Lean sources, dependencies, and workflows are unchanged.
 
-## The analytic maximum is now unconditional on the wide-profile domain
+## Current proof boundary
 
-Theorem AF3 assumes only that h is a real 2pi-periodic H^1 function with
-
-$$
-h(\pi/2)=1,\qquad h(3\pi/2)=0,\qquad h(0)+h(\pi)\geq1.
-$$
-
-It proves
+For a normalized actual hull support h, keep two different quantities:
 
 $$
-\boxed{\widetilde{\mathcal Q}(h)\leq
-M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0,}
+D(h)=M_A-\widetilde{\mathcal Q}(h)\geq0,
+\qquad E(S)=|S|-\widetilde{\mathcal Q}(h),
 $$
 
-with equality exactly for h=h_*+b cos(theta), the candidate profile up to horizontal translation. There is **no convexity, curvature domination, contact-order, or motion assumption** on this auxiliary profile. A genuine unit-span hull containing a body of area greater than one automatically has the required horizontal width.
-
-The proof does not incorrectly assert that the functional is jointly concave in every variable. At fixed horizontal support values it is strictly concave by a Dirichlet spectral-gap identity. The unique half-profile optimizer is symmetric. Its momenta
+so
 
 $$
-P=p+\min(p,0),\qquad Q=q+\max(q,0)
+\boxed{M_A-|S|=D(h)-E(S).}
 $$
 
-satisfy an explicit globally Lipschitz piecewise linear Hamiltonian system. The free-width boundary condition is P(0)=1/2, Q(pi/2)=-1/2. Its orbit lengths leave only the half-unit disk and the candidate as stationary profiles. The disk has smaller value, and an explicit large-width solution rules out escape to infinity. This proves the attained global maximum and its exact equality case.
+[AF3](adaptive-functional-global-calibration.md) controls D and identifies its zero set. It does not control the sign or size of E. [AF4](adaptive-functional-enclosure-counterexample.md) constructs genuine near-candidate bodies with E>0. [The narrow convex example](narrow-curvature-enclosure-counterexample.md) has positive E even with open-quarter curvature domination.
 
-The cubic for Y emerges from the orbit-time equation. The candidate's exact functional value is the one evaluated in Note 14, not an inserted numerical target. Curvature jumps at contact switches are handled through continuous momenta rather than excluded by an unjustified C^2 assumption.
+A completion must prove an ordinary-area comparison or an improving repair for arbitrary relevant maximizers, with enough equality control to recover every maximizing body. Merely proving functional stability does not supply this comparison.
 
-## The other inequality is genuinely missing
+## What PR #8 contributes
 
-Proposition AF4 considers the already proved feasible high-curvature perturbations and their protected convexification repairs. If u is a nonzero reflected first-quarter repair increment supported in J, then
+The [transfer audit](stability-pr8-transfer-audit.md) pins PR #8 at `1a97bc70782652f29c29dd4866115bd288c53e86` and reads both its paper argument and its formalization target. That branch concerns stability of **Gerver's one-turn sofa**, measured using |G|-|S|, not the Romik deficit M_A-|S|.
 
-$$
-\boxed{|S|-\widetilde{\mathcal Q}(h_{\operatorname{conv}S})
-=\int_J(u'^2-u^2)>0.}
-$$
+Its entry into a local neighborhood uses existing Gerver optimality and uniqueness. Repeating that step for Romik would be circular. The inspected `UnrestrictedStability` Lean declaration is a proposition to be proved, and the formalization policy identifies the new files as uncompiled proof source. No completed kernel-verified stability theorem is being imported here.
 
-The strict sign follows from the Dirichlet inequality because J is shorter than pi. These are actual compact connected feasible bodies, with the candidate's exact horizontal width and areas tending to M from below. The ordinary-area gain and the functional gain have been computed separately; their difference is the displayed term.
+The useful transfer is methodological: separate a nonsmooth exact energy identity from geometric enclosure, terminal-angle bookkeeping, and actual-body recovery. The following results derive ambidextrous constants independently.
 
-Thus AF3 does **not** close optimality by itself. Even the adaptive functional, not merely the older frozen-switch quadratic, can lie below the actual area near the candidate. The strict suboptimality of these examples comes from a feasible improving repair, not from omitting this positive correction.
+### Exact nonsmooth fixed-width deficit
 
-One sufficient next statement is ordinary-area enclosure for an actual global maximizer in a common incoming unit-span normalization. For uniqueness it must cover every maximizer or retain an equality-recovery argument. An alternative surrogate profile need not be convex or feasible to use AF3, but its ordinary-area comparison still needs proof. Choosing a profile with value M without establishing that comparison is not a solution.
+[Theorem SD1](stability-fixed-width-deficit.md) writes the half-functional deficit as a positive gauge energy plus two nonnegative Bregman remainders. It is valid for arbitrary H^1 competitors, including moving or degenerate contact sets.
 
-## The existing structural route now needs only two support conditions
-
-It remains sufficient to establish, for relevant maximizing hulls in **one common incoming unit-span normalization**,
+For centered profiles of half-width a, let H_a be the unique fixed-width optimizer and Phi(a) its full functional value. Then
 
 $$
-\sigma_K=h_K+h_K''\leq d\theta
-\quad\text{on the four open coordinate quarters},
+\boxed{\|h-H_a\|_\infty^2\leq
+\frac{4\pi}{7}\,[\Phi(a)-\widetilde{\mathcal Q}(h)].}
 $$
 
-and, for both h_K and its horizontal reflection,
+This is a profile estimate, not automatically a Hausdorff estimate for the original nonconvex sofa. The width deficit M_A-Phi(a) is retained separately.
+
+### A quantified narrow-width error budget
+
+[SW1–SW3](stability-width-gap-certificate.md) construct and verify the exact fixed-width optimizers on
 
 $$
-f(t)=h(t),\quad g(t)=h(t+\pi/2),\qquad
-p=f'-g+1\leq q=g'+f-1.
+1/\sqrt2<a<\tfrac23\cot(\pi/8).
 $$
 
-The [width-gate supplement](64-width-gate-from-curvature-and-contact.md) proves from these hypotheses that
+Their scalar value satisfies -Phi''>=4/3, giving M_A-Phi(a)>=(2/3)(a-a_*)². More concretely, throughout 4/5<=a<=1,
 
 $$
-w_K(t)\geq(2-\sqrt2)|\cos t|+|\sin t|.
+\boxed{\widetilde{\mathcal Q}(h)<M_A-11/768.}
 $$
 
-A centrally symmetric auxiliary body has the same widths as K and contains the comparison rectangle; it is **not assumed feasible**. For a competitive body, the two-strip estimate already puts its endpoint magnitudes above pi/4. The new width bound then forces full quarter turns. Corollary WG4 supplies the sharp area and exact body-uniqueness result from the two support conditions alone.
+Thus any hypothetical sofa of area at least M_A and normalized width 8/5<W<=2 would need **ordinary-area error E(S)>11/768**. This is a proved necessary condition, not a proved bound on E. Widths W<=8/5 are already excluded by the containing rectangle's area.
 
-Those conditions remain sufficient for the **geometric** enclosure; they are no longer assumptions of the analytic maximum AF3. They have not been proved for every unrestricted maximizer. In particular, domination only at floating normals does not control a pinned partial-terminal normal lying inside an open quarter.
+### A direct ordinary-area exclusion, independent of enclosure
 
-## General contact progress is retained
+[Theorem DF1](narrow-separated-face-area-bound.md) assumes open-quarter curvature domination and **ordered** top/bottom face intervals: r_b<=ell_t or r_t<=ell_b. It permits touching endpoints, but does not include a point face lying strictly inside the other interval.
 
-Theorem 130 in [Note 67](67-removing-the-fiber-clearance-hypothesis.md) excludes singular-continuous curvature at floating normals whose exposed point is strictly clear of both swept niches, without a positive-fiber-gap assumption. The proof combines:
+Two containing unit-circle flank estimates imply W<=2 and
 
-- the two-corner BV graph measures of [Note 65](65-two-corner-pinch-measures.md), with exact jump and orientation terms;
-- the zero-sensitivity repair of [Note 66](66-zero-sensitivity-singular-repair.md), where an explicit scaling pays for the small constraint error;
-- stationary-corner reciprocity, forcing the opposite velocity traces to p=-1,q=1, together with BV level-set locality.
+$$
+\boxed{|K|\leq\frac W2\sqrt{1-W^2/4}+\arcsin(W/2)
+\leq\pi/2<M_A.}
+$$
 
-The earlier inactive-corner repairs, affine-ceiling comparison and roof continuity supply the remaining clear-contact cases. [Note 64](64-positive-corners-are-interior.md) removes the projection-endpoint source case: such a corner lies strictly outside the incoming strip and its small changes remove no strip points.
+This bounds the whole hull, so it excludes every body inside it without any motion, full-turn, or contact-order assumption. It disposes of the geometry of the earlier narrow enclosure counterexample without pretending its false enclosure inequality is true.
 
-Corollary 131 localizes remaining singular-continuous curvature to **outer points that themselves coincide with canonical inner corners**. That set is not proved null. Hidden/coincident edge atoms and the sharp absolutely continuous density bound are also unresolved. Countability arguments for nonatomic measures do not dispose of atoms.
+### A verified error-absorption test
 
-The finite optimality equation still has contact normal-cone terms. Vanishing selection penalties and bounded normal work do not make those terms vanish.
+On the already proved reflected protected-repair family, [EA1](stability-error-absorption-check.md) uses the actual area gain and AF4's exact error to obtain
 
-## Earlier framework and failed routes
+$$
+0\leq E(S)\leq\varepsilon:=M_A-|S|,
+\qquad D(h)\leq2\varepsilon.
+$$
 
-The branch contains common-hull canonicalization, admissible unit-span normalization, correct-angle reductions, connected niche separation, a uniform bounding box, attainment, and quantitative selection of any prescribed maximizing hull. The non-sharp unrestricted bound and protected local results do not locate every maximizer near the candidate.
+Hence its actual convex hull satisfies
 
-Recorded failures include the frozen-switch majorant, the adaptive enclosure tested in AF4, signed corner area counting outside the hull, raw-partition nonconcavity, freezing a max-min active angle, replacing visible edge length by full length, and silently dropping contact multipliers. High-area feasible hulls can violate curvature domination; the dominated class is closed, so arbitrary smoothing cannot impose it while approximating a fixed violating hull.
+$$
+d_H(K,K_*)\leq\sqrt{8\pi/7}\sqrt{\varepsilon}.
+$$
 
-These negative findings remain in the history and the linked proofs. They are not counterexamples to candidate optimality; they invalidate specific attempted comparisons or reductions.
+The positive error is paid for, not dropped. This is a quantitative consequence on the existing family, not a new global neighborhood or a comparison of the original nonconvex bodies.
+
+## Strongest earlier geometric routes, retained
+
+[Theorem CW4](curvature-only-wide-hulls.md) gives sharp ordinary-area optimality and exact uniqueness for unit-span hulls with curvature dominated by dtheta and horizontal width W>=2. It does not assume contact order, full turns, or aligned faces; those geometric requirements are supplied or bypassed in its proof.
+
+[Corollary WG4](31-closed-curvature-class-theorem.md) is an alternative sufficient route using curvature domination and both contact inequalities p<=q in a common incoming unit-span normalization. Its [width gate](64-width-gate-from-curvature-and-contact.md) derives full turns from those hypotheses.
+
+The [signed-roof formula](curvature-only-signed-roof.md) computes the exact clipping-minus-negative-roof correction without contact order, once curvature domination and full turns are available. [The coupled repair identity](ordinary-area-repair-coercivity.md) has a coercive remainder but retains the geometric feasibility and contact-work hypotheses of the proposed repair.
+
+None of these results asserts curvature domination for every unrestricted maximizing hull.
+
+## Roadmap with explicit unresolved comparisons
+
+The narrow-width task is not merely to improve a coarse global constant. In the curvature-dominated class, CW4 settles W>=2 and DF1 settles ordered faces. Remaining narrow configurations can have overlapping or nested face intervals and partial endpoints. The explicit 11/768 profile gap supplies an error budget, but **no uniform ordinary-error estimate within that budget has been proved**.
+
+The global curvature task still needs a maximizing-body theorem or a genuinely area-improving comparison handling all excess curvature, including obstructed contacts and atoms. [Note 67](67-removing-the-fiber-clearance-hypothesis.md) excludes singular-continuous curvature at strictly clear exposed points; its residual outer-point/inner-corner coincidence set is not proved null. Hidden/coincident atoms and the sharp bound on absolutely continuous density remain unresolved.
+
+An area comparison for one attained maximizer would determine the optimal value. Exact uniqueness needs the result for every maximizer or an equality-preserving recovery. A bound E<=D alone proves a value bound but does not force D=0; its equality case must also be controlled. The current work does not call that step routine or completed.
+
+## Foundations, negative controls, and history
+
+The earlier notes contain common-hull canonicalization, unit-span normalization, correct-angle reduction, connected niche separation, a uniform bounding box, attainment, quantitative finite-angle completion, and selection of any prescribed maximizing hull. They do not identify that hull with the candidate. The finite selection penalties vanish; contact normal-cone terms have not been shown to vanish.
+
+Failed routes are retained: frozen switches, adaptive ordinary-area enclosure, signed area outside the hull, raw-partition nonconcavity, freezing a moving max-min contact, substituting full edges for visible edges, and silently deleting contact multipliers. High-area feasible hulls can violate curvature domination; the dominated class is closed, so smoothing cannot impose it on an arbitrarily close approximation of a fixed violating hull.
+
+The detailed previous structural inventory is [Note 57](57-focused-structural-status.md); earlier ledgers are chronological snapshots. This README records the later AF/CW supplements and the PR #8 transfer, rather than adding another numbered status note.
 
 ## Reading map
 
-| Notes | Contents |
+| Source | Role |
 |---|---|
-| [Adaptive calibration](adaptive-functional-global-calibration.md) | AF1–AF3: fixed-width strict concavity, Hamiltonian classification, and the global wide-profile maximum. |
-| [Adaptive enclosure counterexample](adaptive-functional-enclosure-counterexample.md) | AF4: the exact positive ordinary-area defect on feasible near-candidate bodies. |
-| [Width-gate supplement](64-width-gate-from-curvature-and-contact.md) | WG1–WG3; WG4 in Note 31 removes a separate full-turn assumption from the structural route. |
-| [1](01-two-motion-envelopes.md)–[24](24-current-proof-ledger.md) | Envelopes, sharp functional, restricted geometry, and early counterexamples. |
-| [25](25-compactness-and-attainment.md)–[39](39-effective-maximizer-selection.md) | Attainment, weak curvature class, selection, rounding, and finite-angle rates. |
-| [40](40-curvature-repair-by-convexification.md)–[51](51-current-proof-status.md) | Protected repairs, coarse global bound, singular examples, and approximation obstructions. |
-| [52](52-uniform-support-variation-control.md)–[63](63-roof-continuity-and-singular-residual.md) | Constrained finite variations, singular improvements, contact measures and roof continuity. |
-| [64](64-positive-corners-are-interior.md)–[67](67-removing-the-fiber-clearance-hypothesis.md) | Projection margins, two-corner pinches, zero-sensitivity repair, and the clear-contact theorem. |
-| [57](57-focused-structural-status.md) | Current ledger, dependencies, corrections and remaining geometry. |
-
-The separate AF and WG labels avoid collisions with concurrently added numbered notes. The duplicate projection-corner file is now a pointer; all original work remains in Git history.
+| [PR #8 audit](stability-pr8-transfer-audit.md) | Pinned dependencies, formalization scope, and the noncircular transfer boundary. |
+| [Fixed-width deficit](stability-fixed-width-deficit.md) | Exact nonsmooth energy, explicit profile coercivity, and ordinary-error bookkeeping. |
+| [Width certificate](stability-width-gap-certificate.md) | Exact optimizer family, scalar curvature, and the narrow-profile gap. |
+| [Ordered faces](narrow-separated-face-area-bound.md) | A direct ordinary-area exclusion using unit-circle flank bounds. |
+| [Error-absorption check](stability-error-absorption-check.md) | A valid stability consequence on the already verified repair family. |
+| [AF3](adaptive-functional-global-calibration.md) and [AF4](adaptive-functional-enclosure-counterexample.md) | Global auxiliary calibration and a concrete failure of ordinary enclosure. |
+| [CW4](curvature-only-wide-hulls.md), [signed roof](curvature-only-signed-roof.md), [narrow example](narrow-curvature-enclosure-counterexample.md) | Geometric curvature-class comparisons and their exact limitations. |
+| [Notes 1–24](24-current-proof-ledger.md) | Initial foundations, exact functional, restricted geometry and early counterexamples. |
+| [Notes 25–51](51-current-proof-status.md) | Attainment, weak curvature class, selection, repairs and coarse unrestricted bounds. |
+| [Notes 52–67](57-focused-structural-status.md) | Constrained variations, singular improvements and contact-measure analysis. |
 
 ## Sources and execution
 
-Romik's [explicit construction](https://arxiv.org/html/1606.08111v3) identifies the candidate. Baek's [sharp-majorant approach](https://arxiv.org/abs/2411.19826) and the repository's [uniqueness manuscript](../paper/) motivate the organization. Standard measure and BV inputs are cited where used. This is not a comprehensive literature or priority review.
+Romik's [explicit construction](https://arxiv.org/html/1606.08111v3) identifies the candidate. Baek's [sharp-majorant approach](https://arxiv.org/abs/2411.19826), the repository's [uniqueness manuscript](../paper/), and the pinned [PR #8 stability notes](https://github.com/vltanh/lean4-moving-sofa/tree/1a97bc70782652f29c29dd4866115bd288c53e86/docs/stability) motivate the methods. Standard measure and analytic inputs are cited where used. This is not a comprehensive literature or priority review.
 
-No CI was requested or used. No Lean/Lake compilation, dependency installation, numerical experiment, computer algebra, or manuscript build was performed. Every research commit includes `[skip ci]`. The PR remains open and draft because the unrestricted ordinary-area comparison and independent proof review remain unfinished.
+No CI was requested or used. No Lean/Lake compilation, dependency installation, numerical experiment, computer algebra, or manuscript build was performed in this continuation. Every research commit includes `[skip ci]`. No files from PR #8 were merged or cherry-picked; the transfer consists of attributed pen-and-paper arguments. Keep PR #3 open and draft while the unrestricted ordinary-area comparison and independent review remain unfinished.
