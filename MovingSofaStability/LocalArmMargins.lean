@@ -14,7 +14,7 @@ satisfy the margin, so polygonal and other nonsmooth competitors are included.
 noncomputable section
 
 open Real Set
-open MovingSofaOptimality
+open MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaStability
 
@@ -56,7 +56,8 @@ theorem core_arm_margin_near_reference {K₀ : Set Point} (h₀ : IsKi K₀)
   have hpositive : ∀ t ∈ Icc a b, 0 < min (fK K₀ t - 1) (gK K₀ t - 1) := by
     intro t ht
     have hti : t ∈ Ioo (0 : ℝ) (π / 2) := ⟨ha.trans_le ht.1, ht.2.trans_lt hb⟩
-    obtain ⟨hf, hg⟩ := opt_arm_gt_one h₀ hti
+    -- The source returns gPlus first, fMinus second.
+    obtain ⟨hg, hf⟩ := opt_arm_gt_one h₀ hti
     exact lt_min (sub_pos.mpr hf) (sub_pos.mpr hg)
   obtain ⟨m, hm, hmle⟩ := isCompact_Icc.exists_forall_le'
     (((hfc.mono hsub).sub continuousOn_const).min ((hgc.mono hsub).sub continuousOn_const))
