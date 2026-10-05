@@ -91,7 +91,7 @@ theorem greenNormSquared_has_maximum {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) :
 /-- A purely rational upper bound for the explicit cap constant in the source box. -/
 theorem cap_constant_lt_2002 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) :
     2 / cos φ ≤ 2500 / 1249 ∧ 2 / cos φ < 1001 / 500 := by
-  have hc0 := one_sub_sq_div_two_le_cos φ
+  have hc0 := one_sub_sq_div_two_le_cos (x := φ)
   have hclower : (1249 / 1250 : ℝ) ≤ cos φ := by nlinarith [hφ.1, hφ.2]
   have hc : 0 < cos φ := by linarith
   have hbound : 2 / cos φ ≤ (2500 / 1249 : ℝ) := by
