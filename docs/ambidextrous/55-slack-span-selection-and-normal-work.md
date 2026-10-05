@@ -18,7 +18,7 @@ No reorientation or subsequent restoration of span is inserted into a derivative
 
 ## 55.2 A canonical homothety gains inner-wall clearance
 
-Let C be a compact connected body whose canonical finite-angle envelope in K=conv(C) is C itself. The correctly signed angles may be partial. Choose o in B and, for 0<s<1, put
+Let C be a member of the slack-span finite class F_n^le, with |C|>A_0, whose canonical finite-angle envelope in K=conv(C) is C itself. In particular it satisfies the box and endpoint-width constraints. A selected saturated optimizer has these properties, because |C|>=V>=M>A_0. The correctly signed angles may be partial. Choose o in B and, for 0<s<1, put
 
 \[
 \lambda=1-s,\qquad K_s=o+\lambda(K-o),
@@ -27,7 +27,7 @@ Let C be a compact connected body whose canonical finite-angle envelope in K=con
 
 where E_n uses the same canonical finite angles and endpoint normals as before.
 
-**Lemma 102 (inward saturation with a clearance margin).** For all sufficiently small positive s, C_s is an admissible slack-span finite competitor, has convex hull K_s, and
+**Lemma 102 (inward saturation with a clearance margin).** Under these hypotheses, for all sufficiently small positive s, C_s is an admissible slack-span finite competitor, has convex hull K_s, and
 
 \[
 o+\lambda(C-o)\subseteq C_s,
@@ -52,9 +52,9 @@ p_s\cdot u-[h_{K_s}(u)-1]
 
 Thus p_s avoids every new open quadrant, and any displacement of norm at most s still avoids at least that inner inequality. Intersect with K_s for the outer constraints. This proves (55.2) and the first inclusion in (55.1).
 
-The smaller copy is connected and has convex hull K_s. Its horizontal projection is therefore the same interval as that of K_s. Every vertical fiber of E_n(K_s) is an interval containing a point of that smaller copy; the finite version of Theorem 26 proves that the entire E_n(K_s) is connected. Since it contains the smaller copy and lies in K_s, its convex hull is exactly K_s. All endpoint widths scale by lambda and are at most one. The box is convex and contains o, so K_s lies in B. Its area remains above A_0 for sufficiently small s when |C|>=V>M>A_0. The area bound follows by containment. QED.
+The smaller copy is connected and has convex hull K_s. Its horizontal projection is therefore the same interval as that of K_s. Every vertical fiber of E_n(K_s) is an interval containing a point of that smaller copy; the finite version of Theorem 26 proves that the entire E_n(K_s) is connected. Since it contains the smaller copy and lies in K_s, its convex hull is exactly K_s. All endpoint widths scale by lambda and are at most one. The box is convex and contains o, so K_s lies in B. Its area remains above A_0 for sufficiently small s because lambda squared times |C| tends to |C|>A_0. The area bound follows by containment. QED.
 
-Taking o in the interior of B also makes all box contacts strictly slack. The proof is independent of the mesh and does not assume a differentiable boundary or strict original neck clearance. It works for the complete canonical angular intervals too whenever they are already feasible, but it does not extend their endpoints.
+Taking o in the interior of B also makes all box contacts strictly slack. The proof is independent of the mesh and does not assume a differentiable boundary or strict original neck clearance. Its geometric containment and connectedness conclusions work for the complete canonical angular intervals too whenever they are already feasible, but it does not extend their endpoints.
 
 ## 55.3 No interior zero-height neck survives this saturation
 
