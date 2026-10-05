@@ -1,138 +1,112 @@
-# Arbitrary hallway angles: research experiment
+# Oblique hallways: exact reverse sofas and sharp asymptotics
 
-**Status:** a reproducible numerical experiment and pen-and-paper derivations, not a theorem of global optimality. No sharp arbitrary-angle version of Baek's `Q` was obtained. The numerical geometry is not interval-certified, and none of the new derivations is Lean-checked.
+**Current status:** a new mathematical proof draft, accompanied by exact-integer scalar certificates and local regression tests. It is not independently reviewed or Lean-checked. The earlier numerical experiments and unsuccessful approaches are retained. Start with [REVERSE_MAIN_THEOREM.md](REVERSE_MAIN_THEOREM.md).
 
 ## Scope and angle convention
 
-Change the **actual bend** of a sharp, unit-width hallway. Write `beta` for the change in travel direction, with `0 < beta < pi`; `beta = pi/2` is the classical hallway. The angle between the two rays pointing away from the corner is `pi-beta`. This is **not** Baek's sofa-rotation parameter `omega` inside the original right-angle hallway.
+The actual bend `beta` is the change in travel direction, with `0 < beta < pi`. The classical hallway has `beta=pi/2`. Write `epsilon=pi-beta` for the angle between the corridor rays pointing away from the junction. This is not Baek's sofa-rotation parameter inside the original right-angle hallway.
 
-The work starts from `main` at `16653ae81e0e4f52a362bafae2ad3440100ad065`. All changes are confined to `experiments/hallway_angles/`; existing paper and Lean claims are untouched. No CI, Lean build, workflow dispatch, or workflow rerun was invoked. Commits carry `[skip ci]`.
+The work starts from `main` at `16653ae81e0e4f52a362bafae2ad3440100ad065`. All changes remain under `experiments/hallway_angles/`; the existing paper, Lean libraries and workflows are untouched. No CI, workflow dispatch/rerun, or Lean build was invoked. Commits carry `[skip ci]`.
 
-## What the experiment establishes and what it does not
+## Main theorem drafts
 
-**An ingredient of rigidity generalizes.** The oblique tangent-displacement operator is
+### Exact optimality and uniqueness in the aligned reverse class
 
-$$D_\beta h(t)=\frac{h(t+\beta)-\cos\beta\,h(t)}{\sin\beta}-h'(t).$$
+For every `120 degrees <= beta < 180 degrees`, the supremum in the entire aligned reverse-turn class is the explicit elementary function `V(epsilon)` in the main theorem. Its maximizer is unique up to horizontal translation in normalized coordinates and is an explicitly constructed convex sofa. Competitors need not be convex, symmetric, smooth, of full actual strip width, or moved monotonically. These properties are not silently imposed as a numerical ansatz.
 
-It retains the Mamikon square-gap identity. On full-circle periodic `H^1` functions, its kernel consists exactly of translations, `span{cos t, sin t}`. The proof uses the Fourier multiplier and is in [THEORY.md](THEORY.md). Extending this to the actual partial contact arcs, and obtaining a sharp geometric area majorant, remain necessary. The operator alone is not an arbitrary-angle sofa solver.
+The candidate is continuously feasible for every `90 degrees < beta < 180 degrees`; the full-class upper-bound proof currently covers the smaller interval starting at 120 degrees.
 
-**There are exact analytic baselines.** The translation-only class has optimum `csc(beta)`. A fixed-inner-corner rotating family has area `beta+cot(beta)` for `beta<pi/2` and `pi/2` otherwise. These are elementary constructions used for regression tests; no novelty is claimed for them, and neither is the general rotating optimum.
+### A sharp asymptotic for the unrestricted problem
 
-**The direct path-area objective is not concave.** [NEGATIVE_RESULTS.md](NEGATIVE_RESULTS.md) gives an exact three-knot counterexample, as well as a saved numerical example where a successful optimizer overstates continuous feasibility. Affine shearing also fails to preserve rigid motion. These rule out shortcuts suggested by an overly direct transfer of the uniqueness argument.
+Let `M(beta)` be the supremum over arbitrary compact connected moving sofas, without an aligned-motion restriction. Set
 
-**Useful numerical candidates can nevertheless be found and checked more carefully.** The code performs seeded local, nonconvex optimization of piecewise-linear corner paths. It tests two endpoint rotation directions without imposing reflection symmetry in the full path search. The largest connected polygon component is retained, rather than adding disconnected pieces. The two families and the coordinate bounds are explicit restrictions, not an exhaustive classification of motions.
+    T0 = tan(sqrt(3)/2)/sqrt(3),
+    C  = 3(1+3*T0)/(4*(1+T0)) = 1.35653373245229... .
 
-## Results from the completed runs
+The draft proves
 
-The first scan used 9 corner knots, 33 optimization poses, one full-coordinate local run per angle/direction, and seed 0. The following are **floating-point inner-construction areas**, using the improved swept-wedge enclosure at 513 validation poses. They are not certified decimal lower bounds or global optimum values.
+    M(pi-epsilon) = C/epsilon + O(epsilon),  epsilon -> 0+.
 
-| Bend angle beta | Forward rotation | Reverse rotation |
-| --- | ---: | ---: |
-| 30 degrees | 5.305425 | 0.806161 |
-| 60 degrees | 2.881108 | 0.889618 |
-| 90 degrees | 2.207172 | 1.034126 |
-| 120 degrees | 1.939595 | 1.396302 |
-| 135 degrees | 1.864048 | 1.798377 |
-| 137 degrees | 1.855714 | 1.874825 |
-| 150 degrees | 1.809627 | 2.632578 |
+It also gives an explicit sandwich. For `0<epsilon<=pi/3`, put
 
-Among these **particular saved paths**, the better rotation direction changes between bend angles 135 and 137 degrees. At 135 degrees the forward inner area exceeds the reverse raw sampled area; at 137 degrees the reverse inner area exceeds the forward raw sampled area. This comparison is robust to the reported per-path enclosure gaps, subject to floating-point qualifications. It does not establish a global phase-transition angle or exclude other motions. Competing rotation patterns have already been investigated numerically by He [4].
+    U(epsilon) = max{V(epsilon), 2 sec(epsilon/2)}.
 
-A separate right-angle refinement used 17 knots, seed 7, and two local restarts. At 1025 validation poses, its raw sampled area is **2.2183633893765324**, while the swept inner-construction area is **2.2150879931699343**. This is a refinement check, not an improvement on Gerver or a claim to reproduce Gerver exactly.
+Then
 
-### Why raw sampled area is insufficient
+    V(epsilon) <= M(pi-epsilon) <= U(epsilon)+1/(4*U(epsilon)).
 
-The original right-angle run reported optimizer success and area **2.2316541712516575** at 33 poses. Holding the path fixed and checking 1025 poses reduced that area to **2.213028228128224**. The apparent improvement was an artifact of sampling; the path and unsuccessful inference are retained in `results/coarse-grid-counterexample.json`.
+For every bend at least 143 degrees the exact-integer scalar checker proves that `U=V`. The proof uses an asymptotically lossless alignment by uniform scaling and an additional exit-arm rotation. It does not assume the original unscaled sofa belongs to either aligned class.
 
-The first continuous-motion construction tightened every sampled hallway by a Lipschitz margin. It is simple but loses substantial area. The second construction encloses the swept forbidden corner by convex hulls of endpoint wedges, with second-order interpolation margins. For the same saved 9-knot right-angle path and 1025 poses, this improves the inner area from **2.187465851663766** to **2.2097998645873833**. See [SWEPT_ENCLOSURE.md](SWEPT_ENCLOSURE.md) for the exact-real argument, including the necessary expansion of the clipping box. Quadratic margins do not imply a quadratic rate of area convergence.
+**Not claimed:** unrestricted fixed-angle equality `M=V`, an exact forward-class solution, or a unique phase transition near the observed numerical branch crossing.
 
-Both methods have exact-real inclusion arguments, but the implementation uses NumPy and GEOS. A numerical guard and dense audit are not a rounding-error proof. Exact/interval arithmetic is required before interpreting the decimals as certified lower bounds. No computed global upper bound is claimed.
+## Rigorous scalar enclosures from the formulas
 
-## Reproduce locally
+These outward-rounded bounds depend on the mathematical theorem drafts, not on a local optimizer. The interval evaluations themselves use exact integers.
 
-Requires Python 3.11 or later; tested with Python 3.13.5 and the versions in `requirements.txt`. Use an isolated Python environment. From the repository root:
+| Bend beta | Reverse-class optimum: lower | Reverse-class optimum: upper | Unrestricted upper bound |
+| --- | ---: | ---: | ---: |
+| 120 degrees | 1.399979511 | 1.399979512 | 2.417655 |
+| 135 degrees | 1.803764167 | 1.803764168 | 2.280270 |
+| 137 degrees | 1.880508238 | 1.880508239 | 2.265875 |
+| 143 degrees | 2.163006742 | 2.163006743 | 2.278587 |
+| 150 degrees | 2.641025081 | 2.641025082 | 2.735686 |
+| 170 degrees | 7.788929081 | 7.788929082 | 7.821026 |
+| 179 degrees | 77.725311765 | 77.725311766 | 77.728529 |
 
-```sh
-cd experiments/hallway_angles
-python -m pip install -r requirements.txt
-python -m unittest discover -v
-```
+The reverse-class lower endpoint is also an unrestricted lower bound. At smaller bends the older forward constructions can give a stronger unrestricted lower bound; this table is not a catalog of best numerical records.
 
-The completed local test run passed **30 tests**. All **72 saved whole-polygon dense audits** reported zero area outside the denser sampled intersection, in floating-point arithmetic. These checks are local numerical tests, not CI or Lean verification. The record is in `results/validation.json`.
+## Proof reading order
 
-Replay all saved paths with the tighter enclosure, without re-running discovery:
+1. [REVERSE_MAIN_THEOREM.md](REVERSE_MAIN_THEOREM.md): definitions, exact class theorem, uniqueness, unrestricted asymptotics, and trust boundary.
+2. [REVERSE_CAP_AREA.md](REVERSE_CAP_AREA.md): the support-cap area identity, including nonsmooth convex hulls.
+3. [REVERSE_QUADRATIC_THEOREM.md](REVERSE_QUADRATIC_THEOREM.md): strict continuous quadratic maximization, including asymmetric free-endpoint variations.
+4. [REVERSE_GENERAL_MAJORANT.md](REVERSE_GENERAL_MAJORANT.md): canonicalization, actual strip width, and bounds for outside-strip excursions. Its final scalar comparisons are completed in the main theorem.
+5. [REVERSE_GEOMETRIC_THEOREM.md](REVERSE_GEOMETRIC_THEOREM.md): convexity, all-pose wedge avoidance, complete entry/exit motion, and exact area attainment.
+6. [ALIGNMENT_REDUCTION.md](ALIGNMENT_REDUCTION.md): scaling and strip-width interpolation for arbitrary motions, quantitative unrestricted bounds, and the sharp leading constant.
 
-```sh
-python replay.py results/angle-scan.json \
-  --refinements 32 64 --output /tmp/hallway-swept-replay.json
-```
+[REVERSE_VARIATIONAL.md](REVERSE_VARIATIONAL.md) is an earlier conditional checkpoint, retained to document the route rather than presented as the final majorant. [ROUND3_NEGATIVE_RESULTS.md](ROUND3_NEGATIVE_RESULTS.md) records the failed shortcuts and corrections. Independent review should focus on the nonsmooth cap identity, excursion inequalities, free-endpoint quadratic calculation, and alignment argument.
 
-Replay the simpler first-order margins:
+## Reproduce the new theorem checks locally
 
-```sh
-python replay.py results/angle-scan.json --method lipschitz \
-  --refinements 8 32 128 --output /tmp/hallway-lipschitz-replay.json
-```
-
-Re-run the original discovery experiment:
+The exact-integer checkers require only the Python standard library. The independent numerical formula/collision tests additionally require NumPy. From this directory:
 
 ```sh
-python search.py --angles 30 60 90 120 135 137 150 \
-  --knots 9 --subdivisions 4 --restarts 1 --maxiter 65 --seed 0 \
-  --refinements 8 32 128 --output /tmp/hallway-angle-scan.json
+python parameter_certificate.py --cells 64 --output parameter-proof.json
+python width_certificate.py --cells 64 --output width-proof.json
+python reverse_value_certificate.py > value-proof.json
+python -m unittest -v test_parameter_certificates test_reverse_exact test_reverse_value_certificate
 ```
 
-Re-run the 17-knot right-angle refinement from the saved 9-knot result:
+All **31 new local tests passed**. This does not assert that the earlier full test suite was rerun in the third round. The record is [results/theorem-checks.json](results/theorem-checks.json).
+
+`parameter_certificate.py` proves positivity on whole parameter intervals using fixed-denominator dyadic integer arithmetic. Pi is enclosed by exact Machin-series bounds; sine/cosine use Taylor polynomials with exact rational remainder bounds; square roots use integer `isqrt`. `width_certificate.py` handles a removable endpoint using sinc. The certificate proofs do not use binary64 arithmetic, platform trigonometric functions, NumPy, Shapely, or the optimizer. Their remaining trust is the implementation and exact integer/rational operations, not a Lean kernel.
+
+`reverse_exact.py` is a separate floating-point evaluator of the analytic candidate. Its polygon, finite-difference and quadrature tests are regression evidence, not the certificate proof.
+
+## Earlier rounds: retained results and reproduction
+
+Round 1 developed the oblique support displacement operator, analytic baselines, a seeded nonconvex path search in both rotation directions, and swept-wedge inner constructions. [THEORY.md](THEORY.md), [SWEPT_ENCLOSURE.md](SWEPT_ENCLOSURE.md), and [NEGATIVE_RESULTS.md](NEGATIVE_RESULTS.md) retain those derivations. The full-circle rigidity operator by itself did not supply a sharp area majorant.
+
+All 14 nine-knot paths, including poor candidates and failed optimizer terminations, remain in `results/angle-scan.json`. The 17-knot right-angle refinement is in `results/refined90.json`; all 72 floating-point denser-grid audits are in `results/enclosures.csv`. A false apparent right-angle improvement from coarse sampling remains in `results/coarse-grid-counterexample.json`. None of those sampled areas is an optimality proof.
+
+Round 2 added exposed-wall gradients, multilevel linear/cubic discovery bases, seven independent continuous-motion rectangle certificates, and elementary whole-class bounds. See [ROUND2.md](ROUND2.md), [INTERVAL_CERTIFICATES.md](INTERVAL_CERTIFICATES.md), [CLASS_BOUNDS.md](CLASS_BOUNDS.md), and [CLASS_EXCLUSIONS.md](CLASS_EXCLUSIONS.md). The old rectangle certificates use documented binary64 outward intervals, unlike the new integer-only scalar checkers. Their paths and exact area fractions remain in `results/pressure-candidates.json` and `results/interval-manifest.json`.
+
+Install the broader numerical experiment dependencies in an isolated environment using `requirements.txt`. Representative replay commands, without repeating optimization:
 
 ```sh
-python replay.py results/angle-scan.json --angles 90 --modes forward \
-  --refine-knots 17 --restarts 2 --maxiter 80 --seed 7 \
-  --refinements 32 64 --output /tmp/hallway-refined90.json
+python replay.py results/angle-scan.json --refinements 32 64 --output /tmp/hallway-replay.json
+python replay.py results/refined90.json --refinements 64 --output /tmp/refined90-replay.json
+python replay_pressure.py --candidate 150-reverse --samples 16385
 ```
 
-Or validate the already saved refined path without optimization:
+See the individual modules' `--help` and the interval-certificate document for the original discovery and certificate-generation commands. No bitwise reproducibility across optimizer platforms is promised; saved coordinates avoid repeating the search.
 
-```sh
-python replay.py results/refined90.json --refinements 64 \
-  --output /tmp/hallway-refined90-replay.json
-python rigidity.py --max-mode 32
-```
+## Literature and publication positioning
 
-`subdivisions` counts samples per corner-path segment. With `k` knots, there are `(k-1)*subdivisions+1` poses. Every path knot is included. A denser audit doubles that angular sampling density. Seeds and versions are recorded, but bitwise reproducibility of optimizer outcomes across platforms is not promised; replaying saved coordinates avoids that source of variation.
+The intended contribution is the exact reverse-class solution and sharp unrestricted asymptotics, subject to mathematical and priority review. The two competing numerical branches and their approximate crossing are not new claims: they appear in Xingyi He's *A Gas-Driven Algorithm for Variants of the Moving Sofa Problem*, arXiv:2608.11206v1. A complete novelty check remains necessary; a search also surfaced an angled-corridor Gerver-family preprint discussed in the third-round negative-results log.
 
-## File map and provenance
+Other starting references are Jineon Baek, *Optimality of Gerver's Sofa*, arXiv:2411.19826, and Yoav Kallus and Dan Romik, *Improved upper bounds in the moving sofa problem*, arXiv:1706.06630. The repository's uniqueness manuscript motivated the initial questions, but the new reverse functional and alignment argument do not depend on the uniqueness theorem.
 
-- `geometry.py`, `search.py`: hallway model, analytic baselines, local path search, optimizer status recording.
-- `enclosure.py`, `swept.py`: first-order and improved continuous-motion inner constructions.
-- `rigidity.py`: oblique support-line algebra and full-circle Fourier diagnostics.
-- `replay.py`: frozen-path validation and optional knot refinement.
-- `test_hallway_angles.py`, `test_swept.py`: 30 local tests covering baselines, geometry, negative results, and enclosures.
-- `THEORY.md`, `SWEPT_ENCLOSURE.md`, `NEGATIVE_RESULTS.md`: derivations, assumptions, and failures.
-- `results/angle-scan.json`: all 14 saved 9-knot paths, shared run parameters, coordinate restrictions, and every local optimizer outcome. Numeric values of analytic formulas are stored as floats.
-- `results/refined90.json`: the 17-knot path, both restart outcomes, and its validation records.
-- `results/enclosures.csv`: all 72 refinement records, including raw total/largest-component areas, inner areas, margins, component counts, and audits.
-- `results/coarse-grid-counterexample.json`, `results/validation.json`: the failed sampling inference and the final local validation summary.
-
-During execution, the original scan was named `scan.json`; its archived path is `results/angle-scan.json`. Repeated metadata was compacted and its enclosure records moved to the CSV without rounding the saved coordinates or area records. The `input` field in the refined run preserves that original execution filename.
-
-## Research log
-
-1. Recorded scope and failure criteria before implementation; did not assume an arbitrary-angle sharp `Q` exists.
-2. Derived the unit-normal geometry, oblique tangent equation, full-circle kernel, and two exact baselines.
-3. Implemented the local search; retained the coarse-grid false improvement as a regression fixture.
-4. Proved nonconcavity of the direct path-area objective and recorded why affine transport and partial-arc shortcuts fail.
-5. Completed both-direction scans at seven bend angles, including poorly performing candidates rather than discarding them.
-6. Replaced the overly conservative first-order validation with a tighter swept-wedge construction; retained both methods and their numerical results.
-7. Completed the 17-knot refinement, saved all results, and passed 30 local tests. No CI or Lean build was attempted.
-
-The main unresolved mathematical step is a **sharp area majorant with the correct arbitrary-angle admissible domain and contact-arc structure**. The oblique square-gap operator is an ingredient for that project, not a substitute for it. The code is useful for generating and checking conjectural geometry while those missing steps are investigated.
-
-## References
-
-[1] Jineon Baek, *Optimality of Gerver's Sofa*, arXiv:2411.19826, especially the cap/niche construction and the Gerver-specific core/tail decomposition of the concave bound: <https://arxiv.org/html/2411.19826v1>.
-
-[2] This repository's uniqueness manuscript, branch `paper/uniqueness-arxiv`, `docs/paper/sections/08-equality.tex`: the Mamikon square-gap identity and support-function tangent equations.
-
-[3] Yoav Kallus and Dan Romik, *Improved upper bounds in the moving sofa problem*, arXiv:1706.06630: <https://arxiv.org/abs/1706.06630>.
-
-[4] Xingyi He, *A Gas-Driven Algorithm for Variants of the Moving Sofa Problem*, arXiv:2608.11206: <https://arxiv.org/html/2608.11206v1>. Relevant numerical prior work on changing the actual corridor angle and competing motion patterns, not a global optimality proof. Its corridor-ray-angle convention is supplementary to our bend-angle convention. This experiment does not claim the first arbitrary-angle numerical search or improved numerical records over that work.
+- https://arxiv.org/html/2608.11206v1
+- https://arxiv.org/abs/2411.19826
+- https://arxiv.org/abs/1706.06630
