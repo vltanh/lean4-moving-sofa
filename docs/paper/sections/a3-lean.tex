@@ -2,33 +2,63 @@
 
 \subsection{The statement of \texorpdfstring{\cref{thm:main}}{the main theorem}}
 
-The statement of record is \path{Baek.gerver_sofa_unique} in \texttt{Challenge.lean}. It uses Mathlib's vocabulary and the definitions below, which \texttt{Challenge.lean}
-copies verbatim from \texttt{ChallengeDefs.lean}; they are those of this paper. In Lean the plane is $\R\times\R$, the area of a set is its Lebesgue measure \path{volume}, and
-\texttt{rot t} is the counterclockwise rotation by $t$.
+The statement of record is \path{Baek.gerver_sofa_unique} in
+\texttt{Challenge.lean}. It uses Mathlib's vocabulary and the definitions below,
+which \texttt{Challenge.lean} copies verbatim from \texttt{ChallengeDefs.lean};
+they are those of this paper. In Lean the plane is $\R\times\R$, the area of a
+set is its Lebesgue measure \path{volume}, and \texttt{rot t} is the
+counterclockwise rotation by $t$.
 \begin{itemize}
-\item \path{horizSide} $=\{p:\ p_1\le1,\ 0\le p_2\le1\}=H_L$, \path{vertSide} $=\{p:\ 0\le p_1\le1,\ p_2\le1\}=V_L$, \path{hallway} $=H_L\cup V_L=L$.
-\item \texttt{IsMovingSofa S} holds if $S$ is closed and connected (hence nonempty) and there are $\theta:\R\to\R$ and $c:\R\to\R^2$, continuous on $[0,1]$, with $\theta(0)=0$,
-$\mathrm{rot}_{\theta(0)}p+c(0)\in H_L$ for $p\in S$, $\mathrm{rot}_{\theta(s)}p+c(s)\in L$ for $p\in S$ and $s\in[0,1]$, and $\mathrm{rot}_{\theta(1)}p+c(1)\in V_L$ for $p\in S$ (\cref{def:sofa}, the rotation
-angle $-\theta(1)$ being left free).
-\item \texttt{shapeOfPath x} $=H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)\cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr)$, written in Lean with images of the hallway sets under $p\mapsto \xx(t)+\mathrm{rot}_t\,p$.
-\item \path{GerverParams} holds the 22 parameters of Appendix~\ref{app:gerver}; \texttt{P.path} is the rotation path glued from the five curves of Appendix~\ref{app:gerver}; \texttt{P.IsSolution} is the conjunction of
-$0<\varphi<\theta<\pi/4$ and the four groups (1)--(4) of Appendix~\ref{app:gerver} (Romik's equations (27)--(44)); \texttt{P.InBox} says $\varphi\in[0.039,0.04]$, $\theta\in[0.68,0.69]$; and \texttt{gerverSofa P} $=$ \texttt{shapeOfPath P.path}.
+\item \path{horizSide} $=\{p:\ p_1\le1,\ 0\le p_2\le1\}=H_L$, \path{vertSide}
+$=\{p:\ 0\le p_1\le1,\ p_2\le1\}=V_L$, \path{hallway} $=H_L\cup V_L=L$.
+\item \texttt{IsMovingSofa S} holds if $S$ is closed and connected (hence
+nonempty) and there are $\theta:\R\to\R$ and $c:\R\to\R^2$, continuous on
+$[0,1]$, with $\theta(0)=0$, $\mathrm{rot}_{\theta(0)}p+c(0)\in H_L$ for $p\in
+S$, $\mathrm{rot}_{\theta(s)}p+c(s)\in L$ for $p\in S$ and $s\in[0,1]$, and
+$\mathrm{rot}_{\theta(1)}p+c(1)\in V_L$ for $p\in S$ (\cref{def:sofa}, the
+rotation angle $-\theta(1)$ being left free).
+\item \texttt{shapeOfPath x}
+$=H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)\cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr)$,
+written in Lean with images of the hallway sets under $p\mapsto
+\xx(t)+\mathrm{rot}_t\,p$.
+\item \path{GerverParams} holds the 22 parameters of Appendix~\ref{app:gerver};
+\texttt{P.path} is the rotation path glued from the five curves of
+Appendix~\ref{app:gerver}; \texttt{P.IsSolution} is the conjunction of
+$0<\varphi<\theta<\pi/4$ and the four groups (1)--(4) of
+Appendix~\ref{app:gerver} (Romik's equations (27)--(44)); \texttt{P.InBox} says
+$\varphi\in[0.039,0.04]$, $\theta\in[0.68,0.69]$; and \texttt{gerverSofa P} $=$
+\texttt{shapeOfPath P.path}.
 \end{itemize}
-The theorem states that for every \texttt{P : GerverParams} with \texttt{P.IsSolution} and \texttt{P.InBox}, and every set $S\subset\R\times\R$ with \texttt{IsMovingSofa S} and
-\texttt{volume S = volume (gerverSofa P)}, there are $\theta\in\R$ and $v\in\R\times\R$ such that the image $\{\mathrm{rot}_\theta p+v:p\in S\}$ equals \texttt{gerverSofa P}. The theorems \path{Baek.gerver_params_exists}
-and \path{Baek.gerver_params_unique} say that the box contains exactly one solution, so that \texttt{gerverSofa P} is Gerver's sofa $\Gs$, and \path{Baek.gerver_sofa_area} says that its area
-lies between $2.2192$ and $2.2199$.
+The theorem states that for every \texttt{P : GerverParams} with
+\texttt{P.IsSolution} and \texttt{P.InBox}, and every set $S\subset\R\times\R$
+with \texttt{IsMovingSofa S} and \texttt{volume S = volume (gerverSofa P)},
+there are $\theta\in\R$ and $v\in\R\times\R$ such that the image
+$\{\mathrm{rot}_\theta p+v:p\in S\}$ equals \texttt{gerverSofa P}. The theorems
+\path{Baek.gerver_params_exists} and \path{Baek.gerver_params_unique} say that
+the box contains exactly one solution, so that \texttt{gerverSofa P} is Gerver's
+sofa $\Gs$, and \path{Baek.gerver_sofa_area} says that its area lies between
+$2.2192$ and $2.2199$.
 
 \subsection{Dictionary}
 
-\cref{tab:dict} lists the declarations that prove the results of this paper; they are in the repository~\cite{Companion}. Each name is followed, directly or after
-other names of the same file, by its file in parentheses: a file name without a directory, such as \texttt{Main}, is a file of \texttt{MovingSofaUniqueness/}, a path with
-a directory, such as \texttt{Basic/SurfaceArea}, is a file of \texttt{MovingSofaOptimality/}, and a path ending in \texttt{.lean} starts at the root of the repository. The
-theorems of \texttt{Challenge.lean} are stated there with \texttt{sorry} and proved in \texttt{Solution.lean}. Names are written without the namespace of their library:
-\path{image_eq_gerver_of_volume_eq} is \path{MovingSofaUniqueness.image_eq_gerver_of_volume_eq}. A result numbered $n_1.n_2.n_3$ in~\cite{Baek} is formalized under the name
-\path{theorem}$n_1$\path{_}$n_2$\path{_}$n_3$, or \path{lemma}, \path{proposition}, \path{corollary} or \path{definition} in place of \path{theorem}, followed by a suffix, as in
-\path{proposition2_5_4_sigma} or \path{definition8_1_2_exists}, when its parts are separate declarations. Some of the listed declarations, such as \path{IsCap.zero_mem}, are
-private to their files.
+\cref{tab:dict} lists the declarations that prove the results of this paper;
+they are in the repository~\cite{Companion}. Each name is followed, directly or
+after other names of the same file, by its file in parentheses: a file name
+without a directory, such as \texttt{Main}, is a file of
+\texttt{MovingSofaUniqueness/}, a path with a directory, such as
+\texttt{Basic/SurfaceArea}, is a file of \texttt{MovingSofaOptimality/}, and a
+path ending in \texttt{.lean} starts at the root of the repository. The theorems
+of \texttt{Challenge.lean} are stated there with \texttt{sorry} and proved in
+\texttt{Solution.lean}. Names are written without the namespace of their
+library: \path{image_eq_gerver_of_volume_eq} is
+\path{MovingSofaUniqueness.image_eq_gerver_of_volume_eq}. A result numbered
+$n_1.n_2.n_3$ in~\cite{Baek} is formalized under the name
+\path{theorem}$n_1$\path{_}$n_2$\path{_}$n_3$, or \path{lemma},
+\path{proposition}, \path{corollary} or \path{definition} in place of
+\path{theorem}, followed by a suffix, as in \path{proposition2_5_4_sigma} or
+\path{definition8_1_2_exists}, when its parts are separate declarations. Some of
+the listed declarations, such as \path{IsCap.zero_mem}, are private to their
+files.
 
 {\footnotesize
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.70\linewidth}@{}}

@@ -47,8 +47,8 @@
 
 \author{The-Anh Vu-Le}
 % Affiliation and e-mail are the author's to fill in before submission:
-% \address{...}
-% \email{...}
+\address{Siebel School of Computing and Data Science, University of Illinois
+Urbana-Champaign, Urbana, IL 61801, USA} \email{vltanh@illinois.edu}
 
 \date{October 2026}
 \subjclass[2020]{Primary 52A38, 52A40; Secondary 52A10, 49Q10, 68V20}
@@ -58,18 +58,21 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
 \begin{document}
 
 \begin{abstract}
-The moving sofa problem asks for the largest area of a planar region that can be moved around the
-right-angled corner of a hallway of unit width. Gerver found a region of area $2.2195\ldots$ in 1992
-and conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the
-only optimal region: every moving sofa of the same area is the image of Gerver's sofa under a
-rotation and a translation, as a set. Baek's proof studies one particular maximizer, produced by a
-compactness argument: its sofa, rotated, turns through a right angle, and at the right angle it satisfies an
-injectivity condition. A given maximizer need not be that one. We show that every maximizer has these
-properties, by approximating a maximizing convex cap by polygonal maximizers of a penalized problem,
-which are almost balanced, and passing to the limit. Equality in Baek's concave upper bound, whose
-nonlinear terms are halves of integrals of squared lengths of tangent segments, then forces differential equations for the difference of the
-support functions of the cap and of Gerver's cap, and these equations identify the cap. A last step
-recovers the region from its cap. The proof, together with Baek's, is formalized in Lean~4 with Mathlib.
+  The moving sofa problem asks for the largest area of a closed connected planar
+  shape that can be moved around the right-angled corner of a hallway of unit
+  width. Gerver found a shape of area $2.2195\ldots$ in 1992 and conjectured
+  that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is
+  the only optimal shape: every moving sofa of the same area is a rotated and
+  translated copy of it. To prove optimality, Baek first bounds the area of any
+  large moving sofa by that of a special shape with two geometric properties.
+  Baek then bounds the area of every shape with these properties by a concave
+  functional whose largest value is the area of Gerver's sofa. Since this chain
+  of inequalities passes through the special shape, it says nothing about the
+  shape of a moving sofa of maximal area. To prove uniqueness, we show that
+  every moving sofa of maximal area has the same two properties, so that the
+  functional bounds its area directly. Equality now forces the sofa to be
+  Gerver's. The proof, together with Baek's, is formalized in Lean~4 with
+  Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
 \end{abstract}
 
 \maketitle
@@ -86,9 +89,11 @@ recovers the region from its cap. The proof, together with Baek's, is formalized
 \input{sections/10-formalization}
 
 \appendix
+\input{sections/a0-baek}
 \input{sections/a1-gerver}
 \input{sections/a2-corrections}
 \input{sections/a3-lean}
+\input{sections/a4-ai}
 
 \bibliographystyle{amsplain}
 \bibliography{refs}

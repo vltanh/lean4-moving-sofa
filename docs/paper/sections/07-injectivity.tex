@@ -1,211 +1,304 @@
 \section{Curvature bounds and the injectivity condition}\label{sec:injectivity}
 
-Baek proves the injectivity condition for a balanced maximum cap $K$ with rotation angle $\pi/2$ from the
-inequality $\sigma_K\le k_0(g_K^+(t))\dd t$ on $[0,\pi/2)$ \baek{Thm.~6.4.3}. This inequality is the limit of
-$\sigma_{K_n}(t)\le k_0(g_{K_n}^+(t))\delta+O(\delta^2)$ for maximum polygon caps $K_n$ with step size
-$\delta$ \baek{Thm.~6.3.3}, whose proof uses the balance $\sigma=\tau$. For the polygon caps of
-\cref{sec:selection} the defect bound of \cref{prop:floating} replaces the balance, and its errors add up to at most $2\eta$
-by \eqref{eq:weights}. In this section we use \cref{sec:selection}, \cref{prop:floating} and \eqref{eq:weights} with $\omega=\pi/2$ and $\cA=\cA_{\pi/2}$: $K_*\in\Kc_{\pi/2}$ is a maximizing cap with
-$\cA(K_*)>0$, $\Theta_k=\{j\delta:0<j<n\}$ with $n=2^{k+1}$ and step size $\delta=\delta_k=\pi/(2n)\le\pi/4$. All the normals of $\Theta_k$ are floating.
-A polygon cap $K\in\Kc_k$ has no edge with normal angle $0$ or $\pi$ and none with normal in $(-\pi/2,0)$; its
-edge normals are among $\delta,2\delta,\dots,(2n-1)\delta$ and $3\pi/2$. For an angle $u$ let
-$H^{\mathrm b}_K(u)$ and $H^{\mathrm d}_K(u)$ be as in \cref{sec:Q}, so that $Q^-_K(u)$ is the complement of
-$H^{\mathrm b}_K(u)\cup H^{\mathrm d}_K(u)$.
+Baek proves the injectivity condition for a balanced maximum cap $K$ with
+rotation angle $\pi/2$ from the inequality $\sigma_K\le k_0(g_K^+(t))\dd t$ on
+$[0,\pi/2)$ \baek{Thm.~6.4.3}. This inequality is the limit of
+$\sigma_{K_n}(t)\le k_0(g_{K_n}^+(t))\delta+O(\delta^2)$ for maximum polygon
+caps $K_n$ with step size $\delta$ \baek{Thm.~6.3.3}, whose proof uses the
+balance $\sigma=\tau$. For the polygon caps of \cref{sec:selection} the defect
+bound of \cref{prop:floating} replaces the balance, and its errors add up to at
+most $2\eta$ by \eqref{eq:weights}. In this section we use \cref{sec:selection},
+\cref{prop:floating} and \eqref{eq:weights} with $\omega=\pi/2$ and
+$\cA=\cA_{\pi/2}$: $K_*\in\Kc_{\pi/2}$ is a maximizing cap with $\cA(K_*)>0$,
+$\Theta_k=\{j\delta:0<j<n\}$ with $n=2^{k+1}$ and step size
+$\delta=\delta_k=\pi/(2n)\le\pi/4$. All the normals of $\Theta_k$ are floating.
+A polygon cap $K\in\Kc_k$ has no edge with normal angle $0$ or $\pi$ and none
+with normal in $(-\pi/2,0)$; its edge normals are among
+$\delta,2\delta,\dots,(2n-1)\delta$ and $3\pi/2$. For an angle $u$ let
+$H^{\mathrm b}_K(u)$ and $H^{\mathrm d}_K(u)$ be as in \cref{sec:Q}, so that
+$Q^-_K(u)$ is the complement of $H^{\mathrm b}_K(u)\cup H^{\mathrm d}_K(u)$.
 
 \subsection{One normal of a polygon cap}
 
 \begin{lemma}[the inner wall near the corner]\label{lem:wall}
-Let $K\in\Kc_k$, $t\in\Theta_k$, $q=\tan(\delta/2)$, and $\xx=\xx_K(t)$. Let $\vec b=\vec b_K(t)=\{\xx-sv_t:s\ge0\}$.
-Then the set of $s\ge0$ with $\xx-sv_t\in H^{\mathrm d}_K(t-\delta)$ is $[0,\alpha_-]$ and the set of $s\ge0$ with
-$\xx-sv_t\in H^{\mathrm d}_K(t+\delta)$ is $[0,\alpha_+]$, where
+Let $K\in\Kc_k$, $t\in\Theta_k$, $q=\tan(\delta/2)$, and $\xx=\xx_K(t)$. Let
+$\vec b=\vec b_K(t)=\{\xx-sv_t:s\ge0\}$. Then the set of $s\ge0$ with
+$\xx-sv_t\in H^{\mathrm d}_K(t-\delta)$ is $[0,\alpha_-]$ and the set of $s\ge0$
+with $\xx-sv_t\in H^{\mathrm d}_K(t+\delta)$ is $[0,\alpha_+]$, where
 \[
-  \alpha_-=\tan\delta\,\bigl(g_K^-(t)-1+q\bigr),\qquad\alpha_+=\tan\delta\,\bigl(1-g_K^+(t)+q\bigr)
+  \alpha_-=\tan\delta\,\bigl(g_K^-(t)-1+q\bigr),\qquad\alpha_+
+    =\tan\delta\,\bigl(1-g_K^+(t)+q\bigr)
 \]
-(an interval is empty if its right end is negative); and the set of $s\in\R$ with
-$\xx-sv_t\in H^{\mathrm b}_K(t-\delta)\cap H^{\mathrm b}_K(t+\delta)$ is an interval, empty or of length $2q-\sigma_K(t)$.
+(an interval is empty if its right end is negative); and the set of $s\in\R$
+with $\xx-sv_t\in H^{\mathrm b}_K(t-\delta)\cap H^{\mathrm b}_K(t+\delta)$ is an
+interval, empty or of length $2q-\sigma_K(t)$.
 \end{lemma}
 
-This is \baek{Lemma~6.3.2}, together with the length $2\tan(\delta/2)-\sigma_K(t)$ that Baek asserts in the proof of \baek{Thm.~6.3.3}. They are stated there for maximum polygon
-caps, but the proofs use only that no normal angle of $K$ lies in $(t-\delta,t)\cup(t,t+\delta)\cup(t+\frac\pi2-\delta,t+\frac\pi2)\cup(t+\frac\pi2,t+\frac\pi2+\delta)$, which holds for
-every $K\in\Kc_k$.
+This is \baek{Lemma~6.3.2}, together with the length
+$2\tan(\delta/2)-\sigma_K(t)$ that Baek asserts in the proof of
+\baek{Thm.~6.3.3}. They are stated there for maximum polygon caps, but the
+proofs use only that no normal angle of $K$ lies in
+$(t-\delta,t)\cup(t,t+\delta)\cup(t+\frac\pi2-\delta,t+\frac\pi2)\cup(t+\frac\pi2,t+\frac\pi2+\delta)$,
+which holds for every $K\in\Kc_k$.
 
 \begin{proof}
-Since no normal angle of $K$ lies between $t+\pi/2$ and $t+\delta+\pi/2$, the supporting lines $l_K(t+\pi/2)$ and
-$l_K(t+\delta+\pi/2)$ meet at a vertex $r$ of $K$, namely $r=C_K^+(t)=\yy_K(t)-g_K^+(t)u_t$, and
-$h_K(t+\delta+\pi/2)=\ip r{v_{t+\delta}}$. As $\xx-r=(g_K^+(t)-1)u_t-v_t$,
+Since no normal angle of $K$ lies between $t+\pi/2$ and $t+\delta+\pi/2$, the
+supporting lines $l_K(t+\pi/2)$ and $l_K(t+\delta+\pi/2)$ meet at a vertex $r$
+of $K$, namely $r=C_K^+(t)=\yy_K(t)-g_K^+(t)u_t$, and $h_K(t+\delta+\pi/2)=\ip
+r{v_{t+\delta}}$. As $\xx-r=(g_K^+(t)-1)u_t-v_t$,
 \begin{align*}
-  \ip{\xx}{v_{t+\delta}}-h_K(t+\delta+\tfrac\pi2)+1&=\ip{\xx-r}{v_{t+\delta}}+1\\
+  \ip{\xx}{v_{t+\delta}}-h_K(t+\delta+\tfrac\pi2)+1&=\ip{\xx-r}{v_{t+\delta}}
+    +1\\
   &=-(g_K^+(t)-1)\sin\delta-\cos\delta+1 .
 \end{align*}
-Now $\ip{\xx-sv_t}{v_{t+\delta}}=\ip{\xx}{v_{t+\delta}}-s\cos\delta$, so $\xx-sv_t\in H^{\mathrm d}_K(t+\delta)$ iff
-$s\le\alpha_+=\bigl[(1-g_K^+(t))\sin\delta+1-\cos\delta\bigr]/\cos\delta$, and $(1-\cos\delta)/\cos\delta=\tan\delta\tan(\delta/2)$. For $t-\delta$
-use $r'=C_K^-(t)=\yy_K(t)-g_K^-(t)u_t$ in the same way. Next, $\ip{\xx-sv_t}{u_{t\mp\delta}}=\ip\xx{u_{t\mp\delta}}\pm s\sin\delta$, so the
-conditions $\ip p{u_{t-\delta}}\ge h_K(t-\delta)-1$ and $\ip p{u_{t+\delta}}\ge h_K(t+\delta)-1$ on
-$p=\xx-sv_t$ read $s\ge s_-$ and $s\le s_+$ with
+Now $\ip{\xx-sv_t}{v_{t+\delta}}=\ip{\xx}{v_{t+\delta}}-s\cos\delta$, so
+$\xx-sv_t\in H^{\mathrm d}_K(t+\delta)$ iff
+$s\le\alpha_+=\bigl[(1-g_K^+(t))\sin\delta+1-\cos\delta\bigr]/\cos\delta$, and
+$(1-\cos\delta)/\cos\delta=\tan\delta\tan(\delta/2)$. For $t-\delta$ use
+$r'=C_K^-(t)=\yy_K(t)-g_K^-(t)u_t$ in the same way. Next,
+$\ip{\xx-sv_t}{u_{t\mp\delta}}=\ip\xx{u_{t\mp\delta}}\pm s\sin\delta$, so the
+conditions $\ip p{u_{t-\delta}}\ge h_K(t-\delta)-1$ and $\ip p{u_{t+\delta}}\ge
+h_K(t+\delta)-1$ on $p=\xx-sv_t$ read $s\ge s_-$ and $s\le s_+$ with
 \begin{align*}
   s_+-s_-&=\frac{2\cos\delta\,(h_K(t)-1)-h_K(t+\delta)-h_K(t-\delta)+2}{\sin\delta}\\
   &=\frac{2(1-\cos\delta)-\sigma_K(t)\sin\delta}{\sin\delta}=2q-\sigma_K(t),
 \end{align*}
-where we used $u_{t+\delta}+u_{t-\delta}=2\cos\delta\,u_t$, $\ip\xx{u_t}=h_K(t)-1$ and
-$h_K(t+\delta)+h_K(t-\delta)-2\cos\delta\,h_K(t)=\sigma_K(t)\sin\delta$. The last identity holds because no normal angle of $K$ lies in
-$(t-\delta,t)\cup(t,t+\delta)$: the vertices $v_K^-(t)=v_K(t-\delta,t)$ and $v_K^+(t)=v_K(t,t+\delta)$ lie on $l_K(t-\delta)$ and on
-$l_K(t+\delta)$, so that $h_K(t\pm\delta)=h_K(t)\cos\delta\pm\ip{v_K^\pm(t)}{v_t}\sin\delta$, while
-$\sigma_K(t)=\ip{v_K^+(t)-v_K^-(t)}{v_t}$ by \cref{fact:convex}\ref{fact:convex:sigma}.
+where we used $u_{t+\delta}+u_{t-\delta}=2\cos\delta\,u_t$,
+$\ip\xx{u_t}=h_K(t)-1$ and
+$h_K(t+\delta)+h_K(t-\delta)-2\cos\delta\,h_K(t)=\sigma_K(t)\sin\delta$. The
+last identity holds because no normal angle of $K$ lies in
+$(t-\delta,t)\cup(t,t+\delta)$: the vertices $v_K^-(t)=v_K(t-\delta,t)$ and
+$v_K^+(t)=v_K(t,t+\delta)$ lie on $l_K(t-\delta)$ and on $l_K(t+\delta)$, so
+that $h_K(t\pm\delta)=h_K(t)\cos\delta\pm\ip{v_K^\pm(t)}{v_t}\sin\delta$, while
+$\sigma_K(t)=\ip{v_K^+(t)-v_K^-(t)}{v_t}$ by
+\cref{fact:convex}\ref{fact:convex:sigma}.
 \end{proof}
 
 \begin{lemma}[the polygon bound at one normal]\label{lem:tau}
 For $K\in\Kc_k$ and $t\in\Theta_k$,
 \begin{multline*}
-  \tau_K(t)\le\max\Bigl(\tan\delta\,(g_K^-(t)-1+q),\ \tan\delta\,(1-g_K^+(t)+q),\ 0\Bigr)\\
+  \tau_K(t)\le\max\Bigl(\tan\delta\,(g_K^-(t)-1+q),\ \tan\delta\,(1-g_K^+(t)+q),
+    \ 0\Bigr)\\
   +\max\bigl(2q-\sigma_K(t),0\bigr),\qquad q=\tan\tfrac\delta2 .
 \end{multline*}
 \end{lemma}
 
 \begin{proof}
-Let $X=\partial\cN_{\Theta_k}(K)\cap\vec b_K(t)$; by \cref{fact:sides}\ref{fact:sides:wall}, $\tau_K(t)=\Hone(X)$. Let
-$I=\{t-\delta,t,t+\delta\}$. The points of $X$ that lie in $H^{\mathrm d}_K(u)$ for some $u\in I$ are of the first kind. On
-$\vec b_K(t)$ the half-plane $H^{\mathrm d}_K(t)$ contains only the corner $\xx_K(t)$, so by \cref{lem:wall} the points of the first kind
-form a set of length at most $\max(0,\alpha_-,\alpha_+)$. Let $p\in X$ not be of the first kind. As
-$X\subset\clos\cN_{\Theta_k}(K)\subset\{y\ge0\}$, $p_y\ge0$, and $p_y=0$ for at most one point of $X$, since the line $b_K(t)$ is not
-horizontal. Let $p_y>0$. For $u\in\Theta_k$, $p\notin Q^-_K(u)$: otherwise the open set $\{y>0\}\cap Q^-_K(u)$, which lies in
-$\cN_{\Theta_k}(K)$, would be a neighborhood of $p$ contained in the niche, and $p$ would not be a boundary point. Also $Q^-_K(0)$ and
-$Q^-_K(\pi/2)$ lie in $\{y<0\}$, since one of the two inequalities that define each of them is $y<h_K(\pi/2)-1=0$. As
-$t-\delta,t+\delta\in\Theta_k\cup\{0,\pi/2\}$ and $Q^-_K(u)$ is the complement of $H^{\mathrm b}_K(u)\cup H^{\mathrm d}_K(u)$, we get
-$p\in H^{\mathrm b}_K(t-\delta)\cap H^{\mathrm b}_K(t+\delta)$. These are the points of the second kind, and by \cref{lem:wall} they form a set
-of length at most $\max(0,2q-\sigma_K(t))$. So $X$ consists of points of the two kinds and of at most one point on the $x$-axis, and
-$\Hone(X)$ is at most the sum of the two lengths.
+Let $X=\partial\cN_{\Theta_k}(K)\cap\vec b_K(t)$; by
+\cref{fact:sides}\ref{fact:sides:wall}, $\tau_K(t)=\Hone(X)$. Let
+$I=\{t-\delta,t,t+\delta\}$. The points of $X$ that lie in $H^{\mathrm d}_K(u)$
+for some $u\in I$ are of the first kind. On $\vec b_K(t)$ the half-plane
+$H^{\mathrm d}_K(t)$ contains only the corner $\xx_K(t)$, so by \cref{lem:wall}
+the points of the first kind form a set of length at most
+$\max(0,\alpha_-,\alpha_+)$. Let $p\in X$ not be of the first kind. As
+$X\subset\clos\cN_{\Theta_k}(K)\subset\{y\ge0\}$, $p_y\ge0$, and $p_y=0$ for at
+most one point of $X$, since the line $b_K(t)$ is not horizontal. Let $p_y>0$.
+For $u\in\Theta_k$, $p\notin Q^-_K(u)$: otherwise the open set $\{y>0\}\cap
+Q^-_K(u)$, which lies in $\cN_{\Theta_k}(K)$, would be a neighborhood of $p$
+contained in the niche, and $p$ would not be a boundary point. Also $Q^-_K(0)$
+and $Q^-_K(\pi/2)$ lie in $\{y<0\}$, since one of the two inequalities that
+define each of them is $y<h_K(\pi/2)-1=0$. As
+$t-\delta,t+\delta\in\Theta_k\cup\{0,\pi/2\}$ and $Q^-_K(u)$ is the complement
+of $H^{\mathrm b}_K(u)\cup H^{\mathrm d}_K(u)$, we get $p\in H^{\mathrm
+b}_K(t-\delta)\cap H^{\mathrm b}_K(t+\delta)$. These are the points of the
+second kind, and by \cref{lem:wall} they form a set of length at most
+$\max(0,2q-\sigma_K(t))$. So $X$ consists of points of the two kinds and of at
+most one point on the $x$-axis, and $\Hone(X)$ is at most the sum of the two
+lengths.
 \end{proof}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\linewidth]{figures/fig-wall}
-\caption{\cref{lem:wall,lem:tau}, for the polygon cap with the angle set $\Theta_1$ ($n=4$, $\delta=\pi/8$) and the support values of Gerver's cap, at $t=\pi/4$, drawn in the frame of the supporting hallway $L_K(t)$ (the polygon niche is shaded). The part of $\vec b_K(t)$ above the dashed line $d_K(t-\delta)$ is the segment $[p,\xx_K(t)]$ (points of the first kind); further down $\vec b_K(t)$ runs between the dotted lines $b_K(t-\delta)$ and $b_K(t+\delta)$, from $B_-$ to $B_+$ (points of the second kind). The side of the niche on $\vec b_K(t)$ lies in the union of the two segments.}
+\caption{\cref{lem:wall,lem:tau}, for the polygon cap with the angle set
+$\Theta_1$ ($n=4$, $\delta=\pi/8$) and the support values of Gerver's cap, at
+$t=\pi/4$, drawn in the frame of the supporting hallway $L_K(t)$ (the polygon
+niche is shaded). The part of $\vec b_K(t)$ above the dashed line
+$d_K(t-\delta)$ is the segment $[p,\xx_K(t)]$ (points of the first kind);
+further down $\vec b_K(t)$ runs between the dotted lines $b_K(t-\delta)$ and
+$b_K(t+\delta)$, from $B_-$ to $B_+$ (points of the second kind). The side of
+the niche on $\vec b_K(t)$ lies in the union of the two segments.}
 \label{fig:wall}
 \end{figure}
 
 \begin{lemma}[with a defect]\label{lem:curv-defect}
-Let $K\in\Kc_k$, $t\in\Theta_k$, $e\ge0$, $D\ge0$ with $g_K^+(t)\le D$ and $\sigma_K(t)\le\tau_K(t)+e$. Then
+Let $K\in\Kc_k$, $t\in\Theta_k$, $e\ge0$, $D\ge0$ with $g_K^+(t)\le D$ and
+$\sigma_K(t)\le\tau_K(t)+e$. Then
 \[
   \sigma_K(t)\le k_0\bigl(g_K^+(t)\bigr)\,\delta+(D+4)\delta^2+e .
 \]
 \end{lemma}
 
 \begin{proof}
-Let $M=\abs{g_K^+(t)-1}$. As $C_K^+(t)\in K$, $g_K^+(t)=h_K(t)-\ip{C_K^+(t)}{u_t}\ge0$; with $g_K^+(t)\le D$ this gives $M\le D+1$. By
-\cref{fact:convex}\ref{fact:convex:sigma} and $v_{t+\pi/2}=-u_t$, $C_K^+(t)=C_K^-(t)-\sigma_K(t+\pi/2)u_t$, so
-$g_K^+(t)-g_K^-(t)=\sigma_K(t+\pi/2)\ge0$, and each of $g_K^-(t)-1+q$ and $1-g_K^+(t)+q$ is at most $M+q$. So the first maximum
-in \cref{lem:tau} is at most $\tan\delta\,(M+q)\le\delta M+(D+3)\delta^2$, using $\tan\delta\le\delta+\delta^2$, $q\le\delta$ and
-$\delta\le1$. If $\sigma_K(t)\ge2q$, the second maximum is $0$ and
-$\sigma_K(t)\le\tau_K(t)+e\le\delta M+(D+3)\delta^2+e$. If $\sigma_K(t)<2q$, then
-$\sigma_K(t)\le\delta M+(D+3)\delta^2+(2q-\sigma_K(t))+e$ and $2q\le\delta+\delta^2$, so
-$\sigma_K(t)\le\frac{M+1}2\delta+\frac{D+4}2\delta^2+\frac e2$. Both $M$ and $(M+1)/2$ are at most $k_0(g_K^+(t))$.
+Let $M=\abs{g_K^+(t)-1}$. As $C_K^+(t)\in K$,
+$g_K^+(t)=h_K(t)-\ip{C_K^+(t)}{u_t}\ge0$; with $g_K^+(t)\le D$ this gives $M\le
+D+1$. By \cref{fact:convex}\ref{fact:convex:sigma} and $v_{t+\pi/2}=-u_t$,
+$C_K^+(t)=C_K^-(t)-\sigma_K(t+\pi/2)u_t$, so
+$g_K^+(t)-g_K^-(t)=\sigma_K(t+\pi/2)\ge0$, and each of $g_K^-(t)-1+q$ and
+$1-g_K^+(t)+q$ is at most $M+q$. So the first maximum in \cref{lem:tau} is at
+most $\tan\delta\,(M+q)\le\delta M+(D+3)\delta^2$, using
+$\tan\delta\le\delta+\delta^2$, $q\le\delta$ and $\delta\le1$. If
+$\sigma_K(t)\ge2q$, the second maximum is $0$ and
+$\sigma_K(t)\le\tau_K(t)+e\le\delta M+(D+3)\delta^2+e$. If $\sigma_K(t)<2q$,
+then $\sigma_K(t)\le\delta M+(D+3)\delta^2+(2q-\sigma_K(t))+e$ and
+$2q\le\delta+\delta^2$, so
+$\sigma_K(t)\le\frac{M+1}2\delta+\frac{D+4}2\delta^2+\frac e2$. Both $M$ and
+$(M+1)/2$ are at most $k_0(g_K^+(t))$.
 \end{proof}
 
 \subsection{From normals to intervals}
 
 \begin{lemma}[arms between two steps]\label{lem:cell}
-Let $D\ge0$, let $K\in\Kc_k$ with $\norm{p-q}\le D$ for all $p,q\in K$, and let $t\in\{0\}\cup\Theta_k$. Then for every $s\in(t,t+\delta)$
+Let $D\ge0$, let $K\in\Kc_k$ with $\norm{p-q}\le D$ for all $p,q\in K$, and let
+$t\in\{0\}\cup\Theta_k$. Then for every $s\in(t,t+\delta)$
 \[
-  g_K^+(s)=g_K^-(s),\qquad g_K^+(s)\le g_K^+(t),\qquad g_K^-(t+\delta)\le g_K^-(s),
+  g_K^+(s)=g_K^-(s),\qquad g_K^+(s)\le g_K^+(t),\qquad g_K^-(t+\delta)
+    \le g_K^-(s),
 \]
 and $g_K^+(t)-g_K^-(t+\delta)\le D\delta$.
 \end{lemma}
 
-This is \baek{Lemma~6.4.1}, with $D$ in place of the bound $5$ for maximum polygon caps.
+This is \baek{Lemma~6.4.1}, with $D$ in place of the bound $5$ for maximum
+polygon caps.
 
 \begin{proof}
-Since there is no normal angle of $K$ strictly between $t$ and $t+\delta$, nor between $t+\pi/2$ and
-$t+\delta+\pi/2$, the supporting lines $l_K(s)$, $s\in[t,t+\delta]$, pass through the vertex $A=v_K(t,t+\delta)$ of $K$, and the lines
-$l_K(s+\pi/2)$ through the vertex $C=v_K(t+\pi/2,t+\delta+\pi/2)$; moreover $C_K^+(t)=C$, $C_K^-(t+\delta)=C$, and $C_K^\pm(s)=C$ for
-$s\in(t,t+\delta)$. As $\ip{\yy_K(s)}{u_s}=h_K(s)=\ip A{u_s}$, the function $G(s)=\ip{A-C}{u_s}$ equals $g_K^+$ at $t$, $g_K^-$ at $t+\delta$, and
-both $g_K^+$ and $g_K^-$ on $(t,t+\delta)$. Its derivative $G'(s)=\ip{A-C}{v_s}$ is at most $0$ on $[t,t+\delta]$, because
-$\ip A{v_s}\le h_K(s+\pi/2)=\ip C{v_s}$, and at least $-\norm{A-C}\ge-D$, as $A,C\in K$. So $G$ is nonincreasing on $[t,t+\delta]$, which gives the
-inequalities for $s\in(t,t+\delta)$, and $G(s)+Ds$ is nondecreasing there, which gives $G(t)-G(t+\delta)\le D\delta$.
+Since there is no normal angle of $K$ strictly between $t$ and $t+\delta$, nor
+between $t+\pi/2$ and $t+\delta+\pi/2$, the supporting lines $l_K(s)$,
+$s\in[t,t+\delta]$, pass through the vertex $A=v_K(t,t+\delta)$ of $K$, and the
+lines $l_K(s+\pi/2)$ through the vertex $C=v_K(t+\pi/2,t+\delta+\pi/2)$;
+moreover $C_K^+(t)=C$, $C_K^-(t+\delta)=C$, and $C_K^\pm(s)=C$ for
+$s\in(t,t+\delta)$. As $\ip{\yy_K(s)}{u_s}=h_K(s)=\ip A{u_s}$, the function
+$G(s)=\ip{A-C}{u_s}$ equals $g_K^+$ at $t$, $g_K^-$ at $t+\delta$, and both
+$g_K^+$ and $g_K^-$ on $(t,t+\delta)$. Its derivative $G'(s)=\ip{A-C}{v_s}$ is
+at most $0$ on $[t,t+\delta]$, because $\ip A{v_s}\le h_K(s+\pi/2)=\ip C{v_s}$,
+and at least $-\norm{A-C}\ge-D$, as $A,C\in K$. So $G$ is nonincreasing on
+$[t,t+\delta]$, which gives the inequalities for $s\in(t,t+\delta)$, and
+$G(s)+Ds$ is nondecreasing there, which gives $G(t)-G(t+\delta)\le D\delta$.
 \end{proof}
 
 \begin{lemma}[summing the steps]\label{lem:sum}
-Let $B,C,D\ge0$, let $K\in\Kc_k$ with $\norm{p-q}\le D$ for all $p,q\in K$ and $k_0(g_K^+)\le B$ on $[0,\pi/2]$, and suppose that for
-every $t\in\{0\}\cup\Theta_k$
+Let $B,C,D\ge0$, let $K\in\Kc_k$ with $\norm{p-q}\le D$ for all $p,q\in K$ and
+$k_0(g_K^+)\le B$ on $[0,\pi/2]$, and suppose that for every
+$t\in\{0\}\cup\Theta_k$
 \[
   \sigma_K(t)\le k_0(g_K^+(t))\,\delta+C\delta^2+e(t),\qquad e(t)\ge0 .
 \]
 Then for $0\le a\le b\le\pi/2$
 \[
-  \sigma_K\bigl([a,b)\bigr)\le\int_a^bk_0\bigl(g_K^+(u)\bigr)\dd u+\Bigl(2B+\frac\pi2(C+D)\Bigr)\delta+\sum_{j=0}^{n-1}e(j\delta),
+  \sigma_K\bigl([a,b)\bigr)\le\int_a^bk_0\bigl(g_K^+(u)\bigr)\dd u+\Bigl(2B
+    +\frac\pi2(C+D)\Bigr)\delta+\sum_{j=0}^{n-1}e(j\delta),
 \]
 and for $a\ge-\pi/2$ with $a'=\max(a,0)\le b\le\pi/2$
 \[
-  \sigma_K\bigl((a,b)\bigr)\le\int_{a'}^bk_0\bigl(g_K^+(u)\bigr)\dd u+\Bigl(2B+\frac\pi2(C+D)\Bigr)\delta+\sum_{j=0}^{n-1}e(j\delta).
+  \sigma_K\bigl((a,b)\bigr)\le\int_{a'}^bk_0\bigl(g_K^+(u)\bigr)\dd u+\Bigl(2B
+    +\frac\pi2(C+D)\Bigr)\delta+\sum_{j=0}^{n-1}e(j\delta).
 \]
 \end{lemma}
 
 \begin{proof}
-Let $t\in\{0\}\cup\Theta_k$ and $s\in(t,t+\delta)$. By \cref{lem:cell}, $g_K^+(s)\le g_K^+(t)$ and
-$g_K^+(t)-g_K^+(s)=g_K^+(t)-g_K^-(s)\le g_K^+(t)-g_K^-(t+\delta)\le D\delta$; as $k_0$ is $1$-Lipschitz, $k_0(g_K^+(s))\ge k_0(g_K^+(t))-D\delta$.
-Integrating over $(t,t+\delta)$ gives $k_0(g_K^+(t))\,\delta\le\int_t^{t+\delta}k_0(g_K^+)+D\delta^2$, hence
+Let $t\in\{0\}\cup\Theta_k$ and $s\in(t,t+\delta)$. By \cref{lem:cell},
+$g_K^+(s)\le g_K^+(t)$ and $g_K^+(t)-g_K^+(s)=g_K^+(t)-g_K^-(s)\le
+g_K^+(t)-g_K^-(t+\delta)\le D\delta$; as $k_0$ is $1$-Lipschitz,
+$k_0(g_K^+(s))\ge k_0(g_K^+(t))-D\delta$. Integrating over $(t,t+\delta)$ gives
+$k_0(g_K^+(t))\,\delta\le\int_t^{t+\delta}k_0(g_K^+)+D\delta^2$, hence
 \[
-  \sigma_K(t)\le\int_t^{t+\delta}k_0\bigl(g_K^+(u)\bigr)\dd u+(C+D)\delta^2+e(t).
+  \sigma_K(t)\le\int_t^{t+\delta}k_0\bigl(g_K^+(u)\bigr)\dd u+(C+D)\delta^2
+    +e(t).
 \]
-For $0\le j<n$, $K$ has no normal angle in $(j\delta,j\delta+\delta)$, so $v_K^+$ is constant on $[j\delta,j\delta+\delta)$, equal to a vertex $w$. There
-$h_K(s)=\ip w{u_s}$, and the function $G_K(s)=\ip w{v_s}+\int_0^sh_K$ of \cref{fact:convex}\ref{fact:convex:sigma} has the derivative
-$-\ip w{u_s}+h_K(s)=0$; so $\sigma_K((j\delta,j\delta+\delta))=0$ and $\sigma_K([j\delta,j\delta+\delta))=\sigma_K(j\delta)$. Adding the bounds at
+For $0\le j<n$, $K$ has no normal angle in $(j\delta,j\delta+\delta)$, so
+$v_K^+$ is constant on $[j\delta,j\delta+\delta)$, equal to a vertex $w$. There
+$h_K(s)=\ip w{u_s}$, and the function $G_K(s)=\ip w{v_s}+\int_0^sh_K$ of
+\cref{fact:convex}\ref{fact:convex:sigma} has the derivative $-\ip
+w{u_s}+h_K(s)=0$; so $\sigma_K((j\delta,j\delta+\delta))=0$ and
+$\sigma_K([j\delta,j\delta+\delta))=\sigma_K(j\delta)$. Adding the bounds at
 $t=j\delta$ for $i\le j<m$ gives, for integers $0\le i\le m\le n$,
 \[
-  \sigma_K\bigl([i\delta,m\delta)\bigr)\le\int_{i\delta}^{m\delta}k_0\bigl(g_K^+(u)\bigr)\dd u+(m-i)(C+D)\delta^2+\sum_{j=i}^{m-1}e(j\delta).
+  \sigma_K\bigl([i\delta,m\delta)\bigr)
+    \le\int_{i\delta}^{m\delta}k_0\bigl(g_K^+(u)\bigr)\dd u+(m-i)(C+D)\delta^2
+    +\sum_{j=i}^{m-1}e(j\delta).
 \]
-Now let $0\le a\le b\le\pi/2$, $i=\lfloor a/\delta\rfloor$ and $m=\lceil b/\delta\rceil$. Then $i\delta\le a<i\delta+\delta$, $b\le m\delta<b+\delta$ and
-$i\le m\le n$, as $b\le\pi/2=n\delta$; so $[a,b)\subset[i\delta,m\delta)$. Hence $\sigma_K([a,b))\le\sigma_K([i\delta,m\delta))$, and the first bound
-follows: the integrals of $k_0(g_K^+)$ over $[i\delta,a]$ and over $[b,m\delta]$, intervals of length less than $\delta$ in $[0,\pi/2]$, are at most $B\delta$
-each; $(m-i)(C+D)\delta^2\le n(C+D)\delta^2=\frac\pi2(C+D)\delta$; and the errors $e(j\delta)$ with $i\le j<m$ are among the nonnegative terms of
-$\sum_{j=0}^{n-1}e(j\delta)$. For the second bound, $K$ has no normal angle in $(-\pi/2,0)$, so $\sigma_K((-\pi/2,0))=0$ in the same way. As
-$(a,b)\subset(-\pi/2,0)\cup[a',b)$, $\sigma_K((a,b))\le\sigma_K([a',b))$, and the first bound applies to $[a',b)$.
+Now let $0\le a\le b\le\pi/2$, $i=\lfloor a/\delta\rfloor$ and $m=\lceil
+b/\delta\rceil$. Then $i\delta\le a<i\delta+\delta$, $b\le m\delta<b+\delta$ and
+$i\le m\le n$, as $b\le\pi/2=n\delta$; so $[a,b)\subset[i\delta,m\delta)$. Hence
+$\sigma_K([a,b))\le\sigma_K([i\delta,m\delta))$, and the first bound follows:
+the integrals of $k_0(g_K^+)$ over $[i\delta,a]$ and over $[b,m\delta]$,
+intervals of length less than $\delta$ in $[0,\pi/2]$, are at most $B\delta$
+each; $(m-i)(C+D)\delta^2\le n(C+D)\delta^2=\frac\pi2(C+D)\delta$; and the
+errors $e(j\delta)$ with $i\le j<m$ are among the nonnegative terms of
+$\sum_{j=0}^{n-1}e(j\delta)$. For the second bound, $K$ has no normal angle in
+$(-\pi/2,0)$, so $\sigma_K((-\pi/2,0))=0$ in the same way. As
+$(a,b)\subset(-\pi/2,0)\cup[a',b)$, $\sigma_K((a,b))\le\sigma_K([a',b))$, and
+the first bound applies to $[a',b)$.
 \end{proof}
 
 \begin{lemma}[the bound on an open interval in the limit]\label{lem:lsc}
-Let $K_j$ be polygon caps (with any angle sets) that converge in $\dH$ to $K\in\Kc_{\pi/2}$, and let $\eps_j\to0$ be such that,
-for every $j$ and all $-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$,
+Let $K_j$ be polygon caps (with any angle sets) that converge in $\dH$ to
+$K\in\Kc_{\pi/2}$, and let $\eps_j\to0$ be such that, for every $j$ and all
+$-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$,
 \[
   \sigma_{K_j}\bigl((a,b)\bigr)\le\int_{a'}^bk_0\bigl(g_{K_j}^+\bigr)+\eps_j .
 \]
 Then $\sigma_K((a,b))\le\int_{a'}^bk_0(g_K^+)$ for all such $a$ and $b$.
 \end{lemma}
 
-With \cref{lem:limit}, this is the passage to the limit in the proof of \baek{Thm.~6.4.3}. Baek obtains the lower semicontinuity of the mass of an
-open interval from the weak convergence of $\sigma_{K_n}$ and the Portmanteau theorem; the proof here uses support functions instead.
+With \cref{lem:limit}, this is the passage to the limit in the proof of
+\baek{Thm.~6.4.3}. Baek obtains the lower semicontinuity of the mass of an open
+interval from the weak convergence of $\sigma_{K_n}$ and the Portmanteau
+theorem; the proof here uses support functions instead.
 
 \begin{proof}
-Let $-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$. By \cref{fact:iteration}\ref{fact:iteration:arms}, $\int_0^{\pi/2}\abs{g_{K_j}^+-g_K^+}\to0$; as $k_0$ is $1$-Lipschitz and $[a',b]\subset[0,\pi/2]$,
-the right sides $c_j=\int_{a'}^bk_0(g_{K_j}^+)+\eps_j$ converge to $c=\int_{a'}^bk_0(g_K^+)$. For $0<\eps<\pi$ let
-$\Phi_K(\eps)=\ip{v_K(b-\eps,b)}{v_b}-\ip{v_K(a,a+\eps)}{v_a}+\int_a^bh_K$, and define $\Phi_{K_j}(\eps)$ in the same way. A point
-$p=h_K(b)u_b+mv_b$ of $e_K(b)$ lies in $H_K(b-\eps)$, that is, $h_K(b)\cos\eps-m\sin\eps\le h_K(b-\eps)$, so
-$\ip{v_K^-(b)}{v_b}\ge\ip{v_K(b-\eps,b)}{v_b}$; likewise $\ip{v_K^+(a)}{v_a}\le\ip{v_K(a,a+\eps)}{v_a}$. By
-\eqref{eq:sigma-open}, $\Phi_K(\eps)\le\sigma_K((a,b))$, and in the same way $\Phi_{K_j}(\eps)\le\sigma_{K_j}((a,b))\le c_j$. Fix $\eps$. The points
-$v_{K_j}(b-\eps,b)$ and $v_{K_j}(a,a+\eps)$ depend continuously on the support values of $K_j$ at $a$, $a+\eps$, $b-\eps$ and $b$, and
-$h_{K_j}\to h_K$ uniformly; so $\Phi_{K_j}(\eps)\to\Phi_K(\eps)$, and therefore $\Phi_K(\eps)\le c$. As $\eps\downarrow0$, $\Phi_K(\eps)\to\sigma_K((a,b))$ by
-\cref{fact:convex}\ref{fact:convex:vertices} and \eqref{eq:sigma-open}, hence $\sigma_K((a,b))\le c$.
+Let $-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$. By
+\cref{fact:iteration}\ref{fact:iteration:arms},
+$\int_0^{\pi/2}\abs{g_{K_j}^+-g_K^+}\to0$; as $k_0$ is $1$-Lipschitz and
+$[a',b]\subset[0,\pi/2]$, the right sides $c_j=\int_{a'}^bk_0(g_{K_j}^+)+\eps_j$
+converge to $c=\int_{a'}^bk_0(g_K^+)$. For $0<\eps<\pi$ let
+$\Phi_K(\eps)=\ip{v_K(b-\eps,b)}{v_b}-\ip{v_K(a,a+\eps)}{v_a}+\int_a^bh_K$, and
+define $\Phi_{K_j}(\eps)$ in the same way. A point $p=h_K(b)u_b+mv_b$ of
+$e_K(b)$ lies in $H_K(b-\eps)$, that is, $h_K(b)\cos\eps-m\sin\eps\le
+h_K(b-\eps)$, so $\ip{v_K^-(b)}{v_b}\ge\ip{v_K(b-\eps,b)}{v_b}$; likewise
+$\ip{v_K^+(a)}{v_a}\le\ip{v_K(a,a+\eps)}{v_a}$. By \eqref{eq:sigma-open},
+$\Phi_K(\eps)\le\sigma_K((a,b))$, and in the same way
+$\Phi_{K_j}(\eps)\le\sigma_{K_j}((a,b))\le c_j$. Fix $\eps$. The points
+$v_{K_j}(b-\eps,b)$ and $v_{K_j}(a,a+\eps)$ depend continuously on the support
+values of $K_j$ at $a$, $a+\eps$, $b-\eps$ and $b$, and $h_{K_j}\to h_K$
+uniformly; so $\Phi_{K_j}(\eps)\to\Phi_K(\eps)$, and therefore $\Phi_K(\eps)\le
+c$. As $\eps\downarrow0$, $\Phi_K(\eps)\to\sigma_K((a,b))$ by
+\cref{fact:convex}\ref{fact:convex:vertices} and \eqref{eq:sigma-open}, hence
+$\sigma_K((a,b))\le c$.
 \end{proof}
 
 \begin{lemma}[passing to the limit]\label{lem:limit}
-Let $K_j$ be polygon caps (with any angle sets) that converge in $\dH$ to $K\in\Kc_{\pi/2}$, and let $\eps_j\to0$
-be such that, for all $-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$,
+Let $K_j$ be polygon caps (with any angle sets) that converge in $\dH$ to
+$K\in\Kc_{\pi/2}$, and let $\eps_j\to0$ be such that, for all $-\pi/2\le
+a<b\le\pi/2$ with $a'=\max(a,0)\le b$,
 \[
   \sigma_{K_j}\bigl((a,b)\bigr)\le\int_{a'}^bk_0\bigl(g_{K_j}^+\bigr)+\eps_j .
 \]
-Then $\sigma_K(E)\le\int_Ek_0(g_K^+(t))\dd t$ for every Borel set $E\subset[0,\pi/2)$.
+Then $\sigma_K(E)\le\int_Ek_0(g_K^+(t))\dd t$ for every Borel set
+$E\subset[0,\pi/2)$.
 \end{lemma}
 
 \begin{proof}
-By \cref{lem:lsc}, $\sigma_K((a,b))\le\int_{a'}^bk_0(g_K^+)$ for all $-\pi/2\le a<b\le\pi/2$ with $a'=\max(a,0)\le b$. Let $\mu$ and $\nu$ be the
-restrictions of $\sigma_K$ and of $k_0(g_K^+(t))\dd t$ to $[0,\pi/2)$; the claim is $\mu\le\nu$. Both are finite measures on $\R$: $\sigma_K([0,\pi/2))$ is finite,
-and $k_0(g_K^+)\le g_K^++1$ is bounded, since $g_K^+(t)=h_K(t)-\ip{C_K^+(t)}{u_t}$ lies between $0$ and $h_K(t)+h_K(t+\pi)$, as $C_K^+(t)\in K$.
-Let $a<b$ be real, $a'=\max(a,0)$ and $b'=\min(b,\pi/2)$. If $b'\le a'$, then $(a,b)\cap[0,\pi/2)$ is empty. Otherwise
-$(a,b)\cap[0,\pi/2)$ contains $(a',b')$ and lies in $(\max(a,-\pi/2),b')$, an interval to which the bound above applies, so
+By \cref{lem:lsc}, $\sigma_K((a,b))\le\int_{a'}^bk_0(g_K^+)$ for all $-\pi/2\le
+a<b\le\pi/2$ with $a'=\max(a,0)\le b$. Let $\mu$ and $\nu$ be the restrictions
+of $\sigma_K$ and of $k_0(g_K^+(t))\dd t$ to $[0,\pi/2)$; the claim is
+$\mu\le\nu$. Both are finite measures on $\R$: $\sigma_K([0,\pi/2))$ is finite,
+and $k_0(g_K^+)\le g_K^++1$ is bounded, since
+$g_K^+(t)=h_K(t)-\ip{C_K^+(t)}{u_t}$ lies between $0$ and $h_K(t)+h_K(t+\pi)$,
+as $C_K^+(t)\in K$. Let $a<b$ be real, $a'=\max(a,0)$ and $b'=\min(b,\pi/2)$. If
+$b'\le a'$, then $(a,b)\cap[0,\pi/2)$ is empty. Otherwise $(a,b)\cap[0,\pi/2)$
+contains $(a',b')$ and lies in $(\max(a,-\pi/2),b')$, an interval to which the
+bound above applies, so
 \[
-  \mu\bigl((a,b)\bigr)\le\sigma_K\bigl((\max(a,-\tfrac\pi2),b')\bigr)\le\int_{a'}^{b'}k_0(g_K^+)\le\nu\bigl((a,b)\bigr).
+  \mu\bigl((a,b)\bigr)\le\sigma_K\bigl((\max(a,-\tfrac\pi2),b')\bigr)
+    \le\int_{a'}^{b'}k_0(g_K^+)\le\nu\bigl((a,b)\bigr).
 \]
-As $\mu$ and $\nu$ are finite and $(a,b]$ is the intersection of the decreasing intervals $(a,b+1/i)$, also $\mu((a,b])\le\nu((a,b])$ for all
-$a<b$. Hence $F(x)=\nu((-\infty,x])-\mu((-\infty,x])$ is nondecreasing; it is also right-continuous, and its Lebesgue--Stieltjes measure $\dd F$
-satisfies $\nu=\mu+\dd F$, since both sides give every interval $(a,b]$ the mass $\nu((a,b])$; hence $\mu\le\mu+\dd F=\nu$.
+As $\mu$ and $\nu$ are finite and $(a,b]$ is the intersection of the decreasing
+intervals $(a,b+1/i)$, also $\mu((a,b])\le\nu((a,b])$ for all $a<b$. Hence
+$F(x)=\nu((-\infty,x])-\mu((-\infty,x])$ is nondecreasing; it is also
+right-continuous, and its Lebesgue--Stieltjes measure $\dd F$ satisfies
+$\nu=\mu+\dd F$, since both sides give every interval $(a,b]$ the mass
+$\nu((a,b])$; hence $\mu\le\mu+\dd F=\nu$.
 \end{proof}
 
 \subsection{The curvature bounds}
@@ -219,35 +312,49 @@ A cap $K\in\Kc_{\pi/2}$ satisfies the \emph{curvature bounds} if, as measures,
 \end{definition}
 
 \begin{proposition}[maximizing caps satisfy the curvature bounds]\label{prop:curvature}
-Every maximizing cap $K_*\in\Kc_{\pi/2}$ with $\cA(K_*)>0$ satisfies the curvature bounds.
+Every maximizing cap $K_*\in\Kc_{\pi/2}$ with $\cA(K_*)>0$ satisfies the
+curvature bounds.
 \end{proposition}
 
 \begin{proof}
-Take the selection $K_j\to K_*$ of \cref{prop:selection}, with stages $k_j$, step sizes $\delta_j\to0$, in
-$[-R_0,R_0]\times[0,1]$, and $\eta_j=\dH(K_j,K_*)\to0$. Let $D=2R_0+2$. Two points of the box differ by at most $2R_0$ in $x$ and by at most $1$ in $y$,
-so $\norm{p-q}\le D$ for all $p,q\in K_j$. Also $\abs{h_{K_j}}\le R_0+1$, and as $C_{K_j}^+(t)\in K_j$,
+Take the selection $K_j\to K_*$ of \cref{prop:selection}, with stages $k_j$,
+step sizes $\delta_j\to0$, in $[-R_0,R_0]\times[0,1]$, and
+$\eta_j=\dH(K_j,K_*)\to0$. Let $D=2R_0+2$. Two points of the box differ by at
+most $2R_0$ in $x$ and by at most $1$ in $y$, so $\norm{p-q}\le D$ for all
+$p,q\in K_j$. Also $\abs{h_{K_j}}\le R_0+1$, and as $C_{K_j}^+(t)\in K_j$,
 \[
-  0\le g_{K_j}^+(t)=h_{K_j}(t)-\ip{C_{K_j}^+(t)}{u_t}\le h_{K_j}(t)+h_{K_j}(t+\pi)\le D ;
+  0\le g_{K_j}^+(t)=h_{K_j}(t)-\ip{C_{K_j}^+(t)}{u_t}\le h_{K_j}(t)+h_{K_j}(t
+    +\pi)\le D ;
 \]
-since $k_0(x)\le\abs x+1$, $k_0(g_{K_j}^+)\le B=D+1$. Let $e_j(t)=2\eta_j\nu_{k_j}(t)\ge0$. For $t\in\Theta_{k_j}$, \cref{prop:floating} gives
-$\sigma_{K_j}(t)\le\tau_{K_j}(t)+e_j(t)$, so by \cref{lem:curv-defect}
+since $k_0(x)\le\abs x+1$, $k_0(g_{K_j}^+)\le B=D+1$. Let
+$e_j(t)=2\eta_j\nu_{k_j}(t)\ge0$. For $t\in\Theta_{k_j}$, \cref{prop:floating}
+gives $\sigma_{K_j}(t)\le\tau_{K_j}(t)+e_j(t)$, so by \cref{lem:curv-defect}
 \[
   \sigma_{K_j}(t)\le k_0(g_{K_j}^+(t))\delta_j+(D+4)\delta_j^2+e_j(t).
 \]
-This holds also at $t=0$, where the right side is nonnegative and $\sigma_{K_j}(0)=0$, since $K_j$ has no normal angle in $(-\pi/2,\delta_j)$ and
-so $v_{K_j}^+(0)=v_{K_j}^-(0)$. The grid points $i\delta_j$, $0\le i<2^{k_j+1}$, are distinct, and the weights $\nu_{k_j}(s)$ add up to at most $1$
-by \eqref{eq:weights}, so the errors $e_j(i\delta_j)$ add up to at most $2\eta_j$. By \cref{lem:sum} with $C=D+4$, for $-\pi/2\le a<b\le\pi/2$
-with $a'\le b$,
+This holds also at $t=0$, where the right side is nonnegative and
+$\sigma_{K_j}(0)=0$, since $K_j$ has no normal angle in $(-\pi/2,\delta_j)$ and
+so $v_{K_j}^+(0)=v_{K_j}^-(0)$. The grid points $i\delta_j$, $0\le i<2^{k_j+1}$,
+are distinct, and the weights $\nu_{k_j}(s)$ add up to at most $1$ by
+\eqref{eq:weights}, so the errors $e_j(i\delta_j)$ add up to at most $2\eta_j$.
+By \cref{lem:sum} with $C=D+4$, for $-\pi/2\le a<b\le\pi/2$ with $a'\le b$,
 \[
-  \sigma_{K_j}((a,b))\le\int_{a'}^bk_0(g_{K_j}^+)+\bigl(2B+\pi(D+2)\bigr)\delta_j+2\eta_j .
+  \sigma_{K_j}((a,b))\le\int_{a'}^bk_0(g_{K_j}^+)+\bigl(2B+\pi(D
+    +2)\bigr)\delta_j+2\eta_j .
 \]
-By \cref{lem:limit}, $K_*$ satisfies the first curvature bound. The reflection $K_*^{\mir}$ is a cap with the same sofa area
-(\cref{fact:monotone}\ref{fact:monotone:mirror}), hence maximizing with positive sofa area, and the argument above, applied to $K_*^{\mir}$ in place
-of $K_*$, shows that it satisfies the first curvature bound. Let $E\subset(\pi/2,\pi]$ be a Borel set, so that $\pi-E\subset[0,\pi/2)$. By
-\cref{fact:monotone}\ref{fact:monotone:mirror}, $\sigma_{K_*}(E)=\sigma_{K_*^{\mir}}(\pi-E)$, and by \cref{fact:arms}\ref{fact:arms:mirror},
+By \cref{lem:limit}, $K_*$ satisfies the first curvature bound. The reflection
+$K_*^{\mir}$ is a cap with the same sofa area
+(\cref{fact:monotone}\ref{fact:monotone:mirror}), hence maximizing with positive
+sofa area, and the argument above, applied to $K_*^{\mir}$ in place of $K_*$,
+shows that it satisfies the first curvature bound. Let $E\subset(\pi/2,\pi]$ be
+a Borel set, so that $\pi-E\subset[0,\pi/2)$. By
+\cref{fact:monotone}\ref{fact:monotone:mirror},
+$\sigma_{K_*}(E)=\sigma_{K_*^{\mir}}(\pi-E)$, and by
+\cref{fact:arms}\ref{fact:arms:mirror},
 $g^+_{K_*^{\mir}}(s)=f^-_{K_*}(\pi/2-s)$; hence
 \[
-  \sigma_{K_*}(E)\le\int_{\pi-E}k_0\bigl(f^-_{K_*}(\tfrac\pi2-s)\bigr)\dd s=\int_Ek_0\bigl(f^-_{K_*}(t-\tfrac\pi2)\bigr)\dd t,
+  \sigma_{K_*}(E)\le\int_{\pi-E}k_0\bigl(f^-_{K_*}(\tfrac\pi2-s)\bigr)\dd s
+    =\int_Ek_0\bigl(f^-_{K_*}(t-\tfrac\pi2)\bigr)\dd t,
 \]
 which is the second curvature bound for $K_*$.
 \end{proof}
@@ -255,17 +362,22 @@ which is the second curvature bound for $K_*$.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\linewidth]{figures/fig-curvature}
-\caption{The first curvature bound for Gerver's cap, which maximizes $\cA$, as $\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
-\cref{fact:monotone}\ref{fact:monotone:area}, \cref{fact:optimal}). The density $r(t)$ of $\sigma_{\KG}$ on $[0,\pi/2)$ (blue) and $k_0(g_{\KG}(t))$ (orange,
-dashed) are computed from Romik's rotation path. In the figure the blue curve lies below the orange one, and the two agree on $[t_1,t_*]$ and on $[t_3,t_4]$,
-where $t_*=0.616\ldots$ is the angle at which $g_{\KG}$ equals $2$; the gap between them is shaded.}
+\caption{The first curvature bound for Gerver's cap, which maximizes $\cA$, as
+$\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
+\cref{fact:monotone}\ref{fact:monotone:area}, \cref{fact:optimal}). The density
+$r(t)$ of $\sigma_{\KG}$ on $[0,\pi/2)$ (blue) and $k_0(g_{\KG}(t))$ (orange,
+dashed) are computed from Romik's rotation path. In the figure the blue curve
+lies below the orange one, and the two agree on $[t_1,t_*]$ and on $[t_3,t_4]$,
+where $t_*=0.616\ldots$ is the angle at which $g_{\KG}$ equals $2$; the gap
+between them is shaded.}
 \label{fig:curvature}
 \end{figure}
 
 \subsection{The injectivity condition}
 
 \begin{lemma}[integral inequalities]\label{lem:integral}
-Let $K\in\Kc_{\pi/2}$ satisfy the curvature bounds. Then $K$ satisfies condition (1) of \cref{def:inj}, and
+Let $K\in\Kc_{\pi/2}$ satisfy the curvature bounds. Then $K$ satisfies condition
+(1) of \cref{def:inj}, and
 \begin{gather*}
   f_K(t)-1\ge\int_0^tm_0\bigl(g_K(u)\bigr)\dd u\quad(0\le t<\tfrac\pi2),\\
   g_K(t)-1\ge\int_t^{\pi/2}m_0\bigl(f_K(u)\bigr)\dd u\quad(0<t\le\tfrac\pi2).
@@ -273,62 +385,82 @@ Let $K\in\Kc_{\pi/2}$ satisfy the curvature bounds. Then $K$ satisfies condition
 \end{lemma}
 
 \begin{proof}
-Each restriction of $\sigma_K$ is a finite measure, dominated by a measure with a density, hence absolutely continuous with respect to
-Lebesgue measure; so it has a density (Radon--Nikodym), and condition (1) holds. By \cref{fact:arms}\ref{fact:arms:regular}, $f_K,g_K$ are defined
-and continuous on $[0,\pi/2]$, $f_K^+=f_K$ on $[0,\pi/2)$, and $f_K(0)=g_K(\pi/2)=1$. For $t\in[0,\pi/2)$, $(0,t]\subset[0,\pi/2)$, so the
-first curvature bound and \cref{fact:arms}\ref{fact:arms:integral} give
+Each restriction of $\sigma_K$ is a finite measure, dominated by a measure with
+a density, hence absolutely continuous with respect to Lebesgue measure; so it
+has a density (Radon--Nikodym), and condition (1) holds. By
+\cref{fact:arms}\ref{fact:arms:regular}, $f_K,g_K$ are defined and continuous on
+$[0,\pi/2]$, $f_K^+=f_K$ on $[0,\pi/2)$, and $f_K(0)=g_K(\pi/2)=1$. For
+$t\in[0,\pi/2)$, $(0,t]\subset[0,\pi/2)$, so the first curvature bound and
+\cref{fact:arms}\ref{fact:arms:integral} give
 \begin{align*}
   f_K(t)-1&=f_K^+(t)-f_K^+(0)=\int_0^tg_K-\sigma_K\bigl((0,t]\bigr)\\
   &\ge\int_0^t\bigl(g_K-k_0(g_K)\bigr)=\int_0^tm_0(g_K).
 \end{align*}
 For $a\le b$,
 \[
-  g_K^+(b)-g_K^+(a)=\sigma_K\bigl((a+\tfrac\pi2,b+\tfrac\pi2]\bigr)-\int_a^bf_K^+ .
+  g_K^+(b)-g_K^+(a)=\sigma_K\bigl((a+\tfrac\pi2,b+\tfrac\pi2]\bigr)
+    -\int_a^bf_K^+ .
 \]
-As $\ip{\yy_K(s)}{u_s}=h_K(s)$, $\ip{\yy_K(s)}{v_s}=h_K(s+\pi/2)$, $A_K^+(s)=v_K^+(s)$, $C_K^+(s)=v_K^+(s+\pi/2)$ and $u_s=-v_{s+\pi/2}$,
-we have $g_K^+(s)=h_K(s)+\ip{v_K^+(s+\pi/2)}{v_{s+\pi/2}}$ and $f_K^+(s)=h_K(s+\pi/2)-\ip{v_K^+(s)}{v_s}$. By
-\cref{fact:convex}\ref{fact:convex:sigma}, $\ip{v_K^+(d)}{v_d}-\ip{v_K^+(c)}{v_c}=\sigma_K((c,d])-\int_c^dh_K$ for $c\le d$. The product rule
-\baek{Lemma~5.1.3} for $h_K(s)=\ip{v_K^+(s)}{u_s}$, with $v_K^+(d)-v_K^+(c)=\int_{(c,d]}v_s\dd\sigma_K(s)$ (\cref{fact:convex}\ref{fact:convex:sigma}) and
-$\frac{\dd}{\dd s}u_s=v_s$, gives $h_K(b)-h_K(a)=\int_{(a,b]}\ip{v_s}{u_s}\dd\sigma_K(s)+\int_a^b\ip{v_K^+(s)}{v_s}\dd s=\int_a^b\ip{v_K^+(s)}{v_s}\dd s$.
-Hence
+As $\ip{\yy_K(s)}{u_s}=h_K(s)$, $\ip{\yy_K(s)}{v_s}=h_K(s+\pi/2)$,
+$A_K^+(s)=v_K^+(s)$, $C_K^+(s)=v_K^+(s+\pi/2)$ and $u_s=-v_{s+\pi/2}$, we have
+$g_K^+(s)=h_K(s)+\ip{v_K^+(s+\pi/2)}{v_{s+\pi/2}}$ and
+$f_K^+(s)=h_K(s+\pi/2)-\ip{v_K^+(s)}{v_s}$. By
+\cref{fact:convex}\ref{fact:convex:sigma},
+$\ip{v_K^+(d)}{v_d}-\ip{v_K^+(c)}{v_c}=\sigma_K((c,d])-\int_c^dh_K$ for $c\le
+d$. The product rule \baek{Lemma~5.1.3} for $h_K(s)=\ip{v_K^+(s)}{u_s}$, with
+$v_K^+(d)-v_K^+(c)=\int_{(c,d]}v_s\dd\sigma_K(s)$
+(\cref{fact:convex}\ref{fact:convex:sigma}) and $\frac{\dd}{\dd s}u_s=v_s$,
+gives
+$h_K(b)-h_K(a)=\int_{(a,b]}\ip{v_s}{u_s}\dd\sigma_K(s)+\int_a^b\ip{v_K^+(s)}{v_s}\dd
+s=\int_a^b\ip{v_K^+(s)}{v_s}\dd s$. Hence
 \begin{align*}
-  g_K^+(b)-g_K^+(a)&=h_K(b)-h_K(a)+\sigma_K\bigl((a+\tfrac\pi2,b+\tfrac\pi2]\bigr)-\int_{a+\pi/2}^{b+\pi/2}h_K,\\
+  g_K^+(b)-g_K^+(a)&=h_K(b)-h_K(a)+\sigma_K\bigl((a+\tfrac\pi2,b
+    +\tfrac\pi2]\bigr)-\int_{a+\pi/2}^{b+\pi/2}h_K,\\
   \int_a^bf_K^+&=\int_{a+\pi/2}^{b+\pi/2}h_K-\bigl(h_K(b)-h_K(a)\bigr),
 \end{align*}
-and the identity follows. Let $t\in(0,\pi/2]$, and take $a=t$, $b=\pi/2$. As $g_K=g_K^+$, $g_K(\pi/2)=1$, $f_K^+=f_K$ on $[t,\pi/2)$ and
+and the identity follows. Let $t\in(0,\pi/2]$, and take $a=t$, $b=\pi/2$. As
+$g_K=g_K^+$, $g_K(\pi/2)=1$, $f_K^+=f_K$ on $[t,\pi/2)$ and
 $(t+\pi/2,\pi]\subset(\pi/2,\pi]$, the second curvature bound gives
 \begin{align*}
   g_K(t)-1&=\int_t^{\pi/2}f_K-\sigma_K\bigl((t+\tfrac\pi2,\pi]\bigr)\\
-  &\ge\int_t^{\pi/2}f_K-\int_{t+\pi/2}^{\pi}k_0\bigl(f_K^-(u-\tfrac\pi2)\bigr)\dd u=\int_t^{\pi/2}m_0(f_K).\qedhere
+  &\ge\int_t^{\pi/2}f_K-\int_{t+\pi/2}^{\pi}k_0\bigl(f_K^-(u
+    -\tfrac\pi2)\bigr)\dd u=\int_t^{\pi/2}m_0(f_K).\qedhere
 \end{align*}
 \end{proof}
 
 \begin{lemma}[the lower sequence]\label{lem:lower}
-Let $f,g:[0,\pi/2]\to[0,\infty)$ be continuous with $f(t)-1\ge\int_0^tm_0(g)$ for $t\in[0,\pi/2)$ and
-$g(t)-1\ge\int_t^{\pi/2}m_0(f)$ for $t\in(0,\pi/2]$. Then for every $j\ge0$, $f_j(t)\le f(t)$ on $[0,\pi/2)$ and
-$f_j(\pi/2-t)\le g(t)$ on $(0,\pi/2]$.
+Let $f,g:[0,\pi/2]\to[0,\infty)$ be continuous with $f(t)-1\ge\int_0^tm_0(g)$
+for $t\in[0,\pi/2)$ and $g(t)-1\ge\int_t^{\pi/2}m_0(f)$ for $t\in(0,\pi/2]$.
+Then for every $j\ge0$, $f_j(t)\le f(t)$ on $[0,\pi/2)$ and $f_j(\pi/2-t)\le
+g(t)$ on $(0,\pi/2]$.
 \end{lemma}
 
 \begin{proof}
-Induction on $j$, the case $j=0$ being $f_0=0\le f,g$. If it holds for $j$, then for $t\in[0,\pi/2)$, since $m_0$ is
-nondecreasing and $f_j(\pi/2-u)\le g(u)$ for $u\in(0,t]$,
-$\mathcal Ff_j(t)=1+\int_0^tm_0(f_j(\pi/2-u))\dd u\le1+\int_0^tm_0(g)\le f(t)$, and with $f_j\le f$ we get
+Induction on $j$, the case $j=0$ being $f_0=0\le f,g$. If it holds for $j$, then
+for $t\in[0,\pi/2)$, since $m_0$ is nondecreasing and $f_j(\pi/2-u)\le g(u)$ for
+$u\in(0,t]$, $\mathcal Ff_j(t)=1+\int_0^tm_0(f_j(\pi/2-u))\dd
+u\le1+\int_0^tm_0(g)\le f(t)$, and with $f_j\le f$ we get
 $f_{j+1}=\max(f_j,\mathcal Ff_j)\le f$ on $[0,\pi/2)$. For $t\in(0,\pi/2]$,
-$\mathcal Ff_j(\pi/2-t)=1+\int_t^{\pi/2}m_0(f_j(s))\dd s\le1+\int_t^{\pi/2}m_0(f)\le g(t)$, and with
-$f_j(\pi/2-t)\le g(t)$ this gives $f_{j+1}(\pi/2-t)\le g(t)$.
+$\mathcal Ff_j(\pi/2-t)=1+\int_t^{\pi/2}m_0(f_j(s))\dd
+s\le1+\int_t^{\pi/2}m_0(f)\le g(t)$, and with $f_j(\pi/2-t)\le g(t)$ this gives
+$f_{j+1}(\pi/2-t)\le g(t)$.
 \end{proof}
 
 \begin{proposition}[injectivity]\label{prop:inj}
-Every $K\in\Kc_{\pi/2}$ that satisfies the curvature bounds satisfies the injectivity condition, and
-$f_K,g_K>1$ on $(0,\pi/2)$.
+Every $K\in\Kc_{\pi/2}$ that satisfies the curvature bounds satisfies the
+injectivity condition, and $f_K,g_K>1$ on $(0,\pi/2)$.
 \end{proposition}
 
 \begin{proof}
-By \cref{lem:integral}, $K$ satisfies (1) and the integral inequalities; by \cref{fact:arms}\ref{fact:arms:regular}, $f_K$ and $g_K$ are continuous
-on $[0,\pi/2]$, and they are nonnegative, since $f_K(t)=h_K(t+\pi/2)-\ip{A_K(t)}{v_t}$ and $g_K(t)=h_K(t)-\ip{C_K(t)}{u_t}$ with
-$A_K(t),C_K(t)\in K$. By \cref{lem:lower} with $j=11$ and \cref{fact:iteration}\ref{fact:iteration:eleven}, for
-$t\in(0,\pi/2)$, $1<f_{11}(t)\le f_K(t)$ and $1<f_{11}(\pi/2-t)\le g_K(t)$. By \cref{fact:arms}\ref{fact:arms:regular}, $\xx_K$ is continuously
-differentiable on $[0,\pi/2]$ with $\xx_K'=-(f_K-1)u_t+(g_K-1)v_t$, which gives (2) and (3).
+By \cref{lem:integral}, $K$ satisfies (1) and the integral inequalities; by
+\cref{fact:arms}\ref{fact:arms:regular}, $f_K$ and $g_K$ are continuous on
+$[0,\pi/2]$, and they are nonnegative, since
+$f_K(t)=h_K(t+\pi/2)-\ip{A_K(t)}{v_t}$ and $g_K(t)=h_K(t)-\ip{C_K(t)}{u_t}$ with
+$A_K(t),C_K(t)\in K$. By \cref{lem:lower} with $j=11$ and
+\cref{fact:iteration}\ref{fact:iteration:eleven}, for $t\in(0,\pi/2)$,
+$1<f_{11}(t)\le f_K(t)$ and $1<f_{11}(\pi/2-t)\le g_K(t)$. By
+\cref{fact:arms}\ref{fact:arms:regular}, $\xx_K$ is continuously differentiable
+on $[0,\pi/2]$ with $\xx_K'=-(f_K-1)u_t+(g_K-1)v_t$, which gives (2) and (3).
 \end{proof}
 
 \begin{corollary}[maximizing right-angle caps are in $\Ki$]\label{cor:Ki}
@@ -336,7 +468,10 @@ Every $K\in\Kc_{\pi/2}$ with $\cA(K)=\abs\Gs$ lies in $\Ki$.
 \end{corollary}
 
 \begin{proof}
-$K$ is maximizing (\cref{fact:optimal}). Gerver's cap $\KG\in\Kc_{\pi/2}$ has $\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
-\cref{fact:monotone}\ref{fact:monotone:area}), so $\cA(K)\ge\cA(\KG)=\abs\Gs>0$. Hence $K$ satisfies the curvature bounds
-(\cref{prop:curvature}) and the injectivity condition (\cref{prop:inj}); and $\abs K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5$.
+$K$ is maximizing (\cref{fact:optimal}). Gerver's cap $\KG\in\Kc_{\pi/2}$ has
+$\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
+\cref{fact:monotone}\ref{fact:monotone:area}), so $\cA(K)\ge\cA(\KG)=\abs\Gs>0$.
+Hence $K$ satisfies the curvature bounds (\cref{prop:curvature}) and the
+injectivity condition (\cref{prop:inj}); and $\abs
+K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5$.
 \end{proof}

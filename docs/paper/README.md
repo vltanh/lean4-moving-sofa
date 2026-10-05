@@ -7,7 +7,8 @@ formalization in this repository and cites it for the machine-checked statement;
 
 This is a draft for the author to read. An AI model (Claude Sonnet 5.5, in Claude Code) wrote the text from
 the Lean library, the illustrated text of the proofs in [`docs/proof/`](../proof/README.md) and the text of
-Baek's paper, and independent model runs checked it. No person has checked it.
+Baek's paper, and independent model runs checked it. The author has read and edited the abstract and the
+introduction (4 and 5 October); the rest of the text has been checked by model runs only.
 [How it was made](#how-it-was-made) says what has been compared with what, and
 [Before submitting](#before-submitting) lists what only the author can settle.
 
@@ -18,10 +19,10 @@ Baek's paper, and independent model runs checked it. No person has checked it.
 | [`main.tex`](main.tex) | the preamble, the title and abstract, and the list of sections |
 | [`macros.tex`](macros.tex) | the notation |
 | [`sections/01-introduction.tex`](sections/01-introduction.tex) … [`10-formalization.tex`](sections/10-formalization.tex) | Sections 1 to 10 |
-| [`sections/a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex) | Appendices A (Gerver's sofa), B (corrections to Baek's statements), C (the Lean statement and a dictionary) |
+| [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean statement and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
-| [`figures/`](figures) | the figures: `make_figures.py` draws eight of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the ninth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (63 pages) |
+| [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
+| [`main.pdf`](main.pdf) | the compiled manuscript (66 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -34,17 +35,17 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 63 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 66 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
 
 - Theorem 1.1 is proved in the text, from Baek's results (arXiv:2411.19826, version 1; its numbering is
   used throughout, as `[1, Thm. x.y.z]`) which Section 2 records as Facts, with the corrections that the
-  audit of that paper found (Appendix B). Section 3 reduces the theorem to caps and outlines the proof;
+  audit of that paper found (Appendix C). Section 3 reduces the theorem to caps and outlines the proof;
   Sections 4 to 9 prove it.
 - The text is a translation of the formalization. Every result of the paper is proved in Lean 4 in the
-  repository, and Appendix C gives the statement of record in mathematical notation, with the definitions that
+  repository, and Appendix D gives the statement of record in mathematical notation, with the definitions that
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
   4 October (commit `952812d`). Section 10 says what the machine check does and does not give, and who and
@@ -61,37 +62,35 @@ undefined reference.
 
 These are the author's to settle; the text settles none of them.
 
-1. The title page names the author only. The AI models are not authors and are described in Sections 1.4 and
-   10.2. Check that wording against arXiv's current policy on generative-AI tools, and against what you are
-   ready to stand behind: the text says that no person has checked the argument independently of the
-   formalization.
+1. The title page names the author only. The AI models are not authors and are described in Section 1.5 and
+   Appendix E. Check that wording against arXiv's current policy on generative-AI tools, and against what you are
+   ready to stand behind: the text says that the author proofread and edited the text and that the argument has
+   not yet been refereed.
 2. `\address` and `\email` are commented out in `main.tex`.
 3. Lean's kernel has checked the formal proofs, not the text. The text is a translation of them by a model,
    compared with the Lean statements, proof by proof, and with Baek's paper by independent model runs (below). A
-   human read of Sections 2 to 9 is the check that is missing, and Appendix C's paraphrase of the Lean
+   human read of Sections 2 to 10 is the check that is missing, and Appendix D's paraphrase of the Lean
    definitions is the place where nothing but model checks stand behind the text.
 4. Baek's paper is a preprint, and all the numbers of its results are those of arXiv version 1. If a later
-   version renumbers, the citations `\baek{...}` and Appendices B and C need updating.
+   version renumbers, the citations `\baek{...}` and Appendices C and D need updating.
 5. The suggested primary category is math.MG (Metric Geometry), with MSC 2020 codes 52A38, 52A40 (primary) and
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "63 pages, 9 figures. The proof, together with Baek's, is formalized in Lean 4:
-   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,240 characters, plain text) is:
+   comments "66 pages, 14 figures. The proof, together with Baek's, is formalized in Lean 4:
+   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,127 characters, plain text) is:
 
-   > The moving sofa problem asks for the largest area of a planar region that can be moved around the
-   > right-angled corner of a hallway of unit width. Gerver found a region of area 2.2195... in 1992 and
-   > conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the only optimal
-   > region: every moving sofa of the same area is the image of Gerver's sofa under a rotation and a
-   > translation, as a set. Baek's proof studies one particular maximizer, produced by a compactness argument:
-   > its sofa, rotated, turns through a right angle, and at the right angle it satisfies an injectivity
-   > condition. A given maximizer need not be that one. We show that every maximizer has these properties, by
-   > approximating a maximizing convex cap by polygonal maximizers of a penalized problem, which are almost
-   > balanced, and passing to the limit. Equality in Baek's concave upper bound, whose nonlinear terms are
-   > halves of integrals of squared lengths of tangent segments, then forces differential equations for the
-   > difference of the support functions of the cap and of Gerver's cap, and these equations identify the cap.
-   > A last step recovers the region from its cap. The proof, together with Baek's, is formalized in Lean 4
-   > with Mathlib.
+   > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
+   > around the right-angled corner of a hallway of unit width. Gerver found a shape of area 2.2195... in 1992
+   > and conjectured that it is optimal; Baek proved this in 2024. We prove that Gerver's sofa is the only
+   > optimal shape: every moving sofa of the same area is a rotated and translated copy of it. To prove
+   > optimality, Baek first bounds the area of any large moving sofa by that of a special shape with two
+   > geometric properties. Baek then bounds the area of every shape with these properties by a concave functional
+   > whose largest value is the area of Gerver's sofa. Since this chain of inequalities passes through the
+   > special shape, it says nothing about the shape of a moving sofa of maximal area. To prove uniqueness, we
+   > show that every moving sofa of maximal area has the same two properties, so that the functional bounds its
+   > area directly. Equality now forces the sofa to be Gerver's. The proof, together with Baek's, is formalized
+   > in Lean 4 with Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
 
 7. `\date{October 2026}` in `main.tex`.
 8. [`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) list the four versions of the Palomar
@@ -195,13 +194,21 @@ passes):
 The third pass alone, from 11:48 to 14:15: 2 hours 26 minutes, 16 sub-agents, about 7.3 hours of
 sub-agent work; [`CREDITS.md`](../../CREDITS.md) has its figures.
 
+On 4 and 5 October the author walked through the abstract and the introduction with Claude (Sonnet 5.5, then Opus
+5.5, in Claude Code) and had them rewritten sentence by sentence. The same session moved the corrections to Baek's
+statements out of Section 2 into Appendix C, moved the account of the use of AI into a new Appendix E, added
+Appendix A with five figures of Baek's argument (among them a maximum polygon cap computed numerically, whose
+balance the script asserts), and rewrapped the source to 80 columns (the text of the compiled PDF was compared before
+and after). These edits were not checked by independent model runs.
+
 ## What has not been done
 
-- No person has read the manuscript.
+- The author has read and edited the abstract and the introduction; Sections 2 to 10 and the appendices have been
+  read by model runs only.
 - The manuscript was not compiled by arXiv; only the local build and the test build of the archive were run.
 - The Facts of Section 2 state Baek's results as the Lean states them; the Lean statements were compared with his TeX
   by the route check and by model runs, not proved again by hand. Baek's paper is itself unrefereed.
-- Appendix C's paraphrase of the Lean definitions was compared with `Challenge.lean` by model runs, in two rounds.
+- Appendix D's paraphrase of the Lean definitions was compared with `Challenge.lean` by model runs, in two rounds.
 - The edits after the second round of checks, the E-label marks added in it, and this file were not checked again.
 - Version 4 of the Palomar entry registers `16653ae`; the Lean results of 4 October are in the libraries but not in
   a registered version.

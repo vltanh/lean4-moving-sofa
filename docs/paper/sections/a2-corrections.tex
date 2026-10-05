@@ -1,9 +1,39 @@
 \section{Corrections to Baek's paper that are used here}\label{app:corrections}
 
-The audit that accompanies the formalization compared every result of~\cite{Baek} with its TeX source and with the formal statement~\cite{Companion}. Every result of the paper
-holds with the intended statement. \cref{tab:corrections} lists the corrections that concern the results used in this paper, with the labels E$n$ of the audit. The complete list of the audit has
-27 items, E22 only pointing to E21, and two missing hypotheses: \baek{Thm.~2.1.1} (Schneider's Theorem~4.2.3: $\sigma_K(X)$ is the length of $\bigcup_{t\in X}e_K(t)$) needs
-$K$ to have interior points, and \baek{Thm.~3.1.2} needs a bounded Nef polygon; every use satisfies them (the text itself uses $\sigma_K$ only as defined in \cref{fact:convex}\ref{fact:convex:sigma}, which does not depend on Thm.~2.1.1). Twelve of the findings in the audit come from the notes of another formalization of Baek's proof~\cite{Cureton}.
+The audit that accompanies the formalization compared every result
+of~\cite{Baek} with its TeX source and with the formal
+statement~\cite{Companion}. Every result of the paper holds with the intended
+statement. \cref{tab:corrections} lists the corrections that concern the results
+used in this paper, with the labels E$n$ of the audit. The complete list of the
+audit has 27 items, E22 only pointing to E21, and two missing hypotheses:
+\baek{Thm.~2.1.1} (Schneider's Theorem~4.2.3: $\sigma_K(X)$ is the length of
+$\bigcup_{t\in X}e_K(t)$) needs $K$ to have interior points, and
+\baek{Thm.~3.1.2} needs a bounded Nef polygon; every use satisfies them (the
+text itself uses $\sigma_K$ only as defined in
+\cref{fact:convex}\ref{fact:convex:sigma}, which does not depend on Thm.~2.1.1).
+Twelve of the findings in the audit come from the notes of another formalization
+of Baek's proof~\cite{Cureton}.
+
+Three Facts of \cref{sec:setting} are known to us only through the
+formalization~\cite{Companion}, because the printed proof is missing or invalid,
+or because the statement is not in~\cite{Baek}: \cref{fact:Q}\ref{fact:Q:triple}
+(E21), \cref{fact:gerver} (E12, E24) and \cref{fact:height}. Baek states
+\baek{Thm.~8.4.1} without proof (his Remark~8.4.1: the properties are ``easy to
+verify numerically'') and proves \baek{Thm.~6.1.2} by a misreading of a theorem
+of Gerver; the statements are true, and the formalization proves them from
+Romik's equations. Romik asserts the uniqueness of the solution of his equations
+for $0<\varphi<\theta<\pi/4$ without proof; the uniqueness in the box
+$\varphi\in[0.039,0.04]$, $\theta\in[0.68,0.69]$ is proved in~\cite{Companion}.
+Baek's \baek{Thm.~8.4.1\,(2)} describes the niche of Gerver's cap as the region
+enclosed by $\bB$ reversed, $\xx|_{[t_1,t_4]}$, $\bD$ reversed and the segment
+of the $x$-axis from $\bD(t_0)$ to $\bB(t_5)$; that open region omits the open
+segment of the $x$-axis between $\bD(t_0)$ and $\bB(t_5)$, which lies in the
+niche, and the exact description is the identity in
+\cref{fact:gerver}\ref{fact:gerver:niche}.
+\cref{fact:gerver}\ref{fact:gerver:endpoint} and \cref{fact:height} are not
+in~\cite{Baek}; the former is proved from Romik's equations, the second identity
+as $\bC(\pi/2)=\xx(\pi/2)-\beta(\pi/2)u_{\pi/2}+v_{\pi/2}$ with
+$\beta(\pi/2)=0$.
 
 {\small
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.065\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}@{}}

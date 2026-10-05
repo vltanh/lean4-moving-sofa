@@ -1,0 +1,42 @@
+\section{The use of AI}\label{app:ai}
+
+ChatGPT Pro~6 (OpenAI) wrote the first version of the proof of \cref{thm:main}
+on 2 October 2026, at the author's request, together with drafts of its
+formalization and of the connection with formal-conjectures; neither Lean draft
+had ever been compiled. Claude Opus~5.5 (Anthropic), in Claude Code with
+sub-agents, formalized~\cite{Baek} and completed the two drafts, following the
+author's \texttt{formalize-math-paper} procedure, in rounds between 1 and 3
+October 2026; 54 proofs of the first draft and 78 proofs of the second did not
+compile and were replaced and proved again. Before any proof was written, a
+separate run of Claude Opus~5.5 reviewed every Lean statement of a result
+of~\cite{Baek} against its TeX source, and a later separate run compared the
+Lean statements of uniqueness with the informal proof and found no weakening,
+vacuous definition or hidden assumption. The repository~\cite{Companion} records
+who did what, with times and sizes. Claude Sonnet~5.5 (Anthropic), in Claude
+Code, wrote the first version of this manuscript on 4 October 2026 from the Lean
+library, the illustrated text of the proofs in~\cite{Companion} and the text
+of~\cite{Baek}. All figures but one were computed from the definitions by the
+script \path{docs/paper/figures/make_figures.py} of the repository, which was
+added after the commit cited in~\cite{Companion}; the remaining one is drawn in
+TikZ. The author asked for each of these steps and decided its scope. None of
+the three systems is an author of this paper, since none of them can take
+responsibility for it.
+
+The text of this paper is not machine-checked; the dictionary of
+Appendix~\ref{app:lean} gives its correspondence with the Lean statements. On 4
+October 2026, six runs of Claude Opus~5.5, each assigned some sections, compared
+the statements and proofs of the first version of this paper with the Lean
+statements and with the TeX source of~\cite{Baek}; a run of Claude Sonnet~5.5
+checked the claims about the formalization, the dictionary and the references;
+and a run of Claude Opus~5.5 read the whole paper without access to either. The
+findings were corrected, and a further run of Claude Opus~5.5 checked the
+passages rewritten in response. Two more runs of Claude Opus~5.5 checked a
+rewrite of the prose for the patterns of machine-written text and for changes of
+claim. The same day, the Lean library was extended with the results of this
+paper that it did not yet prove, and Sections~2 and 4 to 9 were rewritten, by
+sub-agents running Claude Opus~5.5, to state what the Lean states and to follow
+its proofs. Five runs of Claude Opus~5.5, each assigned some sections and
+appendices, then compared the result with the Lean, and a second round of the
+same runs compared the corrected text again. The changes that followed the
+second round were not checked again. At the time of writing, the argument has
+not been refereed.

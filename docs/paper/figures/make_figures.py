@@ -27,8 +27,8 @@ import fig_uniqueness as fu  # noqa: E402
 
 PI = math.pi
 INK, FAINT, WALL = '#1f2937', '#9ca3af', '#374151'
-BLUE, ORANGE, GREEN, PURPLE = '#2563eb', '#ea580c', '#16a34a', '#9333ea'
-BLUE_F, ORANGE_F, GREY_F, GREEN_F, PURPLE_F = '#dbeafe', '#fed7aa', '#e5e7eb', '#dcfce7', '#f3e8ff'
+BLUE, ORANGE, GREEN, PURPLE, TEAL = '#2563eb', '#ea580c', '#16a34a', '#9333ea', '#0d9488'
+BLUE_F, ORANGE_F, GREY_F, GREEN_F, PURPLE_F, TEAL_F = '#dbeafe', '#fed7aa', '#e5e7eb', '#dcfce7', '#f3e8ff', '#ccfbf1'
 
 plt.rcParams.update({
     'font.family': 'serif', 'mathtext.fontset': 'cm', 'font.size': 8.5, 'pdf.fonttype': 42,
@@ -113,43 +113,347 @@ A_END = gerver.path(PI / 2)[0]
 
 
 def fig_intro():
-    fig, (a1, a2) = canvas(6.3, 2.35, 2, [1.35, 1.0])
-    # Left: the hallway and three positions of the sofa.
+    fig, a1 = canvas(3.6, 2.35)
+    # The hallway and three positions of the sofa.
     xmin, ymin = -3.45, -2.55
     poly(a1, [(xmin, 0), (0, 0), (0, ymin), (1, ymin), (1, 1), (xmin, 1)], fc='#f3f4f6', ec='none')
     line(a1, [(xmin, 1), (1, 1), (1, ymin)], color=WALL, lw=2.0)
     line(a1, [(xmin, 0), (0, 0), (0, ymin)], color=WALL, lw=2.0)
-    for t, style in ((0.0, 'dashed'), (PI / 4, 'solid'), (PI / 2, 'dashed')):
-        pts = gerver.place(t, SOFA)
-        if style == 'solid':
-            poly(a1, pts, fc=BLUE_F, ec=BLUE, lw=1.3, alpha=0.95, z=5)
-        else:
-            poly(a1, pts, fc=BLUE_F, ec=BLUE, lw=0.9, ls=(0, (4, 2)), alpha=0.5, z=4)
+    # The two end positions underneath, the middle one on top.
+    positions = ((0.0, GREEN, GREEN_F, 0.6, 4), (PI / 2, PURPLE, PURPLE_F, 0.6, 5), (PI / 3, BLUE, BLUE_F, 0.9, 6))
+    for t, ec, fc, alpha, z in positions:
+        poly(a1, gerver.place(t, SOFA), fc=fc, ec=ec, lw=1.2, alpha=alpha, z=z)
     dot(a1, (0, 0), 2.0)
-    text(a1, (0.14, 0.17), r'$O$', size=8, ha='left')
-    text(a1, (-2.35, 1.27), r'$t=0$', color=BLUE, size=8)
-    text(a1, (-0.55, 1.62), r'$t=\pi/4$', color=BLUE, size=8)
-    text(a1, (1.12, -1.3), r'$t=\pi/2$', color=BLUE, size=8, ha='left')
+    text(a1, (-0.1, -0.1), r'$O$', size=8, ha='right', va='top')
+    text(a1, ((-2.22 + 1) / 2, 1.27), r'$t=0$', color=GREEN, size=8)
+    arrow(a1, (-0.95, -1.35), (0.5, -1.3), color=BLUE, lw=0.7, ms=5, z=8)
+    text(a1, (-1.0, -1.35), r'$t=\pi/3$', color=BLUE, size=8, ha='right')
+    text(a1, (1.12, (-2.22 + 1) / 2), r'$t=\pi/2$', color=PURPLE, size=8, ha='left')
     a1.set_xlim(xmin - 0.05, 1.85)
     a1.set_ylim(ymin - 0.05, 1.9)
-    # Right: the sofa, its niche and the path of the inner corner.
-    xs = np.linspace(A_END - 1.0, 1.0, 400)
-    top, bottom, inside = gerver.bounds(xs, 6000)
-    poly(a2, SOFA, fc=BLUE_F, ec=BLUE, lw=1.3)
-    poly(a2, NICHE, fc=ORANGE_F, ec='none', z=3)
-    path = [gerver.path(t) for t in np.linspace(0, PI / 2, 400)]
-    line(a2, path, color=ORANGE, lw=1.5, z=4)
-    line(a2, [(A_END - 1.05, 0), (1.05, 0)], color=FAINT, lw=0.5, ls=':', z=1)
-    line(a2, [(A_END - 1.05, 1), (1.05, 1)], color=FAINT, lw=0.5, ls=':', z=1)
-    text(a2, (-1.75, 0.62), r'$G$', color=BLUE, size=10)
-    text(a2, (-0.62, 0.17), r'niche', color=ORANGE, size=7.5)
-    dot(a2, (0, 0), 1.8, ORANGE)
-    dot(a2, (A_END, 0), 1.8, ORANGE)
-    text(a2, (0.12, -0.18), r'$\mathbf{x}(0)$', color=ORANGE, size=7.5, ha='left')
-    text(a2, (A_END - 0.02, -0.18), r'$\mathbf{x}(\pi/2)$', color=ORANGE, size=7.5, ha='center')
-    a2.set_xlim(A_END - 1.1, 1.12)
-    a2.set_ylim(-0.3, 1.12)
     save(fig, 'fig-intro')
+
+
+def fig_capniche():
+    """Gerver's cap, its niche, the path of the inner corner and one position of the hallway (Section 1)."""
+    t = PI / 4
+    fig, ax = canvas(5.6, 3.0)
+
+    def body(a, lw_scale=1.0):
+        poly(a, CAP, fc=BLUE_F, ec=BLUE, lw=1.2 * lw_scale, z=2)
+        poly(a, NICHE, fc=ORANGE_F, ec=ORANGE, lw=0.8 * lw_scale, z=3)
+        path = [gerver.path(s) for s in np.linspace(0, PI / 2, 400)]
+        line(a, path, color=ORANGE, lw=1.4 * lw_scale, ls=(0, (3, 1.5)), z=4)
+
+    body(ax)
+    big = 2.4
+    hall = hallway_frame(t, [(-big, 0), (0, 0), (0, -big), (1, -big), (1, 1), (-big, 1)])
+    poly(ax, hall, fc=GREY_F, ec='none', alpha=0.5, z=1)
+    line(ax, hallway_frame(t, [(-big, 1), (1, 1), (1, -big)]), color=FAINT, lw=0.8, z=5)
+    line(ax, hallway_frame(t, [(-big, 0), (0, 0), (0, -big)]), color=FAINT, lw=0.8, z=5)
+    dot(ax, gerver.path(t), 2.2, ORANGE)
+    text(ax, (-1.75, 0.62), r'$K$', color=BLUE, size=11)
+    text(ax, (-0.43, 0.2), r'$\mathcal{N}(K)$', color=ORANGE, size=7.5)
+    zoom = (-0.1, 0.26, -0.015, 0.13)
+    ins = ax.inset_axes([2.2, -0.45, 1.6, 1.6 * (zoom[3] - zoom[2]) / (zoom[1] - zoom[0])],
+                        transform=ax.transData)
+    body(ins, 0.8)
+    ins.set_xlim(zoom[0], zoom[1])
+    ins.set_ylim(zoom[2], zoom[3])
+    ins.set_aspect('equal')
+    ins.set_xticks([])
+    ins.set_yticks([])
+    for sp in ins.spines.values():
+        sp.set_color(FAINT)
+        sp.set_linewidth(0.6)
+    ax.indicate_inset_zoom(ins, edgecolor=FAINT, lw=0.6)
+    ax.set_xlim(-3.15, 3.85)
+    ax.set_ylim(-1.25, 2.1)
+    save(fig, 'fig-capniche')
+
+
+BALANCE_THETAS = [PI / 8, PI / 4, 5 * PI / 12]
+
+
+def max_polygon_heights():
+    """A maximum polygon cap for the angles BALANCE_THETAS (rotation angle pi/2): its support values at the
+    six floating normals, found by maximizing the polygon sofa area numerically (Nelder-Mead, from Gerver's
+    support values). It is unique up to horizontal translation. Checked: it is balanced, and small changes
+    of any height do not increase the sofa area."""
+    thetas = BALANCE_THETAS
+    floating = thetas + [s + PI / 2 for s in thetas]
+    h_max = dict(zip(floating, [1.03672319606303, 1.0351611703967196, 1.020969850477072,
+                                1.6347829945151837, 2.1236105529249607, 2.5964105238222475]))
+    H = fu.Heights(PI / 2, thetas, lambda s: h_max.get(s, 1.0))
+    K = H.cap()
+    N, edges = H.niche()
+    a_max = polygon_sofa_area(H)
+    for t_ in thetas:
+        assert abs(fu.edge_length(K, t_) - H.tau(edges, 'b', t_)) < 1e-3, t_
+        assert abs(fu.edge_length(K, t_ + PI / 2) - H.tau(edges, 'd', t_)) < 1e-3, t_
+    for s_ in floating:
+        for d in (1e-3, -1e-3):
+            assert polygon_sofa_area(H.raised(s_, d)) <= a_max + 1e-9, (s_, d)
+    return H
+
+
+def polygon_sofa_area(H):
+    return fu.area(H.cap()) - fu.area(H.niche()[0])
+
+
+def draw_copies(ax, H, big=4.0):
+    """The copies of the hallway at the angles of H, the start and end strip, the polygon cap and its niche.
+    Each copy shades the region inside its two outer walls in translucent blue, and so does the strip
+    0 <= y <= 1 of the start and end positions; the cap, inside all of them, is darkest."""
+    K = H.cap()
+    N, _ = H.niche()
+    regions = [fu.halfplanes([(uvec(s_), H.h[s_]), (uvec(s_ + PI / 2), H.h[s_ + PI / 2])], big=8.0)
+               for s_ in H.thetas]
+    regions.append(fu.halfplanes([((0.0, 1.0), 1.0), ((0.0, -1.0), 0.0)], big=8.0))
+    for r in regions:
+        poly(ax, r, fc=BLUE, ec='none', alpha=0.11, z=1)
+    poly(ax, K, fc='none', ec=BLUE, lw=1.2, z=2)
+    poly(ax, N, fc=ORANGE_F, ec=ORANGE, lw=1.0, z=3)
+    for s_ in H.thetas:
+        line(ax, hallway_frame_h(H, s_, [(-big, 1), (1, 1), (1, -big)]), color=FAINT, lw=0.6, z=4)
+        line(ax, hallway_frame_h(H, s_, [(-big, 0), (0, 0), (0, -big)]), color=FAINT, lw=0.6, z=4)
+        dot(ax, hallway_frame_h(H, s_, [(0, 0)])[0], 1.6, ORANGE)
+    return K
+
+
+def fig_placements():
+    """Three placements of the copies at the same three angles, and their polygon caps and niches (Section 1):
+    copies close in (small cap), copies far out (large niche), and a maximum polygon cap."""
+    thetas = BALANCE_THETAS
+    placements = [fu.Heights(PI / 2, thetas, lambda s: 1 + 0.3 * abs(math.cos(s))),
+                  fu.Heights(PI / 2, thetas, lambda s: 1 + 1.4 * abs(math.cos(s))),
+                  max_polygon_heights()]
+    areas = [polygon_sofa_area(H) for H in placements]
+    assert areas[2] > max(areas[:2]) + 0.2
+    fig, axes = canvas(6.4, 2.0, 3)
+    half = 2.75
+    for ax, H, a in zip(axes, placements, areas):
+        K = draw_copies(ax, H)
+        xc = 0.5 * (min(p[0] for p in K) + max(p[0] for p in K))
+        ax.set_xlim(xc - half, xc + half)
+        ax.set_ylim(-0.12, 2.6)
+        ax.set_title(f'sofa area ${a:.2f}$', fontsize=8, pad=2)
+    save(fig, 'fig-placements')
+
+
+def fig_balance():
+    """Gerver's balancing argument on a maximum polygon cap (Section 1)."""
+    H = max_polygon_heights()
+    K = H.cap()
+    N, edges = H.niche()
+    t, eps = PI / 8, 0.15
+    fig, (a1, a2) = canvas(6.4, 1.9, 2)
+    # Left: the six pairs of equal sides. Each slanted side of the cap and the side of the niche on the
+    # parallel inner wall of the same copy are drawn thick in the same colour.
+    big = 4.0
+    hall = [(-big, 0), (0, 0), (0, -big), (1, -big), (1, 1), (-big, 1)]
+    for t_ in H.thetas:
+        poly(a1, hallway_frame_h(H, t_, hall), fc=GREY_F, ec='none', alpha=0.3, z=0.5)
+        line(a1, hallway_frame_h(H, t_, [(-big, 1), (1, 1), (1, -big)]), color=FAINT, lw=0.6, z=4)
+        line(a1, hallway_frame_h(H, t_, [(-big, 0), (0, 0), (0, -big)]), color=FAINT, lw=0.6, z=4)
+        dot(a1, hallway_frame_h(H, t_, [(0, 0)])[0], 1.6, ORANGE)
+    poly(a1, K, fc=BLUE_F, ec=BLUE, lw=1.0, z=2)
+    poly(a1, N, fc=ORANGE_F, ec=ORANGE, lw=0.8, z=3)
+    pair_colors = ('#db2777', '#0891b2', '#ca8a04', '#4b5563', '#0d9488', '#92400e')
+    pairs = [(t_, 'b', t_) for t_ in H.thetas] + [(t_ + PI / 2, 'd', t_) for t_ in H.thetas]
+    for (normal, kind, base), col in zip(pairs, pair_colors):
+        for a_, b_ in zip(K, K[1:] + K[:1]):
+            d_ = fu.sub(b_, a_)
+            if fu.norm(d_) > 1e-9 and abs(fu.dot(mul(1 / fu.norm(d_), d_), vvec(normal)) - 1) < 1e-7:
+                line(a1, [a_, b_], color=col, lw=2.4, z=5)
+        for p0_, p1_, tag in edges:
+            if tag == (kind, base):
+                line(a1, [p0_, p1_], color=col, lw=2.4, z=5)
+    Hp = H.raised(t, eps)
+    Kp, Np = Hp.cap(), Hp.niche()[0]
+    sig, tau = fu.edge_length(K, t), H.tau(edges, 'b', t)
+    assert sig > 0.1 and abs(sig - tau) < 1e-3
+    small = 1e-4
+    Hs = H.raised(t, small)
+    dK = (fu.area(Hs.cap()) - fu.area(K)) / small
+    dN = (fu.area(Hs.niche()[0]) - fu.area(N)) / small
+    assert abs(dK - sig) < 0.01 and abs(dN - tau) < 0.01, (dK, sig, dN, tau)
+    # The copy at the angle t (light grey) and the same copy moved by eps in the direction u_t (dashed): this
+    # moves the outer wall with normal t and the parallel inner wall, and leaves the other two walls in place.
+    big = 4.0
+    hall = [(-big, 0), (0, 0), (0, -big), (1, -big), (1, 1), (-big, 1)]
+    poly(a2, hallway_frame_h(H, t, hall), fc=GREY_F, ec='none', alpha=0.6, z=0.5)
+    for HH, ls in ((H, '-'), (Hp, (0, (3, 2)))):
+        line(a2, hallway_frame_h(HH, t, [(-big, 1), (1, 1), (1, -big)]), color=FAINT, lw=0.8, ls=ls, z=4)
+        line(a2, hallway_frame_h(HH, t, [(-big, 0), (0, 0), (0, -big)]), color=FAINT, lw=0.8, ls=ls, z=4)
+    dot(a2, hallway_frame_h(H, t, [(0, 0)])[0], 1.8, ORANGE)
+    p0 = hallway_frame_h(H, t, [(1, 0.55)])[0]
+    arrow(a2, p0, add(p0, mul(eps, uvec(t))), color=FAINT, lw=0.8, ms=4, z=6)
+    text(a2, add(p0, mul(eps + 0.12, uvec(t)), (0.0, 0.03)), r'$\varepsilon$', color=FAINT, size=8)
+    # The strips gained by the cap (green) and by the niche (purple) show from under K and N.
+    poly(a2, Kp, fc=GREEN_F, ec=GREEN, lw=0.8, z=1.5)
+    poly(a2, K, fc=BLUE_F, ec=BLUE, lw=1.2, z=2)
+    poly(a2, Np, fc=PURPLE_F, ec=PURPLE, lw=0.8, z=2.5)
+    poly(a2, N, fc=ORANGE_F, ec=ORANGE, lw=1.0, z=3)
+    for a, b in zip(K, K[1:] + K[:1]):
+        d = fu.sub(b, a)
+        if fu.norm(d) > 1e-9 and abs(fu.dot(mul(1 / fu.norm(d), d), vvec(t)) - 1) < 1e-7:
+            line(a2, [a, b], color=BLUE, lw=2.2, z=5)
+    for p0_, p1_, tag in edges:
+        if tag == ('b', t):
+            line(a2, [p0_, p1_], color=ORANGE, lw=2.2, z=5)
+    xlo, xhi = min(p[0] for p in K), max(p[0] for p in K)
+    for ax in (a1, a2):
+        ax.set_xlim(xlo - 0.35, xhi + 0.55)
+        ax.set_ylim(-0.12, 2.1)
+    save(fig, 'fig-balance')
+
+
+def hallway_frame_h(H, t, pts):
+    """Points given in the frame of the copy of the hallway at the angle t whose outer walls touch the
+    polygon cap with the heights H (its inner corner is x(t) = (h(t)-1) u_t + (h(t+π/2)-1) v_t)."""
+    x = add(mul(H.h[t] - 1, uvec(t)), mul(H.h[t + PI / 2] - 1, vvec(t)))
+    return [add(x, mul(p[0], uvec(t)), mul(p[1], vvec(t))) for p in pts]
+
+
+def fig_turn():
+    """Step (3a) of Section 1, in the fixed hallway, for an actual monotone sofa: a polygon cap K with
+    rotation angle omega < pi/2 (fu.example_cap) minus its niche, whose niche contains the triangle at O.
+    A copy of the sofa turned by pi/2 - omega starts in the horizontal side (1), turns back inside it (2),
+    and then follows the sofa's own movement through the supporting hallways, shown halfway (3) and at the
+    end (4). omega = 1.1 (about 63 degrees) is in the range of the argument."""
+    omega = 1.1
+    beta = PI / 2 - omega
+    H, K = fu.example_cap(omega, 0.6, 4)
+    N, _ = H.niche()
+    c = fu.c_omega(omega)
+    tri = [(0.0, 0.0), (c, 0.0), mul(c, vvec(omega))]
+    # The triangle lies in the niche: its vertices lie in the closed quarter-plane behind one inner corner.
+    assert any(all(fu.dot(p, uvec(t)) <= H.h[t] - 1 + 1e-9 and fu.dot(p, vvec(t)) <= H.h[t + PI / 2] - 1 + 1e-9
+                   for p in tri) for t in H.thetas)
+    # The sofa K \ N as one polygon: the niche's roof from left to right, then the rest of the boundary of K.
+    i0 = min(range(len(K)), key=lambda k: fu.norm(K[k]))
+    assert fu.norm(K[i0]) < 1e-9 and fu.area(K) > 0
+    m = (len(N)) // 2
+    roof = N[m:][::-1]
+    roof = sorted({(round(q[0], 12), round(q[1], 12)) for q in roof}, key=lambda q: q[0])
+    sofa = roof + [K[(i0 + k) % len(K)] for k in range(1, len(K))]
+    assert abs(fu.area(sofa) - (fu.area(K) - fu.area(N))) < 1e-6
+
+    def rot(a, pts):
+        return [(math.cos(a) * p[0] - math.sin(a) * p[1], math.sin(a) * p[0] + math.cos(a) * p[1]) for p in pts]
+
+    def corner(t):
+        return add(mul(fu.support(K, t) - 1, uvec(t)), mul(fu.support(K, t + PI / 2) - 1, vvec(t)))
+
+    def moved(t, pts):
+        """The sofa's own movement: at the angle t it sits in the hallway whose outer walls touch K."""
+        x = corner(t)
+        return rot(-t, [sub(p, x) for p in pts])
+
+    def in_hallway(pts):
+        dense = []
+        for a, b in zip(pts, pts[1:] + pts[:1]):
+            dense += [add(a, mul(k / 40, sub(b, a))) for k in range(40)]
+        return all(q[0] <= 1 + 1e-9 and q[1] <= 1 + 1e-9 and (q[1] >= -1e-9 or q[0] >= -1e-9) and
+                   (q[1] >= -1e-9 or q[0] <= 1 + 1e-9) for q in dense)
+
+    def placed_in_side(a, pts, right):
+        """pts turned by a, on the floor of the horizontal side, with the right end of the sofa at x = right."""
+        R = rot(a, sofa)
+        dy, dx = -min(q[1] for q in R), right - max(q[0] for q in R)
+        return [(q[0] + dx, q[1] + dy) for q in rot(a, pts)]
+
+    own = [(moved(0.0, sofa), PURPLE, PURPLE_F), (moved(omega / 2, sofa), BLUE, BLUE_F),
+           (moved(omega, sofa), WALL, GREY_F)]
+    start_right = max(q[0] for q in own[0][0])
+    width = max(q[0] for q in sofa) - min(q[0] for q in sofa)
+    gap = 0.35
+    # One hallway: the extra turn in the horizontal side (green, teal), ending in the sofa's starting position
+    # (purple), then the sofa's own movement around the corner (blue halfway, grey at the end).
+    turn = [(placed_in_side(beta, sofa, start_right - 2 * (width + gap)),
+             placed_in_side(beta, tri, start_right - 2 * (width + gap)), GREEN, GREEN_F),
+            (placed_in_side(beta / 2, sofa, start_right - (width + gap)),
+             placed_in_side(beta / 2, tri, start_right - (width + gap)), TEAL, TEAL_F)]
+    # The finished position slid down the vertical side, below the corner.
+    end = own[2][0]
+    drop = max(q[1] for q in end) - min(q[1] for q in end) + 0.3
+    down = [(q[0], q[1] - drop) for q in end]
+    own = own + [(down, WALL, GREY_F)]
+    for pts, _, _ in own:
+        assert in_hallway(pts)
+    for pts, _, _, _ in turn:
+        assert in_hallway(pts)
+    for k in range(41):
+        a = beta * k / 40
+        R = rot(a, sofa)
+        assert max(q[1] for q in R) - min(q[1] for q in R) <= 1 + 1e-9
+    pts_all = [q for pts, _, _ in own for q in pts] + [q for pts, _, _, _ in turn for q in pts]
+    xmax = 1.25
+    xmin, ymin = min(q[0] for q in pts_all) - 0.25, min(q[1] for q in pts_all) - 0.25
+    fig, ax = canvas(6.3, 6.3 * (1.25 - ymin) / (xmax - xmin))
+    poly(ax, [(xmin, 0), (0, 0), (0, ymin), (1, ymin), (1, 1), (xmin, 1)], fc='#f3f4f6', ec='none', z=0)
+    line(ax, [(xmin, 1), (1, 1), (1, ymin)], color=WALL, lw=1.4)
+    line(ax, [(xmin, 0), (0, 0), (0, ymin)], color=WALL, lw=1.4)
+    for pts, tp, col, fill in turn:
+        poly(ax, pts, fc=fill, ec=col, lw=1.2, alpha=0.7, z=2)
+        poly(ax, tp, fc=ORANGE_F, ec=ORANGE, lw=0.8, z=3)
+    for k, (pts, col, fill) in enumerate(own):
+        poly(ax, pts, fc=fill, ec=col, lw=1.2, alpha=0.55, z=2)
+    poly(ax, moved(0.0, tri), fc=ORANGE_F, ec=ORANGE, lw=0.8, z=3)
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, 1.25)
+    save(fig, 'fig-turn')
+
+
+def fig_mamikon():
+    """One term of Baek's functional Q for Gerver's cap (Section 1): the segment from the point where the
+    cap touches an outer wall to the outer corner of the hallway sweeps, as t runs over [phi, pi/2 - phi],
+    a region of area (1/2) int rho(t)^2 dt (Mamikon's theorem)."""
+    phi = 0.0391773648
+
+    def contact(t):
+        u = uvec(t)
+        return max(CAP, key=lambda p: p[0] * u[0] + p[1] * u[1])
+
+    def corner(t):
+        return add(mul(fu.support(CAP, t), uvec(t)), mul(fu.support(CAP, t + PI / 2), vvec(t)))
+
+    ts = np.linspace(phi, PI / 2 - phi, 2000)
+    A = [contact(t) for t in ts]
+    Y = [corner(t) for t in ts]
+    rho = np.array([fu.dot(sub(Y[i], A[i]), vvec(t)) for i, t in enumerate(ts)])
+    swept = A + Y[::-1]
+    assert abs(0.5 * np.trapezoid(rho ** 2, ts) - abs(fu.area(swept))) < 1e-3
+    fig, ax = canvas(4.6, 3.0)
+    poly(ax, swept, fc=PURPLE_F, ec='none', z=1)
+    poly(ax, CAP, fc=BLUE_F, ec=BLUE, lw=1.2, z=2)
+    line(ax, Y, color=PURPLE, lw=1.2, ls=(0, (3, 1.5)), z=3)
+    for t in np.linspace(phi, PI / 2 - phi, 9)[1:-1]:
+        line(ax, [contact(t), corner(t)], color=FAINT, lw=0.6, z=3)
+    t = 0.75
+    a_, y_ = contact(t), corner(t)
+    # The copy of the hallway at the angle t, placed against K: its outer corner is y_.
+    x_ = sub(y_, add(uvec(t), vvec(t)))
+    big = 5.0
+
+    def frame(pts):
+        return [add(x_, mul(p[0], uvec(t)), mul(p[1], vvec(t))) for p in pts]
+
+    poly(ax, frame([(-big, 0), (0, 0), (0, -big), (1, -big), (1, 1), (-big, 1)]), fc=GREY_F, ec='none',
+         alpha=0.6, z=0.5)
+    line(ax, frame([(-big, 1), (1, 1), (1, -big)]), color=FAINT, lw=0.8, z=1.5)
+    line(ax, frame([(-big, 0), (0, 0), (0, -big)]), color=FAINT, lw=0.8, z=1.5)
+    line(ax, [a_, y_], color=PURPLE, lw=1.6, z=4)
+    dot(ax, a_, 1.8, INK)
+    dot(ax, y_, 1.8, PURPLE)
+    text(ax, add(mul(0.5, add(a_, y_)), mul(0.18, uvec(t))), r'$\varrho(t)$', color=PURPLE, size=8)
+    text(ax, (-1.6, 0.45), r'$K$', color=BLUE, size=10)
+    ys = [q[1] for q in Y]
+    xs = [q[0] for q in Y] + [p[0] for p in CAP]
+    ax.set_xlim(min(xs) - 0.1, max(xs) + 0.1)
+    ax.set_ylim(-0.1, max(ys) + 0.1)
+    save(fig, 'fig-mamikon')
 
 
 def fig_cap():
@@ -159,10 +463,8 @@ def fig_cap():
     poly(ax, CAP, fc=BLUE_F, ec=BLUE, lw=1.2, z=2)
     poly(ax, NICHE, fc=ORANGE_F, ec=ORANGE, lw=0.9, z=3)
     big = 2.4
-    arm1 = hallway_frame(t, [(-big, 0), (1, 0), (1, 1), (-big, 1)])
-    arm2 = hallway_frame(t, [(0, -big), (1, -big), (1, 1), (0, 1)])
-    for arm in (arm1, arm2):
-        poly(ax, arm, fc=GREY_F, ec='none', alpha=0.55, z=1)
+    hall = hallway_frame(t, [(-big, 0), (0, 0), (0, -big), (1, -big), (1, 1), (-big, 1)])
+    poly(ax, hall, fc=GREY_F, ec='none', alpha=0.55, z=1)
     line(ax, hallway_frame(t, [(-big, 1), (1, 1), (1, -big)]), color=WALL, lw=1.8, z=5)
     line(ax, hallway_frame(t, [(-big, 0), (0, 0), (0, -big)]), color=WALL, lw=1.8, z=5)
     x, y = gerver.path(t), add(gerver.path(t), uvec(t), vvec(t))
@@ -466,6 +768,11 @@ def main():
     fi.check_gerver()
     fu.check_frame()
     fig_intro()
+    fig_capniche()
+    fig_placements()
+    fig_balance()
+    fig_turn()
+    fig_mamikon()
     fig_cap()
     fig_moves()
     fig_rotate()
