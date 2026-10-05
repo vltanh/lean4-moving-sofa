@@ -68,7 +68,7 @@ theorem tangentResidual_translation (a T t : ℝ) (hs : sin (T - t) ≠ 0) :
     ring
   unfold tangentResidual
   rw [hc]
-  field_simp
+  field_simp [hs]
   ring
 
 @[simp] theorem cornerResidual_translation (a t : ℝ) :
@@ -86,7 +86,7 @@ theorem tangentResidual_pinned (T : ℝ) (f df : ℝ → ℝ) (t : ℝ)
     (fun u => -f π * sin u) t
   change tangentResidual T (fun u => f u + f π * cos u)
     (fun u => df u - f π * sin u) t = tangentResidual T f df t
-  simp only [sub_eq_add_neg] at *
+  simp only [sub_eq_add_neg, neg_mul] at *
   rw [he, h, add_zero]
 
 @[simp] theorem cornerResidual_pinned (f df : ℝ → ℝ) (t : ℝ) :
@@ -110,7 +110,8 @@ theorem outer_displacement_sub (K₀ K₁ : Set (ℝ × ℝ)) (t : ℝ) :
       cornerResidual (fun u => supp K₁ u - supp K₀ u)
         (fun u => dot (vplus K₁ u) (vvec u) - dot (vplus K₀ u) (vvec u)) t := by
   rw [outer_displacement_formula, outer_displacement_formula]
-  rfl
+  unfold cornerResidual
+  ring
 
 /-- Explicit integrating factor. The target support `f T` is held constant. -/
 def tangentQuotient (T : ℝ) (f : ℝ → ℝ) (t : ℝ) : ℝ :=
@@ -128,7 +129,8 @@ theorem hasDerivAt_tangentQuotient {f df : ℝ → ℝ} {T t : ℝ}
   convert hquot using 1
   · rfl
   · dsimp only [tangentResidual]
-    have htrig := sin_sq_add_cos_sq (T - t)
+    have hweighted : f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) = f T := by
+      rw [sin_sq_add_cos_sq, mul_one]
     field_simp [hs]
     nlinarith
 
