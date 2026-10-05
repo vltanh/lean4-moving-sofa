@@ -129,8 +129,8 @@ theorem four_arc_mass_bound {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       exact last_bound (u + π / 2)
         ⟨by linarith [hu.1, ht.1, hφ.1], by linarith [hu.2, hbtop]⟩
     have hm := arcMass_mono ht.1 ht.2 le_rfl h.middle
-    have hri := intervalIntegral.abs_integral_le_integral_abs
-      (f := cornerResidual f df) (μ := volume) ht.2
+    have hri : |∫ u in t..b, cornerResidual f df u| ≤ arcMass t b (cornerResidual f df) :=
+      intervalIntegral.abs_integral_le_integral_abs ht.2
     have hfb := third_bound b ⟨le_rfl, hbtop.le⟩
     have hlen : b - t ≤ 2 := by dsimp [b]; linarith [ht.1, hφ.1]
     have hlenprod := mul_le_mul_of_nonneg_right hlen hm₄
@@ -183,6 +183,10 @@ theorem fourResidualMass_le {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (tangentResidual (π - φ) f df)
   have q₄ := arcSquare_nonneg (by linarith : π / 2 ≤ π) (tangentResidual π f df)
   apply four_masses_le_four_sqrt
+    (q₁ := arcSquare 0 φ (tangentResidual (π / 2) f df))
+    (q₂ := arcSquare φ (π / 2 - φ) (cornerResidual f df))
+    (q₃ := arcSquare (π / 2 - φ) (π / 2) (tangentResidual (π - φ) f df))
+    (q₄ := arcSquare (π / 2) π (tangentResidual π f df))
     (arcMass_nonneg hφ.1.le _) (arcMass_nonneg (by linarith [hφ.2]) _)
     (arcMass_nonneg (by linarith [hφ.1]) _) (arcMass_nonneg (by linarith) _)
     (fourResidualEnergy_nonneg hφ f df)
