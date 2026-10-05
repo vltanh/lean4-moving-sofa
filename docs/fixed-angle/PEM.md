@@ -2,95 +2,133 @@
 
 ## Scope and status
 
-This is a paper-first research workstream for a prescribed **net rotation angle** in the existing unit-width, right-angled hallway. It is not the problem of changing the hallway angle. A shape may admit several net rotation angles; membership at angle omega means that it admits a motion with that angle, not that omega is its minimum possible rotation.
+This workstream studies a prescribed **net rotation angle** in the existing unit-width, right-angled hallway. It does not change the hallway angle. A shape may admit several net rotation angles; feasibility at angle omega means it has a motion with that net angle, not that omega is its minimum possible rotation.
 
-Starting point: branch `paper/uniqueness-arxiv`, commit `1ade045936f32cf76572ee668ed8aa1627772bde`. Keep the current uniqueness manuscript and all Lean files unchanged. This directory is a separate research note. Here PEM means proof-exploration memo.
+Starting point: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`. The work is separate under `docs/fixed-angle/`; the uniqueness manuscript, Lean sources, and workflows are unchanged. Here PEM means proof-exploration memo.
 
-No CI, workflow dispatch, Lean compilation, or axiom audit is part of this workstream. Every research commit carries `[skip ci]`. New statements in this directory are paper mathematics, not machine-checked theorems.
+No CI, workflow dispatch, Lean compilation, or axiom audit was run. Every research commit carries `[skip ci]`. The TeX sources were not compiled. These are paper proofs for review, not machine-checked theorems. See [REVIEW.md](REVIEW.md) for the mathematical audit and the limits of the exploratory checks.
 
-The long-term goal is to determine the fixed-angle optimum and its equality cases. **Neither an explicit optimizer for every positive angle nor uniqueness for every positive angle is assumed.** The first deliverable is a collection of proved bounds, a small-angle analysis, and a precise reduction of the remaining optimizer-classification problem.
+**The exact unrestricted optimizer and its uniqueness at positive angles are not yet established.** The first research pass supplies unrestricted asymptotics, an explicit exact-area feasible family, a strict relaxation equality case, and a precise restricted-class optimization theorem.
 
-## Problem and notation
+## Definitions
 
-Let `L = ((-infinity,1] x [0,1]) union ([0,1] x (-infinity,1])`. Let `m(omega)` be the supremum of areas of nonempty compact connected sets admitting a motion in L with initial angle zero and final angle `-omega`.
+Let `L = ((-infinity,1] x [0,1]) union ([0,1] x (-infinity,1])`. Let `m(omega)` be the supremum of areas of nonempty compact connected sets admitting a continuous motion in L whose angular lift starts at zero and ends at `-omega`. Backtracking is allowed.
 
-For `0 < omega < pi/2`, normalize the two upper endpoint supports to one. Then every admissible sofa lies in
+For `0 < omega < pi/2`, the two upper endpoint supports uniquely normalize a sofa into
 
 `P_omega = { (x,y) : 0 <= y <= 1, 0 <= x cos(omega) + y sin(omega) <= 1 }`.
 
 Write `u_t = (cos t, sin t)`, `v_t = (-sin t, cos t)`, `F_omega = { y >= 0, p dot u_omega >= 0 }`, and `J_omega = [0,omega] union [pi/2,pi/2+omega]`.
 
-The cap functional remains the repository's `A_omega(K) = |K| - |N_omega(K)|`, with the **fan**, not the parallelogram, in the definition of the niche. For an arbitrary cap, do not silently identify this difference with the area of a connected feasible sofa.
+The cap functional remains `A_omega(K) = |K| - |N_omega(K)|`, using the **fan**, not the parallelogram, in the niche. For an arbitrary cap this difference must not silently be identified with the area of a connected feasible sofa.
 
-## Dependency audit
+## Important correction to the initial research direction
 
-1. Endpoint normalization and monotonization preserve the specified angle: `docs/paper/sections/02-setting.tex`, Fact `fact:angle` and Fact `fact:monotone`.
-2. Fixed-angle existence and comparison are the content of Baek's Theorems 3.5.2--3.5.6, with the corrections recorded by the companion manuscript. They do not require the final Gerver optimality theorem. Separate these inputs from `fact:optimal`, which packages them together with global optimality.
-3. Penalized selection in `docs/paper/sections/04-selection.tex` already fixes arbitrary `omega in (0,pi/2]` and targets a prescribed positive-area cap maximizer. This is genuinely reusable; it is not a theorem identifying that maximizer.
-4. The fixed-angle pinned-variation estimates and the right-angle curvature/injectivity argument must not be conflated. Inspect their angle and area hypotheses before transferring them.
-5. A motion extended to pi/2 only puts its shape in the larger-angle feasible class. It does **not** make that shape a pi/2 maximizer. Consequently, right-angle equality rigidity does not identify an arbitrary fixed-angle maximizer.
-6. The two endpoint supports remove translation freedom when `cos(omega) != 0`. They do not prove uniqueness, nor exclude noncongruent maximizers or different contact regimes.
+The first memo proposed searching for a fixed-angle quadratic majorant and candidate. A primary-source check found that Baek's earlier paper, *A Conditional Upper Bound for the Moving Sofa Problem*, arXiv:2406.10725v1 (2024), already gives
 
-## Initial proof targets
+`A_1(K) = |K| - I(x_K)`,
 
-### A. A concrete feasible competitor
+its explicit maximizing cap `K_(omega,1)`, and the maximum relaxed value `1 + omega^2/2` (Definition 5.1, Definition 5.12, Theorems 5.30 and 5.32). The relaxation and candidate are therefore attributed to Baek, not presented as new discoveries here.
 
-Consider the convex body
+The important qualification is Theorem 5.5: converting `A_1` into a sofa-area upper bound requires an injective canonical inner-corner curve lying in the fan. Finding a candidate is not the current bottleneck in the small-angle regime. The bottleneck is proving the majorization for the relevant unrestricted maximizers.
 
-`C_omega = F_omega intersect { p dot u_t <= 1 : t in J_omega }`.
+## Results now written
 
-Its motion is rotation by `-t` about the inner corner. Its niche is empty. A radial integral should give
+### 1. Elementary all-angle bounds and the zero-angle equality case
 
-`|C_omega| = omega + tan(pi/4 - omega/2)`.
+[paper.tex](paper.tex) proves `m(0) = 1`, with the square unique in the fixed initial orientation up to translation. For `0 < omega < pi/2` it constructs the feasible corner-rotation body
 
-This is a competitor, not an asserted optimizer. At zero angle it is the unit square; at pi/2 it is the upper unit semicircle.
+`C_omega = F_omega intersect { p dot u_t <= 1 : t in J_omega }`,
 
-### B. Upper bound and a strictly positive deficit
+of area `omega + tan(pi/4 - omega/2)`, and proves a quantitative uniform strict upper bound
 
-Endpoint strips give `m(omega) <= sec(omega)`. Use the supporting hallway at `t = omega/2` to improve this strictly, without invoking Gerver or uniqueness: either an outer support is shortened, which removes a triangle near a vertex of P, or both supports remain large, which excludes a sector near the origin.
+`m(omega) <= sec(omega) - d(omega) < sec(omega)`
 
-Record an explicit positive deficit rather than arguing that every individual sofa has a strict inequality and then incorrectly taking a supremum.
+with an explicit `d(omega) > 0`. This avoids taking a supremum of merely pointwise strict inequalities.
 
-### C. Small-angle corner-carved parallelograms
+### 2. Unrestricted small-angle asymptotics and limiting-defect rigidity
 
-For the full parallelogram P the support values are
-
-`h_P(t) = sec(omega) cos(t)`,
-`h_P(t+pi/2) = sec(omega) cos(omega-t)`.
-
-Its niche has diameter of order `omega^2` near the origin. For small omega, prove directly that `T_omega = P_omega minus N_omega(P_omega)` is compact, connected, and admits the supporting-hallway motion. Do not infer this merely from P being a cap.
-
-This family should improve the elementary small-angle estimate from target A. Under the scaling `p = omega^2 z`, `t = omega s`, the proposed limiting niche is
-
-`D = union_{0<s<1} [0,(1-s^2)/2) x [0,s-s^2/2)`.
-
-Its area is `integral_0^1 (s-s^2/2)s ds = 5/24`. Verify almost-everywhere convergence of the rescaled niches, including the moving fan and the endpoints, before using the area limit.
-
-### D. An upper asymptotic, not only a competitor asymptotic
-
-Near-optimal area forces the outer support values close to those of P. A small triangle contained in a missing support slice should bound a support deficit e by a constant times `sqrt((|P|-|S|) tan(omega))`.
-
-If `|P|-|S| = O(omega^4)`, this is `e = O(omega^(5/2)) = o(omega^2)`. Then the same limiting niche D must be absent from every near-optimal sofa. Together with C, aim to prove
+[small-angle.tex](small-angle.tex) proves
 
 `m(omega) = 1 + omega^2/2 + o(omega^4)` as `omega -> 0+`.
 
-This is a proposed proof target until the accompanying paper supplies both bounds. It does not assert that the corner-carved parallelogram itself is optimal.
+The lower argument verifies directly that the corner-carved parallelogram `P_omega minus N_omega(P_omega)` is compact, path-connected, and feasible for `0 < omega <= pi/4`. The upper argument applies to arbitrary near-maximizers: a missing-triangle estimate forces all relevant support deficits to be `o(omega^2)`, so every such sofa must omit the same limiting corner.
 
-### E. Selection and a conditional optimality/rigidity theorem
+More precisely, for normalized sofas `S_n` at `omega_n -> 0+` with area deficit from `m(omega_n)` equal to `o(omega_n^4)`, the spatially rescaled missing sets
 
-State an abstract sharp-majorant theorem with all hypotheses explicit: existence, admissibility of a candidate, applicability of an upper functional to every relevant maximizer, sharpness at the candidate, and equality rigidity. This is a reusable proof interface, not a construction of the missing fixed-angle functional.
+`omega_n^(-2) (P_(omega_n) minus S_n)`
 
-## Work order
+converge in symmetric-difference area to
 
-- [x] Isolate the problem and audit the obvious logical dependencies.
-- [ ] Write a self-contained paper proof of the explicit competitor, strict upper bound, and zero-angle equality case.
-- [ ] Prove feasibility and the area asymptotics of the corner-carved family.
-- [ ] Prove a matching upper asymptotic for arbitrary near-maximizers.
-- [ ] Record reusable selection statements and the remaining optimizer/uniqueness obligations.
-- [ ] Perform an adversarial paper review, especially connectedness, suprema, endpoint conventions, and quantifiers.
+`D_0 = { x >= 0, y >= 0, x+y+(x-y)^2 < 3/4 }`, of area `5/24`.
 
-## Remaining research after the first note
+This is an asymptotic equality/rigidity theorem, not exact optimizer uniqueness or a Hausdorff-convergence claim.
 
-Determine the first nonzero term beyond the displayed small-angle expansion; derive and solve the appropriate fixed-angle contact equations; construct a sharp global majorant in each justified regime; and prove the equality case. Investigate symmetry rather than assuming it. Normalization removes translations but not reflection as a possible source of multiple maximizers.
+### 3. Exact feasible family and a strict relaxation equality case
 
-The note will distinguish complete elementary proofs, imported results with exact sources, conditional theorems, and unproved research targets. No Lean placeholders should be added before those distinctions are settled.
+[relaxation.tex](relaxation.tex) proves that Baek's relaxed cap produces a feasible monotone sofa `S_*` for `0 < omega <= 1` radian, with **exact** area `1 + omega^2/2`. Thus
+
+`m(omega) >= 1 + omega^2/2`
+
+unconditionally in that interval. In the normalization `o = (sec(omega)-tan(omega), 1)`, its active supports are
+
+`p_*(t) = omega-t + o dot u_t`,
+`k_*(t) = t + o dot v_t`.
+
+The explicit corner curve is
+
+`gamma(t) = o + (omega-t-1)u_t + (t-1)v_t`,
+`gamma'(t) = -t u_t + (omega-t)v_t`.
+
+The proof verifies cap geometry, injectivity, fan containment, the absence of extra niche tails, connectedness, and the continuous motion. No candidate feasibility is inferred merely from solving the stationary equations.
+
+For any other normalized cap, put `f = p-p_*`, `g = k-k_*`. The note derives the exact gap
+
+`A_1(K_*) - A_1(K) = (1/2) integral [f'^2 + (g'+f)^2 - f^2]`,
+
+and the lower bound
+
+`(1/2)(1-omega^2/2) integral f'^2 + (1/2) integral (g'+f)^2`.
+
+For `omega <= 1` this is strictly positive unless both support differences vanish. It proves uniqueness of the normalized **relaxation** maximizer, not just uniqueness of a cap specified by a chosen boundary measure.
+
+Applying Baek's Theorem 5.5 then proves that `S_*` is the unique normalized optimum **among monotone sofas whose canonical corner curves are injective and lie in the fan**. The exact unrestricted upper bound is not supplied by this conditional application.
+
+## Dependency audit
+
+- Endpoint normalization and monotonization preserve the specified angle; see the companion's `02-setting.tex`, Facts `fact:angle` and `fact:monotone`.
+- Fixed-angle existence and comparison are Baek's corrected Theorems 3.5.2--3.5.6. They should be separated from the companion's `fact:optimal`, which also packages the final Gerver theorem. The asymptotic proof avoids needing existence altogether.
+- Penalized selection in `04-selection.tex` already treats a prescribed positive-area cap maximizer at arbitrary `omega in (0,pi/2]`. It is reusable, but it does not by itself identify the cap or prove the conditional majorization.
+- Fixed-angle pinned-variation estimates and right-angle curvature/injectivity estimates must not be conflated. Audit their actual angle and area hypotheses.
+- Extending a motion to pi/2 does not make the shape a pi/2 maximizer. A right-angle equality theorem cannot therefore be applied to an arbitrary fixed-angle maximizer as though it had Gerver's area.
+- Unique endpoint normalization removes translations only. It neither rules out noncongruent maxima nor proves that reflection fixes a maximizing shape.
+- `relaxation.tex` imports the standard cap endpoint geometry, with a source citation, and explains the support-area identity by smooth approximation. Its restricted-class theorem explicitly imports Baek's injectivity/fan majorization. Its direct feasibility theorem does not.
+
+## Completion of the first pass
+
+- [x] Isolate the angle convention and audit dependencies.
+- [x] Write a paper proof of an explicit competitor, strict strip bound, and zero-angle uniqueness.
+- [x] Prove feasibility and area asymptotics of the corner-carved parallelogram.
+- [x] Prove the matching upper asymptotic for arbitrary near-maximizers.
+- [x] Prove uniqueness of the limiting missing-corner region in measure.
+- [x] Locate and attribute the existing fixed-angle relaxation and candidate.
+- [x] Prove candidate feasibility and exact area for `0 < omega <= 1`.
+- [x] Prove a strict relaxation gap and restricted-class optimality plus uniqueness.
+- [x] Record an adversarial paper review and the limits of local symbolic/numerical checks.
+- [ ] Remove the conditional majorization hypothesis for unrestricted maximizers in a proved angle interval.
+- [ ] Complete equality recovery from a maximizing envelope to an arbitrary original sofa.
+- [ ] Classify the larger-angle regimes without assuming a phase diagram.
+
+## Next mathematical target
+
+The most economical target is **not necessarily full injectivity as a standalone theorem**. It is the inequality
+
+`A_omega(K) <= A_1(K)`
+
+for global fixed-angle maximizing caps in a justified interval. Injectivity plus fan containment is one sufficient route; a direct signed-area/niche inequality would also suffice.
+
+For the global optimum value, one needs this for some global maximizing monotone envelope, plus a valid existence/comparison theorem. For global uniqueness by the same argument, one needs it for every maximizing envelope, then a regular-closedness/equality recovery argument for the original sofa. The strict relaxation gap and the feasible candidate already provide the rest of the sandwich.
+
+The small-angle estimates offer a quantitative starting point: `O(omega^4)`-near-full area forces relevant supports within `O(omega^(5/2))` of the parallelogram. This is a support-value estimate, not derivative control; it does not automatically make the inner-corner curve injective. The next variation argument must address that distinction.
+
+No Lean placeholders should be introduced until these paper-level obligations are settled.
