@@ -1,4 +1,6 @@
-# 7. Proof ledger and next mathematical obligations
+# 7. Historical first-pass proof ledger
+
+**Historical snapshot after the initial eight commits.** The task list and unresolved-status statements below describe that first pass, not the current branch. The [current ledger in Note 24](24-current-proof-ledger.md) records the subsequent canonical reduction, exact adaptive maximization, counterexamples, and completed restricted geometric theorem. [Theorem 52](23-sobolev-geometric-theorem.md) is the strongest area/uniqueness statement now proved; the unrestricted reduction remains unproved. The original ledger is retained below rather than deleting the earlier findings.
 
 This ledger describes the first pen-and-paper research pass. "Written proof" means a proof supplied in these notes and self-reviewed for its stated hypotheses. It does not mean independent refereeing, a computer-assisted proof, or Lean verification.
 
