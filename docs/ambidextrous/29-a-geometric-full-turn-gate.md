@@ -16,18 +16,18 @@ A sufficient way to obtain the square is for the top and bottom exposed-face int
 
 ## 29.2 The candidate passes this gate with a margin
 
-For K_* the common face length is
+Write [ell_*,r_*] for the common top and bottom face interval of K_*, and lambda_* for its length. Then
 
 \[
-\ell_*=r_*-\ell_*=4A/3=1/(3\sin\beta)>1.
+\lambda_*=r_*-\ell_*=4A/3=1/(3\sin\beta)>1.
 \tag{29.1}
 \]
 
-In this display the first ell_* on the left denotes the face length; to avoid endpoint ambiguity below, write this length as lambda_*=4A/3. The strict inequality follows from A>3/4. Hence K_* contains a rectangle of height one and length lambda_*>1.
+The strict inequality follows from A>3/4. Hence K_* contains a rectangle of height one and length lambda_*>1.
 
 All of the high-frequency curvature counterexamples in Note 28 have the **same** exposed-face intervals and therefore contain that same rectangle. Their partial-angle reductions cannot avoid full turns. Consequently their failure of the curvature cap is not explained by an alternative short-turn witness.
 
-For clarity, the unambiguous width statement used below is
+The width statement used below is
 
 \[
 w_{K_*}(\cos\alpha,\sin\alpha)
