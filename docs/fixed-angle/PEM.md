@@ -2,118 +2,113 @@
 
 ## Current status
 
-**Closed at paper-proof level:** for every prescribed net rotation angle `0 <= omega <= 1` radian in the usual unit-width right-angled hallway,
+**The full interval `0 <= omega <= pi/2` is covered by the assembled paper-and-interval-certificate argument.** There is no remaining angle interval delegated to an unproved continuation assumption in this draft.
 
-`m(omega) = 1 + omega^2/2`,
+This is a **computer-assisted research proof draft**, not an independently refereed or Lean-checked theorem. The final continuation uses an executed outward-rounded interval verifier. The analytic arguments, implementation and arithmetic model remain explicit review dependencies.
 
-and the normalized optimizer is unique. This includes arbitrary compact connected sofas and motions that backtrack, not just an injective monotone subclass. The proof also gives qualitative Hausdorff stability of near-maximizers at each fixed positive angle in this interval.
+Start with [all-angle-optimality-uniqueness.tex](all-angle-optimality-uniqueness.tex). It states the full theorem, exact contact-system definition of the optimizer, optimal-area formula, uniqueness of the admissible contact parameters, and qualitative stability at each fixed open angle.
 
-**Not closed:** the exact optimum and optimizer classification for `1 < omega < pi/2`. The new work proves a sharp boundary to the first regime: the unrestricted maximum is strictly below `1 + omega^2/2` there, and the actual sofa obtained from Baek's relaxed cap is itself strictly suboptimal. Its boundary must change; simply subtracting its extra niche area does not solve the remaining optimization.
+| Angle range | Optimizer and proof route |
+| --- | --- |
+| `omega = 0` | The unit square, unique after normalization; area one. |
+| `0 < omega <= 1` | Baek's relaxed-cap sofa is the unique normalized optimum; `m(omega)=1+omega^2/2`. Analytic proof. |
+| `1 < omega <= 1.01` | Exact exposed-wall contact sofa. The analytic bridge supplies roots and admissibility throughout this explicit interval. |
+| `1.01 <= omega <= 1.5706` | The same order-independent contact system, with parameter-uniform root and geometry verification in 750 interval boxes. |
+| `1.5706 <= omega < pi/2` | A regular branch parameterized by `h=omega-c`; 16 parameter boxes and 15 joining boxes, followed by an analytic angle-coverage argument. |
+| `omega = pi/2` | The companion Gerver optimality/uniqueness theorem. This is a separate endpoint input; horizontal translation is not fixed by the coincident endpoint support directions. |
 
-The right-angle endpoint belongs to the companion Gerver optimality/uniqueness development, not to the new open-interval arguments. We do not present the full fixed-angle classification as complete.
+All 781 contact records were replayed from their coordinates and preconditioners, without trusting their stored success flags. Exact rational coverage and endpoint joining containment were checked. The final verifier source hashes and record hashes are in [checks/CERTIFICATE_REPORT.json](checks/CERTIFICATE_REPORT.json). The standard-library builder and replay program are committed, and the full reference records are supplied in the verification attachment.
 
-These are paper proofs with explicit imported inputs, not independently refereed or Lean-checked theorems. No CI, workflow dispatch, Lean compilation, axiom audit, or TeX compilation was run. Every research commit uses `[skip ci]`. Changes remain under `docs/fixed-angle/`; Lean sources, workflows, and the original uniqueness manuscript are unchanged.
-
-Starting reference: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`. Here PEM means proof-exploration memo.
+No CI, workflow dispatch, Lean compilation, axiom audit, or TeX compilation was run. Every research commit uses `[skip ci]`. Changes remain in `docs/fixed-angle/`; Lean sources, workflows and the original uniqueness manuscript are unchanged. Starting reference: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`. Here PEM means proof-exploration memo.
 
 ## Problem and normalization
 
-The hallway is `L = ((-infinity,1] x [0,1]) union ([0,1] x (-infinity,1])`. Feasibility at angle omega means a continuous motion whose angular lift starts at zero and ends at `-omega`. This is a prescribed **net** angle, not the minimum angle of a shape and not a change to the hallway corner.
+The hallway remains `L = ((-infinity,1] x [0,1]) union ([0,1] x (-infinity,1])`. A motion's angular lift starts at zero and ends at `-omega`; backtracking is permitted. This is a prescribed **net rotation angle**, not a changed hallway angle or the minimum rotation intrinsic to a shape.
 
 For `0 < omega < pi/2`, the two upper endpoint supports uniquely translate a sofa into
 
-`P_omega = { (x,y) : 0 <= y <= 1, 0 <= x cos(omega) + y sin(omega) <= 1 }`.
+`P_omega = { (x,y) : 0 <= y <= 1, 0 <= x cos(omega)+y sin(omega) <= 1 }`.
 
-Write `u_t = (cos t,sin t)`, `v_t = (-sin t,cos t)`, and `F_omega = { y >= 0, z dot u_omega >= 0 }`. The cap functional is `A_omega(K) = |K| - |N_omega(K)|`. The niche uses the **fan**. For an arbitrary cap, niche containment and feasibility of the cap-minus-niche set are not automatic.
+Write `u_t=(cos t,sin t)`, `v_t=(-sin t,cos t)`, and `F_omega={y>=0, z dot u_omega>=0}`. The niche is defined using the **fan**, and the cap functional is `A_omega(K)=|K|-|N_omega(K)|`. Cap-minus-niche feasibility is proved for the constructed candidates, not assumed for arbitrary caps.
 
-## The theorem assembly that closes the first regime
+## Exact candidate above one radian
 
-Read [optimality-uniqueness.tex](optimality-uniqueness.tex) for the assembly and equality recovery.
+For `1 < omega < pi/2`, choose the unique admissible triple
 
-1. **Cap attainment.** The normalized cap class is Hausdorff compact inside the fixed parallelogram. Its defining normal set survives limits via the support-area measure. Niche area is lower semicontinuous by strict quarter-plane witnesses, hence the cap functional is upper semicontinuous. A positive competitor supplies a positive global cap maximizer. This proof does not invoke Gerver optimality.
-2. **Reach every maximizer.** The companion's fixed-angle penalized selection and floating first variation approximate any prescribed positive maximizing cap with polygon caps whose total floating defect tends to zero.
-3. **Fixed-angle curvature.** [fixed-angle-curvature.tex](fixed-angle-curvature.tex) proves the local wall estimate and weak-measure passage at arbitrary `0 < omega < pi/2`. The measure bounds include the outer endpoints `0` and `pi/2+omega`, excluding atoms there, while permitting the two pinned atoms.
-4. **Arm bootstrap.** For `omega <= 1`, [arm-bootstrap.tex](arm-bootstrap.tex) gives the elementary three-step estimate `f(t) >= 1+t/2`, `g(t) >= 1+(omega-t)/2`. The integral inequalities follow from the curvature bounds and the now-justified endpoint values `f(0)=g(omega)=1`.
-5. **Majorization without assumed fan containment.** [monotone-majorization.tex](monotone-majorization.tex) proves `|N(K)| >= I(x_K)` whenever the canonical corner's first coordinate strictly decreases. The proof retains nonnegative endpoint corrections for a curve outside the fan. The arm estimate supplies this horizontal monotonicity. Thus every global maximizing cap satisfies `A_omega <= A_1`.
-6. **Sharpness and strict equality.** Baek's known relaxed cap has a directly verified feasible sofa of area `1+omega^2/2` when `omega <= 1`. The exact quadratic gap in [relaxation.tex](relaxation.tex) forces every maximizing cap to have the candidate's support functions.
-7. **Recover every original sofa.** The candidate is regular closed, proved by the geometry of its niche and radial interior approximation. A closed subset of a regular-closed finite-area set with the same area equals that set. Applied to the monotone envelope, this gives uniqueness for arbitrary original sofas, without adding a regularity hypothesis to them.
+`0 < phi <= 1/12`, `phi < b < min(c,omega-phi)`, `c < omega`.
 
-The result is genuinely an optimality-plus-equality argument. No final Gerver area bound, right-angle equality theorem, assumed symmetry of the original optimizer, or unproved fan-containment hypothesis is used.
+Set `C=1_(phi,omega-phi)`, `B=1_(b,c)`, and `D(t)=B(omega-t)`. The piecewise elementary shooting equations are
 
-## Candidate and strict gap
+`r_p=(C(g-1)+B)/(1+B)`, `r_k=(C(f-1)+D)/(1+D)`,
 
-The functional `A_1(K) = |K| - I(x_K)`, the cap `K_(omega,1)`, and its relaxed value `1+omega^2/2` are already in Baek, *A Conditional Upper Bound for the Moving Sofa Problem*, arXiv:2406.10725v1. They are attributed to Baek, not claimed as discoveries here.
+`f'=g-r_p`, `g'=r_k-f`, `p'=k-f`, `k'=g-p`.
 
-Put `c = sec(omega)-tan(omega)`, `o=(c,1)`. The active supports are
+Use `f(0)=k(0)=1` and the midpoint conditions `f(omega/2)=g(omega/2)`, `p(omega/2)=k(omega/2)`. The two linear shooting unknowns are uniquely determined in every contact ordering.
 
-`p_*(t)=omega-t+o dot u_t`, `k_*(t)=t+o dot v_t`.
+With
 
-The cap is the convex hull of `O`, `o` and the arcs
+`gamma(t)=(p(t)-1)u_t+(k(t)-1)v_t`,
+`e(t)=(p(t)-1)u_t+p'(t)v_t`,
 
-`A(t)=o+(omega-t)u_t-v_t`, `C(t)=o+t v_t-u_t`.
+the three nonlinear contacts are
 
-The corner is `gamma(t)=o+(omega-t-1)u_t+(t-1)v_t`, with derivative `-t u_t+(omega-t)v_t`.
+`e(b)=gamma(phi)`, `e(c)_y=0`.
 
-For support differences `F=p-p_*`, `G=k-k_*`, the exact relaxation gap is
+The sufficient admissibility tests are `p''<0` on every open coefficient interval, `p(0)<5/3`, and `g(0)-p(0)<1`. They imply positive thresholds, valid normal-gap atoms, a niche strictly inside the unit fan sector, and feasibility. The optimal sofa is the resulting cap minus its niche. Its area is the explicit boundary integral in the main paper; it is **not** `1+omega^2/2` above one radian.
 
-`A_1(K_*)-A_1(K) = (1/2) integral [F'^2 + (G'+F)^2 - F^2]`.
+The unique admissible root is an exact implicit definition, not a claim that the unconstrained shooting equations have no other roots. Global uniqueness first identifies the cap. The first onset of positive curvature then determines `phi`, and the balance equations recover the wall indicator and hence `b,c`.
 
-For `omega <= 1`, the elementary one-ended estimate gives coercivity with coefficient `(1-omega^2/2)/2`. [beyond-one-radian.tex](beyond-one-radian.tex) uses the sharp one-ended Poincare inequality to improve it to `(1-4omega^2/pi^2)/2`, which stays positive for every `omega < pi/2`. Thus the normalized relaxed maximizer is unique throughout the whole open angle interval.
+## Non-circular proof chain
 
-## Structural progress at every angle below pi/2
+1. **Attainment and access to every maximizer.** Cap compactness and upper semicontinuity give a positive global cap maximizer. The companion's fixed-angle penalized selection and floating first variation reach any prescribed such maximizer.
+2. **All-maximizer geometry.** The fixed-angle curvature proof includes the two outer endpoints, ruling out their atoms. The arm certificate, pinned endpoint estimates and global cut geometry yield strict arms, fan containment and separated cuts for every maximizing cap. No symmetry of the unknown maximizer is assumed.
+3. **A valid universal lift on maximizers.** [vertical-core-lifting.tex](vertical-core-lifting.tex) replaces radial core contractions by vertical slices. It removes the unproved requirement that an unknown maximizing cap have all interior thresholds positive. The hypotheses now match exactly what the global geometry proves.
+4. **Strict global comparison.** The lifted functional `Q` is strictly concave on a convex obstacle domain. The contact balance equations and exposed-wall geometry provide its global equality certificate. This applies against every original maximizing cap, not just candidates with the same contact pattern.
+5. **A candidate for every angle.** The analytic bridge, compact interval cover and regular endpoint branch establish the existence of parameters satisfying the certificate's geometric hypotheses over the whole open interval.
+6. **Recover the original sofa.** The candidate is regular closed. A closed subset of a regular-closed finite-area set with equal area is the entire set. Equality in monotonization therefore recovers arbitrary original compact sofas, not merely their caps or envelopes.
 
-[all-angle-bootstrap.tex](all-angle-bootstrap.tex) replaces the short bootstrap by an exact finite rational certificate valid on every interval of length at most `8/5 > pi/2`. Twelve cells and eight integer recurrence steps give the lower bound `699/1000 > 2/3`, after which the same two substitutions give the linear arm bounds.
+The computation only discharges root existence and finite admissibility inequalities. It does not replace the global majorization, equality rigidity, or regular-closedness arguments with a numerical optimization claim.
 
-The certificate and its recurrence are printed in the paper. [checks/arm_certificate.py](checks/arm_certificate.py) independently checks it with integer and Fraction arithmetic; it is an optional local paper-certificate check, not CI.
+## What closed the continuation problem
 
-Combined with the fixed-angle curvature theorem and the new signed-area argument, this proves `A_omega(K) <= A_1(K)` for **every positive global maximizing cap** at every `0 < omega < pi/2`. The majorization gap from the first research pass is therefore closed on the whole open interval. The remaining issue is sharpness of a stronger bound after one radian, not an unresolved injectivity premise for the old bound.
+[order-independent-shooting.tex](order-independent-shooting.tex) rewrites the arm boundary-value problem as a positive affine contraction on `L2 x L2`, with norm at most `2omega/pi<1`. This proves nonsingularity and strict arms independently of the ordering of reflected wall intervals.
 
-## Exact negative results
+[order-independent-contact-certificate.tex](order-independent-contact-certificate.tex) replaces near-transition expansions by exact projection and sine-kernel inequalities. It proves that the proposed arcs are exactly the niche boundary through the later contact crossings as well. Only explicit root and support tests remain.
 
-### Universal majorization is false
+[explicit-first-regime.tex](explicit-first-regime.tex) removes the existential interval near one: a parameter `L=b-phi` explicitly solves two contacts, brackets the remaining scalar contact, and covers `(1,1.01]` by continuity with rational admissibility bounds.
 
-[negative-results.tex](negative-results.tex) gives the feasible convex monotone quadrilateral
+[validated-contact-cover.tex](validated-contact-cover.tex) explains the finite interval proof. The verifier encloses every actual event ordering, uses exact elementary propagation rather than an ODE solver, and checks strict support inequalities on whole coefficient intervals. It certifies `[101/100,7853/5000]` with no missed angle or contact crossing.
 
-`B_omega = conv{O, c u_0, (c,1), c v_omega}`.
+[endpoint-bridge.tex](endpoint-bridge.tex) uses `h=omega-c` to regularize the last interval. Its exact floor equation is
 
-Its niche is empty, its area is `c`, and `I(x_B)=omega+c-1>0`. Consequently
+`cot(omega)=(1-cos h)/(d-sin h)`, where `d=g(0)-p(0)`.
 
-`A_1(B_omega)=1-omega < c=A_omega(B_omega)`.
+The verified bounds `1/2<d<1` give `omega(0)=pi/2`, `omega(h)<pi/2` for positive h, and `omega(1/32)<pi/2-1/4096<1.5706`. Verified joining boxes produce a continuous branch, so the intermediate value theorem covers the entire remaining tail. No sampled monotonicity or extrapolation is used.
 
-Its open-arc arms vanish; curvature atoms at the two outer endpoints explain the failure. This disproves the tempting shortcut of applying the relaxation to every feasible or near-optimal cap without proving the needed geometry. It also verifies that the endpoint no-atom step is substantive.
+## Negative results retained
 
-### The sharp regime ends exactly at one radian
+The earlier failures remain part of the argument, not discarded history.
 
-For the relaxed cap, put `r=omega+c-1` and let `W(t)` be the floor intercept of its inner b-wall. Then
+- [negative-results.tex](negative-results.tex) gives a feasible convex monotone quadrilateral with empty niche and `A_1=1-omega < sec(omega)-tan(omega)=A_omega`. Universal majorization on all feasible caps is false; its endpoint atoms explain why the curvature endpoint audit matters.
+- [beyond-one-radian.tex](beyond-one-radian.tex) proves `m(omega)<1+omega^2/2` for every `1<omega<pi/2` by attainment and strict relaxation rigidity.
+- [redundant-angle-improvement.tex](redundant-angle-improvement.tex) proves the actual relaxed-cap sofa strictly suboptimal above one radian. A smooth outward support bump in a redundant-angle interval leaves the niche exactly unchanged and increases area.
+- Assuming convexity of the raw niche correction, replacing the niche by its convex hull, or invoking right-angle rigidity after merely extending a motion are not used as shortcuts.
+- A fixed numerical root or a finite angle sample does not prove continuation. The new records certify intervals, and the coverage check is exact.
 
-`W(t)-r = ((omega-1)(1-cos t)+sin t-t)/cos t`.
+The intermediate fifth-order transition and unique endpoint-profile results remain in their separate notes. The complete angle theorem does not erase those finer asymptotic results.
 
-When `omega > 1`, this is positive at sufficiently small positive t. A positive-area part of the niche therefore lies beyond the signed corner region. Hence `A_omega(K_(omega,1)) < 1+omega^2/2`. Cap attainment, all-maximizer majorization and strict relaxation rigidity turn this into the strict unrestricted supremal bound
+## Reproduction and validation boundary
 
-`m(omega) < 1+omega^2/2` for `1 < omega < pi/2`.
+The complete builder and verifier use only the Python standard library. From `checks/`:
 
-This argument is in [beyond-one-radian.tex](beyond-one-radian.tex); it does not incorrectly pass from pointwise strictness to strictness of a supremum.
+```sh
+python check_verifier_primitives.py
+python build_contact_cover.py --part all --output-dir certificates
+python verify_contact_cover.py certificates/*.json --report replay.json
+```
 
-### The relaxed-cap sofa itself is suboptimal above one radian
+Floating Newton steps and approximate inverses only propose data. Outward interval checks determine acceptance. The verifier uses Taylor enclosures for trigonometric functions, includes all compatible reflected event orderings, and recomputes every record before exact coverage checks. It does not trust stored booleans or approximate residuals.
 
-[relaxed-candidate-feasibility.tex](relaxed-candidate-feasibility.tex) first proves that the cap-minus-niche sofa is feasible for every `omega < pi/2`: the whole niche lies in a disk of radius strictly less than one inside the fan, and radial paths connect its complement in the cap.
+A final audit corrected an unused mixed interval/second-derivative division dispatch. The primitive regression passed, and all 781 records were replayed again against the final sources. Source and data hashes are frozen in the report. This is not an independent implementation or a proof-assistant kernel verification.
 
-[redundant-angle-improvement.tex](redundant-angle-improvement.tex) then proves that a whole early interval of quarter-planes is strictly contained in a later quarter-plane when `omega > 1`. A small smooth outward bump of the cap support on that interval leaves the niche **exactly unchanged**, preserves convexity and feasibility, and increases area by
-
-`epsilon integral (omega-t) psi(t) dt + (epsilon^2/2) integral (psi^2-psi'^2) dt > 0`.
-
-Thus the actual relaxed-cap sofa is strictly suboptimal, not just smaller than its relaxed value. This is an analytic construction, not a numerical optimizer claim.
-
-## Stability and earlier results
-
-[stability.tex](stability.tex) proves that at each fixed `0 < omega <= 1`, every normalized sequence of feasible sofas whose areas tend to the optimum converges in Hausdorff distance to the unique optimizer. Their caps converge as well. This is a qualitative result with no asserted uniform rate.
-
-The first-pass [paper.tex](paper.tex), [small-angle.tex](small-angle.tex), and [relaxation.tex](relaxation.tex) remain useful as independent component proofs and a record of the development. Statements in those files that say a particular note does not prove unrestricted optimality describe that note's own scope; the continuation now supplies the missing hypotheses. The small-angle expansion is superseded by the exact value theorem, while its rescaled missing-corner theorem remains a separate asymptotic geometric result.
-
-## Remaining problem, stated without a false closure claim
-
-The explicit optimal cap/sofa and uniqueness for `1 < omega < pi/2` are not yet determined by this PR. The first candidate is now ruled out throughout that interval. The exact tail correction to the relaxed objective must enter the next optimization.
-
-Exploratory local support perturbations suggest that the niche-minus-signed-area correction may have useful convexity in restricted contact regimes, but no general convexity theorem is proved. Sampled unions of quarter-planes underestimate the niche and therefore overestimate the cap-minus-niche area; they cannot certify a feasible lower bound without a separate argument. Replacing the niche by its convex hull is also not an identity. These routes are not used as premises of any result above.
-
-A productive next target is a sharp lifted functional or an exact exposed-wall/contact decomposition with a justified equality case. Merely reusing the quadratic relaxation, assuming its stationary cap remains optimal, or citing right-angle rigidity would contradict the negative results already proved.
+The remaining work is independent review, consolidation of the research notes, and any later formalization. No unproved angle-continuation interval remains in the assembled argument. The different-hallway-angle and ambidextrous problems are outside this theorem's scope.
