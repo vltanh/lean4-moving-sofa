@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{Analytic Existence of the First Postcritical Contact Branch}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Use the explicit first-ordering formulas of \texttt{contact-equations.tex}, with $w=1+\delta$ and $0<\phi<b<c<w/2$. Let $R_1,R_2,R_3$ be the three shooting residuals in that note, in the order printed there.
+
+\begin{theorem}[A unique local analytic branch]
+There is $\varepsilon>0$ and a unique analytic branch of solutions in a neighborhood of the following scaled parameters:
+\[
+ \phi=\delta^2\lambda(\delta),\qquad b=\delta\mu(\delta),\qquad c=\delta\nu(\delta),
+\]
+\[
+ \lambda(0)=3/16,\qquad\mu(0)=3/2,\qquad\nu(0)=2.
+\]
+For $0<\delta<\varepsilon$ the ordering $0<\phi<b<c<w/2$ holds. The corresponding supports define a normalized cap with a directly feasible cap-minus-niche sofa. This theorem concerns the shooting branch and feasibility; its exact niche boundary and global optimality are proved separately.
+\end{theorem}
+\begin{proof}
+The elementary trigonometric and integral expressions in \texttt{contact-equations.tex} extend analytically as functions of $(\delta,\lambda,\mu,\nu)$ near $(0,3/16,3/2,2)$. This refers to their explicit formulas with oriented integrals, not to interpreting an invalid negative-$\delta$ contact ordering as a geometric construction. The two denominators determining $g_0$ and $p_0$ tend respectively to one and $\cos(1/2)+\sin(1/2)>0$.
+
+The desingularized residuals $(\delta^{-3}R_1,\delta^{-2}R_2,\delta^{-2}R_3)$ extend analytically to $\delta=0$. Their values there are
+\begin{align*}
+ r_1&=2\lambda\mu-\mu^2/2+\mu^3/6,\\
+ r_2&=2\lambda-\mu+\mu^2/2,\\
+ r_3&=\nu-\nu^2/2-\lambda-d(\mu,\nu),\qquad
+ d(\mu,\nu)=\frac{(\nu-\mu)(2-\mu-\nu)}4.
+\end{align*}
+Here is a direct way to check the cancellation, including the initially unknown $p_0$. On the first interval,
+\[
+ \gamma_x(\phi)=p_0-g_0\sin^2\phi-\sin\phi\cos\phi-\cos\phi+\sin\phi,
+\]
+\[
+ \gamma_y(\phi)=g_0\sin\phi\cos\phi+\cos^2\phi-\sin\phi-\cos\phi.
+\]
+The $p_0$ terms cancel from $R_1,R_2$. The remaining support integrals at $b$ are those of $A-1-t$ on $[\phi,b]$. At $c$, the floor residual is exactly
+\[
+ -\sin c+\int_\phi^b(A-1-t)\cos t\,dt
+             +\frac12\int_b^c(A-t)\cos t\,dt.
+\]
+Using $g_0=2+\delta+O(\delta^2)$, $A=2+\delta+O(\delta^2)$, $\phi=\lambda\delta^2$, $b=\mu\delta$, $c=\nu\delta$ gives the three polynomials above. All lower Taylor coefficients vanish identically in the scaled variables, which justifies the analytic division by the displayed powers of $\delta$.
+
+At $(\lambda,\mu,\nu)=(3/16,3/2,2)$ the three polynomials vanish and their Jacobian is
+\[
+ \begin{pmatrix}3&0&0\\2&1/2&0\\-1&-1/4&-1/2\end{pmatrix},
+ \qquad \det=-3/4\ne0.
+\]
+The analytic implicit function theorem gives the stated unique local branch. Positivity and the required ordering follow from its limiting scaled parameters.
+
+We verify admissibility instead of treating the equations as sufficient by themselves. The initial arms satisfy $f(0)=1$ and $g(0)=2+O(\delta)$. Before $\phi$ they satisfy $f'=g$, $g'=-f$; on the following core-only intervals they satisfy $f'=1$, $g'=-1$; on the right-envelope interval they satisfy $f'=g/2$, $g'=-1$. Reflection supplies the second half. Hence $f>1$, $g>1$ in the interior, $f'>0$, and $g'<0$ for sufficiently small $\delta$.
+
+The cap curvature densities from the balance equations are nonnegative. The supports and their first derivatives converge to those of the angle-one relaxed cap. On a fixed sufficiently small interval near zero one has $p''<-(\sec1-\tan1)/2$ in every piece, while $p'(0)=0$. Away from that interval the limiting support has strictly negative derivative. Consequently $p'<0$ on $(0,w)$ and, by reflection, $k'>0$. Since $p(w)=k(0)=1$, all interior thresholds are positive.
+
+Extend the active supports over the complementary normal intervals by the support of the fixed upper vertex and by the cosine pieces determined by $p(0)$ and $k(w)$. The derivatives at the outer active endpoints are zero. The upper pinned edge lengths tend to one and the lower fan-edge lengths are positive. Thus the full circular support is continuous and has nonnegative curvature measure, so defines a normalized cap. This step includes the necessary normal-gap extensions when the unpinned endpoint values change.
+
+Finally, its fan-truncated niche quadrilaterals converge uniformly to those at the angle-one relaxed cap, whose vertices lie in a disk of radius less than one half. They therefore lie in a common disk of radius $\rho<1$. The cap contains the unit fan sector, its niche is star-shaped and relatively open in the fan, and radial paths connect its complement to the unit fan arc. The canonical supporting-hallway motion is feasible. This proves compactness, path-connectedness and feasibility of the cap-minus-niche sofa, without yet identifying every exposed boundary arc.
+\end{proof}
+
+\begin{lemma}[The floor extends past the initial corner]
+Along this branch,
+\[
+ \frac{p(c)-1}{\cos c}-(p(0)-1)=\frac13\delta^3+O(\delta^4).
+\]
+\end{lemma}
+\begin{proof}
+The $p_0$ term cancels from the left side, leaving
+\[
+ 1-\sec c+\frac1{\cos c}\left[
+ \int_\phi^b(A-1-t)\sin(c-t)\,dt+
+ \frac12\int_b^c(A-t)\sin(c-t)\,dt\right].
+\]
+Its cubic coefficient is
+\[
+ \nu^2/2-\nu^3/6-\lambda\nu
+ +\frac12\int_\mu^\nu(s-1)(\nu-s)\,ds.
+\]
+At $(\lambda,\mu,\nu)=(3/16,3/2,2)$ this is $1/3$. Analyticity supplies the stated remainder.
+\end{proof}
+
+\paragraph{Scope and validation.}
+The positive interval supplied here is existential; no numerical lower bound for $\varepsilon$ is asserted. The Jacobian is an exact rational certificate, not a floating-point nonsingularity test. Root existence near the transition is not being extrapolated across the later changes in contact order. No CI or compilation was run.
+\end{document}
