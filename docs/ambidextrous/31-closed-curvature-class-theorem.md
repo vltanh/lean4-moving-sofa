@@ -2,7 +2,7 @@
 
 This strengthens Theorem 52: curvature may equal one on positive-measure sets, contact zeros may be degenerate, and separate H^2 regularity need not be assumed if curvature is stated as a measure inequality. The proof uses Note 30's direct geometry, not an unproved feasibility-preserving interpolation.
 
-The unrestricted problem still requires a structural theorem for global maximizers or a covering replacement. The hypotheses below are not asserted for all feasible bodies.
+**Updated through Note 65.** Corollary 123 below also removes the independent full-quarter-turn premise: [Note 64](64-width-gate-from-curvature-and-contact.md) derives it from the curvature and contact conditions for every competitive body. The unrestricted problem still requires a proof of those two support conditions for relevant maximizers. They are not asserted for all feasible bodies.
 
 ## 31.1 The algebraic inequality extends to weak bounds
 
@@ -53,7 +53,7 @@ f'(t)-g(t)+1\leq g'(t)+f(t)-1.
 
 Impose the same condition for the support function of rho K. With the regularity just proved, an almost-everywhere version extends to every t by continuity of the one-sided quarter expressions.
 
-## 31.3 The strengthened geometric theorem
+## 31.3 The geometric theorem with full motions supplied
 
 **Theorem 65 (weak-curvature geometric optimality and exact uniqueness).** Let S be compact and connected, K=conv(S), in a proper rigid normalization of vertical span one. Assume:
 
@@ -82,14 +82,36 @@ At equality the hull support is h_*+a cos(theta), hence K is the corresponding h
 
 This theorem assumes neither strict curvature, symmetry, aligned faces, fixed contact switches, ordinary velocity monotonicity, nor a finite analytic arc decomposition. The direct no-clipping proof is what makes the weak-bound extension geometric rather than merely algebraic.
 
-## 31.4 A precise sufficient route to unrestricted closure
+## 31.4 Removing the independent full-turn assumption
 
-Global attainment is now proved in Theorem 55. Consequently the following would suffice to close optimality:
+**Corollary 123 (sharp comparison from two support conditions).** Let S be a compact connected ambidextrous body with arbitrary motions in the posed problem of Note 1. Suppose there is a common unit-span normalization in which K=conv(S) satisfies (31.1) and both inequalities (31.2). Then
 
-> Some global maximizer has a normalized full-turn common hull satisfying (31.1) and (31.2).
+\[
+|S|\leq M,
+\]
 
-To close exact uniqueness by the same route one needs the stronger statement for **every** global maximizer, or an equality-preserving reduction that recovers each original body. Selecting just one well-behaved maximizer proves the optimal value but not uniqueness of the others.
+with equality exactly for bodies congruent to Romik's candidate. Full-quarter endpoint angles are not an additional hypothesis.
 
-Proposition 61 supplies the full-turn conclusion whenever a maximizing hull contains an incoming-axis unit square. Theorem 59 isolates the strictly hidden part of a curvature balance in edge atoms. Neither result yet proves the displayed structural statement.
+**Proof.** If |S|<=sqrt(2), the inequality is strict because M>8/5>sqrt(2), as proved in Note 10. Otherwise Corollary 120 in Note 64 supplies both full conventional canonical turns for the same body and hull. Its proof uses the width identity under central Minkowski symmetrization and the bound
 
-The high-area curvature counterexamples in Note 28 show why a mere feasibility/threshold assertion cannot replace it. This theorem closes the previously recorded degeneracy problem, but does not pretend that the remaining maximizer geometry has been established.
+\[
+w_K(t)\geq(2-\sqrt2)|\cos t|+|\sin t|,
+\]
+
+which is greater than one for pi/4<=|t|<pi/2. The correct-sign canonical endpoints already exceed pi/4 by the two-strip area bound, so their outgoing unit strips force them to equal pi/2. Apply Theorem 65 and its exact equality recovery. The explicit candidate satisfies the two support conditions and attains M. QED.
+
+The two support conditions must hold in **one and the same normalization**. Curvature domination obtained in one orientation and contact order obtained in another do not meet this corollary's hypothesis.
+
+No feasibility-preserving symmetrization is assumed. The auxiliary centrally symmetric body in Note 64 is used only because its widths equal those of K.
+
+## 31.5 The remaining sufficient route to unrestricted closure
+
+Global attainment is proved in Theorem 55. With Corollary 123, the sufficient maximizer statement becomes:
+
+> Some global maximizer has a common unit-span normalized hull satisfying the curvature domination (31.1) and both contact inequalities (31.2).
+
+This would prove the optimal value. To prove exact uniqueness by the same route, establish those conditions for **every** global maximizer, or supply an equality-preserving comparison that recovers each original body.
+
+Full-quarter endpoint angles no longer need an independent proof once these two support conditions are established. The earlier unit-square gate is an alternative sufficient criterion, not a remaining premise of this route.
+
+The conditions themselves have not been proved for unrestricted maximizers. High-area counterexamples in the earlier notes prevent substituting a feasibility threshold for a genuine maximality or improvement argument. Neither the weak-curvature extension nor the new width gate eliminates the residual contact multipliers or proves the sharp density bound.
