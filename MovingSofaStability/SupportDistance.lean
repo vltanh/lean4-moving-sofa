@@ -72,7 +72,8 @@ theorem euclideanDisk_isConvexBody {r : ℝ} (hr : 0 ≤ r) : IsConvexBody (eucl
   rw [norm2_smul, norm2_smul, abs_of_nonneg ha, abs_of_nonneg hb] at h
   have hpa := mul_le_mul_of_nonneg_left hp ha
   have hqb := mul_le_mul_of_nonneg_left hq hb
-  nlinarith
+  have he : a * r + b * r = r := by rw [← add_mul, hab, one_mul]
+  linarith
 
 /-- Minkowski sums of nonempty compact convex sets stay in the same class. -/
 theorem convexBody_add {K L : Set Point} (hK : IsConvexBody K) (hL : IsConvexBody L) :
@@ -134,7 +135,11 @@ theorem convexBody_translate {K : Set Point} (hK : IsConvexBody K) (v : Point) :
   refine ⟨hK.1.image _, hK.2.1.image (continuous_id.add continuous_const), ?_⟩
   rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩ a b ha hb hab
   refine ⟨a • p + b • q, hK.2.2 hp hq ha hb hab, ?_⟩
-  ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;>
-    nlinarith
+  have hv : (a + b) • v = v := by rw [hab, one_smul]
+  calc
+    (a • p + b • q) + v = (a • p + b • q) + (a + b) • v := by rw [hv]
+    _ = a • (p + v) + b • (q + v) := by
+      simp only [add_smul, smul_add]
+      abel
 
 end MovingSofaStability
