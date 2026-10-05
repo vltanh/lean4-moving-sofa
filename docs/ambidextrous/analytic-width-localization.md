@@ -60,6 +60,8 @@ They imply
 \tag{AL.3}
 \]
 
+For example qa>13/30>3/7, qa<98/225, alpha<98/225-29/100=131/900, and beta<2/3-29/50=13/150. The lower estimates alpha>2/15 and beta>1/25 follow from the other sides of the same bounds.
+
 Also
 
 \[
@@ -125,13 +127,15 @@ C_q(d)-(\alpha-d)_+^2/(2q)
 
 is convex: its second derivative is zero below alpha, 1/q between alpha and qa, and zero above qa. On 0<=e<=ra the corresponding e function has second derivative zero below beta, 1/r between beta and H, and zero above H. First derivatives are continuous at each breakpoint. Since B is convex, L is convex on D.
 
-On R, and on a neighborhood of the minimizing points on its four sides used below, no tail or height clipping occurs. There L is the quadratic
+On R, no positive-area truncation occurs and L equals
 
 \[
 Q(d,e)=\frac r2d^2+\frac q2e^2+
 \frac{cs}{2}(\kappa-rd-qe)^2.
 \tag{AL.8}
 \]
+
+At e=H this remains an equality of values and of derivatives tangent to that side. A full open neighborhood need not have the same quadratic, because the outer-height clipping turns on for e>H. That extra term is proportional to (e-H)_+^2 and has zero first derivative at the knot; it causes no difficulty in the following tangent-derivative test.
 
 At d=e=t=cs*kappa/2, which lies between 77/270 and 3/10, this quadratic has value cs*kappa^2/4<9/50. The point lies in the interior of R, and the formula for L there is indeed Q.
 
@@ -153,7 +157,7 @@ Q(d_e,e)=\sqrt6\left[\frac{e^2}{6}+
 \tag{AL.10}
 \]
 
-At d=3/20 or 3/7, the bounds in Section 2 give 1/10<e_d<1/2. At e=1/10 or 1/2 they give 3/20<d_e<3/7. The inner heights at all four points are below H and their baseline lengths positive. Thus L agrees locally with Q at these points, and its derivative tangent to the relevant side is zero. Convexity on D proves they minimize L on the entire corresponding line segment in D, not just within a guessed quadratic region.
+For d in [3/20,3/7], Section 2 bounds e_d strictly between (22/63)(53/84)>1/10 and 51/140<1/2. For e in [1/10,1/2], it bounds d_e strictly between 11/48>3/20 and 7/20<3/7. In particular all four minimizing points belong to the relevant sides of R. Their inner heights are below H and their baseline lengths positive. L has the same value and tangent derivative as Q at each point, with zero tangent derivative. Convexity on D proves they minimize L on the entire corresponding line segment in D, not just within a guessed quadratic region.
 
 Substitute kappa>7/6, r<5/4, q<5/6 and sqrt(6)>22/9 into AL.9–AL.10. The four minimum values are strictly greater than the following rational numbers:
 
@@ -205,7 +209,7 @@ The inequalities d>alpha and e>beta put these inside [a,2-a]. Also
 
 The lower bound follows, for example, from G>7/6-(5/4)(3/7)-(5/6)(1/2)=3/14. Because cs<1/2, its height is below 47/100<H.
 
-The left outer triangle ends at d/q<a since d<3/7<qa. The right one begins at 2-e/r>2-a since e<1/2<ra. Their heights are d<3/7<H and e<H. This verifies all the nontruncation assertions of AL1.
+The left outer triangle ends at d/q<a since d<3/7<qa. The right one begins at 2-e/r>2-a since e<1/2<ra. Their heights are d<3/7<H and e<H. This verifies all the nontruncation assertions of AL1 for the strict rectangle in its conclusion. On the closed rectangle the non-strict versions suffice for all value and tangent calculations above.
 
 The complementary-angle case is obtained by x-reflection and interchange of the coordinates, with no symmetry assumption on the two actual placements.
 
