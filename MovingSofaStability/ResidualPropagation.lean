@@ -120,17 +120,20 @@ theorem last_arc_mass_bound {f df : ℝ → ℝ}
   have hq : tangentQuotient π f (π / 2) = 0 := by
     simp [tangentQuotient, hv, hπ]
   rw [hπ, zero_mul, zero_add, hq, zero_sub, sin_pi_sub] at hrec
+  have he : sin t * (∫ u in (π / 2)..t, tangentResidual π f df u / sin (π - u)) =
+      ∫ u in (π / 2)..t, tangentResidual π f df u * (sin t / sin u) := by
+    rw [← intervalIntegral.integral_const_mul]
+    apply intervalIntegral.integral_congr
+    intro u hu
+    rw [sin_pi_sub]
+    ring
   have hrec' : f t = -(∫ u in (π / 2)..t,
       tangentResidual π f df u * (sin t / sin u)) := by
-    rw [hrec]
-    rw [← intervalIntegral.integral_const_mul]
-    have he : (∫ u in (π / 2)..t, sin t * (tangentResidual π f df u / sin (π - u))) =
-        ∫ u in (π / 2)..t, tangentResidual π f df u * (sin t / sin u) := by
-      apply intervalIntegral.integral_congr
-      intro u hu
-      rw [sin_pi_sub]
-      ring
-    simpa only [mul_neg] using congrArg Neg.neg he
+    calc
+      f t = -(sin t * (∫ u in (π / 2)..t, tangentResidual π f df u / sin (π - u))) := by
+        rw [hrec]
+        ring
+      _ = _ := congrArg Neg.neg he
   have hk : ContinuousOn (fun u => sin t / sin u) (Icc (π / 2) t) :=
     continuousOn_const.div continuous_sin.continuousOn (fun u hu => (hspos u hu).ne')
   have hbound : ∀ u ∈ Icc (π / 2) t, |sin t / sin u| ≤ (1 : ℝ) := by
