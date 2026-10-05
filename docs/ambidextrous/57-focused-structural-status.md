@@ -1,60 +1,89 @@
-# 57. Focused structural status through Note 67 and the width-gate supplement
+# 57. Current proof boundary: global functional calibration, geometric enclosure still missing
 
-**The unrestricted proof is not closed.** The sufficient sharp route now has two support hypotheses rather than three: curvature domination and both contact inequalities imply full turns. Separately, the new singular-curvature argument removes the fiber-clearance assumption at strictly clear outer points of any maximizing hull.
+**The unrestricted ordinary-area proof is not closed.** The new AF supplement proves the adaptive functional's exact global maximum and equality case without curvature or contact assumptions, for all normalized real H^1 profiles of horizontal width at least one. A second supplement computes a strictly positive ordinary-area defect on actual feasible near-candidate bodies. Thus the two sides of the intended sandwich are now sharply distinguished.
 
-This is the current research-entry ledger. Note 51 is the preceding broad inventory; older ledgers are historical snapshots. These are written arguments with self-review, not independent refereeing or Lean verification. The entire preceding proof chain has not been independently audited. No novelty or best-known-bound claim is made.
+The numbered contact results through Note 67 and the WG width gate remain in force within their stated scopes. This is the current research-entry ledger. Earlier inventories are historical snapshots. All proofs are written and self-reviewed, not independently refereed or Lean-verified. No novelty or best-known-bound claim is made.
 
-## 57.1 Full turns are no longer an independent hypothesis
+## 57.0 The sharp analytic optimization is now completed on a much larger domain
 
-[Theorem WG2 in the width-gate supplement](64-width-gate-from-curvature-and-contact.md) applies to a unit-span convex hull satisfying curvature-measure domination on the open quarters and both contact inequalities. It proves
+[Theorem AF3](adaptive-functional-global-calibration.md) applies to every real periodic H^1 profile h with
+
+\[
+h(\pi/2)=1,\quad h(3\pi/2)=0,\quad h(0)+h(\pi)\geq1.
+\]
+
+It proves
+
+\[
+\widetilde{\mathcal Q}(h)\leq M,
+\qquad M=1+4Y^2+\arctan Y,\quad4Y^3+3Y-1=0,\quad Y>0,
+\]
+
+with equality exactly for h=h_*+b cos(theta). It does not assume that h is convex or feasible, or that its curvature or contact order satisfies any inequality. The width condition is automatic for a genuine unit-span hull containing a body of area greater than one.
+
+The proof fixes the horizontal endpoint values h(0)=h(pi)=a first. Differences of two half-profiles vanish at both ends. For z=v+iw and y=exp(-it/2)z, the negative quadratic part of the unpenalized half-functional is
+
+\[
+\frac12\int_0^{\pi/2}(|y'|^2-\tfrac94|y|^2),
+\]
+
+strictly positive on nonzero Dirichlet variations by the first eigenvalue four. The subtracted contact losses are concave. Consequently each fixed-width fiber has a unique maximizer, and its two reflection symmetries follow in function space.
+
+The Euler momenta P=p+min(p,0), Q=q+max(q,0) satisfy a globally Lipschitz piecewise linear Hamiltonian system. At a stationary free width, P(0)=1/2 and Q(pi/2)=-1/2. Classifying the transit times gives only the radius-one-half disk profile and the candidate. The candidate cubic comes from the unique orbit of duration pi/2. The disk boundary has smaller value, and an explicit large-width optimizer makes the value tend to minus infinity. This supplies existence of the global functional maximum, rather than just a stationary-point classification.
+
+The candidate's exact value is the calculation in Note 14. The AF supplement independently supplies the widened domain, fixed-width coercivity, critical-orbit classification and equality reduction. It does not claim independent review of every earlier geometric lemma.
+
+### The geometric enclosure fails even for the adaptive functional
+
+[Proposition AF4](adaptive-functional-enclosure-counterexample.md) uses the already verified protected high-curvature bodies and their convexification repairs. For a nonzero first-quarter increment u and its reflected copy,
+
+\[
+\boxed{|S|-\widetilde{\mathcal Q}(h_{\operatorname{conv}S})
+=\int_J(u'^2-u^2)>0.}
+\]
+
+The actual area gain and the functional gain are computed separately before subtraction. The Dirichlet inequality supplies the strict sign. These bodies have the candidate's exact horizontal width and areas tending to M from below. Thus neither AF3's width condition nor proximity in area makes enclosure automatic.
+
+Their strict suboptimality comes from a feasible improving repair, not from the false inequality |S|<=tilde Q(h). This counterexample is different from the earlier failure of **fixed** switching angles. Both are retained.
+
+A direct enclosure theorem for actual global maximizers would now suffice without first deriving the old support conditions. Alternatively, a constructed surrogate profile may use AF3 even if it is not convex or feasible. In either case the ordinary-area comparison still needs proof. For uniqueness a surrogate also needs equality/containment recovery; selecting a profile of value M is not such a construction.
+
+## 57.1 The structural route no longer has an independent full-turn premise
+
+[Theorem WG2](64-width-gate-from-curvature-and-contact.md) proves, for a unit-span convex hull satisfying open-quarter curvature domination and both contact inequalities,
 
 \[
 \boxed{w_K(t)\geq(2-\sqrt2)|\cos t|+|\sin t|.}
 \]
 
-The proof uses the centrally symmetric auxiliary body C=(K+((0,1)-K))/2. Its widths equal those of K. Quarter-moment inequalities and inherited endpoint contact conditions show that its two horizontal faces contain [-d,d], where d=1-1/sqrt(2); convexity gives the corresponding unit-height rectangle.
+Its centrally symmetric auxiliary body C=(K+((0,1)-K))/2 has exactly the widths of K. Quarter-moment inequalities and inherited endpoint contact traces show that C contains a unit-height rectangle of width 2-sqrt(2). **C is not asserted feasible.** This is a width comparison, not a symmetrization of an actual sofa.
 
-**C is not asserted to be feasible.** This is a comparison of widths, not a feasibility-preserving symmetrization or a proof that the original hull is symmetric.
+For a body of area greater than sqrt(2), the general canonical endpoints already have magnitudes greater than pi/4. The bound is strictly greater than one before pi/2, so the outgoing unit strips force full turns.
 
-For a body of area greater than sqrt(2), the canonical endpoint magnitudes already exceed pi/4 by the two-strip bound. The new width lower bound is strictly greater than one for pi/4<=|t|<pi/2. The outgoing unit strips therefore force both endpoints to be full quarter turns.
+[Corollary WG4 in Note 31](31-closed-curvature-class-theorem.md) therefore gives the sharp area and exact body-uniqueness theorem from just curvature domination and both contact inequalities in one common incoming unit-span normalization. Those conditions remain sufficient for the **geometric enclosure** even though they are no longer assumptions of the analytic theorem AF3.
 
-[Corollary WG4 in Note 31](31-closed-curvature-class-theorem.md) consequently gives the sharp bound and exact uniqueness from just
+Only endpoint contact traces are used in the width gate. The existing geometric profile proof uses the full contact inequalities. Domination only at floating normals also does not control a pinned partial-terminal normal lying inside an open quarter.
 
-\[
-\sigma_K\leq dt\quad\text{on every open quarter},
-\qquad p\leq q\quad\text{for both }h_K\text{ and }h_K^\rho,
-\]
+## 57.2 Projection-endpoint source corners are harmless under the prior outer-clearance assumptions
 
-in one common unit-span normalization. Full turns follow, rather than being an extra premise. Neither of these two support conditions has been proved for every unrestricted maximizer.
-
-Only endpoint contact traces are needed by the width calculation. The full contact inequalities are still needed by the adaptive-functional theorem. Bounds only at floating normals are also insufficient: before endpoint completion a pinned terminal normal may lie inside a coordinate quarter.
-
-## 57.2 The source-corner projection obstruction is removed
-
-[Theorem 118 in Note 64](64-positive-corners-are-interior.md) gives the elementary estimates
+[Theorem 118 in Note 64](64-positive-corners-are-interior.md) gives
 
 \[
 x_+-c_x\geq\frac{1-(1-c_y)\sin t}{\cos t},\qquad
-c_x-x_-\geq\frac{1-(1-c_y)\cos t}{\sin t}
+c_x-x_-\geq\frac{1-(1-c_y)\cos t}{\sin t}.
 \]
 
-for an interior-angle lower canonical corner in a hull contained in [x_-,x_+] times [0,1]. If c_y>=0, both distances are strictly positive. At or beyond a projection endpoint the corner instead lies strictly below the strip. Its sufficiently small circular support replacements therefore remove no strip points. Reflection handles the upper turn.
+For an interior-angle lower corner with c_y>=0, both projection margins are strictly positive. At or beyond an endpoint the corner is strictly below the incoming strip, and its sufficiently small circular support replacements remove no strip points. Reflection gives the upper case.
 
-Corollary 119 deletes the projection-endpoint case from the prior singular-repair residual whenever its outer-clearance and floating-normal hypotheses apply. The independently added calculation at `65-active-corners-stay-inside-the-projection.md` is now a pointer to this common result; the duplicate proof is retained in history rather than maintained with conflicting theorem numbers.
+Corollary 119 removes this residual case when the outer-clearance and floating-normal assumptions of the singular repair hold. The independently added duplicate calculation is now a pointer, preserving its history without competing theorem numbers.
 
-## 57.3 New result: no fiber assumption for clear singular-continuous contacts
+## 57.3 Fiber clearance is removed for clear singular-continuous contacts
 
-[Theorem 130 in Note 67](67-removing-the-fiber-clearance-hypothesis.md) proves:
+[Theorem 130 in Note 67](67-removing-the-fiber-clearance-hypothesis.md) proves that a normalized maximizing hull's singular-continuous curvature gives zero mass to floating normals whose exposed point is strictly clear of both closed swept niches. It requires no candidate neighborhood, full-turn premise, input smoothness or positive fiber gap.
 
-> For any normalized global maximizer, its singular-continuous hull curvature gives zero mass to the set of floating normals whose exposed point is strictly clear of the closures of both swept niches.
+### Two-corner graph measures
 
-This needs neither candidate proximity, full quarter turns, input smoothness, nor positive surviving-fiber clearance. The argument handles actual pinches rather than presuming that a zero-area connection is harmless.
-
-There are three complementary mechanisms.
-
-### A. Two corner graphs give a measure inequality
-
-[Note 65](65-two-corner-pinch-measures.md) treats opposite corners on bi-Lipschitz graph charts. Put a=c_x', b=c_y', z=b/a. On nonatomic parts the exact identity is
+[Note 65](65-two-corner-pinch-measures.md) derives, for a=c_x', b=c_y', z=b/a,
 
 \[
 (Dz)_{\rm na}
@@ -62,89 +91,61 @@ There are three complementary mechanisms.
 +\frac{q-p+2p^2+2q^2}{a^2}\,dt.
 \]
 
-At source jumps the exact quotient difference, not a derivative at one trace, is used. With the graph orientation included, the source curvature terms have positive coefficients at an active lower corner and negative coefficients at an active upper one.
+Exact quotient differences handle jumps. With graph orientation included, the source terms have positive signs at an active lower corner and negative signs at an upper corner. The nonnegative gap between the two graphs controls their source curvature on its zero-contact set by BV locality. Theorem 122 treats strict transverse charts; Lemma 129 in Note 67 permits the coefficient signs to be required only at actual contact points. Countably many rational charts suffice.
 
-Connected feasibility gives a nonnegative gap G-F between the two selected graphs. BV level-set locality controls its derivative measure on {F=G}. Theorem 122 bounds all source curvature there under strict component bounds. Lemma 129 in Note 67 weakens the surrounding-chart conditions: the needed coefficient signs are imposed by feasibility on the contact set itself. The positively weighted source singular curvature is excluded even when nearby contact types differ. Countably many rational charts suffice.
+This does not assert nonzero horizontal speed for every corner graph or a sharp density bound of one.
 
-This does not assert that every corner graph has nonzero horizontal speed or a globally signed second derivative.
+### Vanishing-sensitivity repair
 
-### B. A vanishing coefficient pays for feasibility repair
-
-[Note 66](66-zero-sensitivity-singular-repair.md) handles source singular curvature where the other velocity component vanishes. For example, at a second-source singular point with p=0 and q nonzero, BV locality gives sigma_f=(q+1)dt on the continuous level set of p. At good density scales, if m(r) is the central sigma_g mass, then
-
-\[
-r=o(m(r)),\qquad \sigma_f(J_r)=o(m(r)).
-\]
-
-The circular replacement raises the support by O(m(r)r) and gains hull area at least c m(r)^2r. A direct comparison of the two wall families bounds the **uniform hallway error** by e_r=o(m(r)^2r). This is stronger than just a bound on total lost area.
-
-Form a connected comparison body using the new hull and old niches, retaining the entire old body and the strictly clear added region. Scaling it by 1/(1+e_r) gives genuinely feasible motions. Its exact area gain is
+[Note 66](66-zero-sensitivity-singular-repair.md) handles the complementary zero-coefficient case. At suitable density scales, its circular replacement gains retained hull area G_r>=c m(r)^2r while the uniform hallway error is e_r=o(m(r)^2r). A connected old-niche comparison retains the old body and clear added region. Scaling by 1/(1+e_r) restores the actual motions, with exact gain
 
 \[
 \frac{G_r-|S|(2e_r+e_r^2)}{(1+e_r)^2}>0.
 \]
 
-The scaling cost is explicitly paid; it is not omitted from a claimed variation. Theorem 125 gives the singular-continuous exclusion, and Corollary 126 plus Section 67.6 give corresponding atom exclusions under their trace and outer-clearance conditions.
+The scaling cost is paid. It is not an assertion that an infeasible support variation has zero cost. Atomic versions retain their separate trace hypotheses.
 
-### C. A stationary blocking corner forces a constant-velocity level
+### Stationary blocking corners
 
-Lemma 128 in Note 67 uses the retained exposed-face endpoints of a stationary corner. If an opposite corner coincides with it at an interior motion angle, two fixed-point feasibility tests force that other corner's velocities to satisfy
+Lemma 128 in Note 67 uses retained extreme endpoints of a stationary corner. If an opposite interior corner coincides with it, the fixed-point tests force both one-sided traces to p=-1,q=1. BV locality excludes source singular-continuous curvature on that level set.
 
-\[
-p_-=p_+=-1,\qquad q_-=q_+=1.
-\]
+Theorem 130 combines these mechanisms with the earlier inactivity, positive-gap and oblique-ceiling arguments. Countable blocker images are discarded only for nonatomic source measures, not for atoms.
 
-BV locality shows that this level set carries no source singular-continuous curvature. Thus an unparametrizable stationary blocking corner cannot be left as a new unexplained case in the clear-source proof.
+## 57.4 What remains of singular-continuous curvature
 
-The proof of Theorem 130 also retains the earlier inactive-corner and positive-gap improvements, the oblique affine-ceiling bound, and a countability argument for terminal or jumping blocking parameters. The latter is valid for singular-continuous measures, not for edge atoms.
+[Corollary 131](67-removing-the-fiber-clearance-hypothesis.md) leaves, up to a curvature-null set, only outer points that themselves coincide with canonical inner corners. That is the source **outer point**, not merely its associated inner corner pinching a fiber elsewhere.
 
-## 57.4 The exact remaining singular-continuous support
+The residual outer/inner-corner coincidence set is not proved null. Hidden/coincident edge atoms, pinned interior-quarter normals and the sharp bound on the absolutely continuous density are separate unresolved matters. The new AF calibration does not turn these contact exclusions into a completed ordinary-area comparison.
 
-[Corollary 131](67-removing-the-fiber-clearance-hypothesis.md) combines Theorem 130 with the outer-contact classification and the width-one curvature identity:
+## 57.5 The two available routes, with their missing statements
 
-\[
-\boxed{\text{Remaining singular-continuous curvature can occur only at
-outer points that themselves coincide with canonical inner corners.}}
-\]
+Attainment and selection of any prescribed maximizing hull are available. The remaining sufficient routes are now:
 
-The statement is up to a curvature-null set. The relevant outer point belongs to the source support normal; it is not merely the source inner corner pinching the body somewhere else.
+**Direct geometric enclosure.** Prove |S|<=tilde Q(h_conv S) for an actual maximizing body in a common incoming unit-span normalization, or prove a suitable area-dominating surrogate comparison. AF3 supplies the sharp value and profile equality case. AF4 rules out proving this by feasibility alone. A surrogate requires additional equality recovery for body uniqueness.
 
-The previous ledger listed three residual possibilities. Projection-endpoint source corners are removed by Note 64. Actual pinching source fibers at clear outer points are removed by Notes 65–67. The outer/inner-corner coincidence set itself has **not** been proved null.
+**Structural enclosure.** Derive the complete open-quarter curvature domination and both contact inequalities for a relevant maximizing hull. WG3 supplies full turns; the weak profile/no-clipping theorem supplies actual area equality with the functional; the sharp calibration finishes. Proving the conditions in different normalizations is not enough.
 
-Nor does this prove global curvature domination: hidden/coincident edge atoms, pinned interior-quarter normals, and the sharp bound on the remaining absolutely continuous density are separate obligations. Atoms cannot be discarded using the countability argument applied to singular-continuous curvature.
+For either route, one attained maximizer suffices for the optimal value. Exact uniqueness requires every maximizer or an equality-preserving argument recovering each original body.
 
-## 57.5 Finite optimality and the remaining global route
-
-Attainment and selection of any prescribed maximizing hull are available in the earlier notes. Notes 52–55 supply mesh-independent variation estimates, finite contact charts, and the exact constrained optimality equation
+The finite necessary optimality equation still has the form
 
 \[
 \nabla F_n=\kappa_n r_n-\sum_j\mu_{n,j}\nabla c_{n,j}+E_n^T\lambda_n,
-\qquad \mu_{n,j}\geq0.
+\qquad\mu_{n,j}\geq0.
 \]
 
-Only the selection penalty is known to vanish. Contact multipliers are not removed merely by bounded normal work. Artificial chart walls and physical constraints must be distinguished across all incident admissible charts. The finite pinching counterexample remains valid.
+Only the selection penalty is known to vanish. Bounded normal work does not remove the contact multipliers, and all incident admissible charts must be considered. Neither the new analytic theorem nor the width gate supplies those missing geometric variations.
 
-The sufficient unrestricted structural conclusion is now:
+## 57.6 Audit and concurrent-edit reconciliation
 
-1. curvature-measure domination by dt on every open coordinate quarter, including all residual singular/atomic and absolutely continuous parts;
-2. both contact-order inequalities, in the same unit-span normalization.
+For AF1–AF3, the audit checked the sign in the complex gauge identity, all four fixed-width trace conditions, weak upper semicontinuity, the momentum inverses, both Hamiltonian quadrant transit formulas, the full-period lower bound, the width-one boundary, and the explicit large-width optimizer. The candidate cubic follows from an injective tangent identity on the stated interval. Function-space symmetries are never called feasible body symmetrizations.
 
-A proof for one attained maximizer identifies the value M. A proof for every maximizer, or an equality-preserving comparison recovering each body, gives exact uniqueness. The width-gate supplement then supplies full turns; they are not an independent premise.
+AF4 expands the functional and ordinary-area changes independently. The reflected factor two and the positive Dirichlet remainder are retained. The earlier actual area comparison is used only on its verified protected family; the counterexample is not generalized to an unverified body.
 
-The new clear-contact theorem does not prove either entire support condition. A chart-dependent measure bound is not the sharp bound one. A localization of the remaining singular measure is not proof that its support is null. The unrestricted argument is not complete and is not merely awaiting compilation.
+The WG calculation retains affine-reflection terms, distinct axis derivative traces and the moment inequality directions. The auxiliary rectangle belongs to the symmetral rather than being assumed in K.
 
-## 57.6 Audit and coordination
-
-The contact-quadratic factorization and weak-profile argument were reread; the sign calculations used here agree with their displayed identities. This was not a full independent audit of the entire prior chain.
-
-For the new graph calculation, the orientation factor under a decreasing abscissa, the exact quotient jump, and the coefficient signs on the contact set were checked separately. The level-set argument uses traces and signed-measure locality, not an assertion about almost-everywhere derivatives alone. Countable chart covers and countable blocker images are assigned only to the appropriate nonatomic measures.
-
-For the zero-coefficient repair, the one-wall affine envelope identity is separated from the complete min-wall estimate. The old-body comparison is connected before scaling; the explicit scaling then restores every inner disjunction and endpoint inclusion. Its area cost is kept in the gain formula.
-
-For stationary reciprocity, the tested points are retained extreme endpoints of the hull, not points merely assumed to lie in the body. The differentiated constraint is at the other, interior motion angle. One-sided inequalities and nonnegative support jumps force both traces, rather than presuming differentiability.
-
-The branch received concurrent width-gate and projection-corner work during this pass. These results were read and preserved. The width-gate statements now use WG1–WG4 labels; the duplicate projection proof is a reference pointer. The numbered Notes 64–67 retain Theorems 118–131. This avoids changing the meaning of previously committed results or overwriting other work.
+The numbered contact work checks graph orientation, quotient jumps, one-sided level-set locality, countable chart covers, and the distinction between singular-continuous and atomic mass. These files were added concurrently and preserved. WG and AF labels are separate from the numbered sequence; the duplicate projection proof is consolidated by a pointer. This reconciliation is not independent verification of the full combined chain.
 
 ## 57.7 Execution
 
-All changes are Markdown under docs/ambidextrous. Every research commit includes `[skip ci]`. No CI, Lean/Lake compilation, dependency installation, numerical experiment, computer algebra, or manuscript build was used. The existing manuscript, Lean sources, dependencies, and workflow definitions are unchanged. The PR remains open and draft, with no merge or unrestricted-completion claim.
+All changes are Markdown under docs/ambidextrous. Every research commit includes `[skip ci]`. No CI, Lean/Lake compilation, dependency installation, numerical experiment, computer algebra or manuscript build was used. The existing manuscript, Lean sources, dependencies and workflows are unchanged. The PR remains open and draft because the unrestricted geometric comparison and independent proof review are unfinished.
