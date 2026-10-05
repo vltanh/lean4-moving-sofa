@@ -278,25 +278,37 @@ s\le\ip q{u_s}\le h_K(s)$. As $o_\omega\in F_\omega$, \eqref{eq:cap-fan} gives
 $o_\omega\in K$.
 \end{proof}
 
-The next fact is the main theorem of \cite{Baek}, in the form for caps. It
-assembles Baek's existence proof of a balanced maximum cap $K_\omega$ for every
-$\omega$ (\baek{Thm.~3.5.2, Thm.~3.5.4}), its maximality (\baek{Thm.~3.5.5}),
-and the optimality of Gerver's sofa $\Gs$ (\baek{Thm.~1.1.1}), which is recalled
-in \cref{sec:gerver}.
+For every rotation angle, Baek obtains a cap with the largest sofa area as a
+limit of maximum polygon caps (\baek{Thm.~3.5.2, Thm.~3.5.4}); it is the cap
+$K_\omega$ of step~(2) in \cref{sec:baek}.
+
+\begin{fact}[a cap with the largest sofa area]\label{fact:exists}
+For every $\omega\in(0,\pi/2]$ there is a cap $K_\omega\in\Kc_\omega$ with
+$\cA_\omega(K)\le\cA_\omega(K_\omega)$ for every $K\in\Kc_\omega$. The set
+$S_\omega=K_\omega\setminus\cN(K_\omega)$ is a monotone sofa with rotation angle
+$\omega$ and cap $\cC(S_\omega)=K_\omega$, and every moving sofa $S$ with
+rotation angle $\omega$ has $\abs S\le\abs{S_\omega}$. \baek{Thm.~3.5.5,
+Thm.~3.5.6}
+\end{fact}
+
+The next fact is the main theorem of \cite{Baek}, the optimality of Gerver's
+sofa $\Gs$ (\baek{Thm.~1.1.1}), together with its form for caps; $\Gs$ is
+defined in \cref{sec:gerver}.
 
 \begin{fact}[optimality]\label{fact:optimal}
 Every moving sofa $S$ has $\abs S\le\abs\Gs$, and $\abs\Gs>11/5$. For every
 $\omega\in(0,\pi/2]$ and every cap $K\in\Kc_\omega$, $\cA_\omega(K)\le\abs\Gs$.
 \end{fact}
 
-For the last claim, \baek{Thm.~3.5.6} gives a monotone sofa
-$S_\omega=K_\omega\setminus\cN(K_\omega)$ with rotation angle $\omega$, whose
-cap $K_\omega$ satisfies $\cA_\omega(K)\le\cA_\omega(K_\omega)$ for every cap
-$K$ \baek{Thm.~3.5.5}. Then $\cA_\omega(K_\omega)=\abs{S_\omega}$ by
-\cref{fact:monotone}\ref{fact:monotone:area}, and $S_\omega$ is a moving sofa by
-\cref{fact:monotone}\ref{fact:monotone:envelope}, so that
+For the last claim, let $K_\omega$ and $S_\omega$ be as in \cref{fact:exists}.
+Then $\cA_\omega(K)\le\cA_\omega(K_\omega)$ by \cref{fact:exists}, and
+$\cA_\omega(K_\omega)=\abs{S_\omega}$ by
+\cref{fact:monotone}\ref{fact:monotone:area}, as $\cC(S_\omega)=K_\omega$. As
+$S_\omega$ is a moving sofa (\cref{fact:monotone}\ref{fact:monotone:envelope}),
 $\abs{S_\omega}\le\abs\Gs$ by \baek{Thm.~1.1.1}. The bound $\abs\Gs>11/5$ holds
 because $\abs\Gs\ge2.2192$ (\cref{fact:gerver}\ref{fact:gerver:def}).
+\Cref{sec:second} gives a second proof of \cref{fact:optimal} that does not use
+\baek{Thm.~1.1.1}.
 
 \subsection{Polygon caps}\label{sec:polygon}
 

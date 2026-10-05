@@ -12,9 +12,11 @@ was not recorded.
 - **Formalization:** Claude Opus 5.5 (Anthropic, model `claude-opus-5-5`), in Claude Code 2.1.285
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
-  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below.
+  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
+  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
-  uniqueness proof and of the connection with formal-conjectures.
+  uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
+  Lean modules of a second proof of Baek's theorem (pull request #5).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
   simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the last round.
@@ -279,3 +281,38 @@ Figures, from 11:48 to 14:15:
 - tokens of the sub-agents: 3.00 million output, 18.03 million input, 469 million cache reads; of the main
   session: 0.23 million output, 0.48 million input, 74 million cache reads;
 - model calls: 1,365 by the sub-agents (all to `claude-opus-5-5`) and 118 by the main session (`claude-sonnet-5-5`).
+
+## A second proof of optimality (5 October 2026)
+
+The owner asked to merge pull request #5, in which ChatGPT Pro 6 had written a second proof of Baek's optimality
+theorem from the maximizing caps of the uniqueness proof, and to update the manuscript as the pull request
+suggested.
+
+How it was made:
+- 11:56 to 12:52: Claude Opus 5.5, in Claude Code 2.1.289. The pull request added three Lean modules
+  ([`Maximizers`](MovingSofaUniqueness/Maximizers.lean), [`Optimality`](MovingSofaUniqueness/Optimality.lean), [`Alternative`](MovingSofaUniqueness/Alternative.lean); 428 lines), a separate dependency audit and notes,
+  none of them compiled or run, and left every existing file unchanged. The modules compiled without change and
+  without warnings, and the audit passed: none of their 24 declarations depends on Baek's Theorem 1.1.1 or on
+  [`MovingSofaUniqueness.Main`](MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
+- Commit `51c9be1` makes CI check the new code. [`scripts/Audit.lean`](scripts/Audit.lean) imports the three modules, as the CI step
+  that compares its imports with the libraries requires. The second audit, [`scripts/AuditMaximizerRoute.lean`](scripts/AuditMaximizerRoute.lean),
+  also rejects the results from which Baek derives the right-angle motion and the injectivity condition of
+  Baek's cap from its balance (Theorems 1.5.2 and 8.1.1 (2), and the eight results they rest on), and it passes;
+  CI runs it. The docstrings and the documentation describe the second proof. The continuous integration and
+  Palomar's preflight passed on this commit.
+- The manuscript gained Fact 2.7, Section 8.4 (Lemmas 8.6 and 8.7, Theorem 8.8) and the related passages of
+  Sections 1 to 3 and 10 and Appendices C to E, and now cites commit `51c9be1`. Two sub-agents (Claude Opus 5.5),
+  neither able to edit, read the new text, one against the Lean and one for its prose; the first found no
+  mathematical error, and their findings were applied.
+- Afterwards, at the owner's request, the same session removed the paragraph on the second proof that had ended
+  Section 1.4 of the manuscript, and added one sentence on it to the abstract.
+
+Figures, from 11:56 to 12:52:
+- elapsed time: 57 minutes;
+- sub-agents: 3, at most 3 at once, about 0.4 hours of work: the two readers of the manuscript, and a one-word test
+  call;
+- tool calls: 81 by the sub-agents, 166 by the main session;
+- tokens of the sub-agents: 0.15 million output, 0.48 million input, 12 million cache reads; of the main session:
+  0.21 million output, 0.52 million input, 56 million cache reads;
+- model calls: 70 by the sub-agents (69 to `claude-opus-5-5`, 1 to `claude-haiku-4-5`) and 151 by the main session
+  (`claude-opus-5-5`).

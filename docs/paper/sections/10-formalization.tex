@@ -12,9 +12,10 @@ of the solution of Romik's system in the box of \cref{fact:gerver}) and the
 structure of Gerver's sofa
 (\cref{fact:gerver}\ref{fact:gerver:cap},\ref{fact:gerver:niche}), which
 \cite{Baek} states without proof (Thm.~8.4.1) or proves invalidly (Thm.~6.1.2);
-\item \texttt{MovingSofaUniqueness} (8 files, about 5,500 lines):
+\item \texttt{MovingSofaUniqueness} (11 files, about 5,900 lines):
 \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery},
-one module per step of the argument;
+one module per step of the argument, and three modules for the second proof of
+\cref{sec:second};
 \item \texttt{MovingSofaBridge} (4 files, about 2,600 lines): the connection
 with the definitions of formal-conjectures~\cite{FormalConjectures}, which are
 different (a motion there is a path of isometries that starts at the identity,
@@ -64,6 +65,17 @@ measure, the area functional of a convex arc as $\frac12\int h\dd\sigma$, no
 orientations of curves). A route check in continuous integration compares the
 results used by each Lean proof with those cited by Baek's proof; the other
 details were compared with Baek's TeX source by AI agents, not by a person.
+
+The second proof of optimality (\cref{sec:second}) is formalized in three
+modules of its own. They prove \cref{thm:second} and, from it, \cref{thm:main}
+and \cref{cor:all} again, and they do not import the module \texttt{Main} of
+\texttt{MovingSofaUniqueness}, which proves \cref{thm:main} from Baek's theorem.
+A separate audit checks that no declaration of these modules depends, directly
+or through other declarations, on \texttt{Main}, on \baek{Thm.~1.1.1}, or on the
+results from which Baek derives step~(3) for the caps of step~(2):
+\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)} and the results they rest on,
+\baek{Thm.~4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6} and
+\baek{Cor.~6.4.4}.
 
 \subsection{The use of AI}
 

@@ -8,7 +8,9 @@ formalization in this repository and cites it for the machine-checked statement;
 This is a draft for the author to read. An AI model (Claude Sonnet 5.5, in Claude Code) wrote the text from
 the Lean library, the illustrated text of the proofs in [`docs/proof/`](../proof/README.md) and the text of
 Baek's paper, and independent model runs checked it. The author has read and edited the abstract and the
-introduction (4 and 5 October); the rest of the text has been checked by model runs only.
+introduction (4 and 5 October); the rest of the text has been checked by model runs only. The sentence of the
+abstract on the second proof of optimality, and its mentions in Sections 1.5 and 1.6, were added later on
+5 October at the author's request.
 [How it was made](#how-it-was-made) says what has been compared with what, and
 [Before submitting](#before-submitting) lists what only the author can settle.
 
@@ -22,7 +24,7 @@ introduction (4 and 5 October); the rest of the text has been checked by model r
 | [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean statement and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (66 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (70 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -35,7 +37,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 66 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 70 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -48,11 +50,18 @@ undefined reference.
   repository, and Appendix D gives the statement of record in mathematical notation, with the definitions that
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
-  4 October (commit `952812d`). Section 10 says what the machine check does and does not give, and who and
-  what wrote which part.
+  4 October (commit `952812d`), and Fact 2.7, Lemmas 8.6 and 8.7 and Theorem 8.8 on 5 October (commits
+  `3af9279` and `51c9be1`). Section 10 says what the machine check does and does not give, and who and what
+  wrote which part.
+- Section 8.4 gives a second proof of optimality (Baek's theorem), from the maximizing caps (Theorem 8.8): it uses Baek's
+  results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it Theorem 1.1 and Corollary 9.4
+  hold without Baek's Theorem 1.1.1. ChatGPT Pro 6 wrote it in Lean in pull request #5, merged on 5 October; the
+  formalization proves it in three modules of its own, and a second audit, run by the continuous integration,
+  checks that they use neither Baek's Theorem 1.1.1 nor the results from which Baek derives step (3) of
+  Section 1.3 from the balance.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `952812dd097faa3565f042ed9172d40ec3c29848`, on which the
+- The links to the repository are pinned to commit `51c9be18d5b50d45561bfb93cb82d1aabca549bc`, on which the
   continuous integration and Palomar's preflight both passed. Version 4 of the Palomar entry registers the
   earlier commit `16653ae`, which has the same Challenge.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
@@ -77,8 +86,8 @@ These are the author's to settle; the text settles none of them.
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "66 pages, 14 figures. The proof, together with Baek's, is formalized in Lean 4:
-   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,127 characters, plain text) is:
+   comments "70 pages, 14 figures. The proof, together with Baek's, is formalized in Lean 4:
+   <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,232 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
    > around the right-angled corner of a hallway of unit width. Gerver found a shape of area 2.2195... in 1992
@@ -89,7 +98,8 @@ These are the author's to settle; the text settles none of them.
    > whose largest value is the area of Gerver's sofa. Since this chain of inequalities passes through the
    > special shape, it says nothing about the shape of a moving sofa of maximal area. To prove uniqueness, we
    > show that every moving sofa of maximal area has the same two properties, so that the functional bounds its
-   > area directly. Equality now forces the sofa to be Gerver's. The proof, together with Baek's, is formalized
+   > area directly. Equality now forces the sofa to be Gerver's. This argument does not use the value of the
+   > maximal area, so it also gives a second proof of optimality. The proof, together with Baek's, is formalized
    > in Lean 4 with Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
 
 7. `\date{October 2026}` in `main.tex`.
@@ -201,14 +211,37 @@ Appendix A with five figures of Baek's argument (among them a maximum polygon ca
 balance the script asserts), and rewrapped the source to 80 columns (the text of the compiled PDF was compared before
 and after). These edits were not checked by independent model runs.
 
+On 5 October, at the author's request, a session of Claude Opus 5.5 (Claude Code 2.1.289) merged pull request #5,
+in which ChatGPT Pro 6 had written in Lean a second proof of optimality from the maximizing caps, with a plan
+for presenting it in the manuscript; the code had never been compiled. It compiled without change, and its audit
+passed, also after the session extended the audit to the results from which Baek derives step (3) from the
+balance (commits `3af9279` and `51c9be1`; the continuous integration and Palomar's preflight passed on the second).
+The session then wrote, from the Lean, Fact 2.7 (Baek's existence of a cap with the largest sofa area), Section 8.4
+(Lemmas 8.6 and 8.7, Theorem 8.8 and two paragraphs on what the second proof gives and uses), the paragraph that
+ended Section 1.4, and the matching passages of Sections 1.5, 1.6, 2, 3 and 10 and Appendices C to E. The plan
+suggested a subsection at the end of Section 8, a paragraph in the introduction and the formalization's entries;
+the text follows it, with Fact 2.7 added because the second proof cites Baek's existence result on its own. Two
+sub-agents (Claude Opus 5.5), neither able to edit, then read the new text: one compared it with the Lean and
+found no mathematical error, but a commit pin that did not yet contain the new code (fixed by this pin) and a proof
+route that the text had shortened (restored); the other read it for its prose and for the author's rules, and
+most of its rewrites were applied. The figures of Appendix A now float with `[htbp]`, as the longer text had pushed
+two of them onto an overfull page; the source was rewrapped to 80 columns as before, and the text of the PDF was
+compared before and after the rewrap.
+The author then had the paragraph on the second proof that ended Section 1.4 removed, as unnecessary for now, and
+one sentence added to the abstract instead ("This argument does not use the value of the maximal area, so it also
+gives a second proof of optimality."); Section 1.5 now introduces the second proof with a reference to Section
+8.4, and the text calls it the second proof of optimality throughout.
+
 ## What has not been done
 
 - The author has read and edited the abstract and the introduction; Sections 2 to 10 and the appendices have been
-  read by model runs only.
+  read by model runs only. The text added on 5 October (Fact 2.7, Section 8.4 and the related passages) has been
+  read by two model runs, and not by the author; the sentence of the abstract on the second proof, added at the
+  author's request, has not been checked by a model run.
 - The manuscript was not compiled by arXiv; only the local build and the test build of the archive were run.
 - The Facts of Section 2 state Baek's results as the Lean states them; the Lean statements were compared with his TeX
   by the route check and by model runs, not proved again by hand. Baek's paper is itself unrefereed.
 - Appendix D's paraphrase of the Lean definitions was compared with `Challenge.lean` by model runs, in two rounds.
 - The edits after the second round of checks, the E-label marks added in it, and this file were not checked again.
-- Version 4 of the Palomar entry registers `16653ae`; the Lean results of 4 October are in the libraries but not in
-  a registered version.
+- Version 4 of the Palomar entry registers `16653ae`; the Lean results of 4 and 5 October are in the libraries but
+  not in a registered version.

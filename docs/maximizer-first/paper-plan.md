@@ -3,8 +3,9 @@
 > **Note (5 October 2026, after the merge).** This is the plan of pull request #5 for the manuscript, as written
 > before the code was compiled; it was at `docs/paper/optimality-reorganization.md`. The code has since compiled
 > without change and its audit has passed. Section 8.4 of the manuscript ("A second proof of optimality") carries
-> out the plan, with Fact 2.7 for Baek's existence of a maximizing cap, a paragraph at the end of Section 1.4, and
-> the matching changes to Section 10 and Appendices C to E. [README.md](README.md) describes the current state.
+> out the plan, with Fact 2.7 for Baek's existence of a maximizing cap, one sentence in the abstract in place of
+> the suggested paragraph of the introduction, and the matching changes to Sections 1.5, 1.6 and 10 and
+> Appendices C to E. [README.md](README.md) describes the current state.
 
 **Status.** PR #5 now preserves both original formalizations. Its earlier
 changes to `MovingSofaUniqueness/Main.lean` and `scripts/Audit.lean` were
