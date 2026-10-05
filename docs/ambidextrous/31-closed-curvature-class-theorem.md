@@ -2,7 +2,7 @@
 
 This strengthens Theorem 52: curvature may equal one on positive-measure sets, contact zeros may be degenerate, and separate H^2 regularity need not be assumed if curvature is stated as a measure inequality. The proof uses Note 30's direct geometry, not an unproved feasibility-preserving interpolation.
 
-**Updated through Note 65.** Corollary 123 below also removes the independent full-quarter-turn premise: [Note 64](64-width-gate-from-curvature-and-contact.md) derives it from the curvature and contact conditions for every competitive body. The unrestricted problem still requires a proof of those two support conditions for relevant maximizers. They are not asserted for all feasible bodies.
+**Width-gate update.** Corollary WG4 below also removes the independent full-quarter-turn premise: the [width-gate supplement](64-width-gate-from-curvature-and-contact.md) derives it from the curvature and contact conditions for every competitive body. WG labels are used to avoid collisions with the concurrently extended numbered notes. The unrestricted problem still requires a proof of those two support conditions for relevant maximizers. They are not asserted for all feasible bodies.
 
 ## 31.1 The algebraic inequality extends to weak bounds
 
@@ -84,7 +84,7 @@ This theorem assumes neither strict curvature, symmetry, aligned faces, fixed co
 
 ## 31.4 Removing the independent full-turn assumption
 
-**Corollary 123 (sharp comparison from two support conditions).** Let S be a compact connected ambidextrous body with arbitrary motions in the posed problem of Note 1. Suppose there is a common unit-span normalization in which K=conv(S) satisfies (31.1) and both inequalities (31.2). Then
+**Corollary WG4 (sharp comparison from two support conditions).** Let S be a compact connected ambidextrous body with arbitrary motions in the posed problem of Note 1. Suppose there is a common unit-span normalization in which K=conv(S) satisfies (31.1) and both inequalities (31.2). Then
 
 \[
 |S|\leq M,
@@ -92,7 +92,7 @@ This theorem assumes neither strict curvature, symmetry, aligned faces, fixed co
 
 with equality exactly for bodies congruent to Romik's candidate. Full-quarter endpoint angles are not an additional hypothesis.
 
-**Proof.** If |S|<=sqrt(2), the inequality is strict because M>8/5>sqrt(2), as proved in Note 10. Otherwise Corollary 120 in Note 64 supplies both full conventional canonical turns for the same body and hull. Its proof uses the width identity under central Minkowski symmetrization and the bound
+**Proof.** If |S|<=sqrt(2), the inequality is strict because M>8/5>sqrt(2), as proved in Note 10. Otherwise Corollary WG3 in the width-gate supplement supplies both full conventional canonical turns for the same body and hull. Its proof uses equality of widths under central Minkowski symmetrization and the bound
 
 \[
 w_K(t)\geq(2-\sqrt2)|\cos t|+|\sin t|,
@@ -102,11 +102,11 @@ which is greater than one for pi/4<=|t|<pi/2. The correct-sign canonical endpoin
 
 The two support conditions must hold in **one and the same normalization**. Curvature domination obtained in one orientation and contact order obtained in another do not meet this corollary's hypothesis.
 
-No feasibility-preserving symmetrization is assumed. The auxiliary centrally symmetric body in Note 64 is used only because its widths equal those of K.
+No feasibility-preserving symmetrization is assumed. The auxiliary centrally symmetric body is used only because its widths equal those of K. This result was initially numbered Corollary 123; the WG4 label supersedes that temporary number to avoid a collision with concurrent work.
 
 ## 31.5 The remaining sufficient route to unrestricted closure
 
-Global attainment is proved in Theorem 55. With Corollary 123, the sufficient maximizer statement becomes:
+Global attainment is proved in Theorem 55. With Corollary WG4, the sufficient maximizer statement becomes:
 
 > Some global maximizer has a common unit-span normalized hull satisfying the curvature domination (31.1) and both contact inequalities (31.2).
 
@@ -114,4 +114,4 @@ This would prove the optimal value. To prove exact uniqueness by the same route,
 
 Full-quarter endpoint angles no longer need an independent proof once these two support conditions are established. The earlier unit-square gate is an alternative sufficient criterion, not a remaining premise of this route.
 
-The conditions themselves have not been proved for unrestricted maximizers. High-area counterexamples in the earlier notes prevent substituting a feasibility threshold for a genuine maximality or improvement argument. Neither the weak-curvature extension nor the new width gate eliminates the residual contact multipliers or proves the sharp density bound.
+The conditions themselves have not been proved for unrestricted maximizers. High-area counterexamples in the earlier notes prevent substituting a feasibility threshold for a genuine maximality or improvement argument. Neither the weak-curvature extension nor the width gate eliminates the residual contact multipliers or proves the sharp density bound. Domination only at floating normals is not domination on every open quarter when partial terminal directions are still pinned.
