@@ -1,0 +1,5 @@
+# Versions used for the local experiments; no CI integration.
+numpy==2.3.5
+scipy==1.17.0
+shapely==2.1.2
+mpmath==1.3.0
