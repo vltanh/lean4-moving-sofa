@@ -29,6 +29,12 @@ globs = ["MovingSofaUniqueness.+"]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
 
+# In-progress, uncompiled stability proof source. Deliberately NOT a default target.
+# Its declarations are not part of the existing kernel-verification claim.
+[[lean_lib]]
+name = "MovingSofaStability"
+globs = ["MovingSofaStability.+"]
+
 # The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
 [[lean_lib]]
 name = "ChallengeDefs"
