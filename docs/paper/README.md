@@ -38,7 +38,7 @@ now names the stability. No person has read these new parts of Section 1.
 | [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean formalization: the libraries and the checks, the statements of record and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (102 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (101 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -51,7 +51,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 102 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 101 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -121,7 +121,7 @@ These are the author's to settle; the text settles none of them.
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 5. For the submission form: the title is *Uniqueness and stability of Gerver's sofa*, the author The-Anh Vu-Le,
-   and the comments "102 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
+   and the comments "101 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
    <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,546 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
@@ -405,7 +405,11 @@ cap (now kept for the first only, in Sections 1, 2 and 11 and Appendix D), terms
 Section 1, and stale passages here and in Appendices D and E. The main session applied their findings; these edits
 were not checked again by another run. The manuscript has 102 pages. At the author's request ("Shorten 1.7
 (Organization) because now we already discuss a lot in these two strategies subsection"), the main session then
-cut Section 1.7 to a short outline that points to Sections 1.4 and 1.5 for the parts of the proof.
+cut Section 1.7 to a short outline that points to Sections 1.4 and 1.5 for the parts of the proof. At the
+author's request ("Appendix E is a massive wall of text, can you simplify it and format it in bullet points for
+readability?"), the main session then rewrote Appendix E as three bulleted lists (who wrote what, what was checked
+and by whom, what a person has read), from 1,880 words to about 820; the round-by-round detail it left out is in
+this file and in `CREDITS.md`, which the appendix cites. The manuscript has 101 pages.
 
 ## What has not been done
 

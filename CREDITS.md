@@ -521,8 +521,9 @@ How it was made:
   for its accuracy against the later sections and the Lean, the other for its prose and its structure. Neither
   found a mathematical error; the main session applied their findings, among them a false sentence on the punctured
   sofas and a term used for two inequalities. At the owner's request, the main session then shortened Section 1.7,
-  the outline of the paper, which the two sections on the strategies had made partly redundant. The manuscript has
-  102 pages.
+  the outline of the paper, which the two sections on the strategies had made partly redundant, and rewrote Appendix
+  E, the account of the use of AI, as three bulleted lists, leaving the round-by-round detail to this file and to the
+  manuscript's README. The manuscript has 101 pages.
 
 Figures, from 16:13 to 16:58:
 - elapsed time: 45 minutes;
