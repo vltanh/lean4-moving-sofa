@@ -13,19 +13,22 @@ was not recorded.
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
   (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
-  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below.
+  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below and
+  the compilation of the stability proof.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
-  Lean modules of a second proof of Baek's theorem (pull request #5).
+  Lean modules of a second proof of Baek's theorem (pull request #5). An AI system, working through
+  the owner's GitHub account, wrote the stability argument and its uncompiled Lean code (pull request
+  #8).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
-  simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the last round.
+  simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
 - **Review:** no person has reviewed the proofs; Lean's kernel checks every one of them. Independent
   agents checked the statements against the paper's LaTeX source before any proof was written, the
   audit's findings against the same source, the uniqueness statements against the informal
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
-  and the report's "What's next" section against its sources, and the manuscript against the Lean
-  statements and proofs.
+  and the report's "What's next" section against its sources, the manuscript against the Lean
+  statements and proofs, and every repaired proof of the stability library against the draft's.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -316,3 +319,37 @@ Figures, from 11:56 to 12:52:
   0.21 million output, 0.52 million input, 56 million cache reads;
 - model calls: 70 by the sub-agents (69 to `claude-opus-5-5`, 1 to `claude-haiku-4-5`) and 151 by the main session
   (`claude-opus-5-5`).
+
+## The stability (5 October 2026)
+
+The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
+sofa. Its argument (the notes now in [`docs/archive/stability/`](docs/archive/stability)) and its Lean code, 85 modules and about
+12,200 lines, had been written by an AI system and never compiled.
+
+How it was made:
+- 22:17 to 23:13: Claude Opus 5.5, in Claude Code 2.1.289, following the skill's procedure for an uncompiled draft,
+  in a separate worktree of the pull request's branch.
+- Every module was brought to elaborate in the order of its imports, with the 123 proofs that failed (of about 490
+  declarations) replaced by `sorry`, and two variable names that Lean rejects renamed. That is the baseline,
+  commit `d56546e`.
+- Sixteen sub-agents restored and repaired the draft's proofs, each a group of modules, checking them against
+  private copies of the compiled modules. Most failures were names that Mathlib has changed, rewrites that found no
+  match, and facts that `linarith` could not see. Twenty lemmas were false as compiled: their hypotheses were
+  section variables that the statements never mention, which Lean 4 leaves out. The agents checked a
+  counterexample to each in Lean, and `include` now adds the hypotheses that the draft's proofs and callers assumed.
+- The coordinating agent compared every agent's statements with the baseline, integrated the work, removed six
+  hypotheses that helper lemmas did not use, cleared the other linter warnings, and made the library a default
+  target, part of the axiom audit and part of CI. A seventeenth sub-agent compared every repaired proof with the
+  draft's and found no change of argument. The audit passes: the 5,957 declarations of the libraries use only the
+  standard axioms.
+- [Stability](docs/stability.md) describes the result. The pull request's notes, numerical checks and status documents
+  moved to [`docs/archive/stability/`](docs/archive/stability); the README, the report's "What's next", and the pages on the layout
+  and the verification mention the new library. The manuscript is unchanged.
+
+Figures, from 22:17 to 23:13:
+- elapsed time: 56 minutes;
+- sub-agents: 17, at most 16 at once, about 2.3 hours of work;
+- tool calls: 883 by the sub-agents, 209 by the main session;
+- tokens of the sub-agents: 0.78 million output, 2.40 million input, 80 million cache reads; of the main
+  session: 0.22 million output, 0.52 million input, 66 million cache reads;
+- model calls: 832 by the sub-agents and 199 by the main session, all to `claude-opus-5-5`.

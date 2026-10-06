@@ -106,5 +106,5 @@ less than 2.002 in Romik's box. The declarations with coefficient 80 remain.
 whatever the constant and the rigid alignment. It claims no sharpness for the
 symmetric-difference area or for the cap constants.
 
-See `docs/stability/README.md`.
+See `docs/stability.md`.
 -/

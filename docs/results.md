@@ -110,3 +110,6 @@ The twelve theorems rest on the three libraries:
   [manuscript](paper/README.md)); [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks that they do not use Baek's theorem.
 - [`MovingSofaBridge/`](../MovingSofaBridge), the bridge: [`MovingSofaBridge.isMovingSofa_iff`](../MovingSofaBridge/Motion.lean#L562), [`MovingSofaBridge.sofaConstant_eq`](../MovingSofaBridge/Motion.lean#L600), [`MovingSofaBridge.gerversSofa_eq`](../MovingSofaBridge/GerverSofa.lean#L507) and
   [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1143).
+
+A fourth library, [`MovingSofaStability/`](../MovingSofaStability), proves that sofas of nearly maximal area are close to
+Gerver's sofa; the twelve theorems do not use it. [Stability](stability.md) states its theorems.

@@ -429,7 +429,7 @@ meta def uniquenessResults : List (String × Name) :=
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
    ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
-/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability/`): near-maximal moving
+/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability.md`): near-maximal moving
 sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
 coefficient 2 sec φ. -/
 meta def stabilityResults : List (String × Name) :=
