@@ -1,5 +1,7 @@
 # Ambidextrous sofa research — start a new session here
 
+**Primary milestone:** prove only the optimal value first. Defer uniqueness and full equality classification. Use [optimality-only-computer-plan.md](optimality-only-computer-plan.md) for the exact computer-assisted global/local strategy.
+
 **Unrestricted optimality and uniqueness are not proved.** This is the active cross-session handoff for PR #3, not a certificate that all historical arguments have been independently verified.
 
 Repository: `vltanh/lean4-moving-sofa`.
