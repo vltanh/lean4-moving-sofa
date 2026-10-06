@@ -41,8 +41,8 @@ def main():
         if W > a.wmax:
             return 1.0 + (W - a.wmax)
         hp = rp.cap_support_from_polygon(th_e, sig, theta)
-        hpR = rp.repair_upper(theta, hp)
-        return (rp.A_functional(theta, hpR, nt=700, nx=2000)[0]
+        hR = rp.repair_upper(theta, hp)
+        return (rp.A_functional(theta, hR, nt=700, nx=2000)[0]
                 - rp.A_functional(theta, hp, nt=700, nx=2000)[0])
 
     best = np.inf
