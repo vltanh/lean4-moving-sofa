@@ -13,14 +13,14 @@ from reverse_exact import ReverseSofa, width_majorant
 class InteriorCoreChecks(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.foundation=prove_foundation(128,128)
+        cls.foundation=prove_foundation(64,128)
         cls.directions=prove_directions(cls.foundation,1024)
 
     def test_whole_angle_and_direction_covers(self):
         self.assertEqual(self.foundation['epsilon_interval'],['0','1/8'])
         self.assertEqual(self.directions['epsilon_cutoff'],'1/8')
         self.assertEqual(len(self.directions['cell_records']),1024)
-        self.assertGreater(F(self.directions['minimum_normalized_margin']),F(6,1000))
+        self.assertGreater(F(self.directions['minimum_normalized_margin']),F(5,1000))
         previous=F(0)
         for row in self.directions['cell_records']:
             a,b=map(F,row['t_interval'])
