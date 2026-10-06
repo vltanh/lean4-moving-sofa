@@ -79,7 +79,7 @@ def reference_checks():
     require('reference_scalars',D<I(1),'wing width upper')
     require('reference_scalars',b-a>I(1),'central roof width')
     require('reference_scalars',r-l<I(Q(13,4)),'cap width')
-    require('reference_scalars',k3x>I(-1) and k3x<I(Q(-1,2)),'reference midpoint')
+    require('reference_scalars',k3x>I(-1) and k3x<I(Q(-3,5)),'reference midpoint')
     xp,yp=first_position(p);record('core_endpoint_height',yp)
     require('reference_scalars',yp>I(Q(1,20)),'core minimum height')
     left_corner=2*k3x-xp
@@ -150,6 +150,7 @@ def radius_checks():
     qmargin('niche_containment',Q(1,20)-w-delta)
     qmargin('visited_angle',t-alpha)
     qmargin('interior_floor_slack',w*w/128-delta-12*alpha)
+    qmargin('early_first_wall',Q(1,10)-Q(4,5)*t*t-12*alpha*t-delta)
     qmargin('omitted_wedge_area',Q(1,1000)-48*w)
     D=Q(403,500);eta=D/1000;zeta=Q(1,10**8)
     qmargin('floor_top_margin',eta/4-Q(1,10000))
