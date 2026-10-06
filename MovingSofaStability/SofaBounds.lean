@@ -26,7 +26,42 @@ theorem connected_corner_height {S : Set Point} (hS : IsCompact S) (hne : S.None
     (ht : t ∈ Icc (0 : ℝ) (π / 2))
     (hslack : ∀ p ∈ S, 0 ≤ max (innerSlackU S t p) (innerSlackV S t p)) :
     (innerCorner S t).2 ≤ 1 := by
-  sorry
+  obtain ⟨p, hp, hpu⟩ := exists_dot_eq_supp hS hne t
+  obtain ⟨q, hq, hqv⟩ := exists_dot_eq_supp hS hne (t + π / 2)
+  let f : Point → ℝ := fun z => innerSlackU S t z - innerSlackV S t z
+  have hf : ContinuousOn f S :=
+    ((((continuous_dot (uvec t)).sub continuous_const).add continuous_const).sub
+      (((continuous_dot (vvec t)).sub continuous_const).add continuous_const)).continuousOn
+  have hpu' : innerSlackU S t p = 1 := by unfold innerSlackU; rw [hpu]; ring
+  have hqv' : innerSlackV S t q = 1 := by unfold innerSlackV; rw [← uvec_add_pi_div_two, hqv]; ring
+  have hpv : innerSlackV S t p ≤ 1 := by
+    have he := dot_le_supp hS hp (t + π / 2)
+    rw [uvec_add_pi_div_two] at he
+    unfold innerSlackV
+    linarith
+  have hqu : innerSlackU S t q ≤ 1 := by
+    have he := dot_le_supp hS hq t
+    unfold innerSlackU
+    linarith
+  have hfq : f q ≤ 0 := by dsimp [f]; rw [hqv']; linarith
+  have hfp : 0 ≤ f p := by dsimp [f]; rw [hpu']; linarith
+  obtain ⟨z, hz, hfz⟩ := hconn.isPreconnected.intermediate_value hq hp hf ⟨hfq, hfp⟩
+  have heq : innerSlackU S t z = innerSlackV S t z := sub_eq_zero.mp hfz
+  have hu : 0 ≤ innerSlackU S t z := by simpa only [← heq, max_self] using hslack z hz
+  have hv : 0 ≤ innerSlackV S t z := by rwa [← heq]
+  have hs := sin_nonneg_of_nonneg_of_le_pi ht.1 (by linarith [ht.2, pi_pos])
+  have hc := cos_nonneg_of_mem_Icc (show t ∈ Icc (-(π / 2)) (π / 2) from
+    ⟨by linarith [ht.1, pi_pos], ht.2⟩)
+  have hpos := add_nonneg (mul_nonneg hu hs) (mul_nonneg hv hc)
+  have hid : innerSlackU S t z * sin t + innerSlackV S t z * cos t =
+      z.2 - (innerCorner S t).2 := by
+    rw [proposition2_2_2_innerCorner]
+    simp only [innerSlackU, innerSlackV, dot, uvec, vvec,
+      Prod.snd_add, Prod.smul_snd, smul_eq_mul]
+    have htrig := sin_sq_add_cos_sq t
+    nlinarith [show z.2 * (sin t ^ 2 + cos t ^ 2) = z.2 by rw [htrig, mul_one]]
+  rw [hid] at hpos
+  linarith [(hstrip hz).2]
 
 theorem moving_horizontal_span_le_six {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) (hω : π / 4 ≤ ω)
