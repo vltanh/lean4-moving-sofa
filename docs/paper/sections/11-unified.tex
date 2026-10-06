@@ -37,8 +37,14 @@ the case of equality in the concavity of $\cQ$ (\cref{lem:equality},
 second proof of Baek's theorem, from the maximizing caps, with Baek's bound and
 this equality analysis. Below, \cref{prop:unified-caps} finds the maximizing
 caps from the certificate instead, and \cref{thm:unified-optimality} proves
-Baek's theorem along the lines of that remark. Besides the certificate, the
-proofs of
+Baek's theorem along the lines of that remark. The proofs of
+\cref{thm:unified-optimality,thm:unified-uniqueness} use the certificate only
+through the two properties of a maximizing cap $K\in\Kc_{\pi/2}$ in
+\cref{prop:unified-caps}: $\cA(K)=\abs\Gs$, and $K=\KG+(s,0)$ with
+$K\setminus\cN(K)=\Gs+(s,0)$ for some $s\in\R$. \Cref{rem:second} obtains the
+same two properties with Baek's bound and the equality analysis instead, and the
+formalization proves the steps from these two properties to optimality and
+uniqueness once, for both proofs. Besides the certificate, the proofs of
 \cref{sec:unified-caps,sec:unified-optimality,sec:unified-uniqueness} use the
 Facts of \cref{sec:setting} other than \cref{fact:optimal}, its
 \cref{lem:contains,lem:ends}, and results of
@@ -73,7 +79,7 @@ its directional derivatives at Gerver's triple $\xi_G$
 (\cref{lem:stab-wide,lem:stab-variation}). The second comes from three results.
 The deficit certificate (\cref{prop:stab-certificate}) bounds the energy
 $E_\cS(\KG,K)$ by $\abs\Gs-\cQ(\xi)$. \Cref{lem:stab-residuals} and
-\cref{prop:stab-coercive}\ref{prop:stab-coercive:sharp} bound
+\cref{prop:stab-coercive} bound
 $h_K-h_{\KG+(s_K,0)}$ on $[0,\pi]$ by $2\sec\varphi$ times the square root of
 this energy, and \cref{lem:stab-lower} turns this bound into closeness. By
 \eqref{eq:stab-gap}, the energy measures how far $\cS$ is from being

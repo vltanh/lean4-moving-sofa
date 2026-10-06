@@ -312,11 +312,13 @@ $U$; so they hold without \baek{Thm.~1.1.1} too. \Cref{sec:unified} writes out
 this argument in full (\cref{prop:unified-caps,thm:unified-optimality}), with
 the certificate of \cref{thm:certificate} in place of
 \cref{fact:Q}\ref{fact:Q:max} and \cref{prop:kernel}. The proof with Baek's
-bound is formalized as well, in the namespace
-\path{MovingSofaUniqueness.MaximizerRoute} (modules \texttt{Maximizers},
-\texttt{Optimality} and \texttt{Alternative}). The audit
+bound is formalized as well, in two modules of \texttt{MovingSofaUniqueness}:
+\texttt{MaximizerRoute} proves that $\cA(K)=\abs\Gs$ and that $K=\KG+(s,0)$, with
+$K\setminus\cN(K)=\Gs+(s,0)$, for some $s\in\R$, and \texttt{Maximizing}, which
+the formalization of \cref{sec:unified} also uses, derives optimality and
+uniqueness from these two facts. The audit
 \path{scripts/AuditMaximizerRoute.lean}, which the continuous integration runs,
-checks that it uses neither \baek{Thm.~1.1.1}, nor those results on the balance,
-nor the module \texttt{Main} of \texttt{MovingSofaUniqueness}
+checks that the two modules use neither \baek{Thm.~1.1.1}, nor those results on
+the balance, nor the module \texttt{Main} of \texttt{MovingSofaUniqueness}
 (\cref{sec:formalization}).
 \end{remark}

@@ -448,7 +448,7 @@ The owner asked to simplify and consolidate the stability library and the other 
 formalization of Baek's paper and the connection with formal-conjectures intact, and then to rewrite the manuscript.
 
 How it was made:
-- From 13:25: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+- 13:25 to 16:09: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
   of the formalize-math-paper skill.
 - Commit `0b7978c` removes what the two new proofs of optimality repeated. Both turned the value and the shape of
   the maximizing right-angle caps into optimality and uniqueness by the same steps; one assembly now does it
@@ -456,8 +456,9 @@ How it was made:
   ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean), from Baek's bound and the equality analysis; [`MovingSofaExtremal.Main`](MovingSofaExtremal/Main.lean), from
   the certificate). The helpers that the coercive route had copied from [`MovingSofaUniqueness.Rigidity`](MovingSofaUniqueness/Rigidity.lean), so as not
   to import it, moved to two modules that both proofs import ([`MovingSofaUniqueness.Mamikon`](MovingSofaUniqueness/Mamikon.lean), [`MovingSofaUniqueness.Rigid`](MovingSofaUniqueness/Rigid.lean)).
-- Commit `830b03d` merges the 86 files of the stability library, most of them 100 to 200 lines long and in one
-  chain of imports, into eleven modules, one for each step of the proof, and removes 74 declarations that no
+- Commit `830b03d` merges the 86 files of the stability library (87 before `0b7978c` moved `MamikonFoundation` out),
+  most of them 100 to 200 lines long and in one chain of imports, into eleven modules, one for each step of the
+  proof, besides the root module `All`, and removes 74 declarations that no
   theorem uses, among them the cap estimate with coefficient 80, which the proof no longer needs since it
   carries the coefficient 2 sec φ.
 - Commit `5817473`: eight sub-agents, in parallel and each on its own copy of the build, rewrote the eleven
@@ -466,7 +467,28 @@ How it was made:
   merged, restated or removed. The sub-agents merged repeated helpers, inlined helpers used once, and replaced
   computations by hand with Mathlib lemmas.
 - The stability library went from 12,550 lines in 87 files to 7,585 lines in 12, and the coercive route from 661
-  lines in 7 files to 236 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
+  lines in 7 files to 235 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
   coercive route 743 instead of 958. Baek's library, the bridge, the Challenge, its definitions and the proofs of
   [`Solution.lean`](Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
   changed. The audits and the route check pass, and Comparator accepts the fifteen theorems.
+- Commit `1856810` brought the documentation up to date, and commit `7b8c0a8` the docstring of
+  [`MovingSofaExtremal/All.lean`](MovingSofaExtremal/All.lean), which still listed the old modules; the continuous integration passed on both, and
+  Palomar's preflight was not run.
+- A sub-agent then revised the manuscript for the simplified libraries, with five sub-agents that it launched, which
+  compared each part of Section 10 with the Lean before and after the rewrite. Appendix D names the declarations at
+  commit `7b8c0a8`, which the manuscript now cites; Section 10 lost the bound with the constant 80, and six of its
+  steps now follow the Lean's proofs, two that the rewrite changed and four that had differed before; Remark 8.6 and
+  Sections 11 and 12 describe the new modules and counts, and Appendix E and the manuscript's README record the round.
+  Two more sub-agents, neither able to edit, then read the revision, one against the Lean and the repository, the
+  other for its prose. Neither found a mathematical error; the writing sub-agent applied their findings (a line
+  count, the account of the files and of the rewritten modules, and the wording of several passages). The manuscript
+  has 100 pages.
+
+Figures, from 13:25 to 16:09:
+- elapsed time: 2 hours 44 minutes;
+- sub-agents: 16 (5 of them launched by another sub-agent), at most 8 at once, about 7.1 hours of work; the writing
+  sub-agent was resumed twice, for the four older differences and for the two reviews;
+- tool calls: 1,474 by the sub-agents, 189 by the main session;
+- tokens of the sub-agents: 2.69 million output, 7.77 million input, 426 million cache reads; of the main session:
+  0.26 million output, 0.52 million input, 85 million cache reads;
+- model calls: 1,372 by the sub-agents and 189 by the main session, all to `claude-opus-5-5`.

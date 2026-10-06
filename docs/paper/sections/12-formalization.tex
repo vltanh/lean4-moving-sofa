@@ -12,10 +12,13 @@ of the solution of Romik's system in the box of \cref{fact:gerver}) and the
 structure of Gerver's sofa
 (\cref{fact:gerver}\ref{fact:gerver:cap},\ref{fact:gerver:niche}), which
 \cite{Baek} states without proof (Thm.~8.4.1) or proves invalidly (Thm.~6.1.2);
-\item \texttt{MovingSofaUniqueness} (11 files, about 5,900 lines):
+\item \texttt{MovingSofaUniqueness} (11 files, about 6,000 lines):
 \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery},
-one module per step of the argument, and three modules for the second proof of
-optimality of \cref{rem:second};
+one module per step of the argument, the module \texttt{Maximizing}, shared by
+\cref{rem:second} and \cref{sec:unified} (the maximizing caps, and the steps
+from their two properties in \cref{prop:unified-caps} to optimality and
+uniqueness), and the module \texttt{MaximizerRoute} (the rest of the second
+proof of optimality);
 \item \texttt{MovingSofaBridge} (4 files, about 2,600 lines): the connection
 with the definitions of formal-conjectures~\cite{FormalConjectures}, which are
 different (a motion there is a path of isometries that starts at the identity,
@@ -27,12 +30,14 @@ the two formulations agree, so that formal-conjectures' statements follow from
 Baek's theorem and from \cref{thm:main}, with the existence and uniqueness of
 Gerver's four constants, which the bridge proves; the uniqueness statement,
 which it lists as open, follows from \cref{thm:main};
-\item \texttt{MovingSofaStability} (87 files, about 12,500 lines):
-\cref{sec:stability}, and the certificate of \cref{sec:unified}
-(\cref{thm:certificate});
-\item \texttt{MovingSofaExtremal} (7 files, about 660 lines):
-\cref{sec:unified}; the optimality and uniqueness theorems that
-\texttt{MovingSofaStability} uses come from it.
+\item \texttt{MovingSofaStability} (12 files, about 7,600 lines):
+\cref{sec:stability}, one module per step of the proof, and the certificate of
+\cref{sec:unified} (\cref{thm:certificate});
+\item \texttt{MovingSofaExtremal} (3 files, about 240 lines):
+\cref{sec:unified}, with the steps that it shares with the second proof of
+optimality imported from \texttt{MovingSofaUniqueness};
+\texttt{MovingSofaStability} takes its optimality and uniqueness theorems from
+\texttt{MovingSofaExtremal}.
 \end{itemize}
 The file \texttt{Challenge.lean} states fifteen theorems, among them Baek's
 theorem (\path{Baek.gerver_sofa_optimal}), \cref{thm:main}
@@ -87,15 +92,19 @@ compares the results used by each Lean proof with those cited by Baek's proof;
 the other details were compared with Baek's TeX source by AI agents, not by a
 person.
 
-The second proof of optimality (\cref{rem:second}) is formalized in three
-modules of its own. They prove the assertions of \cref{thm:unified-optimality}
-with Baek's bound and \cref{prop:kernel} in place of the certificate, and from
-them \cref{thm:main} and \cref{cor:all} again; they do not import the module
+The second proof of optimality (\cref{rem:second}) is formalized in two modules
+of \texttt{MovingSofaUniqueness}. The module \texttt{MaximizerRoute} proves the
+two properties of the maximizing caps in \cref{prop:unified-caps} with Baek's
+bound and \cref{prop:kernel} in place of the certificate. The module
+\texttt{Maximizing}, which \texttt{MovingSofaExtremal} uses too, derives from
+these two properties the assertions of \cref{thm:unified-optimality} and, again,
+\cref{thm:main} and \cref{cor:all}. Neither imports the module
 \texttt{Main} of \texttt{MovingSofaUniqueness}, which proves \cref{thm:main}
 from Baek's theorem.
-A separate audit checks that no declaration of these modules depends, directly
-or through other declarations, on \texttt{Main}, on \baek{Thm.~1.1.1}, or on the
-results from which Baek derives step~(3) for the caps of step~(2):
+A separate audit checks that none of the 35 declarations of these two modules
+depends, directly or through other declarations, on \texttt{Main}, on
+\baek{Thm.~1.1.1}, or on the results from which Baek derives step~(3) for the
+caps of step~(2):
 \baek{Thm.~1.5.2, Thm.~8.1.1\,(2)} and, among the results they rest on,
 \baek{Thm.~4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6} and
 \baek{Cor.~6.4.4}.
@@ -112,18 +121,21 @@ through the theorems of \texttt{MovingSofaExtremal}; its proof of
 optimality nor uniqueness. A third audit,
 \path{scripts/AuditCoerciveRoute.lean}, which the continuous integration runs,
 follows the proofs through the bodies of all the declarations of the repository,
-private and generated ones included. It checks that each of the 958 declarations
+private and generated ones included. It checks that each of the 743 declarations
 of \texttt{MovingSofaExtremal}, \texttt{MovingSofaStability} and
 \texttt{SolutionCoercive.lean} uses only the three axioms above. It also checks
 that none of them reaches Baek's theorem \baek{Thm.~1.1.1}, the results listed
 in the previous paragraph, \texttt{Solution.lean}, or a declaration of the
 module \texttt{Main} of \texttt{MovingSofaUniqueness}, of the module
 \texttt{Rigidity} (which proves \cref{lem:equality,lem:tangent} and, with
-\texttt{Main}, \cref{prop:kernel}) or of the three modules of the second proof.
-It checks that none of the 40 declarations of the five modules of
-\texttt{MovingSofaExtremal} that prove optimality and uniqueness reaches the
-module that states the stability theorems or a module that imports it (55
-modules in all), so that the argument is not circular. Twenty further checks
+\texttt{Main}, \cref{prop:kernel}) or of the module \texttt{MaximizerRoute} of
+the second proof. The modules that prove optimality and uniqueness are
+\texttt{Maximizing} of \texttt{MovingSofaUniqueness} and \texttt{Main} of
+\texttt{MovingSofaExtremal}. The audit checks that none of their 41
+declarations reaches the module \texttt{Margins} of \texttt{MovingSofaStability},
+where the stability proof continues after the certificate, or one of the eleven
+modules that import it, which include those of the stability theorems and both
+solutions; so the argument is not circular. Twenty further checks
 confirm that the proofs use what they should; for instance, the classification
 of the maximizing caps reaches the certificate and \cref{prop:stab-certificate},
 and the stability theorems reach the certificate and the uniqueness theorem of

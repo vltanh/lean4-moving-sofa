@@ -84,7 +84,7 @@ On the evening of 5 October 2026, ChatGPT Pro~6 also wrote a third pull request,
 without compiling or running any of it. It contained the library
 \texttt{MovingSofaExtremal}, which derives optimality and uniqueness from the
 estimates of \cref{sec:stab-certificate,sec:stab-cap}; the module
-\texttt{MamikonFoundation} of the stability library, which proves again results
+\texttt{MamikonFoundation} of the stability library, which proved again results
 of the module \texttt{Rigidity} of the first proof on square integrals, Mamikon
 displacements and the canonical triple; a second solution of twelve statements
 of the Challenge
@@ -121,5 +121,39 @@ passages rewritten after their reports. Two more runs of Claude Opus~5.5,
 neither able to edit, then read the new text, one against the Lean and the
 repository and one for its prose. The findings of all these runs were applied;
 the edits that followed the last two runs were not checked again. No person has
-read \cref{sec:unified}. At the time of writing, the argument of this paper has
-not been refereed.
+read \cref{sec:unified}.
+
+Later on 6 October 2026, the author asked that the stability library and the
+other new code be simplified and consolidated, keeping the formalization
+of~\cite{Baek} and the connection with formal-conjectures intact, and that this
+text then be rewritten. Claude Opus~5.5, in Claude Code, simplified the
+libraries in the session of the previous rounds. The second proof of optimality
+and the proof of \cref{sec:unified} had each written out the steps from the
+maximizing caps to optimality and uniqueness; one module of
+\texttt{MovingSofaUniqueness}, \texttt{Maximizing}, now holds these steps for
+both. The results of \texttt{Rigidity} that \texttt{MamikonFoundation} and the
+module \texttt{HorizontalTranslation} of \texttt{MovingSofaExtremal} had proved
+again moved out of \texttt{Rigidity} into two modules that every proof may
+import, \texttt{Mamikon} and \texttt{Rigid}, and the copies were removed. The
+stability library had 87 files; without \texttt{MamikonFoundation}, 86 remained,
+and all of them but the root file were merged into eleven modules, so that the
+library now has twelve files. Of its declarations, 74 that no theorem used were
+removed, among them the bound with the constant~$80$ that \cref{sec:stability}
+had proved besides the bound with $2\sec\varphi$. Eight sub-agents running
+Claude Opus~5.5 then rewrote the eleven modules and the modules \texttt{Mamikon}
+and \texttt{Maximizing} in parallel, each on its own copy of the build; a
+declaration that another module, a solution or an audit uses kept its name and
+its statement. A sub-agent running Claude Opus~5.5, helped by five sub-agents
+that compared each part of \cref{sec:stability} with the old and the new Lean,
+then revised this text: it removed the bound with the constant~$80$ from
+\cref{sec:stability}, made six steps of its proofs follow the Lean's, and
+rewrote Appendix~\ref{app:lean} and the passages of Sections~\ref{sec:equality},
+\ref{sec:unified} and~\ref{sec:formalization} on the modules and the audits. Two
+runs of Claude Opus~5.5, neither able to edit, then read the revision, one
+against the Lean and the repository and one for its prose. Neither found a
+mathematical error. Their findings, on a line count, the description of the
+files and of the rewritten modules, and the wording of \cref{rem:second}, of
+Appendix~\ref{app:lean} and of several sentences of Sections~\ref{sec:stability}
+to~\ref{sec:formalization}, were applied by the writing sub-agent and not
+checked again by another run.
+At the time of writing, the argument of this paper has not been refereed.
