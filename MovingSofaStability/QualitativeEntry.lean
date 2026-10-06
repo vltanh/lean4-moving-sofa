@@ -5,9 +5,8 @@ public import MovingSofaStability.SofaLimitMotion
 /-!
 # Qualitative entry into the quantitative neighborhood
 
-Uncompiled proof source. Compactness is used only to enter one fixed local
-neighborhood. It does not supply the square-root rate. The compact limit is
-shown to be an actual moving sofa by the constructed canonical motion.
+Uncompiled proof source. Compactness supplies entry into a fixed neighborhood,
+not a rate. The limit motion is constructed from supporting constraints.
 -/
 
 @[expose] public section
@@ -18,7 +17,6 @@ open MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaStability
 
-/-- Bundle the actual set, with no convex-hull replacement. -/
 def compactShapeOfMoving {S : Set Point} (hS : IsMovingSofa S) : CompactShape where
   carrier := S
   isCompact' := isCompact_of_isMovingSofa hS
@@ -27,8 +25,6 @@ def compactShapeOfMoving {S : Set Point} (hS : IsMovingSofa S) : CompactShape wh
 def gerverCompactShape {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) : CompactShape :=
   compactShapeOfMoving ⟨π / 2, (GerverParams.gm_movingSofa_std hP hbox).1⟩
 
-/-- Every maximizing normalized sequence has a subsequence converging to the
-pinned Gerver set and the full right-angle rotation. -/
 theorem maximizing_subsequence {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (K : ℕ → CompactShape) (ωn : ℕ → ℝ)
     (hmove : ∀ n, IsMovingSofaWithAngle (K n : Set Point) (ωn n))
@@ -66,8 +62,6 @@ theorem maximizing_subsequence {P : GerverParams} (hP : P.IsSolution) (hbox : P.
     linarith
   exact ⟨σ, hσ, hLeq ▸ hKlim, hωeq ▸ hωlim⟩
 
-/-- The local regime is reached uniformly over all genuine near-maximizers and
-all of their admissible reduced angles. -/
 theorem near_maximizers_enter_neighborhood {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {ρ α₀ : ℝ} (hρ : 0 < ρ) (hα₀ : 0 < α₀) :
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ S : Set Point, ∀ ω : ℝ,
@@ -76,9 +70,17 @@ theorem near_maximizers_enter_neighborhood {P : GerverParams}
       EuclideanClose ρ (normalizedSofa P S) (gerverSofa P) ∧ π / 2 - ω < α₀ := by
   classical
   by_contra hn
-  push Not at hn
-  have hex (n : ℕ) := hn (1 / ((n : ℝ) + 1)) (by positivity)
-  choose S ω hS hω hdef hbad using hex
+  have counter (ε : ℝ) (hε : 0 < ε) :
+      ∃ S : Set Point, ∃ ω : ℝ, IsMovingSofaWithAngle S ω ∧
+        ω ∈ Icc (arccos (5 / 11)) (π / 2) ∧ sofaDeficit P S < ε ∧
+        ¬(EuclideanClose ρ (normalizedSofa P S) (gerverSofa P) ∧ π / 2 - ω < α₀) := by
+    by_contra hc
+    apply hn
+    refine ⟨ε, hε, ?_⟩
+    intro S ω hS hω hdef
+    by_contra hbad
+    exact hc ⟨S, ω, hS, hω, hdef, hbad⟩
+  choose S ω hS hω hdef hbad using fun n : ℕ => counter (1 / ((n : ℝ) + 1)) (by positivity)
   let K : ℕ → CompactShape := fun n => compactShapeOfMoving (normalizedSofa_moving P ⟨ω n, hS n⟩)
   have hmove : ∀ n, IsMovingSofaWithAngle (K n : Set Point) (ω n) :=
     fun n => normalizedSofa_movingWithAngle P (hS n)
