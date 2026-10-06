@@ -258,7 +258,7 @@ def swallowtail_area(sol):
     tb = i3[m3][np.argmin(np.abs(Bx[i3][m3] - xc))]
     X, Yy = Bx[ta:tb + 1], By[ta:tb + 1]
     area = 0.5 * np.sum(X[:-1] * Yy[1:] - X[1:] * Yy[:-1]) + 0.5 * (X[-1] * Yy[0] - X[0] * Yy[-1])
-    return dict(loop_signed_area=area, cusp_t=[t[c1], t[t2] if False else t[c2]], crossing_t=[t[ta], t[tb]],
+    return dict(loop_signed_area=area, cusp_t=[t[c1], t[c2]], crossing_t=[t[ta], t[tb]],
                 p_at_crossing=[p[ta], p[tb]])
 
 
@@ -279,7 +279,7 @@ def class_report(sol, rho):
         active_fold_measure=float(np.sum((p < 0) & (rf > 1)) * dt),
         AR7_measure_rho_f_pos_on_pp=float(np.sum(A_ & (rf > 1e-12)) * dt),
         AR7_measure_rho_g_gt_half_on_pp=float(np.sum(A_ & (rg > 0.5 + 1e-12)) * dt),
-        AR7_measure_rho_g_pos_on_mm=float(np.sum(C_ & (rg > 0.1 if False else 1e-12)) * dt),
+        AR7_measure_rho_g_pos_on_mm=float(np.sum(C_ & (rg > 1e-12)) * dt),
         AR7_measure_rho_f_gt_half_on_mm=float(np.sum(C_ & (rf > 0.5 + 1e-12)) * dt),
         baek_arms_nonneg=bool(p.max() <= 1 + 1e-12 and q.min() >= -1 - 1e-12))
 
