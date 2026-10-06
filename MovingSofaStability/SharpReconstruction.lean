@@ -96,11 +96,10 @@ theorem sharp_first_formula {t : ℝ} (ht : t ∈ Icc 0 φ) :
     (fun u hu => h.rightDeriv u ⟨by linarith [hu.1, ht.1], by linarith [hu.2, pi_pos]⟩)
     hs (residual_div_sin_integrable ht.2 hr hs)
   simp only [tangentQuotient, h.top_zero, zero_mul, zero_add, sub_zero, sin_pi_div_two_sub] at he
-  have hI : (∫ u in t..φ, tangentResidual (π / 2) f df u / sin (π / 2 - u)) =
+  have hI : (∫ u in t..φ, tangentResidual (π / 2) f df u / cos u) =
       ∫ u in t..φ, (1 / cos u) * tangentResidual (π / 2) f df u := by
     apply intervalIntegral.integral_congr
     intro u hu
-    rw [sin_pi_div_two_sub]
     ring
   rw [hI] at he
   simpa only [div_eq_mul_inv, one_div, mul_comm (f φ)] using he
@@ -138,8 +137,7 @@ theorem tail_product_integral (A : ℝ) {a b : ℝ}
 
 /-- The common r4 kernel is combined before taking any norm. -/
 theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
-    f t = (∫ u in t..(π / 2 - φ), tangentResidual (π / 2) (fun x => 0) (fun x => 0) u) +
-      (∫ u in t..(π / 2 - φ), cornerResidual f df u) +
+    f t = (∫ u in t..(π / 2 - φ), cornerResidual f df u) +
       (∫ u in (π / 2 - φ)..(π / 2), (1 / sin (π - φ - u)) * tangentResidual (π - φ) f df u) +
       (1 / cos φ - sin t) * (∫ u in (π / 2)..(π / 2 + t), (1 / sin u) * tangentResidual π f df u) +
       (∫ u in (π / 2 + t)..(π - φ), tailKernel (1 / cos φ) u * tangentResidual π f df u) := by
@@ -165,7 +163,7 @@ theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
   have hT : tailKernel (1 / cos φ) (π - φ) = tan φ := by
     simp only [tailKernel, sin_pi_sub, cos_pi_sub, tan_eq_sin_div_cos]
     field_simp [hcφ, hsφ]
-    nlinarith [sin_sq_add_cos_sq φ]
+    nlinarith [sin_sq_add_cos_sq φ, congrArg (fun x : ℝ => cos φ * x) (sin_sq_add_cos_sq φ)]
   have hstart : tailKernel (1 / cos φ) (π / 2 + t) = (1 / cos φ - sin t) / cos t := by
     simp [tailKernel, sin_add, cos_add]
   have hIshift : (∫ u in t..(π / 2 - φ), f (u + π / 2)) =
@@ -176,8 +174,6 @@ theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
     sin_pi_div_two, cos_pi_div_two_sub, one_mul, tan_eq_sin_div_cos] at hthird
   simp only [sin_add, sin_pi_div_two, cos_pi_div_two, one_mul, zero_mul, add_zero] at hlast
   rw [hIshift, htail, hT, hstart, hthird, hlast] at hrec
-  simp only [tangentResidual, zero_mul, sub_zero, zero_sub, zero_div,
-    intervalIntegral.integral_zero, zero_add] at ⊢
   rw [tan_eq_sin_div_cos] at hrec
   convert hrec using 1 <;> field_simp [hct] <;> ring
 
