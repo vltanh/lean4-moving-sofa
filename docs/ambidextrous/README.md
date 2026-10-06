@@ -1,5 +1,7 @@
 # Ambidextrous sofa research
 
+**Starting a new research session? Read [HANDOFF.md](HANDOFF.md) first, then [ROADMAP.md](ROADMAP.md).** The handoff records the current branch checkpoint, proved results, failed routes, validation status, and the next critical gates.
+
 **The unrestricted optimality and uniqueness proof is not closed.** The analytic width exclusion and the sharp auxiliary calibrations remain available, but the ordinary-area comparison for unrestricted maximizing bodies is unproved. The latest continuation inspected PR #9's new extremal source and tested, rather than assumed, the geometric premise needed to transfer its method.
 
 These are written, self-reviewed arguments and explicitly labelled computational diagnostics. They are not independently refereed or Lean-verified results. The entire historical dependency chain has not been independently audited. No novelty or best-known-bound claim is made.
