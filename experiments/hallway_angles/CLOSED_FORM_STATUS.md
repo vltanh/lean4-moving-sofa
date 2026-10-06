@@ -50,7 +50,13 @@ No CI, workflow dispatch/rerun, or Lean build was attempted.
 
 ## Remaining exact target
 
-The strongest unconditional beta-only statement currently proved is the deep Farey bound: if beta_model/pi=p/q in lowest terms, then q>=3,193,502,245,874,191,590. The earlier q>723688 argument is retained as a simpler first-stage proof.
+The strongest unconditional beta-only statement currently proved is now the 512-bit Farey bound:
+
+    beta_model/pi=p/q in lowest terms
+      ==> q >=
+      120960480401807934322756058341844601463578189551623733657668053196745441803.
+
+This is about 1.21 x 10^74. The earlier q>723688 and q>=3.19 x 10^18 arguments are retained as simpler first-stage proofs.
 
 A complete answer would require one of:
 
@@ -61,3 +67,14 @@ A complete answer would require one of:
 Current classical transcendence theorems do not bridge the remaining gap in the model equations. Schanuel's conjecture would bridge the rational-angle gap, as documented separately.
 
 Independently, identifying beta_model with the unrestricted global phase transition still requires the missing geometric/optimality arguments. No phase-transition theorem is inferred merely from the arithmetic results.
+
+
+## Additional rational-bend structure
+
+If a rational bend nevertheless existed, the forward and reverse algebraic frequencies would each have degree at least
+
+    3888452140662913159824188222522713815
+
+over Q, and 1, mu, kappa would be Q-linearly independent. This follows from cyclotomic degree, the exact denominator bound, and phi(n)>=sqrt(n/2). See `RATIONAL_BEND_FIELD_DEGREE.md`.
+
+This also clarifies why known low-degree Gel'fond power theorems do not settle the problem: the relevant exponents are enormous-degree prescribed algebraic numbers, while the strongest unconditional structured-power theorems guarantee independence only for selected families such as alpha^(gamma^j), not for the specific pair occurring here.
