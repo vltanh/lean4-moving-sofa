@@ -403,7 +403,9 @@ punctured sofas are at distance at least r, not exactly r, from the rigid images
 "Baek's bound" used both for $\mathcal A(K)\le\mathcal Q(K)$ and for the maximality of $\mathcal Q$ at Gerver's
 cap (now kept for the first only, in Sections 1, 2 and 11 and Appendix D), terms of Section 1.5 not defined in
 Section 1, and stale passages here and in Appendices D and E. The main session applied their findings; these edits
-were not checked again by another run. The manuscript has 102 pages.
+were not checked again by another run. The manuscript has 102 pages. At the author's request ("Shorten 1.7
+(Organization) because now we already discuss a lot in these two strategies subsection"), the main session then
+cut Section 1.7 to a short outline that points to Sections 1.4 and 1.5 for the parts of the proof.
 
 ## What has not been done
 
