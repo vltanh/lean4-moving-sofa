@@ -6,9 +6,9 @@ public import MovingSofaUniqueness.Main
 /-!
 # The unrestricted stability target
 
-Uncompiled source. `UnrestrictedStability` is a proposition specifying the
-headline theorem, NOT an axiom or an asserted theorem. Merely defining this
-proposition does not supply its proof.
+`UnrestrictedStability` and `TerminalAngleStability` state the main theorems;
+`GlobalStability.lean` proves them (`unrestricted_stability`,
+`terminal_angle_stability`).
 
 The metric conclusion uses both directed Euclidean bounds on the actual
 nonconvex sets. The normalization agrees with note 08 and uses translation
@@ -67,8 +67,8 @@ theorem sofaDeficit_nonneg {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
     {S : Set Point} (hS : IsMovingSofa S) : 0 ≤ sofaDeficit P S :=
   sub_nonneg.mpr (MovingSofaUniqueness.area_le_gerver hP hbox hS)
 
-/-- Note 08's unrestricted theorem, in the original sofa definitions.
-This declaration records a proof obligation; it does not supply a proof. -/
+/-- Note 08's unrestricted theorem, in the original sofa definitions;
+`unrestricted_stability` proves it. -/
 def UnrestrictedStability (P : GerverParams) : Prop :=
   ∃ C Carea ε₀ : ℝ, 0 < C ∧ 0 < Carea ∧ 0 < ε₀ ∧
     ∀ S : Set Point, IsMovingSofa S → sofaDeficit P S < ε₀ →

@@ -5,9 +5,9 @@ public import MovingSofaStability.CapDistance
 /-!
 # The actual nonconvex cap shape and robust hallway inequalities
 
-Uncompiled proof source. The erosion inclusion is proved for arbitrary pairs
-of normalized right-angle caps, not just Gerver and not just injective caps.
-It keeps the actual set difference K minus its niche throughout.
+The erosion inclusion is proved for arbitrary pairs of normalized right-angle
+caps, not just Gerver and not just injective caps. It keeps the actual set
+difference K minus its niche throughout.
 -/
 
 @[expose] public section

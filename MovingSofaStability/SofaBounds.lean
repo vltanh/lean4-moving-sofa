@@ -5,8 +5,8 @@ public import MovingSofaStability.CompactSetLimits
 /-!
 # A compact containing rectangle for the original sofa sets
 
-Uncompiled proof source. Connectedness bounds a supporting inner corner and
-the pi/4 hallway bounds horizontal span. No balancedness is assumed.
+Connectedness bounds a supporting inner corner and the pi/4 hallway bounds
+horizontal span. No balancedness is assumed.
 -/
 
 @[expose] public section

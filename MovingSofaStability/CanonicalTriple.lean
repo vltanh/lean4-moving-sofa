@@ -5,10 +5,10 @@ public import MovingSofaStability.CanonicalContacts
 /-!
 # Canonical triples for nearby nonsmooth caps
 
-Uncompiled proof source. All endpoint contacts and linear wall constraints
-are proved. The final neighborhood result supplies an actual WideTriple and
-does not assume Ki of the competing cap or feasibility of its canonical tails.
-The geometric inequality A <= Q is a subsequent, separate result.
+All endpoint contacts and linear wall constraints are proved. The final
+neighborhood result supplies an actual WideTriple and does not assume Ki of the
+competing cap or feasibility of its canonical tails. The geometric inequality A
+<= Q is a subsequent, separate result.
 -/
 
 @[expose] public section

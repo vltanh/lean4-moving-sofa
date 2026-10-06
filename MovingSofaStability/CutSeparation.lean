@@ -5,9 +5,9 @@ public import MovingSofaStability.CoreIntegral
 /-!
 # Stable separation from the two niche cuts
 
-Uncompiled proof source. Close to a cut, a uniform right-velocity margin is
-used. Away from it, a strict compact reference margin is used. No derivative
-control near the ends 0 and pi/2 is assumed for the competing cap.
+Close to a cut, a uniform right-velocity margin is used. Away from it, a strict
+compact reference margin is used. No derivative control near the ends 0 and pi/2
+is assumed for the competing cap.
 -/
 
 @[expose] public section

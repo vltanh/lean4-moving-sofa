@@ -5,10 +5,10 @@ public import MovingSofaStability.CornerAnalysis
 /-!
 # The nonsmooth core as a Lipschitz graph
 
-Uncompiled proof source. A uniform horizontal-decrease estimate and a bounded
-right velocity imply a finite chord slope. The graph is extended continuously
-outside its horizontal interval by clamping, for use in an elementary
-right-derivative change-of-variables argument.
+A uniform horizontal-decrease estimate and a bounded right velocity imply a
+finite chord slope. The graph is extended continuously outside its horizontal
+interval by clamping, for use in an elementary right-derivative
+change-of-variables argument.
 -/
 
 @[expose] public section

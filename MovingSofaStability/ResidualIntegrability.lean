@@ -5,10 +5,10 @@ public import MovingSofaStability.ODEReconstruction
 /-!
 # Integrability of the actual cap residuals
 
-Uncompiled proof source. Mamikon's boundedness theorem supplies both first and
-second integrability. Endpoint values of a tangent quotient are not identified
-with its geometric displacement at a singular endpoint: the identification is
-made on the open interval, then transferred across the two null singletons.
+Mamikon's boundedness theorem supplies both first and second integrability.
+Endpoint values of a tangent quotient are not identified with its geometric
+displacement at a singular endpoint: the identification is made on the open
+interval, then transferred across the two null singletons.
 -/
 
 @[expose] public section

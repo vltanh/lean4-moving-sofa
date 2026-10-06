@@ -5,9 +5,9 @@ public import MovingSofaStability.EuclideanDisks
 /-!
 # Puncture distance and inherited motion
 
-Uncompiled proof source. The identity alignment attains distance r. The lower
-bound applies against any comparison set containing the removed center; the
-rigid-orbit lemma supplies that hypothesis for close rigid copies later.
+The identity alignment attains distance r. The lower bound applies against any
+comparison set containing the removed center; the rigid-orbit lemma supplies
+that hypothesis for close rigid copies later.
 -/
 
 @[expose] public section

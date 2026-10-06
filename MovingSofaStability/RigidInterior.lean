@@ -6,8 +6,8 @@ public import Mathlib.Topology.MetricSpace.HausdorffDistance
 /-!
 # Interior retention on a compact rigid orbit
 
-Uncompiled proof source. The conclusion is special to rigid copies of one fixed
-compact set. It is false for arbitrary Hausdorff-close compact sets.
+The conclusion is special to rigid copies of one fixed compact set. It is false
+for arbitrary Hausdorff-close compact sets.
 
 The proof takes subsequences of the cosine/sine coefficients and translations,
 not of unrestricted real angles. No trivial-stabilizer assumption is needed.

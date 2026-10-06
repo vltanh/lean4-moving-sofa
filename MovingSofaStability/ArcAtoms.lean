@@ -5,10 +5,9 @@ public import MovingSofaStability.CBVAlgebra
 /-!
 # Cap area split at the four Mamikon arcs, retaining all atoms
 
-Uncompiled proof source. In a nonsmooth cap, atoms at 0, phi, pi/2-phi and pi
-cannot be discarded. The five edge segments below account for those atoms
-and the top edge. This is the missing bookkeeping in a naive reuse of the
-Ki-only source Lemma 8.3.5.
+In a nonsmooth cap, atoms at 0, phi, pi/2-phi and pi cannot be discarded. The
+five edge segments below account for those atoms and the top edge. This is the
+missing bookkeeping in a naive reuse of the Ki-only source Lemma 8.3.5.
 -/
 
 @[expose] public section

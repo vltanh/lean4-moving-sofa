@@ -5,8 +5,8 @@ public import MovingSofaStability.ConvexParallelArea
 /-!
 # Area distance from actual-set closeness
 
-Uncompiled proof source. A convex parallel layer and a thin vertical niche
-band control S minus G. The area deficit then controls the opposite difference.
+A convex parallel layer and a thin vertical niche band control S minus G. The
+area deficit then controls the opposite difference.
 -/
 
 @[expose] public section

@@ -6,10 +6,10 @@ public import MovingSofaStability.TerminalBookkeeping
 /-!
 # Recovering a nonconvex set from an erosion and a missing-area bound
 
-Uncompiled proof source. The geometric hypothesis is an explicit uniform
-interior-ball condition on the reference set, not an assumed stability theorem.
-An inscribed square provides the area lower bound, so no Euclidean disk-volume
-conversion for the ambient product space is required.
+The geometric hypothesis is an explicit uniform interior-ball condition on the
+reference set, not an assumed stability theorem. An inscribed square provides
+the area lower bound, so no Euclidean disk-volume conversion for the ambient
+product space is required.
 -/
 
 @[expose] public section

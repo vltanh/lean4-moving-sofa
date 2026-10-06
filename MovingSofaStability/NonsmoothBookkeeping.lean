@@ -5,9 +5,9 @@ public import MovingSofaStability.ArcAtoms
 /-!
 # Atom-aware cap Mamikon bookkeeping
 
-Uncompiled proof source. Every supporting-face contribution is retained and
-then cancelled against its adjacent Mamikon connector segments. In particular,
-no equality of `vminus` and `vplus` is assumed at a cut or endpoint.
+Every supporting-face contribution is retained and then cancelled against its
+adjacent Mamikon connector segments. In particular, no equality of `vminus` and
+`vplus` is assumed at a cut or endpoint.
 
 The result writes `mamikonS + upperP` as a sum of affine terms. Unlike the
 source Ki-only proof, the displayed boundary term has no vertex coordinates:

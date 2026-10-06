@@ -6,9 +6,9 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 /-!
 # A linear area bound for an outer parallel layer
 
-Uncompiled proof source. One fixed interior disk bounds the Euclidean parallel
-body by a homothetic copy. The area calculation uses two-dimensional Haar
-scaling and requires no smoothness or perimeter formula.
+One fixed interior disk bounds the Euclidean parallel body by a homothetic copy.
+The area calculation uses two-dimensional Haar scaling and requires no
+smoothness or perimeter formula.
 -/
 
 @[expose] public section

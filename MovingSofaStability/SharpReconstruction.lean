@@ -5,10 +5,9 @@ public import MovingSofaStability.TrigKernelIntegrals
 /-!
 # Exact four-arc reconstruction
 
-Uncompiled proof source. The middle interval is coupled to the last interval.
-A product derivative combines these contributions before estimating them. This
-avoids both Fubini and the loss from estimating the two occurrences of f(T)
-separately.
+The middle interval is coupled to the last interval. A product derivative
+combines these contributions before estimating them. This avoids both Fubini and
+the loss from estimating the two occurrences of f(T) separately.
 -/
 
 @[expose] public section

@@ -5,10 +5,10 @@ public import MovingSofaStability.GerverRoof
 /-!
 # Quantitative roof margins and approximate hallway recovery
 
-Uncompiled proof source. The smaller set may violate the omitted full-angle
-constraints by a controlled slack. It is not assumed to lie in its full-angle
-cap shape. A positive reference roof margin converts this slack into an
-actual point of the reference sofa.
+The smaller set may violate the omitted full-angle constraints by a controlled
+slack. It is not assumed to lie in its full-angle cap shape. A positive
+reference roof margin converts this slack into an actual point of the reference
+sofa.
 -/
 
 @[expose] public section

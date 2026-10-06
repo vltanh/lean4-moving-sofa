@@ -6,9 +6,9 @@ public import MovingSofaUniqueness.RegularClosed
 /-!
 # Lipschitz roof graphs from monotone boundary arcs
 
-Uncompiled proof source. Finite exceptional sets of phase junctions are allowed.
-The derivative condition controls vertical displacement by horizontal
- displacement; this supplies a graph rather than assuming one from a picture.
+Finite exceptional sets of phase junctions are allowed. The derivative condition
+controls vertical displacement by horizontal displacement; this supplies a graph
+rather than assuming one from a picture.
 -/
 
 @[expose] public section

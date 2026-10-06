@@ -5,9 +5,9 @@ public import MovingSofaStability.LocalUpperBound
 /-!
 # The interior niche floor is already removed before the terminal angle
 
-Uncompiled proof source. A directed compact-cover argument supplies a uniform
-strict slack and an angle bounded away from pi/2. The fixed floor interval is
-chosen first; no unsupported rate of compactness is used.
+A directed compact-cover argument supplies a uniform strict slack and an angle
+bounded away from pi/2. The fixed floor interval is chosen first; no unsupported
+rate of compactness is used.
 -/
 
 @[expose] public section

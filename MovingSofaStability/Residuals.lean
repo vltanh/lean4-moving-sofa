@@ -5,12 +5,13 @@ public import MovingSofaStability.IntegralEstimates
 /-!
 # The four cap residuals and their integrating factor
 
-Uncompiled proof source. The derivative argument is kept explicit rather than
-silently using a derivative of a nonsmooth support function everywhere.
-The algebraic support-displacement identities hold without smoothness.
+The derivative argument is kept explicit rather than silently using a derivative
+of a nonsmooth support function everywhere. The algebraic support-displacement
+identities hold without smoothness.
 
-The final absolutely-continuous reconstruction and the four Green-kernel
-square-integral evaluations are separate proof obligations.
+The absolutely continuous reconstruction and the square integrals of the four
+Green kernels are proved in later modules (`ODEReconstruction.lean`,
+`TrigKernelIntegrals.lean`, `SharpKernelNorms.lean`).
 -/
 
 @[expose] public section

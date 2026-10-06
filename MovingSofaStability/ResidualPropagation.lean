@@ -5,10 +5,10 @@ public import MovingSofaStability.ResidualMass
 /-!
 # Stable propagation of the support residual equations
 
-Uncompiled proof source. The last-arc integrating factor has an apparent
-singularity at pi. Its evaluation kernel is a contraction: sin(t)/sin(u) <= 1
-for pi/2 <= u <= t < pi. Thus its first moment is enough for a uniform bound;
-no exchange of two improper integrals or claimed sharp kernel norm is needed.
+The last-arc integrating factor has an apparent singularity at pi. Its
+evaluation kernel is a contraction: sin(t)/sin(u) <= 1 for pi/2 <= u <= t < pi.
+Thus its first moment is enough for a uniform bound; no exchange of two improper
+integrals or claimed sharp kernel norm is needed.
 -/
 
 @[expose] public section

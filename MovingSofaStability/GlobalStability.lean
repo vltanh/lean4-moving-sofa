@@ -5,13 +5,13 @@ public import MovingSofaStability.QualitativeEntry
 /-!
 # Unrestricted stability of Gerver's sofa
 
-Uncompiled proof source. The conclusions concern the actual nonconvex sets in
-the repository's original moving-sofa definition. All analytic and geometric
-prerequisites are supplied by the preceding modules; neither an injective
-envelope nor a stability estimate is assumed of the input sofa.
+The conclusions concern the actual nonconvex sets in the repository's original
+moving-sofa definition. All analytic and geometric prerequisites are supplied by
+the preceding modules; neither an injective envelope nor a stability estimate is
+assumed of the input sofa.
 
-This file completes the written source assembly, not Lean kernel verification.
-No claim is made that the global constants are sharp or effectively computed.
+The global constants are existential: no claim is made that they are sharp or
+effectively computed.
 -/
 
 @[expose] public section

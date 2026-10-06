@@ -5,9 +5,9 @@ public import MovingSofaStability.NonsmoothAffinity
 /-!
 # Baek's Q is quadratic and concave on the enlarged domain
 
-Uncompiled proof source. This is an extension of the functional's algebraic
-properties, not yet its geometric upper bound on arbitrary near-maximizers.
-The enlarged-domain first variation at Gerver is a separate dependency.
+This is an extension of the functional's algebraic properties, not yet its
+geometric upper bound on arbitrary near-maximizers. The enlarged-domain first
+variation at Gerver is a separate dependency.
 -/
 
 @[expose] public section

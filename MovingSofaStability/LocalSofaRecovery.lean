@@ -5,10 +5,10 @@ public import MovingSofaStability.SofaCap
 /-!
 # Local quantitative recovery of the actual sofa
 
-Uncompiled proof source. All cap, terminal, erosion and reference-roof
-hypotheses are assembled here. Only entry into a fixed neighborhood remains
-for the global step. The smaller sofa need not be contained in its full-angle
-shape, and the conclusion concerns its actual nonconvex points.
+All cap, terminal, erosion and reference-roof hypotheses are assembled here.
+Only entry into a fixed neighborhood remains for the global step. The smaller
+sofa need not be contained in its full-angle shape, and the conclusion concerns
+its actual nonconvex points.
 -/
 
 @[expose] public section

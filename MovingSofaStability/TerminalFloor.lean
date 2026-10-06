@@ -5,9 +5,9 @@ public import MovingSofaStability.OmittedWedgeArea
 /-!
 # The terminal strip removes a fixed linear amount of floor area
 
-Uncompiled proof source. A fixed rectangle in Gerver's left wing persists in
-nearby full-angle shapes. A tilted terminal strip excludes its bottom slice,
-whose area is c0 times the missing angle. The slice is constructed explicitly.
+A fixed rectangle in Gerver's left wing persists in nearby full-angle shapes. A
+tilted terminal strip excludes its bottom slice, whose area is c0 times the
+missing angle. The slice is constructed explicitly.
 -/
 
 @[expose] public section

@@ -5,10 +5,10 @@ public import MovingSofaUniqueness.Rigid
 /-!
 # Euclidean distance for the actual sofa sets
 
-Uncompiled proof source. The ambient product `Real × Real` has the sup metric;
-Baek's `hausdorffDist` is a support-function expression for convex bodies and
-would identify a nonconvex sofa with its convex hull. Neither is silently used
-as the actual-set Euclidean Hausdorff distance here.
+The ambient product `Real × Real` has the sup metric; Baek's `hausdorffDist` is
+a support-function expression for convex bodies and would identify a nonconvex
+sofa with its convex hull. Neither is silently used as the actual-set Euclidean
+Hausdorff distance here.
 
 `EuclideanClose r S T` expresses both directed distance bounds by witnesses.
 For nonempty compact sets this is precisely Euclidean Hausdorff distance at

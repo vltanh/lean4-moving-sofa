@@ -5,9 +5,9 @@ public import MovingSofaStability.UniformGeometryBounds
 /-!
 # Exposed faces with a varying normal
 
-Uncompiled proof source. At a multiple-point reference face the conclusion is
-containment near the whole face, not convergence to a selected endpoint. This
-is the form needed near the top edge to control wedge feet uniformly.
+At a multiple-point reference face the conclusion is containment near the whole
+face, not convergence to a selected endpoint. This is the form needed near the
+top edge to control wedge feet uniformly.
 -/
 
 @[expose] public section

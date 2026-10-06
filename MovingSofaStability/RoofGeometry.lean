@@ -5,10 +5,10 @@ public import MovingSofaStability.EnvelopeSlope
 /-!
 # Geometric consequences of a cap with a Lipschitz niche roof
 
-Uncompiled proof source. `CapRoofData` records concrete boundary geometry; it
-does not assume a stability estimate. The nonconvex set is decomposed into
-two convex wings and a positive-height epigraph strip, and its uniform
-interior-ball property is proved from that decomposition.
+`CapRoofData` records concrete boundary geometry; it does not assume a stability
+estimate. The nonconvex set is decomposed into two convex wings and a
+positive-height epigraph strip, and its uniform interior-ball property is proved
+from that decomposition.
 -/
 
 @[expose] public section

@@ -6,9 +6,9 @@ public import MovingSofaStability.Residuals
 /-!
 # Six squared displacement differences in the enlarged deficit
 
-Uncompiled proof source. This identifies the abstract quadratic energy with
-actual integrals, not merely with a midpoint expression. The four cap integrals
-are bounded by the objective deficit for EVERY nonsmooth feasible triple.
+This identifies the abstract quadratic energy with actual integrals, not merely
+with a midpoint expression. The four cap integrals are bounded by the objective
+deficit for EVERY nonsmooth feasible triple.
 -/
 
 @[expose] public section

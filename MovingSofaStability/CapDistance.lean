@@ -5,9 +5,9 @@ public import MovingSofaStability.SupportDistance
 /-!
 # Euclidean cap-distance certificate
 
-Uncompiled proof source. The upper-semicircle coercivity estimate is extended
-to all directions using the cap's two bottom endpoints, then converted to
-actual Euclidean Hausdorff witnesses. The coefficient 80 is non-sharp.
+The upper-semicircle coercivity estimate is extended to all directions using the
+cap's two bottom endpoints, then converted to actual Euclidean Hausdorff
+witnesses. The coefficient 80 is non-sharp.
 -/
 
 @[expose] public section

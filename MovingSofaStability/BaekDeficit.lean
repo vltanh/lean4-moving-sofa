@@ -5,9 +5,9 @@ public import MovingSofaStability.MamikonEnergy
 /-!
 # Quantitative energy bounds for Baek's existing triple domain
 
-Uncompiled proof source. Unlike the generic algebraic results, the theorems
-below use the repository's actual `upperQL`, Gerver parameters, and cap/niche
-area functional. Their domain is the existing `LTriple`, whose cap lies in Ki.
+Unlike the generic algebraic results, the theorems below use the repository's
+actual `upperQL`, Gerver parameters, and cap/niche area functional. Their domain
+is the existing `LTriple`, whose cap lies in Ki.
 
 This file does NOT claim the nonsmooth enlarged-domain theorem of note 05.
 The midpoint energies are identified with displacement-square integrals by

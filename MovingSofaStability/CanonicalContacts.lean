@@ -5,9 +5,9 @@ public import MovingSofaStability.CapWidthGeometry
 /-!
 # Canonical tail contacts without global injectivity
 
-Uncompiled proof source. The topmost-point proof of the source endpoint
-contact theorem needs only a cap, a cut foot in that cap, and one strict
-arm inequality at the cut. Those sufficient hypotheses are exposed here.
+The topmost-point proof of the source endpoint contact theorem needs only a cap,
+a cut foot in that cap, and one strict arm inequality at the cut. Those
+sufficient hypotheses are exposed here.
 -/
 
 @[expose] public section

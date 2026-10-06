@@ -5,9 +5,9 @@ public import MovingSofaStability.ResidualIntegrability
 /-!
 # First-moment bounds for residual reconstruction
 
-Uncompiled proof source. These estimates give a deliberately non-sharp route
-from the four residual equations to cap stability. They avoid the double
-integral calculation needed to identify the sharp Green norm.
+These estimates give a deliberately non-sharp route from the four residual
+equations to cap stability. They avoid the double integral calculation needed to
+identify the sharp Green norm.
 -/
 
 @[expose] public section

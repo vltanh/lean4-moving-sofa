@@ -5,10 +5,10 @@ public import MovingSofaStability.PartialHallways
 /-!
 # A small linear cost for omitted terminal wedges
 
-Uncompiled proof source. The radius is fixed before the endpoint-window
-width. Only afterwards are the support neighborhood and angle threshold
-chosen. Thus the gain coefficient can be made smaller than a fixed terminal
-floor loss, without any quantitative compactness assumption.
+The radius is fixed before the endpoint-window width. Only afterwards are the
+support neighborhood and angle threshold chosen. Thus the gain coefficient can
+be made smaller than a fixed terminal floor loss, without any quantitative
+compactness assumption.
 -/
 
 @[expose] public section

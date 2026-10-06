@@ -5,9 +5,9 @@ public import MovingSofaStability.MissingAreaRecovery
 /-!
 # Uniform interior balls from convex pieces
 
-Uncompiled proof source. The construction shrinks one fixed interior ball
-about each point of a convex piece. The union lemmas permit a nonconvex
-reference to be assembled from finitely many such pieces.
+The construction shrinks one fixed interior ball about each point of a convex
+piece. The union lemmas permit a nonconvex reference to be assembled from
+finitely many such pieces.
 -/
 
 @[expose] public section

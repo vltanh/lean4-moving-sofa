@@ -5,9 +5,9 @@ public import MovingSofaStability.NicheContainment
 /-!
 # Cut geometry from a lower bound on bottom width
 
-Uncompiled proof source. A width of 21/10 suffices for the fixed small cut
-angles. This avoids assuming area continuity, curvature regularity, or Ki
-membership of the competing cap when locating its cut feet.
+A width of 21/10 suffices for the fixed small cut angles. This avoids assuming
+area continuity, curvature regularity, or Ki membership of the competing cap
+when locating its cut feet.
 -/
 
 @[expose] public section

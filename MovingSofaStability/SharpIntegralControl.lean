@@ -5,9 +5,9 @@ public import MovingSofaStability.FourArcCoercivity
 /-!
 # Quadratic control of linear residual functionals
 
-Uncompiled proof source. Combining independent residual intervals adds the
-squared kernel norms, rather than adding their square roots. This is the
-Cauchy--Schwarz step lost in the earlier coefficient-80 proof.
+Combining independent residual intervals adds the squared kernel norms, rather
+than adding their square roots. This is the Cauchy--Schwarz step lost in the
+earlier coefficient-80 proof.
 -/
 
 @[expose] public section

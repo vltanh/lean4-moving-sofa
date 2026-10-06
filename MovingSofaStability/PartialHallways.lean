@@ -5,9 +5,9 @@ public import MovingSofaStability.FloorCoverage
 /-!
 # Partial-angle shapes and the omitted wedges
 
-Uncompiled proof source. The partial shape is an over-envelope of a sofa
-whose rotation stops at omega. It need not be a full-angle moving sofa.
-The difference from the full-angle shape is retained explicitly.
+The partial shape is an over-envelope of a sofa whose rotation stops at omega.
+It need not be a full-angle moving sofa. The difference from the full-angle
+shape is retained explicitly.
 -/
 
 @[expose] public section

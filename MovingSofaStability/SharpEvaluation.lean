@@ -5,9 +5,9 @@ public import MovingSofaStability.SharpKernelNorms
 /-!
 # Sharp evaluation of the four residuals
 
-Uncompiled proof source. Kernel norms and residual energies are kept separate.
-The two pieces of r4 on the middle arc are recombined using their disjoint
-integration intervals, so the same energy is not counted twice.
+Kernel norms and residual energies are kept separate. The two pieces of r4 on
+the middle arc are recombined using their disjoint integration intervals, so the
+same energy is not counted twice.
 -/
 
 @[expose] public section

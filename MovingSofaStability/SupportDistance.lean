@@ -6,9 +6,9 @@ public import MovingSofaStability.CapCoercivity
 /-!
 # From convex support bounds to actual Euclidean distance
 
-Uncompiled proof source. The proof uses the Euclidean parallel body K + rB,
-whose support is h_K + r. It supplies witnesses in the actual convex set and
-does not equate support distance with Hausdorff distance for nonconvex sofas.
+The proof uses the Euclidean parallel body K + rB, whose support is h_K + r. It
+supplies witnesses in the actual convex set and does not equate support distance
+with Hausdorff distance for nonconvex sofas.
 -/
 
 @[expose] public section

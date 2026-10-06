@@ -5,9 +5,9 @@ public import MovingSofaStability.BaekDeficit
 /-!
 # The enlarged nonsmooth triple domain
 
-Uncompiled proof source. This is the domain of stability note 05: normalized
-right-angle caps, arbitrary convex tail bodies, and the original linear wall
-constraints. No curvature-density, injectivity, or area threshold is assumed.
+This is the domain of stability note 05: normalized right-angle caps, arbitrary
+convex tail bodies, and the original linear wall constraints. No
+curvature-density, injectivity, or area threshold is assumed.
 
 The convex-domain construction and `wide_upperQ_decomposition` are proved here.
 The further identity `upperP + mamikonS = affineCore` for all nonsmooth caps,

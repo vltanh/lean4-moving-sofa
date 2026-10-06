@@ -5,11 +5,11 @@ public import MovingSofaStability.WideResidualEnergy
 /-!
 # Integrating the residual equations without classical differentiability
 
-Uncompiled proof source. Convex supports have right derivatives even at normal
-angles carrying atoms. The reconstruction uses the right-derivative fundamental
-theorem on compact intervals avoiding the integrating factor's singularity.
-Integrability of the weighted residual is an explicit hypothesis, not inferred
-from the totalized value of an integral.
+Convex supports have right derivatives even at normal angles carrying atoms. The
+reconstruction uses the right-derivative fundamental theorem on compact
+intervals avoiding the integrating factor's singularity. Integrability of the
+weighted residual is an explicit hypothesis, not inferred from the totalized
+value of an integral.
 -/
 
 @[expose] public section

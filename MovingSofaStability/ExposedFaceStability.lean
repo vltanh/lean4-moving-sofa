@@ -6,10 +6,9 @@ public import Mathlib.Topology.MetricSpace.HausdorffDistance
 /-!
 # Uniform stability of exposed-face properties
 
-Uncompiled proof source. A positive continuous property on the reference
-exposed faces persists for every point of every nearby exposed face. This
-covers atoms in the competitor and does not presume derivative convergence
-at a multiple-point face of the reference.
+A positive continuous property on the reference exposed faces persists for every
+point of every nearby exposed face. This covers atoms in the competitor and does
+not presume derivative convergence at a multiple-point face of the reference.
 
 The proof takes a minimum of a membership/face defect on a fixed compact set.
 It does not require a metric or a differentiable structure on the space of caps.

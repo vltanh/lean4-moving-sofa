@@ -5,8 +5,6 @@ public import MovingSofaOptimality.Convex.ConvexDomain
 /-!
 # Quantitative deficit of a quadratic functional
 
-This file contains proof source only; it has not been compiled.
-
 The midpoint concavity gap, multiplied by four, is the quadratic energy along
 an entire segment. At a global maximizer that energy is bounded by the
 objective deficit, with constant one. The proof uses an explicit small segment

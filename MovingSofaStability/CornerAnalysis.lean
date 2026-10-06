@@ -6,10 +6,10 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 /-!
 # Analysis of nonsmooth corner paths
 
-Uncompiled proof source. The corner velocity is expressed through the
-measurable right derivative of a convex support. It is bounded and integrable.
-The right-derivative fundamental theorem then identifies the curve's vector
-measure with its density, without a C1 assumption on the cap.
+The corner velocity is expressed through the measurable right derivative of a
+convex support. It is bounded and integrable. The right-derivative fundamental
+theorem then identifies the curve's vector measure with its density, without a
+C1 assumption on the cap.
 -/
 
 @[expose] public section

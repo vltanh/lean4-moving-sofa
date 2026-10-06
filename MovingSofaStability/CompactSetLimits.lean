@@ -9,10 +9,10 @@ public import Mathlib.MeasureTheory.Measure.Regular
 /-!
 # Limits of actual compact sets
 
-Uncompiled proof source. The hyperspace here contains all nonempty compact
-sets, not only convex bodies. Its ordinary product-metric Hausdorff distance
-is used only for topology; Euclidean witnesses are recovered with factor two.
-Area is upper semicontinuous, not asserted continuous.
+The hyperspace here contains all nonempty compact sets, not only convex bodies.
+Its ordinary product-metric Hausdorff distance is used only for topology;
+Euclidean witnesses are recovered with factor two. Area is upper semicontinuous,
+not asserted continuous.
 -/
 
 @[expose] public section

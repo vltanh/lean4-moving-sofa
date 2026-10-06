@@ -5,10 +5,10 @@ public import MovingSofaStability.WideConcavity
 /-!
 # Mixed-area first variation without atom-free endpoints
 
-Uncompiled proof source. The source mixed-area symmetry argument removed the
-atoms at 0 and 2*pi using Ki. Here those atoms are retained: periodicity makes
-their endpoint contributions equal. The integration-by-parts theorem already
-applies to arbitrary convex bodies.
+The source mixed-area symmetry argument removed the atoms at 0 and 2*pi using
+Ki. Here those atoms are retained: periodicity makes their endpoint
+contributions equal. The integration-by-parts theorem already applies to
+arbitrary convex bodies.
 -/
 
 @[expose] public section

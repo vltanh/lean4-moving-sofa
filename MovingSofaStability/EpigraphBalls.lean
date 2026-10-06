@@ -5,10 +5,10 @@ public import MovingSofaStability.InteriorBalls
 /-!
 # Interior balls for a Lipschitz roof under a fixed ceiling
 
-Uncompiled proof source. This is the elementary geometric ingredient for the
-middle part of Gerver's sofa. It does not infer the absence of cusps merely
-from a piecewise-smooth parametrization: the horizontal Lipschitz estimate and
-the positive gap below the ceiling are explicit hypotheses.
+This is the elementary geometric ingredient for the middle part of Gerver's
+sofa. It does not infer the absence of cusps merely from a piecewise-smooth
+parametrization: the horizontal Lipschitz estimate and the positive gap below
+the ceiling are explicit hypotheses.
 -/
 
 @[expose] public section

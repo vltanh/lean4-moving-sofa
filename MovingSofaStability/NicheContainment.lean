@@ -5,9 +5,9 @@ public import MovingSofaStability.NicheFeet
 /-!
 # Local containment of the whole niche
 
-Uncompiled proof source. A normalized cap near Gerver need not be injective.
-Horizontal wedge-foot localization and a uniform height bound instead put
-its niche in a fixed rectangle separated from the reference upper boundary.
+A normalized cap near Gerver need not be injective. Horizontal wedge-foot
+localization and a uniform height bound instead put its niche in a fixed
+rectangle separated from the reference upper boundary.
 -/
 
 @[expose] public section

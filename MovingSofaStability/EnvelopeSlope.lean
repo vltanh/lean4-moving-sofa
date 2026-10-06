@@ -5,10 +5,10 @@ public import MovingSofaStability.CurveRoof
 /-!
 # The niche envelope has a finite vertical slope bound
 
-Uncompiled proof source. The two tails have slope at most two when their
-angles stay within a quarter turn of the floor. On the compact middle arc,
-the negative horizontal speed has a positive minimum. The three bounds are
-joined at the actual matching endpoints.
+The two tails have slope at most two when their angles stay within a quarter
+turn of the floor. On the compact middle arc, the negative horizontal speed has
+a positive minimum. The three bounds are joined at the actual matching
+endpoints.
 -/
 
 @[expose] public section

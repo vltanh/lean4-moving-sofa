@@ -8,9 +8,9 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 /-!
 # Euclidean disks in the repository's product coordinates
 
-Uncompiled proof source. The product metric is not used for disk radii or
-areas. The existing measure-preserving coordinate bridge supplies the exact
-Euclidean disk area, while a homeomorphism transports connectedness.
+The product metric is not used for disk radii or areas. The existing
+measure-preserving coordinate bridge supplies the exact Euclidean disk area,
+while a homeomorphism transports connectedness.
 -/
 
 @[expose] public section

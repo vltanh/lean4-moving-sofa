@@ -6,9 +6,9 @@ public import MovingSofaStability.CapDistance
 /-!
 # The local upper bound without Ki
 
-Uncompiled proof source. Canonical-tail feasibility, cut separation, positive
-core height, and niche containment are proved on a common neighborhood of
-Gerver. The original three-region argument then gives A <= Q there.
+Canonical-tail feasibility, cut separation, positive core height, and niche
+containment are proved on a common neighborhood of Gerver. The original
+three-region argument then gives A <= Q there.
 
 The cap-distance coefficient used in the present Lean source is 80. It is
 not the sharp 2 sec(phi) coefficient of the analytic notes; no sharp constant

@@ -5,10 +5,10 @@ public import MovingSofaStability.ODEReconstruction
 /-!
 # Algebraic bound for the four-piece Green evaluation norm
 
-Uncompiled proof source. The four formulas here are the squared evaluation
-norms calculated in stability note 01. This file bounds them and proves the
-rational numerical constant. Identifying them with the square integrals of
-the reconstruction kernels is a distinct analytic obligation.
+The four formulas here are the squared evaluation norms calculated in stability
+note 01. This file bounds them and proves the rational numerical constant.
+Identifying them with the square integrals of the reconstruction kernels is a
+distinct analytic obligation.
 -/
 
 @[expose] public section

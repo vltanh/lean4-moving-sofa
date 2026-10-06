@@ -5,10 +5,10 @@ public import MovingSofaStability.LocalArmMargins
 /-!
 # Core monotonicity without differentiating through curvature atoms
 
-Uncompiled proof source. The one-sided fundamental theorem bounds increments
-by a constant derivative bound; no integrability or continuity of the competing
-right derivative is presumed. This is enough for a strictly monotone core graph
-and for the local cut-separation argument.
+The one-sided fundamental theorem bounds increments by a constant derivative
+bound; no integrability or continuity of the competing right derivative is
+presumed. This is enough for a strictly monotone core graph and for the local
+cut-separation argument.
 -/
 
 @[expose] public section

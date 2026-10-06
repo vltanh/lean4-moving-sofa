@@ -6,9 +6,9 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
 /-!
 # Change of variables and signed area for the nonsmooth core
 
-Uncompiled proof source. A continuous primitive of the roof function is
-composed with the horizontal coordinate. The right-derivative fundamental
-theorem then gives change of variables without assuming a C1 competing cap.
+A continuous primitive of the roof function is composed with the horizontal
+coordinate. The right-derivative fundamental theorem then gives change of
+variables without assuming a C1 competing cap.
 -/
 
 @[expose] public section

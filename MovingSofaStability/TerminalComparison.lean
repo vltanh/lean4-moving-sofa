@@ -5,9 +5,9 @@ public import MovingSofaStability.TerminalFloor
 /-!
 # Local terminal-angle comparison
 
-Uncompiled proof source. The excluded floor slice and omitted-wedge estimates
-are now constructed, not hypotheses supplied by the final theorem. Their
-competition gives a linear angle deficit and both directed missing areas.
+The excluded floor slice and omitted-wedge estimates are now constructed, not
+hypotheses supplied by the final theorem. Their competition gives a linear angle
+deficit and both directed missing areas.
 -/
 
 @[expose] public section

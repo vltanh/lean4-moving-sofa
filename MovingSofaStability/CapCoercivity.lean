@@ -5,10 +5,10 @@ public import MovingSofaStability.FourArcCoercivity
 /-!
 # Cap support coercivity from the actual Mamikon deficit
 
-Uncompiled proof source. The analytic hypotheses are discharged for convex
-supports and the four square integrals are identified with the existing cap
-energy. The resulting coefficient 80 is deliberately non-sharp; it suffices
-for the unrestricted theorem's existence of a square-root constant.
+The analytic hypotheses are discharged for convex supports and the four square
+integrals are identified with the existing cap energy. The resulting coefficient
+80 is deliberately non-sharp; it suffices for the unrestricted theorem's
+existence of a square-root constant.
 
 This is not the separate sharp 2 sec(phi) result. No kernel norm identity,
 residual integrability, or squared support bound is assumed in the final lemmas.

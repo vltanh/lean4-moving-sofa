@@ -5,9 +5,9 @@ public import MovingSofaStability.SeparatedWedges
 /-!
 # Positive local core regions
 
-Uncompiled proof source. Gerver's core lies strictly above the floor. This
-persists in a fixed support neighborhood and lets the local upper bound use
-three positive-area regions, rather than subtract an auxiliary trapezoid.
+Gerver's core lies strictly above the floor. This persists in a fixed support
+neighborhood and lets the local upper bound use three positive-area regions,
+rather than subtract an auxiliary trapezoid.
 -/
 
 @[expose] public section

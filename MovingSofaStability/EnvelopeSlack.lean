@@ -5,10 +5,10 @@ public import MovingSofaStability.RoofMargins
 /-!
 # Uniform slack below an envelope roof
 
-Uncompiled proof source. The inactive tail wall has a strictly negative slack
-on its entire compact parameter interval, including its floor endpoint. The
-active wall's vertical coefficient is uniformly positive. This is proved from
-`EnvHyp`, rather than assumed as a local error bound.
+The inactive tail wall has a strictly negative slack on its entire compact
+parameter interval, including its floor endpoint. The active wall's vertical
+coefficient is uniformly positive. This is proved from `EnvHyp`, rather than
+assumed as a local error bound.
 -/
 
 @[expose] public section

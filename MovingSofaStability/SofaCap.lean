@@ -5,9 +5,9 @@ public import MovingSofaStability.SofaCoordinates
 /-!
 # A full-angle cap without extending the sofa's motion
 
-Uncompiled proof source. The downward completion contains the normalized
-original set and preserves all upper supports. The actual set need not be
-convex and need not admit a full-angle movement.
+The downward completion contains the normalized original set and preserves all
+upper supports. The actual set need not be convex and need not admit a
+full-angle movement.
 -/
 
 @[expose] public section

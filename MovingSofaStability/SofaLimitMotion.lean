@@ -5,10 +5,10 @@ public import MovingSofaStability.SofaBounds
 /-!
 # Closed supporting constraints give a genuine motion of the limit
 
-Uncompiled proof source. The original movement paths are not assumed to have
-a convergent subsequence. The limit motion is constructed directly from the
-limit set's support function and its terminal width. Compact support continuity
-is used directly; the actual sofa is not required to be convex.
+The original movement paths are not assumed to have a convergent subsequence.
+The limit motion is constructed directly from the limit set's support function
+and its terminal width. Compact support continuity is used directly; the actual
+sofa is not required to be convex.
 -/
 
 @[expose] public section

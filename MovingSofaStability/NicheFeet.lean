@@ -5,9 +5,9 @@ public import MovingSofaStability.AngularFaceStability
 /-!
 # Feet of forbidden wedges and horizontal niche localization
 
-Uncompiled proof source. The potentially small sine/cosine denominators at
-the endpoint angles are controlled by nearby top contacts, not by dividing a
-uniform support error by a quantity tending to zero.
+The potentially small sine/cosine denominators at the endpoint angles are
+controlled by nearby top contacts, not by dividing a uniform support error by a
+quantity tending to zero.
 -/
 
 @[expose] public section

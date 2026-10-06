@@ -5,8 +5,8 @@ public import MovingSofaStability.SofaLimitMotion
 /-!
 # Qualitative entry into the quantitative neighborhood
 
-Uncompiled proof source. Compactness supplies entry into a fixed neighborhood,
-not a rate. The limit motion is constructed from supporting constraints.
+Compactness supplies entry into a fixed neighborhood, not a rate. The limit
+motion is constructed from supporting constraints.
 -/
 
 @[expose] public section

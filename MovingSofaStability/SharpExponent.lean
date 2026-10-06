@@ -6,10 +6,10 @@ public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 /-!
 # Sharpness of the unrestricted Hausdorff exponent
 
-Uncompiled proof source. For every exponent greater than one half, every
-constant, and every positive entry threshold, a punctured Gerver sofa violates
-the proposed estimate for EVERY orientation-preserving rigid alignment.
-This is not a sharpness claim for the cap constant or symmetric-difference area.
+For every exponent greater than one half, every constant, and every positive
+entry threshold, a punctured Gerver sofa violates the proposed estimate for
+EVERY orientation-preserving rigid alignment. This is not a sharpness claim for
+the cap constant or symmetric-difference area.
 -/
 
 @[expose] public section

@@ -5,9 +5,9 @@ public import MovingSofaStability.TerminalComparison
 /-!
 # Coordinates inherited from a genuine moving sofa
 
-Uncompiled proof source. Supporting hallways and the terminal lower wall are
-derived from the given movement. The initial normalization is a translation,
-not a rotation of a set that might no longer satisfy the original convention.
+Supporting hallways and the terminal lower wall are derived from the given
+movement. The initial normalization is a translation, not a rotation of a set
+that might no longer satisfy the original convention.
 -/
 
 @[expose] public section

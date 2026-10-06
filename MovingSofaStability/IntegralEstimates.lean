@@ -5,10 +5,10 @@ public import MovingSofaStability.MamikonEnergy
 /-!
 # Integral estimates for the residual-to-support step
 
-Uncompiled proof source. Integrability assumptions are explicit: totalized
-Bochner integrals must not be used to conceal a nonintegrable residual.
-The Cauchy--Schwarz proof below uses nonnegativity of a square integral and
-also handles a zero square norm. No new integration axioms are introduced.
+Integrability assumptions are explicit: totalized Bochner integrals must not be
+used to conceal a nonintegrable residual. The Cauchy--Schwarz proof below uses
+nonnegativity of a square integral and also handles a zero square norm. No new
+integration axioms are introduced.
 -/
 
 @[expose] public section

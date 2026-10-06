@@ -5,9 +5,9 @@ public import MovingSofaStability.SharpIntegralControl
 /-!
 # Exact square integrals of the trigonometric evaluation kernels
 
-Uncompiled proof source. All integrations take place on compact intervals
-where the displayed denominators are nonzero. No improper integral is silently
-used at pi; that endpoint is handled separately by the pinned support value.
+All integrations take place on compact intervals where the displayed
+denominators are nonzero. No improper integral is silently used at pi; that
+endpoint is handled separately by the pinned support value.
 -/
 
 @[expose] public section

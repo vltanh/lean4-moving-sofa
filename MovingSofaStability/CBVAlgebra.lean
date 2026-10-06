@@ -5,9 +5,9 @@ public import MovingSofaStability.WideDomain
 /-!
 # Curve-area affinity without differentiating the competitor
 
-Uncompiled proof source. The difference between the outer and inner corner
-curves is the fixed curve `uvec + vvec`. The difference of their quadratic
-curve areas is therefore affine on the entire convex-body domain.
+The difference between the outer and inner corner curves is the fixed curve
+`uvec + vvec`. The difference of their quadratic curve areas is therefore affine
+on the entire convex-body domain.
 
 This replaces the C1 calculation of the first part of source Lemma 8.3.6 by
 an argument in the real vector space of continuous bounded-variation curves.

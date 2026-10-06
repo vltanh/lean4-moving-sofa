@@ -5,9 +5,9 @@ public import MovingSofaStability.EnvelopeSlack
 /-!
 # Gerver's quantitative roof margin
 
-Uncompiled proof source. A roof function is identified with the existing
-three-piece envelope through equality of their strict subgraphs. The
-reference error bound then follows from the proved envelope slack estimates.
+A roof function is identified with the existing three-piece envelope through
+equality of their strict subgraphs. The reference error bound then follows from
+the proved envelope slack estimates.
 -/
 
 @[expose] public section

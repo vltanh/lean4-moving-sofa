@@ -5,9 +5,9 @@ public import MovingSofaStability.ExposedFaceStability
 /-!
 # Uniform arm margins near an injective reference
 
-Uncompiled proof source. The reference cap is injective; a competitor need
-only be a normalized cap. Both endpoints of every competing exposed face
-satisfy the margin, so polygonal and other nonsmooth competitors are included.
+The reference cap is injective; a competitor need only be a normalized cap. Both
+endpoints of every competing exposed face satisfy the margin, so polygonal and
+other nonsmooth competitors are included.
 -/
 
 @[expose] public section

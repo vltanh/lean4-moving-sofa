@@ -6,11 +6,11 @@ public import Mathlib.Topology.Connected.Clopen
 /-!
 # Removing an interior disk from a connected set
 
-Uncompiled proof source. No path connectedness of the original set is assumed.
-The boundary of the removed open set connects every possible separation of the
-remainder. In dimension two this applies to an interior disk because its circle
-is connected. This avoids assuming that a general closed moving sofa has paths
-between all of its points.
+No path connectedness of the original set is assumed. The boundary of the
+removed open set connects every possible separation of the remainder. In
+dimension two this applies to an interior disk because its circle is connected.
+This avoids assuming that a general closed moving sofa has paths between all of
+its points.
 -/
 
 @[expose] public section

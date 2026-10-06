@@ -6,10 +6,9 @@ public import MovingSofaStability.TerminalBookkeeping
 /-!
 # The local core-area inequality
 
-Uncompiled proof source. The core is a continuous Lipschitz graph with a
-strictly positive height. Its under-graph region and two endpoint triangles
-are disjoint subsets of the middle niche. Their areas give the same signed
-curve bound as Baek's smooth proof.
+The core is a continuous Lipschitz graph with a strictly positive height. Its
+under-graph region and two endpoint triangles are disjoint subsets of the middle
+niche. Their areas give the same signed curve bound as Baek's smooth proof.
 -/
 
 @[expose] public section

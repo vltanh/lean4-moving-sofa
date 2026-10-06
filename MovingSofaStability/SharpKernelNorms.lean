@@ -6,8 +6,8 @@ public import MovingSofaStability.GreenNorm
 /-!
 # The actual kernel integrals equal the closed-form Green norms
 
-Uncompiled proof source. These equalities connect the displayed Green formulas
-to integrals, rather than merely bounding the formulas as independent scalars.
+These equalities connect the displayed Green formulas to integrals, rather than
+merely bounding the formulas as independent scalars.
 -/
 
 @[expose] public section

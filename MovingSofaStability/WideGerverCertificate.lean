@@ -5,10 +5,10 @@ public import MovingSofaStability.WideFirstVariation
 /-!
 # Gerver's certificate on the enlarged nonsmooth domain
 
-Uncompiled proof source. Only the fixed reference sofa supplies regularity.
-The competing triple has arbitrary convex bodies and a normalized cap, with
-no injectivity or curvature-density assumption. Gerver's existing measure
-identity cancels the core contribution in the first variation.
+Only the fixed reference sofa supplies regularity. The competing triple has
+arbitrary convex bodies and a normalized cap, with no injectivity or
+curvature-density assumption. Gerver's existing measure identity cancels the
+core contribution in the first variation.
 
 This proves the algebraic maximum and exact quadratic deficit. Applying it to
 a sofa still requires the geometric canonical-triple and local upper-bound
