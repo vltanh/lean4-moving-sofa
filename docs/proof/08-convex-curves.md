@@ -84,7 +84,7 @@ $K \mapsto h_K$ is injective. $\square$
 [`convexBodyComb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L231),
 [`supp_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L209),
 [`isConvexBody_comb`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L203),
-[`eq_of_supp_eq`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L200).*
+[`eq_of_supp_eq`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L203).*
 
 ### Theorem 8.3 (convex-linear quantities; Baek, Theorem 7.1.2)
 
@@ -119,7 +119,7 @@ $\sigma_K$ are convex-linear in $K$. $\square$
 
 The paper assumes $a < b < a + \pi$ in (2). The Lean statement holds for all $a, b$, because the
 formalization defines $v_K(a, b)$ by the formula above for all $a$ and $b$
-([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78); REPORT.md, Section 5).
+([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L81); REPORT.md, Section 5).
 
 ### Theorem 8.4 (the area is quadratic; Baek, Theorem 7.1.3)
 

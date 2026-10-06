@@ -16,7 +16,7 @@ Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and area
 ([definitions](definitions.md)).
 
 [`Challenge.lean`](../Challenge.lean) restates the three main theorems in Mathlib's vocabulary, as
-[`Baek.gerver_sofa_stable`](../Challenge.lean#L401), [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L411) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L421)
+[`Baek.gerver_sofa_stable`](../Challenge.lean#L405), [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L415) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L425)
 ([Results](results.md#stability)); below are the library's forms, from which [`Solution.lean`](../Solution.lean)
 proves them.
 

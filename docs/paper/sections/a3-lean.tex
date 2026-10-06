@@ -49,8 +49,11 @@ theorem (\path{Baek.gerver_sofa_optimal}), \cref{thm:main}
 \texttt{Baek} use only Mathlib's vocabulary and the definitions of
 Appendix~\ref{app:gerver} and Appendices~\ref{app:lean-main}
 and~\ref{app:lean-stability}; the other seven use the
-definitions of formal-conjectures, restated verbatim in a namespace of their own
-(an anonymous topology instance is given a name), and the three theorems of the
+definitions of formal-conjectures, restated with its code in a namespace of their
+own (the docstrings are reworded, an anonymous topology instance is given a
+name, and the notation $\R^2$ with two instances on it, which formal-conjectures
+takes from a library of its own, is declared in the Challenge), and the three
+theorems of the
 namespace \texttt{Bridge} also use Baek's definitions. \texttt{Solution.lean},
 with the modules that it imports, proves them: the Challenge is a file of
 statements, so its fifteen theorems end in \texttt{sorry} by design, and

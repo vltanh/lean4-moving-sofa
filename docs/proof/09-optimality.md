@@ -1130,7 +1130,7 @@ $\lvert S \rvert \le \lvert G \rvert$.
 
 *Lean: [`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302),
 [`gm_area_le`](../../MovingSofaOptimality/Main.lean#L269),
-[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L384).*
+[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L388).*
 
 *Proof.* $G$ is a monotone sofa with rotation angle $\pi/2$
 ([Theorem 10.11](10-gerver.md#theorem-1011-the-structure-of-gervers-sofa-baek-theorem-841-1-3-4)),
@@ -1167,10 +1167,10 @@ So $\lvert S \rvert \le \lvert G \rvert$. $\square$
 The paper's proof first picks a balanced maximum sofa that attains the maximum area. The Lean proof
 compares each moving sofa with Gerver's directly, as above. In
 [`Challenge.lean`](../../Challenge.lean), Theorem 9.33 is the statement
-[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L384), written with Mathlib's definitions only,
+[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L388), written with Mathlib's definitions only,
 for the parameters whose existence and uniqueness are
-[`Baek.gerver_params_exists`](../../Challenge.lean#L368) and
-[`Baek.gerver_params_unique`](../../Challenge.lean#L372) (Definition 9.3);
+[`Baek.gerver_params_exists`](../../Challenge.lean#L372) and
+[`Baek.gerver_params_unique`](../../Challenge.lean#L376) (Definition 9.3);
 [`Solution.lean`](../../Solution.lean) derives it from
 [`theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302). The area of $G$ lies in
 $[2.2192, 2.2199]$ ([`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L291),

@@ -90,7 +90,7 @@ $(x, y)$ lies in $L$ if and only if
 x \le 1, \qquad y \le 1, \qquad x \ge 0 \ \text{ or } \ y \ge 0 .
 ```
 
-*Lean: [`horizSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L30), [`vertSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L33), [`MovingSofaOptimality.hallway`](../../MovingSofaOptimality/Sofa/Defs.lean#L36), [`Baek.hallway`](../../Challenge.lean#L114),
+*Lean: [`horizSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L30), [`vertSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L33), [`MovingSofaOptimality.hallway`](../../MovingSofaOptimality/Sofa/Defs.lean#L36), [`Baek.hallway`](../../Challenge.lean#L118),
 [`ms_mem_hallway_iff`](../../MovingSofaOptimality/Monotone/SupportingHallway.lean#L56).*
 
 ### Definition 2.4 (moving sofa and rotation angle; Baek, Definitions 1.1.2 and 2.3.3)
@@ -115,7 +115,7 @@ start $\Phi_0(S) \subseteq H_L$ (dashed), halfway $\Phi_{1/2}(S)$, turned clockw
 at the end $\Phi_1(S) \subseteq V_L$ (dashed), turned clockwise by $\pi/2$.
 
 *Lean: [`IsMovement`](../../MovingSofaOptimality/Sofa/Defs.lean#L43), [`IsMovingSofaWithAngle`](../../MovingSofaOptimality/Sofa/Defs.lean#L54), [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59),
-[`Baek.IsMovingSofa`](../../Challenge.lean#L118), [`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L34).*
+[`Baek.IsMovingSofa`](../../Challenge.lean#L122), [`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L34).*
 
 Baek's Definition 1.1.2 (with the paper's footnotes) moves a nonempty, connected and closed set
 inside $L$ from $H_L$ to $V_L$ by a continuous curve $\Phi_s$ in the group $\mathrm{SE}(2)$ of
@@ -126,7 +126,7 @@ $\theta(0) = 0$ because $\Phi_0$ is a translation. So the two definitions agree.
 uses the lifted form from the start; [Chapter 13](13-bridge.md) proves the lifting for the motions
 of formal-conjectures. Baek's rotation angle (Baek's Definition 2.3.3) is the clockwise angle
 $\theta(0) - \theta(1) = -\theta(1)$ through which the sofa turns. The Challenge states the
-definition as [`Baek.IsMovingSofa`](../../Challenge.lean#L118), which leaves $\theta(1)$ free, and
+definition as [`Baek.IsMovingSofa`](../../Challenge.lean#L122), which leaves $\theta(1)$ free, and
 [`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L34) identifies it with [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59).
 
 *Remark.* The rotation angle belongs to the movement, not to the set: a disk of diameter 1 has
@@ -179,7 +179,7 @@ h_S(t) = \sup_{p \in S} \langle p, u_t \rangle, \qquad l_S(t) = l(t, h_S(t)), \q
 and the *width* of $S$ in the direction $u_t$ is $h_S(t) + h_S(t + \pi)$, the distance between the
 parallel supporting lines $l_S(t)$ and $l_S(t + \pi)$.
 
-*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L49), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`suppLine`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L55), [`suppHalf`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L58), [`width`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L61).*
+*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L55), [`suppLine`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L58), [`suppHalf`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L61), [`width`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L64).*
 
 The supporting line $l_S(t)$ touches $S$ from the side of $u_t$: $S$ lies in $H_S(t)$ and meets
 $l_S(t)$ (Figure 2.3).
@@ -204,8 +204,8 @@ functional $f$ with $f(q) < f(p)$ for all $q \in K$; writing $f = \langle \cdot,
 with $r > 0$, the maximum $h_K(\theta)$ of $\langle q, u_\theta \rangle$ over $K$ is less than
 $\langle p, u_\theta \rangle$. $\square$
 
-*Lean: [`continuous_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L143), [`supp_add_two_pi`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L138), [`exists_dot_eq_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L111), [`dot_le_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L106), [`supp_mono`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L121),
-[`supp_translate`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L207), [`mem_iff_forall_dot_le_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L167), [`eq_of_supp_eq`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L200).*
+*Lean: [`continuous_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L146), [`supp_add_two_pi`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L141), [`exists_dot_eq_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L114), [`dot_le_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L109), [`supp_mono`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L124),
+[`supp_translate`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L210), [`mem_iff_forall_dot_le_supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L170), [`eq_of_supp_eq`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L203).*
 
 ### Definition 2.8 (edges and vertices; Baek, Definitions 2.1.9, 2.1.10 and 2.1.14)
 
@@ -220,8 +220,8 @@ $b$ with $\sin(b - a) \ne 0$, the supporting lines $l_K(a)$ and $l_K(b)$ meet in
 v_K(a, b) = h_K(a)\, u_a + \frac{h_K(b) - h_K(a) \cos(b - a)}{\sin(b - a)}\, v_a .
 ```
 
-*Lean: [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L64), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L68), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L73), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78), [`edge_eq_segment`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L321), [`vplus_mem_edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L313), [`vminus_mem_edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L316),
-[`vint_mem_line_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L351), [`vint_mem_line_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L355).*
+*Lean: [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L67), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L71), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L76), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L81), [`edge_eq_segment`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L324), [`vplus_mem_edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L316), [`vminus_mem_edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L319),
+[`vint_mem_line_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L354), [`vint_mem_line_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L358).*
 
 ![A rounded triangle K, light blue, in the first quadrant, the origin O with the arrows u_t and v_t, and the supporting line l_K(t) perpendicular to u_t at the end of a dashed segment of length h_K(t) from O; the supporting half-plane H_K(t), on the side of the line containing K, is shaded grey; the line meets K along the orange edge e_K(t), whose upper end is v_K plus of t and whose lower end is v_K minus of t](figures/02-preliminaries/convex-body.svg)
 
@@ -251,8 +251,8 @@ Let $K$ be a convex body and $t$ an angle. Then
 
 In particular $v_K^+$ is right-continuous and $v_K^-$ is left-continuous.
 
-*Lean: [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L535), [`tendsto_vminus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L541), [`tendsto_vint_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L547), [`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L572),
-[`tendsto_vminus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L578), [`tendsto_vint_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L584).*
+*Lean: [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L647), [`tendsto_vminus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L653), [`tendsto_vint_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L659), [`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L685),
+[`tendsto_vminus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L691), [`tendsto_vint_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L697).*
 
 As printed, the paper's first display takes the limits of $v_K^+(t)$ and $v_K^-(u)$, where
 $v_K^+(s)$ and $v_K^-(s)$ are meant (REPORT.md, E27).
@@ -263,27 +263,42 @@ $v_K^+(s)$ and $v_K^-(s)$ are meant (REPORT.md, E27).
 is a single point of the arc (dots), and $v_K(t, s)$ lies on $l_K(t)$ beyond $v_K^+(t)$ (circles);
 both tend to $v_K^+(t)$ as $s$ decreases to $t$.
 
-*Proof.* For $s$ slightly larger than $t$, a point of $e_K(s)$ maximizes $\langle \cdot, u_s \rangle$,
-where $u_s$ is $u_t$ tilted towards $v_t$. So it lies close to $l_K(t)$ and not behind $v_K^+(t)$ in
-the direction $v_t$, and compactness forces it to $v_K^+(t)$.
+*Proof.* As in Baek's proof, for $s$ slightly larger than $t$ the edge $e_K(s)$ lies in a small
+triangle at $v_K^+(t)$.
 
-We prove the right limits; the left limits follow in the same way with the frame $(u_t, -v_t)$ in
-place of $(u_t, v_t)$. Let $P = v_K^+(t)$, let $s = t + \delta$ with $0 < \delta < \pi/2$, and let
-$w$ be a point of $e_K(s)$, for instance $v_K^+(s)$ or $v_K^-(s)$. Since
+We prove the right limits; the left limits follow by the symmetric argument, with the frame
+$(u_t, -v_t)$ in place of $(u_t, v_t)$. Let $P = v_K^+(t)$, and give a point $x$ the coordinates
+$a = \langle x - P, u_t \rangle$ and $b = \langle x - P, v_t \rangle$. Every point of $K$ has
+$a \le 0$, and those with $a = 0$, the points of $e_K(t)$, have $b \le 0$, since $P$ is the point of
+$e_K(t)$ farthest in the direction $v_t$.
+
+Let $\varepsilon > 0$. The point $p$ with coordinates $(0, \varepsilon)$ is not in $K$, and the
+complement of $K$ is open, so for some $0 < \varepsilon' \le \varepsilon$ the segment from $p$ to the
+point $q$ with coordinates $(-\varepsilon', \varepsilon)$ misses $K$. The triangle $T$ with vertices
+$P$, $p$ and $q$ consists of the points with $a \le 0$ and $b \le \varepsilon$ in the half-plane
+$H_T = \{\varepsilon a + \varepsilon' b \ge 0\}$, bounded by the line through $P$ and $q$.
+
+First, $K \cap H_T \subseteq T$. Let $r \in K \cap H_T$ have coordinates $(a, b)$, and suppose that
+$b > \varepsilon$. The point $P + (\varepsilon / b)(r - P)$ lies in $K$, which is convex, and has
+coordinates $(\varepsilon a / b, \varepsilon)$, where $-\varepsilon' \le \varepsilon a / b \le 0$
+because $\varepsilon a \ge -\varepsilon' b$. So it lies on the segment from $p$ to $q$, which misses
+$K$, a contradiction.
+
+Next, let $s = t + \delta$ with $\delta > 0$ and $\tan\delta < \varepsilon' / \varepsilon$, and let
+$w$ be a point of $e_K(s)$, for instance $v_K^+(s)$ or $v_K^-(s)$, with coordinates $(a, b)$. Since
 $u_s = \cos\delta\, u_t + \sin\delta\, v_t$ and $w$ maximizes $\langle \cdot, u_s \rangle$ on $K$,
 while $P \in K$,
 
 ```math
-\cos\delta \,\langle w, u_t \rangle + \sin\delta\, \langle w, v_t \rangle \ \ge\ \cos\delta\, \langle P, u_t \rangle + \sin\delta\, \langle P, v_t \rangle . \tag{2.1}
+a \cos\delta + b \sin\delta \ \ge\ 0 . \tag{2.1}
 ```
 
-As $w \in K$, $\langle w, u_t \rangle \le h_K(t) = \langle P, u_t \rangle$, so (2.1) gives
-$\langle w, v_t \rangle \ge \langle P, v_t \rangle$. Let $q$ be a cluster point of $w$ as
-$\delta \to 0^+$. It lies in the compact set $K$, and letting $\delta \to 0^+$ in (2.1) gives
-$\langle q, u_t \rangle \ge \langle P, u_t \rangle = h_K(t)$, so $q \in e_K(t)$. Also
-$\langle q, v_t \rangle \ge \langle P, v_t \rangle$, and $P$ is the point of $e_K(t)$ farthest in the
-direction $v_t$, so $q = P$. A function with values in a compact set and a single cluster point
-converges to it, so $v_K^\pm(s) \to P$.
+If $w$ were not in $H_T$, that is $\varepsilon a + \varepsilon' b < 0$, then $\varepsilon'$ times
+(2.1) minus $\sin\delta\,(\varepsilon a + \varepsilon' b)$ would give
+$a\,(\varepsilon' \cos\delta - \varepsilon \sin\delta) > 0$, which is impossible, as $a \le 0$ and
+$\varepsilon' \cos\delta > \varepsilon \sin\delta$. So $w \in K \cap H_T \subseteq T$. The points of
+$T$ have $-\varepsilon' \le a \le 0$ and $0 \le b \le \varepsilon$, so they are within $\varepsilon$
+of $P$ in both coordinates, and $v_K^\pm(s) \to P$ as $s \to t^+$.
 
 The point $v_K(t, s)$ lies on $l_K(t)$, so its $u_t$-coordinate is $\langle P, u_t \rangle$; its
 $v_t$-coordinate is $(h_K(s) - h_K(t) \cos\delta) / \sin\delta$. With $w = v_K^+(s)$, so that
@@ -293,11 +308,9 @@ $h_K(s) = \langle w, u_s \rangle$, this is
 \langle w, v_t \rangle - \bigl(h_K(t) - \langle w, u_t \rangle\bigr) \cot\delta ,
 ```
 
-which is at most $\langle w, v_t \rangle$, and at least $\langle P, v_t \rangle$ by (2.1). Both
-bounds tend to $\langle P, v_t \rangle$, so $v_K(t, s) \to P$ (Figure 2.4). $\square$
-
-Baek proves the theorem with a small triangle at $v_K^+(t)$ that contains the edges $e_K(s)$ for $s$
-close to $t$; the formalization argues by compactness, as above.
+which is at most $\langle w, v_t \rangle$, and at least $\langle P, v_t \rangle$ by (2.1). So
+$v_K(t, s)$ lies on $l_K(t)$ between $P$ and the point of $T$ farthest in the direction $v_t$, and
+$v_K(t, s) \to P$ (Figure 2.4). $\square$
 
 ### Corollary 2.10 (one-sided derivatives of the support function)
 
@@ -314,7 +327,7 @@ The middle factor is the $v_t$-coordinate of $v_K(t, s)$, which tends to
 $\langle v_K^+(t), v_t \rangle$ by Theorem 2.9, while $\sin\delta / \delta \to 1$ and
 $(\cos\delta - 1)/\delta \to 0$. The left derivative is computed in the same way. $\square$
 
-*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L628), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L650).*
+*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L742), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L764).*
 
 The two one-sided derivatives differ by $\langle v_K^+(t) - v_K^-(t), v_t \rangle$, the length of
 the edge $e_K(t)$; so $h_K$ is differentiable at $t$ exactly when $e_K(t)$ is a single point.
@@ -330,7 +343,7 @@ d_{\mathrm H}(K_1, K_2) = \sup_t\, \lvert h_{K_1}(t) - h_{K_2}(t) \rvert ,
 and a sequence of convex bodies $K_n$ *converges* to $K$ if $d_{\mathrm H}(K_n, K) \to 0$, that is,
 if $h_{K_n} \to h_K$ uniformly.
 
-*Lean: [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
+*Lean: [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L89).*
 
 Baek cites this formula from Schneider's Lemma 1.8.14 as a property of the usual Hausdorff distance
 of compact sets; the formalization takes it as the definition, and compares it with Mathlib's

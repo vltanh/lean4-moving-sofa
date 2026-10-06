@@ -195,15 +195,15 @@ $e_K(t)$ from $v_K^-(t)$ to $v_K^+(t)$. The support value $h_K(t)$ is the signed
 origin to $l_K(t)$. The edge $e_K(s)$ of a supporting line through a curved part of the boundary is a
 single point.
 
-*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L49), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L64), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L68), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L73), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L78), [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L535),
-[`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L572).*
+*Lean: [`IsConvexBody`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L52), [`supp`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L55), [`edge`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L67), [`vplus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L71), [`vminus`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L76), [`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L81), [`tendsto_vplus_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L647),
+[`tendsto_vplus_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L685).*
 
 ### Lemma 6.7 (one-sided derivatives of the support function)
 
 For every convex body $K$ and every angle $t$, the support function $h_K$ has the right derivative
 $\langle v_K^+(t), v_t\rangle$ and the left derivative $\langle v_K^-(t), v_t\rangle$ at $t$.
 
-*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L628), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L650).*
+*Lean: [`hasDerivWithinAt_supp_right`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L742), [`hasDerivWithinAt_supp_left`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L764).*
 
 *Proof.* This is
 [Corollary 2.10](02-preliminaries.md#corollary-210-one-sided-derivatives-of-the-support-function),
@@ -522,7 +522,7 @@ function $f$,
 \int_{[0, 2\pi)} f\,\mathrm{d}\sigma_{K_n} \to \int_{[0, 2\pi)} f\,\mathrm{d}\sigma_K .
 ```
 
-*Lean: [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L844), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
+*Lean: [`theorem4_1_3`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L844), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86), [`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L89).*
 
 Baek cites this from Schneider (Theorem 4.2.1) and uses it in four places:
 Theorem 4.1.4

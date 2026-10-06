@@ -64,10 +64,14 @@ translated in any way.
 
 Google DeepMind's formal-conjectures (`FormalConjectures/Wikipedia/MovingSofa.lean`, Git blob
 `59b6ed7eb42e11b208b09539c245da4d3f11ed00`, Apache-2.0, Copyright 2026 The Formal Conjectures
-Authors) states the problem with its own definitions, restated here verbatim inside the namespace
-`FormalConjectures`, with an explicit name for the topology instance on `E(2)`, which it leaves
-anonymous. Its test lemmas are left out, and so is its `sofaConstant_eq`, the statement of
-`sofaConstant_eq_volume_gerversSofa` inside formal-conjectures' `answer` marker.
+Authors) states the problem with its own definitions. They are restated here inside the namespace
+`FormalConjectures`, with formal-conjectures' code for every definition and statement and with
+reworded docstrings. The other changes: the topology instance on `E(2)`, which formal-conjectures
+leaves anonymous, has an explicit name; the `ℝ²` notation and the two instances on it that
+formal-conjectures takes from its `FormalConjecturesForMathlib/Geometry/2d.lean` are declared here;
+`isMovingSofa_gerversSofa` is stated after the definitions; and the test lemmas are left out, and so
+is `sofaConstant_eq`, the statement of `sofaConstant_eq_volume_gerversSofa` inside
+formal-conjectures' `answer` marker.
 
 **The plane** is `ℝ² = EuclideanSpace ℝ (Fin 2)`. **A moving sofa** `s` with motion `m` is connected
 and closed, `m` is a continuous path in the affine isometries `E(2)` with `m 0` the identity, `s` lies

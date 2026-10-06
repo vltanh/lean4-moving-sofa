@@ -8,9 +8,10 @@ arXiv source; the chapter directories `01, 05, 10, 15, 17, 20, 22, 25` hold the 
 
 Status of the formalization:
 
-- Every numbered result the paper proves is proved in Lean, with the deviations listed in Sections 3,
-  6 and 7, and so is the main theorem (Theorem 1.1.1): Gerver's sofa is a moving sofa, and every moving
-  sofa has area at most that of Gerver's sofa.
+- Every numbered result the paper proves is proved in Lean, except the statements about Jordan curves
+  of Section 7.2, whose uses are replaced (Section 9), with the deviations listed in Sections 3, 6 and
+  7; so is the main theorem (Theorem 1.1.1): Gerver's sofa is a moving sofa, and every moving sofa has
+  area at most that of Gerver's sofa.
 - The results the paper takes from the literature and uses in its proofs are proved too:
   - Schneider's area formula for planar convex bodies, in [`MovingSofaOptimality/External/`](MovingSofaOptimality/External);
   - the existence and uniqueness of the solution of Romik's system that defines Gerver's sofa;
@@ -99,7 +100,7 @@ Status of the formalization:
 | Cited result | Where the paper uses it | In the formalization |
 | --- | --- | --- |
 | Schneider Theorem 4.2.3: σ_K(X) is the length of ⋃_{t∈X} e_K(t) (the paper's Theorem 2.1.1) | Proposition 2.1.2 and the side lengths throughout | σ_K is defined directly, as the Lebesgue–Stieltjes measure of t ↦ ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K ([`sigma`](MovingSofaOptimality/Basic/SurfaceArea.lean#L169), [`MovingSofaOptimality/Basic/SurfaceArea.lean`](MovingSofaOptimality/Basic/SurfaceArea.lean)). Proposition 2.1.2 (σ_K({t}) is the length of e_K(t)) and Theorem 5.2.2 (dv_K⁺ = v_t dσ_K) are proved from this definition. [`MovingSofaOptimality/External/AreaFormula/Param.lean`](MovingSofaOptimality/External/AreaFormula/Param.lean) shows that the normal angle along the arc-length parametrization of ∂K pushes Lebesgue measure forward to σ_K, which is Theorem 2.1.1 in arc-length form. |
-| Schneider Lemma 1.8.14: d_H(K, L) = sup_t \|h_K(t) − h_L(t)\| | Chapter 3 (limits of caps) | Hausdorff distance is defined in this support-function form ([`hausdorffDist`](MovingSofaOptimality/Basic/ConvexBody.lean#L83)). The comparison with Mathlib's Hausdorff distance needed for Blaschke's theorem is proved in [`mpc_blaschke`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846). |
+| Schneider Lemma 1.8.14: d_H(K, L) = sup_t \|h_K(t) − h_L(t)\| | Chapter 3 (limits of caps) | Hausdorff distance is defined in this support-function form ([`hausdorffDist`](MovingSofaOptimality/Basic/ConvexBody.lean#L86)). The comparison with Mathlib's Hausdorff distance needed for Blaschke's theorem is proved in [`mpc_blaschke`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846). |
 | Blaschke selection theorem | Theorems 3.4.3, 3.5.2 | Mathlib (compactness of nonempty compact sets in the Hausdorff metric), via [`mpc_blaschke`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846) |
 | Schneider Theorem 1.8.20: area is continuous in d_H | Theorems 3.4.3, 3.5.5 | proved ([`mpc_tendsto_area`](MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L889), from the one-sided forms [`mpc_area_usc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L282) and [`mpc_area_lsc`](MovingSofaOptimality/Balanced/CapGeometry.lean#L296)) |
 | Schneider Theorem 4.2.1: σ is weakly continuous in K (the paper's Theorem 4.1.3) | Theorems 4.1.4 and 5.2.2, Lemma 6.4.2, Theorem 6.4.3 | [`theorem4_1_3`](MovingSofaOptimality/Angle/HorizontalSide.lean#L844), proved by integration by parts against the distribution function of σ and dominated convergence; Theorem 4.1.4, Lemma 6.4.2 and Theorem 6.4.3 use it as the paper does, through the Portmanteau theorem; Theorem 5.2.2 is proved from the definition of σ_K instead (Section 7) |
@@ -290,7 +291,8 @@ to ℝ. Typo.
 
 **E17. Theorem 6.5.1, Lemmas 6.5.2–6.5.5 and Theorem 6.5.6** (`20/20`).
 
-- (a) Lemma 6.5.2 needs f_K(0) ≥ 1, which is never stated. It holds: A_K(0) lies on y = 0 by fact (a)
+- (a) Lemma 6.5.2 needs f_K(0) ≥ 1, which Chapter 6 does not state; the overview says that f(0) = 1
+  because 𝐀(0) lies on the x-axis (`01/20/03:24`). It holds: A_K(0) lies on y = 0 by fact (a)
   of E4, so f_K(0) = 1.
 - (b) Theorem 6.5.6 claims f_K(t) > 1 on (0, π/2] and g_K(t) > 1 on [0, π/2), "by Lemma 6.5.2 and
   Lemma 6.5.5". But Lemma 6.5.2 compares f_K with f_n only on [0, π/2), and g_K only on (0, π/2]. The
@@ -656,10 +658,10 @@ the paper uses without citing it, or a citation that the paper makes in passing.
   Jordan arcs. The formalization replaces every use by a direct area computation (Section 7).
 - **Theorem 2.1.1** (Schneider's Theorem 4.2.3, cited) is not stated in its 𝓗¹ form. The surface area
   measure is defined directly, and the properties the paper uses are proved (Section 2).
-- **Theorem 1.3.1** quotes Gerver's Theorem 1 for orientation; the paper reproves its content in
+- **Theorem 1.3.1** quotes Gerver's Theorem 1 for orientation; the paper reproves the parts it uses in
   Chapter 3 (Theorems 3.5.4–3.5.6), and those are formalized.
-- **Remarks** (15 in the paper), figures, the overview's informal descriptions and Remark 8.4.1's
-  numerical comments are not formalized. The overview's results that restate later ones
+- **Remarks** (15 in the paper; Remark 2.5.2 is formalized, as [`remark2_5_2`](MovingSofaOptimality/Monotone/CapContainsNiche.lean#L1393)), figures, the
+  overview's informal descriptions and Remark 8.4.1's numerical comments are not formalized. The overview's results that restate later ones
   (Propositions 1.2.1, 1.2.2, Theorems 1.5.1, 1.5.2, 1.7.1) are formalized through the later
   statements or directly.
 
@@ -683,13 +685,14 @@ concurrent work is in the README's account of prior work.
   we found no publication. No later work gives a counterexample to one of its results. The other two
   formalizations found errors and gaps in its proofs, all repairable: the [notes of deancureton/MovingSofa](https://github.com/deancureton/MovingSofa/blob/4d5569131940815f47a9ccf3e90a4c5043c56127/NOTES.md) list 11 errors and
   gaps and 33 misprints. This audit had missed twelve of them, which are now among its findings
-  (E2, E5, E10, E17, E18, E24, E27, and Sections 2 and 4). The blueprint of RuifengCao/sofa-formal
-  remarks on several of the gaps that this audit records.
+  (E2, E5, E10, E17, E18, E24, E27, and Sections 2 and 4). Of the 20 issues that the blueprint and
+  the comments of RuifengCao/sofa-formal record, 15 are among this audit's findings; the other five are
+  conventions, routine details or not errors ([`docs/formalizations.md`](docs/formalizations.md), Section 5).
 - **Formal verification.** Three Lean 4 formalizations of the optimality appeared in September and
   October 2026: [deancureton/MovingSofa](https://github.com/deancureton/MovingSofa),
   [RuifengCao/sofa-formal](https://github.com/RuifengCao/sofa-formal) and this one. Each proves the
   statement `sofaConstant = volume gerversSofa` of Google DeepMind's formal-conjectures. They are
-  checked by Lean's kernel, not refereed; [`docs/prior-work.md`](docs/prior-work.md) compares them.
+  checked by Lean's kernel, not refereed; [`docs/formalizations.md`](docs/formalizations.md) compares them.
   RuifengCao/sofa-formal also replaces the Jordan curve arguments of Chapters 7 and 8 by explicit
   area computations and avoids the Portmanteau step of Lemma 6.4.2, as the simpler proofs below do.
 - **Uniqueness.** Baek's paper does not claim that Gerver's sofa is the only sofa of maximum area. An
@@ -712,6 +715,14 @@ concurrent work is in the README's account of prior work.
   pushed by gas pressure. It approximates Gerver's sofa, gives numerical estimates of the maximum
   area for corridors whose corner has other angles, and reports that two patterns of motion exchange
   dominance at a corner of about 43.327°, where the locally maximal area is about 1.8674.
+- **The ambidextrous sofa.** Devin O'Keefe's *Upper bounds for the ambidextrous moving sofa problem*
+  (September 2026, a paper and a Lean formalization in
+  [devinokeefe/ambidextrous-sofa-bounds](https://github.com/devinokeefe/ambidextrous-sofa-bounds), not on arXiv; found on 5 October 2026) proves
+  that a sofa that can turn both left and right around the corner from the same starting position
+  has area at most 2√2 − 1 = 1.8284…, and, with computer assistance, at most 353/200 = 1.765; Romik's
+  ambidextrous sofa has area 1.64495…. Lean checks both proofs, with formal-conjectures' definitions
+  and those of an open pull request to it, except the run, on a certificate of 1.7 GB, of a checker
+  that Lean proves sound.
 
 ### Open directions
 
@@ -734,7 +745,8 @@ concurrent work is in the README's account of prior work.
   such as sec φ < 1.1, are specific to the right angle.
 - **The ambidextrous sofa.** Romik found a sofa of area 1.64495… that can turn both left and right
   around a right-angled corner ([Romik, *Experimental Mathematics* 27, 2018](https://doi.org/10.1080/10586458.2016.1270858));
-  whether it is optimal is open (Georgiev, Gómez-Serrano, Tao and Wagner, above). Baek's reduction
+  whether it is optimal is open (Georgiev, Gómez-Serrano, Tao and Wagner, above); O'Keefe's upper
+  bound 353/200 (above) leaves a gap of about 0.12. Baek's reduction
   to monotone sofas uses one hallway and its caps and niches; a sofa that must turn both ways lies
   in the intersection of two mirror-image families of hallways, so the cap, the niche and the bound
   𝒬 would all need two-sided analogues.

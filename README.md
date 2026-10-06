@@ -71,7 +71,7 @@ def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 ```
 
-formal-conjectures' (namespace `FormalConjectures.MovingSofa`, restated verbatim): moving sofas in
+formal-conjectures' (namespace `FormalConjectures.MovingSofa`, with formal-conjectures' code): moving sofas in
 `EuclideanSpace ℝ (Fin 2)`, moved by continuous paths of isometries that start at the identity; the
 sofa constant, the supremum of their areas; and Gerver's sofa, from Gerver's four constants.
 
@@ -101,15 +101,15 @@ theorem FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerver
 ```
 
 - In `Baek`: Romik's equations have exactly one solution in a small box around Romik's numerical
-  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L368), [`Baek.gerver_params_unique`](Challenge.lean#L372)). Its area lies
-  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L378)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L384), Baek's Theorem
-  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L391)). A moving sofa whose area is ε less
-  than Gerver's is, once translated, within `C√ε` of it ([`Baek.gerver_sofa_stable`](Challenge.lean#L401)) and turns through at
-  least `π/2 - Cε` ([`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411)), and no rate `C εᵃ` with `a > 1/2` holds
-  ([`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)).
-- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L435)), the sofa constant is
-  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L443)), and the two Gerver's sofas
-  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L451)).
+  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L372), [`Baek.gerver_params_unique`](Challenge.lean#L376)). Its area lies
+  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L382)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L388), Baek's Theorem
+  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L395)). A moving sofa whose area is ε less
+  than Gerver's is, once translated, within `C√ε` of it ([`Baek.gerver_sofa_stable`](Challenge.lean#L405)) and turns through at
+  least `π/2 - Cε` ([`Baek.gerver_sofa_angle_stable`](Challenge.lean#L415)), and no rate `C εᵃ` with `a > 1/2` holds
+  ([`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L425)).
+- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L439)), the sofa constant is
+  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L447)), and the two Gerver's sofas
+  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L455)).
 - In `FormalConjectures.MovingSofa`: formal-conjectures' four statements, among them the open one
   above, derived from the theorems of `Baek` and `Bridge`.
 
@@ -185,7 +185,7 @@ More on each earlier result, with references: [docs/prior-work.md](docs/prior-wo
   convexity assumptions (Deng, arXiv:2407.02587).
 - Two Lean formalizations of Baek's proof appeared shortly before this one,
   [deancureton/MovingSofa](https://github.com/deancureton/MovingSofa) and [RuifengCao/sofa-formal](https://github.com/RuifengCao/sofa-formal). Both prove
-  formal-conjectures' statement of the optimality; [docs/prior-work.md](docs/prior-work.md) compares the three.
+  formal-conjectures' statement of the optimality; [docs/formalizations.md](docs/formalizations.md) compares the three.
 
 ## What's next
 
@@ -193,7 +193,8 @@ Baek's paper is still a preprint (arXiv version 1), reported in 2026 to be under
 or counterexample has appeared; the other formalizations, like this audit, found only repairable
 errors and gaps in its proofs. Since it appeared, two other Lean formalizations and this one have
 verified its result, and preprints have studied a three-dimensional sofa by computer search,
-rectangular sofas, and corridors with other corner angles. The report's
+rectangular sofas, and corridors with other corner angles; another Lean formalization bounds the area
+of sofas that turn both ways. The report's
 [What's next](REPORT.md#10-whats-next) also lists open directions (other angles, the ambidextrous sofa, and
 stability, which this repository now proves: [docs/stability.md](docs/stability.md)) and simpler arguments for several
 of Baek's proofs that came up while formalizing them.
@@ -284,6 +285,6 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
 - Claude Opus 5.5, with 8 sub-agents, then simplified the new libraries (6 October 2026): the two new proofs of
   optimality share one assembly, the stability library went from 87 files to 12 and from 12,550 lines to 7,585,
   and the formalization of Baek's paper and the connection with formal-conjectures did not change.
-- No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
-  rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
+- No person has reviewed the proofs; Lean's kernel checks every one of them. The work took seventeen
+  rounds between 1 and 6 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

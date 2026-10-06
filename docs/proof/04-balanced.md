@@ -811,8 +811,8 @@ $\Theta_{\omega, n_i}$ such that $K_i \to K_\omega$ in the Hausdorff distance
 $d_\mathrm{H}(K, K') = \sup_t \lvert h_K(t) - h_{K'}(t) \rvert$
 ([Definition 2.11](02-preliminaries.md#definition-211-hausdorff-distance-baek-definition-2112)).
 
-*Lean: [`uniformAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L33), [`dyadicAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L51), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L137), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L83),
-[`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86).*
+*Lean: [`uniformAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L33), [`dyadicAngleSet`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L51), [`IsBalancedMaxCap`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L137), [`hausdorffDist`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L86),
+[`HausdorffTendsto`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L89).*
 
 ![Three rows, for n = 4, 8 and 16, each showing a blue polygon sofa between faint lines y = 0 and y = 1 with a dashed outline of Gerver's sofa centred on the same vertical line. For n = 4 the polygon sofa is visibly wider, with straight slanted ends and a jagged notch; for n = 8 it is closer; for n = 16 its ends and its notch nearly follow the dashed outline](figures/04-balanced/limit.svg)
 

@@ -28,12 +28,15 @@ continuity, translation, the Hausdorff distance); edges and vertices (`e_K(t)` i
 `[v_K⁻(t), v_K⁺(t)]`); Theorem `thm:limits-converging-to-vertex`; the one-sided derivatives
 `v_K^±(t) · v_t` of `h_K`.
 
-Theorem `thm:limits-converging-to-vertex` is proved by compactness rather than by the paper's
-`ε`-triangle: for `s → t⁺`, any point `w` of `e_K(s)` satisfies `w · u_s ≥ v_K⁺(t) · u_s`, which
-forces `w · u_t → h_K(t)` and `w · v_t ≥ v_K⁺(t) · v_t`, so every cluster point of `w` lies on
-`e_K(t)` and is at least as far as `v_K⁺(t)` in the direction `v_t`, hence equals `v_K⁺(t)`
-(`cb_tendsto_core`). The one-sided derivatives of `h_K` follow from Theorem
-`thm:limits-converging-to-vertex`: the `v_t`-coordinate of `v_K(t, s)` tends to that of `v_K⁺(t)`.
+Theorem `thm:limits-converging-to-vertex` is proved as in the paper, by its `ε`-triangle. For
+`ε > 0`, the point `p = v_K⁺(t) + ε v_t` is not in `K`, so a short segment from `p` to a point `q`
+in the direction `-u_t` misses `K` (`cb_segment`). The triangle `T` with vertices `v_K⁺(t)`,
+`p` and `q` contains the points of `K` on its side of the line through `v_K⁺(t)` and `q`
+(`cb_mem_triangle`), and for `s` slightly larger than `t` every point of `e_K(s)` is on that side
+(`cb_better_mem_triangle`); the points of `T` are within `ε` of `v_K⁺(t)` (`cb_tendsto_core`).
+The left limits follow by the symmetric argument, in the frame `(u_t, -v_t)`. The one-sided
+derivatives of `h_K` follow from Theorem `thm:limits-converging-to-vertex`: the `v_t`-coordinate
+of `v_K(t, s)` tends to that of `v_K⁺(t)`.
 -/
 
 @[expose] public section
@@ -372,6 +375,21 @@ private lemma cb_frame_left (x : ℝ × ℝ) (t : ℝ) :
   rw [dot_neg_right, neg_smul_neg]
   exact eq_dot_uvec_smul_add x t
 
+private lemma cb_dot_comm (p q : ℝ × ℝ) : dot p q = dot q p := by
+  simp only [dot]; ring
+
+private lemma cb_dot_uvec_self (t : ℝ) : dot (uvec t) (uvec t) = 1 := by
+  rw [dot_uvec_uvec, sub_self, cos_zero]
+
+private lemma cb_dot_vvec_self (t : ℝ) : dot (vvec t) (vvec t) = 1 := by
+  rw [dot_vvec_vvec, sub_self, cos_zero]
+
+private lemma cb_dot_neg_vvec_uvec (t : ℝ) : dot (-vvec t) (uvec t) = 0 := by
+  rw [dot_neg_left, dot_vvec_uvec, neg_zero]
+
+private lemma cb_dot_neg_vvec_self (t : ℝ) : dot (-vvec t) (-vvec t) = 1 := by
+  rw [dot_neg_left, dot_neg_right, neg_neg, cb_dot_vvec_self]
+
 /-- Convergence of points from the convergence of both coordinates in a frame `(u, v)`. -/
 private lemma cb_tendsto_of_dot {u v P : ℝ × ℝ} (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
     {ι : Type*} {l : Filter ι} {x : ι → ℝ × ℝ}
@@ -381,13 +399,123 @@ private lemma cb_tendsto_of_dot {u v P : ℝ × ℝ} (huv : ∀ x : ℝ × ℝ, 
   rw [← huv P] at h
   exact Tendsto.congr (fun i => (huv (x i)).symm) h
 
-/-- The core of Theorem `thm:limits-converging-to-vertex`, for a compact set `K` and a frame
-`(u, v)`. Let `P ∈ K` maximize `· u` over `K`, and among those maximizers maximize `· v`. If the
-points `w i ∈ K` do at least as well as `P` in the direction `c i • u + d i • v`, where `c i → 1`
-and `d i → 0⁺`, then `w i → P`. Every cluster point `q` of `w` lies in `K`, maximizes `· u` and
-satisfies `q · v ≥ P · v`, hence equals `P`. -/
-private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : ℝ × ℝ}
+/-- The segment of the paper's proof, in an orthonormal frame `(u, v)`: `(u_t, v_t)` for the right
+limits, `(u_t, -v_t)` for the left limits. Let `P` be the point of the closed set `K` farthest in
+the direction `v` among the points farthest in the direction `u` (for the right limits, `v_K⁺(t)`).
+For `ε > 0` the point `p = P + ε v` is not in `K`, and as the complement of `K` is open, for some
+`0 < ε' ≤ ε` the segment from `p` to `q = p - ε' u` misses `K`. In coordinates: a point of `K` with
+`v`-coordinate `P · v + ε` does not have its `u`-coordinate in `[P · u - ε', P · u]`. -/
+private lemma cb_segment {K : Set (ℝ × ℝ)} (hK : IsClosed K) {u v P : ℝ × ℝ}
     (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
+    (huu : dot u u = 1) (hvu : dot v u = 0) (hvv : dot v v = 1)
+    (hmax : ∀ x ∈ K, dot x u = dot P u → dot x v ≤ dot P v) {ε : ℝ} (hε : 0 < ε) :
+    ∃ ε' > 0, ε' ≤ ε ∧ ∀ x ∈ K, dot x v = dot P v + ε → dot P u - ε' ≤ dot x u →
+      dot P u < dot x u := by
+  -- the points `g μ = (P · u - μ) u + (P · v + ε) v` of the line through `p` parallel to `u`
+  set g : ℝ → ℝ × ℝ := fun μ => (dot P u - μ) • u + (dot P v + ε) • v with hg
+  have hgu : ∀ μ, dot (g μ) u = dot P u - μ := fun μ => by
+    simp only [hg, dot_add_left, dot_smul_left, huu, hvu]; ring
+  have hgv : ∀ μ, dot (g μ) v = dot P v + ε := fun μ => by
+    simp only [hg, dot_add_left, dot_smul_left, hvv, cb_dot_comm u v, hvu]; ring
+  -- `p = g 0` is not in `K`: it is as far as `P` in the direction `u`, and farther in the
+  -- direction `v`
+  have hp : g 0 ∉ K := fun h => by
+    have h' := hmax _ h (by rw [hgu, sub_zero])
+    rw [hgv] at h'
+    linarith
+  -- the complement of `K` is open, so it contains the points `g μ` with `μ` near `0`
+  have hg_cont : Continuous g := by rw [hg]; fun_prop
+  obtain ⟨r, hr, hball⟩ := Metric.mem_nhds_iff.1
+    (hg_cont.continuousAt.preimage_mem_nhds (hK.isOpen_compl.mem_nhds hp))
+  refine ⟨min ε (r / 2), lt_min hε (half_pos hr), min_le_left _ _, fun x hx hxv hxu => ?_⟩
+  by_contra hxP
+  push Not at hxP
+  -- `x = g μ` with `μ = P · u - x · u ∈ [0, ε']`: a point of the segment from `p` to `q`
+  have hx' : x = g (dot P u - dot x u) := by
+    conv_lhs => rw [huv x]
+    simp only [hg, hxv, sub_sub_cancel]
+  have hμ : dot P u - dot x u ∈ Metric.ball (0 : ℝ) r := by
+    rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_lt]
+    constructor <;> linarith [min_le_right ε (r / 2)]
+  exact hball hμ (hx' ▸ hx)
+
+/-- The triangle of the paper's proof contains the part of `K` on its side of the line through
+`P` and `q`. In coordinates relative to `P`, with `a = (r - P) · u` and `b = (r - P) · v`, that
+side is the half-plane `H_T : ε a + ε' b ≥ 0`, and the triangle `T` with vertices `P`, `p`, `q` is
+`H_T ∩ {a ≤ 0, b ≤ ε}`. Every point `r` of the convex set `K` has `a ≤ 0`; if `r ∈ H_T` had `b > ε`,
+the point `P + (ε / b) (r - P)` of the segment from `P` to `r`, which lies in `K`, would be a point of
+the segment from `p` to `q`, which misses `K`. -/
+private lemma cb_mem_triangle {K : Set (ℝ × ℝ)} (hKc : Convex ℝ K) {u v P : ℝ × ℝ} (hP : P ∈ K)
+    (hle : ∀ x ∈ K, dot x u ≤ dot P u) {ε ε' : ℝ} (hε : 0 < ε)
+    (hseg : ∀ x ∈ K, dot x v = dot P v + ε → dot P u - ε' ≤ dot x u → dot P u < dot x u)
+    {r : ℝ × ℝ} (hr : r ∈ K) (hT : 0 ≤ ε * (dot r u - dot P u) + ε' * (dot r v - dot P v)) :
+    dot r v - dot P v ≤ ε := by
+  by_contra hb
+  push Not at hb
+  have hb0 : 0 < dot r v - dot P v := hε.trans hb
+  have ha : dot r u - dot P u ≤ 0 := sub_nonpos.2 (hle r hr)
+  -- the point `y = P + μ (r - P)`, with `μ = ε / b ∈ (0, 1)`, lies in `K` and has `b`-coordinate `ε`
+  set μ := ε / (dot r v - dot P v) with hμ
+  have hμ0 : 0 ≤ μ := div_nonneg hε.le hb0.le
+  have hμ1 : μ ≤ 1 := (div_le_one hb0).2 hb.le
+  have hμb : μ * (dot r v - dot P v) = ε := by rw [hμ]; field_simp
+  have hy : P + μ • (r - P) ∈ K := hKc.add_smul_sub_mem hP hr ⟨hμ0, hμ1⟩
+  have hyu : dot (P + μ • (r - P)) u = dot P u + μ * (dot r u - dot P u) := by
+    rw [dot_add_left, dot_smul_left, dot_sub_left]
+  have hyv : dot (P + μ • (r - P)) v = dot P v + ε := by
+    rw [dot_add_left, dot_smul_left, dot_sub_left, hμb]
+  -- its `a`-coordinate `μ a` lies in `[-ε', 0]`, since `ε a ≥ -ε' b`
+  have hμa : -ε' ≤ μ * (dot r u - dot P u) := by
+    have h1 : μ * (-(ε' * (dot r v - dot P v))) ≤ μ * (ε * (dot r u - dot P u)) :=
+      mul_le_mul_of_nonneg_left (by linarith) hμ0
+    have h2 : μ * (-(ε' * (dot r v - dot P v))) = -(ε' * (μ * (dot r v - dot P v))) := by ring
+    rw [h2, hμb] at h1
+    by_contra hcon
+    push Not at hcon
+    have h3 := mul_lt_mul_of_pos_left hcon hε
+    linarith
+  -- so `y` is a point of the segment from `p` to `q`, which misses `K`
+  have h := hseg _ hy hyv (by rw [hyu]; linarith)
+  rw [hyu] at h
+  linarith [mul_nonpos_of_nonneg_of_nonpos hμ0 ha]
+
+/-- The edges of `K` in directions close to `u` lie in the triangle of the paper's proof. Let the
+direction `c u + d v`, with `d > 0` and `d ε < c ε'`, turn from `u` towards `v` by less than the
+angle of `T` at `P`. A point `z ∈ K` that does at least as well as `P` in that direction is not
+beyond the line through `P` and `q`, where every point of `K` does worse than `P`; so `z ∈ H_T`,
+and `z ∈ T` by `cb_mem_triangle`. The points of `T` are within `ε'` of `P` in the direction `u`
+and within `ε` in the direction `v`. -/
+private lemma cb_better_mem_triangle {K : Set (ℝ × ℝ)} (hKc : Convex ℝ K) {u v P : ℝ × ℝ}
+    (hP : P ∈ K) (hle : ∀ x ∈ K, dot x u ≤ dot P u) {ε ε' : ℝ} (hε : 0 < ε) (hε' : 0 < ε')
+    (hseg : ∀ x ∈ K, dot x v = dot P v + ε → dot P u - ε' ≤ dot x u → dot P u < dot x u)
+    {c d : ℝ} (hd : 0 < d) (hcd : d * ε < c * ε') {z : ℝ × ℝ} (hz : z ∈ K)
+    (hzP : c * dot P u + d * dot P v ≤ c * dot z u + d * dot z v) :
+    |dot z u - dot P u| ≤ ε' ∧ |dot z v - dot P v| ≤ ε := by
+  have ha : dot z u - dot P u ≤ 0 := sub_nonpos.2 (hle z hz)
+  have hab : 0 ≤ c * (dot z u - dot P u) + d * (dot z v - dot P v) := by linarith
+  -- `z ∈ H_T`: if `ε a + ε' b < 0`, then `c a + d b ≥ 0` would force `a (c ε' - d ε) > 0`
+  have hT : 0 ≤ ε * (dot z u - dot P u) + ε' * (dot z v - dot P v) := by
+    by_contra h
+    push Not at h
+    nlinarith [mul_nonneg hε'.le hab, mul_neg_of_pos_of_neg hd h,
+      mul_nonpos_of_nonpos_of_nonneg ha (sub_nonneg.2 hcd.le)]
+  have hb := cb_mem_triangle hKc hP hle hε hseg hz hT
+  -- so `-ε' ≤ a ≤ 0` and `0 ≤ b ≤ ε`
+  have hb0 : 0 ≤ dot z v - dot P v := by nlinarith [mul_nonneg hε.le (neg_nonneg.2 ha)]
+  have ha0 : -ε' ≤ dot z u - dot P u := by nlinarith [mul_le_mul_of_nonneg_left hb hε'.le]
+  exact ⟨abs_le.2 ⟨ha0, by linarith⟩, abs_le.2 ⟨by linarith, hb⟩⟩
+
+/-- The core of Theorem `thm:limits-converging-to-vertex`, by the paper's `ε`-triangle, in an
+orthonormal frame `(u, v)`: `(u_t, v_t)` for the right limits and, by the symmetric argument,
+`(u_t, -v_t)` for the left limits. Let `P` be the point of the closed convex set `K` farthest in the
+direction `v` among those farthest in the direction `u`. If the points `w i ∈ K` do at least as well
+as `P` in the direction `c i • u + d i • v`, where `c i → 1` and `d i → 0⁺`, then `w i → P`. Given
+`ε > 0`, take the segment of `cb_segment`; eventually the direction turns from `u` by less than the
+angle of the triangle `T` at `P`, so `w i ∈ T` (`cb_better_mem_triangle`), and the points of `T` are
+within `ε` of `P` in both coordinates. -/
+private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hKcl : IsClosed K) (hKc : Convex ℝ K)
+    {u v P : ℝ × ℝ} (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
+    (huu : dot u u = 1) (hvu : dot v u = 0) (hvv : dot v v = 1)
     (hP : P ∈ K) (hle : ∀ x ∈ K, dot x u ≤ dot P u)
     (hmax : ∀ x ∈ K, dot x u = dot P u → dot x v ≤ dot P v)
     {ι : Type*} {l : Filter ι} {c d : ι → ℝ} {w : ι → ℝ × ℝ}
@@ -395,54 +523,35 @@ private lemma cb_tendsto_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P :
     (hwK : ∀ᶠ i in l, w i ∈ K)
     (hw : ∀ᶠ i in l, c i * dot P u + d i * dot P v ≤ c i * dot (w i) u + d i * dot (w i) v) :
     Tendsto w l (𝓝 P) := by
-  obtain ⟨R, hR⟩ : ∃ R, ∀ x ∈ K, |dot x v| ≤ R := by
-    obtain ⟨R, hR⟩ := hK.exists_bound_of_continuousOn (continuous_dot v).continuousOn
-    exact ⟨R, fun x hx => by simpa [Real.norm_eq_abs] using hR x hx⟩
-  have hc' : ∀ᶠ i in l, 1 / 2 < c i := hc.eventually (lt_mem_nhds (by norm_num))
-  -- the `u`-coordinate converges: `0 ≤ P · u - w · u ≤ 4 R d`
-  have ha : Tendsto (fun i => dot P u - dot (w i) u) l (𝓝 0) := by
-    have hup : Tendsto (fun i => 4 * R * d i) l (𝓝 0) := by simpa using hd.const_mul (4 * R)
-    refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hup ?_ ?_
-    · filter_upwards [hwK] with i hi
-      linarith [hle _ hi]
-    · filter_upwards [hwK, hw, hdpos, hc'] with i hi hwi hdi hci
-      have h1 := hle _ hi
-      have h2 : dot (w i) v - dot P v ≤ 2 * R := by
-        have h3 := hR _ hi
-        have h4 := hR _ hP
-        rw [abs_le] at h3 h4
-        linarith
-      nlinarith [mul_nonneg (sub_nonneg.2 hci.le) (sub_nonneg.2 h1),
-        mul_nonneg hdi.le (sub_nonneg.2 h2)]
-  -- the `v`-coordinate is eventually at least that of `P`
-  have hb : ∀ᶠ i in l, dot P v ≤ dot (w i) v := by
-    filter_upwards [hwK, hw, hdpos, hc'] with i hi hwi hdi hci
-    have h1 := hle _ hi
-    by_contra hcon
-    have hcon' := not_le.1 hcon
-    nlinarith [mul_nonneg (show (0 : ℝ) ≤ c i by linarith) (sub_nonneg.2 h1),
-      mul_pos hdi (sub_pos.2 hcon')]
-  apply hK.tendsto_nhds_of_unique_mapClusterPt hwK
-  intro q hqK hq
-  have hqu : dot q u = dot P u := by
-    have h1 : MapClusterPt (dot P u - dot q u) l (fun i => dot P u - dot (w i) u) :=
-      hq.continuousAt_comp (f := fun x => dot P u - dot x u)
-        (continuous_const.sub (continuous_dot u)).continuousAt
-    have h2 : ClusterPt (dot P u - dot q u) (𝓝 0) := h1.clusterPt.mono ha
-    have h3 : dot P u - dot q u = 0 := by
-      by_contra hne
-      exact clusterPt_iff_not_disjoint.1 h2 (disjoint_nhds_nhds.2 hne)
-    linarith
-  have hqv : dot P v ≤ dot q v :=
-    (isClosed_le continuous_const (continuous_dot v)).mem_of_mapClusterPt hq hb
-  have hqv' := hmax q hqK hqu
-  rw [huv q, huv P, hqu, le_antisymm hqv' hqv]
+  have key : ∀ ε > 0, ∀ᶠ i in l,
+      |dot (w i) u - dot P u| ≤ ε ∧ |dot (w i) v - dot P v| ≤ ε := by
+    intro ε hε
+    obtain ⟨ε', hε', hε'ε, hseg⟩ := cb_segment hKcl huv huu hvu hvv hmax hε
+    have hc' : ∀ᶠ i in l, 1 / 2 < c i := hc.eventually (lt_mem_nhds (by norm_num))
+    have hd' : ∀ᶠ i in l, d i < ε' / (2 * ε) := hd.eventually (gt_mem_nhds (by positivity))
+    filter_upwards [hc', hd', hdpos, hwK, hw] with i hci hdi hdi0 hwi hwi'
+    have hcd : d i * ε < c i * ε' := by
+      rw [lt_div_iff₀ (by positivity)] at hdi
+      nlinarith [mul_lt_mul_of_pos_right hci hε']
+    obtain ⟨h1, h2⟩ := cb_better_mem_triangle hKc hP hle hε hε' hseg hdi0 hcd hwi hwi'
+    exact ⟨h1.trans hε'ε, h2⟩
+  refine cb_tendsto_of_dot huv (Metric.tendsto_nhds.2 fun ε hε => ?_)
+    (Metric.tendsto_nhds.2 fun ε hε => ?_)
+  · filter_upwards [key (ε / 2) (half_pos hε)] with i hi
+    rw [Real.dist_eq]
+    linarith [hi.1]
+  · filter_upwards [key (ε / 2) (half_pos hε)] with i hi
+    rw [Real.dist_eq]
+    linarith [hi.2]
 
-/-- The support-function form of the core: if `F i = w i · (c i • u + d i • v)` is the support
-value in that direction, then `(F i - (P · u) c i) / d i → P · v`. This is the `v`-coordinate of the
-intersection of the two supporting lines. -/
-private lemma cb_coef_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : ℝ × ℝ}
-    (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
+/-- The intersection of the two supporting lines in the core's frame: if `F i = w i · (c i • u +
+d i • v)` is the support value in that direction, then `(F i - (P · u) c i) / d i → P · v`. This
+is the `v`-coordinate of the point where the line `x · (c i • u + d i • v) = F i` meets the line
+`x · u = P · u` through `P`. That point lies between `P` and `p`, as in the paper: it is not behind
+`P`, as `P ∈ K`, and not beyond `w i`, which lies in the triangle `T` and tends to `P`. -/
+private lemma cb_coef_core {K : Set (ℝ × ℝ)} (hKcl : IsClosed K) (hKc : Convex ℝ K)
+    {u v P : ℝ × ℝ} (huv : ∀ x : ℝ × ℝ, x = dot x u • u + dot x v • v)
+    (huu : dot u u = 1) (hvu : dot v u = 0) (hvv : dot v v = 1)
     (hP : P ∈ K) (hle : ∀ x ∈ K, dot x u ≤ dot P u)
     (hmax : ∀ x ∈ K, dot x u = dot P u → dot x v ≤ dot P v)
     {ι : Type*} {l : Filter ι} {c d F : ι → ℝ} {w : ι → ℝ × ℝ}
@@ -452,7 +561,7 @@ private lemma cb_coef_core {K : Set (ℝ × ℝ)} (hK : IsCompact K) {u v P : �
     (hFP : ∀ᶠ i in l, c i * dot P u + d i * dot P v ≤ F i) :
     Tendsto (fun i => (F i - dot P u * c i) / d i) l (𝓝 (dot P v)) := by
   have hw : Tendsto w l (𝓝 P) := by
-    refine cb_tendsto_core hK huv hP hle hmax hc hd hdpos hwK ?_
+    refine cb_tendsto_core hKcl hKc huv huu hvu hvv hP hle hmax hc hd hdpos hwK ?_
     filter_upwards [hF, hFP] with i h1 h2 using h1 ▸ h2
   have hwv : Tendsto (fun i => dot (w i) v) l (𝓝 (dot P v)) :=
     ((continuous_dot v).tendsto P).comp hw
@@ -490,33 +599,36 @@ private lemma cb_sin_pos_left (t : ℝ) : ∀ᶠ s in 𝓝[<] t, 0 < sin (t - s)
   filter_upwards [Ioo_mem_nhdsLT (show t - π < t by linarith [pi_pos])] with s hs
   exact sin_pos_of_pos_of_lt_pi (by linarith [hs.2]) (by linarith [hs.1])
 
-/-- Right limits for a compact set: every choice of points `w s ∈ e_K(s)` converges to `v_K⁺(t)` as
-`s → t⁺`. -/
-private lemma cb_tendsto_right {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ)
+/-- Right limits: every choice of points `w s ∈ e_K(s)` converges to `v_K⁺(t)` as `s → t⁺`. A point
+of `e_K(s)` does at least as well as `v_K⁺(t)` in the direction `u_s = cos (s - t) u_t +
+sin (s - t) v_t`. -/
+private lemma cb_tendsto_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ)
     {w : ℝ → ℝ × ℝ} (hw : ∀ s, w s ∈ edge K s) : Tendsto w (𝓝[>] t) (𝓝 (vplus K t)) := by
-  have hP := cb_vplus_mem_edge hK hne t
-  refine cb_tendsto_core hK (fun x => eq_dot_uvec_smul_add x t) hP.1
-    (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK hx t)
-    (fun x hx hxu => dot_le_dot_vplus hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
+  have hP := vplus_mem_edge hK t
+  refine cb_tendsto_core hK.isClosed hK.2.2 (fun x => eq_dot_uvec_smul_add x t)
+    (cb_dot_uvec_self t) (dot_vvec_uvec t) (cb_dot_vvec_self t) hP.1
+    (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK.2.1 hx t)
+    (fun x hx hxu => dot_le_dot_vplus hK.2.1 (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
     (cb_tendsto_cos_right t) (cb_tendsto_sin_right t) (cb_sin_pos_right t)
     (Eventually.of_forall fun s => (hw s).1) (Eventually.of_forall fun s => ?_)
   rw [← dot_uvec_eq_cos_add_sin, ← dot_uvec_eq_cos_add_sin, (hw s).2]
-  exact dot_le_supp hK hP.1 s
+  exact dot_le_supp hK.2.1 hP.1 s
 
-/-- Left limits for a compact set: every choice of points `w s ∈ e_K(s)` converges to `v_K⁻(t)` as
-`s → t⁻`. -/
-private lemma cb_tendsto_left {K : Set (ℝ × ℝ)} (hK : IsCompact K) (hne : K.Nonempty) (t : ℝ)
+/-- Left limits, by the symmetric argument in the frame `(u_t, -v_t)`: every choice of points
+`w s ∈ e_K(s)` converges to `v_K⁻(t)` as `s → t⁻`. -/
+private lemma cb_tendsto_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ)
     {w : ℝ → ℝ × ℝ} (hw : ∀ s, w s ∈ edge K s) : Tendsto w (𝓝[<] t) (𝓝 (vminus K t)) := by
-  have hP := cb_vminus_mem_edge hK hne t
-  refine cb_tendsto_core hK (fun x => cb_frame_left x t) hP.1
-    (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK hx t)
+  have hP := vminus_mem_edge hK t
+  refine cb_tendsto_core hK.isClosed hK.2.2 (fun x => cb_frame_left x t)
+    (cb_dot_uvec_self t) (cb_dot_neg_vvec_uvec t) (cb_dot_neg_vvec_self t) hP.1
+    (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK.2.1 hx t)
     (fun x hx hxu => by
       rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]
-      exact dot_vminus_le_dot hK (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
+      exact dot_vminus_le_dot hK.2.1 (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vminus_uvec]⟩))
     (cb_tendsto_cos_left t) (cb_tendsto_sin_left t) (cb_sin_pos_left t)
     (Eventually.of_forall fun s => (hw s).1) (Eventually.of_forall fun s => ?_)
   rw [← cb_dot_uvec_left, ← cb_dot_uvec_left, (hw s).2]
-  exact dot_le_supp hK hP.1 s
+  exact dot_le_supp hK.2.1 hP.1 s
 
 /-- The `v_t`-coordinate of `v_K(s, t)`, read off the two lines `l_K(s)` and `l_K(t)` through it:
 `v_K(s, t) · (-v_t) = (h(s) - h(t) cos (t - s)) / sin (t - s)` when `sin (t - s) ≠ 0`. -/
@@ -534,13 +646,13 @@ an angle `t`, the vertices `v_K^±(s)` and the intersections `v_K(t, s)` converg
 `s → t⁺`. In particular `v_K⁺` is right-continuous. -/
 theorem tendsto_vplus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vplus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
-  cb_tendsto_right hK.2.1 hK.1 t (vplus_mem_edge hK)
+  cb_tendsto_right hK t (vplus_mem_edge hK)
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits: `v_K⁻(s) → v_K⁺(t)` as
 `s → t⁺`. -/
 theorem tendsto_vminus_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vminus K) (𝓝[>] t) (𝓝 (vplus K t)) :=
-  cb_tendsto_right hK.2.1 hK.1 t (vminus_mem_edge hK)
+  cb_tendsto_right hK t (vminus_mem_edge hK)
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), right limits: `v_K(t, s) → v_K⁺(t)` as
 `s → t⁺`. -/
@@ -552,7 +664,8 @@ theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ
     exact (vint_mem_line_left K t s).symm
   · -- the `v_t`-coordinate `(h(s) - h(t) cos (s - t)) / sin (s - t)` of `v_K(t, s)`
     have hP := cb_vplus_mem_edge hK.2.1 hK.1 t
-    have h := cb_coef_core hK.2.1 (fun x => eq_dot_uvec_smul_add x t) hP.1
+    have h := cb_coef_core hK.isClosed hK.2.2 (fun x => eq_dot_uvec_smul_add x t)
+      (cb_dot_uvec_self t) (dot_vvec_uvec t) (cb_dot_vvec_self t) hP.1
       (fun x hx => by rw [dot_vplus_uvec]; exact dot_le_supp hK.2.1 hx t)
       (fun x hx hxu => dot_le_dot_vplus hK.2.1
         (mem_edge_iff.2 ⟨hx, by rw [hxu, dot_vplus_uvec]⟩))
@@ -571,13 +684,13 @@ theorem tendsto_vint_right {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ
 `s → t⁻`. -/
 theorem tendsto_vplus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vplus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
-  cb_tendsto_left hK.2.1 hK.1 t (vplus_mem_edge hK)
+  cb_tendsto_left hK t (vplus_mem_edge hK)
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K⁻(s) → v_K⁻(t)` as
 `s → t⁻`; so `v_K⁻` is left-continuous. -/
 theorem tendsto_vminus_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ) :
     Tendsto (vminus K) (𝓝[<] t) (𝓝 (vminus K t)) :=
-  cb_tendsto_left hK.2.1 hK.1 t (vminus_mem_edge hK)
+  cb_tendsto_left hK t (vminus_mem_edge hK)
 
 /-- **Theorem 2.1.3** (`thm:limits-converging-to-vertex`), left limits: `v_K(s, t) → v_K⁻(t)` as
 `s → t⁻`. -/
@@ -590,7 +703,8 @@ theorem tendsto_vint_left {K : Set (ℝ × ℝ)} (hK : IsConvexBody K) (t : ℝ)
     exact (vint_mem_line_right K hs.ne').symm
   · -- the `(-v_t)`-coordinate `(h(s) - h(t) cos (t - s)) / sin (t - s)` of `v_K(s, t)`
     have hP := cb_vminus_mem_edge hK.2.1 hK.1 t
-    have h := cb_coef_core hK.2.1 (fun x => cb_frame_left x t) hP.1
+    have h := cb_coef_core hK.isClosed hK.2.2 (fun x => cb_frame_left x t)
+      (cb_dot_uvec_self t) (cb_dot_neg_vvec_uvec t) (cb_dot_neg_vvec_self t) hP.1
       (fun x hx => by rw [dot_vminus_uvec]; exact dot_le_supp hK.2.1 hx t)
       (fun x hx hxu => by
         rw [dot_neg_right, dot_neg_right, neg_le_neg_iff]

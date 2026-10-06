@@ -9,13 +9,13 @@ was not recorded.
 
 - **Author and maintainer:** The-Anh Vu-Le, who asked for the formalization of Baek's paper and
   for each later round below, and decided the scope, the names and the publication.
-- **Formalization:** Claude Opus 5.5 (Anthropic, model `claude-opus-5-5`), in Claude Code 2.1.285
-  and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
-  documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
-  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
-  and on 5 and 6 October, in Claude Code 2.1.289, the merge of the second proof of optimality below,
-  the compilation of the stability proof, the compilation and completion of the coercive route, and the
-  simplification of the new libraries.
+- **Formalization:** Claude Opus 5.5 (Anthropic, model `claude-opus-5-5`), in Claude Code 2.1.285,
+  2.1.287 and 2.1.289, in five sessions: the Lean code of the three libraries, the audit of the paper, the
+  documents and the figures, and on 5 October the comparison of the formalizations below; on 4 October, as
+  sub-agents of the session that wrote the manuscript (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5),
+  the extension of the libraries below; and on 5 and 6 October, in another session of Claude Code 2.1.289, the
+  merge of the second proof of optimality below, the compilation of the stability proof, the compilation and
+  completion of the coercive route, the simplification of the new libraries, and the merge of this work into main.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
   Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
@@ -23,13 +23,14 @@ was not recorded.
   code (pull request #9).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
-  simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
+  simplification, version 1.4.0 for following Baek's proofs, and versions 2.1.0 and 2.1.1 for the later rounds.
 - **Review:** no person has reviewed the proofs; Lean's kernel checks every one of them. Independent
   agents checked the statements against the paper's LaTeX source before any proof was written, the
   audit's findings against the same source, the uniqueness statements against the informal
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
-  and the report's "What's next" section against its sources, the manuscript against the Lean
-  statements and proofs, and every repaired proof of the stability library against the draft's.
+  the report's "What's next" section against its sources, the comparison of the formalizations
+  against the three projects' sources, the manuscript against the Lean statements and proofs, and every
+  repaired proof of the stability library against the draft's.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -321,6 +322,43 @@ Figures, from 11:56 to 12:52:
 - model calls: 70 by the sub-agents (69 to `claude-opus-5-5`, 1 to `claude-haiku-4-5`) and 151 by the main session
   (`claude-opus-5-5`).
 
+## The comparison of the formalizations (5 October 2026)
+
+The owner asked for a deeper comparison between the formalizations of Baek's proof, and then for the
+changes that it suggested.
+
+How it was made:
+- 16:35 to 18:48: Claude Opus 5.5, in Claude Code 2.1.289. The coordinating agent searched GitHub,
+  Palomar's registry and the records of the Justin Sun Prize for Lean projects on the moving sofa
+  problem; cloned the two other formalizations of Baek's proof and six related projects; built the
+  two other formalizations and this repository at the commits compared; and measured the three with
+  the same scripts: the lines of code, the declarations that a user can name, those that the proof of
+  formal-conjectures' main statement uses, the axioms of the theorems that Comparator checks, and
+  the build times.
+- Six sub-agents, running at the same time, read the sources: one profile of each formalization, a
+  comparison of the statements and of what each asks a reader to trust, a map of the paper's 301
+  numbered environments onto the three, and a merged list of the errors that the three found in the
+  paper, checked against its LaTeX source. Two more sub-agents checked the new page against the
+  sources; the first found 18 problems and the second 16 more, all fixed. The result is
+  [`docs/formalizations.md`](docs/formalizations.md), which replaces the comparison table of [`docs/prior-work.md`](docs/prior-work.md).
+- From 22:02, at the owner's request, the changes. The comparison had found that Theorem 2.1.3 was
+  proved by compactness instead of by Baek's ε-triangle, a departure that the report's Section 7 did
+  not list; the proof now follows Baek's argument, and Chapter 2 of the text with it. The report's
+  status line and Section 9 now name the results that the formalization leaves out, item E17 notes
+  that the overview states f(0) = 1, and Section 10 gains O'Keefe's upper bounds for the ambidextrous
+  sofa and says how the findings of RuifengCao/sofa-formal compare with the audit's. The Challenge,
+  the README, the definitions page and [`formalization.yaml`](formalization.yaml) no longer call the Challenge's copy of
+  formal-conjectures verbatim: its docstrings are reworded, and the `ℝ²` notation and two instances are
+  declared in it. [`ChallengeDefs`](ChallengeDefs.lean) and the definitions and verification pages no longer say that
+  all the libraries use the constants of [`ChallengeDefs`](ChallengeDefs.lean).
+
+Figures, from 16:35 to 18:48 and from 22:02 to 22:17:
+- elapsed time: 2 hours 13 minutes and 15 minutes;
+- sub-agents: 8, all in the first part, at most 6 at once, about 4.3 hours of work;
+- tool calls: 1,367 by the sub-agents, 273 by the main session;
+- tokens of the sub-agents: 6.2 million input, 465 million cache reads (their transcripts record the output tokens only in part); of the main session: 0.38 million output, 1.7 million input, 131 million cache reads;
+- model calls: 1,319 by the sub-agents and 255 by the main session, all to `claude-opus-5-5`.
+
 ## The stability (5 October 2026)
 
 The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
@@ -363,8 +401,8 @@ formalize-math-paper skill the pitfall that the previous round had met.
 
 How it was made:
 - 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
-- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L401),
-  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L405),
+  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L415), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L425)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
   and, in [`Solution.lean`](Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
   the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
   [`formalization.yaml`](formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull

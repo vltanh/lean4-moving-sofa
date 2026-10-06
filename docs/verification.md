@@ -25,7 +25,7 @@ alone.
 - `lake build` must succeed, and its only warnings are the fifteen `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean), whose theorems are the statements of record.
 - [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the five libraries and of
-  [`SolutionCoercive.lean`](../SolutionCoercive.lean) (5,860 declarations), and of the theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
+  [`SolutionCoercive.lean`](../SolutionCoercive.lean) (5,868 declarations), and of the theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
   unproved lemma would add `sorryAx`, and `native_decide`, which trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
   uniqueness proof, each bridge theorem, the main stability theorems and the theorems of the coercive
@@ -63,8 +63,8 @@ alone.
   does not have exactly the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
-  import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
-  use the constants of [`ChallengeDefs`](../ChallengeDefs.lean).
+  import only Mathlib, and Comparator compares constants by name, so the Solution states its theorems
+  with the constants of [`ChallengeDefs`](../ChallengeDefs.lean), which the bridge library uses too.
 
 ## Comparator
 
