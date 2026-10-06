@@ -20,3 +20,9 @@ since.
   [`docs/coercive.md`](../coercive.md) replaced them. Their status lines ("no Lean compilation", "NOT RUN") and the
   phase 4 that they defer, moving the stability proof onto the route, describe the pull request before
   the compilation; that phase is now done.
+- [`maximizer-first/`](maximizer-first): the page on the second proof of optimality and the notes of pull request #5
+  (its review of the uncompiled draft and its plan for the manuscript), as they were before the simplification of
+  6 October 2026, with their links to the Lean code pinned to commit `6ed7657`. The three modules that they
+  describe, `Maximizers`, `Optimality` and `Alternative`, are now [`MovingSofaUniqueness/Maximizing.lean`](../../MovingSofaUniqueness/Maximizing.lean), shared with
+  the coercive route, and [`MovingSofaUniqueness/MaximizerRoute.lean`](../../MovingSofaUniqueness/MaximizerRoute.lean); [`docs/results.md`](../results.md) and
+  [`docs/verification.md`](../verification.md) describe them.

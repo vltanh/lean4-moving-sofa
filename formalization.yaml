@@ -255,7 +255,13 @@ automation:
         compiled ChatGPT Pro 6's Lean modules of pull request #9 (one proof failed), moved the
         stability proof onto the route, stated the certificate and the theorem that gives the three
         results together, extended the second solution to the fifteen statements, and rewrote and
-        ran its audit (scripts/AuditCoerciveRoute.lean, in CI).
+        ran its audit (scripts/AuditCoerciveRoute.lean, in CI). Simplifying the new libraries: the
+        same session gave the two new proofs of optimality one shared assembly, merged the 86 files
+        of the stability library into eleven modules and removed the declarations that no theorem
+        uses; 8 sub-agents (at most 8 running at once), each on its own copy of the build, then
+        rewrote the modules, keeping the name and statement of every declaration used elsewhere.
+        The stability library went from 12,550 to 7,585 lines; Baek's library, the bridge, the
+        Challenge and the proofs of Solution.lean did not change.
       cost:
         wall_time: >-
           Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization

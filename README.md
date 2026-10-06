@@ -209,7 +209,7 @@ Solution.lean             the proofs of the statements of record
 MovingSofaOptimality/     Baek's paper, one directory per chapter, with External/ for
                           the results it cites and Gerver/ for Gerver's sofa
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
-                          second proof of Baek's theorem (Maximizers, Optimality, Alternative)
+                          second proof of Baek's theorem (Maximizing, MaximizerRoute)
 MovingSofaBridge/         the bridge to formal-conjectures' definitions
 MovingSofaStability/      the stability of Gerver's sofa, and the punctured sofas that show
                           that its exponent is optimal
@@ -279,6 +279,9 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
 - ChatGPT Pro 6 also wrote, in Lean, the coercive route (pull request #9, 5 October 2026), without compiling
   it. Claude Opus 5.5 compiled it, moved the stability proof onto it, and stated the theorem that gives the three
   results together ([docs/coercive.md](docs/coercive.md)).
+- Claude Opus 5.5, with 8 sub-agents, then simplified the new libraries (6 October 2026): the two new proofs of
+  optimality share one assembly, the stability library went from 87 files to 12 and from 12,550 lines to 7,585,
+  and the formalization of Baek's paper and the connection with formal-conjectures did not change.
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
   rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

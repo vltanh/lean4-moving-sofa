@@ -73,49 +73,47 @@ and at small deficit it bounds the distance.
 
 ## The proof
 
-1. **Maximizing caps** (`Geometry`). A cap of maximal sofa area exists at every angle
-   (`MovingSofaExtremal.exists_maximizing_cap`, Baek's Theorems 3.5.5 and 3.5.6); a maximizing right-angle cap satisfies the
-   injectivity condition (`MovingSofaExtremal.isKi_of_maximizes`), through the curvature bounds of the uniqueness proof; and a
+1. **Maximizing caps** ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean)). A cap of maximal sofa area exists at every angle
+   ([`MovingSofaUniqueness.exists_maximizing_cap`](../MovingSofaUniqueness/Maximizing.lean#L44), Baek's Theorems 3.5.5 and 3.5.6); a maximizing right-angle cap satisfies the
+   injectivity condition ([`MovingSofaUniqueness.isKi_of_maximizes`](../MovingSofaUniqueness/Maximizing.lean#L61)), through the curvature bounds of the uniqueness proof; and a
    rotated copy of a maximizing monotone sofa of angle `ω < π/2` moves with the right angle
-   (`MovingSofaExtremal.maximizing_monotone_has_right_angle`).
-2. **The maximizing right-angle caps** (`CoerciveRigidity`, `HorizontalTranslation`). Their sofa area
-   and the value of `𝒬` at their canonical triple are `|G|` ([`MovingSofaExtremal.right_angle_maximizer_certificate`](../MovingSofaExtremal/Main.lean#L43)), and they are the
-   horizontal translates of Gerver's cap, with sofas the same translates of `G`
-   ([`MovingSofaExtremal.wide_zero_deficit_cap`](../MovingSofaExtremal/Main.lean#L34), [`MovingSofaExtremal.right_angle_maximizer_eq_gerver`](../MovingSofaExtremal/Main.lean#L64)).
-3. **Optimality** (`Optimality`): [`MovingSofaExtremal.gerver_sofa_optimal`](../MovingSofaExtremal/Main.lean#L107), through `MovingSofaExtremal.right_angle_area_le_gerver` and, for a sofa of area at
-   least 2.2 and its rotation angle from Baek's Theorem 1.5.1, `MovingSofaExtremal.area_le_gerver_of_large`.
-4. **Uniqueness** (`Uniqueness`): [`MovingSofaExtremal.image_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L121) and [`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L129), step by step as in
-   [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean), with the classification of step 2 in place of the equality
-   analysis of [`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean).
-5. **Stability** ([`MovingSofaStability`](../MovingSofaStability)). The sign of the deficit ([`MovingSofaStability.sofaDeficit_nonneg`](../MovingSofaStability/Global.lean#L32)) and the compactness
-   step ([`MovingSofaStability.maximizing_subsequence`](../MovingSofaStability/Global.lean#L377), [`MovingSofaStability.pinned_maximizer_eq_gerver`](../MovingSofaStability/Recovery.lean#L128)) use steps 3 and 4; the local estimate
+   ([`MovingSofaUniqueness.maximizing_monotone_has_right_angle`](../MovingSofaUniqueness/Maximizing.lean#L77)).
+2. **The maximizing right-angle caps** ([`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)). Their sofa area and the value of `𝒬` at their
+   canonical triple are `|G|` ([`MovingSofaExtremal.right_angle_maximizer_certificate`](../MovingSofaExtremal/Main.lean#L43)), and they are the horizontal translates of
+   Gerver's cap, with sofas the same translates of `G` ([`MovingSofaExtremal.wide_zero_deficit_cap`](../MovingSofaExtremal/Main.lean#L34),
+   [`MovingSofaExtremal.right_angle_maximizer_eq_gerver`](../MovingSofaExtremal/Main.lean#L64)).
+3. **Optimality and uniqueness** ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean), [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)). One assembly turns the value
+   and the shape of the maximizing right-angle caps into optimality and uniqueness, step by step as in
+   [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean): [`MovingSofaUniqueness.Maximizing.gerver_sofa_optimal`](../MovingSofaUniqueness/Maximizing.lean#L151) needs the value, and
+   [`MovingSofaUniqueness.Maximizing.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Maximizing.lean#L275) and [`MovingSofaUniqueness.Maximizing.translate_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Maximizing.lean#L287) need both. With step 2 they give
+   [`MovingSofaExtremal.gerver_sofa_optimal`](../MovingSofaExtremal/Main.lean#L107), [`MovingSofaExtremal.image_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L121) and [`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L129). The second
+   proof of optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)) uses the same assembly, with the value from Baek's
+   bound and the shape from the equality analysis of [`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean).
+4. **Stability** ([`MovingSofaStability`](../MovingSofaStability)). The sign of the deficit ([`MovingSofaStability.sofaDeficit_nonneg`](../MovingSofaStability/Global.lean#L32)) and the compactness
+   step ([`MovingSofaStability.maximizing_subsequence`](../MovingSofaStability/Global.lean#L377), [`MovingSofaStability.pinned_maximizer_eq_gerver`](../MovingSofaStability/Recovery.lean#L128)) use step 3; the local estimate
    ([`MovingSofaStability.nearby_cap_certificate`](../MovingSofaStability/LocalBound.lean#L756), [`MovingSofaStability.nearby_cap_distance`](../MovingSofaStability/LocalBound.lean#L783)) takes both bounds from the certificate, the distance with
    coefficient `2 / cos φ`, which the rest of the proof carries.
 
 ## What the route does not use
 
 [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) follows the proofs through the bodies of all repository declarations, private and
-generated ones included. It checks that none of the 958 declarations of [`MovingSofaExtremal`](../MovingSofaExtremal),
+generated ones included. It checks that none of the 743 declarations of [`MovingSofaExtremal`](../MovingSofaExtremal),
 [`MovingSofaStability`](../MovingSofaStability) and [`SolutionCoercive`](../SolutionCoercive.lean) reaches Baek's Theorem 1.1.1, the results of his balance argument
 (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6, Corollary 6.4.4 and Theorem 8.1.1 (2)), a
 declaration of the first proof of uniqueness ([`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean), [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean)) or of the second proof of
-optimality (`MovingSofaUniqueness.Maximizers`, `.Optimality`, `.Alternative`), or [`Solution`](../Solution.lean); that all use only the standard
-axioms; that the optimality and uniqueness of the route do not reach the stability theorem, which uses
-them; that the route uses the certificate where it should (twenty positive controls); and that the
-older proofs do reach what they are known to reach (eight negative controls, which show that the
-traversal sees proof bodies).
+optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or [`Solution`](../Solution.lean); that all use only the standard axioms; that the
+optimality and uniqueness of the route ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean), [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)) do not reach the stability proof
+after the certificate, which uses them; that the route uses the certificate where it should (twenty
+positive controls); and that the older proofs do reach what they are known to reach (eight negative
+controls, which show that the traversal sees proof bodies).
 
 The route shares the rest of Baek's paper: the reduction to monotone sofas and caps, the existence of
 maximizing caps, the injectivity condition, the bound `A(K) ≤ 𝒬(ξ_K)`, and the rotation angle of
 Theorem 1.5.1. It also shares the steps of the first proof of uniqueness that do not classify caps:
-the curvature bounds, the right-angle motion, and the recovery of the sofa from its area.
-
-Three modules prove again results of modules that the route must not import, so that the audit can
-exclude those modules whole: `MovingSofaExtremal/Geometry.lean` those of
-`MovingSofaUniqueness/Maximizers.lean` on maximizing caps,
-`MovingSofaExtremal/HorizontalTranslation.lean` and
-`MovingSofaStability/MamikonFoundation.lean` translation identities and Mamikon displacements of
-[`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean).
+the curvature bounds, the right-angle motion, and the recovery of the sofa from its area. The
+helpers that the first proof and the route both use are in neutral modules:
+[`MovingSofaUniqueness/Mamikon.lean`](../MovingSofaUniqueness/Mamikon.lean) (square integrals and Mamikon displacements) and
+[`MovingSofaUniqueness/Rigid.lean`](../MovingSofaUniqueness/Rigid.lean) (horizontal translates of caps, niches and sofas).
 
 ## A second solution of the Challenge
 
@@ -139,3 +137,8 @@ or from neutral modules, and its local estimate from the certificate; the packag
 three results; [`SolutionCoercive`](../SolutionCoercive.lean) covers the fifteen statements; and the audit was rewritten for the
 whole route and run. The pull request's notes, written before the compilation, are in
 [`docs/archive/coercive/`](archive/coercive).
+
+On 6 October 2026 the route was consolidated with the second proof of optimality: the maximizing caps
+and the assembly from them to optimality and uniqueness, which both proofs had repeated, are now one
+module ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean)); the helpers that the route restated from [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean) moved
+to neutral modules; and the route itself is two modules ([`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean), [`MovingSofaExtremal.Unified`](../MovingSofaExtremal/Unified.lean)).

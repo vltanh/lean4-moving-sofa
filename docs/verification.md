@@ -23,7 +23,7 @@ alone.
 - `lake build` must succeed, and its only warnings are the fifteen `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean), whose theorems are the statements of record.
 - [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the five libraries and of
-  [`SolutionCoercive.lean`](../SolutionCoercive.lean) (6,062 declarations), and of the theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
+  [`SolutionCoercive.lean`](../SolutionCoercive.lean) (5,860 declarations), and of the theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
   unproved lemma would add `sorryAx`, and `native_decide`, which trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
   uniqueness proof, each bridge theorem, the main stability theorems and the theorems of the coercive
@@ -40,20 +40,22 @@ alone.
   that the paper uses without citing it, a citation made only in passing, or a departure from the
   paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
 - [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks the second proof of Baek's optimality theorem, in
-  `MovingSofaUniqueness/Maximizers.lean`, `Optimality.lean` and `Alternative.lean` (a remark at the end of Section 8 of the
-  [manuscript](paper/README.md)). It fails if a declaration of these modules uses an axiom other than the three
+  [`MovingSofaUniqueness/Maximizing.lean`](../MovingSofaUniqueness/Maximizing.lean) and [`MovingSofaUniqueness/MaximizerRoute.lean`](../MovingSofaUniqueness/MaximizerRoute.lean) (a remark at the end of Section 8 of the
+  [manuscript](paper/README.md)), 35 declarations. It fails if a declaration of these modules uses an axiom other than the three
   standard ones, or if, following the proofs through the whole library without stopping at numbered results, it
   reaches Baek's Theorem 1.1.1, the results from which Baek derives the right-angle motion and the injectivity
   condition of Baek's cap from its balance (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6,
   Corollary 6.4.4 and Theorem 8.1.1 (2)), or a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean). Negative controls
   check that the traversal finds these results in the first proof.
 - [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks the coercive route ([the coercive route](coercive.md)): every declaration
-  of [`MovingSofaExtremal/`](../MovingSofaExtremal), [`MovingSofaStability/`](../MovingSofaStability) and [`SolutionCoercive.lean`](../SolutionCoercive.lean), 958 with the private and generated
+  of [`MovingSofaExtremal/`](../MovingSofaExtremal), [`MovingSofaStability/`](../MovingSofaStability) and [`SolutionCoercive.lean`](../SolutionCoercive.lean), 743 with the private and generated
   ones. It fails if one of them uses an axiom other than the three standard ones, or if, following the proofs
   through all the repository's declarations, it reaches Baek's Theorem 1.1.1, the results of his balance argument
   listed above, a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) or [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean) (the first proof of
-  uniqueness), of the three modules of the second proof of optimality, or of [`Solution.lean`](../Solution.lean). It also fails if
-  a declaration of the route's optimality and uniqueness reaches the modules of the stability proof that use them,
+  uniqueness), of the second proof of optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or of [`Solution.lean`](../Solution.lean). It also fails if
+  one of the 41 declarations of the route's optimality and uniqueness ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean),
+  [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)) reaches the stability proof after the certificate, which uses them
+  ([`MovingSofaStability.Margins`](../MovingSofaStability/Margins.lean) and the eleven modules that import it),
   if one of twenty positive controls is missing (for example, that the uniqueness reaches the certificate
   [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120)), if one of eight negative controls fails, or if a theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean)
   does not have the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.

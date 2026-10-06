@@ -14,7 +14,8 @@ was not recorded.
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
   (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
   and on 5 and 6 October, in Claude Code 2.1.289, the merge of the second proof of optimality below,
-  the compilation of the stability proof, and the compilation and completion of the coercive route.
+  the compilation of the stability proof, the compilation and completion of the coercive route, and the
+  simplification of the new libraries.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
   Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
@@ -440,3 +441,32 @@ Figures, from 09:56 to 13:22:
 - tokens of the sub-agents: 1.20 million output, 6.06 million input, 257 million cache reads; of the main
   session: 0.39 million output, 0.75 million input, 119 million cache reads;
 - model calls: 678 by the sub-agents and 261 by the main session, all to `claude-opus-5-5`.
+
+## Simplifying the new libraries (6 October 2026)
+
+The owner asked to simplify and consolidate the stability library and the other new code, keeping the
+formalization of Baek's paper and the connection with formal-conjectures intact, and then to rewrite the manuscript.
+
+How it was made:
+- From 13:25: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+  of the formalize-math-paper skill.
+- Commit `0b7978c` removes what the two new proofs of optimality repeated. Both turned the value and the shape of
+  the maximizing right-angle caps into optimality and uniqueness by the same steps; one assembly now does it
+  ([`MovingSofaUniqueness.Maximizing`](MovingSofaUniqueness/Maximizing.lean)), and each proof gives the two facts in its own way
+  ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean), from Baek's bound and the equality analysis; [`MovingSofaExtremal.Main`](MovingSofaExtremal/Main.lean), from
+  the certificate). The helpers that the coercive route had copied from [`MovingSofaUniqueness.Rigidity`](MovingSofaUniqueness/Rigidity.lean), so as not
+  to import it, moved to two modules that both proofs import ([`MovingSofaUniqueness.Mamikon`](MovingSofaUniqueness/Mamikon.lean), [`MovingSofaUniqueness.Rigid`](MovingSofaUniqueness/Rigid.lean)).
+- Commit `830b03d` merges the 86 files of the stability library, most of them 100 to 200 lines long and in one
+  chain of imports, into eleven modules, one for each step of the proof, and removes 74 declarations that no
+  theorem uses, among them the cap estimate with coefficient 80, which the proof no longer needs since it
+  carries the coefficient 2 sec φ.
+- Commit `5817473`: eight sub-agents, in parallel and each on its own copy of the build, rewrote the eleven
+  modules and the modules shared by the two proofs. A declaration that another module, a solution or an audit
+  uses kept its name and its statement, which a comparison of the elaborated types checked; the others could be
+  merged, restated or removed. The sub-agents merged repeated helpers, inlined helpers used once, and replaced
+  computations by hand with Mathlib lemmas.
+- The stability library went from 12,550 lines in 87 files to 7,585 lines in 12, and the coercive route from 661
+  lines in 7 files to 236 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
+  coercive route 743 instead of 958. Baek's library, the bridge, the Challenge, its definitions and the proofs of
+  [`Solution.lean`](Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
+  changed. The audits and the route check pass, and Comparator accepts the fifteen theorems.
