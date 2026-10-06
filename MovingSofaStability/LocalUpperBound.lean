@@ -1,7 +1,7 @@
 module
 
 public import MovingSofaStability.CoreAreaBound
-public import MovingSofaStability.CapDistance
+public import MovingSofaStability.CoerciveCertificate
 
 /-!
 # The local upper bound without Ki
@@ -10,9 +10,10 @@ Canonical-tail feasibility, cut separation, positive core height, and niche
 containment are proved on a common neighborhood of Gerver. The original
 three-region argument then gives A <= Q there.
 
-The cap-distance coefficient used in the present Lean source is 80. It is
-not the sharp 2 sec(phi) coefficient of the analytic notes; no sharp constant
-is needed for the unrestricted existence theorem.
+Both remaining bounds come from the coercive certificate (`coercive_certificate`):
+`𝒬 ≤ |G|` at the canonical triple, and the cap distance with coefficient
+`2 / cos φ`, weakened to 80 (`nearby_cap_distance`), the coefficient that the rest of
+the stability proof uses.
 -/
 
 @[expose] public section
@@ -101,8 +102,7 @@ theorem nearby_cap_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.
   have hn := hN K hK (hclose.mono dN)
   have ha := separated_upperQ_bound hbox.1 hK (nearby_bottomWidth hP hbox (hclose.mono dW)) ht
     (hA K hK (hclose.mono dA)) hc (hS K hK (hclose.mono dS)) (hH K (hclose.mono dH)) hn
-  have hq := wideUpperQ_le_gerver hP hbox (canonicalWideTriple ht)
-  rw [wideGerver_value] at hq
+  have hq := (coercive_certificate hP hbox (canonicalWideTriple ht)).1
   exact ⟨ht, hn, ha, hq⟩
 
 /-- Local cap stability in the original area functional, now without Ki. -/
@@ -116,11 +116,12 @@ theorem nearby_cap_distance {P : GerverParams} (hP : P.IsSolution) (hbox : P.InB
   refine ⟨δ, hδ, hδ1, ?_⟩
   intro K hK hclose
   obtain ⟨ht, hn, ha, hq⟩ := hcert K hK hclose
-  have hd := wide_cap_distance_bound hP hbox (canonicalWideTriple ht)
-  have hrad : 80 * sqrt (area (gerverSofa P) - upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K)) ≤
-      80 * sqrt (area (gerverSofa P) - sofaArea (π / 2) K) := by
-    apply mul_le_mul_of_nonneg_left (Real.sqrt_le_sqrt (sub_le_sub_left ha _))
-    norm_num
+  have hd := (coercive_certificate hP hbox (canonicalWideTriple ht)).2
+  have hc80 : 2 / cos P.φ ≤ 80 := by linarith [(cap_constant_lt_2002 hbox.1).2]
+  have hrad : (2 / cos P.φ) *
+        sqrt (area (gerverSofa P) - upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K)) ≤
+      80 * sqrt (area (gerverSofa P) - sofaArea (π / 2) K) :=
+    mul_le_mul hc80 (Real.sqrt_le_sqrt (sub_le_sub_left ha _)) (sqrt_nonneg _) (by norm_num)
   exact ⟨hn, ha.trans hq, hd.mono hrad⟩
 
 end MovingSofaStability

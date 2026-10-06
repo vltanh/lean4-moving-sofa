@@ -480,7 +480,7 @@ $\mathcal{Q}$ forces equality in each of the three. $\square$
 
 *Lean: [`ki_maximizer_equality_conditions`](../../MovingSofaUniqueness/Rigidity.lean#L798), [`ki_upperQL_eq_gerver_of_sofaArea_eq`](../../MovingSofaUniqueness/Rigidity.lean#L783),
 [`MovingSofaOptimality.ConvexDomain.eq_on_segment_of_isMax`](../../MovingSofaUniqueness/Rigidity.lean#L247), [`mamikonSegmentEquality_iff`](../../MovingSofaUniqueness/Rigidity.lean#L690),
-[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L680), [`kiExtensionTriple`](../../MovingSofaUniqueness/Rigidity.lean#L776).*
+[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L680), [`MovingSofaUniqueness.kiExtensionTriple`](../../MovingSofaUniqueness/Rigidity.lean#L776).*
 
 ### Lemma 12.15 (equality in one Mamikon term)
 
@@ -515,7 +515,7 @@ $f(t) = f(T)\cos(T - t) + C\sin(T - t)$ on $(a, b)$, and by continuity on $[a, b
 take $\mathbf{z} = \mathbf{y}$: $\alpha(t) = h(t + \pi/2) - h'(t)$, so $f'(t) = f(t + \pi/2)$, which
 integrates to the stated form. $\square$
 
-*Lean: [`halfSquareIntegral_combo_gap`](../../MovingSofaUniqueness/Rigidity.lean#L55), [`halfSquareIntegral_combo_eq_iff`](../../MovingSofaUniqueness/Rigidity.lean#L91),
+*Lean: [`MovingSofaUniqueness.halfSquareIntegral_combo_gap`](../../MovingSofaUniqueness/Rigidity.lean#L55), [`halfSquareIntegral_combo_eq_iff`](../../MovingSofaUniqueness/Rigidity.lean#L91),
 [`displacement_eqOn_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L369), [`tangentKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L560), [`middleKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L612),
 [`tangentKernel_of_equation`](../../MovingSofaUniqueness/Rigidity.lean#L471), [`integrated_middle_equation`](../../MovingSofaUniqueness/Rigidity.lean#L527).*
 
@@ -696,8 +696,8 @@ $\square$
 
 Both hypotheses on $Y$ are needed (Figure 12.7).
 
-*Lean: [`eq_of_subset_of_measure_eq`](../../MovingSofaUniqueness/Rigid.lean#L54), [`eq_of_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L47),
-[`interior_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L38), [`Rigid.recover`](../../MovingSofaUniqueness/Rigid.lean#L180).*
+*Lean: [`eq_of_subset_of_measure_eq`](../../MovingSofaUniqueness/Rigid.lean#L57), [`eq_of_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L50),
+[`interior_subset_of_null_sdiff`](../../MovingSofaUniqueness/Rigid.lean#L41), [`Rigid.recover`](../../MovingSofaUniqueness/Rigid.lean#L183).*
 
 ![Left: a unit square E filled blue with a segment of length one attached to its lower right corner, labelled hair. Right: Gerver's sofa filled blue with a small dashed orange circle around an interior point q, inside which the sofa is removed](figures/12-uniqueness/recovery.svg)
 
@@ -740,7 +740,7 @@ R_a(S + v_0) + v_1 \subseteq R_a T + v_1 \subseteq U = G + (b, 0) ,
 
 and $g(p) = R_a p + R_a v_0 + v_1 - (b, 0)$ maps $S$ into $G$. $\square$
 
-*Lean: [`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L199), [`Rigid.trans`](../../MovingSofaUniqueness/Rigid.lean#L101).*
+*Lean: [`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`maximal_envelope`](../../MovingSofaUniqueness/Main.lean#L199), [`Rigid.trans`](../../MovingSofaUniqueness/Rigid.lean#L104).*
 
 *Proof of Theorem 12.1.* Let $S$ be a moving sofa with $|S| = |G|$, and $g$ the rigid map of
 Proposition 12.25, with $g(S) \subseteq G$. The set $g(S)$ is closed, since $S$ is closed by the
@@ -748,7 +748,7 @@ definition of a moving sofa and $g$ is a homeomorphism; $|g(S)| = |S| = |G|$, si
 area; $|G|$ is finite; and $G$ is the closure of its interior (Proposition 12.22). By Lemma 12.23,
 $g(S) = G$, and writing $g(p) = R_\theta p + v$ gives the theorem. $\square$
 
-*Lean: [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301), [`Rigid.volume_image`](../../MovingSofaUniqueness/Rigid.lean#L168), [`Rigid.isClosed_image`](../../MovingSofaUniqueness/Rigid.lean#L161),
+*Lean: [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301), [`Rigid.volume_image`](../../MovingSofaUniqueness/Rigid.lean#L171), [`Rigid.isClosed_image`](../../MovingSofaUniqueness/Rigid.lean#L164),
 [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L369), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L391).*
 
 The Challenge's [`Baek.gerver_sofa_unique`](../../Challenge.lean#L391) states the theorem with the definitions of Baek's paper
@@ -838,9 +838,9 @@ $\psi + \pi/2 \in (\pi/2, \pi)$, and this contradicts Lemma 12.27. So $\psi = 0$
 translation by $w$. Gerver's sofa moves with rotation angle $\pi/2$, and so does its translate
 $S$. $\square$
 
-*Lean: [`translate_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L364), [`isMovingSofaWithAngle_pi_div_two_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L396),
-[`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`snd_sub_le_one_of_isMovingSofa`](../../MovingSofaUniqueness/Main.lean#L332),
-[`dot_sub_vvec_le_one_of_mem_image`](../../MovingSofaUniqueness/Main.lean#L347), [`Rigid.eq_translate_of_angle_eq_zero`](../../MovingSofaUniqueness/Rigid.lean#L153).*
+*Lean: [`translate_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L336), [`isMovingSofaWithAngle_pi_div_two_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L368),
+[`maximizer_contained_in_gerver`](../../MovingSofaUniqueness/Main.lean#L262), [`snd_sub_le_one_of_isMovingSofa`](../../MovingSofaUniqueness/Rigid.lean#L192),
+[`dot_sub_vvec_le_one_of_mem_image`](../../MovingSofaUniqueness/Rigid.lean#L207), [`Rigid.eq_translate_of_angle_eq_zero`](../../MovingSofaUniqueness/Rigid.lean#L156).*
 
 ### Remark 12.29 (rotated copies of Gerver's sofa)
 
@@ -853,6 +853,6 @@ not one. So not every rigid image of $G$ is a moving sofa, and the moving sofas 
 the moving sofas that a rigid map takes onto $G$ (Theorem 12.1), all of them translates of $G$
 (Theorem 12.28).
 
-*Lean: [`sin_eq_zero_of_rot_gerver_mem_horizSide`](../../MovingSofaUniqueness/Main.lean#L410), [`sin_eq_zero_of_isMovingSofa_rot_gerver`](../../MovingSofaUniqueness/Main.lean#L424),
-[`not_isMovingSofa_rot_pi_div_two_gerver`](../../MovingSofaUniqueness/Main.lean#L433), [`fst_eq_zero_of_gerver_width_le_one`](../../MovingSofaUniqueness/RegularClosed.lean#L505),
+*Lean: [`sin_eq_zero_of_rot_gerver_mem_horizSide`](../../MovingSofaUniqueness/Main.lean#L382), [`sin_eq_zero_of_isMovingSofa_rot_gerver`](../../MovingSofaUniqueness/Main.lean#L396),
+[`not_isMovingSofa_rot_pi_div_two_gerver`](../../MovingSofaUniqueness/Main.lean#L405), [`fst_eq_zero_of_gerver_width_le_one`](../../MovingSofaUniqueness/RegularClosed.lean#L505),
 [`isMaximal_iff_image_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L316).*

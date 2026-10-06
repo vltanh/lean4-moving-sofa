@@ -327,34 +327,6 @@ theorem isMaximal_iff_image_eq_gerver {P : GerverParams} (hP : P.IsSolution) (hb
 
 /-! ## No rotation is needed (`cor:translate` of the manuscript) -/
 
-/-- A moving sofa lies in a horizontal strip of height one: its translate at the start of its
-movement lies in the horizontal side `H_L = (-∞, 1] × [0, 1]` of the hallway. -/
-theorem snd_sub_le_one_of_isMovingSofa {S : Set Plane}
-    (hS : MovingSofaOptimality.IsMovingSofa S) {p q : Plane} (hp : p ∈ S) (hq : q ∈ S) :
-    p.2 - q.2 ≤ 1 := by
-  obtain ⟨ω, -, -, θ, c, hm⟩ := hS
-  have hp' := hm.start p hp
-  have hq' := hm.start q hq
-  rw [hm.angle_zero, rot_zero] at hp' hq'
-  obtain ⟨-, -, hp1⟩ := hp'
-  obtain ⟨-, hq0, -⟩ := hq'
-  simp only [Prod.snd_add] at hp1 hq0
-  linarith
-
-/-- If a rigid map `g` of angle `θ` takes a moving sofa `S` onto a set containing `x` and `y`, then
-`(x - y) · v_θ ≤ 1`: the image of `S` has width at most one in the direction
-`v_θ = u_{θ + π/2}`, the image of the vertical direction under `R_θ`. -/
-theorem dot_sub_vvec_le_one_of_mem_image {S : Set Plane}
-    (hS : MovingSofaOptimality.IsMovingSofa S) (g : Rigid) {x y : Plane} (hx : x ∈ g '' S)
-    (hy : y ∈ g '' S) : dot (x - y) (vvec g.angle) ≤ 1 := by
-  obtain ⟨p, hp, rfl⟩ := hx
-  obtain ⟨q, hq, rfl⟩ := hy
-  have he : g p - g q = rot g.angle (p - q) := by
-    change rot g.angle p + g.shift - (rot g.angle q + g.shift) = rot g.angle (p - q)
-    ext <;> simp only [rot, Prod.fst_add, Prod.snd_add, Prod.fst_sub, Prod.snd_sub] <;> ring
-  rw [he, dot_rot_vvec_eq_snd, Prod.snd_sub]
-  exact snd_sub_le_one_of_isMovingSofa hS hp hq
-
 /-- **No rotation is needed** (`cor:translate` of the manuscript `docs/paper`): every
 moving sofa with the area of Gerver's sofa is a translate of Gerver's sofa. The rigid map `g` of
 the proof of the theorem maps `S` onto `G` and turns by `ψ ∈ [0, π/2 - arcsec(11/5)]`

@@ -82,6 +82,19 @@ sources:
       is optimal. They have not been peer reviewed. The formalization (MovingSofaStability/) proves
       their theorems; docs/stability.md describes it.
     author_endorsement: n/a
+  - title: "The coercive route: notes"
+    id: "docs/archive/coercive/"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/tree/8042bad7eb08037f773ea03a635d10ff203e57de/docs/coercive-extremal"
+    relationship: formalizes
+    note: >-
+      Notes on a proof of optimality and uniqueness from the certificate of the stability proof,
+      written by ChatGPT Pro 6 (OpenAI) on 2026-10-05 at the request of The-Anh Vu-Le, with
+      uncompiled Lean code for them, in pull request #9; they are kept as they were in
+      docs/archive/coercive/. They have not been peer reviewed. The formalization
+      (MovingSofaExtremal/, SolutionCoercive.lean) proves their theorems and moves the stability
+      proof onto the route; docs/coercive.md describes it.
+    author_endorsement: n/a
   - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
     authors:
       - "Dan Romik"
@@ -176,7 +189,12 @@ status:
     sofa (MovingSofaStability/), with the theorems of notes 08, 01 and 09 of docs/archive/stability/:
     the rate sqrt(epsilon) for the Euclidean Hausdorff distance and the symmetric difference after a
     translation, the rate epsilon for the rotation angle, the cap estimate with coefficient 2 sec phi,
-    and the optimality of the exponent 1/2. Also formalized: the bridge between
+    and the optimality of the exponent 1/2. Also formalized: a proof of the optimality and of the
+    uniqueness from one estimate of the stability proof (MovingSofaExtremal/, docs/archive/coercive/),
+    which uses neither Baek's Theorem 1.1.1 nor the results of his balance argument nor the first
+    proof of uniqueness, and from which the stability proof now takes its uniqueness; a second
+    solution (SolutionCoercive.lean) proves the fifteen statements of the Challenge through it. Also
+    formalized: the bridge between
     formal-conjectures' definitions and Baek's (MovingSofaBridge/): the two notions of moving sofa,
     the two optimal areas and the two Gerver's sofas agree, and Gerver's four constants are unique on
     their whole domain; formal-conjectures' four statements follow.
@@ -233,7 +251,11 @@ automation:
         sub-agents starting from the draft's proofs, and a seventeenth compared every repaired proof
         with the draft's. Twenty lemmas were false as compiled, because Lean 4 leaves out of a
         statement the section variables it does not mention; their hypotheses are now included.
-        The Challenge then gained the three stability theorems.
+        The Challenge then gained the three stability theorems. The coercive route: the same session
+        compiled ChatGPT Pro 6's Lean modules of pull request #9 (one proof failed), moved the
+        stability proof onto the route, stated the certificate and the theorem that gives the three
+        results together, extended the second solution to the fifteen statements, and rewrote and
+        ran its audit (scripts/AuditCoerciveRoute.lean, in CI).
       cost:
         wall_time: >-
           Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
@@ -268,7 +290,9 @@ automation:
         every departure to be reported, bring this formalization in line with them. For What's next,
         two approvals: to run Palomar's preflight, and to bring the formalization in line with the
         skill's later versions. For the stability, one instruction to incorporate pull request #8,
-        then approvals to state its theorems in the Challenge and in the manuscript.
+        then approvals to state its theorems in the Challenge and in the manuscript. For the
+        coercive route, one instruction to integrate pull request #9 so that one theorem proves
+        optimality, uniqueness and stability.
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
@@ -280,7 +304,8 @@ automation:
         did not. On 2026-10-05 it wrote the Lean modules of a second proof of optimality (pull request
         #5), which compiled without change, and the stability argument (docs/archive/stability/) with
         85 Lean modules (pull request #8), of which 123 proofs did not compile and twenty statements
-        had lost their hypotheses.
+        had lost their hypotheses, and the coercive route (pull request #9: 7 Lean modules, a second
+        solution and an audit), of which one proof did not compile.
       cost:
         wall_time: "about 7 hours 40 minutes between the first and the last commit of pull request #1"
         spend_usd: "not tracked"
@@ -290,7 +315,7 @@ automation:
     Claude Opus 5.5 in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this
     repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro 6, and
     Claude Opus 5.5 made the draft compile and completed it; the same holds for the stability
-    argument and its Lean code.
+    argument and for the coercive route, with their Lean code.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
     pair.

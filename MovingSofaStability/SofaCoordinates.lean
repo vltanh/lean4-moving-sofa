@@ -123,14 +123,15 @@ theorem volume_eq_of_area_eq {S T : Set Point}
   have h := congrArg ENNReal.ofReal he
   simpa only [area, ENNReal.ofReal_toReal hS, ENNReal.ofReal_toReal hT] using h
 
-/-- In the pinned frame, the existing uniqueness theorem identifies an exact maximizer. -/
+/-- In the pinned frame, a moving sofa of area `|G|` is Gerver's sofa: it is a translate of `G`
+(`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`), and the two supports fix the translation. -/
 theorem pinned_maximizer_eq_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Point} (hS : IsMovingSofa S) (htop : supp S (π / 2) = 1)
     (hleft : supp S π = supp (gerverSofa P) π) (harea : area S = area (gerverSofa P)) :
     S = gerverSofa P := by
   have hcompact := isCompact_of_isMovingSofa hS
   have hne := hS.choose_spec.2.1.nonempty
-  obtain ⟨w, hw⟩ := translate_eq_gerver_of_volume_eq hP hbox hS
+  obtain ⟨w, hw⟩ := MovingSofaExtremal.translate_eq_gerver_of_volume_eq hP hbox hS
     (volume_eq_of_area_eq hcompact.measure_lt_top.ne (gerverSofa_volume_ne_top hP hbox) harea)
   have hv := congrArg (fun T => supp T (π / 2)) hw
   have hl := congrArg (fun T => supp T π) hw

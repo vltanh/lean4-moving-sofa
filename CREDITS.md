@@ -13,12 +13,13 @@ was not recorded.
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
   (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
-  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below and
-  the compilation of the stability proof.
+  and on 5 and 6 October, in Claude Code 2.1.289, the merge of the second proof of optimality below,
+  the compilation of the stability proof, and the compilation and completion of the coercive route.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
-  Lean modules of a second proof of Baek's theorem (pull request #5), and the stability argument
-  with its uncompiled Lean code (pull request #8).
+  Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
+  with its uncompiled Lean code (pull request #8), and the coercive route with its uncompiled Lean
+  code (pull request #9).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
   simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
@@ -264,7 +265,7 @@ everywhere else.
 How it was made:
 - 11:48 to 14:15: Claude Sonnet 5.5, in Claude Code 2.1.289, the session that wrote the manuscript, coordinated
   sub-agents running Claude Opus 5.5.
-- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L85)): a right-angle cap
+- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L88)): a right-angle cap
   has the sofa area of Gerver's sofa if and only if it is a horizontal translate of Gerver's cap; the maximal
   sofas are the moving sofas that a rigid map takes onto Gerver's sofa; the width of Gerver's sofa exceeds one in
   every direction but the vertical, so that no rotation is needed and a rotated copy of Gerver's sofa moves only if

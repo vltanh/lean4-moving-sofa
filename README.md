@@ -12,7 +12,7 @@ rigid motions, and that shapes of nearly the largest area are close to it:
   ([arXiv:2411.19826v1](https://arxiv.org/abs/2411.19826v1)), with the results it takes from the literature and the
   structure of Gerver's sofa (Theorem 8.4.1), which the paper states without proof;
 - **uniqueness:** every moving sofa with the area of Gerver's sofa is mapped onto it by a rotation
-  and a translation (a translation suffices: [`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L364)).
+  and a translation (a translation suffices: [`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](MovingSofaUniqueness/Main.lean#L336)).
   Baek's paper does not prove this, and Google DeepMind's formal-conjectures lists it as open. The argument was written by ChatGPT Pro 6 for this repository and has not been peer
   reviewed;
 - **a second proof of optimality:** the uniqueness argument proves, for every cap of maximal sofa area, the two
@@ -24,6 +24,12 @@ rigid motions, and that shapes of nearly the largest area are close to it:
   is at most `C'√ε`; the exponent 1/2 cannot be improved ([docs/stability.md](docs/stability.md)). Baek's paper does
   not prove this either. The argument and its Lean code were written by ChatGPT Pro 6 for this repository (pull
   request #8), compiled here, and have not been peer reviewed;
+- **one certificate for all three:** an estimate from the stability proof bounds Baek's upper bound by the area of
+  Gerver's sofa and bounds the distance from a cap to Gerver's cap by the gap. It proves the optimality and the
+  uniqueness again, without Baek's Theorem 1.1.1, his balance argument, or the equality analysis of the first proof
+  of uniqueness, and the stability proof takes its uniqueness from it, so that one theorem states the three results
+  ([docs/coercive.md](docs/coercive.md)). ChatGPT Pro 6 wrote this route (pull request #9) without compiling it; it was
+  compiled and completed here, and has not been peer reviewed;
 - **the bridge to formal-conjectures:** formal-conjectures states the problem with definitions of its
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
   Baek's. Its statements, the open one included, follow from the optimality and the uniqueness.
@@ -107,7 +113,8 @@ theorem FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerver
 - In `FormalConjectures.MovingSofa`: formal-conjectures' four statements, among them the open one
   above, derived from the theorems of `Baek` and `Bridge`.
 
-[docs/stability.md](docs/stability.md) states the stability theorems with the library's own forms.
+[docs/stability.md](docs/stability.md) states the stability theorems with the library's own forms. [`SolutionCoercive.lean`](SolutionCoercive.lean) proves the fifteen
+theorems again through the coercive route ([docs/coercive.md](docs/coercive.md)).
 
 ## Proof outline
 
@@ -132,6 +139,11 @@ declarations: [docs/proof/](docs/proof/README.md).
   Gerver's sofa a local form of Baek's area bound holds without the injectivity condition, a missing final
   angle costs area, and the margins and interior balls of Gerver's sofa carry these bounds from the cap to the
   sofa itself. Compactness and the uniqueness bring every sofa of small deficit into that neighborhood.
+- **One certificate** ([docs/coercive.md](docs/coercive.md)). On the enlarged domain of the stability proof, Baek's bound 𝒬 is
+  at most the area of Gerver's sofa, and the gap bounds the distance from the cap to a translate of Gerver's cap. A
+  cap of maximal sofa area has 𝒬 at least the area of Gerver's sofa, as Gerver's cap competes with it; so the gap is
+  zero, which bounds the maximum and makes the cap a translate of Gerver's. The reductions of Baek's proof and of the
+  first uniqueness proof then give optimality and uniqueness, and at small deficit the same estimate gives stability.
 - **The bridge** ([Chapter 13](docs/proof/13-bridge.md), [Appendix A](docs/proof/appendix-a.md)). A continuous path of isometries
   from the identity consists of rotations whose angle lifts to a continuous function, which matches
   the two notions of moving sofa. Gerver's four constants are unique by elementary inequalities; they
@@ -201,6 +213,8 @@ MovingSofaUniqueness/     the uniqueness, one module per step of the argument, a
 MovingSofaBridge/         the bridge to formal-conjectures' definitions
 MovingSofaStability/      the stability of Gerver's sofa, and the punctured sofas that show
                           that its exponent is optimal
+MovingSofaExtremal/       the coercive route: optimality and uniqueness from one certificate
+SolutionCoercive.lean     the statements of record, proved again through the coercive route
 REPORT.md                 the audit of Baek's paper
 docs/                     these pages, the illustrated text (docs/proof/), the
                           manuscript (docs/paper/) and the archived notes of the
@@ -218,17 +232,19 @@ lake build
 lake env lean scripts/Audit.lean
 python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
 lake env lean scripts/AuditMaximizerRoute.lean
+lake env lean scripts/AuditCoerciveRoute.lean
 lake env lake comparator --config=comparator.json
 ```
 
 The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean-toolchain) and [`lake-manifest.json`](lake-manifest.json).
 `lake build` succeeds, and its only `sorry`s are the fifteen statements of [`Challenge.lean`](Challenge.lean). The audit
-checks that every declaration of the four libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
+checks that every declaration of the libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
 results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
-that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). A second audit checks that the second proof
-of Baek's theorem does not use Baek's Theorem 1.1.1. GitHub Actions builds the project, runs the two audits and the
-route check, and checks the documentation on every push.
+that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). Two more audits check that the second proof
+of Baek's theorem does not use Baek's Theorem 1.1.1, and that the coercive route and the stability proof use neither
+that theorem, nor Baek's balance argument, nor the first proof of uniqueness. GitHub Actions builds the project, runs
+the three audits and the route check, and checks the documentation on every push.
 
 ## Palomar registry
 
@@ -260,6 +276,9 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
 - ChatGPT Pro 6 also wrote the stability argument and its Lean code, without compiling it (pull request
   #8, 5 October 2026). Claude Opus 5.5, with 16 sub-agents, made the code compile: 123 of its proofs
   failed, and twenty of its lemmas had lost their hypotheses ([docs/stability.md](docs/stability.md)).
+- ChatGPT Pro 6 also wrote, in Lean, the coercive route (pull request #9, 5 October 2026), without compiling
+  it. Claude Opus 5.5 compiled it, moved the stability proof onto it, and stated the theorem that gives the three
+  results together ([docs/coercive.md](docs/coercive.md)).
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
   rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

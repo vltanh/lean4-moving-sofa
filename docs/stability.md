@@ -6,7 +6,10 @@ A moving sofa whose area is close to the maximum is close to Gerver's sofa. The 
 [`MovingSofaStability/`](../MovingSofaStability) proves this with the rate √ε, where ε is the missing area, and proves that the
 rate of the Hausdorff distance cannot be improved. The argument and the Lean code were written by ChatGPT Pro 6
 (pull request #8) and compiled here; no person has reviewed the argument, and Lean's kernel checks
-every proof ([verification](verification.md)). Baek's paper does not contain these results.
+every proof ([verification](verification.md)). Baek's paper does not contain these results. The proof takes the
+optimality and the uniqueness of Gerver's sofa from the coercive route, which derives them from the
+same estimate as the local step below ([the coercive route](coercive.md)), so that it uses neither Baek's
+Theorem 1.1.1 nor the first proof of uniqueness.
 
 Throughout, `P` is the solution of Romik's system in the box (`P.IsSolution`, `P.InBox`), `G` is
 Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and areas are Baek's
@@ -116,8 +119,10 @@ the deficit of Baek's upper bound `𝒬`, for every triple of the enlarged domai
 the proof of stability uses. Note 01 of the archive argues that `2 sec φ` is the best constant in the
 space of residuals; that is not proved in Lean, and no claim is made that it is the best constant
 over feasible caps or after optimizing the translation. Nor is it the constant of the stability
-theorem, whose proof uses the cap estimate with the non-sharp coefficient 80
-([`MovingSofaStability.wide_cap_distance_bound`](../MovingSofaStability/CapDistance.lean#L121)).
+theorem: its proof takes the cap estimate from the coercive certificate
+[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) ([the coercive route](coercive.md)) and weakens the coefficient to 80, the coefficient
+that its other steps use. [`MovingSofaStability.wide_cap_distance_bound`](../MovingSofaStability/CapDistance.lean#L121) proves the coefficient 80 directly, by mass
+estimates.
 
 ## The proof
 
@@ -144,7 +149,8 @@ sofas. Each step below names the main modules that carry it.
    feasible, the niche lies in the cap, and the sofa area satisfies `A(K) ≤ 𝒬(ξ_K) ≤ |G|`, without
    Baek's injectivity condition. The exposed points, arm margins and cut separations of Gerver's cap
    persist under small perturbations, and the area of the core is computed through right
-   derivatives.
+   derivatives. The bound `𝒬(ξ_K) ≤ |G|` and the distance from the cap to Gerver's come from the coercive
+   certificate ([`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33)).
 4. **A missing final angle costs area** (`FloorCoverage`, `PartialHallways`, `OmittedWedgeArea`,
    `TerminalFloor`, `TerminalComparison`). If the sofa turns only through `ω < π/2`, the tilted final
    strip removes a floor region of area at least `c(π/2 - ω)`, while the omitted hallway positions
@@ -158,9 +164,11 @@ sofas. Each step below names the main modules that carry it.
    directions, and a parallel-body estimate bounds the symmetric difference.
 6. **Entry and assembly** (`CompactSetLimits`, `SofaBounds`, `SofaLimitMotion`, `QualitativeEntry`,
    `GlobalStability`). Normalized sofas of nearly maximal area lie in a fixed rectangle, and their
-   Hausdorff limits are moving sofas of maximal area, hence Gerver's sofa by the uniqueness theorem
-   ([`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L364)). So every sofa of small deficit enters
-   the neighborhood where steps 2 to 5 apply; compactness gives this entry, not the rate.
+   Hausdorff limits are moving sofas of maximal area, by the optimality theorem of the coercive route
+   ([`MovingSofaExtremal.area_le_gerver`](../MovingSofaExtremal/Optimality.lean#L84)), hence Gerver's sofa by its uniqueness theorem
+   ([`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Uniqueness.lean#L118)), which does not use this step ([the coercive route](coercive.md)). So every sofa
+   of small deficit enters the neighborhood where steps 2 to 5 apply; compactness gives this entry, not
+   the rate.
 
 The sharpness (`PunctureTopology`, `EuclideanDisks`, `PunctureMetric`, `RigidInterior`,
 `PuncturedSofa`, `SharpExponent`) moves the punctured sofa along the motion of Gerver's sofa, and
@@ -174,8 +182,8 @@ exceptions:
 
 - Twenty lemmas were false as written, because their hypotheses were declared as section variables
   and never mentioned in the statements, so that Lean left them out. An `include` now adds them,
-  which is what the draft's proofs and callers assumed: [`mamikon_combo_energy`](../MovingSofaStability/MamikonEnergy.lean#L74),
-  [`mamikon_midpoint_energy`](../MovingSofaStability/MamikonEnergy.lean#L112), the four slope bounds of `EnvelopeSlope`, the three envelope lemmas of
+  which is what the draft's proofs and callers assumed: [`mamikon_combo_energy`](../MovingSofaStability/MamikonEnergy.lean#L76),
+  [`mamikon_midpoint_energy`](../MovingSofaStability/MamikonEnergy.lean#L114), the four slope bounds of `EnvelopeSlope`, the three envelope lemmas of
   `EnvelopeSlack`, the five lemmas of `SharpReconstruction` and the six of `SharpEvaluation`.
 - Six helper lemmas lost a hypothesis that their proofs do not use.
 - Two variable names that Lean does not accept were renamed.
