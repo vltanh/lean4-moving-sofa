@@ -67,7 +67,9 @@ theorem right_angle_maximizer_eq_gerver {P : GerverParams}
   let x := toWideTriple (MovingSofaStability.kiExtensionTriple hbox.1 hKi)
   have hcap := wide_zero_deficit_cap hP hbox x hQ
   let a := -(supp K π - supp P.cap π)
-  have hcap' : K = Rigid.translate (a, 0) '' P.cap := hcap
+  have hcap' : K = Rigid.translate (a, 0) '' P.cap := by
+    rw [Rigid.coe_translate]
+    exact hcap
   have hGset : gerverSofa P = P.cap \ niche P.cap (π / 2) :=
     theorem2_4_3 (GerverParams.gm_isMonotone hP hbox)
   refine ⟨a, hcap', ?_⟩
