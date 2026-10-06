@@ -58,7 +58,12 @@ theorem third_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     intro u hu
     exact (sin_pos_of_pos_of_lt_pi (by linarith [hu.2]) (by linarith [hu.1, ht.1])).ne'
   have hst := hs t ⟨le_rfl, ht.2⟩
-  rw [shifted_cosecant_sq_integral ht.2 hs]
+  have hscale : (-(cos t / cos φ)) ^ 2 * (-sin (π - φ) * cos (π - φ)) =
+      tan φ * cos t ^ 2 := by
+    rw [sin_pi_sub, cos_pi_sub, tan_eq_sin_div_cos]
+    field_simp [hc]
+    ring
+  rw [hscale, shifted_cosecant_sq_integral ht.2 hs]
   have hcot : cotangent (π - φ - π / 2) = tan φ := by
     simp only [cotangent, show π - φ - π / 2 = π / 2 - φ by ring,
       cos_pi_div_two_sub, sin_pi_div_two_sub, tan_eq_sin_div_cos]
@@ -69,7 +74,6 @@ theorem third_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     field_simp [hst]
     ring
   rw [mul_sub, hcancel]
-  simp only [sin_pi_sub, cos_pi_sub, neg_sq]
   rw [show π - φ - t = π - (φ + t) by ring, sin_pi_sub, cos_pi_sub,
     sin_add, cos_add, tan_eq_sin_div_cos]
   field_simp [hc]
@@ -101,7 +105,9 @@ theorem middle_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     cosecant_sq_integral (by linarith [ht.1]) hsin1,
     tailKernel_sq_integral (1 / cos φ) (by linarith [ht.2]) hsin2]
   let A := 1 / cos φ
-  have hAc : A * cos φ = 1 := by dsimp [A]; exact one_div_mul_cancel hcφ
+  have hAc : A * cos φ = 1 := by
+    dsimp [A]
+    field_simp [hcφ]
   have hbase := reciprocal_endpoint_cancel A (cos φ) (sin φ) hsφ hAc (sin_sq_add_cos_sq φ)
   have hvar := middle_variable_cancel A (cos t) (sin t) hct (sin_sq_add_cos_sq t)
   change (π / 2 - φ - t) + tan φ +
@@ -112,8 +118,8 @@ theorem middle_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     one_mul, zero_mul, zero_add, add_zero, zero_div, zero_sub,
     tan_eq_sin_div_cos]
   have htan : sin φ / cos φ = A * sin φ := by dsimp [A]; ring
-  rw [htan]
-  change _ = cos t * (2 * A - sin t)
+  have htwo : 2 / cos φ = 2 * A := by dsimp [A]; ring
+  rw [htan, htwo]
   linear_combination hbase + hvar
 
 /-- On the first arc the middle evaluation at phi has disjoint energy from r1. -/
