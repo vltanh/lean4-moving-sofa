@@ -12,6 +12,8 @@ lake env lean scripts/AuditMaximizerRoute.lean      # the second proof of optima
 lake env lean scripts/AuditCoerciveRoute.lean       # the coercive route avoids it and the first uniqueness proof
 python3 scripts/sync_challenge_defs.py --check      # the Challenge's copy of the definitions
 lake env lake comparator --config=comparator.json   # the Solution proves the Challenge
+lake env lake comparator --config=comparator-coercive.json
+                                                    # so does the second solution, through the coercive route
 ```
 
 Needs [elan](https://github.com/leanprover/elan) and network access for Mathlib, and
@@ -58,7 +60,7 @@ alone.
   ([`MovingSofaStability.Margins`](../MovingSofaStability/Margins.lean) and the eleven modules that import it),
   if one of twenty positive controls is missing (for example, that the uniqueness reaches the certificate
   [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120)), if one of eight negative controls fails, or if a theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean)
-  does not have the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.
+  does not have exactly the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
   import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
@@ -70,9 +72,12 @@ alone.
 exactly the fifteen statements of [`Challenge.lean`](../Challenge.lean), over identical definitions, with the three standard
 axioms only, and replays the proofs through Lean's kernel and the NanoDa kernel. It must end with
 `Your solution is okay!`. The second solution, [`SolutionCoercive.lean`](../SolutionCoercive.lean), names its theorems in the namespace
-`CoerciveSolution`, which Comparator does not match with the Challenge's names;
-[`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks instead that each has the statement of the theorem of [`Solution.lean`](../Solution.lean) that it
-restates.
+`CoerciveSolution`, so that the audits can load it together with [`Solution.lean`](../Solution.lean).
+[`SolutionCoerciveComparator.lean`](../SolutionCoerciveComparator.lean) states the same theorems under the Challenge's names, each proved by the theorem
+of [`SolutionCoercive.lean`](../SolutionCoercive.lean), and [`comparator-coercive.json`](../comparator-coercive.json) has Comparator check it as it checks
+[`Solution.lean`](../Solution.lean); it too must end with `Your solution is okay!`. That module declares the names that
+[`Solution.lean`](../Solution.lean) declares, so no module imports both. [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) also checks that each theorem
+of [`SolutionCoercive.lean`](../SolutionCoercive.lean) has exactly the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.
 
 ## Continuous integration and the Palomar preflight
 

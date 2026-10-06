@@ -1,0 +1,28 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "SolutionCoerciveComparator",
+  "theorem_names": [
+    "Baek.gerver_params_exists",
+    "Baek.gerver_params_unique",
+    "Baek.gerver_sofa_area",
+    "Baek.gerver_sofa_optimal",
+    "Baek.gerver_sofa_unique",
+    "Baek.gerver_sofa_stable",
+    "Baek.gerver_sofa_angle_stable",
+    "Baek.gerver_sofa_stability_exponent",
+    "Bridge.isMovingSofa_iff",
+    "Bridge.sofaConstant_eq",
+    "Bridge.gerversSofa_eq",
+    "FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique",
+    "FormalConjectures.MovingSofa.isMovingSofa_gerversSofa",
+    "FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa",
+    "FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

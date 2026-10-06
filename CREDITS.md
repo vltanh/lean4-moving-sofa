@@ -483,6 +483,13 @@ How it was made:
   other for its prose. Neither found a mathematical error; the writing sub-agent applied their findings (a line
   count, the account of the files and of the rewritten modules, and the wording of several passages). The manuscript
   has 100 pages.
+- At the owner's request, Comparator now checks the second solution too:
+  [`SolutionCoerciveComparator.lean`](SolutionCoerciveComparator.lean) states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
+  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and [`comparator-coercive.json`](comparator-coercive.json) points Comparator at it;
+  Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
+  have exactly the statement of the matching theorem of [`Solution.lean`](Solution.lean), where it accepted a definitionally equal one.
+  The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
+  translation.
 
 Figures, from 13:25 to 16:09:
 - elapsed time: 2 hours 44 minutes;

@@ -3,7 +3,7 @@ version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
   "MovingSofaStability", "MovingSofaExtremal", "ChallengeDefs", "Challenge", "Solution",
-  "SolutionCoercive"]
+  "SolutionCoercive", "SolutionCoerciveComparator"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -53,3 +53,8 @@ name = "Solution"
 # The theorems of the Challenge, proved through MovingSofaExtremal.
 [[lean_lib]]
 name = "SolutionCoercive"
+
+# The theorems of SolutionCoercive under the Challenge's names, for Comparator
+# (comparator-coercive.json). No module imports it.
+[[lean_lib]]
+name = "SolutionCoerciveComparator"

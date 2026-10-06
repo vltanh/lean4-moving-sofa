@@ -234,6 +234,7 @@ python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_d
 lake env lean scripts/AuditMaximizerRoute.lean
 lake env lean scripts/AuditCoerciveRoute.lean
 lake env lake comparator --config=comparator.json
+lake env lake comparator --config=comparator-coercive.json
 ```
 
 The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean-toolchain) and [`lake-manifest.json`](lake-manifest.json).
@@ -241,7 +242,8 @@ The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean
 checks that every declaration of the libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
 results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
-that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). Two more audits check that the second proof
+that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean), and, with the second configuration, that the
+second solution [`SolutionCoercive.lean`](SolutionCoercive.lean) does too. Two more audits check that the second proof
 of Baek's theorem does not use Baek's Theorem 1.1.1, and that the coercive route and the stability proof use neither
 that theorem, nor Baek's balance argument, nor the first proof of uniqueness. GitHub Actions builds the project, runs
 the three audits and the route check, and checks the documentation on every push.

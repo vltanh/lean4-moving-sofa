@@ -120,9 +120,11 @@ helpers that the first proof and the route both use are in neutral modules:
 [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves the fifteen theorems of [`Challenge.lean`](../Challenge.lean) again, through the route, in the
 namespace `CoerciveSolution`: optimality and uniqueness from [`MovingSofaExtremal`](../MovingSofaExtremal), stability from
 [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38), and the bridge to formal-conjectures as in [`Solution.lean`](../Solution.lean). The audit checks that each
-theorem has the type of the theorem of [`Solution.lean`](../Solution.lean) with the same name after the namespace, for
+theorem has exactly the type of the theorem of [`Solution.lean`](../Solution.lean) with the same name after the namespace, for
 example [`CoerciveSolution.formal_volume_eq_sofaConstant_iff_congruent_gerversSofa`](../SolutionCoercive.lean#L148) for formal-conjectures' open statement. Comparator checks
-[`Solution.lean`](../Solution.lean), whose stability theorems now also go through the route.
+[`Solution.lean`](../Solution.lean), whose stability theorems now also go through the route, and, through
+[`SolutionCoerciveComparator.lean`](../SolutionCoerciveComparator.lean), which states the same theorems under the Challenge's names, the second solution
+too ([verification](verification.md#comparator)).
 
 ## The Lean code and the pull request
 

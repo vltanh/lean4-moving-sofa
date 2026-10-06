@@ -70,7 +70,11 @@ theorem gerver_sofa_stability_exponent (P : GerverParams) (hP : P.IsSolution) (h
   point the abscissa of Gerver's ([`normalizedSofa`](../MovingSofaStability/Basic.lean#L195)), a moving sofa of deficit `ε < ε₀` lies within
   Euclidean Hausdorff distance `C√ε` of Gerver's sofa, and the symmetric difference of the two has area
   at most `C'√ε`. The sofa is any closed connected set with a motion: no smoothness, convexity or
-  monotonicity is assumed.
+  monotonicity is assumed. At zero deficit the theorem strengthens [`Baek.gerver_sofa_unique`](../Challenge.lean#L391): a moving sofa with the
+  area of Gerver's sofa has `ε = 0 < ε₀`, so its normalized copy lies within distance 0 of Gerver's sofa and
+  Gerver's sofa within distance 0 of it, which makes the two sets equal; the normalized copy is a translate, so a
+  translation alone maps the sofa onto Gerver's sofa (the libraries also prove this directly:
+  [`MovingSofaUniqueness.translate_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L336)).
 - [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L411): such a sofa, if its motion turns it clockwise by an angle
   `ω ≥ arcsec 2.2 = arccos (5/11)`, turns by at least `π/2 - Cε`. Baek's Theorem 1.5.1 gives every
   moving sofa of area at least 2.2 such an angle.

@@ -15,7 +15,8 @@ registry at its root.
 | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
 | [`SolutionCoercive.lean`](../SolutionCoercive.lean) | the statements of record proved again through the coercive route |
-| [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configuration and the Palomar metadata |
+| [`SolutionCoerciveComparator.lean`](../SolutionCoerciveComparator.lean) | the theorems of [`SolutionCoercive.lean`](../SolutionCoercive.lean) under the Challenge's names, for Comparator; no module imports it |
+| [`comparator.json`](../comparator.json), [`comparator-coercive.json`](../comparator-coercive.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configurations for the two solutions, and the Palomar metadata |
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
@@ -128,7 +129,7 @@ prove the theorem again from it (a remark at the end of Section 8 of the [manusc
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
 | [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
-| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the coercive route and the stability library use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves the statements of [`Solution.lean`](../Solution.lean) |
+| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the coercive route and the stability library use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves exactly the statements of [`Solution.lean`](../Solution.lean) |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |

@@ -328,7 +328,9 @@ automation:
     argument and for the coercive route, with their Lean code.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
-    pair.
+    pair; a second configuration (comparator-coercive.json) checks the second solution,
+    SolutionCoercive.lean, against the same Challenge, through SolutionCoerciveComparator.lean, which
+    states its theorems under the Challenge's names.
 
 fidelity:
   divergences: >-

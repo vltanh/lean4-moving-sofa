@@ -111,7 +111,8 @@ proof after the certificate (`MovingSofaStability.Margins` and the modules that 
 circularity: the stability theorem uses uniqueness), that the route does use
 the certificate where it should (positive controls), that the old routes do reach what they are known
 to reach (negative controls, which show that the traversal sees proof bodies), and that the fifteen
-theorems of `SolutionCoercive` have the types of the fifteen theorems of `Solution.lean`.
+theorems of `SolutionCoercive` have exactly the types of the fifteen theorems of `Solution.lean`
+(Comparator also checks them against the Challenge, through `SolutionCoerciveComparator`).
 -/
 
 open Lean Elab Command
@@ -372,8 +373,8 @@ elab "#audit_coercive_route" : command => do
     let newInfo ← liftCoreM <| getConstInfo coercive
     unless oldInfo.levelParams == newInfo.levelParams do
       throwError m!"different universe parameters: {canonical}, {coercive}"
-    let same ← liftTermElabM do Meta.isDefEq oldInfo.type newInfo.type
-    unless same do
+    -- the same expression up to the names of bound variables, not only definitionally equal
+    unless oldInfo.type == newInfo.type do
       throwError m!"different statements: {canonical}, {coercive}"
   logInfo m!"Coercive route: {audited.size} declarations, standard axioms only, none reaches \
     Baek's Theorem 1.1.1, his balance results or the first proof of uniqueness; the \
