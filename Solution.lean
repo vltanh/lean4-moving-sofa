@@ -4,8 +4,8 @@ public import ChallengeDefs
 public import MovingSofaOptimality.Main
 public import MovingSofaUniqueness.Main
 public import MovingSofaBridge.GerverSofa
-public import MovingSofaStability.GlobalStability
-public import MovingSofaStability.SharpExponent
+public import MovingSofaStability.Global
+public import MovingSofaStability.Sharpness
 
 /-!
 # Solution: the theorems of the Challenge, proved

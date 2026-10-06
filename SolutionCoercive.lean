@@ -2,7 +2,7 @@ module
 
 public import ChallengeDefs
 public import MovingSofaExtremal.Unified
-public import MovingSofaStability.SharpExponent
+public import MovingSofaStability.Sharpness
 public import MovingSofaBridge.GerverSofa
 
 /-!

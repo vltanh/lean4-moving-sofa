@@ -54,11 +54,11 @@ theorem terminal_angle_stability {P : GerverParams} (hP : P.IsSolution) (hbox : 
     TerminalAngleStability P
 ```
 
-- [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/GlobalStability.lean#L113): after the translation, a moving sofa of deficit `ε < ε₀`
+- [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/Global.lean#L695): after the translation, a moving sofa of deficit `ε < ε₀`
   is within Euclidean Hausdorff distance `C√ε` of Gerver's sofa, and its symmetric difference with
   Gerver's sofa has area at most `C_area√ε`. The sofa is an arbitrary closed connected set with a
   motion: no smoothness, convexity, monotonicity or injectivity is assumed.
-- [`MovingSofaStability.terminal_angle_stability`](../MovingSofaStability/GlobalStability.lean#L136): if a moving sofa of deficit `ε < ε₀` moves with a
+- [`MovingSofaStability.terminal_angle_stability`](../MovingSofaStability/Global.lean#L718): if a moving sofa of deficit `ε < ε₀` moves with a
   rotation angle `ω ≥ arcsec 2.2 = arccos (5/11)`, then `ω ≥ π/2 - C_angle ε`. Baek's Theorem 1.5.1
   gives every moving sofa of area at least 2.2 such an angle.
 - The constants are existential. The threshold `ε₀` comes from a compactness argument and is not
@@ -87,10 +87,10 @@ theorem no_hausdorff_exponent_gt_half {P : GerverParams}
       ∀ g : Rigid, ¬EuclideanClose (C * (sofaDeficit P S) ^ a) S (g '' gerverSofa P)
 ```
 
-- [`MovingSofaStability.punctured_gerver_family`](../MovingSofaStability/PuncturedSofa.lean#L61): `puncture G p r` is `G` minus the open Euclidean disk of center `p` and
+- [`MovingSofaStability.punctured_gerver_family`](../MovingSofaStability/Sharpness.lean#L623): `puncture G p r` is `G` minus the open Euclidean disk of center `p` and
   radius `r`; it keeps the circle, so it is closed, and it is connected. The lower bound holds for
-  every rotation and translation `g`, and [`MovingSofaStability.rigidHausdorffDistance`](../MovingSofaStability/PunctureMetric.lean#L116) is the infimum over all of them.
-- [`MovingSofaStability.no_hausdorff_exponent_gt_half`](../MovingSofaStability/SharpExponent.lean#L69) and [`MovingSofaStability.rigid_distance_not_higher_order`](../MovingSofaStability/SharpExponent.lean#L86): no bound
+  every rotation and translation `g`, and [`MovingSofaStability.rigidHausdorffDistance`](../MovingSofaStability/Sharpness.lean#L378) is the infimum over all of them.
+- [`MovingSofaStability.no_hausdorff_exponent_gt_half`](../MovingSofaStability/Sharpness.lean#L712) and [`MovingSofaStability.rigid_distance_not_higher_order`](../MovingSofaStability/Sharpness.lean#L729): no bound
   `C εᵃ` with `a > 1/2` holds, whatever the constant, the threshold and the alignment. The exponent
   of the stability theorem is therefore optimal for the Hausdorff distance. Nothing is claimed about
   the optimal exponent of the symmetric-difference area.
@@ -114,14 +114,14 @@ theorem ki_cap_distance_bound_2002 {P : GerverParams} (hP : P.IsSolution) (hbox 
       K (shiftedReferenceCap P.cap K)
 ```
 
-[`MovingSofaStability.sharp_wide_cap_distance_bound`](../MovingSofaStability/SharpCapDistance.lean#L61) and [`MovingSofaStability.wide_cap_distance_bound_2002`](../MovingSofaStability/SharpCapDistance.lean#L85) prove the same bound, in terms of
+[`MovingSofaStability.sharp_wide_cap_distance_bound`](../MovingSofaStability/CapEstimate.lean#L1679) and [`MovingSofaStability.wide_cap_distance_bound_2002`](../MovingSofaStability/CapEstimate.lean#L1703) prove the same bound, in terms of
 the deficit of Baek's upper bound `𝒬`, for every triple of the enlarged domain of nonsmooth caps that
 the proof of stability uses. Note 01 of the archive argues that `2 sec φ` is the best constant in the
 space of residuals; that is not proved in Lean, and no claim is made that it is the best constant
 over feasible caps or after optimizing the translation. The proof of the stability theorem takes the
 cap estimate, with the coefficient `2 sec φ`, from the coercive certificate
-[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) ([the coercive route](coercive.md)); the constants of the theorem are existential, so
-the coefficient does not appear in its statement. [`MovingSofaStability.wide_cap_distance_bound`](../MovingSofaStability/CapDistance.lean#L121) proves the
+[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1748) ([the coercive route](coercive.md)); the constants of the theorem are existential, so
+the coefficient does not appear in its statement. `MovingSofaStability.wide_cap_distance_bound` proves the
 coefficient 80 by mass estimates, which the proof of the stability theorem no longer uses.
 
 ## The proof
@@ -150,7 +150,7 @@ sofas. Each step below names the main modules that carry it.
    Baek's injectivity condition. The exposed points, arm margins and cut separations of Gerver's cap
    persist under small perturbations, and the area of the core is computed through right
    derivatives. The bound `𝒬(ξ_K) ≤ |G|` and the distance from the cap to Gerver's come from the coercive
-   certificate ([`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33)).
+   certificate ([`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1748)).
 4. **A missing final angle costs area** (`FloorCoverage`, `PartialHallways`, `OmittedWedgeArea`,
    `TerminalFloor`, `TerminalComparison`). If the sofa turns only through `ω < π/2`, the tilted final
    strip removes a floor region of area at least `c(π/2 - ω)`, while the omitted hallway positions
@@ -182,8 +182,8 @@ exceptions:
 
 - Twenty lemmas were false as written, because their hypotheses were declared as section variables
   and never mentioned in the statements, so that Lean left them out. An `include` now adds them,
-  which is what the draft's proofs and callers assumed: [`mamikon_combo_energy`](../MovingSofaStability/MamikonEnergy.lean#L76),
-  [`mamikon_midpoint_energy`](../MovingSofaStability/MamikonEnergy.lean#L114), the four slope bounds of `EnvelopeSlope`, the three envelope lemmas of
+  which is what the draft's proofs and callers assumed: [`mamikon_combo_energy`](../MovingSofaStability/WideDomain.lean#L119),
+  `mamikon_midpoint_energy`, the four slope bounds of `EnvelopeSlope`, the three envelope lemmas of
   `EnvelopeSlack`, the five lemmas of `SharpReconstruction` and the six of `SharpEvaluation`.
 - Six helper lemmas lost a hypothesis that their proofs do not use.
 - Two variable names that Lean does not accept were renamed.

@@ -67,7 +67,7 @@ theorem gerver_sofa_stability_exponent (P : GerverParams) (hP : P.IsSolution) (h
 ```
 
 - [`Baek.gerver_sofa_stable`](../Challenge.lean#L401): once translated so that its highest point has height 1 and its leftmost
-  point the abscissa of Gerver's ([`normalizedSofa`](../MovingSofaStability/Statement.lean#L34)), a moving sofa of deficit `ε < ε₀` lies within
+  point the abscissa of Gerver's ([`normalizedSofa`](../MovingSofaStability/Basic.lean#L240)), a moving sofa of deficit `ε < ε₀` lies within
   Euclidean Hausdorff distance `C√ε` of Gerver's sofa, and the symmetric difference of the two has area
   at most `C'√ε`. The sofa is any closed connected set with a motion: no smoothness, convexity or
   monotonicity is assumed.
@@ -153,9 +153,9 @@ The fifteen theorems rest on five libraries:
   the end of Section 8 of the [manuscript](paper/README.md)); [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks that they do not use Baek's theorem.
 - [`MovingSofaBridge/`](../MovingSofaBridge), the bridge: [`MovingSofaBridge.isMovingSofa_iff`](../MovingSofaBridge/Motion.lean#L562), [`MovingSofaBridge.sofaConstant_eq`](../MovingSofaBridge/Motion.lean#L600), [`MovingSofaBridge.gerversSofa_eq`](../MovingSofaBridge/GerverSofa.lean#L507) and
   [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1143).
-- [`MovingSofaStability/`](../MovingSofaStability), the stability: [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/GlobalStability.lean#L113),
-  [`MovingSofaStability.terminal_angle_stability`](../MovingSofaStability/GlobalStability.lean#L136) and [`MovingSofaStability.no_hausdorff_exponent_gt_half`](../MovingSofaStability/SharpExponent.lean#L69) ([Stability](stability.md)).
-- [`MovingSofaExtremal/`](../MovingSofaExtremal), the coercive route: the certificate [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) gives optimality,
+- [`MovingSofaStability/`](../MovingSofaStability), the stability: [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/Global.lean#L695),
+  [`MovingSofaStability.terminal_angle_stability`](../MovingSofaStability/Global.lean#L718) and [`MovingSofaStability.no_hausdorff_exponent_gt_half`](../MovingSofaStability/Sharpness.lean#L712) ([Stability](stability.md)).
+- [`MovingSofaExtremal/`](../MovingSofaExtremal), the coercive route: the certificate [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1748) gives optimality,
   [`MovingSofaExtremal.gerver_sofa_optimal`](../MovingSofaExtremal/Main.lean#L107), and uniqueness, [`MovingSofaExtremal.image_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L121) and
   [`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L129), without Baek's Theorem 1.1.1 or the first proof of uniqueness; the stability
   library takes its uniqueness from it, and [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38) states the three results

@@ -404,7 +404,7 @@ How it was made:
   sign of the deficit and the compactness step, through Baek's theorem; the identification of the limit, through the
   first proof of uniqueness; and the lemma that a moving sofa lies in a strip of height one. Commit `70ccc8a` takes
   them from the route or from a neutral module, states the certificate as one theorem
-  ([`MovingSofaStability.coercive_certificate`](MovingSofaStability/CoerciveCertificate.lean#L33)), which the route's classification of the maximizing caps and the
+  ([`MovingSofaStability.coercive_certificate`](MovingSofaStability/CapEstimate.lean#L1748)), which the route's classification of the maximizing caps and the
   stability library's local estimate both use, adds to the route the theorem that no rotation is needed, states the
   three results in one theorem ([`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](MovingSofaExtremal/Unified.lean#L38)), and extends the second
   solution to the fifteen statements. The pull request's audit had never run, and on the merged branch it failed;

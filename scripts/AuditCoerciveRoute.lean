@@ -68,91 +68,17 @@ import all MovingSofaUniqueness.Main
 import all MovingSofaUniqueness.MaximizerRoute
 import all MovingSofaUniqueness.Rigidity
 import all MovingSofaStability.All
-import all MovingSofaStability.AngularFaceStability
-import all MovingSofaStability.ArcAtoms
-import all MovingSofaStability.BaekDeficit
-import all MovingSofaStability.CBVAlgebra
-import all MovingSofaStability.CanonicalContacts
-import all MovingSofaStability.CanonicalTriple
-import all MovingSofaStability.CapCoercivity
-import all MovingSofaStability.CapDistance
-import all MovingSofaStability.CapShape
-import all MovingSofaStability.CapWidthGeometry
-import all MovingSofaStability.CoerciveCertificate
-import all MovingSofaStability.CompactSetLimits
-import all MovingSofaStability.ConvexParallelArea
-import all MovingSofaStability.CoreAreaBound
-import all MovingSofaStability.CoreGraph
-import all MovingSofaStability.CoreIntegral
-import all MovingSofaStability.CoreMonotonicity
-import all MovingSofaStability.CoreRegionGeometry
-import all MovingSofaStability.CornerAnalysis
-import all MovingSofaStability.CurveRoof
-import all MovingSofaStability.CutSeparation
-import all MovingSofaStability.EnvelopeSlack
-import all MovingSofaStability.EnvelopeSlope
-import all MovingSofaStability.EpigraphBalls
-import all MovingSofaStability.EuclideanDisks
-import all MovingSofaStability.EuclideanGeometry
-import all MovingSofaStability.ExposedFaceStability
-import all MovingSofaStability.FloorCoverage
-import all MovingSofaStability.FourArcCoercivity
-import all MovingSofaStability.GerverMargins
-import all MovingSofaStability.GerverRoof
-import all MovingSofaStability.GlobalStability
-import all MovingSofaStability.GreenNorm
-import all MovingSofaStability.IntegralEstimates
-import all MovingSofaStability.InteriorBalls
-import all MovingSofaStability.LocalArmMargins
-import all MovingSofaStability.LocalSofaRecovery
-import all MovingSofaStability.LocalUpperBound
-import all MovingSofaStability.MamikonEnergy
-import all MovingSofaStability.MissingAreaRecovery
-import all MovingSofaStability.MixedArea
-import all MovingSofaStability.NicheContainment
-import all MovingSofaStability.NicheFeet
-import all MovingSofaStability.NonsmoothAffinity
-import all MovingSofaStability.NonsmoothBookkeeping
-import all MovingSofaStability.ODEReconstruction
-import all MovingSofaStability.OmittedWedgeArea
-import all MovingSofaStability.PartialHallways
-import all MovingSofaStability.PunctureMetric
-import all MovingSofaStability.PunctureTopology
-import all MovingSofaStability.PuncturedSofa
-import all MovingSofaStability.QuadraticDeficit
-import all MovingSofaStability.QualitativeEntry
-import all MovingSofaStability.ReferenceCoreVariation
-import all MovingSofaStability.ResidualIntegrability
-import all MovingSofaStability.ResidualMass
-import all MovingSofaStability.ResidualPropagation
-import all MovingSofaStability.Residuals
-import all MovingSofaStability.RigidInterior
-import all MovingSofaStability.RoofGeometry
-import all MovingSofaStability.RoofMargins
-import all MovingSofaStability.SeparatedWedges
-import all MovingSofaStability.SharpCapDistance
-import all MovingSofaStability.SharpEvaluation
-import all MovingSofaStability.SharpExponent
-import all MovingSofaStability.SharpIntegralControl
-import all MovingSofaStability.SharpKernelNorms
-import all MovingSofaStability.SharpReconstruction
-import all MovingSofaStability.SofaBounds
-import all MovingSofaStability.SofaCap
-import all MovingSofaStability.SofaCoordinates
-import all MovingSofaStability.SofaLimitMotion
-import all MovingSofaStability.Statement
-import all MovingSofaStability.SupportDistance
-import all MovingSofaStability.SymmetricDifference
-import all MovingSofaStability.TerminalBookkeeping
-import all MovingSofaStability.TerminalComparison
-import all MovingSofaStability.TerminalFloor
-import all MovingSofaStability.TrigKernelIntegrals
-import all MovingSofaStability.UniformGeometryBounds
-import all MovingSofaStability.WideConcavity
+import all MovingSofaStability.Basic
+import all MovingSofaStability.CapEstimate
+import all MovingSofaStability.Deficit
+import all MovingSofaStability.Global
+import all MovingSofaStability.LocalBound
+import all MovingSofaStability.LocalGeometry
+import all MovingSofaStability.Margins
+import all MovingSofaStability.Recovery
+import all MovingSofaStability.Sharpness
+import all MovingSofaStability.Terminal
 import all MovingSofaStability.WideDomain
-import all MovingSofaStability.WideFirstVariation
-import all MovingSofaStability.WideGerverCertificate
-import all MovingSofaStability.WideResidualEnergy
 import all MovingSofaExtremal.All
 import all MovingSofaExtremal.Main
 import all MovingSofaExtremal.Unified
@@ -180,8 +106,9 @@ included:
    declaration of the first proof of uniqueness (`MovingSofaUniqueness.Rigidity`, `.Main`) or of
    the second proof of optimality (`MovingSofaUniqueness.MaximizerRoute`), or `Solution`.
 
-It also checks that the optimality and uniqueness theorems of the route do not reach the global
-stability theorem (no circularity: the stability theorem uses uniqueness), that the route does use
+It also checks that the optimality and uniqueness theorems of the route do not reach the stability
+proof after the certificate (`MovingSofaStability.Margins` and the modules that import it; no
+circularity: the stability theorem uses uniqueness), that the route does use
 the certificate where it should (positive controls), that the old routes do reach what they are known
 to reach (negative controls, which show that the traversal sees proof bodies), and that the fifteen
 theorems of `SolutionCoercive` have the types of the fifteen theorems of `Solution.lean`.
@@ -433,7 +360,7 @@ elab "#audit_coercive_route" : command => do
     if toForbidden.contains n then
       throwError m!"{n} reaches a forbidden declaration: {witness toForbidden n}"
   -- no circularity: optimality and uniqueness do not use the stability theorem
-  let upper := importersOf env `MovingSofaStability.Statement
+  let upper := importersOf env `MovingSofaStability.Margins
   let core := constantsIn env coreModules.contains
   let toUpper := reaching env library (ownedConstants env upper.contains)
   for n in core do

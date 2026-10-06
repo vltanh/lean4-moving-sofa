@@ -1,7 +1,7 @@
 module
 
 public import MovingSofaExtremal.Main
-public import MovingSofaStability.GlobalStability
+public import MovingSofaStability.Global
 
 /-!
 # Optimality, uniqueness and stability from one certificate

@@ -1,7 +1,7 @@
 module
 
 public import MovingSofaUniqueness.Maximizing
-public import MovingSofaStability.CoerciveCertificate
+public import MovingSofaStability.CapEstimate
 
 /-!
 # Optimality and uniqueness from the coercive certificate
