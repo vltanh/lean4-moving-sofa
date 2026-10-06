@@ -27,22 +27,24 @@ specified neighborhood, including motions arbitrarily close to a right angle.
 The much stronger local coefficient 2.3 is not being used to prove (1)--(3).
 
 Equation (3) does not, on its own, name a radius eta for every local certificate
-in the 2.3 proof. Those reference-local radii must still be explicitly bounded
-before advertising a numerical cutoff for that precise sharp local theorem.
-The global compactness separation gap is replaced here by a coarse modulus,
-not by an unexecuted finite enumeration.
+in the 2.3 proof. Those reference-local radii must be explicitly bounded before
+advertising a numerical cutoff for that precise sharp local theorem. Notes29--32
+now supply a proposed analytic completion of that step. The global compactness
+separation gap is replaced here by a coarse modulus, not an unexecuted enumeration.
 
 ## 1. Coarse angle input and attribution
 
 Kallus and Romik, "Improved upper bounds in the moving sofa problem" (2018),
-Theorem 9, equations (27)--(29), and the proof of their Theorem 2 establish
+Theorem 9 and the proof of their Theorem 2 establish
 
     omega<=asin(84/85)  ==>  |S|<=2.21.
 
 Together with M>=2.2192, this implies epsilon<23/2500 forces
 omega>asin(84/85)>2*atan(4/5). This published result is stronger than our earlier
 coarse 77.32-degree computation and is credited as an input, not a new bound.
-Primary source: arXiv:1706.06630; DOI 10.1016/j.aim.2018.10.022.
+Primary source: arXiv:1706.06630v2; DOI 10.1016/j.aim.2018.10.022.
+Equation numbering differs between versions, so the theorem/proof is the
+reference rather than the earlier note's inaccurate equation numbers.
 
 All deficits used below are far below 23/2500. We only need
 
@@ -171,14 +173,22 @@ Apply note26 to R_alpha S. Its deficit is still epsilon and
 
     d_H(R_alpha S+translation,G)<=10300*sqrt(epsilon).
 
-The reference contains a horizontal rectangle of height one and width greater
-than one. For 0<=alpha<=1/4 its width at normal pi/2+alpha is at least
-cos(alpha)+sin(alpha)>=1+alpha/2. But R_alpha S has width at most one in that
-normal, because S lies in its original horizontal strip. Hausdorff distance
-controls each support and hence changes width by at most twice the distance.
-It follows that
+The CONVEX HULL of the reference contains a horizontal rectangle of height one
+and width greater than one. More directly, the four points (a,0),(b0,0),(a,1),
+(b0,1) belong to the actual sofa G, with b0-a>1. The floor points are retained
+niche endpoints, and the upper two lie on its top face. The rectangle interior
+need not belong to G: the niche cuts through it. Width depends only on the
+convex hull, so these four actual support witnesses suffice. For
+0<=alpha<=1/4 the width at normal pi/2+alpha is at least
+cos(alpha)+(b0-a)sin(alpha)>=cos(alpha)+sin(alpha)>=1+alpha/2.
+But R_alpha S has width at most one in that normal because S lies in its
+original horizontal strip. Hausdorff distance changes each support by at most
+the distance and hence changes width by at most twice the distance. Thus
 
     alpha<=41200*sqrt(epsilon).
+
+This corrects the previous wording that placed the entire rectangle inside
+the nonconvex sofa. No numerical coefficient or subsequent argument changes.
 
 If alpha>=a0 and epsilon<=a0^6/10^16 this is impossible:
 41200^2*a0^4<10^16 for a0<=1/100. The same deficit condition is below 10^(-20),
@@ -264,8 +274,8 @@ exterior-niche correction. No original input sofa is replaced in the conclusion
 by an auxiliary maximizer.
 
 The previously missing global separation mechanism is addressed by (3).
-Obtaining a single numerical epsilon_* for the SHARP local constants 2.3/50/3.1
-additionally requires numerical radii for the finite reference-local certificate
-lemmas. The new weak exponent is an entry tool, not a claimed improvement of
-the sharp exponent one half, and the very small thresholds are not advertised
-as practically useful optimizer error bars.
+Notes29--32 add explicit reference-local radii and a proposed numerical cutoff
+for the sharp local constants 2.3/50/3.1. The new weak exponent is an entry tool,
+not an improvement of the sharp exponent one half. Neither its small threshold
+nor the final cutoff is advertised as a practically useful optimizer error bar.
+Independent review of the analytic arguments remains necessary.
