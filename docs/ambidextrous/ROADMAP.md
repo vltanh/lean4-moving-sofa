@@ -1,5 +1,7 @@
 # Active roadmap: geometric admission to the two-wing certificate
 
+For cross-session context, current branch checkpoint, validation status, failed routes, and restart instructions, read [HANDOFF.md](HANDOFF.md) first.
+
 Baseline: `f6a06beae3bbdfaf6e15547a93eb765a0661463e` in PR #3. This is the active plan requested by the user. It supersedes informal progress percentages, not historical mathematical findings. **Unrestricted optimality and uniqueness are not proved.** Written results are self-reviewed, not independently verified infrastructure.
 
 The goal is an ordinary-area comparison for every relevant maximizing body, followed by a sharp bound with an equality case. A short final implication is not evidence that its missing hypotheses are easy.
