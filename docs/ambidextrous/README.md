@@ -1,6 +1,6 @@
 # Ambidextrous sofa research
 
-**The unrestricted optimality and uniqueness proof is not closed.** The analytic width exclusion and the sharp auxiliary-functional calibrations do not yet supply a valid ordinary-area comparison for every maximizing body. The latest audit also rules out rescuing the rejected repair budget merely by requiring canonical saturation.
+**The unrestricted optimality and uniqueness proof is not closed.** The analytic width exclusion and the sharp auxiliary calibrations remain available, but the ordinary-area comparison for unrestricted maximizing bodies is unproved. The latest continuation inspected PR #9's new extremal source and tested, rather than assumed, the geometric premise needed to transfer its method.
 
 These are written, self-reviewed arguments and explicitly labelled computational diagnostics. They are not independently refereed or Lean-verified results. The entire historical dependency chain has not been independently audited. No novelty or best-known-bound claim is made.
 
@@ -8,40 +8,93 @@ Research branch: `research/ambidextrous-pen-and-paper`.
 Draft PR: [#3](https://github.com/vltanh/lean4-moving-sofa/pull/3).
 Original base: `paper/uniqueness-arxiv` at `1ade045936f32cf76572ee668ed8aa1627772bde`; the base has since advanced. Existing manuscript files, Lean libraries, dependencies, and workflow definitions are unchanged.
 
-## Latest correction: saturation is not the missing theorem
+## PR #9: useful organization, not the missing ambidextrous hypothesis
 
-[SAT1](saturation-does-not-rescue-repair.md) applies complete canonical saturation to the actual axis-cut counterexamples from [AX1](axis-cut-repair-budget-obstruction.md). The resulting bodies T_tau are compact, connected, feasible for both full turns, fixed points of saturation, and have exactly the original cut hulls K_tau.
+The [transfer audit](coercive-pr9-transfer-audit.md) records two snapshots. PR #9 initially had planning documents at `5016a36`; it advanced during this pass to uncompiled extremal proof source at `8042bad`. The latter implements a proposed Gerver route through
 
-They still satisfy
+```text
+one-turn cap maximality
+  -> isKi_of_maximizes
+  -> actual area <= intermediate Q <= Gerver's area
+  -> zero Q deficit
+  -> sharp cap-distance estimate at zero
+  -> cap and sofa equality.
+```
+
+The source still obtains geometric admission from the existing one-turn curvature theorem, and still invokes the geometric area inequality before applying coercivity. An ambidextrous maximizer does not maximize either one-turn cap against all caps, so that premise cannot simply be imported. The global-stability layer is deliberately not imported into low coercivity, since qualitative entry there uses uniqueness.
+
+No PR #9 files were merged or compiled. Its new source was inspected at a pinned commit; a proof term in an uncompiled file is not a kernel-verification record. The exact transferable pattern is to keep geometric enclosure, functional calibration, and actual-body equality recovery separate.
+
+## New ordinary-area obstruction: shared anchors do not control clipping
+
+The [anchor bounds AB1](repair-anchor-budgets.md) are valid: genuine nested hulls with the same four axis supports satisfy
 
 $$
-|T_\tau|>
-\mathcal J_{\rm side}(h_{R(K_\tau)};h_{R(K_\tau)}-h_{K_\tau})
+u+u^\rho\leq\sin t,\qquad v+v^\rho\leq\cos t.
 $$
 
-for all sufficiently small positive tau. The right side depends on the hull, which saturation preserves, while saturation can only increase the left side.
+But [Theorem SC3](repair-shadow-clipping-obstruction.md) disproves the ordinary-area inequality proposed for the derivative-free budget J_0, even with those genuine constraints.
 
-Thus the earlier suggestion that the axis-cut obstruction was only caused by deliberately omitted, unsaturated material was insufficient. Fixed-hull saturation is an inclusion closure; it is not maximization over different hulls. Requiring it does not make AS.10 true.
-
-### The saturated family's actual area is now computed
-
-[SAC2](saturated-axis-cut-area.md) proves analytically that these saturated bodies are nevertheless strictly suboptimal. If m is the candidate's horizontal face length, then
+The construction starts with an explicit curvature-dominated outer set bar K_z near the candidate. Its complete two-turn envelope B_z is compact, connected, has the candidate's width and unit span, and is fully saturated in its actual hull H_z. The actual least curvature repair is **exactly** R(H_z)=bar K_z. Nevertheless
 
 $$
 \boxed{
-M-|T_\tau|=
-\frac{1+2\sqrt2}{3}\,m^{3/2}\tau^{3/2}
-+o(\tau^{3/2})>0.
+|B_z|-\widetilde{\mathcal Q}(h_{\bar K_z})
+=\int_{x_Z}^{m}\min\{F_*(x),1-\bar T_z(x)\}\,dx>0.
 }
 $$
 
-The computation identifies the changed lower-niche roof as a unit-circle arc and subtracts its actual recovered area from two upper circular-cap losses. It does not count every added hull point as surviving sofa material. This resolves the sign for the saturated family without assuming unrestricted optimality.
+Here F_* is the candidate's lower-tail roof, bar T_z is the changed upper hull boundary, and m is its face length. The positive term is actual upper-niche clipping against the repaired hull. It is not adverse contact work: the final q is negative on the nonzero repair support. Nor does this example rely on a derivative-energy charge. In fact
 
-In contrast, the squared derivative discrepancy of its hull support is of order tau. Therefore a uniform estimate charging that entire derivative energy against ordinary missing area also fails on saturated bodies arbitrarily close to the candidate. This is a concrete requirement for any replacement proof, not a counterexample to candidate optimality.
+$$
+|B_z|>\widetilde{\mathcal Q}(h_{\bar K_z})>
+\mathcal J_0(h_{\bar K_z};h_{\bar K_z}-h_{H_z}).
+$$
 
-The numerical program [check_saturated_axis_cut.py](computer-assisted/check_saturated_axis_cut.py) compared the closed formulas with separate vertical-slice quadrature at five scales. [The execution record](computer-assisted/saturated-axis-diagnostics.json) labels these as diagnostics, not a proof certificate. The executed source matches its committed Git blob. The analytic argument is independent of these computations.
+These are not counterexamples to Romik optimality. An independent ordinary-area calculation proves
 
-## The width gate is closed analytically
+$$
+\boxed{M-|B_z|=\frac{37-26\sqrt2}{24}z^3+o(z^3)>0.}
+$$
+
+Their areas tend to M from below. Therefore neither a fixed high-area threshold, shared anchors, full turns, nor canonical saturation rescues the proposed enclosure. The original AB note now explicitly marks its geometric proposal as disproved while retaining its valid inequalities.
+
+The [standard-library diagnostic](computer-assisted/check_shadow_clipping.py) compares the direct slice loss/recovery, support-functional deficit, and clipping integral at five scales. The [executed record](computer-assisted/shadow-clipping-diagnostics.json) is labelled `is_proof_certificate: false`; the source bytes match their committed Git blob. These floating-point checks are not the analytic proof or a global certificate.
+
+## A precise positive identity for auxiliary tail regions
+
+[Theorem TR1](repair-invariant-tail-regions.md) identifies what the least repair really preserves. For a full quarter J let
+
+$$
+C_J(h)=\bigcap_{t\in J}\{x:x\cdot n_t\geq h(t)-1\}.
+$$
+
+Then
+
+$$
+\boxed{C_J(h)=C_J(R(h)).}
+$$
+
+In the projective coordinate used by GM2, each point tests an affine minorant of the wall obstacle. Replacing the obstacle by its convex envelope therefore changes none of these tests. The proof is elementary and exact.
+
+The **clipped** tail bodies still change:
+
+$$
+(R(K)\cap C_J)\setminus(K\cap C_J)
+=(R(K)\setminus K)\cap C_J.
+$$
+
+Only the indicated part of the new hull is safe for that wall family. The same identity applies to the intersection of the appropriate safe regions for both turns. It does not cover mixed-wall core points or extend a partial endpoint to a full turn.
+
+The SC3 family also shows that iterating the same repair and saturation is not a solution:
+
+$$
+\mathcal E(R(\operatorname{conv}B_z))=B_z,
+$$
+
+although the actual hull still violates curvature domination and the body is strictly suboptimal. Any sharp auxiliary-body comparison must retain actual clipping rather than assume the repaired hull is the surviving body's hull.
+
+## The width gate remains closed analytically
 
 [Theorem AW-W](analytic-width-theorem.md) proves, for a compact connected ambidextrous body in a common incoming unit-height strip,
 
@@ -49,87 +102,70 @@ $$
 \boxed{W\leq2\quad\Longrightarrow\quad |S|<41/25=1.64<M.}
 $$
 
-It assumes no curvature cap, symmetry, contact order, full-quarter endpoint, or functional enclosure. Incoming vertical span need only be at most one.
+It assumes no curvature cap, symmetry, contact order, full-quarter endpoint, or functional enclosure. Incoming vertical span need only be at most one. Its four actually visited orientations, disjoint loss partition, mixed-area triangle inequality, and convex localization provide a pen-and-paper proof; no search tree is required. The [review](analytic-width-review.md) records discovery and proof separately. The older [computer certificate](computer-assisted/README.md) is retained as a superseded approach to the width gate, not retracted.
 
-The proof uses four actually visited hallway positions with complementary cosine/sine pairs (sqrt(3/5),sqrt(2/5)) and (sqrt(2/5),sqrt(3/5)). A fixed disjoint partition counts independent lower- and upper-turn losses. The [mixed-area inequality](analytic-width-loss-partition.md) bounds triangular overlap; the [localization lemma](analytic-width-localization.md) uses four rational boundary checks and convexity rather than parameter enumeration. The final two-variable convex minimum gives more than 9/50 loss for each turn.
-
-No certificate replay, numerical optimizer, or generated case list is needed for this theorem. The [review](analytic-width-review.md) separates exploratory discovery from its analytic proof. The earlier computer-assisted 411/250 bound and its [complete certificate record](computer-assisted/README.md) remain preserved as a historical approach, superseded for the width gate rather than retracted.
-
-The [diagonal-width bound DU1](diagonal-width-upper-bound.md) also gives W<=1+2sqrt(2) for every sufficiently large body. Thus the earlier attainment and normalization arguments place every global maximizer in
+The [diagonal-width bound DU1](diagonal-width-upper-bound.md) gives W<=1+2sqrt(2) for sufficiently large bodies. Together with the earlier attainment and normalization arguments, every global maximizer has
 
 $$
 2<W\leq1+2\sqrt2<4.
 $$
 
-This does not localize its shape near the candidate.
+This is not a localization of the whole shape near the candidate.
 
-## What the global repair and calibrations actually establish
+## Earlier obstructions and their exact roles
 
-[GM2](global-curvature-majorant.md) constructs the least support majorant R(K) with the same four axis supports and curvature measure dominated by angular measure on the open quarters. It has a positive, exact **hull-area** gain. It does not automatically give a feasible area-improving sofa.
+[GM2](global-curvature-majorant.md) constructs the least same-axis curvature-dominated support majorant and an exact positive **hull-area** gain. [GR1](global-repair-counterexample.md) shows that the corresponding ordinary sofa area can decrease. [AC1](repair-corrected-global-calibration.md) and [AS1](repair-side-loss-calibration.md) bound explicitly defined corrected auxiliary functionals, not the original area for arbitrary repairs.
 
-[GR1](global-repair-counterexample.md) supplies wide, fully feasible examples where that repair decreases ordinary sofa area. [AC1](repair-corrected-global-calibration.md) and [AS1](repair-side-loss-calibration.md) then calibrate explicit corrected auxiliary functionals which include adverse corner work and side-mass terms. Their stated global maxima and equality kernels concern those functionals.
+[AX1](axis-cut-repair-budget-obstruction.md) disproves their proposed universal area linkage; [SAT1](saturation-does-not-rescue-repair.md) preserves that failure after full saturation. [SAC2](saturated-axis-cut-area.md) computes the saturated family's actual positive deficit of order tau^(3/2), despite a hull derivative-energy discrepancy of order tau. Its [diagnostic record](computer-assisted/saturated-axis-diagnostics.json) remains separate from its analytic proof. The new SC3 example is a further obstruction with no derivative-energy charge at all.
 
-The hoped-for universal ordinary-area linkage is false: AX1 disproves it near the candidate, and SAT1 shows that canonical saturation does not repair it. SAC2 computes the true smaller deficit. The valid geometric consequences under the explicit standard-corner accounting hypotheses remain valid; they are not a theorem about every saturated body or every maximizer.
-
-The older [AF3 calibration](adaptive-functional-global-calibration.md) likewise does not supply ordinary-area enclosure. For an actual hull support h,
+For the original adaptive functional,
 
 $$
-M-|S|=
-\underbrace{M-\widetilde{\mathcal Q}(h)}_{\text{auxiliary deficit}}
--\underbrace{(|S|-\widetilde{\mathcal Q}(h))}_{\text{ordinary-area error}}.
+M-|S|=[M-\widetilde{\mathcal Q}(h)]-[|S|-\widetilde{\mathcal Q}(h)].
 $$
 
-The second term can be positive, as [AF4](adaptive-functional-enclosure-counterexample.md) and the [narrow convex example](narrow-curvature-enclosure-counterexample.md) establish. Maximizing a further auxiliary expression does not settle the problem until its comparison with actual area is proved.
+[AF3](adaptive-functional-global-calibration.md) controls the first bracket and its equality kernel. [AF4](adaptive-functional-enclosure-counterexample.md) and the [narrow convex example](narrow-curvature-enclosure-counterexample.md) show the second can be positive. A new calibration cannot close the problem unless its ordinary-area inequality is valid.
 
-## A sufficient remaining route, with its quantifiers visible
+## The remaining sufficient theorem
 
-The existing [CW4 theorem](curvature-only-wide-hulls.md) proves the sharp ordinary-area bound and exact body uniqueness for unit-span common hulls with W>=2 and
+The existing [CW4 theorem](curvature-only-wide-hulls.md) gives the sharp ordinary-area bound and exact body uniqueness for unit-span common hulls with W>=2 and
 
 $$
 \sigma_K=h_K+h_K''\leq d\theta
 \quad\text{on the four open coordinate quarters}.
 $$
 
-Its proof does not separately assume contact order, full turns, or aligned faces. Therefore a sufficient route is
+It does not separately assume contact order, full turns, or aligned faces. A sufficient route therefore remains
 
 ```text
-an attained global maximizer S
-  -> common incoming unit-span representative             [earlier reduction]
-  -> 2 < W < 4                                            [AW-W and DU1]
-  -> full curvature-measure domination                    [NOT PROVED]
-  -> CW4                                                  [stated-class theorem]
-  -> area(S) = M and exact candidate recovery.
+an attained global maximizer
+  -> common incoming unit-span normalization
+  -> 2 < W < 4                          [AW-W and DU1]
+  -> full curvature-measure domination  [NOT PROVED]
+  -> CW4 and exact body recovery.
 ```
 
-For the value, a structural result for one attained maximizer suffices. For uniqueness it must apply to every maximizer, or be replaced by an equality-preserving comparison. Merely proving a set is fully saturated does neither. An area-dominating replacement also needs its equality case checked: hull equality alone is not exact equality of nonconvex bodies.
+Alternatively, a valid sharp ordinary-area comparison using auxiliary tail bodies could replace the curvature reduction. **No such unrestricted comparison is supplied by this continuation.** TR1 identifies exact tail regions; it does not bound the remaining core and clipping terms. The SC3 construction shows why the latest J_0 shortcut cannot be used.
 
-The unresolved maximizing-body argument includes obstructed outer/inner-corner contacts, hidden or coincident edge atoms, and the sharp absolutely continuous density bound. The earlier clear-contact exclusions have explicit scopes. Vanishing selection penalties do not discard the finite contact normal-cone terms. No step in this README substitutes these partial conclusions for full domination.
+A result for one attained maximizer determines the value. Uniqueness requires every maximizer or an equality-preserving comparison. Equal hulls alone do not identify nonconvex bodies. Obstructed contacts, hidden/coincident atoms, and the sharp diffuse density bound remain unresolved in the maximizing-body route. Vanishing finite selection penalties do not remove contact normal-cone terms.
 
-## Other exploration in this audit
-
-A separate floating-point experiment tested a direct disjoint-loss relaxation, rather than another curvature repair. On [-a,a] times [0,1], it counted outer loss in the upper halves of |x|>a/2 and inner-niche loss in the lower half of |x|<=a/2, then optimized finitely sampled hallway offsets. This is a possible ordinary-area route, not a new theorem.
-
-The experiments used NumPy 2.3.5 and SciPy 1.17.0, midpoint spatial sums and L-BFGS-B. At the candidate width, 26-angle/1,800-point multistarts with seeds 0 through 5 were tested, both without and with the necessary offset bounds f>=a cos(t), g>=a sin(t) and the rectangle upper bounds. Dropping these anchoring bounds produced a much looser apparent optimum; that relaxation must not be mistaken for a common-hull model. Restoring the bounds did not produce a certified global result.
-
-Candidate-only sampled envelope areas at 512, 2,048 and 8,192 angles were approximately 1.64524946, 1.64502870 and 1.64497369. These are not rigorous numerical bounds and do not certify convergence or optimality. They are compatible with the known candidate value and the omission of intermediate angular constraints. No complete covering, analytic minimization of this loss, or inequality for the whole continuum was established. This experiment is recorded as unfinished discovery, not as additional proof progress.
-
-## Reading map and retained history
+## Reading map and research record
 
 | Source | Role |
 |---|---|
-| [SAT1](saturation-does-not-rescue-repair.md), [SAC2](saturated-axis-cut-area.md) | Saturation counterexample and the exact ordinary-area deficit of that family. |
-| [AX1](axis-cut-repair-budget-obstruction.md) | Original cut-hull obstruction to the corrected budget. |
-| [GM2](global-curvature-majorant.md), [GR1](global-repair-counterexample.md) | Global hull repair and failure of unconditional ordinary-area monotonicity. |
-| [AC1](repair-corrected-global-calibration.md), [AS1](repair-side-loss-calibration.md) | Corrected auxiliary maxima, not universal geometric enclosure. |
-| [AW-W](analytic-width-theorem.md), [DU1](diagonal-width-upper-bound.md) | Analytic lower and upper width restrictions for competitive bodies. |
-| [CW4](curvature-only-wide-hulls.md) | Sharp geometric theorem conditional on the remaining curvature reduction. |
-| [AF3](adaptive-functional-global-calibration.md), [AF4](adaptive-functional-enclosure-counterexample.md) | Sharp auxiliary calibration and ordinary-area enclosure failure. |
-| [PR #8 audit](stability-pr8-transfer-audit.md) | Why one-turn Gerver stability does not give noncircular Romik localization. |
-| [Historical structural ledger](57-focused-structural-status.md) | Earlier constrained variations, singular/contact analysis, and their hypotheses. |
-| [Historical computer certificate](computer-assisted/README.md) | Preserved exact width covering and reproduction instructions. |
+| [PR #9 audit](coercive-pr9-transfer-audit.md) | Both pinned snapshots, actual source hypotheses, and the rejected transfer shortcut. |
+| [SC1–SC3](repair-shadow-clipping-obstruction.md) | Fully saturated shared-anchor counterexample, exact clipping identity, and positive actual deficit. |
+| [TR1](repair-invariant-tail-regions.md) | One-wall invariance, clipped-tail set identity, and the repair/saturation fixed point. |
+| [AB1](repair-anchor-budgets.md) | Valid shared anchor bounds; its proposed ordinary enclosure is marked disproved. |
+| [AW-W](analytic-width-theorem.md), [DU1](diagonal-width-upper-bound.md) | Analytic width restrictions for competitive bodies. |
+| [CW4](curvature-only-wide-hulls.md) | Sharp theorem conditional on the remaining curvature reduction. |
+| [SAT1](saturation-does-not-rescue-repair.md), [SAC2](saturated-axis-cut-area.md) | Earlier saturation obstruction and exact axis-cut area calculation. |
+| [AF3](adaptive-functional-global-calibration.md), [AF4](adaptive-functional-enclosure-counterexample.md) | Auxiliary calibration and ordinary-area failure. |
+| [PR #8 audit](stability-pr8-transfer-audit.md) | Why Gerver stability does not give noncircular Romik localization. |
+| [Historical structural ledger](57-focused-structural-status.md) | Finite constrained variations and partial singular/contact exclusions. |
 
-All prior findings and corrections remain in the files and Git history. The candidate is Romik's explicit construction; Baek's method and the repository's uniqueness/stability developments motivate the broader program. The recent audit uses the stated candidate formulas, but is not an independent review of every historical argument.
+All prior findings remain in files and Git history. The preceding README at `59ddfef` records the unfinished direct disjoint-loss numerical exploration; it did not produce a global certificate. The PR #9 audit records this continuation's abandoned fixed-width AB-model exploration. Neither numerical optimizer output is presented as proof progress on a failed geometric premise.
 
 ## Execution
 
-All continuation commits include `[skip ci]`. No CI was requested or used, and no Lean/Lake compilation, dependency installation, or manuscript build was performed. Local Python diagnostics and exploratory optimization are disclosed above. They do not turn the unproved global geometric comparison into a theorem. PR #3 remains open and draft.
+All continuation commits include `[skip ci]`. No CI, Lean/Lake compilation, dependency installation, or manuscript build was used. No files from PR #9 were modified, merged, or cherry-picked. Local diagnostic calculations are disclosed and do not certify unrestricted optimality. PR #3 remains open and draft, with the global theorem and independent review unfinished.
