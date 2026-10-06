@@ -50,7 +50,7 @@ No CI, workflow dispatch/rerun, or Lean build was attempted.
 
 ## Remaining exact target
 
-The strongest unconditional beta-only statement currently proved is the denominator lower bound q>723688 for rational beta_model/pi.
+The strongest unconditional beta-only statement currently proved is the deep Farey bound: if beta_model/pi=p/q in lowest terms, then q>=3,193,502,245,874,191,590. The earlier q>723688 argument is retained as a simpler first-stage proof.
 
 A complete answer would require one of:
 
