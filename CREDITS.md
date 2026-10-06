@@ -17,9 +17,8 @@ was not recorded.
   the compilation of the stability proof.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
-  Lean modules of a second proof of Baek's theorem (pull request #5). An AI system, working through
-  the owner's GitHub account, wrote the stability argument and its uncompiled Lean code (pull request
-  #8).
+  Lean modules of a second proof of Baek's theorem (pull request #5), and the stability argument
+  with its uncompiled Lean code (pull request #8).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
   simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
@@ -324,7 +323,7 @@ Figures, from 11:56 to 12:52:
 
 The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
 sofa. Its argument (the notes now in [`docs/archive/stability/`](docs/archive/stability)) and its Lean code, 85 modules and about
-12,200 lines, had been written by an AI system and never compiled.
+12,200 lines, had been written by ChatGPT Pro 6 and never compiled.
 
 How it was made:
 - 22:17 to 23:13: Claude Opus 5.5, in Claude Code 2.1.289, following the skill's procedure for an uncompiled draft,

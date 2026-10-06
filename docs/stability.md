@@ -4,13 +4,18 @@
 
 A moving sofa whose area is close to the maximum is close to Gerver's sofa. The library
 [`MovingSofaStability/`](../MovingSofaStability) proves this with the rate √ε, where ε is the missing area, and proves that the
-rate of the Hausdorff distance cannot be improved. The argument and the Lean code were written by an AI system
+rate of the Hausdorff distance cannot be improved. The argument and the Lean code were written by ChatGPT Pro 6
 (pull request #8) and compiled here; no person has reviewed the argument, and Lean's kernel checks
 every proof ([verification](verification.md)). Baek's paper does not contain these results.
 
 Throughout, `P` is the solution of Romik's system in the box (`P.IsSolution`, `P.InBox`), `G` is
 Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and areas are Baek's
 ([definitions](definitions.md)).
+
+[`Challenge.lean`](../Challenge.lean) restates the three main theorems in Mathlib's vocabulary, as
+[`Baek.gerver_sofa_stable`](../Challenge.lean#L401), [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L411) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L421)
+([Results](results.md#stability)); below are the library's forms, from which [`Solution.lean`](../Solution.lean)
+proves them.
 
 ## The theorems
 

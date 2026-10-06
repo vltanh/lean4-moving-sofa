@@ -19,7 +19,7 @@ and Mathlib is pinned to its release tag `v4.35.0-rc3`, with the exact revision 
 [`lake-manifest.json`](../lake-manifest.json). Every proof is complete and rests on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
 alone.
 
-- `lake build` must succeed, and its only warnings are the twelve `declaration uses 'sorry'` of
+- `lake build` must succeed, and its only warnings are the fifteen `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean), whose theorems are the statements of record.
 - [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the four libraries and of the
   theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
@@ -54,7 +54,7 @@ alone.
 ## Comparator
 
 [`comparator.json`](../comparator.json) configures Lake's Comparator, which checks in a sandbox that [`Solution.lean`](../Solution.lean) proves
-exactly the twelve statements of [`Challenge.lean`](../Challenge.lean), over identical definitions, with the three standard
+exactly the fifteen statements of [`Challenge.lean`](../Challenge.lean), over identical definitions, with the three standard
 axioms only, and replays the proofs through Lean's kernel and the NanoDa kernel. It must end with
 `Your solution is okay!`.
 

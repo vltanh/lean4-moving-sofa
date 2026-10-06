@@ -9,8 +9,8 @@ since.
 - [`uniqueness/`](uniqueness): ChatGPT Pro 6's notes on the uniqueness argument; note 20,
   [`uniqueness/20-complete-paper-proof.md`](uniqueness/20-complete-paper-proof.md), is the informal
   proof that the formalization follows.
-- [`stability/`](stability): the notes, numerical checks and status documents of pull request #8 on
-  the stability of Gerver's sofa, as they were at its last commit `8b25774`, before its Lean code
+- [`stability/`](stability): ChatGPT Pro 6's notes, numerical checks and status documents of pull
+  request #8 on the stability of Gerver's sofa, as they were at its last commit `8b25774`, before its Lean code
   was compiled; [`docs/stability.md`](../stability.md) replaced them. Notes 08, 05, 06 and 07 are the
   informal proof of the main theorem that the Lean code follows, note 01 that of the cap estimate
   with coefficient 2 sec φ, and note 09 that of the punctured sofas. Their status lines ("not

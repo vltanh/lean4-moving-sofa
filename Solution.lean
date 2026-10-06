@@ -4,6 +4,8 @@ public import ChallengeDefs
 public import MovingSofaOptimality.Main
 public import MovingSofaUniqueness.Main
 public import MovingSofaBridge.GerverSofa
+public import MovingSofaStability.GlobalStability
+public import MovingSofaStability.SharpExponent
 
 /-!
 # Solution: the theorems of the Challenge, proved
@@ -11,8 +13,9 @@ public import MovingSofaBridge.GerverSofa
 This module restates every theorem of `Challenge.lean` and proves it, with the Challenge's
 definitions from `ChallengeDefs`:
 
-* Baek's theorems (`Baek`), from the libraries `MovingSofaOptimality` (Baek's paper) and
-  `MovingSofaUniqueness` (the uniqueness of the optimal sofa);
+* Baek's theorems (`Baek`), from the libraries `MovingSofaOptimality` (Baek's paper),
+  `MovingSofaUniqueness` (the uniqueness of the optimal sofa) and `MovingSofaStability` (its
+  stability);
 * the bridge theorems (`Bridge`), from the library `MovingSofaBridge`;
 * formal-conjectures' theorems (`FormalConjectures.MovingSofa`), from the two groups above only: the
   bridge carries Baek's theorems over to formal-conjectures' definitions.
@@ -103,6 +106,114 @@ theorem gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox
     ((GerverParams.toLib_isSolution P).2 hP) ((GerverParams.toLib_inBox P).2 hPb)
     ((isMovingSofa_iff_lib S).1 hS) (by rw [← gerverSofa_eq_lib]; exact harea)
   exact ⟨g.angle, g.shift, by rw [gerverSofa_eq_lib]; exact hg⟩
+
+/-! ### Stability -/
+
+/-- Moving sofas with a rotation angle, in the Challenge's vocabulary, are those of the library. -/
+theorem isMovingSofaWithAngle_iff_lib (S : Set (ℝ × ℝ)) (ω : ℝ) :
+    IsMovingSofaWithAngle S ω ↔ MovingSofaOptimality.IsMovingSofaWithAngle S ω := by
+  constructor
+  · rintro ⟨hc, hconn, θ, c, h1, h2, h3, h4, h5, h6, h7⟩
+    exact ⟨hc, hconn, θ, c, ⟨h1, h2, h3, h4, h5, h6, h7⟩⟩
+  · rintro ⟨hc, hconn, θ, c, hm⟩
+    exact ⟨hc, hconn, θ, c, hm.continuousOn_angle, hm.continuousOn_shift, hm.angle_zero,
+      hm.angle_one, hm.start, hm.inside, hm.finish⟩
+
+/-- The deficit in the Challenge's vocabulary is the library's. -/
+theorem sofaDeficit_eq_lib (P : GerverParams) (S : Set (ℝ × ℝ)) :
+    sofaDeficit P S = MovingSofaStability.sofaDeficit P.toLib S :=
+  rfl
+
+/-- The Euclidean distance in the Challenge's vocabulary is the library's. -/
+theorem euclideanDist_eq_lib (p q : ℝ × ℝ) :
+    euclideanDist p q = MovingSofaStability.euclideanDist p q := by
+  simp only [euclideanDist, MovingSofaStability.euclideanDist, MovingSofaOptimality.norm2,
+    MovingSofaOptimality.dot, Prod.fst_sub, Prod.snd_sub]
+  congr 1
+  ring
+
+/-- Closeness in the Challenge's vocabulary is the library's. -/
+theorem euclideanClose_iff_lib (r : ℝ) (S T : Set (ℝ × ℝ)) :
+    EuclideanClose r S T ↔ MovingSofaStability.EuclideanClose r S T := by
+  simp only [EuclideanClose, MovingSofaStability.EuclideanClose, MovingSofaStability.DirectedClose,
+    euclideanDist_eq_lib]
+
+/-- The support function in the direction `π` is minus the least abscissa. -/
+theorem supp_pi_eq (X : Set (ℝ × ℝ)) : MovingSofaOptimality.supp X π = -sInf (Prod.fst '' X) := by
+  rw [MovingSofaOptimality.supp, ← Real.sSup_neg]
+  congr 1
+  ext y
+  simp only [mem_image, Set.mem_neg, MovingSofaOptimality.dot, MovingSofaOptimality.uvec, cos_pi,
+    sin_pi, mul_neg, mul_one, mul_zero, add_zero]
+  constructor
+  · rintro ⟨p, hp, rfl⟩
+    exact ⟨p, hp, by ring⟩
+  · rintro ⟨p, hp, hpy⟩
+    exact ⟨p, hp, by linarith⟩
+
+/-- The support function in the direction `π/2` is the greatest height. -/
+theorem supp_pi_div_two_eq (X : Set (ℝ × ℝ)) :
+    MovingSofaOptimality.supp X (π / 2) = sSup (Prod.snd '' X) := by
+  rw [MovingSofaOptimality.supp]
+  congr 1
+  ext y
+  simp only [mem_image, MovingSofaOptimality.dot, MovingSofaOptimality.uvec, cos_pi_div_two,
+    sin_pi_div_two, mul_zero, mul_one, zero_add]
+
+/-- The normalization in the Challenge's vocabulary is the library's. -/
+theorem normalizedSofa_eq_lib (P : GerverParams) (S : Set (ℝ × ℝ)) :
+    normalizedSofa P S = MovingSofaStability.normalizedSofa P.toLib S := by
+  rw [MovingSofaStability.normalizedSofa, MovingSofaUniqueness.Rigid.coe_translate, MovingSofaStability.normalizingShift,
+    supp_pi_eq, supp_pi_eq, supp_pi_div_two_eq, ← gerverSofa_eq_lib, normalizedSofa]
+  congr 2
+  ext p
+  · simp only [Prod.fst_add]
+    ring
+  · rfl
+
+open scoped symmDiff in
+/-- **Stability** (not in Baek's paper). There are constants `C`, `C'` and `ε₀ > 0` such that every
+moving sofa `S` whose area is less than the area of Gerver's sofa by `ε < ε₀`, once normalized, lies
+within Euclidean Hausdorff distance `C √ε` of Gerver's sofa, and the symmetric difference of the two
+has area at most `C' √ε`. -/
+theorem gerver_sofa_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ∃ C C' ε₀ : ℝ, 0 < C ∧ 0 < C' ∧ 0 < ε₀ ∧
+      ∀ S, IsMovingSofa S → sofaDeficit P S < ε₀ →
+        EuclideanClose (C * √(sofaDeficit P S)) (normalizedSofa P S) (gerverSofa P) ∧
+        (volume (normalizedSofa P S ∆ gerverSofa P)).toReal ≤ C' * √(sofaDeficit P S) := by
+  obtain ⟨C, C', ε₀, hC, hC', hε₀, h⟩ := MovingSofaStability.unrestricted_stability
+    ((GerverParams.toLib_isSolution P).2 hP) ((GerverParams.toLib_inBox P).2 hPb)
+  refine ⟨C, C', ε₀, hC, hC', hε₀, fun S hS hε => ?_⟩
+  obtain ⟨h1, h2⟩ := h S ((isMovingSofa_iff_lib S).1 hS) hε
+  rw [euclideanClose_iff_lib, normalizedSofa_eq_lib, sofaDeficit_eq_lib, gerverSofa_eq_lib]
+  exact ⟨h1, h2⟩
+
+/-- **Stability of the rotation angle** (not in Baek's paper). There are constants `C` and `ε₀ > 0`
+such that a moving sofa whose area is less than the area of Gerver's sofa by `ε < ε₀`, and whose
+motion turns it clockwise by an angle `ω ∈ [arccos (5/11), π/2]`, has `π/2 - ω ≤ C ε`. -/
+theorem gerver_sofa_angle_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ∃ C ε₀ : ℝ, 0 < C ∧ 0 < ε₀ ∧
+      ∀ S ω, IsMovingSofaWithAngle S ω → ω ∈ Icc (arccos (5 / 11)) (π / 2) →
+        sofaDeficit P S < ε₀ → π / 2 - ω ≤ C * sofaDeficit P S := by
+  obtain ⟨C, ε₀, hC, hε₀, h⟩ := MovingSofaStability.terminal_angle_stability
+    ((GerverParams.toLib_isSolution P).2 hP) ((GerverParams.toLib_inBox P).2 hPb)
+  exact ⟨C, ε₀, hC, hε₀, fun S ω hS hω hε =>
+    (h S ω ((isMovingSofaWithAngle_iff_lib S ω).1 hS) hω hε).2⟩
+
+/-- **The exponent `1/2` is optimal** (not in Baek's paper). For every exponent `a > 1/2`, every
+constant `C` and every `ε₀ > 0`, there is a moving sofa `S` whose deficit `ε` satisfies `0 < ε < ε₀`
+and which lies within Euclidean Hausdorff distance `C εᵃ` of no image of Gerver's sofa by a rotation
+about the origin followed by a translation. -/
+theorem gerver_sofa_stability_exponent (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox)
+    (a C ε₀ : ℝ) (ha : 1 / 2 < a) (hε₀ : 0 < ε₀) :
+    ∃ S, IsMovingSofa S ∧ 0 < sofaDeficit P S ∧ sofaDeficit P S < ε₀ ∧
+      ∀ (θ : ℝ) (v : ℝ × ℝ),
+        ¬ EuclideanClose (C * sofaDeficit P S ^ a) S ((fun p => rot θ p + v) '' gerverSofa P) := by
+  obtain ⟨S, hS, hpos, hlt, hfar⟩ := MovingSofaStability.no_hausdorff_exponent_gt_half
+    ((GerverParams.toLib_isSolution P).2 hP) ((GerverParams.toLib_inBox P).2 hPb) ha C hε₀
+  refine ⟨S, (isMovingSofa_iff_lib S).2 hS, hpos, hlt, fun θ v hclose => hfar ⟨θ, v⟩ ?_⟩
+  rw [euclideanClose_iff_lib, sofaDeficit_eq_lib, gerverSofa_eq_lib] at hclose
+  exact hclose
 
 end Baek
 
