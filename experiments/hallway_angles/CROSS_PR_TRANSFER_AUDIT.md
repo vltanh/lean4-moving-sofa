@@ -81,6 +81,19 @@ Branch: `paper/stationarity-deficit-rigidity`.
 
 For the forward orientation interval beta>pi/2 the full interval may exceed 5/3, so this lemma alone does not solve the forward class; it may still apply on individual contact subintervals.
 
+
+### 7A. Exact no-loss angle completion of the SAME sofa
+
+`04-angle-and-set-recovery.md` proves a particularly relevant theorem in the ordinary hallway: pinned edge bounds plus a sufficiently large-area fixed-angle sofa imply that a rotated copy of the SAME sofa has a complete right-angle motion. There is no uniform shrinking. The proof removes a forced triangle from the cap, derives width <=1 through every missing orientation, and concatenates actual placements.
+
+**Transfer target:** replace the current arbitrary-hallway alignment-by-scaling step. For a hypothetical arbitrary-bend maximizer, use endpoint/pinned geometry to prove that one of the two missing endpoint rotations can be completed inside a straight arm with the original shape. If this works near the forward/reverse crossing, then every maximizer belongs exactly to one of the aligned classes:
+
+    M(beta)=max{M_+(beta),M_-(beta)}.
+
+This is likely more important than improving the current near-reversal scaling constants. It would turn class optimality into unrestricted optimality without an area-loss error term.
+
+The right-angle proof uses a concrete endpoint parallelogram, an area threshold and two scalar width inequalities. Those formulas do not transfer unchanged to a beta-hallway; the reusable idea is the no-loss completion mechanism and its proof structure.
+
 ### 7. Affine-minus-squares deficit identity
 
 `03-deficit-and-rigidity.md` decomposes the area deficit into:
@@ -148,7 +161,7 @@ Several exact counterexamples show that a sharp analytic functional can fail to 
    
    on an interval containing the candidate crossing.
 
-3. **Class exhaustiveness/alignment.** Combine all-maximizer geometry and quantitative coercivity to prove
+3. **Class exhaustiveness/alignment.** First try the PR #2 no-loss angle-completion mechanism, using arbitrary-bend pinned-edge geometry, to prove
    
        M(beta)=max{M_+(beta),M_-(beta)}
    
