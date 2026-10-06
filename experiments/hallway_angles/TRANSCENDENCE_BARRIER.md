@@ -63,3 +63,26 @@ The relevant landscape includes:
 - Schanuel's conjecture, which gives the needed transcendence-degree control in the conditional argument.
 
 A publication should cite primary or standard survey sources for these results; web searches in the research session are not substitutes for the final bibliography.
+
+
+## A standard conjecture exactly covers the same-base algebraic powers
+
+Waldschmidt's formulation of Schneider's algebraic-power question is useful here. For an algebraic base alpha not 0 or 1, the conjectural statement that the full sequence alpha^(gamma^j) has the expected transcendence degree is equivalent to the following finite-dimensional form:
+
+    if 1,beta_1,...,beta_m are Q-linearly independent algebraic numbers,
+    then alpha^beta_1,...,alpha^beta_m are algebraically independent.
+
+Under the hypothetical rational sofa bend, `RATIONAL_BEND_FIELD_DEGREE.md` proves that
+
+    1, -i mu (beta/pi), kappa
+
+are Q-linearly independent algebraic numbers. Thus the two same-base powers
+
+    (-1)^(-i mu beta/pi)=exp(mu beta),
+    (-1)^kappa=exp(i kappa pi)
+
+sit directly inside this standard open algebraic-power framework.
+
+This observation does NOT by itself turn the sofa equations into an algebraic relation between only those two powers; the contact equation also contains the transcendental switching exponential. Hence even assuming this Gel'fond/Schneider power conjecture would not automatically finish the sofa irrationality proof. It does show that the algebraic powers naturally produced by a rational bend lie on a recognized open frontier rather than in an overlooked elementary case.
+
+The relevant standard survey statement is Waldschmidt's discussion of the Four Exponentials and Gel'fond/Schneider conjectures; the structured partial results of Gel'fond, Brownawell-Waldschmidt, Chudnovsky, Philippon, Diaz and Nesterenko do not establish the arbitrary prescribed-exponent form.
