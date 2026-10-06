@@ -1,0 +1,77 @@
+{
+  "format": "hallway-round6-checks-v1",
+  "status": "Analytic proof drafts and exact scalar certificates; not independently reviewed or Lean checked",
+  "starting_commit": "9d08bce1b5c45cabea6c990e8965cfc238af699f",
+  "source_blobs": {
+    "parameter_certificate.py": "d823a8937a550c72a1f596785d9de4c1b8d9de8e",
+    "width_certificate.py": "6fbfc4643eb0e00769e5eb010d626a36ab698bb1",
+    "reverse_exact.py": "be73f2032da918913f7d8ed34edc99909fff701e",
+    "interior_core_certificate.py": "c12e4d3690b895124af7ef6348c73e99e1a12735",
+    "forward_contact_equations.py": "214821268174c247ba0302249b3d8ed728f6b085",
+    "contact_crossing_certificate.py": "ec2ac7c3aed336c84eeec2f699c6587a3655de63",
+    "test_interior_core.py": "9f78f9952790c3999b2d9244f1d3a01dfec10581",
+    "test_contact_model.py": "e63a0cd554c3fe23d2ffde92365e916a13917518",
+    "forward_contact_diagnostics.py": "8ffb70d33eb979279719fe4808a669594becb471",
+    "round6_check.py": "206c637ac95a4e060a4c0841bfc900710c5931c4"
+  },
+  "environment": {"python": "3.13.5", "numpy": "2.3.5", "scipy": "1.17.0", "shapely": "2.1.2", "mpmath": "1.3.0"},
+  "tests": {"command": "python -m unittest -v test_interior_core test_contact_model", "run": 29, "passed": 29, "skipped": 0, "ci": false, "lean": false},
+  "core_certificate": {
+    "epsilon_cutoff": "1/8",
+    "cutoff_degrees": {"lower": "172.838027560", "upper": "172.838027561"},
+    "parameter_cells": 64, "boundary_parameters": 128, "common_rectangles": 255, "used_rectangles": 65, "direction_cells": 1024,
+    "minimum_normalized_margin": "24454657187882255731057316831447807266608181577849/4877390118667421101538791850472609706672128000000000",
+    "scalar_bounds": {
+      "eV": ["27/20", "34/25"], "ell": ["143/500", "1/3"], "endpoint": ["59/250", "1/4"],
+      "width_slope": ["1/4", "1"], "width_half_slope": ["1/10", "1"], "width_near_slope": ["1/4", "1"],
+      "narrow_gap": ["1/3", "1/2"], "jacobi_y": ["0", "16/25"], "width_x": ["0", "7/20"],
+      "jacobi_x_monotone": ["0", "2"], "width_y_monotone": ["0", "1"], "curvature_upper": ["1", "8/5"]
+    },
+    "scalar_enclosures": {
+      "eV": [107466064163658867334942476629, 107657226628489670217545711721],
+      "ell": [22729337691865788343749861091, 22894530502338457297360522386],
+      "endpoint": [18738797325358991673341623499, 18994442165243371388944472028],
+      "width_slope": [22711288884706703281396719791, 22954323633527516198880421577],
+      "width_half_slope": [8550203532393926279842084710, 8733991419002568775473781688],
+      "width_near_slope": [21014920317397417285539803872, 21247883767784522508071624791],
+      "narrow_gap": [28230018903291069324350216918, 28379060809805801354289066808],
+      "jacobi_y": [50186149026380082307467832488, 50350090374075220366229392893],
+      "width_x": [25650561513859071446592732645, 26141077881984107723959257341],
+      "jacobi_x_monotone": [88215067296177463368063152510, 88904297791066022732202246010],
+      "width_y_monotone": [23877083050573086235079064389, 24726091917705408375094054225],
+      "curvature_upper": [126112961569474622790576311774, 126269895302307267089201813691]
+    },
+    "path": {
+      "matrix": [["39/100", "-8/25"], ["-8/25", "197/100"]],
+      "trace_squared": ["80896975/54550528", "12025/13318"],
+      "path_errors": ["(12/5)sqrt(d)+(7/5)d", "(41/25)sqrt(d)+2d"],
+      "slacks": {"poincare_A": "5903/960000", "poincare_B": "1391/80000", "matrix_determinant": "6659/10000", "trace_x": "3197447763/80462028800", "trace_y": "25092047/491101250", "mismatch": "1805/221184", "sinc_reciprocal": "109/204800", "cos_mismatch": "287/51200", "reverse_not_forward": "12/5", "coarse_width_97": "3/25600", "sqrt_deficit": "1/3600"}
+    },
+    "full_certificate_sha256": "f57f811927ae887ab07f9369ee27dd5ecffb0556be546a10259fd196c86a0b54"
+  },
+  "global_value_enclosures": [
+    {"bend_degrees": 173, "global_optimum_formula": {"lower": "11.114966030", "upper": "11.114966031"}, "interval": [880618334986750578215257284194, 880618334986750578215257284977]},
+    {"bend_degrees": 175, "global_optimum_formula": {"lower": "15.553004835", "upper": "15.553004836"}, "interval": [1232235994682730559311777614339, 1232235994682730559311777615804]},
+    {"bend_degrees": 177, "global_optimum_formula": {"lower": "25.912848797", "upper": "25.912848798"}, "interval": [2053027395707876028645349878208, 2053027395707876028645349881086]},
+    {"bend_degrees": 179, "global_optimum_formula": {"lower": "77.725311765", "upper": "77.725311766"}, "interval": [6158033631995296457529293031639, 6158033631995296457529293052604]}
+  ],
+  "contact_model_certificate": {
+    "format": "forward-contact-model-crossing-v1", "status": "unique scalar model crossing certified",
+    "warning": "NOT a forward-class or unrestricted phase-transition theorem; contact geometry and optimality remain separate",
+    "beta_degrees_interval": ["135", "140"], "T_interval": ["13/20", "3/4"], "tube_cells": 256, "monotonicity_grid": [16, 16],
+    "denominator": 79228162514264337593543950336,
+    "minimum_F_T": 100640514480728184027002458674,
+    "maximum_along_branch_derivative": -109505625206996195173306350356,
+    "root_bend_degrees_interval": ["136.672184698", "136.672184699"],
+    "endpoint_records": [
+      {"bend_degrees": "68336092349/500000000", "T": [55042456711475344389609776742, 55042456711475344390039273472], "gap": [405343873684462123, 405343882600452697], "area": [147952191130828223134979591246, 147952191130828223143895581540], "alpha": [39452165339702767896302046310, 39452165339702767896731543043]},
+      {"bend_degrees": "136672184699/1000000000", "T": [55042456711078840861761260748, 55042456711078840862190757479], "gap": [-3058736935041788345, -3058736926125797725], "area": [147952191130502477165464684473, 147952191130502477174380674814], "alpha": [39452165340790667572240093097, 39452165340790667572669589831]}
+    ],
+    "root_T_enclosure": {"lower": "0.694733475601", "upper": "0.694733475658"},
+    "root_alpha_degrees_enclosure": {"lower": "28.530796307", "upper": "28.530796312"},
+    "root_signed_area_enclosure": {"lower": "1.867419188", "upper": "1.867419194"},
+    "full_certificate_sha256": "1a4694e7fa83c0676f53e4f66df5a9a450d8424629a855bde5a4323ff3512ebe"
+  },
+  "exclusions": ["No forward-class upper bound matching the contact model is proved.", "Continuous feasibility and the boundary topology of the contact model are not certified.", "The scalar model root is not identified with the unrestricted beta_c.", "The sufficient cutoff is not the true onset of global reverse optimality."],
+  "reproduction": ["python interior_core_certificate.py --parameter-cells 128 --points 128 --direction-cells 1024 --output interior-core-proof.json", "python contact_crossing_certificate.py --cells 256 --output contact-model-proof.json", "python round6_check.py --output results/round6-checks.json"]
+}
