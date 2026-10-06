@@ -54,17 +54,88 @@ theorem roof_gap_of_close_point {K : Set Point} {a b H L : ℝ} {γ : ℝ → �
   have hdy := (abs_le.mp hy).1
   nlinarith
 
+/-- The band between `F - 2e` and `F + e` over `[a, b]` has measure `3e(b - a)`: its vertical
+sections have the constant length `3e`. -/
+private theorem volume_continuous_band {F : ℝ → ℝ} (hF : Continuous F) {a b e : ℝ}
+    (he : 0 ≤ e) :
+    volume (regionBetween (fun x => F x - 2 * e) (fun x => F x + e) (Icc a b)) =
+      ENNReal.ofReal (3 * e * (b - a)) := by
+  have h1 : Measurable fun x => F x - 2 * e := (hF.sub continuous_const).measurable
+  have h2 : Measurable fun x => F x + e := (hF.add continuous_const).measurable
+  rw [Measure.volume_eq_prod, volume_regionBetween_eq_lintegral' h1 h2 measurableSet_Icc]
+  have heq : ∀ x, ((fun x => F x + e) - (fun x => F x - 2 * e)) x = 3 * e := fun x => by
+    simp only [Pi.sub_apply]
+    ring
+  simp only [heq, lintegral_const, Measure.restrict_apply MeasurableSet.univ, univ_inter,
+    Real.volume_Icc]
+  rw [← ENNReal.ofReal_mul (by positivity), mul_assoc]
+
 theorem area_continuous_band {F : ℝ → ℝ} (hF : Continuous F) {a b e : ℝ}
     (hab : a ≤ b) (he : 0 ≤ e) :
     area (regionBetween (fun x => F x - 2 * e) (fun x => F x + e) (Icc a b)) =
       3 * e * (b - a) := by
-  sorry
+  unfold area
+  rw [volume_continuous_band hF he, ENNReal.toReal_ofReal]
+  have := sub_nonneg.mpr hab
+  positivity
 
 theorem CapRoofData.outer_area_bound {K : Set Point} {a b H L : ℝ} {γ : ℝ → ℝ}
     (h : CapRoofData K a b H L γ) :
     ∃ A : ℝ, 0 < A ∧ ∀ S : Set Point, IsCompact S → ∀ d ∈ Ioc (0 : ℝ) 1,
       DirectedClose d S (capShape K) → area (S \ capShape K) ≤ A * d := by
-  sorry
+  obtain ⟨A0, hA0, hparallel⟩ := exists_parallel_layer_constant h.cap.2.1
+    (interior_nonempty_of_box h.order (by norm_num) h.rectangle)
+  let A := A0 + 3 * (L + 1) * (b - a)
+  have hL := h.slope_nonneg
+  have hab := sub_pos.mpr h.order
+  have hA : 0 < A := by
+    have : 0 ≤ 3 * (L + 1) * (b - a) := by positivity
+    dsimp [A]
+    linarith
+  let F : ℝ → ℝ := fun x => γ (max a (min x b))
+  have hF : Continuous F := continuous_clamped_roof h.order.le h.slope_nonneg h.roof_lipschitz
+  have hFeq : ∀ x ∈ Icc a b, F x = γ x := by
+    intro x hx
+    simp only [F, min_eq_left hx.2, max_eq_right hx.1]
+  refine ⟨A, hA, ?_⟩
+  intro S hS d hd hclose
+  let E := S \ capShape K
+  let Eout := E \ K
+  let Ein := E ∩ K
+  have hEf : volume E ≠ ⊤ := volume_ne_top_of_subset sdiff_subset hS.measure_lt_top.ne
+  have hout : Eout ⊆ (K + euclideanDisk d) \ K := by
+    rintro p ⟨⟨hpS, -⟩, hpK⟩
+    obtain ⟨q, hq, hpq⟩ := hclose p hpS
+    exact ⟨⟨q, hq.1, p - q, hpq, add_sub_cancel q p⟩, hpK⟩
+  have hareaOut := hparallel d ⟨hd.1.le, hd.2⟩ Eout hout
+  let e := (L + 1) * d
+  have he : 0 < e := mul_pos (by linarith) hd.1
+  let Band := regionBetween (fun x => F x - 2 * e) (fun x => F x + e) (Icc a b)
+  have hin : Ein ⊆ Band := by
+    rintro p ⟨⟨hpS, hpG⟩, hpK⟩
+    have hpN : p ∈ niche K (π / 2) := by
+      by_contra hn
+      exact hpG ⟨hpK, hn⟩
+    obtain ⟨q, hq, hpq⟩ := hclose p hpS
+    have hgap := roof_gap_of_close_point h hpN hq hpq
+    rw [h.niche_eq] at hpN
+    refine ⟨hpN.1, ?_, ?_⟩
+    · change F p.1 - 2 * e < p.2
+      rw [hFeq p.1 hpN.1]
+      change γ p.1 - p.2 ≤ e at hgap
+      linarith
+    · change p.2 < F p.1 + e
+      rw [hFeq p.1 hpN.1]
+      linarith [hpN.2.2]
+  have hBandf : volume Band ≠ ⊤ := by
+    rw [volume_continuous_band hF he.le]
+    exact ENNReal.ofReal_ne_top
+  have hareaIn := area_mono_of_finite hin hBandf
+  rw [area_continuous_band hF h.order.le he.le] at hareaIn
+  have hsplit := area_inter_add_sdiff (S := E) h.cap.2.1.2.1.measurableSet hEf
+  change area Ein + area Eout = area E at hsplit
+  dsimp [A, e] at *
+  linarith
 
 theorem symmetricDifferenceArea_eq {S G : Set Point} (hS : MeasurableSet S)
     (hG : MeasurableSet G) (hSf : volume S ≠ ⊤) (hGf : volume G ≠ ⊤) :

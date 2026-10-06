@@ -46,7 +46,15 @@ theorem sofaCap_closed (S : Set Point) : IsClosed (sofaCap S) := by
   exact (isClosed_halfPlus _ _).inter (isClosed_biInter fun t ht => isClosed_halfMinus _ _)
 
 theorem sofaCap_convex (S : Set Point) : Convex ℝ (sofaCap S) := by
-  sorry
+  intro p hp q hq a b ha hb hab
+  refine ⟨by simpa only [Prod.snd_add, Prod.smul_snd, smul_eq_mul] using
+    add_nonneg (mul_nonneg ha hp.1) (mul_nonneg hb hq.1), ?_⟩
+  intro t ht
+  have h1 := mul_le_mul_of_nonneg_left (hp.2 t ht) ha
+  have h2 := mul_le_mul_of_nonneg_left (hq.2 t ht) hb
+  have h3 : a * supp S t + b * supp S t = supp S t := by rw [← add_mul, hab, one_mul]
+  rw [dot_add_left, dot_smul_left, dot_smul_left]
+  linarith
 
 theorem sofaCap_compact {S : Set Point} (htop : supp S (π / 2) = 1) : IsCompact (sofaCap S) := by
   have hb : IsCompact (Icc (-supp S π) (supp S 0) ×ˢ Icc (0 : ℝ) 1) :=
@@ -70,7 +78,49 @@ theorem sofaCap_upper_support {S : Set Point} (hS : IsCompact S) (hne : S.Nonemp
 
 theorem sofaCap_isCap {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
     (hstrip : S ⊆ hStrip) (htop : supp S (π / 2) = 1) : IsCap (sofaCap S) (π / 2) := by
-  sorry
+  have hsub := subset_sofaCap hS hstrip
+  have hcpt := sofaCap_compact htop
+  have hneC := hne.mono hsub
+  have htopC : supp (sofaCap S) (π / 2) = 1 :=
+    (sofaCap_upper_support hS hne hstrip htop ⟨by positivity, by linarith [pi_pos]⟩).trans htop
+  obtain ⟨p, hp⟩ := id hneC
+  have hfloor : (p.1, 0) ∈ sofaCap S := sofaCap_down hp le_rfl hp.1
+  have hbottom : supp (sofaCap S) (3 * π / 2) = 0 := by
+    apply le_antisymm
+    · apply supp_le_of_forall hneC
+      intro q hq
+      rw [dot_uvec_three_pi_div_two]
+      linarith [hq.1]
+    · have he := dot_le_supp hcpt hfloor (3 * π / 2)
+      simpa only [dot_uvec_three_pi_div_two, neg_zero] using he
+  refine ⟨⟨by positivity, le_rfl⟩, ⟨hneC, hcpt, sofaCap_convex S⟩,
+    htopC, htopC, ?_, hbottom, ?_⟩
+  · simpa only [show π / 2 + π = 3 * π / 2 by ring] using hbottom
+  · let I := ↥(Icc (0 : ℝ) π)
+    refine ⟨Option I, (fun i => i.elim (3 * π / 2) Subtype.val),
+      (fun i => i.elim 0 (fun t => supp S t.1)), ?_, ?_⟩
+    · intro i
+      cases i with
+      | none => exact Or.inr (by simp)
+      | some t =>
+        apply Or.inl
+        by_cases ht : t.1 ≤ π / 2
+        · exact Or.inl ⟨t.2.1, ht⟩
+        · exact Or.inr ⟨(not_le.mp ht).le, show t.1 ≤ π / 2 + π / 2 by linarith [t.2.2]⟩
+    · ext q
+      simp only [mem_iInter]
+      constructor
+      · intro h i
+        cases i with
+        | none => simpa only [Option.elim_none, halfMinus, mem_ofPred_eq,
+            dot_uvec_three_pi_div_two, neg_nonpos] using h.1
+        | some t => exact h.2 t.1 t.2
+      · intro h
+        have hf := h none
+        have hf' : 0 ≤ q.2 := by
+          simpa only [Option.elim_none, halfMinus, mem_ofPred_eq,
+            dot_uvec_three_pi_div_two, neg_nonpos] using hf
+        exact ⟨hf', fun t ht => h (some ⟨t, ht⟩)⟩
 
 @[simp] theorem sofaCap_of_cap {K : Set Point} (hK : IsCap K (π / 2)) : sofaCap K = K := by
   ext p
@@ -104,6 +154,19 @@ theorem sofaCap_close_to_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P
 theorem sofaCap_partial_constraints {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) (hω : ω ∈ Icc (0 : ℝ) (π / 2))
     (htop : supp S (π / 2) = 1) : PartialSofaConstraints (sofaCap S) S ω := by
-  sorry
+  have hcpt := ms_isCompact_of_isMovingSofaWithAngle hS
+  have hne := hS.2.1.nonempty
+  have hstrip := moving_strip_of_top ⟨ω, hS⟩ htop
+  have hs : ∀ {t : ℝ}, t ∈ Icc (0 : ℝ) π → supp (sofaCap S) t = supp S t :=
+    sofaCap_upper_support hcpt hne hstrip htop
+  refine ⟨subset_sofaCap hcpt hstrip, ?_, ?_⟩
+  · intro p hp t ht
+    have h0 := moving_hallway_slacks hS hp ht
+    have h1 := hs ⟨ht.1, ht.2.trans (hω.2.trans (by linarith [pi_pos]))⟩
+    have h2 := hs (t := t + π / 2) ⟨by linarith [ht.1, pi_pos], by linarith [ht.2, hω.2]⟩
+    simpa only [innerSlackU, innerSlackV, h1, h2] using h0
+  · intro p hp
+    rw [hs ⟨hω.1, by linarith [hω.2, pi_pos]⟩]
+    exact moving_terminal_lower hS hp
 
 end MovingSofaStability

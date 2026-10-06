@@ -25,7 +25,12 @@ def homotheticBody (K : Set Point) (z : Point) (lam : ℝ) : Set Point :=
 
 theorem homotheticBody_convexBody {K : Set Point} (hK : IsConvexBody K) (z : Point) (lam : ℝ) :
     IsConvexBody (homotheticBody K z lam) := by
-  sorry
+  refine ⟨hK.1.image _, hK.2.1.image (by fun_prop), ?_⟩
+  rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩ a b ha hb hab
+  refine ⟨a • p + b • q, hK.2.2 hp hq ha hb hab, ?_⟩
+  obtain rfl : b = 1 - a := by linarith
+  ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.fst_sub, Prod.snd_sub,
+    Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring
 
 theorem homotheticBody_support {K : Set Point} (hK : IsConvexBody K) (z : Point)
     {lam : ℝ} (hlam : 0 ≤ lam) (t : ℝ) :
@@ -43,7 +48,13 @@ theorem homotheticBody_support {K : Set Point} (hK : IsConvexBody K) (z : Point)
 
 theorem area_homotheticBody (K : Set Point) (z : Point) (lam : ℝ) :
     area (homotheticBody K z lam) = lam ^ 2 * area K := by
-  sorry
+  have hdim : Module.finrank ℝ Point = 2 := by
+    simp [Point, Module.finrank_prod]
+  have he := Measure.addHaar_image_homothety (volume : Measure Point) z lam K
+  change volume (homotheticBody K z lam) = _ at he
+  unfold area
+  rw [he, hdim, abs_of_nonneg (sq_nonneg lam), ENNReal.toReal_mul,
+    ENNReal.toReal_ofReal (sq_nonneg lam)]
 
 /-- A fixed inscribed ball provides a support margin in every direction. -/
 theorem support_margin_of_ball {K : Set Point} (hK : IsConvexBody K) {z : Point} {r : ℝ}
