@@ -7,14 +7,14 @@ public import MovingSofaUniqueness.RegularClosed
 # The uniqueness theorem from the second proof of optimality
 
 The proof of the uniqueness theorem (`thm:main` of the manuscript `docs/paper`) and of `cor:all`,
-with `thm:second` (`MovingSofaUniqueness.Optimality`) in place of Baek's Theorem 1.1.1, as Section
-8.4 of the manuscript says. The steps are those of `MovingSofaUniqueness.Main`: a translate of the
-sofa lies in its monotonization, of the same area, whose cap is maximizing (`equal_area_envelope`,
-`own_cap_maximizes`; `prop:reduction`); a rotated copy of that sofa moves with the rotation angle
-`π/2` (`lem:right-motion`), and its monotonization is a horizontal translate of Gerver's sofa
-(`right_angle_monotone_eq_gerver`; `lem:max-right`); and Gerver's sofa is the closure of its
-interior (`gerver_regularClosed`). The short assembly is repeated here, so that this module does not
-import `MovingSofaUniqueness.Main`, whose results use Baek's theorem.
+with the optimality of `MovingSofaUniqueness.Optimality` in place of Baek's Theorem 1.1.1, as
+`rem:second` of the manuscript says. The steps are those of `MovingSofaUniqueness.Main`: a translate
+of the sofa lies in its monotonization, of the same area, whose cap is maximizing
+(`equal_area_envelope`, `own_cap_maximizes`; `prop:reduction`); a rotated copy of that sofa moves
+with the rotation angle `π/2` (`lem:right-motion`), and its monotonization is a horizontal translate
+of Gerver's sofa (`right_angle_monotone_eq_gerver`; `thm:caps`); and Gerver's sofa is the closure of
+its interior (`gerver_regularClosed`). The short assembly is repeated here, so that this module does
+not import `MovingSofaUniqueness.Main`, whose results use Baek's theorem.
 
 The declarations are in the namespace `MovingSofaUniqueness.MaximizerRoute`;
 `MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq` is the second proof of
@@ -29,8 +29,8 @@ open Set Real MeasureTheory MovingSofaOptimality
 
 namespace MovingSofaUniqueness.MaximizerRoute
 
-/-- The cap of a monotone sofa of Gerver's area is maximizing, by `thm:second` (c) of the
-manuscript `docs/paper`. -/
+/-- The cap of a monotone sofa of Gerver's area is maximizing, by `thm:unified-optimality` (c) of
+the manuscript `docs/paper` (`rem:second`). -/
 theorem own_cap_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hS : IsMonotoneSofa S ω)
     (heq : area S = area (gerverSofa P)) :
@@ -40,9 +40,9 @@ theorem own_cap_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox
   intro C hC
   exact (MaximizerRoute.cap_area_le_gerver hP hbox hC).trans_eq hvalue.symm
 
-/-- `prop:reduction` of the manuscript `docs/paper`, with `thm:second` (b) as the bound: a
-translate of a moving sofa of Gerver's area lies in its monotonization, a monotone sofa of the same
-area. -/
+/-- `prop:reduction` of the manuscript `docs/paper`, with `thm:unified-optimality` (b) as the bound
+(`rem:second`): a translate of a moving sofa of Gerver's area lies in its monotonization, a monotone
+sofa of the same area. -/
 theorem equal_area_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Plane} {ω : ℝ} (hω : ω ∈ Ioc 0 (π / 2))
     (hS : IsMovingSofaWithAngle S ω) (heq : area S = area (gerverSofa P)) :
@@ -61,7 +61,7 @@ theorem equal_area_envelope {P : GerverParams} (hP : P.IsSolution) (hbox : P.InB
   rw [Rigid.area_image, heq] at hlower
   exact ⟨v, T, hmono, hTm.2.2, le_antisymm hupper hlower⟩
 
-/-- The last statement of `thm:caps` of the manuscript `docs/paper`, by `lem:max-right`: a
+/-- The last statement of `thm:caps` of the manuscript `docs/paper`, from `rem:second`: a
 right-angle monotone sofa of Gerver's area is a horizontal translate of Gerver's sofa. -/
 theorem right_angle_monotone_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {T : Set Plane}
@@ -73,7 +73,7 @@ theorem right_angle_monotone_eq_gerver {P : GerverParams}
   exact ⟨a, (theorem2_4_3 hT).trans ha⟩
 
 /-- A rigid image of a moving sofa of Gerver's area lies in Gerver's sofa (`eq:contained` and
-`thm:caps` of the manuscript `docs/paper`), with `thm:second` as the bound. -/
+`thm:caps` of the manuscript `docs/paper`), with the bound of `rem:second`. -/
 theorem maximizer_contained_in_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {S : Set Plane}
     (hS : MovingSofaOptimality.IsMovingSofa S) (heq : volume S = volume (gerverSofa P)) :
@@ -126,8 +126,8 @@ theorem volume_eq_gerver_iff {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
       _ = volume (gerverSofa P) := congrArg volume hg
 
 /-- Gerver's sofa is a moving sofa, every moving sofa has area at most that of Gerver's sofa, and
-equality holds exactly for the rigid images of Gerver's sofa: `thm:second` (b) and `thm:main` of the
-manuscript `docs/paper`, from the second proof. -/
+equality holds exactly for the rigid images of Gerver's sofa: `thm:unified-optimality` (b) and
+`thm:main` of the manuscript `docs/paper`, from the second proof (`rem:second`). -/
 theorem gerver_sofa_optimal_and_unique {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
     MovingSofaOptimality.IsMovingSofa (gerverSofa P) ∧

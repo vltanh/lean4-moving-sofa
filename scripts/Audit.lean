@@ -200,8 +200,8 @@ open Lean Elab Command
 
 namespace Audit
 
-/-- The results from prior work, proved in `MovingSofaOptimality/External/`, with a short label. Their
-proofs are not searched: the traversal stops at them. -/
+/-- The results from prior work, proved in `MovingSofaOptimality/External/`, with a short label.
+Their proofs are not searched: the traversal stops at them. -/
 meta def externalResults : List (String × Name) :=
   [("Schneider, Remark 5.1.2: |K| = ½∫ h_K dσ_K", ``MovingSofaOptimality.area_eq_half_integral_supp),
    ("Romik 2018: Romik's system has a solution in the box", ``MovingSofaOptimality.GerverParams.romik_exists),
@@ -409,10 +409,10 @@ meta def paperResults : List (String × Name) :=
    ("Thm 8.5.7", ``MovingSofaOptimality.theorem8_5_7),
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
-/-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, the refinements that the
-manuscript `docs/paper` states, and the second proof of optimality of its Section 8.4; and the
-bridge to formal-conjectures' definitions (`MovingSofaBridge/`). -/
+/-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of
+its argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, the refinements that the
+manuscript `docs/paper` states, and the second proof of optimality of its Remark `rem:second`; and
+the bridge to formal-conjectures' definitions (`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
    ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
@@ -430,17 +430,17 @@ meta def uniquenessResults : List (String × Name) :=
     ``MovingSofaUniqueness.isMaximal_iff_image_eq_gerver),
    ("Uniqueness: no rotation is needed (manuscript `cor:translate`)",
     ``MovingSofaUniqueness.translate_eq_gerver_of_volume_eq),
-   ("Uniqueness: a second proof of optimality (manuscript `thm:second`)",
+   ("Uniqueness: a second proof of optimality (manuscript `rem:second`)",
     ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal),
-   ("Uniqueness: the theorem from the second proof (manuscript `sec:second`)",
+   ("Uniqueness: the theorem from the second proof (manuscript `rem:second`)",
     ``MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq),
    ("Bridge: moving sofas", ``MovingSofaBridge.isMovingSofa_iff),
    ("Bridge: the sofa constant", ``MovingSofaBridge.sofaConstant_eq),
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
    ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
-/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability.md`): near-maximal moving
-sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
+/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability.md`): near-maximal
+moving sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
 coefficient 2 sec φ. -/
 meta def stabilityResults : List (String × Name) :=
   [("Stability: Hausdorff and symmetric-difference rate", ``MovingSofaStability.unrestricted_stability),
@@ -487,8 +487,8 @@ meta def solutionResults : List Name :=
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
-/-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the bridge
-to formal-conjectures' definitions, the stability of Gerver's sofa, the coercive route, the
+/-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the
+bridge to formal-conjectures' definitions, the stability of Gerver's sofa, the coercive route, the
 Challenge's definitions, and the second solution). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||

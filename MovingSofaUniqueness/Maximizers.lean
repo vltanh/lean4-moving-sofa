@@ -7,7 +7,7 @@ public import MovingSofaUniqueness.Curvature
 /-!
 # Maximizing caps: the largest sofa area at the right angle
 
-The first half of the second proof of Baek's optimality theorem (`thm:second` of the manuscript
+The first half of the second proof of Baek's optimality theorem (`rem:second` of the manuscript
 `docs/paper`), which does not use Baek's Theorem 1.1.1. For every rotation angle there is a
 maximizing cap whose cap minus niche is a monotone sofa (`exists_maximizing_cap`, Baek's Theorems
 3.5.5 and 3.5.6). A maximizing right-angle cap `K` has `|G| ≤ 𝒜(K)`, as Gerver's cap is a
@@ -51,7 +51,7 @@ theorem gerver_le_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.
   have h := hmax P.cap (GerverParams.gm_isCap hP hbox)
   rwa [GerverParams.gm_sofaArea_cap hP hbox] at h
 
-/-- `lem:max-right` of the manuscript `docs/paper`, first part: a maximizing right-angle cap lies
+/-- `prop:unified-caps` (a) of the manuscript `docs/paper`, first part: a maximizing right-angle cap
 in `𝒦^i`. Its sofa area is at least `|G| > 0`, so it satisfies the curvature bounds
 (`curvature_of_maximal_positive`) and the injectivity condition (`injectivity_of_curvature`). -/
 theorem isKi_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -67,7 +67,7 @@ theorem isKi_of_maximizes {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox
   unfold sofaArea at hge
   linarith
 
-/-- `lem:max-right` of the manuscript `docs/paper`: a maximizing right-angle cap has the sofa area
+/-- `rem:second` of the manuscript `docs/paper`: a maximizing right-angle cap has the sofa area
 of Gerver's sofa, as `|G| ≤ 𝒜(K) ≤ 𝒬(K, B_K, D_K) ≤ 𝒬(K_G, B_G, D_G) = |G|` (Baek's Theorems
 8.2.4, 8.1.8 and 8.4.6 and Corollary 8.5.8). -/
 theorem right_angle_maximizer_value {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -82,7 +82,8 @@ theorem right_angle_maximizer_value {P : GerverParams} (hP : P.IsSolution) (hbox
   have hGA := GerverParams.gm_sofaArea_cap hP hbox
   linarith
 
-/-- `lem:max-right` of the manuscript `docs/paper`, last part: a maximizing right-angle cap is a
+/-- `prop:unified-caps` (b) of the manuscript `docs/paper`, by the equality analysis: a maximizing
+right-angle cap is a
 horizontal translate `K_G + (a, 0)` of Gerver's cap, and its sofa is `G + (a, 0)`, by `prop:kernel`
 and `lem:translate` of the manuscript. -/
 theorem right_angle_maximizer_eq_gerver {P : GerverParams}

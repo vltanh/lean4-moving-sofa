@@ -16,8 +16,9 @@ area in advance. Gerver's cap competes with every right-angle cap, so a maximizi
 This determines the largest sofa area, and the equality case shows that the maximizing caps are the horizontal
 translates of Gerver's cap. With Baek's existence of a maximizing cap for every rotation angle, it proves Baek's
 optimality theorem again, without Baek's Theorem 1.1.1, and the uniqueness theorem follows from this second
-proof as from the first. Section 8.4 of the [manuscript](../paper/README.md) gives the argument (Lemmas 8.6
-and 8.7, Theorem 8.8).
+proof as from the first. The [manuscript](../paper/README.md) gave the argument in its Section 8.4 (Lemmas 8.6
+and 8.7, Theorem 8.8) until 6 October; it now gives it in Section 11, as a remark, with the lemma on the right-angle
+motion.
 
 ## The modules
 
@@ -62,5 +63,5 @@ the manuscript, none of them compiled or run; it left every existing file unchan
 The modules compiled without change and the audit passed. The merge then added the modules to the `import all`
 lines of [`scripts/Audit.lean`](../../scripts/Audit.lean) (CI checks that the main audit imports every module), extended this audit to the
 results behind Baek's steps (3a) and (3b), added it to CI, rewrote the docstrings to refer to the manuscript,
-and wrote Section 8.4 of the manuscript. The plan ([`paper-plan.md`](paper-plan.md)) and the review notes of the
+and wrote Section 8.4 of the manuscript (folded into Section 11 on 6 October). The plan ([`paper-plan.md`](paper-plan.md)) and the review notes of the
 uncompiled draft ([`REVIEW.md`](REVIEW.md)) are kept as they were written, with a note on what has changed.

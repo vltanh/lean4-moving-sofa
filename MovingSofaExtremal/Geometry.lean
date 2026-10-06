@@ -12,7 +12,7 @@ Theorems 3.5.5 and 3.5.6). A maximizing right-angle cap satisfies the injectivit
 (`isKi_of_maximizes`), and Gerver's cap competes with it (`gerver_le_of_maximizes`). If a maximizing
 cap has an angle `ω < π/2`, a rotated copy of its sofa moves with the right angle
 (`maximizing_monotone_has_right_angle`). `MovingSofaUniqueness.MaximizerRoute` proves the same
-four results (`lem:max-right` and `lem:right-motion` of the manuscript `docs/paper`); they are
+four results (`prop:unified-caps` and `lem:right-motion` of the manuscript `docs/paper`); they are
 proved again here because its module imports `MovingSofaUniqueness.Rigidity`, the equality analysis
 that the coercive route replaces.
 -/

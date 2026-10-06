@@ -40,7 +40,7 @@ alone.
   that the paper uses without citing it, a citation made only in passing, or a departure from the
   paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
 - [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks the second proof of Baek's optimality theorem, in
-  [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean), [`Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) and [`Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) (Section 8.4 of the
+  [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean), [`Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) and [`Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) (a remark in Section 11 of the
   [manuscript](paper/README.md)). It fails if a declaration of these modules uses an axiom other than the three
   standard ones, or if, following the proofs through the whole library without stopping at numbered results, it
   reaches Baek's Theorem 1.1.1, the results from which Baek derives the right-angle motion and the injectivity

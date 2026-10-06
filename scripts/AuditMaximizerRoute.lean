@@ -76,8 +76,8 @@ Run with `lake env lean scripts/AuditMaximizerRoute.lean` after `lake build`; CI
 `scripts/Audit.lean`.
 
 The modules `MovingSofaUniqueness.Maximizers`, `Optimality` and `Alternative` prove Baek's
-optimality theorem a second time, from the maximizing caps (`thm:second` of the manuscript
-`docs/paper`, Section 8.4), and assemble the uniqueness theorem from that proof. This script checks
+optimality theorem a second time, from the maximizing caps (`rem:second` of the manuscript
+`docs/paper`), and assemble the uniqueness theorem from that proof. This script checks
 every declaration of the three modules, private and auxiliary ones included, and fails if one of
 them
 
