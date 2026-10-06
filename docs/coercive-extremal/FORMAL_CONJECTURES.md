@@ -1,137 +1,110 @@
-# Formal-conjectures integration plan
+# Formal-conjectures interface: two internal solution routes
 
-The bridge is a permanent interface of the project. The coercive refactor must
-preserve it rather than folding it into the new proof.
+The bridge remains a permanent interface. No bridge file, Challenge definition,
+Challenge statement, or canonical solution has been changed by PR #9.
 
-## Stable external surface
+`SolutionCoercive.lean` now contains the intended second solution source.
+**It has not been compiled, and its statement-comparison audit has not run.**
+No new upstream submission is made by this continuation.
 
-The following statements should remain unchanged unless the upstream
-formal-conjectures definitions themselves change:
+## Preserved canonical route
 
-- \`Challenge.lean\`;
-- \`Bridge.isMovingSofa_iff\`;
-- \`Bridge.sofaConstant_eq\`;
-- \`Bridge.gerversSofa_eq\`;
-- \`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa\`;
-- \`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa\`;
-- \`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa\`.
+`Solution.lean` continues to use:
 
-The bridge should continue to prove equivalence of definitions and models, not
-contain moving-sofa optimality or uniqueness arguments itself.
+    faithful Baek optimality
+    + main equality/CapKernel uniqueness
+    + the existing bridge.
 
-## Existing canonical solution
+This preserves both the formalization's provenance and the currently recorded
+external interface. The new route does not replace its proofs.
 
-\`Solution.lean\` should remain as the canonical proof of the Challenge using:
+## Added coercive route
 
-\`\`\`text
-MovingSofaOptimality.theorem1_1_1
-+ MovingSofaUniqueness.Main
-+ MovingSofaBridge
-\`\`\`
+`SolutionCoercive.lean` uses:
 
-This preserves the clean provenance:
+    MovingSofaExtremal optimality
+    + MovingSofaExtremal coercive uniqueness
+    + the SAME bridge and ChallengeDefs.
 
-- optimality is Baek's faithfully formalized theorem;
-- uniqueness is the paper's main proof;
-- the bridge transports both to formal-conjectures.
+It does not import `Solution.lean` or `MovingSofaUniqueness.Main`. Its declarations
+are in `CoerciveSolution` rather than duplicating the canonical global names.
+Consequently both solution families can coexist for dependency and statement
+comparison. Their intended theorem types, not their declaration names, agree.
 
-## Second solution route
+The optional `SolutionCoercive` library is not added to default targets.
 
-After the coercive extremal theorem is formalized, add:
+## Twelve corresponding statements
 
-\`SolutionCoercive.lean\`
+| Existing canonical declaration | New declaration in `CoerciveSolution` |
+| --- | --- |
+| `Baek.gerver_params_exists` | `gerver_params_exists` |
+| `Baek.gerver_params_unique` | `gerver_params_unique` |
+| `Baek.gerver_sofa_area` | `gerver_sofa_area` |
+| `Baek.gerver_sofa_optimal` | `gerver_sofa_optimal` |
+| `Baek.gerver_sofa_unique` | `gerver_sofa_unique` |
+| `Bridge.isMovingSofa_iff` | `bridge_isMovingSofa_iff` |
+| `Bridge.sofaConstant_eq` | `bridge_sofaConstant_eq` |
+| `Bridge.gerversSofa_eq` | `bridge_gerversSofa_eq` |
+| `FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique` | `gerver_constants_existsUnique` |
+| `FormalConjectures.MovingSofa.isMovingSofa_gerversSofa` | `formal_isMovingSofa_gerversSofa` |
+| `FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa` | `formal_sofaConstant_eq_volume_gerversSofa` |
+| `FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa` | `formal_volume_eq_sofaConstant_iff_congruent_gerversSofa` |
 
-with the same Challenge statements and the same bridge, but with the internal
-theorem source changed to:
+The Gerver-constants result is already proved in the shared definitions/bridge
+infrastructure. Reusing it is intentional: independence concerns the extremal
+proof, not finding a different construction of Gerver's constants.
 
-\`\`\`text
-coercive optimality
-+ coercive uniqueness
-+ MovingSofaBridge
-\`\`\`
+## What the bridge still does
 
-The purpose is not to create a second external theorem. It is to prove the
-**same external theorem by an independently audited internal route**.
+The same three semantic correspondences are used:
 
-## Why two solution files are useful
+- moving sofas agree after accounting for initial position and coordinates;
+- the sofa constant agrees with the internal supremum of areas;
+- Gerver's construction from four constants agrees with the Romik/Baek set.
 
-They separate three questions that otherwise get conflated:
+The existing coordinate map preserves volume. Its realization map transports
+the internal rotation/translation witness to the affine-isometry formulation.
+The converse direction of the external uniqueness equivalence uses affine
+isometries preserving volume, exactly as in the canonical solution.
 
-1. Does the repository faithfully formalize Baek's proof?
-2. Does the new coercive framework independently prove the extremal theorem?
-3. Do both internal formulations correspond to the theorem stated by
-   formal-conjectures?
+No alternative hallway, motion, Gerver, congruence, or maximal-area definition
+has been introduced to make the new theorem easier.
 
-The desired answers are established by different artifacts:
+## Statement and provenance checks
 
-- Baek route/audits answer (1);
-- coercive route/audit answers (2);
-- the shared bridge and comparator-style statement equality answer (3).
+`scripts/AuditCoerciveRoute.lean` imports both solutions for comparison and
+negative controls. It compares the types of all twelve pairs by definitional
+equality, checks universe parameters, and traverses the new solution's proof
+dependencies. The new external uniqueness theorem must reach both the new
+internal uniqueness theorem and `MovingSofaBridge.gerversSofa_eq`.
 
-## Upstream PR strategy
+The canonical solution is forbidden as a proof dependency of the new solution;
+it is not enough for the latter to be a wrapper around the former. The same
+applies to Baek's final optimality theorem and the old main/kernel uniqueness
+route. See [DEPENDENCIES.md](DEPENDENCIES.md).
 
-For an eventual formal-conjectures submission, the target statement remains
+These are committed audit commands, not successful audit results. The existing
+Challenge/Comparator workflow is left unchanged; a future adapter may register
+the different new names with that workflow after the new files are checked.
+The local twelve-pair comparison is not represented as an already-run upstream
+Comparator check.
 
-\`volume_eq_sofaConstant_iff_congruent_gerversSofa\`.
+## Upstream integration boundary
 
-The repository's bridge is valuable even if formal-conjectures cannot import
-this repository directly: it certifies that the local theorem proved with
-Baek/Romik definitions is mathematically the same statement as the upstream
-theorem using:
+The target external uniqueness statement remains
+`volume_eq_sofaConstant_iff_congruent_gerversSofa`. The bridge ensures that the
+internal representation can be connected to that statement without changing
+its definitions. Eventual upstream packaging and acceptance requirements must
+be checked against formal-conjectures at submission time; this continuation
+does not assume a policy about external dependencies or modify that repository.
 
-- \`EuclideanSpace ℝ (Fin 2)\`;
-- paths in affine isometries \`E(2)\`;
-- motions starting at the identity;
-- the sofa constant;
-- Gerver's sofa from \(A,B,\phi,\theta\).
+Do not expand the Challenge solely to advertise stability. The stability theorem
+and puncture sharpness have separate proof sources, and proposing additional
+external statements is a distinct task. Keeping the current interface fixed
+avoids coupling that task to the new extremal route.
 
-The upstream patch can therefore be developed against the Challenge copy of
-those definitions while the bridge remains the regression test that no
-translation of meaning has occurred.
+## Verification policy
 
-## Bridge dependency rule
-
-The bridge should depend only on what is needed to establish equivalence of:
-
-- coordinates;
-- hallway sets;
-- rigid motions;
-- moving-sofa predicates;
-- volume;
-- optimal-area formulations;
-- Gerver parameterizations and sofa sets.
-
-Where convenient, high-level imports in \`MovingSofaBridge\` may eventually be
-lowered to smaller modules, but this is optional. It is not necessary to the
-coercive proof and should not delay that proof.
-
-The key invariant is stronger:
-
-> Changing which internal theorem proves optimality or uniqueness must not
-> require changing the bridge theorem statements.
-
-## Challenge policy
-
-Do not expand \`Challenge.lean\` merely to expose stability. The current
-formal-conjectures target is optimality plus uniqueness/congruence, and the
-Challenge should remain a stable statement-of-record interface.
-
-If stability is later proposed upstream as a new conjecture/theorem, add it as a
-separate statement after the stability formalization is actually compiled and
-reviewed, rather than coupling that change to the present extremal refactor.
-
-## Verification plan
-
-Once Lean compilation is permitted, the final integration should check:
-
-1. \`Solution.lean\` proves the current Challenge;
-2. \`SolutionCoercive.lean\` proves the same Challenge;
-3. the coercive-route audit excludes Baek's final theorem, Main uniqueness, and
-   the old CapKernel classification;
-4. the bridge theorem statements have not changed;
-5. the formal-conjectures theorem obtained from each solution is definitionally
-   or propositionally the same external statement already checked by the
-   Challenge/Comparator setup.
-
-Until then, this file is only the integration plan. No build or audit success is
-claimed.
+No Lean, Lake, CI, remote build, or TeX compilation was run. Both newly written
+proof terms and the comparison audit may require corrections. Keep the original
+verification claims separate until these new artifacts are actually checked.
