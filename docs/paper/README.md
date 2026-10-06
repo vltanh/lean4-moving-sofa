@@ -38,7 +38,7 @@ now names the stability. No person has read these new parts of Section 1.
 | [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean formalization: the libraries and the checks, the statements of record and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (101 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (117 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -51,7 +51,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 101 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 117 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -64,12 +64,12 @@ undefined reference.
   repository, and Appendix D gives the statement of record in mathematical notation, with the definitions that
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
-  4 October (commit `952812d`), and Fact 2.7 and the second proof of optimality (now Lemma 6.10 and Remark 8.6)
+  4 October (commit `952812d`), and Fact 2.14 and the second proof of optimality (now Lemma 6.10 and Remark 8.6)
   on 5 October (commits `3af9279` and `51c9be1`). Appendix D says what the machine check does and does not give, and
   Appendix E who and what wrote which part.
 - Remark 8.6, at the end of Section 8, outlines a second proof of optimality (Baek's theorem) from the maximizing
   caps, with Baek's own bound for $\mathcal Q$ and the equality analysis of Section 8; Section 11 writes it out with
-  the certificate in their place (Proposition 11.3, Theorem 11.4). It uses Baek's results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it
+  the certificate in their place (Proposition 11.3, Theorem 11.4). It uses Baek's results recorded as Facts, except Fact 2.15 (Baek's Theorem 1.1.1), and with it
   Theorem 1.1 and Corollary 9.4 hold without Baek's Theorem 1.1.1. ChatGPT Pro 6 wrote it in Lean in pull request
   #5, merged on 5 October; the formalization proves it in the modules `MovingSofaUniqueness.MaximizerRoute` and
   `MovingSofaUniqueness.Maximizing`, the second shared with Section 11, and a second audit, run by the continuous
@@ -121,7 +121,7 @@ These are the author's to settle; the text settles none of them.
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 5. For the submission form: the title is *Uniqueness and stability of Gerver's sofa*, the author The-Anh Vu-Le,
-   and the comments "101 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
+   and the comments "117 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
    <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,546 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
@@ -411,10 +411,27 @@ readability?"), the main session then rewrote Appendix E as three bulleted lists
 and by whom, what a person has read), from 1,880 words to about 820; the round-by-round detail it left out is in
 this file and in `CREDITS.md`, which the appendix cites. The manuscript has 101 pages.
 
+At the author's request ("In Section 2, many of the definitions are not put in definition env, which make it hard
+to find"), the main session put every notion of Section 2 into a definition with its name in the title: convex
+bodies, the moving sofa (now with the hallway), standard position, the supporting hallway, the monotone sofa, the cap,
+the niche and the sofa area, the cap of a sofa and the mirror image, polygon caps, the sides of the polygon niche,
+polygon caps from support values, arm lengths, the iteration, the triples, convex-linear functionals, curve areas and
+displacements, Mamikon terms, the rotation path and its shape, and Gerver's sofa. The facts that the text proved
+along the way stay as text after the definitions; a word-level comparison found no change of content. Section 2 now
+numbers 36 items, so its later Facts moved: Baek's existence of a cap with the largest sofa area is now Fact 2.14 and
+his optimality theorem Fact 2.15. Then, at the author's request ("I feel like a lot of math is inlined instead of
+being its own line, which makes it really hard to read"), seven sub-agents (Opus 5.5), one per group of section
+files, moved long inline formulas into unnumbered displays: definitions by formulas, formulas with integrals, sums or
+fractions, chains of inequalities that carry a step, lists of conditions, and every formula that the PDF broke across
+lines; 387 displays in all, where the text had 125. A script compared every file before and after with the typography stripped: the
+mathematics, the labels and the references did not change, and the only word changes are connectives that a display
+needs ("and" between formulas of one display, "Then" before an aligned block), two piecewise definitions written as
+cases, and Theorem 11.1, which now names the radius r of its bound. The manuscript has 117 pages.
+
 ## What has not been done
 
 - The author has read and edited the abstract and the introduction; Sections 2 to 12 and the appendices have been
-  read by model runs only. The text added on 5 October (Fact 2.7, the second proof of optimality, then Section 8.4,
+  read by model runs only. The text added on 5 October (Fact 2.14, the second proof of optimality, then Section 8.4,
   and the related passages) has been read by two model runs, and not by the author; Lemma 6.10 and Remark 8.6, into
   which that subsection was folded on 6 October, have not been checked by an independent run; the sentence of the abstract on the second proof, added at the
   author's request, has not been checked by a model run.

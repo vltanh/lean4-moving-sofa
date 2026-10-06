@@ -5,9 +5,12 @@ $\Ki$. For a cap $K\in\Ki$, write $K_0=\KG$ for Gerver's cap and $K_1=K$, let
 $\xi_0=\xi_G$ and $\xi_1=\xi_K$ be their canonical triples (\cref{sec:Q}), and
 for $\lambda\in[0,1]$ let $K_\lambda$, $B_\lambda$, $D_\lambda$ be the
 components of $\xi_\lambda=(1-\lambda)\xi_0+\lambda\xi_1$. Thus
-$K_\lambda=(1-\lambda)K_0+\lambda K_1$, $B_\lambda=(1-\lambda)B_{K_0}+\lambda
-B_{K_1}$ and $D_\lambda=(1-\lambda)D_{K_0}+\lambda D_{K_1}$. Write $h_i=h_{K_i}$
-for $i=0,1$, and $\Delta=h_1-h_0$.
+\begin{align*}
+  K_\lambda&=(1-\lambda)K_0+\lambda K_1,\\
+  B_\lambda&=(1-\lambda)B_{K_0}+\lambda B_{K_1},\\
+  D_\lambda&=(1-\lambda)D_{K_0}+\lambda D_{K_1}.
+\end{align*}
+Write $h_i=h_{K_i}$ for $i=0,1$, and $\Delta=h_1-h_0$.
 
 \subsection{Equality in the concavity of \texorpdfstring{$\cQ$}{Q}}
 
@@ -22,9 +25,12 @@ Let $K\in\Ki$ with $\cA(K)=\abs\Gs$. Then for every $\lambda\in[0,1]$
 
 \begin{proof}
 By \cref{fact:Q}\ref{fact:Q:triple}, \ref{fact:Q:max},
-$\abs\Gs=\cA(K)\le\cQ(\xi_1)\le\cQ(\xi_0)=\abs\Gs$, so $\cQ(\xi_1)=\cQ(\xi_0)$,
-and $\cQ\le\cQ(\xi_0)$ on $\cT$. Let $\lambda\in[0,1]$. The set $\cT$ is closed
-under Minkowski combinations, so $\xi_\lambda\in\cT$. By
+\[
+  \abs\Gs=\cA(K)\le\cQ(\xi_1)\le\cQ(\xi_0)=\abs\Gs,
+\]
+so $\cQ(\xi_1)=\cQ(\xi_0)$, and $\cQ\le\cQ(\xi_0)$ on $\cT$. Let
+$\lambda\in[0,1]$. The set $\cT$ is closed under Minkowski combinations, so
+$\xi_\lambda\in\cT$. By
 \cref{fact:Q}\ref{fact:Q:decomp}, $\cQ=\Lambda-\cS-\cR-\cL$ with $\Lambda$
 convex-linear and $\cS$, $\cR$, $\cL$ convex, so $\cQ$ is concave on $\cT$, and
 \[
@@ -48,18 +54,26 @@ In this subsection, $K_0$ and $K_1$ are any two convex bodies,
 $\lambda\in(0,1)$, $K_\lambda=(1-\lambda)K_0+\lambda K_1$, $h_i=h_{K_i}$ and
 $\Delta=h_1-h_0$. Let $a<b<a+\pi$, and let $\mathbf z_K$ be curves on $[a,b]$ as
 in \cref{sec:Q}, one for every convex body $K$, that are convex-linear in $K$:
-$\mathbf z_{K_\lambda}=(1-\lambda)\mathbf z_{K_0}+\lambda\mathbf z_{K_1}$. By
-\cref{fact:Q}\ref{fact:Q:decomp}, the curves of the four terms of $\cS_K$ are of
-this kind. For $i\in\{0,\lambda,1\}$ write $\varrho_i=\varrho_{K_i,\mathbf
-z_{K_i}}$ and $\cM_i=\cM_{K_i}(a,b;\mathbf z_{K_i})$. As
-$v^+_{K_\lambda}(t)=(1-\lambda)v^+_{K_0}(t)+\lambda v^+_{K_1}(t)$ for every $t$
-\baek{Thm.~7.1.2}, $\varrho_\lambda=(1-\lambda)\varrho_0+\lambda\varrho_1$ on
-$[a,b]$. By Mamikon's theorem \baek{Thm.~7.4.1}, $\varrho_{K,\mathbf z}$ is
-almost everywhere measurable and bounded on $[a,b]$ for every convex body $K$
-and every curve $\mathbf z$ as in \cref{sec:Q}; so $\varrho_0^2$, $\varrho_1^2$
-and $\varrho_0\varrho_1$ are integrable on $[a,b]$. Since
-$(1-\lambda)x^2+\lambda y^2-\bigl((1-\lambda)x+\lambda
-y\bigr)^2=\lambda(1-\lambda)(x-y)^2$,
+\[
+  \mathbf z_{K_\lambda}=(1-\lambda)\mathbf z_{K_0}+\lambda\mathbf z_{K_1}.
+\]
+By \cref{fact:Q}\ref{fact:Q:decomp}, the curves of the four terms of $\cS_K$
+are of this kind. For $i\in\{0,\lambda,1\}$ write
+$\varrho_i=\varrho_{K_i,\mathbf z_{K_i}}$ and
+$\cM_i=\cM_{K_i}(a,b;\mathbf z_{K_i})$. As
+\[
+  v^+_{K_\lambda}(t)=(1-\lambda)v^+_{K_0}(t)+\lambda v^+_{K_1}(t)
+\]
+for every $t$ \baek{Thm.~7.1.2},
+$\varrho_\lambda=(1-\lambda)\varrho_0+\lambda\varrho_1$ on $[a,b]$. By
+Mamikon's theorem \baek{Thm.~7.4.1}, $\varrho_{K,\mathbf z}$ is almost
+everywhere measurable and bounded on $[a,b]$ for every convex body $K$ and
+every curve $\mathbf z$ as in \cref{sec:Q}; so $\varrho_0^2$, $\varrho_1^2$ and
+$\varrho_0\varrho_1$ are integrable on $[a,b]$. Since
+\[
+  (1-\lambda)x^2+\lambda y^2-\bigl((1-\lambda)x+\lambda y\bigr)^2
+  =\lambda(1-\lambda)(x-y)^2,
+\]
 \begin{equation}\label{eq:gap}
   (1-\lambda)\cM_0+\lambda\cM_1-\cM_\lambda
     =\frac{\lambda(1-\lambda)}2\int_a^b\bigl(\varrho_0(t)
@@ -72,8 +86,10 @@ continuous on $(a,b)$, then $\varrho_0=\varrho_1$ at every point of $(a,b)$,
 because the set where they differ is open and has measure $0$.
 
 Now let $K_0,K_1\in\Kc_{\pi/2}$ satisfy condition~(1) of \cref{def:inj}, and let
-$[a,b]\subset[0,\pi/2]$ or $[a,b]\subset[\pi/2,\pi]$, so that
-$(a,b)\subset(0,\pi/2)$ or $(a,b)\subset(\pi/2,\pi)$. By
+\[
+  [a,b]\subset[0,\pi/2]\quad\text{or}\quad[a,b]\subset[\pi/2,\pi],
+\]
+so that $(a,b)\subset(0,\pi/2)$ or $(a,b)\subset(\pi/2,\pi)$. By
 \cref{fact:arms}\ref{fact:arms:regular}, $v^+_{K_i}(t)=v^-_{K_i}(t)$ for
 $t\in[0,\pi/2)\cup(\pi/2,\pi]$; so, by the one-sided derivatives of
 \cref{fact:convex}\ref{fact:convex:vertices}, $h_i$ is differentiable at every
@@ -81,8 +97,10 @@ such $t$, with $h_i'(t)=\ip{v^+_{K_i}(t)}{v_t}$. Also by
 \cref{fact:arms}\ref{fact:arms:regular}, $v^+_{K_i}=A_{K_i}$ on $(0,\pi/2)$ and
 $v^+_{K_i}(t)=C_{K_i}(t-\pi/2)$ for $t\in(\pi/2,\pi)$, where $A_{K_i}$ and
 $C_{K_i}$ are continuous on $[0,\pi/2]$. So, for $i=0,1$, $v^+_{K_i}$ is
-continuous on $(a,b)$, and so is $\varrho_i(t)=\ip{\mathbf
-z_{K_i}(t)-v^+_{K_i}(t)}{v_t}$.
+continuous on $(a,b)$, and so is
+\[
+  \varrho_i(t)=\ip{\mathbf z_{K_i}(t)-v^+_{K_i}(t)}{v_t}.
+\]
 
 \begin{lemma}[the tangent equations]\label{lem:tangent}
 Let $K_0,K_1\in\Kc_{\pi/2}$ satisfy condition~(1) of \cref{def:inj}, let
@@ -90,13 +108,25 @@ $\lambda\in(0,1)$, and let $a<b$ with $[a,b]\subset[0,\pi/2]$ or
 $[a,b]\subset[\pi/2,\pi]$.
 \begin{enumerate}[label=(\alph*)]
 \item\label{lem:tangent:l} If $T-\pi<a$, $b\le T$ and
-$\cM_{K_\lambda}(a,b;\mathbf l_{K_\lambda}^T)=(1-\lambda)\cM_{K_0}(a,b;\mathbf
-l_{K_0}^T)+\lambda\cM_{K_1}(a,b;\mathbf l_{K_1}^T)$, then there are $p,q\in\R$
-with $\Delta(t)=p\cos t+q\sin t$ for $t\in[a,b]$, and $\Delta(T)=p\cos T+q\sin
-T$.
+\[
+  \cM_{K_\lambda}(a,b;\mathbf l_{K_\lambda}^T)
+  =(1-\lambda)\cM_{K_0}(a,b;\mathbf l_{K_0}^T)
+  +\lambda\cM_{K_1}(a,b;\mathbf l_{K_1}^T),
+\]
+then there are $p,q\in\R$ with
+\[
+  \Delta(t)=p\cos t+q\sin t\quad\text{for }t\in[a,b],\quad\text{and}\quad
+  \Delta(T)=p\cos T+q\sin T.
+\]
 \item\label{lem:tangent:y} If
-$\cM_{K_\lambda}(a,b;\yy_{K_\lambda})=(1-\lambda)\cM_{K_0}(a,b;\yy_{K_0})+\lambda\cM_{K_1}(a,b;\yy_{K_1})$,
-then $\Delta(t)=\Delta(b)-\int_t^b\Delta(u+\pi/2)\dd u$ for $t\in[a,b]$.
+\[
+  \cM_{K_\lambda}(a,b;\yy_{K_\lambda})
+  =(1-\lambda)\cM_{K_0}(a,b;\yy_{K_0})+\lambda\cM_{K_1}(a,b;\yy_{K_1}),
+\]
+then
+\[
+  \Delta(t)=\Delta(b)-\int_t^b\Delta(u+\pi/2)\dd u\quad\text{for }t\in[a,b].
+\]
 \end{enumerate}
 \end{lemma}
 
@@ -112,7 +142,10 @@ $\mathbf l_K^T$ is continuous and of bounded variation on $[a,b]$, and by
 l_{K_0}^T+\lambda\mathbf l_{K_1}^T$ on $[a,b]$. So these curves are of the kind
 considered above, and $\varrho_0=\varrho_1$ on $(a,b)$. Let $t\in(a,b)$. Then
 $0<T-t<\pi$, $\mathbf l_{K_i}^T(t)=v_{K_i}(t,T)$ and
-$\ip{v_{K_i}(t,T)}{v_t}=(h_i(T)-h_i(t)\cos(T-t))/\sin(T-t)$, so
+\[
+  \ip{v_{K_i}(t,T)}{v_t}=\frac{h_i(T)-h_i(t)\cos(T-t)}{\sin(T-t)},
+\]
+so
 \[
   \varrho_i(t)=\frac{h_i(T)-h_i(t)\cos(T-t)}{\sin(T-t)}-h_i'(t).
 \]
@@ -120,48 +153,74 @@ Multiplied by $\sin(T-t)$, the equality $\varrho_0(t)=\varrho_1(t)$ is
 \[
   \sin(T-t)\Delta'(t)+\cos(T-t)\Delta(t)=\Delta(T).
 \]
-Then $\chi(t)=\bigl(\Delta(t)-\Delta(T)\cos(T-t)\bigr)/\sin(T-t)$ has
-$\chi'=\bigl[\Delta'\sin(T-t)+\Delta\cos(T-t)-\Delta(T)\bigr]/\sin^2(T-t)=0$ on
-$(a,b)$, so $\chi$ is a constant $\kappa$ there, and
-$\Delta(t)=\Delta(T)\cos(T-t)+\kappa\sin(T-t)$ for $t\in(a,b)$. Both sides are
-continuous, so this holds on $[a,b]$. It reads $\Delta(t)=p\cos t+q\sin t$ with
-$p=\Delta(T)\cos T+\kappa\sin T$ and $q=\Delta(T)\sin T-\kappa\cos T$, and then
-$p\cos T+q\sin T=\Delta(T)$.
+Then
+\[
+  \chi(t)=\frac{\Delta(t)-\Delta(T)\cos(T-t)}{\sin(T-t)}
+\]
+has
+\[
+  \chi'=\frac{\Delta'\sin(T-t)+\Delta\cos(T-t)-\Delta(T)}{\sin^2(T-t)}=0
+\]
+on $(a,b)$, so $\chi$ is a constant $\kappa$ there, and
+\[
+  \Delta(t)=\Delta(T)\cos(T-t)+\kappa\sin(T-t)\quad\text{for }t\in(a,b).
+\]
+Both sides are continuous, so this holds on $[a,b]$. It reads
+$\Delta(t)=p\cos t+q\sin t$ with
+\[
+  p=\Delta(T)\cos T+\kappa\sin T,\qquad q=\Delta(T)\sin T-\kappa\cos T,
+\]
+and then $p\cos T+q\sin T=\Delta(T)$.
 
 \ref{lem:tangent:y} Here $b-a\le\pi/2<\pi$. By the formula
-$\yy_K(t)=h_K(t)u_t+h_K(t+\pi/2)v_t$ for the outer corner (\cref{sec:sofas}),
-$\ip{\yy_K(t)}{u_t}=h_K(t)$, that is, $\yy_K(t)\in l_K(t)$; and $\yy_K$ is
-convex-linear in $K$, as $h_K$ is. As $K$ is bounded, $h_K$ is Lipschitz, and so
-is $\yy_K$ on $[a,b]$, which makes $\yy_K$ continuous and of bounded variation
-there. These curves are of the kind considered above, and $\varrho_0=\varrho_1$
-on $(a,b)$. As $\ip{\yy_{K_i}(t)}{v_t}=h_i(t+\pi/2)$, we have
+\[
+  \yy_K(t)=h_K(t)u_t+h_K(t+\pi/2)v_t
+\]
+for the outer corner (\cref{sec:sofas}), $\ip{\yy_K(t)}{u_t}=h_K(t)$, that is,
+$\yy_K(t)\in l_K(t)$; and $\yy_K$ is convex-linear in $K$, as $h_K$ is. As $K$
+is bounded, $h_K$ is Lipschitz, and so is $\yy_K$ on $[a,b]$, which makes
+$\yy_K$ continuous and of bounded variation there. These curves are of the kind
+considered above, and $\varrho_0=\varrho_1$ on $(a,b)$. As
+$\ip{\yy_{K_i}(t)}{v_t}=h_i(t+\pi/2)$, we have
 $\varrho_i(t)=h_i(t+\pi/2)-h_i'(t)$, and $\varrho_0=\varrho_1$ says
-$\Delta'(t)=\Delta(t+\pi/2)$ for $t\in(a,b)$. For $t\in[a,b]$, $\Delta$ is
-continuous on $[t,b]$ and has the continuous derivative
-$u\mapsto\Delta(u+\pi/2)$ on $(t,b)$, so
-$\Delta(b)-\Delta(t)=\int_t^b\Delta(u+\pi/2)\dd u$.
+\[
+  \Delta'(t)=\Delta(t+\pi/2)\quad\text{for }t\in(a,b).
+\]
+For $t\in[a,b]$, $\Delta$ is continuous on $[t,b]$ and has the continuous
+derivative $u\mapsto\Delta(u+\pi/2)$ on $(t,b)$, so
+\[
+  \Delta(b)-\Delta(t)=\int_t^b\Delta(u+\pi/2)\dd u.\qedhere
+\]
 \end{proof}
 
 \subsection{The cap is a horizontal translate}
 
 \begin{proposition}[the difference of support functions]\label{prop:kernel}
 Let $K\in\Ki$ with $\cA(K)=\abs\Gs$. Then there is $s\in\R$ with
-$h_K(t)-h_{\KG}(t)=s\cos t$ for $t\in[0,\pi]$.
+\[
+  h_K(t)-h_{\KG}(t)=s\cos t\quad\text{for }t\in[0,\pi].
+\]
 \end{proposition}
 
 \begin{proof}
 We use the notation of the beginning of this section, with $K_0=\KG$, $K_1=K$
 and $\Delta=h_K-h_{\KG}$. By \cref{lem:equality} with $\lambda=1/2$,
-$\cS_{K_{1/2}}=\frac12\cS_{K_0}+\frac12\cS_{K_1}$. Each of the four terms of
-$\cS$ is convex (\cref{fact:Q}\ref{fact:Q:decomp}), so its value at $K_{1/2}$ is
-at most the mean of its values at $K_0$ and $K_1$; as the sums are equal, each
-term takes at $K_{1/2}$ the mean of its values at $K_0$ and $K_1$. The cap
-$K_0=\KG$ lies in $\Ki$ by \cref{fact:gerver}\ref{fact:gerver:cap}, and so does
-$K_1=K$; so both satisfy condition~(1). Also $0<\varphi<\pi/4$
-(Appendix~\ref{app:gerver}). So \cref{lem:tangent} applies with $\lambda=1/2$:
-part~\ref{lem:tangent:l} to the first, third and fourth terms, with $(a,b,T)$
-equal to $(0,\varphi,\pi/2)$, $(\pi/2-\varphi,\pi/2,\pi-\varphi)$ and
-$(\pi/2,\pi,\pi)$, and part~\ref{lem:tangent:y} to the second, with
+\[
+  \cS_{K_{1/2}}=\frac12\cS_{K_0}+\frac12\cS_{K_1}.
+\]
+Each of the four terms of $\cS$ is convex (\cref{fact:Q}\ref{fact:Q:decomp}),
+so its value at $K_{1/2}$ is at most the mean of its values at $K_0$ and $K_1$;
+as the sums are equal, each term takes at $K_{1/2}$ the mean of its values at
+$K_0$ and $K_1$. The cap $K_0=\KG$ lies in $\Ki$ by
+\cref{fact:gerver}\ref{fact:gerver:cap}, and so does $K_1=K$; so both satisfy
+condition~(1). Also $0<\varphi<\pi/4$ (Appendix~\ref{app:gerver}). So
+\cref{lem:tangent} applies with $\lambda=1/2$: part~\ref{lem:tangent:l} to the
+first, third and fourth terms, with $(a,b,T)$ equal to
+\[
+  (0,\varphi,\pi/2),\qquad(\pi/2-\varphi,\pi/2,\pi-\varphi),\qquad
+  (\pi/2,\pi,\pi),
+\]
+and part~\ref{lem:tangent:y} to the second, with
 $(a,b)=(\varphi,\pi/2-\varphi)$. It gives $p_j,q_j\in\R$ such that
 \begin{enumerate}[label=(\roman*)]
 \item $\Delta(t)=p_1\cos t+q_1\sin t$ for $t\in[0,\varphi]$, and
@@ -169,7 +228,9 @@ $\Delta(\pi/2)=q_1$;
 \item $\Delta(t)=\Delta(\pi/2-\varphi)-\int_t^{\pi/2-\varphi}\Delta(u+\pi/2)\dd
 u$ for $t\in[\varphi,\pi/2-\varphi]$;
 \item $\Delta(t)=p_3\cos t+q_3\sin t$ for $t\in[\pi/2-\varphi,\pi/2]$, and
-$\Delta(\pi-\varphi)=p_3\cos(\pi-\varphi)+q_3\sin(\pi-\varphi)$;
+\[
+  \Delta(\pi-\varphi)=p_3\cos(\pi-\varphi)+q_3\sin(\pi-\varphi);
+\]
 \item $\Delta(t)=p_4\cos t+q_4\sin t$ for $t\in[\pi/2,\pi]$, and
 $\Delta(\pi)=-p_4$.
 \end{enumerate}
@@ -180,19 +241,27 @@ On $[\pi/2,\pi]$: by (iv) at $t=\pi/2$, $q_4=\Delta(\pi/2)=0$; so
 $\Delta(t)=p_4\cos t$, and $p_4=-\Delta(\pi)=s$.
 
 On $[\pi/2-\varphi,\pi/2]$: by (iii) at $t=\pi/2$, $q_3=\Delta(\pi/2)=0$, so
-$\Delta(\pi-\varphi)=p_3\cos(\pi-\varphi)$. As $\pi-\varphi\in[\pi/2,\pi]$, the
-previous step gives $\Delta(\pi-\varphi)=s\cos(\pi-\varphi)$, and
+\[
+  \Delta(\pi-\varphi)=p_3\cos(\pi-\varphi).
+\]
+As $\pi-\varphi\in[\pi/2,\pi]$, the previous step gives
+$\Delta(\pi-\varphi)=s\cos(\pi-\varphi)$, and
 $\cos(\pi-\varphi)=-\cos\varphi\ne0$; so $p_3=s$.
 
 On $[\varphi,\pi/2-\varphi]$: let $b=\pi/2-\varphi$. For $u\in[\varphi,b]$ we
 have $u+\pi/2\in[\pi/2,\pi]$, so $\Delta(u+\pi/2)=s\cos(u+\pi/2)=-s\sin u$ by
-the first step, and $\Delta(b)=s\cos b$ by the second. By (ii), $\Delta(t)=s\cos
-b+s\int_t^b\sin u\dd u=s\cos t$.
+the first step, and $\Delta(b)=s\cos b$ by the second. By (ii),
+\[
+  \Delta(t)=s\cos b+s\int_t^b\sin u\dd u=s\cos t.
+\]
 
 On $[0,\varphi]$: by (i), $q_1=\Delta(\pi/2)=0$, so
-$\Delta(\varphi)=p_1\cos\varphi$, while $\Delta(\varphi)=s\cos\varphi$ by the
-third step. As $\cos\varphi\ne0$, $p_1=s$. So $\Delta(t)=s\cos t$ on each of the
-four intervals, which cover $[0,\pi]$.
+\[
+  \Delta(\varphi)=p_1\cos\varphi,
+\]
+while $\Delta(\varphi)=s\cos\varphi$ by the third step. As $\cos\varphi\ne0$,
+$p_1=s$. So $\Delta(t)=s\cos t$ on each of the four intervals, which cover
+$[0,\pi]$.
 \end{proof}
 
 \begin{figure}[ht]
@@ -210,7 +279,10 @@ Let $C\in\Kc_{\pi/2}$ and $s\in\R$.
 \begin{enumerate}[label=(\alph*)]
 \item\label{lem:translate:supp} Let $K$ be a cap in $\Kc_{\pi/2}$ with
 $h_K(t)-h_C(t)=s\cos t$ for $t\in[0,\pi]$. Then $K=C+(s,0)$,
-$\cN(K)=\cN(C)+(s,0)$ and $K\setminus\cN(K)=(C\setminus\cN(C))+(s,0)$.
+$\cN(K)=\cN(C)+(s,0)$ and
+\[
+  K\setminus\cN(K)=(C\setminus\cN(C))+(s,0).
+\]
 \item\label{lem:translate:conv} The translate $C+(s,0)$ lies in $\Kc_{\pi/2}$,
 $h_{C+(s,0)}(t)-h_C(t)=s\cos t$ for every $t$, and $\cA(C+(s,0))=\cA(C)$.
 \end{enumerate}
@@ -224,26 +296,38 @@ Conversely, $K$ is an intersection of closed half-planes with normal angles in
 $J_{\pi/2}\cup\{3\pi/2\}=[0,\pi]\cup\{3\pi/2\}$; each of them contains $K$,
 hence contains the supporting half-plane $H_K(t)$ at its normal angle $t$, and
 $H_K(3\pi/2)=\{p:\ p_y\ge0\}$ because $h_K(3\pi/2)=0$. For $t\in[0,\pi]$,
-$\ip{p-(s,0)}{u_t}=\ip p{u_t}-s\cos t$ and $h_C(t)=h_K(t)-s\cos t$, and
-$p-(s,0)$ has the ordinate of $p$; so $p\in K$ if and only if $p-(s,0)\in C$,
-that is, $K=C+(s,0)$.
+\[
+  \ip{p-(s,0)}{u_t}=\ip p{u_t}-s\cos t,\qquad h_C(t)=h_K(t)-s\cos t,
+\]
+and $p-(s,0)$ has the ordinate of $p$; so $p\in K$ if and only if
+$p-(s,0)\in C$, that is, $K=C+(s,0)$.
 
 By the definition of the niche, $p\in\cN(K)$ if and only if $p_y\ge0$ and there
-is $t\in(0,\pi/2)$ with $\ip p{u_t}<h_K(t)-1$ and $\ip p{v_t}<h_K(t+\pi/2)-1$,
-and likewise for $C$. For $t\in(0,\pi/2)$ we have $h_K(t)=h_C(t)+s\cos t$ and
-$h_K(t+\pi/2)=h_C(t+\pi/2)-s\sin t$, while $\ip{p-(s,0)}{u_t}=\ip p{u_t}-s\cos
-t$ and $\ip{p-(s,0)}{v_t}=\ip p{v_t}+s\sin t$. So $p\in\cN(K)$ if and only if
-$p-(s,0)\in\cN(C)$, that is, $\cN(K)=\cN(C)+(s,0)$. Together with $K=C+(s,0)$,
-this gives $K\setminus\cN(K)=(C\setminus\cN(C))+(s,0)$.
+is $t\in(0,\pi/2)$ with
+\[
+  \ip p{u_t}<h_K(t)-1\quad\text{and}\quad\ip p{v_t}<h_K(t+\pi/2)-1,
+\]
+and likewise for $C$. For $t\in(0,\pi/2)$ we have
+\begin{align*}
+  h_K(t)&=h_C(t)+s\cos t,&h_K(t+\pi/2)&=h_C(t+\pi/2)-s\sin t,\\
+  \ip{p-(s,0)}{u_t}&=\ip p{u_t}-s\cos t,&\ip{p-(s,0)}{v_t}&=\ip p{v_t}+s\sin t.
+\end{align*}
+So $p\in\cN(K)$ if and only if $p-(s,0)\in\cN(C)$, that is,
+$\cN(K)=\cN(C)+(s,0)$. Together with $K=C+(s,0)$, this gives
+$K\setminus\cN(K)=(C\setminus\cN(C))+(s,0)$.
 
 \ref{lem:translate:conv} As $h_{C+w}(t)=h_C(t)+\ip w{u_t}$,
 $h_{C+(s,0)}(t)-h_C(t)=s\cos t$. This vanishes at $t=\pi/2$ and $t=3\pi/2$, so
-$h_{C+(s,0)}(\pi/2)=1$ and $h_{C+(s,0)}(3\pi/2)=0$. The convex body $C+(s,0)$ is
-the intersection of the translates by $(s,0)$ of the closed half-planes whose
-intersection is $C$, and these have the same normal angles; so
-$C+(s,0)\in\Kc_{\pi/2}$. By \ref{lem:translate:supp} with $K=C+(s,0)$,
+\[
+  h_{C+(s,0)}(\pi/2)=1\quad\text{and}\quad h_{C+(s,0)}(3\pi/2)=0.
+\]
+The convex body $C+(s,0)$ is the intersection of the translates by $(s,0)$ of
+the closed half-planes whose intersection is $C$, and these have the same
+normal angles; so $C+(s,0)\in\Kc_{\pi/2}$. By \ref{lem:translate:supp} with $K=C+(s,0)$,
 $\cN(C+(s,0))=\cN(C)+(s,0)$, and as translations preserve area,
-$\cA(C+(s,0))=\abs C-\abs{\cN(C)}=\cA(C)$.
+\[
+  \cA(C+(s,0))=\abs C-\abs{\cN(C)}=\cA(C).\qedhere
+\]
 \end{proof}
 
 \begin{theorem}[maximizing right-angle caps]\label{thm:caps}
@@ -265,8 +349,10 @@ $K=\KG+(s,0)$, then $\cA(K)=\cA(\KG)$ by
 cap $\KG$ (\cref{fact:gerver}\ref{fact:gerver:cap}). In this case
 \cref{lem:translate}\ref{lem:translate:conv} and then \ref{lem:translate:supp},
 applied to $\KG+(s,0)$ and $\KG$, give
-$K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$, since
-$\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
+\[
+  K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0),
+\]
+since $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
 
 By \cref{fact:optimal}, $\cA\le\abs\Gs$ on $\Kc_{\pi/2}$, and
 $\KG\in\Kc_{\pi/2}$ has $\cA(\KG)=\abs\Gs$. So a cap $K\in\Kc_{\pi/2}$ is
@@ -278,7 +364,9 @@ in $\Kc_{\pi/2}$, with $U=K\setminus\cN(K)$ and $\cA(K)=\abs U=\abs\Gs$
 (\cref{fact:monotone}\ref{fact:monotone:cap}, \ref{fact:monotone:area}). So
 $K\in\Ki$ by \cref{cor:Ki}, and \cref{prop:kernel} and
 \cref{lem:translate}\ref{lem:translate:supp} with $C=\KG$ give $s\in\R$ with
-$U=K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$.
+\[
+  U=K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0).\qedhere
+\]
 \end{proof}
 
 \begin{remark}[a second proof of optimality]\label{rem:second}

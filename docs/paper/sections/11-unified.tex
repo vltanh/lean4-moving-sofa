@@ -4,8 +4,11 @@ stability}\label{sec:unified}
 The estimates of \cref{sec:stab-certificate,sec:stab-cap} combine into one
 estimate for Baek's functional $\cQ$ on the domain $\bar\cT$ of
 \cref{sec:stability}, which we call the coercive certificate
-(\cref{thm:certificate}). For $\xi\in\bar\cT$, call $\abs\Gs-\cQ(\xi)$ the
-deficit of $\cQ$ at $\xi$. The first part of the certificate says that the
+(\cref{thm:certificate}). For $\xi\in\bar\cT$, call
+\[
+  \abs\Gs-\cQ(\xi)
+\]
+the deficit of $\cQ$ at $\xi$. The first part of the certificate says that the
 deficit is nonnegative. The second part bounds the distance from the cap $K$ of
 $\xi$ to a horizontal translate of Gerver's cap by $2\sec\varphi$ times the
 square root of the deficit; so a small deficit forces a small distance, which is
@@ -13,11 +16,13 @@ what \emph{coercive} refers to.
 
 Optimality, uniqueness and stability rest on these two parts. Let
 $K\in\Kc_{\pi/2}$ be a maximizing cap. Then
-$\abs\Gs\le\cA(K)\le\cQ(\xi_K)\le\abs\Gs$, where the first inequality holds as
-$K$ is maximizing, the second by Baek's bound, which applies as $K\in\Ki$
-(\cref{prop:unified-caps}), and the third by the first part. So the largest sofa
-area of a cap in $\Kc_{\pi/2}$ is $\abs\Gs$, and \cref{sec:unified-optimality}
-turns this into optimality.
+\[
+  \abs\Gs\le\cA(K)\le\cQ(\xi_K)\le\abs\Gs,
+\]
+where the first inequality holds as $K$ is maximizing, the second by Baek's
+bound, which applies as $K\in\Ki$ (\cref{prop:unified-caps}), and the third by
+the first part. So the largest sofa area of a cap in $\Kc_{\pi/2}$ is
+$\abs\Gs$, and \cref{sec:unified-optimality} turns this into optimality.
 The deficit at $\xi_K$ is $0$, so by the second part $K$ is a horizontal
 translate of $\KG$; the argument of \cref{sec:reduction,sec:recovery} turns
 this into uniqueness (\cref{sec:unified-caps,sec:unified-uniqueness}). For a
@@ -40,12 +45,15 @@ caps from the certificate instead, and \cref{thm:unified-optimality} proves
 Baek's theorem along the lines of that remark. The proofs of
 \cref{thm:unified-optimality,thm:unified-uniqueness} use the certificate only
 through the two properties of a maximizing cap $K\in\Kc_{\pi/2}$ in
-\cref{prop:unified-caps}: $\cA(K)=\abs\Gs$, and $K=\KG+(s,0)$ with
-$K\setminus\cN(K)=\Gs+(s,0)$ for some $s\in\R$. \Cref{rem:second} obtains the
-same two properties with the maximality of $\cQ$ at $\xi_G$ and the equality
-analysis instead, and the
-formalization proves the steps from these two properties to optimality and
-uniqueness once, for both proofs. Besides the certificate, the proofs of
+\cref{prop:unified-caps}:
+\begin{align*}
+  &\cA(K)=\abs\Gs,\text{ and}\\
+  &K=\KG+(s,0)\text{ with }K\setminus\cN(K)=\Gs+(s,0)\text{ for some }s\in\R.
+\end{align*}
+\Cref{rem:second} obtains the same two properties with the maximality of $\cQ$
+at $\xi_G$ and the equality analysis instead, and the formalization proves the
+steps from these two properties to optimality and uniqueness once, for both
+proofs. Besides the certificate, the proofs of
 \cref{sec:unified-caps,sec:unified-optimality,sec:unified-uniqueness} use the
 Facts of \cref{sec:setting} other than \cref{fact:optimal}, its
 \cref{lem:contains,lem:ends}, and results of
@@ -61,13 +69,19 @@ Thm.~8.1.1\,(2)}.
 
 Recall from \cref{sec:stability} that $\bar\cT$ is defined as $\cT$
 (\cref{sec:Q}), with $K\in\Kc_{\pi/2}$ in place of $K\in\Ki$; that
-$s_K=h_{\KG}(\pi)-h_K(\pi)$, so that $K$ and $\KG+(s_K,0)$ have the same
-leftmost abscissa; and that two sets are $r$-close if every point of each lies
-within Euclidean distance $r$ of a point of the other.
+\[
+  s_K=h_{\KG}(\pi)-h_K(\pi),
+\]
+so that $K$ and $\KG+(s_K,0)$ have the same leftmost abscissa; and that two
+sets are $r$-close if every point of each lies within Euclidean distance $r$ of
+a point of the other.
 
 \begin{theorem}[the coercive certificate]\label{thm:certificate}
 Let $\xi=(K,B,D)\in\bar\cT$. Then $\cQ(\xi)\le\abs\Gs$, and the caps $K$ and
-$\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi)}$-close.
+$\KG+(s_K,0)$ are $r$-close, where
+\[
+  r=2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi)}.
+\]
 \end{theorem}
 
 \begin{proof}
@@ -120,8 +134,11 @@ $\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
 $\cA(K)\ge\cA(\KG)=\abs\Gs$, and $\abs\Gs\ge2.2192$ by
 \cref{fact:gerver}\ref{fact:gerver:def}. So $\cA(K)>0$, and $K$ satisfies the
 curvature bounds (\cref{prop:curvature}) and the injectivity condition
-(\cref{prop:inj}). Also $\abs K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5$, so
-$K\in\Ki$. By \cref{fact:Q}\ref{fact:Q:triple}, the canonical triple $\xi_K$
+(\cref{prop:inj}). Also
+\[
+  \abs K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5,
+\]
+so $K\in\Ki$. By \cref{fact:Q}\ref{fact:Q:triple}, the canonical triple $\xi_K$
 lies in $\cT$, hence in $\bar\cT$ as $\Ki\subset\Kc_{\pi/2}$, and Baek's bound
 $\cA(K)\le\cQ(\xi_K)$ holds. The first part of \cref{thm:certificate} gives
 $\cQ(\xi_K)\le\abs\Gs$. Hence
@@ -135,8 +152,10 @@ $\xi_K\in\cT\subset\bar\cT$, and $\cQ(\xi_K)=\abs\Gs$. So $K=\KG+(s,0)$ with
 $s=s_K$ by \cref{lem:zero-deficit}.
 \Cref{lem:translate}\ref{lem:translate:conv} and then
 \ref{lem:translate:supp}, applied to $\KG+(s,0)$ and $C=\KG$, give
-$K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$, since
-$\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
+\[
+  K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0),
+\]
+since $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
 \end{proof}
 
 \subsection{Optimality}\label{sec:unified-optimality}
@@ -145,7 +164,11 @@ $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
 \begin{enumerate}[label=(\alph*)]
 \item\label{thm:unified-optimality:right} Every cap $C\in\Kc_{\pi/2}$ has
 $\cA(C)\le\abs\Gs$. For a cap $K\in\Kc_{\pi/2}$, the following are equivalent:
-$K$ is maximizing; $\cA(K)=\abs\Gs$; $K=\KG+(s,0)$ for some $s\in\R$.
+\begin{align*}
+  &K\text{ is maximizing};\\
+  &\cA(K)=\abs\Gs;\\
+  &K=\KG+(s,0)\text{ for some }s\in\R.
+\end{align*}
 \item\label{thm:unified-optimality:sofa} $\Gs$ is a moving sofa, and every
 moving sofa $S$ has $\abs S\le\abs\Gs$.
 \item\label{thm:unified-optimality:caps} For every $\omega\in(0,\pi/2]$ and
@@ -158,8 +181,11 @@ every cap $K\in\Kc_\omega$, $\cA_\omega(K)\le\abs\Gs$.
 \cref{fact:exists} for $\omega=\pi/2$. It is maximizing, so
 $\cA(K_{\pi/2})=\abs\Gs$ by
 \cref{prop:unified-caps}\ref{prop:unified-caps:value}, and every
-$C\in\Kc_{\pi/2}$ has $\cA(C)\le\cA(K_{\pi/2})=\abs\Gs$. A maximizing cap $K$ is
-a translate $\KG+(s,0)$ by
+$C\in\Kc_{\pi/2}$ has
+\[
+  \cA(C)\le\cA(K_{\pi/2})=\abs\Gs.
+\]
+A maximizing cap $K$ is a translate $\KG+(s,0)$ by
 \cref{prop:unified-caps}\ref{prop:unified-caps:shape}. A translate
 $K=\KG+(s,0)\in\Kc_{\pi/2}$ has $\cA(K)=\cA(\KG)=\abs\Gs$ by
 \cref{lem:translate}\ref{lem:translate:conv},
@@ -229,9 +255,11 @@ rotation angle $\omega$ in standard position
 (\cref{fact:monotone}\ref{fact:monotone:cap}), and
 $\cA_\omega(\cC(T))=\abs T=\abs\Gs$
 (\cref{fact:monotone}\ref{fact:monotone:area}). Every $C\in\Kc_\omega$ has
-$\cA_\omega(C)\le\abs\Gs=\cA_\omega(\cC(T))$ by
-\cref{thm:unified-optimality}\ref{thm:unified-optimality:caps}, so $\cC(T)$ is
-maximizing.
+\[
+  \cA_\omega(C)\le\abs\Gs=\cA_\omega(\cC(T))
+\]
+by \cref{thm:unified-optimality}\ref{thm:unified-optimality:caps}, so $\cC(T)$
+is maximizing.
 
 \ref{lem:unified-monotone:envelope} By \cref{fact:angle}(b), $S'+w$ is in
 standard position for some $w$, and it is a moving sofa with rotation angle
@@ -269,19 +297,22 @@ moving sofa with some rotation angle $\omega\in[\omega_0,\pi/2]$
 $w_0\in\R^2$ and a monotone sofa $T$ with rotation angle $\omega$ such that
 $S+w_0\subset T$ and $\abs T=\abs\Gs$. By
 \cref{lem:unified-monotone}\ref{lem:unified-monotone:max}, the cap $\cC(T)$ is
-maximizing, and $\abs T=\abs\Gs\ge11/5$; so $R_\psi T$ is a moving sofa with
-rotation angle $\pi/2$ (\cref{lem:right-motion}). It has area $\abs\Gs$, as
-rotations preserve area. So
+maximizing, and
+\[
+  \abs T=\abs\Gs\ge11/5;
+\]
+so $R_\psi T$ is a moving sofa with rotation angle $\pi/2$
+(\cref{lem:right-motion}). It has area $\abs\Gs$, as rotations preserve area. So
 \cref{lem:unified-monotone}\ref{lem:unified-monotone:envelope}, for
 $S'=R_\psi T$ and the rotation angle $\pi/2$, gives $w_1\in\R^2$ and a monotone
 sofa $U$ with rotation angle $\pi/2$ such that $R_\psi T+w_1\subset U$ and
 $\abs U=\abs\Gs$, and $U=\Gs+(s,0)$ for some $s$ by
 \cref{lem:unified-monotone}\ref{lem:unified-monotone:right}. With
 $v=R_\psi w_0+w_1-(s,0)$,
-\[
-  R_\psi S+v=R_\psi(S+w_0)+w_1-(s,0)\subset R_\psi T+w_1-(s,0)
-    \subset U-(s,0)=\Gs .\qedhere
-\]
+\begin{align*}
+  R_\psi S+v&=R_\psi(S+w_0)+w_1-(s,0)\\
+    &\subset R_\psi T+w_1-(s,0)\subset U-(s,0)=\Gs .\qedhere
+\end{align*}
 \end{proof}
 
 \begin{theorem}[uniqueness from the certificate]\label{thm:unified-uniqueness}
@@ -290,9 +321,13 @@ Let $S$ be a moving sofa.
 \item\label{thm:unified-uniqueness:translate} If $\abs S=\abs\Gs$, then
 $S+v=\Gs$ for some $v\in\R^2$.
 \item\label{thm:unified-uniqueness:equiv} The following are equivalent:
-(i)~$\abs S=\abs\Gs$; (ii)~$\abs{S'}\le\abs S$ for every moving sofa $S'$;
-(iii)~$R_\theta S+v=\Gs$ for some $\theta\in\R$ and $v\in\R^2$;
-(iv)~$S+v=\Gs$ for some $v\in\R^2$.
+\begin{align*}
+  &\text{(i)}~\abs S=\abs\Gs;\\
+  &\text{(ii)}~\abs{S'}\le\abs S\text{ for every moving sofa }S';\\
+  &\text{(iii)}~R_\theta S+v=\Gs\text{ for some }\theta\in\R\text{ and }
+    v\in\R^2;\\
+  &\text{(iv)}~S+v=\Gs\text{ for some }v\in\R^2.
+\end{align*}
 \end{enumerate}
 \end{theorem}
 
@@ -305,10 +340,15 @@ $\abs\Gs<\infty$ (\cref{fact:gerver}\ref{fact:gerver:def}). As
 $\Gs=\clos(\inter\Gs)$ (\cref{prop:regular}), $g(S)=\Gs$ by \cref{lem:recover}.
 As in the proof of \cref{cor:translate}\ref{cor:translate:main}, $p_y-q_y\le1$
 for $p,q\in S$, since $S$ lies in a horizontal strip of height one, and
-$\ip{g(p)-g(q)}{v_\psi}=\ip{p-q}{v_0}=p_y-q_y$; so
-$\ip{x-y}{u_{\psi+\pi/2}}\le1$ for all $x,y\in\Gs=g(S)$. If $\psi>0$, then
-$\psi+\pi/2\in(\pi/2,\pi)$, as $\psi\le\pi/2-\omega_0<\pi/2$, and
-\cref{lem:gerver-width}\ref{lem:gerver-width:gt} gives $p,q\in\Gs$ with
+\[
+  \ip{g(p)-g(q)}{v_\psi}=\ip{p-q}{v_0}=p_y-q_y;
+\]
+so
+\[
+  \ip{x-y}{u_{\psi+\pi/2}}\le1\qquad\text{for all }x,y\in\Gs=g(S).
+\]
+If $\psi>0$, then $\psi+\pi/2\in(\pi/2,\pi)$, as $\psi\le\pi/2-\omega_0<\pi/2$,
+and \cref{lem:gerver-width}\ref{lem:gerver-width:gt} gives $p,q\in\Gs$ with
 $\ip{p-q}{u_{\psi+\pi/2}}>1$, a contradiction. So $\psi=0$, and
 $S+v=g(S)=\Gs$.
 

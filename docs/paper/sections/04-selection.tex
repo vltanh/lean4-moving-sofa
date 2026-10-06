@@ -21,14 +21,20 @@ weighted sum of squared differences of support values at dyadic normals.
 
 \subsection{Dyadic angles and the penalty}
 
-For $k\ge0$ let $\Theta_k=\{i\omega/2^{k+1}:0<i<2^{k+1}\}$, an angle set with
-$2^{k+1}$ intervals. Then $\Theta_k\subset\Theta_{k+1}$, $\omega/2\in\Theta_k$,
-and $\bigcup_k\Theta_k$ is dense in $[0,\omega]$. Write $\Kc_k=\Kc_{\Theta_k}$
-for the polygon caps with angle set $\Theta_k$ and $\Theta_k^\diamond$ for the
-defining normals.
+For $k\ge0$ let
+\[
+  \Theta_k=\{i\omega/2^{k+1}:0<i<2^{k+1}\},
+\]
+an angle set with $2^{k+1}$ intervals. Then $\Theta_k\subset\Theta_{k+1}$,
+$\omega/2\in\Theta_k$, and $\bigcup_k\Theta_k$ is dense in $[0,\omega]$. Write
+$\Kc_k=\Kc_{\Theta_k}$ for the polygon caps with angle set $\Theta_k$ and
+$\Theta_k^\diamond$ for the defining normals.
 
-For $m\ge0$ let $\nu_m=2^{-m-1}/(2\abs{\Theta_m})$. For a convex body $K$ and
-$k\ge0$ let
+For $m\ge0$ let
+\[
+  \nu_m=2^{-m-1}/(2\abs{\Theta_m}).
+\]
+For a convex body $K$ and $k\ge0$ let
 \[
   \Pi_k(K)=\sum_{m=0}^k\nu_m\sum_{t\in\Theta_m}\Bigl[\bigl(h_K(t)-h_*(t)\bigr)^2
     +\bigl(h_K(t+\tfrac\pi2)-h_*(t+\tfrac\pi2)\bigr)^2\Bigr].
@@ -50,10 +56,12 @@ Since every term of $\Pi_k$ is nonnegative, each sample is at most the penalty
 Let $K$ and $K'$ be convex bodies and $\eta\ge0$ with
 $\abs{h_K(s)-h_*(s)}\le\eta$ at every sampled normal $s$. For reals $a,b,c,r$
 with $\abs{a-c}\le\eta$ and $\abs{b-a}\le r$, the identity
-$(b-c)^2-(a-c)^2=2(a-c)(b-a)+(b-a)^2$ gives $\abs{(b-c)^2-(a-c)^2}\le2\eta
-r+r^2$; we apply it to each sample, with $a=h_K(s)$, $b=h_{K'}(s)$ and
-$c=h_*(s)$. If $\abs{h_{K'}(s)-h_K(s)}\le r$ at every sampled normal $s$, this
-gives
+\[
+  (b-c)^2-(a-c)^2=2(a-c)(b-a)+(b-a)^2
+\]
+gives $\abs{(b-c)^2-(a-c)^2}\le2\eta r+r^2$; we apply it to each sample, with
+$a=h_K(s)$, $b=h_{K'}(s)$ and $c=h_*(s)$. If $\abs{h_{K'}(s)-h_K(s)}\le r$ at
+every sampled normal $s$, this gives
 \begin{equation}\label{eq:penalty-change}
   \bigl\lvert\Pi_k(K')-\Pi_k(K)\bigr\rvert
     \le\Bigl(\sum_s\nu_k(s)\Bigr)\bigl(2\eta r+r^2\bigr).
@@ -67,51 +75,78 @@ $\nu_k(s_0)$, contribute, and
 
 \begin{definition}[penalized maximizer]\label{def:penmax}
 A polygon cap $K\in\Kc_k$ is a \emph{penalized maximizer at stage $k$} if
-$\cA_{\Theta_k}(C)-\Pi_k(C)\le\cA_{\Theta_k}(K)-\Pi_k(K)$ for every $C\in\Kc_k$.
+\[
+  \cA_{\Theta_k}(C)-\Pi_k(C)\le\cA_{\Theta_k}(K)-\Pi_k(K)
+    \quad\text{for every }C\in\Kc_k.
+\]
 \end{definition}
 
 \begin{lemma}[recovery polygon]\label{lem:recovery}
-$K^{\mathrm r}_k=\cC_{\Theta_k}(K_*)$ lies in $\Kc_k$ and has $\Pi_k(K^{\mathrm
-r}_k)=0$ and $\cA_{\Theta_k}(K^{\mathrm r}_k)-\Pi_k(K^{\mathrm
-r}_k)\ge\cA_\omega(K_*)$.
+$K^{\mathrm r}_k=\cC_{\Theta_k}(K_*)$ lies in $\Kc_k$ and has
+\[
+  \Pi_k(K^{\mathrm r}_k)=0,\qquad
+  \cA_{\Theta_k}(K^{\mathrm r}_k)-\Pi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*).
+\]
 \end{lemma}
 
 \begin{proof}
 By \cref{fact:polygon}, $K^{\mathrm r}_k$ is a polygon cap with the support
 values of $K_*$ on $\Theta_k^\diamond$, which contains all the sampled normals;
-so $\Pi_k(K^{\mathrm r}_k)=0$. Also $\cA_{\Theta_k}(K^{\mathrm
-r}_k)=\cA_{\Theta_k}(K_*)\ge\cA_\omega(K_*)$, by \cref{fact:polygon}.
+so $\Pi_k(K^{\mathrm r}_k)=0$. Also
+\[
+  \cA_{\Theta_k}(K^{\mathrm r}_k)=\cA_{\Theta_k}(K_*)\ge\cA_\omega(K_*),
+\]
+by \cref{fact:polygon}.
 \end{proof}
 
 \begin{lemma}[two samples bound a cap]\label{lem:box}
 Let $\Theta$ be an angle set, $K\in\Kc_\Theta$, $t\in\Theta$, and suppose that
-$q\,(h_K(s)-h_*(s))^2\le c$ for $s=t$ and $s=t+\pi/2$, with $q>0$, $c\ge0$. Then
-$K\subset[-R,R]\times[0,1]$ with $R=H/\sin t+H/\cos t$,
-$H=\abs{h_*(t)}+\abs{h_*(t+\pi/2)}+c/q+1$.
+\[
+  q\,(h_K(s)-h_*(s))^2\le c\quad\text{for }s=t\text{ and }s=t+\pi/2,
+\]
+with $q>0$, $c\ge0$. Then $K\subset[-R,R]\times[0,1]$ with
+\[
+  R=H/\sin t+H/\cos t,\qquad H=\abs{h_*(t)}+\abs{h_*(t+\pi/2)}+c/q+1.
+\]
 \end{lemma}
 
 \begin{proof}
 A real number $a$ with $a^2\le c/q$ has $\abs a\le c/q+1$, as $2\abs a\le
 a^2+1$. So $h_K(t)\le h_*(t)+c/q+1\le H$, and likewise $h_K(t+\pi/2)\le H$. A
 point $(x,y)\in K$ has $0\le y\le1$, since $K\subset P_\omega$. As
-$t\in(0,\pi/2)$, $x\cos t+y\sin t\le H$ gives $x\le H/\cos t$, and $-x\sin
-t+y\cos t\le H$ gives $-x\le H/\sin t$; both bounds are at most $R$, since
-$H\ge0$.
+$t\in(0,\pi/2)$,
+\begin{align*}
+  x\cos t+y\sin t\le H&\quad\text{gives}\quad x\le H/\cos t,\\
+  -x\sin t+y\cos t\le H&\quad\text{gives}\quad{-x}\le H/\sin t;
+\end{align*}
+both bounds are at most $R$, since $H\ge0$.
 \end{proof}
 
 \begin{lemma}[the niche lies in a box]\label{lem:nichebox}
-Let $R\ge0$. If $K\in\Kc_\omega$ and $K\subset[-R,R]\times[0,1]$, then
-$\cN(K)\subset[-R,R]\times[0,2R]$; the same holds for
-$\cN_\Theta(K)\subset\cN(K)$, for every angle set $\Theta$.
+Let $R\ge0$. If $K\in\Kc_\omega$ and ${K\subset[-R,R]\times[0,1]}$, then
+\[
+  \cN(K)\subset[-R,R]\times[0,2R];
+\]
+the same holds for $\cN_\Theta(K)\subset\cN(K)$, for every angle set $\Theta$.
 \end{lemma}
 
 \begin{proof}
 Let $p\in\cN(K)$, so $p_y\ge0$ and $p\in Q^-_K(t)$ for some $t\in(0,\omega)$. As
-$K\subset[-R,R]\times[0,1]$, $h_K(t)\le R\cos t+\sin t\le R\cos t+1$ and
-$h_K(t+\pi/2)\le R\sin t+\cos t\le R\sin t+1$. So $\ip p{u_t}<R\cos t$ and $\ip
-p{v_t}<R\sin t$. Since $p_y\ge0$ and $\ip p{u_t}=p_x\cos t+p_y\sin t$, we get
-$p_x<R$; likewise $\ip p{v_t}=-p_x\sin t+p_y\cos t$ gives $p_x>-R$. Finally
-$p_y=\sin t\ip p{u_t}+\cos t\ip p{v_t}<2R\sin t\cos t\le2R$, as $R\ge0$.
+$K\subset[-R,R]\times[0,1]$,
+\begin{align*}
+  h_K(t)&\le R\cos t+\sin t\le R\cos t+1,\\
+  h_K(t+\pi/2)&\le R\sin t+\cos t\le R\sin t+1.
+\end{align*}
+So $\ip p{u_t}<R\cos t$ and $\ip p{v_t}<R\sin t$. Since $p_y\ge0$ and
+\[
+  \ip p{u_t}=p_x\cos t+p_y\sin t,
+\]
+we get $p_x<R$; likewise $\ip p{v_t}=-p_x\sin t+p_y\cos t$ gives $p_x>-R$.
+Finally
+\[
+  p_y=\sin t\ip p{u_t}+\cos t\ip p{v_t}<2R\sin t\cos t\le2R,
+\]
+as $R\ge0$.
 \end{proof}
 
 \begin{proposition}[penalized maximizers exist]\label{prop:penmax}
@@ -125,18 +160,27 @@ $R_0\ge0$ such that $K^{(k)}\subset[-R_0,R_0]\times[0,1]$ for every $k$.
 \end{proposition}
 
 \begin{proof}
-Let $\Psi_k=\cA_{\Theta_k}-\Pi_k$ on $\Kc_k$, and let $\bar t=\omega/2$, the
-angle of $\Theta_0$, which lies in every $\Theta_k$. Let $c=c_{\omega,\bar t}>0$
-be the constant of \cref{fact:width}; it does not depend on $k$.
+Let
+\[
+  \Psi_k=\cA_{\Theta_k}-\Pi_k\quad\text{on }\Kc_k,
+\]
+and let $\bar t=\omega/2$, the angle of $\Theta_0$, which lies in every
+$\Theta_k$. Let $c=c_{\omega,\bar t}>0$ be the constant of \cref{fact:width}; it
+does not depend on $k$.
 
 \emph{The polygon caps with $\Psi_k>0$ lie in one box.} Let $C\in\Kc_k$ with
 $\Psi_k(C)>0$. As $\Pi_k(C)\ge0$, $\cA_{\Theta_k}(C)>0$, so $C$ has width at
 most $c$ and, as it lies in the strip $0\le y\le1$, $\abs C\le c$. By
-\cref{fact:polygon}, $\Pi_k(C)<\cA_{\Theta_k}(C)=\abs
-C-\abs{\cN_{\Theta_k}(C)}\le c$. The samples of level $0$ lie at $\bar t$ and
-$\bar t+\pi/2$, so \eqref{eq:persistence} gives
-$\nu_0(h_C(s)-h_*(s))^2\le\Pi_k(C)\le c$ for $s=\bar t,\bar t+\pi/2$, and
-\cref{lem:box} with $q=\nu_0$ puts $C$ in $[-R_0,R_0]\times[0,1]$, where
+\cref{fact:polygon},
+\[
+  \Pi_k(C)<\cA_{\Theta_k}(C)=\abs C-\abs{\cN_{\Theta_k}(C)}\le c.
+\]
+The samples of level $0$ lie at $\bar t$ and $\bar t+\pi/2$, so
+\eqref{eq:persistence} gives
+\[
+  \nu_0(h_C(s)-h_*(s))^2\le\Pi_k(C)\le c\quad\text{for }s=\bar t,\bar t+\pi/2,
+\]
+and \cref{lem:box} with $q=\nu_0$ puts $C$ in $[-R_0,R_0]\times[0,1]$, where
 \[
   R_0=\frac H{\sin\bar t}+\frac H{\cos\bar t}\ge0,\qquad H=\abs{h_*(\bar t)}
     +\abs{h_*(\bar t+\tfrac\pi2)}+\frac c{\nu_0}+1,
@@ -145,25 +189,37 @@ do not depend on $k$ or $C$. Moreover $\Psi_k(C)\le\cA_{\Theta_k}(C)\le c$;
 hence $\Psi_k\le c$ on $\Kc_k$, as $c>0$.
 
 \emph{A maximizing sequence and its limit cap.} By \cref{lem:recovery},
-$M_k=\sup\Psi_k\ge\Psi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*)>0$, and $M_k\le c$.
-Take $C_j\in\Kc_k$ with $\Psi_k(C_j)>0$ and $\Psi_k(C_j)\to M_k$. They lie in
-$[-R_0,R_0]\times[0,1]$, so $\abs{h_{C_j}}\le R_0+1$, and as $\Theta_k^\diamond$
-is finite, a subsequence, still written $(C_j)$, has $h_{C_j}(s)\to h_\infty(s)$
-for every $s\in\Theta_k^\diamond$. Let
-$I=\Theta_k^\diamond\cup\{\omega+\pi,3\pi/2\}$, the normal angles of the polygon
-caps in $\Kc_k$, and put $h_\infty(\omega+\pi)=h_\infty(3\pi/2)=0$; then
-$h_{C_j}(s)\to h_\infty(s)$ for every $s\in I$, and
+\[
+  M_k=\sup\Psi_k\ge\Psi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*)>0,
+\]
+and $M_k\le c$. Take $C_j\in\Kc_k$ with $\Psi_k(C_j)>0$ and $\Psi_k(C_j)\to
+M_k$. They lie in $[-R_0,R_0]\times[0,1]$, so $\abs{h_{C_j}}\le R_0+1$, and as
+$\Theta_k^\diamond$ is finite, a subsequence, still written $(C_j)$, has
+$h_{C_j}(s)\to h_\infty(s)$ for every $s\in\Theta_k^\diamond$. Let
+\[
+  I=\Theta_k^\diamond\cup\{\omega+\pi,3\pi/2\},
+\]
+the normal angles of the polygon caps in $\Kc_k$, and put
+\[
+  h_\infty(\omega+\pi)=h_\infty(3\pi/2)=0;
+\]
+then $h_{C_j}(s)\to h_\infty(s)$ for every $s\in I$, and
 $h_\infty(\omega)=h_\infty(\pi/2)=1$. For $\delta\ge0$ let $K_\infty^\delta$ be
-the set of points $p$ with $\ip p{u_s}\le h_\infty(s)+\delta$ for every $s\in
-I$. It is closed and convex, and bounded, since it lies in the strip $-\delta\le
-y\le1+\delta$ and in $H_-(t,h_\infty(t)+\delta)\cap
-H_-(t+\pi/2,h_\infty(t+\pi/2)+\delta)$ for $t\in\Theta_k\subset(0,\pi/2)$. Let
-$K_\infty=K_\infty^0$; it is the set $\cC_{\Theta_k}(h_\infty)$ of
-\cref{sec:polygon}. Let $r\in I$, and take $q_j\in C_j$ with
-$\ip{q_j}{u_r}=h_{C_j}(r)$. As the $q_j$ lie in $[-R_0,R_0]\times[0,1]$, a
-subsequence of $(q_j)$ converges to a point $q$; passing to the limit in
-$\ip{q_j}{u_s}\le h_{C_j}(s)$, $s\in I$, gives $q\in K_\infty$, and $\ip
-q{u_r}=h_\infty(r)$. So $K_\infty$ is nonempty and
+the set of points $p$ with
+\[
+  \ip p{u_s}\le h_\infty(s)+\delta\quad\text{for every }s\in I.
+\]
+It is closed and convex, and bounded, since it lies in the strip $-\delta\le
+y\le1+\delta$ and in
+\[
+  H_-(t,h_\infty(t)+\delta)\cap H_-(t+\pi/2,h_\infty(t+\pi/2)+\delta),
+\]
+for $t\in\Theta_k\subset(0,\pi/2)$. Let $K_\infty=K_\infty^0$; it is the set
+$\cC_{\Theta_k}(h_\infty)$ of \cref{sec:polygon}. Let $r\in I$, and take $q_j\in
+C_j$ with $\ip{q_j}{u_r}=h_{C_j}(r)$. As the $q_j$ lie in
+$[-R_0,R_0]\times[0,1]$, a subsequence of $(q_j)$ converges to a point $q$;
+passing to the limit in $\ip{q_j}{u_s}\le h_{C_j}(s)$, $s\in I$, gives $q\in
+K_\infty$, and $\ip q{u_r}=h_\infty(r)$. So $K_\infty$ is nonempty and
 $h_{K_\infty}(r)=h_\infty(r)$. Hence $K_\infty$ is a convex body, with the
 support values $1,1,0,0$ at $\omega,\pi/2,\omega+\pi,3\pi/2$, and an
 intersection of half-planes with normal angles in $I$; that is,
@@ -177,7 +233,10 @@ $s=\omega+\pi,3\pi/2$; so $C_j\subset K_\infty^\delta$. As $\delta\downarrow0$
 the bounded sets $K_\infty^\delta$ decrease to $K_\infty$, so
 $\abs{K_\infty^\delta}\to\abs{K_\infty}$, and therefore
 $\limsup_j\abs{C_j}\le\abs{K_\infty}$. Let $p\in\cN_{\Theta_k}(K_\infty)$: $p\in
-F_\omega$, and $\ip p{u_t}<h_\infty(t)-1$ and $\ip p{v_t}<h_\infty(t+\pi/2)-1$
+F_\omega$, and
+\[
+  \ip p{u_t}<h_\infty(t)-1,\qquad \ip p{v_t}<h_\infty(t+\pi/2)-1,
+\]
 for some $t\in\Theta_k$. These strict inequalities hold with $h_{C_j}$ in place
 of $h_\infty$ for large $j$, so $p\in\cN_{\Theta_k}(C_j)$ for all large $j$. As
 $h_{C_j}\le R_0+1$, all the niches $\cN_{\Theta_k}(C_j)$ lie in the set of
@@ -185,8 +244,10 @@ points $p\in F_\omega$ with $\ip p{u_t}<R_0$ and $\ip p{v_t}<R_0$ for some
 $t\in\Theta_k$, which is bounded: $p_y\ge0$ gives $p_x<R_0/\cos t$ and
 $-p_x<R_0/\sin t$, and $p_y=\sin t\ip p{u_t}+\cos t\ip p{v_t}<2R_0$. So their
 areas are finite, and Fatou's lemma gives
-$\abs{\cN_{\Theta_k}(K_\infty)}\le\liminf_j\abs{\cN_{\Theta_k}(C_j)}$. Since
-$\Psi_k=\abs\cdot-\abs{\cN_{\Theta_k}(\cdot)}-\Pi_k$ on $\Kc_k$
+\[
+  \abs{\cN_{\Theta_k}(K_\infty)}\le\liminf_j\abs{\cN_{\Theta_k}(C_j)}.
+\]
+Since $\Psi_k=\abs\cdot-\abs{\cN_{\Theta_k}(\cdot)}-\Pi_k$ on $\Kc_k$
 (\cref{fact:polygon}),
 \[
   M_k=\lim_j\Psi_k(C_j)\le\limsup_j\abs{C_j}-\liminf_j\abs{\cN_{\Theta_k}(C_j)}
@@ -195,47 +256,60 @@ $\Psi_k=\abs\cdot-\abs{\cN_{\Theta_k}(\cdot)}-\Pi_k$ on $\Kc_k$
 As $\Psi_k\le M_k$ on $\Kc_k$, $K_\infty$ is a penalized maximizer at stage $k$.
 
 \emph{The lower bound and the box.} A penalized maximizer $K$ at stage $k$ has
-$\Psi_k(K)\ge\Psi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*)$ by \cref{lem:recovery}.
-If $K^{(k)}$ is a penalized maximizer at stage $k$ for every $k$, then
-$\Psi_k(K^{(k)})\ge\cA_\omega(K_*)>0$, and the first step puts every $K^{(k)}$
-in $[-R_0,R_0]\times[0,1]$.
+\[
+  \Psi_k(K)\ge\Psi_k(K^{\mathrm r}_k)\ge\cA_\omega(K_*),
+\]
+by \cref{lem:recovery}. If $K^{(k)}$ is a penalized maximizer at stage $k$ for
+every $k$, then $\Psi_k(K^{(k)})\ge\cA_\omega(K_*)>0$, and the first step puts
+every $K^{(k)}$ in ${[-R_0,R_0]\times[0,1]}$.
 \end{proof}
 
 \subsection{Convergence to the given cap}
 
 \begin{lemma}[limits of polygon caps with nested angle sets]\label{lem:limsup}
-Let $k_1<k_2<\cdots$ and $R\ge0$, and let $C_j\in\Kc_{k_j}$ lie in
+Let ${k_1<k_2<\cdots}$ and $R\ge0$, and let $C_j\in\Kc_{k_j}$ lie in
 $[-R,R]\times[0,1]$ and converge in $\dH$ to a convex body $K_\infty$, whose
 niche $\cN(K_\infty)$ and sofa area $\cA_\omega(K_\infty)$ are given by the
 formulas of \cref{sec:sofas}. Then for every $\eps>0$,
-$\cA_{\Theta_{k_j}}(C_j)\le\cA_\omega(K_\infty)+\eps$ for all large $j$.
+\[
+  \cA_{\Theta_{k_j}}(C_j)\le\cA_\omega(K_\infty)+\eps
+    \quad\text{for all large }j.
+\]
 \end{lemma}
 
 \begin{proof}
 Let $\eps>0$. By the continuity of the area
 (\cref{fact:convex}\ref{fact:convex:blaschke}),
-$\abs{C_j}\le\abs{K_\infty}+\eps/2$ for large $j$. Let $p\in\cN(K_\infty)$:
-$p\in F_\omega\cap Q_{K_\infty}^-(t)$ for some $t\in(0,\omega)$. The two strict
-inequalities that define $Q^-_{K_\infty}(t)$ hold at $p$ with a margin
-$\delta>0$ at some dyadic angle $t'$ near $t$, since $h_{K_\infty}$ is
-continuous. For large $j$, $t'\in\Theta_{k_j}$ and
+\[
+  \abs{C_j}\le\abs{K_\infty}+\eps/2\quad\text{for large }j.
+\]
+Let $p\in\cN(K_\infty)$: $p\in F_\omega\cap Q_{K_\infty}^-(t)$ for some
+$t\in(0,\omega)$. The two strict inequalities that define $Q^-_{K_\infty}(t)$
+hold at $p$ with a margin $\delta>0$ at some dyadic angle $t'$ near $t$, since
+$h_{K_\infty}$ is continuous. For large $j$, $t'\in\Theta_{k_j}$ and
 $\sup\abs{h_{C_j}-h_{K_\infty}}<\delta/2$, so $p\in F_\omega\cap
 Q^-_{C_j}(t')\subset\cN_{\Theta_{k_j}}(C_j)$. The sets $\cN_{\Theta_{k_j}}(C_j)$
 lie in $[-R,R]\times[0,2R]$ by \cref{lem:nichebox} (so their areas are finite),
 and Fatou's lemma gives
-$\abs{\cN(K_\infty)}\le\liminf_j\abs{\cN_{\Theta_{k_j}}(C_j)}$; so
-$\abs{\cN(K_\infty)}\le\abs{\cN_{\Theta_{k_j}}(C_j)}+\eps/2$ for large $j$. As
-$\cA_{\Theta_{k_j}}(C_j)=\abs{C_j}-\abs{\cN_{\Theta_{k_j}}(C_j)}$
+\[
+  \abs{\cN(K_\infty)}\le\liminf_j\abs{\cN_{\Theta_{k_j}}(C_j)};
+\]
+so $\abs{\cN(K_\infty)}\le\abs{\cN_{\Theta_{k_j}}(C_j)}+\eps/2$ for large $j$.
+As $\cA_{\Theta_{k_j}}(C_j)=\abs{C_j}-\abs{\cN_{\Theta_{k_j}}(C_j)}$
 (\cref{fact:polygon}), for large $j$
 \[
   \cA_{\Theta_{k_j}}(C_j)\le\abs{K_\infty}-\abs{\cN(K_\infty)}+\eps
-    =\cA_\omega(K_\infty)+\eps .
+    =\cA_\omega(K_\infty)+\eps .\qedhere
 \]
 \end{proof}
 
 \begin{lemma}[dyadic supports determine a cap]\label{lem:dyadic}
-If $K,K'\in\Kc_\omega$ and $h_K(s)=h_{K'}(s)$ for all
-$s\in\bigcup_m\bigl(\Theta_m\cup(\Theta_m+\pi/2)\bigr)$, then $K=K'$.
+If $K,K'\in\Kc_\omega$ and
+\[
+  h_K(s)=h_{K'}(s)
+    \quad\text{for all }s\in\bigcup_m\bigl(\Theta_m\cup(\Theta_m+\pi/2)\bigr),
+\]
+then $K=K'$.
 \end{lemma}
 
 \begin{proof}
@@ -249,7 +323,10 @@ for $K'$, and these half-planes are those of $K$.
 \begin{proposition}[selection]\label{prop:selection}
 If $K_*$ maximizes $\cA_\omega$ on $\Kc_\omega$, there are $k_1<k_2<\cdots$,
 penalized maximizers $K_j$ at stage $k_j$, and $R_0\ge0$ such that
-$K_j\subset[-R_0,R_0]\times[0,1]$ for every $j$ and $K_j\to K_*$ in $\dH$.
+\[
+  K_j\subset[-R_0,R_0]\times[0,1]\quad\text{for every }j,\qquad
+  K_j\to K_*\quad\text{in }\dH.
+\]
 \end{proposition}
 
 \begin{proof}
@@ -260,32 +337,49 @@ there are $k_1<k_2<\cdots$ with $K_j=K^{(k_j)}\to K_\infty$ for a convex body
 $K_\infty$; the $K_j$ lie in $[-R_0,R_0]\times[0,1]$.
 
 \emph{$K_\infty$ is a cap with rotation angle $\omega$.} The support values at
-$\omega,\pi/2,\omega+\pi,3\pi/2$ pass to the limit. Let $(a,b)$ be a gap of
-$J_\omega\cup\{\omega+\pi,3\pi/2\}$ in the circle; it has length at most
-$\pi/2$. A polygon cap $K_j$ has no normal angle strictly between $a$ and $b$,
-so the supporting lines $l_{K_j}(a)$ and $l_{K_j}(b)$ meet at a vertex $q$ of
-$K_j$ and $h_{K_j}(r)=\ip q{u_r}$ for $a\le r\le b$; with
-$\sin(b-a)u_r=\sin(b-r)u_a+\sin(r-a)u_b$ this gives
-$\sin(b-a)h_{K_j}(r)=\sin(b-r)h_{K_j}(a)+\sin(r-a)h_{K_j}(b)$. The identity
-passes to $h_{K_\infty}$, and its coefficients are nonnegative, so
-$H_{K_\infty}(a)\cap H_{K_\infty}(b)\subset H_{K_\infty}(r)$. Hence
-$K_\infty=\bigcap_rH_{K_\infty}(r)$ is the intersection of the $H_{K_\infty}(r)$
-with $r\in J_\omega\cup\{\omega+\pi,3\pi/2\}$.
+$\omega,\pi/2,\allowbreak{\omega+\pi},3\pi/2$ pass to the limit. Let $(a,b)$ be
+a gap of $J_\omega\cup\{\omega+\pi,3\pi/2\}$ in the circle; it has length at
+most $\pi/2$. A polygon cap $K_j$ has no normal angle strictly between $a$ and
+$b$, so the supporting lines $l_{K_j}(a)$ and $l_{K_j}(b)$ meet at a vertex $q$
+of $K_j$ and $h_{K_j}(r)=\ip q{u_r}$ for $a\le r\le b$; with
+\[
+  \sin(b-a)u_r=\sin(b-r)u_a+\sin(r-a)u_b,
+\]
+this gives
+\[
+  \sin(b-a)h_{K_j}(r)=\sin(b-r)h_{K_j}(a)+\sin(r-a)h_{K_j}(b).
+\]
+The identity passes to $h_{K_\infty}$, and its coefficients are nonnegative, so
+\[
+  H_{K_\infty}(a)\cap H_{K_\infty}(b)\subset H_{K_\infty}(r).
+\]
+Hence $K_\infty=\bigcap_rH_{K_\infty}(r)$ is the intersection of the
+$H_{K_\infty}(r)$ with $r\in J_\omega\cup\{\omega+\pi,3\pi/2\}$.
 
 \emph{The penalties tend to $0$.} By \cref{prop:penmax},
-$0\le\Pi_{k_j}(K_j)\le\cA_{\Theta_{k_j}}(K_j)-\cA_\omega(K_*)$. Let $\eps>0$. By
-\cref{lem:limsup} with $R=R_0$, and the maximality of $K_*$,
-$\cA_{\Theta_{k_j}}(K_j)\le\cA_\omega(K_\infty)+\eps\le\cA_\omega(K_*)+\eps$ for
-all large $j$. So $\Pi_{k_j}(K_j)\le\eps$ for all large $j$, and
-$\Pi_{k_j}(K_j)\to0$.
+\[
+  0\le\Pi_{k_j}(K_j)\le\cA_{\Theta_{k_j}}(K_j)-\cA_\omega(K_*).
+\]
+Let $\eps>0$. By \cref{lem:limsup} with $R=R_0$, and the maximality of $K_*$,
+\[
+  \cA_{\Theta_{k_j}}(K_j)\le\cA_\omega(K_\infty)+\eps\le\cA_\omega(K_*)+\eps
+    \quad\text{for all large }j.
+\]
+So $\Pi_{k_j}(K_j)\le\eps$ for all large $j$, and $\Pi_{k_j}(K_j)\to0$.
 
 \emph{$K_\infty=K_*$.} Let $t\in\Theta_m$. For $k_j\ge m$,
-\eqref{eq:persistence} gives $\nu_m(h_{K_j}(s)-h_*(s))^2\le\Pi_{k_j}(K_j)$ for
-$s=t,t+\pi/2$. As $j\to\infty$, $\Pi_{k_j}(K_j)\to0$ and $h_{K_j}(s)\to
+\eqref{eq:persistence} gives
+\[
+  \nu_m(h_{K_j}(s)-h_*(s))^2\le\Pi_{k_j}(K_j),
+\]
+for $s=t,t+\pi/2$. As $j\to\infty$, $\Pi_{k_j}(K_j)\to0$ and $h_{K_j}(s)\to
 h_{K_\infty}(s)$, and $\nu_m>0$; so $h_{K_\infty}(s)=h_*(s)$. Hence
 $h_{K_\infty}=h_*$ at all dyadic normals, and $K_\infty=K_*$ by
 \cref{lem:dyadic}.
 \end{proof}
 
-For a selection as in \cref{prop:selection}, put $\eta_j=\dH(K_j,K_*)\to0$; at
-every sampled normal, $\abs{h_{K_j}(s)-h_*(s)}\le\eta_j$.
+For a selection as in \cref{prop:selection}, put
+\[
+  \eta_j=\dH(K_j,K_*)\to0;
+\]
+at every sampled normal, $\abs{h_{K_j}(s)-h_*(s)}\le\eta_j$.

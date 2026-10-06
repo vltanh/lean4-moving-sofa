@@ -12,8 +12,11 @@ Y<\infty$ and $\abs X=\abs Y$. Then $X=Y$.
 \end{lemma}
 
 \begin{proof}
-As $X$ is closed, hence measurable, and $\abs Y<\infty$, $\abs{Y\setminus
-X}=\abs Y-\abs X=0$. The set $\inter Y\setminus X$ is open and lies in
+As $X$ is closed, hence measurable, and $\abs Y<\infty$,
+\[
+  \abs{Y\setminus X}=\abs Y-\abs X=0.
+\]
+The set $\inter Y\setminus X$ is open and lies in
 $Y\setminus X$, so it has area $0$; as a nonempty open set has positive area, it
 is empty. Hence $\inter Y\subset X$, and since $X$ is closed, $Y=\clos(\inter
 Y)\subset X\subset Y$.
@@ -57,8 +60,12 @@ $\Gs=\clos(\inter\Gs)$.
 \end{proposition}
 
 \begin{proof}
-Let $\Gamma=\bD([t_0,t_2])\cup\xx([t_1,t_4])\cup\bB([t_3,t_5])$, $a=\bD(0)_x$
-and $b=\bB(\pi/2)_x$ (\cref{fig:recovery}). The set $\Gamma$ is compact, as the
+Let
+\[
+  \Gamma=\bD([t_0,t_2])\cup\xx([t_1,t_4])\cup\bB([t_3,t_5]),
+\]
+$a=\bD(0)_x$ and $b=\bB(\pi/2)_x$ (\cref{fig:recovery}). The set $\Gamma$ is
+compact, as the
 union of the images of three closed intervals under the continuous curves $\bD$,
 $\xx$ and $\bB$. By \cref{fact:gerver}\ref{fact:gerver:niche}, the abscissa
 increases along $\bD$ and $\bB$ and, as $t$ grows, decreases along $\xx$, and
@@ -74,7 +81,10 @@ ends at $0$ and starts at $\xx(t_1)_y<1$. The ordinate of $\xx$ on $[t_1,t_4]$
 lies in $(0,1)$ by \cref{fact:height}. So the heights of $\Gamma$ lie in
 $[0,1)$.
 
-The points $(a,1)=\bD(0)+v_0=\bC(0)$ and $(b,1)=\bB(\pi/2)+u_{\pi/2}=\bA(\pi/2)$
+The points
+\[
+  (a,1)=\bD(0)+v_0=\bC(0),\qquad(b,1)=\bB(\pi/2)+u_{\pi/2}=\bA(\pi/2)
+\]
 lie in $\KG$, since $\bA=A_{\KG}$ and $\bC=C_{\KG}$ on $[0,\pi/2]$
 (\cref{fact:gerver}\ref{fact:gerver:cap}). As $\KG$ is convex, it contains the
 segment from $(a,1)$ to $(b,1)$. A cap $K$ with rotation angle $\pi/2$ is closed
@@ -87,8 +97,11 @@ $\KG\supset[a,b]\times[0,1]$. As $a<b$, $\KG$ is a closed convex set with
 nonempty interior, so $\KG=\clos(\inter\KG)$.
 
 By \cref{fact:gerver}\ref{fact:gerver:cap} and~\ref{fact:gerver:niche},
-$\Gs=\KG\setminus\cN(\KG)=\KG\setminus\Gamma_<$, and $\Gs$ is closed, being a
-moving sofa (\cref{fact:gerver}\ref{fact:gerver:cap},
+\[
+  \Gs=\KG\setminus\cN(\KG)=\KG\setminus\Gamma_<,
+\]
+and $\Gs$ is closed, being a moving sofa
+(\cref{fact:gerver}\ref{fact:gerver:cap},
 \cref{fact:monotone}\ref{fact:monotone:envelope}). So \cref{lem:envelope}
 applies with $K=\KG$.
 \end{proof}
@@ -114,13 +127,20 @@ $s\in\R$ with
 \[
   g_1(S)\subset U=\Gs+(s,0).
 \]
-Let $g(p)=g_1(p)-(s,0)=R_\psi p+v$ with $v=R_\psi w_0+w_1-(s,0)$. Then
-$g(S)\subset\Gs$, and $\psi\in[0,\pi/2-\omega_0]$. The set $g(S)$ is closed,
-since $S$ is closed and $g$ is a homeomorphism, and $\abs{g(S)}=\abs S=\abs\Gs$,
-since rotations and translations preserve area; and $\abs\Gs<\infty$ by
-\cref{fact:gerver}\ref{fact:gerver:def}. By \cref{prop:regular},
-$\Gs=\clos(\inter\Gs)$, so $g(S)=\Gs$ by \cref{lem:recover}, that is, $R_\psi
-S+v=\Gs$. This is the assertion with $\theta=\psi$.
+Let
+\[
+  g(p)=g_1(p)-(s,0)=R_\psi p+v\quad\text{with}\quad v=R_\psi w_0+w_1-(s,0).
+\]
+Then $g(S)\subset\Gs$, and $\psi\in[0,\pi/2-\omega_0]$. The set $g(S)$ is
+closed, since $S$ is closed and $g$ is a homeomorphism, and
+$\abs{g(S)}=\abs S=\abs\Gs$, since rotations and translations preserve area; and
+$\abs\Gs<\infty$ by \cref{fact:gerver}\ref{fact:gerver:def}. By
+\cref{prop:regular}, $\Gs=\clos(\inter\Gs)$, so $g(S)=\Gs$ by
+\cref{lem:recover}, that is,
+\[
+  R_\psi S+v=\Gs.
+\]
+This is the assertion with $\theta=\psi$.
 \end{proof}
 
 \begin{corollary}[the maximal sofas]\label{cor:all}
@@ -133,9 +153,15 @@ $v\in\R^2$.
 By \cref{fact:optimal}, $\abs{S'}\le\abs\Gs$ for every moving sofa $S'$, and
 $\Gs$ is a moving sofa (\cref{fact:gerver}\ref{fact:gerver:cap},
 \cref{fact:monotone}\ref{fact:monotone:envelope}). If $S$ has maximal area, then
-$\abs\Gs\le\abs S\le\abs\Gs$, and \cref{thm:main} gives $\theta$ and $v$.
-Conversely, if $R_\theta S+v=\Gs$, then $\abs S=\abs\Gs\ge\abs{S'}$ for every
-moving sofa $S'$, since rotations and translations preserve area.
+\[
+  \abs\Gs\le\abs S\le\abs\Gs,
+\]
+and \cref{thm:main} gives $\theta$ and $v$. Conversely, if $R_\theta S+v=\Gs$,
+then
+\[
+  \abs S=\abs\Gs\ge\abs{S'}
+\]
+for every moving sofa $S'$, since rotations and translations preserve area.
 \end{proof}
 
 \begin{lemma}[the widths of Gerver's sofa]\label{lem:gerver-width}
@@ -151,19 +177,25 @@ $\ip{p-q}w\le1$ for all $p,q\in\Gs$, then $w_x=0$.
 \end{lemma}
 
 \begin{proof}
-\ref{lem:gerver-width:points} Let $a=\bD(0)_x$, $b=\bB(\pi/2)_x$ and
-$x_-=\xx(\pi/2)_x-1$, and let $\Gamma$ be as in the proof of
-\cref{prop:regular}. A point $q\in\Gamma_<$ lies strictly below a point
-$\gamma\in\Gamma$ with $\gamma_x=q_x$, so $\gamma_y>q_y\ge0$. Write
-$\gamma=\bD(t)$ with $t\in[t_0,t_2]$, $\gamma=\xx(t)$ with $t\in[t_1,t_4]$, or
-$\gamma=\bB(t)$ with $t\in[t_3,t_5]$. As $\bD(t_0)$ and $\bB(t_5)$ lie on the
-$x$-axis, $t\ne t_0$ in the first case and $t\ne t_5$ in the third. By the
-strict monotonicity of the abscissa along $\bD$ on $[t_0,t_2]$, along $\xx$ on
-$[t_1,t_4]$ and along $\bB$ on $[t_3,t_5]$
-(\cref{fact:gerver}\ref{fact:gerver:niche}), and the chain
-$a=\bD(0)_x<\bD(t_2)_x=\xx(t_4)_x<\xx(t_1)_x=\bB(t_3)_x<b$ of the proof of
-\cref{prop:regular}, $q_x=\gamma_x\in(a,b)$. As
-$\Gs=\KG\setminus\cN(\KG)=\KG\setminus\Gamma_<$
+\ref{lem:gerver-width:points} Let
+\[
+  a=\bD(0)_x,\qquad b=\bB(\pi/2)_x,\qquad x_-=\xx(\pi/2)_x-1,
+\]
+and let $\Gamma$ be as in the proof of \cref{prop:regular}. A point
+$q\in\Gamma_<$ lies strictly below a point $\gamma\in\Gamma$ with
+$\gamma_x=q_x$, so $\gamma_y>q_y\ge0$. Write $\gamma=\bD(t)$ with
+$t\in[t_0,t_2]$, $\gamma=\xx(t)$ with $t\in[t_1,t_4]$, or $\gamma=\bB(t)$ with
+$t\in[t_3,t_5]$. As $\bD(t_0)$ and $\bB(t_5)$ lie on the $x$-axis, $t\ne t_0$ in
+the first case and $t\ne t_5$ in the third. By the strict monotonicity of the
+abscissa along $\bD$ on $[t_0,t_2]$, along $\xx$ on $[t_1,t_4]$ and along $\bB$
+on $[t_3,t_5]$ (\cref{fact:gerver}\ref{fact:gerver:niche}), and the chain
+\[
+  a=\bD(0)_x<\bD(t_2)_x=\xx(t_4)_x<\xx(t_1)_x=\bB(t_3)_x<b
+\]
+of the proof of \cref{prop:regular}, $q_x=\gamma_x\in(a,b)$. As
+\[
+  \Gs=\KG\setminus\cN(\KG)=\KG\setminus\Gamma_<
+\]
 (\cref{fact:gerver}\ref{fact:gerver:cap}, \ref{fact:gerver:niche}), every point
 of $\KG$ with abscissa outside $(a,b)$ lies in $\Gs$.
 
@@ -174,26 +206,41 @@ condition~(2)) and $\bC(\pi/2)=(x_-,0)$
 $\bC=C_{\KG}$ on $[0,\pi/2]$ (\cref{fact:gerver}\ref{fact:gerver:cap}). By the
 formula for the inner corner (\cref{sec:sofas}), applied to $\xx=\xx_{\KG}$
 (\cref{fact:gerver}\ref{fact:gerver:cap}) at $t=0$ and $t=\pi/2$,
-$h_{\KG}(0)=\ip{\xx(0)}{u_0}+1=1$, as $\xx(0)=O$ (Appendix~\ref{app:gerver},
-condition~(2)), and $h_{\KG}(\pi)=\ip{\xx(\pi/2)}{v_{\pi/2}}+1=-x_-$. So every
-point $p$ of $\KG$ has $p_x=\ip p{u_0}\le h_{\KG}(0)=1$ and $-p_x=\ip
-p{u_\pi}\le h_{\KG}(\pi)=-x_-$; in particular $x_-\le a$ and $b\le1$. Hence none
-of $a$, $b$, $x_-$ and $1$ lies in $(a,b)$, and the four points lie in $\Gs$.
+\[
+  h_{\KG}(0)=\ip{\xx(0)}{u_0}+1=1,
+\]
+as $\xx(0)=O$ (Appendix~\ref{app:gerver}, condition~(2)), and
+\[
+  h_{\KG}(\pi)=\ip{\xx(\pi/2)}{v_{\pi/2}}+1=-x_-.
+\]
+So every point $p$ of $\KG$ has
+\[
+  p_x=\ip p{u_0}\le h_{\KG}(0)=1,\qquad-p_x=\ip p{u_\pi}\le h_{\KG}(\pi)=-x_-;
+\]
+in particular $x_-\le a$ and $b\le1$. Hence none of $a$, $b$, $x_-$ and $1$ lies
+in $(a,b)$, and the four points lie in $\Gs$.
 
 By condition~(3) of the injectivity condition, which $\KG$ satisfies with
 $\xx_{\KG}=\xx$ (\cref{fact:gerver}\ref{fact:gerver:cap}), $\alpha<0<\beta$ on
 $(0,\pi/2)$. So the abscissa of $\xx$, whose derivative is $\alpha\cos
 t-\beta\sin t$, is decreasing on $[0,\pi/2]$. With the chain above,
-$a<\xx(t_4)_x<\xx(t_1)_x\le\xx(0)_x=0$ and
-$b>\xx(t_1)_x>\xx(t_4)_x\ge\xx(\pi/2)_x=x_-+1$.
+\begin{align*}
+  a&<\xx(t_4)_x<\xx(t_1)_x\le\xx(0)_x=0,\\
+  b&>\xx(t_1)_x>\xx(t_4)_x\ge\xx(\pi/2)_x=x_-+1.
+\end{align*}
 
 \ref{lem:gerver-width:gt} Let $a$, $b$ and $x_-$ be as in
 \ref{lem:gerver-width:points}. Since $0\le\sin r\le1$, $\sin r\ge\sin^2r$, and
 likewise $\abs{\cos r}\ge\cos^2r$; so $\abs{\cos r}+\sin r\ge1$. For
-$r\in[0,\pi/2)$, $\cos r>0$ and $\ip{(b,1)-(x_-,0)}{u_r}=(b-x_-)\cos r+\sin
-r>\cos r+\sin r\ge1$. For $r\in(\pi/2,\pi]$, $\cos r<0$ and
-$\ip{(a,1)-(1,0)}{u_r}=(1-a)\abs{\cos r}+\sin r>\abs{\cos r}+\sin r\ge1$. These
-four points lie in $\Gs$ by \ref{lem:gerver-width:points}.
+$r\in[0,\pi/2)$, $\cos r>0$ and
+\[
+  \ip{(b,1)-(x_-,0)}{u_r}=(b-x_-)\cos r+\sin r>\cos r+\sin r\ge1.
+\]
+For $r\in(\pi/2,\pi]$, $\cos r<0$ and
+\[
+  \ip{(a,1)-(1,0)}{u_r}=(1-a)\abs{\cos r}+\sin r>\abs{\cos r}+\sin r\ge1.
+\]
+These four points lie in $\Gs$ by \ref{lem:gerver-width:points}.
 
 \ref{lem:gerver-width:vertical} Suppose first that $w_y\ge0$. Then $w=u_r$ with
 $r=\arccos w_x\in[0,\pi]$, and if $w_x\ne0$, then $r\ne\pi/2$, and
@@ -223,11 +270,14 @@ $H_L$ (\cref{def:sofa}), so $p_y-q_y\le1$ for $p,q\in S$. For $p,q\in S$,
   \ip{g(p)-g(q)}{v_\psi}=\ip{R_\psi(p-q)}{R_\psi v_0}=\ip{p-q}{v_0}=p_y-q_y
     \le1 ,
 \]
-so $\ip{x-y}{u_{\psi+\pi/2}}\le1$ for all $x,y\in\Gs=g(S)$. If $\psi>0$, then
-$\psi+\pi/2\in(\pi/2,\pi)$, as $\psi\le\pi/2-\omega_0<\pi/2$, and
-\cref{lem:gerver-width}\ref{lem:gerver-width:gt} contradicts this. So $\psi=0$,
-and $S+v=g(S)=\Gs$. As $\Gs$ is a moving sofa with rotation angle $\pi/2$
-(\cref{fact:gerver}\ref{fact:gerver:cap},
+so
+\[
+  \ip{x-y}{u_{\psi+\pi/2}}\le1\quad\text{for all }x,y\in\Gs=g(S).
+\]
+If $\psi>0$, then $\psi+\pi/2\in(\pi/2,\pi)$, as $\psi\le\pi/2-\omega_0<\pi/2$,
+and \cref{lem:gerver-width}\ref{lem:gerver-width:gt} contradicts this. So
+$\psi=0$, and $S+v=g(S)=\Gs$. As $\Gs$ is a moving sofa with rotation angle
+$\pi/2$ (\cref{fact:gerver}\ref{fact:gerver:cap},
 \cref{fact:monotone}\ref{fact:monotone:envelope}), so is its translate
 $S=\Gs-v$.
 

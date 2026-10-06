@@ -160,18 +160,28 @@ they are those of this paper. In Lean the plane is $\R\times\R$, the area of a
 set is its Lebesgue measure \path{volume}, and \texttt{rot t} is the
 counterclockwise rotation by $t$.
 \begin{itemize}
-\item \path{horizSide} $=\{p:\ p_1\le1,\ 0\le p_2\le1\}=H_L$, \path{vertSide}
-$=\{p:\ 0\le p_1\le1,\ p_2\le1\}=V_L$, \path{hallway} $=H_L\cup V_L=L$.
+\item $\begin{aligned}[t]
+  \text{\path{horizSide}}&=\{p:\ p_1\le1,\ 0\le p_2\le1\}=H_L,\\
+  \text{\path{vertSide}}&=\{p:\ 0\le p_1\le1,\ p_2\le1\}=V_L,\\
+  \text{\path{hallway}}&=H_L\cup V_L=L.
+\end{aligned}$
 \item \texttt{IsMovingSofa S} holds if $S$ is closed and connected (hence
 nonempty) and there are $\theta:\R\to\R$ and $c:\R\to\R^2$, continuous on
-$[0,1]$, with $\theta(0)=0$, $\mathrm{rot}_{\theta(0)}p+c(0)\in H_L$ for $p\in
-S$, $\mathrm{rot}_{\theta(s)}p+c(s)\in L$ for $p\in S$ and $s\in[0,1]$, and
-$\mathrm{rot}_{\theta(1)}p+c(1)\in V_L$ for $p\in S$ (\cref{def:sofa}, the
-rotation angle $-\theta(1)$ being left free).
-\item \texttt{shapeOfPath x}
-$=H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)\cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr)$,
-written in Lean with images of the hallway sets under $p\mapsto
-\xx(t)+\mathrm{rot}_t\,p$.
+$[0,1]$, with $\theta(0)=0$,
+\begin{alignat*}{2}
+  \mathrm{rot}_{\theta(0)}p+c(0)&\in H_L &\qquad&\text{for } p\in S,\\
+  \mathrm{rot}_{\theta(s)}p+c(s)&\in L &&\text{for } p\in S \text{ and }
+    s\in[0,1], \text{ and}\\
+  \mathrm{rot}_{\theta(1)}p+c(1)&\in V_L &&\text{for } p\in S
+\end{alignat*}
+(\cref{def:sofa}, the rotation angle $-\theta(1)$ being left free).
+\item \texttt{shapeOfPath x} is
+\[
+  H_L\cap\bigcap_{t\in[0,\pi/2]}\bigl(\xx(t)+R_tL\bigr)
+  \cap\bigl(\xx(\pi/2)+R_{\pi/2}V_L\bigr),
+\]
+written in Lean with images of the hallway sets under
+$p\mapsto\xx(t)+\mathrm{rot}_t\,p$.
 \item \path{GerverParams} holds the 22 parameters of Appendix~\ref{app:gerver};
 \texttt{P.path} is the rotation path glued from the five curves of
 Appendix~\ref{app:gerver}; \texttt{P.IsSolution} is the conjunction of
@@ -224,17 +234,25 @@ $\eps$ for \texttt{sofaDeficit P S}. The three theorems state the following.
 \begin{itemize}
 \item \path{Baek.gerver_sofa_stable}: there are $C,C',\eps_0>0$ such that every
 $S$ with \texttt{IsMovingSofa S} and $\eps<\eps_0$ satisfies
-\texttt{EuclideanClose} $(C\sqrt\eps)$ $N$ (\texttt{gerverSofa P}) and
-$\abs{N\,\triangle\,\Gs}\le C'\sqrt\eps$, where $N=$ \texttt{normalizedSofa P S}
-and $\triangle$ is the symmetric difference.
+\[
+  \texttt{EuclideanClose}\; (C\sqrt\eps)\; N\; (\texttt{gerverSofa P})
+  \quad\text{and}\quad\abs{N\,\triangle\,\Gs}\le C'\sqrt\eps ,
+\]
+where $N=$ \texttt{normalizedSofa P S} and $\triangle$ is the symmetric
+difference.
 \item \path{Baek.gerver_sofa_angle_stable}: there are $C,\eps_0>0$ such that
 every $S$ and $\omega$ with \texttt{IsMovingSofaWithAngle S}~$\omega$,
-$\omega\in[\arccos(5/11),\pi/2]$ and $\eps<\eps_0$ satisfy $\pi/2-\omega\le C\eps$.
+$\omega\in[\arccos(5/11),\pi/2]$ and $\eps<\eps_0$ satisfy
+\[
+  \pi/2-\omega\le C\eps .
+\]
 \item \path{Baek.gerver_sofa_stability_exponent}: for all $a>1/2$, $C\in\R$ and
 $\eps_0>0$ there is a set $S$ with \texttt{IsMovingSofa S} and $0<\eps<\eps_0$
-such that \texttt{EuclideanClose} $(C\eps^a)$ $S$
-$\{\mathrm{rot}_\theta p+v:p\in\Gs\}$ fails for every $\theta\in\R$ and
-$v\in\R\times\R$.
+such that
+\[
+  \texttt{EuclideanClose}\; (C\eps^a)\; S\; \{\mathrm{rot}_\theta p+v:p\in\Gs\}
+\]
+fails for every $\theta\in\R$ and $v\in\R\times\R$.
 \end{itemize}
 
 \subsection{Dictionary}\label{app:lean-dict}

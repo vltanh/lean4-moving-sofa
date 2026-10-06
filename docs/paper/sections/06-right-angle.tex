@@ -3,7 +3,10 @@
 Baek shows that a balanced maximum sofa $S_\omega$ with $\abs{S_\omega}\ge11/5$
 and rotation angle $\omega\in[\omega_0,\pi/2]$ has a rotated copy that turns by
 a right angle \baek{Thm.~1.5.2}. The proof uses the balance only through two
-inequalities, $w^\circ_K\le\sigma_K(\pi/2)$ and $z^\circ_K\le\sigma_K(\omega)$,
+inequalities,
+\[
+  w^\circ_K\le\sigma_K(\pi/2),\qquad z^\circ_K\le\sigma_K(\omega),
+\]
 which bound the wedge gaps on the two floors $y=0$ and $l(\omega,0)$ by the
 lengths of the sides of the cap on the opposite walls $y=1$ and $l(\omega,1)$
 \baek{Thm.~4.1.4}. We prove these inequalities for $K_*$ from the defect bounds
@@ -19,20 +22,28 @@ For a cap $K\in\Kc_\omega$ and $t\in(0,\omega)$ let
   w_K(t)=h_K(0)-\frac{h_K(t)-1}{\cos t},\qquad
   z_K(t)=h_K(\omega+\tfrac\pi2)-\frac{h_K(t+\pi/2)-1}{\cos(\omega-t)},
 \]
-the \emph{wedge gaps}. With $A=(h_K(0),0)=A_K^-(0)$ and
-$C=h_K(\omega+\pi/2)v_\omega=C_K^+(\omega)$ the ends of the upper boundary of
-$K$ (see \eqref{eq:ends}), $w_K(t)=\ip{A-W_K(t)}{u_0}$, where
-$W_K(t)=((h_K(t)-1)/\cos t,0)$ is the point where the inner wall $b_K(t)$ meets
-the $x$-axis, and $z_K(t)=\ip{C-Z_K(t)}{v_\omega}$, where $Z_K(t)$ is the point
-where $d_K(t)$ meets $l(\omega,0)$ \baek{Def.~2.5.5}. Let
-$w^\circ_K=\inf_{t\in(0,\omega)}w_K(t)$ and
-$z^\circ_K=\inf_{t\in(0,\omega)}z_K(t)$ \baek{Def.~4.1.1}. As $t\to\omega$,
-$w_K(t)\to h_K(0)$, so $w^\circ_K\le h_K(0)$; as $t\to0$, $z_K(t)\to
-h_K(\omega+\pi/2)$, so $z^\circ_K\le h_K(\omega+\pi/2)$.
+the \emph{wedge gaps}. With
+\[
+  A=(h_K(0),0)=A_K^-(0),\qquad C=h_K(\omega+\pi/2)v_\omega=C_K^+(\omega)
+\]
+the ends of the upper boundary of $K$ (see \eqref{eq:ends}),
+$w_K(t)=\ip{A-W_K(t)}{u_0}$, where $W_K(t)=((h_K(t)-1)/\cos t,0)$ is the point
+where the inner wall $b_K(t)$ meets the $x$-axis, and
+$z_K(t)=\ip{C-Z_K(t)}{v_\omega}$, where $Z_K(t)$ is the point where $d_K(t)$
+meets $l(\omega,0)$ \baek{Def.~2.5.5}. Let
+\[
+  w^\circ_K=\inf_{t\in(0,\omega)}w_K(t),\qquad
+  z^\circ_K=\inf_{t\in(0,\omega)}z_K(t)
+\]
+\baek{Def.~4.1.1}. As $t\to\omega$, $w_K(t)\to h_K(0)$, so $w^\circ_K\le
+h_K(0)$; as $t\to0$, $z_K(t)\to h_K(\omega+\pi/2)$, so $z^\circ_K\le
+h_K(\omega+\pi/2)$.
 
 \begin{lemma}[wedge gaps and the polyline]\label{lem:wedge}
-Every polygon cap $K\in\Kc_\Theta$ satisfies $w^\circ_K\le\tau_K(\pi/2)$ and
-$z^\circ_K\le\tau_K(\omega)$.
+Every polygon cap $K\in\Kc_\Theta$ satisfies
+\[
+  w^\circ_K\le\tau_K(\pi/2),\qquad z^\circ_K\le\tau_K(\omega).
+\]
 \end{lemma}
 
 This is the first half of the proof of \baek{Thm.~4.1.2}.
@@ -41,39 +52,55 @@ This is the first half of the proof of \baek{Thm.~4.1.2}.
 Choose $t_0\in\Theta$ with $w_K(t_0)=\min_{t\in\Theta}w_K(t)$. A point $(x,0)$
 of $\cN_\Theta(K)$ lies in $F_\omega$, so $x\ge0$, and in some $Q^-_K(t)$,
 $t\in\Theta$, so $x\cos t<h_K(t)-1$, that is $x<h_K(0)-w_K(t)\le
-h_K(0)-w_K(t_0)$. Hence $\cN_\Theta(K)\cap
-l(\pi/2,0)\subset[0,h_K(0)-w_K(t_0))\times\{0\}$, and by
-\cref{fact:sides}\ref{fact:sides:floor}
+h_K(0)-w_K(t_0)$. Hence
+\[
+  \cN_\Theta(K)\cap l(\pi/2,0)\subset[0,h_K(0)-w_K(t_0))\times\{0\},
+\]
+and by \cref{fact:sides}\ref{fact:sides:floor}
 \[
   \sigma_K(3\pi/2)-\tau_K(\pi/2)=\Hone\bigl(\cN_\Theta(K)\cap l(\pi/2,0)\bigr)
     \le\max\bigl(h_K(0)-w_K(t_0),0\bigr).
 \]
 The bottom edge $e_K(3\pi/2)$ contains $O$ and $A$
 (\cref{lem:contains,lem:ends}), so $\sigma_K(3\pi/2)\ge h_K(0)$. If $w_K(t_0)\ge
-h_K(0)$, then $\tau_K(\pi/2)\ge\sigma_K(3\pi/2)\ge h_K(0)\ge w^\circ_K$.
-Otherwise $\tau_K(\pi/2)\ge\sigma_K(3\pi/2)-h_K(0)+w_K(t_0)\ge w_K(t_0)\ge
-w^\circ_K$, as $t_0\in\Theta\subset(0,\omega)$. The second inequality is the
-same argument on the line $l(\omega,0)$, with $C$, $z_K$ and $h_K(\omega+\pi/2)$
-in place of $A$, $w_K$ and $h_K(0)$: a point $\mu v_\omega$ of $\cN_\Theta(K)$
-has $\mu\ge0$, as it lies in $F_\omega$, and $\mu\cos(\omega-t)=\ip{\mu
-v_\omega}{v_t}<h_K(t+\pi/2)-1$ for some $t\in\Theta$, that is
-$\mu<h_K(\omega+\pi/2)-z_K(t)$; the edge $e_K(\omega+\pi)$ contains $O$ and $C$,
-so $\sigma_K(\omega+\pi)\ge h_K(\omega+\pi/2)$; and
-\cref{fact:sides}\ref{fact:sides:floor} is used with $t=\omega$.
+h_K(0)$, then
+\[
+  \tau_K(\pi/2)\ge\sigma_K(3\pi/2)\ge h_K(0)\ge w^\circ_K.
+\]
+Otherwise
+\[
+  \tau_K(\pi/2)\ge\sigma_K(3\pi/2)-h_K(0)+w_K(t_0)\ge w_K(t_0)\ge w^\circ_K,
+\]
+as $t_0\in\Theta\subset(0,\omega)$. The second inequality is the same argument
+on the line $l(\omega,0)$, with $C$, $z_K$ and $h_K(\omega+\pi/2)$ in place of
+$A$, $w_K$ and $h_K(0)$: a point $\mu v_\omega$ of $\cN_\Theta(K)$ has
+$\mu\ge0$, as it lies in $F_\omega$, and
+\[
+  \mu\cos(\omega-t)=\ip{\mu v_\omega}{v_t}<h_K(t+\pi/2)-1
+\]
+for some $t\in\Theta$, that is $\mu<h_K(\omega+\pi/2)-z_K(t)$; the edge
+$e_K(\omega+\pi)$ contains $O$ and $C$, so $\sigma_K(\omega+\pi)\ge
+h_K(\omega+\pi/2)$; and \cref{fact:sides}\ref{fact:sides:floor} is used with
+$t=\omega$.
 \end{proof}
 
 \begin{lemma}[continuity]\label{lem:cont}
 For caps $K,K'\in\Kc_\omega$ with $\dH(K,K')=\eps$,
-$\abs{w^\circ_K-w^\circ_{K'}}\le(1+\sec\omega)\eps$ and
-$\abs{z^\circ_K-z^\circ_{K'}}\le(1+\sec\omega)\eps$.
+\[
+  \abs{w^\circ_K-w^\circ_{K'}}\le(1+\sec\omega)\eps,\qquad
+  \abs{z^\circ_K-z^\circ_{K'}}\le(1+\sec\omega)\eps.
+\]
 \end{lemma}
 
 This is \baek{Lemma~4.1.1}, with the analogous bound for $z^\circ$.
 
 \begin{proof}
-For $t\in(0,\omega)$, $\abs{w_K(t)-w_{K'}(t)}\le\eps+\eps\sec
-t\le(1+\sec\omega)\eps$; similarly for $z$, since $\cos(\omega-t)\ge\cos\omega$.
-The infima differ by at most as much.
+For $t\in(0,\omega)$,
+\[
+  \abs{w_K(t)-w_{K'}(t)}\le\eps+\eps\sec t\le(1+\sec\omega)\eps;
+\]
+similarly for $z$, since $\cos(\omega-t)\ge\cos\omega$. The infima differ by at
+most as much.
 \end{proof}
 
 Baek obtains \baek{Thm.~4.1.4} from the weak convergence of surface area
@@ -108,23 +135,31 @@ $a\le\hat\sigma_K(\delta)$ for every $\delta\in(0,\pi)$. As $\delta\downarrow0$,
   \frac{h_K(t)\cos\delta-h_K(t-\delta)}{\sin\delta}\to h_K'(t^-),
 \]
 because $(1-\cos\delta)/\delta\to0$ and $\delta/\sin\delta\to1$. By
-\cref{fact:convex}\ref{fact:convex:vertices}, $\hat\sigma_K(\delta)\to
-h_K'(t^+)-h_K'(t^-)=\ip{v_K^+(t)-v_K^-(t)}{v_t}=\sigma_K(t)$, so
-$a\le\sigma_K(t)$.
+\cref{fact:convex}\ref{fact:convex:vertices},
+\[
+  \hat\sigma_K(\delta)\to h_K'(t^+)-h_K'(t^-)=\ip{v_K^+(t)-v_K^-(t)}{v_t}
+    =\sigma_K(t),
+\]
+so $a\le\sigma_K(t)$.
 \end{proof}
 
 \begin{proposition}[pinned bounds]\label{prop:pinned-bounds}
 Let $\omega\in(0,\pi/2)$ and let $K_*\in\Kc_\omega$ be a maximizing cap with
-$\cA_\omega(K_*)>0$. Then $w^\circ_{K_*}\le\sigma_{K_*}(\pi/2)$ and
-$z^\circ_{K_*}\le\sigma_{K_*}(\omega)$.
+$\cA_\omega(K_*)>0$. Then
+\[
+  w^\circ_{K_*}\le\sigma_{K_*}(\pi/2),\qquad
+  z^\circ_{K_*}\le\sigma_{K_*}(\omega).
+\]
 \end{proposition}
 
 \begin{proof}
 Take the selection $K_j\to K_*$ of \cref{prop:selection}, with
-$K_j\subset[-R_0,R_0]\times[0,1]$, and $\eta_j=\dH(K_j,K_*)\to0$. Every point
-$p$ of this box has $\abs{\ip p{u_s}}\le R_0+1$, so $\abs{h_{K_j}(s)}\le
-R_0+1=R$ for all $s$, where $R\ge0$; at every sampled normal
-$\abs{h_{K_j}-h_*}\le\eta_j$, and the total weight is $\bar\nu\le1$ by
+\[
+  K_j\subset[-R_0,R_0]\times[0,1],\qquad\eta_j=\dH(K_j,K_*)\to0.
+\]
+Every point $p$ of this box has $\abs{\ip p{u_s}}\le R_0+1$, so
+$\abs{h_{K_j}(s)}\le R_0+1=R$ for all $s$, where $R\ge0$; at every sampled
+normal $\abs{h_{K_j}-h_*}\le\eta_j$, and the total weight is $\bar\nu\le1$ by
 \eqref{eq:weights}. By \cref{cor:twosided} at $t=\pi/2$, with
 $e_j=(2+4\gamma(R))\eta_j$, $\abs{\sigma_{K_j}(\pi/2)-\tau_{K_j}(\pi/2)}\le
 e_j$; so by \cref{lem:wedge}
@@ -142,20 +177,34 @@ $t=\omega$, where \cref{cor:twosided} divides by $\sin\omega>0$: by
 \subsection{The triangle in the niche}\label{sec:triangle}
 
 Except in \cref{lem:triangle}(c), let $\omega\in[\omega_0,\pi/2)$, so that
-$\omega>\pi/4$. Put $c=c_\omega=\sec\omega-\tan\omega>0$, so that
-$o_\omega-v_0=c\,u_0$ and $o_\omega-u_\omega=c\,v_\omega$ \baek{Prop.~4.2.1},
-and let $\Delta_\omega$ be the triangle with vertices $O$, $cu_0$, $cv_\omega$,
-which cuts off the corner $O$ of $P_\omega$. Let $d_{\min}=5/4$ if
-$\omega<\tan^{-1}(11/5)$ and $d_{\min}=11/10$ otherwise, and for
-$d\in[0,\tan\omega]$ let $R_{\omega,d}=P_\omega\cap H_-(0,d+c)\cap
-H_-(\omega+\pi/2,d+c)$ be $P_\omega$ without its two acute corners.
+$\omega>\pi/4$. Put
+\[
+  c=c_\omega=\sec\omega-\tan\omega>0,
+\]
+so that $o_\omega-v_0=c\,u_0$ and $o_\omega-u_\omega=c\,v_\omega$
+\baek{Prop.~4.2.1}, and let $\Delta_\omega$ be the triangle with vertices $O$,
+$cu_0$, $cv_\omega$, which cuts off the corner $O$ of $P_\omega$. Let
+\[
+  d_{\min}=\begin{cases}
+    5/4&\text{if }\omega<\tan^{-1}(11/5),\\
+    11/10&\text{otherwise,}
+  \end{cases}
+\]
+and for $d\in[0,\tan\omega]$ let
+\[
+  R_{\omega,d}=P_\omega\cap H_-(0,d+c)\cap H_-(\omega+\pi/2,d+c)
+\]
+be $P_\omega$ without its two acute corners.
 
 \begin{fact}[numerical inequalities at the corner]\label{fact:corner}
 Let $\omega\in[\omega_0,\pi/2)$.
 \begin{enumerate}[label=(\alph*)]
 \item $\abs{R_{\omega,d_{\min}}}<11/5$. \baek{Lemma~4.2.2}
 \item If $d\in[d_{\min},\tan\omega]$ and $r_y=1-d\cot\omega\ge0$, then the
-points $q_0=o_\omega-v_0+d\,u_0$ and $q_1=o_\omega-g\,u_0$, $g=\sqrt{1-r_y^2}$,
+points
+\[
+  q_0=o_\omega-v_0+d\,u_0,\qquad q_1=o_\omega-g\,u_0,\qquad g=\sqrt{1-r_y^2}
+\]
 satisfy
 \[
   \ip{q_0-cu_0}{u_{\pi/2-\omega}}>1\quad\text{and}
@@ -168,19 +217,26 @@ satisfy
 \begin{lemma}[the triangle lies in the niche]\label{lem:triangle}
 \begin{enumerate}[label=(\alph*)]
 \item Let $\omega\in[\omega_0,\pi/2)$, let $K$ be a compact set, and let
-$q_0,q_1\in K$ satisfy $\ip{q_0-cu_0}{u_{\pi/2-\omega}}>1$ and
-$\ip{q_1-cv_\omega}{v_{\pi/2-\omega}}>1$. Then $O$, $cu_0$ and $cv_\omega$ lie
-in $Q^-_K(\pi/2-\omega)$.
+$q_0,q_1\in K$ satisfy
+\[
+  \ip{q_0-cu_0}{u_{\pi/2-\omega}}>1\quad\text{and}
+    \quad\ip{q_1-cv_\omega}{v_{\pi/2-\omega}}>1 .
+\]
+Then $O$, $cu_0$ and $cv_\omega$ lie in $Q^-_K(\pi/2-\omega)$.
 \item Let $\omega\in[\omega_0,\pi/2)$ and let $K\in\Kc_\omega$ satisfy
-$w^\circ_K\le\sigma_K(\pi/2)$ and $h_K(0)\ge d_{\min}+c$. Then $O$, $cu_0$ and
-$cv_\omega$ lie in $Q^-_K(\pi/2-\omega)$.
+\[
+  w^\circ_K\le\sigma_K(\pi/2),\qquad h_K(0)\ge d_{\min}+c.
+\]
+Then $O$, $cu_0$ and $cv_\omega$ lie in $Q^-_K(\pi/2-\omega)$.
 \item For every $\omega\in\R$, every compact set $K$ and every $t\in\R$, the
 reflection $M_\omega$ maps $Q^-_{M_\omega(K)}(t)$ into $Q^-_K(\omega-t)$.
 \item Let $\omega\in[\omega_0,\pi/2)$ and let $K\in\Kc_\omega$ satisfy
-$\cA_\omega(K)\ge11/5$, $w^\circ_K\le\sigma_K(\pi/2)$ and
-$z^\circ_K\le\sigma_K(\omega)$. Then for some $t_\sharp\in(0,\omega)$ the three
-vertices $O$, $cu_0$, $cv_\omega$ of $\Delta_\omega$ lie in the closure of
-$Q^-_K(t_\sharp)$.
+\[
+  \cA_\omega(K)\ge11/5,\qquad w^\circ_K\le\sigma_K(\pi/2),\qquad
+  z^\circ_K\le\sigma_K(\omega).
+\]
+Then for some $t_\sharp\in(0,\omega)$ the three vertices $O$, $cu_0$,
+$cv_\omega$ of $\Delta_\omega$ lie in the closure of $Q^-_K(t_\sharp)$.
 \end{enumerate}
 \end{lemma}
 
@@ -190,38 +246,51 @@ them. Parts (a) and (b) are steps of that proof, and (c) is a consequence of
 \baek{Prop.~2.5.4}.
 
 \begin{proof}
-(a) Put $t=\pi/2-\omega$. As $q_0,q_1\in K$, $h_K(t)\ge\ip{q_0}{u_t}$ and
-$h_K(t+\pi/2)\ge\ip{q_1}{v_t}$. So every point $p$ with $\ip
-p{u_t}\le\ip{cu_0}{u_t}$ and $\ip p{v_t}\le\ip{cv_\omega}{v_t}$ lies in
-$Q^-_K(t)$, because the hypotheses give
+(a) Put $t=\pi/2-\omega$. As $q_0,q_1\in K$,
+\[
+  h_K(t)\ge\ip{q_0}{u_t},\qquad h_K(t+\pi/2)\ge\ip{q_1}{v_t}.
+\]
+So every point $p$ with $\ip p{u_t}\le\ip{cu_0}{u_t}$ and $\ip
+p{v_t}\le\ip{cv_\omega}{v_t}$ lies in $Q^-_K(t)$, because the hypotheses give
 \begin{align*}
   \ip p{u_t}&\le\ip{cu_0}{u_t}<\ip{q_0}{u_t}-1\le h_K(t)-1,\\
   \ip p{v_t}&\le\ip{cv_\omega}{v_t}<\ip{q_1}{v_t}-1\le h_K(t+\pi/2)-1.
 \end{align*}
-Now $\ip{cu_0}{u_t}=c\sin\omega>0$ and
-$\ip{cv_\omega}{v_t}=c\cos(\omega-t)=c\sin2\omega>0$, while
-$\ip{cu_0}{v_t}=-c\sin t=-c\cos\omega<0$ and
-$\ip{cv_\omega}{u_t}=c\sin(t-\omega)=c\cos2\omega\le0$, since
-$\pi/4<\omega<\pi/2$. So $O$, $cu_0$ and $cv_\omega$ satisfy both conditions.
+Now
+\begin{align*}
+  \ip{cu_0}{u_t}&=c\sin\omega>0, &
+    \ip{cv_\omega}{v_t}&=c\cos(\omega-t)=c\sin2\omega>0,\\
+  \ip{cu_0}{v_t}&=-c\sin t=-c\cos\omega<0, &
+    \ip{cv_\omega}{u_t}&=c\sin(t-\omega)=c\cos2\omega\le0,
+\end{align*}
+since $\pi/4<\omega<\pi/2$. So $O$, $cu_0$ and $cv_\omega$ satisfy both
+conditions.
 
 (b) Put $d=h_K(0)-c\ge d_{\min}$ and $q_0=(h_K(0),0)$, which is $A^-_K(0)\in K$
 by \cref{lem:ends}; then $q_0=(c+d)u_0=o_\omega-v_0+d\,u_0$. As $q_0\in
 P_\omega$, $h_K(0)\cos\omega\le1$, so $d\cos\omega\le1-c\cos\omega=\sin\omega$.
 Hence $d\le\tan\omega$, and $r_y=1-d\cot\omega$ lies in $[0,1]$. The point
-$r=(h_K(0),r_y)$ lies on $l_K(0)$ and on $l(\omega,1)$, since $\ip
-r{u_\omega}=(c+d)\cos\omega+\sin\omega-d\cos\omega=1$. Let $g=\sqrt{1-r_y^2}$
-and $s=q_0-g\,u_0$: the triangle $s,q_0,r$ has a right angle at $q_0$, and
-$r-s=(g,r_y)$ is a unit vector.
+$r=(h_K(0),r_y)$ lies on $l_K(0)$ and on $l(\omega,1)$, since
+\[
+  \ip r{u_\omega}=(c+d)\cos\omega+\sin\omega-d\cos\omega=1.
+\]
+Let $g=\sqrt{1-r_y^2}$ and $s=q_0-g\,u_0$: the triangle $s,q_0,r$ has a right
+angle at $q_0$, and $r-s=(g,r_y)$ is a unit vector.
 
 For $t\in(0,\omega)$, $\sin\omega\,u_t=\sin(\omega-t)\,u_0+\sin t\,u_\omega$
-with nonnegative coefficients, and every $p\in K$ has $\ip p{u_0}\le h_K(0)=\ip
-r{u_0}$ and $\ip p{u_\omega}\le1=\ip r{u_\omega}$, as $K\subset P_\omega$. So
-$h_K(t)\le\ip r{u_t}$, and since $\ip{r-s}{u_t}\le\norm{r-s}=1$,
+with nonnegative coefficients, and every $p\in K$ has
+\[
+  \ip p{u_0}\le h_K(0)=\ip r{u_0},\qquad\ip p{u_\omega}\le1=\ip r{u_\omega},
+\]
+as $K\subset P_\omega$. So $h_K(t)\le\ip r{u_t}$, and since
+$\ip{r-s}{u_t}\le\norm{r-s}=1$,
 \[
   h_K(t)-1\le\ip r{u_t}-\ip{r-s}{u_t}=\ip s{u_t}=(h_K(0)-g)\cos t .
 \]
-So $W_K(t)$ lies on or to the left of $s$, that is $w_K(t)\ge g$. Hence $0\le
-g\le w^\circ_K\le\sigma_K(\pi/2)$.
+So $W_K(t)$ lies on or to the left of $s$, that is $w_K(t)\ge g$. Hence
+\[
+  0\le g\le w^\circ_K\le\sigma_K(\pi/2).
+\]
 
 The top edge $e_K(\pi/2)$ lies on the line $l(\pi/2,1)$, whose points in
 $P_\omega$ have abscissa at most $c$. Its end $v^-_K(\pi/2)$ is such a point,
@@ -237,20 +306,32 @@ claim.
 
 (c) The reflection $M_\omega$ is a symmetric linear map with $M_\omega
 u_s=u_{\omega+\pi/2-s}$, so $\ip{M_\omega p}{u_s}=\ip p{u_{\omega+\pi/2-s}}$ for
-all $p$ and $s$; in particular $h_{M_\omega(K)}(s)=h_K(\omega+\pi/2-s)$. Let
-$p\in Q^-_{M_\omega(K)}(t)$, that is $\ip p{u_t}<h_K(\omega+\pi/2-t)-1$ and $\ip
-p{u_{t+\pi/2}}<h_K(\omega-t)-1$. Then
+all $p$ and $s$; in particular
+\[
+  h_{M_\omega(K)}(s)=h_K(\omega+\pi/2-s).
+\]
+Let $p\in Q^-_{M_\omega(K)}(t)$, that is
+\[
+  \ip p{u_t}<h_K(\omega+\pi/2-t)-1,\qquad\ip p{u_{t+\pi/2}}<h_K(\omega-t)-1.
+\]
+Then
 \begin{align*}
   \ip{M_\omega p}{u_{\omega-t}}&=\ip p{u_{t+\pi/2}}<h_K(\omega-t)-1,\\
   \ip{M_\omega p}{u_{\omega-t+\pi/2}}&=\ip p{u_t}<h_K(\omega-t+\pi/2)-1,
 \end{align*}
 so $M_\omega p\in Q^-_K(\omega-t)$.
 
-(d) If $h_K(0)<d_{\min}+c$ and $h_K(\omega+\pi/2)<d_{\min}+c$, then $K\subset
-R_{\omega,d_{\min}}$, as $K\subset P_\omega$, and $\abs
+(d) If
+\[
+  h_K(0)<d_{\min}+c\quad\text{and}\quad h_K(\omega+\pi/2)<d_{\min}+c,
+\]
+then $K\subset R_{\omega,d_{\min}}$, as $K\subset P_\omega$, and $\abs
 K\le\abs{R_{\omega,d_{\min}}}<11/5$ by \cref{fact:corner}(a), whereas $\abs
-K\ge\cA_\omega(K)\ge11/5$. So $h_K(0)\ge d_{\min}+c$ or $h_K(\omega+\pi/2)\ge
-d_{\min}+c$. In the first case (b) puts $O$, $cu_0$ and $cv_\omega$ in
+K\ge\cA_\omega(K)\ge11/5$. So
+\[
+  h_K(0)\ge d_{\min}+c\quad\text{or}\quad h_K(\omega+\pi/2)\ge d_{\min}+c.
+\]
+In the first case (b) puts $O$, $cu_0$ and $cv_\omega$ in
 $Q^-_K(\pi/2-\omega)$, hence in its closure, and $t_\sharp=\pi/2-\omega$ lies in
 $(0,\omega)$, as $\omega>\pi/4$.
 
@@ -260,8 +341,10 @@ $\sigma_{K^{\mir}}(\pi/2)=\sigma_K(\omega)$
 (\cref{fact:monotone}\ref{fact:monotone:mirror}). Then
 $h_{K^{\mir}}(0)=h_K(\omega+\pi/2)\ge d_{\min}+c$, and the formulas for the
 wedge gaps give $w_{K^{\mir}}(t)=z_K(\omega-t)$ for $t\in(0,\omega)$, so
-$w^\circ_{K^{\mir}}=z^\circ_K\le\sigma_K(\omega)=\sigma_{K^{\mir}}(\pi/2)$. By
-(b), $O$, $cu_0$ and $cv_\omega$ lie in $Q^-_{K^{\mir}}(\pi/2-\omega)$. As
+\[
+  w^\circ_{K^{\mir}}=z^\circ_K\le\sigma_K(\omega)=\sigma_{K^{\mir}}(\pi/2).
+\]
+By (b), $O$, $cu_0$ and $cv_\omega$ lie in $Q^-_{K^{\mir}}(\pi/2-\omega)$. As
 $M_\omega$ fixes $O$ and exchanges $u_0$ and $v_\omega$, (c) puts $O$,
 $cv_\omega$ and $cu_0$ in $Q^-_K(\omega-(\pi/2-\omega))$, hence in its closure,
 and $t_\sharp=2\omega-\pi/2$ lies in $(0,\omega)$, as $\pi/4<\omega<\pi/2$.
@@ -286,28 +369,44 @@ $P_\omega\setminus\Delta_\omega$.
 
 \begin{proof}
 (a) The closure of $Q^-_K(t_\sharp)$ lies in the closed quarter-plane of the
-points $p$ with $\ip p{u_{t_\sharp}}\le\alpha$ and $\ip
-p{v_{t_\sharp}}\le\beta$, where $\alpha=h_K(t_\sharp)-1$ and
-$\beta=h_K(t_\sharp+\pi/2)-1$. It contains $cu_0$ and $cv_\omega$, and
-$\ip{cu_0}{u_{t_\sharp}}=c\cos t_\sharp>0$,
+points $p$ with
+\[
+  \ip p{u_{t_\sharp}}\le\alpha,\qquad\ip p{v_{t_\sharp}}\le\beta,
+\]
+where $\alpha=h_K(t_\sharp)-1$ and $\beta=h_K(t_\sharp+\pi/2)-1$. It contains
+$cu_0$ and $cv_\omega$, and $\ip{cu_0}{u_{t_\sharp}}=c\cos t_\sharp>0$,
 $\ip{cv_\omega}{v_{t_\sharp}}=c\cos(\omega-t_\sharp)>0$, so $\alpha>0$ and
 $\beta>0$. The point $p=\lambda u_0+\mu v_\omega$ is
 $(\lambda/c)\,cu_0+(\mu/c)\,cv_\omega$, with $\lambda/c,\mu/c\ge0$ and
-$(\lambda+\mu)/c<1$. So $\ip p{u_{t_\sharp}}\le(\lambda+\mu)\alpha/c<\alpha$ and
-$\ip p{v_{t_\sharp}}\le(\lambda+\mu)\beta/c<\beta$, and $p\in Q^-_K(t_\sharp)$.
-Also $p\in F_\omega$, since $\ip p{u_\omega}=\lambda\cos\omega\ge0$ and
-$p_y=\mu\cos\omega\ge0$; as $t_\sharp\in(0,\omega)$, $p\in\cN(K)$.
+$(\lambda+\mu)/c<1$. So
+\[
+  \ip p{u_{t_\sharp}}\le(\lambda+\mu)\alpha/c<\alpha,\qquad
+  \ip p{v_{t_\sharp}}\le(\lambda+\mu)\beta/c<\beta,
+\]
+and $p\in Q^-_K(t_\sharp)$. Also $p\in F_\omega$, since
+\[
+  \ip p{u_\omega}=\lambda\cos\omega\ge0,\qquad p_y=\mu\cos\omega\ge0;
+\]
+as $t_\sharp\in(0,\omega)$, $p\in\cN(K)$.
 
-(b) Write $q=\lambda u_0+\mu v_\omega$. As $q\in P_\omega$, $\lambda=\ip
-q{u_\omega}/\cos\omega\ge0$ and $\mu=q_y/\cos\omega\ge0$, and $\lambda+\mu\ge c$
-by (a). For $t\in[\omega,\pi/2]$ both $\cos t$ and $\sin(t-\omega)$ are
-nonnegative, so $\ip q{u_t}=\lambda\cos t+\mu\sin(t-\omega)\ge c\min(\cos
-t,\sin(t-\omega))$. Also $\cos\omega\,u_t=\cos
-t\,u_\omega+\sin(t-\omega)\,u_{\pi/2}$, and $\ip p{u_\omega}\le1$, $p_y\le1$ as
-$p\in P_\omega$, so $\cos\omega\ip p{u_t}\le\cos t+\sin(t-\omega)$, that is $\ip
-p{u_t}\le c\cos t+\sin t=\ip{o_\omega}{u_t}$, as $c\cos\omega=1-\sin\omega$. If
-$\cos t\le\sin(t-\omega)$, then $\ip{p-q}{u_t}\le\sin t\le1$. Otherwise, using
-$c(1+\sin\omega)=\cos\omega$ and $c\cos\omega=1-\sin\omega$,
+(b) Write $q=\lambda u_0+\mu v_\omega$. As $q\in P_\omega$,
+\[
+  \lambda=\ip q{u_\omega}/\cos\omega\ge0,\qquad\mu=q_y/\cos\omega\ge0,
+\]
+and $\lambda+\mu\ge c$ by (a). For $t\in[\omega,\pi/2]$ both $\cos t$ and
+$\sin(t-\omega)$ are nonnegative, so
+\[
+  \ip q{u_t}=\lambda\cos t+\mu\sin(t-\omega)\ge c\min(\cos t,\sin(t-\omega)).
+\]
+Also $\cos\omega\,u_t=\cos t\,u_\omega+\sin(t-\omega)\,u_{\pi/2}$, and $\ip
+p{u_\omega}\le1$, $p_y\le1$ as $p\in P_\omega$, so $\cos\omega\ip
+p{u_t}\le\cos t+\sin(t-\omega)$, that is
+\[
+  \ip p{u_t}\le c\cos t+\sin t=\ip{o_\omega}{u_t},
+\]
+as $c\cos\omega=1-\sin\omega$. If $\cos t\le\sin(t-\omega)$, then
+$\ip{p-q}{u_t}\le\sin t\le1$. Otherwise, using $c(1+\sin\omega)=\cos\omega$ and
+$c\cos\omega=1-\sin\omega$,
 \[
   \ip{p-q}{u_t}\le c\cos t+\sin t-c\sin(t-\omega)=\cos(t-\omega)\le1 .\qedhere
 \]
@@ -324,12 +423,16 @@ Let $(\theta,\mathbf c)$ be a movement of $S$ with rotation angle $\omega$, as
 in \cref{def:sofa}; its translation $\mathbf c$ is set in bold, to distinguish
 it from $c_\omega$. As $S$ is compact, there is $R$ with $\norm p\le R$ for all
 $p\in S$. For $\rho\in[0,\psi]$ let
-$b(\rho)=\bigl(1-2R,\,h_S(3\pi/2-\rho)\bigr)$, which depends continuously on
-$\rho$, as $h_S$ is continuous. Then $R_\rho S+b(\rho)\subset H_L$: for $p\in S$
-the abscissa of $R_\rho p+b(\rho)$ is
-$p_x\cos\rho-p_y\sin\rho+1-2R\le\abs{p_x}+\abs{p_y}+1-2R\le1$; and, as $(R_\rho
-p)_y=\ip p{u_{\pi/2-\rho}}$ and $u_{3\pi/2-\rho}=-u_{\pi/2-\rho}$, its ordinate
-is
+\[
+  b(\rho)=\bigl(1-2R,\,h_S(3\pi/2-\rho)\bigr),
+\]
+which depends continuously on $\rho$, as $h_S$ is continuous. Then $R_\rho
+S+b(\rho)\subset H_L$: for $p\in S$ the abscissa of $R_\rho p+b(\rho)$ is
+\[
+  p_x\cos\rho-p_y\sin\rho+1-2R\le\abs{p_x}+\abs{p_y}+1-2R\le1;
+\]
+and, as $(R_\rho p)_y=\ip p{u_{\pi/2-\rho}}$ and
+$u_{3\pi/2-\rho}=-u_{\pi/2-\rho}$, its ordinate is
 \[
   \ip p{u_{\pi/2-\rho}}+h_S(3\pi/2-\rho)=\ip p{u_{\pi/2-\rho}}
     -\min_{q\in S}\ip q{u_{\pi/2-\rho}},
@@ -345,8 +448,11 @@ Define $\theta'$ and $\mathbf c'$ on $[0,1]$ by
     -2) && \text{on }[\tfrac23,1].
 \end{align*}
 The definitions agree at $s=1/3$ and at $s=2/3$, so $\theta'$ and $\mathbf c'$
-are continuous; $\theta'(0)=0$ and $\theta'(1)=\theta(1)-\psi=-\pi/2$. The image
-of $R_\psi S$ under $p\mapsto R_{\theta'(s)}p+\mathbf c'(s)$ is
+are continuous;
+\[
+  \theta'(0)=0,\qquad\theta'(1)=\theta(1)-\psi=-\pi/2.
+\]
+The image of $R_\psi S$ under $p\mapsto R_{\theta'(s)}p+\mathbf c'(s)$ is
 $R_{\theta'(s)+\psi}S+\mathbf c'(s)$. On $[0,1/3]$ it is $R_\rho
 S+b(\rho)\subset H_L$ with $\rho=\psi(1-3s)$, so the sofa turns clockwise by
 $\psi$ inside $H_L$. On $[1/3,2/3]$ it is $S+(2-3s)\,b(0)+(3s-1)\,\mathbf c(0)$,

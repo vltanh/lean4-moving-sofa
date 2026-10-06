@@ -520,10 +520,7 @@ How it was made:
   terms also bounds the distance to Gerver's cap. Two sub-agents, neither able to edit, then read the result, one
   for its accuracy against the later sections and the Lean, the other for its prose and its structure. Neither
   found a mathematical error; the main session applied their findings, among them a false sentence on the punctured
-  sofas and a term used for two inequalities. At the owner's request, the main session then shortened Section 1.7,
-  the outline of the paper, which the two sections on the strategies had made partly redundant, and rewrote Appendix
-  E, the account of the use of AI, as three bulleted lists, leaving the round-by-round detail to this file and to the
-  manuscript's README. The manuscript has 101 pages.
+  sofas and a term used for two inequalities. The manuscript has 102 pages.
 
 Figures, from 16:13 to 16:58:
 - elapsed time: 45 minutes;
@@ -532,3 +529,29 @@ Figures, from 16:13 to 16:58:
 - tokens of the sub-agents: 0.18 million output, 0.55 million input, 14 million cache reads; of the main session:
   0.14 million output, 0.23 million input, 28 million cache reads;
 - model calls: 84 by the sub-agents and 67 by the main session, all to `claude-opus-5-5`.
+
+## The manuscript's readability (6 October 2026)
+
+The owner asked to shorten the outline of the manuscript (Section 1.7), to rewrite the account of the use of AI
+(Appendix E) as bulleted lists, to put the definitions of Section 2 into definition environments, and to move long
+inline formulas onto their own lines.
+
+How it was made:
+- 16:59 to 17:50: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
+- The main session shortened Section 1.7, which the two sections on the strategies had made partly redundant;
+  rewrote Appendix E as three bulleted lists (who wrote what, what was checked and by whom, what a person has read),
+  from 1,880 words to about 820, leaving the round-by-round detail to this file and to the manuscript's README; and
+  put every notion of Section 2 into a definition with its name in the title. A word-level comparison found no change
+  of content.
+- Seven sub-agents, one per group of section files, moved long inline formulas into unnumbered displays, 387
+  in all, each building a private copy of the manuscript to check that it compiles without overfull lines. A script
+  compared every file before and after with the typography stripped: the mathematics, the labels and the references
+  did not change; the only word changes are the connectives that the displays need. The manuscript has 117 pages.
+
+Figures, from 16:59 to 17:50:
+- elapsed time: 51 minutes;
+- sub-agents: 7, all at the same time, about 3.1 hours of work;
+- tool calls: 938 by the sub-agents, 43 by the main session;
+- tokens of the sub-agents: 1.21 million output, 2.71 million input, 117 million cache reads; of the main session:
+  0.08 million output, 0.14 million input, 27 million cache reads;
+- model calls: 526 by the sub-agents and 44 by the main session, all to `claude-opus-5-5`.
