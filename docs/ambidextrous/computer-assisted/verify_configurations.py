@@ -6,6 +6,8 @@ The mathematical argument is configuration-area-certificate.md (CF1--CF2).
 """
 from __future__ import annotations
 import argparse
+import base64
+import zlib
 from fractions import Fraction as Q
 import hashlib
 import json
@@ -148,8 +150,16 @@ if __name__=='__main__':
     ap.add_argument('certificate',type=Path)
     ap.add_argument('--output',type=Path)
     args=ap.parse_args()
-    raw=args.certificate.read_bytes()
-    require(len(raw)<=10_000_000,'Certificate too large')
+    stored=args.certificate.read_bytes()
+    require(len(stored)<=10_000_000,'Certificate too large')
+    if args.certificate.suffix=='.b64':
+        compressed=base64.b64decode(b''.join(stored.split()),validate=True)
+        dec=zlib.decompressobj()
+        raw=dec.decompress(compressed,10_000_001)
+        require(len(raw)<=10_000_000 and dec.eof and not dec.unconsumed_tail
+                and not dec.unused_data,'Invalid or oversized compressed certificate')
+    else:
+        raw=stored
     result=verify(json.loads(raw))
     result['certificate_sha256']=hashlib.sha256(raw).hexdigest()
     result['verifier_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
