@@ -1,340 +1,151 @@
 # Roadmap: coercive extremal framework
 
-This branch is a **stacked planning/refactor branch** based on
-\`research/quantitative-stability\`. It is intended to reorganize the new
-quantitative machinery into an independent extremal route while preserving:
+This PR is stacked on `research/quantitative-stability`. The initial planning
+commits are preserved in history. Implementation has now begun and the core
+extremal/bridge route has intended proof-source entry points. See
+[IMPLEMENTATION.md](IMPLEMENTATION.md) for the actual module map and limitations.
 
-1. the faithful formalization of Baek's paper in \`MovingSofaOptimality\`;
-2. the existing main uniqueness proof in \`MovingSofaUniqueness.Main\`;
-3. the bridge and Challenge interface used to transport the result to
-   formal-conjectures.
+**No Lean, Lake, CI, remote build, or TeX compilation has been run.** A completed
+source milestone is not a successfully elaborated or verified theorem.
+
+## Assets to preserve
+
+The faithful Baek formalization in `MovingSofaOptimality`, the original main
+uniqueness/CapKernel proof, the historical maximizing-cap alternative route,
+and the bridge/Challenge interface remain available. The new route must not
+replace them or silently extend their kernel-verification claims.
 
-The goal is not to replace any of those assets. The goal is to make the new
-coercive framework prove optimality and uniqueness by a route that is
-machine-auditable as independent of both Baek's final optimality theorem and
-the old CapKernel equality proof.
+Manuscript integration is for the user's other session. The current task is
+proof source and dependency separation, not editing the paper.
+
+## Mathematical target
 
-No Lean, Lake, CI, remote build, or TeX compilation is to be run while this
-roadmap is being implemented unless that policy is explicitly changed. Research
-commits should continue to use \`[skip ci]\`.
-
-## Target mathematical picture
-
-Let \(M=|G|\). The new framework should expose one right-angle extremal theorem
-whose consequences separate according to the size of the deficit:
-
-\[
-  \mathcal A(K)\le Q(\xi_K)\le M,
-\]
-
-together with a coercive estimate of the form
-
-\[
-  d_H^{\mathrm{Euc}}(K,K_G+(s,0))
-    \le C\sqrt{M-Q(\xi_K)}.
-\]
-
-Then:
-
-- **sign of the deficit** gives the right-angle upper bound;
-- **zero deficit** gives rigidity and uniqueness of the right-angle maximizer;
-- **small deficit** gives cap stability.
-
-The global maximizing-cap machinery transports the first two consequences to
-arbitrary moving sofas. The additional local/compactness geometry transports
-the third consequence to unrestricted stability.
-
-The intended source-level zero-deficit route is
-
-\[
-\begin{aligned}
-K\text{ maximizes } \mathcal A
-&\Longrightarrow |G|\le \mathcal A(K)\\
-&\Longrightarrow K\in\mathcal K^i\\
-&\Longrightarrow \mathcal A(K)\le Q(\xi_K)\le Q(\xi_G)=|G|\\
-&\Longrightarrow M-Q(\xi_K)=0\\
-&\Longrightarrow E_{\rm cap}=0\\
-&\Longrightarrow d_H^{\mathrm{Euc}}(K,K_G+(s,0))=0\\
-&\Longrightarrow K=K_G+(s,0).
-\end{aligned}
-\]
-
-The classification step must use the quantitative deficit/coercivity machinery,
-not \`ki_maximizer_equality_conditions\`, \`capKernel_of_triple_midpoint\`, or
-\`CapKernel.eq_horizontal_translation\`.
-
-## What stays unchanged
-
-### Baek track
-
-\`MovingSofaOptimality\` remains the faithful formalization of Baek's paper,
-including \`MovingSofaOptimality.theorem1_1_1\`. The new route does not replace
-or rewrite it.
-
-### Main uniqueness track
-
-\`MovingSofaUniqueness.Main\` remains the natural uniqueness proof used by the
-current manuscript. It may continue to use Baek's optimality theorem and the
-existing equality/CapKernel argument.
-
-### Bridge and Challenge
-
-\`MovingSofaBridge\`, \`Challenge.lean\`, and the formal-conjectures statements
-remain an external interface. Internal proof routes may change without changing
-that interface.
-
-## Phase 1 — dependency refactor
-
-The first implementation phase is source organization, not new mathematics.
-
-### 1.1 Extract neutral Mamikon square-gap algebra
-
-The following declarations currently live in \`MovingSofaUniqueness.Rigidity\`
-although they are not uniqueness-specific:
-
-- \`halfSquareIntegral\`;
-- \`integrable_sq_sub\`;
-- \`halfSquareIntegral_combo_gap\`;
-- \`integral_sq_sub_eq_zero_iff\`;
-- the associated equality lemmas used by Mamikon's formula.
-
-Move or re-export them from a neutral module, tentatively
-
-\`MovingSofaUniqueness/MamikonGap.lean\`.
-
-Both the old rigidity proof and the quantitative stability proof should import
-that module. The coercive route should not need to import the old CapKernel
-classification just to obtain these analytic lemmas.
-
-### 1.2 Split maximizer geometry from maximizer rigidity
-
-The current \`MovingSofaUniqueness.Maximizers\` mixes geometry/value results
-with the old rigidity classification. Split the dependency surface so the
-coercive route can use:
-
-- \`exists_maximizing_cap\`;
-- \`gerver_le_of_maximizes\`;
-- \`isKi_of_maximizes\`;
-- \`right_angle_maximizer_value\`;
-- \`maximizing_monotone_has_right_angle\`;
-
-without importing the old equality route.
-
-Tentative module:
-
-\`MovingSofaUniqueness/MaximizerGeometry.lean\`.
-
-The existing CapKernel-based classification may remain in a separate module or
-be re-exported for compatibility.
-
-### 1.3 Extract horizontal-translation geometry
-
-Move/re-export the elementary facts used by both routes:
-
-- support of a horizontal translate;
-- cap equality from upper support;
-- niche translation;
-- sofa translation.
-
-Tentative module:
-
-\`MovingSofaUniqueness/HorizontalTranslation.lean\`.
-
-This keeps the coercive route from importing unrelated equality machinery.
-
-## Phase 2 — coercive right-angle rigidity
-
-Add a module tentatively named
-
-\`MovingSofaUniqueness/CoerciveRigidity.lean\`.
-
-Its headline theorem should classify a maximizing right-angle cap using
-\`MovingSofaStability.ki_cap_distance_bound\` (or a lower-level equivalent):
-
-\`\`\`lean
-theorem right_angle_maximizer_eq_gerver_coercive
-    {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    {K : Set Plane} (hK : IsCap K (π / 2))
-    (hmax : ∀ C, IsCap C (π / 2) →
-      sofaArea (π / 2) C ≤ sofaArea (π / 2) K) :
-    ∃ a : ℝ,
-      K = Rigid.translate (a, 0) '' P.cap ∧
-      K \ niche K (π / 2) =
-        Rigid.translate (a, 0) '' gerverSofa P
-\`\`\`
-
-Proof skeleton:
-
-1. \`isKi_of_maximizes\`;
-2. \`right_angle_maximizer_value\`;
-3. apply the Ki cap-distance theorem;
-4. rewrite the area deficit to zero;
-5. conclude \`EuclideanClose 0 ...\`;
-6. use \`EuclideanClose.eq_of_zero\`;
-7. translate the niche/sofa.
-
-There should be no midpoint-equality or CapKernel call in this proof.
-
-## Phase 3 — coercive extremal route
-
-Add a dedicated route, tentatively
-
-\`MovingSofaUniqueness/CoerciveAlternative.lean\`.
-
-It should reprove the same public mathematical conclusions as the current
-maximizer route while replacing only the right-angle classification theorem.
-
-Target entry points:
-
-- right-angle cap upper bound and equality characterization;
-- \`gerver_sofa_optimal\`;
-- cap area bound for every angle;
-- equality/congruence theorem for maximal sofas;
-- \`gerver_sofa_optimal_and_unique\`;
-- maximal-sofa iff Gerver-copy theorem.
-
-The global steps may reuse:
-
-- existence of maximizing caps;
-- maximality-derived pinned/curvature bounds;
-- remaining-angle turn;
-- regular-closed recovery.
-
-This route must not use \`MovingSofaUniqueness.Main\` or the old CapKernel
-classification.
-
-## Phase 4 — stability dependency cleanup
-
-The unrestricted stability theorem currently uses the existing uniqueness
-theorem in the compactness/local-entry step. After the coercive extremal route
-exists, decide whether to switch qualitative entry to the coercive uniqueness
-theorem.
-
-This is desirable because it gives a single dependency hierarchy:
-
-\[
-\text{maximizer geometry}
-\to\text{coercive right-angle theorem}
-\to\text{global optimality/uniqueness}
-\to\text{qualitative entry}
-\to\text{global stability}.
-\]
-
-It is not necessary for the first coercive-route milestone. The first priority
-is an independent zero-deficit proof, not rewriting all of global stability.
-
-## Phase 5 — formal-conjectures interface
-
-Keep the existing bridge statements stable:
-
-- \`Bridge.isMovingSofa_iff\`;
-- \`Bridge.sofaConstant_eq\`;
-- \`Bridge.gerversSofa_eq\`.
-
-Keep \`Challenge.lean\` stable as the statement-of-record interface.
-
-Add a second solution entry point, tentatively \`SolutionCoercive.lean\`, proving
-the same Challenge theorems using the coercive optimality/uniqueness route plus
-the same bridge.
-
-The existing \`Solution.lean\` should remain the canonical solution based on
-Baek's faithful optimality theorem plus the main uniqueness proof.
-
-Thus the repository will have two internally different proofs of the same
-external formal-conjectures statements.
-
-## Phase 6 — route audits
-
-Extend the current dependency-audit strategy.
-
-### Existing maximizer-route audit
-
-Preserve \`scripts/AuditMaximizerRoute.lean\` for the historical second route
-until the refactor is complete.
-
-### New coercive-route audit
-
-Add \`scripts/AuditCoerciveRoute.lean\`.
-
-It should fail if any declaration of the coercive route reaches, transitively:
-
-#### Baek final optimality
-
-- \`MovingSofaOptimality.theorem1_1_1\`;
-- \`MovingSofaOptimality.gm_area_le\`.
-
-#### Baek's balance-derived step-(3) route
-
-Keep the existing \`baekForbidden\` list from
-\`AuditMaximizerRoute.lean\`.
-
-#### Main uniqueness route
-
-Forbid all declarations owned by \`MovingSofaUniqueness.Main\`.
-
-#### Old equality/CapKernel route
-
-At minimum forbid:
-
-- \`MovingSofaUniqueness.ki_maximizer_equality_conditions\`;
-- \`MovingSofaUniqueness.capKernel_of_triple_midpoint\`;
-- \`MovingSofaUniqueness.CapKernel.eq_horizontal_translation\`;
-
-and any higher-level old classification theorem that would bypass the
-coercivity argument.
-
-Negative controls should prove that the audit traversal really sees these
-dependencies in the old routes.
-
-## Phase 7 — manuscript integration
-
-Do not rewrite the faithful Baek exposition.
-
-The paper should ultimately distinguish two proof tracks:
-
-### Track A — Baek
-
-A faithful proof of optimality, formalized in \`MovingSofaOptimality\`.
-
-### Track B — coercive framework
-
-A common framework in which:
-
-\[
-M-Q\ge0 \Rightarrow \text{optimality},\qquad
-M-Q=0 \Rightarrow \text{uniqueness},\qquad
-M-Q\ll1 \Rightarrow \text{stability}.
-\]
-
-The current subsection “A second proof of optimality” should be absorbed into
-this broader section rather than deleted mathematically. Its maximizing-cap and
-remaining-angle arguments remain part of the new track.
-
-A likely paper order is:
-
-1. Baek's optimality background;
-2. main uniqueness proof;
-3. quantitative stability;
-4. unified/coercive route to optimality and uniqueness;
-5. formalization and bridge to formal-conjectures.
-
-The paper may continue to present the natural narrative
-optimality → uniqueness → stability while recording the coercive route as an
-independently audited reorganization.
-
-## Merge strategy
-
-This PR is intentionally **stacked on the stability branch** because the new
-route depends on cap coercivity.
-
-Recommended merge order:
-
-1. finish/review \`research/quantitative-stability\`;
-2. merge or rebase that work into the paper branch;
-3. rebase this coercive-extremal PR onto the resulting integration branch;
-4. perform Lean compilation/audits only when explicitly allowed;
-5. update the manuscript verification claims only after the new route is
-   actually kernel-checked.
-
-Until then, descriptions must say “proof source” or “planned formalization,”
-not “verified formalization.”
+Write M=area(G). On the appropriate right-angle cap/triple domain, the shared
+certificate controls both value and shape:
+
+    A(K) <= Q(xi_K) <= M,
+    Euclidean cap distance(K, K_G + horizontal shift)
+      <= (2 / cos(phi)) * sqrt(M-Q(xi_K)).
+
+For an exact maximizer, Gerver as a competitor gives M<=A(K). The maximality
+geometry gives Ki, where the canonical triple and geometric area inequality
+are available. Thus A(K)=Q(xi_K)=M, and zero cap distance gives actual cap
+identity. Niche translation gives the nonconvex cap-minus-niche identity.
+
+Fixed-angle existence and the remaining-angle motion give global optimality.
+Envelope and regular-closed recovery give global uniqueness. The independent
+route uses the lower cap coercivity theorem, not the global stability theorem
+whose qualitative entry currently invokes uniqueness.
+
+## Milestones and acceptance gates
+
+| Phase | Source status | Remaining acceptance gate |
+| --- | --- | --- |
+| 1. Neutral dependencies | Written in `MamikonFoundation`, `Geometry`, `HorizontalTranslation` | Elaborate; inspect transitive dependencies |
+| 2. Zero-deficit cap rigidity | Written in `CoerciveRigidity` | Check actual use of cap distance and absence of old kernel route |
+| 3. Global extremal theorem | Written in `Optimality`, `Uniqueness`, `All` | Elaborate and audit all new declarations |
+| 4. Switch global stability to new uniqueness | Optional, deferred | Add translation/pinning adapter after the new route is checked |
+| 5. Same formal-conjectures interface | Written in `SolutionCoercive` | Compare all twelve types and check bridge dependencies |
+| 6. Route audit | Written in `AuditCoerciveRoute.lean`, NOT RUN | Execute only when compilation is permitted |
+| 7. Manuscript integration | Deferred to the user's other session | Reflect actual verification status, not merely source completion |
+
+All acceptance gates involving Lean remain pending under the current explicit
+no-compilation instruction.
+
+## Phase 1: neutral dependencies
+
+The implementation preserves the old source files instead of physically moving
+their declarations during an uncompiled refactor:
+
+- `MovingSofaStability/MamikonFoundation.lean` supplies neutral square-integral,
+  displacement, and canonical-triple facts in the quantitative namespace.
+- `MamikonEnergy.lean` imports it instead of the original `Rigidity` module.
+- `MovingSofaExtremal/Geometry.lean` supplies maximizing-cap existence,
+  maximality-to-Ki, and the remaining-angle turn.
+- `MovingSofaExtremal/HorizontalTranslation.lean` supplies elementary niche and
+  sofa translation identities.
+
+This duplicates a small amount of neutral infrastructure in separate namespaces
+rather than changing the established proof. Later checked deduplication is
+optional, not a dependency of the new theorem. No wrapper that calls the old
+classification counts as an independent replacement.
+
+## Phases 2 and 3: coercive classification and global assembly
+
+The new `MovingSofaExtremal` entry points are:
+
+    wide_zero_deficit_cap
+    right_angle_maximizer_certificate
+    right_angle_maximizer_eq_gerver
+    right_angle_extremal
+    gerver_sofa_optimal
+    image_eq_gerver_of_volume_eq
+    gerver_sofa_optimal_and_unique
+    isMaximal_iff_image_eq_gerver
+
+The key proof explicitly calls `sharp_wide_cap_distance_bound`, rewrites the
+Q deficit to zero, and calls `EuclideanClose.eq_of_zero`. It does not call the
+old midpoint-equality or CapKernel classification.
+
+The library is separate and optional, so new uncompiled modules do not enter
+the existing default uniqueness-library glob. The original default targets
+remain unchanged.
+
+## Phase 4: optional stability dependency cleanup
+
+The current global stability source uses the original uniqueness theorem for
+qualitative local entry and the zero-deficit case. That is a valid dependency
+ordering, not a defect that must be repaired to obtain quantitative stability.
+
+After checking the new extremal route, it is possible to replace those calls
+with a translation/pinning refinement of its uniqueness theorem. This optional
+change is not implemented here and does not affect the new route's independence:
+its own imports stop at cap coercivity, before global stability/local entry.
+
+## Phase 5: bridge and external statements
+
+The canonical `Solution.lean`, all bridge files, and both Challenge files stay
+unchanged. `SolutionCoercive.lean` supplies the second route under distinct
+`CoerciveSolution` names, allowing both theorem families to coexist.
+
+Its twelve intended statement types are the same as the corresponding canonical
+Challenge results. `AuditCoerciveRoute.lean` compares these types; it has not run.
+No external formal-conjectures repository has been modified by this work.
+
+## Phase 6: independence audit
+
+The new audit is stricter than the historical maximizing-route audit. It checks
+all loaded quantitative/extremal declarations and the second solution, including
+private/generated declarations. It traverses intermediate proof bodies and
+forbids:
+
+- Baek's final optimality theorem and its final assembly lemma;
+- the historical balance-derived step-(3) list;
+- all original main uniqueness and Rigidity declarations;
+- the old maximizing-cap alternative modules;
+- global stability/local-entry/Statement modules and the canonical Solution.
+
+Positive controls require the new cap classification to reach the actual
+quantitative deficit and sharp cap-distance theorems. Negative controls require
+the older routes to expose their known forbidden dependencies. All twelve
+external statement types are compared separately. See
+[DEPENDENCIES.md](DEPENDENCIES.md) for the precise contract.
+
+## Phase 7: presentation and merge strategy
+
+Retain the faithful Baek proof. The current new 'second proof of optimality'
+material can be absorbed into the wider coercive route rather than removed.
+The paper may present optimality, uniqueness, and stability in that natural
+order, while explaining the independent zero-deficit derivation as a common
+framework, subject to the actual dependency audit.
+
+PR #8's sharpness additions are handed off separately in
+`docs/stability/SHARPNESS_HANDOFF.md`. PR #9 merged that handoff without rewriting
+its history. Integrate/review #8 first, then rebase or retarget #9 onto the chosen
+integration branch without discarding either proof track. Do not merge solely
+because top-level theorem source exists.
+
+When explicitly permitted, the next verification stage is elaboration of the
+lower certificate, both extremal/solution routes, the new transitive audit, and
+the existing preservation audits. Only successful verification permits changing
+paper claims from 'proof source' to 'kernel-checked'.
