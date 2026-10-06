@@ -1,5 +1,7 @@
 # Active roadmap: geometric admission, with an audited one-turn alternative
 
+**Primary milestone now: optimal value only.** Defer uniqueness/equality classification until the global upper bound is proved. The active computer-assisted plan is [optimality-only-computer-plan.md](optimality-only-computer-plan.md): exact ordinary-area global localization plus a local candidate theorem.
+
 Read [HANDOFF.md](HANDOFF.md) first for the live-checkpoint procedure, provenance, validation status and failed routes. **Unrestricted optimality and uniqueness are not proved.** A short conditional assembly is not evidence that its geometric premises are routine. All written results remain subject to independent review.
 
 ## 1. Target and quantifiers
