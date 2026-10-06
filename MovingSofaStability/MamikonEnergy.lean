@@ -67,8 +67,9 @@ variable (hz : ∀ K, IsCBV (z K) a b)
 variable (hzl : ∀ K, ∀ t ∈ Icc a b, z K t ∈ suppLine K.1 t)
 variable (hlin : ∀ K₀ K₁, ∀ c ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
   z (convexBodyComb c K₀ K₁) t = (1 - c) • z K₀ t + c • z K₁ t)
+-- The statements below do not mention these hypotheses, so they are included explicitly.
+include hab hb hz hzl hlin
 
-include hab hb hz hzl hlin in
 /-- Exact quantitative Mamikon convexity gap, including the endpoint parameters. -/
 theorem mamikon_combo_energy (K₀ K₁ : ConvexBodySet) {c : ℝ}
     (hc : c ∈ Icc (0 : ℝ) 1) :
@@ -107,7 +108,6 @@ theorem mamikon_combo_energy (K₀ K₁ : ConvexBodySet) {c : ℝ}
   unfold halfSquareIntegral
   ring
 
-include hab hb hz hzl hlin in
 /-- Four times the midpoint gap is exactly the difference-square energy. -/
 theorem mamikon_midpoint_energy (K₀ K₁ : ConvexBodySet) :
     4 * ((mamikon K₀.1 a b (z K₀) + mamikon K₁.1 a b (z K₁)) / 2 -

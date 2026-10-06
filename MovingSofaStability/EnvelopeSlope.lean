@@ -23,6 +23,7 @@ section Envelope
 
 variable {t₁ t₂ t₃ t₄ sA sC : ℝ} {x : ℝ → Point} {α β ρA ρC : ℝ → ℝ}
 variable (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
+-- The statements below do not mention `h`, so it is included explicitly.
 include h
 
 theorem envelope_left_slope (ht₂ : t₂ < π / 4) :
