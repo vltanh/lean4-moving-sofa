@@ -1,13 +1,14 @@
 module
 
 public import MovingSofaStability.EuclideanGeometry
+public import MovingSofaUniqueness.Main
 
 /-!
 # The unrestricted stability target
 
 Uncompiled source. `UnrestrictedStability` is a proposition specifying the
-remaining headline theorem, NOT an axiom or an asserted theorem. In particular,
-merely defining this proposition is not a formalization of its proof.
+headline theorem, NOT an axiom or an asserted theorem. Merely defining this
+proposition does not supply its proof.
 
 The metric conclusion uses both directed Euclidean bounds on the actual
 nonconvex sets. The normalization agrees with note 08 and uses translation
@@ -60,9 +61,11 @@ theorem normalizedSofa_left (P : GerverParams) {S : Set Point}
   simp only [normalizingShift, dot, uvec_fst, uvec_snd, cos_pi, sin_pi]
   ring
 
+/-- `theorem1_1_1` bounds ENNReal volume. The imported real-area corollary
+performs the finite-measure conversion needed for this real deficit. -/
 theorem sofaDeficit_nonneg {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Point} (hS : IsMovingSofa S) : 0 ≤ sofaDeficit P S :=
-  sub_nonneg.mpr ((theorem1_1_1 hP hbox).2 S hS)
+  sub_nonneg.mpr (MovingSofaUniqueness.area_le_gerver hP hbox hS)
 
 /-- Note 08's unrestricted theorem, in the original sofa definitions.
 This declaration records a proof obligation; it does not supply a proof. -/
