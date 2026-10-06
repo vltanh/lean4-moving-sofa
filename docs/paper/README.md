@@ -32,7 +32,7 @@ person has read them yet.
 | [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean statement and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (100 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (99 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -45,7 +45,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 100 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 99 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -58,15 +58,17 @@ undefined reference.
   repository, and Appendix D gives the statement of record in mathematical notation, with the definitions that
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
-  4 October (commit `952812d`), and Fact 2.7, Lemmas 8.6 and 8.7 and Theorem 8.8 on 5 October (commits
-  `3af9279` and `51c9be1`). Section 12 says what the machine check does and does not give, and who and what
+  4 October (commit `952812d`), and Fact 2.7 and the second proof of optimality (now Lemma 11.4 and Remark 11.6)
+  on 5 October (commits `3af9279` and `51c9be1`). Section 12 says what the machine check does and does not give, and who and what
   wrote which part.
-- Section 8.4 gives a second proof of optimality (Baek's theorem), from the maximizing caps (Theorem 8.8): it uses Baek's
-  results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it Theorem 1.1 and Corollary 9.4
-  hold without Baek's Theorem 1.1.1. ChatGPT Pro 6 wrote it in Lean in pull request #5, merged on 5 October; the
-  formalization proves it in three modules of its own, and a second audit, run by the continuous integration,
-  checks that they use neither Baek's Theorem 1.1.1 nor the results from which Baek derives step (3) of
-  Section 1.3 from the balance.
+- Remark 11.6 records a second proof of optimality (Baek's theorem) from the maximizing caps: the proof of
+  Theorem 11.5 with Baek's own bound for $\mathcal Q$ and the equality analysis of Section 8 in place of the
+  certificate. It uses Baek's results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it
+  Theorem 1.1 and Corollary 9.4 hold without Baek's Theorem 1.1.1. ChatGPT Pro 6 wrote it in Lean in pull request
+  #5, merged on 5 October; the formalization proves it in three modules of its own
+  (`MovingSofaUniqueness.MaximizerRoute`), and a second audit, run by the continuous integration, checks that
+  they use neither Baek's Theorem 1.1.1 nor the results from which Baek derives step (3) of Section 1.3 from the
+  balance. Section 8.4 presented it until 6 October, when it was folded into Section 11 at the author's request.
 - Section 10 proves the stability (Theorems 10.1 to 10.4), translated from the library `MovingSofaStability`. ChatGPT
   Pro 6 wrote that library and the argument in pull request #8, without compiling it; Claude Opus 5.5 made it compile
   on 5 October, and the Challenge states Theorems 10.1 to 10.3 since 6 October (commit `92b2f86`). The cap estimate,
@@ -74,9 +76,8 @@ undefined reference.
 - Section 11 derives optimality, uniqueness and stability from one estimate (Theorem 11.1, the coercive
   certificate: Lemma 10.6 and Theorem 10.4 (a) together), translated from the library `MovingSofaExtremal` and
   the module `MovingSofaStability/CoerciveCertificate.lean`. Its classification of the maximizing right-angle caps
-  (Proposition 11.3) replaces Lemma 8.6, and with it the use of Lemmas 8.1 and 8.2 and Proposition 8.3; its
-  optimality and uniqueness theorems
-  (Theorems 11.4 and 11.7) use neither Baek's Theorem 1.1.1 nor his Theorems 1.5.2 and 8.1.1 (2) and the balance
+  (Proposition 11.3) replaces the equality analysis of Section 8 (Lemmas 8.1 and 8.2, Proposition 8.3); its
+  optimality and uniqueness theorems (Theorems 11.5 and 11.9) use neither Baek's Theorem 1.1.1 nor his Theorems 1.5.2 and 8.1.1 (2) and the balance
   results that the audit lists. The stability proof of Section 10 takes the sign of the deficit, and the
   optimality and uniqueness of its compactness step and of its case of zero deficit, from these theorems, and its
   local cap estimate from the certificate. ChatGPT Pro 6 wrote the route in pull request #9, without compiling it; Claude
@@ -85,7 +86,7 @@ undefined reference.
   uniqueness and the stability of Theorems 10.1 and 10.2 from the route.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `a94bde643776c7fce67f97bad5880852ad34a5fd`, on which the
+- The links to the repository are pinned to commit `6ed7657bd670f678cfd2cbb83411de901dcf0648`, on which the
   continuous integration passed; Palomar's preflight has not been run on it. Version 4 of the Palomar entry
   registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those of stability.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
@@ -110,7 +111,7 @@ These are the author's to settle; the text settles none of them.
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "100 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
+   comments "99 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
    <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,546 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
@@ -313,13 +314,21 @@ Section 1; Section 1.5 and Appendix E now say that the author has proofread and 
 and has not yet read the other sections. At the author's request ("use the best bound"), the stability proof now
 carries the coefficient $2\sec\varphi$ of the cap estimate instead of weakening it to 80 (commit `a94bde6`):
 Proposition 10.11 and the constants of the local recovery in Section 10 changed accordingly, and the manuscript cites
-that commit. The main session made these edits; they were not checked by another run. The manuscript has 100 pages.
+that commit. The main session made these edits; they were not checked by another run.
+At the author's request ("keep it as a remark, and say we have formalized that"), Section 8.4 was then folded into
+Section 11: Lemma 8.7 became Lemma 11.4, Remark 11.6 records the second proof of optimality with Baek's own bound,
+which the formalization proves, and Lemma 8.6 and Theorem 8.8 were dropped, as Proposition 11.3 and Theorem 11.5
+state them. The writing sub-agent made the change and checked the remark against the Lean of the second proof; the
+main session checked in the Lean the new claim of Section 11 on which results of Sections 4 to 9 use Baek's Theorem
+1.1.1 (in the uniqueness library, only declarations of `Main` reach it). The docstrings of the second proof now cite
+the remark (commit `6ed7657`, which the manuscript cites). The manuscript has 99 pages.
 
 ## What has not been done
 
 - The author has read and edited the abstract and the introduction; Sections 2 to 12 and the appendices have been
-  read by model runs only. The text added on 5 October (Fact 2.7, Section 8.4 and the related passages) has been
-  read by two model runs, and not by the author; the sentence of the abstract on the second proof, added at the
+  read by model runs only. The text added on 5 October (Fact 2.7, the second proof of optimality, then Section 8.4,
+  and the related passages) has been read by two model runs, and not by the author; Lemma 11.4 and Remark 11.6, into
+  which that subsection was folded on 6 October, have not been checked by an independent run; the sentence of the abstract on the second proof, added at the
   author's request, has not been checked by a model run.
 - The manuscript was not compiled by arXiv; only the local build and the test build of the archive were run.
 - The Facts of Section 2 state Baek's results as the Lean states them; the Lean statements were compared with his TeX

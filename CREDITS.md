@@ -395,7 +395,7 @@ optimality and uniqueness from two estimates of the stability library, a second 
 Challenge, and an audit. It had left for later the step that moves the stability proof onto the route.
 
 How it was made:
-- 09:56 to 12:56: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+- 09:56 to 13:13: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
   of the formalize-math-paper skill.
 - The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](lakefile.toml)
   and `MamikonEnergy.lean` were resolved for the compiled code). One proof did not compile, a `change` whose two sides
@@ -423,13 +423,17 @@ How it was made:
 - The owner then said that they have not read the manuscript past Section 1, which Section 1.5 and Appendix E now
   say, and asked to use the best bound: the stability proof now carries the coefficient 2 sec φ of the cap estimate
   through its constants, where it had weakened it to 80 (commit `a94bde6`; Comparator accepts, the audits pass).
-  Section 10 of the manuscript changed with it; the manuscript has 100 pages and cites that commit.
+  Section 10 of the manuscript changed with it.
+- At the owner's request, Section 8.4 of the manuscript (the second proof of optimality of pull request #5) was
+  folded into Section 11: its lemma on the right-angle motion became Lemma 11.4, and Remark 11.6 records the
+  second proof with Baek's own bound, which the formalization proves (`MovingSofaUniqueness.MaximizerRoute`). The
+  docstrings of that proof now cite the remark (commit `6ed7657`). The manuscript has 99 pages and cites `6ed7657`.
 
-Figures, from 09:56 to 12:56:
-- elapsed time: 3 hours, of which 7 minutes waiting for the owner's answers;
-- sub-agents: 7 (4 of them launched by another sub-agent), at most 4 at once, about 3.6 hours of work; one was
-  resumed to apply the two reviews;
-- tool calls: 750 by the sub-agents, 215 by the main session;
-- tokens of the sub-agents: 1.13 million output, 4.23 million input, 213 million cache reads; of the main
-  session: 0.32 million output, 0.64 million input, 89 million cache reads;
-- model calls: 627 by the sub-agents and 215 by the main session, all to `claude-opus-5-5`.
+Figures, from 09:56 to 13:13:
+- elapsed time: 3 hours 17 minutes, of which 9 minutes waiting for the owner's answers;
+- sub-agents: 7 (4 of them launched by another sub-agent), at most 4 at once, about 3.7 hours of work; the
+  writing sub-agent was resumed twice, to apply the two reviews and to fold Section 8.4 into Section 11;
+- tool calls: 787 by the sub-agents, 244 by the main session;
+- tokens of the sub-agents: 1.18 million output, 5.12 million input, 239 million cache reads; of the main
+  session: 0.36 million output, 0.72 million input, 110 million cache reads;
+- model calls: 658 by the sub-agents and 247 by the main session, all to `claude-opus-5-5`.

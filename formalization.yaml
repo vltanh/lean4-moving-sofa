@@ -271,7 +271,7 @@ automation:
           time. What's next: about 1 hour 6 minutes (2026-10-03 20:46 to 21:52), with about 0.8 hours of
           sub-agent working time. Stability: about 1 hour (2026-10-05 22:17 to 23:13), with about 2.3
           hours of sub-agent working time. The coercive route, with the manuscript's section on it: about
-          3 hours (2026-10-06 09:56 to 12:56), with about 3.6 hours of sub-agent working time.
+          3 hours 17 minutes (2026-10-06 09:56 to 13:13), with about 3.7 hours of sub-agent working time.
           CREDITS.md gives the figures of each round
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
