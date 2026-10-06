@@ -20,9 +20,11 @@ script \path{docs/paper/figures/make_figures.py} of the
 repository~\cite{Companion}; the remaining one is drawn in TikZ. The author
 asked for each of these steps and decided its scope. None of the three systems
 is an author of this paper, since none of them can take responsibility for it.
-The author has proofread and edited the abstract and \cref{sec:intro}, and has
-not yet read the other sections; they have been checked only by the runs
-described below.
+The author has proofread and edited the abstract and \cref{sec:intro}, except
+the remark at the end of \cref{sec:strategy-uniqueness},
+\cref{sec:strategy-stability} and the sentences of \cref{sec:intro} that refer
+to them, which were written later, and has not yet read the other sections. No
+person has read these parts; the runs described below have checked them.
 
 The text of this paper is not machine-checked; the dictionary of
 Appendix~\ref{app:lean} gives its correspondence with the Lean statements. On 4
@@ -50,8 +52,8 @@ compiled without change and passed the audit that came with it, and also an
 extended audit, written by Claude Opus~5.5, that covers the results from which
 Baek derives step~(3) of \cref{sec:baek}. From the Lean, Claude Opus~5.5 then
 wrote a subsection on this proof, \cref{fact:exists} and the passages that refer
-to them in Sections~\ref{sec:intro} to~\ref{sec:reduction}
-and~\ref{sec:formalization} and Appendices~C and~D. Two more runs of Claude
+to them in Sections~\ref{sec:intro} to~\ref{sec:reduction} and
+Appendices~C and~D. Two more runs of Claude
 Opus~5.5 checked these passages, one against the Lean and one for their prose,
 and their findings were applied. At the author's request, Claude Opus~5.5 also
 wrote the sentence of the abstract on the second proof. On 6 October, at the
@@ -73,8 +75,8 @@ repaired proof with the draft's and found no change of argument. On 6 October
 \texttt{Challenge.lean}, and a sub-agent running Claude Opus~5.5 wrote
 \cref{sec:stability} and its rows of \cref{tab:dict} from the Lean. The same
 session also wrote the sentence of the abstract and the passages of
-Sections~\ref{sec:intro} and~\ref{sec:formalization} and
-Appendix~\ref{app:lean} on stability, and corrected a sign in the description
+Sections~\ref{sec:intro} and~\ref{sec:questions} and Appendix~\ref{app:lean} on
+stability, and corrected a sign in the description
 of $\cM_K$ in \cref{sec:setting}. Three runs of Claude Opus~5.5 compared the
 statements and proofs of \cref{sec:stability} with the Lean, part by part; a
 further run compared the new text with the Lean and the repository, and another
@@ -147,13 +149,27 @@ its statement. A sub-agent running Claude Opus~5.5, helped by five sub-agents
 that compared each part of \cref{sec:stability} with the old and the new Lean,
 then revised this text: it removed the bound with the constant~$80$ from
 \cref{sec:stability}, made six steps of its proofs follow the Lean's, and
-rewrote Appendix~\ref{app:lean} and the passages of Sections~\ref{sec:equality},
-\ref{sec:unified} and~\ref{sec:formalization} on the modules and the audits. Two
+rewrote Appendix~\ref{app:lean} and the passages of Sections~\ref{sec:equality}
+and~\ref{sec:unified} on the modules and the audits. Two
 runs of Claude Opus~5.5, neither able to edit, then read the revision, one
 against the Lean and the repository and one for its prose. Neither found a
 mathematical error. Their findings, on a line count, the description of the
 files and of the rewritten modules, and the wording of \cref{rem:second}, of
 Appendix~\ref{app:lean} and of several sentences of Sections~\ref{sec:stability}
-to~\ref{sec:formalization}, were applied by the writing sub-agent and not
-checked again by another run.
+and~\ref{sec:unified}, were applied by the writing sub-agent and not checked
+again by another run. At the author's request, Comparator then also
+checked the second solution, through a module that states its theorems under the
+Challenge's names; Claude Opus~5.5 added the module and the configuration, and
+the corresponding sentences of Appendix~\ref{app:formalization}. Also at the
+author's request, Claude Opus~5.5 then reorganized this text: the description of
+the formalization moved from Section~12 to Appendix~\ref{app:formalization}, so
+that \cref{sec:questions} lists only open questions; \cref{sec:intro} gained
+the remark on the second proof of optimality at the end of
+\cref{sec:strategy-uniqueness}, and \cref{sec:strategy-stability}, on the
+strategy of the stability proof and the certificate; and the title, formerly
+``Uniqueness of Gerver's sofa'', now names the stability too. Two runs of Claude
+Opus~5.5, neither able to edit, then read the reorganized text, one for its
+accuracy against the later sections and the Lean, the other for its prose and its
+structure. Neither found a mathematical error; their findings were applied and
+not checked again.
 At the time of writing, the argument of this paper has not been refereed.

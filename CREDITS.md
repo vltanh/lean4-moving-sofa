@@ -483,13 +483,6 @@ How it was made:
   other for its prose. Neither found a mathematical error; the writing sub-agent applied their findings (a line
   count, the account of the files and of the rewritten modules, and the wording of several passages). The manuscript
   has 100 pages.
-- At the owner's request, Comparator now checks the second solution too:
-  [`SolutionCoerciveComparator.lean`](SolutionCoerciveComparator.lean) states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
-  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and [`comparator-coercive.json`](comparator-coercive.json) points Comparator at it;
-  Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
-  have exactly the statement of the matching theorem of [`Solution.lean`](Solution.lean), where it accepted a definitionally equal one.
-  The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
-  translation.
 
 Figures, from 13:25 to 16:09:
 - elapsed time: 2 hours 44 minutes;
@@ -499,3 +492,40 @@ Figures, from 13:25 to 16:09:
 - tokens of the sub-agents: 2.69 million output, 7.77 million input, 426 million cache reads; of the main session:
   0.26 million output, 0.52 million input, 85 million cache reads;
 - model calls: 1,372 by the sub-agents and 189 by the main session, all to `claude-opus-5-5`.
+
+## Comparator for the second solution, and the manuscript reorganized (6 October 2026)
+
+The owner asked whether the second solution should be in the Challenge too, then asked that Comparator check it
+in the same project, and that the page of results say that the stability theorem gives the uniqueness up to a
+translation. Then the owner asked that Section 12 of the manuscript keep only the open questions, with the
+formalization and the use of AI in the appendices; allowed renaming the manuscript; and asked for an introduction
+in which Section 1.4 gives the strategy of the uniqueness proof, with a short remark that it gives another proof of
+optimality, and a new section gives the strategy of the stability proof, parallel to the outlines of Baek's proof
+and of the uniqueness proof, with a remark on the certificate that gives the three results.
+
+How it was made:
+- 16:13 to 16:58: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
+- Comparator now checks the second solution too (commit `3d3ea3e`, on which the continuous integration passed):
+  [`SolutionCoerciveComparator.lean`](SolutionCoerciveComparator.lean) states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
+  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and [`comparator-coercive.json`](comparator-coercive.json) points Comparator at it;
+  Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
+  have exactly the statement of the matching theorem of [`Solution.lean`](Solution.lean), where it accepted a definitionally equal one.
+  The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
+  translation.
+- The manuscript cites commit `3d3ea3e`. The main session moved its description of the formalization from Section 12
+  to Appendix D.1, so that Section 12 lists the open questions only; renamed it *Uniqueness and stability of Gerver's
+  sofa*; and wrote the remark at the end of Section 1.4 on the second proof of optimality and Section 1.5 on the
+  strategy of the stability proof, which ends with the reason for the name "coercive certificate": an identity
+  writes the gap as a sum of nonnegative terms, as a certificate does in optimization, and the energy among these
+  terms also bounds the distance to Gerver's cap. Two sub-agents, neither able to edit, then read the result, one
+  for its accuracy against the later sections and the Lean, the other for its prose and its structure. Neither
+  found a mathematical error; the main session applied their findings, among them a false sentence on the punctured
+  sofas and a term used for two inequalities. The manuscript has 102 pages.
+
+Figures, from 16:13 to 16:58:
+- elapsed time: 45 minutes;
+- sub-agents: 2, at the same time, about 0.4 hours of work;
+- tool calls: 97 by the sub-agents, 70 by the main session;
+- tokens of the sub-agents: 0.18 million output, 0.55 million input, 14 million cache reads; of the main session:
+  0.14 million output, 0.23 million input, 28 million cache reads;
+- model calls: 84 by the sub-agents and 67 by the main session, all to `claude-opus-5-5`.

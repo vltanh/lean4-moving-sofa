@@ -1,4 +1,4 @@
-# Uniqueness of Gerver's sofa: the manuscript
+# Uniqueness and stability of Gerver's sofa: the manuscript
 
 A LaTeX manuscript, prepared for arXiv, of the theorem that Gerver's sofa is the only maximal moving
 sofa: every moving sofa of the same area is a rotated and translated copy of it, as a set. Section 10 proves
@@ -13,13 +13,18 @@ This is a draft for the author to read. An AI model (Claude Sonnet 5.5, in Claud
 the Lean library, the illustrated text of the proofs in [`docs/proof/`](../proof/README.md) and the text of
 Baek's paper, and independent model runs checked it. The author has read and edited the abstract and the
 introduction (4 and 5 October); the rest of the text has been checked by model runs only. The sentence of the
-abstract on the second proof of optimality, and its mentions in Sections 1.5 and 1.6, were added later on
+abstract on the second proof of optimality, and its mentions in Sections 1.6 and 1.7, were added later on
 5 October at the author's request. Section 10, the sentence of the abstract on stability and their mentions in
-Sections 1, 12 and Appendices D and E were added on 6 October at the author's request; the author has not read
-them yet. Section 11, the sentence of the abstract on the single estimate and the passages that refer to Section 11
-in Sections 1, 2, 8, 10 and 12 and Appendices D and E were added later on 6 October at the author's request; no
-person has read them yet. Sections 8 and 10 to 12 and Appendices D and E were then revised for the simplified
-libraries of the formalization, also on 6 October; no person has read the revision.
+Sections 1 and 12 and Appendices D and E were added on 6 October at the author's request; the author has not read
+Section 10 yet. Section 11, the sentence of the abstract on the single estimate and the passages that refer to
+Section 11 in Sections 1, 2, 8 and 10 and Appendices D and E were added later on 6 October at the author's
+request; no person has read Section 11 yet. On 6 October the author said that they had read nothing past
+Section 1, and the text has said since then that the author has proofread and edited the abstract and Section 1. Sections 8, 10 and 11 and Appendices D and E were then revised for the simplified
+libraries of the formalization, also on 6 October; no person has read the revision. Last, at the author's request,
+the description of the formalization moved from Section 12 to Appendix D, so that Section 12 lists open questions
+only; Section 1 gained a remark on the second proof of optimality at the end of Section 1.4 and Section 1.5, on
+the strategy of the stability proof and the certificate; and the title, formerly *Uniqueness of Gerver's sofa*,
+now names the stability. No person has read these new parts of Section 1.
 [How it was made](#how-it-was-made) says what has been compared with what, and
 [Before submitting](#before-submitting) lists what only the author can settle.
 
@@ -29,11 +34,11 @@ libraries of the formalization, also on 6 October; no person has read the revisi
 | --- | --- |
 | [`main.tex`](main.tex) | the preamble, the title and abstract, and the list of sections |
 | [`macros.tex`](macros.tex) | the notation |
-| [`sections/01-introduction.tex`](sections/01-introduction.tex) … [`12-formalization.tex`](sections/12-formalization.tex) | Sections 1 to 12 |
-| [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean statement and a dictionary), E (the use of AI) |
+| [`sections/01-introduction.tex`](sections/01-introduction.tex) … [`12-questions.tex`](sections/12-questions.tex) | Sections 1 to 12 |
+| [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean formalization: the libraries and the checks, the statements of record and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (100 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (102 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -46,7 +51,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 100 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 102 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -60,8 +65,8 @@ undefined reference.
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
   4 October (commit `952812d`), and Fact 2.7 and the second proof of optimality (now Lemma 6.10 and Remark 8.6)
-  on 5 October (commits `3af9279` and `51c9be1`). Section 12 says what the machine check does and does not give, and who and what
-  wrote which part.
+  on 5 October (commits `3af9279` and `51c9be1`). Appendix D says what the machine check does and does not give, and
+  Appendix E who and what wrote which part.
 - Remark 8.6, at the end of Section 8, outlines a second proof of optimality (Baek's theorem) from the maximizing
   caps, with Baek's own bound for $\mathcal Q$ and the equality analysis of Section 8; Section 11 writes it out with
   the certificate in their place (Proposition 11.3, Theorem 11.4). It uses Baek's results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it
@@ -86,10 +91,12 @@ undefined reference.
   local cap estimate from the certificate. ChatGPT Pro 6 wrote the route in pull request #9, without compiling it; Claude
   Opus 5.5 compiled and completed it on 6 October, and `scripts/AuditCoerciveRoute.lean` checks its
   dependencies. `SolutionCoercive.lean` proves the fifteen theorems of the Challenge again, taking optimality,
-  uniqueness and the stability of Theorems 10.1 and 10.2 from the route.
+  uniqueness and the stability of Theorems 10.1 and 10.2 from the route; Comparator checks it against the Challenge
+  as it checks `Solution.lean`, through `SolutionCoerciveComparator.lean`, which states its theorems under the
+  Challenge's names.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `7b8c0a8e803b1fec7001f1579a5c8810d5e39cf9`, on which the
+- The links to the repository are pinned to commit `3d3ea3e2871bcf31c7fa78d9fa43f391b43b32be`, on which the
   continuous integration passed; Palomar's preflight has not been run on it. Version 4 of the Palomar entry
   registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those of stability.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
@@ -99,21 +106,22 @@ undefined reference.
 
 These are the author's to settle; the text settles none of them.
 
-1. The title page names the author only. The AI models are not authors and are described in Section 1.5 and
+1. The title page names the author only. The AI models are not authors and are described in Section 1.6 and
    Appendix E. Check that wording against arXiv's current policy on generative-AI tools, and against what you are
-   ready to stand behind: the text says that the author has proofread and edited the abstract and Section 1 and has
-   not yet read the other sections, and that the argument has not yet been refereed.
+   ready to stand behind: the text says that the author has proofread and edited the abstract and Section 1, except
+   the end of Section 1.4 and Section 1.5, and has not yet read the other sections, and that the argument has not
+   yet been refereed.
 2. Lean's kernel has checked the formal proofs, not the text. The text is a translation of them by a model,
    compared with the Lean statements, proof by proof, and with Baek's paper by independent model runs (below). A
-   human read of Sections 2 to 12 is the check that is missing, and Appendix D's paraphrase of the Lean
+   human read of Sections 2 to 12 and of the new parts of Section 1 is the check that is missing, and Appendix D's paraphrase of the Lean
    definitions is the place where nothing but model checks stand behind the text.
 3. Baek's paper is a preprint, and all the numbers of its results are those of arXiv version 1. If a later
    version renumbers, the citations `\baek{...}` and Appendices C and D need updating.
 4. The suggested primary category is math.MG (Metric Geometry), with MSC 2020 codes 52A38, 52A40 (primary) and
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
-5. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "100 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
+5. For the submission form: the title is *Uniqueness and stability of Gerver's sofa*, the author The-Anh Vu-Le,
+   and the comments "102 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
    <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,546 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
@@ -137,14 +145,13 @@ These are the author's to settle; the text settles none of them.
    entry; `CREDITS.md` has a section for each later round. Version 4 registers `16653ae`, and the libraries have
    grown since: the Challenge now has fifteen theorems, and `formalization.yaml` describes them. Palomar's preflight
    has not been run on the cited commit; whether to run it and register a version 5 is for the author to decide.
-8. The title names the uniqueness only; Section 10 adds the stability, and Section 11 derives the three results
-   from one estimate. Whether the title should say so is the author's choice.
 
 ## How it was made
 
 Section numbers below are those of the time: the formalization section was Section 10 until 6 October, when
 Section 10 became the stability and the formalization section Section 11; later that day Section 11 became the
-derivation of the three results from one estimate, and the formalization section Section 12.
+derivation of the three results from one estimate, and the formalization section Section 12. At the end of that
+day, the description of the formalization moved to Appendix D.1, and Section 12 kept only the open questions.
 
 
 The manuscript was written on 4 October 2026 by Claude Sonnet 5.5 in Claude Code (version 2.1.289), at the
@@ -372,6 +379,32 @@ findings (a line count, the description of the files and of the rewritten module
 Appendix D and of several sentences of Sections 10 to 12, and a stale item of [Before submitting](#before-submitting))
 were applied by the writing sub-agent and not checked again by another run. The manuscript has 100 pages.
 
+At the author's request, Comparator then also checked the second solution, `SolutionCoercive.lean`: the main
+session added `SolutionCoerciveComparator.lean`, which states its theorems under the Challenge's names, and the
+configuration `comparator-coercive.json` (commit `3d3ea3e`; Comparator accepts both solutions, and the continuous
+integration passed). The manuscript now cites that commit, and Appendix D.1 says so in two sentences.
+
+Last, at the author's request ("Section 12 should just do the open questions. Formalization and use of AI can go
+into appendix all. Paper can be renamed. Introduction should have 1.4 be strategy for the uniqueness proof, with a
+short remark that this can be organized to be another optimality proof, then add section for the strategy for the
+stability proof [...] with remark about how this leads to a unifying certificate for all 3 results"), the main
+session (Claude Opus 5.5) reorganized the manuscript. The description of the formalization moved from Section 12 to
+Appendix D.1 ("The libraries and the checks"), and Appendix D became "The Lean formalization"; the short Section
+12.2 on the use of AI was dropped, as Appendix E already says what it said; Section 12 is now "Open questions",
+followed by the acknowledgments. The title, formerly *Uniqueness of Gerver's sofa*, is now *Uniqueness and
+stability of Gerver's sofa*. Section 1.2 is now "Uniqueness and stability", and Section 1.4, "The strategy of the
+uniqueness proof", ends with a short remark on the second proof of optimality. The new Section 1.5, "The strategy of
+the stability proof", follows Baek's chain (1.1): it makes step (4) quantitative, replaces step (3) near Gerver's
+cap, adds the compactness argument, writes the chain (1.3) of the stability proof, and ends with a paragraph on the
+coercive certificate, which says why it is called a certificate. Two runs of Claude Opus 5.5, neither able to edit,
+then read the result, one for its accuracy against Sections 6 to 11 and the Lean, the other for its prose and its
+structure against the author's request. Neither found a mathematical error. They found a false sentence (the
+punctured sofas are at distance at least r, not exactly r, from the rigid images of Gerver's sofa), the term
+"Baek's bound" used both for $\mathcal A(K)\le\mathcal Q(K)$ and for the maximality of $\mathcal Q$ at Gerver's
+cap (now kept for the first only, in Sections 1, 2 and 11 and Appendix D), terms of Section 1.5 not defined in
+Section 1, and stale passages here and in Appendices D and E. The main session applied their findings; these edits
+were not checked again by another run. The manuscript has 102 pages.
+
 ## What has not been done
 
 - The author has read and edited the abstract and the introduction; Sections 2 to 12 and the appendices have been
@@ -388,9 +421,12 @@ were applied by the writing sub-agent and not checked again by another run. The 
   theorems that the Challenge states since 6 October, and the derivation of Section 11, are not in a registered
   version, and Palomar's preflight has not been run on the cited commit.
 - Sections 10 and 11 and the passages on them added on 6 October have been read by model runs only, not by the
-  author. Section 1.5 and Appendix E now say that the author has proofread and edited the abstract and Section 1
-  only (the author's statement of 6 October); until then Section 1.5 said that the author proofread and edited the
-  text.
+  author. Section 1.6 and Appendix E say that the author has proofread and edited the abstract and Section 1
+  only (the author's statement of 6 October), except the parts of Section 1 written later; until 6 October the
+  section on the use of AI said that the author proofread and edited the text.
+- The remark at the end of Section 1.4, Section 1.5 and the reorganization of 6 October (the move of the
+  description of the formalization to Appendix D, Section 12 reduced to the open questions, the new title) have
+  been read by two model runs, not by the author; the edits that followed their reports were not checked again.
 - The edits applied to Section 11 and its passages after the last two reviews (below) were not checked again.
 - The revision of 6 October for the simplified libraries has been read by two model runs, not by the author; the
   edits that followed their reports were not checked again.

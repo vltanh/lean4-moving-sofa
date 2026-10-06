@@ -279,8 +279,10 @@ automation:
           hours of sub-agent working time. The coercive route, with the manuscript's section on it: about
           3 hours 26 minutes (2026-10-06 09:56 to 13:22), with about 3.8 hours of sub-agent working time.
           Simplifying the new libraries, with the manuscript's revision: about 2 hours 44 minutes
-          (2026-10-06 13:25 to 16:09), with about 7.1 hours of sub-agent working time. CREDITS.md gives
-          the figures of each round
+          (2026-10-06 13:25 to 16:09), with about 7.1 hours of sub-agent working time. Comparator for
+          the second solution, and the manuscript reorganized: about 45 minutes (2026-10-06 16:13 to
+          16:58), with about 0.4 hours of sub-agent working time. CREDITS.md gives the figures of each
+          round
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
