@@ -1,299 +1,138 @@
-# Ambidextrous moving-sofa research — session handoff
+# Ambidextrous sofa research — start a new session here
 
-This file is the **authoritative starting point for a new research session** on PR #3.
+**Unrestricted optimality and uniqueness are not proved.** This is the active cross-session handoff for PR #3, not a certificate that all historical arguments have been independently verified.
 
-- Repository: `vltanh/lean4-moving-sofa`
-- Branch: `research/ambidextrous-pen-and-paper`
-- Draft PR: #3
-- Base branch: `paper/uniqueness-arxiv`
-- Mathematical branch head immediately before this handoff: `9207937dbdaf4d7e01ae9e8c458dbd1a65e3ff09`
-- Status: **the unrestricted ambidextrous optimality and uniqueness proof is not closed**
-- Execution policy: commit substantive findings frequently with `[skip ci]`; do not run CI; do not compile Lean/Lake unless the user explicitly changes that policy.
+Repository: `vltanh/lean4-moving-sofa`.
+Branch: `research/ambidextrous-pen-and-paper`.
+Draft PR: #3; base: `paper/uniqueness-arxiv`.
+Last substantive checkpoint before this handoff update: `ac76e9a7f6490cb3f44ce3808be8befab1a76f48`.
+Always query the live branch head and inspect intervening changes before continuing.
 
-Always check the current branch tip first because later sessions may have advanced beyond the snapshot SHA above.
+## 1. User instructions
 
-## 1. Research target
+Continue toward a mathematical proof; commit substantial positive and negative findings frequently with `[skip ci]`. Computer assistance is allowed, but a sampled optimizer or an unexecuted checker is not a certificate. **Do not run CI or compile Lean/Lake.** Do not change the manuscript, Lean libraries, dependencies, or workflows without a new instruction. Keep the PR draft until the mathematical theorem and its equality recovery are genuinely complete.
 
-Prove that Romik's ambidextrous sofa is the unique maximizer, up to congruence. Its area is
+The target is Romik's candidate of area
 
-[
-M=1+4Y^2+arctan Y,
-qquad 4Y^3+3Y-1=0,quad Y>0.
-]
+$$
+M=1+4Y^2+\arctan Y,\qquad 4Y^3+3Y-1=0,\quad Y>0.
+$$
 
-The task is **not** to produce another calibrated auxiliary functional unless its ordinary-area comparison is also proved. Every closure claim must identify the original nonconvex body, not merely its convex hull.
+A result for one attained maximizer proves the optimal value; uniqueness requires every maximizer or an equality-preserving comparison recovering each original nonconvex body.
 
-## 2. User instructions that remain in force
+## 2. New user-supplied proposal: read the audit before using it
 
-- Continue toward mathematical closure rather than polishing side results.
-- Commit frequently, including negative findings.
-- Computer assistance is allowed for discovery and for complete certificates, but scope must be explicit.
-- Do not call sampled numerics, an optimizer status, an unfinished covering, or unexecuted source a theorem.
-- No CI.
-- No Lean/Lake compilation.
-- Keep PR #3 draft until the unrestricted proof and equality recovery are genuinely complete.
-- Existing manuscript, Lean libraries, dependencies and workflow files are out of scope unless the user explicitly changes the task.
+The user uploaded `ambidextrous-one-turn-reduction-draft.zip`, attributing it to Claude Opus 5.5 Max. The original nine files are preserved byte-for-byte at `7c2cb37b55ebd00d7c9d7717f170f6205101a946`:
 
-## 3. What is established and should be treated as infrastructure
+- [one-turn-reduction.md](one-turn-reduction.md): the imported OT1–OT8 proposal;
+- [computer-assisted/one-turn/](computer-assisted/one-turn/): its original scripts and reported diagnostic table.
 
-### 3.1 Common-hull reduction, compactness and attainment
+The attribution is as supplied by the user, not independent verification of the generating model. Original numerical claims have not been independently reproduced in full.
 
-Earlier notes establish canonical support placements, same-hull saturation, a common incoming normalization, compactness/attainment, and selection of any prescribed maximizing hull. These are historical dependencies; they have not all been independently re-audited in the latest passes.
+**Read [one-turn-proposal-audit.md](one-turn-proposal-audit.md) first.** It records the source hash, imported blob hashes, verified reductions, necessary qualifications, and numerical mismatches. Do not silently promote every claim in the imported draft to an established branch theorem.
 
-### 3.2 The width gate is closed analytically
+### Accepted geometric content and qualifications
 
-[Theorem AW-W](analytic-width-theorem.md) proves
+For two full right-angle caps with the same projection and nonempty two-turn fibers, OT1 gives the exact identity
 
-[
-Wle2Longrightarrow |S|<41/25<M
-]
+$$
+|E|=\Psi(U)+\Psi(V)+G,\qquad
+\Psi(U)=|U|-|N(U)|-W/2,
+$$
 
-for any normalized compact connected ambidextrous body, without curvature, contact-order, symmetry or full-turn assumptions.
+where G is a nonnegative clipping correction. The audit also supplies the positive empty-fiber correction when the nonempty-fiber assumption is absent. **The sign of G cannot be dropped.** Full-turn caps do not automatically contain an original partial-turn body in their two-turn envelope.
 
-[DU1](diagonal-width-upper-bound.md) gives a complementary upper bound for every sufficiently large body. Hence every global maximizer in the common incoming unit-span normalization satisfies
+OT3–OT4 use initial floor traces and retained extreme points to classify horizontal faces without a curvature assumption. A main case has a shared unit-height rectangle. The audit strengthens its full-turn test: if `|S|>q>1` and that rectangle has width d, then
 
-[
-oxed{2<Wle1+2sqrt2<4.}
-]
+$$
+d\ge q-\sqrt{q^2-1}
+\quad\Longrightarrow\quad\text{both reduced turns are full}.
+$$
 
-The older exact computer certificate for the width gate is historical and no longer needed for this conclusion.
+For competitive bodies one may use q=41/25, giving d at least `(41-4 sqrt(66))/25`. This does not exclude point faces or the other exceptional configurations.
 
-### 3.3 Conditional wide-hull theorem
+OT5 removes clipping when the horizontal faces align and the corner-height positivity holds for **both** turns. A common face length at least one supplies both positivities. The one-turn maximality conclusion still applies only to variations that preserve a feasible connected two-turn intersection; it is not maximality against every unpenalized one-turn cap.
 
-[CW4](curvature-only-wide-hulls.md) gives the sharp ordinary-area bound and exact uniqueness when the actual common hull has width at least two and
+### New independent result: existence for the weighted one-turn objective
 
-[
-h+h''le d	heta
-]
+[Theorem PA2](one-turn-penalized-attainment.md) proves that the signed objective Psi attains its maximum over all normalized full-right-angle caps. It uses only compactness, niche-area lower semicontinuity and
 
-on all four open coordinate quarters. It needs neither contact order nor a separately assumed full turn.
+$$
+\Psi(U)\le\min\{W/2,\ 2\sqrt2-W/2\}.
+$$
 
-This remains a sufficient route, but the curvature domination has **not** been proved for arbitrary maximizers.
+A cap with a semicircular upper boundary gives Psi=pi/8>0, so maximizing sequences have widths in a fixed compact positive interval. No Gerver sharp theorem or conjectured Romik maximum is used.
 
-### 3.4 Sharp adaptive functional calibration
+**PA2 does not prove `max Psi = M/2` or uniqueness.** It also does not prove niche containment or curvature/arm bounds for the maximizing cap. Full turns are built into this auxiliary domain; getting an arbitrary ambidextrous body into it remains a separate geometric task.
 
-[AF3](adaptive-functional-global-calibration.md) proves the global maximum (M) and equality kernel of the adaptive support functional on a large normalized (H^1) profile space, without convexity or curvature hypotheses.
+### Numerical issue that must not be reintroduced
 
-Do **not** use it as universal ordinary-area enclosure. [AF4](adaptive-functional-enclosure-counterexample.md) gives genuine feasible near-candidate bodies with
+The imported `polycap.psi` uses the integral of `(a-alpha)_+`, whereas the proposed W-Gerver problem uses the integral of `a-alpha`. Their difference is `|N(U) minus U|`, potentially positive. The imported top-profile interpolator also fails to consolidate repeated abscissae despite its comment; an exact rectangle exposes the error at its right endpoint.
 
-[
-|S|>widetilde{mathcal Q}(h_{operatorname{conv}S}).
-]
+The separate [review_checks.py](computer-assisted/one-turn/review_checks.py) keeps signed cap area, surviving area, leakage, and empty-fiber corrections distinct and fixes that interpolation in its own utility. The original code remains preserved. [review-results.json](computer-assisted/one-turn/review-results.json) records an executed run: 2,025 rational fiber checks, 1,296 interval pairs (476 meeting the initial floor tests), two rejected sign omissions, and small rectangle/candidate diagnostics. The executed source matches its committed blob.
 
-### 3.5 PR #8 / PR #9 transfer
+These are finite identity checks and floating-point diagnostics, **not** a continuum covering or a proof of global optimality. The original multistart searches were not rerun. Finite hallway sampling alone does not give a certified bound after spatial quadrature and support interpolation.
 
-PR #8 supplies the useful deficit/coercivity methodology. PR #9, at later snapshot `8042bad`, implements an uncompiled one-turn coercive extremal route. Its logical pattern is useful:
+## 3. Infrastructure retained from the earlier branch
 
-[
-	ext{geometric admission}	o 	ext{area}le Qle M
-	o	ext{zero deficit}	o	ext{rigidity}.
-]
+The following are written arguments with stated hypotheses; the full chain still needs independent review.
 
-It does **not** provide the missing ambidextrous admission step. In particular, its one-turn theorem uses maximality against all one-turn caps to derive the geometric domain. An ambidextrous maximizer does not automatically have that premise. See [coercive-pr9-transfer-audit.md](coercive-pr9-transfer-audit.md).
+**General reductions.** The earlier notes give common-hull canonicalization, correctly signed motion intervals for competitive bodies, same-hull saturation, attainment, and selection of any prescribed maximizing hull. They do not prove full turns or curvature domination universally.
 
-## 4. Failed global shortcuts — do not retry without a genuinely new premise
+**Analytic width exclusion.** [AW-W](analytic-width-theorem.md) gives `W<=2 => |S|<41/25<M` without curvature or symmetry. [DU1](diagonal-width-upper-bound.md) gives the upper width restriction. Thus normalized maximizing hulls have
 
-These are committed counterexamples or exact obstructions.
+$$
+2<W\le1+2\sqrt2<4.
+$$
 
-1. **Universal adaptive enclosure fails:** AF4.
-2. **Least curvature-majorant repair need not increase ordinary area:** [GR1](global-repair-counterexample.md).
-3. **Corrected repair budgets can still undercount ordinary area:** [AX1](axis-cut-repair-budget-obstruction.md).
-4. **Canonical saturation does not rescue those budgets:** [SAT1](saturation-does-not-rescue-repair.md).
-5. The saturated axis-cut family is still strictly suboptimal with deficit of order (	au^{3/2}): [SAC2](saturated-axis-cut-area.md).
-6. **Shared-anchor / derivative-free repair enclosure fails** through actual niche clipping: [SC3](repair-shadow-clipping-obstruction.md).
-7. Repair followed by saturation can have a fixed point whose actual hull still violates the desired curvature bound: [TR1 / repair-invariant-tail-regions.md](repair-invariant-tail-regions.md).
-8. High area alone does not imply the curvature cap; smoothing cannot impose the cap arbitrarily closely on a fixed violating hull.
+The older exact computer-assisted width certificate is historical; AW-W no longer needs it.
 
-Any proposed comparison must be stress-tested against the axis-cut and shadow-clipping families before it is used globally.
+**Conditional geometric theorem.** [CW4](curvature-only-wide-hulls.md) proves the sharp ordinary-area bound and exact uniqueness on the wide class if the actual hull has open-quarter curvature measure bounded by angular measure. Deriving that condition for every maximizer remains open.
 
-## 5. Current active route: two convex wings plus an ordinary-area core
+**Functional calibration.** [AF3](adaptive-functional-global-calibration.md) gives a sharp auxiliary maximum, not universal ordinary-area enclosure. [AF4](adaptive-functional-enclosure-counterexample.md) provides genuine counterexamples to that enclosure.
 
-The current program is deliberately different from whole-hull repair. It retains **actual convex safe pieces** whose areas are counted directly.
+**PR #8 and PR #9.** Their deficit/coercivity organization is useful. The [PR #9 transfer audit](coercive-pr9-transfer-audit.md) uses pinned snapshots, not a claim about its current tip. Its one-turn maximality-to-curvature premise does not transfer automatically to an ambidextrous maximizer. No uncompiled Lean source is treated as kernel verification.
 
-Read in this order:
+## 4. Two-wing route: still available, not silently superseded
 
-1. [ROADMAP.md](ROADMAP.md)
-2. [two-wing-domain.md](two-wing-domain.md)
-3. [two-wing-strip-quadratic.md](two-wing-strip-quadratic.md)
-4. [two-wing-calibration.md](two-wing-calibration.md)
-5. [two-wing-cut-slack.md](two-wing-cut-slack.md)
-6. [two-wing-slack-quadratic.md](two-wing-slack-quadratic.md)
-7. [two-wing-near-full-height.md](two-wing-near-full-height.md)
+Read the domain and calibration chain only when using this route:
 
-### 5.1 Base two-wing theorem
+1. [two-wing-domain.md](two-wing-domain.md), [two-wing-strip-quadratic.md](two-wing-strip-quadratic.md), [two-wing-calibration.md](two-wing-calibration.md);
+2. [two-wing-cut-slack.md](two-wing-cut-slack.md), [two-wing-slack-quadratic.md](two-wing-slack-quadratic.md);
+3. [two-wing-near-full-height.md](two-wing-near-full-height.md).
 
-For convex wings (R,D) in one unit strip, with the stated directional-width and cut conditions, a quadratic functional (mathcal W(R,D)) is calibrated sharply:
+WC2 treats its original cut-point domain. SQ1 allows arbitrary cut slack for full-height wings. NH1 allows arbitrary cut slack and unequal heights **when the wings share a bottom line and both heights are at least `1-sin(beta)/2`**. Arbitrary-maximizer admission, the needed heights, terminal-angle coverage and ordinary-area core are not established.
 
-[
-mathcal W(R,D)le M,
-]
+The CS/SQ checker has a committed execution record. The NH checker source was added at `9207937`; no execution record for it was established in this pass. Verify before claiming a run. Do not infer joint concavity from the strip-cone or first-order slack arguments.
 
-with equality only for the candidate wing pair up to common horizontal translation.
+## 5. Failed shortcuts: mandatory stress tests
 
-The negative quadratic part is not positive on the entire affine space. [WS1](two-wing-strip-quadratic.md) proves the needed sign on the **common-strip cone** by an explicit copositive factorization.
+Retain these distinctions in every new comparison:
 
-### 5.2 Arbitrary cut slack, full-height wings
+- [GR1](global-repair-counterexample.md): least curvature repair can lower actual sofa area despite increasing hull area.
+- [AX1](axis-cut-repair-budget-obstruction.md), [SAT1](saturation-does-not-rescue-repair.md): corrected energy budgets fail, even after full canonical saturation.
+- [SAC2](saturated-axis-cut-area.md): saturated axis cuts are strictly suboptimal, but their true deficit has a different order from the proposed derivative-energy charge.
+- [SC3](repair-shadow-clipping-obstruction.md): a fully saturated, shared-anchor, near-candidate family still defeats the derivative-free repair enclosure through positive clipping. It has a point top face.
+- [TR1](repair-invariant-tail-regions.md): one-wall safe regions are repair-invariant, but clipped tail bodies and mixed-wall core are not thereby controlled. Repair followed by saturation can remain at a suboptimal fixed point.
 
-[two-wing-cut-slack.md](two-wing-cut-slack.md) replaces the old prescribed inward cut points by the intersections of the **actual inward supporting lines**, introducing four nonnegative directional-width slacks.
+No fixed high-area threshold below M excludes all the known point-face examples. No new proposal is accepted merely because it matches the candidate.
 
-[Theorem SQ1](two-wing-slack-quadratic.md) proves, for wings each spanning the entire common strip,
+## 6. Next-session priorities and stopping criteria
 
-[
-widehat{mathcal W}(R,D)le M
-]
+Read [ROADMAP.md](ROADMAP.md), then choose **one** unresolved comparison to attack.
 
-with exact equality only at the candidate. The favorable first-order cut-slack term pays the negative quadratic slack term. This is not a joint-concavity theorem.
+For the new one-turn route, the concrete next target is the sharp signed inequality `Psi<=M/2` for its attained maximizing cap. Interior fixed-axis variations leave the width penalty unchanged, but the new endpoint conditions, curvature/arm bounds, and admissibility need proofs. Alternatively, target a specific exceptional face class from OT4 with an actual area-improving operation. Do not call the point-face exclusion an elementary consequence of high area.
 
-The exact finite algebra has a committed SymPy checker and a committed execution record:
-- `computer-assisted/check_two_wing_slack.py`
-- `computer-assisted/two-wing-slack-checks.json`
+For the two-wing route, the unresolved gates are required angles, canonical safe pieces with the stated height/width properties, and containment in a correctly accounted ordinary-area core. A calibrated signed curve expression is not that containment theorem.
 
-That recorded run checks 16 exact identities and rejects three deliberate mutations. It does not verify geometric admission.
+Both routes need actual-body equality recovery. A short conditional final implication is not evidence that the missing geometry is routine.
 
-### 5.3 Latest result: unequal heights near full strip
+Every new mathematical statement should say which gate it closes and for what class. Record negative results. Avoid another unconnected calibration, coarse bound or local regularity refinement without a demonstrated role on the critical path.
 
-The latest mathematical commit before this handoff is `e9ef366`; the following commit `9207937` adds its exact checker source.
+## 7. Fresh-session procedure
 
-[Theorem NH1](two-wing-near-full-height.md) allows arbitrary cut slack and unequal wing heights when:
+Query PR #3, inspect new commits, and check for repository instructions. Read this handoff and the roadmap, then the relevant theorem definitions and counterexamples. Pin every imported PR result to a commit. Verify original/source hashes before reporting numerical reproduction. Use the GitHub API for edits; refresh blob SHAs and use branch leases when building multi-file commits. Keep all changes under `docs/ambidextrous/` unless instructed otherwise.
 
-- the two completed wings lie in one unit-height strip;
-- they share the same bottom supporting line;
-- after translating that bottom to zero, both vertical spans satisfy
+The current proposal's original files remain available at the provenance checkpoint above. The new audit and PA2 are separate from that author's draft. This handoff update also replaces malformed mathematical escapes in the prior version with valid Markdown/TeX; no historical theorem is made stronger by that editorial repair.
 
-[
-oxed{min(H_R,H_D)ge1-rac{sineta}{2}.}
-]
-
-Then
-
-[
-oxed{widehat{mathcal W}(R,D)le M}
-]
-
-with equality only at the reference wing pair up to common horizontal translation.
-
-This converts the fully general unequal-height algebra problem into a concrete geometric admission target: prove the actual canonical wings of every relevant maximizer have this shared-bottom near-full-height property, or exclude bodies where a wing is shorter.
-
-Important validation status:
-- `computer-assisted/check_two_wing_height.py` reconstructs the finite height/cut/mixed factorization with exact SymPy algebra.
-- At the handoff snapshot, **there is no committed execution-result JSON for this checker**. Treat it as checker source, not an executed verification record.
-
-## 6. Active gates
-
-The authoritative gate definitions are in [ROADMAP.md](ROADMAP.md). In practical priority order:
-
-### R2 — terminal angles
-
-The wing/core construction uses fixed angular intervals. Do not insert full quarter turns by convention. Either:
-
-- prove every global maximizer visits every required angle; or
-- add an explicit ordinary-area penalty/correction for a missing terminal interval.
-
-The direct forbidden-triple framework in [configuration-area-certificate.md](configuration-area-certificate.md) is a possible curvature-free way to exclude partial endpoint ranges. Its checker is `computer-assisted/verify_configurations.py`. Source alone is not a certificate; a complete interval covering and accepted certificate would be needed.
-
-### R3 — canonical wings
-
-For an arbitrary attained maximizer, construct actual convex safe pieces from the two motions and prove:
-
-- nonempty compact convexity;
-- common-strip placement;
-- directional-width inequalities used by the calibration;
-- the actual cut data required by the relaxed functional;
-- ideally the shared-bottom condition and
-  [
-  min(H_R,H_D)ge1-sineta/2,
-  ]
-  so NH1 applies.
-
-If that height bound fails, try to prove a strict ordinary-area loss large enough to exclude the body from maximality, rather than enlarging the algebraic domain indefinitely.
-
-### R4 — cut slack
-
-Current state:
-- old WC2: unequal heights under old cut-vertex domain;
-- SQ1: arbitrary cut slack for full-height wings;
-- NH1: arbitrary cut slack for shared-bottom wings that are near full height.
-
-So R4 is **not fully closed**, but a global arbitrary-height theorem may no longer be necessary if R3 proves the NH1 threshold for maximizing canonical wings.
-
-### R5 — ordinary-area core
-
-Need a genuine ordinary-area comparison. Pairwise disjointness of wing/core interiors is **not** required for the upper bound by subadditivity. What is still required is:
-
-- containment of the body in the wings plus core;
-- a correctly oriented simple core boundary, or a replacement theorem that rigorously computes/upper-bounds its ordinary area;
-- correct handling of clipping and terminal-angle corrections.
-
-Do not identify a nonsimple signed curve integral with ordinary area.
-
-### R6/R7 — assembly and equality
-
-Once R2–R5 are proved for every maximizer:
-
-[
-|S|lewidehat{mathcal W}le M.
-]
-
-Since the candidate is feasible with area (M), the optimal value follows. Track equality through every enlargement/comparison; the candidate's regular-closedness can then recover exact equality of the original nonconvex body.
-
-A theorem for just one attained maximizer proves the value, not uniqueness of all maximizers.
-
-## 7. Parallel structural route, if the two-wing admission stalls
-
-The older contact/variation program is still available. [Note 57](57-focused-structural-status.md) summarizes it.
-
-Useful established pieces include:
-- width-one diffuse curvature identity;
-- classification of diffuse single-wall contact;
-- clear-contact singular repair;
-- transverse two-corner pinch measure bounds;
-- zero-sensitivity singular repair;
-- removal of fiber-clearance for singular-continuous curvature at clear exposed points.
-
-The unresolved structural target is still full open-quarter curvature domination for an arbitrary maximizing hull, including hidden/coincident atoms and the sharp absolutely continuous density bound. If this route closes, CW4 finishes the problem.
-
-Do not restart local contact classification merely because another subcase is available; use it only if it materially advances the global domination theorem.
-
-## 8. Current files worth opening first in a new session
-
-Minimal reading set:
-
-- `docs/ambidextrous/HANDOFF.md` — this file
-- `docs/ambidextrous/ROADMAP.md`
-- `docs/ambidextrous/two-wing-near-full-height.md`
-- `docs/ambidextrous/two-wing-cut-slack.md`
-- `docs/ambidextrous/two-wing-slack-quadratic.md`
-- `docs/ambidextrous/two-wing-domain.md`
-- `docs/ambidextrous/configuration-area-certificate.md`
-- `docs/ambidextrous/curvature-only-wide-hulls.md`
-- `docs/ambidextrous/57-focused-structural-status.md`
-
-Open older counterexample notes only when testing a proposed comparison.
-
-## 9. Immediate next-session procedure
-
-1. Query PR #3 and branch tip. If newer than this snapshot, read every intervening research commit before doing new work.
-2. Read this handoff and ROADMAP.
-3. **Do not spend time re-maximizing an auxiliary functional.**
-4. Attack R3/R5 first:
-   - define canonical bottom-anchored convex wings directly from a maximizing saturated body;
-   - prove the shared-bottom condition;
-   - seek the NH1 height threshold from connectedness, width (>2), and the actual two motions;
-   - in parallel, prove body containment in wings plus an ordinary-area core.
-5. If terminal angles block these constructions, switch immediately to R2 and use either an analytic strip argument or a complete forbidden-triple certificate.
-6. Commit every substantive theorem, counterexample, or failed global premise separately with `[skip ci]`.
-7. Keep claims scoped: written proof, executed diagnostic, exact certificate, and kernel verification are different statuses.
-
-## 10. What not to claim
-
-At this handoff snapshot:
-
-- unrestricted ambidextrous optimality is **not proved**;
-- unrestricted uniqueness is **not proved**;
-- no global curvature theorem for arbitrary maximizers is proved;
-- no universal ordinary-area enclosure by AF3, GM2, AC1/AS1, J0, or the whole-hull repair is valid;
-- the two-wing calibration is sharp on its stated data domains but arbitrary-maximizer admission is open;
-- `check_two_wing_height.py` is committed checker source but has no committed execution record yet;
-- PR #9's new Lean route was not compiled in this work.
-
-No CI or Lean/Lake compilation has been used in this branch's research workflow unless a later session explicitly records otherwise.
+No CI or Lean/Lake compilation was used. The mathematical proof, not the PR state, is what remains to be closed.
