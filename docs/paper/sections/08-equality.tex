@@ -280,3 +280,149 @@ $K\in\Ki$ by \cref{cor:Ki}, and \cref{prop:kernel} and
 \cref{lem:translate}\ref{lem:translate:supp} with $C=\KG$ give $s\in\R$ with
 $U=K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$.
 \end{proof}
+
+\subsection{A second proof of optimality}\label{sec:second}
+
+The pinned bounds (\cref{prop:pinned-bounds}, for $\omega<\pi/2$) and the
+curvature bounds (\cref{prop:curvature}, for $\omega=\pi/2$) hold for every
+maximizing cap with positive sofa area, and their proofs do not use the value of
+the largest sofa area. The proof of \cref{thm:main} uses Baek's theorem
+(\cref{fact:optimal}) to show that a cap with sofa area $\abs\Gs$ is maximizing.
+Applied to the caps of \cref{fact:exists}, the two bounds give the properties of
+step~(3) of \cref{sec:baek} without \cref{fact:optimal}, and with \cref{fact:Q}
+they determine the largest sofa area. This gives a second proof of
+\cref{fact:optimal}. The proofs in this subsection use the Facts of
+\cref{sec:setting} other than \cref{fact:optimal}, and the results of
+\cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality}
+other than \cref{prop:U,cor:Ki,thm:caps}, which are the only ones there whose
+proofs use \cref{fact:optimal}.
+
+\begin{lemma}[a maximizing right-angle cap]\label{lem:max-right}
+Let $K\in\Kc_{\pi/2}$ be a maximizing cap. Then $K\in\Ki$ and $\cA(K)=\abs\Gs$,
+and there is $s\in\R$ with $K=\KG+(s,0)$ and $K\setminus\cN(K)=\Gs+(s,0)$.
+\end{lemma}
+
+\begin{proof}
+Gerver's cap $\KG$ lies in $\Kc_{\pi/2}$ and has $\cA(\KG)=\abs\Gs$
+(\cref{fact:gerver}\ref{fact:gerver:cap},
+\cref{fact:monotone}\ref{fact:monotone:area}). As $K$ is maximizing,
+$\cA(K)\ge\cA(\KG)=\abs\Gs$, and $\abs\Gs\ge2.2192$ by
+\cref{fact:gerver}\ref{fact:gerver:def}. So $\cA(K)>0$, and $K$ satisfies the
+curvature bounds (\cref{prop:curvature}) and the injectivity condition
+(\cref{prop:inj}). Also $\abs K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5$, so
+$K\in\Ki$. Hence
+\[
+  \abs\Gs=\cA(\KG)\le\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs ,
+\]
+where the first inequality holds as $K$ is maximizing, the second by
+\cref{fact:Q}\ref{fact:Q:triple}, and the third and the last equality by
+\cref{fact:Q}\ref{fact:Q:max}. So $\cA(K)=\abs\Gs$. Now \cref{prop:kernel} gives
+$s\in\R$ with $h_K(t)-h_{\KG}(t)=s\cos t$ for $t\in[0,\pi]$, and
+\cref{lem:translate}\ref{lem:translate:supp}, with $C=\KG$, gives $K=\KG+(s,0)$
+and $K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$, as
+$\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
+\end{proof}
+
+\begin{lemma}[a right-angle motion]\label{lem:right-motion}
+Let $\omega\in[\omega_0,\pi/2]$, and let $T$ be a monotone sofa with rotation
+angle $\omega$ and $\abs T\ge11/5$ whose cap $\cC(T)$ is maximizing. Then
+$R_\psi T$, $\psi=\pi/2-\omega$, is a moving sofa with rotation angle $\pi/2$.
+\end{lemma}
+
+\begin{proof}
+If $\omega=\pi/2$, then $\psi=0$, and $T$ is a moving sofa with rotation angle
+$\pi/2$ by \cref{fact:monotone}\ref{fact:monotone:envelope}. Let $\omega<\pi/2$
+and $K=\cC(T)$. By \cref{fact:monotone}\ref{fact:monotone:envelope},
+\ref{fact:monotone:cap} and \ref{fact:monotone:area}, $T$ is a moving sofa with
+rotation angle $\omega$ in standard position, $K$ is a cap, $T=K\setminus\cN(K)$
+and $\cA_\omega(K)=\abs T\ge11/5>0$. As $K$ is maximizing,
+\cref{prop:pinned-bounds} gives the pinned bounds $w^\circ_K\le\sigma_K(\pi/2)$
+and $z^\circ_K\le\sigma_K(\omega)$. The proof of \cref{prop:U} uses $\abs
+T=\abs\Gs$ only to obtain these bounds and $\cA_\omega(K)\ge11/5$, and it
+concludes as before: \cref{lem:triangle}(d) gives $t_\sharp\in(0,\omega)$ such
+that $O$, $cu_0$ and $cv_\omega$ lie in the closure of $Q^-_K(t_\sharp)$,
+\cref{lem:width}(b) gives $\ip{p-q}{u_t}\le1$ for $p,q\in T$ and
+$t\in[\omega,\pi/2]$, and \cref{lem:turn} shows that $R_\psi T$ is a moving sofa
+with rotation angle $\pi/2$.
+\end{proof}
+
+\begin{theorem}[optimality from the maximizing caps]\label{thm:second}
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:second:right} Every cap $C\in\Kc_{\pi/2}$ has
+$\cA(C)\le\abs\Gs$. For a cap $K\in\Kc_{\pi/2}$, the following are equivalent:
+$K$ is maximizing; $\cA(K)=\abs\Gs$; $K=\KG+(s,0)$ for some $s\in\R$.
+\item\label{thm:second:sofa} $\Gs$ is a moving sofa, and every moving sofa $S$
+has $\abs S\le\abs\Gs$.
+\item\label{thm:second:caps} For every $\omega\in(0,\pi/2]$ and every cap
+$K\in\Kc_\omega$, $\cA_\omega(K)\le\abs\Gs$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{thm:second:right} Let $K_{\pi/2}$ be the cap of \cref{fact:exists} for
+$\omega=\pi/2$. It is maximizing, so $\cA(K_{\pi/2})=\abs\Gs$ by
+\cref{lem:max-right}, and every $C\in\Kc_{\pi/2}$ has
+$\cA(C)\le\cA(K_{\pi/2})=\abs\Gs$. Hence a cap $K\in\Kc_{\pi/2}$ with
+$\cA(K)=\abs\Gs$ is maximizing, and a maximizing cap is a translate $\KG+(s,0)$
+by \cref{lem:max-right}. Conversely, $\KG+(s,0)$ lies in $\Kc_{\pi/2}$ and has
+$\cA(\KG+(s,0))=\cA(\KG)=\abs\Gs$ by
+\cref{lem:translate}\ref{lem:translate:conv},
+\cref{fact:gerver}\ref{fact:gerver:cap} and
+\cref{fact:monotone}\ref{fact:monotone:area}.
+
+\ref{thm:second:sofa} By \cref{fact:gerver}\ref{fact:gerver:cap}, $\Gs$ is a
+monotone sofa with rotation angle $\pi/2$, hence a moving sofa
+(\cref{fact:monotone}\ref{fact:monotone:envelope}). For the bound, first let $S$
+be a moving sofa with rotation angle $\pi/2$, and let $K_{\pi/2}$ and
+$S_{\pi/2}=K_{\pi/2}\setminus\cN(K_{\pi/2})$ be as in \cref{fact:exists}. Then
+\[
+  \abs S\le\abs{S_{\pi/2}}=\cA(K_{\pi/2})=\abs\Gs ,
+\]
+where the inequality holds by \cref{fact:exists}, the first equality by
+\cref{fact:monotone}\ref{fact:monotone:area}, as $\cC(S_{\pi/2})=K_{\pi/2}$, and
+the second by \cref{lem:max-right}, as $K_{\pi/2}$ is maximizing. Now let $S$ be
+any moving sofa. If $\abs S<11/5$, then $\abs S<\abs\Gs$, as $\abs\Gs\ge2.2192$
+(\cref{fact:gerver}\ref{fact:gerver:def}). Otherwise $S$ is a moving sofa with
+some rotation angle $\omega\in[\omega_0,\pi/2]$ (\cref{fact:angle}(a)). Let
+$K_\omega$ and $S_\omega=K_\omega\setminus\cN(K_\omega)$ be as in
+\cref{fact:exists}. Then $\abs{S_\omega}\ge\abs S\ge11/5$, and the cap
+$\cC(S_\omega)=K_\omega$ of the monotone sofa $S_\omega$ is maximizing. By
+\cref{lem:right-motion}, $R_\psi S_\omega$, $\psi=\pi/2-\omega$, is a moving
+sofa with rotation angle $\pi/2$, and so
+\[
+  \abs S\le\abs{S_\omega}=\abs{R_\psi S_\omega}\le\abs\Gs ,
+\]
+where the first inequality holds by \cref{fact:exists}, the equality as
+rotations preserve area, and the last inequality by the first case.
+
+\ref{thm:second:caps} Let $K_\omega$ and $S_\omega$ be as in \cref{fact:exists}.
+Every $K\in\Kc_\omega$ has
+\[
+  \cA_\omega(K)\le\cA_\omega(K_\omega)=\abs{S_\omega}\le\abs\Gs ,
+\]
+where the first inequality holds by \cref{fact:exists}, the equality by
+\cref{fact:monotone}\ref{fact:monotone:area}, as $\cC(S_\omega)=K_\omega$, and
+the last inequality by \ref{thm:second:sofa}, as $S_\omega$ is a moving sofa
+(\cref{fact:monotone}\ref{fact:monotone:envelope}).
+\end{proof}
+
+With $\abs\Gs>11/5$ (\cref{fact:gerver}\ref{fact:gerver:def}), \cref{thm:second}
+contains \cref{fact:optimal}. The proofs of \cref{thm:main} and \cref{cor:all}
+use \cref{fact:optimal} only in \cref{prop:reduction,prop:U,cor:Ki,thm:caps} and
+in the proof of \cref{cor:all}. They go through with \cref{thm:second} in place
+of \cref{fact:optimal}, with \cref{lem:right-motion} for \cref{prop:U}, and with
+\cref{lem:max-right} for the cap of the monotone sofa $U$; this is how the
+formalization proves them a second time (\cref{sec:formalization}). So
+\cref{thm:main} and \cref{cor:all} hold without \baek{Thm.~1.1.1}.
+
+The second proof uses Baek's caps $K_\omega$ and $K_{\pi/2}$ of step~(2) only
+through \cref{fact:exists}, whose statement does not involve their balance. Baek
+derives the two properties of step~(3) for these caps from their balance
+\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)}; here they follow from maximality, by
+\cref{lem:right-motion,lem:max-right}. For the other steps of the chain, the
+second proof uses Baek's results: \cref{fact:monotone} for step~(1),
+\cref{fact:exists} for the caps of step~(2a) and \cref{fact:Q} for step~(4),
+with \cref{fact:angle} for the bound on the rotation angle. The proof also uses
+$\abs\Gs=\cA(\KG)\le\cA(K_{\pi/2})$, which is not in \eqref{eq:baek-chain} and
+holds as $K_{\pi/2}$ is maximizing; with step~(4) it gives the value of the
+maximum, and with \cref{prop:kernel} the maximizing caps.

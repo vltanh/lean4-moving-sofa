@@ -183,15 +183,15 @@ the inclusion of a rigid image of $S$ in $\Gs$ into an equality
 The proof, together with Baek's, is formalized in Lean~4 with
 Mathlib~\cite{Lean4,Mathlib20}, in the repository~\cite{Companion}: every result
 of~\cite{Baek} used here, with the corrections of
-Appendix~\ref{app:corrections}, and the proof of \cref{thm:main}.
-\cref{sec:formalization} describes the formalization, and
-Appendix~\ref{app:lean} gives the formal statement of \cref{thm:main} and the
-formal counterpart of each result of this paper. The formalization is registered
-in the Palomar registry, which checks mechanically that it proves exactly the
-stated theorems, using only Lean's standard axioms, and uses AI to check that
-each formal statement says the same as its informal version
-(\cref{sec:formalization}). The formalization also proves that its definitions
-agree with those of Google DeepMind's formal-conjectures
+Appendix~\ref{app:corrections}, the proof of \cref{thm:main}, and a second proof
+of optimality (\cref{sec:second}). \cref{sec:formalization} describes the
+formalization, and Appendix~\ref{app:lean} gives the formal statement of
+\cref{thm:main} and the formal counterpart of each result of this paper. The
+formalization is registered in the Palomar registry, which checks mechanically
+that it proves exactly the stated theorems, using only Lean's standard axioms,
+and uses AI to check that each formal statement says the same as its informal
+version (\cref{sec:formalization}). The formalization also proves that its
+definitions agree with those of Google DeepMind's formal-conjectures
 project~\cite{FormalConjectures}, whose statements of the moving sofa problem
 were written and reviewed by people independently of this work. The project
 lists the uniqueness of Gerver's sofa as an open problem, and the author has
@@ -209,10 +209,11 @@ checked, and by whom.
 work~\cite{Baek} that we use. \cref{sec:reduction} reduces the theorem to caps
 and outlines the rest;
 \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
-carry out the strategy described above; \cref{sec:formalization} describes the
-formalization and lists open questions. The appendices give pictures of Baek's
-argument (Appendix~\ref{app:baek}), the explicit description of Gerver's sofa
-(Appendix~\ref{app:gerver}), the corrections to Baek's work
-(Appendix~\ref{app:corrections}), the dictionary to the Lean declarations
-(Appendix~\ref{app:lean}), and the account of the use of AI
-(Appendix~\ref{app:ai}).
+carry out the strategy described above, and \cref{sec:second}, the last
+subsection of \cref{sec:equality}, gives the second proof of optimality;
+\cref{sec:formalization} describes the formalization and lists open questions.
+The appendices give pictures of Baek's argument (Appendix~\ref{app:baek}), the
+explicit description of Gerver's sofa (Appendix~\ref{app:gerver}), the
+corrections to Baek's work (Appendix~\ref{app:corrections}), the dictionary to
+the Lean declarations (Appendix~\ref{app:lean}), and the account of the use of
+AI (Appendix~\ref{app:ai}).
