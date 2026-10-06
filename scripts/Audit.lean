@@ -9,8 +9,8 @@ import all MovingSofaOptimality.Angle.HorizontalSide
 import all MovingSofaOptimality.Angle.RightAngle
 import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
 import all MovingSofaOptimality.Balanced.CapGeometry
-import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.MaxPolygonCapExists
+import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.NefPolygon
 import all MovingSofaOptimality.Balanced.PolygonCap
 import all MovingSofaOptimality.Balanced.Polyline
@@ -23,12 +23,12 @@ import all MovingSofaOptimality.Convex.ConvexCurve
 import all MovingSofaOptimality.Convex.ConvexDomain
 import all MovingSofaOptimality.Convex.CurveArea
 import all MovingSofaOptimality.Convex.Mamikon
-import all MovingSofaOptimality.External.AreaFormula.Param
 import all MovingSofaOptimality.External.AreaFormula
+import all MovingSofaOptimality.External.AreaFormula.Param
+import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.External.Romik.Calc
 import all MovingSofaOptimality.External.Romik.Fix
 import all MovingSofaOptimality.External.Romik.Num
-import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.Gerver.AreaBounds
 import all MovingSofaOptimality.Gerver.Bounds
 import all MovingSofaOptimality.Gerver.Defs
@@ -56,12 +56,12 @@ import all MovingSofaOptimality.Optimality.Domain
 import all MovingSofaOptimality.Optimality.UpperBound
 import all MovingSofaOptimality.Optimality.Variation
 import all MovingSofaOptimality.Sofa.Defs
-import all MovingSofaUniqueness.Alternative
 import all MovingSofaUniqueness.AngleExtension
 import all MovingSofaUniqueness.Curvature
 import all MovingSofaUniqueness.Main
-import all MovingSofaUniqueness.Maximizers
-import all MovingSofaUniqueness.Optimality
+import all MovingSofaUniqueness.Mamikon
+import all MovingSofaUniqueness.MaximizerRoute
+import all MovingSofaUniqueness.Maximizing
 import all MovingSofaUniqueness.RegularClosed
 import all MovingSofaUniqueness.Rigid
 import all MovingSofaUniqueness.Rigidity
@@ -72,92 +72,23 @@ import all MovingSofaBridge.GerverSofa
 import all MovingSofaBridge.Motion
 import all MovingSofaBridge.RomikParams
 import all MovingSofaStability.All
-import all MovingSofaStability.AngularFaceStability
-import all MovingSofaStability.ArcAtoms
-import all MovingSofaStability.BaekDeficit
-import all MovingSofaStability.CBVAlgebra
-import all MovingSofaStability.CanonicalContacts
-import all MovingSofaStability.CanonicalTriple
-import all MovingSofaStability.CapCoercivity
-import all MovingSofaStability.CapDistance
-import all MovingSofaStability.CapShape
-import all MovingSofaStability.CapWidthGeometry
-import all MovingSofaStability.CompactSetLimits
-import all MovingSofaStability.ConvexParallelArea
-import all MovingSofaStability.CoreAreaBound
-import all MovingSofaStability.CoreGraph
-import all MovingSofaStability.CoreIntegral
-import all MovingSofaStability.CoreMonotonicity
-import all MovingSofaStability.CoreRegionGeometry
-import all MovingSofaStability.CornerAnalysis
-import all MovingSofaStability.CurveRoof
-import all MovingSofaStability.CutSeparation
-import all MovingSofaStability.EnvelopeSlack
-import all MovingSofaStability.EnvelopeSlope
-import all MovingSofaStability.EpigraphBalls
-import all MovingSofaStability.EuclideanDisks
-import all MovingSofaStability.EuclideanGeometry
-import all MovingSofaStability.ExposedFaceStability
-import all MovingSofaStability.FloorCoverage
-import all MovingSofaStability.FourArcCoercivity
-import all MovingSofaStability.GerverMargins
-import all MovingSofaStability.GerverRoof
-import all MovingSofaStability.GlobalStability
-import all MovingSofaStability.GreenNorm
-import all MovingSofaStability.IntegralEstimates
-import all MovingSofaStability.InteriorBalls
-import all MovingSofaStability.LocalArmMargins
-import all MovingSofaStability.LocalSofaRecovery
-import all MovingSofaStability.LocalUpperBound
-import all MovingSofaStability.MamikonEnergy
-import all MovingSofaStability.MissingAreaRecovery
-import all MovingSofaStability.MixedArea
-import all MovingSofaStability.NicheContainment
-import all MovingSofaStability.NicheFeet
-import all MovingSofaStability.NonsmoothAffinity
-import all MovingSofaStability.NonsmoothBookkeeping
-import all MovingSofaStability.ODEReconstruction
-import all MovingSofaStability.OmittedWedgeArea
-import all MovingSofaStability.PartialHallways
-import all MovingSofaStability.PunctureMetric
-import all MovingSofaStability.PunctureTopology
-import all MovingSofaStability.PuncturedSofa
-import all MovingSofaStability.QuadraticDeficit
-import all MovingSofaStability.QualitativeEntry
-import all MovingSofaStability.ReferenceCoreVariation
-import all MovingSofaStability.ResidualIntegrability
-import all MovingSofaStability.ResidualMass
-import all MovingSofaStability.ResidualPropagation
-import all MovingSofaStability.Residuals
-import all MovingSofaStability.RigidInterior
-import all MovingSofaStability.RoofGeometry
-import all MovingSofaStability.RoofMargins
-import all MovingSofaStability.SeparatedWedges
-import all MovingSofaStability.SharpCapDistance
-import all MovingSofaStability.SharpEvaluation
-import all MovingSofaStability.SharpExponent
-import all MovingSofaStability.SharpIntegralControl
-import all MovingSofaStability.SharpKernelNorms
-import all MovingSofaStability.SharpReconstruction
-import all MovingSofaStability.SofaBounds
-import all MovingSofaStability.SofaCap
-import all MovingSofaStability.SofaCoordinates
-import all MovingSofaStability.SofaLimitMotion
-import all MovingSofaStability.Statement
-import all MovingSofaStability.SupportDistance
-import all MovingSofaStability.SymmetricDifference
-import all MovingSofaStability.TerminalBookkeeping
-import all MovingSofaStability.TerminalComparison
-import all MovingSofaStability.TerminalFloor
-import all MovingSofaStability.TrigKernelIntegrals
-import all MovingSofaStability.UniformGeometryBounds
-import all MovingSofaStability.WideConcavity
+import all MovingSofaStability.Basic
+import all MovingSofaStability.CapEstimate
+import all MovingSofaStability.Deficit
+import all MovingSofaStability.Global
+import all MovingSofaStability.LocalBound
+import all MovingSofaStability.LocalGeometry
+import all MovingSofaStability.Margins
+import all MovingSofaStability.Recovery
+import all MovingSofaStability.Sharpness
+import all MovingSofaStability.Terminal
 import all MovingSofaStability.WideDomain
-import all MovingSofaStability.WideFirstVariation
-import all MovingSofaStability.WideGerverCertificate
-import all MovingSofaStability.WideResidualEnergy
+import all MovingSofaExtremal.All
+import all MovingSofaExtremal.Main
+import all MovingSofaExtremal.Unified
 import all ChallengeDefs
 import all Solution
+import all SolutionCoercive
 
 /-!
 # Axiom and dependency audit
@@ -190,8 +121,8 @@ open Lean Elab Command
 
 namespace Audit
 
-/-- The results from prior work, proved in `MovingSofaOptimality/External/`, with a short label. Their
-proofs are not searched: the traversal stops at them. -/
+/-- The results from prior work, proved in `MovingSofaOptimality/External/`, with a short label.
+Their proofs are not searched: the traversal stops at them. -/
 meta def externalResults : List (String × Name) :=
   [("Schneider, Remark 5.1.2: |K| = ½∫ h_K dσ_K", ``MovingSofaOptimality.area_eq_half_integral_supp),
    ("Romik 2018: Romik's system has a solution in the box", ``MovingSofaOptimality.GerverParams.romik_exists),
@@ -399,10 +330,10 @@ meta def paperResults : List (String × Name) :=
    ("Thm 8.5.7", ``MovingSofaOptimality.theorem8_5_7),
    ("Cor 8.5.8", ``MovingSofaOptimality.corollary8_5_8)]
 
-/-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of its
-argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, the refinements that the
-manuscript `docs/paper` states, and the second proof of optimality of its Section 8.4; and the
-bridge to formal-conjectures' definitions (`MovingSofaBridge/`). -/
+/-- The uniqueness of Gerver's sofa (`MovingSofaUniqueness/`): the theorem and the propositions of
+its argument, `docs/archive/uniqueness/20-complete-paper-proof.md`, the refinements that the
+manuscript `docs/paper` states, and the second proof of optimality of its Remark `rem:second`; and
+the bridge to formal-conjectures' definitions (`MovingSofaBridge/`). -/
 meta def uniquenessResults : List (String × Name) :=
   [("Uniqueness theorem", ``MovingSofaUniqueness.image_eq_gerver_of_volume_eq),
    ("Uniqueness: Prop 1", ``MovingSofaUniqueness.exists_selectedCapSequence),
@@ -420,17 +351,17 @@ meta def uniquenessResults : List (String × Name) :=
     ``MovingSofaUniqueness.isMaximal_iff_image_eq_gerver),
    ("Uniqueness: no rotation is needed (manuscript `cor:translate`)",
     ``MovingSofaUniqueness.translate_eq_gerver_of_volume_eq),
-   ("Uniqueness: a second proof of optimality (manuscript `thm:second`)",
+   ("Uniqueness: a second proof of optimality (manuscript `rem:second`)",
     ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal),
-   ("Uniqueness: the theorem from the second proof (manuscript `sec:second`)",
+   ("Uniqueness: the theorem from the second proof (manuscript `rem:second`)",
     ``MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq),
    ("Bridge: moving sofas", ``MovingSofaBridge.isMovingSofa_iff),
    ("Bridge: the sofa constant", ``MovingSofaBridge.sofaConstant_eq),
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
    ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
-/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability.md`): near-maximal moving
-sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
+/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability.md`): near-maximal
+moving sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
 coefficient 2 sec φ. -/
 meta def stabilityResults : List (String × Name) :=
   [("Stability: Hausdorff and symmetric-difference rate", ``MovingSofaStability.unrestricted_stability),
@@ -444,6 +375,18 @@ meta def stabilityResults : List (String × Name) :=
     ``MovingSofaStability.sharp_wide_cap_distance_bound),
    ("Stability: cap distance, coefficient 1001/500", ``MovingSofaStability.ki_cap_distance_bound_2002)]
 
+/-- The coercive route (`MovingSofaExtremal/`, `docs/coercive.md`): optimality, uniqueness and
+stability from one certificate; `scripts/AuditCoerciveRoute.lean` checks its dependencies. -/
+meta def coerciveResults : List (String × Name) :=
+  [("Coercive route: the certificate", ``MovingSofaStability.coercive_certificate),
+   ("Coercive route: maximizing right-angle caps",
+    ``MovingSofaExtremal.right_angle_maximizer_eq_gerver),
+   ("Coercive route: optimality", ``MovingSofaExtremal.gerver_sofa_optimal),
+   ("Coercive route: uniqueness", ``MovingSofaExtremal.image_eq_gerver_of_volume_eq),
+   ("Coercive route: no rotation is needed", ``MovingSofaExtremal.translate_eq_gerver_of_volume_eq),
+   ("Coercive route: optimality, uniqueness and stability",
+    ``MovingSofaExtremal.gerver_sofa_optimal_unique_stable)]
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
@@ -451,6 +394,9 @@ meta def solutionResults : List Name :=
    ``Baek.gerver_sofa_area,
    ``Baek.gerver_sofa_optimal,
    ``Baek.gerver_sofa_unique,
+   ``Baek.gerver_sofa_stable,
+   ``Baek.gerver_sofa_angle_stable,
+   ``Baek.gerver_sofa_stability_exponent,
    ``Bridge.isMovingSofa_iff,
    ``Bridge.sofaConstant_eq,
    ``Bridge.gerversSofa_eq,
@@ -462,12 +408,13 @@ meta def solutionResults : List Name :=
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
-/-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the bridge
-to formal-conjectures' definitions, the stability of Gerver's sofa, and the Challenge's
-definitions). -/
+/-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the
+bridge to formal-conjectures' definitions, the stability of Gerver's sofa, the coercive route, the
+Challenge's definitions, and the second solution). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
-    (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m || m == `ChallengeDefs
+    (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m ||
+    (`MovingSofaExtremal).isPrefixOf m || m == `ChallengeDefs || m == `SolutionCoercive
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
@@ -561,7 +508,7 @@ elab "#audit" : command => do
   let mut deps : NameMap (Array Name) := {}
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
-  for (label, n) in paperResults ++ uniquenessResults ++ stabilityResults do
+  for (label, n) in paperResults ++ uniquenessResults ++ stabilityResults ++ coerciveResults do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n

@@ -15,7 +15,7 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc}
-\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,pdftitle={Uniqueness of Gerver's sofa},pdfauthor={The-Anh Vu-Le}]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,pdftitle={Uniqueness and stability of Gerver's sofa},pdfauthor={The-Anh Vu-Le}]{hyperref}
 \usepackage[capitalize,noabbrev]{cleveref}
 
 \input{macros}
@@ -43,7 +43,7 @@
 \numberwithin{equation}{section}
 
 % ---------------------------------------------------------------- title
-\title{Uniqueness of Gerver's sofa}
+\title{Uniqueness and stability of Gerver's sofa}
 
 \author{The-Anh Vu-Le}
 % Affiliation and e-mail are the author's to fill in before submission:
@@ -52,7 +52,7 @@ Urbana-Champaign, Urbana, IL 61801, USA} \email{vltanh@illinois.edu}
 
 \date{October 2026}
 \subjclass[2020]{Primary 52A38, 52A40; Secondary 52A10, 49Q10, 68V20}
-\keywords{moving sofa problem, Gerver's sofa, extremal shapes, uniqueness, convex bodies,
+\keywords{moving sofa problem, Gerver's sofa, extremal shapes, uniqueness, stability, convex bodies,
 surface area measure, Mamikon's theorem, formal verification, Lean}
 
 \begin{document}
@@ -71,10 +71,14 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
   shape of a moving sofa of maximal area. To prove uniqueness, we show that
   every moving sofa of maximal area has the same two properties, so that the
   functional bounds its area directly. Equality now forces the sofa to be
-  Gerver's. This argument does not use the value of the maximal area, so it
-  also gives a second proof of optimality. The proof, together with Baek's, is
-  formalized in Lean~4 with Mathlib and checked by Lean's kernel, using only
-  Lean's standard axioms.
+  Gerver's. This argument does not use the value of the maximal area, so it also
+  gives a second proof of optimality. We prove, moreover, that the uniqueness is
+  stable: a moving sofa whose area is $\eps$ less than the maximum lies, after a
+  translation, within Hausdorff distance $O(\sqrt\eps)$ of Gerver's sofa, and
+  the exponent $1/2$ cannot be improved. We also derive optimality, uniqueness
+  and stability from one estimate for this functional. The proofs, together
+  with Baek's, are formalized in Lean~4 with Mathlib and checked by Lean's
+  kernel, using only Lean's standard axioms.
 \end{abstract}
 
 \maketitle
@@ -88,7 +92,9 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
 \input{sections/07-injectivity}
 \input{sections/08-equality}
 \input{sections/09-recovery}
-\input{sections/10-formalization}
+\input{sections/10-stability}
+\input{sections/11-unified}
+\input{sections/12-questions}
 
 \appendix
 \input{sections/a0-baek}

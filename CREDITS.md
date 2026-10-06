@@ -13,13 +13,14 @@ was not recorded.
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
   (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
-  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below and
-  the compilation of the stability proof.
+  and on 5 and 6 October, in Claude Code 2.1.289, the merge of the second proof of optimality below,
+  the compilation of the stability proof, the compilation and completion of the coercive route, and the
+  simplification of the new libraries.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
-  Lean modules of a second proof of Baek's theorem (pull request #5). An AI system, working through
-  the owner's GitHub account, wrote the stability argument and its uncompiled Lean code (pull request
-  #8).
+  Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
+  with its uncompiled Lean code (pull request #8), and the coercive route with its uncompiled Lean
+  code (pull request #9).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
   simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
@@ -265,7 +266,7 @@ everywhere else.
 How it was made:
 - 11:48 to 14:15: Claude Sonnet 5.5, in Claude Code 2.1.289, the session that wrote the manuscript, coordinated
   sub-agents running Claude Opus 5.5.
-- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L85)): a right-angle cap
+- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L88)): a right-angle cap
   has the sofa area of Gerver's sofa if and only if it is a horizontal translate of Gerver's cap; the maximal
   sofas are the moving sofas that a rigid map takes onto Gerver's sofa; the width of Gerver's sofa exceeds one in
   every direction but the vertical, so that no rotation is needed and a rotated copy of Gerver's sofa moves only if
@@ -293,7 +294,7 @@ suggested.
 
 How it was made:
 - 11:56 to 12:52: Claude Opus 5.5, in Claude Code 2.1.289. The pull request added three Lean modules
-  ([`Maximizers`](MovingSofaUniqueness/Maximizers.lean), [`Optimality`](MovingSofaUniqueness/Optimality.lean), [`Alternative`](MovingSofaUniqueness/Alternative.lean); 428 lines), a separate dependency audit and notes,
+  (`Maximizers`, `Optimality`, `Alternative`; 428 lines), a separate dependency audit and notes,
   none of them compiled or run, and left every existing file unchanged. The modules compiled without change and
   without warnings, and the audit passed: none of their 24 declarations depends on Baek's Theorem 1.1.1 or on
   [`MovingSofaUniqueness.Main`](MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
@@ -324,7 +325,7 @@ Figures, from 11:56 to 12:52:
 
 The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
 sofa. Its argument (the notes now in [`docs/archive/stability/`](docs/archive/stability)) and its Lean code, 85 modules and about
-12,200 lines, had been written by an AI system and never compiled.
+12,200 lines, had been written by ChatGPT Pro 6 and never compiled.
 
 How it was made:
 - 22:17 to 23:13: Claude Opus 5.5, in Claude Code 2.1.289, following the skill's procedure for an uncompiled draft,
@@ -353,3 +354,204 @@ Figures, from 22:17 to 23:13:
 - tokens of the sub-agents: 0.78 million output, 2.40 million input, 80 million cache reads; of the main
   session: 0.22 million output, 0.52 million input, 66 million cache reads;
 - model calls: 832 by the sub-agents and 199 by the main session, all to `claude-opus-5-5`.
+
+## The stability in the Challenge and the manuscript (6 October 2026)
+
+The owner named ChatGPT Pro 6 as the author of pull request #8 and asked to state the stability theorems in the
+Challenge without running Palomar's preflight yet, to add the stability to the manuscript, and to add to the
+formalize-math-paper skill the pitfall that the previous round had met.
+
+How it was made:
+- 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L401),
+  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
+  and, in [`Solution.lean`](Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
+  the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
+  [`formalization.yaml`](formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
+  request #8.
+- The manuscript gained Section 10, the stability (Theorems 10.1 to 10.4 with their proofs, about sixteen pages),
+  and the passages on it in the abstract, Sections 1 and 11 and Appendices D and E; it now cites commit `92b2f86`.
+  A sub-agent wrote Section 10 and its rows of the dictionary from the Lean, and three sub-agents that it launched
+  compared every statement and proof with the Lean, part by part. Two more sub-agents, neither able to edit, then
+  read the new text, one against the Lean and the repository, the other for its prose. Their findings were applied,
+  among them a sign error in the description of Mamikon's term in Section 2. The manuscript grew from 70 to 91
+  pages; its README records the round.
+- Version 2.1.1 of the formalize-math-paper skill (commit `06ae331`) adds the pitfall that Lean 4 leaves out of a
+  statement the section variables that it does not mention, with the check and the fix.
+
+Figures, from 07:08 to 09:49:
+- elapsed time: 2 hours 41 minutes;
+- sub-agents: 6 (3 of them launched by another sub-agent), at most 4 at once, about 3.2 hours of work;
+- tool calls: 549 by the sub-agents, 108 by the main session;
+- tokens of the sub-agents: 1.32 million output, 4.63 million input, 121 million cache reads; of the main
+  session: 0.16 million output, 1.63 million input, 85 million cache reads;
+- model calls: 447 by the sub-agents and 114 by the main session, all to `claude-opus-5-5`.
+
+## The coercive route (6 October 2026)
+
+The owner asked to integrate pull request #9 so that one theorem gives another proof of optimality, uniqueness and
+stability at once, and to present it in the manuscript as a new section or subsection. ChatGPT Pro 6 had written the
+pull request on the evening of 5 October, without compiling it: the library [`MovingSofaExtremal`](MovingSofaExtremal), which proves
+optimality and uniqueness from two estimates of the stability library, a second solution of twelve statements of the
+Challenge, and an audit. It had left for later the step that moves the stability proof onto the route.
+
+How it was made:
+- 09:56 to 13:22: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+  of the formalize-math-paper skill.
+- The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](lakefile.toml)
+  and `MamikonEnergy.lean` were resolved for the compiled code). One proof did not compile, a `change` whose two sides
+  are not definitionally equal, and one linter warning remained (commit `ae0162a`).
+- A search through the proofs found the four places where the stability library still reached the first proofs: the
+  sign of the deficit and the compactness step, through Baek's theorem; the identification of the limit, through the
+  first proof of uniqueness; and the lemma that a moving sofa lies in a strip of height one. Commit `70ccc8a` takes
+  them from the route or from a neutral module, states the certificate as one theorem
+  ([`MovingSofaStability.coercive_certificate`](MovingSofaStability/CapEstimate.lean#L1120)), which the route's classification of the maximizing caps and the
+  stability library's local estimate both use, adds to the route the theorem that no rotation is needed, states the
+  three results in one theorem ([`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](MovingSofaExtremal/Unified.lean#L38)), and extends the second
+  solution to the fifteen statements. The pull request's audit had never run, and on the merged branch it failed;
+  it was rewritten for the whole route, the stability library included, and now runs in CI: none of the 958
+  declarations reaches Baek's Theorem 1.1.1, his balance results or the first proof of uniqueness, and optimality
+  and uniqueness do not reach the stability theorem. The main audit passes with 6,062 declarations, Comparator
+  accepts the fifteen theorems, and [The coercive route](docs/coercive.md) describes the result.
+- The pull request was retargeted at the manuscript's branch and merged as commit `94a1bcf`, on which the continuous
+  integration passed; Palomar's preflight was not run.
+- The manuscript gained Section 11, the derivation of the three results from one estimate, and the formalization
+  section became Section 12. A sub-agent wrote the section and the passages that refer to it from the Lean; three
+  sub-agents that it launched compared the text with the Lean part by part, and a fourth checked the passages
+  rewritten after their reports. Two more sub-agents, neither able to edit, then read the new text, one against the
+  Lean and the repository, the other for its prose; neither found a mathematical error, and the writing sub-agent
+  applied their reports. The manuscript grew from 91 to 101 pages.
+- The owner then said that they have not read the manuscript past Section 1, which Section 1.5 and Appendix E now
+  say, and asked to use the best bound: the stability proof now carries the coefficient 2 sec φ of the cap estimate
+  through its constants, where it had weakened it to 80 (commit `a94bde6`; Comparator accepts, the audits pass).
+  Section 10 of the manuscript changed with it.
+- At the owner's request, Section 8.4 of the manuscript (the second proof of optimality of pull request #5) was
+  shortened to a remark at the end of Section 8 (Remark 8.6), which outlines the second proof with Baek's own bound
+  and says that the formalization proves it ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean)); its lemma on the right-angle
+  motion moved to the end of Section 6 (Lemma 6.10), and Section 11 writes the proof out with the certificate. The
+  docstrings of the second proof now cite the remark (commit `6ed7657`). The manuscript has 99 pages and cites
+  `6ed7657`.
+
+Figures, from 09:56 to 13:22:
+- elapsed time: 3 hours 26 minutes, of which 12 minutes waiting for the owner's answers;
+- sub-agents: 7 (4 of them launched by another sub-agent), at most 4 at once, about 3.8 hours of work; the
+  writing sub-agent was resumed three times, to apply the two reviews, to fold Section 8.4 into Section 11, and to
+  move the remark to Section 8;
+- tool calls: 810 by the sub-agents, 256 by the main session;
+- tokens of the sub-agents: 1.20 million output, 6.06 million input, 257 million cache reads; of the main
+  session: 0.39 million output, 0.75 million input, 119 million cache reads;
+- model calls: 678 by the sub-agents and 261 by the main session, all to `claude-opus-5-5`.
+
+## Simplifying the new libraries (6 October 2026)
+
+The owner asked to simplify and consolidate the stability library and the other new code, keeping the
+formalization of Baek's paper and the connection with formal-conjectures intact, and then to rewrite the manuscript.
+
+How it was made:
+- 13:25 to 16:09: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+  of the formalize-math-paper skill.
+- Commit `0b7978c` removes what the two new proofs of optimality repeated. Both turned the value and the shape of
+  the maximizing right-angle caps into optimality and uniqueness by the same steps; one assembly now does it
+  ([`MovingSofaUniqueness.Maximizing`](MovingSofaUniqueness/Maximizing.lean)), and each proof gives the two facts in its own way
+  ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean), from Baek's bound and the equality analysis; [`MovingSofaExtremal.Main`](MovingSofaExtremal/Main.lean), from
+  the certificate). The helpers that the coercive route had copied from [`MovingSofaUniqueness.Rigidity`](MovingSofaUniqueness/Rigidity.lean), so as not
+  to import it, moved to two modules that both proofs import ([`MovingSofaUniqueness.Mamikon`](MovingSofaUniqueness/Mamikon.lean), [`MovingSofaUniqueness.Rigid`](MovingSofaUniqueness/Rigid.lean)).
+- Commit `830b03d` merges the 86 files of the stability library (87 before `0b7978c` moved `MamikonFoundation` out),
+  most of them 100 to 200 lines long and in one chain of imports, into eleven modules, one for each step of the
+  proof, besides the root module `All`, and removes 74 declarations that no
+  theorem uses, among them the cap estimate with coefficient 80, which the proof no longer needs since it
+  carries the coefficient 2 sec φ.
+- Commit `5817473`: eight sub-agents, in parallel and each on its own copy of the build, rewrote the eleven
+  modules and the modules shared by the two proofs. A declaration that another module, a solution or an audit
+  uses kept its name and its statement, which a comparison of the elaborated types checked; the others could be
+  merged, restated or removed. The sub-agents merged repeated helpers, inlined helpers used once, and replaced
+  computations by hand with Mathlib lemmas.
+- The stability library went from 12,550 lines in 87 files to 7,585 lines in 12, and the coercive route from 661
+  lines in 7 files to 235 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
+  coercive route 743 instead of 958. Baek's library, the bridge, the Challenge, its definitions and the proofs of
+  [`Solution.lean`](Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
+  changed. The audits and the route check pass, and Comparator accepts the fifteen theorems.
+- Commit `1856810` brought the documentation up to date, and commit `7b8c0a8` the docstring of
+  [`MovingSofaExtremal/All.lean`](MovingSofaExtremal/All.lean), which still listed the old modules; the continuous integration passed on both, and
+  Palomar's preflight was not run.
+- A sub-agent then revised the manuscript for the simplified libraries, with five sub-agents that it launched, which
+  compared each part of Section 10 with the Lean before and after the rewrite. Appendix D names the declarations at
+  commit `7b8c0a8`, which the manuscript now cites; Section 10 lost the bound with the constant 80, and six of its
+  steps now follow the Lean's proofs, two that the rewrite changed and four that had differed before; Remark 8.6 and
+  Sections 11 and 12 describe the new modules and counts, and Appendix E and the manuscript's README record the round.
+  Two more sub-agents, neither able to edit, then read the revision, one against the Lean and the repository, the
+  other for its prose. Neither found a mathematical error; the writing sub-agent applied their findings (a line
+  count, the account of the files and of the rewritten modules, and the wording of several passages). The manuscript
+  has 100 pages.
+
+Figures, from 13:25 to 16:09:
+- elapsed time: 2 hours 44 minutes;
+- sub-agents: 16 (5 of them launched by another sub-agent), at most 8 at once, about 7.1 hours of work; the writing
+  sub-agent was resumed twice, for the four older differences and for the two reviews;
+- tool calls: 1,474 by the sub-agents, 189 by the main session;
+- tokens of the sub-agents: 2.69 million output, 7.77 million input, 426 million cache reads; of the main session:
+  0.26 million output, 0.52 million input, 85 million cache reads;
+- model calls: 1,372 by the sub-agents and 189 by the main session, all to `claude-opus-5-5`.
+
+## Comparator for the second solution, and the manuscript reorganized (6 October 2026)
+
+The owner asked whether the second solution should be in the Challenge too, then asked that Comparator check it
+in the same project, and that the page of results say that the stability theorem gives the uniqueness up to a
+translation. Then the owner asked that Section 12 of the manuscript keep only the open questions, with the
+formalization and the use of AI in the appendices; allowed renaming the manuscript; and asked for an introduction
+in which Section 1.4 gives the strategy of the uniqueness proof, with a short remark that it gives another proof of
+optimality, and a new section gives the strategy of the stability proof, parallel to the outlines of Baek's proof
+and of the uniqueness proof, with a remark on the certificate that gives the three results.
+
+How it was made:
+- 16:13 to 16:58: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
+- Comparator now checks the second solution too (commit `3d3ea3e`, on which the continuous integration passed):
+  [`SolutionCoerciveComparator.lean`](SolutionCoerciveComparator.lean) states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
+  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and [`comparator-coercive.json`](comparator-coercive.json) points Comparator at it;
+  Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
+  have exactly the statement of the matching theorem of [`Solution.lean`](Solution.lean), where it accepted a definitionally equal one.
+  The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
+  translation.
+- The manuscript cites commit `3d3ea3e`. The main session moved its description of the formalization from Section 12
+  to Appendix D.1, so that Section 12 lists the open questions only; renamed it *Uniqueness and stability of Gerver's
+  sofa*; and wrote the remark at the end of Section 1.4 on the second proof of optimality and Section 1.5 on the
+  strategy of the stability proof, which ends with the reason for the name "coercive certificate": an identity
+  writes the gap as a sum of nonnegative terms, as a certificate does in optimization, and the energy among these
+  terms also bounds the distance to Gerver's cap. Two sub-agents, neither able to edit, then read the result, one
+  for its accuracy against the later sections and the Lean, the other for its prose and its structure. Neither
+  found a mathematical error; the main session applied their findings, among them a false sentence on the punctured
+  sofas and a term used for two inequalities. The manuscript has 102 pages.
+
+Figures, from 16:13 to 16:58:
+- elapsed time: 45 minutes;
+- sub-agents: 2, at the same time, about 0.4 hours of work;
+- tool calls: 97 by the sub-agents, 70 by the main session;
+- tokens of the sub-agents: 0.18 million output, 0.55 million input, 14 million cache reads; of the main session:
+  0.14 million output, 0.23 million input, 28 million cache reads;
+- model calls: 84 by the sub-agents and 67 by the main session, all to `claude-opus-5-5`.
+
+## The manuscript's readability (6 October 2026)
+
+The owner asked to shorten the outline of the manuscript (Section 1.7), to rewrite the account of the use of AI
+(Appendix E) as bulleted lists, to put the definitions of Section 2 into definition environments, and to move long
+inline formulas onto their own lines.
+
+How it was made:
+- 16:59 to 17:50: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
+- The main session shortened Section 1.7, which the two sections on the strategies had made partly redundant;
+  rewrote Appendix E as three bulleted lists (who wrote what, what was checked and by whom, what a person has read),
+  from 1,880 words to about 820, leaving the round-by-round detail to this file and to the manuscript's README; and
+  put every notion of Section 2 into a definition with its name in the title. A word-level comparison found no change
+  of content.
+- Seven sub-agents, one per group of section files, moved long inline formulas into unnumbered displays, 387
+  in all, each building a private copy of the manuscript to check that it compiles without overfull lines. A script
+  compared every file before and after with the typography stripped: the mathematics, the labels and the references
+  did not change; the only word changes are the connectives that the displays need. The manuscript has 117 pages.
+
+Figures, from 16:59 to 17:50:
+- elapsed time: 51 minutes;
+- sub-agents: 7, all at the same time, about 3.1 hours of work;
+- tool calls: 938 by the sub-agents, 43 by the main session;
+- tokens of the sub-agents: 1.21 million output, 2.71 million input, 117 million cache reads; of the main session:
+  0.08 million output, 0.14 million input, 27 million cache reads;
+- model calls: 526 by the sub-agents and 44 by the main session, all to `claude-opus-5-5`.

@@ -30,7 +30,7 @@ set $X\subset\R^2$.
   \label{fig:intro}
 \end{figure}
 
-\subsection{Uniqueness}
+\subsection{Uniqueness and stability}
 
 We prove that Gerver's sofa is the only optimal sofa, up to a rotation and a
 translation. We write $R_\theta$ for the counterclockwise rotation of the plane
@@ -50,6 +50,11 @@ translated copy of $\Gs$ (\cref{cor:all}).
 Note that \cref{thm:main} gives an equality of sets. This is stronger than what
 an equality of areas yields, which allows the two sets to differ by a set of
 measure zero, such as a point or a segment.
+
+The uniqueness is stable (\cref{sec:stability}): a moving sofa whose area is
+$\eps$ less than $\abs\Gs$ lies, after a translation, within Hausdorff distance
+$O(\sqrt\eps)$ of $\Gs$ (\cref{thm:stability}), and the exponent $1/2$ cannot
+be improved (\cref{thm:stability-exponent}).
 
 \subsection{Baek's proof of optimality}\label{sec:baek}
 
@@ -131,7 +136,7 @@ $K_S$, the four steps give
 where $K_\omega$ and $K_{\pi/2}$ are Baek's caps of step (2) and $\KG$ is
 Gerver's cap. Only the first two terms involve $S$.
 
-\subsection{The strategy of the proof}
+\subsection{The strategy of the uniqueness proof}\label{sec:strategy-uniqueness}
 
 Suppose now that $S$ has area $\abs\Gs$. Then every inequality in
 \eqref{eq:baek-chain} is an equality, but this says only that $K_S$, $K_\omega$
@@ -168,7 +173,10 @@ argument for step (3b) gives the injectivity condition (\cref{sec:injectivity}).
 Now the chain runs through the cap $K_U$ of $U$ itself: as $U$ has area
 $\abs\Gs$, we have $\abs\Gs=\abs U=\cA_{\pi/2}(K_U)$, and step (4), which
 applies as $K_U$ satisfies the injectivity condition, gives
-$\cA_{\pi/2}(K_U)\le\cQ(K_U)\le\cQ(\KG)=\abs\Gs$, where $\KG$ is Gerver's cap.
+\[
+  \cA_{\pi/2}(K_U)\le\cQ(K_U)\le\cQ(\KG)=\abs\Gs ,
+\]
+where $\KG$ is Gerver's cap.
 So every inequality is an equality; in particular, $\cQ(K_U)=\cQ(\KG)$, so $\cQ$
 is largest at $K_U$ as well as at $\KG$. Since $\cQ$ is concave, and strictly so
 in the lengths of the tangent segments of \cref{fig:mamikon}, this forces the
@@ -178,20 +186,110 @@ a horizontal translate of Gerver's cap, and $U$ of Gerver's sofa
 the inclusion of a rigid image of $S$ in $\Gs$ into an equality
 (\cref{sec:recovery}).
 
+\runin{A second proof of optimality.} The pinned bounds and the curvature
+bounds hold for every cap with the largest sofa area, and their proofs do not
+use the value $\abs\Gs$ of that area, which comes from Baek's theorem. Baek's
+caps $K_\omega$ and $K_{\pi/2}$ of step~(2) have the largest sofa area, so these
+bounds give them steps (3a) and (3b) without the balance of step~(2b), and the
+chain \eqref{eq:baek-chain} proves Baek's theorem again (\cref{rem:second}). In
+particular, a cap $K$ with rotation angle $\pi/2$ and the largest sofa area has
+\begin{equation}\label{eq:second-chain}
+  \abs\Gs=\cA_{\pi/2}(\KG)\le\cA_{\pi/2}(K)\le\cQ(K)\le\cQ(\KG)=\abs\Gs .
+\end{equation}
+
+\subsection{The strategy of the stability proof}\label{sec:strategy-stability}
+
+Now let $S$ be a moving sofa with rotation angle $\omega$ and area
+$\abs\Gs-\eps$, where the \emph{deficit} $\eps>0$ is small. For uniqueness, the
+pinned and the curvature bounds let the chain \eqref{eq:baek-chain} run through
+the cap $K_U$, which comes from the sofa itself. These bounds are proved only for
+caps with the largest sofa area, and the caps of $S$ need not have it. For
+stability, the chain must still run through a cap of $S$; as it starts at
+$\abs S=\abs\Gs-\eps$ and ends at $\abs\Gs$, each of its inequalities is then an
+equality up to $\eps$. We use the \emph{right-angle cap} $K$ of $S$: the cap
+built as in \cref{sec:baek} with copies of the hallway at all angles from $0$ to
+$\pi/2$, even when $\omega<\pi/2$. We change steps (3) and (4) of the chain, and
+add a compactness argument.
+\begin{enumerate}[label=(\roman*)]
+  \item \emph{Step (4) becomes quantitative.} We extend $\cQ$ to caps with
+  rotation angle $\pi/2$ that need not satisfy the injectivity condition, among
+  them every cap close to $\KG$. For such a cap $K$, the gap $\abs\Gs-\cQ(K)$ is
+  a sum of nonnegative terms (\cref{prop:stab-certificate}): the rate at which
+  $\cQ$ decreases when Gerver's cap is moved toward $K$, which is nonnegative as
+  in Baek's proof that $\cQ$ is largest at $\KG$, and \emph{energies}, which
+  measure how far the tangent segments of \cref{fig:mamikon} for $K$ are from
+  those for $\KG$. So $\cQ(K)\le\abs\Gs$. The energy of the cap also bounds the
+  distance from $K$ to a horizontal translate of $\KG$: the Hausdorff distance
+  between them is at most $2.002\sqrt{\abs\Gs-\cQ(K)}$
+  (\cref{thm:stability-cap}). For $\cQ(K)=\abs\Gs$, this makes $K$ a horizontal
+  translate of $\KG$; the proof of uniqueness got this from the case of equality
+  in the concavity of $\cQ$.
+  \item \emph{Step (3) is not needed near Gerver's cap.} If $K$ is close to
+  $\KG$, Baek's bound $\cA_{\pi/2}(K)\le\cQ(K)$ holds even without the
+  injectivity condition (\cref{sec:stab-local}); this replaces step (3b).
+  Instead of step (3a), the missing part of the turn costs area: if
+  $\omega<\pi/2$, then
+  \[
+    \abs S\le\cA_{\pi/2}(K)-c\,(\pi/2-\omega)
+  \]
+  for a constant $c>0$ (\cref{sec:stab-angle}).
+  \item \emph{Compactness brings $S$ near $\Gs$.} If moving sofas with deficits
+  tending to $0$ stayed away from every translate of $\Gs$, a limit of
+  translates of them would be a moving sofa of area $\abs\Gs$ that is not a
+  translate of $\Gs$; but every moving sofa of area $\abs\Gs$ is a translate of
+  $\Gs$ (\cref{cor:translate}). So, when $\eps$ is small, a translate of $S$ is
+  close to $\Gs$, its right-angle cap $K$ is close to $\KG$, and $\omega$ is
+  close to $\pi/2$ (\cref{sec:stab-entry}).
+\end{enumerate}
+For this translate of $S$, with $\psi=\pi/2-\omega$, the three items give
+\begin{equation}\label{eq:stab-chain}
+  \abs\Gs-\eps=\abs S\overset{\text{(ii)}}{\le}\cA_{\pi/2}(K)-c\psi
+    \overset{\text{(ii)}}{\le}\cQ(K)-c\psi\overset{\text{(i)}}{\le}\abs\Gs-c\psi .
+\end{equation}
+Hence $\psi\le\eps/c$ (\cref{thm:stability-angle}), and
+$\abs\Gs-\cQ(K)\le\eps$, so that $K$ lies within Hausdorff distance
+$2.002\sqrt\eps$ of a horizontal translate of $\KG$. From the cap,
+\cref{sec:stab-recovery} passes to the sofa: this translate of $S$ lies within
+Hausdorff distance $O(\sqrt\eps)$ of $\Gs$, and their symmetric difference has
+area $O(\sqrt\eps)$. The exponent $1/2$ cannot be improved: removing a small
+open disk of radius $r$ from the interior of $\Gs$ leaves a moving sofa of
+deficit $\pi r^2$, at Hausdorff distance $r$ from $\Gs$ and at distance at least
+$r$ from every rigid image of $\Gs$ (\cref{sec:stab-puncture}).
+
+\runin{One certificate for the three results.} The two parts of item (i),
+$\cQ(K)\le\abs\Gs$ and the bound on the distance from $K$ to a horizontal
+translate of $\KG$, form one estimate for $\cQ$, the \emph{coercive
+certificate} (\cref{thm:certificate}). We call it a certificate as in
+optimization, where a certificate is a proof of a bound that can be checked term
+by term, such as an identity that writes the gap as a sum of nonnegative terms;
+item (i) gives such an identity. We call it coercive because the energy of the
+cap also bounds the distance from $K$ to a horizontal translate of $\KG$, so
+that a small gap forces a small distance. \Cref{sec:unified} derives the three
+results from it. In the second proof of optimality, its first part replaces the
+last inequality $\cQ(K)\le\cQ(\KG)$ of \eqref{eq:second-chain}. For a cap with
+the largest sofa area, the gap is then $0$, and its second part makes the cap a
+horizontal translate of $\KG$, which replaces the case of equality in the proof
+of uniqueness. For the right-angle cap of a sofa of small deficit, its first part
+gives the last inequality of \eqref{eq:stab-chain} and its second part the
+distance bound; item (iii) uses the optimality and uniqueness that it gives.
+
 \subsection{Formal verification and the use of AI}
 
-The proof, together with Baek's, is formalized in Lean~4 with
+The proofs, together with Baek's, are formalized in Lean~4 with
 Mathlib~\cite{Lean4,Mathlib20}, in the repository~\cite{Companion}: every result
 of~\cite{Baek} used here, with the corrections of
-Appendix~\ref{app:corrections}, the proof of \cref{thm:main}, and a second proof
-of optimality (\cref{sec:second}). \cref{sec:formalization} describes the
-formalization, and Appendix~\ref{app:lean} gives the formal statement of
-\cref{thm:main} and the formal counterpart of each result of this paper. The
-formalization is registered in the Palomar registry, which checks mechanically
-that it proves exactly the stated theorems, using only Lean's standard axioms,
-and uses AI to check that each formal statement says the same as its informal
-version (\cref{sec:formalization}). The formalization also proves that its
-definitions agree with those of Google DeepMind's formal-conjectures
+Appendix~\ref{app:corrections}, the proof of \cref{thm:main}, a second proof of
+optimality (\cref{rem:second}), the stability theorems of \cref{sec:stability},
+and the derivation of optimality, uniqueness and stability from one estimate
+(\cref{sec:unified}). Appendix~\ref{app:lean} describes the formalization, gives
+the formal statement of \cref{thm:main} and of the stability theorems, and lists
+the formal counterpart of each result of this paper. An
+earlier version of the formalization, without the stability theorems, is
+registered in the Palomar registry, which checks mechanically that it proves
+exactly the stated theorems, using only Lean's standard axioms, and uses AI to
+check that each formal statement says the same as its informal version. The
+formalization also proves that its definitions
+agree with those of Google DeepMind's formal-conjectures
 project~\cite{FormalConjectures}, whose statements of the moving sofa problem
 were written and reviewed by people independently of this work. The project
 lists the uniqueness of Gerver's sofa as an open problem, and the author has
@@ -199,21 +297,20 @@ opened a pull request there so that the project's maintainers can check this
 solution.
 
 Much of this work was done with AI systems. They wrote the first version of the
-proof, of the formalization and of this text, and the author then proofread and
-edited the text; Appendix~\ref{app:ai} names the systems and says what was
-checked, and by whom.
+proof, of the formalization and of this text. The author has proofread and
+edited the abstract and \cref{sec:intro}, except the remark at the end of
+\cref{sec:strategy-uniqueness}, \cref{sec:strategy-stability} and the
+sentences of \cref{sec:intro} that refer to them, which were written later, and
+has not yet read the other sections. Appendix~\ref{app:ai} names the systems and says what was checked, and by whom.
 
 \subsection{Organization}
 
-\cref{sec:setting} recalls the definitions and the results of Baek's
-work~\cite{Baek} that we use. \cref{sec:reduction} reduces the theorem to caps
-and outlines the rest;
-\cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
-carry out the strategy described above, and \cref{sec:second}, the last
-subsection of \cref{sec:equality}, gives the second proof of optimality;
-\cref{sec:formalization} describes the formalization and lists open questions.
-The appendices give pictures of Baek's argument (Appendix~\ref{app:baek}), the
-explicit description of Gerver's sofa (Appendix~\ref{app:gerver}), the
-corrections to Baek's work (Appendix~\ref{app:corrections}), the dictionary to
-the Lean declarations (Appendix~\ref{app:lean}), and the account of the use of
-AI (Appendix~\ref{app:ai}).
+\cref{sec:setting} recalls what we use from Baek's work~\cite{Baek}.
+\cref{sec:reduction,sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
+prove \cref{thm:main} as outlined in \cref{sec:strategy-uniqueness},
+\cref{sec:stability} proves stability as outlined in
+\cref{sec:strategy-stability}, and \cref{sec:unified} derives the three results
+from the coercive certificate. \cref{sec:questions} lists open questions. The
+appendices illustrate Baek's argument, describe Gerver's sofa, list the
+corrections to Baek's statements, present the formalization and account for the
+use of AI (Appendices~\ref{app:baek} to~\ref{app:ai}).

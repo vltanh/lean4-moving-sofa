@@ -8,8 +8,8 @@ import all MovingSofaOptimality.Angle.HorizontalSide
 import all MovingSofaOptimality.Angle.RightAngle
 import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
 import all MovingSofaOptimality.Balanced.CapGeometry
-import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.MaxPolygonCapExists
+import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.NefPolygon
 import all MovingSofaOptimality.Balanced.PolygonCap
 import all MovingSofaOptimality.Balanced.Polyline
@@ -22,12 +22,12 @@ import all MovingSofaOptimality.Convex.ConvexCurve
 import all MovingSofaOptimality.Convex.ConvexDomain
 import all MovingSofaOptimality.Convex.CurveArea
 import all MovingSofaOptimality.Convex.Mamikon
-import all MovingSofaOptimality.External.AreaFormula.Param
 import all MovingSofaOptimality.External.AreaFormula
+import all MovingSofaOptimality.External.AreaFormula.Param
+import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.External.Romik.Calc
 import all MovingSofaOptimality.External.Romik.Fix
 import all MovingSofaOptimality.External.Romik.Num
-import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.Gerver.AreaBounds
 import all MovingSofaOptimality.Gerver.Bounds
 import all MovingSofaOptimality.Gerver.Defs
@@ -57,17 +57,16 @@ import all MovingSofaOptimality.Optimality.Variation
 import all MovingSofaOptimality.Sofa.Defs
 import all MovingSofaUniqueness.AngleExtension
 import all MovingSofaUniqueness.Curvature
--- The original entry point is imported for negative controls and coexistence checks only.
--- None of the three alternative modules imports it.
-import all MovingSofaUniqueness.Main
+import all MovingSofaUniqueness.Mamikon
+import all MovingSofaUniqueness.Maximizing
 import all MovingSofaUniqueness.RegularClosed
 import all MovingSofaUniqueness.Rigid
 import all MovingSofaUniqueness.Rigidity
 import all MovingSofaUniqueness.Selection
 import all MovingSofaUniqueness.Variation
-import all MovingSofaUniqueness.Maximizers
-import all MovingSofaUniqueness.Optimality
-import all MovingSofaUniqueness.Alternative
+import all MovingSofaUniqueness.MaximizerRoute
+-- The first proof is imported for negative controls only; the second proof does not import it.
+import all MovingSofaUniqueness.Main
 
 /-!
 # Audit of the second proof of optimality
@@ -75,11 +74,11 @@ import all MovingSofaUniqueness.Alternative
 Run with `lake env lean scripts/AuditMaximizerRoute.lean` after `lake build`; CI runs it after
 `scripts/Audit.lean`.
 
-The modules `MovingSofaUniqueness.Maximizers`, `Optimality` and `Alternative` prove Baek's
-optimality theorem a second time, from the maximizing caps (`thm:second` of the manuscript
-`docs/paper`, Section 8.4), and assemble the uniqueness theorem from that proof. This script checks
-every declaration of the three modules, private and auxiliary ones included, and fails if one of
-them
+The modules `MovingSofaUniqueness.Maximizing` (the maximizing caps and the assembly shared with the
+coercive route) and `MovingSofaUniqueness.MaximizerRoute` prove Baek's optimality theorem a second
+time, from the maximizing caps (`rem:second` of the manuscript `docs/paper`), and assemble the
+uniqueness theorem from that proof. This script checks every declaration of the two modules,
+private and auxiliary ones included, and fails if one of them
 
 - depends on an axiom other than `propext`, `Classical.choice` and `Quot.sound`, or
 - reaches, through the proofs of the library's declarations, Baek's final theorem
@@ -97,18 +96,18 @@ open Lean Elab Command
 namespace MaximizerRouteAudit
 
 meta def alternativeModules : List Name :=
-  [`MovingSofaUniqueness.Maximizers, `MovingSofaUniqueness.Optimality,
-   `MovingSofaUniqueness.Alternative]
+  [`MovingSofaUniqueness.Maximizing, `MovingSofaUniqueness.MaximizerRoute]
 
 meta def entryPoints : List Name :=
-  [``MovingSofaUniqueness.MaximizerRoute.exists_maximizing_cap,
-   ``MovingSofaUniqueness.MaximizerRoute.isKi_of_maximizes,
+  [``MovingSofaUniqueness.exists_maximizing_cap,
+   ``MovingSofaUniqueness.isKi_of_maximizes,
+   ``MovingSofaUniqueness.maximizing_monotone_has_right_angle,
+   ``MovingSofaUniqueness.Maximizing.gerver_sofa_optimal,
+   ``MovingSofaUniqueness.Maximizing.image_eq_gerver_of_volume_eq,
    ``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_value,
    ``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_eq_gerver,
-   ``MovingSofaUniqueness.MaximizerRoute.maximizing_monotone_has_right_angle,
    ``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizes_iff_translate_gerver,
    ``MovingSofaUniqueness.MaximizerRoute.right_angle_sofaArea_eq_gerver_iff,
-   ``MovingSofaUniqueness.MaximizerRoute.right_angle_optimality_and_rigidity,
    ``MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal,
    ``MovingSofaUniqueness.MaximizerRoute.cap_area_le_gerver,
    ``MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq,

@@ -5,7 +5,9 @@ the problem to caps and then outline the rest of the proof.
 
 \begin{definition}[maximizing cap]\label{def:maximizing}
 Let $\omega\in(0,\pi/2]$. A cap $K\in\Kc_\omega$ is \emph{maximizing} if
-$\cA_\omega(C)\le\cA_\omega(K)$ for every $C\in\Kc_\omega$.
+\[
+  \cA_\omega(C)\le\cA_\omega(K)\quad\text{for every }C\in\Kc_\omega.
+\]
 \end{definition}
 
 By \cref{fact:optimal}, every cap with $\cA_\omega(K)=\abs\Gs$ is maximizing. A
@@ -31,12 +33,14 @@ By \cref{fact:angle}(b), $S'+w$ is in standard position for some $w$, and is a
 moving sofa with rotation angle $\omega$. By
 \cref{fact:monotone}\ref{fact:monotone:envelope}, $T=\cI(S'+w)$ is a moving sofa
 in standard position containing $S'+w$, and it is a monotone sofa. So
-$\abs\Gs=\abs{S'+w}\le\abs{T}\le\abs\Gs$ by \cref{fact:optimal}. By
-\cref{fact:monotone}\ref{fact:monotone:cap}, $K=\cC(T)$ is a cap, and
-\cref{fact:monotone}\ref{fact:monotone:area} gives $T=K\setminus\cN(K)$ and
-$\cA_\omega(K)=\abs{T}=\abs\Gs$; $K$ is maximizing by \cref{fact:optimal}.
-Finally, if $\abs S=\abs\Gs$ then $\abs S>11/5$, so $S$ has a rotation angle
-$\omega\in[\omega_0,\pi/2]$ by \cref{fact:angle}(a).
+\[
+  \abs\Gs=\abs{S'+w}\le\abs{T}\le\abs\Gs,
+\]
+by \cref{fact:optimal}. By \cref{fact:monotone}\ref{fact:monotone:cap},
+$K=\cC(T)$ is a cap, and \cref{fact:monotone}\ref{fact:monotone:area} gives
+$T=K\setminus\cN(K)$ and $\cA_\omega(K)=\abs{T}=\abs\Gs$; $K$ is maximizing by
+\cref{fact:optimal}. Finally, if $\abs S=\abs\Gs$ then $\abs S>11/5$, so $S$ has
+a rotation angle $\omega\in[\omega_0,\pi/2]$ by \cref{fact:angle}(a).
 \end{proof}
 
 So the problem is to show that $S$ is a rigid image of $\Gs$. The proof follows
@@ -56,22 +60,31 @@ is bounded by a multiple of the distance from $K_n$ to $K_*$ at the sampled
 normals, and the weights are chosen so that these bounds add up.
 \item \emph{The right angle} (\cref{sec:right-angle}). If $\omega<\pi/2$, the
 limit of the defect bounds gives the two \emph{pinned bounds}
-$w^\circ_{K_*}\le\sigma_{K_*}(\pi/2)$ and $z^\circ_{K_*}\le\sigma_{K_*}(\omega)$
+\[
+  w^\circ_{K_*}\le\sigma_{K_*}(\pi/2),\qquad
+  z^\circ_{K_*}\le\sigma_{K_*}(\omega),
+\]
 between wedge gaps and side lengths of $K_*$. They give $T$ width at most one in
 the directions $u_t$, $t\in[\omega,\pi/2]$, so that a rotated copy $R_\psi T$,
 $\psi=\pi/2-\omega$, turns by $\pi/2$. Monotonizing $R_\psi T$ gives a monotone
 sofa $U$ with rotation angle $\pi/2$ and $\abs U=\abs\Gs$ that contains a rigid
 image of $S$.
 \item \emph{Injectivity} (\cref{sec:injectivity}). For the cap $K$ of $U$, the
-defect bounds become the curvature bounds $\sigma_K\le k_0(g_K^+(t))\dd t$ on
-$[0,\pi/2)$ and $\sigma_K\le k_0(f_K^-(t-\pi/2))\dd t$ on $(\pi/2,\pi]$, and
-Baek's iteration gives the injectivity condition.
+defect bounds become the curvature bounds
+\begin{alignat*}{2}
+  \sigma_K&\le k_0(g_K^+(t))\dd t&\quad&\text{on }[0,\pi/2),\\
+  \sigma_K&\le k_0(f_K^-(t-\pi/2))\dd t&&\text{on }(\pi/2,\pi],
+\end{alignat*}
+and Baek's iteration gives the injectivity condition.
 \item \emph{Equality} (\cref{sec:equality}). Then
-$\abs\Gs=\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs$, and equality in the concave
-functional $\cQ$ forces equality in each Mamikon term, a convex integral
-$\frac12\int\varrho^2$. This gives differential equations for the difference of
-the support functions of $K$ and of Gerver's cap, whose solutions make $K$ a
-horizontal translate of Gerver's cap and $U$ a horizontal translate of $\Gs$.
+\[
+  \abs\Gs=\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs,
+\]
+and equality in the concave functional $\cQ$ forces equality in each Mamikon
+term, a convex integral $\frac12\int\varrho^2$. This gives differential
+equations for the difference of the support functions of $K$ and of Gerver's
+cap, whose solutions make $K$ a horizontal translate of Gerver's cap and $U$ a
+horizontal translate of $\Gs$.
 \item \emph{Recovery} (\cref{sec:recovery}). A closed subset of $\Gs$ with the
 area of $\Gs$ is $\Gs$, since $\Gs$ is the closure of its interior.
 \end{enumerate}

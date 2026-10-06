@@ -2,7 +2,8 @@
 
 [Back to the README](../README.md)
 
-The project has four libraries, one per result, and the files of the Palomar registry at its root.
+The project has five libraries, one per result and one for the coercive route, and the files of the Palomar
+registry at its root.
 
 | Path | Contents |
 | --- | --- |
@@ -10,14 +11,17 @@ The project has four libraries, one per result, and the files of the Palomar reg
 | [`MovingSofaUniqueness/`](../MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions |
 | [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
 | [`MovingSofaStability/`](../MovingSofaStability) | the stability of Gerver's sofa, with Baek's definitions, and the punctured sofas that show its exponent is optimal |
+| [`MovingSofaExtremal/`](../MovingSofaExtremal) | the coercive route: optimality and uniqueness from one certificate of the stability proof |
 | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
-| [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configuration and the Palomar metadata |
+| [`SolutionCoercive.lean`](../SolutionCoercive.lean) | the statements of record proved again through the coercive route |
+| [`SolutionCoerciveComparator.lean`](../SolutionCoerciveComparator.lean) | the theorems of [`SolutionCoercive.lean`](../SolutionCoercive.lean) under the Challenge's names, for Comparator; no module imports it |
+| [`comparator.json`](../comparator.json), [`comparator-coercive.json`](../comparator-coercive.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configurations for the two solutions, and the Palomar metadata |
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
-| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, ChatGPT Pro's notes, and the notes of the stability pull request |
+| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, and ChatGPT Pro 6's notes on the uniqueness, the stability and the coercive route |
 | [`scripts/`](../scripts) | the axiom audits, the generators of two Lean files, the figures, and the documentation tools |
 
 ### `MovingSofaOptimality/`: Baek's paper
@@ -60,7 +64,8 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 
 | Module | Content |
 | --- | --- |
-| [`MovingSofaUniqueness/Rigid.lean`](../MovingSofaUniqueness/Rigid.lean) | rigid maps, and the recovery of a closed set from a regular closed superset of the same area |
+| [`MovingSofaUniqueness/Rigid.lean`](../MovingSofaUniqueness/Rigid.lean) | rigid maps, the recovery of a closed set from a regular closed superset of the same area, moving sofas in a strip of height one, and horizontal translates of caps, niches and sofas |
+| [`MovingSofaUniqueness/Mamikon.lean`](../MovingSofaUniqueness/Mamikon.lean) | square integrals and Mamikon displacements, the canonical triple of a cap of `𝒦^i` and Baek's maximum of `𝒬` (shared with the stability library) |
 | [`MovingSofaUniqueness/Selection.lean`](../MovingSofaUniqueness/Selection.lean) | Proposition 1: polygon caps converging to a given maximizing cap |
 | [`MovingSofaUniqueness/Variation.lean`](../MovingSofaUniqueness/Variation.lean) | Proposition 2 and the bounds (19): variations of the selected polygons and their limits |
 | [`MovingSofaUniqueness/Curvature.lean`](../MovingSofaUniqueness/Curvature.lean) | Proposition 3: curvature bounds and the injectivity condition for every maximizing right-angle cap |
@@ -69,15 +74,13 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 | [`MovingSofaUniqueness/RegularClosed.lean`](../MovingSofaUniqueness/RegularClosed.lean) | Proposition 6: Gerver's sofa is the closure of its interior |
 | [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean) | the theorem |
 
-Three more modules give a second proof of Baek's optimality theorem, which does not use Baek's Theorem 1.1.1, and
-prove the theorem again from it (Section 8.4 of the [manuscript](paper/README.md)); their declarations are in the
-namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
+Two more modules give a second proof of Baek's optimality theorem, which does not use Baek's Theorem 1.1.1, and
+prove the theorem again from it (a remark at the end of Section 8 of the [manuscript](paper/README.md)); they do not import `Main`:
 
 | Module | Content |
 | --- | --- |
-| [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean) | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap; the right-angle motion of the sofa of a maximizing cap |
-| [`MovingSofaUniqueness/Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) | Baek's optimality theorem from the maximizing caps |
-| [`MovingSofaUniqueness/Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) | the theorem again, from the second proof of optimality |
+| [`MovingSofaUniqueness/Maximizing.lean`](../MovingSofaUniqueness/Maximizing.lean) | maximizing caps (existence, the injectivity condition at the right angle, the right-angle motion), and the assembly that turns the value and the shape of the maximizing right-angle caps into optimality and uniqueness; the coercive route uses it too |
+| [`MovingSofaUniqueness/MaximizerRoute.lean`](../MovingSofaUniqueness/MaximizerRoute.lean) | the value of the maximizing right-angle caps from Baek's bound, their shape from the equality analysis of `Rigidity`, and the second proof of optimality and the theorem from them (namespace [`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)) |
 
 ### `MovingSofaBridge/`: the bridge to formal-conjectures
 
@@ -94,17 +97,31 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 
 [Stability](stability.md) describes the theorems and the proof. The modules, by step of the proof:
 
-| Modules | Content |
+| Module | Content |
 | --- | --- |
-| `EuclideanGeometry`, `Statement`, `All` | Euclidean distance between sets, the statements, and the module that imports all the others |
-| `QuadraticDeficit`, `MamikonEnergy`, `BaekDeficit`, `WideDomain`, `CBVAlgebra`, `ArcAtoms`, `NonsmoothBookkeeping`, `NonsmoothAffinity`, `WideConcavity`, `MixedArea`, `ReferenceCoreVariation`, `WideFirstVariation`, `WideGerverCertificate`, `WideResidualEnergy` | the deficit of Baek's bound 𝒬 on an enlarged domain of caps with corners: a dual slack plus six squared Mamikon differences |
-| `IntegralEstimates`, `Residuals`, `ODEReconstruction`, `ResidualIntegrability`, `ResidualMass`, `ResidualPropagation`, `FourArcCoercivity`, `CapCoercivity`, `SupportDistance`, `CapDistance` | from the energies to the support function of the cap and the Euclidean distance between caps, with coefficient 80 |
-| `GreenNorm`, `SharpIntegralControl`, `TrigKernelIntegrals`, `SharpReconstruction`, `SharpKernelNorms`, `SharpEvaluation`, `SharpCapDistance` | the same with coefficient 2 sec φ, by the exact kernel integrals |
-| `ExposedFaceStability`, `LocalArmMargins`, `CoreMonotonicity`, `UniformGeometryBounds`, `AngularFaceStability`, `NicheFeet`, `NicheContainment`, `CapWidthGeometry`, `CanonicalContacts`, `CanonicalTriple`, `CornerAnalysis`, `CoreGraph`, `CoreIntegral`, `CutSeparation`, `SeparatedWedges`, `CoreRegionGeometry`, `CoreAreaBound`, `LocalUpperBound` | Baek's area bound for the caps near Gerver's, without the injectivity condition |
-| `TerminalBookkeeping`, `FloorCoverage`, `PartialHallways`, `OmittedWedgeArea`, `TerminalFloor`, `TerminalComparison` | a missing final angle costs area |
-| `CapShape`, `MissingAreaRecovery`, `InteriorBalls`, `EpigraphBalls`, `CurveRoof`, `EnvelopeSlope`, `RoofGeometry`, `GerverRoof`, `RoofMargins`, `EnvelopeSlack`, `GerverMargins`, `SofaCoordinates`, `SofaCap`, `LocalSofaRecovery`, `ConvexParallelArea`, `SymmetricDifference` | from the cap back to the sofa: the sofa's cap, Gerver's roof and interior balls, the Euclidean distance and the symmetric difference |
-| `CompactSetLimits`, `SofaBounds`, `SofaLimitMotion`, `QualitativeEntry`, `GlobalStability` | entry into the neighborhood by compactness, and the main theorems |
-| `PunctureTopology`, `EuclideanDisks`, `PunctureMetric`, `RigidInterior`, `PuncturedSofa`, `SharpExponent` | the punctured sofas: the exponent one half is optimal |
+| [`MovingSofaStability/Basic.lean`](../MovingSofaStability/Basic.lean) | Euclidean distance between sets, the deficit, the normalization and the statements |
+| [`MovingSofaStability/WideDomain.lean`](../MovingSofaStability/WideDomain.lean) | Baek's bound `𝒬` on the enlarged domain of caps with corners, and its concavity there |
+| [`MovingSofaStability/Deficit.lean`](../MovingSofaStability/Deficit.lean) | the first variation at Gerver's triple, which makes it the maximum, and the deficit as a slack plus squared Mamikon differences |
+| [`MovingSofaStability/CapEstimate.lean`](../MovingSofaStability/CapEstimate.lean) | from the energies to the support function of the cap and the Euclidean distance between caps, with coefficient 2 sec φ; the coercive certificate |
+| [`MovingSofaStability/Margins.lean`](../MovingSofaStability/Margins.lean) | the shape of a cap, interior balls, and the roof and margins of Gerver's sofa |
+| [`MovingSofaStability/LocalGeometry.lean`](../MovingSofaStability/LocalGeometry.lean) | exposed faces, arm margins, the niche and the canonical triple of a cap near Gerver's |
+| [`MovingSofaStability/LocalBound.lean`](../MovingSofaStability/LocalBound.lean) | Baek's area bound for the caps near Gerver's, without the injectivity condition, and their distance to Gerver's cap |
+| [`MovingSofaStability/Terminal.lean`](../MovingSofaStability/Terminal.lean) | a missing final angle costs area |
+| [`MovingSofaStability/Recovery.lean`](../MovingSofaStability/Recovery.lean) | from the cap back to the sofa: the sofa's cap, the Euclidean distance and the symmetric difference |
+| [`MovingSofaStability/Global.lean`](../MovingSofaStability/Global.lean) | entry into the neighborhood by compactness, and the main theorems |
+| [`MovingSofaStability/Sharpness.lean`](../MovingSofaStability/Sharpness.lean) | the punctured sofas: the exponent one half is optimal |
+| [`MovingSofaStability/All.lean`](../MovingSofaStability/All.lean) | imports all the others |
+
+### `MovingSofaExtremal/`: the coercive route
+
+[The coercive route](coercive.md) describes the theorems and the proof. The library imports the stability library up to
+`CapEstimate`, and the stability library's `Recovery` and `Global` import its `Main`:
+
+| Module | Content |
+| --- | --- |
+| [`MovingSofaExtremal/Main.lean`](../MovingSofaExtremal/Main.lean) | the value and the shape of the maximizing right-angle caps from the coercive certificate, and optimality and uniqueness from them, through the assembly of [`MovingSofaUniqueness/Maximizing.lean`](../MovingSofaUniqueness/Maximizing.lean) |
+| [`MovingSofaExtremal/Unified.lean`](../MovingSofaExtremal/Unified.lean) | optimality, uniqueness and stability in one theorem |
+| [`MovingSofaExtremal/All.lean`](../MovingSofaExtremal/All.lean) | imports all the others |
 
 ### `scripts/`
 
@@ -112,6 +129,7 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
 | [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
+| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the coercive route and the stability library use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves exactly the statements of [`Solution.lean`](../Solution.lean) |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |

@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "Optimality (Baek 2024) and uniqueness of Gerver's sofa, formalized in Lean 4"
+  name: "Optimality (Baek 2024), uniqueness and stability of Gerver's sofa, formalized in Lean 4"
   # The description is shown as plain text that keeps line breaks. Its paragraphs are separated by
   # two empty lines, which this folded block turns into one empty line.
   description: >-
@@ -18,6 +18,13 @@ project:
     It also proves that Gerver's sofa is the only moving sofa of maximum area up to rigid motions: a
     rotation followed by a translation maps every moving sofa of that area onto Gerver's sofa. Baek's
     paper does not prove this.
+
+
+    It proves that Gerver's sofa is stable: after a translation, a moving sofa whose area is epsilon
+    less than Gerver's lies within Euclidean Hausdorff distance C sqrt(epsilon) of Gerver's sofa, the
+    area of their symmetric difference is at most C' sqrt(epsilon), and its rotation angle misses a
+    right angle by at most C'' epsilon. The exponent 1/2 cannot be improved: Gerver's sofa minus a
+    small disk shows it. Baek's paper does not prove this either.
 
 
     Finally, it bridges Baek's definitions and those of Google DeepMind's formal-conjectures: the two
@@ -61,6 +68,32 @@ sources:
       does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
       its six propositions; docs/proof/ (Chapters 11 and 12) gives the proof with the Lean form of
       each step and the places where the formal proof takes a different route.
+    author_endorsement: n/a
+  - title: "Stability of Gerver's sofa: notes"
+    id: "docs/archive/stability/"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/tree/a8f7719fd43fa91b223d9f6c0eb53594e5a95716/docs/archive/stability"
+    relationship: formalizes
+    note: >-
+      Notes 01-09 on the stability of Gerver's sofa, written by ChatGPT Pro 6 (OpenAI) on 2026-10-05
+      at the request of The-Anh Vu-Le, with uncompiled Lean code for them, in pull request #8; they
+      are kept as they were in docs/archive/stability/. Notes 08, 05, 06 and 07 prove the stability
+      theorem, note 01 the cap estimate with coefficient 2 sec phi, and note 09 that the exponent 1/2
+      is optimal. They have not been peer reviewed. The formalization (MovingSofaStability/) proves
+      their theorems; docs/stability.md describes it.
+    author_endorsement: n/a
+  - title: "The coercive route: notes"
+    id: "docs/archive/coercive/"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/tree/8042bad7eb08037f773ea03a635d10ff203e57de/docs/coercive-extremal"
+    relationship: formalizes
+    note: >-
+      Notes on a proof of optimality and uniqueness from the certificate of the stability proof,
+      written by ChatGPT Pro 6 (OpenAI) on 2026-10-05 at the request of The-Anh Vu-Le, with
+      uncompiled Lean code for them, in pull request #9; they are kept as they were in
+      docs/archive/coercive/. They have not been peer reviewed. The formalization
+      (MovingSofaExtremal/, SolutionCoercive.lean) proves their theorems and moves the stability
+      proof onto the route; docs/coercive.md describes it.
     author_endorsement: n/a
   - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
     authors:
@@ -152,7 +185,16 @@ status:
     and the remarks and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
     motions (MovingSofaUniqueness/), with the theorem and the six propositions of
     docs/archive/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
-    estimate of note 17, which the theorem does not use. Also formalized: the bridge between
+    estimate of note 17, which the theorem does not use. Also formalized: the stability of Gerver's
+    sofa (MovingSofaStability/), with the theorems of notes 08, 01 and 09 of docs/archive/stability/:
+    the rate sqrt(epsilon) for the Euclidean Hausdorff distance and the symmetric difference after a
+    translation, the rate epsilon for the rotation angle, the cap estimate with coefficient 2 sec phi,
+    and the optimality of the exponent 1/2. Also formalized: a proof of the optimality and of the
+    uniqueness from one estimate of the stability proof (MovingSofaExtremal/, docs/archive/coercive/),
+    which uses neither Baek's Theorem 1.1.1 nor the results of his balance argument nor the first
+    proof of uniqueness, and from which the stability proof now takes its uniqueness; a second
+    solution (SolutionCoercive.lean) proves the fifteen statements of the Challenge through it. Also
+    formalized: the bridge between
     formal-conjectures' definitions and Baek's (MovingSofaBridge/): the two notions of moving sofa,
     the two optimal areas and the two Gerver's sofas agree, and Gerver's four constants are unique on
     their whole domain; formal-conjectures' four statements follow.
@@ -203,7 +245,23 @@ automation:
         sub-agents, one at a time, wrote the report's What's next section from a literature search,
         moved the run log to CREDITS.md, added to the audit the twelve findings of another
         formalization's notes that it had missed, and restored two statements (Lemma 7.1.6, Theorem
-        8.4.1 (4)) that were weaker than the paper's.
+        8.4.1 (4)) that were weaker than the paper's. Stability: Claude Code 2.1.289, with version
+        2.1.0 of the skill, compiled ChatGPT Pro 6's 85 Lean modules (pull request #8): every
+        statement was made to elaborate, the 123 proofs that failed were proved again by 16
+        sub-agents starting from the draft's proofs, and a seventeenth compared every repaired proof
+        with the draft's. Twenty lemmas were false as compiled, because Lean 4 leaves out of a
+        statement the section variables it does not mention; their hypotheses are now included.
+        The Challenge then gained the three stability theorems. The coercive route: the same session
+        compiled ChatGPT Pro 6's Lean modules of pull request #9 (one proof failed), moved the
+        stability proof onto the route, stated the certificate and the theorem that gives the three
+        results together, extended the second solution to the fifteen statements, and rewrote and
+        ran its audit (scripts/AuditCoerciveRoute.lean, in CI). Simplifying the new libraries: the
+        same session gave the two new proofs of optimality one shared assembly, merged the 86 files
+        of the stability library into eleven modules and removed the declarations that no theorem
+        uses; 8 sub-agents (at most 8 running at once), each on its own copy of the build, then
+        rewrote the modules, keeping the name and statement of every declaration used elsewhere.
+        The stability library went from 12,550 to 7,585 lines; Baek's library, the bridge, the
+        Challenge and the proofs of Solution.lean did not change.
       cost:
         wall_time: >-
           Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
@@ -217,7 +275,15 @@ automation:
           15:45), with about 12.5 hours of sub-agent working time. Following Baek's proofs: about
           4 hours 15 minutes (2026-10-03 16:30 to 20:45), with about 6.3 hours of sub-agent working
           time. What's next: about 1 hour 6 minutes (2026-10-03 20:46 to 21:52), with about 0.8 hours of
-          sub-agent working time. CREDITS.md gives the figures of each round
+          sub-agent working time. Stability: about 1 hour (2026-10-05 22:17 to 23:13), with about 2.3
+          hours of sub-agent working time. The coercive route, with the manuscript's section on it: about
+          3 hours 26 minutes (2026-10-06 09:56 to 13:22), with about 3.8 hours of sub-agent working time.
+          Simplifying the new libraries, with the manuscript's revision: about 2 hours 44 minutes
+          (2026-10-06 13:25 to 16:09), with about 7.1 hours of sub-agent working time. Comparator for
+          the second solution, and the manuscript reorganized: about 45 minutes (2026-10-06 16:13 to
+          16:58), with about 0.4 hours of sub-agent working time. The manuscript's readability: about
+          51 minutes (2026-10-06 16:59 to 17:50), with about 3.1 hours of sub-agent working time.
+          CREDITS.md gives the figures of each round
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
@@ -236,7 +302,10 @@ automation:
         one instruction: after the skill gained rules requiring the proofs to follow the paper's and
         every departure to be reported, bring this formalization in line with them. For What's next,
         two approvals: to run Palomar's preflight, and to bring the formalization in line with the
-        skill's later versions.
+        skill's later versions. For the stability, one instruction to incorporate pull request #8,
+        then approvals to state its theorems in the Challenge and in the manuscript. For the
+        coercive route, one instruction to integrate pull request #9 so that one theorem proves
+        optimality, uniqueness and stability.
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
@@ -245,19 +314,26 @@ automation:
         without a Lean compiler, and a draft of the connection with formal-conjectures' definitions,
         in pull request #1 (151 commits on 2026-10-02, 15:01 to 22:43 US Central Time). The draft's
         statements compiled after porting; 54 proofs of the uniqueness draft and 78 of the connection
-        did not.
+        did not. On 2026-10-05 it wrote the Lean modules of a second proof of optimality (pull request
+        #5), which compiled without change, and the stability argument (docs/archive/stability/) with
+        85 Lean modules (pull request #8), of which 123 proofs did not compile and twenty statements
+        had lost their hypotheses, and the coercive route (pull request #9: 7 Lean modules, a second
+        solution and an audit), of which one proof did not compile.
       cost:
-        wall_time: "about 7 hours 40 minutes between the first and the last commit used here"
+        wall_time: "about 7 hours 40 minutes between the first and the last commit of pull request #1"
         spend_usd: "not tracked"
   spend_usd: "not tracked"
   notes: >-
     The Lean code of Baek's paper, the numerical verification scripts and the audit were written by
     Claude Opus 5.5 in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this
     repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro 6, and
-    Claude Opus 5.5 made the draft compile and completed it.
+    Claude Opus 5.5 made the draft compile and completed it; the same holds for the stability
+    argument and for the coercive route, with their Lean code.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
-    pair.
+    pair; a second configuration (comparator-coercive.json) checks the second solution,
+    SolutionCoercive.lean, against the same Challenge, through SolutionCoerciveComparator.lean, which
+    states its theorems under the Challenge's names.
 
 fidelity:
   divergences: >-
@@ -329,12 +405,19 @@ fidelity:
     library that declares it, and Comparator compares constants by name). Its theorems are stated
     after its definitions instead of between them. The Challenge adds three theorems, in the
     namespace Bridge, that relate its definitions to Baek's.
+    (8) The stability: the Euclidean Hausdorff distance of note 08 is stated as EuclideanClose (every
+    point of each set within the given distance of a point of the other), which is the same for
+    nonempty compact sets; its normalization h(pi/2) = 1, h(pi) = h_G(pi) is stated in the Challenge
+    with the highest and leftmost points, and Solution.lean proves that the two agree. The angle
+    theorem is stated for rotation angles in [arccos(5/11), pi/2], which Baek's Theorem 1.5.1 provides.
+    The proofs follow the notes' arguments as written in pull request #8's Lean code.
 
 review:
   status: "agent-reviewed"
   reviewers:
     - "Claude Opus 5.5 sub-agents, separate from the proving agents: a statement-fidelity review against the LaTeX source, and an audit of the paper's findings against the LaTeX source"
     - "A Claude Opus 5.5 sub-agent, separate from the proving agents: a review of the uniqueness statements against the informal proof"
+    - "A Claude Opus 5.5 sub-agent, separate from the repairing agents: a comparison of every repaired stability proof with the uncompiled draft's"
   notes: >-
     No human has reviewed the proofs, the statements or the audit. Before any proof was written, a
     separate agent reviewed every statement against the paper's LaTeX source. Every statement change
@@ -391,6 +474,31 @@ alignment:
         Every moving sofa whose area equals that of Gerver's sofa is mapped onto Gerver's sofa, as a
         set, by a rotation about the origin followed by a translation. With gerver_sofa_optimal, the
         moving sofas of maximum area are exactly the moving sofas congruent to Gerver's sofa.
+    - source: "Stability, docs/archive/stability/08-unrestricted-theorem.md, Theorem (1) (not a result of Baek's paper)"
+      lean: "Baek.gerver_sofa_stable"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        There are constants C, C', epsilon_0 > 0 such that every moving sofa S whose area is epsilon <
+        epsilon_0 less than Gerver's, translated so that its highest point has height 1 and its
+        leftmost point the abscissa of Gerver's, lies within Euclidean Hausdorff distance
+        C sqrt(epsilon) of Gerver's sofa, and the symmetric difference of the two has area at most
+        C' sqrt(epsilon).
+    - source: "Stability of the rotation angle, docs/archive/stability/08-unrestricted-theorem.md, Theorem (3)"
+      lean: "Baek.gerver_sofa_angle_stable"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        A moving sofa of deficit epsilon < epsilon_0 whose motion turns it clockwise by an angle omega in
+        [arccos(5/11), pi/2] has pi/2 - omega <= C epsilon.
+    - source: "Optimality of the exponent, docs/archive/stability/09-sharp-exponent.md"
+      lean: "Baek.gerver_sofa_stability_exponent"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        For every a > 1/2, C and epsilon_0 > 0, some moving sofa of deficit epsilon in (0, epsilon_0)
+        lies within Euclidean Hausdorff distance C epsilon^a of no image of Gerver's sofa by a rotation
+        and a translation (Gerver's sofa minus a small open disk).
     - source: "The correspondence between formal-conjectures' moving sofas and Baek's"
       lean: "Bridge.isMovingSofa_iff"
       module: "Challenge"

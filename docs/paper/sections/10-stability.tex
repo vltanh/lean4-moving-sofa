@@ -1,0 +1,1447 @@
+\section{Stability}\label{sec:stability}
+
+This section proves that a moving sofa whose area is close to $\abs\Gs$ is,
+after a translation, close to $\Gs$, at the rate of the square root of the
+missing area, and that this rate is optimal. As in \cref{sec:equality},
+$\varphi$ is Gerver's angle, $\KG$ is Gerver's cap and $\cA=\cA_{\pi/2}$. The
+\emph{deficit} of a set $S$ of finite area is
+\[
+  \eps(S)=\abs\Gs-\abs S,
+\]
+which is nonnegative for moving sofas by Baek's theorem (\cref{fact:optimal});
+the proofs below take this inequality from
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}, which proves it
+again in \cref{sec:unified}. Two sets
+$X,Y\subset\R^2$ are \emph{$r$-close} if every point of each lies within
+Euclidean distance $r$ of a point of the other; for nonempty compact sets, this
+means that their Hausdorff distance is at most $r$. For a nonempty compact set
+$S$, let $h_S(t)=\max_{p\in S}\ip p{u_t}$. The \emph{normalized} translate
+\[
+  S^\natural=S+\bigl(h_S(\pi)-h_\Gs(\pi),1-h_S(\pi/2)\bigr)
+\]
+has $h_{S^\natural}(\pi/2)=1$ and $h_{S^\natural}(\pi)=h_\Gs(\pi)$, and $S$ is
+\emph{normalized} if $S^\natural=S$. Let
+\[
+  X\triangle Y=(X\setminus Y)\cup(Y\setminus X)
+\]
+be the symmetric difference.
+
+\begin{theorem}[stability of Gerver's sofa]\label{thm:stability}
+There are $C,C',\eps_0>0$ such that for every moving sofa $S$ with
+$\eps=\eps(S)<\eps_0$, the sets $S^\natural$ and $\Gs$ are
+$C\sqrt\eps$-close, and $\abs{S^\natural\triangle\Gs}\le C'\sqrt\eps$.
+\end{theorem}
+
+\begin{theorem}[the rotation angle]\label{thm:stability-angle}
+There are $C'',\eps_0>0$ such that every moving sofa $S$ with rotation angle
+$\omega\in[\omega_0,\pi/2]$ and $\eps(S)<\eps_0$ satisfies
+$0\le\pi/2-\omega\le C''\eps(S)$.
+\end{theorem}
+
+A \emph{rigid motion} is a map $g(p)=R_\vartheta p+v$. For nonempty compact
+sets $X,Y$, $d_{\mathrm{rig}}(X,Y)$ is the infimum of the $d\ge0$ for which
+$X$ and $g(Y)$ are $d$-close for some rigid motion $g$. Let $\mathbb B(p,r)$
+and $\mathbb B^\circ(p,r)$ be the closed and the open disk of radius $r$ about
+$p$.
+
+\begin{theorem}[the exponent $1/2$ is optimal]\label{thm:stability-exponent}
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:stability-exponent:family} There are a point $p$ and $r_0>0$
+such that for every $r\in(0,r_0)$ the set $\Gs_r=\Gs\setminus\mathbb
+B^\circ(p,r)$ is a moving sofa with $\eps(\Gs_r)=\pi r^2$ and
+$d_{\mathrm{rig}}(\Gs_r,\Gs)=r$. Moreover, $\Gs_r$ and $\Gs$ are $r$-close,
+and $r\le d$ whenever $\Gs_r$ and $g(\Gs)$ are $d$-close for a rigid motion
+$g$.
+\item\label{thm:stability-exponent:no} Let $a>1/2$, $C\in\R$ and $\eps_0>0$.
+There is a moving sofa $S$ with $0<\eps(S)<\eps_0$ such that $S$ and $g(\Gs)$
+are $C\eps(S)^a$-close for no rigid motion $g$.
+\item\label{thm:stability-exponent:rig} For the same $a$, $C$ and $\eps_0$,
+there is a moving sofa $S'$ with $0<\eps(S')<\eps_0$ and
+$C\eps(S')^a<d_{\mathrm{rig}}(S',\Gs)$.
+\end{enumerate}
+\end{theorem}
+
+Baek's functional $\cQ$ is given by a formula \baek{Def.~8.2.2}: for convex
+bodies $K$, $B$ and $D$,
+\begin{multline}\label{eq:stab-Q}
+  \cQ(K,B,D)=\abs K
+  +\tfrac12\int_{(3\pi/2,\,3\pi/2+\varphi^{\mathrm L})}h_D\dd\sigma_D
+  +\mathcal J\bigl([Y_D,\xx_K(\varphi^{\mathrm L})]\bigr)\\
+  -\mathcal J\bigl(\xx_K|_{[\varphi^{\mathrm R},\varphi^{\mathrm L}]}\bigr)
+  +\mathcal J\bigl([\xx_K(\varphi^{\mathrm R}),X_B]\bigr)
+  +\tfrac12\int_{(\pi+\varphi^{\mathrm R},\,3\pi/2)}h_B\dd\sigma_B ,
+\end{multline}
+where
+\[
+  X_B=v_B^+(\pi+\varphi^{\mathrm R}),\qquad
+  Y_D=v_D^-(3\pi/2+\varphi^{\mathrm L})\qquad\text{and}\qquad
+  \mathcal J([p,q])=\frac12\,p\times q;
+\]
+the integrals are the curve areas of two arcs of the boundaries of $D$ and $B$
+\baek{Thm.~7.3.2}. Let $\bar\cT$ be defined as $\cT$ (\cref{sec:Q}), with
+$K\in\Kc_{\pi/2}$ in place of $K\in\Ki$; by \cref{lem:stab-variation} below,
+$\cQ\le\abs\Gs$ on $\bar\cT$. For $K\in\Kc_{\pi/2}$ let
+\[
+  s_K=h_{\KG}(\pi)-h_K(\pi),
+\]
+so that $K$ and $\KG+(s_K,0)$ have the same leftmost abscissa.
+
+\begin{theorem}[the cap estimate]\label{thm:stability-cap}
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:stability-cap:wide} For every $\xi=(K,B,D)\in\bar\cT$, the
+caps $K$ and $\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi)}$-close.
+\item\label{thm:stability-cap:ki} For every $K\in\Ki$, the caps $K$ and
+$\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cA(K)}$-close.
+\item\label{thm:stability-cap:num} $2\sec\varphi\le2500/1249<1001/500$, so
+\ref{thm:stability-cap:wide} and \ref{thm:stability-cap:ki} hold with
+$1001/500$ in place of $2\sec\varphi$.
+\end{enumerate}
+\end{theorem}
+
+\Cref{sec:stab-certificate,sec:stab-cap} prove \cref{thm:stability-cap}, and
+the proofs of \cref{thm:stability,thm:stability-angle} use its bound with
+$2\sec\varphi$ through \cref{thm:certificate}. Near
+$\KG$, Baek's bound $\cA(K)\le\cQ(\xi_K)$ holds without the injectivity
+condition (\cref{sec:stab-local}), and a rotation angle $\omega<\pi/2$ costs
+area proportional to $\pi/2-\omega$ (\cref{sec:stab-angle}).
+\Cref{sec:stab-recovery} passes from the cap back to the sofa, and a compactness
+argument, which uses the optimality and uniqueness theorems of
+\cref{sec:unified}, brings the normalized translate of every moving sofa of
+small deficit near $\Gs$ (\cref{sec:stab-entry}); this proves
+\cref{thm:stability,thm:stability-angle}. \Cref{sec:unified-stability} shows
+that this is not circular. \Cref{sec:stab-puncture} removes small disks from
+$\Gs$ to prove \cref{thm:stability-exponent}.
+
+\subsection{The deficit of \texorpdfstring{$\cQ$}{Q} on
+\texorpdfstring{$\bar\cT$}{the enlarged domain}}\label{sec:stab-certificate}
+
+Let $\mathcal D$ be a set closed under the Minkowski combinations $c_\lambda$
+(\cref{sec:Q}). A functional $\Psi$ on $\mathcal D$ is \emph{quadratic} if
+\[
+  \Psi(x)=\beta(x,x)
+\]
+with $\beta$ convex-linear in each argument; its
+\emph{directional derivative} $D\Psi(x;y)$ is the right derivative of
+$\lambda\mapsto\Psi(c_\lambda(x,y))$ at $0$ \baek{Def.~7.1.4, Def.~7.1.5}.
+Baek shows that
+\[
+  D\Psi(x;y)=\beta(x,y)+\beta(y,x)-2\beta(x,x),
+\]
+and that a quadratic concave $\Psi$ is largest at $x$ if and only if
+$D\Psi(x;y)\le0$ for all $y$ \baek{Lemma~7.1.4, Thm.~7.1.5}. Let
+\[
+  E_\Psi(x,y)=4\Psi(c_{1/2}(x,y))-2\Psi(x)-2\Psi(y).
+\]
+As $\beta$ is convex-linear in each argument,
+\[
+  E_\Psi(x,y)=\beta(x,y)+\beta(y,x)-\beta(x,x)-\beta(y,y),
+\]
+and Baek's formula for $D\Psi$ gives
+\begin{equation}\label{eq:stab-segment}
+  \Psi(x)-\Psi(y)=-D\Psi(x;y)+E_\Psi(x,y).
+\end{equation}
+For a convex body $K$ and a curve $\mathbf z$ as in \cref{sec:Q}, we call
+$\varrho_{K,\mathbf z}$ the \emph{displacement} of $\mathbf z$. For convex
+bodies $K_0,K_1$, the \emph{energy} $E_\cS(K_0,K_1)$ is the sum, over the four
+terms $\cM_K(a,b;\mathbf z_K)$ of $\cS_K$, of
+\[
+  \frac12\int_a^b(\varrho_{K_0,\mathbf z_{K_0}}-\varrho_{K_1,\mathbf z_{K_1}})^2
+  \dd t,
+\]
+and the energies $E_\cR(B_0,B_1)$ and $E_\cL(D_0,D_1)$ are defined likewise. As
+the curves of these terms are convex-linear in the body
+(\cref{fact:Q}\ref{fact:Q:decomp}), \eqref{eq:gap} gives, for all convex bodies
+and $\lambda\in[0,1]$,
+\begin{equation}\label{eq:stab-gap}
+  (1-\lambda)\cS_{K_0}+\lambda\cS_{K_1}-\cS_{(1-\lambda)K_0+\lambda K_1}
+    =\lambda(1-\lambda)E_\cS(K_0,K_1),
+\end{equation}
+and likewise for $\cR$ and $\cL$. Let $I=[\varphi,\pi/2-\varphi]$.
+
+\begin{lemma}[$\cQ$ on $\bar\cT$]\label{lem:stab-wide}
+$\bar\cT$ is closed under Minkowski combinations. On $\bar\cT$,
+\[
+  \cQ(K,B,D)=\Lambda(K)-\cS_K-\cR_B-\cL_D,
+\]
+where $\Lambda$, Baek's $\cP_K+\cS_K$ (\cref{fact:Q}\ref{fact:Q:decomp}), is
+convex-linear on $\Kc_{\pi/2}$, and $\cQ$ is quadratic and concave.
+\end{lemma}
+
+\begin{proof}
+Support functions of Minkowski combinations are the same combinations of the
+support functions, so $\bar\cT$ is closed under them. Baek's proof of the
+decomposition in \cref{fact:Q}\ref{fact:Q:decomp} \baek{Lemma~8.3.4} uses only
+the equalities at the ends of the intervals, so it holds on $\bar\cT$. On
+$\Kc_{\pi/2}$, $\abs K$ is the sum of the curve areas of the four arcs of
+$\cS_K$ and of the areas $\frac12\sigma_K(t)h_K(t)$ of the triangles spanned by
+$O$ and the edges $e_K(t)$, $t=0,\varphi,\pi/2-\varphi,\pi/2,\pi$. Each edge
+lies on the supporting line that carries the adjacent end segments
+$[v_K^+(a),\mathbf z(a)]$ and $[\mathbf z(b),v_K^-(b)]$ of the Mamikon terms.
+In $\cS_K+\cP_K$ \baek{Def.~8.3.4}, the curve areas of the arcs cancel against
+$\abs K$, and what remains are $\mathcal J(\yy_K|_I)$, $-\mathcal J(\xx_K|_I)$,
+the triangles of the edges and curve areas of segments on the five lines
+$l_K(t)$, $t=0,\varphi,\pi/2-\varphi,\pi/2,\pi$. Joining the collinear pieces
+on each of these lines gives, with $W_K$ and $Z_K$ as in
+\cref{sec:pinned-bounds},
+\begin{multline*}
+  \Lambda(K)=h_K(0)+h_K(\pi)
+  +\frac{2\sin\varphi-h_K(\varphi)-h_K(\pi-\varphi)}{2\cos\varphi}\\
+  +\mathcal J(\yy_K|_I)-\mathcal J(\xx_K|_I)+\varsigma_K ,
+\end{multline*}
+where
+\begin{multline*}
+  \varsigma_K=\mathcal J([\mathbf l^{\pi/2}_K(\varphi),\yy_K(\varphi)])
+    -\mathcal J([W_K(\varphi),\xx_K(\varphi)])\\
+  -\mathcal J([\mathbf l^{\pi-\varphi}_K(\pi/2),\yy_K(\pi/2-\varphi)])
+    +\mathcal J([Z_K(\pi/2-\varphi),\xx_K(\pi/2-\varphi)]).
+\end{multline*}
+The differences
+\begin{align*}
+  \yy_K-\xx_K&=u_t+v_t,\\
+  \mathbf l^{\pi/2}_K(\varphi)-W_K(\varphi)
+    &=\bigl((1-\sin\varphi)/\cos\varphi,1\bigr)\quad\text{and}\\
+  \mathbf l^{\pi-\varphi}_K(\pi/2)-Z_K(\pi/2-\varphi)
+    &=\bigl(-(1-\sin\varphi)/\cos\varphi,1\bigr)
+\end{align*}
+do not depend on $K$, so $\Lambda$ is convex-linear \baek{Lemma~7.1.6}. The
+terms of \eqref{eq:stab-Q} are quadratic \baek{Thm.~7.1.3, Thm.~7.3.2,
+Thm.~7.1.2, Prop.~7.2.2}, so $\cQ$ is quadratic.
+Baek proves that $\cR$ and $\cL$ are convex, and that $\cS$ is convex on $\Ki$
+\baek{Lemma~8.3.3}, by applying \baek{Thm.~7.4.2} to each of their terms. As
+the curves of these terms are convex-linear in the body for all convex bodies
+(\cref{fact:Q}\ref{fact:Q:decomp}), the same argument makes the four terms of
+$\cS_K$ convex for all convex bodies, so $\cS$ is convex on $\Kc_{\pi/2}$. As
+$\Lambda$ is convex-linear, $\cQ=\Lambda-\cS-\cR-\cL$ is concave.
+\end{proof}
+
+\begin{lemma}[the directional derivative at Gerver's
+triple]\label{lem:stab-variation}
+For every $\xi\in\bar\cT$, $D\cQ(\xi_G;\xi)\le0$. Hence
+$\cQ\le\cQ(\xi_G)=\abs\Gs$ on $\bar\cT$.
+\end{lemma}
+
+\begin{proof}
+Let $\xi_G=(K_0,B_0,D_0)$ and $\xi=(K,B,D)$, let $\breve\sigma_X$ be the image
+of $\sigma_X$ under $t\mapsto t-\pi$, and let
+\begin{align*}
+  \Delta&=h_K-h_{K_0},\\
+  \Delta_B(t)&=h_B(t+\pi)-h_{B_0}(t+\pi)\quad\text{and}\\
+  \Delta_D(t)&=h_D(t+\pi)-h_{D_0}(t+\pi).
+\end{align*}
+Baek computes $D\cQ(\xi_G;\xi)$ for $\xi\in\cT$ term by term \baek{Thm.~8.5.6,
+Thm.~8.5.7}, and his computation holds on $\bar\cT$. Baek's formulas for the
+derivatives of the curve areas of the two arcs and of the two segments in
+\eqref{eq:stab-Q} hold for all convex bodies \baek{Thm.~8.5.2, Thm.~8.5.3}. The
+derivative of $\abs K$ is $\int_{[0,\pi]}\Delta\dd\sigma_{K_0}$ for all caps,
+as for caps in $\Ki$ \baek{Thm.~8.5.1}. Indeed, $\abs K=\beta(K,K)$ for the
+functional
+\[
+  \beta(K_1,K_2)=\frac12\int_{[0,2\pi)}h_{K_1}\dd\sigma_{K_2}
+\]
+(\cref{fact:convex}\ref{fact:convex:sigma}), which is convex-linear in each
+argument, as $h_K$ and $\sigma_K$ are. Integration by parts gives
+\[
+  \beta(K_1,K_2)=\frac12\int_0^{2\pi}(h_{K_1}h_{K_2}-h'_{K_1}h'_{K_2})\dd t,
+\]
+with right derivatives, so $\beta$ is symmetric in any two convex bodies, and
+Baek's formula for $D\Psi$ gives $\int_{[0,2\pi)}\Delta\dd\sigma_{K_0}$. Finally,
+$\Delta$ vanishes at $3\pi/2$, the only angle in $(\pi,2\pi)$ that carries
+$\sigma_{K_0}$. For every convex body $K$, the derivative of
+$\mathcal J(\xx_K|_I)$ is $\int_{I\cup(I+\pi/2)}\Delta\,i_{K_0}\dd t$, the
+integral of $\Delta$ against a density $i_{K_0}$, plus the end terms
+\[
+  \mathcal J([\xx_{K_0}(\varphi^{\mathrm L}),\xx_K(\varphi^{\mathrm L})])
+  -\mathcal J([\xx_{K_0}(\varphi^{\mathrm R}),\xx_K(\varphi^{\mathrm R})]),
+\]
+as Baek's proof of \baek{Thm.~8.5.5} differentiates only the curve $\xx_{K_0}$
+of $K_0\in\Ki$ \baek{Thm.~8.5.4}. The end terms of the other derivatives also
+have the form $\mathcal J([p_0,p])$, for an end $p$ of an arc or a segment and
+its value $p_0$ at $\xi_G$. As $X_{B_0}=\xx_{K_0}(\varphi^{\mathrm R})$ and
+$Y_{D_0}=\xx_{K_0}(\varphi^{\mathrm L})$ \baek{Thm.~8.4.3}, the two segments
+reduce to points at $\xi_G$, so that their derivatives consist of end terms, and
+the end terms at $\xx_K(\varphi^{\mathrm R})$, $\xx_K(\varphi^{\mathrm L})$,
+$X_B$ and $Y_D$ cancel in pairs. The end terms at the points of $B$ and $D$
+with outer normal $u_{3\pi/2}$ vanish, as these points lie on the $x$-axis:
+$h_B(3\pi/2)=h_D(3\pi/2)=0$ by the equalities at the ends that define
+$\bar\cT$, as $h_K(\pi/2)=1$. Hence
+\begin{multline*}
+  D\cQ(\xi_G;\xi)=\int_{[0,\pi]}\Delta\dd\sigma_{K_0}
+  -\int_{I\cup(I+\pi/2)}\Delta\,i_{K_0}\dd t\\
+  +\int_{(\varphi,\pi/2)}\Delta_B\dd\breve\sigma_{B_0}
+  +\int_{(\pi/2,\pi-\varphi)}\Delta_D\dd\breve\sigma_{D_0},
+\end{multline*}
+where the first two terms come from $\abs K$ and $-\mathcal J(\xx_K|_I)$, and
+the last two from the terms of \eqref{eq:stab-Q} that involve $B$ and from those
+that involve $D$.
+
+Baek shows that, on $[0,\pi]$, $\sigma_{K_0}$ is the sum of the measure with
+density $i_{K_0}$ on $I\cup(I+\pi/2)$, of $\breve\sigma_{B_0}$ on
+$[\pi/2-\theta,\pi/2)$, of $\breve\sigma_{D_0}$ on $(\pi/2,\pi/2+\theta]$ and of
+the atom at $\pi/2$ \baek{Thm.~8.4.5}, where $\theta$ is Gerver's second angle
+(\cref{sec:gerver}). Moreover, $\breve\sigma_{B_0}$ and $\breve\sigma_{D_0}$
+vanish on $(\varphi,\pi/2-\theta)$ and $(\pi/2+\theta,\pi-\varphi)$, and
+\begin{align*}
+  h_{K_0}(t)+h_{B_0}(t+\pi)&=1\quad\text{on }[\pi/2-\theta,\pi/2]
+    \quad\text{and}\\
+  h_{K_0}(t)+h_{D_0}(t+\pi)&=1\quad\text{on }[\pi/2,\pi/2+\theta]
+\end{align*}
+\baek{Thm.~8.4.3}. So the part of the first term against the density $i_{K_0}$
+cancels the second term, the atom contributes
+\[
+  \Delta(\pi/2)\sigma_{K_0}(\{\pi/2\})=0
+\]
+as $h_K(\pi/2)=h_{K_0}(\pi/2)$, and the rest of the first term combines with
+the last two terms into
+\begin{multline*}
+  D\cQ(\xi_G;\xi)=\int_{[\frac\pi2-\theta,\frac\pi2)}
+    \bigl(h_K(t)+h_B(t+\pi)-1\bigr)\dd\breve\sigma_{B_0}(t)\\
+  +\int_{(\frac\pi2,\frac\pi2+\theta]}
+    \bigl(h_K(t)+h_D(t+\pi)-1\bigr)\dd\breve\sigma_{D_0}(t),
+\end{multline*}
+which is nonpositive by the inequalities defining $\bar\cT$. By
+\cref{lem:stab-wide} and \baek{Thm.~7.1.5}, $\cQ\le\cQ(\xi_G)$ on $\bar\cT$,
+and $\cQ(\xi_G)=\abs\Gs$ (\cref{fact:Q}\ref{fact:Q:max}).
+\end{proof}
+
+\begin{proposition}[the deficit certificate]\label{prop:stab-certificate}
+For every $\xi=(K,B,D)\in\bar\cT$,
+\[
+  \abs\Gs-\cQ(\xi)=-D\cQ(\xi_G;\xi)+E_\cS(\KG,K)+E_\cR(B_{\KG},B)
+    +E_\cL(D_{\KG},D),
+\]
+and the four terms on the right are nonnegative; so
+$E_\cS(\KG,K)\le\abs\Gs-\cQ(\xi)$.
+\end{proposition}
+
+\begin{proof}
+Apply \eqref{eq:stab-segment} to $\cQ$, $x=\xi_G$ and $y=\xi$. By
+\cref{lem:stab-wide}, the convex-linear $\Lambda$ drops out of
+$E_\cQ(\xi_G,\xi)$, and \eqref{eq:stab-gap} at $\lambda=1/2$ gives
+\[
+  E_\cQ(\xi_G,\xi)=E_\cS(\KG,K)+E_\cR(B_{\KG},B)+E_\cL(D_{\KG},D).
+\]
+The first term is nonnegative by \cref{lem:stab-variation}, and the energies
+are integrals of squares.
+\end{proof}
+
+\subsection{From the energies to the cap; proof of
+\texorpdfstring{\cref{thm:stability-cap}}{the cap estimate}}\label{sec:stab-cap}
+
+For any function $f$ with right derivatives and any $T\in\R$, the
+\emph{tangent residual} $r_T$ and the \emph{corner residual} $r_{\mathrm c}$
+of $f$ are
+\[
+  r_T(t)=\frac{f(T)-f(t)\cos(T-t)}{\sin(T-t)}-f'(t^+),\qquad
+  r_{\mathrm c}(t)=f(t+\pi/2)-f'(t^+).
+\]
+The \emph{four residuals} of $f$ are
+\begin{align*}
+  r_1&=r_{\pi/2}\text{ on }(0,\varphi), &
+  r_2&=r_{\mathrm c}\text{ on }(\varphi,\pi/2-\varphi),\\
+  r_3&=r_{\pi-\varphi}\text{ on }(\pi/2-\varphi,\pi/2), &
+  r_4&=r_\pi\text{ on }(\pi/2,\pi),
+\end{align*}
+and
+\[
+  E(f)=\frac12\sum_j\int r_j^2,
+\]
+each integral over the interval of $r_j$. By the quotient rule,
+\[
+  q_T(t)=(f(t)-f(T)\cos(T-t))/\sin(T-t)
+\]
+has the right derivative $-r_T(t)/\sin(T-t)$. So, if $f$ is continuous with
+integrable right derivatives on $[s_1,s_2]$, the fundamental theorem of
+calculus for right derivatives gives
+\begin{gather}
+  q_T(s_1)-q_T(s_2)=\int_{s_1}^{s_2}\frac{r_T(u)}{\sin(T-u)}\dd u\quad
+  \text{if $\sin(T-u)\ne0$ on $[s_1,s_2]$},\label{eq:stab-ftc}\\
+  f(s_1)=f(s_2)-\int_{s_1}^{s_2}f(u+\pi/2)\dd u
+    +\int_{s_1}^{s_2}r_{\mathrm c}(u)\dd u.\notag
+\end{gather}
+For $K_0,K_1\in\Kc_{\pi/2}$, the function \emph{formed with} $K_0$ and $K_1$
+is
+\[
+  f(t)=\Delta(t)+\Delta(\pi)\cos t,
+\]
+where $\Delta=h_{K_1}-h_{K_0}$. Then $f=h_{K_1}-h_{K_0+(s,0)}$, where
+$s=h_{K_0}(\pi)-h_{K_1}(\pi)$; moreover $f(\pi/2)=f(\pi)=0$, and $f$ has at
+every $t$ the right derivative
+\[
+  f'(t^+)=\ip{v^+_{K_1}(t)-v^+_{K_0}(t)}{v_t}-\Delta(\pi)\sin t
+\]
+(\cref{fact:convex}\ref{fact:convex:vertices}).
+
+\begin{lemma}[residuals and displacements]\label{lem:stab-residuals}
+Let $K_0,K_1\in\Kc_{\pi/2}$, and let $f$ be formed with them. On the open
+interval of each term $\cM_K(a,b;\mathbf z_K)$ of $\cS_K$, the corresponding
+residual of $f$ is $\varrho_{K_1,\mathbf z_{K_1}}-\varrho_{K_0,\mathbf
+z_{K_0}}$. The four residuals and their squares are integrable, and
+$E(f)=E_\cS(K_0,K_1)$.
+\end{lemma}
+
+\begin{proof}
+For $T-\pi<t<T$, the point $\mathbf l_K^T(t)=v_K(t,T)$ lies on $l_K(t)$ and
+$l_K(T)$, and $u_T=\cos(T-t)u_t+\sin(T-t)v_t$, so
+\[
+  \ip{v_K(t,T)}{v_t}=(h_K(T)-h_K(t)\cos(T-t))/\sin(T-t);
+\]
+and $\ip{\yy_K(t)}{v_t}=h_K(t+\pi/2)$ (\cref{sec:sofas}). Hence
+\begin{align*}
+  \varrho_{K,\mathbf l_K^T}(t)&=(h_K(T)-h_K(t)\cos(T-t))/\sin(T-t)
+    -\ip{v^+_K(t)}{v_t}\quad\text{and}\\
+  \varrho_{K,\yy_K}(t)&=h_K(t+\pi/2)-\ip{v^+_K(t)}{v_t}.
+\end{align*}
+So $\varrho_{K,\mathbf l^T_K}$ and $\varrho_{K,\yy_K}$ are the residuals $r_T$
+and $r_{\mathrm c}$ of $h_K$, whose right derivative is $\ip{v^+_K(t)}{v_t}$
+(\cref{fact:convex}\ref{fact:convex:vertices}). Residuals are linear in the
+function, and multiples of $\cos t$, whose right derivatives are the same
+multiples of $-\sin t$, have zero residuals; as
+$f=h_{K_1}-h_{K_0}+\Delta(\pi)\cos t$, the residuals of $f$ are the
+differences of the displacements. By Mamikon's theorem \baek{Thm.~7.4.1}, the
+displacements are measurable and bounded, so the residuals and their squares
+are integrable.
+\end{proof}
+
+\begin{proposition}[the support bound]\label{prop:stab-coercive}
+Let $0<\varphi<\pi/4$, not necessarily Gerver's angle, and form the four
+residuals with this $\varphi$. Let $f$ be continuous, with right derivatives on
+$(0,\pi)$, $f(\pi/2)=f(\pi)=0$, and four residuals that are integrable and
+square integrable. Let
+\[
+  \mathcal G_\varphi(t)=
+  \begin{cases}
+    \cos^2t\,(2\sec^2\varphi-\tan t) & \text{for }t\le\varphi,\\
+    \cos t\,(2\sec\varphi-\sin t) & \text{for }\varphi<t\le\pi/2-\varphi,\\
+    \sin t\cos t+2\tan\varphi\cos^2t & \text{for }\pi/2-\varphi<t\le\pi/2,\\
+    -\sin t\cos t & \text{for }t>\pi/2.
+  \end{cases}
+\]
+Then, for $t\in[0,\pi]$,
+\[
+  f(t)^2\le\mathcal G_\varphi(t)\sum_j\int r_j^2\le2\sec^2\varphi\sum_j\int r_j^2,
+\]
+so $\abs{f(t)}\le2\sec\varphi\sqrt{E(f)}$.
+\end{proposition}
+
+\begin{proof}
+Let $b'=\pi/2-\varphi$ and $T=\pi-\varphi$. As $f(\pi/2)=f(\pi)=0$,
+\eqref{eq:stab-ftc} gives
+\begin{align*}
+  f(t)&=-\sin t\int_{\pi/2}^t\frac{r_4(u)}{\sin u}\dd u,
+    & t&\in[\pi/2,\pi),\\
+  f(t)&=-\frac{\cos t}{\cos\varphi}f(T)
+    +\sin(T-t)\int_t^{\pi/2}\frac{r_3(u)\dd u}{\sin(T-u)},
+    & t&\in[b',\pi/2],\\
+  f(t)&=f(b')-\int_t^{b'}f(u+\tfrac\pi2)\dd u+\int_t^{b'}r_2,
+    & t&\in[\varphi,b'],\\
+  f(t)&=\cos t\Bigl(\frac{f(\varphi)}{\cos\varphi}
+    +\int_t^\varphi\frac{r_1(u)}{\cos u}\dd u\Bigr), & t&\in[0,\varphi].
+\end{align*}
+Let
+\[
+  k(u)=(\sec\varphi+\cos u)/\sin u.
+\]
+On $(\pi/2,\pi)$, $r_4=f\cot u-f'$, so $(kf)'=-f-k\,r_4$; integrating this,
+and inserting the first two formulas, turns the third into
+\[
+  f(t)=\int_t^{b'}r_2+\int_{b'}^{\pi/2}\frac{r_3(u)\dd u}{\sin(T-u)}
+  +(\sec\varphi-\sin t)\int_{\pi/2}^{\pi/2+t}\frac{r_4(u)\dd u}{\sin u}
+  +\int_{\pi/2+t}^{T}k\,r_4 ,
+\]
+the terms with $f(T)$ cancelling as $k(T)=\tan\varphi$. With $f(\varphi)$ and
+$f(T)$ inserted, each formula writes $f(t)$ as a sum of integrals of kernels
+against the residuals over disjoint intervals. By the Cauchy--Schwarz
+inequality, $f(t)^2$ is at most the sum of the squared $L^2$ norms of the
+kernels times $\sum_j\int r_j^2$, and
+\begin{gather*}
+  \int\csc^2=-\cot,\qquad\int\sec^2=\tan\qquad\text{and}\\
+  \int k^2=-(\sec^2\varphi+1)\cot u-2\sec\varphi\csc u-u
+\end{gather*}
+give this sum as $\mathcal G_\varphi(t)$; on $[\pi/2,\pi)$, for instance, it is
+\[
+  \sin^2t\,(\cot(\pi/2)-\cot t)=-\sin t\cos t.
+\]
+Finally $\mathcal G_\varphi\le2\sec^2\varphi$, as
+\begin{gather*}
+  \tan t\ge0\text{ on }[0,\varphi],\qquad
+  \cos t\,(2\sec\varphi-\sin t)\le2\sec\varphi\le2\sec^2\varphi,\\
+  \abs{\sin t\cos t}\le1/2\qquad\text{and}\qquad
+  1/2+2\tan\varphi\le2+2\tan^2\varphi.\qedhere
+\end{gather*}
+\end{proof}
+
+\begin{lemma}[downward support values, and distances]\label{lem:stab-lower}
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-lower:caps} For $K\in\Kc_{\pi/2}$,
+\[
+  h_K(t)=
+  \begin{cases}
+    h_K(0)\cos t & \text{if }\sin t\le0\le\cos t,\\
+    -h_K(\pi)\cos t & \text{if }\sin t,\cos t\le0.
+  \end{cases}
+\]
+So $\dH(K,K')=\max_{[0,\pi]}\abs{h_K-h_{K'}}$ for $K,K'\in\Kc_{\pi/2}$, and if
+$f$ is formed with caps of $\Kc_{\pi/2}$ and $\abs f\le\rho$ on $[0,\pi]$, then
+$\abs f\le\rho$ on $\R$.
+\item\label{lem:stab-lower:close} Convex bodies $K,L$ with $\dH(K,L)\le r$
+are $r$-close; and if nonempty compact sets $X,Y$ are $r$-close, then
+$\abs{h_X-h_Y}\le r$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-lower:caps} Every $p\in K$ has $p_y\ge0$ and
+$-h_K(\pi)\le p_x\le h_K(0)$, with equality at $A^-_K(0)=(h_K(0),0)$ and
+$C^+_K(\pi/2)=(-h_K(\pi),0)$ (\cref{lem:ends}). This gives $h_K(t)$ for
+$\sin t\le0$, where $f(t)$ is then $f(0)\cos t$ or $0$.
+\ref{lem:stab-lower:close} For $p\in K$,
+\[
+  \ip p{u_t}\le h_L(t)+r=h_{L+r\mathbb B(0,1)}(t)\quad\text{for all }t,
+\]
+so $p\in L+r\mathbb B(0,1)$, and symmetrically. If $p\in X$ has
+$\ip p{u_t}=h_X(t)$ and $q\in Y$ has $\norm{p-q}\le r$, then
+\[
+  h_Y(t)\ge\ip q{u_t}\ge h_X(t)-r,
+\]
+and symmetrically.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:stability-cap}]
+\ref{thm:stability-cap:wide} Let $f$ be formed with $\KG$ and $K$, so that
+\[
+  f=h_K-h_{\KG+(s_K,0)}.
+\]
+By \cref{lem:stab-residuals}, \cref{prop:stab-coercive} applies and gives
+\[
+  \abs f\le2\sec\varphi\sqrt{E_\cS(\KG,K)}\quad\text{on }[0,\pi],
+\]
+and $E_\cS(\KG,K)\le\abs\Gs-\cQ(\xi)$ by \cref{prop:stab-certificate}. By
+\cref{lem:stab-lower}\ref{lem:stab-lower:caps} the bound holds on $\R$, so
+\[
+  \dH(K,\KG+(s_K,0))\le2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi)},
+\]
+and \cref{lem:stab-lower}\ref{lem:stab-lower:close} gives the closeness.
+\ref{thm:stability-cap:ki} For $K\in\Ki$, $\xi_K\in\cT\subset\bar\cT$ and
+$\cA(K)\le\cQ(\xi_K)$ (\cref{fact:Q}\ref{fact:Q:triple}); so
+\ref{thm:stability-cap:wide} applies to $\xi_K$, and
+\[
+  \abs\Gs-\cQ(\xi_K)\le\abs\Gs-\cA(K).
+\]
+\ref{thm:stability-cap:num} As $\varphi\le0.04$
+(\cref{fact:gerver}\ref{fact:gerver:def}),
+$\cos\varphi\ge1-\varphi^2/2\ge1249/1250$.
+\end{proof}
+
+\subsection{The upper bound near Gerver's cap}\label{sec:stab-local}
+
+Baek proves $\cA(K)\le\cQ(\xi_K)$ for $K\in\Ki$ \baek{Thm.~8.2.4}; this
+subsection proves it for the caps of $\Kc_{\pi/2}$ near $\KG$. If
+$\dH(K,K')\le\delta$, then $\norm{\xx_K(t)-\xx_{K'}(t)}\le2\delta$, by the
+formula for the inner corner (\cref{sec:sofas}). Let $\Gamma$ be as in
+\cref{fact:gerver}\ref{fact:gerver:niche}, and let $a_\Gamma=\bD(0)_x$ and
+$b_\Gamma=\bB(\pi/2)_x$, the numbers $a<b$ of the proof of
+\cref{prop:regular}. The top edge $e_{\KG}(\pi/2)$ of $\KG$ is the segment from
+\[
+  C^+_{\KG}(0)=\bC(0)=(a_\Gamma,1)\qquad\text{to}\qquad
+  A^-_{\KG}(\pi/2)=\bA(\pi/2)=(b_\Gamma,1)
+\]
+(\cref{fact:gerver}\ref{fact:gerver:cap} and the proof of \cref{prop:regular}).
+Recall that the width of a cap $K$ is $h_K(0)+h_K(\pi)$; its \emph{cut
+half-planes} are $\breve H^{\mathrm R}_K=H^{\mathrm b}_K(\varphi)$ and
+$\breve H^{\mathrm L}_K=H^{\mathrm d}_K(\pi/2-\varphi)$ \baek{Def.~8.1.5}.
+
+\begin{proposition}[the upper bound near $\KG$]\label{prop:stab-local}
+There is $\delta\in(0,1]$ such that every $K\in\Kc_{\pi/2}$ with
+$\dH(K,\KG)\le\delta$ satisfies
+\[
+  \xi_K=(K,B_K,D_K)\in\bar\cT,\qquad\cN(K)\subset K\qquad\text{and}\qquad
+  \cA(K)\le\cQ(\xi_K)\le\abs\Gs,
+\]
+and $K$ and $\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cA(K)}$-close.
+\end{proposition}
+
+\begin{lemma}[Gerver's roof]\label{lem:stab-roof}
+There are $\bar\gamma<1$, $L\ge0$ and an $L$-Lipschitz
+$\gamma:[a_\Gamma,b_\Gamma]\to[0,\bar\gamma]$ with
+$\gamma(a_\Gamma)=\gamma(b_\Gamma)=0$ and graph $\Gamma$, such that
+\[
+  \cN(\KG)=\{(x,y):x\in[a_\Gamma,b_\Gamma],\ 0\le y<\gamma(x)\}.
+\]
+Moreover
+\[
+  -h_{\KG}(\pi)<a_\Gamma<b_\Gamma<h_{\KG}(0)\qquad\text{and}\qquad
+  [a_\Gamma,b_\Gamma]\times[0,1]\subset\KG.
+\]
+\end{lemma}
+
+\begin{proof}
+The chords of $\Gamma$ have bounded slopes: on $[t_0,t_2]$, $\bD'$ is a
+positive multiple of $u_t$ (\cref{fact:gerver}\ref{fact:gerver:niche}) and
+$\cos t\ge1/2$; likewise for $\bB$ on $[t_3,t_5]$; and on $[t_1,t_4]$ the
+abscissa of $\xx$ has the derivative $\alpha\cos t-\beta\sin t$, which is
+negative (\cref{lem:gerver-width}), hence bounded away from $0$. As the three
+pieces occupy consecutive intervals of abscissas and meet at their ends,
+$\Gamma$ is the graph of an $L$-Lipschitz $\gamma$ on $[a_\Gamma,b_\Gamma]$,
+with $\gamma(a_\Gamma)=\bD(0)_y=0$ and $\gamma(b_\Gamma)=\bB(\pi/2)_y=0$. The
+proof of \cref{prop:regular} gives the heights in $[0,1)$, with a largest,
+$\bar\gamma$, and $[a_\Gamma,b_\Gamma]\times[0,1]\subset\KG$; the niche is that
+of \cref{fact:gerver}\ref{fact:gerver:niche}. As $\sigma_{\KG}$ has no atom at
+$\pi$ (\cref{fact:arms}\ref{fact:arms:regular}), the edge $e_{\KG}(\pi)$ is the
+point $(-h_{\KG}(\pi),0)$ (\cref{lem:ends}). The point $(a_\Gamma,1)$ of $\KG$
+is not this point, so $\ip{(a_\Gamma,1)}{u_\pi}<h_{\KG}(\pi)$, that is,
+$-h_{\KG}(\pi)<a_\Gamma$. Likewise $b_\Gamma<h_{\KG}(0)$.
+\end{proof}
+
+\begin{lemma}[persistence on edges]\label{lem:stab-faces}
+Let $K_0\in\Kc_{\pi/2}$ and $\mathbb B=\mathbb B(0,1)$.
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-faces:fixed} If $I'\subset[0,\pi]$ is compact and $F$ is
+continuous on $(K_0+\mathbb B)\times I'$, with $F(p,t)>0$ for $t\in I'$ and
+$p\in e_{K_0}(t)$, then there is $\delta\in(0,1]$ such that $F(p,t)>0$ for all
+$K\in\Kc_{\pi/2}$ with $\dH(K,K_0)\le\delta$, $t\in I'$ and $p\in e_K(t)$.
+\item\label{lem:stab-faces:angle} If $F$ is continuous on $\R^2$ and $F>0$ on
+$e_{K_0}(t_0)$, then there are $\delta,\rho>0$ such that $F(p)>0$ for all such
+$K$, $t\in[0,\pi]$ with $\abs{t-t_0}\le\rho$, and $p\in e_K(t)$.
+\item\label{lem:stab-faces:arms} If $K_0\in\Ki$ and $0<s_1\le s_2<\pi/2$,
+there are $c,\delta>0$ such that every $K\in\Kc_{\pi/2}$ with
+$\dH(K,K_0)\le\delta$ has, for $t\in[s_1,s_2]$,
+\begin{align*}
+  h_K(t+\pi/2)-\ip p{v_t}&\ge1+c\quad\text{for }p\in e_K(t)\quad\text{and}\\
+  h_K(t)-\ip p{u_t}&\ge1+c\quad\text{for }p\in e_K(t+\pi/2).
+\end{align*}
+So $f^\pm_K,g^\pm_K\ge1+c$ on $[s_1,s_2]$, and there the abscissa of $\xx_K$
+has right derivatives at most $-c$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-faces:fixed} The function
+\[
+  \Theta(p,t)=\operatorname{dist}(p,K_0)+\abs{\ip p{u_t}-h_{K_0}(t)}
+\]
+vanishes exactly when $p\in e_{K_0}(t)$, so it has a positive minimum $m$ on
+the compact set where $F\le0$; let $\delta=\min(1,m/4)$. A cap $K$ with
+$\dH(K,K_0)\le\delta$ lies in $K_0+\mathbb B$ and is $\delta$-close to $K_0$
+(\cref{lem:stab-lower}), so $\Theta(p,t)\le2\delta<m$ for $p\in e_K(t)$.
+\ref{lem:stab-faces:angle} The proof of \ref{lem:stab-faces:fixed} applies to
+\[
+  \Theta(p)=\operatorname{dist}(p,K_0)+\abs{\ip p{u_{t_0}}-h_{K_0}(t_0)},
+\]
+which is at most $2\delta+4R\abs{t-t_0}$ for $p\in e_K(t)$, where $R$ bounds
+the norms on $K_0+\mathbb B$. \ref{lem:stab-faces:arms} By condition~(3) of the
+injectivity condition and \cref{fact:arms}\ref{fact:arms:regular}, $f_{K_0}$
+and $g_{K_0}$ are continuous and exceed $1$ on $(0,\pi/2)$, hence exceed $1+m$
+on $[s_1,s_2]$ for some $m>0$, and $e_{K_0}(t)$, $e_{K_0}(t+\pi/2)$ are the
+points $A_{K_0}(t)$, $C_{K_0}(t)$. Part \ref{lem:stab-faces:fixed} for
+\[
+  F(p,t)=h_{K_0}(t+\pi/2)-\ip p{v_t}-1-m/2
+\]
+and its analogue, with $\delta\le m/4$, gives $c=m/4$. The right derivative of
+$\xx_K$ is $-(f^+_K-1)u_t+(g^+_K-1)v_t$ (\cref{fact:arms}\ref{fact:arms:deriv}),
+with abscissa at most $-c(\cos t+\sin t)\le-c$.
+\end{proof}
+
+\begin{lemma}[the niche of a nearby cap]\label{lem:stab-niche}
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-niche:x} For every $\eta>0$ there is $\delta\in(0,1]$
+such that every $K\in\Kc_{\pi/2}$ with $\dH(K,\KG)\le\delta$ has
+\[
+  a_\Gamma-\eta\le p_x\le b_\Gamma+\eta\quad\text{for all }p\in\cN(K).
+\]
+\item\label{lem:stab-niche:sub} There is $\delta\in(0,1]$ such that
+$\cN(K)\subset K$ for every $K\in\Kc_{\pi/2}$ with $\dH(K,\KG)\le\delta$.
+\item\label{lem:stab-niche:width} Let $K\in\Kc_{\pi/2}$. If
+$\dH(K,\KG)\le1/20$, then $K$ has width at least $21/10$. If $K$ has width at
+least $21/10$, then for every $\varphi\in[0.039,0.04]$, Gerver's angle among
+them, $W_K(\varphi)$ and $Z_K(\pi/2-\varphi)$ lie on the bottom edge of $K$,
+strictly between its ends, and
+\[
+  K\cap H^{\mathrm b}_K(\varphi)\cap H^{\mathrm d}_K(\pi/2-\varphi)=\emptyset.
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-niche:x} A point $p\in\cN(K)$ has $p_y\ge0$ and lies in
+$Q^-_K(t)$ for some $t\in(0,\pi/2)$, so $Z_K(t)_x<p_x<W_K(t)_x$, where
+\[
+  Z_K(t)_x=(1-h_K(t+\pi/2))/\sin t\qquad\text{and}\qquad
+  W_K(t)_x=(h_K(t)-1)/\cos t.
+\]
+For $\KG$,
+\[
+  \xx(t)_y=\sin t\cos t\,(W_{\KG}(t)_x-Z_{\KG}(t)_x)
+\]
+is positive (by \cref{fact:height} on $[t_1,t_4]$, and elsewhere as $\xx(t)$
+lies above $\bD(t)$ or $\bB(t)$), so the open segment of the $x$-axis between
+$Z_{\KG}(t)$ and $W_{\KG}(t)$ lies in $\cN(\KG)$, and
+$a_\Gamma\le Z_{\KG}(t)_x$ and $W_{\KG}(t)_x\le b_\Gamma$
+(\cref{lem:stab-roof}). As the top edge of $\KG$ is
+$[(a_\Gamma,1),(b_\Gamma,1)]$, \cref{lem:stab-faces}\ref{lem:stab-faces:angle}
+at $t_0=\pi/2$ gives $\rho\in(0,\pi/4]$ and $\delta_0$ such that, if
+$\delta\le\delta_0$ and $t\le\rho$, each $q\in e_K(t+\pi/2)$ has
+$q_x>a_\Gamma-\eta$, and
+\[
+  Z_K(t)_x=q_x+(1-q_y\cos t)/\sin t\ge q_x.
+\]
+For $t>\rho$, $\abs{Z_K(t)_x-Z_{\KG}(t)_x}\le\delta/\sin\rho\le\eta$ if
+$\delta\le\eta\sin\rho$. So $p_x>a_\Gamma-\eta$, and symmetrically
+$p_x<b_\Gamma+\eta$.
+
+\ref{lem:stab-niche:sub} Let $p\in\cN(K)$, so that $p\in Q^-_K(t)$ for some
+$t\in(0,\pi/2)$. Let
+\[
+  M'=\max\xx_y<1
+\]
+(\cref{fact:height}) and $\delta\le(1-M')/4$. As $(0,1)=u_t\sin t+v_t\cos t$,
+\[
+  p_y<\xx_K(t)_y\le\xx(t)_y+2\delta\le y'=(1+M')/2.
+\]
+By compactness, there is $m>0$ with
+\[
+  h_{\KG}(t)-\ip q{u_t}\ge m\quad
+  \text{for all $q\in[a_\Gamma,b_\Gamma]\times[0,y']$ and $t\in[0,\pi]$},
+\]
+as $(q_x,1)\in\KG$ and $-h_{\KG}(\pi)<a_\Gamma<b_\Gamma<h_{\KG}(0)$. With
+$\delta\le m/4$ and \ref{lem:stab-niche:x} for $\eta=m/4$, $p$ lies within $m/4$
+of such a $q$, so
+\[
+  \ip p{u_t}\le h_{\KG}(t)-3m/4\le h_K(t)\quad\text{for }t\in[0,\pi],
+\]
+and $p\in K$ by \eqref{eq:cap-fan}.
+
+\ref{lem:stab-niche:width} By \cref{lem:stab-lower}, a cap
+$K'\in\Kc_{\pi/2}$ lies in $[-h_{K'}(\pi),h_{K'}(0)]\times[0,1]$, so its area
+is at most its width. Hence $\KG$ has width at least $\abs{\KG}\ge\abs\Gs>11/5$
+(\cref{fact:gerver}\ref{fact:gerver:def}), and $K$, whose support values
+differ from those of $\KG$ by at most $1/20$, has width at least
+$11/5-2/20=21/10$. As $h_K(\varphi)\ge h_K(0)\cos\varphi$ and
+$(21/10)\cos\varphi>1$, $W_K(\varphi)_x>-h_K(\pi)$; and
+$W_K(\varphi)_x<h_K(0)$, as
+\[
+  h_K(\varphi)\le h_K(0)\cos\varphi+h_K(\pi/2)\sin\varphi<h_K(0)\cos\varphi+1
+\]
+by the sublinearity of $h_K$. Likewise for $Z_K(\pi/2-\varphi)$. A point $p$
+of $K$ in $H^{\mathrm b}_K(\varphi)\cap H^{\mathrm d}_K(\pi/2-\varphi)$ would
+satisfy
+\[
+  2\sin\varphi\ge\ip p{u_\varphi+u_{\pi-\varphi}}
+  \ge h_K(\varphi)+h_K(\pi-\varphi)-2\ge(21/10)\cos\varphi-2,
+\]
+where the first inequality holds as $u_\varphi+u_{\pi-\varphi}=(0,2\sin\varphi)$
+and $p_y\le1$, the second by the definition of the two half-planes, and the
+third as
+\[
+  h_K(\varphi)\ge h_K(0)\cos\varphi\qquad\text{and}\qquad
+  h_K(\pi-\varphi)\ge h_K(\pi)\cos\varphi;
+\]
+as $\varphi\le0.04$, this is false.
+\end{proof}
+
+\begin{lemma}[the canonical triple and the cuts]\label{lem:stab-triple}
+There is $\delta\in(0,1]$ such that every $K\in\Kc_{\pi/2}$ with
+$\dH(K,\KG)\le\delta$ satisfies:
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-triple:wide} $\xi_K\in\bar\cT$;
+\item\label{lem:stab-triple:cut} $\xx_K(t)\notin\breve H^{\mathrm R}_K$ for
+$t\in(\varphi,\pi/2]$, and $\xx_K(t)\notin\breve H^{\mathrm L}_K$ for
+$t\in[0,\pi/2-\varphi)$;
+\item\label{lem:stab-triple:height} $\xx_K(t)_y>0$ for
+$t\in[\varphi,\pi/2-\varphi]$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Take $c$ and $\delta\le1/20$ from
+\cref{lem:stab-faces}\ref{lem:stab-faces:arms} for $K_0=\KG$ and
+\mbox{$[\varphi,\pi/2-\varphi]$}; so $g^+_K(\varphi)>1$,
+$f^-_K(\pi/2-\varphi)>1$, and $K$ has width at least $21/10$
+(\cref{lem:stab-niche}\ref{lem:stab-niche:width}).
+\ref{lem:stab-triple:wide} The inequalities defining $\bar\cT$ hold for $B_K$
+and $D_K$ by definition. For the equalities at the ends $\pi/2$ and $0$, $B_K$
+contains $(h_K(0),0)$ and $D_K$ contains $(-h_K(\pi),0)$: for
+$t\in[\varphi,\pi/2]$,
+\[
+  h_K(t)\le h_K(0)\cos t+h_K(\pi/2)\sin t\le h_K(0)\cos t+1
+\]
+by the sublinearity of $h_K$, and likewise for $D_K$. For the
+equality at $\varphi$ we follow Baek's proof of \baek{Lemma~8.1.7}:
+$b_K(\varphi)$ contains $W_K(\varphi)\in K$ (\cref{lem:stab-niche}), and the
+point $p$ of $K\cap b_K(\varphi)$ farthest in the direction $v_\varphi$ lies in
+some $e_K(\vartheta)$, $\vartheta\in[\varphi,\varphi+\pi]$. If
+$\vartheta>\varphi+\pi/2$, then
+$\ip p{u_\varphi}\le\ip{v^+_K(\varphi+\pi/2)}{u_\varphi}$, that is,
+$g^+_K(\varphi)\le1$. So $\vartheta\le\varphi+\pi/2$, and the sublinearity of
+$h_K$ between $\varphi$, $\vartheta$ and $\pi/2$ (where $h_K=1\ge p_y$) gives
+$\ip p{u_t}\ge h_K(t)-1$ for $t\in[\varphi,\pi/2]$, so $p\in B_K$. The mirror
+argument with $f^-_K(\pi/2-\varphi)>1$ treats $D_K$.
+\ref{lem:stab-triple:cut} Fix $t_*\in(\varphi,\pi/2)$, apply
+\cref{lem:stab-faces}\ref{lem:stab-faces:arms} also on $[\varphi,t_*]$, and
+take the smaller $c$ and $\delta$. For $t\in(\varphi,t_*]$, the right derivative
+of $\ip{\xx_K}{u_\varphi}$ is
+\[
+  -(f^+_K-1)\cos(t-\varphi)-(g^+_K-1)\sin(t-\varphi)\le-c,
+\]
+so
+\[
+  \ip{\xx_K(t)}{u_\varphi}<\ip{\xx_K(\varphi)}{u_\varphi}=h_K(\varphi)-1.
+\]
+On $[t_*,\pi/2]$, $\KG$ satisfies the strict inequality
+$\ip{\xx(t)}{u_\varphi}<h_{\KG}(\varphi)-1$ \baek{Lemma~8.1.6} with a positive
+minimal gap, and this persists for small $\delta$, as
+$\ip{\xx_K(t)}{u_\varphi}$ and $h_K(\varphi)$ differ from their values for
+$\KG$ by at most $2\delta$ and $\delta$. The left cut is symmetric.
+\ref{lem:stab-triple:height} $\xx(t)_y$ has a positive minimum $m'$ on
+$[\varphi,\pi/2-\varphi]$ (\cref{fact:height}), and
+$\xx_K(t)_y\ge\xx(t)_y-2\delta>0$ if $\delta<m'/2$.
+\end{proof}
+
+\begin{lemma}[the three regions of the niche]\label{lem:stab-areabound}
+Let $\varphi$ be any number in $[0.039,0.04]$, and form $\bar\cT$, $\xi_K$,
+$I$, $\cQ$ and the cut half-planes with it. Let $K\in\Kc_{\pi/2}$ have width
+at least $21/10$, $\xi_K\in\bar\cT$, $\cN(K)\subset K$, the properties
+\ref{lem:stab-triple:cut} and \ref{lem:stab-triple:height} of
+\cref{lem:stab-triple}, and those of
+\cref{lem:stab-faces}\ref{lem:stab-faces:arms} on $[\varphi,\pi/2-\varphi]$
+for some $c>0$. Then $\cA(K)\le\cQ(\xi_K)$.
+\end{lemma}
+
+\begin{proof}
+We follow Baek's proof, which bounds the areas of three regions of the niche
+\baek{Lemma~8.2.2, Lemma~8.2.3, Thm.~8.2.4}. Write $B=B_K$, $D=D_K$,
+$x^{\mathrm R}=\xx_K(\varphi)$, $x^{\mathrm L}=\xx_K(\pi/2-\varphi)$,
+$W=W_K(\varphi)$ and $Z=Z_K(\pi/2-\varphi)$. As $\cN(K)\subset K$,
+\cref{lem:stab-niche}\ref{lem:stab-niche:width} splits $\cN(K)$ into its parts
+in $\breve H^{\mathrm R}_K$, in $\breve H^{\mathrm L}_K$ and outside both. For
+$t\in(\varphi,\pi/2]$,
+\[
+  \breve H^{\mathrm R}_K\cap Q^-_K(t)=\breve H^{\mathrm R}_K\setminus
+  H^{\mathrm b}_K(t),
+\]
+as $\xx_K(t)\notin\breve H^{\mathrm R}_K$ and
+$u_\varphi=\cos(t-\varphi)u_t-\sin(t-\varphi)v_t$. So the points of $K$
+outside $B$ in the supporting half-planes of $B$ with normals $\pi+\varphi$
+and $3\pi/2$ lie in $\cN(K)\cap\breve H^{\mathrm R}_K$; among them are the
+points of the region between the arc of $B$ with normals in
+$(\pi+\varphi,3\pi/2)$ and its end tangents, which meet at $W\in K$. This
+region has area
+\[
+  \mathcal J([X_B,W])-\frac12\int_{(\pi+\varphi,3\pi/2)}h_B\dd\sigma_B
+\]
+\baek{Lemma~7.3.5}, so $\abs{\cN(K)\cap\breve H^{\mathrm R}_K}$ is at least
+this area. Likewise
+\[
+  \abs{\cN(K)\cap\breve H^{\mathrm L}_K}\ge\mathcal J([Z,Y_D])
+  -\frac12\int_{(3\pi/2,3\pi/2+\varphi^{\mathrm L})}h_D\dd\sigma_D.
+\]
+By \cref{lem:stab-faces}\ref{lem:stab-faces:arms}, the abscissa of $\xx_K$
+decreases on $I$ with right derivatives at most $-c$, so $\xx_K|_I$ is the
+graph of a Lipschitz function of the abscissa. The region $\Omega$ between this
+graph and the $x$-axis and the triangles $T^{\mathrm R}$ with vertices
+$(x^{\mathrm R}_x,0)$, $W$, $x^{\mathrm R}$ and $T^{\mathrm L}$ with vertices
+$Z$, $(x^{\mathrm L}_x,0)$, $x^{\mathrm L}$ are disjoint, and lie in $\cN(K)$
+outside the cut half-planes: points below $\xx_K(t)$ lie in $Q^-_K(t)$, and
+\cref{lem:stab-triple}\ref{lem:stab-triple:cut} applies. By changes of
+variables and integration by parts with right derivatives,
+\begin{align*}
+  \abs{\Omega\cup T^{\mathrm R}\cup T^{\mathrm L}}
+  &=-\int_I(\xx_K)'_x(\xx_K)_y\dd t+\tfrac12\tan\varphi\,
+    \bigl((x^{\mathrm R}_y)^2+(x^{\mathrm L}_y)^2\bigr)\\
+  &=\mathcal J([W,x^{\mathrm R}])+\mathcal J(\xx_K|_I)
+    +\mathcal J([x^{\mathrm L},Z]).
+\end{align*}
+Adding the three bounds and joining the collinear points
+$x^{\mathrm R},X_B,W$ on $b_K(\varphi)$ and $Y_D,x^{\mathrm L},Z$ on
+$d_K(\pi/2-\varphi)$ gives $\abs{\cN(K)}\ge\abs K-\cQ(\xi_K)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:stab-local}]
+Let $\delta$ be the least of $1/20$ and of those of \cref{lem:stab-triple},
+\cref{lem:stab-niche}\ref{lem:stab-niche:sub} and
+\cref{lem:stab-faces}\ref{lem:stab-faces:arms} for $K_0=\KG$ and
+$[\varphi,\pi/2-\varphi]$; recall $\KG\in\Ki$
+(\cref{fact:gerver}\ref{fact:gerver:cap}) and $\varphi\in[0.039,0.04]$
+(\cref{fact:gerver}\ref{fact:gerver:def}). By
+\cref{lem:stab-niche}\ref{lem:stab-niche:width}, $K$ has width at least
+$21/10$. Then \cref{lem:stab-triple,lem:stab-niche,lem:stab-areabound} give
+$\xi_K\in\bar\cT$, $\cN(K)\subset K$ and $\cA(K)\le\cQ(\xi_K)$.
+\Cref{lem:stab-variation} and
+\cref{thm:stability-cap}\ref{thm:stability-cap:wide}, stated together as
+\cref{thm:certificate}, give $\cQ(\xi_K)\le\abs\Gs$ and show that $K$ and
+$\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi_K)}$-close, hence
+$2\sec\varphi\sqrt{\abs\Gs-\cA(K)}$-close, as $\cA(K)\le\cQ(\xi_K)$.
+\end{proof}
+
+\subsection{The cost of a missing final angle}\label{sec:stab-angle}
+
+For $K\in\Kc_{\pi/2}$ and $t\in\R$, the coordinates of $p-\xx_K(t)$ in the
+frame $(u_t,v_t)$ are
+\begin{align*}
+  \ell^{\mathrm b}_K(t,p)&=\ip p{u_t}-h_K(t)+1\quad\text{and}\\
+  \ell^{\mathrm d}_K(t,p)&=\ip p{v_t}-h_K(t+\pi/2)+1;
+\end{align*}
+we write $\ell_K(t,p)$ for the pair
+$(\ell^{\mathrm b}_K(t,p),\ell^{\mathrm d}_K(t,p))$. Then $Q^-_K(t)$ is the set
+where both coordinates are negative. For $\omega\in[0,\pi/2]$, let
+$\cN_\omega(K)$ be the set of $p$ with $p_y\ge0$ and $p\in Q^-_K(t)$ for some
+$t\in(0,\omega)$, so that $\cN_{\pi/2}(K)=\cN(K)$, and let
+\[
+  O_\omega(K)=(K\setminus\cN_\omega(K))\setminus(K\setminus\cN(K))
+\]
+be the \emph{omitted wedges}. A set $S$ \emph{satisfies the constraints of
+$(K,\omega)$} if $S\subset K$,
+\[
+  \max(\ell^{\mathrm b}_K(t,p),\ell^{\mathrm d}_K(t,p))\ge0\quad
+  \text{for $p\in S$ and $t\in[0,\omega]$},
+\]
+and $\ell^{\mathrm b}_K(\omega,p)\ge0$ for $p\in S$.
+
+\begin{proposition}[the terminal comparison]\label{prop:stab-terminal}
+There are $c>0$, $\delta\in(0,1]$, $\psi_0>0$ and $R\ge1$ such that for every
+$K\in\Kc_{\pi/2}$ with $\dH(K,\KG)\le\delta$, every $\omega\in[0,\pi/2]$ with
+$\psi=\pi/2-\omega\le\psi_0$ and every measurable set $S$ that satisfies the
+constraints of $(K,\omega)$, with $\eps=\abs\Gs-\abs S$ and
+$U=K\setminus\cN(K)$:
+\begin{enumerate}[label=(\alph*)]
+\item\label{prop:stab-terminal:area} $\abs S\le\cA(K)-c\psi$,
+$\psi\le\eps/c$ and $\abs\Gs-\cA(K)\le\eps$;
+\item\label{prop:stab-terminal:diff} $\abs{S\setminus U}\le\eps$ and
+$\abs{U\setminus S}\le2\eps$;
+\item\label{prop:stab-terminal:hall}
+$\max(\ell^{\mathrm b}_K(t,p),\ell^{\mathrm d}_K(t,p))\ge-4R\psi$ for $p\in S$
+and $t\in(0,\pi/2)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{lemma}[a rectangle missed by the sofa]\label{lem:stab-floor}
+There are $c_0,\delta,\psi_0>0$ such that for every $K\in\Kc_{\pi/2}$ with
+$\dH(K,\KG)\le\delta$, every $\psi\in(0,\psi_0]$ and every set $S$ with
+$\ell^{\mathrm b}_K(\pi/2-\psi,p)\ge0$ for $p\in S$, there is a measurable
+$F\subset K\setminus\cN(K)$ with $F\cap S=\emptyset$ and $\abs F=c_0\psi$.
+\end{lemma}
+
+\begin{proof}
+Let $x_0=-h_{\KG}(\pi)$, $d=(a_\Gamma-x_0)/2>0$ (\cref{lem:stab-roof}),
+$l=x_0+d/2$ and $r=a_\Gamma-d$. As $(x_0,0),(a_\Gamma,1)\in\KG$, the rectangle
+$[l,r]\times[0,1/4]$ lies in $\KG$, so by compactness there is $m>0$ such that
+the points of $[l,r]\times[0,1/8]$ have distance at least $m$ from the
+supporting lines of $\KG$ with normals in $[0,\pi]$. For $\delta\le m/2$ this
+rectangle lies in $K$ by \eqref{eq:cap-fan}, and by
+\cref{lem:stab-niche}\ref{lem:stab-niche:x} with $\eta=d/4$ it misses
+$\cN(K)$. By \cref{lem:stab-faces}\ref{lem:stab-faces:angle} for the top edge
+of $\KG$, $q=v^+_K(\pi/2)$ has $q_y=1$ and $q_x>a_\Gamma-d/4$, for small
+$\delta$. Let
+\[
+  c_0=(r-l)d/8,\qquad\psi_0=\min(1,d/4,1/d)\qquad\text{and}\qquad
+  F=[l,r]\times[0,\psi d/8].
+\]
+For $p\in F$, as
+$h_K(\pi/2-\psi)\ge q_x\sin\psi+\cos\psi$, $q_x-p_x\ge3d/4$,
+$\sin\psi\ge\psi/2$ and $1-\cos\psi\le\psi^2/2\le\psi d/8$,
+\[
+  \ell^{\mathrm b}_K(\tfrac\pi2-\psi,p)\le-(q_x-p_x)\sin\psi+p_y\cos\psi
+    +1-\cos\psi\le-\tfrac{3\psi d}8+\tfrac{\psi d}8+\tfrac{\psi d}8<0,
+\]
+so $p\notin S$.
+\end{proof}
+
+\begin{lemma}[the omitted wedges]\label{lem:stab-wedges}
+For all $\eta>0$ and $R\ge1$ there are $\delta\in(0,1]$ and $\psi_0>0$ such
+that
+\[
+  \abs{O_\omega(K)}\le4\eta(3R+1)(\pi/2-\omega)
+\]
+for every $K\in\Kc_{\pi/2}$ with $\dH(K,\KG)\le\delta$ and $\norm p\le R$ on
+$K$, and every $\omega\in[0,\pi/2]$ with $\pi/2-\omega\le\psi_0$.
+\end{lemma}
+
+\begin{proof}
+A point $p\in O_\omega(K)$ has $p_y\ge0$ and both coordinates of
+$\ell_K(t,p)$ negative at some $t\in[\omega,\pi/2)$, so $p_y<\xx_K(t)_y$
+(proof of \cref{lem:stab-niche}). As $h_K$ is $2R$-Lipschitz, $h_K(\pi/2)=1$,
+$\abs{h_K}\le R$ and $\cos t\le\pi/2-t$,
+\[
+  \xx_K(t)_y=(h_K(t)-1)\sin t+(h_K(t+\pi/2)-1)\cos t\le(3R+1)(\pi/2-\omega).
+\]
+By \cref{lem:stab-niche}\ref{lem:stab-niche:x},
+$a_\Gamma-\eta\le p_x\le b_\Gamma+\eta$. Every $x\in(a_\Gamma,b_\Gamma)$ is the
+abscissa of a point of $\Gamma$ other than $\bD(t_0)$ and $\bB(t_5)$, and these
+points have positive height: $\bD_y$ increases strictly from $0$ on
+$[t_0,t_2]$, $\bB_y$ decreases strictly to $0$ on $[t_3,t_5]$
+(\cref{fact:gerver}\ref{fact:gerver:niche}), and $\xx_y>0$ on $[t_1,t_4]$
+(\cref{fact:height}). So the segment $(a_\Gamma,b_\Gamma)\times\{0\}$ lies in
+$\cN(\KG)$, and by compactness there is $\nu>0$ such that each
+$x\in[a_\Gamma+\eta,b_\Gamma-\eta]$ has a $t\in(\nu,\pi/2-\nu)$ at which both
+coordinates of $\ell_{\KG}(t,(x,0))$ are less than $-\nu$. Let
+$y_0=\min(1,\nu/4)$. If $\delta\le y_0$, the points of the rectangle
+$[a_\Gamma+\eta,b_\Gamma-\eta]\times[0,y_0]$ then lie in $\cN_\omega(K)$ when
+$\omega>\pi/2-\nu$. Let $\psi_0=\min(\nu/2,y_0/(3R+1))$; then $\omega>\pi/2-\nu$
+and $(3R+1)(\pi/2-\omega)\le y_0$, so $O_\omega(K)$ lies in
+\[
+  \bigl([a_\Gamma-\eta,a_\Gamma+\eta]\cup[b_\Gamma-\eta,b_\Gamma+\eta]\bigr)
+  \times[0,(3R+1)(\pi/2-\omega)].\qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:stab-terminal}]
+Caps with $\dH(K,\KG)\le1$ lie in
+\[
+  \KG+\mathbb B(0,1)\subset\mathbb B(0,R)
+\]
+for some $R\ge1$. Let $c_0$ be as in \cref{lem:stab-floor},
+\[
+  c=c_0/2\qquad\text{and}\qquad\eta=c_0/(16(3R+1)),
+\]
+and let $\delta,\psi_0$ be the least of those of
+\cref{lem:stab-floor,lem:stab-wedges,prop:stab-local}. By
+\cref{prop:stab-local}, $\abs U=\cA(K)\le\abs\Gs$. The set
+$V=K\setminus\cN_\omega(K)$ contains $U$ and, by the constraints, $S$, and
+\[
+  \abs{V\setminus U}=\abs{O_\omega(K)}\le c\psi.
+\]
+\Cref{lem:stab-floor}, or $F=\emptyset$ if $\psi=0$, gives $F\subset U$,
+disjoint from $S$, with $\abs F=2c\psi$, so
+\[
+  \abs S+2c\psi\le\abs V=\abs U+\abs{V\setminus U}\le\cA(K)+c\psi ,
+\]
+where the first inequality holds as $S$ and $F$ are disjoint subsets of $V$,
+and the last as $\abs U=\cA(K)$ and $\abs{V\setminus U}\le c\psi$. With
+$\cA(K)\le\abs\Gs$ this gives \ref{prop:stab-terminal:area}, then
+\[
+  \abs{S\setminus U}\le\abs{V\setminus U}\le c\psi\le\eps\qquad\text{and}\qquad
+  \abs{U\setminus S}=\abs U-\abs S+\abs{S\setminus U}\le2\eps.
+\]
+For \ref{prop:stab-terminal:hall}, $\ell^{\mathrm b}_K(\cdot,p)$ and
+$\ell^{\mathrm d}_K(\cdot,p)$ are $4R$-Lipschitz for $p\in K$, and their
+maximum is nonnegative at $\omega$.
+\end{proof}
+
+\subsection{From the cap back to the sofa}\label{sec:stab-recovery}
+
+\begin{lemma}[a right-angle cap of a sofa]\label{lem:stab-sofacap}
+Let $S$ be a moving sofa with rotation angle $\omega$ and $h_S(\pi/2)=1$, and
+let
+\[
+  K=\{p:p_y\ge0,\ \ip p{u_t}\le h_S(t)\text{ for }t\in[0,\pi]\}.
+\]
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-sofacap:sofa} $S\subset\R\times[0,1]$,
+$h_S(\omega)+h_S(\omega+\pi)\le1$, and $S\subset L_S(t)$ for
+$t\in[0,\omega]$.
+\item\label{lem:stab-sofacap:cap} $K$ is a cap in $\Kc_{\pi/2}$ with
+$S\subset K$ and $h_K=h_S$ on $[0,\pi]$, and, if $\omega\in[0,\pi/2]$, $S$
+satisfies the constraints of $(K,\omega)$. If $S$ and $\Gs$ are
+$\delta$-close, then $\dH(K,\KG)\le\delta$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-sofacap:sofa} As in the proof of \cref{cor:translate},
+$p_y-q_y\le1$ for $p,q\in S$, so $S\subset\R\times[0,1]$, and the end position
+$\Phi_1(S)\subset V_L$ gives $\ip{q-p}{u_\omega}\le1$. For $t\in[0,\omega]$,
+some $s$ has $\theta(s)=-t$, and $\Phi_s(S)\subset L$ puts $S$ in a translate
+of $R_tL$, hence in $L_S(t)$ \baek{Prop.~2.2.3}.
+\ref{lem:stab-sofacap:cap} $K$ is closed, convex, contained in
+$[-h_S(\pi),h_S(0)]\times[0,1]$, contains $S$ and, with each point $p$, the
+point $(p_x,0)$; as an intersection of half-planes with normals in
+$[0,\pi]\cup\{3\pi/2\}$, it is a cap, with $h_K=h_S$ on $[0,\pi]$. If
+$\omega\le\pi/2$ and $t\in[0,\omega]$, then $t$ and $t+\pi/2$ lie in
+$[0,\pi]$, so $\xx_K(t)=\xx_S(t)$; as $S\subset L_S(t)$, at each point of $S$
+one of $\ell^{\mathrm b}_K(t,\cdot)$ and $\ell^{\mathrm d}_K(t,\cdot)$ is
+nonnegative. Also $\ell^{\mathrm b}_K(\omega,\cdot)\ge0$ on $S$ by
+\ref{lem:stab-sofacap:sofa}. Finally $h_{\KG}=h_\Gs$ on $[0,\pi]$
+(\cref{fact:monotone}\ref{fact:monotone:cap},
+\cref{fact:gerver}\ref{fact:gerver:cap}), and \cref{lem:stab-lower} gives
+\[
+  \dH(K,\KG)=\max_{[0,\pi]}\abs{h_S-h_\Gs}\le\delta.\qedhere
+\]
+\end{proof}
+
+\begin{lemma}[margins of Gerver's sofa]\label{lem:stab-margins}
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-margins:outer} There is $d_0>0$ such that
+$h_{\KG}(t)-\ip p{u_t}\ge d_0$ for $p\in\cN(\KG)$ and $t\in[0,\pi]$.
+\item\label{lem:stab-margins:roof} There are $c_1,\tau>0$ such that every
+$p\in\cN(\KG)$ has a $t\in(0,\pi/2)$ at which both coordinates of
+$\ell_{\KG}(t,p)$ are at most $-\min(c_1(\gamma(p_x)-p_y),\tau)$.
+\item\label{lem:stab-margins:balls} There are $\kappa,r_0>0$ such that for
+every $p\in\Gs$ and $\rho\in(0,r_0]$ some disk $\mathbb B(z,\kappa\rho)$ lies
+in $\Gs\cap\mathbb B(p,\rho)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-margins:outer} By \cref{lem:stab-roof},
+$\cN(\KG)\subset[a_\Gamma,b_\Gamma]\times[0,\bar\gamma]$, and
+\[
+  h_{\KG}(t)-\ip p{u_t}>0
+\]
+on this rectangle for $t\in[0,\pi]$: at $0$ and $\pi$ as
+$-h_{\KG}(\pi)<a_\Gamma<b_\Gamma<h_{\KG}(0)$, and otherwise as $(p_x,1)\in\KG$
+makes it at least $(1-p_y)\sin t$; compactness gives $d_0$.
+\ref{lem:stab-margins:roof} Let $q=(p_x,\gamma(p_x))\in\Gamma$ and
+$d=q_y-p_y$. Moving down by $d$ lowers $\ell^{\mathrm b}_{\KG}(t,\cdot)$ by
+$d\sin t$ and $\ell^{\mathrm d}_{\KG}(t,\cdot)$ by $d\cos t$. If $q=\xx(t)$,
+$t\in[t_1,t_4]$, both coordinates of $\ell_{\KG}(t,q)$ vanish, and
+$\min(\sin t,\cos t)$ is bounded below. For $q=\bB(t)$, $t\in[t_3,t_5)$,
+$\ell^{\mathrm b}_{\KG}(t,q)=0$, $\sin t\ge\sin t_1$, and
+$\ell^{\mathrm d}_{\KG}(t,q)=\alpha(t)$ is at most a negative constant, as
+$\alpha<0$ on $(0,\pi/2)$ and
+\[
+  \bB(\pi/2)_x=\xx(\pi/2)_x-\alpha(\pi/2)>\xx(t_1)_x>\xx(\pi/2)_x.
+\]
+The case $q=\bD(t)$ is symmetric, with $\beta$. \ref{lem:stab-margins:balls} By
+\cref{lem:stab-roof}, $\Gs$ is the union of the convex bodies
+$\KG\cap\{x\le a_\Gamma\}$, $\KG\cap\{x\ge b_\Gamma\}$ and
+$[a_\Gamma,b_\Gamma]\times[\bar\gamma,1]$, which have interior points, and of
+\[
+  \{(x,y):x\in[a_\Gamma,b_\Gamma],\ \gamma(x)\le y\le(1+\bar\gamma)/2\}.
+\]
+A convex body $C$ with $\mathbb B(z_0,s)\subset C\subset\mathbb B(z_0,D)$ has
+the property with $\kappa=s/(D+s)$ and $r_0=D+s$: the homothety of ratio
+$\rho/(D+s)$ about $p$ maps $\mathbb B(z_0,s)$ into $C\cap\mathbb B(p,\rho)$.
+For a point $p$ of the last set,
+\[
+  \rho\le\min(b_\Gamma-a_\Gamma,(1-\bar\gamma)/2)\qquad\text{and}\qquad
+  w=\rho/(4(L+2)),
+\]
+the disk $\mathbb B(z,w)$, $z=(p_x\pm2w,p_y+(3L+2)w)$ with the sign towards the
+farther end of $[a_\Gamma,b_\Gamma]$, lies in $\Gs\cap\mathbb B(p,\rho)$, as
+$\gamma$ is $L$-Lipschitz.
+\end{proof}
+
+\begin{lemma}[the two directed distances]\label{lem:stab-directed}
+Let $K_0,K\in\Kc_{\pi/2}$ and $\delta\ge0$ with $\dH(K,K_0)\le\delta$, and let
+$U_0=K_0\setminus\cN(K_0)$ and $U=K\setminus\cN(K)$.
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-directed:to} Suppose that $K_0$ has, in place of $\KG$,
+the properties of \cref{lem:stab-roof} (with some
+$a_\Gamma,b_\Gamma,\bar\gamma,L,\gamma$) and of
+\cref{lem:stab-margins}\ref{lem:stab-margins:outer},
+\ref{lem:stab-margins:roof} (with some $d_0,c_1,\tau$). Let $\zeta\ge0$,
+$\delta<d_0$, $\delta+\zeta<\tau$, and let $S\subset K$ have
+\[
+  \max(\ell^{\mathrm b}_K(t,p),\ell^{\mathrm d}_K(t,p))\ge-\zeta\quad
+  \text{for $p\in S$ and $t\in(0,\pi/2)$}.
+\]
+Then every point of $S$ lies within $\max(1,1/c_1)(\delta+\zeta)$ of a point
+of $U_0$.
+\item\label{lem:stab-directed:from} Suppose that $U_0$ has the property of
+\cref{lem:stab-margins}\ref{lem:stab-margins:balls} (with some $\kappa,r_0$).
+Let $A\ge0$, $\eps>0$, $\rho=(4(A+1)/\kappa)\sqrt\eps\le r_0$ and
+$2\delta\le A\sqrt\eps$, and let $S$ be a set with
+$\abs{U\setminus S}\le2\eps$. Then every point of $U_0$ lies within $\rho$ of a
+point of $S$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-directed:to} Let $p\in S\setminus U_0$; the coordinates of
+$\ell_K$ and $\ell_{K_0}$ differ by at most $\delta$. If $p\in\cN(K_0)$, let
+$d=\gamma(p_x)-p_y$ and take $t$ from
+\cref{lem:stab-margins}\ref{lem:stab-margins:roof}; were $c_1d>\delta+\zeta$,
+both coordinates of $\ell_K(t,p)$ would be less than $-\zeta$, so
+$d\le(\delta+\zeta)/c_1$, and $(p_x,\gamma(p_x))\in U_0$ is at distance $d$.
+Otherwise $p\notin K_0$, and some $q\in K_0$ has $\norm{p-q}\le\delta$
+(\cref{lem:stab-lower}); were $q\in\cN(K_0)$, then
+\[
+  \ip p{u_t}\le\ip q{u_t}+\delta\le h_{K_0}(t)-d_0+\delta<h_{K_0}(t)\quad
+  \text{for }t\in[0,\pi],
+\]
+and $p\in K_0$ by \eqref{eq:cap-fan}. So $q\in U_0$.
+\ref{lem:stab-directed:from} First, $U$ contains every $p'$ with
+$\mathbb B(p',2\delta)\subset U_0$: $p'+\delta u_t\in K_0$ gives
+$\ip{p'}{u_t}\le h_K(t)$ for $t\in[0,\pi]$, so $p'\in K$; and if both
+coordinates of $\ell_K(t,p')$ were negative, then $p'-\delta u_t-\delta v_t$,
+at distance $\sqrt2\delta$, would have both coordinates of $\ell_{K_0}$
+negative and lie in $\cN(K_0)$. Now let $p\in U_0$ have no point of $S$ in
+$\mathbb B(p,\rho)$, take $\mathbb B(z,\kappa\rho)\subset U_0\cap\mathbb
+B(p,\rho)$, and let
+\[
+  \mu=\kappa\rho/2=2(A+1)\sqrt\eps\ge2\delta.
+\]
+The square of side $\mu$ centered at $z$ lies in $\mathbb B(z,\mu)$, so the
+disks of radius $2\delta$ about its points lie in $\mathbb B(z,\kappa\rho)$;
+hence it lies in $U\setminus S$, and
+\[
+  4(A+1)^2\eps=\mu^2\le\abs{U\setminus S}\le2\eps,
+\]
+which is false.
+\end{proof}
+
+\begin{proposition}[local recovery of the sofa]\label{prop:stab-sofa}
+There are $C,c,\delta,\psi_0,\eps_0>0$, with $\delta\le1$ and $\eps_0\le1$,
+such that for every $K\in\Kc_{\pi/2}$ with $h_K(\pi)=h_{\KG}(\pi)$ and
+$\dH(K,\KG)\le\delta$, every $\omega\in[0,\pi/2]$ with
+$\pi/2-\omega\le\psi_0$ and every measurable set $S$ that satisfies the
+constraints of $(K,\omega)$ and has
+\[
+  \eps=\abs\Gs-\abs S\in(0,\eps_0),
+\]
+the sets $S$ and $\Gs$ are $C\sqrt\eps$-close and $\pi/2-\omega\le\eps/c$.
+\end{proposition}
+
+\begin{proof}
+Take $c,\delta_1,\psi_0,R$ from \cref{prop:stab-terminal}, $\delta_2$ from
+\cref{prop:stab-local}, $\delta=\min(\delta_1,\delta_2)$, and
+$d_0,c_1,\tau,\kappa,r_0$ from \cref{lem:stab-margins}. Let
+\begin{gather*}
+  a=2\sec\varphi,\qquad B'=4R/c,\qquad C_1=\max(1,1/c_1)(a+B'),\\
+  C_2=4(2a+1)/\kappa\qquad\text{and}\qquad C=\max(1,C_1,C_2),
+\end{gather*}
+and choose $\eps_0\le1$ such that
+\[
+  a\sqrt\eps<d_0,\qquad(a+B')\sqrt\eps<\tau\qquad\text{and}\qquad
+  C_2\sqrt\eps<r_0\qquad\text{for }\eps<\eps_0.
+\]
+By \cref{prop:stab-terminal},
+\[
+  \pi/2-\omega\le\eps/c,\qquad\abs\Gs-\cA(K)\le\eps,\qquad
+  \abs{(K\setminus\cN(K))\setminus S}\le2\eps,
+\]
+and \ref{prop:stab-terminal:hall} holds with $4R(\pi/2-\omega)\le B'\sqrt\eps$,
+as $\eps\le1$. As $s_K=0$, \cref{prop:stab-local,lem:stab-lower} give
+$\dH(K,\KG)\le a\sqrt\eps$. By \cref{lem:stab-roof,lem:stab-margins}, $\KG$
+has the properties of \cref{lem:stab-directed}, with
+$\KG\setminus\cN(\KG)=\Gs$. Part \ref{lem:stab-directed:to}, with
+$a\sqrt\eps$ for $\delta$ and $\zeta=B'\sqrt\eps$, puts $S$ within
+$C_1\sqrt\eps$ of $\Gs$; part \ref{lem:stab-directed:from}, with $A=2a$, puts
+$\Gs$ within $C_2\sqrt\eps$ of $S$.
+\end{proof}
+
+\begin{lemma}[the symmetric difference]\label{lem:stab-symdiff}
+For every $C>0$ there are $C'>0$ and $\eps_0\in(0,1]$ such that every compact
+set $S$ that is $C\sqrt\eps$-close to $\Gs$, where
+$\eps=\abs\Gs-\abs S\in(0,\eps_0]$, satisfies
+$\abs{S\triangle\Gs}\le C'\sqrt\eps$.
+\end{lemma}
+
+\begin{proof}
+Fix a disk $\mathbb B(z,r)\subset\KG$. Then
+\[
+  h_{\KG}+d\le(1+d/r)h_{\KG}-(d/r)\ip z{u_t},
+\]
+so $\KG+d\,\mathbb B(0,1)$ lies in the image of $\KG$ under the homothety of
+ratio $1+d/r$ about $z$. So the points within $d\le1$ of $\KG$ outside it have
+area at most $((1+d/r)^2-1)\abs{\KG}\le A_0d$ for a constant $A_0$. A point
+$p\in\cN(\KG)$ within $d$ of a point $q\in\Gs$ has
+$\gamma(p_x)-p_y\le(L+1)d$: if $q_x\in[a_\Gamma,b_\Gamma]$, then
+$q_y\ge\gamma(q_x)\ge\gamma(p_x)-Ld$, and otherwise $\gamma(p_x)\le Ld$, while
+$q_y\ge0$. With $C\sqrt{\eps_0}\le1$, $d=C\sqrt\eps$ and $d'=(L+1)d$, the
+points of $S\setminus\Gs$ in $\cN(\KG)$ lie in
+\[
+  \{(x,y):x\in[a_\Gamma,b_\Gamma],\ \gamma(x)-2d'<y<\gamma(x)+d'\},
+\]
+of area $3d'(b_\Gamma-a_\Gamma)$. So $\abs{S\setminus\Gs}\le Ad$ with
+$A=A_0+3(L+1)(b_\Gamma-a_\Gamma)$, and, as $\eps\le1$,
+\[
+  \abs{S\triangle\Gs}=\abs\Gs-\abs S+2\abs{S\setminus\Gs}\le(1+2AC)\sqrt\eps.
+  \qedhere
+\]
+\end{proof}
+
+\subsection{Compactness and uniqueness; proof of
+\texorpdfstring{\cref{thm:stability,thm:stability-angle}}{the stability
+theorems}}\label{sec:stab-entry}
+
+Let $d_\infty$ be the Hausdorff distance between nonempty compact sets for the
+norm $\norm{(x,y)}_\infty=\max(\abs x,\abs y)$. As $\norm p\le2\norm p_\infty$,
+sets with $d_\infty\le r$ are $2r$-close; and the nonempty compact subsets of a
+compact set form a compact space for $d_\infty$. For a compact set $S$,
+$\ell^{\mathrm b}_S$, $\ell^{\mathrm d}_S$ and $\ell_S$ are defined as for
+caps, with $h_S$ in place of $h_K$.
+
+\begin{lemma}[limits of normalized sofas]\label{lem:stab-limit}
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:stab-limit:move} Let $S$ be a compact connected set and
+$\omega\ge0$ with
+\begin{gather*}
+  S\subset\R\times[0,1],\qquad h_S(\pi/2)=1,\qquad
+  h_S(\omega)+h_S(\omega+\pi)\le1\qquad\text{and}\\
+  \max(\ell^{\mathrm b}_S(t,p),\ell^{\mathrm d}_S(t,p))\ge0\quad
+  \text{for $p\in S$ and $t\in[0,\omega]$}.
+\end{gather*}
+Then $S$ is a moving sofa with rotation angle $\omega$.
+\item\label{lem:stab-limit:box} A moving sofa $S$ with rotation angle
+\[
+  \omega\ge\pi/4,\qquad h_S(\pi/2)=1\qquad\text{and}\qquad h_S(\pi)=h_\Gs(\pi)
+\]
+lies in $[-h_\Gs(\pi),-h_\Gs(\pi)+6]\times[0,1]$.
+\item\label{lem:stab-limit:lim} Let $S_n$ be moving sofas with rotation
+angles
+\[
+  \omega_n\in[\omega_0,\pi/2],\qquad h_{S_n}(\pi/2)=1\qquad\text{and}\qquad
+  h_{S_n}(\pi)=h_\Gs(\pi),
+\]
+and let $S$ be a nonempty compact set with $d_\infty(S_n,S)\to0$ and
+$\omega_n\to\omega$. Then $S$ is a moving sofa with rotation angle
+$\omega\in[\omega_0,\pi/2]$, $h_S(\pi/2)=1$ and $h_S(\pi)=h_\Gs(\pi)$; and if
+$\abs{S_n}\to M$, then $M\le\abs S$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:stab-limit:move} Let
+\[
+  \theta(s)=-s\omega\qquad\text{and}\qquad c(s)=-R_{-s\omega}\xx_S(s\omega).
+\]
+Then $\Phi_s(p)=R_{-s\omega}(p-\xx_S(s\omega))$ has the coordinates
+$\ell_S(s\omega,p)$, both at most $1$ and one nonnegative, so
+$\Phi_s(S)\subset L$. At $s=0$ they are $(p_x-h_S(0)+1,p_y)$, so
+$\Phi_0(S)\subset H_L$; at $s=1$, $\ell^{\mathrm b}_S(\omega,p)\in[0,1]$, as
+$\ip p{u_\omega}\ge-h_S(\omega+\pi)\ge h_S(\omega)-1$, so
+$\Phi_1(S)\subset V_L$.
+\ref{lem:stab-limit:box} By \cref{lem:stab-sofacap}, $S\subset\R\times[0,1]$
+and $S\subset L_S(\pi/4)$. As $S$ is connected and
+$\ell^{\mathrm b}_S(\pi/4,\cdot)-\ell^{\mathrm d}_S(\pi/4,\cdot)$ takes both
+signs on $S$ (where $\ip p{u_{\pi/4}}$ and where $\ip p{v_{\pi/4}}$ is
+largest), some $z\in S$ has $\ell^{\mathrm b}_S=\ell^{\mathrm d}_S\ge0$ at
+$\pi/4$, so
+\[
+  (h_S(\pi/4)+h_S(3\pi/4)-2)/\sqrt2=\xx_S(\pi/4)_y\le z_y\le1.
+\]
+For $p,q\in S$, as $p_y,q_y\ge0$,
+\[
+  p_x-q_x\le\sqrt2(h_S(\pi/4)+h_S(3\pi/4))\le6;
+\]
+and $\min_Sp_x=-h_\Gs(\pi)$. \ref{lem:stab-limit:lim} Support values converge
+along converging directions, as
+\[
+  \abs{h_{S_n}(t_n)-h_S(t)}\le2d_\infty(S_n,S)+\abs{h_S(t_n)-h_S(t)}
+\]
+(\cref{lem:stab-lower}). So $h_S(\pi/2)=1$, $h_S(\pi)=h_\Gs(\pi)$, and
+$h_S(\omega)+h_S(\omega+\pi)\le1$ by \cref{lem:stab-sofacap}; and
+$S\subset\R\times[0,1]$. $S$ is connected, as disjoint closed sets that cover
+$S$ and meet it have disjoint open neighborhoods that would eventually cover
+$S_n$ and meet it. For $p\in S$ and $t\in[0,\omega]$, take $p_n\in S_n$ with
+$p_n\to p$ and $t_n=(t/\omega)\omega_n$; the inequality
+$\max(\ell^{\mathrm b}_{S_n},\ell^{\mathrm d}_{S_n})(t_n,p_n)\ge0$
+(\cref{lem:stab-sofacap}) passes to the limit, and \ref{lem:stab-limit:move}
+applies. Finally, for $r>\abs S$, an open set $\mathcal O\supset S$ with
+$\abs{\mathcal O}<r$ contains $S_n$ for large $n$, so $M\le r$.
+\end{proof}
+
+\begin{proposition}[sofas of small deficit are near
+$\Gs$]\label{prop:stab-entry}
+For all $\rho,\psi_0>0$ there is $\eps_0>0$ such that for every moving sofa
+$S$ with rotation angle $\omega\in[\omega_0,\pi/2]$ and $\eps(S)<\eps_0$, the
+sets $S^\natural$ and $\Gs$ are $\rho$-close, and $\pi/2-\omega<\psi_0$.
+\end{proposition}
+
+\begin{proof}
+Otherwise there are moving sofas $S_n$ with rotation angles
+\[
+  \omega_n\in[\omega_0,\pi/2]\qquad\text{and}\qquad\eps(S_n)<1/(n+1)
+\]
+that violate the conclusion. The translates $S_n^\natural$ are moving sofas
+with the same rotation angles, lie in the box of
+\cref{lem:stab-limit}\ref{lem:stab-limit:box}, as $\omega_0\ge\pi/4$, and have
+$\abs{S_n^\natural}\to\abs\Gs$, as $0\le\eps(S_n)<1/(n+1)$
+(\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}). By
+compactness, a subsequence has
+$d_\infty(S^\natural_n,S)\to0$ and $\omega_n\to\omega$ for a nonempty compact
+set $S$; by \cref{lem:stab-limit}, $S$ is a moving sofa with rotation angle
+$\omega$, $h_S(\pi/2)=1$, $h_S(\pi)=h_\Gs(\pi)$ and $\abs S\ge\abs\Gs$, so
+$\abs S=\abs\Gs$ by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}.
+\Cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate} gives
+$S+w=\Gs$ for some $w$, and the support values at $\pi/2$ and $\pi$ give
+$w=0$. As $\Gs$ is a moving sofa with rotation angle $\omega$,
+$\ip{q-p}{u_\omega}\le1$ on $\Gs$ (\cref{lem:stab-sofacap}), so
+$\omega=\pi/2$ by \cref{lem:gerver-width}\ref{lem:gerver-width:gt}. For large
+$n$, $d_\infty(S_n^\natural,\Gs)<\rho/2$ and $\pi/2-\omega_n<\psi_0$, a
+contradiction.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:stability,thm:stability-angle}]
+Take $C,c,\delta,\psi_0,\eps_1$ from \cref{prop:stab-sofa}, $C',\eps_2$ from
+\cref{lem:stab-symdiff} for this $C$, $\eps_3$ from \cref{prop:stab-entry} for
+$\rho=\delta$ and this $\psi_0$, and $\eps_0=\min(\eps_1,\eps_2,\eps_3)$. Let
+$S$ be a moving sofa with rotation angle $\omega\in[\omega_0,\pi/2]$ and
+$\eps=\eps(S)<\eps_0$. If $\eps=0$, then $S^\natural=\Gs$ and $\omega=\pi/2$,
+as in the proof of \cref{prop:stab-entry}. Otherwise $\eps>0$, by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}. Then
+$N=S^\natural$ is a moving sofa with rotation angle $\omega$, and by
+\cref{prop:stab-entry} $N$
+and $\Gs$ are $\delta$-close and $\pi/2-\omega<\psi_0$. The set $K$ of
+\cref{lem:stab-sofacap} for $N$, a cap in $\Kc_{\pi/2}$, has
+$h_K(\pi)=h_{\KG}(\pi)$ (as $h_{\KG}=h_\Gs$ on $[0,\pi]$) and
+$\dH(K,\KG)\le\delta$, and $N$ satisfies the constraints of $(K,\omega)$. So
+\cref{prop:stab-sofa} shows that $N$ and $\Gs$ are $C\sqrt\eps$-close and
+$\pi/2-\omega\le\eps/c$, and \cref{lem:stab-symdiff} gives
+\[
+  \abs{N\triangle\Gs}\le C'\sqrt\eps.
+\]
+This proves \cref{thm:stability-angle}, with $C''=1/c$. For
+\cref{thm:stability}, let
+\[
+  \eps_0'=\min(\eps_0,\abs\Gs-11/5)>0
+\]
+(\cref{fact:gerver}\ref{fact:gerver:def}): a moving sofa with deficit less
+than $\eps_0'$ has area more than $11/5$, hence a rotation angle in
+$[\omega_0,\pi/2]$ (\cref{fact:angle}).
+\end{proof}
+
+\subsection{Punctured sofas; proof of
+\texorpdfstring{\cref{thm:stability-exponent}}{the optimality of the
+exponent}}\label{sec:stab-puncture}
+
+\begin{lemma}[removing a disk]\label{lem:stab-puncture}
+Let $X$ be a closed connected set, $p\in\R^2$ and $r>0$ with
+$\mathbb B(p,r)\subset X$, and let $Y=X\setminus\mathbb B^\circ(p,r)$. Then
+$Y$ is closed and connected, and $r$-close to $X$; $\abs X-\abs Y=\pi r^2$ if
+$X$ is compact; and if $X$ is a moving sofa with rotation angle $\omega$, so is
+$Y$.
+\end{lemma}
+
+\begin{proof}
+The boundary circle of $\mathbb B^\circ(p,r)$ lies in $Y$ and is connected. If
+closed sets $A,B$ cover $Y$ and $Y\cap A\cap B=\emptyset$, the circle lies in
+one of them, say $A$; then $(Y\cap A)\cup\mathbb B(p,r)$ and $Y\cap B$ are
+disjoint closed sets that cover $X$, so $Y\cap B=\emptyset$. A point
+$x\in\mathbb B(p,r)$ lies within $r$ of the point of the circle on the ray
+from $p$ through $x$. The disk $\mathbb B^\circ(p,r)$ has area $\pi r^2$, and a
+movement of $X$ moves the closed connected subset $Y$.
+\end{proof}
+
+\begin{lemma}[rigid copies keep interior points]\label{lem:stab-rigid}
+Let $X$ be a compact set and $p$ an interior point of $X$. There is $\eta>0$
+such that $p\in g(X)$ for every rigid motion $g$ for which $X$ and $g(X)$ are
+$d$-close for some $d<\eta$.
+\end{lemma}
+
+\begin{proof}
+Otherwise there are $g_n(x)=R_{\vartheta_n}x+v_n$ with $X$ and $g_n(X)$
+$d_n$-close, $d_n\to0$ and $p\notin g_n(X)$. The $v_n$ are bounded, so a
+subsequence has
+\[
+  (\cos\vartheta_n,\sin\vartheta_n,v_n)\to(\cos\vartheta,\sin\vartheta,v);
+\]
+let $g(x)=R_\vartheta x+v$. For $x\in X$, $g_n^{-1}(x)$ lies within $d_n$ of
+$X$, so $g^{-1}(x)\in X$. Hence $g^{-1}$ maps the interior of $X$ onto an open
+subset of $X$ that contains $g^{-1}(p)$, and, as $g_n^{-1}(p)\to g^{-1}(p)$,
+$p\in g_n(X)$ for large $n$, a contradiction.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:stability-exponent}]
+\ref{thm:stability-exponent:family} As $\Gs$ is the closure of its interior
+(\cref{prop:regular}), it has an interior point $p$; let
+$\mathbb B(p,R)\subset\Gs$, let $\eta$ be as in \cref{lem:stab-rigid} for
+$X=\Gs$, and let $r_0=\min(R/2,\eta/3)$ and $r\in(0,r_0)$. As $\Gs$ is a
+moving sofa (\cref{fact:gerver}\ref{fact:gerver:cap},
+\cref{fact:monotone}\ref{fact:monotone:envelope}), \cref{lem:stab-puncture}
+shows that $\Gs_r$ is a moving sofa, $r$-close to $\Gs$, with
+$\eps(\Gs_r)=\pi r^2$. If $\Gs_r$ and $g(\Gs)$ are $d$-close with $d<r$, then
+$\Gs$ and $g(\Gs)$ are $(r+d)$-close and $r+d<\eta$, so $p\in g(\Gs)$ by
+\cref{lem:stab-rigid}; then $p$ lies within $d<r$ of a point of $\Gs_r$, which
+is false. So $r\le d$, and $d_{\mathrm{rig}}(\Gs_r,\Gs)=r$, attained by the
+identity. \ref{thm:stability-exponent:no}, \ref{thm:stability-exponent:rig}
+As $2a-1>0$, some $r\in(0,r_0)$ has $\pi r^2<\eps_0$ and
+$C\pi^ar^{2a-1}<1$, that is, $C(\pi r^2)^a<r$. Then $S=\Gs_r$ has
+$0<\eps(S)<\eps_0$ and $C\eps(S)^a<r$. If $S$ and $g(\Gs)$ were
+$C\eps(S)^a$-close for a rigid motion $g$, then $r\le C\eps(S)^a$ by
+\ref{thm:stability-exponent:family}, which is false; this proves
+\ref{thm:stability-exponent:no}. And $S'=S$ has
+$C\eps(S')^a<r=d_{\mathrm{rig}}(S',\Gs)$, which is
+\ref{thm:stability-exponent:rig}.
+\end{proof}

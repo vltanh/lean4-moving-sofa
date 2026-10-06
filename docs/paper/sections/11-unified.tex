@@ -1,0 +1,431 @@
+\section{One certificate for optimality, uniqueness and
+stability}\label{sec:unified}
+
+The estimates of \cref{sec:stab-certificate,sec:stab-cap} combine into one
+estimate for Baek's functional $\cQ$ on the domain $\bar\cT$ of
+\cref{sec:stability}, which we call the coercive certificate
+(\cref{thm:certificate}). For $\xi\in\bar\cT$, call
+\[
+  \abs\Gs-\cQ(\xi)
+\]
+the deficit of $\cQ$ at $\xi$. The first part of the certificate says that the
+deficit is nonnegative. The second part bounds the distance from the cap $K$ of
+$\xi$ to a horizontal translate of Gerver's cap by $2\sec\varphi$ times the
+square root of the deficit; so a small deficit forces a small distance, which is
+what \emph{coercive} refers to.
+
+Optimality, uniqueness and stability rest on these two parts. Let
+$K\in\Kc_{\pi/2}$ be a maximizing cap. Then
+\[
+  \abs\Gs\le\cA(K)\le\cQ(\xi_K)\le\abs\Gs,
+\]
+where the first inequality holds as $K$ is maximizing, the second by Baek's
+bound, which applies as $K\in\Ki$ (\cref{prop:unified-caps}), and the third by
+the first part. So the largest sofa area of a cap in $\Kc_{\pi/2}$ is
+$\abs\Gs$, and \cref{sec:unified-optimality} turns this into optimality.
+The deficit at $\xi_K$ is $0$, so by the second part $K$ is a horizontal
+translate of $\KG$; the argument of \cref{sec:reduction,sec:recovery} turns
+this into uniqueness (\cref{sec:unified-caps,sec:unified-uniqueness}). For a
+cap $K$ near $\KG$, \cref{sec:stab-local} proves $\cA(K)\le\cQ(\xi_K)$ without
+the injectivity condition, and the second part then bounds the distance from
+$K$ to a horizontal translate of $\KG$ by a multiple of $\sqrt{\abs\Gs-\cA(K)}$
+(\cref{prop:stab-local}). \Cref{sec:stability} derives stability from this bound
+and from the optimality and uniqueness proved here
+(\cref{sec:unified-stability}). \Cref{thm:unified} collects the three results.
+
+The proof of uniqueness in
+\cref{sec:reduction,sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
+uses Baek's theorem (\cref{fact:optimal}) to know that a cap with sofa area
+$\abs\Gs$ is maximizing, and finds the maximizing caps in $\Kc_{\pi/2}$ through
+the case of equality in the concavity of $\cQ$ (\cref{lem:equality},
+\cref{lem:tangent} and \cref{prop:kernel}). \Cref{rem:second} outlines a
+second proof of Baek's theorem, from the maximizing caps, with the maximality of
+$\cQ$ at $\xi_G$ (\cref{fact:Q}\ref{fact:Q:max}) and this equality analysis. Below, \cref{prop:unified-caps} finds the maximizing
+caps from the certificate instead, and \cref{thm:unified-optimality} proves
+Baek's theorem along the lines of that remark. The proofs of
+\cref{thm:unified-optimality,thm:unified-uniqueness} use the certificate only
+through the two properties of a maximizing cap $K\in\Kc_{\pi/2}$ in
+\cref{prop:unified-caps}:
+\begin{align*}
+  &\cA(K)=\abs\Gs,\text{ and}\\
+  &K=\KG+(s,0)\text{ with }K\setminus\cN(K)=\Gs+(s,0)\text{ for some }s\in\R.
+\end{align*}
+\Cref{rem:second} obtains the same two properties with the maximality of $\cQ$
+at $\xi_G$ and the equality analysis instead, and the formalization proves the
+steps from these two properties to optimality and uniqueness once, for both
+proofs. Besides the certificate, the proofs of
+\cref{sec:unified-caps,sec:unified-optimality,sec:unified-uniqueness} use the
+Facts of \cref{sec:setting} other than \cref{fact:optimal}, its
+\cref{lem:contains,lem:ends}, and results of
+\cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
+other than \cref{prop:U,cor:Ki,thm:caps,cor:all,cor:translate}, which with the
+proof of \cref{thm:main} are the only ones there whose proofs use
+\cref{fact:optimal}. They use neither \cref{lem:equality}, \cref{lem:tangent}
+and \cref{prop:kernel}, nor the results by which Baek derives step~(3) of
+\cref{sec:baek} from the balance of his caps \baek{Thm.~1.5.2,
+Thm.~8.1.1\,(2)}.
+
+\subsection{The certificate}\label{sec:unified-certificate}
+
+Recall from \cref{sec:stability} that $\bar\cT$ is defined as $\cT$
+(\cref{sec:Q}), with $K\in\Kc_{\pi/2}$ in place of $K\in\Ki$; that
+\[
+  s_K=h_{\KG}(\pi)-h_K(\pi),
+\]
+so that $K$ and $\KG+(s_K,0)$ have the same leftmost abscissa; and that two
+sets are $r$-close if every point of each lies within Euclidean distance $r$ of
+a point of the other.
+
+\begin{theorem}[the coercive certificate]\label{thm:certificate}
+Let $\xi=(K,B,D)\in\bar\cT$. Then $\cQ(\xi)\le\abs\Gs$, and the caps $K$ and
+$\KG+(s_K,0)$ are $r$-close, where
+\[
+  r=2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi)}.
+\]
+\end{theorem}
+
+\begin{proof}
+The first assertion is \cref{lem:stab-variation}, and the second is
+\cref{thm:stability-cap}\ref{thm:stability-cap:wide}.
+\end{proof}
+
+The first part comes from the concavity of $\cQ$ on $\bar\cT$ and the sign of
+its directional derivatives at Gerver's triple $\xi_G$
+(\cref{lem:stab-wide,lem:stab-variation}). The second comes from three results.
+The deficit certificate (\cref{prop:stab-certificate}) bounds the energy
+$E_\cS(\KG,K)$ by $\abs\Gs-\cQ(\xi)$. \Cref{lem:stab-residuals} and
+\cref{prop:stab-coercive} bound
+$h_K-h_{\KG+(s_K,0)}$ on $[0,\pi]$ by $2\sec\varphi$ times the square root of
+this energy, and \cref{lem:stab-lower} turns this bound into closeness. By
+\eqref{eq:stab-gap}, the energy measures how far $\cS$ is from being
+convex-linear on the segment from $\KG$ to $K$. \Cref{sec:equality} shows that
+$\cS$ is convex-linear there when $K\in\Ki$ and $\cA(K)=\abs\Gs$
+(\cref{lem:equality}), and solves the resulting equations for $h_K-h_{\KG}$
+(\cref{lem:tangent,prop:kernel}); the certificate replaces these steps by a
+bound.
+
+\subsection{Maximizing right-angle caps}\label{sec:unified-caps}
+
+\begin{lemma}[zero deficit of $\cQ$]\label{lem:zero-deficit}
+Let $\xi=(K,B,D)\in\bar\cT$ with $\cQ(\xi)=\abs\Gs$. Then $K=\KG+(s_K,0)$.
+\end{lemma}
+
+\begin{proof}
+By \cref{thm:certificate}, $K$ and $\KG+(s_K,0)$ are $0$-close. So every point
+of each set lies at distance $0$ from a point of the other, that is, belongs to
+the other, and each set contains the other.
+\end{proof}
+
+\begin{proposition}[maximizing right-angle caps from the
+certificate]\label{prop:unified-caps}
+Let $K\in\Kc_{\pi/2}$ be a maximizing cap.
+\begin{enumerate}[label=(\alph*)]
+\item\label{prop:unified-caps:value} $K\in\Ki$, and
+$\cA(K)=\cQ(\xi_K)=\abs\Gs$.
+\item\label{prop:unified-caps:shape} There is $s\in\R$ with $K=\KG+(s,0)$ and
+$K\setminus\cN(K)=\Gs+(s,0)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\ref{prop:unified-caps:value} Gerver's cap $\KG$ lies in $\Kc_{\pi/2}$ and has
+$\cA(\KG)=\abs\Gs$ (\cref{fact:gerver}\ref{fact:gerver:cap},
+\cref{fact:monotone}\ref{fact:monotone:area}). As $K$ is maximizing,
+$\cA(K)\ge\cA(\KG)=\abs\Gs$, and $\abs\Gs\ge2.2192$ by
+\cref{fact:gerver}\ref{fact:gerver:def}. So $\cA(K)>0$, and $K$ satisfies the
+curvature bounds (\cref{prop:curvature}) and the injectivity condition
+(\cref{prop:inj}). Also
+\[
+  \abs K=\cA(K)+\abs{\cN(K)}\ge\abs\Gs\ge11/5,
+\]
+so $K\in\Ki$. By \cref{fact:Q}\ref{fact:Q:triple}, the canonical triple $\xi_K$
+lies in $\cT$, hence in $\bar\cT$ as $\Ki\subset\Kc_{\pi/2}$, and Baek's bound
+$\cA(K)\le\cQ(\xi_K)$ holds. The first part of \cref{thm:certificate} gives
+$\cQ(\xi_K)\le\abs\Gs$. Hence
+\[
+  \abs\Gs\le\cA(K)\le\cQ(\xi_K)\le\abs\Gs ,
+\]
+and the three numbers are equal.
+
+\ref{prop:unified-caps:shape} By \ref{prop:unified-caps:value}, $K\in\Ki$, so
+$\xi_K\in\cT\subset\bar\cT$, and $\cQ(\xi_K)=\abs\Gs$. So $K=\KG+(s,0)$ with
+$s=s_K$ by \cref{lem:zero-deficit}.
+\Cref{lem:translate}\ref{lem:translate:conv} and then
+\ref{lem:translate:supp}, applied to $\KG+(s,0)$ and $C=\KG$, give
+\[
+  K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0),
+\]
+since $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
+\end{proof}
+
+\subsection{Optimality}\label{sec:unified-optimality}
+
+\begin{theorem}[optimality from the certificate]\label{thm:unified-optimality}
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:unified-optimality:right} Every cap $C\in\Kc_{\pi/2}$ has
+$\cA(C)\le\abs\Gs$. For a cap $K\in\Kc_{\pi/2}$, the following are equivalent:
+\begin{align*}
+  &K\text{ is maximizing};\\
+  &\cA(K)=\abs\Gs;\\
+  &K=\KG+(s,0)\text{ for some }s\in\R.
+\end{align*}
+\item\label{thm:unified-optimality:sofa} $\Gs$ is a moving sofa, and every
+moving sofa $S$ has $\abs S\le\abs\Gs$.
+\item\label{thm:unified-optimality:caps} For every $\omega\in(0,\pi/2]$ and
+every cap $K\in\Kc_\omega$, $\cA_\omega(K)\le\abs\Gs$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{thm:unified-optimality:right} Let $K_{\pi/2}$ be the cap of
+\cref{fact:exists} for $\omega=\pi/2$. It is maximizing, so
+$\cA(K_{\pi/2})=\abs\Gs$ by
+\cref{prop:unified-caps}\ref{prop:unified-caps:value}, and every
+$C\in\Kc_{\pi/2}$ has
+\[
+  \cA(C)\le\cA(K_{\pi/2})=\abs\Gs.
+\]
+A maximizing cap $K$ is a translate $\KG+(s,0)$ by
+\cref{prop:unified-caps}\ref{prop:unified-caps:shape}. A translate
+$K=\KG+(s,0)\in\Kc_{\pi/2}$ has $\cA(K)=\cA(\KG)=\abs\Gs$ by
+\cref{lem:translate}\ref{lem:translate:conv},
+\cref{fact:gerver}\ref{fact:gerver:cap} and
+\cref{fact:monotone}\ref{fact:monotone:area}. Finally, a cap $K$ with
+$\cA(K)=\abs\Gs$ is maximizing, since $\cA(C)\le\abs\Gs$ for every
+$C\in\Kc_{\pi/2}$.
+
+\ref{thm:unified-optimality:sofa} By \cref{fact:gerver}\ref{fact:gerver:cap},
+$\Gs$ is a monotone sofa with rotation angle $\pi/2$, hence a moving sofa
+(\cref{fact:monotone}\ref{fact:monotone:envelope}). For the bound, first let
+$S$ be a moving sofa with rotation angle $\pi/2$, and let $K_{\pi/2}$ and
+$S_{\pi/2}=K_{\pi/2}\setminus\cN(K_{\pi/2})$ be as in \cref{fact:exists}. Then
+\[
+  \abs S\le\abs{S_{\pi/2}}=\cA(K_{\pi/2})=\abs\Gs ,
+\]
+where the inequality holds by \cref{fact:exists}, the first equality by
+\cref{fact:monotone}\ref{fact:monotone:area}, as $\cC(S_{\pi/2})=K_{\pi/2}$, and
+the second by \cref{prop:unified-caps}\ref{prop:unified-caps:value}, as
+$K_{\pi/2}$ is maximizing. Now let $S$ be any moving sofa. If $\abs S<11/5$,
+then $\abs S<\abs\Gs$, as $\abs\Gs\ge2.2192$
+(\cref{fact:gerver}\ref{fact:gerver:def}). Otherwise $S$ is a moving sofa with
+some rotation angle $\omega\in[\omega_0,\pi/2]$ (\cref{fact:angle}(a)). Let
+$K_\omega$ and $S_\omega=K_\omega\setminus\cN(K_\omega)$ be as in
+\cref{fact:exists}. Then
+$\abs{S_\omega}\ge\abs S\ge11/5$, and the cap $\cC(S_\omega)=K_\omega$ of the
+monotone sofa $S_\omega$ is maximizing. By \cref{lem:right-motion},
+$R_\psi S_\omega$, $\psi=\pi/2-\omega$, is a moving sofa with rotation angle
+$\pi/2$, and so
+\[
+  \abs S\le\abs{S_\omega}=\abs{R_\psi S_\omega}\le\abs\Gs ,
+\]
+where the first inequality holds by \cref{fact:exists}, the equality as
+rotations preserve area, and the last inequality by the first case.
+
+\ref{thm:unified-optimality:caps} Let $K_\omega$ and $S_\omega$ be as in
+\cref{fact:exists}. Every $K\in\Kc_\omega$ has
+\[
+  \cA_\omega(K)\le\cA_\omega(K_\omega)=\abs{S_\omega}\le\abs\Gs ,
+\]
+where the first inequality holds by \cref{fact:exists}, the equality by
+\cref{fact:monotone}\ref{fact:monotone:area}, as $\cC(S_\omega)=K_\omega$, and
+the last inequality by \ref{thm:unified-optimality:sofa}, as $S_\omega$ is a
+moving sofa (\cref{fact:monotone}\ref{fact:monotone:envelope}).
+\end{proof}
+
+\subsection{Uniqueness}\label{sec:unified-uniqueness}
+
+\begin{lemma}[monotone sofas of area $\abs\Gs$]\label{lem:unified-monotone}
+Let $\omega\in(0,\pi/2]$.
+\begin{enumerate}[label=(\alph*)]
+\item\label{lem:unified-monotone:max} If $T$ is a monotone sofa with rotation
+angle $\omega$ and $\abs T=\abs\Gs$, then its cap $\cC(T)$ is maximizing.
+\item\label{lem:unified-monotone:envelope} If $S'$ is a moving sofa with
+rotation angle $\omega$ and $\abs{S'}=\abs\Gs$, then there are $w\in\R^2$ and a
+monotone sofa $T$ with rotation angle $\omega$ such that $S'+w\subset T$ and
+$\abs T=\abs\Gs$.
+\item\label{lem:unified-monotone:right} If $U$ is a monotone sofa with rotation
+angle $\pi/2$ and $\abs U=\abs\Gs$, then $U=\Gs+(s,0)$ for some $s\in\R$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{lem:unified-monotone:max} The monotone sofa $T$ is a moving sofa with
+rotation angle $\omega$ in standard position
+(\cref{fact:monotone}\ref{fact:monotone:envelope}), so $\cC(T)$ is a cap
+(\cref{fact:monotone}\ref{fact:monotone:cap}), and
+$\cA_\omega(\cC(T))=\abs T=\abs\Gs$
+(\cref{fact:monotone}\ref{fact:monotone:area}). Every $C\in\Kc_\omega$ has
+\[
+  \cA_\omega(C)\le\abs\Gs=\cA_\omega(\cC(T))
+\]
+by \cref{thm:unified-optimality}\ref{thm:unified-optimality:caps}, so $\cC(T)$
+is maximizing.
+
+\ref{lem:unified-monotone:envelope} By \cref{fact:angle}(b), $S'+w$ is in
+standard position for some $w$, and it is a moving sofa with rotation angle
+$\omega$. By \cref{fact:monotone}\ref{fact:monotone:envelope}, $T=\cI(S'+w)$ is
+a moving sofa with rotation angle $\omega$ that contains $S'+w$, and it is a
+monotone sofa. Translations preserve area and $S'+w\subset T$, so
+$\abs\Gs=\abs{S'+w}\le\abs T$; and $\abs T\le\abs\Gs$ by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}, as $T$ is a
+moving sofa.
+
+\ref{lem:unified-monotone:right} By \ref{lem:unified-monotone:max}, the cap
+$K=\cC(U)\in\Kc_{\pi/2}$ is maximizing, so
+\cref{prop:unified-caps}\ref{prop:unified-caps:shape} gives $s\in\R$ with
+$K\setminus\cN(K)=\Gs+(s,0)$. As $U=K\setminus\cN(K)$
+(\cref{fact:monotone}\ref{fact:monotone:area}), $U=\Gs+(s,0)$.
+\end{proof}
+
+Parts \ref{lem:unified-monotone:max} and \ref{lem:unified-monotone:envelope},
+with \cref{fact:angle}(a), \cref{fact:monotone}\ref{fact:monotone:area} and
+\cref{fact:gerver}\ref{fact:gerver:def}, give \cref{prop:reduction}, and part
+\ref{lem:unified-monotone:right} is the last assertion of \cref{thm:caps}.
+
+\begin{proposition}[a rigid image in Gerver's
+sofa]\label{prop:unified-contained}
+Let $S$ be a moving sofa with $\abs S=\abs\Gs$. Then there are
+$\omega\in[\omega_0,\pi/2]$ and $v\in\R^2$ such that $R_\psi S+v\subset\Gs$,
+where $\psi=\pi/2-\omega\in[0,\pi/2-\omega_0]$.
+\end{proposition}
+
+\begin{proof}
+As $\abs S=\abs\Gs\ge2.2192$ (\cref{fact:gerver}\ref{fact:gerver:def}), $S$ is a
+moving sofa with some rotation angle $\omega\in[\omega_0,\pi/2]$
+(\cref{fact:angle}(a)). By
+\cref{lem:unified-monotone}\ref{lem:unified-monotone:envelope}, there are
+$w_0\in\R^2$ and a monotone sofa $T$ with rotation angle $\omega$ such that
+$S+w_0\subset T$ and $\abs T=\abs\Gs$. By
+\cref{lem:unified-monotone}\ref{lem:unified-monotone:max}, the cap $\cC(T)$ is
+maximizing, and
+\[
+  \abs T=\abs\Gs\ge11/5;
+\]
+so $R_\psi T$ is a moving sofa with rotation angle $\pi/2$
+(\cref{lem:right-motion}). It has area $\abs\Gs$, as rotations preserve area. So
+\cref{lem:unified-monotone}\ref{lem:unified-monotone:envelope}, for
+$S'=R_\psi T$ and the rotation angle $\pi/2$, gives $w_1\in\R^2$ and a monotone
+sofa $U$ with rotation angle $\pi/2$ such that $R_\psi T+w_1\subset U$ and
+$\abs U=\abs\Gs$, and $U=\Gs+(s,0)$ for some $s$ by
+\cref{lem:unified-monotone}\ref{lem:unified-monotone:right}. With
+$v=R_\psi w_0+w_1-(s,0)$,
+\begin{align*}
+  R_\psi S+v&=R_\psi(S+w_0)+w_1-(s,0)\\
+    &\subset R_\psi T+w_1-(s,0)\subset U-(s,0)=\Gs .\qedhere
+\end{align*}
+\end{proof}
+
+\begin{theorem}[uniqueness from the certificate]\label{thm:unified-uniqueness}
+Let $S$ be a moving sofa.
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:unified-uniqueness:translate} If $\abs S=\abs\Gs$, then
+$S+v=\Gs$ for some $v\in\R^2$.
+\item\label{thm:unified-uniqueness:equiv} The following are equivalent:
+\begin{align*}
+  &\text{(i)}~\abs S=\abs\Gs;\\
+  &\text{(ii)}~\abs{S'}\le\abs S\text{ for every moving sofa }S';\\
+  &\text{(iii)}~R_\theta S+v=\Gs\text{ for some }\theta\in\R\text{ and }
+    v\in\R^2;\\
+  &\text{(iv)}~S+v=\Gs\text{ for some }v\in\R^2.
+\end{align*}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{thm:unified-uniqueness:translate} Let $\omega$, $\psi$ and $v$ be as in
+\cref{prop:unified-contained}, and $g(p)=R_\psi p+v$. The set $g(S)$ is closed,
+since $S$ is closed and $g$ is a homeomorphism; it lies in $\Gs$;
+$\abs{g(S)}=\abs S=\abs\Gs$, as rotations and translations preserve area; and
+$\abs\Gs<\infty$ (\cref{fact:gerver}\ref{fact:gerver:def}). As
+$\Gs=\clos(\inter\Gs)$ (\cref{prop:regular}), $g(S)=\Gs$ by \cref{lem:recover}.
+As in the proof of \cref{cor:translate}\ref{cor:translate:main}, $p_y-q_y\le1$
+for $p,q\in S$, since $S$ lies in a horizontal strip of height one, and
+\[
+  \ip{g(p)-g(q)}{v_\psi}=\ip{p-q}{v_0}=p_y-q_y;
+\]
+so
+\[
+  \ip{x-y}{u_{\psi+\pi/2}}\le1\qquad\text{for all }x,y\in\Gs=g(S).
+\]
+If $\psi>0$, then $\psi+\pi/2\in(\pi/2,\pi)$, as $\psi\le\pi/2-\omega_0<\pi/2$,
+and \cref{lem:gerver-width}\ref{lem:gerver-width:gt} gives $p,q\in\Gs$ with
+$\ip{p-q}{u_{\psi+\pi/2}}>1$, a contradiction. So $\psi=0$, and
+$S+v=g(S)=\Gs$.
+
+\ref{thm:unified-uniqueness:equiv} The first part of the proof of
+\ref{thm:unified-uniqueness:translate}, which shows $g(S)=\Gs$, gives
+(i)$\Rightarrow$(iii), and \ref{thm:unified-uniqueness:translate} is
+(i)$\Rightarrow$(iv); (iii) and (iv) imply (i), since rotations and
+translations preserve area. By
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}, $\Gs$ is a
+moving sofa and $\abs{S'}\le\abs\Gs$ for every moving sofa $S'$. So (ii) gives
+$\abs\Gs\le\abs S\le\abs\Gs$, which is (i), and (i) gives
+$\abs{S'}\le\abs\Gs=\abs S$ for every moving sofa $S'$, which is (ii).
+\end{proof}
+
+These are the proofs of \cref{thm:main}, of \cref{cor:all} and of the first
+assertion of \cref{cor:translate}\ref{cor:translate:main}, with
+\cref{thm:unified-optimality} in place of \cref{fact:optimal},
+\cref{lem:right-motion} in place of \cref{prop:U}, and
+\cref{lem:unified-monotone}\ref{lem:unified-monotone:right} in place of
+\cref{thm:caps}; \cref{thm:unified-uniqueness} contains these three results.
+
+\subsection{Stability}\label{sec:unified-stability}
+
+The proofs of \cref{thm:stability,thm:stability-angle} in \cref{sec:stability}
+use optimality, uniqueness and the certificate at three places, and at each of
+them they use the results of this section.
+\begin{enumerate}[label=(\Alph*)]
+\item\label{unified:sign} The deficit $\eps(S)=\abs\Gs-\abs S$ of a moving sofa
+$S$ is nonnegative, by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}. The proof of
+\cref{prop:stab-entry} uses this, and so does the distinction between the cases
+$\eps=0$ and $\eps>0$ in the proof of the two theorems.
+\item\label{unified:entry} In the proof of \cref{prop:stab-entry}, the limit $S$
+of the normalized sofas $S_n^\natural$ is a moving sofa with
+$\abs S\ge\abs\Gs$. Then $\abs S=\abs\Gs$ by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}, and
+\cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate} gives
+$S+w=\Gs$ for some $w$. In the case $\eps=0$ of the proof of the two theorems,
+\cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate}, applied in
+the same way to the normalized translate $S^\natural$ of the given sofa $S$,
+gives $S^\natural=\Gs$.
+\item\label{unified:local} The proof of \cref{prop:stab-local} applies
+\cref{thm:certificate} to the canonical triple of a cap $K\in\Kc_{\pi/2}$ near
+$\KG$.
+\end{enumerate}
+These are the only places where
+\cref{sec:stab-local,sec:stab-angle,sec:stab-recovery,sec:stab-entry} use
+optimality, uniqueness, \cref{lem:stab-variation} or \cref{thm:stability-cap};
+their other steps use these results only through
+\cref{prop:stab-local,prop:stab-entry}. In turn, the proofs of
+\cref{thm:unified-optimality,thm:unified-uniqueness} use from
+\cref{sec:stability} only \cref{lem:stab-variation} and
+\cref{thm:stability-cap}\ref{thm:stability-cap:wide}, through the certificate,
+and \cref{sec:stab-certificate,sec:stab-cap} prove these two results without
+optimality or uniqueness. So \ref{unified:sign} and \ref{unified:entry} rest
+on the certificate through \cref{thm:unified-optimality,thm:unified-uniqueness},
+and \ref{unified:local} on the certificate itself; there is no circularity.
+
+\begin{theorem}[optimality, uniqueness and stability]\label{thm:unified}
+\begin{enumerate}[label=(\alph*)]
+\item\label{thm:unified:opt} $\Gs$ is a moving sofa, and every moving sofa $S$
+has $\abs S\le\abs\Gs$.
+\item\label{thm:unified:unique} A moving sofa $S$ has $\abs S=\abs\Gs$ if and
+only if $S+v=\Gs$ for some $v\in\R^2$.
+\item\label{thm:unified:stable} The assertions of
+\cref{thm:stability,thm:stability-angle} hold.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\ref{thm:unified:opt} is
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}.
+\ref{thm:unified:unique} If $\abs S=\abs\Gs$, then $S+v=\Gs$ for some $v$ by
+\cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate};
+conversely, translations preserve area.
+\ref{thm:unified:stable} \Cref{sec:stability} proves
+\cref{thm:stability,thm:stability-angle} with
+\ref{unified:sign}--\ref{unified:local} above, which come from
+\cref{thm:certificate,thm:unified-optimality,thm:unified-uniqueness}.
+\end{proof}

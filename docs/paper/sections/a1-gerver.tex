@@ -2,12 +2,15 @@
 
 We recall Romik's description of Gerver's sofa~\cite[Section~4]{Romik18}, in the
 form used by~\cite{Baek} and by the formalization. Let
-$t_0=0<t_1=\varphi<t_2=\theta<t_3=\pi/2-\theta<t_4=\pi/2-\varphi<t_5=\pi/2$. A
-\emph{parameter tuple} consists of the angles $\varphi,\theta$, numbers
-$a_1,a_2,b_1,b_2,c_1,c_2,d_1,d_2,e_1,e_2$ and points
-$\kappa_1,\dots,\kappa_5\in\R^2$ (22 real parameters). The \emph{rotation path}
-$\xx:[0,\pi/2]\to\R^2$ is $\xx=\xx_i$ on the $i$th phase, where the phases are
-$[0,t_1)$, $[t_1,t_2)$, $[t_2,t_3]$, $(t_3,t_4]$ and $(t_4,t_5]$, and
+\[
+  t_0=0<t_1=\varphi<t_2=\theta<t_3=\pi/2-\theta<t_4=\pi/2-\varphi<t_5=\pi/2.
+\]
+A \emph{parameter tuple} consists of the angles $\varphi,\theta$, numbers
+$a_1,a_2,b_1,b_2,\allowbreak c_1,c_2,\allowbreak d_1,d_2,\allowbreak e_1,e_2$
+and points $\kappa_1,\dots,\kappa_5\in\R^2$ (22 real parameters). The
+\emph{rotation path} $\xx:[0,\pi/2]\to\R^2$ is $\xx=\xx_i$ on the $i$th phase,
+where the phases are $[0,t_1)$, $[t_1,t_2)$, $[t_2,t_3]$, $(t_3,t_4]$ and
+$(t_4,t_5]$, and
 \begin{align*}
   \xx_1(t)&=R_t\bigl(a_1\cos t+a_2\sin t-1,\ -a_2\cos t+a_1\sin t-\tfrac12\bigr)
     +\kappa_1,\\
@@ -19,19 +22,34 @@ $[0,t_1)$, $[t_1,t_2)$, $[t_2,t_3]$, $(t_3,t_4]$ and $(t_4,t_5]$, and
 \end{align*}
 The pieces of a solution agree at the ends of the phases, by condition~(3)
 below, so the conventions at the ends matter only for other tuples. For a
-differentiable curve $\xx$ let $\alpha=\ip{\xx'}{u_t}$, $\beta=\ip{\xx'}{v_t}$,
+differentiable curve $\xx$ let
+\[
+  \alpha=\ip{\xx'}{u_t},\qquad\beta=\ip{\xx'}{v_t},
+\]
 and let $\bA,\bB,\bC,\bD$ be as in \cref{sec:gerver}. The tuple \emph{solves
 Romik's equations} if $0<\varphi<\theta<\pi/4$ and:
 \begin{enumerate}[label=(\arabic*)]
-\item (left--right symmetry) $e_1=a_1$, $e_2=-a_2$, $d_1=\frac\pi4-b_1$,
-$d_2=b_2+\frac\pi4\bigl(2b_1-\frac\pi4\bigr)$, $c_2=c_1-\frac\pi2$;
-\item (the start) $\kappa_1=(1-a_1,\frac14)$ and $a_2=-\frac14$, so that
-$\xx(0)=O$ and $\bA(0)=(1,0)$;
-\item (continuous differentiability) $\xx_i(t_i)=\xx_{i+1}(t_i)$ and
-$\xx_i'(t_i)=\xx_{i+1}'(t_i)$ for $i=1,2,3,4$;
-\item (the contact conditions) $\xx_1(t_1)=\bB_4(t_3)$ and
-$\xx_5(t_4)=\bD_2(t_2)$, where $\bB_4=\xx_4+\alpha_4v_t$ and
-$\bD_2=\xx_2-\beta_2u_t$ are the contact curves of $\xx_4$ and $\xx_2$.
+\item (left--right symmetry)
+\begin{gather*}
+  e_1=a_1,\qquad e_2=-a_2,\qquad d_1=\tfrac\pi4-b_1,\\
+  d_2=b_2+\tfrac\pi4\bigl(2b_1-\tfrac\pi4\bigr),\qquad c_2=c_1-\tfrac\pi2;
+\end{gather*}
+\item (the start)
+\[
+  \kappa_1=(1-a_1,\tfrac14)\quad\text{and}\quad a_2=-\tfrac14,
+\]
+so that $\xx(0)=O$ and $\bA(0)=(1,0)$;
+\item (continuous differentiability)
+\[
+  \xx_i(t_i)=\xx_{i+1}(t_i)\quad\text{and}\quad\xx_i'(t_i)=\xx_{i+1}'(t_i)
+  \qquad\text{for }i=1,2,3,4;
+\]
+\item (the contact conditions)
+\[
+  \xx_1(t_1)=\bB_4(t_3)\quad\text{and}\quad\xx_5(t_4)=\bD_2(t_2),
+\]
+where $\bB_4=\xx_4+\alpha_4v_t$ and $\bD_2=\xx_2-\beta_2u_t$ are the contact
+curves of $\xx_4$ and $\xx_2$.
 \end{enumerate}
 These are Romik's equations (27)--(44). \emph{Gerver's sofa} is the shape of the
 rotation path of the solution with $\varphi\in[0.039,0.04]$ and
@@ -55,11 +73,22 @@ places, are
   \kappa_4=(-0.3083471661,\ 0.4724066198),
 \end{array}
 \]
-and $\xx(\pi/2)=(-1.2275264589,0)$, $\max_t\xx(t)_y=\xx(\pi/4)_y=0.6642678135$,
-$\xx(t_1)_y=\xx(t_4)_y=0.0551867605$. The area is $\abs\Gs=2.21953166887\ldots$
-(Gerver, Romik), and $2.2192\le\abs\Gs\le2.2199$ is proved in~\cite{Companion}.
-In Gerver's own parametrization the constants $A=0.0944265608$ and
-$B=1.3992037273$ together with $\varphi$ and $\theta$ solve a system of four
+and
+\begin{align*}
+  \xx(\pi/2)&=(-1.2275264589,0),\\
+  \max_t\xx(t)_y&=\xx(\pi/4)_y=0.6642678135,\\
+  \xx(t_1)_y&=\xx(t_4)_y=0.0551867605.
+\end{align*}
+The area is $\abs\Gs=2.21953166887\ldots$ (Gerver, Romik), and
+\[
+  2.2192\le\abs\Gs\le2.2199
+\]
+is proved in~\cite{Companion}.
+In Gerver's own parametrization the constants
+\[
+  A=0.0944265608\qquad\text{and}\qquad B=1.3992037273
+\]
+together with $\varphi$ and $\theta$ solve a system of four
 equations~\cite{Gerver92}, from which the 22 parameters above are computed.
 
 The contact curves $\bA,\bB,\bC,\bD$ are the points where the sides of the

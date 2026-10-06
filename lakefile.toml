@@ -2,7 +2,8 @@ name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
-  "MovingSofaStability", "ChallengeDefs", "Challenge", "Solution"]
+  "MovingSofaStability", "MovingSofaExtremal", "ChallengeDefs", "Challenge", "Solution",
+  "SolutionCoercive", "SolutionCoerciveComparator"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -34,6 +35,11 @@ globs = ["MovingSofaBridge.+"]
 name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
 
+# Optimality, uniqueness and stability from the coercive certificate of MovingSofaStability.
+[[lean_lib]]
+name = "MovingSofaExtremal"
+globs = ["MovingSofaExtremal.+"]
+
 # The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
 [[lean_lib]]
 name = "ChallengeDefs"
@@ -43,3 +49,12 @@ name = "Challenge"
 
 [[lean_lib]]
 name = "Solution"
+
+# The theorems of the Challenge, proved through MovingSofaExtremal.
+[[lean_lib]]
+name = "SolutionCoercive"
+
+# The theorems of SolutionCoercive under the Challenge's names, for Comparator
+# (comparator-coercive.json). No module imports it.
+[[lean_lib]]
+name = "SolutionCoerciveComparator"
