@@ -14,26 +14,30 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.35.0-rc3"
 
-# The formalization of Baek's paper "Optimality of Gerver's sofa".
+# The faithful formalization of Baek's paper remains unchanged.
 [[lean_lib]]
 name = "MovingSofaOptimality"
 globs = ["MovingSofaOptimality.+"]
 
-# The uniqueness of Gerver's sofa, in the definitions of MovingSofaOptimality.
+# The original equality/CapKernel uniqueness proof and historical maximizer route.
 [[lean_lib]]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# The bridge between the definitions of formal-conjectures and those of Baek's paper.
+# The stable bridge between formal-conjectures and Baek/Romik definitions.
 [[lean_lib]]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
 
-# In-progress, uncompiled stability proof source. Deliberately NOT a default target.
-# Its declarations are not part of the existing kernel-verification claim.
+# Uncompiled proof source. Deliberately NOT a default target.
 [[lean_lib]]
 name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
+
+# Coercive optimality/uniqueness, separated to avoid changing default targets.
+[[lean_lib]]
+name = "MovingSofaExtremal"
+globs = ["MovingSofaExtremal.+"]
 
 # The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
 [[lean_lib]]
@@ -44,3 +48,7 @@ name = "Challenge"
 
 [[lean_lib]]
 name = "Solution"
+
+# The same Challenge statements via the coercive route; uncompiled, non-default.
+[[lean_lib]]
+name = "SolutionCoercive"
