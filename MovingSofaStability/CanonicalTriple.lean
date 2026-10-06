@@ -1,0 +1,122 @@
+module
+
+public import MovingSofaStability.CanonicalContacts
+
+/-!
+# Canonical triples for nearby nonsmooth caps
+
+All endpoint contacts and linear wall constraints are proved. The final
+neighborhood result supplies an actual WideTriple and does not assume Ki of the
+competing cap or feasibility of its canonical tails. The geometric inequality A
+<= Q is a subsequent, separate result.
+-/
+
+@[expose] public section
+noncomputable section
+
+open Real Set
+open MovingSofaOptimality MovingSofaUniqueness
+
+namespace MovingSofaStability
+
+/-- The right-body wall inequalities hold for all caps once the cut is nonnegative. -/
+theorem canonical_right_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : IsCap K (π / 2))
+    {t : ℝ} (ht : t ∈ Icc φ (π / 2)) :
+    supp K t + supp (rightBody φ K) (π + t) ≤ 1 := by
+  have hB := opt_rightBody_isConvexBody hφ hK
+  have hbound : ∀ p ∈ rightBody φ K, dot p (uvec (π + t)) ≤ 1 - supp K t := by
+    intro p hp
+    have h := mem_iInter₂.mp hp.2 t ht
+    change supp K t - 1 ≤ dot p (uvec t) at h
+    rw [show π + t = t + π by ring, uvec_add_pi, dot_neg_right]
+    linarith
+  have h := supp_le_of_forall hB.1 hbound
+  linarith
+
+/-- The left-body inequalities are likewise independent of curvature regularity. -/
+theorem canonical_left_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : IsCap K (π / 2))
+    {t : ℝ} (ht : t ∈ Icc 0 (π / 2 - φ)) :
+    supp K (π / 2 + t) + supp (leftBody φ K) (3 * π / 2 + t) ≤ 1 := by
+  have hD := opt_leftBody_isConvexBody hφ hK
+  have hbound : ∀ p ∈ leftBody φ K, dot p (uvec (3 * π / 2 + t)) ≤ 1 - supp K (π / 2 + t) := by
+    intro p hp
+    have h := mem_iInter₂.mp hp.2 t ht
+    change supp K (t + π / 2) - 1 ≤ dot p (uvec (t + π / 2)) at h
+    rw [uvec_add_pi_div_two] at h
+    rw [show 3 * π / 2 + t = (t + π / 2) + π by ring, uvec_add_pi,
+      dot_neg_right, uvec_add_pi_div_two]
+    rw [show π / 2 + t = t + π / 2 by ring]
+    linarith
+  have h := supp_le_of_forall hD.1 hbound
+  linarith
+
+/-- Feasibility of the canonical triple needs only width and the two cut-arm inequalities. -/
+theorem canonical_inWideL_of_cut_arms {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
+    {K : Set Point} (hK : IsCap K (π / 2)) (hwidth : (21 / 10 : ℝ) ≤ bottomWidth K)
+    (hg : 1 < gPlus K φ) (hf : 1 < fMinus K (π / 2 - φ)) :
+    InWideL φ K (rightBody φ K) (leftBody φ K) := by
+  obtain ⟨hφ0, hφ4, -, -, -⟩ := opt_phi_bounds hφ
+  have hφ' : φ ∈ Ioo 0 (π / 4) := ⟨hφ0, hφ4⟩
+  have hp := pi_pos
+  have hB := opt_rightBody_isConvexBody hφ0.le hK
+  have hD := opt_leftBody_isConvexBody hφ0.le hK
+  obtain ⟨hW, hZ⟩ := cut_feet_mem_of_width hφ hK hwidth
+  obtain ⟨p, hpB, hpR⟩ := canonical_right_contact hφ' hK hW.1.1 hg
+  obtain ⟨q, hqD, hqL⟩ := canonical_left_contact hφ' hK hZ.1.1 hf
+  have hR : supp K φ + supp (rightBody φ K) (π + φ) = 1 := by
+    have hlo := dot_le_supp hB.2.1 hpB (π + φ)
+    rw [show π + φ = φ + π by ring, uvec_add_pi, dot_neg_right, hpR] at hlo
+    have hhi := canonical_right_wall hφ0.le hK ⟨le_rfl, by linarith⟩
+    rw [show φ + π = π + φ by ring] at hlo
+    linarith
+  have hL : supp K (π / 2 + (π / 2 - φ)) +
+      supp (leftBody φ K) (3 * π / 2 + (π / 2 - φ)) = 1 := by
+    have hlo := dot_le_supp hD.2.1 hqD (3 * π / 2 + (π / 2 - φ))
+    rw [show 3 * π / 2 + (π / 2 - φ) = ((π / 2 - φ) + π / 2) + π by ring,
+      uvec_add_pi, dot_neg_right, uvec_add_pi_div_two, hqL] at hlo
+    have hhi := canonical_left_wall hφ0.le hK ⟨by linarith, le_rfl⟩
+    have ea : π / 2 + (π / 2 - φ) = π / 2 - φ + π / 2 := by ring
+    have eb : ((π / 2 - φ) + π / 2) + π = 3 * π / 2 + (π / 2 - φ) := by ring
+    rw [eb] at hlo
+    rw [ea] at hhi ⊢
+    linarith
+  have hB0 := opt_supp_three_pi_div_two_eq_zero hK hB inter_subset_left
+    (opt_rightBody_A_mem hφ0.le hK)
+  have hD0 := opt_supp_three_pi_div_two_eq_zero hK hD inter_subset_left
+    (opt_leftBody_C_mem hφ0.le hK)
+  refine ⟨hK, hB, hD, inter_subset_left, inter_subset_left,
+    fun t ht => canonical_right_wall hφ0.le hK ht, hR, ?_,
+    fun t ht => canonical_left_wall hφ0.le hK ht, ?_, hL⟩
+  · rw [show π + π / 2 = 3 * π / 2 by ring, hB0, hK.2.2.2.1]
+    norm_num
+  · rw [add_zero, add_zero, hD0, hK.2.2.2.1]
+    norm_num
+
+/-- An open neighborhood of Gerver has feasible canonical triples on the nonsmooth domain. -/
+theorem nearby_canonical_inWideL {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ K : Set Point,
+      IsCap K (π / 2) → UpperSupportClose δ K P.cap →
+      InWideL P.φ K (rightBody P.φ K) (leftBody P.φ K) := by
+  have hKi := theorem8_1_1_gerver hP hbox
+  have hφ := GerverParams.gm_φ_mem_Ioo hP hbox
+  obtain ⟨c, δA, hc, hδA, hδA1, hA⟩ := core_arm_margin_near_reference hKi
+    (a := P.φ) (b := π / 2 - P.φ) hφ.1 (by linarith [hφ.2]) (by linarith [hφ.1])
+  let δ := min δA (1 / 20)
+  have hδ : 0 < δ := lt_min hδA (by norm_num)
+  have hδA' : δ ≤ δA := min_le_left _ _
+  have hδw : δ ≤ (1 / 20 : ℝ) := min_le_right _ _
+  refine ⟨δ, hδ, hδA'.trans hδA1, ?_⟩
+  intro K hK hclose
+  have hwidth := nearby_bottomWidth hP hbox (hclose.mono hδw)
+  have hcore := hA K hK (hclose.mono hδA')
+  have hφarm := hcore.oneSided hK (t := P.φ) ⟨le_rfl, by linarith [hφ.2]⟩
+  have hbarm := hcore.oneSided hK (t := π / 2 - P.φ) ⟨by linarith [hφ.2], le_rfl⟩
+  exact canonical_inWideL_of_cut_arms hbox.1 hK hwidth
+    (by linarith [hφarm.2.2.1]) (by linarith [hbarm.2.1])
+
+/-- Package the canonical bodies without introducing a choice of auxiliary solver output. -/
+def canonicalWideTriple {φ : ℝ} {K : Set Point}
+    (h : InWideL φ K (rightBody φ K) (leftBody φ K)) : WideTriple φ :=
+  ⟨(⟨K, h.1.2.1⟩, ⟨rightBody φ K, h.2.1⟩, ⟨leftBody φ K, h.2.2.1⟩), h⟩
+
+end MovingSofaStability

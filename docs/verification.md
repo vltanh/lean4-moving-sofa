@@ -4,7 +4,7 @@
 
 ```sh
 lake exe cache get                                  # Mathlib's compiled files
-lake build                                          # the three libraries, Challenge and Solution
+lake build                                          # the four libraries, Challenge and Solution
 lake env lean scripts/Audit.lean                    # axioms and dependencies
 python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
                                                     # the proofs follow the routes of Baek's proofs
@@ -21,13 +21,14 @@ alone.
 
 - `lake build` must succeed, and its only warnings are the twelve `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean), whose theorems are the statements of record.
-- [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the three libraries and of the
+- [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the four libraries and of the
   theorems of [`Solution.lean`](../Solution.lean), and fails unless each one uses only the three standard axioms: an
   unproved lemma would add `sorryAx`, and `native_decide`, which trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
-  uniqueness proof and each bridge theorem, the results from prior work that its proof uses.
+  uniqueness proof, each bridge theorem and the main stability theorems, the results from prior work
+  that its proof uses.
   It reaches the proofs through one `import all` line per module (the module system hides proofs
-  from a plain import), and CI checks that these lines name exactly the modules of the three
+  from a plain import), and CI checks that these lines name exactly the modules of the four
   libraries.
 - The audit also writes the *route* of every numbered result of Baek's paper: the other numbered
   results that its Lean proof uses. `python3 scripts/route_check.py check docs/paper_routes.tsv

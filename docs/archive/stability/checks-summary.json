@@ -1,0 +1,17 @@
+{
+  "python": "3.13.5",
+  "scipy": "1.17.0",
+  "local_tests": 17,
+  "failures_final": 0,
+  "initial_failures": 1,
+  "max_evaluation_norm_quadrature_error": 1.3322676295501878e-15,
+  "max_independent_reconstruction_error": 7.077671781985373e-16,
+  "cap_constant_at_phi_004": 2.0016010673611615,
+  "source_sha256": "4b07d133e505ed8b9906cdc31b88bcdd6e8f9fa7a6b16d1b91d5f32d7f05e9e4",
+  "source_git_blob_sha": "384e7b5feb746d7f354de255b758943356fe1d2d",
+  "remote_source_hash_matches_local": true,
+  "lean_checked": false,
+  "arithmetic_certified": false,
+  "ci_dispatched": false,
+  "initial_failure": "Zero-tolerance endpoint comparison exceeded 1e-6 by approximately 2.62e-16; corrected with a 4e-15 absolute roundoff tolerance. The analytic inequality is unchanged."
+}

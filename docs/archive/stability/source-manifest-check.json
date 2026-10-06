@@ -1,0 +1,13 @@
+{
+  "module_files": 73,
+  "all_imports": 72,
+  "duplicate_names": false,
+  "all_git_blob_sha": "81aa7b29ae18da039cf3abd75560735dcd1ebdb1",
+  "matches_github_returned_blob_sha": true,
+  "scope": "manifest coverage only; names transcribed from GitHub changed-file response",
+  "lean_invoked": false,
+  "lake_invoked": false,
+  "ci_invoked": false,
+  "proof_elaboration_checked": false,
+  "whole_repository_scanned": false
+}

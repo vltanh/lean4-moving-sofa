@@ -2,7 +2,7 @@ name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
-  "ChallengeDefs", "Challenge", "Solution"]
+  "MovingSofaStability", "ChallengeDefs", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -28,6 +28,11 @@ globs = ["MovingSofaUniqueness.+"]
 [[lean_lib]]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
+
+# The stability of Gerver's sofa, in the definitions of MovingSofaOptimality.
+[[lean_lib]]
+name = "MovingSofaStability"
+globs = ["MovingSofaStability.+"]
 
 # The definitions that Challenge.lean copies verbatim (scripts/sync_challenge_defs.py).
 [[lean_lib]]

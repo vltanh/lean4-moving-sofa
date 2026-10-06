@@ -34,10 +34,10 @@ from pathlib import Path
 DOCS = ['README.md', 'REPORT.md', 'CREDITS.md', 'docs/*.md', 'docs/proof/*.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'MovingSofaUniqueness',
-              'MovingSofaBridge', 'MovingSofaBridge.GerverConstants']
+              'MovingSofaBridge', 'MovingSofaBridge.GerverConstants', 'MovingSofaStability']
 # Top-level module names of the project: a code span naming such a module links to its file.
-MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'ChallengeDefs',
-                'Challenge', 'Solution')
+MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'MovingSofaStability',
+                'ChallengeDefs', 'Challenge', 'Solution')
 # The module whose declarations win when a name is declared in several modules.
 PREFERRED_MODULE = 'Challenge'
 # Directories, besides the repository root, against which the paths in the documents of a
