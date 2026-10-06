@@ -29,7 +29,11 @@ theorem abs_dot_le_norm2_mul (p q : Point) : |dot p q| ≤ norm2 p * norm2 q := 
   · exact dot_le_norm2_mul p q
 
 theorem norm2_uvec_sub_le (s t : ℝ) : norm2 (uvec s - uvec t) ≤ 2 * |s - t| := by
-  sorry
+  have h := norm2_le_abs_add (uvec s - uvec t)
+  have hc := abs_cos_sub_cos_le s t
+  have hs := abs_sin_sub_sin_le s t
+  simp only [Prod.fst_sub, Prod.snd_sub, uvec_fst, uvec_snd] at h
+  linarith
 
 theorem norm2_vvec (t : ℝ) : norm2 (vvec t) = 1 := by
   rw [← uvec_add_pi_div_two]
