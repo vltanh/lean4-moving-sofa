@@ -95,7 +95,7 @@ theorem displacement_mul_integrable (K₀ K₁ : ConvexBodySet) :
   have hI : IntegrableOn
       (fun t => displacement K₀.1 (z K₀) t * displacement K₁.1 (z K₁) t)
       (Icc a b) volume := by
-    letI : IsFiniteMeasure (volume.restrict (Icc a b)) :=
+    have : IsFiniteMeasure (volume.restrict (Icc a b)) :=
       isFiniteMeasure_restrict.2 (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)
     refine Integrable.of_bound ((hM K₀).1.mul (hM K₁).1).aestronglyMeasurable (C₀ * C₁) ?_
     apply ae_restrict_of_forall_mem measurableSet_Icc

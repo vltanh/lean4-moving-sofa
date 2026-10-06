@@ -78,8 +78,9 @@ theorem cap_minus_niche_translate {G : Set Plane} (hG : IsConvexBody G) (a : ℝ
   rw [niche_translate_horizontal hG a]
   have hinj : Function.Injective (Rigid.translate (a, 0)) := by
     intro p q heq
-    change p + (a, 0) = q + (a, 0) at heq
-    exact add_right_cancel heq
+    have h : p + (a, 0) = q + (a, 0) := by
+      simpa only [Rigid.translate_apply] using heq
+    exact add_right_cancel h
   exact (image_sdiff hinj _ _).symm
 
 theorem sofaArea_translate_horizontal {G : Set Plane} (hG : IsConvexBody G) (a : ℝ) :
