@@ -69,13 +69,11 @@ private theorem normalized_pair_bound {x y u v r : ℝ} (hu : u ≠ 0) (hv : v �
   have hau : |u| ≠ 0 := abs_ne_zero.mpr hu
   have hav : |v| ≠ 0 := abs_ne_zero.mpr hv
   have he : x / u - y / v = (x * v - y * u) / (u * v) := by
-    field_simp
-    ring
+    field_simp [hu, hv] <;> ring
   rw [he, abs_div, abs_mul]
   apply (div_le_iff₀ (mul_pos (abs_pos.mpr hu) (abs_pos.mpr hv))).2
   have hm : (r / |u| + r / |v|) * (|u| * |v|) = r * (|u| + |v|) := by
-    field_simp
-    ring
+    field_simp [hau, hav] <;> ring
   rwa [hm]
 
 /-- Exact feasibility criterion for a rank-one uniform approximation.
@@ -123,8 +121,7 @@ theorem fitsTranslation_iff_pairwise {f w : ι → ℝ}
         constructor <;> linarith
       have hm := (le_div_iff₀ (abs_pos.mpr hi)).mp hh
       have he : f i - sSup L * w i = (f i / w i - sSup L) * w i := by
-        field_simp
-        ring
+        field_simp [hi] <;> ring
       rw [he, abs_mul]
       exact hm
 
@@ -141,8 +138,10 @@ theorem pairwise_of_pairScore_le {f w : ι → ℝ} {r : ℝ}
     |f i * w j - f j * w i| ≤ r * (|w i| + |w j|) := by
   have hn : 0 ≤ |w i| + |w j| := add_nonneg (abs_nonneg _) (abs_nonneg _)
   rcases hn.eq_or_lt with hz | hp
-  · have hi : w i = 0 := abs_eq_zero.mp (by linarith [abs_nonneg (w j)])
-    have hj : w j = 0 := abs_eq_zero.mp (by linarith [abs_nonneg (w i)])
+  · have hi : w i = 0 := abs_eq_zero.mp (by
+      linarith [abs_nonneg (w i), abs_nonneg (w j)])
+    have hj : w j = 0 := abs_eq_zero.mp (by
+      linarith [abs_nonneg (w i), abs_nonneg (w j)])
     simp [hi, hj]
   · exact (div_le_iff₀ hp).mp (h i j)
 
@@ -179,9 +178,9 @@ theorem quotientRadius_eq_score_and_attained {f w : ι → ℝ}
 /-- Subtracting a translation mode leaves every two-point obstruction unchanged. -/
 theorem pairScore_sub_mode (f w : ι → ℝ) (a : ℝ) (i j : ι) :
     pairScore (fun i => f i - a * w i) w i j = pairScore f w i j := by
-  unfold pairScore
-  congr 2
-  ring
+  have he : (f i - a * w i) * w j - (f j - a * w j) * w i =
+      f i * w j - f j * w i := by ring
+  simp only [pairScore, he]
 
 /-- Opposite unit weights detect width error independently of alignment. -/
 theorem endpoint_width_lower {f w : ι → ℝ} {r : ℝ}
