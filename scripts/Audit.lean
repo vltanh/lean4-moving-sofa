@@ -71,6 +71,91 @@ import all MovingSofaBridge.GerverConstants
 import all MovingSofaBridge.GerverSofa
 import all MovingSofaBridge.Motion
 import all MovingSofaBridge.RomikParams
+import all MovingSofaStability.All
+import all MovingSofaStability.AngularFaceStability
+import all MovingSofaStability.ArcAtoms
+import all MovingSofaStability.BaekDeficit
+import all MovingSofaStability.CBVAlgebra
+import all MovingSofaStability.CanonicalContacts
+import all MovingSofaStability.CanonicalTriple
+import all MovingSofaStability.CapCoercivity
+import all MovingSofaStability.CapDistance
+import all MovingSofaStability.CapShape
+import all MovingSofaStability.CapWidthGeometry
+import all MovingSofaStability.CompactSetLimits
+import all MovingSofaStability.ConvexParallelArea
+import all MovingSofaStability.CoreAreaBound
+import all MovingSofaStability.CoreGraph
+import all MovingSofaStability.CoreIntegral
+import all MovingSofaStability.CoreMonotonicity
+import all MovingSofaStability.CoreRegionGeometry
+import all MovingSofaStability.CornerAnalysis
+import all MovingSofaStability.CurveRoof
+import all MovingSofaStability.CutSeparation
+import all MovingSofaStability.EnvelopeSlack
+import all MovingSofaStability.EnvelopeSlope
+import all MovingSofaStability.EpigraphBalls
+import all MovingSofaStability.EuclideanDisks
+import all MovingSofaStability.EuclideanGeometry
+import all MovingSofaStability.ExposedFaceStability
+import all MovingSofaStability.FloorCoverage
+import all MovingSofaStability.FourArcCoercivity
+import all MovingSofaStability.GerverMargins
+import all MovingSofaStability.GerverRoof
+import all MovingSofaStability.GlobalStability
+import all MovingSofaStability.GreenNorm
+import all MovingSofaStability.IntegralEstimates
+import all MovingSofaStability.InteriorBalls
+import all MovingSofaStability.LocalArmMargins
+import all MovingSofaStability.LocalSofaRecovery
+import all MovingSofaStability.LocalUpperBound
+import all MovingSofaStability.MamikonEnergy
+import all MovingSofaStability.MissingAreaRecovery
+import all MovingSofaStability.MixedArea
+import all MovingSofaStability.NicheContainment
+import all MovingSofaStability.NicheFeet
+import all MovingSofaStability.NonsmoothAffinity
+import all MovingSofaStability.NonsmoothBookkeeping
+import all MovingSofaStability.ODEReconstruction
+import all MovingSofaStability.OmittedWedgeArea
+import all MovingSofaStability.PartialHallways
+import all MovingSofaStability.PunctureMetric
+import all MovingSofaStability.PunctureTopology
+import all MovingSofaStability.PuncturedSofa
+import all MovingSofaStability.QuadraticDeficit
+import all MovingSofaStability.QualitativeEntry
+import all MovingSofaStability.ReferenceCoreVariation
+import all MovingSofaStability.ResidualIntegrability
+import all MovingSofaStability.ResidualMass
+import all MovingSofaStability.ResidualPropagation
+import all MovingSofaStability.Residuals
+import all MovingSofaStability.RigidInterior
+import all MovingSofaStability.RoofGeometry
+import all MovingSofaStability.RoofMargins
+import all MovingSofaStability.SeparatedWedges
+import all MovingSofaStability.SharpCapDistance
+import all MovingSofaStability.SharpEvaluation
+import all MovingSofaStability.SharpExponent
+import all MovingSofaStability.SharpIntegralControl
+import all MovingSofaStability.SharpKernelNorms
+import all MovingSofaStability.SharpReconstruction
+import all MovingSofaStability.SofaBounds
+import all MovingSofaStability.SofaCap
+import all MovingSofaStability.SofaCoordinates
+import all MovingSofaStability.SofaLimitMotion
+import all MovingSofaStability.Statement
+import all MovingSofaStability.SupportDistance
+import all MovingSofaStability.SymmetricDifference
+import all MovingSofaStability.TerminalBookkeeping
+import all MovingSofaStability.TerminalComparison
+import all MovingSofaStability.TerminalFloor
+import all MovingSofaStability.TrigKernelIntegrals
+import all MovingSofaStability.UniformGeometryBounds
+import all MovingSofaStability.WideConcavity
+import all MovingSofaStability.WideDomain
+import all MovingSofaStability.WideFirstVariation
+import all MovingSofaStability.WideGerverCertificate
+import all MovingSofaStability.WideResidualEnergy
 import all ChallengeDefs
 import all Solution
 
@@ -344,6 +429,21 @@ meta def uniquenessResults : List (String × Name) :=
    ("Bridge: Gerver's constants", ``MovingSofaBridge.GerverConstants.spec_existsUnique),
    ("Bridge: Gerver's sofa", ``MovingSofaBridge.gerversSofa_eq)]
 
+/-- The stability of Gerver's sofa (`MovingSofaStability/`, `docs/stability/`): near-maximal moving
+sofas are close to Gerver's sofa, the exponent one half is optimal, and the cap estimate with
+coefficient 2 sec φ. -/
+meta def stabilityResults : List (String × Name) :=
+  [("Stability: Hausdorff and symmetric-difference rate", ``MovingSofaStability.unrestricted_stability),
+   ("Stability: terminal angle rate", ``MovingSofaStability.terminal_angle_stability),
+   ("Stability: punctured Gerver sofas", ``MovingSofaStability.punctured_gerver_family),
+   ("Stability: no exponent above one half", ``MovingSofaStability.no_hausdorff_exponent_gt_half),
+   ("Stability: no exponent above one half (rigid distance)",
+    ``MovingSofaStability.rigid_distance_not_higher_order),
+   ("Stability: cap distance, coefficient 2 sec φ", ``MovingSofaStability.sharp_ki_cap_distance_bound),
+   ("Stability: cap distance, coefficient 2 sec φ (triples)",
+    ``MovingSofaStability.sharp_wide_cap_distance_bound),
+   ("Stability: cap distance, coefficient 1001/500", ``MovingSofaStability.ki_cap_distance_bound_2002)]
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
@@ -363,10 +463,11 @@ meta def solutionResults : List Name :=
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
 /-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the bridge
-to formal-conjectures' definitions, and the Challenge's definitions). -/
+to formal-conjectures' definitions, the stability of Gerver's sofa, and the Challenge's
+definitions). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
-    (`MovingSofaBridge).isPrefixOf m || m == `ChallengeDefs
+    (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m || m == `ChallengeDefs
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
@@ -460,7 +561,7 @@ elab "#audit" : command => do
   let mut deps : NameMap (Array Name) := {}
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
-  for (label, n) in paperResults ++ uniquenessResults do
+  for (label, n) in paperResults ++ uniquenessResults ++ stabilityResults do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n

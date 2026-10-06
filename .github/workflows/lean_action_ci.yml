@@ -17,7 +17,7 @@ jobs:
       - uses: leanprover/lean-action@v1
       - name: Check that the audit imports every module of the libraries
         run: >-
-          diff <(find MovingSofaOptimality MovingSofaUniqueness MovingSofaBridge -name '*.lean'
+          diff <(find MovingSofaOptimality MovingSofaUniqueness MovingSofaBridge MovingSofaStability -name '*.lean'
           | sed 's/\.lean$//; s#/#.#g' | sort)
           <(grep '^import all MovingSofa' scripts/Audit.lean | sed 's/^import all //' | sort)
       - name: Audit axioms and dependencies

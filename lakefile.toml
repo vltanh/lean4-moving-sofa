@@ -2,7 +2,7 @@ name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
-  "ChallengeDefs", "Challenge", "Solution"]
+  "MovingSofaStability", "ChallengeDefs", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -29,8 +29,7 @@ globs = ["MovingSofaUniqueness.+"]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
 
-# In-progress, uncompiled stability proof source. Deliberately NOT a default target.
-# Its declarations are not part of the existing kernel-verification claim.
+# The stability of Gerver's sofa, in the definitions of MovingSofaOptimality.
 [[lean_lib]]
 name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
