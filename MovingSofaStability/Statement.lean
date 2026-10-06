@@ -1,7 +1,7 @@
 module
 
 public import MovingSofaStability.EuclideanGeometry
-public import MovingSofaUniqueness.Main
+public import MovingSofaExtremal.Uniqueness
 
 /-!
 # The unrestricted stability target
@@ -61,11 +61,11 @@ theorem normalizedSofa_left (P : GerverParams) {S : Set Point}
   simp only [normalizingShift, dot, uvec_fst, uvec_snd, cos_pi, sin_pi]
   ring
 
-/-- `theorem1_1_1` bounds ENNReal volume. The imported real-area corollary
-performs the finite-measure conversion needed for this real deficit. -/
+/-- The deficit of a moving sofa is nonnegative: Gerver's sofa has the largest area, by the
+optimality theorem of the coercive route (`MovingSofaExtremal.area_le_gerver`). -/
 theorem sofaDeficit_nonneg {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Point} (hS : IsMovingSofa S) : 0 ≤ sofaDeficit P S :=
-  sub_nonneg.mpr (MovingSofaUniqueness.area_le_gerver hP hbox hS)
+  sub_nonneg.mpr (MovingSofaExtremal.area_le_gerver hP hbox hS)
 
 /-- Note 08's unrestricted theorem, in the original sofa definitions;
 `unrestricted_stability` proves it. -/

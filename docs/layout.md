@@ -2,7 +2,8 @@
 
 [Back to the README](../README.md)
 
-The project has four libraries, one per result, and the files of the Palomar registry at its root.
+The project has five libraries, one per result and one for the coercive route, and the files of the Palomar
+registry at its root.
 
 | Path | Contents |
 | --- | --- |
@@ -10,14 +11,16 @@ The project has four libraries, one per result, and the files of the Palomar reg
 | [`MovingSofaUniqueness/`](../MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions |
 | [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
 | [`MovingSofaStability/`](../MovingSofaStability) | the stability of Gerver's sofa, with Baek's definitions, and the punctured sofas that show its exponent is optimal |
+| [`MovingSofaExtremal/`](../MovingSofaExtremal) | the coercive route: optimality and uniqueness from one certificate of the stability proof |
 | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
+| [`SolutionCoercive.lean`](../SolutionCoercive.lean) | the statements of record proved again through the coercive route |
 | [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configuration and the Palomar metadata |
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
-| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, and ChatGPT Pro 6's notes on the uniqueness and on the stability |
+| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, and ChatGPT Pro 6's notes on the uniqueness, the stability and the coercive route |
 | [`scripts/`](../scripts) | the axiom audits, the generators of two Lean files, the figures, and the documentation tools |
 
 ### `MovingSofaOptimality/`: Baek's paper
@@ -97,14 +100,31 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 | Modules | Content |
 | --- | --- |
 | `EuclideanGeometry`, `Statement`, `All` | Euclidean distance between sets, the statements, and the module that imports all the others |
+| `MamikonFoundation` | square integrals and Mamikon displacements, as in [`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean), which this library does not import |
 | `QuadraticDeficit`, `MamikonEnergy`, `BaekDeficit`, `WideDomain`, `CBVAlgebra`, `ArcAtoms`, `NonsmoothBookkeeping`, `NonsmoothAffinity`, `WideConcavity`, `MixedArea`, `ReferenceCoreVariation`, `WideFirstVariation`, `WideGerverCertificate`, `WideResidualEnergy` | the deficit of Baek's bound 𝒬 on an enlarged domain of caps with corners: a dual slack plus six squared Mamikon differences |
 | `IntegralEstimates`, `Residuals`, `ODEReconstruction`, `ResidualIntegrability`, `ResidualMass`, `ResidualPropagation`, `FourArcCoercivity`, `CapCoercivity`, `SupportDistance`, `CapDistance` | from the energies to the support function of the cap and the Euclidean distance between caps, with coefficient 80 |
 | `GreenNorm`, `SharpIntegralControl`, `TrigKernelIntegrals`, `SharpReconstruction`, `SharpKernelNorms`, `SharpEvaluation`, `SharpCapDistance` | the same with coefficient 2 sec φ, by the exact kernel integrals |
+| `CoerciveCertificate` | the coercive certificate: 𝒬 is at most the area of Gerver's sofa on the enlarged domain, and its deficit bounds the distance to Gerver's cap ([the coercive route](coercive.md)) |
 | `ExposedFaceStability`, `LocalArmMargins`, `CoreMonotonicity`, `UniformGeometryBounds`, `AngularFaceStability`, `NicheFeet`, `NicheContainment`, `CapWidthGeometry`, `CanonicalContacts`, `CanonicalTriple`, `CornerAnalysis`, `CoreGraph`, `CoreIntegral`, `CutSeparation`, `SeparatedWedges`, `CoreRegionGeometry`, `CoreAreaBound`, `LocalUpperBound` | Baek's area bound for the caps near Gerver's, without the injectivity condition |
 | `TerminalBookkeeping`, `FloorCoverage`, `PartialHallways`, `OmittedWedgeArea`, `TerminalFloor`, `TerminalComparison` | a missing final angle costs area |
 | `CapShape`, `MissingAreaRecovery`, `InteriorBalls`, `EpigraphBalls`, `CurveRoof`, `EnvelopeSlope`, `RoofGeometry`, `GerverRoof`, `RoofMargins`, `EnvelopeSlack`, `GerverMargins`, `SofaCoordinates`, `SofaCap`, `LocalSofaRecovery`, `ConvexParallelArea`, `SymmetricDifference` | from the cap back to the sofa: the sofa's cap, Gerver's roof and interior balls, the Euclidean distance and the symmetric difference |
 | `CompactSetLimits`, `SofaBounds`, `SofaLimitMotion`, `QualitativeEntry`, `GlobalStability` | entry into the neighborhood by compactness, and the main theorems |
 | `PunctureTopology`, `EuclideanDisks`, `PunctureMetric`, `RigidInterior`, `PuncturedSofa`, `SharpExponent` | the punctured sofas: the exponent one half is optimal |
+
+### `MovingSofaExtremal/`: the coercive route
+
+[The coercive route](coercive.md) describes the theorems and the proof. The library imports the stability library up to
+`CoerciveCertificate`, and the stability library's modules from `Statement` on import its `Uniqueness`:
+
+| Module | Content |
+| --- | --- |
+| [`MovingSofaExtremal/Geometry.lean`](../MovingSofaExtremal/Geometry.lean) | maximizing caps: existence, the injectivity condition at the right angle, the right-angle motion |
+| [`MovingSofaExtremal/HorizontalTranslation.lean`](../MovingSofaExtremal/HorizontalTranslation.lean) | horizontal translates of caps, niches and sofas |
+| [`MovingSofaExtremal/CoerciveRigidity.lean`](../MovingSofaExtremal/CoerciveRigidity.lean) | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap, by the certificate |
+| [`MovingSofaExtremal/Optimality.lean`](../MovingSofaExtremal/Optimality.lean) | Baek's optimality theorem from the maximizing caps |
+| [`MovingSofaExtremal/Uniqueness.lean`](../MovingSofaExtremal/Uniqueness.lean) | the uniqueness, and no rotation is needed |
+| [`MovingSofaExtremal/Unified.lean`](../MovingSofaExtremal/Unified.lean) | optimality, uniqueness and stability in one theorem |
+| [`MovingSofaExtremal/All.lean`](../MovingSofaExtremal/All.lean) | imports all the others |
 
 ### `scripts/`
 
@@ -112,6 +132,7 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
 | [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
+| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the coercive route and the stability library use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves the statements of [`Solution.lean`](../Solution.lean) |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |

@@ -10,6 +10,7 @@ public import MovingSofaStability.CapCoercivity
 public import MovingSofaStability.CapDistance
 public import MovingSofaStability.CapShape
 public import MovingSofaStability.CapWidthGeometry
+public import MovingSofaStability.CoerciveCertificate
 public import MovingSofaStability.CompactSetLimits
 public import MovingSofaStability.ConvexParallelArea
 public import MovingSofaStability.CoreAreaBound

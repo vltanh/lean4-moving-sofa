@@ -5,26 +5,22 @@ public import MovingSofaExtremal.HorizontalTranslation
 public import MovingSofaExtremal.CoerciveRigidity
 public import MovingSofaExtremal.Optimality
 public import MovingSofaExtremal.Uniqueness
+public import MovingSofaExtremal.Unified
 
 /-!
-# The coercive extremal route
+# The coercive route
 
-Intended proof-source entry points:
+Optimality, uniqueness and stability of Gerver's sofa from the coercive certificate
+`MovingSofaStability.coercive_certificate`, without Baek's Theorem 1.1.1, his results on balanced
+caps, or the modules of the first proof of uniqueness:
 
-* MovingSofaExtremal.right_angle_maximizer_certificate
-* MovingSofaExtremal.right_angle_maximizer_eq_gerver
-* MovingSofaExtremal.gerver_sofa_optimal
-* MovingSofaExtremal.image_eq_gerver_of_volume_eq
-* MovingSofaExtremal.gerver_sofa_optimal_and_unique
+* `Geometry`: maximizing caps, the injectivity condition and the right-angle motion;
+* `HorizontalTranslation`: horizontal translates of caps, niches and sofas;
+* `CoerciveRigidity`: the maximizing right-angle caps are the translates of Gerver's cap;
+* `Optimality`: `gerver_sofa_optimal`;
+* `Uniqueness`: `image_eq_gerver_of_volume_eq`, `translate_eq_gerver_of_volume_eq`;
+* `Unified`: `gerver_sofa_optimal_unique_stable`, with the stability theorems of
+  `MovingSofaStability`, whose global step uses `Uniqueness`.
 
-The quantitative input is the lower cap-distance layer. GlobalStability and
-QualitativeEntry are deliberately absent, preventing use of the original
-uniqueness theorem through the global stability argument.
-
-The faithful Baek library, the original uniqueness proof, and the historical
-MaximizerRoute remain unchanged. SolutionCoercive separately transports the
-new conclusions through the unchanged bridge to the Challenge's statements.
-
-All additions are uncompiled proof source. No Lean or CI has been run, and no
-audit success or kernel verification is claimed.
+`SolutionCoercive.lean` proves the statements of `Challenge.lean` through these theorems.
 -/

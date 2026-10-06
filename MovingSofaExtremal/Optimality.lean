@@ -3,12 +3,16 @@ module
 public import MovingSofaExtremal.CoerciveRigidity
 
 /-!
-# Global optimality from the coercive maximizer certificate
+# Optimality through the coercive certificate
 
-Uncompiled proof source. Baek's faithful optimality theorem is retained in its
-original library but is not used by this derivation. The shared inputs are
-fixed-angle existence, maximality-derived geometry, and the upper-bound
-functional before Baek's final optimality theorem.
+Every right-angle cap has sofa area at most `|G|` (`right_angle_cap_area_le_gerver`), because a
+maximizing right-angle cap has sofa area `|G|` (`right_angle_maximizer_value`). A right-angle moving
+sofa lies in the sofa of a maximizing cap (`right_angle_area_le_gerver`). A moving sofa of area at
+least 2.2 moves with an angle `ω ≥ arcsec 2.2` (Baek's Theorem 1.5.1); it lies in the sofa of a
+maximizing cap of angle `ω`, a rotated copy of which moves with the right angle
+(`maximizing_monotone_has_right_angle`), so its area is at most `|G|` (`area_le_gerver`).
+
+Baek's Theorem 1.1.1 is not used, nor are his results on balanced caps.
 -/
 
 @[expose] public section

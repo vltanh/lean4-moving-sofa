@@ -37,7 +37,7 @@ NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'Movi
               'MovingSofaBridge', 'MovingSofaBridge.GerverConstants', 'MovingSofaStability']
 # Top-level module names of the project: a code span naming such a module links to its file.
 MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'MovingSofaStability',
-                'ChallengeDefs', 'Challenge', 'Solution')
+                'MovingSofaExtremal', 'ChallengeDefs', 'Challenge', 'Solution', 'SolutionCoercive')
 # The module whose declarations win when a name is declared in several modules.
 PREFERRED_MODULE = 'Challenge'
 # Directories, besides the repository root, against which the paths in the documents of a

@@ -9,8 +9,8 @@ import all MovingSofaOptimality.Angle.HorizontalSide
 import all MovingSofaOptimality.Angle.RightAngle
 import all MovingSofaOptimality.Balanced.BalancedMaximumSofa
 import all MovingSofaOptimality.Balanced.CapGeometry
-import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.MaxPolygonCapExists
+import all MovingSofaOptimality.Balanced.MaximumPolygonCap
 import all MovingSofaOptimality.Balanced.NefPolygon
 import all MovingSofaOptimality.Balanced.PolygonCap
 import all MovingSofaOptimality.Balanced.Polyline
@@ -23,12 +23,12 @@ import all MovingSofaOptimality.Convex.ConvexCurve
 import all MovingSofaOptimality.Convex.ConvexDomain
 import all MovingSofaOptimality.Convex.CurveArea
 import all MovingSofaOptimality.Convex.Mamikon
-import all MovingSofaOptimality.External.AreaFormula.Param
 import all MovingSofaOptimality.External.AreaFormula
+import all MovingSofaOptimality.External.AreaFormula.Param
+import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.External.Romik.Calc
 import all MovingSofaOptimality.External.Romik.Fix
 import all MovingSofaOptimality.External.Romik.Num
-import all MovingSofaOptimality.External.Romik
 import all MovingSofaOptimality.Gerver.AreaBounds
 import all MovingSofaOptimality.Gerver.Bounds
 import all MovingSofaOptimality.Gerver.Defs
@@ -82,6 +82,7 @@ import all MovingSofaStability.CapCoercivity
 import all MovingSofaStability.CapDistance
 import all MovingSofaStability.CapShape
 import all MovingSofaStability.CapWidthGeometry
+import all MovingSofaStability.CoerciveCertificate
 import all MovingSofaStability.CompactSetLimits
 import all MovingSofaStability.ConvexParallelArea
 import all MovingSofaStability.CoreAreaBound
@@ -110,6 +111,7 @@ import all MovingSofaStability.LocalArmMargins
 import all MovingSofaStability.LocalSofaRecovery
 import all MovingSofaStability.LocalUpperBound
 import all MovingSofaStability.MamikonEnergy
+import all MovingSofaStability.MamikonFoundation
 import all MovingSofaStability.MissingAreaRecovery
 import all MovingSofaStability.MixedArea
 import all MovingSofaStability.NicheContainment
@@ -156,8 +158,16 @@ import all MovingSofaStability.WideDomain
 import all MovingSofaStability.WideFirstVariation
 import all MovingSofaStability.WideGerverCertificate
 import all MovingSofaStability.WideResidualEnergy
+import all MovingSofaExtremal.All
+import all MovingSofaExtremal.CoerciveRigidity
+import all MovingSofaExtremal.Geometry
+import all MovingSofaExtremal.HorizontalTranslation
+import all MovingSofaExtremal.Optimality
+import all MovingSofaExtremal.Unified
+import all MovingSofaExtremal.Uniqueness
 import all ChallengeDefs
 import all Solution
+import all SolutionCoercive
 
 /-!
 # Axiom and dependency audit
@@ -444,6 +454,18 @@ meta def stabilityResults : List (String × Name) :=
     ``MovingSofaStability.sharp_wide_cap_distance_bound),
    ("Stability: cap distance, coefficient 1001/500", ``MovingSofaStability.ki_cap_distance_bound_2002)]
 
+/-- The coercive route (`MovingSofaExtremal/`, `docs/coercive.md`): optimality, uniqueness and
+stability from one certificate; `scripts/AuditCoerciveRoute.lean` checks its dependencies. -/
+meta def coerciveResults : List (String × Name) :=
+  [("Coercive route: the certificate", ``MovingSofaStability.coercive_certificate),
+   ("Coercive route: maximizing right-angle caps",
+    ``MovingSofaExtremal.right_angle_maximizer_eq_gerver),
+   ("Coercive route: optimality", ``MovingSofaExtremal.gerver_sofa_optimal),
+   ("Coercive route: uniqueness", ``MovingSofaExtremal.image_eq_gerver_of_volume_eq),
+   ("Coercive route: no rotation is needed", ``MovingSofaExtremal.translate_eq_gerver_of_volume_eq),
+   ("Coercive route: optimality, uniqueness and stability",
+    ``MovingSofaExtremal.gerver_sofa_optimal_unique_stable)]
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
@@ -466,11 +488,12 @@ meta def solutionResults : List Name :=
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
 /-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the bridge
-to formal-conjectures' definitions, the stability of Gerver's sofa, and the Challenge's
-definitions). -/
+to formal-conjectures' definitions, the stability of Gerver's sofa, the coercive route, the
+Challenge's definitions, and the second solution). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
-    (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m || m == `ChallengeDefs
+    (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m ||
+    (`MovingSofaExtremal).isPrefixOf m || m == `ChallengeDefs || m == `SolutionCoercive
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
@@ -564,7 +587,7 @@ elab "#audit" : command => do
   let mut deps : NameMap (Array Name) := {}
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
-  for (label, n) in paperResults ++ uniquenessResults ++ stabilityResults do
+  for (label, n) in paperResults ++ uniquenessResults ++ stabilityResults ++ coerciveResults do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n

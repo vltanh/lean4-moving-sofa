@@ -7,7 +7,10 @@ public import MovingSofaOptimality.Main
 
 A `Rigid` map of `ℝ × ℝ` is a rotation about the origin followed by a translation; it preserves
 volume. A closed set contained in a regular closed set `G` of finite measure, with the same measure,
-is `G` itself (`Rigid.recover`): this is the last step of the uniqueness theorem.
+is `G` itself (`Rigid.recover`): this is the last step of the uniqueness theorem. A moving sofa lies
+in a horizontal strip of height one, so a rigid image of it has width at most one in the image of
+the vertical direction (`snd_sub_le_one_of_isMovingSofa`, `dot_sub_vvec_le_one_of_mem_image`); this
+shows that no rotation is needed (`cor:translate` of the manuscript `docs/paper`).
 -/
 
 @[expose] public section
@@ -181,6 +184,36 @@ theorem Rigid.recover (g : Rigid) {s G : Set Plane} (hs : IsClosed s)
     (hsub : g '' s ⊆ G) (hreg : closure (interior G) = G)
     (hfin : volume G ≠ ⊤) (hvol : volume s = volume G) : g '' s = G :=
   eq_of_subset_of_measure_eq (g.isClosed_image hs) hsub hreg hfin (by simpa using hvol)
+
+/-! ## A moving sofa lies in a horizontal strip of height one -/
+
+/-- A moving sofa lies in a horizontal strip of height one: its translate at the start of its
+movement lies in the horizontal side `H_L = (-∞, 1] × [0, 1]` of the hallway. -/
+theorem snd_sub_le_one_of_isMovingSofa {S : Set Plane}
+    (hS : MovingSofaOptimality.IsMovingSofa S) {p q : Plane} (hp : p ∈ S) (hq : q ∈ S) :
+    p.2 - q.2 ≤ 1 := by
+  obtain ⟨ω, -, -, θ, c, hm⟩ := hS
+  have hp' := hm.start p hp
+  have hq' := hm.start q hq
+  rw [hm.angle_zero, rot_zero] at hp' hq'
+  obtain ⟨-, -, hp1⟩ := hp'
+  obtain ⟨-, hq0, -⟩ := hq'
+  simp only [Prod.snd_add] at hp1 hq0
+  linarith
+
+/-- If a rigid map `g` of angle `θ` takes a moving sofa `S` onto a set containing `x` and `y`, then
+`(x - y) · v_θ ≤ 1`: the image of `S` has width at most one in the direction
+`v_θ = u_{θ + π/2}`, the image of the vertical direction under `R_θ`. -/
+theorem dot_sub_vvec_le_one_of_mem_image {S : Set Plane}
+    (hS : MovingSofaOptimality.IsMovingSofa S) (g : Rigid) {x y : Plane} (hx : x ∈ g '' S)
+    (hy : y ∈ g '' S) : dot (x - y) (vvec g.angle) ≤ 1 := by
+  obtain ⟨p, hp, rfl⟩ := hx
+  obtain ⟨q, hq, rfl⟩ := hy
+  have he : g p - g q = rot g.angle (p - q) := by
+    change rot g.angle p + g.shift - (rot g.angle q + g.shift) = rot g.angle (p - q)
+    ext <;> simp only [rot, Prod.fst_add, Prod.snd_add, Prod.fst_sub, Prod.snd_sub] <;> ring
+  rw [he, dot_rot_vvec_eq_snd, Prod.snd_sub]
+  exact snd_sub_le_one_of_isMovingSofa hS hp hq
 
 end MovingSofaUniqueness
 

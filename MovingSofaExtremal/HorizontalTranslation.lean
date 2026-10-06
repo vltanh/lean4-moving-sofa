@@ -3,11 +3,12 @@ module
 public import MovingSofaUniqueness.Rigid
 
 /-!
-# Elementary horizontal translation for the coercive route
+# Horizontal translates of caps
 
-Uncompiled proof source. These are geometric identities, not rigidity theorems.
-No equality-in-concavity, CapKernel, or old maximizer classification is imported.
-The original versions remain in their existing module for compatibility.
+Translating a cap horizontally translates its niche and its sofa, and keeps its sofa area
+(`niche_translate_horizontal`, `cap_minus_niche_translate`, `sofaArea_translate_horizontal`).
+`MovingSofaUniqueness.Rigidity` proves the same identities, except `cap_minus_niche_translate`;
+they are proved again here so that the coercive route does not import that module.
 -/
 
 @[expose] public section

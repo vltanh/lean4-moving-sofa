@@ -4,7 +4,9 @@
 
 [`Challenge.lean`](../Challenge.lean) states fifteen theorems with the definitions of [Definitions](definitions.md), and
 [`Solution.lean`](../Solution.lean) proves them; [Comparator](verification.md#comparator) checks that the proofs prove
-exactly these statements, with Lean's standard axioms only.
+exactly these statements, with Lean's standard axioms only. [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves them again
+through the coercive route ([the coercive route](coercive.md)), and [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks that its
+theorems have the same statements.
 
 ## Baek's theorems
 
@@ -77,7 +79,9 @@ theorem gerver_sofa_stability_exponent (P : GerverParams) (hP : P.IsSolution) (h
 
 The constants exist but are not computed. Baek's paper does not prove these theorems; the argument was
 written by ChatGPT Pro 6 for this repository and has not been peer reviewed. [Stability](stability.md) gives
-the proof and the library's further results.
+the proof and the library's further results. The proofs of the first two take the optimality and the
+uniqueness from the coercive route ([the coercive route](coercive.md)), not from Baek's Theorem 1.1.1 or the first
+proof of uniqueness.
 
 ## The bridge
 
@@ -136,7 +140,7 @@ each, and the uniqueness of the constants from the library's analytic proof.
 
 ## The libraries
 
-The fifteen theorems rest on the four libraries:
+The fifteen theorems rest on five libraries:
 
 - [`MovingSofaOptimality/`](../MovingSofaOptimality), Baek's paper: every numbered result of the paper, under its number (for
   example [`MovingSofaOptimality.theorem2_3_2`](../MovingSofaOptimality/Monotone/MonotoneSofa.lean#L430) for Theorem 2.3.2), with the main theorem [`MovingSofaOptimality.theorem1_1_1`](../MovingSofaOptimality/Main.lean#L302), the results it
@@ -151,3 +155,8 @@ The fifteen theorems rest on the four libraries:
   [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1143).
 - [`MovingSofaStability/`](../MovingSofaStability), the stability: [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/GlobalStability.lean#L113),
   [`MovingSofaStability.terminal_angle_stability`](../MovingSofaStability/GlobalStability.lean#L136) and [`MovingSofaStability.no_hausdorff_exponent_gt_half`](../MovingSofaStability/SharpExponent.lean#L69) ([Stability](stability.md)).
+- [`MovingSofaExtremal/`](../MovingSofaExtremal), the coercive route: the certificate [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) gives optimality,
+  [`MovingSofaExtremal.gerver_sofa_optimal`](../MovingSofaExtremal/Optimality.lean#L102), and uniqueness, [`MovingSofaExtremal.image_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Uniqueness.lean#L105) and
+  [`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Uniqueness.lean#L118), without Baek's Theorem 1.1.1 or the first proof of uniqueness; the stability
+  library takes its uniqueness from it, and [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38) states the three results
+  ([the coercive route](coercive.md)).

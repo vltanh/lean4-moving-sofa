@@ -3,17 +3,15 @@ module
 public import MovingSofaUniqueness.Rigid
 
 /-!
-# Neutral Mamikon infrastructure for the quantitative route
+# Square integrals and Mamikon displacements
 
-Uncompiled proof source. These elementary square-integral and displacement
-lemmas use Baek's Mamikon formula, not the old equality/CapKernel argument.
-The original MovingSofaUniqueness.Rigidity module is deliberately unchanged.
-The quantitative route uses the declarations in MovingSofaStability below,
-so it does not import the original rigidity module merely for its utilities.
-
-The distinct namespace preserves coexistence with the old theorem family.
-A later checked deduplication can turn the old utilities into compatibility
-aliases, but no such change to the original proof is needed for this route.
+Half square integrals and their gap under convex combinations (`halfSquareIntegral`,
+`halfSquareIntegral_combo_gap`), the tangent displacements of a cap and the Mamikon term as their
+half square integral (`displacement`, `mamikon_eq_halfSquareIntegral`), and the canonical triple of
+a cap of `𝒦^i` (`kiExtensionTriple`). `MovingSofaUniqueness.Rigidity` proves the same results for
+the first proof of uniqueness; they are proved again here so that the stability library and the
+coercive route, which import this module, do not import `Rigidity`, whose equality analysis the
+coercive route replaces.
 -/
 
 @[expose] public section

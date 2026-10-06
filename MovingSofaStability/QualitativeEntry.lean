@@ -6,7 +6,10 @@ public import MovingSofaStability.SofaLimitMotion
 # Qualitative entry into the quantitative neighborhood
 
 Compactness supplies entry into a fixed neighborhood, not a rate. The limit
-motion is constructed from supporting constraints.
+motion is constructed from supporting constraints. A limit of normalized sofas
+whose areas tend to `|G|` has area `|G|`, so it is Gerver's sofa, by the
+optimality and uniqueness theorems of the coercive route
+(`MovingSofaExtremal.area_le_gerver`, `pinned_maximizer_eq_gerver`).
 -/
 
 @[expose] public section
@@ -49,7 +52,8 @@ theorem maximizing_subsequence {P : GerverParams} (hP : P.IsSolution) (hbox : P.
     (fun n => hmove (σ n)) (fun n => hangles (σ n)) (fun n => htops (σ n)) (fun n => hlefts (σ n))
   have hareaLim := harea.comp hσ.tendsto_atTop
   have hmax : area (L : Set Point) = area (gerverSofa P) := le_antisymm
-    (area_le_gerver hP hbox ⟨ω, hLmove⟩) (compactShape_area_limsup hKlim hareaLim)
+    (MovingSofaExtremal.area_le_gerver hP hbox ⟨ω, hLmove⟩)
+    (compactShape_area_limsup hKlim hareaLim)
   have hset : (L : Set Point) = gerverSofa P := pinned_maximizer_eq_gerver hP hbox
     ⟨ω, hLmove⟩ htop hleft hmax
   have hLeq : L = gerverCompactShape hP hbox := NonemptyCompacts.ext hset
