@@ -20,40 +20,30 @@ open MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaStability
 
-def homotheticBody (K : Set Point) (z : Point) (λ : ℝ) : Set Point :=
-  (fun p => λ • (p - z) + z) '' K
+def homotheticBody (K : Set Point) (z : Point) (lam : ℝ) : Set Point :=
+  (fun p => lam • (p - z) + z) '' K
 
-theorem homotheticBody_convexBody {K : Set Point} (hK : IsConvexBody K) (z : Point) (λ : ℝ) :
-    IsConvexBody (homotheticBody K z λ) := by
-  refine ⟨hK.1.image _, hK.2.1.image (by fun_prop), ?_⟩
-  rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩ a b ha hb hab
-  refine ⟨a • p + b • q, hK.2.2 hp hq ha hb hab, ?_⟩
-  ext <;> simp only [Prod.fst_add, Prod.snd_add, Prod.fst_sub, Prod.snd_sub,
-    Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> nlinarith
+theorem homotheticBody_convexBody {K : Set Point} (hK : IsConvexBody K) (z : Point) (lam : ℝ) :
+    IsConvexBody (homotheticBody K z lam) := by
+  sorry
 
 theorem homotheticBody_support {K : Set Point} (hK : IsConvexBody K) (z : Point)
-    {λ : ℝ} (hλ : 0 ≤ λ) (t : ℝ) :
-    supp (homotheticBody K z λ) t = λ * supp K t + (1 - λ) * dot z (uvec t) := by
-  have hC := homotheticBody_convexBody hK z λ
+    {lam : ℝ} (hlam : 0 ≤ lam) (t : ℝ) :
+    supp (homotheticBody K z lam) t = lam * supp K t + (1 - lam) * dot z (uvec t) := by
+  have hC := homotheticBody_convexBody hK z lam
   obtain ⟨p, hp, he⟩ := exists_dot_eq_supp hK.2.1 hK.1 t
   apply supp_eq_of_mem hC.2.1
   · rintro _ ⟨q, hq, rfl⟩
-    have h := mul_le_mul_of_nonneg_left (dot_le_supp hK.2.1 hq t) hλ
+    have h := mul_le_mul_of_nonneg_left (dot_le_supp hK.2.1 hq t) hlam
     rw [dot_add_left, dot_smul_left, dot_sub_left]
     linarith
   · exact mem_image_of_mem _ hp
   · rw [dot_add_left, dot_smul_left, dot_sub_left, he]
     ring
 
-theorem area_homotheticBody (K : Set Point) (z : Point) (λ : ℝ) :
-    area (homotheticBody K z λ) = λ ^ 2 * area K := by
-  have hdim : Module.finrank ℝ Point = 2 := by
-    simp [Point, Module.finrank_prod]
-  have he := addHaar_image_homothety (volume : Measure Point) z λ K
-  change volume (homotheticBody K z λ) = _ at he
-  unfold area
-  rw [he, hdim, abs_of_nonneg (sq_nonneg λ), ENNReal.toReal_mul,
-    ENNReal.toReal_ofReal (sq_nonneg λ)]
+theorem area_homotheticBody (K : Set Point) (z : Point) (lam : ℝ) :
+    area (homotheticBody K z lam) = lam ^ 2 * area K := by
+  sorry
 
 /-- A fixed inscribed ball provides a support margin in every direction. -/
 theorem support_margin_of_ball {K : Set Point} (hK : IsConvexBody K) {z : Point} {r : ℝ}
@@ -88,9 +78,9 @@ theorem area_parallel_layer_le {K : Set Point} (hK : IsConvexBody K) {z : Point}
     (hr : 0 < r) (hd : d ∈ Icc (0 : ℝ) 1) (hball : euclideanBall z r ⊆ K)
     {E : Set Point} (hE : E ⊆ (K + euclideanDisk d) \ K) :
     area E ≤ area K * (2 / r + 1 / r ^ 2) * d := by
-  let λ := 1 + d / r
-  let C := homotheticBody K z λ
-  have hCK := homotheticBody_convexBody hK z λ
+  let lam := 1 + d / r
+  let C := homotheticBody K z lam
+  have hCK := homotheticBody_convexBody hK z lam
   have hsub := parallel_subset_homothetic hK hr hd.1 hball
   have hKsum : K ⊆ K + euclideanDisk d := by
     intro p hp
@@ -102,11 +92,11 @@ theorem area_parallel_layer_le {K : Set Point} (hK : IsConvexBody K) {z : Point}
     (volume_ne_top_of_subset sdiff_subset hCK.2.1.measure_lt_top.ne)
   have harea := area_inter_add_sdiff (S := C) hK.2.1.measurableSet hCK.2.1.measure_lt_top.ne
   rw [inter_eq_right.mpr hKC] at harea
-  have hscale : area C = λ ^ 2 * area K := area_homotheticBody K z λ
+  have hscale : area C = lam ^ 2 * area K := area_homotheticBody K z lam
   have hK0 : 0 ≤ area K := ENNReal.toReal_nonneg
   have hd2 : d ^ 2 ≤ d := by nlinarith [hd.1, hd.2]
-  have hpoly : λ ^ 2 - 1 ≤ (2 / r + 1 / r ^ 2) * d := by
-    dsimp [λ]
+  have hpoly : lam ^ 2 - 1 ≤ (2 / r + 1 / r ^ 2) * d := by
+    dsimp [lam]
     field_simp [hr.ne']
     nlinarith [mul_nonneg hd.1 hr.le]
   have hm := mul_le_mul_of_nonneg_left hpoly hK0

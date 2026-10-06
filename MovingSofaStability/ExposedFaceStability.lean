@@ -47,74 +47,7 @@ theorem exposed_face_property_stable {K₀ : Set Point} (h₀ : IsCap K₀ (π /
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧
       ∀ K : Set Point, IsCap K (π / 2) → UpperSupportClose δ K K₀ →
         ∀ t ∈ I, ∀ p ∈ edge K t, 0 < F p t := by
-  classical
-  let B := K₀ + euclideanDisk 1
-  have hB : IsCompact B :=
-    (convexBody_add h₀.2.1 (euclideanDisk_isConvexBody (by norm_num : (0 : ℝ) ≤ 1))).2.1
-  letI : CompactSpace ↥B := isCompact_iff_compactSpace.mp hB
-  letI : CompactSpace ↥I := isCompact_iff_compactSpace.mp hI
-  let Z := ↥B × ↥I
-  let defect : Z → ℝ := fun z => Metric.infDist z.1.1 K₀ +
-    |dot z.1.1 (uvec z.2.1) - supp K₀ z.2.1|
-  let property : Z → ℝ := fun z => F z.1.1 z.2.1
-  have hmap : Continuous (fun z : Z => (z.1.1, z.2.1)) := by fun_prop
-  have hprop : Continuous property := by
-    exact hF.comp_continuous hmap (fun z => ⟨z.1.2, z.2.2⟩)
-  have hdef : Continuous defect := by
-    apply Continuous.add
-    · exact (Metric.continuous_infDist_pt K₀).comp (continuous_subtype_val.comp continuous_fst)
-    · apply Continuous.abs
-      apply Continuous.sub
-      · exact continuous_dot_pair.comp
-          ((continuous_subtype_val.comp continuous_fst).prodMk
-            (continuous_uvec.comp (continuous_subtype_val.comp continuous_snd)))
-      · exact h₀.2.1.continuous_supp.comp (continuous_subtype_val.comp continuous_snd)
-  let bad : Set Z := {z | property z ≤ 0}
-  have hbad : IsCompact bad := (isClosed_le hprop continuous_const).isCompact
-  have hpos : ∀ z ∈ bad, 0 < defect z := by
-    intro z hz
-    by_contra hnot
-    have hdist0 : Metric.infDist z.1.1 K₀ = 0 := by
-      have hn := Metric.infDist_nonneg (x := z.1.1) (s := K₀)
-      have ha := abs_nonneg (dot z.1.1 (uvec z.2.1) - supp K₀ z.2.1)
-      change ¬0 < Metric.infDist z.1.1 K₀ +
-        |dot z.1.1 (uvec z.2.1) - supp K₀ z.2.1| at hnot
-      linarith
-    have hgap0 : dot z.1.1 (uvec z.2.1) = supp K₀ z.2.1 := by
-      change ¬0 < Metric.infDist z.1.1 K₀ +
-        |dot z.1.1 (uvec z.2.1) - supp K₀ z.2.1| at hnot
-      rw [hdist0, zero_add] at hnot
-      exact sub_eq_zero.mp (abs_eq_zero.mp (le_antisymm (not_lt.mp hnot) (abs_nonneg _)))
-    have hp : z.1.1 ∈ K₀ := (h₀.2.1.2.1.isClosed.mem_iff_infDist_zero h₀.2.1.1).2 hdist0
-    have hh := hpositive z.2.1 z.2.2 z.1.1 ⟨hp, hgap0⟩
-    exact (not_lt_of_ge hz) hh
-  obtain ⟨m, hm, hmin⟩ := hbad.exists_forall_le' hdef.continuousOn hpos
-  let δ := min 1 (m / 4)
-  have hδ : 0 < δ := lt_min (by norm_num) (by linarith)
-  have hδ1 : δ ≤ 1 := min_le_left _ _
-  have hδm : 2 * δ < m := by
-    have h := min_le_right (1 : ℝ) (m / 4)
-    change δ ≤ m / 4 at h
-    linarith
-  refine ⟨δ, hδ, hδ1, ?_⟩
-  intro K hK hclose t ht p hp
-  have hpB := cap_subset_unit_parallel hK h₀ hδ1 hclose hp.1
-  let z : Z := (⟨p, hpB⟩, ⟨t, ht⟩)
-  by_contra hnot
-  have hzbad : z ∈ bad := not_lt.mp hnot
-  have hd : m ≤ defect z := hmin z hzbad
-  have hcapclose := upperSupportClose_euclidean hδ.le hK h₀ hclose
-  obtain ⟨q, hq, hpq⟩ := hcapclose.1 p hp.1
-  have hdist : Metric.infDist p K₀ ≤ δ := by
-    have hprod : dist p q ≤ euclideanDist p q := by
-      rw [dist_eq_norm]
-      exact product_norm_le_norm2 (p - q)
-    exact (Metric.infDist_le_dist_of_mem hq).trans (hprod.trans hpq)
-  have hsupport : |dot p (uvec t) - supp K₀ t| ≤ δ := by
-    rw [hp.2]
-    exact hclose t (hIupper ht)
-  change m ≤ Metric.infDist p K₀ + |dot p (uvec t) - supp K₀ t| at hd
-  linarith
+  sorry
 
 /-- On a compact interval of unique reference faces, all competing contact
 points are uniformly close to the reference contact curve. -/

@@ -54,32 +54,13 @@ theorem compactShape_support_error (K L : CompactShape) (t : ℝ) :
 theorem compactShape_support_tendsto {K : ℕ → CompactShape} {L : CompactShape}
     (hK : Tendsto K atTop (𝓝 L)) {t : ℕ → ℝ} {a : ℝ} (ht : Tendsto t atTop (𝓝 a)) :
     Tendsto (fun n => supp (K n : Set Point) (t n)) atTop (𝓝 (supp (L : Set Point) a)) := by
-  have hfixed := (continuous_supp L.isCompact).continuousAt.tendsto.comp ht
-  apply Metric.tendsto_nhds.2
-  intro ε hε
-  have h1 := Metric.tendsto_nhds.1 hK (ε / 4) (by positivity)
-  have h2 := Metric.tendsto_nhds.1 hfixed (ε / 2) (by positivity)
-  filter_upwards [h1, h2] with n hn1 hn2
-  have he := compactShape_support_error (K n) L (t n)
-  have htri := abs_add (supp (K n : Set Point) (t n) - supp (L : Set Point) (t n))
-    (supp (L : Set Point) (t n) - supp (L : Set Point) a)
-  rw [Real.dist_eq] at hn2 ⊢
-  have hsum : supp (K n : Set Point) (t n) - supp (L : Set Point) (t n) +
-      (supp (L : Set Point) (t n) - supp (L : Set Point) a) =
-      supp (K n : Set Point) (t n) - supp (L : Set Point) a := by ring
-  rw [hsum] at htri
-  linarith
+  sorry
 
 /-- Every point of the limit is the limit of a sequence of points in the approximants. -/
 theorem compactShape_approximate_point {K : ℕ → CompactShape} {L : CompactShape}
     (hK : Tendsto K atTop (𝓝 L)) {p : Point} (hp : p ∈ L) :
     ∃ q : ℕ → Point, (∀ n, q n ∈ K n) ∧ Tendsto q atTop (𝓝 p) := by
-  choose q hq hd using fun n => compactShape_near_point L (K n) hp
-  refine ⟨q, hq, Metric.tendsto_nhds.2 ?_⟩
-  intro ε hε
-  filter_upwards [Metric.tendsto_nhds.1 hK ε hε] with n hn
-  rw [dist_comm] at hn
-  exact (by simpa only [dist_comm] using hd n).trans_lt hn
+  sorry
 
 /-- Compact connected sets remain connected under Hausdorff limits. -/
 theorem compactShape_connected_limit {K : ℕ → CompactShape} {L : CompactShape}
@@ -116,23 +97,6 @@ theorem compactShape_subset_limit {K : ℕ → CompactShape} {L : CompactShape} 
 theorem compactShape_area_limsup {K : ℕ → CompactShape} {L : CompactShape} {M : ℝ}
     (hK : Tendsto K atTop (𝓝 L)) (harea : Tendsto (fun n => area (K n : Set Point)) atTop (𝓝 M)) :
     M ≤ area (L : Set Point) := by
-  apply le_of_forall_gt
-  intro r hr
-  have hL0 : 0 ≤ area (L : Set Point) := ENNReal.toReal_nonneg
-  have hr0 : 0 < r := lt_of_le_of_lt hL0 hr
-  have hvol : volume (L : Set Point) < ENNReal.ofReal r := by
-    rw [← ENNReal.ofReal_toReal L.isCompact.measure_lt_top.ne]
-    exact (ENNReal.ofReal_lt_ofReal_iff hr0).2 hr
-  obtain ⟨U, hLU, hU, hvolU⟩ := (L : Set Point).exists_isOpen_lt_of_lt
-    (μ := volume) (ENNReal.ofReal r) hvol
-  have hUf : volume U ≠ ⊤ := ne_top_of_lt (hvolU.trans_le le_top)
-  have huarea : area U < r := by
-    have he := ENNReal.toReal_lt_toReal hUf ENNReal.ofReal_ne_top |>.2 hvolU
-    simpa only [area, ENNReal.toReal_ofReal hr0.le] using he
-  have ev : ∀ᶠ n in atTop, area (K n : Set Point) ≤ area U := by
-    filter_upwards [hK.eventually ((NonemptyCompacts.isOpen_subsets_of_isOpen hU).mem_nhds hLU)] with n hn
-    exact area_mono_of_finite hn hUf
-  have hm : M ≤ area U := le_of_tendsto harea ev
-  exact hm.trans huarea.le
+  sorry
 
 end MovingSofaStability

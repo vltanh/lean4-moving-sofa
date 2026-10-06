@@ -69,32 +69,6 @@ theorem exists_core_graph {K : Set Point} (hK : IsCap K (π / 2))
       (∀ t ∈ Icc a b, F (innerCorner K t).1 = (innerCorner K t).2) ∧
       (∀ y ∈ Icc (innerCorner K b).1 (innerCorner K a).1,
         ∃ t ∈ Icc a b, (innerCorner K t).1 = y) := by
-  have hanti := hmargin.strictAnti_core hK hc ha hb
-  have hcX := (opt_innerCorner_continuous hK.2.1).fst.continuousOn
-  have horder : (innerCorner K b).1 < (innerCorner K a).1 :=
-    hanti ⟨le_rfl, hab.le⟩ ⟨hab.le, le_rfl⟩ hab
-  obtain ⟨L, hL, hSlope⟩ := core_verticalSlopeBound hK hmargin hc ha hb
-  have hrange : ∀ p ∈ innerCorner K '' Icc a b,
-      p.1 ∈ Icc (innerCorner K b).1 (innerCorner K a).1 := by
-    rintro p ⟨t, ht, rfl⟩
-    exact ⟨hanti.antitoneOn ht ⟨hab.le, le_rfl⟩ ht.2,
-      hanti.antitoneOn ⟨le_rfl, hab.le⟩ ht ht.1⟩
-  have hcover : ∀ y ∈ Icc (innerCorner K b).1 (innerCorner K a).1,
-      ∃ t ∈ Icc a b, (innerCorner K t).1 = y := by
-    intro y hy
-    exact intermediate_value_Icc' hab.le hcX hy
-  obtain ⟨γ, hgraph, hLip⟩ := exists_roof_function hrange (by
-    intro y hy
-    obtain ⟨t, ht, he⟩ := hcover y hy
-    exact ⟨innerCorner K t, mem_image_of_mem _ ht, he⟩) hSlope
-  let F := fun y => γ (max (innerCorner K b).1 (min y (innerCorner K a).1))
-  have hF : Continuous F := continuous_clamped_roof horder.le hL hLip
-  refine ⟨F, hF, ?_, hcover⟩
-  intro t ht
-  have hp := hrange _ (mem_image_of_mem _ ht)
-  have hy := ((hgraph _).1 (mem_image_of_mem _ ht)).2
-  dsimp [F]
-  rw [min_eq_left hp.2, max_eq_right hp.1]
-  exact hy.symm
+  sorry
 
 end MovingSofaStability

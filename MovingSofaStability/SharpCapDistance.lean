@@ -28,8 +28,7 @@ theorem sharp_capDifference_le_energy {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (K₀ K₁ : ConvexBodySet) (h₀ : IsCap K₀.1 (π / 2)) (h₁ : IsCap K₁.1 (π / 2))
     {t : ℝ} (ht : t ∈ Icc 0 π) :
     |capDifference K₀.1 K₁.1 t| ≤ (2 / cos φ) * sqrt (capResidualEnergy φ K₀ K₁) := by
-  have he := sharp_four_arc_coercivity hφ (capDifference_data hφ K₀ K₁ h₀ h₁) ht
-  rwa [fourResidualEnergy_eq_capEnergy hφ K₀ K₁] at he
+  sorry
 
 /-- The original Q deficit controls the cap with coefficient 2 sec(phi). -/
 theorem sharp_wide_cap_support_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)

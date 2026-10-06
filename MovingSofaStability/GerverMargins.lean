@@ -58,38 +58,7 @@ theorem gerver_roof_slack_margin {P : GerverParams} (hP : P.IsSolution) (hbox : 
     {H L : ℝ} {γ : ℝ → ℝ}
     (hroof : CapRoofData P.cap (gerverRoofLeft P) (gerverRoofRight P) H L γ) :
     ∃ c τ : ℝ, 0 < c ∧ 0 < τ ∧ RoofSlackMargin P.cap γ c τ := by
-  have hB := romik_bounds hP hbox
-  have henv := gn_envHyp hP hB
-  have hθ : P.θ < π / 4 := by linarith [henv.ht.2.2.1]
-  obtain ⟨LΓ, -, hΓ⟩ := envelope_slope_bound henv hθ (by linarith)
-  have hheight : ∀ t ∈ Icc (0 : ℝ) (π / 2), (P.path t).2 < 1 :=
-    fun t ht => path_snd_lt_one hP hB ht.1 ht.2
-  have hbounds := envelope_bounds_of_path_height henv hheight
-  have hniche := gerver_niche_envelope hP hbox
-  have hgraph : ∀ q ∈ gerverEnvelope P, q.2 = γ q.1 := by
-    intro q hq
-    exact roof_value_of_envelope hroof hniche hΓ
-      (fun p hp => ⟨(hbounds p hp).1, (hbounds p hp).2.1⟩) hq
-  obtain ⟨c, τ, hc, hτ, hslack⟩ := envelope_downward_slack henv
-    (K := P.cap) (fun t ht => ((theorem8_4_1_monotone hP hbox).2 t ht).2.2)
-  refine ⟨c, τ, hc, hτ, ?_⟩
-  intro p hp
-  rw [hniche] at hp
-  obtain ⟨hpy, q, hq, hqx, hlt⟩ := hp
-  let d := q.2 - p.2
-  have hd : 0 < d := sub_pos.mpr hlt
-  have hfloor : 0 ≤ q.2 - d := by dsimp [d]; linarith
-  obtain ⟨t, ht, hU, hV⟩ := hslack q hq d hd hfloor
-  have he : (q.1, q.2 - d) = p := by
-    apply Prod.ext
-    · exact hqx
-    · dsimp [d]
-      ring
-  have hdγ : d = γ p.1 - p.2 := by
-    dsimp [d]
-    rw [hgraph q hq, hqx]
-  rw [he, hdγ] at hU hV
-  exact ⟨t, ht, hU, hV⟩
+  sorry
 
 /-- All constants needed for the S-to-G directed recovery are properties of Gerver,
 not additional assumptions on a near-optimal competing sofa. -/

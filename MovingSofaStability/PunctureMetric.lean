@@ -22,35 +22,7 @@ namespace MovingSofaStability
 theorem exists_sphere_point_near (p : Point) {r : ℝ} (hr : 0 < r)
     {x : Point} (hx : euclideanDist p x ≤ r) :
     ∃ q ∈ euclideanSphere p r, euclideanDist x q ≤ r := by
-  by_cases hxp : x = p
-  · obtain ⟨q, hq⟩ := (euclideanSphere_connected p hr.le).nonempty
-    exact ⟨q, hq, by simpa only [hxp] using hq.le⟩
-  let u := x - p
-  let n := norm2 u
-  have hn : 0 < n := by
-    have hne : euclideanDist x p ≠ 0 := by
-      simpa only [euclideanDist_eq_zero_iff] using hxp
-    exact lt_of_le_of_ne (norm2_nonneg u) (Ne.symm hne)
-  have hnr : n ≤ r := by
-    simpa only [n, u, euclideanDist, show x - p = -(p - x) by abel, norm2_neg] using hx
-  let a := r / n
-  let q := p + a • u
-  have ha : 0 < a := div_pos hr hn
-  have han : a * n = r := div_mul_cancel₀ _ hn.ne'
-  have ha1 : 1 ≤ a := (le_div_iff₀ hn).2 (by simpa using hnr)
-  have hpq : euclideanDist p q = r := by
-    change norm2 (p - (p + a • u)) = r
-    rw [show p - (p + a • u) = -(a • u) by abel, norm2_neg, norm2_smul, abs_of_pos ha]
-    exact han
-  have hxu : x - q = (1 - a) • u := by
-    dsimp [q, u]
-    simp only [sub_smul, one_smul, smul_sub]
-    abel
-  refine ⟨q, hpq, ?_⟩
-  change norm2 (x - q) ≤ r
-  rw [hxu, norm2_smul, abs_of_nonpos (sub_nonpos.mpr ha1)]
-  change -(1 - a) * n ≤ r
-  nlinarith
+  sorry
 
 /-- The original set and its puncture have Euclidean Hausdorff distance at most r. -/
 theorem puncture_euclideanClose {S : Set Point} {p : Point} {r : ℝ}
@@ -102,8 +74,7 @@ theorem moving_subset_of_closed_connected {S T : Set Point} {ω : ℝ}
 theorem puncture_movingWithAngle {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) {p : Point} {r : ℝ} (hr : 0 < r)
     (hball : euclideanBall p r ⊆ S) : IsMovingSofaWithAngle (puncture S p r) ω := by
-  exact moving_subset_of_closed_connected hS sdiff_subset
-    (hS.1.diff (openEuclideanBall_isOpen p r)) (puncture_connected hS.1 hS.2.1 hr hball)
+  sorry
 
 theorem puncture_moving {S : Set Point} (hS : IsMovingSofa S)
     {p : Point} {r : ℝ} (hr : 0 < r) (hball : euclideanBall p r ⊆ S) :

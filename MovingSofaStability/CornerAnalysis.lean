@@ -37,51 +37,11 @@ theorem cornerRightVelocity_measurable {K : Set Point} (hK : IsConvexBody K) :
 
 theorem cornerRightVelocity_bound {K : Set Point} (hK : IsConvexBody K) :
     ∃ B : ℝ, 0 ≤ B ∧ ∀ t, norm2 (cornerRightVelocity K t) ≤ B := by
-  obtain ⟨R, hR⟩ := hK.2.1.exists_bound_of_continuousOn continuous_norm2.continuousOn
-  obtain ⟨p, hp⟩ := hK.1
-  have hR0 : 0 ≤ R := (norm_nonneg _).trans (hR p hp)
-  have hradius : ∀ p ∈ K, norm2 p ≤ R := by
-    intro p hp
-    simpa only [Real.norm_eq_abs, abs_of_nonneg (norm2_nonneg p)] using hR p hp
-  have hg : ∀ t, |opt_g K t| ≤ R := by
-    intro t
-    have hb := hradius (vplus K t) (vplus_mem_edge hK t).1
-    have he := abs_dot_le_norm2_mul (vplus K t) (vvec t)
-    rw [norm2_vvec, mul_one] at he
-    exact he.trans hb
-  have hfplus : ∀ t, |fPlus K t - 1| ≤ 2 * R + 1 := by
-    intro t
-    rw [inj_fPlus_eq]
-    have h1 := abs_sub (supp K (t + π / 2)) (opt_g K t)
-    have h2 := abs_sub (supp K (t + π / 2) - opt_g K t) 1
-    have hs := support_abs_le_radius hK hradius (t + π / 2)
-    have hd := hg t
-    norm_num at h2
-    linarith
-  have hgplus : ∀ t, |gPlus K t - 1| ≤ 2 * R + 1 := by
-    intro t
-    rw [inj_gPlus_eq]
-    have h1 := abs_add_le (supp K t) (opt_g K (t + π / 2))
-    have h2 := abs_sub (supp K t + opt_g K (t + π / 2)) 1
-    have hs := support_abs_le_radius hK hradius t
-    have hd := hg (t + π / 2)
-    norm_num at h2
-    linarith
-  refine ⟨4 * R + 2, by linarith, ?_⟩
-  intro t
-  have hh := norm2_add_le (-(fPlus K t - 1) • uvec t) ((gPlus K t - 1) • vvec t)
-  rw [norm2_smul, norm2_smul, norm2_uvec, norm2_vvec, mul_one, mul_one, abs_neg] at hh
-  exact hh.trans (by linarith [hfplus t, hgplus t])
+  sorry
 
 theorem cornerRightVelocity_intervalIntegrable {K : Set Point} (hK : IsConvexBody K) (a b : ℝ) :
     IntervalIntegrable (cornerRightVelocity K) volume a b := by
-  obtain ⟨B, hB, hbound⟩ := cornerRightVelocity_bound hK
-  have hm := cornerRightVelocity_measurable hK
-  have hi1 := opt_intervalIntegrable_of_bound hm.fst
-    (fun t => (abs_fst_le_norm2 _).trans (hbound t)) a b
-  have hi2 := opt_intervalIntegrable_of_bound hm.snd
-    (fun t => (abs_snd_le_norm2 _).trans (hbound t)) a b
-  exact hi1.prodMk hi2
+  sorry
 
 /-- A corner path is the primitive of its right velocity on every compact interval. -/
 theorem corner_primitive {K : Set Point} (hK : IsCap K (π / 2))

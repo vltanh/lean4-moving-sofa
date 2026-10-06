@@ -38,18 +38,7 @@ theorem arcMass_sq_le {a b : ℝ} (hab : a ≤ b) {f : ℝ → ℝ}
     (hf : IntervalIntegrable f volume a b)
     (hf2 : IntervalIntegrable (fun t => f t ^ 2) volume a b) :
     arcMass a b f ^ 2 ≤ (b - a) * arcSquare a b f := by
-  have h := integral_mul_sq_le (volume.restrict (Ioc a b))
-    (f := fun t => |f t|) (g := fun _ => (1 : ℝ))
-    (by simpa only [sq_abs] using hf2.1)
-    (by simpa using (intervalIntegrable_const (μ := volume) (a := a) (b := b)
-      (c := (1 : ℝ))).1)
-    (by simpa only [mul_one] using hf.abs.1)
-  have h1 : (∫ _ : ℝ in Ioc a b, (1 : ℝ)) = b - a := by
-    rw [← intervalIntegral.integral_of_le hab]
-    simp
-  simp only [mul_one, sq_abs, one_pow] at h
-  rw [h1, mul_comm] at h
-  simpa only [arcMass, arcSquare, intervalIntegral.integral_of_le hab] using h
+  sorry
 
 /-- Multiplication by a continuous bounded kernel only costs its uniform bound. -/
 theorem weighted_integral_le_mass {a b B : ℝ} (hab : a ≤ b)

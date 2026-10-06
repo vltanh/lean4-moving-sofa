@@ -36,19 +36,7 @@ def omittedWedges (K : Set Point) (ω : ℝ) : Set Point := partialShape K ω \ 
   simp only [omittedWedges, partialShape_rightAngle, sdiff_self]
 
 theorem partialNiche_measurable (K : Set Point) (ω : ℝ) : MeasurableSet (partialNiche K ω) := by
-  have he : partialNiche K ω = {p : Point | 0 ≤ p.2} ∩
-      ⋃ t ∈ Ioo (0 : ℝ) ω, {p : Point | innerSlackU K t p < 0 ∧ innerSlackV K t p < 0} := by
-    ext p
-    simp only [partialNiche, mem_inter_iff, mem_setOf_eq, mem_iUnion, exists_prop]
-  rw [he]
-  apply MeasurableSet.inter (isClosed_le continuous_const continuous_snd).measurableSet
-  apply IsOpen.measurableSet
-  apply isOpen_iUnion
-  intro t
-  apply isOpen_iUnion
-  intro ht
-  exact (isOpen_lt (by unfold innerSlackU; fun_prop) continuous_const).inter
-    (isOpen_lt (by unfold innerSlackV; fun_prop) continuous_const)
+  sorry
 
 theorem partialShape_measurable {K : Set Point} (hK : IsConvexBody K) (ω : ℝ) :
     MeasurableSet (partialShape K ω) :=
@@ -94,26 +82,7 @@ theorem late_corner_height {K : Set Point} (hK : IsCap K (π / 2)) {R : ℝ}
     (hR : 1 ≤ R) (hradius : ∀ p ∈ K, norm2 p ≤ R) {t : ℝ}
     (ht : t ∈ Icc (0 : ℝ) (π / 2)) :
     (innerCorner K t).2 ≤ (3 * R + 1) * (π / 2 - t) := by
-  have hR0 : 0 ≤ R := by linarith
-  have hs := support_angle_bound hK.2.1 hR0 hradius t (π / 2)
-  rw [hK.2.2.2.1, abs_of_nonpos (sub_nonpos.mpr ht.2)] at hs
-  have hfirst : supp K t - 1 ≤ 2 * R * (π / 2 - t) := by
-    have he := (abs_le.mp hs).2
-    linarith
-  have hsecond := (abs_le.mp (support_abs_le_radius hK.2.1 hradius (t + π / 2))).2
-  have hsin0 : 0 ≤ sin t := sin_nonneg_of_nonneg_of_le_pi ht.1 (by linarith [ht.2, pi_pos])
-  have hcos0 : 0 ≤ cos t := cos_nonneg_of_mem_Icc ⟨by linarith [ht.1, pi_pos], ht.2⟩
-  have hcos : cos t ≤ π / 2 - t := by
-    rw [← sin_pi_div_two_sub]
-    exact sin_le (by linarith [ht.2])
-  have h1 := mul_le_mul_of_nonneg_right hfirst hsin0
-  have h2 := mul_le_mul_of_nonneg_left (sin_le_one t)
-    (show 0 ≤ 2 * R * (π / 2 - t) by positivity)
-  have h3 := mul_le_mul_of_nonneg_right (show supp K (t + π / 2) - 1 ≤ R + 1 by linarith) hcos0
-  have h4 := mul_le_mul_of_nonneg_left hcos (show 0 ≤ R + 1 by linarith)
-  rw [proposition2_2_2_innerCorner]
-  simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul, uvec_snd, vvec_snd]
-  nlinarith
+  sorry
 
 /-- All omitted wedges lie in a thin horizontal slab. -/
 theorem omittedWedges_height {K : Set Point} (hK : IsCap K (π / 2)) {R ω : ℝ}

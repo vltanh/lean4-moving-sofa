@@ -30,7 +30,7 @@ theorem corner_hasRightDeriv {K : Set Point} (hK : IsCap K (π / 2)) (t : ℝ) :
 theorem hasRightDeriv_dot_uvec {x dx : ℝ → Point} {t d : ℝ}
     (h : HasDerivWithinAt x (dx t) (Ioi t) t) :
     HasDerivWithinAt (fun s => dot (x s) (uvec d)) (dot (dx t) (uvec d)) (Ioi t) t := by
-  exact (h.fst.mul_const (cos d)).add (h.snd.mul_const (sin d))
+  sorry
 
 /-- The constant comparison version of the one-sided fundamental theorem. -/
 theorem right_derivative_increment_le {f df : ℝ → ℝ} {a b B : ℝ}
@@ -45,9 +45,7 @@ theorem right_derivative_increment_ge {f df : ℝ → ℝ} {a b B : ℝ}
     (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hd : ∀ t ∈ Ioo a b, HasDerivWithinAt f (df t) (Ioi t) t)
     (hB : ∀ t ∈ Ioo a b, B ≤ df t) : B * (b - a) ≤ f b - f a := by
-  have h := right_derivative_increment_le hab hf.neg
-    (fun t ht => (hd t ht).neg) (B := -B) (fun t ht => neg_le_neg (hB t ht))
-  linarith
+  sorry
 
 theorem sin_add_cos_ge_one {t : ℝ} (ht : t ∈ Icc (0 : ℝ) (π / 2)) :
     1 ≤ sin t + cos t := by

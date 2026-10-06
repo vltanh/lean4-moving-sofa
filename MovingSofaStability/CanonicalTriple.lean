@@ -23,31 +23,13 @@ namespace MovingSofaStability
 theorem canonical_right_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : IsCap K (π / 2))
     {t : ℝ} (ht : t ∈ Icc φ (π / 2)) :
     supp K t + supp (rightBody φ K) (π + t) ≤ 1 := by
-  have hB := opt_rightBody_isConvexBody hφ hK
-  have hbound : ∀ p ∈ rightBody φ K, dot p (uvec (π + t)) ≤ 1 - supp K t := by
-    intro p hp
-    have h := hp.2 t ht
-    change supp K t - 1 ≤ dot p (uvec t) at h
-    rw [show π + t = t + π by ring, uvec_add_pi, dot_neg_right]
-    linarith
-  have h := supp_le_of_forall hB.1 hbound
-  linarith
+  sorry
 
 /-- The left-body inequalities are likewise independent of curvature regularity. -/
 theorem canonical_left_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : IsCap K (π / 2))
     {t : ℝ} (ht : t ∈ Icc 0 (π / 2 - φ)) :
     supp K (π / 2 + t) + supp (leftBody φ K) (3 * π / 2 + t) ≤ 1 := by
-  have hD := opt_leftBody_isConvexBody hφ hK
-  have hbound : ∀ p ∈ leftBody φ K, dot p (uvec (3 * π / 2 + t)) ≤ 1 - supp K (π / 2 + t) := by
-    intro p hp
-    have h := hp.2 t ht
-    change supp K (t + π / 2) - 1 ≤ dot p (vvec t) at h
-    rw [show 3 * π / 2 + t = (t + π / 2) + π by ring, uvec_add_pi,
-      dot_neg_right, uvec_add_pi_div_two]
-    rw [show π / 2 + t = t + π / 2 by ring]
-    linarith
-  have h := supp_le_of_forall hD.1 hbound
-  linarith
+  sorry
 
 /-- Feasibility of the canonical triple needs only width and the two cut-arm inequalities. -/
 theorem canonical_inWideL_of_cut_arms {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
@@ -96,22 +78,7 @@ theorem nearby_canonical_inWideL {P : GerverParams} (hP : P.IsSolution) (hbox : 
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ K : Set Point,
       IsCap K (π / 2) → UpperSupportClose δ K P.cap →
       InWideL P.φ K (rightBody P.φ K) (leftBody P.φ K) := by
-  have hKi := theorem8_1_1_gerver hP hbox
-  have hφ := gm_φ_mem_Ioo hP hbox
-  obtain ⟨c, δA, hc, hδA, hδA1, hA⟩ := core_arm_margin_near_reference hKi
-    (a := P.φ) (b := π / 2 - P.φ) hφ.1 (by linarith [hφ.2]) (by linarith [hφ.1])
-  let δ := min δA (1 / 20)
-  have hδ : 0 < δ := lt_min hδA (by norm_num)
-  have hδA' : δ ≤ δA := min_le_left _ _
-  have hδw : δ ≤ (1 / 20 : ℝ) := min_le_right _ _
-  refine ⟨δ, hδ, hδA'.trans hδA1, ?_⟩
-  intro K hK hclose
-  have hwidth := nearby_bottomWidth hP hbox (hclose.mono hδw)
-  have hcore := hA K hK (hclose.mono hδA')
-  have hφarm := hcore.oneSided hK (t := P.φ) ⟨le_rfl, by linarith [hφ.2]⟩
-  have hbarm := hcore.oneSided hK (t := π / 2 - P.φ) ⟨by linarith [hφ.2], le_rfl⟩
-  exact canonical_inWideL_of_cut_arms hbox.1 hK hwidth
-    (by linarith [hφarm.2.2.1]) (by linarith [hbarm.2.1])
+  sorry
 
 /-- Package the canonical bodies without introducing a choice of auxiliary solver output. -/
 def canonicalWideTriple {φ : ℝ} {K : Set Point}

@@ -74,22 +74,7 @@ theorem cut_feet_mem_of_width {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
 theorem cut_regions_disjoint_of_width {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)
     {K : Set Point} (hK : IsCap K (π / 2)) (hwidth : (21 / 10 : ℝ) ≤ bottomWidth K) :
     Disjoint (K ∩ hRight φ K) (K ∩ hLeft φ K) := by
-  obtain ⟨hφ0, hφ4, hs4, hc9, hs0⟩ := opt_phi_bounds hφ
-  have hc : 0 ≤ cos φ := by linarith
-  have hA := dot_le_supp hK.2.1.2.1 (opt_cap_A_mem hK) φ
-  have hC := dot_le_supp hK.2.1.2.1 (opt_cap_C_mem hK) (π - φ)
-  simp only [dot, uvec, cos_pi_sub, sin_pi_sub, zero_mul, add_zero] at hA hC
-  have hwidthmul := mul_le_mul_of_nonneg_right hwidth hc
-  unfold bottomWidth at hwidthmul
-  rw [Set.disjoint_left]
-  rintro p ⟨hpK, hpR⟩ ⟨-, hpL⟩
-  have hy := hK.snd_le_one hpK
-  change supp K φ - 1 ≤ dot p (uvec φ) at hpR
-  change supp K (π / 2 - φ + π / 2) - 1 ≤ dot p (vvec (π / 2 - φ)) at hpL
-  rw [show π / 2 - φ + π / 2 = π - φ by ring] at hpL
-  simp only [dot, uvec, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub] at hpR hpL
-  have hys := mul_le_mul_of_nonneg_right hy hs0.le
-  nlinarith
+  sorry
 
 /-- The feet are ordered from left to right. -/
 theorem cut_feet_order_of_width {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04)

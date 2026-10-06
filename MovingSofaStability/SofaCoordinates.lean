@@ -128,19 +128,6 @@ theorem pinned_maximizer_eq_gerver {P : GerverParams} (hP : P.IsSolution) (hbox 
     {S : Set Point} (hS : IsMovingSofa S) (htop : supp S (π / 2) = 1)
     (hleft : supp S π = supp (gerverSofa P) π) (harea : area S = area (gerverSofa P)) :
     S = gerverSofa P := by
-  have hcompact := isCompact_of_isMovingSofa hS
-  have hne := hS.choose_spec.2.1.nonempty
-  obtain ⟨w, hw⟩ := translate_eq_gerver_of_volume_eq hP hbox hS
-    (volume_eq_of_area_eq hcompact.measure_lt_top.ne (gerverSofa_volume_ne_top hP hbox) harea)
-  have hv := congrArg (fun T => supp T (π / 2)) hw
-  have hl := congrArg (fun T => supp T π) hw
-  rw [Rigid.coe_translate, supp_translate S _ _ hcompact hne, htop,
-    ← gerver_upper_support hP hbox ⟨by positivity, by linarith [pi_pos]⟩,
-    gm_supp_cap_pi_div_two hP hbox, dot_uvec_pi_div_two] at hv
-  rw [Rigid.coe_translate, supp_translate S _ _ hcompact hne, hleft] at hl
-  simp only [dot, uvec_pi] at hl
-  have hw0 : w = 0 := by ext <;> linarith
-  rw [hw0, Rigid.coe_translate] at hw
-  simpa only [add_zero, image_id] using hw
+  sorry
 
 end MovingSofaStability

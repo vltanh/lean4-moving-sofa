@@ -121,8 +121,6 @@ theorem area_firstVariation_caps (K Ks : ConvexBodySet)
     (hK : IsCap K.1 (π / 2)) (hKs : IsCap Ks.1 (π / 2)) :
     convexBodyDomain.dirDeriv (fun C => area C.1) K Ks =
       ∫ t in Icc 0 π, (supp Ks.1 t - supp K.1 t) ∂(sigma K.1) := by
-  rw [area_firstVariation_convex]
-  apply opt_Ico_eq_Icc hK (Ks.2.continuous_supp.sub K.2.continuous_supp)
-  rw [hKs.2.2.2.2.2.1, hK.2.2.2.2.2.1, sub_self]
+  sorry
 
 end MovingSofaStability

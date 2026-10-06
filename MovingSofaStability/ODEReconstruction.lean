@@ -25,16 +25,7 @@ theorem hasDerivWithinAt_tangentQuotient {f df : ℝ → ℝ} {T t : ℝ}
     (hd : HasDerivWithinAt f (df t) (Ioi t) t) (hs : sin (T - t) ≠ 0) :
     HasDerivWithinAt (tangentQuotient T f)
       (-tangentResidual T f df t / sin (T - t)) (Ioi t) t := by
-  have hu : HasDerivWithinAt (fun s : ℝ => T - s) (-1) (Ioi t) t := by
-    simpa using ((hasDerivAt_id t).const_sub T).hasDerivWithinAt
-  have hquot := (hd.sub (hu.cos.const_mul (f T))).div hu.sin hs
-  convert hquot using 1
-  · rfl
-  · dsimp only [tangentResidual]
-    have hweighted : f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) = f T := by
-      rw [sin_sq_add_cos_sq, mul_one]
-    field_simp [hs]
-    nlinarith
+  sorry
 
 /-- The integral of a weighted residual is the difference of the quotient values. -/
 theorem tangent_quotient_integral {f df : ℝ → ℝ} {a b T : ℝ}
@@ -115,9 +106,6 @@ theorem pinned_support_rightDerivative {K₀ K₁ : Set (ℝ × ℝ)}
     HasDerivWithinAt (pinnedDifference (fun u => supp K₁ u - supp K₀ u))
       (pinnedDerivative (fun u => supp K₁ u - supp K₀ u)
         (fun u => opt_g K₁ u - opt_g K₀ u) t) (Ioi t) t := by
-  have hd := support_difference_rightDerivative h₀ h₁ t
-  have hcos := ((hasDerivAt_cos t).const_mul (supp K₁ π - supp K₀ π)).hasDerivWithinAt
-  convert hd.add hcos using 1 <;>
-    simp only [pinnedDifference, pinnedDerivative] <;> ring
+  sorry
 
 end MovingSofaStability

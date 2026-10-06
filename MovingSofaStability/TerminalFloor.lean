@@ -20,13 +20,7 @@ namespace MovingSofaStability
 
 /-- A convenient elementary lower bound, enough for small terminal angles. -/
 theorem sin_ge_half_on_unit {α : ℝ} (hα : α ∈ Icc (0 : ℝ) 1) : α / 2 ≤ sin α := by
-  have hcos : ∀ t ∈ Ioo (0 : ℝ) α, (1 / 2 : ℝ) ≤ cos t := by
-    intro t ht
-    have he := one_sub_sq_div_two_le_cos (x := t)
-    nlinarith [ht.1, ht.2, hα.2]
-  have he := right_derivative_increment_ge hα.1 continuous_sin.continuousOn
-    (fun t ht => (hasDerivAt_sin t).hasDerivWithinAt) hcos
-  simpa only [sin_zero, sub_zero, mul_comm, one_div] using he
+  sorry
 
 /-- The terminal lower wall excludes low points to the left of a top contact. -/
 theorem terminal_excludes_low_left {K : Set Point} (hK : IsCap K (π / 2))

@@ -110,11 +110,7 @@ theorem cap_euclideanClose_of_upper_support {K₀ K₁ : Set Point}
     (h₀ : IsCap K₀ (π / 2)) (h₁ : IsCap K₁ (π / 2)) {R : ℝ} (hR : 0 ≤ R)
     (hupper : ∀ t ∈ Icc (0 : ℝ) π, |capDifference K₀ K₁ t| ≤ R) :
     EuclideanClose R K₁ (shiftedReferenceCap K₀ K₁) := by
-  apply euclideanClose_of_support_bound h₁.2.1
-    (convexBody_translate h₀.2.1 (capReferenceShift K₀ K₁)) hR
-  intro t
-  rw [← capDifference_eq_shifted_support h₀.2.1 t]
-  exact capDifference_bound_all h₀ h₁ hR hupper t
+  sorry
 
 /-- Fully assembled non-sharp cap-distance theorem on the nonsmooth Q domain. -/
 theorem wide_cap_distance_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -139,6 +135,6 @@ theorem ki_cap_distance_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.I
 /-- No translation remains when the reference and competitor have the same left support. -/
 theorem shiftedReferenceCap_eq_of_left_support {K₀ K₁ : Set Point}
     (h : supp K₁ π = supp K₀ π) : shiftedReferenceCap K₀ K₁ = K₀ := by
-  simp [shiftedReferenceCap, capReferenceShift, h]
+  sorry
 
 end MovingSofaStability

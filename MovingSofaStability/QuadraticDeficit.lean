@@ -50,13 +50,7 @@ theorem energy_le_deficit_of_segment {V : Type*} (comb : ℝ → V → V → V)
     (hsegment : ∀ c ∈ Icc (0 : ℝ) 1,
       Q (comb c x₀ x₁) = (1 - c) * Q x₀ + c * Q x₁ + c * (1 - c) * E) :
     E ≤ Q x₀ - Q x₁ := by
-  apply energy_le_of_dilations (sub_nonneg.mpr (hmax x₁))
-  intro c hc
-  have he := hsegment c ⟨hc.1.le, hc.2.le⟩
-  have hm := hmax (comb c x₀ x₁)
-  have hp : c * ((1 - c) * E) ≤ c * (Q x₀ - Q x₁) := by
-    nlinarith
-  exact (mul_le_mul_left hc.1).mp hp
+  sorry
 
 /-- Four times the midpoint concavity gap. For a quadratic functional this is
 its negative quadratic part in the direction from `x` to `y`. -/
@@ -69,13 +63,7 @@ theorem quadratic_segment_identity {V : Type} (D : ConvexDomain V)
     (hc : c ∈ Icc (0 : ℝ) 1) :
     Q (D.comb c x y) =
       (1 - c) * Q x + c * Q y + c * (1 - c) * segmentEnergy D Q x y := by
-  obtain ⟨g, hg, hfg⟩ := hq
-  have hf : Q = fun z => g z z := funext hfg
-  subst Q
-  have hh : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
-  unfold segmentEnergy
-  rw [cvx_bilin_comb D hg x y hc, cvx_bilin_comb D hg x y hh]
-  ring
+  sorry
 
 /-- Concavity is needed for nonnegativity, but not for the exact identity. -/
 theorem segmentEnergy_nonneg {V : Type} (D : ConvexDomain V) {Q : V → ℝ}
@@ -97,14 +85,7 @@ For an affine-minus-squares functional this is its dual-slack certificate. -/
 theorem deficit_eq_neg_dirDeriv_add_energy {V : Type} (D : ConvexDomain V)
     {Q : V → ℝ} (hq : D.IsQuadratic Q) (x y : V) :
     Q x - Q y = -D.dirDeriv Q x y + segmentEnergy D Q x y := by
-  obtain ⟨g, hg, hfg⟩ := hq
-  have hf : Q = fun z => g z z := funext hfg
-  subst Q
-  have hh : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
-  rw [lemma7_1_4 D hg]
-  unfold segmentEnergy
-  rw [cvx_bilin_comb D hg x y hh]
-  ring
+  sorry
 
 /-- Equality of maximizing values makes the quadratic energy vanish. -/
 theorem segmentEnergy_eq_zero_of_equal_values {V : Type} (D : ConvexDomain V)

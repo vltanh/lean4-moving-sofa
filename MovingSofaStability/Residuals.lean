@@ -44,8 +44,7 @@ def pinnedDerivative (f df : ℝ → ℝ) (t : ℝ) : ℝ := df t - f π * sin t
 theorem hasDerivAt_pinnedDifference {f df : ℝ → ℝ} {t : ℝ}
     (h : HasDerivAt f (df t) t) :
     HasDerivAt (pinnedDifference f) (pinnedDerivative f df t) t := by
-  convert h.add ((hasDerivAt_cos t).const_mul (f π)) using 1 <;>
-    simp only [pinnedDifference, pinnedDerivative] <;> ring
+  sorry
 
 theorem tangentResidual_add (T : ℝ) (f df g dg : ℝ → ℝ) (t : ℝ) :
     tangentResidual T (fun u => f u + g u) (fun u => df u + dg u) t =
@@ -62,14 +61,7 @@ theorem tangentResidual_sub (T : ℝ) (f df g dg : ℝ → ℝ) (t : ℝ) :
 /-- Horizontal translations lie in the kernel of every tangent residual. -/
 theorem tangentResidual_translation (a T t : ℝ) (hs : sin (T - t) ≠ 0) :
     tangentResidual T (fun u => a * cos u) (fun u => -a * sin u) t = 0 := by
-  have hc : cos T = cos t * cos (T - t) - sin t * sin (T - t) := by
-    rw [← cos_add]
-    congr 1
-    ring
-  unfold tangentResidual
-  rw [hc]
-  field_simp [hs]
-  ring
+  sorry
 
 @[simp] theorem cornerResidual_translation (a t : ℝ) :
     cornerResidual (fun u => a * cos u) (fun u => -a * sin u) t = 0 := by
@@ -123,16 +115,7 @@ theorem hasDerivAt_tangentQuotient {f df : ℝ → ℝ} {T t : ℝ}
     (hd : HasDerivAt f (df t) t) (hs : sin (T - t) ≠ 0) :
     HasDerivAt (tangentQuotient T f)
       (-tangentResidual T f df t / sin (T - t)) t := by
-  have hu : HasDerivAt (fun s : ℝ => T - s) (-1) t := by
-    simpa using (hasDerivAt_id t).const_sub T
-  have hquot := (hd.sub (hu.cos.const_mul (f T))).div hu.sin hs
-  convert hquot using 1
-  · rfl
-  · dsimp only [tangentResidual]
-    have hweighted : f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) = f T := by
-      rw [sin_sq_add_cos_sq, mul_one]
-    field_simp [hs]
-    nlinarith
+  sorry
 
 /-- The first interval's residual, after fixing the top support. -/
 theorem tangentResidual_top {f df : ℝ → ℝ} (h : f (π / 2) = 0) (t : ℝ) :

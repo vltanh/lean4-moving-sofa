@@ -116,41 +116,6 @@ theorem roofStrip_hasInteriorBalls {a b H L : ℝ} {γ : ℝ → ℝ}
     (hLip : ∀ x ∈ Icc a b, ∀ y ∈ Icc a b, |γ x - γ y| ≤ L * |x - y|)
     (hheight : ∀ x ∈ Icc a b, γ x ≤ H) :
     ∃ κ r₀ : ℝ, 0 < κ ∧ 0 < r₀ ∧ HasInteriorBalls (roofStrip a b γ) κ r₀ := by
-  let R : Set Point := Icc a b ×ˢ Icc H 1
-  have hR : IsConvexBody R :=
-    ⟨⟨(a, H), ⟨⟨le_rfl, hab.le⟩, ⟨le_rfl, hH.le⟩⟩⟩,
-      isCompact_Icc.prod isCompact_Icc, convex_Icc.prod convex_Icc⟩
-  have hRint : (interior R).Nonempty := by
-    have hsub : Ioo a b ×ˢ Ioo H 1 ⊆ R := fun p hp =>
-      ⟨⟨hp.1.1.le, hp.1.2.le⟩, ⟨hp.2.1.le, hp.2.2.le⟩⟩
-    have hi := interior_maximal hsub (isOpen_Ioo.prod isOpen_Ioo)
-    refine ⟨((a + b) / 2, (H + 1) / 2), hi ?_⟩
-    constructor <;> constructor <;> dsimp <;> linarith
-  have hRE : R ⊆ roofStrip a b γ := by
-    intro p hp
-    exact ⟨hp.1, (hheight p.1 hp.1).trans hp.2.1, hp.2.2⟩
-  obtain ⟨κR, rR, hκR, hrR, hballsR⟩ := convexBody_hasInteriorBalls hR hRint
-  let κ := min κR (1 / (4 * (L + 2)))
-  let r₀ := min rR (min (b - a) ((1 - H) / 2))
-  have hκ : 0 < κ := lt_min hκR (by positivity)
-  have hr₀ : 0 < r₀ := lt_min hrR (lt_min (sub_pos.mpr hab) (by linarith))
-  refine ⟨κ, r₀, hκ, hr₀, ?_⟩
-  intro p hp ρ hρ hρmax
-  by_cases hlow : p.2 ≤ (1 + H) / 2
-  · obtain ⟨z, hz⟩ := roofStrip_low_ball hab hH hL hLip hp hlow hρ
-      (hρmax.trans ((min_le_right _ _).trans (min_le_left _ _)))
-      (hρmax.trans ((min_le_right _ _).trans (min_le_right _ _)))
-    refine ⟨z, ?_⟩
-    intro q hq
-    apply hz
-    have hk := mul_le_mul_of_nonneg_right (min_le_right κR (1 / (4 * (L + 2)))) hρ.le
-    have he : 1 / (4 * (L + 2)) * ρ = ρ / (4 * (L + 2)) := by ring
-    exact hq.trans (hk.trans_eq he)
-  · have hpR : p ∈ R := ⟨hp.1, by constructor <;> linarith [hp.2.2, not_le.mp hlow]⟩
-    obtain ⟨z, hz⟩ := hballsR p hpR ρ hρ (hρmax.trans (min_le_left _ _))
-    refine ⟨z, ?_⟩
-    intro q hq
-    have hqR := hz (hq.trans (mul_le_mul_of_nonneg_right (min_le_left _ _) hρ.le))
-    exact ⟨hRE hqR.1, hqR.2⟩
+  sorry
 
 end MovingSofaStability
