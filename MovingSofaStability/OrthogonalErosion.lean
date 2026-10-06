@@ -26,7 +26,9 @@ theorem norm2_frame_diagonal {δ : ℝ} (hδ : 0 ≤ δ) (t : ℝ) :
     mul_one, mul_zero, add_zero, zero_add] at hn
   have hs : sqrt (2 : ℝ) ^ 2 = 2 := sq_sqrt (by norm_num)
   have hnonneg : 0 ≤ sqrt (2 : ℝ) * δ := mul_nonneg (sqrt_nonneg _) hδ
-  nlinarith [norm2_nonneg (δ • uvec t + δ • vvec t)]
+  apply (sq_eq_sq₀ (norm2_nonneg _) hnonneg).mp
+  rw [mul_pow, hs]
+  nlinarith only [hn]
 
 /-- Closed-ball erosion in the Euclidean metric. Both the cap and the niche
 are handled, including the floor and the zero-error case. -/
