@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "groups": {
+    "rational_reference_and_budgets": 25,
+    "conditional_downstream_threshold": 5,
+    "sampled_phase_reference": 492,
+    "sampled_adaptive_slack": 984,
+    "balanced_first_variation": 164,
+    "sampled_reference_scales": 802,
+    "exact_polygon_square_dilation": 128,
+    "split_deficit_stress": 612
+  },
+  "assertions": 3212,
+  "diagnostics_not_certificates": {
+    "largest_sampled_core_slope": "9.34873850319911943",
+    "smallest_sampled_transversality": "0.0998621937003267133",
+    "largest_sampled_speed": "1.4206448441453775",
+    "largest_sampled_acceleration": "3.87369416311728019",
+    "reference_peak_height": "0.664267813538886085",
+    "positive_slack_violation_allowance": "0.0",
+    "reverse_reference_formula": "30.3433449840226509",
+    "puncture_lower_bound": "0.564189583547756287"
+  },
+  "scope": "exact rational/polygon arithmetic and sampled high-precision diagnostics only",
+  "not_checked": [
+    "Lean elaboration",
+    "kernel axioms",
+    "global compactness separation gap",
+    "effective global epsilon0",
+    "uniform C1 proof by numerical sampling"
+  ],
+  "python": "3.13.5",
+  "mpmath": "1.3.0",
+  "decimal_digits": 60,
+  "source_git_blob_sha1": "6ec33e06e8a6425e8179d5103cbc749068a6935d"
+}
