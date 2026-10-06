@@ -76,7 +76,34 @@ theorem nearby_cap_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.
         niche K (π / 2) ⊆ K ∧
         sofaArea (π / 2) K ≤ upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K) ∧
         upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K) ≤ area (gerverSofa P) := by
-  sorry
+  have hφ := GerverParams.gm_φ_mem_Ioo hP hbox
+  have hKi := theorem8_1_1_gerver hP hbox
+  obtain ⟨δT, hδT, hδT1, hT⟩ := nearby_canonical_inWideL hP hbox
+  obtain ⟨δS, hδS, hδS1, hS⟩ := nearby_cutSeparated hP hbox
+  obtain ⟨δH, hδH, hδH1, hH⟩ := nearby_core_height_pos hP hbox
+  obtain ⟨δN, hδN, hδN1, hN⟩ := nearby_niche_subset_cap hP hbox
+  obtain ⟨c, δA, hc, hδA, hδA1, hA⟩ := core_arm_margin_near_reference hKi hφ.1
+    (b := π / 2 - P.φ) (by linarith [hφ.2]) (by linarith [hφ.1])
+  let δ := min δT (min δS (min δH (min δN (min δA (1 / 20)))))
+  have hδ : 0 < δ := lt_min hδT (lt_min hδS (lt_min hδH (lt_min hδN (lt_min hδA (by norm_num)))))
+  have dT : δ ≤ δT := min_le_left _ _
+  have dS : δ ≤ δS := (min_le_right _ _).trans (min_le_left _ _)
+  have dH : δ ≤ δH := (min_le_right _ _).trans ((min_le_right _ _).trans (min_le_left _ _))
+  have dN : δ ≤ δN := (min_le_right _ _).trans ((min_le_right _ _).trans
+    ((min_le_right _ _).trans (min_le_left _ _)))
+  have dA : δ ≤ δA := (min_le_right _ _).trans ((min_le_right _ _).trans
+    ((min_le_right _ _).trans ((min_le_right _ _).trans (min_le_left _ _))))
+  have dW : δ ≤ (1 / 20 : ℝ) := (min_le_right _ _).trans ((min_le_right _ _).trans
+    ((min_le_right _ _).trans ((min_le_right _ _).trans (min_le_right _ _))))
+  refine ⟨δ, hδ, dT.trans hδT1, ?_⟩
+  intro K hK hclose
+  have ht := hT K hK (hclose.mono dT)
+  have hn := hN K hK (hclose.mono dN)
+  have ha := separated_upperQ_bound hbox.1 hK (nearby_bottomWidth hP hbox (hclose.mono dW)) ht
+    (hA K hK (hclose.mono dA)) hc (hS K hK (hclose.mono dS)) (hH K (hclose.mono dH)) hn
+  have hq := wideUpperQ_le_gerver hP hbox (canonicalWideTriple ht)
+  rw [wideGerver_value] at hq
+  exact ⟨ht, hn, ha, hq⟩
 
 /-- Local cap stability in the original area functional, now without Ki. -/
 theorem nearby_cap_distance {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :

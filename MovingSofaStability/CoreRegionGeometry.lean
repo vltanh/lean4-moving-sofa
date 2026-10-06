@@ -57,7 +57,28 @@ theorem separated_core_below {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     ((innerCorner K t).1, (innerCorner K t).2 - s) ∉ hRight φ K ∧
     ((innerCorner K t).1, (innerCorner K t).2 - s) ∉ hLeft φ K ∧
     ((innerCorner K t).1, (innerCorner K t).2 - s) ∈ qMinus K t := by
-  sorry
+  have hpi := pi_pos
+  have ht' : t ∈ Ioo 0 (π / 2) :=
+    ⟨by linarith [ht.1, hφ.1], by linarith [ht.2, hφ.1]⟩
+  have hst : 0 < sin t := sin_pos_of_pos_of_lt_pi ht'.1 (by linarith [ht'.2])
+  have hct : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht'.1], ht'.2⟩
+  have hs0 : 0 < sin φ := sin_pos_of_pos_of_lt_pi hφ.1 (by linarith [hφ.2])
+  have e1 := hsep.1 t ⟨ht.1, ht'.2.le⟩
+  have e2 := hsep.2 t ⟨ht'.1.le, ht.2⟩
+  have e3 := (cn_innerCorner_dot K t).1
+  have e4 := opt_innerCorner_dot_v K t
+  simp only [dot, uvec, vvec] at e1 e2 e3 e4
+  rw [sin_pi_div_two_sub, cos_pi_div_two_sub] at e2
+  refine ⟨?_, ?_, ?_⟩
+  · simp only [hRight, halfB, halfPlus, mem_ofPred_eq, not_le, dot, uvec]
+    nlinarith [mul_pos hs hs0]
+  · simp only [hLeft, halfD, halfPlus, mem_ofPred_eq, not_le, uvec_add_pi_div_two,
+      dot, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub]
+    nlinarith [mul_pos hs hs0]
+  · rw [proposition2_2_2_qMinus]
+    simp only [mem_inter_iff, halfMinusOpen, mem_ofPred_eq, dot, uvec, cos_add_pi_div_two,
+      sin_add_pi_div_two]
+    constructor <;> nlinarith [mul_pos hs hst, mul_pos hs hct]
 
 /-- The small right triangular region is inside a cut-endpoint wedge. -/
 theorem separated_right_triangle {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
