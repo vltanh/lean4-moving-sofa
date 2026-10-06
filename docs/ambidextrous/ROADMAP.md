@@ -1,88 +1,117 @@
-# Active roadmap: geometric admission to the two-wing certificate
+# Active roadmap: geometric admission, with an audited one-turn alternative
 
-For cross-session context, current branch checkpoint, validation status, failed routes, and restart instructions, read [HANDOFF.md](HANDOFF.md) first.
+Read [HANDOFF.md](HANDOFF.md) first for the live-checkpoint procedure, provenance, validation status and failed routes. **Unrestricted optimality and uniqueness are not proved.** A short conditional assembly is not evidence that its geometric premises are routine. All written results remain subject to independent review.
 
-Baseline: `f6a06beae3bbdfaf6e15547a93eb765a0661463e` in PR #3. This is the active plan requested by the user. It supersedes informal progress percentages, not historical mathematical findings. **Unrestricted optimality and uniqueness are not proved.** Written results are self-reviewed, not independently verified infrastructure.
+## 1. Target and quantifiers
 
-The goal is an ordinary-area comparison for every relevant maximizing body, followed by a sharp bound with an equality case. A short final implication is not evidence that its missing hypotheses are easy.
-
-## 1. Current result and the exact unresolved part
-
-The first R4 investigation produced [CS1–CS2](two-wing-cut-slack.md) and [SQ1](two-wing-slack-quadratic.md).
-
-- The actual inward supporting-line intersections are retained as independent data. Their differences from the old fixed-width cut points are explicitly the four nonnegative cut slacks.
-- Completing both actual corners preserves the common strip, every constrained width and every core support. It changes only the two positively counted wing areas.
-- The first variation pays **one half** of tan(beta) times the total cut slack, not the coefficient from the old fixed-vertex formula.
-- SQ1 proves the sharp bound and exact equality for arbitrary cut slacks when **both wings span the common strip**. The negative quadratic slack terms are paid by the positive first-order slack terms. All finite identities are displayed and checked exactly.
-
-This is a completed **subcase of R4**, not the whole gate. The original WC2 covers its old cut-vertex domain, including unequal heights. SQ1 covers a different enlarged-cut domain with equal full heights. Neither result currently covers arbitrary cut slack and arbitrary unequal wing heights simultaneously. Nor has it been proved that the canonical wings of every maximizer have full height.
-
-## 2. The intended conclusion and quantifiers
-
-For an arbitrary attained maximizer S, seek data xi with
+For an arbitrary attained maximizer S, establish either a directly sharp ordinary-area inequality or data xi such that
 
 $$
-|S|\leq\widehat{\mathcal W}(\xi)\leq M,
+|S|\le Q(\xi)\le M,
+\qquad M=1+4Y^2+\arctan Y,
+\quad4Y^3+3Y-1=0,\quad Y>0.
 $$
 
-where M is the area of the feasible Romik candidate and the chosen functional matches the actual cut data. Equality must identify S itself up to congruence, not just its hull or selected witnesses. A result for one attained maximizer establishes the value; uniqueness requires every maximizer or a separate equality-preserving comparison.
+Track equality through every comparison to recover S itself up to congruence. A theorem for one attained maximizer gives the value, not automatically uniqueness of every maximizer.
 
-No auxiliary bound is called an area theorem before its geometric comparison is proved. No candidate-neighborhood assumption is inferred from the desired optimality or uniqueness.
+Never infer candidate-neighborhood entry from the optimality or uniqueness being sought. Never substitute a signed curve integral for ordinary area without the required orientation, containment and correction terms.
 
-## 3. Critical-path gates
+## 2. Current two-wing results
 
-| Gate | Deliverable and acceptance criterion | Current status |
+The domain and base calibration are TW/WS/WC. [CS1–CS2](two-wing-cut-slack.md) retain actual inward supporting-line intersections and the four nonnegative cut-width slacks. Corner completion preserves all core supports and constrained widths while increasing the two counted wing areas. The favorable endpoint first variation has coefficient `tan(beta)/2` times the total slack.
+
+[SQ1](two-wing-slack-quadratic.md) proves the sharp inequality and equality case with arbitrary cut slack when both wings span the common strip. Negative quadratic slack terms are paid by the positive first-order terms; joint concavity on an unrestricted affine space is not claimed.
+
+[NH1](two-wing-near-full-height.md) allows unequal heights when the wings share their bottom supporting line and
+
+$$
+\min(H_R,H_D)\ge1-\sin\beta/2.
+$$
+
+This is an additional completed subcase of R4, not admission of arbitrary maximizing sofas. That geometric height property is still unproved. The CS/SQ checker has a recorded executed run; the NH checker source has no execution record established in this pass.
+
+## 3. Existing critical-path gates
+
+| Gate | Acceptance criterion | Status |
 |---|---|---|
-| R0: audit the certificate | Recheck the quadratic, first variation, reference geometry and equality conditions from the definitions. Corrections get separate commits. | CS/SQ rational algebra has 16 executed identity checks and three rejected sign/formula mutations. This is not an independent audit of TW/WS/WC or global geometry. |
-| R1: normalization and coverage | State the motion class, attainment input, common incoming strip and actual-hull saturation; preserve containment needed for equality. | Earlier notes give these reductions and 2<W<4 for competitive maximizers, not curvature domination. |
-| R2: terminal angles | Justify all angles used by the wing construction, or include an explicit ordinary-area correction for missing angles and terminal strips. | Open. Full turns cannot be inserted by convention. |
-| R3: canonical wings | Construct actual convex safe pieces from both witnesses; prove nonemptiness, strip/width constraints and the needed support relations. | Open for arbitrary maximizers. Both wings having full height is not assumed. |
-| R4: arbitrary cut slack | Prove a sharp comparison/equality theorem on a domain covering the actual wing data, or identify the additional maximality property needed. | SQ1 closes the full-height subcase. Unequal-height wings with arbitrary cut slack remain open. |
-| R5: ordinary-area core | Prove containment in the wings plus a correctly oriented core, or a replacement retaining nonsimple-curve, clipping and endpoint corrections. | Open. Pairwise disjointness is not needed for the upper inequality; it must not be confused with simplicity/orientation. |
-| R6: value assembly | Apply R2–R5 and an audited sharp certificate to an attained maximizer; compare with the candidate. | Conditional on preceding gates. |
-| R7: equality recovery | Track equality in every enlargement and area inequality; recover the original closed body from a regular-closed reference envelope. | Conditional mechanism exists; global admission and equality transfer remain open. |
+| R0: audit | Derive signs, endpoint terms, reference geometry and equality from definitions; check actual code/source correspondence. | Exact finite CS/SQ checks are recorded. New proposal audit is separate. Neither is independent verification of the whole branch. |
+| R1: normalization/coverage | Preserve containment from an arbitrary body through normalization and saturation, with attainment available. | Earlier written reductions and analytic `2<W<4` restrictions; not curvature domination. |
+| R2: terminal angles | Prove every angle used by the chosen representation is visited, or pay for missing intervals explicitly. | Open globally. OT4/OA.3 close a specific face-rectangle subcase only. |
+| R3: canonical wings | Construct actual convex safe pieces satisfying the calibrated strip, width and height conditions. | Open globally. Shared-bottom and NH1's height threshold cannot be assumed. |
+| R4: cut slack | A sharp certificate on a domain covering those actual data, or a proved reason excluding the rest. | WC2, SQ1 and NH1 cover stated subcases. Arbitrary slack with arbitrary relative heights remains unproved. |
+| R5: ordinary-area core | Prove containment and a valid area formula/upper bound, retaining clipping and nonsimple-curve effects. | Open globally. Disjointness is unnecessary for an upper bound by subadditivity; the area accounting remains necessary. |
+| R6: value | Apply admitted sharp comparison to an attained maximizer. | Conditional on the needed geometric gates. |
+| R7: uniqueness | Equality must recover the original closed body, not just auxiliary data. | Conditional recovery exists; unrestricted admission remains open. |
 
-R2–R5 are linked global obligations. They are not described as one routine lemma.
+R2–R5 are substantive linked obligations, not one routine lemma.
 
-## 4. The next acceptance test
+## 4. New alternative supplied by the user
 
-Continue R4 with the **unequal-height vertical traces retained explicitly**, rather than assuming the full-height equations U=V=-z_0 used in SQ.7. The parameters are the nonnegative distances of the two tops and bottoms from the common strip boundaries, together with the four cut-width slacks. Their geometric constraints must be kept.
+The user supplied [one-turn-reduction.md](one-turn-reduction.md), attributed to Claude Opus 5.5 Max, with original diagnostic scripts. Read [one-turn-proposal-audit.md](one-turn-proposal-audit.md) before invoking it. The original nine files remain preserved at the audit's provenance checkpoint.
 
-The target is either a nonnegative total deficit, including the first-order width losses, or a valid counterexample in the actual convex-body domain. A negative quadratic remainder from independently minimized arc traces is not such a counterexample: the linear slack may pay for it, and arbitrary interpolants need not be convex or meet every width constraint.
+The candidate-based weighted objective is
 
-If the enlarged certificate fails, record the exact failed statement and return to R3/maximality for the missing property. Do not introduce a new auxiliary functional without specifying its ordinary-area comparison.
+$$
+\Psi(U)=\mathcal A(U)-W(U)/2,
+\qquad\mathcal A(U)=|U|-|N(U)|.
+$$
 
-In parallel with this acceptance test, only a directly useful R3 or R5 lemma should be pursued. Full-height wing admission may be an alternative, but must be proved rather than inferred from the candidate.
+A pair of full-angle caps with nonempty two-turn fibers has exact area
 
-## 5. Positive and negative acceptance tests
+$$
+|E|=\Psi(U)+\Psi(V)+G,\qquad G\ge0.
+$$
 
-Every geometric admission must handle, or exclude by a proved area improvement, the saturated axis-cut and shadow-clipping families. They remain mandatory tests, not already established applications of SQ1. Saturation and shared anchor constraints did not fix the older repair comparisons.
+The initial floor traces OT3–OT4 classify horizontal faces without an input curvature cap. In the aligned-long-face case, with both corner-height positivities, OT5 proves G=0. The other configurations still need analysis.
 
-For reference data, verify core orientation and endpoint determinants. For slack data, distinguish width deficits from whether an intersection of two inward supporting lines lies inside the wing. A diameter-one disk has zero cut-width deficit but lacks that inward vertex; CS1 supplies the correct auxiliary completion instead of ignoring the distinction.
+The audit strengthens the sufficient full-turn rectangle width to `q-sqrt(q^2-1)` for area greater than q. It also states the needed full-turn and nonempty-fiber qualifications, and distinguishes constrained one-turn variations from maximality against all caps.
 
-A computer-assisted theorem requires exact arithmetic or certified enclosures, a proved covering of its claimed class and no unresolved boxes. Symbolic identities and floating-point searches are labelled according to their actual scope. An unexecuted checker is source, not verification.
+### One-turn gates and their current status
 
-## 6. Change control and decision log
+| Gate | Required result | Status |
+|---|---|---|
+| O0: objective and existence | Fix the signed full-niche objective and prove its maximum is attained. | **PA2 proved in writing** in [one-turn-penalized-attainment.md](one-turn-penalized-attainment.md), without assumed Romik or Gerver optimality. |
+| O1: exceptional face placement | Exclude or control OT4's end-face and short-rectangle configurations by ordinary area or a valid improvement. | Open. The R case locates at least one face, not automatically both faces at one end. |
+| O2: point faces | Handle actual maximizing point-face configurations, including the SC3 obstruction. | Open. No uniform area threshold below M excludes all known examples. |
+| O3: niche topology | Prove the two no-clipping hypotheses outside the common-face-length-at-least-one subcase, or bound G correctly. | Open in the remaining configurations. |
+| O4: sharp weighted maximum | Prove `Psi(U)<=M/2` on the stated right-angle cap class and characterize equality. | Open. Attainment does not supply the value, curvature or arm estimates. |
 
-Every substantive finding is committed separately with `[skip ci]`. Failed attempts remain recorded. A gate is closed only when its stated deliverable and scope are proved. Counts of notes, commits or lines do not measure closeness to a proof; no numerical completion percentage is assigned.
+OT.7's full-right-angle cap problem is full-angle by definition. A separate full-angle theorem belongs to the geometric transfer from a partial-turn body, not to existence of that already fixed-domain cap maximum.
 
-- **Plan committed:** R4 first, with R0 checks of the formulas it uses; R2/R3/R5 stay explicit.
-- **Domain correction:** cut widths equal to one do not force the old inward membership. Introduce actual inward intersections and the four displacement formulas CS.2.
-- **Positive R4 subcase:** complete actual corners, then use CS2 plus SQ.9 to prove SQ1 for wings both spanning the strip. In mean-slack variables, the guaranteed positive cost is y(3-y)(s_R+s_D)/4. Equality forces zero cut slack and then the reference pair.
-- **Negative control:** SQ.9 is negative when both mean slacks are equal and their differences vanish. Thus claiming joint concavity of the enlarged functional would be false at this algebraic level. The proved total deficit retains its first-order slack.
-- **R5 simplification:** containment and a simple clockwise core suffice for |S|<=|R|+|D|+|C| by subadditivity. Disjointness is not a premise of that upper bound. No signed-area assertion for a nonsimple core follows.
-- **Exploratory limits:** direct numerical checks on disk/rectangle subfamilies did not falsify the relaxation but give no global bound. Minimizing the enlarged free-trace remainder with unequal heights produced negative values; this does not provide an actual feasible convex-wing counterexample or settle that gate. No unrestricted claim is drawn from either experiment.
+Even a completed O4 gives only `|E|<=M+G` while G is positive. A valid assembly must also address O1–O3 or another exact correction. The new route is complementary to the two-wing program, not a proof that its global admission has been solved.
 
-Work outside the gates is deferred unless a proved dependency or explicit obstruction makes it necessary. In particular, additional coarse width bounds, protected local repairs and stability refinements are not pursued simply because they are available.
+## 5. Next acceptance test
 
-## 7. Reproduction and execution boundary
+Choose one directly relevant target, record it, and pursue it to a proof or a specific obstruction before creating another auxiliary functional.
 
-Run
+The new one-turn target is now well posed by PA2: derive the maximizing cap's finite and limiting balance conditions for `A-W/2`. Fixed-axis interior variations leave the penalty unchanged. Axis variations have an additional minus-one-half derivative. The transfer must still handle domain admissibility, approximation errors, endpoint conditions and the arm bounds needed for a sharp comparison. The existing unpenalized maximality theorem cannot be invoked with a false premise.
 
-```sh
-python docs/ambidextrous/computer-assisted/check_two_wing_slack.py
-```
+Alternatively, attack one of OT4's exceptional face classes with an actual two-turn area comparison. The point-face examples must be included, not dismissed as unsaturated. In the two-wing route, directly constructing the shared-bottom near-full-height wings or proving the core enclosure remains useful.
 
-with SymPy already available to reproduce the exact rational-identity checks. [The recorded run](computer-assisted/two-wing-slack-checks.json) lists all 16 identities, the three rejected mutations, source hashes and versions. The executed source matches the fetched Git blob. No floating-point calculation participates in those identity checks; the positivity arguments and geometric scope are supplied by the written proof, not inferred from the checker.
+Do not spend another pass optimizing an already calibrated expression while its geometric area inequality is unproved.
 
-No CI, Lean/Lake compilation, dependency installation or manuscript build was used. Existing manuscript, Lean source, dependencies and workflows remain unchanged. PR #3 stays draft while unrestricted admission and independent review remain unfinished. Closing the mathematical proof, not merely closing the PR, is the goal.
+## 6. Mandatory positive and negative tests
+
+Reference data must give the correct area and orientation. A proposed global comparison must handle or exclude by a proved improvement the axis-cut and shadow-clipping families. Repair, saturation and shared anchors did not rescue the earlier failed comparisons.
+
+For cap calculations distinguish
+
+$$
+|U|-|N(U)|\quad\text{from}\quad|U\setminus N(U)|.
+$$
+
+The difference is `|N(U) minus U|`. The imported polygon optimizer clips negative fibers and therefore optimizes the second expression; that is not the signed W-Gerver objective on arbitrary caps. Its repeated-abscissa interpolation bug is independently reproduced. The new review utility keeps all terms separate without modifying the preserved originals.
+
+A computer-assisted theorem requires exact arithmetic or certified enclosures and complete coverage of its claimed domain. Finite samples and optimizer convergence do not suffice. In the recorded review, 2,025 rational fiber cases and 1,296 interval pairs are finite checks of the algebra/classification; the continuum statements have written proofs and qualifications. Floating-point candidate/rectangle calculations are diagnostics only.
+
+## 7. Decision log and execution
+
+- Established the actual inward-intersection formulation CS and the full-height arbitrary-slack theorem SQ1.
+- Added the shared-bottom near-full-height theorem NH1; did not assume its height criterion for actual maximizing wings.
+- Imported the user-supplied one-turn draft and all scripts with provenance hashes.
+- Accepted OT1's scoped area identity and the initial floor/face classification; strengthened the rectangle full-turn criterion.
+- Identified signed-versus-clipped objective mismatch, an endpoint interpolation defect, and the missing error sign for ordinary floating-point quadrature.
+- Proved PA2, attainment of the signed weighted cap maximum, independently of the candidate optimum. The sharp value and its structural derivation remain open.
+- Retained both approaches and their unresolved geometric comparisons. No unrestricted-completion claim.
+
+Substantive findings, including negative results, are committed with `[skip ci]`. No CI, Lean/Lake compilation, dependency installation or manuscript build was used. Existing manuscript, Lean libraries, dependencies and workflows remain unchanged. PR #3 stays draft. Counts of commits or notes do not measure proximity to closure.
