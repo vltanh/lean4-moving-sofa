@@ -1,4 +1,10 @@
-# Width-two exclusion: a completed exact covering
+# Width-two exclusion: the historical exact covering
+
+**An analytic replacement is now available.** [Theorem AW-W](../analytic-width-theorem.md) proves the stronger bound `area(S) < 41/25 = 1.64` by pen and paper. It needs no certificate tree, replay, numerical optimization, or arithmetic implementation. Its dependencies are the [disjoint loss partition and mixed-area triangle bound](../analytic-width-loss-partition.md) and the [analytic localization lemma](../analytic-width-localization.md). The [review](../analytic-width-review.md) distinguishes discovery from proof.
+
+The earlier covering and execution record below are preserved, not retracted or silently deleted. They are no longer necessary to establish the width exclusion. Neither the old certificate nor its analytic replacement closes unrestricted optimality and uniqueness.
+
+## Earlier result
 
 **Theorem CA-W:** a compact connected ambidextrous sofa in a common incoming unit-span normalization with horizontal width at most two has area at most
 
@@ -6,11 +12,11 @@ $$
 411/250=1.644<M,
 $$
 
-where M is Romik's candidate area. This excludes the narrow-width regime without assuming curvature bounds, symmetry, contact order, or full-quarter endpoint angles. It does **not** close the unrestricted moving problem.
+where M is Romik's candidate area. This excludes the narrow-width regime without curvature bounds, symmetry, contact order, or full-quarter endpoint assumptions.
 
-Read [THEORY.md](THEORY.md) for the geometric reduction and correctness argument, [RESULT.json](RESULT.json) for the executed complete covering/replay record, and [DISCOVERY.md](DISCOVERY.md) for unsuccessful searches and numerical suggestions that are not proof inputs.
+Read [THEORY.md](THEORY.md) for the historical geometric reduction and correctness argument, [RESULT.json](RESULT.json) for the executed complete covering/replay record, and [DISCOVERY.md](DISCOVERY.md) for unsuccessful searches and numerical suggestions that are not proof inputs.
 
-## Reproduce the complete proof
+## Reproduce the complete earlier covering
 
 With Python, NumPy and Numba available, run from this directory:
 
@@ -41,15 +47,15 @@ The same complete tree can be replayed without NumPy, Numba, or fixed-width arit
 python verify_width_complete.py run_width/tree.bin --pure
 ```
 
-This path uses only the Python standard library and unbounded integers/Fraction. **The whole recorded tree was replayed in guarded-int64 mode, not in pure mode.** The pure evaluator was compared with the accelerated evaluator on 1,200 boxes. An independently implemented rational polygon-clipping evaluator checked 500 spatial bounds, and both replay paths rejected all seven selected malformed/false trees. These are checks in addition to the full replay and the written correctness argument, not proof by sampling.
+This path uses only the Python standard library and unbounded integers/Fraction. **The whole recorded tree was replayed in guarded-int64 mode, not in pure mode.** The pure evaluator was compared with the accelerated evaluator on 1,200 boxes. An independently implemented rational polygon-clipping evaluator checked 500 spatial bounds, and both replay paths rejected all seven selected malformed/false trees. These supplement the complete replay and written correctness argument, rather than proving the theorem by sampling.
 
 THEORY.md gives an explicit int64 overflow bound. The accelerated path rejects depths above 13 and large generated template coefficients; the actual certificate uses depth at most eight. Exact rational matrix calculations are performed with Fraction before acceleration. No floating-point quantity participates in a pruning or acceptance decision.
 
 ## Certificate storage
 
-The complete raw tree is 11,697,975 bytes, or 1,494,626 bytes as deterministic gzip. The generated binary is distributed with the conversation's certificate bundle; it is **not checked into this branch**. Its full deterministic generator, verifier, expected hashes and executed record are committed here. Regenerating it with the command above produces the same raw hash. The verifier accepts either the raw file or a `.gz` file and reconstructs the entire parameter covering from it.
+The complete raw tree is 11,697,975 bytes, or 1,494,626 bytes as deterministic gzip. The generated binary is distributed with the conversation's certificate bundle; it is **not checked into this branch**. Its deterministic generator, verifier, expected hashes and executed record are committed here. Regeneration produces the same raw hash. The verifier accepts either the raw file or a `.gz` file and reconstructs the whole parameter covering from it.
 
-Keeping the binary out of Git does not make its leaf claims implicit: every leaf is regenerated/replayed from the full [0,1]^8 root. The recorded tree has no unresolved frontier. A fresh regeneration is preferable to trusting the JSON summary alone.
+Every leaf is regenerated/replayed from the full [0,1]^8 root. The recorded tree has no unresolved frontier. A fresh regeneration is preferable to trusting the JSON summary alone. None of this binary data is needed for the new analytic proof.
 
 ## Discovery is not verification
 
@@ -59,7 +65,7 @@ The optional command
 python discover_width.py --seeds 0,1,2,20261005
 ```
 
-also needs SciPy (tested version 1.17.0). It returns floating-point candidate placements around area 1.628313908. These are finite-position witnesses, not continuous-motion proofs and not certified global upper bounds. The exact certificate proves the weaker but sufficient 1.644 bound independently of those outputs.
+also needs SciPy (tested version 1.17.0). It returns floating-point candidate placements around area 1.628313908. These are finite-position witnesses, not continuous-motion proofs and not certified global upper bounds. The historical exact certificate establishes the weaker 1.644 bound independently of those outputs.
 
 The polynomial template's exact maximum is reconstructed as
 
@@ -69,10 +75,10 @@ The polynomial template's exact maximum is reconstructed as
 
 and checked by rational LDL/Gaussian elimination. Its domain conditions are checked on each box that uses it; it is not assumed to majorize the envelope outside that domain.
 
-## What the computation contributes to closure
+## Relation to the remaining problem
 
-The two-direction reduction is valid for every potentially improving body: the second direction has cosine 481/769>5/8, so the existing two-strip bound forces both motions to visit it whenever the body has area greater than 8/5. The eight placement variables cover independent left/right motions and every normalized width-at-most-two body.
+The old two-direction reduction was valid for every potentially improving body: its second direction has cosine 481/769>5/8, so the two-strip bound forces both motions to visit it above area 8/5. Eight placement variables cover independent left/right motions and all normalized width-at-most-two bodies.
 
-Therefore all global maximizers have width greater than two. The existing [CW4 theorem](../curvature-only-wide-hulls.md) already proves optimality and exact uniqueness for such hulls **provided** their open-quarter curvature measure is dominated by dtheta. The remaining sufficient structural task is that global curvature/enclosure theorem, not another narrow-width estimate. A result for only one maximizer proves the value; uniqueness requires every maximizer or an equality-preserving recovery.
+The new analytic argument uses different, complementary directions and proves the stronger bound 41/25. Both routes imply that every global maximizer has width greater than two. The existing [CW4 theorem](../curvature-only-wide-hulls.md) proves optimality and exact uniqueness for such hulls **provided** their open-quarter curvature measure is dominated by dtheta. The remaining sufficient structural task is that global curvature/enclosure theorem. A statement for one maximizer proves the value; uniqueness requires every maximizer or an equality-preserving recovery.
 
-The proof, code and historical dependencies remain subject to independent review. No best-known-bound or novelty claim is made.
+The proof, code and historical dependencies remain subject to independent review. No best-known-bound or novelty claim is made. The analytic-replacement pass did not rerun or modify this directory's algorithms or recorded results.
