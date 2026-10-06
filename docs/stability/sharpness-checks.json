@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "scope": "numerical analytic formulas only; no Lean or CI",
+  "not_checked": [
+    "Lean elaboration",
+    "proof dependencies",
+    "topology",
+    "rigid-orbit compactness"
+  ],
+  "python": "3.13.5",
+  "mpmath": "1.3.0",
+  "decimal_precision": 60,
+  "tolerance": "1.0e-45",
+  "groups": {
+    "actual_kernel_square_integrals": {
+      "cases": 60,
+      "max_scaled_error": "1.2319595763e-61"
+    },
+    "tail_primitive_derivative": {
+      "cases": 15,
+      "max_scaled_error": "3.65071695645e-61"
+    },
+    "reconstruction_and_product_identity": {
+      "cases": 75,
+      "max_scaled_error": "1.1668153646e-61"
+    },
+    "junctions_and_sampled_uniform_bound": {
+      "cases": 10,
+      "max_scaled_error": "1.04063777431e-61"
+    },
+    "rational_constant": {
+      "cases": 1,
+      "max_scaled_error": "0.0"
+    },
+    "puncture_power_identity": {
+      "cases": 18,
+      "max_scaled_error": "4.88807018933e-62"
+    }
+  },
+  "cases": 179,
+  "source_git_blob_sha1": "b08fabd8fc060a282e2111e24f0e104870f549bb"
+}
