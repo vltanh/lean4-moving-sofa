@@ -74,7 +74,69 @@ theorem cap_top_strict_between_floor_endpoints {K : Set Point}
 theorem gerver_roof_data {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     ∃ H L : ℝ, ∃ γ : ℝ → ℝ,
       CapRoofData P.cap (gerverRoofLeft P) (gerverRoofRight P) H L γ := by
-  sorry
+  have hB := romik_bounds hP hbox
+  have henv := gn_envHyp hP hB
+  have hc : IsCap P.cap (π / 2) := gm_isCap hP hbox
+  have hI : InjCond1 P.cap := (theorem6_1_2 hP hbox).1
+  have hheight : ∀ t ∈ Icc (0 : ℝ) (π / 2), (P.path t).2 < 1 :=
+    fun t ht => path_snd_lt_one hP hB ht.1 ht.2
+  have hΓc : IsCompact (gerverEnvelope P) := envelope_isCompact henv
+  have hΓbounds : ∀ p ∈ gerverEnvelope P,
+      p.1 ∈ Icc (gerverRoofLeft P) (gerverRoofRight P) ∧ p.2 ∈ Ico (0 : ℝ) 1 :=
+    envelope_bounds_of_path_height henv hheight
+  have hcover : ∀ x ∈ Icc (gerverRoofLeft P) (gerverRoofRight P),
+      ∃ p ∈ gerverEnvelope P, p.1 = x := fun x hx => env_exists_curve_fst henv hx
+  have hθ : P.θ < π / 4 := by linarith [henv.ht.2.2.1]
+  obtain ⟨L, hL, hSlope⟩ := envelope_slope_bound henv hθ (by linarith)
+  obtain ⟨γ, hgraph, hLip⟩ := exists_roof_function
+    (fun p hp => (hΓbounds p hp).1) hcover hSlope
+  have hDmem : envD P.path P.gs_β 0 ∈ gerverEnvelope P :=
+    Or.inr ⟨0, ⟨le_rfl, (henv.ht.1.trans henv.ht.2.1).le⟩, rfl⟩
+  have hBmem : envB P.path P.gs_α (π / 2) ∈ gerverEnvelope P :=
+    Or.inl (Or.inl ⟨π / 2, ⟨by linarith [henv.ht.2.2.2.1, henv.ht.2.2.2.2], le_rfl⟩, rfl⟩)
+  obtain ⟨pmax, hpmax, hmax⟩ := hΓc.exists_isMaxOn ⟨_, hDmem⟩ continuous_snd.continuousOn
+  let H := pmax.2
+  have hH : H < 1 := (hΓbounds pmax hpmax).2.2
+  have hγmem : ∀ x ∈ Icc (gerverRoofLeft P) (gerverRoofRight P), (x, γ x) ∈ gerverEnvelope P :=
+    fun x hx => (hgraph (x, γ x)).2 ⟨hx, rfl⟩
+  have hγnonneg : ∀ x ∈ Icc (gerverRoofLeft P) (gerverRoofRight P), 0 ≤ γ x :=
+    fun x hx => (hΓbounds (x, γ x) (hγmem x hx)).2.1
+  have hγheight : ∀ x ∈ Icc (gerverRoofLeft P) (gerverRoofRight P), γ x ≤ H :=
+    fun x hx => hmax (hγmem x hx)
+  have hγa : γ (gerverRoofLeft P) = 0 := by
+    have h := ((hgraph _).1 hDmem).2
+    rw [henv.D_end] at h
+    exact h.symm
+  have hγb : γ (gerverRoofRight P) = 0 := by
+    have h := ((hgraph _).1 hBmem).2
+    rw [henv.B_end] at h
+    exact h.symm
+  obtain ⟨ho1, ho2, ho3⟩ := envelope_endpoint_order henv
+  have hab : gerverRoofLeft P < gerverRoofRight P := ho1.trans (ho2.trans ho3)
+  have ha : (gerverRoofLeft P, 1) ∈ P.cap := by
+    rw [gerver_cap_explicit hP hbox]
+    have h := gs_C_mem_K hP hB (τ := 0) le_rfl (by positivity)
+    rwa [gerver_contactC_zero hP hB] at h
+  have hb : (gerverRoofRight P, 1) ∈ P.cap := by
+    rw [gerver_cap_explicit hP hbox]
+    have h := gs_A_mem_K hP hB (τ := π / 2) (by positivity) le_rfl
+    rwa [gerver_contactA_pi_div_two hP hB] at h
+  have hn : niche P.cap (π / 2) =
+      {p : Point | p.1 ∈ Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
+        0 ≤ p.2 ∧ p.2 < γ p.1} := by
+    rw [gerver_niche_envelope hP hbox]
+    ext p
+    constructor
+    · rintro ⟨hpy, q, hq, hqx, hpq⟩
+      obtain ⟨hx, hy⟩ := (hgraph q).1 hq
+      rw [hqx] at hx
+      rw [hy, hqx] at hpq
+      exact ⟨hx, hpy, hpq⟩
+    · rintro ⟨hx, hpy, hy⟩
+      exact ⟨hpy, (p.1, γ p.1), hγmem p.1 hx, rfl, hy⟩
+  exact ⟨H, L, γ, hc, hab, (cap_top_strict_between_floor_endpoints hc hI ha).1,
+    (cap_top_strict_between_floor_endpoints hc hI hb).2, hH, hL,
+    hγnonneg, hγheight, hLip, hγa, hγb, cap_horizontal_rectangle hc hab ha hb, hn⟩
 
 /-- The actual nonconvex Gerver sofa satisfies the uniform interior-ball condition. -/
 theorem gerver_interiorBalls {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
