@@ -62,7 +62,7 @@ The first join is a tangency; the second has an exposed-edge atom. All other qua
 
 ## 2. Only one lower-niche tail can change
 
-Write R_t(x)=(f(t)-1-x cos(t))/sin(t), L_t(x)=(g(t)-1+x sin(t))/cos(t). The positive lower niche roof is the maximum of zero and sup_t min(R_t,L_t).
+Write R_t(x)=(f(t)-1-x cos(t))/sin(t), L_t(x)=(g(t)-1+x sin(t))/cos(t). The positive lower niche roof is max(0,sup_t min(R_t,L_t)), the roof clipped at the incoming baseline.
 
 Because f_tau<=f_* and g is unchanged, the lower niche can only shrink. The upper niche is unchanged, since its two support quarters are unchanged. The convex hull's lower boundary is unchanged, since the cut lies strictly above y=1/2 throughout the fixed projection for small tau.
 
@@ -90,11 +90,17 @@ Y-\sqrt{1-(x-x_P)^2},&x_B\leq x\leq x_Z,\\
 \tag{SAC.6}
 $$
 
-**Proof.** On [t_P,t_tau], f_tau=P dot mu, so its single-wall envelope is the lower arc of the unit circle centered at P: its stationary point has x=x_P-cos(t) and height Y-sin(t). The component p=f_tau'-g+1 is strictly negative uniformly on this short interval for small z; its limit is -m/2. Therefore the companion L wall is strictly higher at every such tangency. The unit-circle envelope is consequently a genuine min-wall roof, not just an upper relaxation.
+**Proof.** On [t_P,t_tau], f_tau=P dot mu, so its single-wall envelope is the lower arc of the unit circle centered at P: its stationary point has x=x_P-cos(t) and height Y-sin(t). On this support piece,
 
-For x>=x_B, every unchanged earlier R line has value at most R_{t_P}(x). Indeed the reference B_x is nondecreasing and B_x(t)<=x_B for t<=t_P, so the identity partial_t R_t=(x-B_x(t))/sin^2(t) gives that maximum. The new family includes t_P and is no smaller than that line at its maximum. On [t_tau,L), (SAC.4) instead gives R_t(x)=1-csc(t)-x cot(t)<0 for x>0, so this part contributes no positive roof. The axis constraint supplies height zero.
+$$
+p=f_\tau'-g+1=1-(x_P+m/2)\sin t+(Y-1/2)\cos t.
+$$
 
-The positive portion of the unit-circle envelope ends exactly at x_Z. Its stationary parameters up to this endpoint lie strictly between t_P and t_tau for small z: cos(t) ranges from sin(z) to D, both of order z, whereas cos(t_tau) is of order z^2. Thus no stationary point used in (SAC.6) lies outside the specified support piece. For x between x_Z and m the maximum of that family is nonpositive (or decreases to a nonpositive endpoint value), so the positive roof is zero.
+It tends uniformly to 1-3m/2<-1/2 as z tends to zero. Thus p is strictly negative for small z, and the companion L wall is strictly higher at every such tangency. The unit-circle envelope is a genuine min-wall roof, not just an upper relaxation. The first draft misstated this limit as -m/2; the required strict sign and all subsequent formulas are unchanged by the correction.
+
+For x>=x_B, every unchanged earlier R line has value at most R_{t_P}(x). Indeed the reference B_x is nondecreasing and B_x(t)<=x_B for t<=t_P, so the identity partial_t R_t=(x-B_x(t))/sin^2(t) gives that maximum. The new family includes t_P and is no smaller than that line at its maximum. On [t_tau,L), (SAC.4) instead gives R_t(x)=1-csc(t)-x cot(t)<0 for x>0, so this part contributes no positive roof. Clipping at the baseline gives height zero when no positive roof remains.
+
+The positive portion of the unit-circle envelope ends exactly at x_Z. Its stationary parameters up to this endpoint lie between t_P and t_tau for small z (with equality at t_P at x_B): cos(t) ranges from sin(z) to D, both of order z, whereas cos(t_tau) is of order z^2. Thus no stationary point used in (SAC.6) lies outside the specified support piece. For x between x_Z and m the maximum of that family is nonpositive (or decreases to a nonpositive endpoint value), so the positive roof is zero.
 
 For x<x_B the old active tail parameter, or old core/left-tail parameter, is unchanged; since the new niche is a subset of the old one, this proves equality there. For x>=m the old positive niche is absent, hence so is the new one. These observations prove the claim. QED.
 
@@ -148,7 +154,7 @@ $$
 
 ## 4. The leading coefficient is positive
 
-There is a simple way to extract the sign without cancellation among inverse trigonometric formulas. Set a=z/2 and rescale x=m+a X on the shrinking lower-tail interval. Uniformly on bounded X intervals, the old roof divided by a^2 tends to X^2, while the new one tends to
+There is a simple way to extract the sign without cancellation among inverse trigonometric formulas. Set a=z/2 and rescale x=m+a X on the shrinking lower-tail interval. Uniformly for X in the bounded interval relevant to these tails, the old roof divided by a^2 tends to X^2, while the new one tends to
 
 $$
 \left(\frac{(1-X)^2}{2}-1\right)_+.
@@ -194,8 +200,14 @@ $$
 M-|T|\geq c\int_0^L|h_T'-h_*'|^2\,dt.
 $$
 
-Indeed, on t_tau<t<L the two derivative traces differ by -m+O(sqrt(tau)) as in AX1, over an interval of length arctan(tau). The integral is at least a positive constant times tau, whereas (SAC.12) is o(tau). The actual set and hull remain close, but the transfer of a long axis face to a nearby non-axis normal carries an energy not proportional to ordinary missing area.
+Indeed, on t_tau<t<L the exact derivative difference is
+
+$$
+f_\tau'(t)-f_*'(t)=m\sin t+\tfrac12\cos t.
+$$
+
+Its magnitude tends uniformly to m, over an interval of length arctan(tau). The integral is at least a positive constant times tau, whereas (SAC.12) is o(tau). The transfer of a long axis face to a nearby non-axis normal carries an energy not proportional to ordinary missing area.
 
 This is an explicit stress test for the next global proof: auxiliary tail variables or an exposed-face term must retain this distinction. It does not invalidate the earlier calibration on its stated domain or prove a competing sofa exceeds M.
 
-The proof above is analytic. A separate numerical check of the cap-integral formulas and their limiting coefficient was used as a diagnostic, not as the justification for (SAC.12). No CI or Lean/Lake compilation was used. The candidate dependencies and this argument remain subject to independent review.
+The proof above is analytic. The standard-library program [check_saturated_axis_cut.py](computer-assisted/check_saturated_axis_cut.py) compares the cap formulas with separate vertical slice integrals and checks sample ratios approaching (SAC.12). These are diagnostics, not the proof of the limit or of global optimality. No CI or Lean/Lake compilation was used. The candidate dependencies and this argument remain subject to independent review.
