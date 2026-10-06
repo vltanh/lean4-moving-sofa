@@ -115,12 +115,9 @@ right-angle cap, which is `|G|`. -/
 theorem right_angle_area_le_gerver {P : GerverParams} (hval : MaximizingValue P)
     {S : Set Plane} (hS : IsMovingSofaWithAngle S (π / 2)) : area S ≤ area (gerverSofa P) := by
   obtain ⟨K, hK, hmono, hcap, hmax, hle⟩ := exists_maximizing_cap pi_div_two_mem_Ioc
-  have hA : sofaArea (π / 2) K = area (K \ niche K (π / 2)) := by
-    have h := theorem2_5_10 hmono
-    rwa [hcap] at h
   calc
     area S ≤ area (K \ niche K (π / 2)) := hle S hS
-    _ = sofaArea (π / 2) K := hA.symm
+    _ = sofaArea (π / 2) K := by rw [← theorem2_5_10 hmono, hcap]
     _ = area (gerverSofa P) := hval K hK hmax
 
 /-- A moving sofa of area at least `2.2` moves with an angle `ω ≥ arcsec 2.2` (Baek's
@@ -133,10 +130,7 @@ theorem area_le_gerver_of_large {P : GerverParams} (hval : MaximizingValue P)
   have hωpos : ω ∈ Ioc 0 (π / 2) := ⟨ang_arcsec22_pos.trans_le hω.1, hω.2⟩
   obtain ⟨K, -, hmono, hcap, hmax, hle⟩ := exists_maximizing_cap hωpos
   have hT22 : (2.2 : ℝ) ≤ area (K \ niche K ω) := h22.trans (hle S hSω)
-  have hown : MaximizesCap ω (capOf (K \ niche K ω) ω) := by
-    rw [hcap]
-    exact hmax
-  have hrot := maximizing_monotone_has_right_angle hmono hω hT22 hown
+  have hrot := maximizing_monotone_has_right_angle hmono hω hT22 (by rwa [hcap])
   calc
     area S ≤ area (K \ niche K ω) := hle S hSω
     _ = area (rot (π / 2 - ω) '' (K \ niche K ω)) :=
@@ -150,25 +144,17 @@ theorem area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     area S ≤ area (gerverSofa P) := by
   by_cases h22 : (2.2 : ℝ) ≤ area S
   · exact area_le_gerver_of_large hval hS h22
-  · have hG := gerverSofa_area hP hbox
-    linarith [lt_of_not_ge h22]
-
-/-- `area_le_gerver`, for the measures: both are finite. -/
-theorem volume_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
-    (hval : MaximizingValue P) {S : Set Plane} (hS : MovingSofaOptimality.IsMovingSofa S) :
-    volume S ≤ volume (gerverSofa P) := by
-  rw [← ENNReal.toReal_le_toReal (isBounded_of_isMovingSofa hS).measure_lt_top.ne
-    (gerverSofa_volume_ne_top hP hbox)]
-  exact area_le_gerver hP hbox hval hS
+  · linarith [gerverSofa_area hP hbox, lt_of_not_ge h22]
 
 /-- Gerver's sofa is a moving sofa, and every moving sofa has area at most `|G|`: the statement of
-Baek's Theorem 1.1.1. -/
+Baek's Theorem 1.1.1. The measures are finite, so `area_le_gerver` bounds them. -/
 theorem gerver_sofa_optimal {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (hval : MaximizingValue P) :
     MovingSofaOptimality.IsMovingSofa (gerverSofa P) ∧
       ∀ S, MovingSofaOptimality.IsMovingSofa S → volume S ≤ volume (gerverSofa P) :=
-  ⟨⟨π / 2, (GerverParams.gm_movingSofa_std hP hbox).1⟩,
-    fun _ hS => volume_le_gerver hP hbox hval hS⟩
+  ⟨⟨π / 2, (GerverParams.gm_movingSofa_std hP hbox).1⟩, fun _ hS =>
+    (ENNReal.toReal_le_toReal (isBounded_of_isMovingSofa hS).measure_lt_top.ne
+      (gerverSofa_volume_ne_top hP hbox)).1 (area_le_gerver hP hbox hval hS)⟩
 
 /-- Every cap of every angle `ω` has sofa area at most `|G|`, as
 `𝒜_ω(C) ≤ 𝒜_ω(K) = |K \ 𝒩(K)| ≤ |G|` for the maximizing cap `K` of `exists_maximizing_cap`. -/
@@ -176,12 +162,9 @@ theorem cap_area_le_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
     (hval : MaximizingValue P) {C : Set Plane} {ω : ℝ} (hC : IsCap C ω) :
     sofaArea ω C ≤ area (gerverSofa P) := by
   obtain ⟨K, -, hmono, hcap, hmax, -⟩ := exists_maximizing_cap hC.1
-  have hA : sofaArea ω K = area (K \ niche K ω) := by
-    have h := theorem2_5_10 hmono
-    rwa [hcap] at h
   calc
     sofaArea ω C ≤ sofaArea ω K := hmax C hC
-    _ = area (K \ niche K ω) := hA
+    _ = area (K \ niche K ω) := by rw [← theorem2_5_10 hmono, hcap]
     _ ≤ area (gerverSofa P) := area_le_gerver hP hbox hval ⟨ω, hmono.isMovingSofaWithAngle⟩
 
 /-- A right-angle cap is maximizing if and only if it is a horizontal translate of Gerver's cap. -/

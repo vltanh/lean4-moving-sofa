@@ -17,6 +17,10 @@ stability proof (`MovingSofaStability`) all use them.
 @[expose] public section
 noncomputable section
 
+open Real Set MeasureTheory Filter MovingSofaOptimality
+
+namespace MovingSofaUniqueness
+
 /-!
 ## The square gap
 
@@ -27,11 +31,7 @@ functional along `(1 - c) f + c g` is `c (1 - c) / 2 · ∫ (f - g)²` for every
 vanishes if and only if `f = g` almost everywhere (`halfSquareIntegral_combo_eq_iff`).
 -/
 
-section
-
-open MeasureTheory Filter
-
-namespace MovingSofaUniqueness
+section SquareGap
 
 variable {X : Type*} [MeasurableSpace X]
 variable (μ : Measure X) {f g : X → ℝ}
@@ -96,24 +96,11 @@ theorem halfSquareIntegral_combo_eq_iff {c : ℝ} (hc : c ∈ Set.Ioo (0 : ℝ) 
     halfSquareIntegral μ (fun x => (1 - c) * f x + c * g x) =
         (1 - c) * halfSquareIntegral μ f + c * halfSquareIntegral μ g ↔
       f =ᵐ[μ] g := by
-  have hcoef : c * (1 - c) / 2 ≠ 0 :=
-    ne_of_gt (div_pos (mul_pos hc.1 (sub_pos.mpr hc.2)) (by norm_num))
-  have hint := integrable_sq_sub μ hf hg hfg
-  constructor
-  · intro heq
-    have hz : (c * (1 - c) / 2) * (∫ x, (f x - g x) ^ 2 ∂μ) = 0 := by
-      rw [← halfSquareIntegral_combo_gap μ c hf hg hfg, heq, sub_self]
-    exact (integral_sq_sub_eq_zero_iff μ hint).mp
-      ((mul_eq_zero.mp hz).resolve_left hcoef)
-  · intro hae
-    have hz := (integral_sq_sub_eq_zero_iff μ hint).mpr hae
-    have hgap := halfSquareIntegral_combo_gap μ c hf hg hfg
-    rw [hz, mul_zero] at hgap
-    exact (sub_eq_zero.mp hgap).symm
+  have hcoef : c * (1 - c) / 2 ≠ 0 := (div_pos (mul_pos hc.1 (sub_pos.2 hc.2)) two_pos).ne'
+  rw [eq_comm, ← sub_eq_zero, halfSquareIntegral_combo_gap μ c hf hg hfg, mul_eq_zero,
+    or_iff_right hcoef, integral_sq_sub_eq_zero_iff μ (integrable_sq_sub μ hf hg hfg)]
 
-end MovingSofaUniqueness
-
-end
+end SquareGap
 
 /-!
 ## Mamikon's area as a square integral
@@ -124,11 +111,7 @@ writes Mamikon's area as `halfSquareIntegral` of the bounded tangent displacemen
 combinations, so is the displacement (`displacement_combo`).
 -/
 
-section
-
-open Real Set MeasureTheory Filter MovingSofaOptimality
-
-namespace MovingSofaUniqueness
+section Displacement
 
 /-- The signed distance along the supporting line from the endpoint `vplus K t` of the support face
 to `z t`. -/
@@ -149,18 +132,11 @@ theorem displacement_mul_integrable (K₀ K₁ : ConvexBodySet) :
   obtain ⟨C₀, hC₀⟩ := (hM K₀).2.1
   obtain ⟨C₁, hC₁⟩ := (hM K₁).2.1
   have hC₀0 : 0 ≤ C₀ := (abs_nonneg _).trans (hC₀ a ⟨le_rfl, hab.le⟩)
-  have hI : IntegrableOn
-      (fun t => displacement K₀.1 (z K₀) t * displacement K₁.1 (z K₁) t)
-      (Icc a b) volume := by
-    have : IsFiniteMeasure (volume.restrict (Icc a b)) :=
-      isFiniteMeasure_restrict.2 (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)
-    refine Integrable.of_bound ((hM K₀).1.mul (hM K₁).1).aestronglyMeasurable
-      (C₀ * C₁) ?_
-    apply ae_restrict_of_forall_mem measurableSet_Icc
-    intro t ht
-    rw [Real.norm_eq_abs, abs_mul]
-    exact mul_le_mul (hC₀ t ht) (hC₁ t ht) (abs_nonneg _) hC₀0
-  exact hI.mono_set Ioo_subset_Icc_self
+  refine (IntegrableOn.of_bound measure_Icc_lt_top ((hM K₀).1.mul (hM K₁).1).aestronglyMeasurable
+    (C₀ * C₁) (ae_restrict_of_forall_mem measurableSet_Icc fun t ht => ?_)).mono_set
+    Ioo_subset_Icc_self
+  rw [Real.norm_eq_abs, Pi.mul_apply, abs_mul]
+  exact mul_le_mul (hC₀ t ht) (hC₁ t ht) (abs_nonneg _) hC₀0
 
 include hab hb hz hzl in
 /-- Mamikon's area is `halfSquareIntegral` of the displacement (Baek's Theorem 7.4.1). -/
@@ -185,15 +161,11 @@ theorem displacement_combo (K₀ K₁ : ConvexBodySet) {c : ℝ}
   simp only [dot_sub_left, dot_add_left, dot_smul_left]
   ring
 
-end MovingSofaUniqueness
+end Displacement
 
-end
-
-section
-
-open Real Set MovingSofaOptimality
-
-namespace MovingSofaUniqueness
+/-!
+## The displacements of the tangent points and of the outer corner; the canonical triple
+-/
 
 /-- The displacement of the intersection with the supporting line at `T`. -/
 theorem tangent_displacement_formula (K : Set (ℝ × ℝ)) {T t : ℝ} (ht : t < T) :
@@ -222,5 +194,3 @@ noncomputable def kiExtensionTriple {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0
     ⟨leftBody φ K, (theorem8_1_8 hφ hK).2.2.1⟩), theorem8_1_8 hφ hK⟩
 
 end MovingSofaUniqueness
-
-end

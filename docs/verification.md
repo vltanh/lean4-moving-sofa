@@ -55,7 +55,7 @@ alone.
   uniqueness), of the three modules of the second proof of optimality, or of [`Solution.lean`](../Solution.lean). It also fails if
   a declaration of the route's optimality and uniqueness reaches the modules of the stability proof that use them,
   if one of twenty positive controls is missing (for example, that the uniqueness reaches the certificate
-  [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1748)), if one of eight negative controls fails, or if a theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean)
+  [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120)), if one of eight negative controls fails, or if a theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean)
   does not have the statement of the theorem of [`Solution.lean`](../Solution.lean) that it restates.
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may

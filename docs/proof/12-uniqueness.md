@@ -480,7 +480,7 @@ $\mathcal{Q}$ forces equality in each of the three. $\square$
 
 *Lean: [`ki_maximizer_equality_conditions`](../../MovingSofaUniqueness/Rigidity.lean#L624), [`ki_upperQL_eq_gerver_of_sofaArea_eq`](../../MovingSofaUniqueness/Rigidity.lean#L609),
 [`MovingSofaOptimality.ConvexDomain.eq_on_segment_of_isMax`](../../MovingSofaUniqueness/Rigidity.lean#L149), [`mamikonSegmentEquality_iff`](../../MovingSofaUniqueness/Rigidity.lean#L527),
-[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L517), [`MovingSofaUniqueness.kiExtensionTriple`](../../MovingSofaUniqueness/Mamikon.lean#L219).*
+[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L517), [`MovingSofaUniqueness.kiExtensionTriple`](../../MovingSofaUniqueness/Mamikon.lean#L191).*
 
 ### Lemma 12.15 (equality in one Mamikon term)
 

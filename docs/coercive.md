@@ -11,7 +11,7 @@ contain it.
 
 Throughout, `P` is the solution of Romik's system in the box (`P.IsSolution`, `P.InBox`), `G` is
 Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and areas are Baek's
-([definitions](definitions.md)); [Stability](stability.md) defines the deficit, the normalization and [`EuclideanClose`](../MovingSofaStability/Basic.lean#L141).
+([definitions](definitions.md)); [Stability](stability.md) defines the deficit, the normalization and [`EuclideanClose`](../MovingSofaStability/Basic.lean#L119).
 
 ## The certificate
 
@@ -28,9 +28,9 @@ theorem coercive_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
         x.1.1.1 (shiftedReferenceCap P.cap x.1.1.1)
 ```
 
-[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1748) is the conjunction of two theorems of the stability library:
-[`MovingSofaStability.wideUpperQ_le_gerver`](../MovingSofaStability/Deficit.lean#L481), from the concavity of `𝒬` and its first variation at Gerver's triple, and
-[`MovingSofaStability.sharp_wide_cap_distance_bound`](../MovingSofaStability/CapEstimate.lean#L1679), from the residual energies of the deficit. `shiftedReferenceCap P.cap K` is
+[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) is the conjunction of two theorems of the stability library:
+[`MovingSofaStability.wideUpperQ_le_gerver`](../MovingSofaStability/Deficit.lean#L343), from the concavity of `𝒬` and its first variation at Gerver's triple, and
+[`MovingSofaStability.sharp_wide_cap_distance_bound`](../MovingSofaStability/CapEstimate.lean#L1061), from the residual energies of the deficit. `shiftedReferenceCap P.cap K` is
 Gerver's cap translated horizontally so that its leftmost point has the abscissa of the leftmost
 point of `K`.
 
@@ -87,9 +87,9 @@ and at small deficit it bounds the distance.
 4. **Uniqueness** (`Uniqueness`): [`MovingSofaExtremal.image_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L121) and [`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L129), step by step as in
    [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean), with the classification of step 2 in place of the equality
    analysis of [`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean).
-5. **Stability** ([`MovingSofaStability`](../MovingSofaStability)). The sign of the deficit ([`MovingSofaStability.sofaDeficit_nonneg`](../MovingSofaStability/Global.lean#L36)) and the compactness
-   step ([`MovingSofaStability.maximizing_subsequence`](../MovingSofaStability/Global.lean#L498), [`MovingSofaStability.pinned_maximizer_eq_gerver`](../MovingSofaStability/Recovery.lean#L142)) use steps 3 and 4; the local estimate
-   ([`MovingSofaStability.nearby_cap_certificate`](../MovingSofaStability/LocalBound.lean#L1121), [`MovingSofaStability.nearby_cap_distance`](../MovingSofaStability/LocalBound.lean#L1160)) takes both bounds from the certificate, the distance with
+5. **Stability** ([`MovingSofaStability`](../MovingSofaStability)). The sign of the deficit ([`MovingSofaStability.sofaDeficit_nonneg`](../MovingSofaStability/Global.lean#L32)) and the compactness
+   step ([`MovingSofaStability.maximizing_subsequence`](../MovingSofaStability/Global.lean#L377), [`MovingSofaStability.pinned_maximizer_eq_gerver`](../MovingSofaStability/Recovery.lean#L128)) use steps 3 and 4; the local estimate
+   ([`MovingSofaStability.nearby_cap_certificate`](../MovingSofaStability/LocalBound.lean#L756), [`MovingSofaStability.nearby_cap_distance`](../MovingSofaStability/LocalBound.lean#L783)) takes both bounds from the certificate, the distance with
    coefficient `2 / cos φ`, which the rest of the proof carries.
 
 ## What the route does not use
