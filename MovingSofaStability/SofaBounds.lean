@@ -5,8 +5,8 @@ public import MovingSofaStability.CompactSetLimits
 /-!
 # A compact containing rectangle for the original sofa sets
 
-Uncompiled proof source. Connectedness bounds a supporting inner corner and
-the pi/4 hallway bounds horizontal span. No balancedness is assumed.
+Connectedness bounds a supporting inner corner and the pi/4 hallway bounds
+horizontal span. No balancedness is assumed.
 -/
 
 @[expose] public section
@@ -29,7 +29,9 @@ theorem connected_corner_height {S : Set Point} (hS : IsCompact S) (hne : S.None
   obtain ⟨p, hp, hpu⟩ := exists_dot_eq_supp hS hne t
   obtain ⟨q, hq, hqv⟩ := exists_dot_eq_supp hS hne (t + π / 2)
   let f : Point → ℝ := fun z => innerSlackU S t z - innerSlackV S t z
-  have hf : ContinuousOn f S := by unfold f innerSlackU innerSlackV; fun_prop
+  have hf : ContinuousOn f S :=
+    ((((continuous_dot (uvec t)).sub continuous_const).add continuous_const).sub
+      (((continuous_dot (vvec t)).sub continuous_const).add continuous_const)).continuousOn
   have hpu' : innerSlackU S t p = 1 := by unfold innerSlackU; rw [hpu]; ring
   have hqv' : innerSlackV S t q = 1 := by unfold innerSlackV; rw [← uvec_add_pi_div_two, hqv]; ring
   have hpv : innerSlackV S t p ≤ 1 := by

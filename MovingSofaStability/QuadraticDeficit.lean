@@ -5,8 +5,6 @@ public import MovingSofaOptimality.Convex.ConvexDomain
 /-!
 # Quantitative deficit of a quadratic functional
 
-This file contains proof source only; it has not been compiled.
-
 The midpoint concavity gap, multiplied by four, is the quadratic energy along
 an entire segment. At a global maximizer that energy is bounded by the
 objective deficit, with constant one. The proof uses an explicit small segment
@@ -56,7 +54,7 @@ theorem energy_le_deficit_of_segment {V : Type*} (comb : ℝ → V → V → V)
   have hm := hmax (comb c x₀ x₁)
   have hp : c * ((1 - c) * E) ≤ c * (Q x₀ - Q x₁) := by
     nlinarith
-  exact (mul_le_mul_left hc.1).mp hp
+  exact (mul_le_mul_iff_right₀ hc.1).mp hp
 
 /-- Four times the midpoint concavity gap. For a quadratic functional this is
 its negative quadratic part in the direction from `x` to `y`. -/
@@ -74,6 +72,7 @@ theorem quadratic_segment_identity {V : Type} (D : ConvexDomain V)
   subst Q
   have hh : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
   unfold segmentEnergy
+  beta_reduce
   rw [cvx_bilin_comb D hg x y hc, cvx_bilin_comb D hg x y hh]
   ring
 
@@ -103,6 +102,7 @@ theorem deficit_eq_neg_dirDeriv_add_energy {V : Type} (D : ConvexDomain V)
   have hh : (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 := ⟨by norm_num, by norm_num⟩
   rw [lemma7_1_4 D hg]
   unfold segmentEnergy
+  beta_reduce
   rw [cvx_bilin_comb D hg x y hh]
   ring
 

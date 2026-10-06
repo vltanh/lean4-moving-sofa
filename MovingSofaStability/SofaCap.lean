@@ -5,9 +5,9 @@ public import MovingSofaStability.SofaCoordinates
 /-!
 # A full-angle cap without extending the sofa's motion
 
-Uncompiled proof source. The downward completion contains the normalized
-original set and preserves all upper supports. The actual set need not be
-convex and need not admit a full-angle movement.
+The downward completion contains the normalized original set and preserves all
+upper supports. The actual set need not be convex and need not admit a
+full-angle movement.
 -/
 
 @[expose] public section
@@ -26,7 +26,7 @@ def sofaCap (S : Set Point) : Set Point :=
     p ∈ sofaCap S ↔ 0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ supp S t := Iff.rfl
 
 theorem subset_sofaCap {S : Set Point} (hS : IsCompact S) (hstrip : S ⊆ hStrip) : S ⊆ sofaCap S :=
-  fun p hp => ⟨(hstrip hp).1, fun t ht => dot_le_supp hS hp t⟩
+  fun _ hp => ⟨(hstrip hp).1, fun t _ => dot_le_supp hS hp t⟩
 
 theorem sofaCap_down {S : Set Point} {p : Point} (hp : p ∈ sofaCap S)
     {y : ℝ} (hy0 : 0 ≤ y) (hy : y ≤ p.2) : (p.1, y) ∈ sofaCap S := by
@@ -41,7 +41,7 @@ theorem sofaCap_closed (S : Set Point) : IsClosed (sofaCap S) := by
   have he : sofaCap S = halfPlus (π / 2) 0 ∩ ⋂ t ∈ Icc (0 : ℝ) π, halfMinus t (supp S t) := by
     ext p
     simp only [sofaCap, halfPlus, halfMinus, mem_inter_iff, mem_iInter,
-      mem_setOf_eq, dot_uvec_pi_div_two]
+      mem_ofPred_eq, dot_uvec_pi_div_two]
   rw [he]
   exact (isClosed_halfPlus _ _).inter (isClosed_biInter fun t ht => isClosed_halfMinus _ _)
 
@@ -52,8 +52,9 @@ theorem sofaCap_convex (S : Set Point) : Convex ℝ (sofaCap S) := by
   intro t ht
   have h1 := mul_le_mul_of_nonneg_left (hp.2 t ht) ha
   have h2 := mul_le_mul_of_nonneg_left (hq.2 t ht) hb
+  have h3 : a * supp S t + b * supp S t = supp S t := by rw [← add_mul, hab, one_mul]
   rw [dot_add_left, dot_smul_left, dot_smul_left]
-  nlinarith
+  linarith
 
 theorem sofaCap_compact {S : Set Point} (htop : supp S (π / 2) = 1) : IsCompact (sofaCap S) := by
   have hb : IsCompact (Icc (-supp S π) (supp S 0) ×ˢ Icc (0 : ℝ) 1) :=
@@ -82,7 +83,7 @@ theorem sofaCap_isCap {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
   have hneC := hne.mono hsub
   have htopC : supp (sofaCap S) (π / 2) = 1 :=
     (sofaCap_upper_support hS hne hstrip htop ⟨by positivity, by linarith [pi_pos]⟩).trans htop
-  obtain ⟨p, hp⟩ := hneC
+  obtain ⟨p, hp⟩ := id hneC
   have hfloor : (p.1, 0) ∈ sofaCap S := sofaCap_down hp le_rfl hp.1
   have hbottom : supp (sofaCap S) (3 * π / 2) = 0 := by
     apply le_antisymm
@@ -105,20 +106,20 @@ theorem sofaCap_isCap {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
         apply Or.inl
         by_cases ht : t.1 ≤ π / 2
         · exact Or.inl ⟨t.2.1, ht⟩
-        · exact Or.inr ⟨(not_le.mp ht).le, by linarith [t.2.2]⟩
+        · exact Or.inr ⟨(not_le.mp ht).le, show t.1 ≤ π / 2 + π / 2 by linarith [t.2.2]⟩
     · ext q
       simp only [mem_iInter]
       constructor
       · intro h i
         cases i with
-        | none => simpa only [Option.elim_none, halfMinus, mem_setOf_eq,
-            dot_uvec_three_pi_div_two, neg_le_zero] using h.1
+        | none => simpa only [Option.elim_none, halfMinus, mem_ofPred_eq,
+            dot_uvec_three_pi_div_two, neg_nonpos] using h.1
         | some t => exact h.2 t.1 t.2
       · intro h
         have hf := h none
         have hf' : 0 ≤ q.2 := by
-          simpa only [Option.elim_none, halfMinus, mem_setOf_eq,
-            dot_uvec_three_pi_div_two, neg_le_zero] using hf
+          simpa only [Option.elim_none, halfMinus, mem_ofPred_eq,
+            dot_uvec_three_pi_div_two, neg_nonpos] using hf
         exact ⟨hf', fun t ht => h (some ⟨t, ht⟩)⟩
 
 @[simp] theorem sofaCap_of_cap {K : Set Point} (hK : IsCap K (π / 2)) : sofaCap K = K := by
@@ -156,7 +157,8 @@ theorem sofaCap_partial_constraints {S : Set Point} {ω : ℝ}
   have hcpt := ms_isCompact_of_isMovingSofaWithAngle hS
   have hne := hS.2.1.nonempty
   have hstrip := moving_strip_of_top ⟨ω, hS⟩ htop
-  have hs := sofaCap_upper_support hcpt hne hstrip htop
+  have hs : ∀ {t : ℝ}, t ∈ Icc (0 : ℝ) π → supp (sofaCap S) t = supp S t :=
+    sofaCap_upper_support hcpt hne hstrip htop
   refine ⟨subset_sofaCap hcpt hstrip, ?_, ?_⟩
   · intro p hp t ht
     have h0 := moving_hallway_slacks hS hp ht

@@ -5,9 +5,9 @@ public import MovingSofaStability.CutSeparation
 /-!
 # Wedges and tail areas under the weaker cut-separation hypothesis
 
-Uncompiled proof source. These are the geometric parts of source Lemmas
-8.1.6 and 8.2.2. Their actual hypotheses are separated cut corners, canonical
-endpoint contacts, and finite niche area; no global injectivity is required.
+These are the geometric parts of source Lemmas 8.1.6 and 8.2.2. Their actual
+hypotheses are separated cut corners, canonical endpoint contacts, and finite
+niche area; no global injectivity is required.
 -/
 
 @[expose] public section

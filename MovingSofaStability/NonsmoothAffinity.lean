@@ -5,8 +5,8 @@ public import MovingSofaStability.NonsmoothBookkeeping
 /-!
 # The affine cap remainder on all normalized caps
 
-Uncompiled proof source. The atom-aware decomposition and the bounded-variation
-curve argument remove all Ki assumptions from the affine part of Q.
+The atom-aware decomposition and the bounded-variation curve argument remove all
+Ki assumptions from the affine part of Q.
 -/
 
 @[expose] public section

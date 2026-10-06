@@ -2,13 +2,14 @@
 
 [Back to the README](../README.md)
 
-The project has three libraries, one per result, and the files of the Palomar registry at its root.
+The project has four libraries, one per result, and the files of the Palomar registry at its root.
 
 | Path | Contents |
 | --- | --- |
 | [`MovingSofaOptimality/`](../MovingSofaOptimality) | Baek's paper: every numbered result, the results it cites, and the structure of Gerver's sofa |
 | [`MovingSofaUniqueness/`](../MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions |
 | [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
+| [`MovingSofaStability/`](../MovingSofaStability) | the stability of Gerver's sofa, with Baek's definitions, and the punctured sofas that show its exponent is optimal |
 | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
 | [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configuration and the Palomar metadata |
@@ -16,7 +17,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
-| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof and ChatGPT Pro's notes |
+| [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, and ChatGPT Pro 6's notes on the uniqueness and on the stability |
 | [`scripts/`](../scripts) | the axiom audits, the generators of two Lean files, the figures, and the documentation tools |
 
 ### `MovingSofaOptimality/`: Baek's paper
@@ -88,6 +89,22 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 | [`MovingSofaBridge/RomikParams.lean`](../MovingSofaBridge/RomikParams.lean) | Gerver's four constants and Romik's parameters; the constants exist |
 | [`MovingSofaBridge/Motion.lean`](../MovingSofaBridge/Motion.lean) | the two notions of moving sofa agree, and so do the two optimal areas |
 | [`MovingSofaBridge/GerverSofa.lean`](../MovingSofaBridge/GerverSofa.lean) | the two Gerver's sofas are the same set |
+
+### `MovingSofaStability/`: the stability
+
+[Stability](stability.md) describes the theorems and the proof. The modules, by step of the proof:
+
+| Modules | Content |
+| --- | --- |
+| `EuclideanGeometry`, `Statement`, `All` | Euclidean distance between sets, the statements, and the module that imports all the others |
+| `QuadraticDeficit`, `MamikonEnergy`, `BaekDeficit`, `WideDomain`, `CBVAlgebra`, `ArcAtoms`, `NonsmoothBookkeeping`, `NonsmoothAffinity`, `WideConcavity`, `MixedArea`, `ReferenceCoreVariation`, `WideFirstVariation`, `WideGerverCertificate`, `WideResidualEnergy` | the deficit of Baek's bound 𝒬 on an enlarged domain of caps with corners: a dual slack plus six squared Mamikon differences |
+| `IntegralEstimates`, `Residuals`, `ODEReconstruction`, `ResidualIntegrability`, `ResidualMass`, `ResidualPropagation`, `FourArcCoercivity`, `CapCoercivity`, `SupportDistance`, `CapDistance` | from the energies to the support function of the cap and the Euclidean distance between caps, with coefficient 80 |
+| `GreenNorm`, `SharpIntegralControl`, `TrigKernelIntegrals`, `SharpReconstruction`, `SharpKernelNorms`, `SharpEvaluation`, `SharpCapDistance` | the same with coefficient 2 sec φ, by the exact kernel integrals |
+| `ExposedFaceStability`, `LocalArmMargins`, `CoreMonotonicity`, `UniformGeometryBounds`, `AngularFaceStability`, `NicheFeet`, `NicheContainment`, `CapWidthGeometry`, `CanonicalContacts`, `CanonicalTriple`, `CornerAnalysis`, `CoreGraph`, `CoreIntegral`, `CutSeparation`, `SeparatedWedges`, `CoreRegionGeometry`, `CoreAreaBound`, `LocalUpperBound` | Baek's area bound for the caps near Gerver's, without the injectivity condition |
+| `TerminalBookkeeping`, `FloorCoverage`, `PartialHallways`, `OmittedWedgeArea`, `TerminalFloor`, `TerminalComparison` | a missing final angle costs area |
+| `CapShape`, `MissingAreaRecovery`, `InteriorBalls`, `EpigraphBalls`, `CurveRoof`, `EnvelopeSlope`, `RoofGeometry`, `GerverRoof`, `RoofMargins`, `EnvelopeSlack`, `GerverMargins`, `SofaCoordinates`, `SofaCap`, `LocalSofaRecovery`, `ConvexParallelArea`, `SymmetricDifference` | from the cap back to the sofa: the sofa's cap, Gerver's roof and interior balls, the Euclidean distance and the symmetric difference |
+| `CompactSetLimits`, `SofaBounds`, `SofaLimitMotion`, `QualitativeEntry`, `GlobalStability` | entry into the neighborhood by compactness, and the main theorems |
+| `PunctureTopology`, `EuclideanDisks`, `PunctureMetric`, `RigidInterior`, `PuncturedSofa`, `SharpExponent` | the punctured sofas: the exponent one half is optimal |
 
 ### `scripts/`
 

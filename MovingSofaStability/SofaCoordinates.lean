@@ -5,9 +5,9 @@ public import MovingSofaStability.TerminalComparison
 /-!
 # Coordinates inherited from a genuine moving sofa
 
-Uncompiled proof source. Supporting hallways and the terminal lower wall are
-derived from the given movement. The initial normalization is a translation,
-not a rotation of a set that might no longer satisfy the original convention.
+Supporting hallways and the terminal lower wall are derived from the given
+movement. The initial normalization is a translation, not a rotation of a set
+that might no longer satisfy the original convention.
 -/
 
 @[expose] public section
@@ -58,7 +58,7 @@ theorem moving_terminal_projection {S : Set Point} {ω : ℝ}
   have hp' := hm.finish p hp
   have hq' := hm.finish q hq
   rw [hm.angle_one] at hp' hq'
-  simp only [vertSide, mem_setOf_eq, Prod.fst_add, ms_rot_neg_fst] at hp' hq'
+  simp only [vertSide, mem_ofPred_eq, Prod.fst_add, ms_rot_neg_fst] at hp' hq'
   rw [dot_sub_left]
   linarith [hp'.1, hq'.2.1]
 
@@ -135,12 +135,12 @@ theorem pinned_maximizer_eq_gerver {P : GerverParams} (hP : P.IsSolution) (hbox 
   have hv := congrArg (fun T => supp T (π / 2)) hw
   have hl := congrArg (fun T => supp T π) hw
   rw [Rigid.coe_translate, supp_translate S _ _ hcompact hne, htop,
-    ← gerver_upper_support hP hbox ⟨by positivity, by linarith [pi_pos]⟩,
+    ← gerver_upper_support hP hbox (t := π / 2) ⟨by positivity, by linarith [pi_pos]⟩,
     gm_supp_cap_pi_div_two hP hbox, dot_uvec_pi_div_two] at hv
   rw [Rigid.coe_translate, supp_translate S _ _ hcompact hne, hleft] at hl
   simp only [dot, uvec_pi] at hl
-  have hw0 : w = 0 := by ext <;> linarith
+  have hw0 : w = 0 := by ext <;> simp only [Prod.fst_zero, Prod.snd_zero] <;> linarith
   rw [hw0, Rigid.coe_translate] at hw
-  simpa only [add_zero, image_id] using hw
+  simpa only [add_zero, image_id'] using hw
 
 end MovingSofaStability

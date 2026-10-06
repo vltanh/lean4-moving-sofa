@@ -6,10 +6,10 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 /-!
 # Analysis of nonsmooth corner paths
 
-Uncompiled proof source. The corner velocity is expressed through the
-measurable right derivative of a convex support. It is bounded and integrable.
-The right-derivative fundamental theorem then identifies the curve's vector
-measure with its density, without a C1 assumption on the cap.
+The corner velocity is expressed through the measurable right derivative of a
+convex support. It is bounded and integrable. The right-derivative fundamental
+theorem then identifies the curve's vector measure with its density, without a
+C1 assumption on the cap.
 -/
 
 @[expose] public section
@@ -52,6 +52,7 @@ theorem cornerRightVelocity_bound {K : Set Point} (hK : IsConvexBody K) :
   have hfplus : ∀ t, |fPlus K t - 1| ≤ 2 * R + 1 := by
     intro t
     rw [inj_fPlus_eq]
+    change |supp K (t + π / 2) - opt_g K t - 1| ≤ 2 * R + 1
     have h1 := abs_sub (supp K (t + π / 2)) (opt_g K t)
     have h2 := abs_sub (supp K (t + π / 2) - opt_g K t) 1
     have hs := support_abs_le_radius hK hradius (t + π / 2)
@@ -61,6 +62,7 @@ theorem cornerRightVelocity_bound {K : Set Point} (hK : IsConvexBody K) :
   have hgplus : ∀ t, |gPlus K t - 1| ≤ 2 * R + 1 := by
     intro t
     rw [inj_gPlus_eq]
+    change |supp K t + opt_g K (t + π / 2) - 1| ≤ 2 * R + 1
     have h1 := abs_add_le (supp K t) (opt_g K (t + π / 2))
     have h2 := abs_sub (supp K t + opt_g K (t + π / 2)) 1
     have hs := support_abs_le_radius hK hradius t
@@ -81,7 +83,7 @@ theorem cornerRightVelocity_intervalIntegrable {K : Set Point} (hK : IsConvexBod
     (fun t => (abs_fst_le_norm2 _).trans (hbound t)) a b
   have hi2 := opt_intervalIntegrable_of_bound hm.snd
     (fun t => (abs_snd_le_norm2 _).trans (hbound t)) a b
-  exact hi1.prodMk hi2
+  exact ⟨hi1.1.prodMk hi2.1, hi1.2.prodMk hi2.2⟩
 
 /-- A corner path is the primitive of its right velocity on every compact interval. -/
 theorem corner_primitive {K : Set Point} (hK : IsCap K (π / 2))

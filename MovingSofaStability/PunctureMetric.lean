@@ -5,9 +5,9 @@ public import MovingSofaStability.EuclideanDisks
 /-!
 # Puncture distance and inherited motion
 
-Uncompiled proof source. The identity alignment attains distance r. The lower
-bound applies against any comparison set containing the removed center; the
-rigid-orbit lemma supplies that hypothesis for close rigid copies later.
+The identity alignment attains distance r. The lower bound applies against any
+comparison set containing the removed center; the rigid-orbit lemma supplies
+that hypothesis for close rigid copies later.
 -/
 
 @[expose] public section
@@ -29,7 +29,7 @@ theorem exists_sphere_point_near (p : Point) {r : ℝ} (hr : 0 < r)
   let n := norm2 u
   have hn : 0 < n := by
     have hne : euclideanDist x p ≠ 0 := by
-      simpa only [euclideanDist_eq_zero_iff] using hxp
+      simpa only [ne_eq, euclideanDist_eq_zero_iff] using hxp
     exact lt_of_le_of_ne (norm2_nonneg u) (Ne.symm hne)
   have hnr : n ≤ r := by
     simpa only [n, u, euclideanDist, show x - p = -(p - x) by abel, norm2_neg] using hx
@@ -79,7 +79,7 @@ theorem puncture_exact_radius {S : Set Point} {p : Point} {r : ℝ}
     (hr : 0 < r) (hball : euclideanBall p r ⊆ S) :
     EuclideanClose r (puncture S p r) S ∧
       ∀ d, EuclideanClose d (puncture S p r) S → r ≤ d := by
-  have hp : p ∈ S := hball (by simpa only [euclideanBall, mem_setOf_eq, euclideanDist_self] using hr.le)
+  have hp : p ∈ S := hball (by simpa only [euclideanBall, mem_ofPred_eq, euclideanDist_self] using hr.le)
   exact ⟨puncture_euclideanClose hr hball, fun _ h => puncture_radius_le_of_center_mem hp h⟩
 
 /-- A closed connected subset inherits precisely the same movement. -/
@@ -103,7 +103,7 @@ theorem puncture_movingWithAngle {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) {p : Point} {r : ℝ} (hr : 0 < r)
     (hball : euclideanBall p r ⊆ S) : IsMovingSofaWithAngle (puncture S p r) ω := by
   exact moving_subset_of_closed_connected hS sdiff_subset
-    (hS.1.diff (openEuclideanBall_isOpen p r)) (puncture_connected hS.1 hS.2.1 hr hball)
+    (hS.1.sdiff (openEuclideanBall_isOpen p r)) (puncture_connected hS.1 hS.2.1 hr hball)
 
 theorem puncture_moving {S : Set Point} (hS : IsMovingSofa S)
     {p : Point} {r : ℝ} (hr : 0 < r) (hball : euclideanBall p r ⊆ S) :

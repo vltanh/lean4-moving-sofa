@@ -5,10 +5,10 @@ public import MovingSofaStability.LocalArmMargins
 /-!
 # Core monotonicity without differentiating through curvature atoms
 
-Uncompiled proof source. The one-sided fundamental theorem bounds increments
-by a constant derivative bound; no integrability or continuity of the competing
-right derivative is presumed. This is enough for a strictly monotone core graph
-and for the local cut-separation argument.
+The one-sided fundamental theorem bounds increments by a constant derivative
+bound; no integrability or continuity of the competing right derivative is
+presumed. This is enough for a strictly monotone core graph and for the local
+cut-separation argument.
 -/
 
 @[expose] public section
@@ -30,7 +30,11 @@ theorem corner_hasRightDeriv {K : Set Point} (hK : IsCap K (π / 2)) (t : ℝ) :
 theorem hasRightDeriv_dot_uvec {x dx : ℝ → Point} {t d : ℝ}
     (h : HasDerivWithinAt x (dx t) (Ioi t) t) :
     HasDerivWithinAt (fun s => dot (x s) (uvec d)) (dot (dx t) (uvec d)) (Ioi t) t := by
-  exact (h.fst.mul_const (cos d)).add (h.snd.mul_const (sin d))
+  have h1 : HasDerivWithinAt (fun s => (x s).1) (dx t).1 (Ioi t) t :=
+    (hasFDerivAt_fst (𝕜 := ℝ) (p := x t)).comp_hasDerivWithinAt t h
+  have h2 : HasDerivWithinAt (fun s => (x s).2) (dx t).2 (Ioi t) t :=
+    (hasFDerivAt_snd (𝕜 := ℝ) (p := x t)).comp_hasDerivWithinAt t h
+  exact (h1.mul_const (cos d)).add (h2.mul_const (sin d))
 
 /-- The constant comparison version of the one-sided fundamental theorem. -/
 theorem right_derivative_increment_le {f df : ℝ → ℝ} {a b B : ℝ}
@@ -47,6 +51,7 @@ theorem right_derivative_increment_ge {f df : ℝ → ℝ} {a b B : ℝ}
     (hB : ∀ t ∈ Ioo a b, B ≤ df t) : B * (b - a) ≤ f b - f a := by
   have h := right_derivative_increment_le hab hf.neg
     (fun t ht => (hd t ht).neg) (B := -B) (fun t ht => neg_le_neg (hB t ht))
+  simp only [Pi.neg_apply] at h
   linarith
 
 theorem sin_add_cos_ge_one {t : ℝ} (ht : t ∈ Icc (0 : ℝ) (π / 2)) :

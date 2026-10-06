@@ -1,12 +1,12 @@
-# Optimality and uniqueness of Gerver's sofa, in Lean 4
+# Optimality, uniqueness and stability of Gerver's sofa, in Lean 4
 
 [![Lean Action CI](https://github.com/vltanh/lean4-moving-sofa/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/vltanh/lean4-moving-sofa/actions/workflows/lean_action_ci.yml)
 [![Palomar](https://img.shields.io/badge/Palomar-registered-blue)](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008)
 
 The moving sofa problem asks for the largest area of a shape that can be moved around the
 right-angled corner of a hallway of unit width. This repository proves, in Lean 4 with Mathlib, that
-Gerver's sofa, of area 2.21953…, has the largest area, and that it is the only shape that does, up to
-rigid motions:
+Gerver's sofa, of area 2.21953…, has the largest area, that it is the only shape that does, up to
+rigid motions, and that shapes of nearly the largest area are close to it:
 
 - **optimality:** the whole of Jineon Baek's proof, *Optimality of Gerver's Sofa*
   ([arXiv:2411.19826v1](https://arxiv.org/abs/2411.19826v1)), with the results it takes from the literature and the
@@ -19,6 +19,11 @@ rigid motions:
   properties that Baek's proof derives from the balance of one particular cap. With Gerver's cap as a competitor,
   this proves Baek's theorem again without Baek's Theorem 1.1.1 ([`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](MovingSofaUniqueness/Optimality.lean#L141)),
   and the uniqueness from it;
+- **stability:** a moving sofa whose area is ε less than Gerver's is, after a translation, within `C√ε` of
+  Gerver's sofa in the Euclidean Hausdorff distance, and the area of its symmetric difference with Gerver's sofa
+  is at most `C'√ε`; the exponent 1/2 cannot be improved ([docs/stability.md](docs/stability.md)). Baek's paper does
+  not prove this either. The argument and its Lean code were written by ChatGPT Pro 6 for this repository (pull
+  request #8), compiled here, and have not been peer reviewed;
 - **the bridge to formal-conjectures:** formal-conjectures states the problem with definitions of its
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
   Baek's. Its statements, the open one included, follow from the optimality and the uniqueness.
@@ -68,7 +73,7 @@ sofa constant, the supremum of their areas; and Gerver's sofa, from Gerver's fou
 
 More on each theorem: [docs/results.md](docs/results.md).
 
-[`Solution.lean`](Solution.lean) proves the twelve theorems of [`Challenge.lean`](Challenge.lean). The three main ones:
+[`Solution.lean`](Solution.lean) proves the fifteen theorems of [`Challenge.lean`](Challenge.lean). The four main ones:
 
 ```lean
 theorem Baek.gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
@@ -78,20 +83,31 @@ theorem Baek.gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.
     (S : Set (ℝ × ℝ)) (hS : IsMovingSofa S) (harea : volume S = volume (gerverSofa P)) :
     ∃ (θ : ℝ) (v : ℝ × ℝ), (fun p => rot θ p + v) '' S = gerverSofa P
 
+theorem Baek.gerver_sofa_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ∃ C C' ε₀ : ℝ, 0 < C ∧ 0 < C' ∧ 0 < ε₀ ∧
+      ∀ S, IsMovingSofa S → sofaDeficit P S < ε₀ →
+        EuclideanClose (C * √(sofaDeficit P S)) (normalizedSofa P S) (gerverSofa P) ∧
+        (volume (normalizedSofa P S ∆ gerverSofa P)).toReal ≤ C' * √(sofaDeficit P S)
+
 theorem FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa
     (s : Set ℝ²) (hs : ∃ m, IsMovingSofa s m) :
     volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa
 ```
 
 - In `Baek`: Romik's equations have exactly one solution in a small box around Romik's numerical
-  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L328), [`Baek.gerver_params_unique`](Challenge.lean#L332)). Its area lies
-  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L338)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L344), Baek's Theorem
-  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L351)).
-- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L363)), the sofa constant is
-  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L371)), and the two Gerver's sofas
-  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L379)).
+  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L368), [`Baek.gerver_params_unique`](Challenge.lean#L372)). Its area lies
+  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L378)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L384), Baek's Theorem
+  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L391)). A moving sofa whose area is ε less
+  than Gerver's is, once translated, within `C√ε` of it ([`Baek.gerver_sofa_stable`](Challenge.lean#L401)) and turns through at
+  least `π/2 - Cε` ([`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411)), and no rate `C εᵃ` with `a > 1/2` holds
+  ([`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)).
+- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L435)), the sofa constant is
+  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L443)), and the two Gerver's sofas
+  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L451)).
 - In `FormalConjectures.MovingSofa`: formal-conjectures' four statements, among them the open one
   above, derived from the theorems of `Baek` and `Bridge`.
+
+[docs/stability.md](docs/stability.md) states the stability theorems with the library's own forms.
 
 ## Proof outline
 
@@ -111,6 +127,11 @@ declarations: [docs/proof/](docs/proof/README.md).
   the limit as bounds on curvature, which give the given sofa both properties. Equality in Baek's
   bound then forces equality in each of Mamikon's terms, which makes the monotone sofa a horizontal
   translate of Gerver's; Gerver's sofa is the closure of its interior, which recovers the given set.
+- **Stability** ([docs/stability.md](docs/stability.md)). Baek's bound 𝒬 extends to caps with corners, and
+  its deficit is a sum of squared differences that bounds the distance between the cap and Gerver's. Near
+  Gerver's sofa a local form of Baek's area bound holds without the injectivity condition, a missing final
+  angle costs area, and the margins and interior balls of Gerver's sofa carry these bounds from the cap to the
+  sofa itself. Compactness and the uniqueness bring every sofa of small deficit into that neighborhood.
 - **The bridge** ([Chapter 13](docs/proof/13-bridge.md), [Appendix A](docs/proof/appendix-a.md)). A continuous path of isometries
   from the identity consists of rotations whose angle lifts to a continuous function, which matches
   the two notions of moving sofa. Gerver's four constants are unique by elementary inequalities; they
@@ -161,9 +182,9 @@ or counterexample has appeared; the other formalizations, like this audit, found
 errors and gaps in its proofs. Since it appeared, two other Lean formalizations and this one have
 verified its result, and preprints have studied a three-dimensional sofa by computer search,
 rectangular sofas, and corridors with other corner angles. The report's
-[What's next](REPORT.md#10-whats-next) also lists open directions (stability, other angles, the
-ambidextrous sofa) and simpler arguments for several of Baek's proofs that came up while formalizing
-them.
+[What's next](REPORT.md#10-whats-next) also lists open directions (other angles, the ambidextrous sofa, and
+stability, which this repository now proves: [docs/stability.md](docs/stability.md)) and simpler arguments for several
+of Baek's proofs that came up while formalizing them.
 
 ## Layout
 
@@ -178,10 +199,12 @@ MovingSofaOptimality/     Baek's paper, one directory per chapter, with External
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
                           second proof of Baek's theorem (Maximizers, Optimality, Alternative)
 MovingSofaBridge/         the bridge to formal-conjectures' definitions
+MovingSofaStability/      the stability of Gerver's sofa, and the punctured sofas that show
+                          that its exponent is optimal
 REPORT.md                 the audit of Baek's paper
 docs/                     these pages, the illustrated text (docs/proof/), the
                           manuscript (docs/paper/) and the archived notes of the
-                          uniqueness proof (docs/archive/)
+                          uniqueness and stability proofs (docs/archive/)
 scripts/                  the axiom audits, generators, documentation tools, figures
 ```
 
@@ -199,8 +222,8 @@ lake env lake comparator --config=comparator.json
 ```
 
 The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean-toolchain) and [`lake-manifest.json`](lake-manifest.json).
-`lake build` succeeds, and its only `sorry`s are the twelve statements of [`Challenge.lean`](Challenge.lean). The audit
-checks that every declaration of the three libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
+`lake build` succeeds, and its only `sorry`s are the fifteen statements of [`Challenge.lean`](Challenge.lean). The audit
+checks that every declaration of the four libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
 results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
 that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean). A second audit checks that the second proof
@@ -213,8 +236,9 @@ The library is registered in the [Palomar](https://palomar-registry.org) registr
 [PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008): version 1 registers the optimality (commit `d0b42d2`),
 version 2 adds the uniqueness (commit `cf4feff`), version 3 adds the bridge to formal-conjectures, which brings the
 Challenge to twelve theorems (commit `eb93296`), and version 4 registers the simplified proofs that follow Baek's
-arguments (commit `16653ae`). Palomar checks the proofs against
-[`Challenge.lean`](Challenge.lean), which imports only Mathlib; [`comparator.json`](comparator.json) selects its twelve theorems, and
+arguments (commit `16653ae`). The three stability theorems, which bring the Challenge to fifteen, are not registered
+yet. Palomar checks the proofs against
+[`Challenge.lean`](Challenge.lean), which imports only Mathlib; [`comparator.json`](comparator.json) selects its fifteen theorems, and
 [`formalization.yaml`](formalization.yaml) records provenance, authorship and AI use. The workflow
 [`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's mechanical verification on a commit
 ([verification](docs/verification.md#continuous-integration-and-the-palomar-preflight)).
@@ -233,6 +257,9 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
   The-Anh Vu-Le, who directed it.
 - ChatGPT Pro 6 also wrote, in Lean, the second proof of Baek's theorem (pull request #5, 5 October
   2026); it compiled without change, and Claude Opus 5.5 merged it and extended its audit.
+- ChatGPT Pro 6 also wrote the stability argument and its Lean code, without compiling it (pull request
+  #8, 5 October 2026). Claude Opus 5.5, with 16 sub-agents, made the code compile: 123 of its proofs
+  failed, and twenty of its lemmas had lost their hypotheses ([docs/stability.md](docs/stability.md)).
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took eight
   rounds between 1 and 3 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

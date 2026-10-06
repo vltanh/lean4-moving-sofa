@@ -5,9 +5,9 @@ public import MovingSofaStability.SharpKernelNorms
 /-!
 # Sharp evaluation of the four residuals
 
-Uncompiled proof source. Kernel norms and residual energies are kept separate.
-The two pieces of r4 on the middle arc are recombined using their disjoint
-integration intervals, so the same energy is not counted twice.
+Kernel norms and residual energies are kept separate. The two pieces of r4 on
+the middle arc are recombined using their disjoint integration intervals, so the
+same energy is not counted twice.
 -/
 
 @[expose] public section
@@ -21,12 +21,16 @@ section Evaluation
 
 variable {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 variable {f df : ℝ → ℝ} (H : FourResidualData φ f df)
+-- The statements below do not mention these hypotheses, so each theorem includes the ones
+-- it uses explicitly.
 
+include H in
 theorem sharp_last_control {t : ℝ} (ht : t ∈ Icc (π / 2) π) :
     SquareControl (f t) (-sin t * cos t) (arcSquare (π / 2) π (tangentResidual π f df)) := by
   by_cases htπ : t = π
   · simpa only [htπ, H.left_zero, sin_pi, neg_zero, zero_mul] using
-      SquareControl.zero (arcSquare_nonneg (by linarith [pi_pos] : π / 2 ≤ π) (tangentResidual π f df))
+      SquareControl.zero
+        (arcSquare_nonneg (by linarith [pi_pos] : π / 2 ≤ π) (tangentResidual π f df))
   have htt : t ∈ Ico (π / 2) π := ⟨ht.1, lt_of_le_of_ne ht.2 htπ⟩
   have hs : ∀ u ∈ Icc (π / 2) t, sin u ≠ 0 := by
     intro u hu
@@ -41,6 +45,7 @@ theorem sharp_last_control {t : ℝ} (ht : t ∈ Icc (π / 2) π) :
   rw [← sharp_last_formula H htt, hn] at hI
   exact hI.mono_energy (arcSquare_mono H.last_sq le_rfl ht.1 ht.2)
 
+include hφ H in
 theorem sharp_third_control {t : ℝ} (ht : t ∈ Icc (π / 2 - φ) (π / 2)) :
     SquareControl (f t) (sin t * cos t + 2 * tan φ * cos t ^ 2)
       (arcSquare (π / 2 - φ) (π / 2) (tangentResidual (π - φ) f df) +
@@ -64,6 +69,7 @@ theorem sharp_third_control {t : ℝ} (ht : t ∈ Icc (π / 2 - φ) (π / 2)) :
   have hsub := arcSquare_mono H.third_sq ht.1 ht.2 le_rfl
   linarith
 
+include hφ H in
 theorem sharp_middle_control {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
     SquareControl (f t) (cos t * (2 / cos φ - sin t))
       (arcSquare φ (π / 2 - φ) (cornerResidual f df) +
@@ -120,6 +126,7 @@ theorem sharp_middle_control {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
   have h4 := arcSquare_mono H.last_sq le_rfl hvT hT
   linarith
 
+include hφ H in
 theorem sharp_first_control {t : ℝ} (ht : t ∈ Icc 0 φ) :
     SquareControl (f t) (cos t ^ 2 * (2 * (1 / cos φ) ^ 2 - tan t))
       (2 * fourResidualEnergy φ f df) := by
@@ -144,6 +151,7 @@ theorem sharp_first_control {t : ℝ} (ht : t ∈ Icc 0 φ) :
   unfold fourResidualEnergy
   linarith
 
+include hφ H in
 /-- The actual square-integral norm at every evaluation point. -/
 theorem sharp_green_control {t : ℝ} (ht : t ∈ Icc 0 π) :
     SquareControl (f t) (greenNormSquared φ t) (2 * fourResidualEnergy φ f df) := by
@@ -155,7 +163,7 @@ theorem sharp_green_control {t : ℝ} (ht : t ∈ Icc 0 π) :
   have e3 := arcSquare_nonneg (by linarith : π / 2 - φ ≤ π / 2) (tangentResidual (π - φ) f df)
   have e4 := arcSquare_nonneg (by linarith : π / 2 ≤ π) (tangentResidual π f df)
   by_cases h1 : t ≤ φ
-  · simpa only [greenNormSquared, if_pos h1] using sharp_first_control hφ H ⟨ht.1, h1⟩
+  · simpa only [greenNormSquared, ite_eq_left h1] using sharp_first_control hφ H ⟨ht.1, h1⟩
   by_cases h2 : t ≤ π / 2 - φ
   · have hc := sharp_middle_control hφ H ⟨(not_le.mp h1).le, h2⟩
     have henergy : arcSquare φ (π / 2 - φ) (cornerResidual f df) +
@@ -163,25 +171,29 @@ theorem sharp_green_control {t : ℝ} (ht : t ∈ Icc 0 π) :
         arcSquare (π / 2) π (tangentResidual π f df) ≤ 2 * fourResidualEnergy φ f df := by
       unfold fourResidualEnergy
       linarith
-    simpa only [greenNormSquared, if_neg h1, if_pos h2] using hc.mono_energy henergy
+    simpa only [greenNormSquared, ite_eq_right h1, ite_eq_left h2] using hc.mono_energy henergy
   by_cases h3 : t ≤ π / 2
   · have hc := sharp_third_control hφ H ⟨(not_le.mp h2).le, h3⟩
     have henergy : arcSquare (π / 2 - φ) (π / 2) (tangentResidual (π - φ) f df) +
         arcSquare (π / 2) π (tangentResidual π f df) ≤ 2 * fourResidualEnergy φ f df := by
       unfold fourResidualEnergy
       linarith
-    simpa only [greenNormSquared, if_neg h1, if_neg h2, if_pos h3] using hc.mono_energy henergy
+    simpa only [greenNormSquared, ite_eq_right h1, ite_eq_right h2, ite_eq_left h3] using
+      hc.mono_energy henergy
   · have hc := sharp_last_control H ⟨(not_le.mp h3).le, ht.2⟩
-    have henergy : arcSquare (π / 2) π (tangentResidual π f df) ≤ 2 * fourResidualEnergy φ f df := by
+    have henergy :
+        arcSquare (π / 2) π (tangentResidual π f df) ≤ 2 * fourResidualEnergy φ f df := by
       unfold fourResidualEnergy
       linarith
-    simpa only [greenNormSquared, if_neg h1, if_neg h2, if_neg h3] using hc.mono_energy henergy
+    simpa only [greenNormSquared, ite_eq_right h1, ite_eq_right h2, ite_eq_right h3] using
+      hc.mono_energy henergy
 
+include hφ H in
 /-- The coefficient is 2/cos(phi), not the earlier non-sharp 80. -/
 theorem sharp_four_arc_coercivity {t : ℝ} (ht : t ∈ Icc 0 π) :
     |f t| ≤ (2 / cos φ) * sqrt (fourResidualEnergy φ f df) := by
   have hc := (sharp_green_control hφ H ht).mono_kernel (greenNormSquared_le hφ ht)
-  apply green_evaluation_from_squared hφ (fourResidualEnergy_nonneg hφ f df)
+  apply green_evaluation_from_squared hφ
   nlinarith only [hc.bound]
 
 end Evaluation

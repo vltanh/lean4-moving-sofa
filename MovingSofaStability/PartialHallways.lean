@@ -5,9 +5,9 @@ public import MovingSofaStability.FloorCoverage
 /-!
 # Partial-angle shapes and the omitted wedges
 
-Uncompiled proof source. The partial shape is an over-envelope of a sofa
-whose rotation stops at omega. It need not be a full-angle moving sofa.
-The difference from the full-angle shape is retained explicitly.
+The partial shape is an over-envelope of a sofa whose rotation stops at omega.
+It need not be a full-angle moving sofa. The difference from the full-angle
+shape is retained explicitly.
 -/
 
 @[expose] public section
@@ -39,7 +39,7 @@ theorem partialNiche_measurable (K : Set Point) (ω : ℝ) : MeasurableSet (part
   have he : partialNiche K ω = {p : Point | 0 ≤ p.2} ∩
       ⋃ t ∈ Ioo (0 : ℝ) ω, {p : Point | innerSlackU K t p < 0 ∧ innerSlackV K t p < 0} := by
     ext p
-    simp only [partialNiche, mem_inter_iff, mem_setOf_eq, mem_iUnion, exists_prop]
+    simp only [partialNiche, mem_inter_iff, mem_ofPred_eq, mem_iUnion, exists_prop]
   rw [he]
   apply MeasurableSet.inter (isClosed_le continuous_const continuous_snd).measurableSet
   apply IsOpen.measurableSet
@@ -47,8 +47,10 @@ theorem partialNiche_measurable (K : Set Point) (ω : ℝ) : MeasurableSet (part
   intro t
   apply isOpen_iUnion
   intro ht
-  exact (isOpen_lt (by unfold innerSlackU; fun_prop) continuous_const).inter
-    (isOpen_lt (by unfold innerSlackV; fun_prop) continuous_const)
+  exact (isOpen_lt (f := fun p : Point => innerSlackU K t p)
+    (by unfold innerSlackU dot; fun_prop) continuous_const).inter
+    (isOpen_lt (f := fun p : Point => innerSlackV K t p)
+      (by unfold innerSlackV dot; fun_prop) continuous_const)
 
 theorem partialShape_measurable {K : Set Point} (hK : IsConvexBody K) (ω : ℝ) :
     MeasurableSet (partialShape K ω) :=
@@ -108,7 +110,7 @@ theorem late_corner_height {K : Set Point} (hK : IsCap K (π / 2)) {R : ℝ}
     exact sin_le (by linarith [ht.2])
   have h1 := mul_le_mul_of_nonneg_right hfirst hsin0
   have h2 := mul_le_mul_of_nonneg_left (sin_le_one t)
-    (show 0 ≤ 2 * R * (π / 2 - t) by positivity)
+    (show 0 ≤ 2 * R * (π / 2 - t) from mul_nonneg (by linarith) (sub_nonneg.mpr ht.2))
   have h3 := mul_le_mul_of_nonneg_right (show supp K (t + π / 2) - 1 ≤ R + 1 by linarith) hcos0
   have h4 := mul_le_mul_of_nonneg_left hcos (show 0 ≤ R + 1 by linarith)
   rw [proposition2_2_2_innerCorner]
@@ -117,8 +119,7 @@ theorem late_corner_height {K : Set Point} (hK : IsCap K (π / 2)) {R : ℝ}
 
 /-- All omitted wedges lie in a thin horizontal slab. -/
 theorem omittedWedges_height {K : Set Point} (hK : IsCap K (π / 2)) {R ω : ℝ}
-    (hR : 1 ≤ R) (hradius : ∀ p ∈ K, norm2 p ≤ R)
-    (hω : ω ∈ Icc (0 : ℝ) (π / 2)) :
+    (hR : 1 ≤ R) (hradius : ∀ p ∈ K, norm2 p ≤ R) :
     ∀ p ∈ omittedWedges K ω, p.2 ∈ Icc (0 : ℝ) ((3 * R + 1) * (π / 2 - ω)) := by
   intro p hp
   obtain ⟨-, hy, t, ht, hωt, hu, hv⟩ := omittedWedges_witness hp

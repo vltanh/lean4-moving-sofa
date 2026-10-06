@@ -6,9 +6,9 @@ public import MovingSofaStability.CapDistance
 /-!
 # The improved Euclidean cap-distance certificate
 
-Uncompiled proof source. The actual Mamikon residuals satisfy the analytic
-hypotheses, and their square integrals are identified before applying the sharp
-four-arc estimate. No kernel-reconstruction premise remains in these theorems.
+The actual Mamikon residuals satisfy the analytic hypotheses, and their square
+integrals are identified before applying the sharp four-arc estimate. No
+kernel-reconstruction premise remains in these theorems.
 
 The old coefficient-80 declarations remain for compatibility. These stronger
 entry points have the same domains and the same pinned horizontal translation.

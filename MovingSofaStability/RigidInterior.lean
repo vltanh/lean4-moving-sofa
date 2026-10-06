@@ -6,8 +6,8 @@ public import Mathlib.Topology.MetricSpace.HausdorffDistance
 /-!
 # Interior retention on a compact rigid orbit
 
-Uncompiled proof source. The conclusion is special to rigid copies of one fixed
-compact set. It is false for arbitrary Hausdorff-close compact sets.
+The conclusion is special to rigid copies of one fixed compact set. It is false
+for arbitrary Hausdorff-close compact sets.
 
 The proof takes subsequences of the cosine/sine coefficients and translations,
 not of unrestricted real angles. No trivial-stabilizer assumption is needed.
@@ -93,7 +93,7 @@ theorem rigid_shift_bound {X : Set Point} {R δ : ℝ} (hne : X.Nonempty)
       rw [he]
       exact (norm2_add_le _ _).trans (by
         rw [norm2_neg]
-        exact add_le_add_right (norm2_add_le _ _) _)
+        exact add_le_add (norm2_add_le _ _) le_rfl)
     _ ≤ 4 * R + 1 := by
       change norm2 (g x - q) ≤ δ at hd
       linarith
@@ -121,15 +121,16 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     intro n
     obtain ⟨q, _, hd⟩ := (hclose n).1 p (interior_subset hp)
     exact (euclideanDist_nonneg _ _).trans hd
-  have hinv : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0) := by
-    simpa only [one_div] using tendsto_inv_atTop_zero.comp (tendsto_natCast_atTop_atTop.add_const 1)
+  have hinv : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
   have hδlim : Tendsto δ atTop (𝓝 0) := squeeze_zero hδnonneg (fun n => (hsmall n).le) hinv
   obtain ⟨R, hR⟩ := hX.isBounded.exists_norm_le
-  let B : Set RotationShift := (Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1) ×ˢ closedBall (0 : Point) (4 * R + 1)
-  have hB : IsCompact B := (isCompact_Icc.prod isCompact_Icc).prod isCompact_closedBall
+  let B : Set RotationShift :=
+    (Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1) ×ˢ closedBall (0 : Point) (4 * R + 1)
+  have hB : IsCompact B := (isCompact_Icc.prod isCompact_Icc).prod (isCompact_closedBall _ _)
   have hgB : ∀ n, rotationShift (g n) ∈ B := by
     intro n
-    refine ⟨⟨⟨neg_one_le_cos _, cos_le_one _⟩, ⟨neg_one_le_sin _, sin_le_one _⟩⟩, ?_⟩
+    refine ⟨⟨⟨neg_one_le_cos _, cos_le_one _⟩, neg_one_le_sin _, sin_le_one _⟩, ?_⟩
     rw [mem_closedBall, dist_zero_right]
     apply rigid_shift_bound hne hR _ (hclose n)
     have he : 1 / ((n : ℝ) + 1) ≤ 1 := by
@@ -153,6 +154,7 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     intro n
     obtain ⟨_, ⟨q, hq, rfl⟩, hd⟩ := (hclose (σ n)).1 x hx
     refine ⟨q, hq, ?_⟩
+    change euclideanDist (coefficientInverse (rotationShift (g (σ n))) x) q ≤ δ (σ n)
     rw [coefficientInverse_rotationShift]
     have he := euclideanDist_rigid (g (σ n)) ((g (σ n)).symm x) q
     rw [Rigid.apply_symm_apply] at he
@@ -168,6 +170,7 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     fun_prop
   have hev := ((hcont.tendsto z).comp hz).eventually hnhds
   obtain ⟨n, hn⟩ := hev.exists
+  replace hn : coefficientInverse (rotationShift (g (σ n))) p ∈ X := hn
   rw [coefficientInverse_rotationShift] at hn
   exact hout (σ n) ⟨(g (σ n)).symm p, hn, (g (σ n)).apply_symm_apply p⟩
 

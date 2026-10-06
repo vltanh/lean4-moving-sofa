@@ -8,9 +8,9 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 /-!
 # Euclidean disks in the repository's product coordinates
 
-Uncompiled proof source. The product metric is not used for disk radii or
-areas. The existing measure-preserving coordinate bridge supplies the exact
-Euclidean disk area, while a homeomorphism transports connectedness.
+The product metric is not used for disk radii or areas. The existing
+measure-preserving coordinate bridge supplies the exact Euclidean disk area,
+while a homeomorphism transports connectedness.
 -/
 
 @[expose] public section
@@ -37,7 +37,9 @@ def diskCoordinates : EuclideanPoint ≃ₜ Point where
   rw [euclideanDist, dist_eq_norm]
   apply (sq_eq_sq₀ (norm2_nonneg _) (norm_nonneg _)).mp
   rw [norm2_sq, MovingSofaBridge.norm_sq_coordinates]
-  simp only [diskCoordinates, MovingSofaBridge.coordinates, dot, Prod.fst_sub, Prod.snd_sub]
+  change dot (MovingSofaBridge.coordinates p - MovingSofaBridge.coordinates q)
+    (MovingSofaBridge.coordinates p - MovingSofaBridge.coordinates q) = _
+  simp only [MovingSofaBridge.coordinates, dot, Prod.fst_sub, Prod.snd_sub, PiLp.sub_apply]
   ring
 
 @[simp] theorem dist_inverse_coordinates (p q : Point) :
@@ -104,7 +106,7 @@ theorem openEuclideanBall_isOpen (p : Point) (r : ℝ) : IsOpen (openEuclideanBa
 
 theorem euclideanBall_isCompact (p : Point) (r : ℝ) : IsCompact (euclideanBall p r) := by
   rw [← coordinates_image_closedBall]
-  exact isCompact_closedBall.image diskCoordinates.continuous
+  exact (isCompact_closedBall _ _).image diskCoordinates.continuous
 
 /-- Exact area, with no sup-norm disk substitution. -/
 theorem area_openEuclideanBall (p : Point) {r : ℝ} (hr : 0 ≤ r) :
@@ -119,7 +121,8 @@ theorem area_openEuclideanBall (p : Point) {r : ℝ} (hr : 0 ≤ r) :
 theorem euclideanSphere_connected (p : Point) {r : ℝ} (hr : 0 ≤ r) :
     IsConnected (euclideanSphere p r) := by
   rw [← coordinates_image_sphere]
-  exact (isConnected_sphere (by simp : 1 < Module.rank ℝ EuclideanPoint)
+  exact (isConnected_sphere
+    (Module.one_lt_rank_of_one_lt_finrank (by simp) : 1 < Module.rank ℝ EuclideanPoint)
     (diskCoordinates.symm p) hr).image _ diskCoordinates.continuous.continuousOn
 
 theorem puncture_isCompact {S : Set Point} (hS : IsCompact S) (p : Point) (r : ℝ) :
@@ -138,7 +141,8 @@ theorem puncture_connected {S : Set Point} (hS : IsClosed S) (hconn : IsConnecte
       rw [← coordinates_image_closedBall]
       exact mem_image_of_mem _ hq
     exact ⟨diskCoordinates q, hball hq', by simp⟩
-  have h := connected_sdiff_ball (by simp : 1 < Module.rank ℝ EuclideanPoint)
+  have h := connected_sdiff_ball
+    (Module.one_lt_rank_of_one_lt_finrank (by simp) : 1 < Module.rank ℝ EuclideanPoint)
     hTclosed hTconn hr hTball
   have he : diskCoordinates '' (T \ ball (diskCoordinates.symm p) r) = puncture S p r := by
     rw [image_sdiff diskCoordinates.injective, coordinates_image_ball]
@@ -157,7 +161,8 @@ theorem puncture_nonempty {S : Set Point} {p : Point} {r : ℝ} (hr : 0 ≤ r)
 theorem puncture_area_loss {S : Set Point} (hS : IsCompact S)
     {p : Point} {r : ℝ} (hr : 0 ≤ r) (hball : euclideanBall p r ⊆ S) :
     area S - area (puncture S p r) = π * r ^ 2 := by
-  have hsub : openEuclideanBall p r ⊆ S := fun q hq => hball hq.le
+  have hsub : openEuclideanBall p r ⊆ S := fun q hq =>
+    hball (show euclideanDist p q ≤ r from (show euclideanDist p q < r from hq).le)
   have hi : S ∩ openEuclideanBall p r = openEuclideanBall p r := inter_eq_right.mpr hsub
   have hpart := area_inter_add_sdiff (openEuclideanBall_isOpen p r).measurableSet
     hS.isBounded.measure_lt_top.ne

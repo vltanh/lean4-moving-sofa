@@ -5,10 +5,10 @@ public import MovingSofaStability.ResidualMass
 /-!
 # Stable propagation of the support residual equations
 
-Uncompiled proof source. The last-arc integrating factor has an apparent
-singularity at pi. Its evaluation kernel is a contraction: sin(t)/sin(u) <= 1
-for pi/2 <= u <= t < pi. Thus its first moment is enough for a uniform bound;
-no exchange of two improper integrals or claimed sharp kernel norm is needed.
+The last-arc integrating factor has an apparent singularity at pi. Its
+evaluation kernel is a contraction: sin(t)/sin(u) <= 1 for pi/2 <= u <= t < pi.
+Thus its first moment is enough for a uniform bound; no exchange of two improper
+integrals or claimed sharp kernel norm is needed.
 -/
 
 @[expose] public section
@@ -32,9 +32,10 @@ theorem residual_div_sin_integrable {a b T : ℝ} {r : ℝ → ℝ}
     (hs : ∀ t ∈ Icc a b, sin (T - t) ≠ 0) :
     IntervalIntegrable (fun t => r t / sin (T - t)) volume a b := by
   have hc : ContinuousOn (fun t => 1 / sin (T - t)) (Icc a b) :=
-    continuousOn_const.div ((continuous_const.sub continuous_id).sin.continuousOn) hs
+    continuousOn_const.div (continuous_sin.comp (continuous_const.sub continuous_id)).continuousOn
+      hs
   simpa only [one_div, div_eq_mul_inv] using
-    hr.mul_continuousOn (by simpa only [uIcc_of_le hab] using hc)
+    hr.mul_continuousOn (by simpa only [uIcc_of_le hab, one_div] using hc)
 
 /-- Propagation on an arc whose sine denominator is at least one half. -/
 theorem tangent_regular_arc_bound {f df : ℝ → ℝ} {a b T : ℝ}
@@ -48,14 +49,15 @@ theorem tangent_regular_arc_bound {f df : ℝ → ℝ} {a b T : ℝ}
   have hi := residual_div_sin_integrable hab hr hsn
   have hrec := tangent_reconstruct_left hab hf hd hsn hi
   have hk : ContinuousOn (fun t => 1 / sin (T - t)) (Icc a b) :=
-    continuousOn_const.div ((continuous_const.sub continuous_id).sin.continuousOn) hsn
+    continuousOn_const.div (continuous_sin.comp (continuous_const.sub continuous_id)).continuousOn
+      hsn
   have hweight : ∀ t ∈ Icc a b, |1 / sin (T - t)| ≤ (2 : ℝ) := by
     intro t ht
     rw [abs_of_pos (one_div_pos.mpr (hs0 t ht))]
     exact (div_le_iff₀ (hs0 t ht)).2 (by linarith [hs t ht])
   have hI : |∫ t in a..b, tangentResidual T f df t / sin (T - t)| ≤
       2 * arcMass a b (tangentResidual T f df) := by
-    simpa only [one_div, div_eq_mul_inv] using weighted_integral_le_mass hab hr hk hweight
+    simpa only [one_div, div_eq_mul_inv, one_mul] using weighted_integral_le_mass hab hr hk hweight
   have hb0 := hs0 b ⟨hab, le_rfl⟩
   have hq : |tangentQuotient T f b| ≤ 2 * (|f b| + |f T|) := by
     unfold tangentQuotient
@@ -66,9 +68,9 @@ theorem tangent_regular_arc_bound {f df : ℝ → ℝ} {a b T : ℝ}
         _ ≤ |f b| + |f T * cos (T - b)| := abs_sub _ _
         _ ≤ _ := by
           rw [abs_mul]
-          exact add_le_add_left
+          exact add_le_add le_rfl
             (by simpa only [mul_one] using
-              mul_le_mul_of_nonneg_left (abs_cos_le_one (T - b)) (abs_nonneg (f T))) _
+              mul_le_mul_of_nonneg_left (abs_cos_le_one (T - b)) (abs_nonneg (f T)))
     have hh := hs b ⟨hab, le_rfl⟩
     nlinarith [abs_nonneg (f b), abs_nonneg (f T)]
   have hc : |f T * cos (T - a)| ≤ |f T| := by
@@ -124,8 +126,8 @@ theorem last_arc_mass_bound {f df : ℝ → ℝ}
       ∫ u in (π / 2)..t, tangentResidual π f df u * (sin t / sin u) := by
     rw [← intervalIntegral.integral_const_mul]
     apply intervalIntegral.integral_congr
-    intro u hu
-    rw [sin_pi_sub]
+    intro u _
+    simp only [sin_pi_sub]
     ring
   have hrec' : f t = -(∫ u in (π / 2)..t,
       tangentResidual π f df u * (sin t / sin u)) := by
@@ -142,9 +144,8 @@ theorem last_arc_mass_bound {f df : ℝ → ℝ}
     have htpos := hspos t ⟨ht.1, le_rfl⟩
     rw [abs_of_pos (div_pos htpos hp)]
     exact (div_le_one hp).2 (sin_antitone_upper_quarter hu.1 hu.2 ht.2)
+  have hmono := arcMass_mono (f := tangentResidual π f df) le_rfl ht.1 ht.2 hr
   rw [hrec', abs_neg]
-  exact (weighted_integral_le_mass ht.1 hrt hk hbound).trans
-    (by simpa only [one_mul] using arcMass_mono (f := tangentResidual π f df)
-      le_rfl ht.1 ht.2 hr)
+  exact (weighted_integral_le_mass ht.1 hrt hk hbound).trans ((one_mul _).trans_le hmono)
 
 end MovingSofaStability

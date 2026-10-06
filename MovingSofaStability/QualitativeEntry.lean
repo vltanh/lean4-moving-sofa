@@ -5,8 +5,8 @@ public import MovingSofaStability.SofaLimitMotion
 /-!
 # Qualitative entry into the quantitative neighborhood
 
-Uncompiled proof source. Compactness supplies entry into a fixed neighborhood,
-not a rate. The limit motion is constructed from supporting constraints.
+Compactness supplies entry into a fixed neighborhood, not a rate. The limit
+motion is constructed from supporting constraints.
 -/
 
 @[expose] public section
@@ -43,8 +43,8 @@ theorem maximizing_subsequence {P : GerverParams} (hP : P.IsSolution) (hbox : P.
     exact ⟨pinned_sofa_subset_box (hmove n) (quarter_le_reduced_angle.trans (hangles n).1)
       (htops n) (hlefts n), hangles n⟩
   obtain ⟨⟨L, ω⟩, hLω, σ, hσ, hlim⟩ := hprod.tendsto_subseq hmem
-  have hKlim : Tendsto (K ∘ σ) atTop (𝓝 L) := hlim.fst
-  have hωlim : Tendsto (ωn ∘ σ) atTop (𝓝 ω) := hlim.snd
+  have hKlim : Tendsto (K ∘ σ) atTop (𝓝 L) := (continuous_fst.tendsto _).comp hlim
+  have hωlim : Tendsto (ωn ∘ σ) atTop (𝓝 ω) := (continuous_snd.tendsto _).comp hlim
   obtain ⟨hLmove, hω, htop, hleft⟩ := normalized_moving_limit hKlim hωlim
     (fun n => hmove (σ n)) (fun n => hangles (σ n)) (fun n => htops (σ n)) (fun n => hlefts (σ n))
   have hareaLim := harea.comp hσ.tendsto_atTop
@@ -88,22 +88,22 @@ theorem near_maximizers_enter_neighborhood {P : GerverParams}
     normalizedSofa_top P (ms_isCompact_of_isMovingSofaWithAngle (hS n)) (hS n).2.1.nonempty
   have hleft : ∀ n, supp (K n : Set Point) π = supp (gerverSofa P) π := fun n =>
     normalizedSofa_left P (ms_isCompact_of_isMovingSofaWithAngle (hS n)) (hS n).2.1.nonempty
-  have hinv : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0) := by
-    simpa only [one_div] using tendsto_inv_atTop_zero.comp
-      (tendsto_natCast_atTop_atTop.add_const 1)
+  have hinv : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
   have hdef0 : Tendsto (fun n => sofaDeficit P (S n)) atTop (𝓝 0) :=
     squeeze_zero (fun n => sofaDeficit_nonneg hP hbox ⟨ω n, hS n⟩) (fun n => (hdef n).le) hinv
   have harea : Tendsto (fun n => area (K n : Set Point)) atTop (𝓝 (area (gerverSofa P))) := by
-    have he := tendsto_const_nhds.sub hdef0
-    simpa only [K, compactShapeOfMoving, sofaDeficit, sub_sub_cancel, sub_zero,
-      area_normalizedSofa] using he
+    have he := (tendsto_const_nhds (x := area (gerverSofa P))).sub hdef0
+    simpa only [K, compactShapeOfMoving, NonemptyCompacts.coe_mk, Compacts.coe_mk, sofaDeficit,
+      sub_sub_cancel, sub_zero, area_normalizedSofa] using he
   obtain ⟨σ, hσ, hKlim, hωlim⟩ := maximizing_subsequence hP hbox K ω hmove hω htop hleft harea
   have evK := Metric.tendsto_nhds.1 hKlim (ρ / 2) (by positivity)
   have evω := Metric.tendsto_nhds.1 hωlim α₀ hα₀
   obtain ⟨n, hnK, hnω⟩ := (evK.and evω).exists
+  rw [Function.comp_apply] at hnK hnω
   have hclose := compactShape_euclideanClose (K (σ n)) (gerverCompactShape hP hbox)
   have hclose' : EuclideanClose ρ (normalizedSofa P (S (σ n))) (gerverSofa P) :=
-    hclose.mono (by change 2 * dist (K (σ n)) (gerverCompactShape hP hbox) ≤ ρ; linarith)
+    hclose.mono (by linarith)
   have hang : π / 2 - ω (σ n) < α₀ := by
     rw [Real.dist_eq] at hnω
     have he := (abs_lt.mp hnω).1

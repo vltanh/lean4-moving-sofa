@@ -6,9 +6,9 @@ public import MovingSofaStability.CapDistance
 /-!
 # The local upper bound without Ki
 
-Uncompiled proof source. Canonical-tail feasibility, cut separation, positive
-core height, and niche containment are proved on a common neighborhood of
-Gerver. The original three-region argument then gives A <= Q there.
+Canonical-tail feasibility, cut separation, positive core height, and niche
+containment are proved on a common neighborhood of Gerver. The original
+three-region argument then gives A <= Q there.
 
 The cap-distance coefficient used in the present Lean source is 80. It is
 not the sharp 2 sec(phi) coefficient of the analytic notes; no sharp constant
@@ -76,14 +76,14 @@ theorem nearby_cap_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.
         niche K (π / 2) ⊆ K ∧
         sofaArea (π / 2) K ≤ upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K) ∧
         upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K) ≤ area (gerverSofa P) := by
-  have hφ := gm_φ_mem_Ioo hP hbox
+  have hφ := GerverParams.gm_φ_mem_Ioo hP hbox
   have hKi := theorem8_1_1_gerver hP hbox
   obtain ⟨δT, hδT, hδT1, hT⟩ := nearby_canonical_inWideL hP hbox
   obtain ⟨δS, hδS, hδS1, hS⟩ := nearby_cutSeparated hP hbox
   obtain ⟨δH, hδH, hδH1, hH⟩ := nearby_core_height_pos hP hbox
   obtain ⟨δN, hδN, hδN1, hN⟩ := nearby_niche_subset_cap hP hbox
   obtain ⟨c, δA, hc, hδA, hδA1, hA⟩ := core_arm_margin_near_reference hKi hφ.1
-    (by linarith [hφ.2]) (by linarith [hφ.1])
+    (b := π / 2 - P.φ) (by linarith [hφ.2]) (by linarith [hφ.1])
   let δ := min δT (min δS (min δH (min δN (min δA (1 / 20)))))
   have hδ : 0 < δ := lt_min hδT (lt_min hδS (lt_min hδH (lt_min hδN (lt_min hδA (by norm_num)))))
   have dT : δ ≤ δT := min_le_left _ _

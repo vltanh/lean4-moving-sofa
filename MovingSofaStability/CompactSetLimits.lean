@@ -9,10 +9,10 @@ public import Mathlib.MeasureTheory.Measure.Regular
 /-!
 # Limits of actual compact sets
 
-Uncompiled proof source. The hyperspace here contains all nonempty compact
-sets, not only convex bodies. Its ordinary product-metric Hausdorff distance
-is used only for topology; Euclidean witnesses are recovered with factor two.
-Area is upper semicontinuous, not asserted continuous.
+The hyperspace here contains all nonempty compact sets, not only convex bodies.
+Its ordinary product-metric Hausdorff distance is used only for topology;
+Euclidean witnesses are recovered with factor two. Area is upper semicontinuous,
+not asserted continuous.
 -/
 
 @[expose] public section
@@ -61,9 +61,10 @@ theorem compactShape_support_tendsto {K : ℕ → CompactShape} {L : CompactShap
   have h2 := Metric.tendsto_nhds.1 hfixed (ε / 2) (by positivity)
   filter_upwards [h1, h2] with n hn1 hn2
   have he := compactShape_support_error (K n) L (t n)
-  have htri := abs_add (supp (K n : Set Point) (t n) - supp (L : Set Point) (t n))
+  have htri := abs_add_le (supp (K n : Set Point) (t n) - supp (L : Set Point) (t n))
     (supp (L : Set Point) (t n) - supp (L : Set Point) a)
-  rw [Real.dist_eq] at hn2 ⊢
+  rw [Real.dist_eq, Function.comp_apply] at hn2
+  rw [Real.dist_eq]
   have hsum : supp (K n : Set Point) (t n) - supp (L : Set Point) (t n) +
       (supp (L : Set Point) (t n) - supp (L : Set Point) a) =
       supp (K n : Set Point) (t n) - supp (L : Set Point) a := by ring
@@ -79,7 +80,8 @@ theorem compactShape_approximate_point {K : ℕ → CompactShape} {L : CompactSh
   intro ε hε
   filter_upwards [Metric.tendsto_nhds.1 hK ε hε] with n hn
   rw [dist_comm] at hn
-  exact (by simpa only [dist_comm] using hd n).trans_lt hn
+  rw [dist_comm]
+  exact (hd n).trans_lt hn
 
 /-- Compact connected sets remain connected under Hausdorff limits. -/
 theorem compactShape_connected_limit {K : ℕ → CompactShape} {L : CompactShape}
@@ -133,6 +135,6 @@ theorem compactShape_area_limsup {K : ℕ → CompactShape} {L : CompactShape} {
     filter_upwards [hK.eventually ((NonemptyCompacts.isOpen_subsets_of_isOpen hU).mem_nhds hLU)] with n hn
     exact area_mono_of_finite hn hUf
   have hm : M ≤ area U := le_of_tendsto harea ev
-  exact hm.trans huarea.le
+  exact hm.trans_lt huarea
 
 end MovingSofaStability

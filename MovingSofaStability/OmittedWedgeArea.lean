@@ -5,10 +5,10 @@ public import MovingSofaStability.PartialHallways
 /-!
 # A small linear cost for omitted terminal wedges
 
-Uncompiled proof source. The radius is fixed before the endpoint-window
-width. Only afterwards are the support neighborhood and angle threshold
-chosen. Thus the gain coefficient can be made smaller than a fixed terminal
-floor loss, without any quantitative compactness assumption.
+The radius is fixed before the endpoint-window width. Only afterwards are the
+support neighborhood and angle threshold chosen. Thus the gain coefficient can
+be made smaller than a fixed terminal floor loss, without any quantitative
+compactness assumption.
 -/
 
 @[expose] public section
@@ -53,7 +53,7 @@ theorem nearby_omittedWedges_area {P : GerverParams} (hP : P.IsSolution) (hbox :
     obtain ⟨hpK, hy0, t, ht, -, hu, hv⟩ := omittedWedges_witness hp
     have hpN := (mem_niche_iff_slacks K p).2 ⟨hy0, t, ht, hu, hv⟩
     have hx := hlocal K hK (hclose.mono hδN') p hpN
-    have hy := omittedWedges_height hK hR hradius hω p hp
+    have hy := omittedWedges_height hK hR hradius p hp
     by_cases hleft : p.1 ≤ gerverRoofLeft P + η
     · exact Or.inl ⟨⟨hx.1, hleft⟩, hy⟩
     by_cases hright : gerverRoofRight P - η ≤ p.1

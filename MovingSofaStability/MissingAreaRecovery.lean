@@ -6,10 +6,10 @@ public import MovingSofaStability.TerminalBookkeeping
 /-!
 # Recovering a nonconvex set from an erosion and a missing-area bound
 
-Uncompiled proof source. The geometric hypothesis is an explicit uniform
-interior-ball condition on the reference set, not an assumed stability theorem.
-An inscribed square provides the area lower bound, so no Euclidean disk-volume
-conversion for the ambient product space is required.
+The geometric hypothesis is an explicit uniform interior-ball condition on the
+reference set, not an assumed stability theorem. An inscribed square provides
+the area lower bound, so no Euclidean disk-volume conversion for the ambient
+product space is required.
 -/
 
 @[expose] public section
@@ -41,7 +41,7 @@ theorem area_centeredSquare (z : Point) {a : ℝ} (ha : 0 ≤ a) :
   rw [hm, ENNReal.toReal_mul, ENNReal.toReal_ofReal ha]
   ring
 
-theorem centeredSquare_subset_ball (z : Point) {a : ℝ} (ha : 0 ≤ a) :
+theorem centeredSquare_subset_ball (z : Point) {a : ℝ} :
     centeredSquare z a ⊆ euclideanBall z a := by
   rintro q ⟨hx, hy⟩
   have hx' : |z.1 - q.1| ≤ a / 2 := abs_le.2 ⟨by linarith [hx.2], by linarith [hx.1]⟩
@@ -80,7 +80,7 @@ theorem directedClose_of_missing_area {G U S : Set Point} {κ r₀ r ρ η : ℝ
     ball_subset_erosion (fun q hq => (hz hq).1) (by dsimp [a] at *; linarith)
   have hsq : centeredSquare z a ⊆ U \ S := by
     intro q hq
-    have hqball := centeredSquare_subset_ball z ha hq
+    have hqball := centeredSquare_subset_ball z hq
     have hqG := hz (hqball.trans halarge)
     refine ⟨herosion (hsmallball hqball), ?_⟩
     intro hqS

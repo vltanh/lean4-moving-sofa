@@ -5,11 +5,11 @@ public import MovingSofaStability.WideResidualEnergy
 /-!
 # Integrating the residual equations without classical differentiability
 
-Uncompiled proof source. Convex supports have right derivatives even at normal
-angles carrying atoms. The reconstruction uses the right-derivative fundamental
-theorem on compact intervals avoiding the integrating factor's singularity.
-Integrability of the weighted residual is an explicit hypothesis, not inferred
-from the totalized value of an integral.
+Convex supports have right derivatives even at normal angles carrying atoms. The
+reconstruction uses the right-derivative fundamental theorem on compact
+intervals avoiding the integrating factor's singularity. Integrability of the
+weighted residual is an explicit hypothesis, not inferred from the totalized
+value of an integral.
 -/
 
 @[expose] public section
@@ -33,8 +33,9 @@ theorem hasDerivWithinAt_tangentQuotient {f df : ℝ → ℝ} {T t : ℝ}
   · dsimp only [tangentResidual]
     have hweighted : f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) = f T := by
       rw [sin_sq_add_cos_sq, mul_one]
-    field_simp [hs]
-    nlinarith
+    simp only [Pi.sub_apply]
+    field_simp
+    linear_combination hweighted
 
 /-- The integral of a weighted residual is the difference of the quotient values. -/
 theorem tangent_quotient_integral {f df : ℝ → ℝ} {a b T : ℝ}
@@ -117,7 +118,12 @@ theorem pinned_support_rightDerivative {K₀ K₁ : Set (ℝ × ℝ)}
         (fun u => opt_g K₁ u - opt_g K₀ u) t) (Ioi t) t := by
   have hd := support_difference_rightDerivative h₀ h₁ t
   have hcos := ((hasDerivAt_cos t).const_mul (supp K₁ π - supp K₀ π)).hasDerivWithinAt
-  convert hd.add hcos using 1 <;>
-    simp only [pinnedDifference, pinnedDerivative] <;> ring
+    (s := Ioi t)
+  have he : pinnedDerivative (fun u => supp K₁ u - supp K₀ u)
+      (fun u => opt_g K₁ u - opt_g K₀ u) t =
+      opt_g K₁ t - opt_g K₀ t + (supp K₁ π - supp K₀ π) * -sin t := by
+    simp only [pinnedDerivative]; ring
+  rw [he]
+  exact hd.add hcos
 
 end MovingSofaStability

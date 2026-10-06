@@ -6,8 +6,8 @@ public import MovingSofaStability.GreenNorm
 /-!
 # The actual kernel integrals equal the closed-form Green norms
 
-Uncompiled proof source. These equalities connect the displayed Green formulas
-to integrals, rather than merely bounding the formulas as independent scalars.
+These equalities connect the displayed Green formulas to integrals, rather than
+merely bounding the formulas as independent scalars.
 -/
 
 @[expose] public section
@@ -62,7 +62,6 @@ theorem third_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       tan φ * cos t ^ 2 := by
     rw [sin_pi_sub, cos_pi_sub, tan_eq_sin_div_cos]
     field_simp [hc]
-    ring
   rw [hscale, shifted_cosecant_sq_integral ht.2 hs]
   have hcot : cotangent (π - φ - π / 2) = tan φ := by
     simp only [cotangent, show π - φ - π / 2 = π / 2 - φ by ring,
@@ -72,7 +71,6 @@ theorem third_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       sin (π - φ - t) * cos (π - φ - t) := by
     unfold cotangent
     field_simp [hst]
-    ring
   rw [mul_sub, hcancel]
   rw [show π - φ - t = π - (φ + t) by ring, sin_pi_sub, cos_pi_sub,
     sin_add, cos_add, tan_eq_sin_div_cos]
@@ -115,7 +113,7 @@ theorem middle_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (tailKernelPrimitive A (π - φ) - tailKernelPrimitive A (π / 2 + t))) = _
   simp only [tailKernelPrimitive, cotangent, sin_pi_sub, cos_pi_sub,
     sin_add, cos_add, sin_pi_div_two, cos_pi_div_two,
-    one_mul, zero_mul, zero_add, add_zero, zero_div, zero_sub,
+    one_mul, zero_mul, add_zero, zero_div, zero_sub,
     tan_eq_sin_div_cos]
   have htan : sin φ / cos φ = A * sin φ := by dsimp [A]; ring
   have htwo : 2 / cos φ = 2 * A := by dsimp [A]; ring

@@ -6,9 +6,9 @@ public import MovingSofaStability.CapCoercivity
 /-!
 # From convex support bounds to actual Euclidean distance
 
-Uncompiled proof source. The proof uses the Euclidean parallel body K + rB,
-whose support is h_K + r. It supplies witnesses in the actual convex set and
-does not equate support distance with Hausdorff distance for nonconvex sofas.
+The proof uses the Euclidean parallel body K + rB, whose support is h_K + r. It
+supplies witnesses in the actual convex set and does not equate support distance
+with Hausdorff distance for nonconvex sofas.
 -/
 
 @[expose] public section
@@ -64,7 +64,7 @@ theorem euclideanDisk_isConvexBody {r : ℝ} (hr : 0 ≤ r) : IsConvexBody (eucl
     intro p hp
     exact ⟨abs_le.mp ((abs_fst_le_norm2 p).trans hp),
       abs_le.mp ((abs_snd_le_norm2 p).trans hp)⟩
-  refine ⟨⟨0, by simpa only [euclideanDisk, mem_setOf_eq, norm2_zero] using hr⟩,
+  refine ⟨⟨0, by simpa only [euclideanDisk, mem_ofPred_eq, norm2_zero] using hr⟩,
     (isCompact_Icc.prod isCompact_Icc).of_isClosed_subset hclosed hsub, ?_⟩
   intro p hp q hq a b ha hb hab
   change norm2 (a • p + b • q) ≤ r
@@ -113,7 +113,8 @@ theorem directedClose_of_support_le {S T : Set Point} (hS : IsCompact S)
   refine ⟨q, hq, ?_⟩
   rw [← hqz]
   change norm2 (q + z - q) ≤ r
-  simpa only [add_sub_cancel_left] using hz
+  rw [add_sub_cancel_left]
+  exact hz
 
 /-- The support criterion for Euclidean Hausdorff distance between convex bodies. -/
 theorem euclideanClose_of_support_bound {K L : Set Point}

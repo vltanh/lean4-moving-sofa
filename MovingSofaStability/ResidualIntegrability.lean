@@ -5,10 +5,10 @@ public import MovingSofaStability.ODEReconstruction
 /-!
 # Integrability of the actual cap residuals
 
-Uncompiled proof source. Mamikon's boundedness theorem supplies both first and
-second integrability. Endpoint values of a tangent quotient are not identified
-with its geometric displacement at a singular endpoint: the identification is
-made on the open interval, then transferred across the two null singletons.
+Mamikon's boundedness theorem supplies both first and second integrability.
+Endpoint values of a tangent quotient are not identified with its geometric
+displacement at a singular endpoint: the identification is made on the open
+interval, then transferred across the two null singletons.
 -/
 
 @[expose] public section
@@ -37,7 +37,7 @@ theorem displacement_difference_integrable {a b : ℝ} (hab : a < b) (hb : b < a
     intro t ht
     exact (abs_sub _ _).trans (add_le_add (hC₁ t ht) (hC₀ t ht))
   have hC : 0 ≤ C₁ + C₀ := (abs_nonneg (f a)).trans (hbound a ⟨le_rfl, hab.le⟩)
-  letI : IsFiniteMeasure (volume.restrict (Icc a b)) :=
+  have : IsFiniteMeasure (volume.restrict (Icc a b)) :=
     isFiniteMeasure_restrict.2 (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)
   have hm : AEStronglyMeasurable f (volume.restrict (Icc a b)) :=
     ((hM K₁).1.sub (hM K₀).1).aestronglyMeasurable
@@ -49,7 +49,7 @@ theorem displacement_difference_integrable {a b : ℝ} (hab : a < b) (hb : b < a
     apply Integrable.of_bound (hm.mul hm) ((C₁ + C₀) * (C₁ + C₀))
     apply ae_restrict_of_forall_mem measurableSet_Icc
     intro t ht
-    rw [Real.norm_eq_abs, abs_mul]
+    rw [Real.norm_eq_abs, Pi.mul_apply, abs_mul]
     exact mul_le_mul (hbound t ht) (hbound t ht) (abs_nonneg _) hC
   exact ⟨hi, hi2.congr (Eventually.of_forall fun t => (pow_two (f t)).symm)⟩
 

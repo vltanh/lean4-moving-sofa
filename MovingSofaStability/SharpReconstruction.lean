@@ -5,10 +5,9 @@ public import MovingSofaStability.TrigKernelIntegrals
 /-!
 # Exact four-arc reconstruction
 
-Uncompiled proof source. The middle interval is coupled to the last interval.
-A product derivative combines these contributions before estimating them. This
-avoids both Fubini and the loss from estimating the two occurrences of f(T)
-separately.
+The middle interval is coupled to the last interval. A product derivative
+combines these contributions before estimating them. This avoids both Fubini and
+the loss from estimating the two occurrences of f(T) separately.
 -/
 
 @[expose] public section
@@ -22,7 +21,10 @@ section Reconstruction
 
 variable {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 variable {f df : ℝ → ℝ} (h : FourResidualData φ f df)
+-- The statements below do not mention these hypotheses, so each theorem includes the ones
+-- it uses explicitly.
 
+include h in
 theorem sharp_last_formula {t : ℝ} (ht : t ∈ Ico (π / 2) π) :
     f t = -sin t * (∫ u in (π / 2)..t, (1 / sin u) * tangentResidual π f df u) := by
   have hs : ∀ u ∈ Icc (π / 2) t, sin (π - u) ≠ 0 := by
@@ -39,12 +41,13 @@ theorem sharp_last_formula {t : ℝ} (ht : t ∈ Ico (π / 2) π) :
   have hI : (∫ u in (π / 2)..t, tangentResidual π f df u / sin (π - u)) =
       ∫ u in (π / 2)..t, (1 / sin u) * tangentResidual π f df u := by
     apply intervalIntegral.integral_congr
-    intro u hu
-    rw [sin_pi_sub]
+    intro u _
+    simp only [sin_pi_sub]
     ring
   rw [hI] at he
-  nlinarith only [he]
+  linear_combination he
 
+include hφ h in
 theorem sharp_third_formula {t : ℝ} (ht : t ∈ Icc (π / 2 - φ) (π / 2)) :
     f t = -(cos t / cos φ) * f (π - φ) + sin (π - φ - t) *
       (∫ u in t..(π / 2), (1 / sin (π - φ - u)) * tangentResidual (π - φ) f df u) := by
@@ -67,7 +70,7 @@ theorem sharp_third_formula {t : ℝ} (ht : t ∈ Icc (π / 2 - φ) (π / 2)) :
     have hh : cos (π - φ - t) * cos φ - sin (π - φ - t) * sin φ = -cos t := by
       rw [← cos_add, show π - φ - t + φ = π - t by ring, cos_pi_sub]
     field_simp [hc]
-    exact hh
+    linear_combination hh
   have hI : (∫ u in t..(π / 2), tangentResidual (π - φ) f df u / sin (π - φ - u)) =
       ∫ u in t..(π / 2), (1 / sin (π - φ - u)) * tangentResidual (π - φ) f df u := by
     apply intervalIntegral.integral_congr
@@ -82,6 +85,7 @@ theorem sharp_third_formula {t : ℝ} (ht : t ∈ Icc (π / 2 - φ) (π / 2)) :
       ring
     _ = _ := by rw [hcoef]; ring
 
+include hφ h in
 theorem sharp_first_formula {t : ℝ} (ht : t ∈ Icc 0 φ) :
     f t = cos t * ((1 / cos φ) * f φ +
       ∫ u in t..φ, (1 / cos u) * tangentResidual (π / 2) f df u) := by
@@ -102,8 +106,10 @@ theorem sharp_first_formula {t : ℝ} (ht : t ∈ Icc 0 φ) :
     intro u hu
     ring
   rw [hI] at he
-  simpa only [div_eq_mul_inv, one_div, mul_comm (f φ)] using he
+  rw [he]
+  ring
 
+include h in
 /-- Product integration replaces a double integral. The reference endpoint
 f(pi) is zero, so its tangent residual is cot(u)*f(u)-f'(u). -/
 theorem tail_product_integral (A : ℝ) {a b : ℝ}
@@ -116,9 +122,9 @@ theorem tail_product_integral (A : ℝ) {a b : ℝ}
   have hk : ContinuousOn (tailKernel A) (Icc a b) :=
     (continuousOn_const.add continuous_cos.continuousOn).div continuous_sin.continuousOn hs
   have hr := intervalIntegrable_subinterval h.last ha hab hb.le
-  have hkr : IntervalIntegrable (fun u => tailKernel A u * tangentResidual π f df u) volume a b := by
-    simpa only [mul_comm] using hr.mul_continuousOn (by simpa only [uIcc_of_le hab] using hk)
-  have hf := h.continuous.intervalIntegrable a b
+  have hkr : IntervalIntegrable (fun u => tailKernel A u * tangentResidual π f df u) volume a b :=
+    hr.continuousOn_mul (by simpa only [uIcc_of_le hab] using hk)
+  have hf : IntervalIntegrable f volume a b := h.continuous.intervalIntegrable a b
   have hd : ∀ u ∈ Ioo a b, HasDerivWithinAt (fun u => tailKernel A u * f u)
       (-f u - tailKernel A u * tangentResidual π f df u) (Ioi u) u := by
     intro u hu
@@ -130,11 +136,14 @@ theorem tail_product_integral (A : ℝ) {a b : ℝ}
     unfold tailKernel
     field_simp [hsu]
     linear_combination -(f u) * sin_sq_add_cos_sq u
+  have hfn : IntervalIntegrable (fun u => -f u) volume a b := hf.neg
   have he := intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hab
-    (hk.mul h.continuous.continuousOn) hd (hf.neg.sub hkr)
-  rw [intervalIntegral.integral_sub hf.neg hkr, intervalIntegral.integral_neg] at he
+    (hk.mul h.continuous.continuousOn) hd (hfn.sub hkr)
+  rw [intervalIntegral.integral_sub hfn hkr, intervalIntegral.integral_neg] at he
+  simp only [Pi.mul_apply] at he
   linarith
 
+include hφ h in
 /-- The common r4 kernel is combined before taking any norm. -/
 theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
     f t = (∫ u in t..(π / 2 - φ), cornerResidual f df u) +
@@ -155,9 +164,8 @@ theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
     simpa only [cornerResidual, sub_sub_cancel] using he
   have hrec := corner_reconstruct ht.2 h.continuous.continuousOn
     (fun u hu => h.rightDeriv u ⟨by linarith [hu.1, ht.1], by linarith [hu.2]⟩) hdf hshift
-  have hthird := sharp_third_formula hφ h ⟨le_rfl, by linarith : π / 2 - φ ≤ π / 2⟩
-  have hlast := sharp_last_formula h ⟨by linarith [ht.1], by linarith [ht.2] :
-    π / 2 + t ∈ Ico (π / 2) π⟩
+  have hthird := sharp_third_formula hφ h (t := π / 2 - φ) ⟨le_rfl, by linarith⟩
+  have hlast := sharp_last_formula h (t := π / 2 + t) ⟨by linarith [ht.1], by linarith [ht.2]⟩
   have htail := tail_product_integral h (1 / cos φ)
     (a := π / 2 + t) (b := π - φ) (by linarith [ht.1]) (by linarith [ht.2]) (by linarith)
   have hT : tailKernel (1 / cos φ) (π - φ) = tan φ := by
@@ -165,17 +173,21 @@ theorem sharp_middle_formula {t : ℝ} (ht : t ∈ Icc φ (π / 2 - φ)) :
     field_simp [hcφ, hsφ]
     nlinarith [sin_sq_add_cos_sq φ, congrArg (fun x : ℝ => cos φ * x) (sin_sq_add_cos_sq φ)]
   have hstart : tailKernel (1 / cos φ) (π / 2 + t) = (1 / cos φ - sin t) / cos t := by
-    simp [tailKernel, sin_add, cos_add]
+    simp only [tailKernel, sin_add, cos_add, sin_pi_div_two, cos_pi_div_two, one_mul, zero_mul,
+      add_zero, zero_sub]
+    ring
   have hIshift : (∫ u in t..(π / 2 - φ), f (u + π / 2)) =
       ∫ u in (π / 2 + t)..(π - φ), f u := by
     rw [intervalIntegral.integral_comp_add_right f (π / 2)]
     congr 1 <;> ring
   simp only [show π - φ - (π / 2 - φ) = π / 2 by ring,
-    sin_pi_div_two, cos_pi_div_two_sub, one_mul, tan_eq_sin_div_cos] at hthird
+    sin_pi_div_two, cos_pi_div_two_sub, one_mul] at hthird
   simp only [sin_add, sin_pi_div_two, cos_pi_div_two, one_mul, zero_mul, add_zero] at hlast
   rw [hIshift, htail, hT, hstart, hthird, hlast] at hrec
   rw [tan_eq_sin_div_cos] at hrec
-  convert hrec using 1 <;> field_simp [hct] <;> ring
+  rw [hrec]
+  field_simp
+  ring
 
 end Reconstruction
 end MovingSofaStability

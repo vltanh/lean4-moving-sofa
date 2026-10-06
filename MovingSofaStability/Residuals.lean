@@ -5,12 +5,13 @@ public import MovingSofaStability.IntegralEstimates
 /-!
 # The four cap residuals and their integrating factor
 
-Uncompiled proof source. The derivative argument is kept explicit rather than
-silently using a derivative of a nonsmooth support function everywhere.
-The algebraic support-displacement identities hold without smoothness.
+The derivative argument is kept explicit rather than silently using a derivative
+of a nonsmooth support function everywhere. The algebraic support-displacement
+identities hold without smoothness.
 
-The final absolutely-continuous reconstruction and the four Green-kernel
-square-integral evaluations are separate proof obligations.
+The absolutely continuous reconstruction and the square integrals of the four
+Green kernels are proved in later modules (`ODEReconstruction.lean`,
+`TrigKernelIntegrals.lean`, `SharpKernelNorms.lean`).
 -/
 
 @[expose] public section
@@ -44,8 +45,11 @@ def pinnedDerivative (f df : ℝ → ℝ) (t : ℝ) : ℝ := df t - f π * sin t
 theorem hasDerivAt_pinnedDifference {f df : ℝ → ℝ} {t : ℝ}
     (h : HasDerivAt f (df t) t) :
     HasDerivAt (pinnedDifference f) (pinnedDerivative f df t) t := by
-  convert h.add ((hasDerivAt_cos t).const_mul (f π)) using 1 <;>
-    simp only [pinnedDifference, pinnedDerivative] <;> ring
+  have h2 := h.add ((hasDerivAt_cos t).const_mul (f π))
+  have he : pinnedDerivative f df t = df t + f π * -sin t := by
+    simp only [pinnedDerivative]; ring
+  rw [he]
+  exact h2
 
 theorem tangentResidual_add (T : ℝ) (f df g dg : ℝ → ℝ) (t : ℝ) :
     tangentResidual T (fun u => f u + g u) (fun u => df u + dg u) t =
@@ -67,8 +71,9 @@ theorem tangentResidual_translation (a T t : ℝ) (hs : sin (T - t) ≠ 0) :
     congr 1
     ring
   unfold tangentResidual
+  beta_reduce
   rw [hc]
-  field_simp [hs]
+  field_simp
   ring
 
 @[simp] theorem cornerResidual_translation (a t : ℝ) :
@@ -131,8 +136,9 @@ theorem hasDerivAt_tangentQuotient {f df : ℝ → ℝ} {T t : ℝ}
   · dsimp only [tangentResidual]
     have hweighted : f T * (sin (T - t) ^ 2 + cos (T - t) ^ 2) = f T := by
       rw [sin_sq_add_cos_sq, mul_one]
-    field_simp [hs]
-    nlinarith
+    simp only [Pi.sub_apply]
+    field_simp
+    linear_combination hweighted
 
 /-- The first interval's residual, after fixing the top support. -/
 theorem tangentResidual_top {f df : ℝ → ℝ} (h : f (π / 2) = 0) (t : ℝ) :

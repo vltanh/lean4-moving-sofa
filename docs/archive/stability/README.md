@@ -8,8 +8,8 @@ errors must not be mistaken for verified results.
 
 Start with [FORMALIZATION.md](FORMALIZATION.md) for the current source route
 and verification boundary, and
-[GlobalStability.lean](../../MovingSofaStability/GlobalStability.lean) for the
-headline declarations. [All.lean](../../MovingSofaStability/All.lean) imports
+[GlobalStability.lean](../../../MovingSofaStability/GlobalStability.lean) for the
+headline declarations. [All.lean](../../../MovingSofaStability/All.lean) imports
 all 72 other stability modules. The earlier notes 01--09 give the mathematical
 argument and its development history.
 

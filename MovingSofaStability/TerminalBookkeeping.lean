@@ -5,9 +5,9 @@ public import MovingSofaStability.Statement
 /-!
 # Terminal-angle loss: finite-measure bookkeeping
 
-Uncompiled proof source. These lemmas implement the set/area comparison in
-stability note 07. In particular they do not assume `S ⊆ U`: `S` can contain
-points in the wedges omitted by stopping before a right-angle turn.
+These lemmas implement the set/area comparison in stability note 07. In
+particular they do not assume `S ⊆ U`: `S` can contain points in the wedges
+omitted by stopping before a right-angle turn.
 
 The geometric construction of the excluded floor rectangle and the upper
 bound for the omitted wedges are NOT proved by this file. Those are explicit

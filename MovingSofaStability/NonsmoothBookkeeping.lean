@@ -5,9 +5,9 @@ public import MovingSofaStability.ArcAtoms
 /-!
 # Atom-aware cap Mamikon bookkeeping
 
-Uncompiled proof source. Every supporting-face contribution is retained and
-then cancelled against its adjacent Mamikon connector segments. In particular,
-no equality of `vminus` and `vplus` is assumed at a cut or endpoint.
+Every supporting-face contribution is retained and then cancelled against its
+adjacent Mamikon connector segments. In particular, no equality of `vminus` and
+`vplus` is assumed at a cut or endpoint.
 
 The result writes `mamikonS + upperP` as a sum of affine terms. Unlike the
 source Ki-only proof, the displayed boundary term has no vertex coordinates:
@@ -111,7 +111,8 @@ theorem mamikonS_add_upperP_nonsmooth {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       segArea (vplus K b) (outerCorner K b) + edgeArea K b = 0 := by
     have he := segArea_join_face (inj_dot_outerCorner_uvec K b)
       (dot_vminus_uvec K b) (dot_vplus_uvec K b) (inj_dot_outerCorner_uvec K b)
-    simpa only [segArea_self] using he
+    rw [segArea_self] at he
+    exact he
   have ev : segArea (tangentParam K T (π / 2)) (vminus K (π / 2)) +
       segArea (vplus K (π / 2)) (tangentParam K π (π / 2)) + edgeArea K (π / 2) =
       segArea (tangentParam K T (π / 2)) (tangentParam K π (π / 2)) :=
@@ -150,7 +151,7 @@ theorem mamikonS_add_upperP_nonsmooth {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
         segArea (zLeft φ K) (xLeft φ K))
   simp only [mamikonS, mamikon, upperP]
   change _ = _ at harea
-  simp only [← hb, ← hT] at *
+  simp only [← hb] at *
   rw [c1, c3, c4, l3b, l4π]
   simp only [segArea_self]
   linarith only [harea, e0, eφ, eb, ev, eπ, hboundary, swR, swL]

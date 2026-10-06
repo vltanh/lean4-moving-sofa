@@ -6,9 +6,9 @@ public import MovingSofaStability.Statement
 /-!
 # A punctured Gerver family, including optimization over rigid alignment
 
-Uncompiled proof source. The family has area loss pi*r^2 and distance exactly r
-from the entire orientation-preserving rigid orbit of Gerver. The conclusion
-concerns the actual closed sets, not the Hausdorff distance of their boundaries.
+The family has area loss pi*r^2 and distance exactly r from the entire
+orientation-preserving rigid orbit of Gerver. The conclusion concerns the actual
+closed sets, not the Hausdorff distance of their boundaries.
 -/
 
 @[expose] public section

@@ -6,9 +6,9 @@ public import MovingSofaStability.Residuals
 /-!
 # Six squared displacement differences in the enlarged deficit
 
-Uncompiled proof source. This identifies the abstract quadratic energy with
-actual integrals, not merely with a midpoint expression. The four cap integrals
-are bounded by the objective deficit for EVERY nonsmooth feasible triple.
+This identifies the abstract quadratic energy with actual integrals, not merely
+with a midpoint expression. The four cap integrals are bounded by the objective
+deficit for EVERY nonsmooth feasible triple.
 -/
 
 @[expose] public section
@@ -147,7 +147,8 @@ theorem wide_deficit_eq_slack_add_integrals {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) (x : WideTriple P.φ) :
     area (gerverSofa P) - wideUpperQ P.φ x =
       wideDualSlack hP hbox x + wideResidualEnergy (wideGerverTriple hP hbox) x := by
-  rw [wide_deficit_identity hP hbox x, wideEnergy_eq_integrals (gm_φ_mem_Ioo hP hbox)]
+  rw [wide_deficit_identity hP hbox x,
+    wideEnergy_eq_integrals (GerverParams.gm_φ_mem_Ioo hP hbox)]
 
 /-- Cap-only integral energy is bounded by the nonsmooth Q deficit. -/
 theorem wide_capResidualEnergy_le_deficit {P : GerverParams}

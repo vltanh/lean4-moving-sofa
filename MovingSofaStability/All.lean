@@ -86,21 +86,25 @@ public import MovingSofaStability.WideGerverCertificate
 public import MovingSofaStability.WideResidualEnergy
 
 /-!
-# Stability: intended source assembly and sharpness additions
+# The stability of Gerver's sofa
 
-GlobalStability.lean contains the intended unrestricted and terminal-angle
-proofs. SharpCapDistance.lean supplies stronger cap theorems with coefficient
-2 / cos(phi), uniformly less than 2.002 in the source box. The older coefficient
-80 declarations remain available, and the global constants remain existential.
+This module imports every module of the library.
 
-SharpExponent.lean supplies the punctured Gerver family and rules out every
-Hausdorff exponent greater than one half, including arbitrary rigid alignment.
-It does not claim sharpness for symmetric-difference area or feasible-cap constants.
+`GlobalStability.lean` proves the unrestricted stability theorem and the
+terminal-angle estimate. There are constants C, C', C'', ε₀ > 0 such that a
+moving sofa whose area is ε < ε₀ less than Gerver's is, after a translation,
+within C√ε of Gerver's sofa in the Euclidean Hausdorff distance, the area of its
+symmetric difference with Gerver's sofa is at most C'√ε, and every rotation angle
+ω ∈ [arcsec 2.2, π/2] with which it moves satisfies π/2 - ω ≤ C''ε. The
+constants are existential.
 
-IMPORTANT: none of this development has been compiled or kernel-checked.
-These files are proof source, not verified formalization. No Lean, Lake, CI,
-remote build, or TeX compilation was run. Formula tests check analytic formulas
-only; they do not establish elaboration or theorem dependencies.
+`SharpCapDistance.lean` proves the cap estimates with coefficient 2 / cos φ,
+less than 2.002 in Romik's box. The declarations with coefficient 80 remain.
 
-See docs/stability/SHARPNESS_HANDOFF.md for the new entry points and limitations.
+`SharpExponent.lean` proves, with the punctured Gerver sofas of
+`PuncturedSofa.lean`, that no Hausdorff exponent greater than one half holds,
+whatever the constant and the rigid alignment. It claims no sharpness for the
+symmetric-difference area or for the cap constants.
+
+See `docs/stability.md`.
 -/

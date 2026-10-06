@@ -5,10 +5,9 @@ public import MovingSofaStability.CBVAlgebra
 /-!
 # Cap area split at the four Mamikon arcs, retaining all atoms
 
-Uncompiled proof source. In a nonsmooth cap, atoms at 0, phi, pi/2-phi and pi
-cannot be discarded. The five edge segments below account for those atoms
-and the top edge. This is the missing bookkeeping in a naive reuse of the
-Ki-only source Lemma 8.3.5.
+In a nonsmooth cap, atoms at 0, phi, pi/2-phi and pi cannot be discarded. The
+five edge segments below account for those atoms and the top edge. This is the
+missing bookkeeping in a naive reuse of the Ki-only source Lemma 8.3.5.
 -/
 
 @[expose] public section
@@ -111,12 +110,12 @@ theorem cap_area_four_arcs {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 
 /-- A useful three-point collinearity identity, with a face inserted between
 its two endpoints rather than identified with a point. -/
-theorem segArea_join_face {t h : ℝ} {z₁ p₋ p₊ z₂ : ℝ × ℝ}
-    (hz₁ : z₁ ∈ line t h) (hp₋ : p₋ ∈ line t h)
-    (hp₊ : p₊ ∈ line t h) (hz₂ : z₂ ∈ line t h) :
-    segArea z₁ p₋ + segArea p₊ z₂ + segArea p₋ p₊ = segArea z₁ z₂ := by
-  have h1 := segArea_add_of_mem_line hz₁ hp₋ hp₊
-  have h2 := segArea_add_of_mem_line hz₁ hp₊ hz₂
+theorem segArea_join_face {t h : ℝ} {z₁ pl pr z₂ : ℝ × ℝ}
+    (hz₁ : z₁ ∈ line t h) (hpl : pl ∈ line t h)
+    (hpr : pr ∈ line t h) (hz₂ : z₂ ∈ line t h) :
+    segArea z₁ pl + segArea pr z₂ + segArea pl pr = segArea z₁ z₂ := by
+  have h1 := segArea_add_of_mem_line hz₁ hpl hpr
+  have h2 := segArea_add_of_mem_line hz₁ hpr hz₂
   linarith
 
 end MovingSofaStability

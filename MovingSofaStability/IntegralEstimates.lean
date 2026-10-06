@@ -5,10 +5,10 @@ public import MovingSofaStability.MamikonEnergy
 /-!
 # Integral estimates for the residual-to-support step
 
-Uncompiled proof source. Integrability assumptions are explicit: totalized
-Bochner integrals must not be used to conceal a nonintegrable residual.
-The Cauchy--Schwarz proof below uses nonnegativity of a square integral and
-also handles a zero square norm. No new integration axioms are introduced.
+Integrability assumptions are explicit: totalized Bochner integrals must not be
+used to conceal a nonintegrable residual. The Cauchy--Schwarz proof below uses
+nonnegativity of a square integral and also handles a zero square norm. No new
+integration axioms are introduced.
 -/
 
 @[expose] public section
@@ -73,7 +73,7 @@ theorem integral_mul_sq_le
       rw [← hi]
       exact integral_nonneg fun x => sq_nonneg _
     have hp : A * C ^ 2 ≤ A * (A * B) := by nlinarith
-    exact (mul_le_mul_left hApos).mp hp
+    exact (mul_le_mul_iff_right₀ hApos).mp hp
 
 /-- Absolute-value form of the preceding estimate. -/
 theorem abs_integral_mul_le
@@ -125,7 +125,7 @@ theorem four_term_sq_le (a b c d x y z w : ℝ) :
   positivity
 
 /-- The final scalar passage from a squared norm estimate to square-root stability. -/
-theorem abs_le_mul_sqrt_of_sq_le {d C E : ℝ} (hC : 0 ≤ C) (hE : 0 ≤ E)
+theorem abs_le_mul_sqrt_of_sq_le {d C E : ℝ} (hC : 0 ≤ C)
     (h : d ^ 2 ≤ C ^ 2 * E) : |d| ≤ C * sqrt E := by
   have hroot := Real.sqrt_le_sqrt h
   rw [Real.sqrt_sq_eq_abs, Real.sqrt_mul (sq_nonneg C), Real.sqrt_sq_eq_abs,

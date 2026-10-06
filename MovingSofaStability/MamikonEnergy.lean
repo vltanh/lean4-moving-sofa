@@ -6,9 +6,10 @@ public import MovingSofaStability.QuadraticDeficit
 /-!
 # Mamikon difference energies
 
-Uncompiled proof source. The quantitative route now uses the neutral square
-and displacement infrastructure, without importing the original rigidity or
-CapKernel module. It applies to arbitrary convex bodies, without InjCond1.
+These statements quantify Mamikon's theorem for two convex bodies and apply to
+arbitrary convex bodies, without `InjCond1`. They use the square-integral and
+displacement facts of `MamikonFoundation`, not the uniqueness proof's
+`Rigidity` module.
 
 The energy is half the integral of the difference of two tangent displacements
 squared. It is not the Mamikon area of either body separately.
@@ -68,6 +69,8 @@ variable (hz : ∀ K, IsCBV (z K) a b)
 variable (hzl : ∀ K, ∀ t ∈ Icc a b, z K t ∈ suppLine K.1 t)
 variable (hlin : ∀ K₀ K₁, ∀ c ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
   z (convexBodyComb c K₀ K₁) t = (1 - c) • z K₀ t + c • z K₁ t)
+-- The statements below do not mention these hypotheses, so they are included explicitly.
+include hab hb hz hzl hlin
 
 /-- Exact quantitative Mamikon convexity gap, including the endpoint parameters. -/
 theorem mamikon_combo_energy (K₀ K₁ : ConvexBodySet) {c : ℝ}

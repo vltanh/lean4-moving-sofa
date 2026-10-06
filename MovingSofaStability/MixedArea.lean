@@ -5,10 +5,10 @@ public import MovingSofaStability.WideConcavity
 /-!
 # Mixed-area first variation without atom-free endpoints
 
-Uncompiled proof source. The source mixed-area symmetry argument removed the
-atoms at 0 and 2*pi using Ki. Here those atoms are retained: periodicity makes
-their endpoint contributions equal. The integration-by-parts theorem already
-applies to arbitrary convex bodies.
+The source mixed-area symmetry argument removed the atoms at 0 and 2*pi using
+Ki. Here those atoms are retained: periodicity makes their endpoint
+contributions equal. The integration-by-parts theorem already applies to
+arbitrary convex bodies.
 -/
 
 @[expose] public section
@@ -123,6 +123,6 @@ theorem area_firstVariation_caps (K Ks : ConvexBodySet)
       ∫ t in Icc 0 π, (supp Ks.1 t - supp K.1 t) ∂(sigma K.1) := by
   rw [area_firstVariation_convex]
   apply opt_Ico_eq_Icc hK (Ks.2.continuous_supp.sub K.2.continuous_supp)
-  rw [hKs.2.2.2.2.2.1, hK.2.2.2.2.2.1, sub_self]
+  rw [Pi.sub_apply, hKs.2.2.2.2.2.1, hK.2.2.2.2.2.1, sub_self]
 
 end MovingSofaStability

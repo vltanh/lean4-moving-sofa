@@ -5,10 +5,10 @@ public import MovingSofaStability.ODEReconstruction
 /-!
 # Algebraic bound for the four-piece Green evaluation norm
 
-Uncompiled proof source. The four formulas here are the squared evaluation
-norms calculated in stability note 01. This file bounds them and proves the
-rational numerical constant. Identifying them with the square integrals of
-the reconstruction kernels is a distinct analytic obligation.
+The four formulas here are the squared evaluation norms calculated in stability
+note 01. This file bounds them and proves the rational numerical constant.
+Identifying them with the square integrals of the reconstruction kernels is a
+distinct analytic obligation.
 -/
 
 @[expose] public section
@@ -54,7 +54,7 @@ theorem greenNormSquared_le {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   unfold greenNormSquared
   split_ifs with h1 h2 h3
   · have hct : 0 < cos t := cos_pos_of_mem_Ioo
-      ⟨by linarith [pi_pos, ht.1], by linarith [hφ.2]⟩
+      ⟨by linarith [pi_pos, ht.1], by linarith [hφ.2, pi_pos]⟩
     have htnt : 0 ≤ tan t := by rw [tan_eq_sin_div_cos]; exact div_nonneg hs hct.le
     have hmul : 0 ≤ cos t ^ 2 * tan t := mul_nonneg (sq_nonneg _) htnt
     have hscale := mul_le_mul_of_nonneg_right hcost
@@ -103,11 +103,12 @@ theorem cap_constant_lt_2002 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) :
 /-- Convert a verified squared evaluation bound to the explicit cap scale.
 The analytic premise is kept visible until the kernel integrals are identified. -/
 theorem green_evaluation_from_squared {φ value E : ℝ}
-    (hφ : φ ∈ Ioo 0 (π / 4)) (hE : 0 ≤ E)
+    (hφ : φ ∈ Ioo 0 (π / 4))
     (he : value ^ 2 ≤ 4 * (1 / cos φ) ^ 2 * E) :
     |value| ≤ (2 / cos φ) * sqrt E := by
   have hc : 0 < cos φ := (cap_angle_parameters hφ).1
-  apply abs_le_mul_sqrt_of_sq_le (show 0 ≤ 2 / cos φ by positivity) hE
-  convert he using 1 <;> ring
+  apply abs_le_mul_sqrt_of_sq_le (show 0 ≤ 2 / cos φ by positivity)
+  convert he using 1
+  ring
 
 end MovingSofaStability

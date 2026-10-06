@@ -5,9 +5,9 @@ public import MovingSofaStability.MixedArea
 /-!
 # Core first variation with a nonsmooth competing cap
 
-Uncompiled proof source. Only the reference cap is in Ki. The competitor is
-an arbitrary convex body. The core's vector measure belongs to the smooth
-reference; no derivative of the competing corner path is assumed.
+Only the reference cap is in Ki. The competitor is an arbitrary convex body. The
+core's vector measure belongs to the smooth reference; no derivative of the
+competing corner path is assumed.
 -/
 
 @[expose] public section

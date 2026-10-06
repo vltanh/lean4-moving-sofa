@@ -82,10 +82,45 @@ Romik's numerical solution `φ = 0.039177…`, `θ = 0.681301…`. Then
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 ```
 
-The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L328) and [`Baek.gerver_params_unique`](../Challenge.lean#L332) prove that the box holds exactly one solution, so
-Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L338) that its area lies between `2.2192` and `2.2199`, around
+The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L368) and [`Baek.gerver_params_unique`](../Challenge.lean#L372) prove that the box holds exactly one solution, so
+Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L378) that its area lies between `2.2192` and `2.2199`, around
 Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L93) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L109) are in
 [`ChallengeDefs.lean`](../ChallengeDefs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
+
+### Stability
+
+The stability theorems ([Results](results.md#stability)) use five more definitions. A moving sofa *with
+angle* `ω` is one whose motion ends with the rotation by `-ω`, that is, turns it clockwise by `ω`. The
+*deficit* of a set is the area of Gerver's sofa minus its area. `normalizedSofa P S` translates `S` so
+that its highest point has height 1 and its leftmost point the abscissa of the leftmost point of
+Gerver's sofa. `EuclideanClose r S T` says that every point of each set lies within Euclidean distance
+`r` of a point of the other; for nonempty compact sets, this is a Euclidean Hausdorff distance at most
+`r`:
+
+```lean
+def IsMovingSofaWithAngle (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
+  IsClosed S ∧ IsConnected S ∧
+    ∃ (θ : ℝ → ℝ) (c : ℝ → ℝ × ℝ), ContinuousOn θ (Icc 0 1) ∧ ContinuousOn c (Icc 0 1) ∧
+      θ 0 = 0 ∧ θ 1 = -ω ∧ (∀ p ∈ S, rot (θ 0) p + c 0 ∈ horizSide) ∧
+      (∀ s ∈ Icc (0 : ℝ) 1, ∀ p ∈ S, rot (θ s) p + c s ∈ hallway) ∧
+      (∀ p ∈ S, rot (θ 1) p + c 1 ∈ vertSide)
+
+noncomputable def sofaDeficit (P : GerverParams) (S : Set (ℝ × ℝ)) : ℝ :=
+  (volume (gerverSofa P)).toReal - (volume S).toReal
+
+noncomputable def normalizedSofa (P : GerverParams) (S : Set (ℝ × ℝ)) : Set (ℝ × ℝ) :=
+  (fun p => p + (sInf (Prod.fst '' gerverSofa P) - sInf (Prod.fst '' S), 1 - sSup (Prod.snd '' S)))
+    '' S
+
+noncomputable def euclideanDist (p q : ℝ × ℝ) : ℝ := √((p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2)
+
+def EuclideanClose (r : ℝ) (S T : Set (ℝ × ℝ)) : Prop :=
+  (∀ p ∈ S, ∃ q ∈ T, euclideanDist p q ≤ r) ∧ (∀ q ∈ T, ∃ p ∈ S, euclideanDist q p ≤ r)
+```
+
+The library states the same theorems with its own forms of these definitions: the normalization
+with support functions, and the distance through its Euclidean norm; [`Solution.lean`](../Solution.lean) proves that
+the two forms agree.
 
 ## Formal-conjectures' definitions
 

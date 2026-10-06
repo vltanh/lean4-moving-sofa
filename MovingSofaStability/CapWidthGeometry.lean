@@ -5,9 +5,9 @@ public import MovingSofaStability.NicheContainment
 /-!
 # Cut geometry from a lower bound on bottom width
 
-Uncompiled proof source. A width of 21/10 suffices for the fixed small cut
-angles. This avoids assuming area continuity, curvature regularity, or Ki
-membership of the competing cap when locating its cut feet.
+A width of 21/10 suffices for the fixed small cut angles. This avoids assuming
+area continuity, curvature regularity, or Ki membership of the competing cap
+when locating its cut feet.
 -/
 
 @[expose] public section
@@ -85,9 +85,9 @@ theorem cut_regions_disjoint_of_width {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ)
   rintro p ⟨hpK, hpR⟩ ⟨-, hpL⟩
   have hy := hK.snd_le_one hpK
   change supp K φ - 1 ≤ dot p (uvec φ) at hpR
-  change supp K (π / 2 - φ + π / 2) - 1 ≤ dot p (vvec (π / 2 - φ)) at hpL
+  change supp K (π / 2 - φ + π / 2) - 1 ≤ dot p (uvec (π / 2 - φ + π / 2)) at hpL
   rw [show π / 2 - φ + π / 2 = π - φ by ring] at hpL
-  simp only [dot, uvec, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub] at hpR hpL
+  simp only [dot, uvec, cos_pi_sub, sin_pi_sub] at hpR hpL
   have hys := mul_le_mul_of_nonneg_right hy hs0.le
   nlinarith
 

@@ -130,6 +130,33 @@ def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 /-- Gerver's sofa. -/
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
+/-- A moving sofa that turns clockwise by the angle `ω`: a motion as in `IsMovingSofa` that ends
+with the rotation by `-ω`. -/
+def IsMovingSofaWithAngle (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
+  IsClosed S ∧ IsConnected S ∧
+    ∃ (θ : ℝ → ℝ) (c : ℝ → ℝ × ℝ), ContinuousOn θ (Icc 0 1) ∧ ContinuousOn c (Icc 0 1) ∧
+      θ 0 = 0 ∧ θ 1 = -ω ∧ (∀ p ∈ S, rot (θ 0) p + c 0 ∈ horizSide) ∧
+      (∀ s ∈ Icc (0 : ℝ) 1, ∀ p ∈ S, rot (θ s) p + c s ∈ hallway) ∧
+      (∀ p ∈ S, rot (θ 1) p + c 1 ∈ vertSide)
+
+/-- The area deficit `|G| - |S|` of a set `S`, where `G` is Gerver's sofa. -/
+noncomputable def sofaDeficit (P : GerverParams) (S : Set (ℝ × ℝ)) : ℝ :=
+  (volume (gerverSofa P)).toReal - (volume S).toReal
+
+/-- The translate of `S` whose highest point has height `1` and whose leftmost point has the
+abscissa of the leftmost point of Gerver's sofa. -/
+noncomputable def normalizedSofa (P : GerverParams) (S : Set (ℝ × ℝ)) : Set (ℝ × ℝ) :=
+  (fun p => p + (sInf (Prod.fst '' gerverSofa P) - sInf (Prod.fst '' S), 1 - sSup (Prod.snd '' S)))
+    '' S
+
+/-- The Euclidean distance between two points of the plane. -/
+noncomputable def euclideanDist (p q : ℝ × ℝ) : ℝ := √((p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2)
+
+/-- Every point of each of the sets `S` and `T` lies within Euclidean distance `r` of a point of the
+other. For nonempty compact sets, their Euclidean Hausdorff distance is then at most `r`. -/
+def EuclideanClose (r : ℝ) (S T : Set (ℝ × ℝ)) : Prop :=
+  (∀ p ∈ S, ∃ q ∈ T, euclideanDist p q ≤ r) ∧ (∀ q ∈ T, ∃ p ∈ S, euclideanDist q p ≤ r)
+
 end Baek
 
 scoped[EuclideanGeometry] notation "ℝ²" => EuclideanSpace ℝ (Fin 2)

@@ -12,18 +12,22 @@ was not recorded.
 - **Formalization:** Claude Opus 5.5 (Anthropic, model `claude-opus-5-5`), in Claude Code 2.1.285
   and 2.1.287, in four sessions: the Lean code of the three libraries, the audit of the paper, the
   documents and the figures; and on 4 October, as sub-agents of the session that wrote the manuscript
-  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below.
+  (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5), the extension of the libraries below;
+  and on 5 October, in Claude Code 2.1.289, the merge of the second proof of optimality below and
+  the compilation of the stability proof.
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
-  uniqueness proof and of the connection with formal-conjectures.
+  uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
+  Lean modules of a second proof of Baek's theorem (pull request #5), and the stability argument
+  with its uncompiled Lean code (pull request #8).
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill:
   commit `cbdedac` for Baek's paper, versions 1.3.0 and 1.3.1 for the rounds up to the
-  simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the last round.
+  simplification, version 1.4.0 for following Baek's proofs, and version 2.1.0 for the later rounds.
 - **Review:** no person has reviewed the proofs; Lean's kernel checks every one of them. Independent
   agents checked the statements against the paper's LaTeX source before any proof was written, the
   audit's findings against the same source, the uniqueness statements against the informal
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
-  and the report's "What's next" section against its sources, and the manuscript against the Lean
-  statements and proofs.
+  and the report's "What's next" section against its sources, the manuscript against the Lean
+  statements and proofs, and every repaired proof of the stability library against the draft's.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -279,3 +283,104 @@ Figures, from 11:48 to 14:15:
 - tokens of the sub-agents: 3.00 million output, 18.03 million input, 469 million cache reads; of the main
   session: 0.23 million output, 0.48 million input, 74 million cache reads;
 - model calls: 1,365 by the sub-agents (all to `claude-opus-5-5`) and 118 by the main session (`claude-sonnet-5-5`).
+
+## A second proof of optimality (5 October 2026)
+
+The owner asked to merge pull request #5, in which ChatGPT Pro 6 had written a second proof of Baek's optimality
+theorem from the maximizing caps of the uniqueness proof, and to update the manuscript as the pull request
+suggested.
+
+How it was made:
+- 11:56 to 12:52: Claude Opus 5.5, in Claude Code 2.1.289. The pull request added three Lean modules
+  ([`Maximizers`](MovingSofaUniqueness/Maximizers.lean), [`Optimality`](MovingSofaUniqueness/Optimality.lean), [`Alternative`](MovingSofaUniqueness/Alternative.lean); 428 lines), a separate dependency audit and notes,
+  none of them compiled or run, and left every existing file unchanged. The modules compiled without change and
+  without warnings, and the audit passed: none of their 24 declarations depends on Baek's Theorem 1.1.1 or on
+  [`MovingSofaUniqueness.Main`](MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
+- Commit `51c9be1` makes CI check the new code. [`scripts/Audit.lean`](scripts/Audit.lean) imports the three modules, as the CI step
+  that compares its imports with the libraries requires. The second audit, [`scripts/AuditMaximizerRoute.lean`](scripts/AuditMaximizerRoute.lean),
+  also rejects the results from which Baek derives the right-angle motion and the injectivity condition of
+  Baek's cap from its balance (Theorems 1.5.2 and 8.1.1 (2), and the eight results they rest on), and it passes;
+  CI runs it. The docstrings and the documentation describe the second proof. The continuous integration and
+  Palomar's preflight passed on this commit.
+- The manuscript gained Fact 2.7, Section 8.4 (Lemmas 8.6 and 8.7, Theorem 8.8) and the related passages of
+  Sections 1 to 3 and 10 and Appendices C to E, and now cites commit `51c9be1`. Two sub-agents (Claude Opus 5.5),
+  neither able to edit, read the new text, one against the Lean and one for its prose; the first found no
+  mathematical error, and their findings were applied.
+- Afterwards, at the owner's request, the same session removed the paragraph on the second proof that had ended
+  Section 1.4 of the manuscript, and added one sentence on it to the abstract.
+
+Figures, from 11:56 to 12:52:
+- elapsed time: 57 minutes;
+- sub-agents: 3, at most 3 at once, about 0.4 hours of work: the two readers of the manuscript, and a one-word test
+  call;
+- tool calls: 81 by the sub-agents, 166 by the main session;
+- tokens of the sub-agents: 0.15 million output, 0.48 million input, 12 million cache reads; of the main session:
+  0.21 million output, 0.52 million input, 56 million cache reads;
+- model calls: 70 by the sub-agents (69 to `claude-opus-5-5`, 1 to `claude-haiku-4-5`) and 151 by the main session
+  (`claude-opus-5-5`).
+
+## The stability (5 October 2026)
+
+The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
+sofa. Its argument (the notes now in [`docs/archive/stability/`](docs/archive/stability)) and its Lean code, 85 modules and about
+12,200 lines, had been written by ChatGPT Pro 6 and never compiled.
+
+How it was made:
+- 22:17 to 23:13: Claude Opus 5.5, in Claude Code 2.1.289, following the skill's procedure for an uncompiled draft,
+  in a separate worktree of the pull request's branch.
+- Every module was brought to elaborate in the order of its imports, with the 123 proofs that failed (of about 490
+  declarations) replaced by `sorry`, and two variable names that Lean rejects renamed. That is the baseline,
+  commit `d56546e`.
+- Sixteen sub-agents restored and repaired the draft's proofs, each a group of modules, checking them against
+  private copies of the compiled modules. Most failures were names that Mathlib has changed, rewrites that found no
+  match, and facts that `linarith` could not see. Twenty lemmas were false as compiled: their hypotheses were
+  section variables that the statements never mention, which Lean 4 leaves out. The agents checked a
+  counterexample to each in Lean, and `include` now adds the hypotheses that the draft's proofs and callers assumed.
+- The coordinating agent compared every agent's statements with the baseline, integrated the work, removed six
+  hypotheses that helper lemmas did not use, cleared the other linter warnings, and made the library a default
+  target, part of the axiom audit and part of CI. A seventeenth sub-agent compared every repaired proof with the
+  draft's and found no change of argument. The audit passes: the 5,957 declarations of the libraries use only the
+  standard axioms.
+- [Stability](docs/stability.md) describes the result. The pull request's notes, numerical checks and status documents
+  moved to [`docs/archive/stability/`](docs/archive/stability); the README, the report's "What's next", and the pages on the layout
+  and the verification mention the new library. The manuscript is unchanged.
+
+Figures, from 22:17 to 23:13:
+- elapsed time: 56 minutes;
+- sub-agents: 17, at most 16 at once, about 2.3 hours of work;
+- tool calls: 883 by the sub-agents, 209 by the main session;
+- tokens of the sub-agents: 0.78 million output, 2.40 million input, 80 million cache reads; of the main
+  session: 0.22 million output, 0.52 million input, 66 million cache reads;
+- model calls: 832 by the sub-agents and 199 by the main session, all to `claude-opus-5-5`.
+
+## The stability in the Challenge and the manuscript (6 October 2026)
+
+The owner named ChatGPT Pro 6 as the author of pull request #8 and asked to state the stability theorems in the
+Challenge without running Palomar's preflight yet, to add the stability to the manuscript, and to add to the
+formalize-math-paper skill the pitfall that the previous round had met.
+
+How it was made:
+- 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L401),
+  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
+  and, in [`Solution.lean`](Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
+  the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
+  [`formalization.yaml`](formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
+  request #8.
+- The manuscript gained Section 10, the stability (Theorems 10.1 to 10.4 with their proofs, about sixteen pages),
+  and the passages on it in the abstract, Sections 1 and 11 and Appendices D and E; it now cites commit `92b2f86`.
+  A sub-agent wrote Section 10 and its rows of the dictionary from the Lean, and three sub-agents that it launched
+  compared every statement and proof with the Lean, part by part. Two more sub-agents, neither able to edit, then
+  read the new text, one against the Lean and the repository, the other for its prose. Their findings were applied,
+  among them a sign error in the description of Mamikon's term in Section 2. The manuscript grew from 70 to 91
+  pages; its README records the round.
+- Version 2.1.1 of the formalize-math-paper skill (commit `06ae331`) adds the pitfall that Lean 4 leaves out of a
+  statement the section variables that it does not mention, with the check and the fix.
+
+Figures, from 07:08 to 09:49:
+- elapsed time: 2 hours 41 minutes;
+- sub-agents: 6 (3 of them launched by another sub-agent), at most 4 at once, about 3.2 hours of work;
+- tool calls: 549 by the sub-agents, 108 by the main session;
+- tokens of the sub-agents: 1.32 million output, 4.63 million input, 121 million cache reads; of the main
+  session: 0.16 million output, 1.63 million input, 85 million cache reads;
+- model calls: 447 by the sub-agents and 114 by the main session, all to `claude-opus-5-5`.

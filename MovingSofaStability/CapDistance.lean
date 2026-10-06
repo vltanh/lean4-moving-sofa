@@ -5,9 +5,9 @@ public import MovingSofaStability.SupportDistance
 /-!
 # Euclidean cap-distance certificate
 
-Uncompiled proof source. The upper-semicircle coercivity estimate is extended
-to all directions using the cap's two bottom endpoints, then converted to
-actual Euclidean Hausdorff witnesses. The coefficient 80 is non-sharp.
+The upper-semicircle coercivity estimate is extended to all directions using the
+cap's two bottom endpoints, then converted to actual Euclidean Hausdorff
+witnesses. The coefficient 80 is non-sharp.
 -/
 
 @[expose] public section
@@ -113,6 +113,7 @@ theorem cap_euclideanClose_of_upper_support {K₀ K₁ : Set Point}
   apply euclideanClose_of_support_bound h₁.2.1
     (convexBody_translate h₀.2.1 (capReferenceShift K₀ K₁)) hR
   intro t
+  change |supp K₁ t - supp (shiftedReferenceCap K₀ K₁) t| ≤ R
   rw [← capDifference_eq_shifted_support h₀.2.1 t]
   exact capDifference_bound_all h₀ h₁ hR hupper t
 
@@ -139,6 +140,6 @@ theorem ki_cap_distance_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.I
 /-- No translation remains when the reference and competitor have the same left support. -/
 theorem shiftedReferenceCap_eq_of_left_support {K₀ K₁ : Set Point}
     (h : supp K₁ π = supp K₀ π) : shiftedReferenceCap K₀ K₁ = K₀ := by
-  simp [shiftedReferenceCap, capReferenceShift, h]
+  simp [shiftedReferenceCap, capReferenceShift, h, Prod.mk_zero_zero]
 
 end MovingSofaStability

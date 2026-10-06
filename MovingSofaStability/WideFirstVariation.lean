@@ -5,9 +5,9 @@ public import MovingSofaStability.ReferenceCoreVariation
 /-!
 # First variation of Q on the enlarged domain
 
-Uncompiled proof source. The reference cap belongs to Ki and its two tails
-meet its core. The competing triple is only in the enlarged nonsmooth domain.
-All derivatives of corner paths below belong to the reference cap.
+The reference cap belongs to Ki and its two tails meet its core. The competing
+triple is only in the enlarged nonsmooth domain. All derivatives of corner paths
+below belong to the reference cap.
 -/
 
 @[expose] public section

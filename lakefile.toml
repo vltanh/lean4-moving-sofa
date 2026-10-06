@@ -2,7 +2,8 @@ name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
-  "ChallengeDefs", "Challenge", "Solution"]
+  "MovingSofaStability", "MovingSofaExtremal", "ChallengeDefs", "Challenge", "Solution",
+  "SolutionCoercive"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -14,27 +15,27 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.35.0-rc3"
 
-# The faithful formalization of Baek's paper remains unchanged.
+# The formalization of Baek's paper "Optimality of Gerver's sofa".
 [[lean_lib]]
 name = "MovingSofaOptimality"
 globs = ["MovingSofaOptimality.+"]
 
-# The original equality/CapKernel uniqueness proof and historical maximizer route.
+# The uniqueness of Gerver's sofa, in the definitions of MovingSofaOptimality.
 [[lean_lib]]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# The stable bridge between formal-conjectures and Baek/Romik definitions.
+# The bridge between the definitions of formal-conjectures and those of Baek's paper.
 [[lean_lib]]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
 
-# Uncompiled proof source. Deliberately NOT a default target.
+# The stability of Gerver's sofa, in the definitions of MovingSofaOptimality.
 [[lean_lib]]
 name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
 
-# Coercive optimality/uniqueness, separated to avoid changing default targets.
+# Optimality, uniqueness and stability from the coercive certificate of MovingSofaStability.
 [[lean_lib]]
 name = "MovingSofaExtremal"
 globs = ["MovingSofaExtremal.+"]
@@ -49,6 +50,6 @@ name = "Challenge"
 [[lean_lib]]
 name = "Solution"
 
-# The same Challenge statements via the coercive route; uncompiled, non-default.
+# The theorems of the Challenge, proved through MovingSofaExtremal.
 [[lean_lib]]
 name = "SolutionCoercive"

@@ -5,9 +5,9 @@ public import MovingSofaStability.SeparatedWedges
 /-!
 # Positive local core regions
 
-Uncompiled proof source. Gerver's core lies strictly above the floor. This
-persists in a fixed support neighborhood and lets the local upper bound use
-three positive-area regions, rather than subtract an auxiliary trapezoid.
+Gerver's core lies strictly above the floor. This persists in a fixed support
+neighborhood and lets the local upper bound use three positive-area regions,
+rather than subtract an auxiliary trapezoid.
 -/
 
 @[expose] public section
@@ -76,7 +76,8 @@ theorem separated_core_below {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       dot, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub]
     nlinarith [mul_pos hs hs0]
   · rw [proposition2_2_2_qMinus]
-    simp only [mem_inter_iff, halfMinusOpen, mem_ofPred_eq, uvec_add_pi_div_two, dot, uvec, vvec]
+    simp only [mem_inter_iff, halfMinusOpen, mem_ofPred_eq, dot, uvec, cos_add_pi_div_two,
+      sin_add_pi_div_two]
     constructor <;> nlinarith [mul_pos hs hst, mul_pos hs hct]
 
 /-- The small right triangular region is inside a cut-endpoint wedge. -/

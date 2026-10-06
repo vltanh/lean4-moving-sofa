@@ -5,10 +5,10 @@ public import MovingSofaStability.CanonicalContacts
 /-!
 # Canonical triples for nearby nonsmooth caps
 
-Uncompiled proof source. All endpoint contacts and linear wall constraints
-are proved. The final neighborhood result supplies an actual WideTriple and
-does not assume Ki of the competing cap or feasibility of its canonical tails.
-The geometric inequality A <= Q is a subsequent, separate result.
+All endpoint contacts and linear wall constraints are proved. The final
+neighborhood result supplies an actual WideTriple and does not assume Ki of the
+competing cap or feasibility of its canonical tails. The geometric inequality A
+<= Q is a subsequent, separate result.
 -/
 
 @[expose] public section
@@ -26,7 +26,7 @@ theorem canonical_right_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : I
   have hB := opt_rightBody_isConvexBody hφ hK
   have hbound : ∀ p ∈ rightBody φ K, dot p (uvec (π + t)) ≤ 1 - supp K t := by
     intro p hp
-    have h := hp.2 t ht
+    have h := mem_iInter₂.mp hp.2 t ht
     change supp K t - 1 ≤ dot p (uvec t) at h
     rw [show π + t = t + π by ring, uvec_add_pi, dot_neg_right]
     linarith
@@ -40,8 +40,9 @@ theorem canonical_left_wall {φ : ℝ} (hφ : 0 ≤ φ) {K : Set Point} (hK : Is
   have hD := opt_leftBody_isConvexBody hφ hK
   have hbound : ∀ p ∈ leftBody φ K, dot p (uvec (3 * π / 2 + t)) ≤ 1 - supp K (π / 2 + t) := by
     intro p hp
-    have h := hp.2 t ht
-    change supp K (t + π / 2) - 1 ≤ dot p (vvec t) at h
+    have h := mem_iInter₂.mp hp.2 t ht
+    change supp K (t + π / 2) - 1 ≤ dot p (uvec (t + π / 2)) at h
+    rw [uvec_add_pi_div_two] at h
     rw [show 3 * π / 2 + t = (t + π / 2) + π by ring, uvec_add_pi,
       dot_neg_right, uvec_add_pi_div_two]
     rw [show π / 2 + t = t + π / 2 by ring]
@@ -97,7 +98,7 @@ theorem nearby_canonical_inWideL {P : GerverParams} (hP : P.IsSolution) (hbox : 
       IsCap K (π / 2) → UpperSupportClose δ K P.cap →
       InWideL P.φ K (rightBody P.φ K) (leftBody P.φ K) := by
   have hKi := theorem8_1_1_gerver hP hbox
-  have hφ := gm_φ_mem_Ioo hP hbox
+  have hφ := GerverParams.gm_φ_mem_Ioo hP hbox
   obtain ⟨c, δA, hc, hδA, hδA1, hA⟩ := core_arm_margin_near_reference hKi
     (a := P.φ) (b := π / 2 - P.φ) hφ.1 (by linarith [hφ.2]) (by linarith [hφ.1])
   let δ := min δA (1 / 20)

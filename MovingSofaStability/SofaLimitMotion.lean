@@ -5,10 +5,10 @@ public import MovingSofaStability.SofaBounds
 /-!
 # Closed supporting constraints give a genuine motion of the limit
 
-Uncompiled proof source. The original movement paths are not assumed to have
-a convergent subsequence. The limit motion is constructed directly from the
-limit set's support function and its terminal width. Compact support continuity
-is used directly; the actual sofa is not required to be convex.
+The original movement paths are not assumed to have a convergent subsequence.
+The limit motion is constructed directly from the limit set's support function
+and its terminal width. Compact support continuity is used directly; the actual
+sofa is not required to be convex.
 -/
 
 @[expose] public section
@@ -36,7 +36,7 @@ theorem canonical_placement_coordinates (S : Set Point) (t : ℝ) (p : Point) :
     (rot (-t) (p - innerCorner S t)).2 = innerSlackV S t p := by
   rw [ms_rot_neg_fst, ms_rot_neg_snd, dot_sub_left, dot_sub_left,
     (cn_innerCorner_dot S t).1, opt_innerCorner_dot_v]
-  constructor <;> unfold innerSlackU innerSlackV <;> ring
+  exact ⟨by unfold innerSlackU; ring, by unfold innerSlackV; ring⟩
 
 /-- Closed canonical-hallway inequalities and terminal width define a movement. -/
 theorem moving_of_supporting_constraints {S : Set Point} {ω : ℝ}
@@ -51,12 +51,14 @@ theorem moving_of_supporting_constraints {S : Set Point} {ω : ℝ}
   have hcorner := compact_innerCorner_continuous hS
   have hplace (s : ℝ) (p : Point) :
       rot (θ s) p + c s = rot (-(s * ω)) (p - innerCorner S (s * ω)) := by
-    simp only [θ, c, rot_sub_vec, sub_eq_add_neg]
+    simp only [θ, c]
+    rw [rot_sub_vec, sub_eq_add_neg]
   refine ⟨hS.isClosed, hc, θ, c, ?_⟩
   refine ⟨by fun_prop, ?_, by simp [θ], by simp [θ], ?_, ?_, ?_⟩
   · have hpath : Continuous (fun s => innerCorner S (s * ω)) := hcorner.comp (by fun_prop)
-    unfold c rot
-    fun_prop
+    have hfst : Continuous (fun s => (innerCorner S (s * ω)).1) := continuous_fst.comp hpath
+    have hsnd : Continuous (fun s => (innerCorner S (s * ω)).2) := continuous_snd.comp hpath
+    exact Continuous.continuousOn (by unfold c rot; fun_prop)
   · intro p hp
     rw [hplace]
     simp only [zero_mul, neg_zero, rot_zero]
@@ -159,7 +161,8 @@ theorem normalized_moving_limit {P : GerverParams} {K : ℕ → CompactShape} {L
       ⟨div_nonneg ht.1 hωpos.le, (div_le_one hωpos).2 ht.2⟩
     have he : s * ω = t := div_mul_cancel₀ _ hωpos.ne'
     have htn : Tendsto (fun n => s * ωn n) atTop (𝓝 t) := by
-      simpa only [he] using tendsto_const_nhds.mul hωn
+      rw [← he]
+      exact tendsto_const_nhds.mul hωn
     obtain ⟨hU, hV⟩ := compactShape_slack_limits hK hpt htn
     apply ge_of_tendsto (hU.max hV)
     exact Eventually.of_forall fun n => moving_hallway_slacks (hmove n) (hpn n)

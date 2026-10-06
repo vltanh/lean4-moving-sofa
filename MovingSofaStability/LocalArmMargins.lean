@@ -5,9 +5,9 @@ public import MovingSofaStability.ExposedFaceStability
 /-!
 # Uniform arm margins near an injective reference
 
-Uncompiled proof source. The reference cap is injective; a competitor need
-only be a normalized cap. Both endpoints of every competing exposed face
-satisfy the margin, so polygonal and other nonsmooth competitors are included.
+The reference cap is injective; a competitor need only be a normalized cap. Both
+endpoints of every competing exposed face satisfy the margin, so polygonal and
+other nonsmooth competitors are included.
 -/
 
 @[expose] public section
@@ -31,7 +31,7 @@ theorem injective_face_eq_aK {K : Set Point} (hK : IsCap K (π / 2)) (hI : InjCo
 theorem injective_face_eq_cK {K : Set Point} (hK : IsCap K (π / 2)) (hI : InjCond1 K)
     {t : ℝ} (ht : t ∈ Ioc (0 : ℝ) (π / 2)) {p : Point} (hp : p ∈ edge K (t + π / 2)) :
     p = cK K t := by
-  have he := inj_vplus_eq_vminus_of_injCond1 hK.2.1 hI
+  have he := inj_vplus_eq_vminus_of_injCond1 hK.2.1 hI (t := t + π / 2)
     (Or.inr ⟨by linarith [ht.1], by linarith [ht.2]⟩)
   rw [edge_eq_segment hK.2.1 (t + π / 2), ← he, segment_same] at hp
   exact mem_singleton_iff.mp hp
@@ -60,7 +60,7 @@ theorem core_arm_margin_near_reference {K₀ : Set Point} (h₀ : IsKi K₀)
     obtain ⟨hg, hf⟩ := opt_arm_gt_one h₀ hti
     exact lt_min (sub_pos.mpr hf) (sub_pos.mpr hg)
   obtain ⟨m, hm, hmle⟩ := isCompact_Icc.exists_forall_le'
-    (((hfc.mono hsub).sub continuousOn_const).min ((hgc.mono hsub).sub continuousOn_const))
+    (((hfc.mono hsub).sub continuousOn_const).inf ((hgc.mono hsub).sub continuousOn_const))
     hpositive
   let FA := fun p : Point => fun t : ℝ => supp K₀ (t + π / 2) - dot p (vvec t) - 1 - m / 2
   let FC := fun p : Point => fun t : ℝ => supp K₀ (t - π / 2) - dot p (uvec (t - π / 2)) - 1 - m / 2
@@ -82,13 +82,14 @@ theorem core_arm_margin_near_reference {K₀ : Set Point} (h₀ : IsKi K₀)
     · exact continuous_const
     · exact continuous_const
   obtain ⟨δA, hδA, -, hA⟩ := exposed_face_property_stable hcap isCompact_Icc
-    (I := Icc a b) (fun t ht => ⟨ha.le.trans ht.1, ht.2.trans hb.le |>.trans (by linarith [pi_pos])⟩)
+    (I := Icc a b)
+    (fun t ht => ⟨ha.le.trans ht.1, ht.2.trans hb.le |>.trans (by linarith [pi_pos])⟩)
     FA hFA.continuousOn (by
       intro t ht p hp
       have he := injective_face_eq_aK hcap hI
         ⟨ha.le.trans ht.1, ht.2.trans_lt hb⟩ hp
       rw [he]
-      have hf := (hmle t ht).trans (min_le_left _ _)
+      have hf : m ≤ fK K₀ t - 1 := (hmle t ht).trans (min_le_left _ _)
       have hform : supp K₀ (t + π / 2) - dot (aK K₀ t) (vvec t) = fK K₀ t := by
         exact (inj_fMinus_eq K₀ t).symm
       change 0 < supp K₀ (t + π / 2) - dot (aK K₀ t) (vvec t) - 1 - m / 2
@@ -104,7 +105,7 @@ theorem core_arm_margin_near_reference {K₀ : Set Point} (h₀ : IsKi K₀)
       have he := injective_face_eq_cK hcap hI
         ⟨by linarith [hti.1], by linarith [hti.2]⟩ hp'
       rw [he]
-      have hg := (hmle (t - π / 2) hti).trans (min_le_right _ _)
+      have hg : m ≤ gK K₀ (t - π / 2) - 1 := (hmle (t - π / 2) hti).trans (min_le_right _ _)
       have hform : supp K₀ (t - π / 2) - dot (cK K₀ (t - π / 2)) (uvec (t - π / 2)) =
           gK K₀ (t - π / 2) := by
         simp only [gK, gPlus, dot_sub_left, inj_dot_outerCorner_uvec, cK]

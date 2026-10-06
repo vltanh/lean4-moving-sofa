@@ -1,0 +1,124 @@
+\section{Formalization, the use of AI, and open questions}\label{sec:formalization}
+
+\subsection{The formalization}
+
+The repository~\cite{Companion} (Apache-2.0) contains four Lean~4 libraries on
+top of Mathlib (Lean and Mathlib \texttt{v4.35.0-rc3}):
+\begin{itemize}
+\item \texttt{MovingSofaOptimality} (51 files, about 40,000 lines): Baek's
+paper~\cite{Baek}, organized by its chapters, with the results that it cites
+(Schneider's area formula for planar convex bodies; the existence and uniqueness
+of the solution of Romik's system in the box of \cref{fact:gerver}) and the
+structure of Gerver's sofa
+(\cref{fact:gerver}\ref{fact:gerver:cap},\ref{fact:gerver:niche}), which
+\cite{Baek} states without proof (Thm.~8.4.1) or proves invalidly (Thm.~6.1.2);
+\item \texttt{MovingSofaUniqueness} (11 files, about 5,900 lines):
+\cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery},
+one module per step of the argument, and three modules for the second proof of
+\cref{sec:second};
+\item \texttt{MovingSofaBridge} (4 files, about 2,600 lines): the connection
+with the definitions of formal-conjectures~\cite{FormalConjectures}, which are
+different (a motion there is a path of isometries that starts at the identity,
+and Gerver's sofa is defined from Gerver's four constants); it shows that a set
+is a moving sofa for formal-conjectures if and only if it lies in the horizontal
+side of the hallway and is a moving sofa in the sense of
+Appendix~\ref{app:lean}, and that the optimal areas and the Gerver's sofas of
+the two formulations agree, so that formal-conjectures' statements follow from
+Baek's theorem and from \cref{thm:main}, with the existence and uniqueness of
+Gerver's four constants, which the bridge proves; the uniqueness statement,
+which it lists as open, follows from \cref{thm:main};
+\item \texttt{MovingSofaStability} (85 files, about 12,300 lines), built on the
+other three libraries: \cref{sec:stability}.
+\end{itemize}
+The file \texttt{Challenge.lean} states fifteen theorems, among them Baek's
+theorem (\path{Baek.gerver_sofa_optimal}), \cref{thm:main}
+(\path{Baek.gerver_sofa_unique}), \cref{thm:stability},
+\cref{thm:stability-angle} and
+\cref{thm:stability-exponent}\ref{thm:stability-exponent:no}
+(\path{Baek.gerver_sofa_stable}, \path{Baek.gerver_sofa_angle_stable},
+\path{Baek.gerver_sofa_stability_exponent}). The eight theorems of the namespace
+\texttt{Baek} use only Mathlib's vocabulary and the definitions of
+Appendices~\ref{app:gerver} and~\ref{app:lean}; the other seven use the
+definitions of formal-conjectures, restated verbatim in a namespace of their own
+(an anonymous topology instance is given a name), and the three theorems of the
+namespace \texttt{Bridge} also use Baek's definitions. \texttt{Solution.lean},
+with the modules that it imports, proves them: the Challenge is a file of
+statements, so its fifteen theorems end in \texttt{sorry} by design, and
+Comparator checks that \texttt{Solution.lean} proves exactly the statements of
+\texttt{Challenge.lean}. \texttt{lake build} succeeds, and an audit checks that
+every declaration of the four libraries depends only on the axioms
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The project
+is registered in the Palomar registry as entry PALOMAR-2026-10-02-000008. Its
+version~4 registers an earlier commit, whose Challenge states the twelve
+theorems other than the three of stability. The continuous integration passed on
+the commit cited in~\cite{Companion}. To rebuild, run \texttt{lake exe cache get
+\&\& lake build}, then the commands listed in the repository's
+\texttt{README.md}. The Challenge states \cref{thm:main}, \cref{thm:stability},
+\cref{thm:stability-angle} and
+\cref{thm:stability-exponent}\ref{thm:stability-exponent:no}; the other results
+of this paper are proved in the libraries, and Appendix~\ref{app:lean} lists the
+declarations.
+
+The machine check shows that \cref{thm:main} and the theorems of
+\cref{sec:stability}, as the Lean statements formulate them, follow from Lean's
+axioms and Mathlib. The formal proof contains Baek's argument and the argument
+of this paper. The machine check does not check that the definitions say what
+they should. Appendix~\ref{app:lean} reproduces the Lean definitions (moving
+sofa, hallway, the rotation path, Gerver's sofa, and the definitions used by the
+stability theorems) in mathematical notation, so that they can be read and
+compared with the intended meaning. Every proof of a result of~\cite{Baek} in
+the library follows Baek's argument, except at sixteen steps, each forced by an
+error or gap of the paper, by mathematics that Mathlib lacks (the Jordan curve
+theorem, Green's theorem, the Brunn--Minkowski inequality, mixed volumes), or by
+the representations chosen in the formalization (the surface area measure as a
+Lebesgue--Stieltjes measure, the area functional of a convex arc as $\frac12\int
+h\dd\sigma$, no orientations of curves). A route check in continuous integration
+compares the results used by each Lean proof with those cited by Baek's proof;
+the other details were compared with Baek's TeX source by AI agents, not by a
+person.
+
+The second proof of optimality (\cref{sec:second}) is formalized in three
+modules of its own. They prove \cref{thm:second} and, from it, \cref{thm:main}
+and \cref{cor:all} again, and they do not import the module \texttt{Main} of
+\texttt{MovingSofaUniqueness}, which proves \cref{thm:main} from Baek's theorem.
+A separate audit checks that no declaration of these modules depends, directly
+or through other declarations, on \texttt{Main}, on \baek{Thm.~1.1.1}, or on the
+results from which Baek derives step~(3) for the caps of step~(2):
+\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)} and the results they rest on,
+\baek{Thm.~4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6} and
+\baek{Cor.~6.4.4}.
+
+\subsection{The use of AI}
+
+AI systems wrote the first version of the proof, the formalization and this
+text, at the author's request; none of them is an author of this paper.
+\cref{app:ai} names them, says what each did and what has been checked by whom.
+The argument has not yet been refereed.
+
+\subsection{Open questions}
+
+\emph{Stability constants.} The constants of
+\cref{thm:stability,thm:stability-angle} are not explicit; the threshold
+$\eps_0$, for instance, comes from a compactness argument
+(\cref{prop:stab-entry}). The best constants are not known.
+\Cref{thm:stability-exponent} shows that the exponent $1/2$ is optimal for the
+Hausdorff distance; whether it is optimal for the area of the symmetric
+difference is not known.
+
+\emph{Other corners.} For a hallway whose corner has an angle $\alpha\ne\pi/2$
+one can ask for the largest area as a function of $\alpha$ and for the extremal
+shapes. Each step of Baek's method has an analogue to prove, and its numerical
+inequalities, such as those of \cref{fact:corner}, are specific to the right
+angle.
+
+\emph{The ambidextrous sofa.} Romik~\cite{Romik18} found a sofa of area
+$1.6449\ldots$ that can turn both left and right around a right-angled corner.
+As far as we know, it is not known whether it is optimal. Baek's reduction to
+monotone sofas uses one hallway; for a sofa that must turn both ways, the cap,
+the niche and the bound $\cQ$ all need two-sided analogues.
+
+\subsection*{Acknowledgments}
+This paper builds on the results of~\cite{Baek}. The audit of~\cite{Baek} owes
+twelve findings to the notes of another formalization of that
+paper~\cite{Cureton}, and was also compared with the blueprint of a
+third~\cite{Cao}.

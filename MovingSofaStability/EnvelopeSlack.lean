@@ -5,10 +5,10 @@ public import MovingSofaStability.RoofMargins
 /-!
 # Uniform slack below an envelope roof
 
-Uncompiled proof source. The inactive tail wall has a strictly negative slack
-on its entire compact parameter interval, including its floor endpoint. The
-active wall's vertical coefficient is uniformly positive. This is proved from
-`EnvHyp`, rather than assumed as a local error bound.
+The inactive tail wall has a strictly negative slack on its entire compact
+parameter interval, including its floor endpoint. The active wall's vertical
+coefficient is uniformly positive. This is proved from `EnvHyp`, rather than
+assumed as a local error bound.
 -/
 
 @[expose] public section
@@ -47,16 +47,18 @@ section Envelope
 
 variable {t₁ t₂ t₃ t₄ sA sC : ℝ} {x : ℝ → Point} {α β ρA ρC : ℝ → ℝ}
 variable (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
+-- The statements below do not mention `h`, so it is included explicitly.
+include h
 
 /-- The path's abscissa decreases even outside the middle exposed arc. -/
 theorem envelope_path_fst_strictAnti : StrictAntiOn (fun t => (x t).1) (Icc 0 (π / 2)) := by
   apply env_strictAntiOn (Set.finite_empty : (∅ : Set ℝ).Finite) h.x_cont.fst
     (f' := fun t => α t * cos t - β t * sin t)
-  · intro t ht he
-    convert (h.x_deriv t ht).fst using 1
+  · intro t ht _
+    convert hasDerivAt_fst (h.x_deriv t ht) using 1
     simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul, uvec_fst, vvec_fst]
     ring
-  · intro t ht he
+  · intro t ht _
     have hcos : 0 < cos t := cos_pos_of_mem_Ioo ⟨by linarith [ht.1, pi_pos], ht.2⟩
     have hsin : 0 < sin t := sin_pos_of_pos_of_lt_pi ht.1 (by linarith [ht.2, pi_pos])
     have h1 := mul_neg_of_neg_of_pos (h.α_neg t ht) hcos
@@ -67,14 +69,14 @@ theorem envelope_path_fst_strictAnti : StrictAntiOn (fun t => (x t).1) (Icc 0 (�
 theorem envelope_endpoint_speeds : 0 < β 0 ∧ α (π / 2) < 0 := by
   obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
   obtain ⟨ho1, ho2, ho3⟩ := envelope_endpoint_order h
-  have hx1 := envelope_path_fst_strictAnti h ⟨le_rfl, by positivity⟩
-    ⟨h1.le, by linarith⟩ h1
-  have hx4 := envelope_path_fst_strictAnti h ⟨by linarith, h4.le⟩
-    ⟨by positivity, le_rfl⟩ h4
+  have hx1 : (x t₁).1 < (x 0).1 := envelope_path_fst_strictAnti h
+    ⟨le_rfl, by positivity⟩ ⟨h1.le, by linarith⟩ h1
+  have hx4 : (x (π / 2)).1 < (x t₄).1 := envelope_path_fst_strictAnti h
+    ⟨by linarith, h4.le⟩ ⟨by positivity, le_rfl⟩ h4
   have hD : (envD x β 0).1 = (x 0).1 - β 0 := by
     simp [envD, uvec]
   have hB : (envB x α (π / 2)).1 = (x (π / 2)).1 - α (π / 2) := by
-    simp [envB, vvec]
+    simp [envB, vvec, sub_eq_add_neg]
   rw [hD] at ho1
   rw [hB] at ho3
   constructor <;> linarith
@@ -138,7 +140,7 @@ theorem envelope_downward_slack {K : Set Point}
       exact env_dot_B_self x α t
     have heV : innerSlackV K t (envB x α t) = α t := by
       rw [innerSlackV_eq_dot, hpath t ⟨hti.1.le, hti.2.le⟩]
-      simp [envB, dot_sub_left, dot_add_left, dot_smul_left]
+      simp [envB, dot_smul_left]
     have hcoef : c ≤ sin t := hcB'.trans (hsin t ht)
     have hinactive : τ ≤ -α t := hτB'.trans (hB t ht)
     have hcos0 : 0 ≤ cos t := cos_nonneg_of_mem_Icc ⟨by linarith [hti.1, pi_pos], ht.2⟩
@@ -176,7 +178,7 @@ theorem envelope_downward_slack {K : Set Point}
     have hti : t ∈ Ioo (0 : ℝ) (π / 2) := ⟨ht0, by linarith [ht.2]⟩
     have heU : innerSlackU K t (envD x β t) = -β t := by
       rw [innerSlackU_eq_dot, hpath t ⟨hti.1.le, hti.2.le⟩]
-      simp [envD, dot_sub_left, dot_smul_left]
+      simp [envD, dot_neg_left, dot_smul_left]
     have heV : innerSlackV K t (envD x β t) = 0 := by
       rw [innerSlackV_eq_dot, hpath t ⟨hti.1.le, hti.2.le⟩]
       exact env_dot_D_self x β t

@@ -5,10 +5,10 @@ public import MovingSofaStability.CurveRoof
 /-!
 # The niche envelope has a finite vertical slope bound
 
-Uncompiled proof source. The two tails have slope at most two when their
-angles stay within a quarter turn of the floor. On the compact middle arc,
-the negative horizontal speed has a positive minimum. The three bounds are
-joined at the actual matching endpoints.
+The two tails have slope at most two when their angles stay within a quarter
+turn of the floor. On the compact middle arc, the negative horizontal speed has
+a positive minimum. The three bounds are joined at the actual matching
+endpoints.
 -/
 
 @[expose] public section
@@ -23,25 +23,28 @@ section Envelope
 
 variable {t₁ t₂ t₃ t₄ sA sC : ℝ} {x : ℝ → Point} {α β ρA ρC : ℝ → ℝ}
 variable (h : EnvHyp t₁ t₂ t₃ t₄ sA sC x α β ρA ρC)
+-- The statements below do not mention `h`, so it is included explicitly.
+include h
 
 theorem envelope_left_slope (ht₂ : t₂ < π / 4) :
     VerticalSlopeBound (envD x β '' Icc 0 t₂) 2 := by
   obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
   have hθ : t₂ ∈ Ioo 0 (π / 4) := ⟨h1.trans h12, ht₂⟩
-  have hc := (env_D_cont h).mono (Icc_subset_Icc le_rfl (by linarith))
+  have hc : ContinuousOn (envD x β) (Icc 0 t₂) :=
+    (env_D_cont h).mono (Icc_subset_Icc le_rfl (by linarith))
   have hs := scalar_graph_slope (L := 2) (env_bp_finite t₁ t₂ t₃ t₄) hc.fst hc.snd
     (dX := fun t => (1 - ρC t) * cos t) (dY := fun t => (1 - ρC t) * sin t)
     (fun t ht he => by
       simpa only [Prod.smul_fst, smul_eq_mul, uvec_fst] using
-        (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ he).fst)
+        hasDerivAt_fst (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ he))
     (fun t ht he => by
       simpa only [Prod.smul_snd, smul_eq_mul, uvec_snd] using
-        (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ he).snd)
-    (fun t ht he => by
+        hasDerivAt_snd (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ he))
+    (fun t ht _ => by
       have hp : 0 ≤ 1 - ρC t := by linarith [h.ρC_lt t ⟨ht.1.le, ht.2.le⟩]
       have hcos := cos_ge_half_of_small hθ ⟨ht.1.le, ht.2.le⟩
       exact mul_nonneg hp (by linarith))
-    (fun t ht he => by
+    (fun t ht _ => by
       have hp : 0 ≤ 1 - ρC t := by linarith [h.ρC_lt t ⟨ht.1.le, ht.2.le⟩]
       have hsin : 0 ≤ sin t := sin_nonneg_of_nonneg_of_le_pi ht.1.le (by linarith [ht.2, pi_pos])
       have hcos := cos_ge_half_of_small hθ ⟨ht.1.le, ht.2.le⟩
@@ -55,21 +58,23 @@ theorem envelope_right_slope (ht₃ : π / 4 < t₃) :
     VerticalSlopeBound (envB x α '' Icc t₃ (π / 2)) 2 := by
   obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
   have hsφ : π / 2 - t₃ ∈ Ioo 0 (π / 4) := ⟨by linarith, by linarith⟩
-  have hc := (env_B_cont h).mono (Icc_subset_Icc (by linarith) le_rfl)
+  have hc : ContinuousOn (envB x α) (Icc t₃ (π / 2)) :=
+    (env_B_cont h).mono (Icc_subset_Icc (by linarith) le_rfl)
   have hs := scalar_graph_slope (L := 2) (env_bp_finite t₁ t₂ t₃ t₄) hc.fst hc.snd
     (dX := fun t => (1 - ρA t) * sin t) (dY := fun t => -(1 - ρA t) * cos t)
     (fun t ht he => by
-      convert (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ he).fst using 1
+      convert hasDerivAt_fst (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ he) using 1
       simp only [Prod.smul_fst, smul_eq_mul, vvec_fst]
       ring)
     (fun t ht he => by
-      convert (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ he).snd using 1
+      convert hasDerivAt_snd (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ he) using 1
       simp only [Prod.smul_snd, smul_eq_mul, vvec_snd]
       ring)
-    (fun t ht he => by
+    (fun t ht _ => by
       have hp : 0 ≤ 1 - ρA t := by linarith [h.ρA_lt t ⟨ht.1.le, ht.2.le⟩]
-      exact mul_nonneg hp (sin_nonneg_of_nonneg_of_le_pi (by linarith [ht.1]) (by linarith [ht.2, pi_pos])))
-    (fun t ht he => by
+      exact mul_nonneg hp
+        (sin_nonneg_of_nonneg_of_le_pi (by linarith [ht.1]) (by linarith [ht.2, pi_pos])))
+    (fun t ht _ => by
       have hp : 0 ≤ 1 - ρA t := by linarith [h.ρA_lt t ⟨ht.1.le, ht.2.le⟩]
       have hcos : 0 ≤ cos t := cos_nonneg_of_mem_Icc ⟨by linarith [ht.1, pi_pos], ht.2.le⟩
       have hsin := cos_ge_half_of_small hsφ
@@ -82,7 +87,8 @@ theorem envelope_right_slope (ht₃ : π / 4 < t₃) :
   exact hs u hu v hv
 
 /-- The middle arc is a Lipschitz graph because its horizontal speed is uniformly nonzero. -/
-theorem envelope_core_slope : ∃ L : ℝ, 0 ≤ L ∧ VerticalSlopeBound (x '' Icc t₁ t₄) L := by
+theorem envelope_core_slope :
+    ∃ L : ℝ, 0 ≤ L ∧ VerticalSlopeBound (x '' Icc t₁ t₄) L := by
   obtain ⟨h1, h12, h23, h34, h4⟩ := h.ht
   have hsub : Icc t₁ t₄ ⊆ Icc 0 (π / 2) := Icc_subset_Icc h1.le h4.le
   let dX : ℝ → ℝ := fun t => -α t * cos t + β t * sin t
@@ -108,15 +114,16 @@ theorem envelope_core_slope : ∃ L : ℝ, 0 ≤ L ∧ VerticalSlopeBound (x '' 
   have hs := scalar_graph_slope (L := L) (Set.finite_empty : (∅ : Set ℝ).Finite)
     hc.fst.neg hc.snd
     (dX := dX) (dY := dY)
-    (fun t ht he => by
-      convert (h.x_deriv t ⟨by linarith [ht.1], by linarith [ht.2]⟩).fst.neg using 1
+    (fun t ht _ => by
+      convert (hasDerivAt_fst (h.x_deriv t ⟨by linarith [ht.1], by linarith [ht.2]⟩)).neg
+        using 1
       simp only [dX, Prod.fst_add, Prod.smul_fst, smul_eq_mul, uvec_fst, vvec_fst]
       ring)
-    (fun t ht he => by
+    (fun t ht _ => by
       simpa only [dY, Prod.snd_add, Prod.smul_snd, smul_eq_mul, uvec_snd, vvec_snd] using
-        (h.x_deriv t ⟨by linarith [ht.1], by linarith [ht.2]⟩).snd)
-    (fun t ht he => (hpositive t ⟨ht.1.le, ht.2.le⟩).le)
-    (fun t ht he => by
+        hasDerivAt_snd (h.x_deriv t ⟨by linarith [ht.1], by linarith [ht.2]⟩))
+    (fun t ht _ => (hpositive t ⟨ht.1.le, ht.2.le⟩).le)
+    (fun t ht _ => by
       have hbnd : |dY t| ≤ B := by simpa only [Real.norm_eq_abs] using hB t ⟨ht.1.le, ht.2.le⟩
       have hbnd' : |dY t| ≤ |B| + 1 := by linarith [le_abs_self B]
       have hprod := mul_le_mul_of_nonneg_left (hmle t ⟨ht.1.le, ht.2.le⟩) hL
@@ -124,7 +131,7 @@ theorem envelope_core_slope : ∃ L : ℝ, 0 ≤ L ∧ VerticalSlopeBound (x '' 
       exact hbnd'.trans hprod)
   refine ⟨L, hL, ?_⟩
   rintro p ⟨u, hu, rfl⟩ q ⟨v, hv, rfl⟩
-  simpa only [neg_sub_neg, abs_sub_comm] using hs u hu v hv
+  simpa only [Pi.neg_apply, neg_sub_neg, abs_sub_comm] using hs u hu v hv
 
 /-- The whole three-piece envelope inherits a single finite slope bound. -/
 theorem envelope_slope_bound (ht₂ : t₂ < π / 4) (ht₃ : π / 4 < t₃) :
@@ -135,9 +142,11 @@ theorem envelope_slope_bound (ht₂ : t₂ < π / 4) (ht₃ : π / 4 < t₃) :
   let D := envD x β '' Icc 0 t₂
   let C := x '' Icc t₁ t₄
   let B := envB x α '' Icc t₃ (π / 2)
-  have hD : VerticalSlopeBound D L := (envelope_left_slope h ht₂).mono_constant (le_max_left _ _)
+  have hD : VerticalSlopeBound D L :=
+    (envelope_left_slope h ht₂).mono_constant (le_max_left _ _)
   have hC : VerticalSlopeBound C L := hcore.mono_constant (le_max_right _ _)
-  have hB : VerticalSlopeBound B L := (envelope_right_slope h ht₃).mono_constant (le_max_left _ _)
+  have hB : VerticalSlopeBound B L :=
+    (envelope_right_slope h ht₃).mono_constant (le_max_left _ _)
   have hzD : x t₄ ∈ D := ⟨t₂, ⟨by linarith, le_rfl⟩, h.D_t₂⟩
   have hzC : x t₄ ∈ C := ⟨t₄, ⟨by linarith, le_rfl⟩, rfl⟩
   have hdmax : ∀ p ∈ D, p.1 ≤ (x t₄).1 := by

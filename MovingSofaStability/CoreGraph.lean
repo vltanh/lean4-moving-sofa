@@ -5,10 +5,10 @@ public import MovingSofaStability.CornerAnalysis
 /-!
 # The nonsmooth core as a Lipschitz graph
 
-Uncompiled proof source. A uniform horizontal-decrease estimate and a bounded
-right velocity imply a finite chord slope. The graph is extended continuously
-outside its horizontal interval by clamping, for use in an elementary
-right-derivative change-of-variables argument.
+A uniform horizontal-decrease estimate and a bounded right velocity imply a
+finite chord slope. The graph is extended continuously outside its horizontal
+interval by clamping, for use in an elementary right-derivative
+change-of-variables argument.
 -/
 
 @[expose] public section
@@ -70,7 +70,8 @@ theorem exists_core_graph {K : Set Point} (hK : IsCap K (π / 2))
       (∀ y ∈ Icc (innerCorner K b).1 (innerCorner K a).1,
         ∃ t ∈ Icc a b, (innerCorner K t).1 = y) := by
   have hanti := hmargin.strictAnti_core hK hc ha hb
-  have hcX := (opt_innerCorner_continuous hK.2.1).fst.continuousOn
+  have hcX : ContinuousOn (fun t => (innerCorner K t).1) (Icc a b) :=
+    (opt_innerCorner_continuous hK.2.1).fst.continuousOn
   have horder : (innerCorner K b).1 < (innerCorner K a).1 :=
     hanti ⟨le_rfl, hab.le⟩ ⟨hab.le, le_rfl⟩ hab
   obtain ⟨L, hL, hSlope⟩ := core_verticalSlopeBound hK hmargin hc ha hb

@@ -6,11 +6,11 @@ public import Mathlib.Topology.Connected.Clopen
 /-!
 # Removing an interior disk from a connected set
 
-Uncompiled proof source. No path connectedness of the original set is assumed.
-The boundary of the removed open set connects every possible separation of the
-remainder. In dimension two this applies to an interior disk because its circle
-is connected. This avoids assuming that a general closed moving sofa has paths
-between all of its points.
+No path connectedness of the original set is assumed. The boundary of the
+removed open set connects every possible separation of the remainder. In
+dimension two this applies to an interior disk because its circle is connected.
+This avoids assuming that a general closed moving sofa has paths between all of
+its points.
 -/
 
 @[expose] public section
@@ -26,7 +26,7 @@ theorem preconnected_sdiff_of_connected_frontier {X : Type*} [TopologicalSpace X
     (hU : IsOpen U) (hcl : closure U ⊆ S) (hF : IsPreconnected (frontier U)) :
     IsPreconnected (S \ U) := by
   let Y := S \ U
-  have hY : IsClosed Y := hS.diff hU
+  have hY : IsClosed Y := hS.sdiff hU
   have hFY : frontier U ⊆ Y := by
     intro x hx
     refine ⟨hcl (frontier_subset_closure hx), ?_⟩
@@ -39,7 +39,7 @@ theorem preconnected_sdiff_of_connected_frontier {X : Type*} [TopologicalSpace X
     apply subset_empty_iff.mp
     intro x hx
     have hy : x ∈ Y ∩ (A ∩ B) := ⟨hFY hx.1, hx.2⟩
-    simpa only [hdisj, mem_empty_iff_false] using hy
+    exact hdisj.subset hy
   have step (A B : Set X) (hA : IsClosed A) (hB : IsClosed B)
       (hcover : Y ⊆ A ∪ B) (hdisj : Y ∩ (A ∩ B) = ∅)
       (hFA : frontier U ⊆ A) : Y ⊆ A ∨ Y ⊆ B := by
@@ -58,13 +58,14 @@ theorem preconnected_sdiff_of_connected_frontier {X : Type*} [TopologicalSpace X
       apply subset_empty_iff.mp
       rintro x ⟨hxS, hxA | hxcl, hxY, hxB⟩
       · have hx : x ∈ Y ∩ (A ∩ B) := ⟨hxA.1, hxA.2, hxB⟩
-        simpa only [hdisj, mem_empty_iff_false] using hx
+        exact hdisj.subset hx
       · have hxf : x ∈ frontier U := by
           refine ⟨hxcl, ?_⟩
           simpa only [hU.interior_eq] using hxY.2
         have hx : x ∈ Y ∩ (A ∩ B) := ⟨hxY, hFA hxf, hxB⟩
-        simpa only [hdisj, mem_empty_iff_false] using hx
-    rcases isPreconnected_iff_subset_of_disjoint_closed.mp hconn A' B' hA' hB' hcov' hdisj' with h | h
+        exact hdisj.subset hx
+    rcases isPreconnected_iff_subset_of_disjoint_closed.mp hconn A' B' hA' hB' hcov' hdisj' with
+      h | h
     · left
       intro x hx
       rcases h hx.1 with ha | hclx

@@ -3,13 +3,14 @@ module
 public import Mathlib
 
 /-!
-# The moving sofa problem: Gerver's sofa has maximum area, and is the only such sofa
+# The moving sofa problem: Gerver's sofa has maximum area, is the only such sofa, and is stable
 
 Statements of record, in Mathlib's vocabulary only, in three groups.
 
 * `Baek`: the definitions of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), the
-  paper's main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions, which the
-  paper does not prove (the argument is in `docs/archive/uniqueness/20-complete-paper-proof.md`).
+  paper's main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions and
+  its stability, which the paper does not prove (the arguments are in
+  `docs/archive/uniqueness/20-complete-paper-proof.md` and `docs/stability.md`).
 * `FormalConjectures.MovingSofa`: the definitions and statements of Google DeepMind's
   formal-conjectures, including its uniqueness statement, which it lists as open.
 * `Bridge`: the two sets of definitions describe the same objects. Formal-conjectures' statements
@@ -46,6 +47,18 @@ solution in this range, so Gerver's sofa is well defined. `gerver_sofa_area`: it
 `gerver_sofa_optimal`: Gerver's sofa is a moving sofa, and every moving sofa has area at most the area
 of Gerver's sofa. `gerver_sofa_unique`: a rotation about the origin followed by a translation maps
 every moving sofa with the area of Gerver's sofa exactly onto Gerver's sofa.
+
+**Stability.** The deficit `sofaDeficit P S` of a moving sofa `S` is the area of Gerver's sofa minus
+the area of `S`. `normalizedSofa P S` translates `S` so that its highest point has height `1` and its
+leftmost point the abscissa of the leftmost point of Gerver's sofa. `EuclideanClose r S T` says that
+every point of each set lies within Euclidean distance `r` of a point of the other, and
+`IsMovingSofaWithAngle S ω` that `S` is a moving sofa whose motion turns it clockwise by `ω`.
+`gerver_sofa_stable`: there are constants `C`, `C'`, `ε₀ > 0` such that a moving sofa of deficit
+`ε < ε₀`, once normalized, lies within Euclidean Hausdorff distance `C √ε` of Gerver's sofa, and the
+symmetric difference of the two has area at most `C' √ε`. `gerver_sofa_angle_stable`: such a sofa
+that turns clockwise by `ω ∈ [arccos (5/11), π/2]` has `π/2 - ω ≤ C ε`. `gerver_sofa_stability_exponent`:
+no exponent larger than `1/2` can replace the square root, even if Gerver's sofa may be rotated and
+translated in any way.
 
 ## Formal-conjectures' definitions (namespace `FormalConjectures.MovingSofa`)
 
@@ -195,6 +208,33 @@ def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 
 /-- Gerver's sofa. -/
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
+
+/-- A moving sofa that turns clockwise by the angle `ω`: a motion as in `IsMovingSofa` that ends
+with the rotation by `-ω`. -/
+def IsMovingSofaWithAngle (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
+  IsClosed S ∧ IsConnected S ∧
+    ∃ (θ : ℝ → ℝ) (c : ℝ → ℝ × ℝ), ContinuousOn θ (Icc 0 1) ∧ ContinuousOn c (Icc 0 1) ∧
+      θ 0 = 0 ∧ θ 1 = -ω ∧ (∀ p ∈ S, rot (θ 0) p + c 0 ∈ horizSide) ∧
+      (∀ s ∈ Icc (0 : ℝ) 1, ∀ p ∈ S, rot (θ s) p + c s ∈ hallway) ∧
+      (∀ p ∈ S, rot (θ 1) p + c 1 ∈ vertSide)
+
+/-- The area deficit `|G| - |S|` of a set `S`, where `G` is Gerver's sofa. -/
+noncomputable def sofaDeficit (P : GerverParams) (S : Set (ℝ × ℝ)) : ℝ :=
+  (volume (gerverSofa P)).toReal - (volume S).toReal
+
+/-- The translate of `S` whose highest point has height `1` and whose leftmost point has the
+abscissa of the leftmost point of Gerver's sofa. -/
+noncomputable def normalizedSofa (P : GerverParams) (S : Set (ℝ × ℝ)) : Set (ℝ × ℝ) :=
+  (fun p => p + (sInf (Prod.fst '' gerverSofa P) - sInf (Prod.fst '' S), 1 - sSup (Prod.snd '' S)))
+    '' S
+
+/-- The Euclidean distance between two points of the plane. -/
+noncomputable def euclideanDist (p q : ℝ × ℝ) : ℝ := √((p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2)
+
+/-- Every point of each of the sets `S` and `T` lies within Euclidean distance `r` of a point of the
+other. For nonempty compact sets, their Euclidean Hausdorff distance is then at most `r`. -/
+def EuclideanClose (r : ℝ) (S T : Set (ℝ × ℝ)) : Prop :=
+  (∀ p ∈ S, ∃ q ∈ T, euclideanDist p q ≤ r) ∧ (∀ q ∈ T, ∃ p ∈ S, euclideanDist q p ≤ r)
 
 end Baek
 
@@ -351,6 +391,38 @@ Gerver's sofa. -/
 theorem gerver_sofa_unique (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) (S : Set (ℝ × ℝ))
     (hS : IsMovingSofa S) (harea : volume S = volume (gerverSofa P)) :
     ∃ (θ : ℝ) (v : ℝ × ℝ), (fun p => rot θ p + v) '' S = gerverSofa P := by
+  sorry
+
+open scoped symmDiff in
+/-- **Stability** (not in Baek's paper). There are constants `C`, `C'` and `ε₀ > 0` such that every
+moving sofa `S` whose area is less than the area of Gerver's sofa by `ε < ε₀`, once normalized, lies
+within Euclidean Hausdorff distance `C √ε` of Gerver's sofa, and the symmetric difference of the two
+has area at most `C' √ε`. -/
+theorem gerver_sofa_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ∃ C C' ε₀ : ℝ, 0 < C ∧ 0 < C' ∧ 0 < ε₀ ∧
+      ∀ S, IsMovingSofa S → sofaDeficit P S < ε₀ →
+        EuclideanClose (C * √(sofaDeficit P S)) (normalizedSofa P S) (gerverSofa P) ∧
+        (volume (normalizedSofa P S ∆ gerverSofa P)).toReal ≤ C' * √(sofaDeficit P S) := by
+  sorry
+
+/-- **Stability of the rotation angle** (not in Baek's paper). There are constants `C` and `ε₀ > 0`
+such that a moving sofa whose area is less than the area of Gerver's sofa by `ε < ε₀`, and whose
+motion turns it clockwise by an angle `ω ∈ [arccos (5/11), π/2]`, has `π/2 - ω ≤ C ε`. -/
+theorem gerver_sofa_angle_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
+    ∃ C ε₀ : ℝ, 0 < C ∧ 0 < ε₀ ∧
+      ∀ S ω, IsMovingSofaWithAngle S ω → ω ∈ Icc (arccos (5 / 11)) (π / 2) →
+        sofaDeficit P S < ε₀ → π / 2 - ω ≤ C * sofaDeficit P S := by
+  sorry
+
+/-- **The exponent `1/2` is optimal** (not in Baek's paper). For every exponent `a > 1/2`, every
+constant `C` and every `ε₀ > 0`, there is a moving sofa `S` whose deficit `ε` satisfies `0 < ε < ε₀`
+and which lies within Euclidean Hausdorff distance `C εᵃ` of no image of Gerver's sofa by a rotation
+about the origin followed by a translation. -/
+theorem gerver_sofa_stability_exponent (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox)
+    (a C ε₀ : ℝ) (ha : 1 / 2 < a) (hε₀ : 0 < ε₀) :
+    ∃ S, IsMovingSofa S ∧ 0 < sofaDeficit P S ∧ sofaDeficit P S < ε₀ ∧
+      ∀ (θ : ℝ) (v : ℝ × ℝ),
+        ¬ EuclideanClose (C * sofaDeficit P S ^ a) S ((fun p => rot θ p + v) '' gerverSofa P) := by
   sorry
 
 end Baek

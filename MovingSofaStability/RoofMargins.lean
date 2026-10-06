@@ -5,10 +5,10 @@ public import MovingSofaStability.GerverRoof
 /-!
 # Quantitative roof margins and approximate hallway recovery
 
-Uncompiled proof source. The smaller set may violate the omitted full-angle
-constraints by a controlled slack. It is not assumed to lie in its full-angle
-cap shape. A positive reference roof margin converts this slack into an
-actual point of the reference sofa.
+The smaller set may violate the omitted full-angle constraints by a controlled
+slack. It is not assumed to lie in its full-angle cap shape. A positive
+reference roof margin converts this slack into an actual point of the reference
+sofa.
 -/
 
 @[expose] public section
@@ -68,17 +68,19 @@ theorem CapRoofData.outer_margin {K : Set Point} {a b H L : ℝ} {γ : ℝ → �
       (continuous_dot_pair.comp (continuous_fst.prodMk (continuous_uvec.comp continuous_snd)))
   have hpos : ∀ z ∈ R ×ˢ Icc (0 : ℝ) π, 0 < F z := by
     rintro ⟨p, t⟩ ⟨hp, ht⟩
+    change p ∈ R at hp
+    change t ∈ Icc 0 π at ht
     rcases eq_or_lt_of_le ht.1 with he | ht0
     · subst t
       change 0 < supp K 0 - dot p (uvec 0)
-      simp only [dot_uvec_zero]
+      rw [dot_uvec_zero]
       linarith [hp.1.2, h.right_wing]
     rcases eq_or_lt_of_le ht.2 with he | htπ
     · subst t
       change 0 < supp K π - dot p (uvec π)
       simp only [dot, uvec_pi]
       linarith [hp.1.1, h.left_wing]
-    have htop : (p.1, 1) ∈ K := h.rectangle ⟨hp.1, by norm_num, le_rfl⟩
+    have htop : (p.1, (1 : ℝ)) ∈ K := h.rectangle ⟨hp.1, by norm_num, le_rfl⟩
     have hs := dot_le_supp h.cap.2.1.2.1 htop t
     have hsin : 0 < sin t := sin_pos_of_pos_of_lt_pi ht0 htπ
     have hgap : 0 < (1 - p.2) * sin t :=

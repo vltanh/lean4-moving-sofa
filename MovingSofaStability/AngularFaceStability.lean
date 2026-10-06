@@ -5,9 +5,9 @@ public import MovingSofaStability.UniformGeometryBounds
 /-!
 # Exposed faces with a varying normal
 
-Uncompiled proof source. At a multiple-point reference face the conclusion is
-containment near the whole face, not convergence to a selected endpoint. This
-is the form needed near the top edge to control wedge feet uniformly.
+At a multiple-point reference face the conclusion is containment near the whole
+face, not convergence to a selected endpoint. This is the form needed near the
+top edge to control wedge feet uniformly.
 -/
 
 @[expose] public section
@@ -107,17 +107,18 @@ theorem face_property_stable_in_angle {K₀ : Set Point} (h₀ : IsCap K₀ (π 
 theorem gerver_top_face_bounds {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} (hp : p ∈ edge P.cap (π / 2)) :
     gerverRoofLeft P ≤ p.1 ∧ p.1 ≤ gerverRoofRight P := by
-  have hcb := gm_isConvexBody_cap hP hbox
+  have hcb := GerverParams.gm_isConvexBody_cap hP hbox
   have ha : vminus P.cap (π / 2) = (gerverRoofRight P, 1) := by
     have he := ((theorem8_4_1_monotone hP hbox).2 (π / 2) ⟨by positivity, le_rfl⟩).1
-    exact he.trans (gerver_contactA_pi_div_two hP (romik_bounds hP hbox))
+    exact he.trans (gerver_contactA_pi_div_two hP (GerverParams.romik_bounds hP hbox))
   have hc : vplus P.cap (π / 2) = (gerverRoofLeft P, 1) := by
     have he := ((theorem8_4_1_monotone hP hbox).2 0 ⟨le_rfl, by positivity⟩).2.1
-    simpa only [cK, cPlus, zero_add] using
-      he.trans (gerver_contactC_zero hP (romik_bounds hP hbox))
+    simpa only [cK, cPlus, zero_add, gerverRoofLeft] using
+      he.trans (gerver_contactC_zero hP (GerverParams.romik_bounds hP hbox))
   have h1 := dot_vminus_le_dot hcb.2.1 hp
   have h2 := dot_le_dot_vplus hcb.2.1 hp
-  rw [ha, hc] at h1 h2
+  rw [ha] at h1
+  rw [hc] at h2
   simp only [dot, vvec_pi_div_two] at h1 h2
   constructor <;> linarith
 
@@ -132,7 +133,7 @@ theorem gerver_near_top_contacts {P : GerverParams} (hP : P.IsSolution) (hbox : 
     (gerverRoofRight P + η - p.1)
   have hF : Continuous F :=
     (continuous_fst.sub continuous_const).min (continuous_const.sub continuous_fst)
-  obtain ⟨δ, ρ, hδ, hρ, hδ1, h⟩ := face_property_stable_in_angle (gm_isCap hP hbox)
+  obtain ⟨δ, ρ, hδ, hρ, hδ1, h⟩ := face_property_stable_in_angle (GerverParams.gm_isCap hP hbox)
     (π / 2) F hF (by
       intro p hp
       obtain ⟨hl, hr⟩ := gerver_top_face_bounds hP hbox hp

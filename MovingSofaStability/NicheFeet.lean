@@ -5,9 +5,9 @@ public import MovingSofaStability.AngularFaceStability
 /-!
 # Feet of forbidden wedges and horizontal niche localization
 
-Uncompiled proof source. The potentially small sine/cosine denominators at
-the endpoint angles are controlled by nearby top contacts, not by dividing a
-uniform support error by a quantity tending to zero.
+The potentially small sine/cosine denominators at the endpoint angles are
+controlled by nearby top contacts, not by dividing a uniform support error by a
+quantity tending to zero.
 -/
 
 @[expose] public section
@@ -106,7 +106,7 @@ theorem gerver_wedge_feet_bounds {P : GerverParams} (hP : P.IsSolution) (hbox : 
   rw [← hpath, wedge_feet_height P.cap hs.ne' hc.ne'] at hp
   have hZW : wedgeLeftFoot P.cap t < wedgeRightFoot P.cap t := by
     have hmul := mul_pos hs hc
-    exact sub_pos.mp (pos_of_mul_pos_left hp hmul.le)
+    exact sub_pos.mp (pos_of_mul_pos_right hp hmul.le)
   obtain ⟨H, L, γ, hroof⟩ := gerver_roof_data hP hbox
   have hfloorbounds : ∀ x, wedgeLeftFoot P.cap t < x → x < wedgeRightFoot P.cap t →
       x ∈ Icc (gerverRoofLeft P) (gerverRoofRight P) := by
@@ -172,7 +172,7 @@ theorem nearby_niche_horizontal_localization {P : GerverParams}
       have he : wedgeLeftFoot K t = q.1 + (1 - q.2 * cos t) / sin t := by
         unfold wedgeLeftFoot
         rw [← hq.2, uvec_add_pi_div_two]
-        simp only [dot, vvec]
+        simp only [dot, vvec, q]
         field_simp [hsin.ne']
         ring
       have hnon : 0 ≤ (1 - q.2 * cos t) / sin t := by
@@ -206,7 +206,7 @@ theorem nearby_niche_horizontal_localization {P : GerverParams}
       have he : wedgeRightFoot K t = q.1 + (q.2 * sin t - 1) / cos t := by
         unfold wedgeRightFoot
         rw [← hq.2]
-        simp only [dot, uvec]
+        simp only [dot, uvec, q]
         field_simp [hcos.ne']
         ring
       have hnon : (q.2 * sin t - 1) / cos t ≤ 0 := by

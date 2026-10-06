@@ -71,8 +71,13 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
   shape of a moving sofa of maximal area. To prove uniqueness, we show that
   every moving sofa of maximal area has the same two properties, so that the
   functional bounds its area directly. Equality now forces the sofa to be
-  Gerver's. The proof, together with Baek's, is formalized in Lean~4 with
-  Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
+  Gerver's. This argument does not use the value of the maximal area, so it also
+  gives a second proof of optimality. We prove, moreover, that the uniqueness is
+  stable: a moving sofa whose area is $\eps$ less than the maximum lies, after a
+  translation, within Hausdorff distance $O(\sqrt\eps)$ of Gerver's sofa, and
+  the exponent $1/2$ cannot be improved. The proofs, together with Baek's, are
+  formalized in Lean~4 with Mathlib and checked by Lean's kernel, using only
+  Lean's standard axioms.
 \end{abstract}
 
 \maketitle
@@ -86,7 +91,8 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
 \input{sections/07-injectivity}
 \input{sections/08-equality}
 \input{sections/09-recovery}
-\input{sections/10-formalization}
+\input{sections/10-stability}
+\input{sections/11-formalization}
 
 \appendix
 \input{sections/a0-baek}

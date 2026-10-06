@@ -5,9 +5,9 @@ public import MovingSofaStability.FourArcCoercivity
 /-!
 # Quadratic control of linear residual functionals
 
-Uncompiled proof source. Combining independent residual intervals adds the
-squared kernel norms, rather than adding their square roots. This is the
-Cauchy--Schwarz step lost in the earlier coefficient-80 proof.
+Combining independent residual intervals adds the squared kernel norms, rather
+than adding their square roots. This is the Cauchy--Schwarz step lost in the
+earlier coefficient-80 proof.
 -/
 
 @[expose] public section
@@ -70,11 +70,11 @@ theorem integral_square_control {a b : ℝ} (hab : a ≤ b) {k r : ℝ → ℝ}
       (∫ t in a..b, k t ^ 2) (arcSquare a b r) := by
   have hk2 : IntervalIntegrable (fun t => k t ^ 2) volume a b :=
     (hk.pow 2).intervalIntegrable_of_Icc hab
-  have hkr : IntervalIntegrable (fun t => k t * r t) volume a b := by
-    simpa only [mul_comm] using hr.mul_continuousOn (by simpa only [uIcc_of_le hab] using hk)
-  have ki := ((intervalIntegrable_iff_integrableOn_Icc_of_le hab).mp hk2).mono_set Ioc_subset_Icc_self
-  have ri := ((intervalIntegrable_iff_integrableOn_Icc_of_le hab).mp hr2).mono_set Ioc_subset_Icc_self
-  have kri := ((intervalIntegrable_iff_integrableOn_Icc_of_le hab).mp hkr).mono_set Ioc_subset_Icc_self
+  have hkr : IntervalIntegrable (fun t => k t * r t) volume a b :=
+    hr.continuousOn_mul (by rwa [uIcc_of_le hab])
+  have ki := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hk2
+  have ri := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hr2
+  have kri := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hkr
   refine ⟨intervalIntegral.integral_nonneg hab (fun t _ => sq_nonneg (k t)),
     arcSquare_nonneg hab r, ?_⟩
   unfold arcSquare

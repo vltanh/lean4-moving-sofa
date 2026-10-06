@@ -5,9 +5,9 @@ public import MovingSofaStability.ResidualIntegrability
 /-!
 # First-moment bounds for residual reconstruction
 
-Uncompiled proof source. These estimates give a deliberately non-sharp route
-from the four residual equations to cap stability. They avoid the double
-integral calculation needed to identify the sharp Green norm.
+These estimates give a deliberately non-sharp route from the four residual
+equations to cap stability. They avoid the double integral calculation needed to
+identify the sharp Green norm.
 -/
 
 @[expose] public section
@@ -40,10 +40,9 @@ theorem arcMass_sq_le {a b : ℝ} (hab : a ≤ b) {f : ℝ → ℝ}
     arcMass a b f ^ 2 ≤ (b - a) * arcSquare a b f := by
   have h := integral_mul_sq_le (volume.restrict (Ioc a b))
     (f := fun t => |f t|) (g := fun _ => (1 : ℝ))
-    (by simpa only [sq_abs] using hf2.1)
-    (by simpa using (intervalIntegrable_const (μ := volume) (a := a) (b := b)
-      (c := (1 : ℝ))).1)
-    (by simpa only [mul_one] using hf.abs.1)
+    (by simpa only [sq_abs] using hf2.1.integrable)
+    (by simp)
+    (by simpa only [mul_one] using hf.abs.1.integrable)
   have h1 : (∫ _ : ℝ in Ioc a b, (1 : ℝ)) = b - a := by
     rw [← intervalIntegral.integral_of_le hab]
     simp
@@ -80,7 +79,6 @@ theorem abs_integral_le_length_mul {a b B : ℝ} (hab : a ≤ b) {f : ℝ → �
 /-- Four intervals, each of length at most two, suffice for a fixed energy constant. -/
 theorem four_masses_le_four_sqrt {m₁ m₂ m₃ m₄ q₁ q₂ q₃ q₄ E : ℝ}
     (hm₁ : 0 ≤ m₁) (hm₂ : 0 ≤ m₂) (hm₃ : 0 ≤ m₃) (hm₄ : 0 ≤ m₄)
-    (hE : 0 ≤ E)
     (h₁ : m₁ ^ 2 ≤ 2 * q₁) (h₂ : m₂ ^ 2 ≤ 2 * q₂)
     (h₃ : m₃ ^ 2 ≤ 2 * q₃) (h₄ : m₄ ^ 2 ≤ 2 * q₄)
     (htotal : q₁ + q₂ + q₃ + q₄ = 2 * E) :
@@ -88,7 +86,7 @@ theorem four_masses_le_four_sqrt {m₁ m₂ m₃ m₄ q₁ q₂ q₃ q₄ E : �
   have hc := four_term_sq_le 1 1 1 1 m₁ m₂ m₃ m₄
   have hs : (m₁ + m₂ + m₃ + m₄) ^ 2 ≤ 4 ^ 2 * E := by
     nlinarith
-  have h := abs_le_mul_sqrt_of_sq_le (C := 4) (by norm_num) hE hs
+  have h := abs_le_mul_sqrt_of_sq_le (C := 4) (by norm_num) hs
   rw [abs_of_nonneg (by positivity)] at h
   exact h
 

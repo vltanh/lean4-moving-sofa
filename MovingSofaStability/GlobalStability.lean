@@ -5,13 +5,13 @@ public import MovingSofaStability.QualitativeEntry
 /-!
 # Unrestricted stability of Gerver's sofa
 
-Uncompiled proof source. The conclusions concern the actual nonconvex sets in
-the repository's original moving-sofa definition. All analytic and geometric
-prerequisites are supplied by the preceding modules; neither an injective
-envelope nor a stability estimate is assumed of the input sofa.
+The conclusions concern the actual nonconvex sets in the repository's original
+moving-sofa definition. All analytic and geometric prerequisites are supplied by
+the preceding modules; neither an injective envelope nor a stability estimate is
+assumed of the input sofa.
 
-This file completes the written source assembly, not Lean kernel verification.
-No claim is made that the global constants are sharp or effectively computed.
+The global constants are existential: no claim is made that they are sharp or
+effectively computed.
 -/
 
 @[expose] public section
@@ -77,7 +77,7 @@ theorem reduced_sofa_stability {P : GerverParams} (hP : P.IsSolution) (hbox : P.
     have hGmove := normalizedSofa_movingWithAngle P hS
     rw [hset] at hGmove
     have hωeq := gerver_reduced_angle_eq hP hbox hω hGmove
-    rw [hz, sqrt_zero, mul_zero, mul_zero, hset, hωeq, sub_self]
+    rw [hz, sqrt_zero, mul_zero, mul_zero, mul_zero, hset, hωeq, sub_self]
     refine ⟨EuclideanClose.refl _ le_rfl, ?_, le_rfl, le_rfl⟩
     simp [symmetricDifferenceArea, area]
   · have hcompact := ms_isCompact_of_isMovingSofaWithAngle hS
@@ -106,7 +106,7 @@ theorem reduced_sofa_stability {P : GerverParams} (hP : P.IsSolution) (hbox : P.
       (sofaDeficit P S) heq hpositive (hε.trans_le eL)
     have had := harea N hNc (sofaDeficit P S) ⟨hpositive, (hε.trans_le eA).le⟩ heq hd
     refine ⟨hd, had, hα, ?_⟩
-    simpa only [div_eq_mul_inv, one_mul, mul_comm] using ha
+    rwa [one_div_mul_eq_div]
 
 /-- The unrestricted actual-set stability theorem, in the precise target
 proposition. No geometric certificate is an assumption of this theorem. -/
@@ -127,7 +127,8 @@ theorem unrestricted_stability {P : GerverParams} (hP : P.IsSolution) (hbox : P.
     linarith
   obtain ⟨ω, hω, hSω⟩ := theorem1_5_1 hS h22
   have hω' : ω ∈ Icc (arccos (5 / 11 : ℝ)) (π / 2) := by
-    simpa [arcsec22] using hω
+    have h : (1 / 2.2 : ℝ) = 5 / 11 := by norm_num
+    simpa only [arcsec22, h] using hω
   have he := hresult S ω hSω hω' (hε.trans_le (min_le_left _ _))
   exact ⟨he.1, he.2.1⟩
 

@@ -1,13 +1,14 @@
 module
 
 public import MovingSofaStability.CoreGraph
+import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
 
 /-!
 # Change of variables and signed area for the nonsmooth core
 
-Uncompiled proof source. A continuous primitive of the roof function is
-composed with the horizontal coordinate. The right-derivative fundamental
-theorem then gives change of variables without assuming a C1 competing cap.
+A continuous primitive of the roof function is composed with the horizontal
+coordinate. The right-derivative fundamental theorem then gives change of
+variables without assuming a C1 competing cap.
 -/
 
 @[expose] public section
@@ -36,7 +37,31 @@ theorem integral_comp_mul_rightDerivative {X X' F : ℝ → ℝ} {a b : ℝ}
     exact (hP (X t)).comp_hasDerivWithinAt t (hd t ht)
   have h := intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hab
     (hPc.comp_continuousOn hX) hcomp hi
-  simpa only [P, intervalIntegral.integral_same, sub_zero] using h
+  simpa only [P, Function.comp_apply, intervalIntegral.integral_same, sub_zero] using h
+
+/-- The first coordinate of an interval-integrable plane curve is interval integrable. -/
+private theorem intervalIntegrable_fst {f : ℝ → Point} {a b : ℝ}
+    (h : IntervalIntegrable f volume a b) :
+    IntervalIntegrable (fun t => (f t).1) volume a b :=
+  ⟨h.1.fst, h.2.fst⟩
+
+/-- The second coordinate of an interval-integrable plane curve is interval integrable. -/
+private theorem intervalIntegrable_snd {f : ℝ → Point} {a b : ℝ}
+    (h : IntervalIntegrable f volume a b) :
+    IntervalIntegrable (fun t => (f t).2) volume a b :=
+  ⟨h.1.snd, h.2.snd⟩
+
+/-- The horizontal coordinate of the corner has the first velocity coordinate as right
+derivative. -/
+private theorem corner_fst_hasRightDeriv {K : Set Point} (hK : IsCap K (π / 2)) (t : ℝ) :
+    HasDerivWithinAt (fun s => (innerCorner K s).1) (cornerRightVelocity K t).1 (Ioi t) t :=
+  (corner_hasRightDeriv hK t).fst
+
+/-- The vertical coordinate of the corner has the second velocity coordinate as right
+derivative. -/
+private theorem corner_snd_hasRightDeriv {K : Set Point} (hK : IsCap K (π / 2)) (t : ℝ) :
+    HasDerivWithinAt (fun s => (innerCorner K s).2) (cornerRightVelocity K t).2 (Ioi t) t :=
+  (corner_hasRightDeriv hK t).snd
 
 /-- Multiplying a coordinate by a coordinate of the right velocity is integrable. -/
 theorem corner_coordinate_velocity_integrable {K : Set Point}
@@ -45,8 +70,8 @@ theorem corner_coordinate_velocity_integrable {K : Set Point}
     IntervalIntegrable (fun t => (innerCorner K t).2 * (cornerRightVelocity K t).1) volume a b := by
   have hv := cornerRightVelocity_intervalIntegrable hK.2.1 a b
   have hc := opt_innerCorner_continuous hK.2.1
-  exact ⟨hv.snd.continuousOn_mul hc.fst.continuousOn,
-    hv.fst.continuousOn_mul hc.snd.continuousOn⟩
+  exact ⟨(intervalIntegrable_snd hv).continuousOn_mul hc.fst.continuousOn,
+    (intervalIntegrable_fst hv).continuousOn_mul hc.snd.continuousOn⟩
 
 /-- Integration by parts using the right derivative of the coordinate product. -/
 theorem corner_coordinate_product_integral {K : Set Point}
@@ -61,8 +86,9 @@ theorem corner_coordinate_product_integral {K : Set Point}
       HasDerivWithinAt (fun t => (innerCorner K t).1 * (innerCorner K t).2)
         ((innerCorner K t).1 * (cornerRightVelocity K t).2 +
           (innerCorner K t).2 * (cornerRightVelocity K t).1) (Ioi t) t := by
-    intro t ht
-    convert (corner_hasRightDeriv hK t).fst.mul (corner_hasRightDeriv hK t).snd using 1 <;> ring
+    intro t _
+    convert (corner_fst_hasRightDeriv hK t).mul (corner_snd_hasRightDeriv hK t) using 1
+    ring
   have h := intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le hab
     (hc.fst.mul hc.snd).continuousOn hd (hi1.add hi2)
   rwa [intervalIntegral.integral_add hi1 hi2] at h
@@ -80,17 +106,17 @@ theorem core_curveArea_graph_integral {K : Set Point} (hK : IsCap K (π / 2))
       (fun t => F (innerCorner K t).1 * (cornerRightVelocity K t).1) volume a b := by
     apply hi2.congr
     intro t ht
-    rw [uIcc_of_le hab] at ht
-    rw [hgraph t ht]
+    rw [uIoc_of_le hab] at ht
+    simp only [hgraph t (Ioc_subset_Icc_self ht)]
   have hsub := integral_comp_mul_rightDerivative hab
     (opt_innerCorner_continuous hK.2.1).fst.continuousOn hF
-    (fun t ht => (corner_hasRightDeriv hK t).fst) hiF
+    (fun t _ => corner_fst_hasRightDeriv hK t) hiF
   have heq : (∫ t in a..b, F (innerCorner K t).1 * (cornerRightVelocity K t).1) =
       ∫ t in a..b, (innerCorner K t).2 * (cornerRightVelocity K t).1 := by
     apply intervalIntegral.integral_congr
     intro t ht
     rw [uIcc_of_le hab] at ht
-    rw [hgraph t ht]
+    simp only [hgraph t ht]
   rw [heq] at hsub
   have hprod := corner_coordinate_product_integral hK hab
   rw [corner_curveArea_integral hK hab]
@@ -98,7 +124,7 @@ theorem core_curveArea_graph_integral {K : Set Point} (hK : IsCap K (π / 2))
       fun t => (innerCorner K t).1 * (cornerRightVelocity K t).2 -
         (innerCorner K t).2 * (cornerRightVelocity K t).1 := rfl
   rw [hcross, intervalIntegral.integral_sub hi1 hi2]
-  rw [intervalIntegral.integral_symm (innerCorner K b).1 (innerCorner K a).1 F] at hsub
+  rw [intervalIntegral.integral_symm (f := F) (innerCorner K b).1 (innerCorner K a).1] at hsub
   linarith
 
 /-- The region under a strictly decreasing nonsmooth core is an ordinary region
@@ -141,33 +167,34 @@ theorem volume_under_core_graph {K : Set Point} (hK : IsCap K (π / 2))
     obtain ⟨t, ht, he⟩ := hcover x ⟨hx.1.le, hx.2.le⟩
     rw [← he, hgraph t ht]
     linarith [hH t ht]
-  rw [hset, volume_regionBetween_eq_integral
+  rw [hset, Measure.volume_eq_prod, volume_regionBetween_eq_integral
     (continuous_const.integrableOn_Icc.mono_set Ioo_subset_Icc_self)
     (hF.integrableOn_Icc.mono_set Ioo_subset_Icc_self) measurableSet_Ioo hheight,
     ← integral_Ioc_eq_integral_Ioo, ← intervalIntegral.integral_of_le horder.le]
   congr 1
-  have hv := (cornerRightVelocity_intervalIntegrable hK.2.1 a b).fst
-  have hcY := ((opt_innerCorner_continuous hK.2.1).snd.add continuous_const).continuousOn
+  have hv := intervalIntegrable_fst (cornerRightVelocity_intervalIntegrable hK.2.1 a b)
+  have hcY : ContinuousOn (fun t => (innerCorner K t).2 + H) (uIcc a b) :=
+    ((opt_innerCorner_continuous hK.2.1).snd.add continuous_const).continuousOn
   have hi : IntervalIntegrable
       (fun t => (F (innerCorner K t).1 + H) * (cornerRightVelocity K t).1) volume a b := by
     apply (hv.continuousOn_mul hcY).congr
     intro t ht
-    rw [uIcc_of_le hab.le] at ht
-    rw [hgraph t ht]
+    rw [uIoc_of_le hab.le] at ht
+    simp only [hgraph t (Ioc_subset_Icc_self ht)]
   have he := integral_comp_mul_rightDerivative hab.le
     (opt_innerCorner_continuous hK.2.1).fst.continuousOn (hF.add continuous_const)
-    (fun t ht => (corner_hasRightDeriv hK t).fst) hi
-  rw [intervalIntegral.integral_symm (innerCorner K a).1 (innerCorner K b).1] at he
+    (fun t _ => corner_fst_hasRightDeriv hK t) hi
+  rw [intervalIntegral.integral_symm (innerCorner K b).1 (innerCorner K a).1] at he
   calc
     (∫ x in (innerCorner K b).1..(innerCorner K a).1, F x - -H)
         = -(∫ t in a..b, (F (innerCorner K t).1 + H) * (cornerRightVelocity K t).1) := by
-          simpa only [sub_neg_eq_add] using (neg_eq_iff_eq_neg.mpr he).symm
+          simpa only [sub_neg_eq_add, Pi.add_apply] using (neg_eq_iff_eq_neg.mpr he).symm
     _ = ∫ t in a..b, -(cornerRightVelocity K t).1 * ((innerCorner K t).2 + H) := by
       rw [← intervalIntegral.integral_neg]
       apply intervalIntegral.integral_congr
       intro t ht
       rw [uIcc_of_le hab.le] at ht
-      rw [hgraph t ht]
+      simp only [hgraph t ht]
       ring
 
 end MovingSofaStability

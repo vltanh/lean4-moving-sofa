@@ -6,10 +6,9 @@ public import MovingSofaStability.TerminalBookkeeping
 /-!
 # The local core-area inequality
 
-Uncompiled proof source. The core is a continuous Lipschitz graph with a
-strictly positive height. Its under-graph region and two endpoint triangles
-are disjoint subsets of the middle niche. Their areas give the same signed
-curve bound as Baek's smooth proof.
+The core is a continuous Lipschitz graph with a strictly positive height. Its
+under-graph region and two endpoint triangles are disjoint subsets of the middle
+niche. Their areas give the same signed curve bound as Baek's smooth proof.
 -/
 
 @[expose] public section
@@ -34,16 +33,16 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   have hφ4 := hφ.2
   have hcos : 0 < cos φ := cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩
   have hsin : 0 < sin φ := sin_pos_of_pos_of_lt_pi hφ0 (by linarith)
-  let b := π / 2 - φ
-  let τ := sin φ / cos φ
-  let w := (supp K φ - 1) / cos φ
-  let z := (1 - supp K (π - φ)) / cos φ
-  let XR := (innerCorner K φ).1
-  let YR := (innerCorner K φ).2
-  let XL := (innerCorner K b).1
-  let YL := (innerCorner K b).2
-  have hab : φ < b := by dsimp [b]; linarith
-  have hbv : b < π / 2 := by dsimp [b]; linarith
+  have hab : φ < π / 2 - φ := by linarith
+  have hbv : π / 2 - φ < π / 2 := by linarith
+  set b := π / 2 - φ with hb
+  set τ := sin φ / cos φ with hτ_def
+  set w := (supp K φ - 1) / cos φ with hw_def
+  set z := (1 - supp K (π - φ)) / cos φ with hz_def
+  set XR := (innerCorner K φ).1
+  set YR := (innerCorner K φ).2
+  set XL := (innerCorner K b).1
+  set YL := (innerCorner K b).2
   have hτ : 0 < τ := div_pos hsin hcos
   have hYR : 0 < YR := hheight φ ⟨le_rfl, hab.le⟩
   have hYL : 0 < YL := hheight b ⟨hab.le, le_rfl⟩
@@ -51,26 +50,24 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   have hX : XL < XR := hanti ⟨le_rfl, hab.le⟩ ⟨hab.le, le_rfl⟩ hab
   have hw : w = XR + YR * τ := by
     have he := (cn_innerCorner_dot K φ).1
-    dsimp [w, XR, YR, τ]
     simp only [dot, uvec] at he
-    apply (div_eq_iff hcos.ne').2
-    field_simp [hcos.ne']
-    nlinarith
+    rw [hw_def, hτ_def, div_eq_iff hcos.ne', add_mul, mul_assoc, div_mul_cancel₀ _ hcos.ne']
+    linarith
   have hz : z = XL - YL * τ := by
     have he := opt_innerCorner_dot_v K b
-    simp only [b, dot, vvec, sin_pi_div_two_sub, cos_pi_div_two_sub,
-      show π / 2 - φ + π / 2 = π - φ by ring] at he
-    dsimp [z, XL, YL, τ, b]
-    apply (div_eq_iff hcos.ne').2
-    field_simp [hcos.ne']
-    nlinarith
+    have hsb : sin b = cos φ := by rw [hb, sin_pi_div_two_sub]
+    have hcb : cos b = sin φ := by rw [hb, cos_pi_div_two_sub]
+    rw [show b + π / 2 = π - φ by rw [hb]; ring] at he
+    simp only [dot, vvec, hsb, hcb] at he
+    rw [hz_def, hτ_def, div_eq_iff hcos.ne', sub_mul, mul_assoc, div_mul_cancel₀ _ hcos.ne']
+    linarith
   let C : Set Point := (fun q : Point => ((innerCorner K q.1).1, (innerCorner K q.1).2 - q.2)) ''
     {q : Point | q.1 ∈ Ioo φ b ∧ 0 < q.2 ∧ q.2 < (innerCorner K q.1).2}
   let R : Set Point := {p | 0 < p.2 ∧ p.2 < YR ∧ XR + 0 * p.2 < p.1 ∧ p.1 < w + -τ * p.2}
   let L : Set Point := {p | 0 < p.2 ∧ p.2 < YL ∧ z + τ * p.2 < p.1 ∧ p.1 < XL + 0 * p.2}
   let I : ℝ := ∫ t in φ..b, -(cornerRightVelocity K t).1 * (innerCorner K t).2
   have hI : 0 ≤ I := by
-    dsimp [I]
+    dsimp only [I]
     rw [intervalIntegral.integral_of_le hab.le]
     apply setIntegral_nonneg measurableSet_Ioc
     intro t ht
@@ -79,29 +76,23 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       ⟨hφ0.le.trans ht.1.le, ht.2.trans hbv.le⟩
     exact mul_nonneg (by linarith) (hheight t ht').le
   have vC : volume C = ENNReal.ofReal I := by
-    simpa only [C, I, add_zero] using volume_under_core_graph hK hab hcore hc hφ0.le hbv.le
+    simpa only [add_zero] using volume_under_core_graph hK hab hcore hc hφ0.le hbv.le
       (H := 0) (by simpa only [add_zero] using hheight)
   have vR : volume R = ENNReal.ofReal (τ * YR ^ 2 / 2) := by
     have hn : ∀ y ∈ Ioo (0 : ℝ) YR, XR + 0 * y ≤ w + -τ * y := by
       intro y hy
       rw [hw]
       nlinarith [mul_nonneg hτ.le (sub_nonneg.mpr hy.2.le)]
-    have hv := opt_volume_hregion (α₁ := XR) (β₁ := 0) (α₂ := w) (β₂ := -τ) hYR.le hn
-    change volume R = _ at hv
-    rw [hv]
+    rw [opt_volume_hregion hYR.le hn, hw]
     congr 1
-    rw [hw]
     ring
   have vL : volume L = ENNReal.ofReal (τ * YL ^ 2 / 2) := by
     have hn : ∀ y ∈ Ioo (0 : ℝ) YL, z + τ * y ≤ XL + 0 * y := by
       intro y hy
       rw [hz]
       nlinarith [mul_nonneg hτ.le (sub_nonneg.mpr hy.2.le)]
-    have hv := opt_volume_hregion (α₁ := z) (β₁ := τ) (α₂ := XL) (β₂ := 0) hYL.le hn
-    change volume L = _ at hv
-    rw [hv]
+    rw [opt_volume_hregion hYL.le hn, hz]
     congr 1
-    rw [hz]
     ring
   have hCfst : ∀ p ∈ C, XL < p.1 ∧ p.1 < XR := by
     rintro p ⟨⟨t, s⟩, ⟨ht, -, -⟩, rfl⟩
@@ -110,14 +101,12 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   have hdisjR : Disjoint C R := Set.disjoint_left.mpr fun p hp hq => by
     have hx := hCfst p hp
     have hr := hq.2.2.1
-    dsimp at hr
     linarith
   have hdisjL : Disjoint (C ∪ R) L := Set.disjoint_left.mpr fun p hp hq => by
     have hl := hq.2.2.2
-    dsimp at hl
     rcases hp with hp | hp
     · have hx := hCfst p hp; linarith
-    · have hr := hp.2.2.1; dsimp at hr; linarith
+    · have hr := hp.2.2.1; linarith
   have hopen : ∀ a b A B D E : ℝ,
       IsOpen {p : Point | a < p.2 ∧ p.2 < b ∧ A + B * p.2 < p.1 ∧ p.1 < D + E * p.2} := by
     intro a b A B D E
@@ -134,18 +123,16 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       rcases hp with (hp | hp) | hp
       · obtain ⟨⟨t, s⟩, ⟨ht, hs0, hsY⟩, rfl⟩ := hp
         obtain ⟨hR, hL, hq⟩ := separated_core_below hφ hsep ht hs0
-        exact ⟨by dsimp; linarith, hR, hL,
+        exact ⟨by dsimp only; linarith, hR, hL,
           t, ⟨hφ0.trans ht.1, ht.2.trans hbv⟩, hq⟩
       · obtain ⟨hy0, hyR, hxR, hxw⟩ := hp
-        have hR : p ∉ hRight φ K := (opt_notMem_hRight_iff hcos K p).2 (by
-          change p.1 < w - p.2 * τ; dsimp at hxw; linarith)
-        obtain ⟨hL, hq⟩ := separated_right_triangle hφ hsep (by simpa using hxR) hyR hR
+        have hR : p ∉ hRight φ K := (opt_notMem_hRight_iff hcos K p).2 (by linarith)
+        obtain ⟨hL, hq⟩ := separated_right_triangle hφ hsep (by linarith) hyR hR
         exact ⟨hy0.le, hR, hL, φ, ⟨hφ0, by linarith⟩, hq⟩
       · obtain ⟨hy0, hyL, hxz, hxL⟩ := hp
-        have hL : p ∉ hLeft φ K := (opt_notMem_hLeft_iff hcos K p).2 (by
-          change z + p.2 * τ < p.1; dsimp at hxz; nlinarith)
-        obtain ⟨hR, hq⟩ := separated_left_triangle hφ hsep (by simpa using hxL) hyL hL
-        exact ⟨hy0.le, hR, hL, b, ⟨by dsimp [b]; linarith, hbv⟩, hq⟩
+        have hL : p ∉ hLeft φ K := (opt_notMem_hLeft_iff hcos K p).2 (by linarith)
+        obtain ⟨hR, hq⟩ := separated_left_triangle hφ hsep (by linarith) hyL hL
+        exact ⟨hy0.le, hR, hL, b, ⟨by linarith, hbv⟩, hq⟩
     obtain ⟨hy0, hR, hL, t, ht, hq⟩ := key
     refine ⟨⟨⟨?_, mem_iUnion₂.mpr ⟨t, ht, hq⟩⟩, hR⟩, hL⟩
     simpa [fan, halfPlus, dot_uvec_pi_div_two] using hy0
@@ -163,13 +150,12 @@ theorem positive_core_area_le {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       ENNReal.toReal_ofReal (by positivity)]
   have hCA := core_curveArea_rightVelocity hK hab.le
   have hsegR : segArea (wRight φ K) (xRight φ K) = w * YR / 2 := by
-    simp only [opt_wRight_eq, xRight, segArea, cross, w, YR]
+    simp only [opt_wRight_eq, xRight, segArea, cross]
     ring
   have hsegL : segArea (xLeft φ K) (zLeft φ K) = -YL * z / 2 := by
-    simp only [opt_zLeft_eq, xLeft, segArea, cross, z, YL, b]
+    simp only [opt_zLeft_eq, xLeft, segArea, cross]
     ring
   rw [hsegR, hsegL, hCA]
-  change w * YR / 2 + ((XL * YL - XR * YR) / 2 + I) + -YL * z / 2 ≤ _
   have he : w * YR / 2 + ((XL * YL - XR * YR) / 2 + I) + -YL * z / 2 = area (C ∪ R ∪ L) := by
     rw [aUnion, hw, hz]
     ring

@@ -5,9 +5,9 @@ public import MovingSofaStability.TerminalFloor
 /-!
 # Local terminal-angle comparison
 
-Uncompiled proof source. The excluded floor slice and omitted-wedge estimates
-are now constructed, not hypotheses supplied by the final theorem. Their
-competition gives a linear angle deficit and both directed missing areas.
+The excluded floor slice and omitted-wedge estimates are now constructed, not
+hypotheses supplied by the final theorem. Their competition gives a linear angle
+deficit and both directed missing areas.
 -/
 
 @[expose] public section
@@ -53,7 +53,7 @@ theorem nearby_terminal_comparison {P : GerverParams} (hP : P.IsSolution) (hbox 
         area (S \ capShape K) ≤ area (gerverSofa P) - area S ∧
         area (capShape K \ S) ≤ 2 * (area (gerverSofa P) - area S) ∧
         ApproxHallways K S (4 * R * (π / 2 - ω)) := by
-  obtain ⟨R, hR, hradius⟩ := exists_uniform_cap_radius (gm_isCap hP hbox)
+  obtain ⟨R, hR, hradius⟩ := exists_uniform_cap_radius (GerverParams.gm_isCap hP hbox)
   obtain ⟨c₀, δF, αF, hc₀, hδF, hδF1, hαF, hfloor⟩ := terminal_floor_loss hP hbox
   let Cw := 3 * R + 1
   have hCw : 0 < Cw := by dsimp [Cw]; linarith

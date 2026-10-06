@@ -5,9 +5,9 @@ public import MovingSofaStability.RoofGeometry
 /-!
 # Gerver's reference roof and uniform interior balls
 
-Uncompiled proof source. All reference geometry is derived from the existing
-Gerver envelope, contact and injectivity theorems. The two convex wings have
-positive width because the cap has no vertical supporting faces.
+All reference geometry is derived from the existing Gerver envelope, contact and
+injectivity theorems. The two convex wings have positive width because the cap
+has no vertical supporting faces.
 -/
 
 @[expose] public section

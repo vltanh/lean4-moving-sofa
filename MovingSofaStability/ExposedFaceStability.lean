@@ -6,10 +6,9 @@ public import Mathlib.Topology.MetricSpace.HausdorffDistance
 /-!
 # Uniform stability of exposed-face properties
 
-Uncompiled proof source. A positive continuous property on the reference
-exposed faces persists for every point of every nearby exposed face. This
-covers atoms in the competitor and does not presume derivative convergence
-at a multiple-point face of the reference.
+A positive continuous property on the reference exposed faces persists for every
+point of every nearby exposed face. This covers atoms in the competitor and does
+not presume derivative convergence at a multiple-point face of the reference.
 
 The proof takes a minimum of a membership/face defect on a fixed compact set.
 It does not require a metric or a differentiable structure on the space of caps.
@@ -51,13 +50,12 @@ theorem exposed_face_property_stable {K₀ : Set Point} (h₀ : IsCap K₀ (π /
   let B := K₀ + euclideanDisk 1
   have hB : IsCompact B :=
     (convexBody_add h₀.2.1 (euclideanDisk_isConvexBody (by norm_num : (0 : ℝ) ≤ 1))).2.1
-  letI : CompactSpace ↥B := isCompact_iff_compactSpace.mp hB
-  letI : CompactSpace ↥I := isCompact_iff_compactSpace.mp hI
-  let Z := ↥B × ↥I
-  let defect : Z → ℝ := fun z => Metric.infDist z.1.1 K₀ +
+  have : CompactSpace ↥B := isCompact_iff_compactSpace.mp hB
+  have : CompactSpace ↥I := isCompact_iff_compactSpace.mp hI
+  let defect : ↥B × ↥I → ℝ := fun z => Metric.infDist z.1.1 K₀ +
     |dot z.1.1 (uvec z.2.1) - supp K₀ z.2.1|
-  let property : Z → ℝ := fun z => F z.1.1 z.2.1
-  have hmap : Continuous (fun z : Z => (z.1.1, z.2.1)) := by fun_prop
+  let property : ↥B × ↥I → ℝ := fun z => F z.1.1 z.2.1
+  have hmap : Continuous (fun z : ↥B × ↥I => (z.1.1, z.2.1)) := by fun_prop
   have hprop : Continuous property := by
     exact hF.comp_continuous hmap (fun z => ⟨z.1.2, z.2.2⟩)
   have hdef : Continuous defect := by
@@ -69,7 +67,7 @@ theorem exposed_face_property_stable {K₀ : Set Point} (h₀ : IsCap K₀ (π /
           ((continuous_subtype_val.comp continuous_fst).prodMk
             (continuous_uvec.comp (continuous_subtype_val.comp continuous_snd)))
       · exact h₀.2.1.continuous_supp.comp (continuous_subtype_val.comp continuous_snd)
-  let bad : Set Z := {z | property z ≤ 0}
+  let bad : Set (↥B × ↥I) := {z | property z ≤ 0}
   have hbad : IsCompact bad := (isClosed_le hprop continuous_const).isCompact
   have hpos : ∀ z ∈ bad, 0 < defect z := by
     intro z hz
@@ -99,7 +97,7 @@ theorem exposed_face_property_stable {K₀ : Set Point} (h₀ : IsCap K₀ (π /
   refine ⟨δ, hδ, hδ1, ?_⟩
   intro K hK hclose t ht p hp
   have hpB := cap_subset_unit_parallel hK h₀ hδ1 hclose hp.1
-  let z : Z := (⟨p, hpB⟩, ⟨t, ht⟩)
+  let z : ↥B × ↥I := (⟨p, hpB⟩, ⟨t, ht⟩)
   by_contra hnot
   have hzbad : z ∈ bad := not_lt.mp hnot
   have hd : m ≤ defect z := hmin z hzbad

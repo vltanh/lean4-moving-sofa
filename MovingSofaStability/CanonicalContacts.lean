@@ -5,9 +5,9 @@ public import MovingSofaStability.CapWidthGeometry
 /-!
 # Canonical tail contacts without global injectivity
 
-Uncompiled proof source. The topmost-point proof of the source endpoint
-contact theorem needs only a cap, a cut foot in that cap, and one strict
-arm inequality at the cut. Those sufficient hypotheses are exposed here.
+The topmost-point proof of the source endpoint contact theorem needs only a cap,
+a cut foot in that cap, and one strict arm inequality at the cut. Those
+sufficient hypotheses are exposed here.
 -/
 
 @[expose] public section
@@ -106,12 +106,13 @@ theorem canonical_left_contact {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   have hLc : IsCompact L := hcb.2.1.inter_right (isClosed_eq (continuous_dot _) continuous_const)
   have hZL : zLeft φ K ∈ L := by
     refine ⟨hZ, ?_⟩
-    simp only [mem_setOf_eq, opt_zLeft_eq, dot, vvec, sin_pi_div_two_sub, zero_mul, add_zero,
+    simp only [mem_ofPred_eq, opt_zLeft_eq, dot, vvec, sin_pi_div_two_sub, zero_mul, add_zero,
       show π / 2 - φ + π / 2 = π - φ by ring]
     field_simp [hc.ne']
     ring
   obtain ⟨p, ⟨hpK, hpl⟩, hpmax⟩ :=
     hLc.exists_isMaxOn ⟨_, hZL⟩ (continuous_dot (uvec (π / 2 - φ))).continuousOn
+  have hpl' : dot p (vvec (π / 2 - φ)) = supp K (π / 2 - φ + π / 2) - 1 := hpl
   have hu : ∀ q : Point, dot q (uvec (-φ)) = -dot q (vvec (π / 2 - φ)) := by
     intro q
     simp only [dot, uvec, vvec, cos_neg, sin_neg, sin_pi_div_two_sub, cos_pi_div_two_sub]
@@ -182,8 +183,7 @@ theorem canonical_left_contact {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
   refine ⟨p, ⟨hpK, ?_⟩, hpl⟩
   simp only [mem_iInter₂]
   intro s hs
-  change supp K (s + π / 2) - 1 ≤ dot p (vvec s)
-  rw [← uvec_add_pi_div_two]
+  change supp K (s + π / 2) - 1 ≤ dot p (uvec (s + π / 2))
   exact key _ ⟨by linarith [hs.1], by linarith [hs.2]⟩
 
 end MovingSofaStability

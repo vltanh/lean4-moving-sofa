@@ -716,13 +716,15 @@ concurrent work is in the README's account of prior work.
 ### Open directions
 
 - **Stability.** Gerver's sofa is the only maximizer up to congruence (above). A stability theorem
-  would bound the distance from a moving sofa S to the nearest congruent copy of G (in the Hausdorff
-  distance, or by the area of the symmetric difference) in terms of \|G\| − \|S\|. The obstacle is
-  that the bound 𝒜 ≤ 𝒬 needs the injectivity condition, which Chapters 4 to 6, and the uniqueness
-  proof, establish only for sofas of maximum area, through limits with no rate (Chapter 3). A proof
-  would need that condition, with an error term, for sofas of nearly maximum area, and a
-  quantitative form of the equality cases behind the uniqueness, such as a strict concavity of 𝒬 at
-  Gerver's triple (Theorem 8.3.8).
+  bounds the distance from a moving sofa S to Gerver's sofa in terms of \|G\| − \|S\|. The
+  obstacle was that the bound 𝒜 ≤ 𝒬 needs the injectivity condition, which Chapters 4 to 6, and the
+  uniqueness proof, establish only for sofas of maximum area, through limits with no rate
+  (Chapter 3). The library [`MovingSofaStability`](MovingSofaStability), added after this audit, avoids that condition:
+  𝒜 ≤ 𝒬 holds for every cap close to Gerver's, the deficit of 𝒬 on a larger domain of caps with
+  corners is a sum of squares that bounds the distance from the cap to Gerver's cap, and compactness
+  with the uniqueness brings every sofa of small deficit near Gerver's sofa. After a translation, the
+  Hausdorff distance and the area of the symmetric difference are at most C(\|G\| − \|S\|)^½, and the
+  exponent ½ cannot be improved ([docs/stability.md](docs/stability.md)).
 - **Other corner angles.** For a hallway whose corner has angle α ≠ π/2, the aim is the maximal area
   as a function of α, with the optimal shapes. Each step of Baek's method has an analogue to prove:
   the reduction to monotone sofas and their caps, the balance of maximum polygon caps, the

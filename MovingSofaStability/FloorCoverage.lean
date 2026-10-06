@@ -5,9 +5,9 @@ public import MovingSofaStability.LocalUpperBound
 /-!
 # The interior niche floor is already removed before the terminal angle
 
-Uncompiled proof source. A directed compact-cover argument supplies a uniform
-strict slack and an angle bounded away from pi/2. The fixed floor interval is
-chosen first; no unsupported rate of compactness is used.
+A directed compact-cover argument supplies a uniform strict slack and an angle
+bounded away from pi/2. The fixed floor interval is chosen first; no unsupported
+rate of compactness is used.
 -/
 
 @[expose] public section
@@ -36,7 +36,7 @@ theorem gerver_floor_mem_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.
       (f' := fun t => (gb_rhoA P t - 1) * cos t)
     · intro t ht hne
       simpa only [Prod.smul_snd, smul_eq_mul, vvec_snd] using
-        (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ hne).snd
+        hasDerivAt_snd (h.B_deriv t ⟨by linarith [ht.1], ht.2⟩ hne)
     · intro t ht hne
       exact mul_neg_of_neg_of_pos (sub_neg.mpr (h.ρA_lt t ⟨ht.1.le, ht.2.le⟩))
         (cos_pos_of_mem_Ioo ⟨by linarith [ht.1, pi_pos], ht.2⟩)
@@ -46,7 +46,7 @@ theorem gerver_floor_mem_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.
       (f' := fun t => (1 - gb_rhoC P t) * sin t)
     · intro t ht hne
       simpa only [Prod.smul_snd, smul_eq_mul, uvec_snd] using
-        (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ hne).snd
+        hasDerivAt_snd (h.D_deriv t ⟨ht.1, by linarith [ht.2]⟩ hne)
     · intro t ht hne
       exact mul_pos (sub_pos.mpr (h.ρC_lt t ⟨ht.1.le, ht.2.le⟩))
         (sin_pos_of_pos_of_lt_pi ht.1 (by linarith [ht.2, pi_pos]))
@@ -58,7 +58,8 @@ theorem gerver_floor_mem_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.
         subst t
         change gerverRoofRight P = x at hqx
         exact (ne_of_lt hx.2) hqx.symm)
-      have he := hBanti ht ⟨by linarith, le_rfl⟩ htv
+      have he : (envB P.path P.gs_α (π / 2)).2 < (envB P.path P.gs_α t).2 :=
+        hBanti ht ⟨by linarith, le_rfl⟩ htv
       rwa [h.B_end] at he
     · exact h.x_pos t ht
     · have ht0 : 0 < t := lt_of_le_of_ne ht.1 (by
@@ -66,7 +67,8 @@ theorem gerver_floor_mem_niche {P : GerverParams} (hP : P.IsSolution) (hbox : P.
         subst t
         change gerverRoofLeft P = x at hqx
         exact (ne_of_lt hx.1) hqx)
-      have he := hDmono ⟨le_rfl, by linarith⟩ ht ht0
+      have he : (envD P.path P.gs_β 0).2 < (envD P.path P.gs_β t).2 :=
+        hDmono ⟨le_rfl, by linarith⟩ ht ht0
       rwa [h.D_end] at he
   rw [gerver_niche_envelope hP hbox]
   exact ⟨le_rfl, q, hq, hqx, hqy⟩
@@ -81,35 +83,40 @@ theorem compact_floor_witnesses {K₀ : Set Point} {I : Set ℝ} (hI : IsCompact
   let J := {e : ℝ // 0 < e}
   let U : J → Set ℝ := fun e => ⋃ t ∈ Ioo e.1 (π / 2 - e.1),
     {x | innerSlackU K₀ t (x, 0) < -e.1 ∧ innerSlackV K₀ t (x, 0) < -e.1}
-  letI : Nonempty J := ⟨⟨1, by norm_num⟩⟩
+  have : Nonempty J := ⟨⟨1, by norm_num⟩⟩
   have ho : ∀ e, IsOpen (U e) := by
     intro e
     apply isOpen_iUnion
     intro t
     apply isOpen_iUnion
     intro ht
-    exact (isOpen_lt (by unfold innerSlackU; fun_prop) continuous_const).inter
-      (isOpen_lt (by unfold innerSlackV; fun_prop) continuous_const)
+    exact (isOpen_lt (f := fun x : ℝ => innerSlackU K₀ t (x, 0))
+      (by unfold innerSlackU dot; fun_prop) continuous_const).inter
+      (isOpen_lt (f := fun x : ℝ => innerSlackV K₀ t (x, 0))
+        (by unfold innerSlackV dot; fun_prop) continuous_const)
   have hcover : I ⊆ ⋃ e, U e := by
     intro x hx
     obtain ⟨-, t, ht, hU, hV⟩ := (mem_niche_iff_slacks K₀ (x, 0)).1 (hfloor x hx)
     let e := min t (min (π / 2 - t) (min (-innerSlackU K₀ t (x, 0)) (-innerSlackV K₀ t (x, 0)))) / 2
     have he : 0 < e := half_pos (lt_min ht.1
       (lt_min (sub_pos.mpr ht.2) (lt_min (neg_pos.mpr hU) (neg_pos.mpr hV))))
+    have hr := min_le_right t
+      (min (π / 2 - t) (min (-innerSlackU K₀ t (x, 0)) (-innerSlackV K₀ t (x, 0))))
     have e1 : e < t := by
-      have hm := min_le_left t (min (π / 2 - t) (min (-innerSlackU K₀ t (x, 0)) (-innerSlackV K₀ t (x, 0))))
+      have hm := min_le_left t
+        (min (π / 2 - t) (min (-innerSlackU K₀ t (x, 0)) (-innerSlackV K₀ t (x, 0))))
       dsimp [e] at *
       linarith
     have e2 : e < π / 2 - t := by
-      have hm := (min_le_right t _).trans (min_le_left (π / 2 - t) _)
+      have hm := hr.trans (min_le_left _ _)
       dsimp [e] at *
       linarith
     have e3 : e < -innerSlackU K₀ t (x, 0) := by
-      have hm := (min_le_right t _).trans ((min_le_right (π / 2 - t) _).trans (min_le_left _ _))
+      have hm := hr.trans ((min_le_right _ _).trans (min_le_left _ _))
       dsimp [e] at *
       linarith
     have e4 : e < -innerSlackV K₀ t (x, 0) := by
-      have hm := (min_le_right t _).trans ((min_le_right (π / 2 - t) _).trans (min_le_right _ _))
+      have hm := hr.trans ((min_le_right _ _).trans (min_le_right _ _))
       dsimp [e] at *
       linarith
     exact mem_iUnion.mpr ⟨⟨e, he⟩, mem_iUnion₂.mpr ⟨t, ⟨e1, by linarith⟩, by linarith, by linarith⟩⟩
@@ -126,7 +133,9 @@ theorem compact_floor_witnesses {K₀ : Set Point} {I : Set ℝ} (hI : IsCompact
       have hgf : g.1 ≤ f.1 := min_le_right _ _
       exact mem_iUnion₂.mpr ⟨t, ⟨hgf.trans_lt ht.1, by linarith [ht.2]⟩, by linarith, by linarith⟩
   obtain ⟨e, he⟩ := hI.elim_directed_cover U ho hcover hd
-  exact ⟨e.1, e.2, fun x hx => mem_iUnion₂.mp (he hx)⟩
+  refine ⟨e.1, e.2, fun x hx => ?_⟩
+  obtain ⟨t, ht, hx'⟩ := mem_iUnion₂.mp (he hx)
+  exact ⟨t, ht, hx'⟩
 
 /-- A fixed interior floor slab is removed by angles uniformly below pi/2,
 even after a sufficiently small perturbation of the cap support. -/

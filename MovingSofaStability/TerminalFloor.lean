@@ -5,9 +5,9 @@ public import MovingSofaStability.OmittedWedgeArea
 /-!
 # The terminal strip removes a fixed linear amount of floor area
 
-Uncompiled proof source. A fixed rectangle in Gerver's left wing persists in
-nearby full-angle shapes. A tilted terminal strip excludes its bottom slice,
-whose area is c0 times the missing angle. The slice is constructed explicitly.
+A fixed rectangle in Gerver's left wing persists in nearby full-angle shapes. A
+tilted terminal strip excludes its bottom slice, whose area is c0 times the
+missing angle. The slice is constructed explicitly.
 -/
 
 @[expose] public section
@@ -26,7 +26,8 @@ theorem sin_ge_half_on_unit {α : ℝ} (hα : α ∈ Icc (0 : ℝ) 1) : α / 2 �
     nlinarith [ht.1, ht.2, hα.2]
   have he := right_derivative_increment_ge hα.1 continuous_sin.continuousOn
     (fun t ht => (hasDerivAt_sin t).hasDerivWithinAt) hcos
-  simpa only [sin_zero, sub_zero, mul_comm, one_div] using he
+  rw [sin_zero] at he
+  linarith
 
 /-- The terminal lower wall excludes low points to the left of a top contact. -/
 theorem terminal_excludes_low_left {K : Set Point} (hK : IsCap K (π / 2))
@@ -75,12 +76,14 @@ theorem nearby_left_floor_rectangle {P : GerverParams} (hP : P.IsSolution) (hbox
   have hxl : (l, (1 / 4 : ℝ)) ∈ P.cap := by
     have he := hroof.cap.2.1.2.2.add_smul_sub_mem (opt_cap_C_mem hroof.cap) ha
       (show (1 / 4 : ℝ) ∈ Icc (0 : ℝ) 1 by constructor <;> norm_num)
-    convert he using 1 <;> ext <;> dsimp [l, D, x₀, a] <;> ring
+    convert he using 1
+    ext <;> dsimp [l, D, x₀, a] <;> ring
   have hxr : (r, (1 / 4 : ℝ)) ∈ P.cap := by
     have he := hroof.cap.2.1.2.2.add_smul_sub_mem (opt_cap_C_mem hroof.cap) ha
       (show (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 by constructor <;> norm_num)
     have hrhalf : (r, (1 / 2 : ℝ)) ∈ P.cap := by
-      convert he using 1 <;> ext <;> dsimp [r, D, x₀, a] <;> ring
+      convert he using 1
+      ext <;> dsimp [r, D, x₀, a] <;> ring
     exact opt_cap_down hroof.cap hrhalf (by norm_num) (by norm_num)
   obtain ⟨m, hm, hmargin⟩ := cap_rectangle_upper_margin hroof.cap hlr hla hr0
     (show (1 / 8 : ℝ) < 1 / 4 by norm_num) hxl hxr

@@ -5,9 +5,8 @@ public import MovingSofaStability.CoreMonotonicity
 /-!
 # Uniform bounds in a cap neighborhood
 
-Uncompiled proof source. Coarse Euclidean constants are intentional. They
-control changing hallway angles and support perturbations independently of
-any regularity of the cap boundary.
+Coarse Euclidean constants are intentional. They control changing hallway angles
+and support perturbations independently of any regularity of the cap boundary.
 -/
 
 @[expose] public section
@@ -32,7 +31,7 @@ theorem norm2_uvec_sub_le (s t : ℝ) : norm2 (uvec s - uvec t) ≤ 2 * |s - t| 
   have h := norm2_le_abs_add (uvec s - uvec t)
   have hc := abs_cos_sub_cos_le s t
   have hs := abs_sin_sub_sin_le s t
-  simp only [uvec, Prod.fst_sub, Prod.snd_sub] at h
+  simp only [Prod.fst_sub, Prod.snd_sub, uvec_fst, uvec_snd] at h
   linarith
 
 theorem norm2_vvec (t : ℝ) : norm2 (vvec t) = 1 := by

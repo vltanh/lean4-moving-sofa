@@ -5,9 +5,9 @@ public import MovingSofaStability.MissingAreaRecovery
 /-!
 # Uniform interior balls from convex pieces
 
-Uncompiled proof source. The construction shrinks one fixed interior ball
-about each point of a convex piece. The union lemmas permit a nonconvex
-reference to be assembled from finitely many such pieces.
+The construction shrinks one fixed interior ball about each point of a convex
+piece. The union lemmas permit a nonconvex reference to be assembled from
+finitely many such pieces.
 -/
 
 @[expose] public section
@@ -26,43 +26,45 @@ theorem convex_interiorBalls_of_ball {C : Set Point} (hC : Convex ℝ C)
     HasInteriorBalls C (s / (D + s)) (D + s) := by
   intro p hp ρ hρ hρmax
   have hden : 0 < D + s := by linarith
-  let λ := ρ / (D + s)
-  let z := (1 - λ) • p + λ • c
-  have hλ : 0 < λ := div_pos hρ hden
-  have hλ1 : λ ≤ 1 := (div_le_one hden).2 hρmax
-  have hλden : λ * (D + s) = ρ := div_mul_cancel₀ _ hden.ne'
-  have hrad : s / (D + s) * ρ = λ * s := by dsimp [λ]; ring
+  let μ := ρ / (D + s)
+  let z := (1 - μ) • p + μ • c
+  have hμ : 0 < μ := div_pos hρ hden
+  have hμ1 : μ ≤ 1 := (div_le_one hden).2 hρmax
+  have hμden : μ * (D + s) = ρ := div_mul_cancel₀ _ hden.ne'
+  have hrad : s / (D + s) * ρ = μ * s := by dsimp [μ]; ring
   refine ⟨z, ?_⟩
   intro q hq
   rw [hrad] at hq
-  let w := c + λ⁻¹ • (q - z)
+  let w := c + μ⁻¹ • (q - z)
   have hwball : w ∈ euclideanBall c s := by
-    change norm2 (c - (c + λ⁻¹ • (q - z))) ≤ s
-    rw [show c - (c + λ⁻¹ • (q - z)) = -(λ⁻¹ • (q - z)) by abel,
-      norm2_neg, norm2_smul, abs_of_pos (inv_pos.mpr hλ)]
-    have hq' : norm2 (q - z) ≤ λ * s := by
-      simpa only [euclideanBall, mem_setOf_eq, euclideanDist, norm2_neg,
-        show q - z = -(z - q) by abel] using hq
-    have hmul := mul_le_mul_of_nonneg_left hq' (inv_nonneg.mpr hλ.le)
-    simpa only [← mul_assoc, inv_mul_cancel₀ hλ.ne', one_mul] using hmul
+    change norm2 (c - (c + μ⁻¹ • (q - z))) ≤ s
+    rw [show c - (c + μ⁻¹ • (q - z)) = -(μ⁻¹ • (q - z)) by abel,
+      norm2_neg, norm2_smul, abs_of_pos (inv_pos.mpr hμ)]
+    have hq' : norm2 (q - z) ≤ μ * s := by
+      rw [← norm2_neg, neg_sub]
+      exact hq
+    have hmul := mul_le_mul_of_nonneg_left hq' (inv_nonneg.mpr hμ.le)
+    simpa only [← mul_assoc, inv_mul_cancel₀ hμ.ne', one_mul] using hmul
   have hqC : q ∈ C := by
-    have h := hC hp (hball hwball) (sub_nonneg.mpr hλ1) hλ.le (by ring : 1 - λ + λ = 1)
-    have he : (1 - λ) • p + λ • w = q := by
-      dsimp [w, z]
-      simp only [smul_add, smul_sub, smul_smul, mul_inv_cancel₀ hλ.ne', one_smul]
+    have h := hC hp (hball hwball) (sub_nonneg.mpr hμ1) hμ.le (by ring : 1 - μ + μ = 1)
+    have he : (1 - μ) • p + μ • w = q := by
+      have hw : μ • w = μ • c + (q - z) := by
+        simp only [w, smul_add, smul_inv_smul₀ hμ.ne']
+      rw [hw]
+      simp only [z]
       abel
     rwa [he] at h
-  have hzp : euclideanDist p z ≤ λ * D := by
-    change norm2 (p - ((1 - λ) • p + λ • c)) ≤ λ * D
-    rw [show p - ((1 - λ) • p + λ • c) = λ • (p - c) by
+  have hzp : euclideanDist p z ≤ μ * D := by
+    change norm2 (p - ((1 - μ) • p + μ • c)) ≤ μ * D
+    rw [show p - ((1 - μ) • p + μ • c) = μ • (p - c) by
       ext <;> simp only [Prod.fst_sub, Prod.snd_sub, Prod.fst_add, Prod.snd_add,
         Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring,
-      norm2_smul, abs_of_pos hλ]
-    exact mul_le_mul_of_nonneg_left (hbound p hp) hλ.le
+      norm2_smul, abs_of_pos hμ]
+    exact mul_le_mul_of_nonneg_left (hbound p hp) hμ.le
   refine ⟨hqC, ?_⟩
   change euclideanDist p q ≤ ρ
   have hh := euclideanDist_triangle p z q
-  have he : λ * D + λ * s = ρ := by rw [← mul_add, hλden]
+  have he : μ * D + μ * s = ρ := by rw [← mul_add, hμden]
   exact hh.trans ((add_le_add hzp hq).trans_eq he)
 
 /-- A nonempty interior supplies a closed Euclidean ball even though the ambient
@@ -86,7 +88,7 @@ theorem convexBody_hasInteriorBalls {C : Set Point} (hC : IsConvexBody C)
     (hne : (interior C).Nonempty) :
     ∃ κ r₀ : ℝ, 0 < κ ∧ 0 < r₀ ∧ HasInteriorBalls C κ r₀ := by
   obtain ⟨c, s, hs, hball⟩ := exists_euclideanBall_subset_of_interior hne
-  have hc : c ∈ C := hball (by simpa only [euclideanBall, mem_setOf_eq, euclideanDist_self] using hs.le)
+  have hc : c ∈ C := hball (by simpa only [euclideanBall, mem_ofPred_eq, euclideanDist_self] using hs.le)
   have hcont : Continuous (fun p : Point => euclideanDist p c) := by
     exact continuous_norm2.comp (continuous_id.sub continuous_const)
   obtain ⟨D, hD⟩ := hC.2.1.exists_bound_of_continuousOn hcont.continuousOn
