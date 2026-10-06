@@ -1,0 +1,62 @@
+{
+  "format": "elementary-descent-checks-v1",
+  "starting_commit": "e5b064b6d6986580252ed5f58dc7d14eb0b77bb6",
+  "status": "Conditional proof draft: Schanuel assumed; only symbolic identities tested here.",
+  "source_blobs": {
+    "elementary_descent_algebra.py": "ea03fb2605cfacfe00d14eb00b8e148245748e81",
+    "test_elementary_descent.py": "f24b1c6b4e73c3f83cc48177302159468956a5da"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "sympy": "1.14.0"
+  },
+  "tests": {
+    "run": 15,
+    "passed": 15,
+    "skipped": 0,
+    "command": "python -m unittest -v test_elementary_descent"
+  },
+  "identities": {
+    "contact_normal_form": "0",
+    "common_root_sine": "0",
+    "common_root_cosine": "0",
+    "common_root_defect_factorization": "0",
+    "resultant_factorization": "0",
+    "area_linear_coefficients": "0",
+    "bend_coefficient_factorization": "0",
+    "mu_recovers_sine_square": "0",
+    "direction_reconstruction": "0",
+    "frequency_hyperbola": "0",
+    "forward_rational_form": "0",
+    "nonzero_forward_pole_factorization": "0",
+    "reverse_mobius_inverse": "0",
+    "reverse_mobius_determinant": "0",
+    "common_root_defect": "(1 - 2*c**2)*(8*c**2 - 8)/(3 - 4*c**2)**2",
+    "contact_resultant": "-8192*c**2*(1 - 4*c**2)*(1 - 2*c**2)*(1 - c**2)**2/(3 - 4*c**2)**3",
+    "bend_coefficient": "(d + 6)/(4*(d + 2))",
+    "forward_pole_numerator": "-4*H**2*d*(d + 2)",
+    "reverse_mobius_determinant_value": "2*I*eta_r",
+    "frequency_square_difference": "5/4"
+  },
+  "negative_controls": [
+    "P constant allows the elementary solution x=log(2)/(sqrt(2)-1).",
+    "P(0)=0 allows the elementary solution x=log(2)/(sqrt(2)+1).",
+    "A common factor can hide a monomial graph and an elementary solution.",
+    "A rational multiplier permits nonzero rational logarithmic coefficients."
+  ],
+  "initial_failure": {
+    "kind": "test expression-tree equality versus algebraic equality",
+    "details": "One initial test compared (d+6)/(4*(d+2)) with (d+6)/(4*d+8) syntactically.",
+    "repair": "Compare the exact cancelled difference with zero; no mathematical formula changed."
+  },
+  "not_verified_by_tests": [
+    "Schanuel's conjecture",
+    "the conditional field-theoretic/tower-descent proof",
+    "unconditional non-elementarity or irrationality",
+    "identification of the model root with the unrestricted phase transition",
+    "prior geometric theorem drafts or old numerical certificates"
+  ],
+  "ci": false,
+  "lean_build": false,
+  "reproduction": "python run_elementary_descent_checks.py --output results/elementary-descent-checks.json"
+}
