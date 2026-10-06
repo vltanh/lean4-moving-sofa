@@ -1,111 +1,151 @@
-# Explicit global stability coefficients
+# Analytic stability improvements: centered caps and actual sofas
 
 Base paper checkpoint: `a8f7719fd43fa91b223d9f6c0eb53594e5a95716`.
-PR #8 is merged; this constants branch is separate from the coercive-route PR #9.
-The first six constants commits, ending at
-`4acfa639976ce41eab7ae77f2485591b9e3f6bb9`, were inherited. Their simpler bounds
-are retained in the research history and notes.
+This PR #10 branch is separate from the coercive-route PR #9. The present
+analytic continuation starts at `f95fe45c4194ecc95d46ad5427bf58db2dcae157`.
 
-## Strongest written analytic result
+**Formalization is frozen at the user's request.** This continuation changes
+only analytic notes and Python diagnostics. No Lean file, library configuration,
+workflow, bridge, Challenge statement, manuscript, or original proof is changed.
+No Lean, Lake, CI, or manuscript build was run. New conclusions are written
+analytic arguments requiring independent review, not kernel-checked results.
 
-There exists a positive threshold epsilon0 such that every original moving sofa
-with deficit epsilon=|G|-|S|<epsilon0 satisfies, after the prescribed normalization,
+## Strongest current analytic statements
 
-| Quantity | Explicit coefficient |
-| --- | --- |
-| Euclidean Hausdorff distance | `(61/2) * sqrt(epsilon)` |
-| Symmetric-difference area | `100 * sqrt(epsilon)` |
-| Missing angle of every admissible reduced motion | `(31/10) * epsilon` |
+Write epsilon=|G|-|S|. For all sufficiently near-optimal original moving sofas:
 
-The simple integer Hausdorff coefficient 31 works without the final small-surplus
-refinement. The strongest 30.5 uses the improved terminal trapezoid. These are
-uniform bounds for the unrestricted class of near-optimal sofas, not claims of
-optimal coefficients or bounds valid at every area deficit.
+| Object / normalization | New coefficient | Previous comparison |
+| --- | --- | --- |
+| Cap distance with horizontal midpoint alignment | `sec(phi) < 1.001` times square-root cap energy or Q deficit | `2 sec(phi) < 2.002` with the left-support pin |
+| Actual sofa, same old left/top pin | `4.22 * sqrt(epsilon)` | `30.5 * sqrt(epsilon)` |
+| Actual sofa, horizontal midpoint/top alignment | `2.3 * sqrt(epsilon)` | New stronger allowed-alignment theorem |
+| Symmetric-difference area, midpoint/top alignment | `50 * sqrt(epsilon)` | `100` with the previous normalization/estimate |
+| Missing angle of every admissible reduced motion | `3.1 * epsilon` | Unchanged |
 
-**Status:** written analytic proof plus supporting uncompiled Lean lemmas.
-The full numerical-coefficient theorem has NOT been assembled or checked in Lean.
-No Lean, Lake, CI, remote build, or TeX compilation was run. The new source may
-contain elaboration, tactic, API, or mathematical errors pending review.
+The common positive entry threshold remains existential. These are not bounds
+claimed for all possible deficits, nor sharp global-sofa coefficients. The two
+normalizations are different and must be labelled. The cap constant is not the
+actual-sofa constant. The midpoint theorem uses only translation, and thus also
+bounds distance minimized over arbitrary rigid alignment.
 
-## Main improvements
+## Reading order for this continuation
 
-The cap and missing set spend complementary portions of the deficit. Orthogonal
-hallway normals reduce the erosion allowance from `2*delta` to `sqrt(2)*delta`.
-Recovery uses the full surviving disk and its exact area, rather than a smaller
-inscribed square.
+1. [11-centered-cap-coercivity.md](11-centered-cap-coercivity.md): midpoint
+   alignment halves the kernel norm coefficient, with exact covariance and
+   centered norm formulas. The abstract quotient norm is exactly sec(phi).
+2. [12-boundary-cones-and-sector-recovery.md](12-boundary-cones-and-sector-recovery.md):
+   audit every reference corner, rotate local charts, and recover missing area
+   from whole eroded sectors. The outer floor angles are pi/2-phi, NOT pi/2.
+3. [13-normal-slack-recovery.md](13-normal-slack-recovery.md): adapt hallway
+   angles to Euclidean normal displacement. Forward recovery no longer pays
+   for steepness in fixed vertical coordinates.
+4. [14-centered-global-2p3.md](14-centered-global-2p3.md): the numerical global
+   theorem and exact optimization/certification of its split deficit budget.
+5. [15-feasible-cap-residual-sharpness.md](15-feasible-cap-residual-sharpness.md):
+   the raw extremizing ray is infeasible in either sign, but one-sided Hermite
+   smoothing realizes limiting sharpness among actual normalized convex caps.
+6. [16-effective-entry-certificate-design.md](16-effective-entry-certificate-design.md):
+   a finite convergent outer-pixel certificate design for a prescribed global
+   neighborhood. No enumeration or numerical separation gap has been computed.
 
-Phase-wise reference velocity bounds improve the roof Lipschitz coefficient
-from 26 to 9.45. An adaptive hallway angle balances the two inner-wall first
-variations and improves the reference roof recovery factor to 10.2. Euclidean
-interior-ball geometry then supplies the numerical ratio `100/1051`.
+[10-analytic-continuation.md](10-analytic-continuation.md) preserves the initial
+hypotheses and scope. Notes 01--09 preserve the earlier 84/80/30.5 stages and
+remain useful inputs; their numerical conclusions are superseded where stated
+above, not silently erased from the research history.
 
-For area distance, compare the competing envelope directly with the reference
-cap and niche: a convex square-parallel layer plus a thin roof band suffices.
-This avoids multiplying the global Hausdorff constant into the area estimate.
-A trapezoidal terminal-floor slice also improves the angle coefficient to 3.1
-and keeps the surplus outside the full-angle envelope very small.
+## Main mechanisms
 
-## Read in this order
+### Center the width, not one endpoint
 
-1. [07-global-constants.md](07-global-constants.md): the strongest theorem and
-   its assembly, including both deficit budgets and the full-angle subclass.
-2. [06-phase-aware-reference.md](06-phase-aware-reference.md): the new reference
-   slope, adaptive-angle slack argument, and explicit interior-ball ratio.
-3. [08-effective-reference-scales.md](08-effective-reference-scales.md): numerical
-   height, ball scale, outer margin, and clipping threshold, with the remaining
-   effective-entry gap isolated explicitly.
-4. [05-area-and-angle.md](05-area-and-angle.md): the direct area argument and
-   improved terminal trapezoid. Note 07 substitutes the sharper reference data.
-5. [09-audit-and-limitations.md](09-audit-and-limitations.md): negative results,
-   formalization scope, lower bounds, and validation limits.
+If f is the left-pinned support difference, replace it by
 
-The earlier notes document the progression: shared deficit and exact disks in
-01, the inherited reference estimates in 02, then the simpler Hausdorff 80 and
-area 204 bounds in 03--05. They are intermediate estimates, not contradictions
-of the stronger result.
+    g(t)=f(t)-(f(0)/2)*cos(t).
 
-## Explicit coefficient is not an explicit global threshold
+This removes the same translation kernel and makes the two extreme support
+errors equal. The exact centered evaluation norm is at most sec(phi)^2/2;
+since the residual square norm is twice the cap energy, the coefficient is
+sec(phi). Endpoint width gives a matching quotient-space lower bound.
 
-The new analytic reference scales can be fixed at
+One-sided smoothing of the negative extremal direction yields genuine convex
+caps approaching this residual coefficient. This is sharpness for E_cap, NOT
+for M-Q: dual slack and the two auxiliary-body energies have not been shown
+negligible. Determining the best feasible-Q or area-deficit constant still
+requires a critical-cone analysis.
 
-    roof height <= 2/3,
-    interior-ball scale = 1/24,
-    outer-wall margin = 1/5,
-    roof clipping threshold = 1/2040000.
+### Whole sectors replace one worst-case interior disk
 
-A deficit of at most `10^(-14)` satisfies the subsequent recovery inequalities
-once the local cap and terminal certificates apply. It has NOT been proved to
-guarantee those certificates for every sofa. The missing numerical global
-separation/entry bound is not supplied by the existing compactness argument.
-Accordingly epsilon0 in the unconditional result remains existential.
+The reference boundary has uniform translated interior sectors of aperture
+beta=1.53 at sufficiently small scales. For erosion r and target radius rho,
+the surviving sector area is
 
-The punctured-sofa family gives the necessary lower bound `C >= 1/sqrt(pi)`
-for any unrestricted rigid-Hausdorff square-root coefficient. The new upper
-coefficient 30.5 is not asserted to attain that infimum.
+    rho^2 * [beta/2-asin(u)-u*sqrt(1-u^2)+u^2*cot(beta/2)], u=r/rho.
 
-## Source and actual checks
+Optimizing this exact expression over complementary cap/missing-area budgets
+gives sufficient-method limits approximately 2.299325 (centered) and 4.216330
+(left-pinned). Exact rational Taylor bounds certify the strict choices 2.3 and
+4.22. These are limits of a sufficient recovery method, not lower bounds for
+actual sofa stability.
 
-`MovingSofaStability/Constants.lean` is the dedicated review root. It collects
-exact deficit identities, orthogonal erosion, scalar phase and numerical
-budgets, conditional actual-set recovery, direct roof-band localization, and
-the puncture-based coefficient lower bound. The unconditional numerical theorem
-still needs the geometric reference adapters and final assembly; these are not
-hidden in an assumed final-stability interface.
+### Normals replace vertical roof depth
 
-The local command
+At a core point, choose the hallway-angle adjustment to balance the two inner
+wall violations for a unit displacement direction w. Both first variations
+are `[sqrt(a^2+b^2)/(a+b)]*<w,n>`. Nearest-point geometry, including the two
+roof corners, yields a common coefficient strictly below 1/2. Using 49/100
+makes the forward factor 100/49, rather than 10.2. Only the reference is
+differentiated, never an arbitrary competing cap or sofa.
 
-    python docs/stability/constants/check_global_constants.py
+## Diagnostics actually run
 
-passed 3,212 assertions, including exact rational budgets and 128 exact polygon
-square-dilation identities, plus sampled high-precision reference, adaptive-angle,
-and deficit-splitting checks. The tested script's Git blob SHA is
-`6ec33e06e8a6425e8179d5103cbc749068a6935d`, matching the committed source.
-[global-constant-checks.json](global-constant-checks.json) is the recorded output.
-These diagnostics do not check Lean, topology, or the global entry gap.
+Run locally, without Lean or Lake:
 
-The faithful Baek library, original uniqueness, bridge, Challenge files,
-canonical Solution, manuscript, workflows, and lakefile are unchanged. The
-merged paper branch already builds the stability-library glob by default, so
-new files will be included when that target is eventually compiled; no claim
-is made that they are excluded from that build. All research commits use
-`[skip ci]`, and the paper's existing verification claims are not extended.
+    python docs/stability/constants/check_centered_recovery.py
+    python docs/stability/constants/check_cap_smoothing.py
+
+The first script passed 3,126 assertions at 50 decimal digits, including 12
+exact rational inequalities, 65 kernel quadratures, sampled normal witnesses,
+exact sector stationary identities, and budget stress tests. Its committed
+Git blob matches the tested source:
+
+    f78a75069f6a4af1620d2f426c15ce06ec76e824.
+
+The second integrates five one-sided Hermite residual witnesses. Their endpoint
+quotient lower ratios approach 1.00076792405693346 from below. Its blob also
+matches the tested source:
+
+    3a4449a4e8cfc48b2ce5d3862ce3cc1c79f2c64c.
+
+The exact outputs are `centered-recovery-checks.json` and
+`cap-smoothing-checks.json`. The earlier `global-constant-checks.json` remains
+its separate historical 3,212-assertion record; it was not rerun or relabelled
+as validation of the new results.
+
+These diagnostics do NOT establish uniform boundary charts by sampling, a
+verified global entry threshold, feasibility of an extremal Q triple, or any
+Lean theorem. The proofs of the uniform and limiting statements are the
+analytic arguments in the notes.
+
+## Negative findings preserved
+
+The initial right-angle corner hypothesis failed: the two outer floor angles
+are pi/2-phi. A quarter-plane sector cannot be used there. An initial kernel
+test used a displacement below working precision at a breakpoint and recursed;
+the endpoint kernel is now explicit. The raw extremal ray fails cap feasibility
+in both signs, so it is not itself a Q sharpness witness. Coefficient 2.2 fails
+the present sufficient sector budget, but that is NOT a counterexample among
+actual sofas. The pixel-entry design must retain the small-area class by taking
+the maximum of its enumerated upper bound and 2.2.
+
+## Remaining goals
+
+A numerical epsilon0 still needs certified reference chart/local-certificate
+radii and a global separation calculation. Note 16 gives a convergent design,
+not a completed practical solver. The 1e-14 downstream calculation from note 08
+must not be used as an unconditional entry threshold, especially with the new
+normal/cone charts.
+
+Global coefficient 2.3 is not sharp; the puncture lower bound 1/sqrt(pi) remains
+only a necessary lower bound. The cap residual constant sec(phi) is sharp in
+its stated class, but a smaller coefficient for the full feasible Q deficit
+may still be possible because that deficit contains additional nonnegative
+terms. Manuscript integration and any future formalization remain separate.
