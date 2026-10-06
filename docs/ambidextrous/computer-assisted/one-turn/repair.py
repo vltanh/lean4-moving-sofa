@@ -98,5 +98,5 @@ if __name__ == "__main__":
         worst = min(worst, d)
         if k < 12 or d < 0:
             print("k=%2d W=%.3f  A=%.5f -> A(R)=%.5f  diff=%+.5f  (hull %+.5f niche %+.5f)"
-                  % (k, A0[3], A0[0], d, A1[1] - A0[1], A1[2] - A0[2]))
+                  % (k, A0[3], A0[0], A1[0], d, A1[1] - A0[1], A1[2] - A0[2]))
     print("min A(R)-A over random polygon caps: %+.6f" % worst)
