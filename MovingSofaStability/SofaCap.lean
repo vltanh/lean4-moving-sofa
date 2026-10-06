@@ -5,10 +5,9 @@ public import MovingSofaStability.SofaCoordinates
 /-!
 # A full-angle cap without extending the sofa's motion
 
-Uncompiled proof source. The downward convex completion is defined by all
-upper supporting half-planes. It contains the original normalized set and
-has exactly its upper supports, even when the motion ends before pi/2.
-No full-angle movement of the original set is asserted.
+Uncompiled proof source. The downward completion contains the normalized
+original set and preserves all upper supports. The actual set need not be
+convex and need not admit a full-angle movement.
 -/
 
 @[expose] public section
@@ -57,8 +56,9 @@ theorem sofaCap_convex (S : Set Point) : Convex ℝ (sofaCap S) := by
   nlinarith
 
 theorem sofaCap_compact {S : Set Point} (htop : supp S (π / 2) = 1) : IsCompact (sofaCap S) := by
-  apply (isCompact_Icc.prod isCompact_Icc).of_isClosed_subset (sofaCap_closed S)
-    (s := Icc (-supp S π) (supp S 0) ×ˢ Icc (0 : ℝ) 1)
+  have hb : IsCompact (Icc (-supp S π) (supp S 0) ×ˢ Icc (0 : ℝ) 1) :=
+    isCompact_Icc.prod isCompact_Icc
+  apply hb.of_isClosed_subset (sofaCap_closed S)
   intro p hp
   have h0 := hp.2 0 ⟨le_rfl, pi_pos.le⟩
   have hπ := hp.2 π ⟨pi_pos.le, le_rfl⟩
@@ -68,7 +68,6 @@ theorem sofaCap_compact {S : Set Point} (htop : supp S (π / 2) = 1) : IsCompact
   rw [dot_uvec_pi_div_two, htop] at hv
   exact ⟨⟨by linarith, h0⟩, hp.1, hv⟩
 
-/-- Upper supports are preserved exactly, not only approximately. -/
 theorem sofaCap_upper_support {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
     (hstrip : S ⊆ hStrip) (htop : supp S (π / 2) = 1)
     {t : ℝ} (ht : t ∈ Icc (0 : ℝ) π) : supp (sofaCap S) t = supp S t := by
@@ -76,7 +75,6 @@ theorem sofaCap_upper_support {S : Set Point} (hS : IsCompact S) (hne : S.Nonemp
   exact le_antisymm (supp_le_of_forall (hne.mono hsub) (fun p hp => hp.2 t ht))
     (supp_mono hsub hne (sofaCap_compact htop) t)
 
-/-- This is a normalized right-angle cap for every compact nonempty normalized set. -/
 theorem sofaCap_isCap {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
     (hstrip : S ⊆ hStrip) (htop : supp S (π / 2) = 1) : IsCap (sofaCap S) (π / 2) := by
   have hsub := subset_sofaCap hS hstrip
@@ -127,25 +125,31 @@ theorem sofaCap_isCap {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
   ext p
   exact (cap_mem_iff_upper hK p).symm
 
-/-- The arbitrary-sofa cap agrees with Gerver's cap at the reference sofa. -/
 theorem sofaCap_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     sofaCap (gerverSofa P) = P.cap := by
   ext p
   rw [cap_mem_iff_upper (gm_isCap hP hbox)]
-  change (0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ supp (gerverSofa P) t) ↔ _
-  simp only [gerver_upper_support hP hbox]
+  constructor
+  · intro hp
+    refine ⟨hp.1, ?_⟩
+    intro t ht
+    rw [gerver_upper_support hP hbox ht]
+    exact hp.2 t ht
+  · intro hp
+    refine ⟨hp.1, ?_⟩
+    intro t ht
+    rw [← gerver_upper_support hP hbox ht]
+    exact hp.2 t ht
 
-/-- The upper-support neighborhood of the associated cap follows from actual-set closeness. -/
 theorem sofaCap_close_to_gerver {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty) (hstrip : S ⊆ hStrip)
     (htop : supp S (π / 2) = 1) {δ : ℝ} (hclose : EuclideanClose δ S (gerverSofa P)) :
     UpperSupportClose δ (sofaCap S) P.cap := by
   intro t ht
   rw [sofaCap_upper_support hS hne hstrip htop ht, gerver_upper_support hP hbox ht]
-  exact hclose.abs_supp_sub_le hS (gm_isCompact_sofa hP hbox) hne
-    (gm_movingSofa_std hP hbox).1.2.1.nonempty t
+  have hG := (gm_movingSofa_std hP hbox).1
+  exact hclose.abs_supp_sub_le hS (ms_isCompact_of_isMovingSofaWithAngle hG) hne hG.2.1.nonempty t
 
-/-- The partial motion transfers to the cap's supporting walls, without extending the motion. -/
 theorem sofaCap_partial_constraints {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω) (hω : ω ∈ Icc (0 : ℝ) (π / 2))
     (htop : supp S (π / 2) = 1) : PartialSofaConstraints (sofaCap S) S ω := by
