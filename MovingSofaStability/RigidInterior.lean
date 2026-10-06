@@ -119,7 +119,7 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     fun n : ℕ => counter (1 / ((n : ℝ) + 1)) (by positivity)
   have hδnonneg : ∀ n, 0 ≤ δ n := by
     intro n
-    obtain ⟨q, _, hd⟩ := hclose n |>.1 p (interior_subset hp)
+    obtain ⟨q, _, hd⟩ := (hclose n).1 p (interior_subset hp)
     exact (euclideanDist_nonneg _ _).trans hd
   have hinv : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0) := by
     simpa only [one_div] using tendsto_inv_atTop_zero.comp (tendsto_natCast_atTop_atTop.add_const 1)
@@ -134,7 +134,7 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     apply rigid_shift_bound hne hR _ (hclose n)
     have he : 1 / ((n : ℝ) + 1) ≤ 1 := by
       apply (div_le_one (by positivity)).2
-      positivity
+      linarith [Nat.cast_nonneg (α := ℝ) n]
     exact (hsmall n).le.trans he
   obtain ⟨z, hzB, σ, hσ, hz⟩ := hB.tendsto_subseq hgB
   have hunit : z.1.1 ^ 2 + z.1.2 ^ 2 = 1 := by
@@ -155,7 +155,8 @@ theorem rigid_copies_retain_interior {X : Set Point} (hX : IsCompact X)
     refine ⟨q, hq, ?_⟩
     rw [coefficientInverse_rotationShift]
     have he := euclideanDist_rigid (g (σ n)) ((g (σ n)).symm x) q
-    simpa only [Rigid.apply_symm_apply] using he.le.trans hd
+    rw [Rigid.apply_symm_apply] at he
+    exact he.symm.le.trans hd
   have hU : IsOpen (F.symm '' interior X) := F.symm.isOpenMap _ isOpen_interior
   have hUX : F.symm '' interior X ⊆ X := by
     rintro _ ⟨x, hx, rfl⟩
