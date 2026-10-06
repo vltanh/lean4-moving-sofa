@@ -91,7 +91,7 @@ class Model:
             # Possible overlap; bound the whole range, including the empty case.
             U=iv.mpf([lo.a,hi.b]);prod=self.value(j,U,a,b)*self.value(j,U,c,d)
             length=hi.b-lo.a
-            return iv.mpf([min(Z,prod.a*length),max(Z,prod.b*length)])
+            return prod*iv.mpf([Z,length.b])
         if j==0:return a*c*(iv.tan(hi)-iv.tan(lo))
         if j==1:return a*c*(hi-lo)
         if j==2:return a*c*(cot(self.T-hi)-cot(self.T-lo))
