@@ -1,16 +1,17 @@
 module
 
-public import MovingSofaUniqueness.Rigidity
+public import MovingSofaStability.MamikonFoundation
 public import MovingSofaStability.QuadraticDeficit
 
 /-!
 # Mamikon difference energies
 
-Uncompiled proof source. These statements quantify the existing equality-case
-lemmas and apply to arbitrary convex bodies, without `InjCond1`.
+Uncompiled proof source. The quantitative route now uses the neutral square
+and displacement infrastructure, without importing the original rigidity or
+CapKernel module. It applies to arbitrary convex bodies, without InjCond1.
 
-The energy is half the integral of the *difference* of two tangent
-displacements squared. It is not the Mamikon area of either body separately.
+The energy is half the integral of the difference of two tangent displacements
+squared. It is not the Mamikon area of either body separately.
 -/
 
 @[expose] public section
