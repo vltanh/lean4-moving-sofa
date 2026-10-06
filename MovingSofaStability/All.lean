@@ -23,6 +23,7 @@ public import MovingSofaStability.CutSeparation
 public import MovingSofaStability.EnvelopeSlack
 public import MovingSofaStability.EnvelopeSlope
 public import MovingSofaStability.EpigraphBalls
+public import MovingSofaStability.EuclideanDisks
 public import MovingSofaStability.EuclideanGeometry
 public import MovingSofaStability.ExposedFaceStability
 public import MovingSofaStability.FloorCoverage
@@ -46,6 +47,9 @@ public import MovingSofaStability.NonsmoothBookkeeping
 public import MovingSofaStability.ODEReconstruction
 public import MovingSofaStability.OmittedWedgeArea
 public import MovingSofaStability.PartialHallways
+public import MovingSofaStability.PunctureMetric
+public import MovingSofaStability.PunctureTopology
+public import MovingSofaStability.PuncturedSofa
 public import MovingSofaStability.QuadraticDeficit
 public import MovingSofaStability.QualitativeEntry
 public import MovingSofaStability.ReferenceCoreVariation
@@ -53,9 +57,16 @@ public import MovingSofaStability.ResidualIntegrability
 public import MovingSofaStability.ResidualMass
 public import MovingSofaStability.ResidualPropagation
 public import MovingSofaStability.Residuals
+public import MovingSofaStability.RigidInterior
 public import MovingSofaStability.RoofGeometry
 public import MovingSofaStability.RoofMargins
 public import MovingSofaStability.SeparatedWedges
+public import MovingSofaStability.SharpCapDistance
+public import MovingSofaStability.SharpEvaluation
+public import MovingSofaStability.SharpExponent
+public import MovingSofaStability.SharpIntegralControl
+public import MovingSofaStability.SharpKernelNorms
+public import MovingSofaStability.SharpReconstruction
 public import MovingSofaStability.SofaBounds
 public import MovingSofaStability.SofaCap
 public import MovingSofaStability.SofaCoordinates
@@ -66,6 +77,7 @@ public import MovingSofaStability.SymmetricDifference
 public import MovingSofaStability.TerminalBookkeeping
 public import MovingSofaStability.TerminalComparison
 public import MovingSofaStability.TerminalFloor
+public import MovingSofaStability.TrigKernelIntegrals
 public import MovingSofaStability.UniformGeometryBounds
 public import MovingSofaStability.WideConcavity
 public import MovingSofaStability.WideDomain
@@ -74,26 +86,21 @@ public import MovingSofaStability.WideGerverCertificate
 public import MovingSofaStability.WideResidualEnergy
 
 /-!
-# Stability: complete current source assembly
+# Stability: intended source assembly and sharpness additions
 
-The headline proof-source declarations are now in GlobalStability.lean:
+GlobalStability.lean contains the intended unrestricted and terminal-angle
+proofs. SharpCapDistance.lean supplies stronger cap theorems with coefficient
+2 / cos(phi), uniformly less than 2.002 in the source box. The older coefficient
+80 declarations remain available, and the global constants remain existential.
 
-* `MovingSofaStability.unrestricted_stability`
-* `MovingSofaStability.terminal_angle_stability`
-* `MovingSofaStability.reduced_sofa_stability`
-
-The first two inhabit the target propositions defined in Statement.lean;
-they are no longer only target definitions. Their assumptions are Gerver's
-parameter solution and source-box hypotheses, not an unproved stability or
-special-envelope interface.
+SharpExponent.lean supplies the punctured Gerver family and rules out every
+Hausdorff exponent greater than one half, including arbitrary rigid alignment.
+It does not claim sharpness for symmetric-difference area or feasible-cap constants.
 
 IMPORTANT: none of this development has been compiled or kernel-checked.
-This root records source coverage, not verification. Elaboration and tactic
-errors may remain. No Lean, Lake, CI, remote build, or TeX compilation was run.
-The global constants are existential; the source cap estimate uses the
-non-sharp coefficient 80, not the analytic sharp coefficient 2 sec(phi).
+These files are proof source, not verified formalization. No Lean, Lake, CI,
+remote build, or TeX compilation was run. Formula tests check analytic formulas
+only; they do not establish elaboration or theorem dependencies.
 
-The separate exponent-sharpness argument remains in the analytic notes; it
-is not asserted here as a Lean theorem. See docs/stability/FORMALIZATION.md
-for the proof route, validation limits, and source-review corrections.
+See docs/stability/SHARPNESS_HANDOFF.md for the new entry points and limitations.
 -/
