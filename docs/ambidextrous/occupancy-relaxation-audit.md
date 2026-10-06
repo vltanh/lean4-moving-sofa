@@ -1,68 +1,67 @@
 # A necessary correction to the optimality-only occupancy plan
 
-This note audits the proposed computer-assisted route before spending effort on a large search. It does not change the proved forbidden-triple bound CF2. It proves that the unbranched LP in the new plan has a structural lower bound that prevents it from giving the requested sharp upper bound on many of the planned search boxes.
-
-Labels OR are local. The baseline is `924ee7fef66b4cb1b9d5d9ba356a41d6adb250c7`. No numerical computation, existing optimum, or one-turn functional theorem is needed below.
+This audits the proposed computer-assisted route before a large search. It does not change CF2. It identifies a structural floor for the unconditioned LP and the extra geometric information needed to overcome it. Labels OR are local; baseline `924ee7fef66b4cb1b9d5d9ba356a41d6adb250c7`.
 
 ## 1. The fractional barrier
 
-Let a finite partition of a region Omega have cells of areas a_i >= 0. Consider exactly the relaxation
+Partition a region Omega into finitely many cells of areas a_i>=0. Consider exactly
 
 $$
 0\le z_i\le1,\qquad z_i+z_j+z_k\le2
 $$
 
-for any collection of triples of distinct cells. Its objective is to maximize sum_i a_i z_i. The constraints are necessary for the indicator of cells met by a feasible body, as in CF1--CF2.
+for any collection of triples of distinct cells, maximizing sum_i a_i z_i.
 
-**Proposition OR1.** The optimum of this LP is at least
+**Proposition OR1.** The LP optimum is at least `(2/3)|Omega|`, because the constant assignment z_i=2/3 satisfies every triple, at every angular and spatial resolution.
 
-$$
-\boxed{\frac23\sum_i a_i=\frac23|\Omega|.}
-$$
-
-**Proof.** The constant assignment z_i=2/3 is feasible for every possible triple. Evaluate its objective. QED.
-
-This holds if all possible geometric triples are included, at every angular and spatial resolution. Thus finer cells and additional hallway angles cannot by themselves overcome this bound. For equal cells, it also follows directly from CF2: putting L=sum_e lambda_e and c_i=sum_{e containing i}lambda_e gives sum_i c_i=3L, and
+For equal cells the same barrier follows directly from CF2. Put L=sum_e lambda_e and c_i=sum_{e containing i}lambda_e. Then sum_i c_i=3L, and the valid scalar inequality
 
 $$
-2L+\sum_i(1-c_i)_+\ge 2N/3.
+\frac23c+(1-c)_+\ge\frac23\qquad(c\ge0)
 $$
 
-Indeed (1-c)_+ >= 1-(2/3)c when 0<=c<=1, while for c>=1 the needed combined pointwise inequality is (2/3)c+(1-c)_+ >=2/3. Summing the latter proves the assertion for every nonnegative dual proposal, whether or not its degrees exceed one.
-
-On the planned rectangle [0,4] times [0,1], the barrier is 8/3. Even after reducing the bounding rectangle to [0,W] times [0,1], it is 2W/3, so this LP cannot prove an upper bound below M when W>=3M/2. This is a statement about the relaxation, not a feasible sofa of area 2W/3.
-
-## 2. Repeated witnesses provide pair constraints, but not a complete cure
-
-CF1 permits q=r. If two distinct cells P,Q satisfy both strict separations
+gives
 
 $$
-\inf_{p\in P,q\in Q}(q-p)\cdot u>1,\qquad
-\inf_{p\in P,q\in Q}(q-p)\cdot v>1,
+2L+\sum_i(1-c_i)_+\ge2N/3.
 $$
 
-then they cannot both be met, giving z_P+z_Q<=1. These constraints were omitted by the distinct-triple-only relaxation, even though they follow from its continuous geometric source.
+For c<=1 the left scalar expression is 1-c/3; for c>=1 it is 2c/3. This also corrects an unnecessary, incorrectly written scalar sub-inequality in the first draft; the constant feasible vector and the conclusion were unaffected.
 
-Adding arbitrary pair constraints as well as triples still leaves z_i=1/2 feasible. Consequently the resulting unconditioned LP has optimum at least |Omega|/2. On an area-four search rectangle this remains two, above the target. Additional mandatory occupied cells, certified empty regions, clique inequalities, or integral branching can change this conclusion; OR1 does not concern those strengthened models.
+On [0,4] times [0,1], the barrier is 8/3. Even with the actual width-W rectangle it is 2W/3, above the target when W>=3M/2. This is not a feasible sofa of that area: it is a defect of the fractional relaxation. Additional angles or finer cells alone cannot remove it.
 
-## 3. What an adequate replacement must do
+## 2. Repeated witnesses and the important terminal distinction
 
-At least one of the following is necessary for the proposed global computation:
+In general CF1 permits q=r. Two cells whose point differences exceed one in both frame coordinates cannot both meet the body, giving a pair cut z_i+z_j<=1.
 
-1. Branch on actual occupation decisions, or on support-witness/placement boxes that imply occupied and empty cells, then certify an upper bound at every leaf.
-2. Use stronger valid occupancy inequalities such as those for incompatible cliques or exact small hypergraph subproblems, retaining a verified derivation.
-3. Work directly with interval bounds for the ordinary area of finite-position hallway intersections, as in the older width certificate.
+However, such a two-point hallway conflict is impossible for two points in the incoming unit-height strip and the conventional angle sectors. For a displacement (dx,dy) with |dy|<=1 and dx>=0, its second coordinate in either frame `(c,s),(-s,c)` or `(c,-s),(-s,-c)` is at most one. For dx<0 its first coordinate is at most one. Here c,s>=0. Hence it cannot exceed one in both coordinates. Thus repeated-witness hallway cuts do not cure OR1 in this normalized global problem.
 
-For occupation branching, a split on cell i covers all actual bodies because their meet indicators are exactly zero or one. The children impose z_i=0 and z_i=1. After z_i=1, an incident forbidden triple becomes a pair constraint; after two occupied members its remaining member is forbidden. These are exact logical consequences, not fractional rounding.
+**Terminal-strip constraints are different.** At a terminal normal n, the whole body lies in a strip of width one. If every difference between points in cells P,Q has scalar product with n greater than one, P and Q are incompatible. Only one normal is tested. These pair cuts are valid and can be nontrivial in the incoming strip.
 
-A complete proof tree must retain both children unless a child is independently infeasible or has a verified upper bound. A large explored-node count with unresolved leaves is not a global certificate. Nor is a branch a candidate-neighborhood certificate unless a separate geometric theorem maps its conditions to the precise neighborhood used by the local proof.
+Even an arbitrary collection of pair and triple cuts leaves z_i=1/2 feasible when there are no forced cells or geometric exclusions. Its optimum is therefore at least |Omega|/2. On an area-four box this is still two. Mandatory occupied witness regions, empty regions, stronger configuration cuts, or branching are needed as well.
 
-## 4. Additional distinction at the local boundary
+## 3. Mandatory extreme witnesses
 
-The global-versus-local strategy also needs a noncircular local theorem on an explicitly specified neighborhood in a topology covered by the computation. A bound on finitely many sampled support values is not automatically a C1 neighborhood; uniform Hausdorff closeness does not imply derivative or curvature closeness. The saturated axis-cut examples already demonstrate why exposed faces need separate care.
+Normalize the horizontal projection to [0,W]. Compactness supplies points (0,y_l) and (W,y_r) with both heights in [0,1]. For a width box [W_0,W_1], the body therefore meets both witness rectangles
 
-The existing restricted geometric theorems cannot simply be declared to be the required local theorem. Each has admission hypotheses that must be verified for every body in the chosen residual set.
+$$
+\{0\}\times[0,1],\qquad [W_0,W_1]\times[0,1].
+$$
 
-## 5. Decision
+They can be represented by two zero-area variables fixed to one. A forbidden triple involving one witness then becomes a pair constraint on ordinary occupation variables; with two witnesses it can force a cell to be empty. Witnesses may be refined by branches on their heights or locations, provided the branches cover all possibilities.
 
-Do not run the unmodified triple-only LP over the entire width/endpoint domain expecting it to localize all competitive bodies. Retain CF2 for boxes where it is effective, and implement or prove a strengthened, independently checked finite-position bound for the remaining boxes. This audit removes an impossible computational expectation; it does not prove the optimal value or refute the candidate.
+This is a geometric premise supplied by compactness and normalization, not rounding a fractional LP solution. Terminal-strip pair cuts and these forced witnesses are the first strengthened model being tested.
+
+## 4. Exact branching and the local boundary
+
+A split on an ordinary cell's true meet indicator covers all bodies: either it is zero or one. Both children must be retained unless independently infeasible or upper-bounded. A tree with unresolved leaves is not a global certificate.
+
+Alternatively branch directly on support/placement boxes and compute interval upper bounds on ordinary finite-position envelope area. Both strategies are related to the finite-position approach of Kallus and Romik, *Improved upper bounds in the moving sofa problem*, arXiv:1706.06630; no novelty claim is made for branching or LP dual certificates.
+
+A residual set also cannot be declared a local candidate neighborhood without a geometric implication to the topology and exact hypotheses of the local theorem. Uniform support closeness does control derivative traces on compact arcs where the reference support is continuously differentiable, but not across its exposed-face jumps, and it does not impose a curvature cap. Finite sampled support closeness additionally needs interpolation/error control. The existing restricted area theorems are not automatically an unrestricted local theorem.
+
+## 5. Decision and proof boundary
+
+Retain CF2 where it is effective, but do not launch the distinct-triple-only LP on the entire search region expecting refinement to close the proof. Test forced extreme witnesses and terminal-strip cuts, with every numerical dual converted to a separately checked rational upper bound. If those remain weak, use integral or support-box branching rather than reporting a floating-point optimization result as closure.
+
+This correction concerns the computational method. It proves neither the optimal value nor the geometric admission required by the existing auxiliary calibrations. No CI or Lean/Lake compilation is used.
