@@ -1,6 +1,7 @@
 module
 
 public import MovingSofaStability.CoreGraph
+import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
 
 /-!
 # Change of variables and signed area for the nonsmooth core
@@ -126,17 +127,6 @@ theorem core_curveArea_graph_integral {K : Set Point} (hK : IsCap K (π / 2))
   rw [intervalIntegral.integral_symm (f := F) (innerCorner K b).1 (innerCorner K a).1] at hsub
   linarith
 
-/-- The volume of the region between two integrable graphs over a measurable set of the line
-(`volume_regionBetween_eq_integral`, for the Lebesgue measure of the plane). -/
-private theorem volume_regionBetween_eq_integral_plane {f g : ℝ → ℝ} {s : Set ℝ}
-    (f_int : IntegrableOn f s) (g_int : IntegrableOn g s) (hs : MeasurableSet s)
-    (hfg : ∀ x ∈ s, f x ≤ g x) :
-    volume (regionBetween f g s) = ENNReal.ofReal (∫ y in s, (g - f) y) := by
-  rw [Measure.volume_eq_prod, volume_regionBetween_eq_lintegral f_int.aemeasurable
-      g_int.aemeasurable hs,
-    ofReal_integral_eq_lintegral_ofReal (g_int.sub f_int)
-      ((ae_restrict_iff' hs).mpr (Eventually.of_forall fun x hx => sub_nonneg.mpr (hfg x hx)))]
-
 /-- The region under a strictly decreasing nonsmooth core is an ordinary region
 between continuous graphs. The change of variables uses the previous lemma. -/
 theorem volume_under_core_graph {K : Set Point} (hK : IsCap K (π / 2))
@@ -177,7 +167,7 @@ theorem volume_under_core_graph {K : Set Point} (hK : IsCap K (π / 2))
     obtain ⟨t, ht, he⟩ := hcover x ⟨hx.1.le, hx.2.le⟩
     rw [← he, hgraph t ht]
     linarith [hH t ht]
-  rw [hset, volume_regionBetween_eq_integral_plane
+  rw [hset, Measure.volume_eq_prod, volume_regionBetween_eq_integral
     (continuous_const.integrableOn_Icc.mono_set Ioo_subset_Icc_self)
     (hF.integrableOn_Icc.mono_set Ioo_subset_Icc_self) measurableSet_Ioo hheight,
     ← integral_Ioc_eq_integral_Ioo, ← intervalIntegral.integral_of_le horder.le]
