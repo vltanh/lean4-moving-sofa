@@ -1,6 +1,6 @@
 module
 
-public import MovingSofaExtremal.Uniqueness
+public import MovingSofaExtremal.Main
 public import MovingSofaStability.GlobalStability
 
 /-!

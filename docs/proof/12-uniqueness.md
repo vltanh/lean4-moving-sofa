@@ -478,9 +478,9 @@ $\mathcal{Q} = (\mathcal{P} + \mathcal{S}) - \mathcal{S} - \mathcal{R} - \mathca
 term linear and the other three convex (proof of Theorem 9.27). So equality in the concavity of
 $\mathcal{Q}$ forces equality in each of the three. $\square$
 
-*Lean: [`ki_maximizer_equality_conditions`](../../MovingSofaUniqueness/Rigidity.lean#L798), [`ki_upperQL_eq_gerver_of_sofaArea_eq`](../../MovingSofaUniqueness/Rigidity.lean#L783),
-[`MovingSofaOptimality.ConvexDomain.eq_on_segment_of_isMax`](../../MovingSofaUniqueness/Rigidity.lean#L247), [`mamikonSegmentEquality_iff`](../../MovingSofaUniqueness/Rigidity.lean#L690),
-[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L680), [`MovingSofaUniqueness.kiExtensionTriple`](../../MovingSofaUniqueness/Rigidity.lean#L776).*
+*Lean: [`ki_maximizer_equality_conditions`](../../MovingSofaUniqueness/Rigidity.lean#L624), [`ki_upperQL_eq_gerver_of_sofaArea_eq`](../../MovingSofaUniqueness/Rigidity.lean#L609),
+[`MovingSofaOptimality.ConvexDomain.eq_on_segment_of_isMax`](../../MovingSofaUniqueness/Rigidity.lean#L149), [`mamikonSegmentEquality_iff`](../../MovingSofaUniqueness/Rigidity.lean#L527),
+[`MamikonSegmentEquality`](../../MovingSofaUniqueness/Rigidity.lean#L517), [`MovingSofaUniqueness.kiExtensionTriple`](../../MovingSofaUniqueness/Mamikon.lean#L219).*
 
 ### Lemma 12.15 (equality in one Mamikon term)
 
@@ -515,9 +515,9 @@ $f(t) = f(T)\cos(T - t) + C\sin(T - t)$ on $(a, b)$, and by continuity on $[a, b
 take $\mathbf{z} = \mathbf{y}$: $\alpha(t) = h(t + \pi/2) - h'(t)$, so $f'(t) = f(t + \pi/2)$, which
 integrates to the stated form. $\square$
 
-*Lean: [`MovingSofaUniqueness.halfSquareIntegral_combo_gap`](../../MovingSofaUniqueness/Rigidity.lean#L55), [`halfSquareIntegral_combo_eq_iff`](../../MovingSofaUniqueness/Rigidity.lean#L91),
-[`displacement_eqOn_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L369), [`tangentKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L560), [`middleKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L612),
-[`tangentKernel_of_equation`](../../MovingSofaUniqueness/Rigidity.lean#L471), [`integrated_middle_equation`](../../MovingSofaUniqueness/Rigidity.lean#L527).*
+*Lean: [`MovingSofaUniqueness.halfSquareIntegral_combo_gap`](../../MovingSofaUniqueness/Mamikon.lean#L56), [`halfSquareIntegral_combo_eq_iff`](../../MovingSofaUniqueness/Mamikon.lean#L92),
+[`displacement_eqOn_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L221), [`tangentKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L397), [`middleKernel_of_mamikon_eq`](../../MovingSofaUniqueness/Rigidity.lean#L449),
+[`tangentKernel_of_equation`](../../MovingSofaUniqueness/Rigidity.lean#L308), [`integrated_middle_equation`](../../MovingSofaUniqueness/Rigidity.lean#L364).*
 
 ### Definition 12.16 (cap kernel)
 
@@ -529,7 +529,7 @@ with the same constants also at the targets $\pi/2$, $\pi - \varphi$ and $\pi$ r
 f(t) = f(\pi/2 - \varphi) - \int_t^{\pi/2 - \varphi} f(u + \pi/2)\,\mathrm{d}u \qquad \text{for } t \in [\varphi, \pi/2 - \varphi] .
 ```
 
-*Lean: [`CapKernel`](../../MovingSofaUniqueness/Rigidity.lean#L142), [`TangentKernel`](../../MovingSofaUniqueness/Rigidity.lean#L136).*
+*Lean: [`CapKernel`](../../MovingSofaUniqueness/Rigidity.lean#L44), [`TangentKernel`](../../MovingSofaUniqueness/Rigidity.lean#L38).*
 
 ### Lemma 12.17 (the cap kernel is a horizontal translation)
 
@@ -553,8 +553,8 @@ f(t) = a\cos(\pi/2 - \varphi) + a\int_t^{\pi/2 - \varphi} \sin u\,\mathrm{d}u = 
 On $[0, \varphi]$, $f = p''\cos t + q''\sin t$ with $q'' = f(\pi/2) = 0$ at the target, and the
 value at $\varphi$ gives $p'' = a$. $\square$
 
-*Lean: [`capKernel_of_mamikonS_eq`](../../MovingSofaUniqueness/Rigidity.lean#L829), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
-[`CapKernel.eq_horizontal_translation`](../../MovingSofaUniqueness/Rigidity.lean#L164), [`CapKernel.upper_left`](../../MovingSofaUniqueness/Rigidity.lean#L151).*
+*Lean: [`capKernel_of_mamikonS_eq`](../../MovingSofaUniqueness/Rigidity.lean#L655), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L712),
+[`CapKernel.eq_horizontal_translation`](../../MovingSofaUniqueness/Rigidity.lean#L66), [`CapKernel.upper_left`](../../MovingSofaUniqueness/Rigidity.lean#L53).*
 
 ### Lemma 12.18 (caps with translated supports; note 20, (21))
 
@@ -572,8 +572,8 @@ Since $(p - (a, 0)) \cdot u_t = p \cdot u_t - a\cos t$ and
 $(p - (a, 0)) \cdot v_t = p \cdot v_t - a\cos(t + \pi/2)$, both descriptions for $K$ at $p$ are those
 for $C$ at $p - (a, 0)$. $\square$
 
-*Lean: [`sofa_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigidity.lean#L1014), [`cap_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigidity.lean#L1033), [`mem_right_cap_iff`](../../MovingSofaUniqueness/Rigidity.lean#L924), [`mem_right_niche_iff`](../../MovingSofaUniqueness/Rigidity.lean#L946),
-[`mem_cap_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L967), [`mem_niche_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigidity.lean#L986).*
+*Lean: [`sofa_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigid.lean#L334), [`cap_eq_translate_of_upper_support`](../../MovingSofaUniqueness/Rigid.lean#L353), [`mem_right_cap_iff`](../../MovingSofaUniqueness/Rigid.lean#L244), [`mem_right_niche_iff`](../../MovingSofaUniqueness/Rigid.lean#L266),
+[`mem_cap_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigid.lean#L287), [`mem_niche_sub_horizontal_iff`](../../MovingSofaUniqueness/Rigid.lean#L306).*
 
 Note 20 obtains the lower supports from the bottom segment of the cap; the formal proof describes
 the cap by its upper supports and the floor, which amounts to the same.
@@ -593,7 +593,7 @@ $K \setminus \mathcal{N}(K) = (\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(
 $\mathcal{C}(G) \setminus \mathcal{N}(\mathcal{C}(G)) = G$ because $G$ is a monotone sofa
 (Theorem 3.13; Figure 12.5). $\square$
 
-*Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L122), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L886),
+*Lean: [`MovingSofaUniqueness.ki_sofa_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L122), [`capKernel_of_triple_midpoint`](../../MovingSofaUniqueness/Rigidity.lean#L712),
 [`theorem6_1_2`](../../MovingSofaOptimality/Gerver/Properties.lean#L181), [`theorem2_4_3`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L230).*
 
 ![Top: Gerver's cap filled blue and its horizontal translate drawn dashed in green, overlapping; at one normal t each has a dashed supporting line, the two lines parallel, and a double arrow between them is labelled a cos t. Bottom: the graph of f(t) = a cos t from 0 to π, positive up to π/2 and negative after](figures/12-uniqueness/translation.svg)
@@ -786,8 +786,8 @@ Finally $\mathcal{A}_{\pi/2}(K_G) = |G|$
 is the maximum of $\mathcal{A}_{\pi/2}$ (Lemma 11.2). $\square$
 
 *Lean: [`sofaArea_eq_gerver_iff`](../../MovingSofaUniqueness/Main.lean#L167), [`cap_eq_gerver_translate`](../../MovingSofaUniqueness/Main.lean#L153), [`translate_gerver_cap_sdiff_niche`](../../MovingSofaUniqueness/Main.lean#L138),
-[`isMaxCap_iff_translate_gerver_cap`](../../MovingSofaUniqueness/Main.lean#L181), [`ki_supp_sub_gerver_eq`](../../MovingSofaUniqueness/Main.lean#L108), [`isCap_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1052),
-[`niche_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1070), [`sofaArea_translate_horizontal`](../../MovingSofaUniqueness/Rigidity.lean#L1078), [`right_angle_monotone_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L248).*
+[`isMaxCap_iff_translate_gerver_cap`](../../MovingSofaUniqueness/Main.lean#L181), [`ki_supp_sub_gerver_eq`](../../MovingSofaUniqueness/Main.lean#L108), [`isCap_translate_horizontal`](../../MovingSofaUniqueness/Rigid.lean#L372),
+[`niche_translate_horizontal`](../../MovingSofaUniqueness/Rigid.lean#L390), [`sofaArea_translate_horizontal`](../../MovingSofaUniqueness/Rigid.lean#L398), [`right_angle_monotone_eq_gerver`](../../MovingSofaUniqueness/Main.lean#L248).*
 
 ### Lemma 12.27 (the width of Gerver's sofa)
 

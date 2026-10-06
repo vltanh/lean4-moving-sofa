@@ -17,7 +17,7 @@ rigid motions, and that shapes of nearly the largest area are close to it:
   reviewed;
 - **a second proof of optimality:** the uniqueness argument proves, for every cap of maximal sofa area, the two
   properties that Baek's proof derives from the balance of one particular cap. With Gerver's cap as a competitor,
-  this proves Baek's theorem again without Baek's Theorem 1.1.1 ([`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](MovingSofaUniqueness/Optimality.lean#L142)),
+  this proves Baek's theorem again without Baek's Theorem 1.1.1 ([`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](MovingSofaUniqueness/MaximizerRoute.lean#L92)),
   and the uniqueness from it;
 - **stability:** a moving sofa whose area is ε less than Gerver's is, after a translation, within `C√ε` of
   Gerver's sofa in the Euclidean Hausdorff distance, and the area of its symmetric difference with Gerver's sofa

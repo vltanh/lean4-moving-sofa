@@ -1,6 +1,6 @@
 module
 
-public import MovingSofaStability.MamikonFoundation
+public import MovingSofaUniqueness.Mamikon
 public import MovingSofaStability.QuadraticDeficit
 
 /-!

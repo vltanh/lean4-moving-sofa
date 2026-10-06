@@ -57,15 +57,15 @@ import all MovingSofaOptimality.Optimality.Variation
 import all MovingSofaOptimality.Sofa.Defs
 import all MovingSofaUniqueness.AngleExtension
 import all MovingSofaUniqueness.Curvature
+import all MovingSofaUniqueness.Mamikon
+import all MovingSofaUniqueness.Maximizing
 import all MovingSofaUniqueness.RegularClosed
 import all MovingSofaUniqueness.Rigid
 import all MovingSofaUniqueness.Selection
 import all MovingSofaUniqueness.Variation
--- The first proof of uniqueness and the maximizing-cap route: negative controls only.
-import all MovingSofaUniqueness.Alternative
+-- The first proof of uniqueness and the second proof of optimality: negative controls only.
 import all MovingSofaUniqueness.Main
-import all MovingSofaUniqueness.Maximizers
-import all MovingSofaUniqueness.Optimality
+import all MovingSofaUniqueness.MaximizerRoute
 import all MovingSofaUniqueness.Rigidity
 import all MovingSofaStability.All
 import all MovingSofaStability.AngularFaceStability
@@ -107,7 +107,6 @@ import all MovingSofaStability.LocalArmMargins
 import all MovingSofaStability.LocalSofaRecovery
 import all MovingSofaStability.LocalUpperBound
 import all MovingSofaStability.MamikonEnergy
-import all MovingSofaStability.MamikonFoundation
 import all MovingSofaStability.MissingAreaRecovery
 import all MovingSofaStability.MixedArea
 import all MovingSofaStability.NicheContainment
@@ -155,12 +154,8 @@ import all MovingSofaStability.WideFirstVariation
 import all MovingSofaStability.WideGerverCertificate
 import all MovingSofaStability.WideResidualEnergy
 import all MovingSofaExtremal.All
-import all MovingSofaExtremal.CoerciveRigidity
-import all MovingSofaExtremal.Geometry
-import all MovingSofaExtremal.HorizontalTranslation
-import all MovingSofaExtremal.Optimality
+import all MovingSofaExtremal.Main
 import all MovingSofaExtremal.Unified
-import all MovingSofaExtremal.Uniqueness
 import all MovingSofaBridge.GerverConstants
 import all MovingSofaBridge.GerverSofa
 import all MovingSofaBridge.Motion
@@ -183,7 +178,7 @@ included:
    Theorem 1.1.1 (`theorem1_1_1`, `gm_area_le`), his results on balanced caps (Theorems 1.5.2,
    4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6, Corollary 6.4.4 and Theorem 8.1.1 (2)), any
    declaration of the first proof of uniqueness (`MovingSofaUniqueness.Rigidity`, `.Main`) or of
-   the maximizing-cap route (`.Maximizers`, `.Optimality`, `.Alternative`), or `Solution`.
+   the second proof of optimality (`MovingSofaUniqueness.MaximizerRoute`), or `Solution`.
 
 It also checks that the optimality and uniqueness theorems of the route do not reach the global
 stability theorem (no circularity: the stability theorem uses uniqueness), that the route does use
@@ -209,8 +204,7 @@ meta def auditedModule (m : Name) : Bool :=
 /-- The modules whose declarations the route must not reach. -/
 meta def forbiddenModules : List Name :=
   [`MovingSofaUniqueness.Main, `MovingSofaUniqueness.Rigidity,
-   `MovingSofaUniqueness.Maximizers, `MovingSofaUniqueness.Optimality,
-   `MovingSofaUniqueness.Alternative, `Solution]
+   `MovingSofaUniqueness.MaximizerRoute, `Solution]
 
 /-- Baek's Theorem 1.1.1 and the results of his balance argument. -/
 meta def baekForbidden : List Name :=
@@ -223,9 +217,7 @@ meta def baekForbidden : List Name :=
 
 /-- The modules of the route that prove optimality and uniqueness. -/
 meta def coreModules : List Name :=
-  [`MovingSofaExtremal.Geometry, `MovingSofaExtremal.HorizontalTranslation,
-   `MovingSofaExtremal.CoerciveRigidity, `MovingSofaExtremal.Optimality,
-   `MovingSofaExtremal.Uniqueness]
+  [`MovingSofaUniqueness.Maximizing, `MovingSofaExtremal.Main]
 
 meta def constantsIn (env : Environment) (select : Name → Bool) : NameSet := Id.run do
   let mut out : NameSet := {}
@@ -333,7 +325,7 @@ meta def importersOf (env : Environment) (m : Name) : NameSet := Id.run do
 meta def requiredEdges : List (Name × Name) :=
   [-- the cap classification uses the certificate at zero deficit
    (``MovingSofaExtremal.right_angle_maximizer_eq_gerver,
-      ``MovingSofaExtremal.isKi_of_maximizes),
+      ``MovingSofaUniqueness.isKi_of_maximizes),
    (``MovingSofaExtremal.right_angle_maximizer_eq_gerver,
       ``MovingSofaExtremal.right_angle_maximizer_certificate),
    (``MovingSofaExtremal.right_angle_maximizer_eq_gerver,

@@ -1,7 +1,7 @@
 module
 
 public import MovingSofaStability.EuclideanGeometry
-public import MovingSofaExtremal.Uniqueness
+public import MovingSofaExtremal.Main
 
 /-!
 # The unrestricted stability target

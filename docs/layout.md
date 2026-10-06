@@ -74,13 +74,13 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 
 Three more modules give a second proof of Baek's optimality theorem, which does not use Baek's Theorem 1.1.1, and
 prove the theorem again from it (a remark at the end of Section 8 of the [manuscript](paper/README.md)); their declarations are in the
-namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
+namespace [`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean), and they do not import `Main`:
 
 | Module | Content |
 | --- | --- |
-| [`MovingSofaUniqueness/Maximizers.lean`](../MovingSofaUniqueness/Maximizers.lean) | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap; the right-angle motion of the sofa of a maximizing cap |
-| [`MovingSofaUniqueness/Optimality.lean`](../MovingSofaUniqueness/Optimality.lean) | Baek's optimality theorem from the maximizing caps |
-| [`MovingSofaUniqueness/Alternative.lean`](../MovingSofaUniqueness/Alternative.lean) | the theorem again, from the second proof of optimality |
+| `MovingSofaUniqueness/Maximizers.lean` | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap; the right-angle motion of the sofa of a maximizing cap |
+| `MovingSofaUniqueness/Optimality.lean` | Baek's optimality theorem from the maximizing caps |
+| `MovingSofaUniqueness/Alternative.lean` | the theorem again, from the second proof of optimality |
 
 ### `MovingSofaBridge/`: the bridge to formal-conjectures
 
@@ -118,11 +118,11 @@ namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 
 | Module | Content |
 | --- | --- |
-| [`MovingSofaExtremal/Geometry.lean`](../MovingSofaExtremal/Geometry.lean) | maximizing caps: existence, the injectivity condition at the right angle, the right-angle motion |
-| [`MovingSofaExtremal/HorizontalTranslation.lean`](../MovingSofaExtremal/HorizontalTranslation.lean) | horizontal translates of caps, niches and sofas |
-| [`MovingSofaExtremal/CoerciveRigidity.lean`](../MovingSofaExtremal/CoerciveRigidity.lean) | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap, by the certificate |
-| [`MovingSofaExtremal/Optimality.lean`](../MovingSofaExtremal/Optimality.lean) | Baek's optimality theorem from the maximizing caps |
-| [`MovingSofaExtremal/Uniqueness.lean`](../MovingSofaExtremal/Uniqueness.lean) | the uniqueness, and no rotation is needed |
+| `MovingSofaExtremal/Geometry.lean` | maximizing caps: existence, the injectivity condition at the right angle, the right-angle motion |
+| `MovingSofaExtremal/HorizontalTranslation.lean` | horizontal translates of caps, niches and sofas |
+| `MovingSofaExtremal/CoerciveRigidity.lean` | a maximizing right-angle cap has the sofa area of Gerver's sofa and is a horizontal translate of Gerver's cap, by the certificate |
+| `MovingSofaExtremal/Optimality.lean` | Baek's optimality theorem from the maximizing caps |
+| `MovingSofaExtremal/Uniqueness.lean` | the uniqueness, and no rotation is needed |
 | [`MovingSofaExtremal/Unified.lean`](../MovingSofaExtremal/Unified.lean) | optimality, uniqueness and stability in one theorem |
 | [`MovingSofaExtremal/All.lean`](../MovingSofaExtremal/All.lean) | imports all the others |
 

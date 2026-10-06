@@ -1,10 +1,6 @@
 module
 
-public import MovingSofaExtremal.Geometry
-public import MovingSofaExtremal.HorizontalTranslation
-public import MovingSofaExtremal.CoerciveRigidity
-public import MovingSofaExtremal.Optimality
-public import MovingSofaExtremal.Uniqueness
+public import MovingSofaExtremal.Main
 public import MovingSofaExtremal.Unified
 
 /-!

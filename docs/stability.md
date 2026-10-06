@@ -165,8 +165,8 @@ sofas. Each step below names the main modules that carry it.
 6. **Entry and assembly** (`CompactSetLimits`, `SofaBounds`, `SofaLimitMotion`, `QualitativeEntry`,
    `GlobalStability`). Normalized sofas of nearly maximal area lie in a fixed rectangle, and their
    Hausdorff limits are moving sofas of maximal area, by the optimality theorem of the coercive route
-   ([`MovingSofaExtremal.area_le_gerver`](../MovingSofaExtremal/Optimality.lean#L84)), hence Gerver's sofa by its uniqueness theorem
-   ([`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Uniqueness.lean#L118)), which does not use this step ([the coercive route](coercive.md)). So every sofa
+   ([`MovingSofaExtremal.area_le_gerver`](../MovingSofaExtremal/Main.lean#L101)), hence Gerver's sofa by its uniqueness theorem
+   ([`MovingSofaExtremal.translate_eq_gerver_of_volume_eq`](../MovingSofaExtremal/Main.lean#L129)), which does not use this step ([the coercive route](coercive.md)). So every sofa
    of small deficit enters the neighborhood where steps 2 to 5 apply; compactness gives this entry, not
    the rate.
 

@@ -293,7 +293,7 @@ suggested.
 
 How it was made:
 - 11:56 to 12:52: Claude Opus 5.5, in Claude Code 2.1.289. The pull request added three Lean modules
-  ([`Maximizers`](MovingSofaUniqueness/Maximizers.lean), [`Optimality`](MovingSofaUniqueness/Optimality.lean), [`Alternative`](MovingSofaUniqueness/Alternative.lean); 428 lines), a separate dependency audit and notes,
+  (`Maximizers`, `Optimality`, `Alternative`; 428 lines), a separate dependency audit and notes,
   none of them compiled or run, and left every existing file unchanged. The modules compiled without change and
   without warnings, and the audit passed: none of their 24 declarations depends on Baek's Theorem 1.1.1 or on
   [`MovingSofaUniqueness.Main`](MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
@@ -426,7 +426,7 @@ How it was made:
   Section 10 of the manuscript changed with it.
 - At the owner's request, Section 8.4 of the manuscript (the second proof of optimality of pull request #5) was
   shortened to a remark at the end of Section 8 (Remark 8.6), which outlines the second proof with Baek's own bound
-  and says that the formalization proves it (`MovingSofaUniqueness.MaximizerRoute`); its lemma on the right-angle
+  and says that the formalization proves it ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean)); its lemma on the right-angle
   motion moved to the end of Section 6 (Lemma 6.10), and Section 11 writes the proof out with the certificate. The
   docstrings of the second proof now cite the remark (commit `6ed7657`). The manuscript has 99 pages and cites
   `6ed7657`.
