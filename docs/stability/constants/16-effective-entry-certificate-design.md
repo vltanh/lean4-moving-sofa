@@ -22,11 +22,12 @@ still certifies only downstream smallness after the local certificates apply.
 
 ## 2. A finite outer-pixel scheme
 
-For deficits below 0.01, the prior area/reduced-angle bounds put the relevant
-motion angle in [omega0,pi/2], omega0=acos(5/11)>pi/4. The connected supporting-
-hallway argument in SofaBounds bounds horizontal span by six, independently of
-local entry. After horizontal midpoint/top normalization, m(G) lies in (-1,0),
-so the sofa lies in the fixed rational box B=[-4,3] x [0,1].
+For sofas of area at least 2.2, the prior reduced-angle bound gives a motion
+angle in [omega0,pi/2], omega0=acos(5/11)>pi/4. The connected supporting-hallway
+argument in SofaBounds bounds horizontal span by six, independently of local
+entry. After horizontal midpoint/top normalization, m(G) lies in (-1,0), so
+these sofas lie in the fixed rational box B=[-4,3] x [0,1]. Sofas of area below
+2.2 will be handled separately by that trivial area upper bound.
 
 For h=2^(-n), enumerate nonempty unions V of closed h-by-h grid squares in B.
 Their interiors are disjoint, and |V| is exactly an integer times h^2. Retain
@@ -66,12 +67,12 @@ subdividing its arc parameters and bounding their derivatives. Compact polygon
 versus reference distance in both directions must be checked; distance of
 convex hulls is not a replacement.
 
-## 3. Why every truly excluded sofa has a retained cover
+## 3. Why every large excluded sofa has a retained cover
 
-Let S be normalized with d_H(S,G)>=eta. Take all squares meeting S. Their union
-V contains S and lies within sqrt(2)h of it, remains connected, and lies in B.
-For sufficiently small h its midpoint and top tests pass. Choose the nearest
-omega_l to the actual reduced angle omega.
+Let S have area at least 2.2 and d_H(S,G)>=eta in the selected normalization.
+Take all squares meeting S. Their union V contains S and lies within sqrt(2)h
+of it, remains connected, and lies in B. For sufficiently small h its midpoint
+and top tests pass. Choose the nearest omega_l to the actual reduced angle omega.
 
 At matching sampled parameters, replacing a point of S by a square center costs
 at most sqrt(2)h in each unit-normal projection. Replacing h_S by h_V costs
@@ -81,18 +82,24 @@ than the stated 100h tolerance on the fixed box. The terminal test is handled
 by the same estimate.
 
 Finally d_H(V,G)>=eta-sqrt(2)h>eta/2 for small h. Thus this cover is retained
-and |S|<=|V|. The largest retained pixel area U_n is an upper bound for every
-sofa in (1). If no candidate is retained, the excluded class is empty.
+and |S|<=|V|. Let V_n^* be the largest retained pixel area, with value zero when
+no candidate is retained, and set
+
+    U_n=max(2.2,V_n^*).
+
+Then U_n bounds ALL sofas in (1), including the small-area class that need not
+fit the chosen reduced-angle rectangle. Omitting the maximum with 2.2 would
+only prove the upper bound for the large-sofa class.
 
 ## 4. Why the certificates eventually separate from M
 
-Suppose no positive separation is obtained as h tends to zero. Choose retained
-pairs (V_n,omega_n) with areas tending to at least M. The containing box is compact;
-extract Hausdorff convergence V_n->S_* and omega_n->omega_*. Nonemptiness and
-connectedness pass to the limit. The approximate support/hallway conditions
-pass through the dense angular samples by support continuity and boundedness.
-The limiting set lies in the normalized horizontal strip, satisfies every
-supporting hallway, and lies in the terminal unit strip.
+Suppose no positive separation is obtained as h tends to zero. Since 2.2<M,
+choose retained pairs (V_n,omega_n) with areas tending to at least M. The containing
+box is compact; extract Hausdorff convergence V_n->S_* and omega_n->omega_*.
+Nonemptiness and connectedness pass to the limit. The approximate support/hallway
+conditions pass through the dense angular samples by support continuity and
+boundedness. The limiting set lies in the normalized horizontal strip, satisfies
+every supporting hallway, and lies in the terminal unit strip.
 
 The canonical-support motion construction used in SofaLimitMotion therefore
 makes S_* an actual moving sofa. This step is why the terminal test and use of
