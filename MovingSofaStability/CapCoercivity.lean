@@ -59,13 +59,45 @@ theorem tangent_arcSquare_eq_energy {a b T : ℝ}
     arcSquare a b (tangentResidual T (capDifference K₀.1 K₁.1)
       (capDifferenceDeriv K₀.1 K₁.1)) =
       2 * displacementEnergy a b (fun K => tangentParam K.1 T) K₀ K₁ := by
-  sorry
+  unfold arcSquare displacementEnergy halfSquareIntegral
+  rw [intervalIntegral.integral_of_le hab.le, integral_Ioc_eq_integral_Ioo]
+  have he : (∫ t in Ioo a b,
+      tangentResidual T (capDifference K₀.1 K₁.1) (capDifferenceDeriv K₀.1 K₁.1) t ^ 2) =
+      ∫ t in Ioo a b, (displacement K₀.1 (tangentParam K₀.1 T) t -
+        displacement K₁.1 (tangentParam K₁.1 T) t) ^ 2 := by
+    apply integral_congr_ae
+    apply ae_restrict_of_forall_mem measurableSet_Ioo
+    intro t ht
+    have htT : t < T := ht.2.trans_le hbT
+    have hs : sin (T - t) ≠ 0 :=
+      (sin_pos_of_pos_of_lt_pi (by linarith) (by linarith [ht.1])).ne'
+    dsimp only
+    rw [capDifference, capDifferenceDeriv, tangentResidual_pinned _ _ _ _ hs]
+    simp only [opt_g]
+    rw [← tangent_displacement_sub htT]
+    ring
+  rw [he]
+  ring
 
 /-- The corresponding middle-arc identity has no singular tangent endpoint. -/
 theorem corner_arcSquare_eq_energy {a b : ℝ} (hab : a ≤ b) (K₀ K₁ : ConvexBodySet) :
     arcSquare a b (cornerResidual (capDifference K₀.1 K₁.1) (capDifferenceDeriv K₀.1 K₁.1)) =
       2 * displacementEnergy a b (fun K => outerCorner K.1) K₀ K₁ := by
-  sorry
+  unfold arcSquare displacementEnergy halfSquareIntegral
+  rw [intervalIntegral.integral_of_le hab, integral_Ioc_eq_integral_Ioo]
+  have he : (∫ t in Ioo a b,
+      cornerResidual (capDifference K₀.1 K₁.1) (capDifferenceDeriv K₀.1 K₁.1) t ^ 2) =
+      ∫ t in Ioo a b, (displacement K₀.1 (outerCorner K₀.1) t -
+        displacement K₁.1 (outerCorner K₁.1) t) ^ 2 := by
+    apply integral_congr_ae
+    exact Eventually.of_forall fun t => by
+      dsimp only
+      rw [capDifference, capDifferenceDeriv, cornerResidual_pinned]
+      simp only [opt_g]
+      rw [← outer_displacement_sub K₀.1 K₁.1 t]
+      ring
+  rw [he]
+  ring
 
 /-- The analytic residual energy and the four Mamikon integrals are identical. -/
 theorem fourResidualEnergy_eq_capEnergy {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
@@ -98,7 +130,10 @@ theorem capDifference_le_energy {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 theorem wide_cap_support_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (x : WideTriple P.φ) {t : ℝ} (ht : t ∈ Icc 0 π) :
     |capDifference P.cap x.1.1.1 t| ≤ 80 * sqrt (area (gerverSofa P) - wideUpperQ P.φ x) := by
-  sorry
+  have h := capDifference_le_energy (GerverParams.gm_φ_mem_Ioo hP hbox)
+    (wideGerverTriple hP hbox).1.1 x.1.1 (wideGerverTriple hP hbox).2.1 x.2.1 ht
+  have he := wide_capResidualEnergy_le_deficit hP hbox x
+  exact h.trans (mul_le_mul_of_nonneg_left (sqrt_le_sqrt he) (by norm_num))
 
 /-- In the old Ki class, the real sofa-area deficit controls the cap support directly. -/
 theorem ki_cap_support_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)

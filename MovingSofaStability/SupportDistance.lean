@@ -102,7 +102,19 @@ theorem supp_add_euclideanDisk {K : Set Point} (hK : IsConvexBody K)
 theorem directedClose_of_support_le {S T : Set Point} (hS : IsCompact S)
     (hT : IsConvexBody T) {r : ℝ} (hr : 0 ≤ r)
     (h : ∀ t, supp S t ≤ supp T t + r) : DirectedClose r S T := by
-  sorry
+  intro p hp
+  have hsum := convexBody_add hT (euclideanDisk_isConvexBody hr)
+  have hm : p ∈ T + euclideanDisk r := by
+    apply (mem_iff_forall_dot_le_supp hsum p).2
+    intro t
+    rw [supp_add_euclideanDisk hT hr]
+    exact (dot_le_supp hS hp t).trans (h t)
+  obtain ⟨q, hq, z, hz, hqz⟩ := hm
+  refine ⟨q, hq, ?_⟩
+  rw [← hqz]
+  change norm2 (q + z - q) ≤ r
+  rw [add_sub_cancel_left]
+  exact hz
 
 /-- The support criterion for Euclidean Hausdorff distance between convex bodies. -/
 theorem euclideanClose_of_support_bound {K L : Set Point}

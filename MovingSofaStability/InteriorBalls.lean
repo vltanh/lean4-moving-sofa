@@ -24,7 +24,48 @@ theorem convex_interiorBalls_of_ball {C : Set Point} (hC : Convex ℝ C)
     (hball : euclideanBall c s ⊆ C)
     (hbound : ∀ p ∈ C, euclideanDist p c ≤ D) :
     HasInteriorBalls C (s / (D + s)) (D + s) := by
-  sorry
+  intro p hp ρ hρ hρmax
+  have hden : 0 < D + s := by linarith
+  let μ := ρ / (D + s)
+  let z := (1 - μ) • p + μ • c
+  have hμ : 0 < μ := div_pos hρ hden
+  have hμ1 : μ ≤ 1 := (div_le_one hden).2 hρmax
+  have hμden : μ * (D + s) = ρ := div_mul_cancel₀ _ hden.ne'
+  have hrad : s / (D + s) * ρ = μ * s := by dsimp [μ]; ring
+  refine ⟨z, ?_⟩
+  intro q hq
+  rw [hrad] at hq
+  let w := c + μ⁻¹ • (q - z)
+  have hwball : w ∈ euclideanBall c s := by
+    change norm2 (c - (c + μ⁻¹ • (q - z))) ≤ s
+    rw [show c - (c + μ⁻¹ • (q - z)) = -(μ⁻¹ • (q - z)) by abel,
+      norm2_neg, norm2_smul, abs_of_pos (inv_pos.mpr hμ)]
+    have hq' : norm2 (q - z) ≤ μ * s := by
+      rw [← norm2_neg, neg_sub]
+      exact hq
+    have hmul := mul_le_mul_of_nonneg_left hq' (inv_nonneg.mpr hμ.le)
+    simpa only [← mul_assoc, inv_mul_cancel₀ hμ.ne', one_mul] using hmul
+  have hqC : q ∈ C := by
+    have h := hC hp (hball hwball) (sub_nonneg.mpr hμ1) hμ.le (by ring : 1 - μ + μ = 1)
+    have he : (1 - μ) • p + μ • w = q := by
+      have hw : μ • w = μ • c + (q - z) := by
+        simp only [w, smul_add, smul_inv_smul₀ hμ.ne']
+      rw [hw]
+      simp only [z]
+      abel
+    rwa [he] at h
+  have hzp : euclideanDist p z ≤ μ * D := by
+    change norm2 (p - ((1 - μ) • p + μ • c)) ≤ μ * D
+    rw [show p - ((1 - μ) • p + μ • c) = μ • (p - c) by
+      ext <;> simp only [Prod.fst_sub, Prod.snd_sub, Prod.fst_add, Prod.snd_add,
+        Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring,
+      norm2_smul, abs_of_pos hμ]
+    exact mul_le_mul_of_nonneg_left (hbound p hp) hμ.le
+  refine ⟨hqC, ?_⟩
+  change euclideanDist p q ≤ ρ
+  have hh := euclideanDist_triangle p z q
+  have he : μ * D + μ * s = ρ := by rw [← mul_add, hμden]
+  exact hh.trans ((add_le_add hzp hq).trans_eq he)
 
 /-- A nonempty interior supplies a closed Euclidean ball even though the ambient
 product-space topology is originally presented with the sup norm. -/
