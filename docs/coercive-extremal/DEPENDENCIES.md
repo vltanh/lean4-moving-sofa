@@ -1,212 +1,137 @@
-# Dependency contract for the coercive extremal route
+# Dependency contract and audit source
 
-This file records the intended dependency boundaries for the new route. It is a
-design contract for later Lean audits; it is not itself a proof or audit result.
+The implementation is in `MovingSofaExtremal`, the lower quantitative modules,
+and `SolutionCoercive`. The audit source is
+`scripts/AuditCoerciveRoute.lean`. **It has not been executed.** This contract
+records intended checks, not a successful dependency or axiom audit.
 
-## Public theorem families to preserve
+## Preserved routes
 
-The repository should continue to expose all of the following simultaneously.
+The faithful Baek optimality theorem, the original main uniqueness proof,
+the historical `MaximizerRoute`, and the bridge/canonical Challenge solution
+remain unchanged. The new declarations have different namespaces and coexist
+with them. The audit imports the old routes only for negative controls and
+statement comparison; the new theorem modules do not import them.
 
-### Faithful Baek optimality
+## Allowed shared mathematics
 
-From \`MovingSofaOptimality\`:
+The coercive route may use Baek's pre-final geometry, fixed-angle compactness
+and existence, his intermediate Q construction and reference maximization,
+Gerver's explicit geometry, selection/variation/curvature from maximality,
+remaining-angle motion, elementary rigid/translation identities, and
+regular-closed recovery. It also uses the new residual-energy and cap-distance
+estimates. The bridge is used at the external solution layer.
 
-- \`theorem1_1_1\` and its supporting numbered results;
-- the same theorem dependencies and corrections already documented by the
-  existing route checks.
+Importing `MovingSofaOptimality.Main` for its intermediate Q/reference results
+is not forbidden. Depending on the final optimality declaration in that file
+is forbidden. The audit traverses declaration proof bodies rather than treating
+every theorem in an imported module as used.
 
-This route may not be rewritten merely to simplify the new proof.
+## Forbidden declaration dependencies
 
-### Main uniqueness proof
+### Baek's final optimality
 
-From \`MovingSofaUniqueness.Main\`:
+    MovingSofaOptimality.theorem1_1_1
+    MovingSofaOptimality.gm_area_le
 
-- the current uniqueness theorem;
-- the current maximal-sofa characterization;
-- the current proof path through Baek optimality and the original
-  equality/CapKernel mechanism.
+### Baek's historical balance-derived step-(3) route
 
-### Coercive extremal proof
+    MovingSofaOptimality.theorem1_5_2
+    MovingSofaOptimality.theorem4_1_2
+    MovingSofaOptimality.theorem4_1_4
+    MovingSofaOptimality.theorem4_2_5
+    MovingSofaOptimality.theorem6_1_1
+    MovingSofaOptimality.theorem6_3_3
+    MovingSofaOptimality.theorem6_4_3
+    MovingSofaOptimality.corollary6_4_4
+    MovingSofaOptimality.theorem6_5_6
+    MovingSofaOptimality.theorem8_1_1_balanced
 
-New declarations should establish:
+### Entire old proof modules
 
-- right-angle optimality;
-- right-angle rigidity;
-- global optimality;
-- global uniqueness;
-- maximal-sofa characterization;
+All declarations owned by the following modules are forbidden, including
+private and generated declarations:
 
-using the quantitative deficit/coercivity machinery in place of the old
-right-angle equality classification.
+    MovingSofaUniqueness.Main
+    MovingSofaUniqueness.Rigidity
+    MovingSofaUniqueness.Maximizers
+    MovingSofaUniqueness.Optimality
+    MovingSofaUniqueness.Alternative
+    Solution
 
-### Stability
+Forbidding the entire Rigidity module is stronger than forbidding just
+`ki_maximizer_equality_conditions`, `capKernel_of_triple_midpoint`, and
+`CapKernel.eq_horizontal_translation`. The neutral Mamikon utilities needed
+by the quantitative route are now defined separately in
+`MovingSofaStability.MamikonFoundation`; they do not alias the old proof.
 
-The current stability theorem remains available. It may later use the coercive
-uniqueness theorem for qualitative entry, but that change is a second-stage
-cleanup and is not required to establish independence of the extremal route.
+### Global stability, to prevent circular use of uniqueness
 
-## Allowed dependencies of the coercive route
+    MovingSofaStability.Statement
+    MovingSofaStability.QualitativeEntry
+    MovingSofaStability.GlobalStability
 
-The coercive route may use:
+The new extremal route uses the lower cap-distance theorem, not the global
+stability theorem. The latter's current dependence on existing uniqueness is
+preserved and does not enter the new route.
 
-- low-level geometry and convex-body infrastructure from
-  \`MovingSofaOptimality\`;
-- existence of maximizing caps;
-- the selection, variation, pinned-bound, angle-extension and curvature
-  machinery proved from maximality;
-- Gerver's explicit geometry and area bounds;
-- Baek's upper-bound functional before his final optimality theorem;
-- the new quantitative deficit, residual-energy and cap-coercivity modules;
-- elementary rigid-motion, translation, regular-closedness and recovery facts;
-- the bridge only at the external solution layer, not inside the geometric
-  theorem.
+## Positive dependency controls
 
-## Forbidden dependencies
+The audit requires
+`MovingSofaExtremal.right_angle_maximizer_eq_gerver` to reach:
 
-The new route is intended to be stronger than the current historical
-\`MaximizerRoute\` audit. Its final extremal theorems must not depend transitively
-on any declaration in the following groups.
+    MovingSofaExtremal.isKi_of_maximizes
+    MovingSofaExtremal.right_angle_maximizer_certificate
+    MovingSofaStability.sharp_wide_cap_distance_bound
+    MovingSofaStability.wide_deficit_eq_slack_add_integrals
+    MovingSofaStability.EuclideanClose.eq_of_zero
 
-### A. Baek's final optimality theorem
+It also requires the new optimality theorem to reach `wideUpperQ_le_gerver`,
+the new global uniqueness theorem to reach the coercive cap classification,
+and the new formal-conjectures uniqueness theorem to reach both the new
+internal theorem and `MovingSofaBridge.gerversSofa_eq`.
 
-At minimum:
+Thus absence of old dependencies is not the only test: a route that bypasses
+the quantitative mechanism does not meet the contract.
 
-\`\`\`text
-MovingSofaOptimality.theorem1_1_1
-MovingSofaOptimality.gm_area_le
-\`\`\`
+## Negative controls and visibility
 
-### B. Baek's balance-derived construction of step (3)
+The old Baek proof must expose its final assembly and balance-derived steps.
+The old main uniqueness area wrapper must expose Baek's final theorem. The
+historical maximizing-cap classification must expose both the midpoint kernel
+construction and `CapKernel.eq_horizontal_translation`.
 
-Preserve the current forbidden list from \`scripts/AuditMaximizerRoute.lean\`:
+The audit uses `import all` for repository intermediate modules so proof bodies
+are available under Lean's module system. Traversal visits types and values of
+theorems, definitions, and opaque declarations, as well as inductive interfaces.
+It does not stop at numbered results. Negative controls must fail the audit
+when the expected old proof bodies cannot be seen.
 
-\`\`\`text
-MovingSofaOptimality.theorem1_5_2
-MovingSofaOptimality.theorem4_1_2
-MovingSofaOptimality.theorem4_1_4
-MovingSofaOptimality.theorem4_2_5
-MovingSofaOptimality.theorem6_1_1
-MovingSofaOptimality.theorem6_3_3
-MovingSofaOptimality.theorem6_4_3
-MovingSofaOptimality.corollary6_4_4
-MovingSofaOptimality.theorem6_5_6
-MovingSofaOptimality.theorem8_1_1_balanced
-\`\`\`
+A successful audit still requires inspecting the import/ownership coverage for
+the pinned Lean version. Merely writing this traversal is not proof that all
+expected bodies are visible or that the traversal itself elaborates.
 
-The purpose is to retain the current “maximality replaces balance” distinction.
+## Axioms and interface comparison
 
-### C. Main uniqueness proof
+Every loaded lower-quantitative/extremal declaration and every declaration of
+`SolutionCoercive` is checked against the standard-axiom list:
 
-All declarations owned by:
+    propext
+    Classical.choice
+    Quot.sound
 
-\`\`\`text
-MovingSofaUniqueness.Main
-\`\`\`
+The twelve external statement pairs are separately compared by type, after
+checking their universe parameters. The new names live in `CoerciveSolution`,
+so both solutions can coexist without duplicate global names. The canonical
+`Solution` is imported only into the audit for comparison and negative controls.
 
-must be forbidden for the coercive route.
+This is a local same-statement audit, not an already-run Comparator result or
+an upstream formal-conjectures submission. No change to the existing Challenge
+is required.
 
-### D. Old right-angle equality classification
+## Source and verification boundary
 
-The new right-angle classification must not use the old kernel route. At
-minimum forbid:
-
-\`\`\`text
-MovingSofaUniqueness.ki_maximizer_equality_conditions
-MovingSofaUniqueness.capKernel_of_triple_midpoint
-MovingSofaUniqueness.CapKernel.eq_horizontal_translation
-MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_eq_gerver
-\`\`\`
-
-Depending on the refactor, the audit should also forbid the module that owns
-the old classification as a whole.
-
-## Required positive dependencies
-
-An independence audit should not only prove absence of forbidden theorems. It
-should also check that the new route really reaches the intended quantitative
-mechanism.
-
-The new right-angle classification should transitively depend on declarations
-corresponding to:
-
-1. maximality \(\Rightarrow \mathcal K^i\);
-2. maximizing value \(\mathcal A(K)=|G|\);
-3. cap area deficit \(\Rightarrow\) residual/Q deficit;
-4. residual/Q deficit \(\Rightarrow\) support or Euclidean cap distance;
-5. zero Euclidean distance \(\Rightarrow\) set equality.
-
-Concrete names may change during refactoring, but likely positive controls are:
-
-\`\`\`text
-MovingSofaUniqueness.MaximizerRoute.isKi_of_maximizes
-MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_value
-MovingSofaStability.ki_cap_distance_bound
-MovingSofaStability.EuclideanClose.eq_of_zero
-\`\`\`
-
-After the maximizer-geometry split, the first two should move to the neutral
-geometry module and the positive controls should be updated.
-
-## Negative controls
-
-The audit should verify that its dependency traversal is capable of finding:
-
-- \`theorem1_1_1\` through the old main uniqueness proof;
-- \`capKernel_of_triple_midpoint\` through the old right-angle classification;
-- balance-derived step-(3) declarations through Baek's original proof.
-
-Without these negative controls, an empty forbidden-dependency result would not
-establish that proof bodies were visible to the traversal.
-
-## Coexistence checks
-
-The final audit should \`#check\` all of these theorem families at once:
-
-- Baek's original optimality theorem;
-- main uniqueness theorem;
-- current maximizer-route theorem, if retained;
-- coercive optimality theorem;
-- coercive uniqueness theorem;
-- unrestricted stability theorem;
-- formal-conjectures bridge theorem(s).
-
-The intended result is coexistence, not replacement.
-
-## Import-layer goal
-
-The source graph should eventually admit this schematic layering:
-
-\`\`\`text
-MovingSofaOptimality
-  ├─ faithful final optimality theorem
-  └─ pre-final upper-bound / geometry infrastructure
-                │
-MovingSofaUniqueness
-  ├─ Main / old Rigidity
-  └─ MaximizerGeometry
-                │
-MovingSofaStability
-  ├─ low coercivity layer
-  └─ global stability layer
-                │
-Coercive extremal route
-                │
-MovingSofaBridge / Challenge solutions
-\`\`\`
-
-The low coercivity layer used by the coercive extremal route must not import the
-global stability layer, because global qualitative entry currently invokes
-uniqueness. This boundary is essential to avoid a hidden cycle.
-
-## Compilation policy
-
-Until explicitly changed by the user:
-
-- do not run Lean;
-- do not run Lake;
-- do not dispatch or rerun CI;
-- do not claim that the planned audits pass;
-- keep \`[skip ci]\` on commits in this branch.
-
-The eventual audit commands belong to the implementation roadmap, not to the
-current validation status.
+The audit source has been committed but neither it nor the new proof modules
+have been compiled. No axiom, dependency, positive-control, negative-control,
+or statement-equivalence check is reported as passed. No Lean, Lake, or CI is
+to be run until the user explicitly changes the current instruction.
