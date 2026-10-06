@@ -395,7 +395,7 @@ optimality and uniqueness from two estimates of the stability library, a second 
 Challenge, and an audit. It had left for later the step that moves the stability proof onto the route.
 
 How it was made:
-- 09:56 to 12:30: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+- 09:56 to 12:56: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
   of the formalize-math-paper skill.
 - The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](lakefile.toml)
   and `MamikonEnergy.lean` were resolved for the compiled code). One proof did not compile, a `change` whose two sides
@@ -419,13 +419,17 @@ How it was made:
   sub-agents that it launched compared the text with the Lean part by part, and a fourth checked the passages
   rewritten after their reports. Two more sub-agents, neither able to edit, then read the new text, one against the
   Lean and the repository, the other for its prose; neither found a mathematical error, and the writing sub-agent
-  applied their reports. The manuscript grew from 91 to 101 pages and cites commit `94a1bcf`.
+  applied their reports. The manuscript grew from 91 to 101 pages.
+- The owner then said that they have not read the manuscript past Section 1, which Section 1.5 and Appendix E now
+  say, and asked to use the best bound: the stability proof now carries the coefficient 2 sec φ of the cap estimate
+  through its constants, where it had weakened it to 80 (commit `a94bde6`; Comparator accepts, the audits pass).
+  Section 10 of the manuscript changed with it; the manuscript has 100 pages and cites that commit.
 
-Figures, from 09:56 to 12:30:
-- elapsed time: 2 hours 34 minutes;
+Figures, from 09:56 to 12:56:
+- elapsed time: 3 hours, of which 7 minutes waiting for the owner's answers;
 - sub-agents: 7 (4 of them launched by another sub-agent), at most 4 at once, about 3.6 hours of work; one was
   resumed to apply the two reviews;
-- tool calls: 750 by the sub-agents, 172 by the main session;
+- tool calls: 750 by the sub-agents, 215 by the main session;
 - tokens of the sub-agents: 1.13 million output, 4.23 million input, 213 million cache reads; of the main
-  session: 0.25 million output, 0.55 million input, 65 million cache reads;
-- model calls: 627 by the sub-agents and 171 by the main session, all to `claude-opus-5-5`.
+  session: 0.32 million output, 0.64 million input, 89 million cache reads;
+- model calls: 627 by the sub-agents and 215 by the main session, all to `claude-opus-5-5`.

@@ -90,7 +90,7 @@ of $\sqrt{\abs\Gs-\cQ(\xi)}$: with the constant $80$ in
 \cref{prop:stab-coercive} and \cref{lem:stab-lower}, and with $2\sec\varphi$ in
 \cref{thm:stability-cap}. The proofs of
 \cref{thm:stability,thm:stability-angle} use the bound with $2\sec\varphi$,
-through \cref{thm:certificate}, with the larger constant $80$ in its place. Near
+through \cref{thm:certificate}. Near
 $\KG$, Baek's bound $\cA(K)\le\cQ(\xi_K)$ holds without the injectivity
 condition (\cref{sec:stab-local}), and a rotation angle $\omega<\pi/2$ costs
 area proportional to $\pi/2-\omega$ (\cref{sec:stab-angle}).
@@ -442,7 +442,7 @@ $\breve H^{\mathrm L}_K=H^{\mathrm d}_K(\pi/2-\varphi)$ \baek{Def.~8.1.5}.
 There is $\delta\in(0,1]$ such that every $K\in\Kc_{\pi/2}$ with
 $\dH(K,\KG)\le\delta$ satisfies $\xi_K=(K,B_K,D_K)\in\bar\cT$,
 $\cN(K)\subset K$ and $\cA(K)\le\cQ(\xi_K)\le\abs\Gs$, and $K$ and
-$\KG+(s_K,0)$ are $80\sqrt{\abs\Gs-\cA(K)}$-close.
+$\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cA(K)}$-close.
 \end{proposition}
 
 \begin{lemma}[Gerver's roof]\label{lem:stab-roof}
@@ -694,9 +694,7 @@ $\xi_K\in\bar\cT$, $\cN(K)\subset K$ and $\cA(K)\le\cQ(\xi_K)$.
 \cref{thm:stability-cap}\ref{thm:stability-cap:wide}, stated together as
 \cref{thm:certificate}, give $\cQ(\xi_K)\le\abs\Gs$ and show that $K$ and
 $\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi_K)}$-close, hence
-$80\sqrt{\abs\Gs-\cA(K)}$-close, as $2\sec\varphi<1001/500<80$
-(\cref{thm:stability-cap}\ref{thm:stability-cap:num}) and
-$\cA(K)\le\cQ(\xi_K)$.
+$2\sec\varphi\sqrt{\abs\Gs-\cA(K)}$-close, as $\cA(K)\le\cQ(\xi_K)$.
 \end{proof}
 
 \subsection{The cost of a missing final angle}\label{sec:stab-angle}
@@ -950,19 +948,19 @@ sets $S$ and $\Gs$ are $C\sqrt\eps$-close and $\pi/2-\omega\le\eps/c$.
 \begin{proof}
 Take $c,\delta_1,\psi_0,R$ from \cref{prop:stab-terminal}, $\delta_2$ from
 \cref{prop:stab-local}, $\delta=\min(\delta_1,\delta_2)$, and
-$d_0,c_1,\tau,\kappa,r_0$ from \cref{lem:stab-margins}. Let $B'=4R/c$,
-$C_1=\max(1,1/c_1)(80+B')$, $C_2=644/\kappa$ and $C=\max(1,C_1,C_2)$, and
-choose $\eps_0\le1$ such that $80\sqrt\eps<d_0$, $(80+B')\sqrt\eps<\tau$ and
-$C_2\sqrt\eps<r_0$ for $\eps<\eps_0$. By \cref{prop:stab-terminal},
-$\pi/2-\omega\le\eps/c$, $\abs\Gs-\cA(K)\le\eps$,
+$d_0,c_1,\tau,\kappa,r_0$ from \cref{lem:stab-margins}. Let $a=2\sec\varphi$,
+$B'=4R/c$, $C_1=\max(1,1/c_1)(a+B')$, $C_2=4(2a+1)/\kappa$ and
+$C=\max(1,C_1,C_2)$, and choose $\eps_0\le1$ such that $a\sqrt\eps<d_0$,
+$(a+B')\sqrt\eps<\tau$ and $C_2\sqrt\eps<r_0$ for $\eps<\eps_0$. By
+\cref{prop:stab-terminal}, $\pi/2-\omega\le\eps/c$, $\abs\Gs-\cA(K)\le\eps$,
 $\abs{(K\setminus\cN(K))\setminus S}\le2\eps$, and
 \ref{prop:stab-terminal:hall} holds with $4R(\pi/2-\omega)\le B'\sqrt\eps$, as
 $\eps\le1$. As $s_K=0$, \cref{prop:stab-local,lem:stab-lower} give
-$\dH(K,\KG)\le80\sqrt\eps$. By \cref{lem:stab-roof,lem:stab-margins}, $\KG$
+$\dH(K,\KG)\le a\sqrt\eps$. By \cref{lem:stab-roof,lem:stab-margins}, $\KG$
 has the properties of \cref{lem:stab-directed}, with
 $\KG\setminus\cN(\KG)=\Gs$. Part \ref{lem:stab-directed:to}, with
-$80\sqrt\eps$ for $\delta$ and $\zeta=B'\sqrt\eps$, puts $S$ within
-$C_1\sqrt\eps$ of $\Gs$; part \ref{lem:stab-directed:from}, with $A=160$, puts
+$a\sqrt\eps$ for $\delta$ and $\zeta=B'\sqrt\eps$, puts $S$ within
+$C_1\sqrt\eps$ of $\Gs$; part \ref{lem:stab-directed:from}, with $A=2a$, puts
 $\Gs$ within $C_2\sqrt\eps$ of $S$.
 \end{proof}
 

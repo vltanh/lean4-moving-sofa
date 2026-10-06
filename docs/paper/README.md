@@ -32,7 +32,7 @@ person has read them yet.
 | [`sections/a0-baek.tex`](sections/a0-baek.tex), [`a1-gerver.tex`](sections/a1-gerver.tex), [`a2-corrections.tex`](sections/a2-corrections.tex), [`a3-lean.tex`](sections/a3-lean.tex), [`a4-ai.tex`](sections/a4-ai.tex) | Appendices A (pictures of Baek's argument), B (Gerver's sofa), C (corrections to Baek's statements), D (the Lean statement and a dictionary), E (the use of AI) |
 | [`refs.bib`](refs.bib) | the bibliography |
 | [`figures/`](figures) | the figures: `make_figures.py` draws thirteen of them as PDF files from the definitions of the formalization (it imports `scripts/figures/`); the fourteenth is TikZ, in Section 3 |
-| [`main.pdf`](main.pdf) | the compiled manuscript (101 pages) |
+| [`main.pdf`](main.pdf) | the compiled manuscript (100 pages) |
 | [`Makefile`](Makefile) | `make` builds the PDF, `make figures` redraws the figures, `make arxiv` builds the upload |
 
 ## Build
@@ -45,7 +45,7 @@ make arxiv      # arxiv/gerver-sofa-uniqueness.tar.gz, after a test build of the
 
 The archive holds `main.tex`, `macros.tex`, `main.bbl`, `sections/` and `figures/*.pdf`: arXiv builds from the
 `.bbl`, so the bibliography is not rebuilt there. The manuscript compiles with a standard TeX Live and without
-shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 101 pages and no
+shell escape; the test build of the archive (three `pdflatex` runs, no `.bib`) gives the same 100 pages and no
 undefined reference.
 
 ## What the manuscript claims, and on what
@@ -85,7 +85,7 @@ undefined reference.
   uniqueness and the stability of Theorems 10.1 and 10.2 from the route.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `94a1bcf20f843d21d96162ace5245fcf8da2455a`, on which the
+- The links to the repository are pinned to commit `a94bde643776c7fce67f97bad5880852ad34a5fd`, on which the
   continuous integration passed; Palomar's preflight has not been run on it. Version 4 of the Palomar entry
   registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those of stability.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
@@ -97,9 +97,8 @@ These are the author's to settle; the text settles none of them.
 
 1. The title page names the author only. The AI models are not authors and are described in Section 1.5 and
    Appendix E. Check that wording against arXiv's current policy on generative-AI tools, and against what you are
-   ready to stand behind: the text says that the author proofread and edited the text, that Sections 10 and 11
-   were written later and that the author has not read them yet, and that the argument has not yet been refereed.
-   This file records that the author has read and edited the abstract and the introduction.
+   ready to stand behind: the text says that the author has proofread and edited the abstract and Section 1 and has
+   not yet read the other sections, and that the argument has not yet been refereed.
 2. `\address` and `\email` are commented out in `main.tex`.
 3. Lean's kernel has checked the formal proofs, not the text. The text is a translation of them by a model,
    compared with the Lean statements, proof by proof, and with Baek's paper by independent model runs (below). A
@@ -111,7 +110,7 @@ These are the author's to settle; the text settles none of them.
    52A10, 49Q10, 68V20 (secondary), as in `main.tex`; a cross-list to cs.LO would reflect the formalization. A
    first submission to a category may need an endorsement, and the licence is chosen in the submission form.
 6. For the submission form: the title is *Uniqueness of Gerver's sofa*, the author The-Anh Vu-Le, and the
-   comments "101 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
+   comments "100 pages, 14 figures. The proofs, together with Baek's, are formalized in Lean 4:
    <https://github.com/vltanh/lean4-moving-sofa>". The abstract (1,546 characters, plain text) is:
 
    > The moving sofa problem asks for the largest area of a closed connected planar shape that can be moved
@@ -309,6 +308,12 @@ Section 12), mentions outside the section that were too long, steps without thei
 found a mathematical error. The writing sub-agent applied both reports, with the main session's decisions on the
 wording of the abstract and of Section 1.5; those edits were not checked again. The manuscript grew from 91 to 101
 pages.
+The author then confirmed the removal of the paragraph of Section 1.4 and said that they have not read anything past
+Section 1; Section 1.5 and Appendix E now say that the author has proofread and edited the abstract and Section 1
+and has not yet read the other sections. At the author's request ("use the best bound"), the stability proof now
+carries the coefficient $2\sec\varphi$ of the cap estimate instead of weakening it to 80 (commit `a94bde6`):
+Proposition 10.11 and the constants of the local recovery in Section 10 changed accordingly, and the manuscript cites
+that commit. The main session made these edits; they were not checked by another run. The manuscript has 100 pages.
 
 ## What has not been done
 
@@ -325,6 +330,7 @@ pages.
   theorems that the Challenge states since 6 October, and the derivation of Section 11, are not in a registered
   version, and Palomar's preflight has not been run on the cited commit.
 - Sections 10 and 11 and the passages on them added on 6 October have been read by model runs only, not by the
-  author. Section 1.5's sentence that the author proofread and edited the text predates them; the sentence after it
-  now says so.
+  author. Section 1.5 and Appendix E now say that the author has proofread and edited the abstract and Section 1
+  only (the author's statement of 6 October); until then Section 1.5 said that the author proofread and edited the
+  text.
 - The edits applied to Section 11 and its passages after the last two reviews (below) were not checked again.
