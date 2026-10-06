@@ -31,8 +31,13 @@ theorem puncture_power_identity {r : ℝ} (hr : 0 < r) (a C : ℝ) :
       _ = r ^ (2 * a - 1) * r ^ (1 : ℝ) := by rw [rpow_one]
       _ = r ^ ((2 * a - 1) + 1) := (rpow_add hr _ _).symm
       _ = _ := by congr 1; ring
-  rw [mul_rpow pi_pos.le (sq_nonneg r), hsquare]
-  rw [mul_assoc, hjoin]
+  calc
+    C * (π * r ^ 2) ^ a = C * π ^ a * r ^ (2 * a) := by
+      rw [mul_rpow pi_pos.le (sq_nonneg r), hsquare]
+      ring
+    _ = (C * π ^ a * r ^ (2 * a - 1)) * r := by
+      rw [← hjoin]
+      ring
 
 /-- Arbitrarily small positive radii violate every exponent above one half. -/
 theorem exists_puncture_scale {a C ε₀ r₀ : ℝ} (ha : 1 / 2 < a)
