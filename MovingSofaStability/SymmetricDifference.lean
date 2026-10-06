@@ -5,10 +5,8 @@ public import MovingSofaStability.ConvexParallelArea
 /-!
 # Area distance from actual-set closeness
 
-Uncompiled proof source. A point outside Gerver's cap lies in a convex parallel
-layer. A point in its niche but close to the sofa lies in a thin vertical roof
-band. These two regions control S minus G, and the area deficit controls the
-opposite set difference. No continuity of nonconvex area is assumed.
+Uncompiled proof source. A convex parallel layer and a thin vertical niche
+band control S minus G. The area deficit then controls the opposite difference.
 -/
 
 @[expose] public section
@@ -20,8 +18,6 @@ open MovingSofaOptimality MovingSofaUniqueness
 
 namespace MovingSofaStability
 
-/-- A point in the niche and within distance d of the reference shape is at
-most (L+1)d below its Lipschitz roof. -/
 theorem roof_gap_of_close_point {K : Set Point} {a b H L : ℝ} {γ : ℝ → ℝ}
     (h : CapRoofData K a b H L γ) {p q : Point} {d : ℝ}
     (hp : p ∈ niche K (π / 2)) (hq : q ∈ capShape K)
@@ -58,8 +54,6 @@ theorem roof_gap_of_close_point {K : Set Point} {a b H L : ℝ} {γ : ℝ → �
   have hdy := (abs_le.mp hy).1
   nlinarith
 
-/-- A vertical band around a continuous graph has exactly its width times
-its base length. The open band avoids any separate graph-null-set argument. -/
 theorem area_continuous_band {F : ℝ → ℝ} (hF : Continuous F) {a b e : ℝ}
     (hab : a ≤ b) (he : 0 ≤ e) :
     area (regionBetween (fun x => F x - 2 * e) (fun x => F x + e) (Icc a b)) =
@@ -77,8 +71,6 @@ theorem area_continuous_band {F : ℝ → ℝ} (hF : Continuous F) {a b e : ℝ}
     ring
   rw [hi, ENNReal.toReal_ofReal (by positivity)]
 
-/-- The reference shape has an outer one-sided area modulus linear in actual
-Euclidean distance. The original set S need not be convex or monotone. -/
 theorem CapRoofData.outer_area_bound {K : Set Point} {a b H L : ℝ} {γ : ℝ → ℝ}
     (h : CapRoofData K a b H L γ) :
     ∃ A : ℝ, 0 < A ∧ ∀ S : Set Point, IsCompact S → ∀ d ∈ Ioc (0 : ℝ) 1,
@@ -136,7 +128,6 @@ theorem CapRoofData.outer_area_bound {K : Set Point} {a b H L : ℝ} {γ : ℝ �
   dsimp [A, e] at *
   linarith
 
-/-- The two directed differences sum to the symmetric-difference area. -/
 theorem symmetricDifferenceArea_eq {S G : Set Point} (hS : MeasurableSet S)
     (hG : MeasurableSet G) (hSf : volume S ≠ ⊤) (hGf : volume G ≠ ⊤) :
     symmetricDifferenceArea S G = area G - area S + 2 * area (S \ G) := by
@@ -149,8 +140,6 @@ theorem symmetricDifferenceArea_eq {S G : Set Point} (hS : MeasurableSet S)
     area_sdiff_balance hS hG hSf hGf]
   ring
 
-/-- Actual-set Hausdorff recovery implies area-distance recovery at the same
-square-root rate for Gerver's fixed reference geometry. -/
 theorem gerver_symmetricDifference_from_distance {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) {C : ℝ} (hC : 0 < C) :
     ∃ Carea ε₀ : ℝ, 0 < Carea ∧ 0 < ε₀ ∧ ε₀ ≤ 1 ∧
@@ -162,8 +151,7 @@ theorem gerver_symmetricDifference_from_distance {P : GerverParams}
   obtain ⟨A, hA, hbound⟩ := hroof.outer_area_bound
   obtain ⟨ε₀, hε₀, hε₀1, hsmall⟩ := exists_sqrt_threshold hC.le (show (0 : ℝ) < 1 by norm_num)
   let Carea := 1 + 2 * A * C
-  refine ⟨Carea, by dsimp [Carea]; positivity, ε₀ / 2, by positivity,
-    (by linarith), ?_⟩
+  refine ⟨Carea, ε₀ / 2, by dsimp [Carea]; positivity, by positivity, by linarith, ?_⟩
   intro S hS ε hε hεeq hclose
   have hεsmall : ε < ε₀ := by linarith [hε.2]
   have hdpos : 0 < C * sqrt ε := mul_pos hC (sqrt_pos.mpr hε.1)
