@@ -1,0 +1,4 @@
+# This task's optional local checks only. No CI or Lean dependencies.
+# Neither package supplies a machine-checked transcendence proof.
+mpmath==1.3.0
+sympy==1.14.0
