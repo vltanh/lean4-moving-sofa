@@ -58,3 +58,9 @@ name = "SolutionCoercive"
 # (comparator-coercive.json). No module imports it.
 [[lean_lib]]
 name = "SolutionCoerciveComparator"
+
+# Quantitative extension under development. Not a default target and not yet
+# kernel-checked. Existing paper/Challenge verification claims do not cover it.
+[[lean_lib]]
+name = "MovingSofaQuantitative"
+globs = ["MovingSofaQuantitative.+"]
