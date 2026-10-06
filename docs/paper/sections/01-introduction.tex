@@ -51,6 +51,11 @@ Note that \cref{thm:main} gives an equality of sets. This is stronger than what
 an equality of areas yields, which allows the two sets to differ by a set of
 measure zero, such as a point or a segment.
 
+The uniqueness is stable (\cref{sec:stability}): a moving sofa whose area is
+$\eps$ less than $\abs\Gs$ lies, after a translation, within Hausdorff distance
+$O(\sqrt\eps)$ of $\Gs$ (\cref{thm:stability}), and the exponent $1/2$ cannot
+be improved (\cref{thm:stability-exponent}).
+
 \subsection{Baek's proof of optimality}\label{sec:baek}
 
 We recall the outline of Baek's proof~\cite{Baek}, since ours follows it.
@@ -180,18 +185,20 @@ the inclusion of a rigid image of $S$ in $\Gs$ into an equality
 
 \subsection{Formal verification and the use of AI}
 
-The proof, together with Baek's, is formalized in Lean~4 with
+The proofs, together with Baek's, are formalized in Lean~4 with
 Mathlib~\cite{Lean4,Mathlib20}, in the repository~\cite{Companion}: every result
 of~\cite{Baek} used here, with the corrections of
-Appendix~\ref{app:corrections}, the proof of \cref{thm:main}, and a second proof
-of optimality (\cref{sec:second}). \cref{sec:formalization} describes the
-formalization, and Appendix~\ref{app:lean} gives the formal statement of
-\cref{thm:main} and the formal counterpart of each result of this paper. The
-formalization is registered in the Palomar registry, which checks mechanically
-that it proves exactly the stated theorems, using only Lean's standard axioms,
-and uses AI to check that each formal statement says the same as its informal
-version (\cref{sec:formalization}). The formalization also proves that its
-definitions agree with those of Google DeepMind's formal-conjectures
+Appendix~\ref{app:corrections}, the proof of \cref{thm:main}, a second proof of
+optimality (\cref{sec:second}), and the stability theorems of
+\cref{sec:stability}. \cref{sec:formalization} describes the formalization, and
+Appendix~\ref{app:lean} gives the formal statement of \cref{thm:main} and of the
+stability theorems, and the formal counterpart of each result of this paper. An
+earlier version of the formalization, without the stability theorems, is
+registered in the Palomar registry, which checks mechanically that it proves
+exactly the stated theorems, using only Lean's standard axioms, and uses AI to
+check that each formal statement says the same as its informal version
+(\cref{sec:formalization}). The formalization also proves that its definitions
+agree with those of Google DeepMind's formal-conjectures
 project~\cite{FormalConjectures}, whose statements of the moving sofa problem
 were written and reviewed by people independently of this work. The project
 lists the uniqueness of Gerver's sofa as an open problem, and the author has
@@ -211,7 +218,10 @@ and outlines the rest;
 \cref{sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}
 carry out the strategy described above, and \cref{sec:second}, the last
 subsection of \cref{sec:equality}, gives the second proof of optimality;
-\cref{sec:formalization} describes the formalization and lists open questions.
+\cref{sec:stability} proves that the uniqueness is stable and bounds the
+rotation angle of a moving sofa of nearly maximal area
+(\cref{thm:stability-angle}); \cref{sec:formalization} describes the
+formalization and lists open questions.
 The appendices give pictures of Baek's argument (Appendix~\ref{app:baek}), the
 explicit description of Gerver's sofa (Appendix~\ref{app:gerver}), the
 corrections to Baek's work (Appendix~\ref{app:corrections}), the dictionary to

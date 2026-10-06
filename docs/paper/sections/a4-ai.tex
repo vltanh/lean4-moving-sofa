@@ -16,11 +16,10 @@ who did what, with times and sizes. Claude Sonnet~5.5 (Anthropic), in Claude
 Code, wrote the first version of this manuscript on 4 October 2026 from the Lean
 library, the illustrated text of the proofs in~\cite{Companion} and the text
 of~\cite{Baek}. All figures but one were computed from the definitions by the
-script \path{docs/paper/figures/make_figures.py} of the repository, which was
-added after the commit cited in~\cite{Companion}; the remaining one is drawn in
-TikZ. The author asked for each of these steps and decided its scope. None of
-the three systems is an author of this paper, since none of them can take
-responsibility for it.
+script \path{docs/paper/figures/make_figures.py} of the
+repository~\cite{Companion}; the remaining one is drawn in TikZ. The author
+asked for each of these steps and decided its scope. None of the three systems
+is an author of this paper, since none of them can take responsibility for it.
 
 The text of this paper is not machine-checked; the dictionary of
 Appendix~\ref{app:lean} gives its correspondence with the Lean statements. On 4
@@ -48,8 +47,27 @@ compiled without change and passed the audit that came with it, and also an
 extended audit, written by Claude Opus~5.5, that covers the results from which
 Baek derives step~(3) of \cref{sec:baek}. From the Lean, Claude Opus~5.5 then
 wrote \cref{sec:second}, \cref{fact:exists} and the passages that refer to them
-in Sections~1 to~3 and~10 and Appendices~C and~D. Two more runs of Claude
+in Sections~1 to~3 and~11 and Appendices~C and~D. Two more runs of Claude
 Opus~5.5 checked these passages, one against the Lean and one for their prose,
 and their findings were applied. At the author's request, Claude Opus~5.5 also
-wrote the sentence of the abstract on the second proof. At the time of writing,
-the argument of this paper has not been refereed.
+wrote the sentence of the abstract on the second proof.
+
+The same day, ChatGPT Pro~6 wrote the proofs of \cref{sec:stability} as notes
+and as Lean code in 85 modules, which had never been compiled; they came as
+another pull request. Claude Opus~5.5, in Claude Code with sixteen sub-agents,
+made the code compile and merged it, at the author's request. Of its proofs, 123
+did not compile and were proved again along the draft's arguments. Twenty lemmas
+had lost hypotheses that the draft declared as section variables, since Lean
+omits a section variable from a statement that does not mention it; these
+hypotheses were added back. A separate run of Claude Opus~5.5 compared every
+repaired proof with the draft's and found no change of argument. On 6 October
+2026, Claude Opus~5.5 stated the three theorems of stability in
+\texttt{Challenge.lean}, and a sub-agent running Claude Opus~5.5 wrote
+\cref{sec:stability} and its rows of \cref{tab:dict} from the Lean. The same
+session also wrote the sentence of the abstract and the passages of Sections~1
+and~11 and Appendix~\ref{app:lean} on stability, and corrected a sign in the
+description of $\cM_K$ in \cref{sec:setting}. Three runs of Claude Opus~5.5
+compared the statements and proofs of \cref{sec:stability} with the Lean, part
+by part; a further run compared the new text with the Lean and the repository,
+and another read it for its prose. Their findings were applied. At the time of
+writing, the argument of this paper has not been refereed.

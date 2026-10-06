@@ -352,3 +352,35 @@ Figures, from 22:17 to 23:13:
 - tokens of the sub-agents: 0.78 million output, 2.40 million input, 80 million cache reads; of the main
   session: 0.22 million output, 0.52 million input, 66 million cache reads;
 - model calls: 832 by the sub-agents and 199 by the main session, all to `claude-opus-5-5`.
+
+## The stability in the Challenge and the manuscript (6 October 2026)
+
+The owner named ChatGPT Pro 6 as the author of pull request #8 and asked to state the stability theorems in the
+Challenge without running Palomar's preflight yet, to add the stability to the manuscript, and to add to the
+formalize-math-paper skill the pitfall that the previous round had met.
+
+How it was made:
+- 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L401),
+  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L411), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L421)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
+  and, in [`Solution.lean`](Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
+  the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
+  [`formalization.yaml`](formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
+  request #8.
+- The manuscript gained Section 10, the stability (Theorems 10.1 to 10.4 with their proofs, about sixteen pages),
+  and the passages on it in the abstract, Sections 1 and 11 and Appendices D and E; it now cites commit `92b2f86`.
+  A sub-agent wrote Section 10 and its rows of the dictionary from the Lean, and three sub-agents that it launched
+  compared every statement and proof with the Lean, part by part. Two more sub-agents, neither able to edit, then
+  read the new text, one against the Lean and the repository, the other for its prose. Their findings were applied,
+  among them a sign error in the description of Mamikon's term in Section 2. The manuscript grew from 70 to 91
+  pages; its README records the round.
+- Version 2.1.1 of the formalize-math-paper skill (commit `06ae331`) adds the pitfall that Lean 4 leaves out of a
+  statement the section variables that it does not mention, with the check and the fix.
+
+Figures, from 07:08 to 09:49:
+- elapsed time: 2 hours 41 minutes;
+- sub-agents: 6 (3 of them launched by another sub-agent), at most 4 at once, about 3.2 hours of work;
+- tool calls: 549 by the sub-agents, 108 by the main session;
+- tokens of the sub-agents: 1.32 million output, 4.63 million input, 121 million cache reads; of the main
+  session: 0.16 million output, 1.63 million input, 85 million cache reads;
+- model calls: 447 by the sub-agents and 114 by the main session, all to `claude-opus-5-5`.
