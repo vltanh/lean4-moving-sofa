@@ -593,3 +593,23 @@ Figures, from 16:59 to 17:50:
 - tokens of the sub-agents: 1.21 million output, 2.71 million input, 117 million cache reads; of the main session:
   0.08 million output, 0.14 million input, 27 million cache reads;
 - model calls: 526 by the sub-agents and 44 by the main session, all to `claude-opus-5-5`.
+
+## Merging into main for Palomar version 5 (6 October 2026)
+
+The owner asked to merge this work into main so as to submit a fifth version of the Palomar entry, and to clean up
+the branches and pull requests.
+
+How it was made:
+- 18:16 to 18:30: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
+- Main had one commit that the branch of the manuscript lacked (`13d574e`, the comparison of the formalizations).
+  Commit `22f0b37` merges it. The conflicts were in the illustrated text's links to the code (regenerated), the
+  README, the page of results and this file; the merged build is clean, the audit checks 5,868 declarations, the
+  route check and the audits of the second proof and of the coercive route pass, Comparator accepts both solutions,
+  and the continuous integration passed on the merge. Main now points to this work. The branches of the merged pull
+  requests were deleted.
+
+Figures, from 18:16 to 18:30:
+- elapsed time: 14 minutes;
+- sub-agents: none;
+- tool calls: 35 by the main session; tokens: 0.04 million output, 0.06 million input, 26 million cache reads;
+- model calls: 36, all to `claude-opus-5-5`.

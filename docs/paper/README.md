@@ -96,7 +96,7 @@ undefined reference.
   Challenge's names.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `3d3ea3e2871bcf31c7fa78d9fa43f391b43b32be`, on which the
+- The links to the repository are pinned to commit `22f0b37d0567f5cbbefe810b8fb4b92c9cf99178`, on which the
   continuous integration passed; Palomar's preflight has not been run on it. Version 4 of the Palomar entry
   registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those of stability.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
@@ -427,6 +427,13 @@ lines; 387 displays in all, where the text had 125. A script compared every file
 mathematics, the labels and the references did not change, and the only word changes are connectives that a display
 needs ("and" between formulas of one display, "Then" before an aligned block), two piecewise definitions written as
 cases, and Theorem 11.1, which now names the radius r of its bound. The manuscript has 117 pages.
+
+At the author's request ("merge all this to main so we can submit Palomar v5"), the main session merged main into
+this branch (commit `22f0b37`, on which the continuous integration passed) and moved the branch into main. Main had
+one commit of its own, the comparison of the three formalizations of Baek's proof, with a proof of Baek's Theorem
+2.1.3 along his argument; every name of Appendix D still exists after it. Appendix D.1 now says, as main's pages
+do, that the Challenge restates formal-conjectures' definitions with its code rather than verbatim. The manuscript
+cites `22f0b37` and has 117 pages.
 
 ## What has not been done
 
