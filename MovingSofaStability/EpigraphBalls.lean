@@ -30,7 +30,7 @@ def roofStrip (a b : ℝ) (γ : ℝ → ℝ) : Set Point :=
 
 /-- A low point can be shifted up and toward the farther side to make room for a ball. -/
 theorem roofStrip_low_ball {a b H L : ℝ} {γ : ℝ → ℝ}
-    (hab : a < b) (hH : H < 1) (hL : 0 ≤ L)
+    (hL : 0 ≤ L)
     (hLip : ∀ x ∈ Icc a b, ∀ y ∈ Icc a b, |γ x - γ y| ≤ L * |x - y|)
     {p : Point} (hp : p ∈ roofStrip a b γ) (hpy : p.2 ≤ (1 + H) / 2)
     {ρ : ℝ} (hρ : 0 < ρ) (hρwidth : ρ ≤ b - a) (hρheight : ρ ≤ (1 - H) / 2) :
@@ -137,7 +137,7 @@ theorem roofStrip_hasInteriorBalls {a b H L : ℝ} {γ : ℝ → ℝ}
   refine ⟨κ, r₀, hκ, hr₀, ?_⟩
   intro p hp ρ hρ hρmax
   by_cases hlow : p.2 ≤ (1 + H) / 2
-  · obtain ⟨z, hz⟩ := roofStrip_low_ball hab hH hL hLip hp hlow hρ
+  · obtain ⟨z, hz⟩ := roofStrip_low_ball hL hLip hp hlow hρ
       (hρmax.trans ((min_le_right _ _).trans (min_le_left _ _)))
       (hρmax.trans ((min_le_right _ _).trans (min_le_right _ _)))
     refine ⟨z, ?_⟩

@@ -113,7 +113,7 @@ theorem middle_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       (tailKernelPrimitive A (π - φ) - tailKernelPrimitive A (π / 2 + t))) = _
   simp only [tailKernelPrimitive, cotangent, sin_pi_sub, cos_pi_sub,
     sin_add, cos_add, sin_pi_div_two, cos_pi_div_two,
-    one_mul, zero_mul, zero_add, add_zero, zero_div, zero_sub,
+    one_mul, zero_mul, add_zero, zero_div, zero_sub,
     tan_eq_sin_div_cos]
   have htan : sin φ / cos φ = A * sin φ := by dsimp [A]; ring
   have htwo : 2 / cos φ = 2 * A := by dsimp [A]; ring

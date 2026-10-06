@@ -88,7 +88,7 @@ theorem convexBody_hasInteriorBalls {C : Set Point} (hC : IsConvexBody C)
     (hne : (interior C).Nonempty) :
     ∃ κ r₀ : ℝ, 0 < κ ∧ 0 < r₀ ∧ HasInteriorBalls C κ r₀ := by
   obtain ⟨c, s, hs, hball⟩ := exists_euclideanBall_subset_of_interior hne
-  have hc : c ∈ C := hball (by simpa only [euclideanBall, mem_setOf_eq, euclideanDist_self] using hs.le)
+  have hc : c ∈ C := hball (by simpa only [euclideanBall, mem_ofPred_eq, euclideanDist_self] using hs.le)
   have hcont : Continuous (fun p : Point => euclideanDist p c) := by
     exact continuous_norm2.comp (continuous_id.sub continuous_const)
   obtain ⟨D, hD⟩ := hC.2.1.exists_bound_of_continuousOn hcont.continuousOn

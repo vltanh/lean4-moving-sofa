@@ -119,8 +119,7 @@ theorem late_corner_height {K : Set Point} (hK : IsCap K (π / 2)) {R : ℝ}
 
 /-- All omitted wedges lie in a thin horizontal slab. -/
 theorem omittedWedges_height {K : Set Point} (hK : IsCap K (π / 2)) {R ω : ℝ}
-    (hR : 1 ≤ R) (hradius : ∀ p ∈ K, norm2 p ≤ R)
-    (hω : ω ∈ Icc (0 : ℝ) (π / 2)) :
+    (hR : 1 ≤ R) (hradius : ∀ p ∈ K, norm2 p ≤ R) :
     ∀ p ∈ omittedWedges K ω, p.2 ∈ Icc (0 : ℝ) ((3 * R + 1) * (π / 2 - ω)) := by
   intro p hp
   obtain ⟨-, hy, t, ht, hωt, hu, hv⟩ := omittedWedges_witness hp

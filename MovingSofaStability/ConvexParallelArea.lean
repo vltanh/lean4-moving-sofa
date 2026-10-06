@@ -95,7 +95,7 @@ theorem area_parallel_layer_le {K : Set Point} (hK : IsConvexBody K) {z : Point}
   have hsub := parallel_subset_homothetic hK hr hd.1 hball
   have hKsum : K ⊆ K + euclideanDisk d := by
     intro p hp
-    exact ⟨p, hp, 0, by simpa only [euclideanDisk, mem_setOf_eq, norm2_zero] using hd.1,
+    exact ⟨p, hp, 0, by simpa only [euclideanDisk, mem_ofPred_eq, norm2_zero] using hd.1,
       add_zero p⟩
   have hKC : K ⊆ C := hKsum.trans hsub
   have hEC : E ⊆ C \ K := fun p hp => ⟨hsub (hE hp).1, (hE hp).2⟩

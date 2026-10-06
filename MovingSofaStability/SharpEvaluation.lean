@@ -193,7 +193,7 @@ include hφ H in
 theorem sharp_four_arc_coercivity {t : ℝ} (ht : t ∈ Icc 0 π) :
     |f t| ≤ (2 / cos φ) * sqrt (fourResidualEnergy φ f df) := by
   have hc := (sharp_green_control hφ H ht).mono_kernel (greenNormSquared_le hφ ht)
-  apply green_evaluation_from_squared hφ (fourResidualEnergy_nonneg hφ f df)
+  apply green_evaluation_from_squared hφ
   nlinarith only [hc.bound]
 
 end Evaluation

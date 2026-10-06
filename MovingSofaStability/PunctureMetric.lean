@@ -79,7 +79,7 @@ theorem puncture_exact_radius {S : Set Point} {p : Point} {r : ℝ}
     (hr : 0 < r) (hball : euclideanBall p r ⊆ S) :
     EuclideanClose r (puncture S p r) S ∧
       ∀ d, EuclideanClose d (puncture S p r) S → r ≤ d := by
-  have hp : p ∈ S := hball (by simpa only [euclideanBall, mem_setOf_eq, euclideanDist_self] using hr.le)
+  have hp : p ∈ S := hball (by simpa only [euclideanBall, mem_ofPred_eq, euclideanDist_self] using hr.le)
   exact ⟨puncture_euclideanClose hr hball, fun _ h => puncture_radius_le_of_center_mem hp h⟩
 
 /-- A closed connected subset inherits precisely the same movement. -/

@@ -81,12 +81,14 @@ theorem CapRoofData.wings {K : Set Point} {a b H L : ℝ} {γ : ℝ → ℝ}
   have hmidL : ((l + a) / 2, (1 / 2 : ℝ)) ∈ K := by
     have hh := h.cap.2.1.2.2 (opt_cap_C_mem h.cap) hleft
       (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num)
-    convert hh using 1 <;> ext <;> simp only [l, Prod.fst_add, Prod.snd_add,
+    convert hh using 1
+    ext <;> simp only [l, Prod.fst_add, Prod.snd_add,
       Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring
   have hmidR : ((b + r) / 2, (1 / 2 : ℝ)) ∈ K := by
     have hh := h.cap.2.1.2.2 hright (opt_cap_A_mem h.cap)
       (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num)
-    convert hh using 1 <;> ext <;> simp only [r, Prod.fst_add, Prod.snd_add,
+    convert hh using 1
+    ext <;> simp only [r, Prod.fst_add, Prod.snd_add,
       Prod.smul_fst, Prod.smul_snd, smul_eq_mul] <;> ring
   have hboxL : Icc ((l + a) / 2) a ×ˢ Icc (0 : ℝ) (1 / 2) ⊆ leftWing K a := by
     have hh := cap_horizontal_rectangle h.cap (by linarith : (l + a) / 2 < a)

@@ -33,11 +33,13 @@ theorem hasDerivAt_cotangent {u : ℝ} (hs : sin u ≠ 0) :
 
 theorem hasDerivAt_cosecant {u : ℝ} (hs : sin u ≠ 0) :
     HasDerivAt (fun u => 1 / sin u) (-cos u / sin u ^ 2) u := by
-  convert (hasDerivAt_const u (1 : ℝ)).div (hasDerivAt_sin u) hs using 1 <;> ring
+  convert (hasDerivAt_const u (1 : ℝ)).div (hasDerivAt_sin u) hs using 1
+  ring
 
 theorem hasDerivAt_secant {u : ℝ} (hc : cos u ≠ 0) :
     HasDerivAt (fun u => 1 / cos u) (sin u / cos u ^ 2) u := by
-  convert (hasDerivAt_const u (1 : ℝ)).div (hasDerivAt_cos u) hc using 1 <;> ring
+  convert (hasDerivAt_const u (1 : ℝ)).div (hasDerivAt_cos u) hc using 1
+  ring
 
 theorem hasDerivAt_tailKernel (A : ℝ) {u : ℝ} (hs : sin u ≠ 0) :
     HasDerivAt (tailKernel A) (-(1 + A * cos u) / sin u ^ 2) u := by

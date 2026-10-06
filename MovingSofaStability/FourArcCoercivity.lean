@@ -189,7 +189,6 @@ theorem fourResidualMass_le {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (q₄ := arcSquare (π / 2) π (tangentResidual π f df))
     (arcMass_nonneg hφ.1.le _) (arcMass_nonneg (by linarith [hφ.2]) _)
     (arcMass_nonneg (by linarith [hφ.1]) _) (arcMass_nonneg (by linarith) _)
-    (fourResidualEnergy_nonneg hφ f df)
   · nlinarith [hφ.1, hφ.2]
   · nlinarith [hφ.1, hφ.2]
   · nlinarith [hφ.1, hφ.2]

@@ -103,11 +103,12 @@ theorem cap_constant_lt_2002 {φ : ℝ} (hφ : φ ∈ Icc (0.039 : ℝ) 0.04) :
 /-- Convert a verified squared evaluation bound to the explicit cap scale.
 The analytic premise is kept visible until the kernel integrals are identified. -/
 theorem green_evaluation_from_squared {φ value E : ℝ}
-    (hφ : φ ∈ Ioo 0 (π / 4)) (hE : 0 ≤ E)
+    (hφ : φ ∈ Ioo 0 (π / 4))
     (he : value ^ 2 ≤ 4 * (1 / cos φ) ^ 2 * E) :
     |value| ≤ (2 / cos φ) * sqrt E := by
   have hc : 0 < cos φ := (cap_angle_parameters hφ).1
-  apply abs_le_mul_sqrt_of_sq_le (show 0 ≤ 2 / cos φ by positivity) hE
-  convert he using 1 <;> ring
+  apply abs_le_mul_sqrt_of_sq_le (show 0 ≤ 2 / cos φ by positivity)
+  convert he using 1
+  ring
 
 end MovingSofaStability

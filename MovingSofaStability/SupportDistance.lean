@@ -64,7 +64,7 @@ theorem euclideanDisk_isConvexBody {r : ℝ} (hr : 0 ≤ r) : IsConvexBody (eucl
     intro p hp
     exact ⟨abs_le.mp ((abs_fst_le_norm2 p).trans hp),
       abs_le.mp ((abs_snd_le_norm2 p).trans hp)⟩
-  refine ⟨⟨0, by simpa only [euclideanDisk, mem_setOf_eq, norm2_zero] using hr⟩,
+  refine ⟨⟨0, by simpa only [euclideanDisk, mem_ofPred_eq, norm2_zero] using hr⟩,
     (isCompact_Icc.prod isCompact_Icc).of_isClosed_subset hclosed hsub, ?_⟩
   intro p hp q hq a b ha hb hab
   change norm2 (a • p + b • q) ≤ r

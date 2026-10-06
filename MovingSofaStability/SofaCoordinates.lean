@@ -58,7 +58,7 @@ theorem moving_terminal_projection {S : Set Point} {ω : ℝ}
   have hp' := hm.finish p hp
   have hq' := hm.finish q hq
   rw [hm.angle_one] at hp' hq'
-  simp only [vertSide, mem_setOf_eq, Prod.fst_add, ms_rot_neg_fst] at hp' hq'
+  simp only [vertSide, mem_ofPred_eq, Prod.fst_add, ms_rot_neg_fst] at hp' hq'
   rw [dot_sub_left]
   linarith [hp'.1, hq'.2.1]
 

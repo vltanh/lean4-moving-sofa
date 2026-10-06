@@ -26,7 +26,7 @@ def sofaCap (S : Set Point) : Set Point :=
     p ∈ sofaCap S ↔ 0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ supp S t := Iff.rfl
 
 theorem subset_sofaCap {S : Set Point} (hS : IsCompact S) (hstrip : S ⊆ hStrip) : S ⊆ sofaCap S :=
-  fun p hp => ⟨(hstrip hp).1, fun t ht => dot_le_supp hS hp t⟩
+  fun _ hp => ⟨(hstrip hp).1, fun t _ => dot_le_supp hS hp t⟩
 
 theorem sofaCap_down {S : Set Point} {p : Point} (hp : p ∈ sofaCap S)
     {y : ℝ} (hy0 : 0 ≤ y) (hy : y ≤ p.2) : (p.1, y) ∈ sofaCap S := by
@@ -41,7 +41,7 @@ theorem sofaCap_closed (S : Set Point) : IsClosed (sofaCap S) := by
   have he : sofaCap S = halfPlus (π / 2) 0 ∩ ⋂ t ∈ Icc (0 : ℝ) π, halfMinus t (supp S t) := by
     ext p
     simp only [sofaCap, halfPlus, halfMinus, mem_inter_iff, mem_iInter,
-      mem_setOf_eq, dot_uvec_pi_div_two]
+      mem_ofPred_eq, dot_uvec_pi_div_two]
   rw [he]
   exact (isClosed_halfPlus _ _).inter (isClosed_biInter fun t ht => isClosed_halfMinus _ _)
 

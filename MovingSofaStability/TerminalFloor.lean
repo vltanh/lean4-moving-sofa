@@ -76,12 +76,14 @@ theorem nearby_left_floor_rectangle {P : GerverParams} (hP : P.IsSolution) (hbox
   have hxl : (l, (1 / 4 : ℝ)) ∈ P.cap := by
     have he := hroof.cap.2.1.2.2.add_smul_sub_mem (opt_cap_C_mem hroof.cap) ha
       (show (1 / 4 : ℝ) ∈ Icc (0 : ℝ) 1 by constructor <;> norm_num)
-    convert he using 1 <;> ext <;> dsimp [l, D, x₀, a] <;> ring
+    convert he using 1
+    ext <;> dsimp [l, D, x₀, a] <;> ring
   have hxr : (r, (1 / 4 : ℝ)) ∈ P.cap := by
     have he := hroof.cap.2.1.2.2.add_smul_sub_mem (opt_cap_C_mem hroof.cap) ha
       (show (1 / 2 : ℝ) ∈ Icc (0 : ℝ) 1 by constructor <;> norm_num)
     have hrhalf : (r, (1 / 2 : ℝ)) ∈ P.cap := by
-      convert he using 1 <;> ext <;> dsimp [r, D, x₀, a] <;> ring
+      convert he using 1
+      ext <;> dsimp [r, D, x₀, a] <;> ring
     exact opt_cap_down hroof.cap hrhalf (by norm_num) (by norm_num)
   obtain ⟨m, hm, hmargin⟩ := cap_rectangle_upper_margin hroof.cap hlr hla hr0
     (show (1 / 8 : ℝ) < 1 / 4 by norm_num) hxl hxr

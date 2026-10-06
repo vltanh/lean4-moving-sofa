@@ -125,7 +125,7 @@ theorem four_term_sq_le (a b c d x y z w : ℝ) :
   positivity
 
 /-- The final scalar passage from a squared norm estimate to square-root stability. -/
-theorem abs_le_mul_sqrt_of_sq_le {d C E : ℝ} (hC : 0 ≤ C) (hE : 0 ≤ E)
+theorem abs_le_mul_sqrt_of_sq_le {d C E : ℝ} (hC : 0 ≤ C)
     (h : d ^ 2 ≤ C ^ 2 * E) : |d| ≤ C * sqrt E := by
   have hroot := Real.sqrt_le_sqrt h
   rw [Real.sqrt_sq_eq_abs, Real.sqrt_mul (sq_nonneg C), Real.sqrt_sq_eq_abs,
