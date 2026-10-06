@@ -50,7 +50,32 @@ theorem third_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
       sin (π - φ - t) ^ 2 *
         (∫ u in t..(π / 2), (1 / sin (π - φ - u)) ^ 2) =
       sin t * cos t + 2 * tan φ * cos t ^ 2 := by
-  sorry
+  have hp0 := hφ.1
+  have hp4 := hφ.2
+  have hpi := pi_pos
+  have hc : cos φ ≠ 0 := (cap_angle_parameters hφ).1.ne'
+  have hs : ∀ u ∈ Icc t (π / 2), sin (π - φ - u) ≠ 0 := by
+    intro u hu
+    exact (sin_pos_of_pos_of_lt_pi (by linarith [hu.2]) (by linarith [hu.1, ht.1])).ne'
+  have hst := hs t ⟨le_rfl, ht.2⟩
+  have hscale : (-(cos t / cos φ)) ^ 2 * (-sin (π - φ) * cos (π - φ)) =
+      tan φ * cos t ^ 2 := by
+    rw [sin_pi_sub, cos_pi_sub, tan_eq_sin_div_cos]
+    field_simp [hc]
+  rw [hscale, shifted_cosecant_sq_integral ht.2 hs]
+  have hcot : cotangent (π - φ - π / 2) = tan φ := by
+    simp only [cotangent, show π - φ - π / 2 = π / 2 - φ by ring,
+      cos_pi_div_two_sub, sin_pi_div_two_sub, tan_eq_sin_div_cos]
+  rw [hcot]
+  have hcancel : sin (π - φ - t) ^ 2 * cotangent (π - φ - t) =
+      sin (π - φ - t) * cos (π - φ - t) := by
+    unfold cotangent
+    field_simp [hst]
+  rw [mul_sub, hcancel]
+  rw [show π - φ - t = π - (φ + t) by ring, sin_pi_sub, cos_pi_sub,
+    sin_add, cos_add, tan_eq_sin_div_cos]
+  field_simp [hc]
+  linear_combination (cos t * (cos φ * sin t + cos t * sin φ)) * sin_sq_add_cos_sq φ
 
 /-- The middle-arc kernel has two disjoint pieces on the last residual arc. -/
 theorem middle_evaluation_norm {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))

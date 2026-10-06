@@ -45,7 +45,35 @@ theorem cap_angle_parameters {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4)) :
 /-- The closed-form evaluation norm never exceeds its value at zero. -/
 theorem greenNormSquared_le {φ t : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (ht : t ∈ Icc 0 π) : greenNormSquared φ t ≤ 2 * (1 / cos φ) ^ 2 := by
-  sorry
+  obtain ⟨hcφ, hA, htanφ, hAid⟩ := cap_angle_parameters hφ
+  have hAA : 1 ≤ (1 / cos φ) ^ 2 := by nlinarith
+  have hs : 0 ≤ sin t := sin_nonneg_of_nonneg_of_le_pi ht.1 ht.2
+  have hcost : cos t ^ 2 ≤ 1 := by nlinarith [sin_sq_add_cos_sq t, sq_nonneg (sin t)]
+  have hprod : sin t * cos t ≤ 1 / 2 := by
+    nlinarith [sin_sq_add_cos_sq t, sq_nonneg (sin t - cos t)]
+  unfold greenNormSquared
+  split_ifs with h1 h2 h3
+  · have hct : 0 < cos t := cos_pos_of_mem_Ioo
+      ⟨by linarith [pi_pos, ht.1], by linarith [hφ.2, pi_pos]⟩
+    have htnt : 0 ≤ tan t := by rw [tan_eq_sin_div_cos]; exact div_nonneg hs hct.le
+    have hmul : 0 ≤ cos t ^ 2 * tan t := mul_nonneg (sq_nonneg _) htnt
+    have hscale := mul_le_mul_of_nonneg_right hcost
+      (show 0 ≤ 2 * (1 / cos φ) ^ 2 by positivity)
+    nlinarith
+  · have hct : 0 ≤ cos t := (cos_pos_of_mem_Ioo
+      ⟨by linarith [pi_pos, ht.1], by linarith [hφ.1]⟩).le
+    have hterm : 0 ≤ cos t * sin t := mul_nonneg hct hs
+    have hscale := mul_le_mul_of_nonneg_right (cos_le_one t)
+      (show 0 ≤ 2 * (1 / cos φ) by positivity)
+    have hrewrite : 2 / cos φ = 2 * (1 / cos φ) := by ring
+    rw [hrewrite]
+    nlinarith
+  · have hscale := mul_le_mul_of_nonneg_left hcost
+      (show 0 ≤ 2 * tan φ by positivity)
+    nlinarith [sq_nonneg (tan φ - 1 / 2)]
+  · have hnegprod : -sin t * cos t ≤ 1 / 2 := by
+      nlinarith [sin_sq_add_cos_sq t, sq_nonneg (sin t + cos t)]
+    linarith
 
 @[simp] theorem greenNormSquared_zero {φ : ℝ} (hφ : 0 ≤ φ) :
     greenNormSquared φ 0 = 2 * (1 / cos φ) ^ 2 := by

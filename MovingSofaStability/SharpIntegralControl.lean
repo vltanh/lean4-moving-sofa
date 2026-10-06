@@ -68,7 +68,18 @@ theorem integral_square_control {a b : ℝ} (hab : a ≤ b) {k r : ℝ → ℝ}
     (hr2 : IntervalIntegrable (fun t => r t ^ 2) volume a b) :
     SquareControl (∫ t in a..b, k t * r t)
       (∫ t in a..b, k t ^ 2) (arcSquare a b r) := by
-  sorry
+  have hk2 : IntervalIntegrable (fun t => k t ^ 2) volume a b :=
+    (hk.pow 2).intervalIntegrable_of_Icc hab
+  have hkr : IntervalIntegrable (fun t => k t * r t) volume a b :=
+    hr.continuousOn_mul (by rwa [uIcc_of_le hab])
+  have ki := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hk2
+  have ri := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hr2
+  have kri := (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp hkr
+  refine ⟨intervalIntegral.integral_nonneg hab (fun t _ => sq_nonneg (k t)),
+    arcSquare_nonneg hab r, ?_⟩
+  unfold arcSquare
+  simp only [intervalIntegral.integral_of_le hab]
+  exact integral_mul_sq_le (volume.restrict (Ioc a b)) ki ri kri
 
 /-- The energy over a subinterval is bounded by the full arc energy. -/
 theorem arcSquare_mono {a b c d : ℝ} {r : ℝ → ℝ}
