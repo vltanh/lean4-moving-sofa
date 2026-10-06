@@ -1,119 +1,136 @@
-# Active roadmap: geometric admission, with an audited one-turn alternative
+# Active roadmap: optimal value, ordinary area, and audited reductions
 
-**Primary milestone now: optimal value only.** Defer uniqueness/equality classification until the global upper bound is proved. The active computer-assisted plan is [optimality-only-computer-plan.md](optimality-only-computer-plan.md): exact ordinary-area global localization plus a local candidate theorem.
+**Primary milestone: optimal value only. Unrestricted optimality is not proved.** Defer uniqueness until the sharp ordinary-area bound is established. Read [HANDOFF.md](HANDOFF.md) for the live-checkpoint procedure, provenance, executed-check status and failed routes. All written arguments remain self-reviewed, not independently verified infrastructure.
 
-Read [HANDOFF.md](HANDOFF.md) first for the live-checkpoint procedure, provenance, validation status and failed routes. **Unrestricted optimality and uniqueness are not proved.** A short conditional assembly is not evidence that its geometric premises are routine. All written results remain subject to independent review.
+## 1. Acceptance criterion
 
-## 1. Target and quantifiers
-
-For an arbitrary attained maximizer S, establish either a directly sharp ordinary-area inequality or data xi such that
+For one attained global ambidextrous maximizer S, prove |S|<=M, where the known feasible reference has
 
 $$
-|S|\le Q(\xi)\le M,
-\qquad M=1+4Y^2+\arctan Y,
-\quad4Y^3+3Y-1=0,\quad Y>0.
+M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.
 $$
 
-Track equality through every comparison to recover S itself up to congruence. A theorem for one attained maximizer gives the value, not automatically uniqueness of every maximizer.
+This establishes the value. A proof for every maximizer and exact equality recovery are later uniqueness obligations, not prerequisites for this milestone.
 
-Never infer candidate-neighborhood entry from the optimality or uniqueness being sought. Never substitute a signed curve integral for ordinary area without the required orientation, containment and correction terms.
+An auxiliary maximum is useful only with a valid ordinary-area comparison. A decomposition with an uncontrolled positive correction is not such a comparison. Do not infer entry into a candidate neighborhood from the very optimality or uniqueness being sought.
 
-## 2. Current two-wing results
+## 2. Direct computer-assisted route: retain the fractional-barrier correction
 
-The domain and base calibration are TW/WS/WC. [CS1–CS2](two-wing-cut-slack.md) retain actual inward supporting-line intersections and the four nonnegative cut-width slacks. Corner completion preserves all core supports and constrained widths while increasing the two counted wing areas. The favorable endpoint first variation has coefficient `tan(beta)/2` times the total slack.
+The [optimality-only computer plan](optimality-only-computer-plan.md) proposes exact global localization plus a local ordinary-area theorem. Read its later [occupancy audit](occupancy-relaxation-audit.md) before implementation. A triple-only LP always admits z=2/3; with pairs, z=1/2 remains feasible. More angles or cells alone cannot overcome these barriers.
 
-[SQ1](two-wing-slack-quadratic.md) proves the sharp inequality and equality case with arbitrary cut slack when both wings span the common strip. Negative quadratic slack terms are paid by the positive first-order terms; joint concavity on an unrestricted affine space is not claimed.
+An adequate global computation must use certified occupied anchors and empty regions, integral branching or stronger justified inequalities, or exact area bounds for boxes of finite hallway placements. [CF](configuration-area-certificate.md) and the [anchored-terminal framework](anchored-terminal-certificates.md) provide stated necessary constraints, not a completed covering of all competitors.
 
-[NH1](two-wing-near-full-height.md) allows unequal heights when the wings share their bottom supporting line and
+Every retained angle must be proved visited. Every domain box needs complete coverage, including boundaries. Numerical solvers may propose rational certificates; a separate verifier checks the geometry and weights. No unresolved leaf is silently assigned to a candidate neighborhood. Finite support proximity does not automatically imply the C1 hypotheses of a local theorem.
 
-$$
-\min(H_R,H_D)\ge1-\sin\beta/2.
-$$
+The unpublished `optimality_anchor_followon.zip` from the prior session is a separate import/replay task. This arm review did not merge it or independently recheck its entire certificate.
 
-This is an additional completed subcase of R4, not admission of arbitrary maximizing sofas. That geometric height property is still unproved. The CS/SQ checker has a recorded executed run; the NH checker source has no execution record established in this pass.
+## 3. Weighted one-turn route: current exact reduction
 
-## 3. Existing critical-path gates
-
-| Gate | Acceptance criterion | Status |
-|---|---|---|
-| R0: audit | Derive signs, endpoint terms, reference geometry and equality from definitions; check actual code/source correspondence. | Exact finite CS/SQ checks are recorded. New proposal audit is separate. Neither is independent verification of the whole branch. |
-| R1: normalization/coverage | Preserve containment from an arbitrary body through normalization and saturation, with attainment available. | Earlier written reductions and analytic `2<W<4` restrictions; not curvature domination. |
-| R2: terminal angles | Prove every angle used by the chosen representation is visited, or pay for missing intervals explicitly. | Open globally. OT4/OA.3 close a specific face-rectangle subcase only. |
-| R3: canonical wings | Construct actual convex safe pieces satisfying the calibrated strip, width and height conditions. | Open globally. Shared-bottom and NH1's height threshold cannot be assumed. |
-| R4: cut slack | A sharp certificate on a domain covering those actual data, or a proved reason excluding the rest. | WC2, SQ1 and NH1 cover stated subcases. Arbitrary slack with arbitrary relative heights remains unproved. |
-| R5: ordinary-area core | Prove containment and a valid area formula/upper bound, retaining clipping and nonsimple-curve effects. | Open globally. Disjointness is unnecessary for an upper bound by subadditivity; the area accounting remains necessary. |
-| R6: value | Apply admitted sharp comparison to an attained maximizer. | Conditional on the needed geometric gates. |
-| R7: uniqueness | Equality must recover the original closed body, not just auxiliary data. | Conditional recovery exists; unrestricted admission remains open. |
-
-R2–R5 are substantive linked obligations, not one routine lemma.
-
-## 4. New alternative supplied by the user
-
-The user supplied [one-turn-reduction.md](one-turn-reduction.md), attributed to Claude Opus 5.5 Max, with original diagnostic scripts. Read [one-turn-proposal-audit.md](one-turn-proposal-audit.md) before invoking it. The original nine files remain preserved at the audit's provenance checkpoint.
-
-The candidate-based weighted objective is
+The signed objective is
 
 $$
-\Psi(U)=\mathcal A(U)-W(U)/2,
-\qquad\mathcal A(U)=|U|-|N(U)|.
+\Psi(U)=|U|-|N(U)|-W(U)/2,
 $$
 
-A pair of full-angle caps with nonempty two-turn fibers has exact area
+with the **full niche** subtracted. It is not clipped surviving area. The package [one-turn-arm-reduction.md](one-turn-arm-reduction.md), reviewed in [one-turn-arm-package-review.md](one-turn-arm-package-review.md), gives a useful sufficient endpoint condition.
+
+Let [x_L,x_R] be a cap's horizontal projection and [x_tl,x_tr] its top face. At a weighted maximizer,
+
+$$
+d_R=x_R-x_{tl}=1+q(0),\qquad d_L=x_{tr}-x_L=1-p(\pi/2).
+$$
+
+AR7 and AR5' yield
+
+$$
+q(t)\le\max(q(0),1/8),\qquad p(t)\ge\min(p(\pi/2),-1/8).
+$$
+
+Therefore EA2, the two inequalities d_R,d_L<=2, supplies unit curvature. SR1 plus AF3 then gives Psi<=M/2, and the reference cap attains that value. **EA2 for one attained weighted maximizer suffices for the weighted value. It has not been proved for one.**
+
+| Weighted subproblem | Current status |
+|---|---|
+| Attainment | PA2 supplies a global maximizer for the signed objective. |
+| Height and floor | ST1 gives roof>=1/2; HV1 gives height one. |
+| Selection and regularity | WP1--WP2 select any prescribed weighted maximizer with summable defects; WR1 gives bounded open-quarter curvature and exact half-height vertical end edges. |
+| Endpoint-to-interior arms | AR7/AR5' give the sharper propagation and EA2 reduction. |
+| Positive top face | TS1 proves full niche height<=1/2 whenever the top-face length T>0. |
+| Coarse endpoint arms in that class | TS2 gives d_R,d_L<=9/4. This is not EA2. |
+| Zero-length top face | Unresolved by TS1; its finite shortening needs T>0. |
+| Sharp weighted value | Still open. Possible remaining long arms lie in (2,9/4] for positive-top maximizers. |
+
+### Finite shortening rather than an assumed derivative
+
+[TS1](one-turn-top-shortening.md) constructs a cap U_minus by shortening every horizontal section by epsilon in (0,T), with
+
+$$
+\Psi(U_{\rm minus})-\Psi(U)
+\ge\varepsilon\bigl(H_N(U)-1/2-\varepsilon/2\bigr).
+$$
+
+The proof uses a niche Minkowski inclusion and interval growth, not a presumed smooth contact chart or differentiability of niche area. This proves H_N<=1/2 at a positive-top maximizer and hence niche containment using ST1. A rational support test gives the 9/4 arm bound.
+
+### The proposed ODE is now solved, but not geometrically justified
+
+[SP1](one-turn-saturated-passage.md) proves the proposed saturated ODE has strictly increasing first-passage time tau(q0) from (1/2,q0) to q=-1/2, with tau=pi/2 only at the reference q0. Its explicit formulas cover the reverse regime and all high-arm standard regimes.
+
+This replaces one numerical observation by a hand proof. It does **not** prove that every maximizing cap follows that saturated law. The next geometric requirements on this alternative remain exact exposure balance, the needed niche-area derivative or a finite substitute, and activity in folded configurations. A solution of an assumed ODE is not a maximizing-body theorem.
+
+## 4. Transfer from a weighted value to two-turn optimality remains separate
+
+The original user proposal OT and its [audit](one-turn-proposal-audit.md) give, under full turns and nonempty two-turn fibers,
 
 $$
 |E|=\Psi(U)+\Psi(V)+G,\qquad G\ge0.
 $$
 
-The initial floor traces OT3–OT4 classify horizontal faces without an input curvature cap. In the aligned-long-face case, with both corner-height positivities, OT5 proves G=0. The other configurations still need analysis.
+Thus even a sharp weighted bound yields |E|<=M+G. Empty fibers add a further positive correction. OT3--OT4's face classification and OA.3's full-turn rectangle test cover useful cases, but do not eliminate all exceptions. OT5's zero-clipping conclusion keeps its aligned-face and two-sided corner-positivity hypotheses.
 
-The audit strengthens the sufficient full-turn rectangle width to `q-sqrt(q^2-1)` for area greater than q. It also states the needed full-turn and nonempty-fiber qualifications, and distinguishes constrained one-turn variations from maximality against all caps.
-
-### One-turn gates and their current status
-
-| Gate | Required result | Status |
-|---|---|---|
-| O0: objective and existence | Fix the signed full-niche objective and prove its maximum is attained. | **PA2 proved in writing** in [one-turn-penalized-attainment.md](one-turn-penalized-attainment.md), without assumed Romik or Gerver optimality. |
-| O1: exceptional face placement | Exclude or control OT4's end-face and short-rectangle configurations by ordinary area or a valid improvement. | Open. The R case locates at least one face, not automatically both faces at one end. |
-| O2: point faces | Handle actual maximizing point-face configurations, including the SC3 obstruction. | Open. No uniform area threshold below M excludes all known examples. |
-| O3: niche topology | Prove the two no-clipping hypotheses outside the common-face-length-at-least-one subcase, or bound G correctly. | Open in the remaining configurations. |
-| O4: sharp weighted maximum | Prove `Psi(U)<=M/2` on the stated right-angle cap class and characterize equality. | Open. Attainment does not supply the value, curvature or arm estimates. |
-
-OT.7's full-right-angle cap problem is full-angle by definition. A separate full-angle theorem belongs to the geometric transfer from a partial-turn body, not to existence of that already fixed-domain cap maximum.
-
-Even a completed O4 gives only `|E|<=M+G` while G is positive. A valid assembly must also address O1–O3 or another exact correction. The new route is complementary to the two-wing program, not a proof that its global admission has been solved.
-
-## 5. Next acceptance test
-
-Choose one directly relevant target, record it, and pursue it to a proof or a specific obstruction before creating another auxiliary functional.
-
-The new one-turn target is now well posed by PA2: derive the maximizing cap's finite and limiting balance conditions for `A-W/2`. Fixed-axis interior variations leave the penalty unchanged. Axis variations have an additional minus-one-half derivative. The transfer must still handle domain admissibility, approximation errors, endpoint conditions and the arm bounds needed for a sharp comparison. The existing unpenalized maximality theorem cannot be invoked with a false premise.
-
-Alternatively, attack one of OT4's exceptional face classes with an actual two-turn area comparison. The point-face examples must be included, not dismissed as unsaturated. In the two-wing route, directly constructing the shared-bottom near-full-height wings or proving the core enclosure remains useful.
-
-Do not spend another pass optimizing an already calibrated expression while its geometric area inequality is unproved.
-
-## 6. Mandatory positive and negative tests
-
-Reference data must give the correct area and orientation. A proposed global comparison must handle or exclude by a proved improvement the axis-cut and shadow-clipping families. Repair, saturation and shared anchors did not rescue the earlier failed comparisons.
-
-For cap calculations distinguish
+The positive-top weighted maximizer from TS1 generates a connected reflected two-turn intersection through height 1/2, with
 
 $$
-|U|-|N(U)|\quad\text{from}\quad|U\setminus N(U)|.
+|S_U|=2\Psi(U)+2\int\min(n,1-a)\,dx.
 $$
 
-The difference is `|N(U) minus U|`. The imported polygon optimizer clips negative fibers and therefore optimizes the second expression; that is not the signed W-Gerver objective on arbitrary caps. Its repeated-abscissa interpolation bug is independently reproduced. The new review utility keeps all terms separate without modifying the preserved originals.
+This makes a weighted value above M/2 relevant to an actual counterexample, but is not an upper bound with the integral discarded. No such counterexample is provided.
 
-A computer-assisted theorem requires exact arithmetic or certified enclosures and complete coverage of its claimed domain. Finite samples and optimizer convergence do not suffice. In the recorded review, 2,025 rational fiber cases and 1,296 interval pairs are finite checks of the algebra/classification; the continuum statements have written proofs and qualifications. Floating-point candidate/rectangle calculations are diagnostics only.
+| Two-turn obligation | Status |
+|---|---|
+| Actual angular coverage | Open globally; full turns cannot be inserted by convention. |
+| Exceptional face placement | OT classifications give cases, not an exclusion of every case. |
+| Point faces | Open; SC3 examples approach M and cannot be dismissed by a fixed lower threshold. |
+| Clipping / ordinary-area correction | Open outside the stated no-clipping subcases. |
+| Value assembly | Requires these premises or a direct certificate replacing them. |
 
-## 7. Decision log and execution
+## 5. Two-wing route remains available
 
-- Established the actual inward-intersection formulation CS and the full-height arbitrary-slack theorem SQ1.
-- Added the shared-bottom near-full-height theorem NH1; did not assume its height criterion for actual maximizing wings.
-- Imported the user-supplied one-turn draft and all scripts with provenance hashes.
-- Accepted OT1's scoped area identity and the initial floor/face classification; strengthened the rectangle full-turn criterion.
-- Identified signed-versus-clipped objective mismatch, an endpoint interpolation defect, and the missing error sign for ordinary floating-point quadrature.
-- Proved PA2, attainment of the signed weighted cap maximum, independently of the candidate optimum. The sharp value and its structural derivation remain open.
-- Retained both approaches and their unresolved geometric comparisons. No unrestricted-completion claim.
+TW/WS/WC, CS/SQ and NH retain convex wing areas rather than repaired hull area. Their calibrated domains are explicit. The canonical-admission upload adds its proposed extension and contact conditions; consult its review and [canonical-wing-winding-accounting.md](canonical-wing-winding-accounting.md).
 
-Substantive findings, including negative results, are committed with `[skip ci]`. No CI, Lean/Lake compilation, dependency installation or manuscript build was used. Existing manuscript, Lean libraries, dependencies and workflows remain unchanged. PR #3 stays draft. Counts of commits or notes do not measure proximity to closure.
+The exact bookkeeping is
+
+$$
+|S|-\widehat{\mathcal W}=N+U-B,
+$$
+
+where N is multiplicity-weighted negative winding, U is surviving material outside both wings not covered by positive winding, and B>=0. Adding only a visually apparent loop area is insufficient without controlling U and multiplicities.
+
+R2--R5 remain the critical admission tasks: required angles; actual convex safe wings with the calibrated height/width data; allowed cut slack; and an ordinary-area core comparison. Subadditivity means pairwise disjointness is unnecessary for the upper bound, but it does not identify a nonsimple signed integral with ordinary area. Exact algebra checks are not global admission.
+
+## 6. Next acceptance test
+
+Choose one of the following only when its claimed payoff and hypotheses are explicit:
+
+- Prove EA2 for one weighted maximizer, starting with the remaining positive-top arm interval (2,9/4] or the T=0 case.
+- Supply a justified exposure/balance theorem feeding SP1, including the required sign and first-passage properties; do not assume the saturated law.
+- Bound the actual two-turn clipping/winding/uncovered correction in a covering class.
+- Build a strengthened ordinary-area certificate that clears its stated parameter boxes, with all residual boxes accounted for.
+
+Do not restart solved fixed-width calibration or refine unrelated local/perimeter statements. A negative auxiliary quadratic value is not a feasible-body counterexample; a numerical candidate match is not coverage.
+
+## 7. Execution and regression requirements
+
+The arm package's original four files are preserved at `0b187ac...`. All original numerical parts were freshly replayed; the old author record remains unchanged. The separate [review checker](computer-assisted/one-turn-arms/review_checks.py) and [record](computer-assisted/one-turn-arms/review-results.json) contain 23 exact identities, 213 rational local-offset tests, 200 interval-growth tests and two negative controls. The rational offset samples do not claim cap realizability. The fifty numerical passage comparisons do not certify geometric exposure laws.
+
+Mandatory negative controls remain AF4, GR1, AX1/SAT1, SAC2, SC3 and TR1. Preserve the distinction between signed cap area, clipped surviving area and actual two-turn area. Preserve both positive clipping and uncovered-material terms. Keep exact inequality directions, endpoint hypotheses and finite proof coverage explicit.
+
+Every substantive finding is committed with `[skip ci]`. No CI, Lean/Lake compilation, dependency installation or manuscript build was used. Existing manuscript, Lean libraries and workflows are unchanged. Commit counts are not a measure of proximity to closure; PR #3 remains draft.
