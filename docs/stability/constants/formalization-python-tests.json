@@ -1,0 +1,34 @@
+{
+  "status": "passed_python_regressions",
+  "python": "3.13.5",
+  "tests": 24,
+  "failures": 0,
+  "errors": 0,
+  "exact_finite_quotient_examples": 702,
+  "scope": [
+    "synthetic TeX inventory fixtures",
+    "manifest rejection and no-receipt failure paths",
+    "exact rational examples of the finite two-point formula"
+  ],
+  "not_checked": [
+    "Lean elaboration",
+    "generated Lean audit",
+    "complete repository paper-claim mapping",
+    "actual centered cap Gram identities",
+    "explicit stability or cutoff theorem"
+  ],
+  "files": {
+    "scripts/paper_claim_inventory.py": {
+      "git_blob_sha1": "ae2499a68fc5faded55c8c1c27fd9ef7fcca360f",
+      "sha256": "53e7eedcb855a3f36309867befc8b2d31ac645c57586b2663daf42dbffc0bcaa"
+    },
+    "scripts/quantitative_gate.py": {
+      "git_blob_sha1": "8c843734986208be065967060106fd61da18c4eb",
+      "sha256": "c01c119041475d7f56959c1287a088e71fcb6935077b08f28516fb7625a57426"
+    },
+    "scripts/tests/test_quantitative_gate.py": {
+      "git_blob_sha1": "e6493666416c97e3d9494ce814a11ca29adeffed",
+      "sha256": "24a10d4239ebdfa96493e1ceec47d324424c2184e6e450c066e695a5738a9236"
+    }
+  }
+}
