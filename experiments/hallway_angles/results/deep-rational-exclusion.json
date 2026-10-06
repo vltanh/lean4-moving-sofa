@@ -1,0 +1,22 @@
+{
+  "format": "deep-rational-exclusion-v1",
+  "status": "Exact-integer interval computation for the contact-model crossing; not a proof about the unrestricted global phase transition",
+  "source_blob": "507952b17dcaa9ec006c85133ef9fa17f2cdb249",
+  "precision_bits": 192,
+  "lower": "504644407557908571/664626775090067219",
+  "upper": "1920149641230808118/2528875470784124371",
+  "lower_gap": [
+    "4593953482741186348711/1569275433846670190958947355801916604025588861116008628224",
+    "28179040522618511642309/6277101735386680763835789423207666416102355444464034512896"
+  ],
+  "upper_gap": [
+    "-10956270380529161340079/6277101735386680763835789423207666416102355444464034512896",
+    "-576521894437697545899/3138550867693340381917894711603833208051177722232017256448"
+  ],
+  "farey_determinant": 1,
+  "minimum_denominator": 3193502245874191590,
+  "conclusion": "if beta_model/pi=p/q in lowest terms then q>=3193502245874191590",
+  "method": "Machin pi enclosure; 192-bit fixed-denominator integer intervals; argument-reduced Taylor sin/cos; Taylor sinh/cosh; interval Newton for T; Farey-neighbour denominator theorem",
+  "ci": false,
+  "lean": false
+}
