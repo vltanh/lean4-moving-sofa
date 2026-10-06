@@ -12,8 +12,7 @@ three-region argument then gives A <= Q there.
 
 Both remaining bounds come from the coercive certificate (`coercive_certificate`):
 `𝒬 ≤ |G|` at the canonical triple, and the cap distance with coefficient
-`2 / cos φ`, weakened to 80 (`nearby_cap_distance`), the coefficient that the rest of
-the stability proof uses.
+`2 / cos φ` (`nearby_cap_distance`).
 -/
 
 @[expose] public section
@@ -105,23 +104,27 @@ theorem nearby_cap_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.
   have hq := (coercive_certificate hP hbox (canonicalWideTriple ht)).1
   exact ⟨ht, hn, ha, hq⟩
 
-/-- Local cap stability in the original area functional, now without Ki. -/
+/-- Near Gerver's cap, a right-angle cap contains its niche, has sofa area at most `|G|`, and
+lies within `(2 / cos φ) √(|G| - A(K))` of Gerver's cap translated horizontally: the coercive
+certificate at its canonical triple, with `A(K) ≤ 𝒬(ξ_K)`. The injectivity condition is not
+assumed. -/
 theorem nearby_cap_distance {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ K : Set Point,
       IsCap K (π / 2) → UpperSupportClose δ K P.cap →
         niche K (π / 2) ⊆ K ∧ sofaArea (π / 2) K ≤ area (gerverSofa P) ∧
-        EuclideanClose (80 * sqrt (area (gerverSofa P) - sofaArea (π / 2) K))
+        EuclideanClose ((2 / cos P.φ) * sqrt (area (gerverSofa P) - sofaArea (π / 2) K))
           K (shiftedReferenceCap P.cap K) := by
   obtain ⟨δ, hδ, hδ1, hcert⟩ := nearby_cap_certificate hP hbox
   refine ⟨δ, hδ, hδ1, ?_⟩
   intro K hK hclose
   obtain ⟨ht, hn, ha, hq⟩ := hcert K hK hclose
   have hd := (coercive_certificate hP hbox (canonicalWideTriple ht)).2
-  have hc80 : 2 / cos P.φ ≤ 80 := by linarith [(cap_constant_lt_2002 hbox.1).2]
+  have hc : 0 ≤ 2 / cos P.φ :=
+    div_nonneg (by norm_num) (cap_angle_parameters (GerverParams.gm_φ_mem_Ioo hP hbox)).1.le
   have hrad : (2 / cos P.φ) *
         sqrt (area (gerverSofa P) - upperQ P.φ K (rightBody P.φ K) (leftBody P.φ K)) ≤
-      80 * sqrt (area (gerverSofa P) - sofaArea (π / 2) K) :=
-    mul_le_mul hc80 (Real.sqrt_le_sqrt (sub_le_sub_left ha _)) (sqrt_nonneg _) (by norm_num)
+      (2 / cos P.φ) * sqrt (area (gerverSofa P) - sofaArea (π / 2) K) :=
+    mul_le_mul_of_nonneg_left (Real.sqrt_le_sqrt (sub_le_sub_left ha _)) hc
   exact ⟨hn, ha.trans hq, hd.mono hrad⟩
 
 end MovingSofaStability

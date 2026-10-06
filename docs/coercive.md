@@ -87,8 +87,8 @@ and at small deficit it bounds the distance.
    analysis of [`MovingSofaUniqueness/Rigidity.lean`](../MovingSofaUniqueness/Rigidity.lean).
 5. **Stability** ([`MovingSofaStability`](../MovingSofaStability)). The sign of the deficit ([`MovingSofaStability.sofaDeficit_nonneg`](../MovingSofaStability/Statement.lean#L66)) and the compactness
    step ([`MovingSofaStability.maximizing_subsequence`](../MovingSofaStability/QualitativeEntry.lean#L31), [`MovingSofaStability.pinned_maximizer_eq_gerver`](../MovingSofaStability/SofaCoordinates.lean#L128)) use steps 3 and 4; the local estimate
-   ([`MovingSofaStability.nearby_cap_certificate`](../MovingSofaStability/LocalUpperBound.lean#L73), [`MovingSofaStability.nearby_cap_distance`](../MovingSofaStability/LocalUpperBound.lean#L109)) takes both bounds from the certificate, the distance with
-   coefficient `2 / cos φ < 1001/500`, weakened to the coefficient 80 that the rest of the proof uses.
+   ([`MovingSofaStability.nearby_cap_certificate`](../MovingSofaStability/LocalUpperBound.lean#L72), [`MovingSofaStability.nearby_cap_distance`](../MovingSofaStability/LocalUpperBound.lean#L111)) takes both bounds from the certificate, the distance with
+   coefficient `2 / cos φ`, which the rest of the proof carries.
 
 ## What the route does not use
 

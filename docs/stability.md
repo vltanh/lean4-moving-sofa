@@ -118,11 +118,11 @@ theorem ki_cap_distance_bound_2002 {P : GerverParams} (hP : P.IsSolution) (hbox 
 the deficit of Baek's upper bound `𝒬`, for every triple of the enlarged domain of nonsmooth caps that
 the proof of stability uses. Note 01 of the archive argues that `2 sec φ` is the best constant in the
 space of residuals; that is not proved in Lean, and no claim is made that it is the best constant
-over feasible caps or after optimizing the translation. Nor is it the constant of the stability
-theorem: its proof takes the cap estimate from the coercive certificate
-[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) ([the coercive route](coercive.md)) and weakens the coefficient to 80, the coefficient
-that its other steps use. [`MovingSofaStability.wide_cap_distance_bound`](../MovingSofaStability/CapDistance.lean#L121) proves the coefficient 80 directly, by mass
-estimates.
+over feasible caps or after optimizing the translation. The proof of the stability theorem takes the
+cap estimate, with the coefficient `2 sec φ`, from the coercive certificate
+[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CoerciveCertificate.lean#L33) ([the coercive route](coercive.md)); the constants of the theorem are existential, so
+the coefficient does not appear in its statement. [`MovingSofaStability.wide_cap_distance_bound`](../MovingSofaStability/CapDistance.lean#L121) proves the
+coefficient 80 by mass estimates, which the proof of the stability theorem no longer uses.
 
 ## The proof
 
@@ -141,8 +141,8 @@ sofas. Each step below names the main modules that carry it.
    `TrigKernelIntegrals`, `SharpReconstruction`, `SharpEvaluation`, `SharpCapDistance`). The support
    function of the cap is reconstructed from the residuals on the four arcs of Gerver's cap. The
    energies bound its distance to Gerver's support function, with coefficient 80 by mass estimates
-   or `2 sec φ` by the exact kernel integrals, and bounds on support functions become Euclidean
-   distances between the caps.
+   or `2 sec φ` by the exact kernel integrals, which the proof uses, and bounds on support functions
+   become Euclidean distances between the caps.
 3. **A local upper bound** (`ExposedFaceStability`, `LocalArmMargins`, `NicheFeet`,
    `CanonicalTriple`, `CoreIntegral`, `CutSeparation`, `CoreAreaBound`, `LocalUpperBound`). For every
    right-angle cap whose upper support function is close to Gerver's, the canonical triple is
