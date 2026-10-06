@@ -1,169 +1,186 @@
-# Lean formalization of quantitative stability
+# Lean source for unrestricted stability
 
-This continuation starts at `4770c508a05295b26215435b5fc85b0a5121fb45`.
-The mathematical target is note 08's unrestricted theorem, not just the earlier
-conditional injective-cap theorem.
+**Current status: the unrestricted theorem and angle-rate theorem now have
+end-to-end Lean proof source. None of this development has been compiled or
+kernel-checked.** Elaboration, tactic and API errors may remain. Source assembly
+must not be described as a verified formalization.
 
-**Status: substantial uncompiled proof source; the unrestricted Lean theorem
-is NOT complete.** The remaining work is not merely running a compiler.
-The analytic proofs in notes 01--09 remain distinct from this partial Lean
-formalization.
+This completion continuation starts at
+`0d578d8337553dedbfd2a86f407acef1d6a03c9d`, after the earlier algebraic and local
+geometric development. It does not modify the manuscript's incorporated
+alternative optimality proof.
 
-## Validation policy and integration
+## Headline declarations
 
-No Lean invocation, Lake invocation, CI dispatch, CI rerun, remote build, or
-TeX compilation was performed. The user explicitly prohibited CI and Lean
-compilation. Every continuation commit carries `[skip ci]`.
+`MovingSofaStability/GlobalStability.lean` contains:
 
-The development is in `MovingSofaStability/`, with an explicit import root
-`MovingSofaStability/All.lean`. It is registered as an optional library in
-`lakefile.toml`, but the existing default targets are unchanged. No existing
-optimality, uniqueness, bridge, audit, workflow, or manuscript proof was edited.
-No existing kernel-verification claim is extended to this directory.
+```lean
+theorem unrestricted_stability {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    UnrestrictedStability P
 
-Every theorem declaration supplied here has a proof term. No new axiom,
-`sorry`, `admit`, or typeclass assumption of the final theorem was introduced.
-This is a description of the written source, not a kernel axiom audit. Since
-Lean was not invoked, elaboration, tactic completion, and successful imports
-remain unverified and may require correction.
+theorem terminal_angle_stability {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    TerminalAngleStability P
+```
 
-## Strongest concrete objective result
+Both have proof terms. The target propositions remain defined in
+`Statement.lean`, but they are no longer merely unproved target definitions.
+The final declarations do not assume a stability estimate, a special envelope,
+Ki membership of the competitor, or an interface packaging the missing proof.
 
-`wide_deficit_eq_slack_add_integrals` in `WideResidualEnergy.lean` states
+`reduced_sofa_stability` supplies a common set of constants for every admissible
+reduced motion of every sufficiently near-optimal sofa. It handles the
+zero-deficit case using the existing uniqueness theorem and the positive case
+using the newly assembled local and compactness arguments.
 
-    area(G) - wideUpperQ(xi)
-      = wideDualSlack(xi) + wideResidualEnergy(xi_G, xi).
+The actual conclusions are:
 
-Here `xi` belongs to the genuinely enlarged domain `WideTriple`: its cap need
-only be a normalized convex cap, not Ki. The objective is the original
-`MovingSofaOptimality.upperQ`, not a newly defined substitute for the area.
-`wideDualSlack_nonneg` proves the slack sign. `wideResidualEnergy` is the sum
-of six half-integrals of squared differences of the actual Mamikon tangent
-displacements. `wide_capResidualEnergy_le_deficit` drops the two nonnegative
-auxiliary-body terms to bound the four cap integrals by the Q deficit.
+- Euclidean closeness, in both directed distances, of the normalized original
+  nonconvex set to Gerver at rate C sqrt(M-area(S));
+- symmetric-difference area at the same square-root rate;
+- terminal angle deficit pi/2-omega bounded linearly in M-area(S).
 
-These declarations have no assumption of the desired energy inequality or
-of a nonsmooth-competitor derivative sign: those are derived through the
-modules listed below. They still require the explicit linear constraints of
-the wide triple domain. Showing that the cap associated with a near-optimal
-sofa supplies such a triple is a separate geometric task, still outstanding.
+Only a translation is used in the manuscript's initial-horizontal-strip
+convention. The global constants and entry threshold are existential, not
+numerically computed.
 
-## Dependency ledger
+## Proof route
 
-The labels below mean **proof source written**, **partly written**, or **not
-yet implemented**. None denotes a compilation or verification result.
+### 1. Nonsmooth deficit certificate
 
-### Proof source written
+The earlier modules through `WideResidualEnergy.lean` prove in source
 
-1. **Quadratic deficit:** `QuadraticDeficit.lean` proves the exact segment
-   identity, the equality of deficit with negative first variation plus
-   quadratic energy, and the constant-one energy bound at a maximizer. The
-   small-segment argument is explicit rather than an informal limit.
-2. **Mamikon difference integrals:** `MamikonEnergy.lean` proves the quantitative
-   convexity gap on arbitrary convex bodies. `BaekDeficit.lean` first connects
-   it to the existing Ki-based domain and the actual cap area functional.
-3. **Enlarged domain:** `WideDomain.lean` constructs `WideTriple`, its convex
-   domain structure, the original functional on it, and the tail decomposition.
-4. **Nonsmooth cap algebra:** `CBVAlgebra.lean`, `ArcAtoms.lean`,
-   `NonsmoothBookkeeping.lean`, and `NonsmoothAffinity.lean` retain and cancel
-   all five face contributions at the four cap arcs. The outer-minus-inner
-   curve-area term is treated by bilinearity on continuous bounded-variation
-   curves, with no C1 assumption on the competitor.
-5. **Quadraticity and concavity:** `WideConcavity.lean` proves both properties
-   on the enlarged domain, rather than applying the old Ki-only theorems to
-   inadmissible inputs.
-6. **First variation and reference certificate:** `MixedArea.lean` cancels
-   periodic endpoint atoms instead of assuming they vanish.
-   `ReferenceCoreVariation.lean` differentiates only the reference core.
-   `WideFirstVariation.lean` assembles the six terms with a nonsmooth competitor.
-   `WideGerverCertificate.lean` uses Gerver's existing measure decomposition to
-   prove the sign, the enlarged-domain maximum, and the exact deficit identity.
-   `WideResidualEnergy.lean` identifies that identity with all six integrals.
-7. **Actual-set Euclidean geometry:** `EuclideanGeometry.lean` develops both
-   directed Euclidean distance bounds, rigid invariance, and the implication
-   from actual-set closeness to support closeness. `Statement.lean` pins the
-   top and left supports and proves normalization invariance of area.
-8. **Finite-measure bookkeeping:** `TerminalBookkeeping.lean` proves the terminal
-   comparison and both missing-set estimates once the excluded-region and
-   omitted-wedge area estimates are supplied. It never assumes S is contained
-   in its full-angle envelope.
+    M - Q(xi) = nonnegative dual slack + six displacement-difference energies.
 
-### Partly written: cap coercivity
+The objective is the original `MovingSofaOptimality.upperQ` and the domain
+retains its linear wall constraints while allowing nonsmooth convex caps.
+Curvature atoms are retained in the four-arc decomposition and cancelled
+against their connector faces. Only the reference Gerver core is differentiated
+in the first variation. The auxiliary-body null directions cause no problem:
+their two nonnegative energies are discarded in the cap estimate.
 
-`IntegralEstimates.lean` supplies real integral Cauchy--Schwarz, the four-term
-square inequality, and the kernel-to-error estimate. `Residuals.lean` identifies
-the tangent residuals, removes translation, and computes the integrating factor.
-`ODEReconstruction.lean` integrates with right derivatives so that curvature
-atoms are allowed. `GreenNorm.lean` bounds the four displayed Green norm
-formulas and proves the rational inequality `2/cos(phi) < 2.002` on the source
-box.
+### 2. Cap distance
 
-**Still missing:** the integral reconstruction on all four intervals with the
-needed integrability and endpoint arguments, identification of the displayed
-norm formulas with their kernel square integrals, and the final support-norm /
-Euclidean cap-distance estimate. The scalar theorem
-`green_evaluation_from_squared` explicitly takes its squared estimate as a
-hypothesis; it is not mislabelled as the completed cap theorem.
+`ResidualIntegrability`, `ResidualMass`, `ResidualPropagation`,
+`FourArcCoercivity`, `CapCoercivity`, `SupportDistance`, and `CapDistance` connect
+those integrals to upper support error, the full support circle, and actual
+Euclidean cap distance.
 
-### Not yet implemented
+**The completed source route uses the non-sharp cap coefficient 80.** The
+analytic note's sharp pinned coefficient 2 sec(phi), and its bound below
+2.002, are not silently substituted into this route. The unrestricted theorem
+only requires existence of a finite constant.
 
-- Note 06: the local exposed-point estimates, canonical-body contacts, niche
-  localization, and local geometric upper bound for arbitrary nearby caps.
-- Note 07: construction of the fixed excluded floor rectangle and localization
-  of omitted wedges. Only the subsequent finite-area comparison is in Lean.
-- Notes 02 and 08: compactness of the relevant class of actual moving sofas,
-  closedness under limits, and qualitative entry into the local neighborhood.
-- Notes 03 and 08: reference erosion, uniform interior-ball property, directed
-  nonconvex recovery, and symmetric-difference area estimate.
-- Note 08: the unconditional final assembly with one choice of constants.
-- Note 09: the punctured-sofa construction and sharpness after optimizing over
-  rigid alignments.
+### 3. Local area bound for arbitrary nearby caps
 
-`UnrestrictedStability` and `TerminalAngleStability` in `Statement.lean` are
-**definitions of the target propositions**, not asserted theorems. There is no
-proof of either target in `All.lean` or elsewhere in the new directory.
+`CoreIntegral.lean` proves substitution through a continuous primitive and
+right derivatives, not a C1 change-of-variables assumption on the competitor.
+`CutSeparation`, `SeparatedWedges`, `CoreRegionGeometry`, and `CoreAreaBound`
+supply the three disjoint niche regions. The reference core has positive height,
+so the local proof does not need the source's auxiliary negative-height region.
 
-## Important modelling and proof details
+`LocalUpperBound.lean` assembles the neighborhood theorem:
 
-The repository represents points by `Real × Real`, whose default metric is
-not Euclidean. It also defines `hausdorffDist` by support functions; applying
-that expression to nonconvex sets would compare only their convex hulls.
-The target therefore uses `EuclideanClose`, with Euclidean point distances
-from the repository's `norm2` and witnesses in both actual sets. For nonempty
-compact sets this expresses the desired Euclidean Hausdorff bound. A separate
-identification with a standard metric-space Hausdorff API is not used as a
-shortcut in the theorem statement.
+    canonical triple feasible, N(K) subset K, A(K) <= Q(xi_K) <= M.
 
-Curvature atoms at 0, phi, pi/2-phi, and pi cannot be deleted when extending
-Baek's domain. They are present in `cap_area_four_arcs` and cancel through
-`segArea_join_face`. Periodicity similarly cancels the endpoint atoms in mixed
-area. The new proofs never infer Ki from Hausdorff closeness.
+All its hypotheses are obtained in a fixed support neighborhood of Gerver.
+The competitor is not asserted to belong to Ki.
 
-The raw Mamikon terms at Gerver need not vanish. The quantitative integrals
-are squares of differences. Flat B,D directions are permitted throughout;
-there is no assertion of strict concavity in every triple variable.
+### 4. Terminal strip versus omitted angles
 
-Every conversion from measure to real area in `TerminalBookkeeping.lean`
-retains a finite-measure hypothesis. This prevents `ENNReal.toReal` at infinity
-from invalidating an apparently elementary area comparison.
+`FloorCoverage` proves that a fixed interior niche-floor interval has uniformly
+strict forbidden-wedge witnesses at angles bounded away from pi/2.
+`PartialHallways` bounds late wedge heights linearly in the omitted angle.
+`OmittedWedgeArea` confines their new area to two arbitrarily short endpoint
+windows. `TerminalFloor` constructs the excluded floor slice explicitly.
 
-## Source-review corrections preserved in separate commits
+`TerminalComparison.lean` chooses the constants in the correct order and derives
 
-- The outer-displacement subtraction needs ring algebra, not definitional
-  equality; trigonometric denominators and translation signs were made explicit.
-- The Mathlib cosine bound has an implicit `x` argument; the source now passes
-  `(x := phi)` rather than applying it positionally.
-- Mixed-area symmetry uses explicit equality of the two integrals rather than
-  a brittle fixed-depth `congr` chain.
+    area(S) <= A(K) - c*(pi/2-omega),
+    area(S minus U) <= epsilon,
+    area(U minus S) <= 2*epsilon,
 
-These are corrections found by reading source, not compiler diagnostics.
-No claim is made that they exhaust possible elaboration problems.
+where U=K minus N(K). It also supplies approximate full-angle hallway slack.
+It never assumes S subset U or extends the original motion to a right angle.
 
-## Environment record
+### 5. Actual-set recovery and area distance
 
-A local `git clone` was attempted only to obtain source files and failed
-because the runtime cannot resolve github.com. Repository reads and commits
-were performed through the connected GitHub API. A separate materialization
-attempt did not turn connector response citations into local source files.
-Neither action involved Lean. No local whole-repository test or static scanner
-was run, and no such run is claimed.
+`SofaCoordinates` derives supporting hallway and terminal strip constraints
+from the original movement. `SofaCap` constructs the downward completion using
+all upper supporting half-planes and proves that it preserves the original
+set's upper supports. `LocalSofaRecovery` combines the cap estimate, roof
+margins, erosion, interior balls and missing-area comparison.
+
+`ConvexParallelArea` controls the outer layer of the reference cap by dilation
+about an inscribed disk and Haar area scaling. `SymmetricDifference` adds a
+thin vertical roof-band estimate. Thus small actual-set distance and the
+original area deficit control symmetric-difference area; no continuity of
+nonconvex area is assumed.
+
+### 6. Qualitative entry and final assembly
+
+`CompactSetLimits` uses the hyperspace of all nonempty compact sets, not just
+convex bodies. It proves support convergence with changing angles, preservation
+of connectedness, and upper semicontinuity of area.
+
+`SofaBounds` gives a fixed rectangle using connectedness and the pi/4 hallway.
+`SofaLimitMotion` passes the closed wall constraints and terminal width to the
+limit and constructs a movement from its support function. It does not assume
+convergence of the original movement paths. `QualitativeEntry` invokes the
+existing pinned uniqueness and Gerver width results to identify a maximizing
+limit and enter the fixed local neighborhood.
+
+`GlobalStability` then chooses one set of constants and proves the two targets.
+
+## Modelling and scope
+
+The default metric on Real x Real is the product metric, and the source's
+support-based `hausdorffDist` only sees convex hulls of nonconvex sets. The
+headline uses `EuclideanClose`, with the repository's Euclidean `norm2` and
+witnesses in both actual sets. The hyperspace's product-metric distance is used
+only topologically and is converted with an explicit factor two.
+
+The separate punctured-sofa exponent-sharpness argument in note 09 has NOT
+been added as a Lean theorem. It is not part of either target above. The exact
+sharp cap constant is likewise not the coefficient used in the assembled
+source proof. The manuscript must not claim these extras are formalized on
+the basis of the present files.
+
+## Source review and preserved corrections
+
+Separate commits record corrections found by reading source, not by compiling:
+
+- `theorem1_1_1` bounds ENNReal volume; the real deficit sign now uses the
+  existing real-area corollary.
+- Compact support continuity is used directly for a nonconvex limit sofa;
+  an initial invalid attempt to supply a convex-body witness was removed.
+- A nonexistent reference-compactness shortcut was replaced with the actual
+  moving-sofa compactness theorem.
+- Rotation subtraction was supplied explicitly and the two-argument
+  inverse-cosine API was corrected.
+- The symmetric-difference theorem's existential witness order and the
+  compactness counterexample quantifiers were made explicit.
+
+These corrections do not certify that all possible source errors have been
+found. No claim of successful elaboration, tactic completion, import resolution
+inside Lean, or kernel axiom audit is made.
+
+## Import coverage and validation policy
+
+There are 73 Lean files in `MovingSofaStability/`, including `All.lean`.
+The import root now lists the other 72 modules, including `GlobalStability`.
+A local Python manifest-only check matched those names against the GitHub
+changed-file list and reproduced the committed All.lean Git blob SHA
+`81aa7b29ae18da039cf3abd75560735dcd1ebdb1`. See `source-manifest-check.json`.
+This checks file coverage and bytes, not Lean syntax or proofs.
+
+No Lean, Lake, CI, remote build, or TeX compilation was invoked. All continuation
+commits carry `[skip ci]`. The optional stability library remains excluded from
+default targets. Existing verified libraries, audits, workflows, and manuscript
+files were not changed in this continuation.
+
+DNS resolution still prevents a local clone. Repository reads and commits used
+the connected GitHub API. There was no whole-repository static proof scan; the
+only executed new source check was the import-manifest/hash check just described.
+Earlier numerical test logs are historical and do not validate the new Lean.
