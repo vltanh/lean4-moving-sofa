@@ -15,7 +15,7 @@ e=M-|U|, epsilon=M-|S|, and g=|S minus U|.
 Set
 
     w=1/100000,   t0=w/16,   t1=pi/2-t0,
-    m=(a+b0)/2=kappa3.x in (-1,-1/2).
+    m=(a+b0)/2=kappa3.x in (-1,-3/5).
 
 Both angles are visited because alpha<t0. For the reference, the floor endpoint
 (r,0)=(1,0) and top endpoint (a,1) give
@@ -26,13 +26,22 @@ Both angles are visited because alpha<t0. For the reference, the floor endpoint
 For a point (x,y) with a+w<=x<=m and 0<=y<=12alpha, its two reference inner-wall
 slacks at t0 are at most
 
-    (x-1)cos(t0)+1+y*sin(t0) < -1/2,
+    (x-1)cos(t0)+1+y*sin(t0)
+      <=-3/5+(4/5)*t0^2+12alpha*t0,
     -w*sin(t0)+1-cos(t0)+y*cos(t0)
       <=-w*t0/2+t0^2/2+12alpha.
 
-Since t0=w/16 and delta+12alpha<w^2/128, adding the support error delta leaves
-both competing slacks strictly negative (the second is below -w^2/64).
-Reflection about x=m gives the same conclusion on [m,b0-w] at t1. Thus
+The exact checks
+
+    (4/5)*t0^2+12alpha*t0+delta<1/10,
+    delta+12alpha<w^2/128
+
+leave both competing slacks strictly negative after adding the support error
+delta (the first below-1/2 and the second below-w^2/64). The reference midpoint
+bound was strengthened from m<-1/2 to m<-3/5 to make that first strict margin
+explicit. Reflection about x=m gives the same conclusion on [m,b0-w] at t1.
+Here the reference is reflected and the reflected competing support errors
+are still bounded by delta; no symmetry of S or K is assumed. Thus
 
     S has no point in [a+w,b0-w] x [0,12alpha].                 (2)
 
