@@ -385,3 +385,47 @@ Figures, from 07:08 to 09:49:
 - tokens of the sub-agents: 1.32 million output, 4.63 million input, 121 million cache reads; of the main
   session: 0.16 million output, 1.63 million input, 85 million cache reads;
 - model calls: 447 by the sub-agents and 114 by the main session, all to `claude-opus-5-5`.
+
+## The coercive route (6 October 2026)
+
+The owner asked to integrate pull request #9 so that one theorem gives another proof of optimality, uniqueness and
+stability at once, and to present it in the manuscript as a new section or subsection. ChatGPT Pro 6 had written the
+pull request on the evening of 5 October, without compiling it: the library [`MovingSofaExtremal`](MovingSofaExtremal), which proves
+optimality and uniqueness from two estimates of the stability library, a second solution of twelve statements of the
+Challenge, and an audit. It had left for later the step that moves the stability proof onto the route.
+
+How it was made:
+- 09:56 to 12:30: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
+  of the formalize-math-paper skill.
+- The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](lakefile.toml)
+  and `MamikonEnergy.lean` were resolved for the compiled code). One proof did not compile, a `change` whose two sides
+  are not definitionally equal, and one linter warning remained (commit `ae0162a`).
+- A search through the proofs found the four places where the stability library still reached the first proofs: the
+  sign of the deficit and the compactness step, through Baek's theorem; the identification of the limit, through the
+  first proof of uniqueness; and the lemma that a moving sofa lies in a strip of height one. Commit `70ccc8a` takes
+  them from the route or from a neutral module, states the certificate as one theorem
+  ([`MovingSofaStability.coercive_certificate`](MovingSofaStability/CoerciveCertificate.lean#L33)), which the route's classification of the maximizing caps and the
+  stability library's local estimate both use, adds to the route the theorem that no rotation is needed, states the
+  three results in one theorem ([`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](MovingSofaExtremal/Unified.lean#L38)), and extends the second
+  solution to the fifteen statements. The pull request's audit had never run, and on the merged branch it failed;
+  it was rewritten for the whole route, the stability library included, and now runs in CI: none of the 958
+  declarations reaches Baek's Theorem 1.1.1, his balance results or the first proof of uniqueness, and optimality
+  and uniqueness do not reach the stability theorem. The main audit passes with 6,062 declarations, Comparator
+  accepts the fifteen theorems, and [The coercive route](docs/coercive.md) describes the result.
+- The pull request was retargeted at the manuscript's branch and merged as commit `94a1bcf`, on which the continuous
+  integration passed; Palomar's preflight was not run.
+- The manuscript gained Section 11, the derivation of the three results from one estimate, and the formalization
+  section became Section 12. A sub-agent wrote the section and the passages that refer to it from the Lean; three
+  sub-agents that it launched compared the text with the Lean part by part, and a fourth checked the passages
+  rewritten after their reports. Two more sub-agents, neither able to edit, then read the new text, one against the
+  Lean and the repository, the other for its prose; neither found a mathematical error, and the writing sub-agent
+  applied their reports. The manuscript grew from 91 to 101 pages and cites commit `94a1bcf`.
+
+Figures, from 09:56 to 12:30:
+- elapsed time: 2 hours 34 minutes;
+- sub-agents: 7 (4 of them launched by another sub-agent), at most 4 at once, about 3.6 hours of work; one was
+  resumed to apply the two reviews;
+- tool calls: 750 by the sub-agents, 172 by the main session;
+- tokens of the sub-agents: 1.13 million output, 4.23 million input, 213 million cache reads; of the main
+  session: 0.25 million output, 0.55 million input, 65 million cache reads;
+- model calls: 627 by the sub-agents and 171 by the main session, all to `claude-opus-5-5`.

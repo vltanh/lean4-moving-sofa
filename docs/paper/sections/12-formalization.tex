@@ -2,7 +2,7 @@
 
 \subsection{The formalization}
 
-The repository~\cite{Companion} (Apache-2.0) contains four Lean~4 libraries on
+The repository~\cite{Companion} (Apache-2.0) contains five Lean~4 libraries on
 top of Mathlib (Lean and Mathlib \texttt{v4.35.0-rc3}):
 \begin{itemize}
 \item \texttt{MovingSofaOptimality} (51 files, about 40,000 lines): Baek's
@@ -27,8 +27,12 @@ the two formulations agree, so that formal-conjectures' statements follow from
 Baek's theorem and from \cref{thm:main}, with the existence and uniqueness of
 Gerver's four constants, which the bridge proves; the uniqueness statement,
 which it lists as open, follows from \cref{thm:main};
-\item \texttt{MovingSofaStability} (85 files, about 12,300 lines), built on the
-other three libraries: \cref{sec:stability}.
+\item \texttt{MovingSofaStability} (87 files, about 12,500 lines):
+\cref{sec:stability}, and the certificate of \cref{sec:unified}
+(\cref{thm:certificate});
+\item \texttt{MovingSofaExtremal} (7 files, about 660 lines):
+\cref{sec:unified}; the optimality and uniqueness theorems that
+\texttt{MovingSofaStability} uses come from it.
 \end{itemize}
 The file \texttt{Challenge.lean} states fifteen theorems, among them Baek's
 theorem (\path{Baek.gerver_sofa_optimal}), \cref{thm:main}
@@ -45,8 +49,13 @@ namespace \texttt{Bridge} also use Baek's definitions. \texttt{Solution.lean},
 with the modules that it imports, proves them: the Challenge is a file of
 statements, so its fifteen theorems end in \texttt{sorry} by design, and
 Comparator checks that \texttt{Solution.lean} proves exactly the statements of
-\texttt{Challenge.lean}. \texttt{lake build} succeeds, and an audit checks that
-every declaration of the four libraries depends only on the axioms
+\texttt{Challenge.lean}. \texttt{SolutionCoercive.lean} proves the fifteen
+statements again, in a namespace of its own, taking optimality, uniqueness and
+the stability of \cref{thm:stability,thm:stability-angle} from
+\texttt{MovingSofaExtremal}; it imports neither \texttt{Solution.lean} nor the
+module \texttt{Main} of \texttt{MovingSofaUniqueness}. \texttt{lake build}
+succeeds, and an audit checks that every declaration of the five libraries and
+of \texttt{SolutionCoercive.lean} depends only on the axioms
 \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The project
 is registered in the Palomar registry as entry PALOMAR-2026-10-02-000008. Its
 version~4 registers an earlier commit, whose Challenge states the twelve
@@ -59,10 +68,11 @@ the commit cited in~\cite{Companion}. To rebuild, run \texttt{lake exe cache get
 of this paper are proved in the libraries, and Appendix~\ref{app:lean} lists the
 declarations.
 
-The machine check shows that \cref{thm:main} and the theorems of
-\cref{sec:stability}, as the Lean statements formulate them, follow from Lean's
-axioms and Mathlib. The formal proof contains Baek's argument and the argument
-of this paper. The machine check does not check that the definitions say what
+The machine check shows that \cref{thm:main}, the theorems of
+\cref{sec:stability} and those of \cref{sec:unified}, as the Lean statements
+formulate them, follow from Lean's axioms and Mathlib. The formal proof
+contains Baek's argument and the argument of this paper. The machine check does
+not check that the definitions say what
 they should. Appendix~\ref{app:lean} reproduces the Lean definitions (moving
 sofa, hallway, the rotation path, Gerver's sofa, and the definitions used by the
 stability theorems) in mathematical notation, so that they can be read and
@@ -84,15 +94,49 @@ and \cref{cor:all} again, and they do not import the module \texttt{Main} of
 A separate audit checks that no declaration of these modules depends, directly
 or through other declarations, on \texttt{Main}, on \baek{Thm.~1.1.1}, or on the
 results from which Baek derives step~(3) for the caps of step~(2):
-\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)} and the results they rest on,
+\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)} and, among the results they rest on,
 \baek{Thm.~4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6} and
 \baek{Cor.~6.4.4}.
+
+The certificate of \cref{sec:unified} is the theorem
+\path{coercive_certificate} of \texttt{MovingSofaStability}, and the theorem
+\path{gerver_sofa_optimal_unique_stable} of \texttt{MovingSofaExtremal} states
+\cref{thm:unified}. The stability library uses the certificate and the theorems
+of \texttt{MovingSofaExtremal} at the three places of
+\cref{sec:unified-stability}. So \texttt{Solution.lean}, and not only
+\texttt{SolutionCoercive.lean}, proves \cref{thm:stability,thm:stability-angle}
+through the theorems of \texttt{MovingSofaExtremal}; its proof of
+\cref{thm:stability-exponent}\ref{thm:stability-exponent:no} uses neither
+optimality nor uniqueness. A third audit,
+\path{scripts/AuditCoerciveRoute.lean}, which the continuous integration runs,
+follows the proofs through the bodies of all the declarations of the repository,
+private and generated ones included. It checks that each of the 958 declarations
+of \texttt{MovingSofaExtremal}, \texttt{MovingSofaStability} and
+\texttt{SolutionCoercive.lean} uses only the three axioms above. It also checks
+that none of them reaches Baek's theorem \baek{Thm.~1.1.1}, the results listed
+in the previous paragraph, \texttt{Solution.lean}, or a declaration of the
+module \texttt{Main} of \texttt{MovingSofaUniqueness}, of the module
+\texttt{Rigidity} (which proves \cref{lem:equality,lem:tangent} and, with
+\texttt{Main}, \cref{prop:kernel}) or of the three modules of the second proof.
+It checks that none of the 40 declarations of the five modules of
+\texttt{MovingSofaExtremal} that prove optimality and uniqueness reaches the
+module that states the stability theorems or a module that imports it (55
+modules in all), so that the argument is not circular. Twenty further checks
+confirm that the proofs use what they should; for instance, the classification
+of the maximizing caps reaches the certificate and \cref{prop:stab-certificate},
+and the stability theorems reach the certificate and the uniqueness theorem of
+\texttt{MovingSofaExtremal}. Eight checks confirm that the search finds, in the
+older proofs, results that these are known to use, which shows that the search
+sees proof bodies. Finally, the audit checks that the fifteen theorems of
+\texttt{SolutionCoercive.lean} have the types of those of
+\texttt{Solution.lean}.
 
 \subsection{The use of AI}
 
 AI systems wrote the first version of the proof, the formalization and this
 text, at the author's request; none of them is an author of this paper.
-\cref{app:ai} names them, says what each did and what has been checked by whom.
+Appendix~\ref{app:ai} names them, says what each did and what has been checked
+by whom.
 The argument has not yet been refereed.
 
 \subsection{Open questions}

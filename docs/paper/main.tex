@@ -75,9 +75,10 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
   gives a second proof of optimality. We prove, moreover, that the uniqueness is
   stable: a moving sofa whose area is $\eps$ less than the maximum lies, after a
   translation, within Hausdorff distance $O(\sqrt\eps)$ of Gerver's sofa, and
-  the exponent $1/2$ cannot be improved. The proofs, together with Baek's, are
-  formalized in Lean~4 with Mathlib and checked by Lean's kernel, using only
-  Lean's standard axioms.
+  the exponent $1/2$ cannot be improved. We also derive optimality, uniqueness
+  and stability from one estimate for this functional. The proofs, together
+  with Baek's, are formalized in Lean~4 with Mathlib and checked by Lean's
+  kernel, using only Lean's standard axioms.
 \end{abstract}
 
 \maketitle
@@ -92,7 +93,8 @@ surface area measure, Mamikon's theorem, formal verification, Lean}
 \input{sections/08-equality}
 \input{sections/09-recovery}
 \input{sections/10-stability}
-\input{sections/11-formalization}
+\input{sections/11-unified}
+\input{sections/12-formalization}
 
 \appendix
 \input{sections/a0-baek}

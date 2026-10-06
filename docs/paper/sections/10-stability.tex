@@ -5,7 +5,10 @@ after a translation, close to $\Gs$, at the rate of the square root of the
 missing area, and that this rate is optimal. As in \cref{sec:equality},
 $\varphi$ is Gerver's angle, $\KG$ is Gerver's cap and $\cA=\cA_{\pi/2}$. The
 \emph{deficit} of a set $S$ of finite area is $\eps(S)=\abs\Gs-\abs S$, which
-is nonnegative for moving sofas (\cref{fact:optimal}). Two sets
+is nonnegative for moving sofas by Baek's theorem (\cref{fact:optimal}); the
+proofs below take this inequality from
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}, which proves it
+again in \cref{sec:unified}. Two sets
 $X,Y\subset\R^2$ are \emph{$r$-close} if every point of each lies within
 Euclidean distance $r$ of a point of the other; for nonempty compact sets, this
 means that their Hausdorff distance is at most $r$. For a nonempty compact set
@@ -84,16 +87,20 @@ $1001/500$ in place of $2\sec\varphi$.
 \Cref{sec:stab-certificate,sec:stab-cap} bound, for every
 $\xi=(K,B,D)\in\bar\cT$, the distance from $K$ to $\KG+(s_K,0)$ by a multiple
 of $\sqrt{\abs\Gs-\cQ(\xi)}$: with the constant $80$ in
-\cref{prop:stab-coercive}, which the proofs of
-\cref{thm:stability,thm:stability-angle} use, and with $2\sec\varphi$ in
-\cref{thm:stability-cap}. Near $\KG$, Baek's bound $\cA(K)\le\cQ(\xi_K)$ holds
-without the injectivity condition (\cref{sec:stab-local}), and a rotation
-angle $\omega<\pi/2$ costs area proportional to $\pi/2-\omega$
-(\cref{sec:stab-angle}). \Cref{sec:stab-recovery} passes from the cap back to
-the sofa, and a compactness argument brings the normalized translate of every
-moving sofa of small deficit near $\Gs$ (\cref{sec:stab-entry}); this proves
-\cref{thm:stability,thm:stability-angle}. \Cref{sec:stab-puncture} removes
-small disks from $\Gs$ to prove \cref{thm:stability-exponent}.
+\cref{prop:stab-coercive} and \cref{lem:stab-lower}, and with $2\sec\varphi$ in
+\cref{thm:stability-cap}. The proofs of
+\cref{thm:stability,thm:stability-angle} use the bound with $2\sec\varphi$,
+through \cref{thm:certificate}, with the larger constant $80$ in its place. Near
+$\KG$, Baek's bound $\cA(K)\le\cQ(\xi_K)$ holds without the injectivity
+condition (\cref{sec:stab-local}), and a rotation angle $\omega<\pi/2$ costs
+area proportional to $\pi/2-\omega$ (\cref{sec:stab-angle}).
+\Cref{sec:stab-recovery} passes from the cap back to the sofa, and a compactness
+argument, which uses the optimality and uniqueness theorems of
+\cref{sec:unified}, brings the normalized translate of every moving sofa of
+small deficit near $\Gs$ (\cref{sec:stab-entry}); this proves
+\cref{thm:stability,thm:stability-angle}. \Cref{sec:unified-stability} shows
+that this is not circular. \Cref{sec:stab-puncture} removes small disks from
+$\Gs$ to prove \cref{thm:stability-exponent}.
 
 \subsection{The deficit of \texorpdfstring{$\cQ$}{Q} on
 \texorpdfstring{$\bar\cT$}{the enlarged domain}}\label{sec:stab-certificate}
@@ -285,9 +292,12 @@ $E(f)=E_\cS(K_0,K_1)$.
 \end{lemma}
 
 \begin{proof}
-As in the proof of \cref{lem:tangent},
+For $T-\pi<t<T$, the point $\mathbf l_K^T(t)=v_K(t,T)$ lies on $l_K(t)$ and
+$l_K(T)$, and $u_T=\cos(T-t)u_t+\sin(T-t)v_t$, so
+$\ip{v_K(t,T)}{v_t}=(h_K(T)-h_K(t)\cos(T-t))/\sin(T-t)$; and
+$\ip{\yy_K(t)}{v_t}=h_K(t+\pi/2)$ (\cref{sec:sofas}). Hence
 $\varrho_{K,\mathbf l_K^T}(t)=(h_K(T)-h_K(t)\cos(T-t))/\sin(T-t)
--\ip{v^+_K(t)}{v_t}$ for $T-\pi<t<T$, and
+-\ip{v^+_K(t)}{v_t}$ and
 $\varrho_{K,\yy_K}(t)=h_K(t+\pi/2)-\ip{v^+_K(t)}{v_t}$. So
 $\varrho_{K,\mathbf l^T_K}$ and $\varrho_{K,\yy_K}$ are the residuals $r_T$ and
 $r_{\mathrm c}$ of $h_K$, whose right derivative is $\ip{v^+_K(t)}{v_t}$
@@ -678,12 +688,15 @@ $[\varphi,\pi/2-\varphi]$; recall $\KG\in\Ki$
 (\cref{fact:gerver}\ref{fact:gerver:cap}) and $\varphi\in[0.039,0.04]$
 (\cref{fact:gerver}\ref{fact:gerver:def}). By
 \cref{lem:stab-niche}\ref{lem:stab-niche:width}, $K$ has width at least
-$21/10$. Then
-\cref{lem:stab-triple,lem:stab-niche,lem:stab-areabound,lem:stab-variation}
-give $\xi_K\in\bar\cT$, $\cN(K)\subset K$ and
-$\cA(K)\le\cQ(\xi_K)\le\abs\Gs$, and \cref{prop:stab-coercive,lem:stab-lower}
-show that $K$ and $\KG+(s_K,0)$ are $80\sqrt{\abs\Gs-\cQ(\xi_K)}$-close, hence
-$80\sqrt{\abs\Gs-\cA(K)}$-close, as $\cA(K)\le\cQ(\xi_K)$.
+$21/10$. Then \cref{lem:stab-triple,lem:stab-niche,lem:stab-areabound} give
+$\xi_K\in\bar\cT$, $\cN(K)\subset K$ and $\cA(K)\le\cQ(\xi_K)$.
+\Cref{lem:stab-variation} and
+\cref{thm:stability-cap}\ref{thm:stability-cap:wide}, stated together as
+\cref{thm:certificate}, give $\cQ(\xi_K)\le\abs\Gs$ and show that $K$ and
+$\KG+(s_K,0)$ are $2\sec\varphi\sqrt{\abs\Gs-\cQ(\xi_K)}$-close, hence
+$80\sqrt{\abs\Gs-\cA(K)}$-close, as $2\sec\varphi<1001/500<80$
+(\cref{thm:stability-cap}\ref{thm:stability-cap:num}) and
+$\cA(K)\le\cQ(\xi_K)$.
 \end{proof}
 
 \subsection{The cost of a missing final angle}\label{sec:stab-angle}
@@ -1052,11 +1065,15 @@ $\omega_n\in[\omega_0,\pi/2]$ and $\eps(S_n)<1/(n+1)$ that violate the
 conclusion. The translates $S_n^\natural$ are moving sofas with the same
 rotation angles, lie in the box of
 \cref{lem:stab-limit}\ref{lem:stab-limit:box}, as $\omega_0\ge\pi/4$, and have
-$\abs{S_n^\natural}\to\abs\Gs$. By compactness, a subsequence has
+$\abs{S_n^\natural}\to\abs\Gs$, as $0\le\eps(S_n)<1/(n+1)$
+(\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}). By
+compactness, a subsequence has
 $d_\infty(S^\natural_n,S)\to0$ and $\omega_n\to\omega$ for a nonempty compact
 set $S$; by \cref{lem:stab-limit}, $S$ is a moving sofa with rotation angle
 $\omega$, $h_S(\pi/2)=1$, $h_S(\pi)=h_\Gs(\pi)$ and $\abs S\ge\abs\Gs$, so
-$\abs S=\abs\Gs$ (\cref{fact:optimal}). \Cref{cor:translate} gives
+$\abs S=\abs\Gs$ by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}.
+\Cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate} gives
 $S+w=\Gs$ for some $w$, and the support values at $\pi/2$ and $\pi$ give
 $w=0$. As $\Gs$ is a moving sofa with rotation angle $\omega$,
 $\ip{q-p}{u_\omega}\le1$ on $\Gs$ (\cref{lem:stab-sofacap}), so
@@ -1071,8 +1088,10 @@ Take $C,c,\delta,\psi_0,\eps_1$ from \cref{prop:stab-sofa}, $C',\eps_2$ from
 $\rho=\delta$ and this $\psi_0$, and $\eps_0=\min(\eps_1,\eps_2,\eps_3)$. Let
 $S$ be a moving sofa with rotation angle $\omega\in[\omega_0,\pi/2]$ and
 $\eps=\eps(S)<\eps_0$. If $\eps=0$, then $S^\natural=\Gs$ and $\omega=\pi/2$,
-as in the proof of \cref{prop:stab-entry}. Otherwise $N=S^\natural$ is a
-moving sofa with rotation angle $\omega$, and by \cref{prop:stab-entry} $N$
+as in the proof of \cref{prop:stab-entry}. Otherwise $\eps>0$, by
+\cref{thm:unified-optimality}\ref{thm:unified-optimality:sofa}. Then
+$N=S^\natural$ is a moving sofa with rotation angle $\omega$, and by
+\cref{prop:stab-entry} $N$
 and $\Gs$ are $\delta$-close and $\pi/2-\omega<\psi_0$. The set $K$ of
 \cref{lem:stab-sofacap} for $N$, a cap in $\Kc_{\pi/2}$, has
 $h_K(\pi)=h_{\KG}(\pi)$ (as $h_{\KG}=h_\Gs$ on $[0,\pi]$) and

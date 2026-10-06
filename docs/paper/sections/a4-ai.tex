@@ -47,7 +47,8 @@ compiled without change and passed the audit that came with it, and also an
 extended audit, written by Claude Opus~5.5, that covers the results from which
 Baek derives step~(3) of \cref{sec:baek}. From the Lean, Claude Opus~5.5 then
 wrote \cref{sec:second}, \cref{fact:exists} and the passages that refer to them
-in Sections~1 to~3 and~11 and Appendices~C and~D. Two more runs of Claude
+in Sections~\ref{sec:intro} to~\ref{sec:reduction} and~\ref{sec:formalization}
+and Appendices~C and~D. Two more runs of Claude
 Opus~5.5 checked these passages, one against the Lean and one for their prose,
 and their findings were applied. At the author's request, Claude Opus~5.5 also
 wrote the sentence of the abstract on the second proof.
@@ -64,10 +65,55 @@ repaired proof with the draft's and found no change of argument. On 6 October
 2026, Claude Opus~5.5 stated the three theorems of stability in
 \texttt{Challenge.lean}, and a sub-agent running Claude Opus~5.5 wrote
 \cref{sec:stability} and its rows of \cref{tab:dict} from the Lean. The same
-session also wrote the sentence of the abstract and the passages of Sections~1
-and~11 and Appendix~\ref{app:lean} on stability, and corrected a sign in the
-description of $\cM_K$ in \cref{sec:setting}. Three runs of Claude Opus~5.5
-compared the statements and proofs of \cref{sec:stability} with the Lean, part
-by part; a further run compared the new text with the Lean and the repository,
-and another read it for its prose. Their findings were applied. At the time of
-writing, the argument of this paper has not been refereed.
+session also wrote the sentence of the abstract and the passages of
+Sections~\ref{sec:intro} and~\ref{sec:formalization} and
+Appendix~\ref{app:lean} on stability, and corrected a sign in the description
+of $\cM_K$ in \cref{sec:setting}. Three runs of Claude Opus~5.5 compared the
+statements and proofs of \cref{sec:stability} with the Lean, part by part; a
+further run compared the new text with the Lean and the repository, and another
+read it for its prose. Their findings were applied. The author has not read
+\cref{sec:stability}.
+
+On the evening of 5 October 2026, ChatGPT Pro~6 also wrote a third pull request,
+without compiling or running any of it. It contained the library
+\texttt{MovingSofaExtremal}, which derives optimality and uniqueness from the
+estimates of \cref{sec:stab-certificate,sec:stab-cap}; the module
+\texttt{MamikonFoundation} of the stability library, which proves again results
+of the module \texttt{Rigidity} of the first proof on square integrals, Mamikon
+displacements and the canonical triple; a second solution of twelve statements
+of the Challenge
+(\texttt{SolutionCoercive.lean}); and the audit
+\path{scripts/AuditCoerciveRoute.lean}. It also switched the module
+\texttt{MamikonEnergy} of the stability library from importing
+\texttt{Rigidity} to importing \texttt{MamikonFoundation}. On 6 October, at the
+author's request, Claude Opus~5.5, in Claude Code, merged the manuscript's
+branch, which held the compiled stability library, into the pull request's and
+compiled the result. One proof did not compile: a \texttt{change} step in the
+module \texttt{HorizontalTranslation} whose two sides were not definitionally
+equal, which was replaced by a rewrite; one linter warning was also cleared.
+The same session then did what the pull request had left for later. It stated
+the certificate as one theorem (\cref{thm:certificate}), added to
+\texttt{MovingSofaExtremal} the theorem that no rotation is needed
+(\cref{thm:unified-uniqueness}\ref{thm:unified-uniqueness:translate}), and
+moved two lemmas of that proof, which \cref{cor:translate} shares, from the
+module \texttt{Main} to the module \texttt{Rigid}. The stability library had
+used the module \texttt{Main} at four places: Baek's theorem twice, for the sign
+of the deficit and in the compactness step; the first proof of uniqueness once,
+to identify the limit of the compactness step and the normalized sofa of zero
+deficit; and the lemma that a moving sofa lies in a horizontal strip of height
+one. The session switched these to \texttt{MovingSofaExtremal} and to the moved
+lemmas, and made the local cap estimate of the stability library use the
+certificate. It then stated \cref{thm:unified}, extended
+\texttt{SolutionCoercive.lean} to the fifteen statements of the Challenge, and
+rewrote and ran the audit. The pull request was merged the same day. A
+sub-agent running Claude Opus~5.5 wrote \cref{sec:unified}, and the passages
+that refer to it in the other sections and in Appendices~D and~E, from the
+Lean; the session wrote the sentence of the abstract on the single estimate.
+Three runs of Claude Opus~5.5, launched by the sub-agent, compared the new
+text with the Lean and the repository, part by part, and a fourth checked the
+passages rewritten after their reports. Two more runs of Claude Opus~5.5,
+neither able to edit, then read the new text, one against the Lean and the
+repository and one for its prose. The findings of all these runs were applied;
+the edits that followed the last two runs were not checked again. No person has
+read \cref{sec:unified}. At the time of writing, the argument of this paper has
+not been refereed.
