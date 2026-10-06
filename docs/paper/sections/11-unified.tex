@@ -33,15 +33,12 @@ The proof of uniqueness in
 uses Baek's theorem (\cref{fact:optimal}) to know that a cap with sofa area
 $\abs\Gs$ is maximizing, and finds the maximizing caps in $\Kc_{\pi/2}$ through
 the case of equality in the concavity of $\cQ$ (\cref{lem:equality},
-\cref{lem:tangent} and \cref{prop:kernel}). Below, \cref{prop:unified-caps}
-finds the maximizing caps from the certificate, and
-\cref{thm:unified-optimality} proves Baek's theorem again. This rests on the
-pinned bounds (\cref{prop:pinned-bounds}, for $\omega<\pi/2$) and the curvature
-bounds (\cref{prop:curvature}, for $\omega=\pi/2$): they hold for every
-maximizing cap with positive sofa area, and their proofs do not use the value of
-the largest sofa area, whereas Baek obtains the two properties of step~(3) of
-\cref{sec:baek} only for his caps, from their balance \baek{Thm.~1.5.2,
-Thm.~8.1.1\,(2)}. Besides the certificate, the proofs of
+\cref{lem:tangent} and \cref{prop:kernel}). \Cref{rem:second} outlines a
+second proof of Baek's theorem, from the maximizing caps, with Baek's bound and
+this equality analysis. Below, \cref{prop:unified-caps} finds the maximizing
+caps from the certificate instead, and \cref{thm:unified-optimality} proves
+Baek's theorem along the lines of that remark. Besides the certificate, the
+proofs of
 \cref{sec:unified-caps,sec:unified-optimality,sec:unified-uniqueness} use the
 Facts of \cref{sec:setting} other than \cref{fact:optimal}, its
 \cref{lem:contains,lem:ends}, and results of
@@ -49,7 +46,9 @@ Facts of \cref{sec:setting} other than \cref{fact:optimal}, its
 other than \cref{prop:U,cor:Ki,thm:caps,cor:all,cor:translate}, which with the
 proof of \cref{thm:main} are the only ones there whose proofs use
 \cref{fact:optimal}. They use neither \cref{lem:equality}, \cref{lem:tangent}
-and \cref{prop:kernel}, nor Baek's results just cited.
+and \cref{prop:kernel}, nor the results by which Baek derives step~(3) of
+\cref{sec:baek} from the balance of his caps \baek{Thm.~1.5.2,
+Thm.~8.1.1\,(2)}.
 
 \subsection{The certificate}\label{sec:unified-certificate}
 
@@ -135,29 +134,6 @@ $\Gs=\KG\setminus\cN(\KG)$ (\cref{fact:gerver}\ref{fact:gerver:cap}).
 
 \subsection{Optimality}\label{sec:unified-optimality}
 
-\begin{lemma}[a right-angle motion]\label{lem:right-motion}
-Let $\omega\in[\omega_0,\pi/2]$, and let $T$ be a monotone sofa with rotation
-angle $\omega$ and $\abs T\ge11/5$ whose cap $\cC(T)$ is maximizing. Then
-$R_\psi T$, $\psi=\pi/2-\omega$, is a moving sofa with rotation angle $\pi/2$.
-\end{lemma}
-
-\begin{proof}
-If $\omega=\pi/2$, then $\psi=0$, and $T$ is a moving sofa with rotation angle
-$\pi/2$ by \cref{fact:monotone}\ref{fact:monotone:envelope}. Let $\omega<\pi/2$
-and $K=\cC(T)$. By \cref{fact:monotone}\ref{fact:monotone:envelope},
-\ref{fact:monotone:cap} and \ref{fact:monotone:area}, $T$ is a moving sofa with
-rotation angle $\omega$ in standard position, $K$ is a cap, $T=K\setminus\cN(K)$
-and $\cA_\omega(K)=\abs T\ge11/5>0$. As $K$ is maximizing,
-\cref{prop:pinned-bounds} gives the pinned bounds $w^\circ_K\le\sigma_K(\pi/2)$
-and $z^\circ_K\le\sigma_K(\omega)$. The proof of \cref{prop:U} uses $\abs
-T=\abs\Gs$ only to obtain these bounds and $\cA_\omega(K)\ge11/5$, and it
-concludes as before: \cref{lem:triangle}(d) gives $t_\sharp\in(0,\omega)$ such
-that $O$, $cu_0$ and $cv_\omega$ lie in the closure of $Q^-_K(t_\sharp)$,
-\cref{lem:width}(b) gives $\ip{p-q}{u_t}\le1$ for $p,q\in T$ and
-$t\in[\omega,\pi/2]$, and \cref{lem:turn} shows that $R_\psi T$ is a moving sofa
-with rotation angle $\pi/2$.
-\end{proof}
-
 \begin{theorem}[optimality from the certificate]\label{thm:unified-optimality}
 \begin{enumerate}[label=(\alph*)]
 \item\label{thm:unified-optimality:right} Every cap $C\in\Kc_{\pi/2}$ has
@@ -222,35 +198,6 @@ where the first inequality holds by \cref{fact:exists}, the equality by
 the last inequality by \ref{thm:unified-optimality:sofa}, as $S_\omega$ is a
 moving sofa (\cref{fact:monotone}\ref{fact:monotone:envelope}).
 \end{proof}
-
-\begin{remark}[a second proof with Baek's bound]\label{rem:second}
-The proof of \cref{thm:unified-optimality} uses the certificate only through
-\cref{prop:unified-caps}, for a maximizing cap $K\in\Kc_{\pi/2}$. The proof of
-\cref{prop:unified-caps}\ref{prop:unified-caps:value} shows $K\in\Ki$ before it
-uses the certificate, so $\xi_K\in\cT$ (\cref{fact:Q}\ref{fact:Q:triple}), and
-Baek's bound (\cref{fact:Q}\ref{fact:Q:max}) gives
-$\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs$ in place of the first part of the
-certificate. Then $\cA(K)=\abs\Gs$, and \cref{prop:kernel} and
-\cref{lem:translate}\ref{lem:translate:supp} give $K=\KG+(s,0)$ and
-$K\setminus\cN(K)=\Gs+(s,0)$, as in the proof of \cref{thm:caps}, in place of
-\cref{lem:zero-deficit}. With these, the proofs of
-\cref{prop:unified-caps,thm:unified-optimality} use no result of
-\cref{sec:stability}. This is a second proof of Baek's theorem, from the
-maximizing caps; it uses neither \baek{Thm.~1.1.1} nor the results by which
-Baek derives step~(3) from the balance of his caps. With the theorem so proved
-in place of \cref{fact:optimal}, the proofs of \cref{thm:main} and
-\cref{cor:all} go through, with \cref{lem:right-motion} in place of
-\cref{prop:U}, and with
-\cref{prop:kernel} and \cref{lem:translate} for the maximizing cap of the
-monotone sofa $U$; so these results, too, hold without \baek{Thm.~1.1.1}. This
-second proof is formalized as well, in the namespace
-\path{MovingSofaUniqueness.MaximizerRoute} (modules \texttt{Maximizers},
-\texttt{Optimality} and \texttt{Alternative}). The audit
-\path{scripts/AuditMaximizerRoute.lean}, which the continuous integration runs,
-checks that it uses neither \baek{Thm.~1.1.1}, nor those results on the balance,
-nor the module \texttt{Main} of \texttt{MovingSofaUniqueness}
-(\cref{sec:formalization}).
-\end{remark}
 
 \subsection{Uniqueness}\label{sec:unified-uniqueness}
 

@@ -73,7 +73,7 @@ One module per proposition of the informal proof ([Chapters 11 and 12](proof/11-
 | [`MovingSofaUniqueness/Main.lean`](../MovingSofaUniqueness/Main.lean) | the theorem |
 
 Three more modules give a second proof of Baek's optimality theorem, which does not use Baek's Theorem 1.1.1, and
-prove the theorem again from it (a remark in Section 11 of the [manuscript](paper/README.md)); their declarations are in the
+prove the theorem again from it (a remark at the end of Section 8 of the [manuscript](paper/README.md)); their declarations are in the
 namespace `MovingSofaUniqueness.MaximizerRoute`, and they do not import `Main`:
 
 | Module | Content |

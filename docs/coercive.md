@@ -55,8 +55,8 @@ hold. Each part comes from the certificate:
   triple `ξ_K` (Baek's Theorem 8.2.4); and `𝒬(ξ_K) ≤ |G|` by the first half of the certificate.
   Hence every right-angle cap has sofa area at most `|G|`, and so has every moving sofa (Section 11
   of the [manuscript](paper/README.md)). With Baek's own bound `𝒬(ξ_K) ≤ |G|` in place of the certificate,
-  the same argument is the second proof of optimality of `MovingSofaUniqueness.MaximizerRoute`, which a remark of
-  Section 11 of the manuscript describes.
+  the same argument is the second proof of optimality of `MovingSofaUniqueness.MaximizerRoute`, which a remark at
+  the end of Section 8 of the manuscript describes.
 - **Uniqueness.** For the same `K`, `𝒬(ξ_K) = |G|`, so the second half of the certificate puts `K` at
   distance zero from a horizontal translate of Gerver's cap: `K` is that translate. The rest is the
   first proof of uniqueness: a moving sofa of area `|G|` lies, after a rigid motion, in a right-angle

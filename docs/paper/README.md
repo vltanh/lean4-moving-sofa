@@ -58,17 +58,18 @@ undefined reference.
   repository, and Appendix D gives the statement of record in mathematical notation, with the definitions that
   make it meaningful, and a dictionary from each result of the text to its Lean declarations. The Challenge
   states Theorem 1.1. Theorem 8.5, Corollary 9.4, Lemma 9.5 and Corollary 9.6 were added to the libraries on
-  4 October (commit `952812d`), and Fact 2.7 and the second proof of optimality (now Lemma 11.4 and Remark 11.6)
+  4 October (commit `952812d`), and Fact 2.7 and the second proof of optimality (now Lemma 6.10 and Remark 8.6)
   on 5 October (commits `3af9279` and `51c9be1`). Section 12 says what the machine check does and does not give, and who and what
   wrote which part.
-- Remark 11.6 records a second proof of optimality (Baek's theorem) from the maximizing caps: the proof of
-  Theorem 11.5 with Baek's own bound for $\mathcal Q$ and the equality analysis of Section 8 in place of the
-  certificate. It uses Baek's results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it
+- Remark 8.6, at the end of Section 8, outlines a second proof of optimality (Baek's theorem) from the maximizing
+  caps, with Baek's own bound for $\mathcal Q$ and the equality analysis of Section 8; Section 11 writes it out with
+  the certificate in their place (Proposition 11.3, Theorem 11.4). It uses Baek's results recorded as Facts, except Fact 2.8 (Baek's Theorem 1.1.1), and with it
   Theorem 1.1 and Corollary 9.4 hold without Baek's Theorem 1.1.1. ChatGPT Pro 6 wrote it in Lean in pull request
   #5, merged on 5 October; the formalization proves it in three modules of its own
   (`MovingSofaUniqueness.MaximizerRoute`), and a second audit, run by the continuous integration, checks that
   they use neither Baek's Theorem 1.1.1 nor the results from which Baek derives step (3) of Section 1.3 from the
-  balance. Section 8.4 presented it until 6 October, when it was folded into Section 11 at the author's request.
+  balance. Section 8.4 presented it in full until 6 October, when, at the author's request, it was shortened to this
+  remark and Lemma 6.10 (the right-angle motion, at the end of Section 6).
 - Section 10 proves the stability (Theorems 10.1 to 10.4), translated from the library `MovingSofaStability`. ChatGPT
   Pro 6 wrote that library and the argument in pull request #8, without compiling it; Claude Opus 5.5 made it compile
   on 5 October, and the Challenge states Theorems 10.1 to 10.3 since 6 October (commit `92b2f86`). The cap estimate,
@@ -77,7 +78,7 @@ undefined reference.
   certificate: Lemma 10.6 and Theorem 10.4 (a) together), translated from the library `MovingSofaExtremal` and
   the module `MovingSofaStability/CoerciveCertificate.lean`. Its classification of the maximizing right-angle caps
   (Proposition 11.3) replaces the equality analysis of Section 8 (Lemmas 8.1 and 8.2, Proposition 8.3); its
-  optimality and uniqueness theorems (Theorems 11.5 and 11.9) use neither Baek's Theorem 1.1.1 nor his Theorems 1.5.2 and 8.1.1 (2) and the balance
+  optimality and uniqueness theorems (Theorems 11.4 and 11.7) use neither Baek's Theorem 1.1.1 nor his Theorems 1.5.2 and 8.1.1 (2) and the balance
   results that the audit lists. The stability proof of Section 10 takes the sign of the deficit, and the
   optimality and uniqueness of its compactness step and of its case of zero deficit, from these theorems, and its
   local cap estimate from the certificate. ChatGPT Pro 6 wrote the route in pull request #9, without compiling it; Claude
@@ -322,12 +323,17 @@ state them. The writing sub-agent made the change and checked the remark against
 main session checked in the Lean the new claim of Section 11 on which results of Sections 4 to 9 use Baek's Theorem
 1.1.1 (in the uniqueness library, only declarations of `Main` reach it). The docstrings of the second proof now cite
 the remark (commit `6ed7657`, which the manuscript cites). The manuscript has 99 pages.
+At the author's suggestion ("why don't you put the remark at the end of 8?"), the remark then moved to the end of
+Section 8 (Remark 8.6), rewritten to stand on its own, and the lemma on the right-angle motion to the end of Section 6
+(Lemma 6.10), after Proposition 6.9, whose argument it reuses: the second proof uses nothing after Section 8. Section
+11 got back its numbering (Theorem 11.4 for optimality, 11.7 for uniqueness, 11.8 for the three results). The writing
+sub-agent made the move and checked the remark against the Lean of the second proof; the Lean did not change.
 
 ## What has not been done
 
 - The author has read and edited the abstract and the introduction; Sections 2 to 12 and the appendices have been
   read by model runs only. The text added on 5 October (Fact 2.7, the second proof of optimality, then Section 8.4,
-  and the related passages) has been read by two model runs, and not by the author; Lemma 11.4 and Remark 11.6, into
+  and the related passages) has been read by two model runs, and not by the author; Lemma 6.10 and Remark 8.6, into
   which that subsection was folded on 6 October, have not been checked by an independent run; the sentence of the abstract on the second proof, added at the
   author's request, has not been checked by a model run.
 - The manuscript was not compiled by arXiv; only the local build and the test build of the archive were run.

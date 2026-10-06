@@ -281,6 +281,42 @@ $K\in\Ki$ by \cref{cor:Ki}, and \cref{prop:kernel} and
 $U=K\setminus\cN(K)=(\KG\setminus\cN(\KG))+(s,0)=\Gs+(s,0)$.
 \end{proof}
 
-\Cref{sec:unified} reaches the conclusions of \cref{thm:caps} without
-\cref{lem:equality}, \cref{lem:tangent} and \cref{prop:kernel}, from an
-estimate in the proof of stability (\cref{thm:certificate}).
+\begin{remark}[a second proof of optimality]\label{rem:second}
+The pinned bounds (\cref{prop:pinned-bounds}), the curvature bounds
+(\cref{prop:curvature}) and the injectivity condition (\cref{prop:inj}) hold
+for every maximizing cap with positive sofa area, and their proofs do not use
+the value of the largest sofa area. Baek obtains the two properties of
+step~(3) of \cref{sec:baek} only for his caps, from their balance
+\baek{Thm.~1.5.2, Thm.~8.1.1\,(2)}. Let $K\in\Kc_{\pi/2}$ be a maximizing cap,
+such as the cap of \cref{fact:exists} for $\omega=\pi/2$. Gerver's cap competes
+with $K$, so $\abs\Gs\le\cA(K)$; hence $K\in\Ki$, by
+\cref{prop:curvature,prop:inj} and as $\abs K\ge\cA(K)\ge\abs\Gs>11/5$, and
+\[
+  \abs\Gs\le\cA(K)\le\cQ(\xi_K)\le\cQ(\xi_G)=\abs\Gs
+\]
+by \cref{fact:Q}. So $\cA(K)=\abs\Gs$, and \cref{prop:kernel} with
+\cref{lem:translate} makes $K$ a horizontal translate of $\KG$. By
+\cref{fact:exists}, every moving sofa with rotation angle $\pi/2$ then has area
+at most $\abs\Gs$. A moving sofa of area at least $11/5$ has a rotation angle
+$\omega\in[\omega_0,\pi/2]$ (\cref{fact:angle}); its area is at most that of
+the monotone sofa of a maximizing cap of angle $\omega$ (\cref{fact:exists}),
+which \cref{lem:right-motion} rotates into a moving sofa with rotation angle
+$\pi/2$ and the same area, so it is at most $\abs\Gs$; and a smaller moving
+sofa has area less than $11/5<\abs\Gs$. This proves Baek's theorem
+(\cref{fact:optimal}) without
+\baek{Thm.~1.1.1} and without the results by which he derives step~(3) from the
+balance. With it in place of \cref{fact:optimal}, the proofs of \cref{thm:main}
+and \cref{cor:all} go through, with \cref{lem:right-motion} in place of
+\cref{prop:U} and the argument above for the maximizing cap of the monotone sofa
+$U$; so they hold without \baek{Thm.~1.1.1} too. \Cref{sec:unified} writes out
+this argument in full (\cref{prop:unified-caps,thm:unified-optimality}), with
+the certificate of \cref{thm:certificate} in place of
+\cref{fact:Q}\ref{fact:Q:max} and \cref{prop:kernel}. The proof with Baek's
+bound is formalized as well, in the namespace
+\path{MovingSofaUniqueness.MaximizerRoute} (modules \texttt{Maximizers},
+\texttt{Optimality} and \texttt{Alternative}). The audit
+\path{scripts/AuditMaximizerRoute.lean}, which the continuous integration runs,
+checks that it uses neither \baek{Thm.~1.1.1}, nor those results on the balance,
+nor the module \texttt{Main} of \texttt{MovingSofaUniqueness}
+(\cref{sec:formalization}).
+\end{remark}

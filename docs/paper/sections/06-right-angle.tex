@@ -407,3 +407,26 @@ $g_1(p)=R_\psi(p+w_0)+w_1$,
 \end{equation}
 where $U$ is a monotone sofa with rotation angle $\pi/2$ whose cap is
 maximizing.
+
+\begin{lemma}[a right-angle motion]\label{lem:right-motion}
+Let $\omega\in[\omega_0,\pi/2]$, and let $T$ be a monotone sofa with rotation
+angle $\omega$ and $\abs T\ge11/5$ whose cap $\cC(T)$ is maximizing. Then
+$R_\psi T$, $\psi=\pi/2-\omega$, is a moving sofa with rotation angle $\pi/2$.
+\end{lemma}
+
+\begin{proof}
+If $\omega=\pi/2$, then $\psi=0$, and $T$ is a moving sofa with rotation angle
+$\pi/2$ by \cref{fact:monotone}\ref{fact:monotone:envelope}. Let $\omega<\pi/2$
+and $K=\cC(T)$. By \cref{fact:monotone}\ref{fact:monotone:envelope},
+\ref{fact:monotone:cap} and \ref{fact:monotone:area}, $T$ is a moving sofa with
+rotation angle $\omega$ in standard position, $K$ is a cap, $T=K\setminus\cN(K)$
+and $\cA_\omega(K)=\abs T\ge11/5>0$. As $K$ is maximizing,
+\cref{prop:pinned-bounds} gives the pinned bounds $w^\circ_K\le\sigma_K(\pi/2)$
+and $z^\circ_K\le\sigma_K(\omega)$. The proof of \cref{prop:U} uses $\abs
+T=\abs\Gs$ only to obtain these bounds and $\cA_\omega(K)\ge11/5$, and it
+concludes as before: \cref{lem:triangle}(d) gives $t_\sharp\in(0,\omega)$ such
+that $O$, $cu_0$ and $cv_\omega$ lie in the closure of $Q^-_K(t_\sharp)$,
+\cref{lem:width}(b) gives $\ip{p-q}{u_t}\le1$ for $p,q\in T$ and
+$t\in[\omega,\pi/2]$, and \cref{lem:turn} shows that $R_\psi T$ is a moving sofa
+with rotation angle $\pi/2$.
+\end{proof}

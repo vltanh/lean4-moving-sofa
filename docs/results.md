@@ -149,8 +149,8 @@ The fifteen theorems rest on five libraries:
 - [`MovingSofaUniqueness/`](../MovingSofaUniqueness), the uniqueness: [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L301), and one module per proposition of the
   informal proof ([Chapters 11 and 12](proof/11-selection.md)). Three more modules prove Baek's theorem a second time, from the
   maximizing caps and without Baek's Theorem 1.1.1, [`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](../MovingSofaUniqueness/Optimality.lean#L142), and the
-  uniqueness from it, [`MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Alternative.lean#L108) (a remark in
-  Section 11 of the [manuscript](paper/README.md)); [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks that they do not use Baek's theorem.
+  uniqueness from it, [`MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Alternative.lean#L108) (a remark at
+  the end of Section 8 of the [manuscript](paper/README.md)); [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks that they do not use Baek's theorem.
 - [`MovingSofaBridge/`](../MovingSofaBridge), the bridge: [`MovingSofaBridge.isMovingSofa_iff`](../MovingSofaBridge/Motion.lean#L562), [`MovingSofaBridge.sofaConstant_eq`](../MovingSofaBridge/Motion.lean#L600), [`MovingSofaBridge.gerversSofa_eq`](../MovingSofaBridge/GerverSofa.lean#L507) and
   [`MovingSofaBridge.GerverConstants.spec_unique`](../MovingSofaBridge/GerverConstants.lean#L1143).
 - [`MovingSofaStability/`](../MovingSofaStability), the stability: [`MovingSofaStability.unrestricted_stability`](../MovingSofaStability/GlobalStability.lean#L113),
