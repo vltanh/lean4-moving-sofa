@@ -31,7 +31,49 @@ theorem integral_mul_sq_le
     (hfg : Integrable (fun x => f x * g x) μ) :
     (∫ x, f x * g x ∂μ) ^ 2 ≤
       (∫ x, f x ^ 2 ∂μ) * (∫ x, g x ^ 2 ∂μ) := by
-  sorry
+  let A : ℝ := ∫ x, f x ^ 2 ∂μ
+  let B : ℝ := ∫ x, g x ^ 2 ∂μ
+  let C : ℝ := ∫ x, f x * g x ∂μ
+  have hA : 0 ≤ A := integral_nonneg fun x => sq_nonneg (f x)
+  change C ^ 2 ≤ A * B
+  by_cases hA0 : A = 0
+  · have hfzero : ∀ᵐ x ∂μ, f x = 0 := by
+      have hz : ∀ᵐ x ∂μ, f x ^ 2 = 0 :=
+        (integral_eq_zero_iff_of_nonneg (fun x => sq_nonneg (f x)) hf).1 hA0
+      filter_upwards [hz] with x hx
+      have hmul : f x * f x = 0 := by simpa only [pow_two] using hx
+      exact (mul_eq_zero.mp hmul).elim id id
+    have hC0 : C = 0 := by
+      change (∫ x, f x * g x ∂μ) = 0
+      calc
+        _ = ∫ _ : X, (0 : ℝ) ∂μ := by
+          apply integral_congr_ae
+          filter_upwards [hfzero] with x hx
+          simp only [hx, zero_mul]
+        _ = 0 := integral_zero X ℝ
+    rw [hA0, hC0]
+    norm_num
+  · have hApos : 0 < A := lt_of_le_of_ne hA (Ne.symm hA0)
+    have hleft : Integrable (fun x => C ^ 2 * f x ^ 2 + A ^ 2 * g x ^ 2) μ :=
+      (hf.const_mul _).add (hg.const_mul _)
+    have hright : Integrable (fun x => (2 * C * A) * (f x * g x)) μ :=
+      hfg.const_mul _
+    have hi : (∫ x, (C * f x - A * g x) ^ 2 ∂μ) =
+        C ^ 2 * A + A ^ 2 * B - (2 * C * A) * C := by
+      calc
+        _ = ∫ x, (C ^ 2 * f x ^ 2 + A ^ 2 * g x ^ 2) -
+            (2 * C * A) * (f x * g x) ∂μ := by
+          apply integral_congr_ae
+          exact Eventually.of_forall fun x => by ring
+        _ = _ := by
+          rw [integral_sub hleft hright,
+            integral_add (hf.const_mul _) (hg.const_mul _),
+            integral_const_mul, integral_const_mul, integral_const_mul]
+    have hn : 0 ≤ C ^ 2 * A + A ^ 2 * B - (2 * C * A) * C := by
+      rw [← hi]
+      exact integral_nonneg fun x => sq_nonneg _
+    have hp : A * C ^ 2 ≤ A * (A * B) := by nlinarith
+    exact (mul_le_mul_iff_right₀ hApos).mp hp
 
 /-- Absolute-value form of the preceding estimate. -/
 theorem abs_integral_mul_le

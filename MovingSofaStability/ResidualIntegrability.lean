@@ -29,7 +29,29 @@ theorem displacement_difference_integrable {a b : ℝ} (hab : a < b) (hb : b < a
         (Icc a b) volume ∧
       IntegrableOn (fun t => (displacement K₁.1 (z K₁) t -
         displacement K₀.1 (z K₀) t) ^ 2) (Icc a b) volume := by
-  sorry
+  have hM := fun K : ConvexBodySet => theorem7_4_1 K.2 hab hb (hz K) (hzl K)
+  obtain ⟨C₀, hC₀⟩ := (hM K₀).2.1
+  obtain ⟨C₁, hC₁⟩ := (hM K₁).2.1
+  let f : ℝ → ℝ := fun t => displacement K₁.1 (z K₁) t - displacement K₀.1 (z K₀) t
+  have hbound : ∀ t ∈ Icc a b, |f t| ≤ C₁ + C₀ := by
+    intro t ht
+    exact (abs_sub _ _).trans (add_le_add (hC₁ t ht) (hC₀ t ht))
+  have hC : 0 ≤ C₁ + C₀ := (abs_nonneg (f a)).trans (hbound a ⟨le_rfl, hab.le⟩)
+  have : IsFiniteMeasure (volume.restrict (Icc a b)) :=
+    isFiniteMeasure_restrict.2 (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)
+  have hm : AEStronglyMeasurable f (volume.restrict (Icc a b)) :=
+    ((hM K₁).1.sub (hM K₀).1).aestronglyMeasurable
+  have hi : IntegrableOn f (Icc a b) volume := by
+    apply Integrable.of_bound hm (C₁ + C₀)
+    exact ae_restrict_of_forall_mem measurableSet_Icc fun t ht => by
+      simpa only [Real.norm_eq_abs] using hbound t ht
+  have hi2 : IntegrableOn (fun t => f t * f t) (Icc a b) volume := by
+    apply Integrable.of_bound (hm.mul hm) ((C₁ + C₀) * (C₁ + C₀))
+    apply ae_restrict_of_forall_mem measurableSet_Icc
+    intro t ht
+    rw [Real.norm_eq_abs, Pi.mul_apply, abs_mul]
+    exact mul_le_mul (hbound t ht) (hbound t ht) (abs_nonneg _) hC
+  exact ⟨hi, hi2.congr (Eventually.of_forall fun t => (pow_two (f t)).symm)⟩
 
 /-- Move an identity valid on the open interval across its measure-zero endpoints. -/
 theorem integrableOn_Icc_of_eqOn_Ioo {a b : ℝ} {f g : ℝ → ℝ}

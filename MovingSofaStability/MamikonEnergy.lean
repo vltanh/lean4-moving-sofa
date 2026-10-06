@@ -68,21 +68,55 @@ variable (hzl : ∀ K, ∀ t ∈ Icc a b, z K t ∈ suppLine K.1 t)
 variable (hlin : ∀ K₀ K₁, ∀ c ∈ Icc (0 : ℝ) 1, ∀ t ∈ Icc a b,
   z (convexBodyComb c K₀ K₁) t = (1 - c) • z K₀ t + c • z K₁ t)
 
+include hab hb hz hzl hlin in
 /-- Exact quantitative Mamikon convexity gap, including the endpoint parameters. -/
 theorem mamikon_combo_energy (K₀ K₁ : ConvexBodySet) {c : ℝ}
     (hc : c ∈ Icc (0 : ℝ) 1) :
     (1 - c) * mamikon K₀.1 a b (z K₀) + c * mamikon K₁.1 a b (z K₁) -
       mamikon (convexBodyComb c K₀ K₁).1 a b (z (convexBodyComb c K₀ K₁)) =
       c * (1 - c) * displacementEnergy a b z K₀ K₁ := by
-  sorry
+  let μ := volume.restrict (Ioo a b)
+  let f := displacement K₀.1 (z K₀)
+  let g := displacement K₁.1 (z K₁)
+  have hfg : Integrable (fun t => f t * g t) μ :=
+    displacement_mul_integrable hab hb z hz hzl K₀ K₁
+  have hf : Integrable (fun t => f t ^ 2) μ :=
+    Integrable.congr (displacement_mul_integrable hab hb z hz hzl K₀ K₀)
+      (Eventually.of_forall fun t => (pow_two (f t)).symm)
+  have hg : Integrable (fun t => g t ^ 2) μ :=
+    Integrable.congr (displacement_mul_integrable hab hb z hz hzl K₁ K₁)
+      (Eventually.of_forall fun t => (pow_two (g t)).symm)
+  have hcombo : mamikon (convexBodyComb c K₀ K₁).1 a b (z (convexBodyComb c K₀ K₁)) =
+      halfSquareIntegral μ (fun t => (1 - c) * f t + c * g t) := by
+    rw [mamikon_eq_halfSquareIntegral hab hb z hz hzl]
+    unfold halfSquareIntegral
+    congr 1
+    apply integral_congr_ae
+    apply ae_restrict_of_forall_mem measurableSet_Ioo
+    intro t ht
+    show displacement (convexBodyComb c K₀ K₁).1 (z (convexBodyComb c K₀ K₁)) t ^ 2 =
+      ((1 - c) * f t + c * g t) ^ 2
+    rw [displacement_combo z hlin K₀ K₁ hc ⟨ht.1.le, ht.2.le⟩]
+  rw [hcombo, mamikon_eq_halfSquareIntegral hab hb z hz hzl K₀,
+    mamikon_eq_halfSquareIntegral hab hb z hz hzl K₁]
+  have he := halfSquareIntegral_combo_gap μ c hf hg hfg
+  change (1 - c) * halfSquareIntegral μ f + c * halfSquareIntegral μ g -
+      halfSquareIntegral μ (fun t => (1 - c) * f t + c * g t) =
+      c * (1 - c) * halfSquareIntegral μ (fun t => f t - g t)
+  rw [he]
+  unfold halfSquareIntegral
+  ring
 
+include hab hb hz hzl hlin in
 /-- Four times the midpoint gap is exactly the difference-square energy. -/
 theorem mamikon_midpoint_energy (K₀ K₁ : ConvexBodySet) :
     4 * ((mamikon K₀.1 a b (z K₀) + mamikon K₁.1 a b (z K₁)) / 2 -
       mamikon (convexBodyComb (1 / 2) K₀ K₁).1 a b
         (z (convexBodyComb (1 / 2) K₀ K₁))) =
       displacementEnergy a b z K₀ K₁ := by
-  sorry
+  have h := mamikon_combo_energy hab hb z hz hzl hlin K₀ K₁
+    (c := 1 / 2) ⟨by norm_num, by norm_num⟩
+  nlinarith
 
 end Arc
 

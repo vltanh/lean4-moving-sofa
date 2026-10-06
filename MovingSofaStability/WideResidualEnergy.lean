@@ -56,7 +56,20 @@ theorem tangent_energy_gap {a b T c : ℝ} (hab : a < b) (hb : b < a + π)
       mamikon (convexBodyComb c K₀ K₁).1 a b
         (tangentParam (convexBodyComb c K₀ K₁).1 T) =
       c * (1 - c) * displacementEnergy a b (fun K => tangentParam K.1 T) K₀ K₁ := by
-  sorry
+  apply mamikon_combo_energy hab hb (fun K => tangentParam K.1 T)
+  · intro K
+    exact (theorem8_3_1 K.2 ha hab.le hbt).1
+  · intro K t ht
+    by_cases h : t < T
+    · simp only [tangentParam, h, ↓reduceIte]
+      exact vint_mem_line_left K.1 t T
+    · have he : t = T := le_antisymm (ht.2.trans hbt) (not_lt.mp h)
+      subst t
+      simp only [tangentParam, lt_irrefl, ↓reduceIte]
+      exact dot_vminus_uvec K.1 T
+  · intro K L s hs t ht
+    exact theorem8_3_2 hab.le hbt K L hs t ht
+  · exact hc
 
 /-- Specialize the identity to the outer-corner family. -/
 theorem outer_energy_gap {a b c : ℝ} (hab : a < b) (hb : b < a + π)
@@ -65,7 +78,15 @@ theorem outer_energy_gap {a b c : ℝ} (hab : a < b) (hb : b < a + π)
       c * mamikon K₁.1 a b (outerCorner K₁.1) -
       mamikon (convexBodyComb c K₀ K₁).1 a b (outerCorner (convexBodyComb c K₀ K₁).1) =
       c * (1 - c) * displacementEnergy a b (fun K => outerCorner K.1) K₀ K₁ := by
-  sorry
+  apply mamikon_combo_energy hab hb (fun K => outerCorner K.1)
+  · intro K
+    exact opt_outerCorner_cbv K.2 a b
+  · intro K t ht
+    exact inj_dot_outerCorner_uvec K.1 t
+  · intro K L s hs t ht
+    rw [cvx_convexBodyComb_val hs, opt_outerCorner_comb K.2 L.2 hs]
+    rfl
+  · exact hc
 
 /-- The grouped cap gap is the sum of all four displacement energies. -/
 theorem capResidualEnergy_gap {φ c : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
@@ -126,7 +147,8 @@ theorem wide_deficit_eq_slack_add_integrals {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) (x : WideTriple P.φ) :
     area (gerverSofa P) - wideUpperQ P.φ x =
       wideDualSlack hP hbox x + wideResidualEnergy (wideGerverTriple hP hbox) x := by
-  sorry
+  rw [wide_deficit_identity hP hbox x,
+    wideEnergy_eq_integrals (GerverParams.gm_φ_mem_Ioo hP hbox)]
 
 /-- Cap-only integral energy is bounded by the nonsmooth Q deficit. -/
 theorem wide_capResidualEnergy_le_deficit {P : GerverParams}
