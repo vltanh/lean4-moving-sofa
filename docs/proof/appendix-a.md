@@ -109,8 +109,8 @@ cosines. At a solution, $E_1 = E_3 = 0$ gives $A D = N$, so $A = \hat A$. Then $
 $B = \hat A k + o = \hat B$, and the third identity gives $Q = 0$. $\square$
 
 The documentation of the Lean module compares these identities with those of RuifengCao/sofa-formal
-(`Sofa/GerverConst.lean`), an earlier formalization of Baek's proof (see the
-[prior work](../prior-work.md) page).
+(`Sofa/GerverConst.lean`), an earlier formalization of Baek's proof (see
+[Formalizations of Baek's proof](../formalizations.md)).
 
 ## A.2 The boundary of the domain
 

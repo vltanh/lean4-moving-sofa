@@ -38,8 +38,8 @@ alone.
   paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
 - `scripts/sync_challenge_defs.py --check` checks that [`Challenge.lean`](../Challenge.lean) copies the two blocks of
   definitions of [`ChallengeDefs.lean`](../ChallengeDefs.lean) word for word (without `--check`, it copies them). The Challenge may
-  import only Mathlib, and Comparator compares constants by name, so the libraries and the Solution
-  use the constants of [`ChallengeDefs`](../ChallengeDefs.lean).
+  import only Mathlib, and Comparator compares constants by name, so the Solution states its theorems
+  with the constants of [`ChallengeDefs`](../ChallengeDefs.lean), which the bridge library uses too.
 
 ## Comparator
 

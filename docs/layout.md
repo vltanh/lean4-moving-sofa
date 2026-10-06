@@ -6,7 +6,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 
 | Path | Contents |
 | --- | --- |
-| [`MovingSofaOptimality/`](../MovingSofaOptimality) | Baek's paper: every numbered result, the results it cites, and the structure of Gerver's sofa |
+| [`MovingSofaOptimality/`](../MovingSofaOptimality) | Baek's paper: its numbered results (the report's Section 9 lists the few left out), the results it cites, and the structure of Gerver's sofa |
 | [`MovingSofaUniqueness/`](../MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions |
 | [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
 | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
@@ -21,7 +21,7 @@ The project has three libraries, one per result, and the files of the Palomar re
 ### `MovingSofaOptimality/`: Baek's paper
 
 Facts that several files use live in `Basic/` under plain names ([`dot_uvec_pi_div_two`](../MovingSofaOptimality/Basic/Plane.lean#L238),
-[`tendsto_supp`](../MovingSofaOptimality/Basic/ConvexBody.lean#L254), …). A helper lemma used by one part of the proof carries a prefix that names that
+[`tendsto_supp`](../MovingSofaOptimality/Basic/ConvexBody.lean#L257), …). A helper lemma used by one part of the proof carries a prefix that names that
 part: `ms_` for monotone sofas, `cn_` for the cap containing its niche, `nef_` for Nef polygons and
 polygon caps, `mpc_` for maximum polygon caps, `ang_` for the rotation angle, `inj_` for the
 injectivity condition, `cvx_` for convex curves, `opt_` for the upper bound, `gs_`, `gb_`, `gn_`,

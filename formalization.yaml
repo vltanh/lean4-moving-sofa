@@ -9,7 +9,8 @@ project:
     The moving sofa problem asks for the largest area of a planar shape that can be moved around the
     right-angled corner of a hallway of unit width. This repository formalizes in Lean 4, with
     Mathlib, Jineon Baek's proof (arXiv:2411.19826) that Gerver's sofa, of area 2.2195..., is optimal:
-    every numbered result of the paper, the results it cites (Schneider's area formula for convex
+    the numbered results of the paper (the few that the proofs do not need are listed in REPORT.md,
+    Section 9), the results it cites (Schneider's area formula for convex
     bodies, and the existence and uniqueness of the solution of Romik's equations, which define
     Gerver's sofa), and the structure of Gerver's sofa (Theorem 8.4.1), which the paper states without
     proof.
@@ -136,7 +137,8 @@ related_formalizations:
 
 status:
   scope: >-
-    Formalized: every numbered result of Chapters 1-8 of the paper, the main theorem (Theorem 1.1.1),
+    Formalized: the numbered results of Chapters 1-8 of the paper, except those listed below, the
+    main theorem (Theorem 1.1.1),
     and the existence and uniqueness of Gerver's parameters in the stated box. Also formalized: the
     results from the literature that the proofs use (Schneider's area formula, the solution of
     Romik's system, the weak convergence of surface area measures, Blaschke selection via Mathlib),
@@ -148,8 +150,8 @@ status:
     (Theorems 7.2.1, 7.2.3, Proposition 7.2.7), whose uses are replaced by direct area computations;
     Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
     surface area measure is defined directly and the properties the paper uses are proved; the
-    quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose content the paper reproves in Chapter 3;
-    and the remarks and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
+    quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose parts that the paper uses it reproves in
+    Chapter 3; and the remarks (except Remark 2.5.2) and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
     motions (MovingSofaUniqueness/), with the theorem and the six propositions of
     docs/archive/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
     estimate of note 17, which the theorem does not use. Also formalized: the bridge between
@@ -323,10 +325,13 @@ fidelity:
     area, which is proved where it is used; the arm inequalities come from the lower sequence of
     Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of
     Gerver's sofa uses that its rotation path stays strictly below the top of the cap.
-    (7) Formal-conjectures' statements: its definitions are restated verbatim inside the namespace
-    FormalConjectures (formal-conjectures uses the namespace MovingSofa), except that its anonymous
-    topology instance on E(2) gets an explicit name (an automatically generated name depends on the
-    library that declares it, and Comparator compares constants by name). Its theorems are stated
+    (7) Formal-conjectures' statements: its definitions and statements are restated inside the
+    namespace FormalConjectures (formal-conjectures uses the namespace MovingSofa) with
+    formal-conjectures' code, except that its anonymous topology instance on E(2) gets an explicit
+    name (an automatically generated name depends on the library that declares it, and Comparator
+    compares constants by name). The docstrings are reworded, and the R^2 notation and the two
+    instances on it that formal-conjectures takes from its utility library are declared in the
+    Challenge. Its theorems are stated
     after its definitions instead of between them. The Challenge adds three theorems, in the
     namespace Bridge, that relate its definitions to Baek's.
 
@@ -350,7 +355,7 @@ alignment:
   namespaces:
     Baek: "the definitions of Baek's paper (the plane R x R, Romik's description of Gerver's sofa)"
     Bridge: "theorems relating formal-conjectures' definitions to Baek's"
-    FormalConjectures.MovingSofa: "the definitions of formal-conjectures, restated verbatim"
+    FormalConjectures.MovingSofa: "the definitions of formal-conjectures, restated with its code"
   statements:
     - source: "Definition 8.1.2 (Gerver's sofa, from Romik's system), existence of the parameters"
       lean: "Baek.gerver_params_exists"

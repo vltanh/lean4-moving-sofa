@@ -8,9 +8,9 @@ public import MovingSofaBridge.RomikParams
 
 The definitions of `Challenge.lean`: those of Baek's paper, in the namespace `Baek`, and those of
 formal-conjectures, in the namespace `FormalConjectures.MovingSofa`. `Challenge.lean` may not import
-the project, so `scripts/sync_challenge_defs.py` copies the two marked blocks into it verbatim; the
-libraries and `Solution.lean` use the constants defined here, so Comparator sees the same constants
-in the Challenge and in the Solution. Between the blocks, the Challenge states
+the project, so `scripts/sync_challenge_defs.py` copies the two marked blocks into it verbatim;
+`Solution.lean` and the bridge library use the constants defined here, so Comparator sees the same
+constants in the Challenge and in the Solution. Between the blocks, the Challenge states
 `ABφθSpec.existsUnique` and this module proves it (`MovingSofaBridge.GerverConstants`).
 -/
 

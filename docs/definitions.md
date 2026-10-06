@@ -5,7 +5,8 @@
 Read these before trusting the results: Lean's kernel checks the proofs, not that the statements mean
 what you intend. The statements of record, in [`Challenge.lean`](../Challenge.lean), use only Mathlib and the
 definitions below, which [`Challenge.lean`](../Challenge.lean) copies verbatim from [`ChallengeDefs.lean`](../ChallengeDefs.lean); the
-libraries and [`Solution.lean`](../Solution.lean) use the same constants. There are two sets of definitions, each in its
+bridge library and [`Solution.lean`](../Solution.lean) use the same constants, and [`Solution.lean`](../Solution.lean) proves that the definitions of the
+optimality library, which the uniqueness library uses too, agree with them. There are two sets of definitions, each in its
 own namespace: those of Baek's paper, `Baek`, and those of Google DeepMind's formal-conjectures,
 `FormalConjectures.MovingSofa`. The bridge theorems ([Results](results.md#the-bridge)) show that they describe
 the same objects.
@@ -82,8 +83,8 @@ Romik's numerical solution `φ = 0.039177…`, `θ = 0.681301…`. Then
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 ```
 
-The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L328) and [`Baek.gerver_params_unique`](../Challenge.lean#L332) prove that the box holds exactly one solution, so
-Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L338) that its area lies between `2.2192` and `2.2199`, around
+The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L332) and [`Baek.gerver_params_unique`](../Challenge.lean#L336) prove that the box holds exactly one solution, so
+Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L342) that its area lies between `2.2192` and `2.2199`, around
 Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L93) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L109) are in
 [`ChallengeDefs.lean`](../ChallengeDefs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
 
@@ -92,10 +93,12 @@ Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](..
 [formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean)
 (file `FormalConjectures/Wikipedia/MovingSofa.lean`, Git blob
 `59b6ed7eb42e11b208b09539c245da4d3f11ed00`, Apache-2.0, Copyright 2026 The Formal Conjectures Authors)
-states the problem with definitions of its own. The Challenge restates them verbatim inside the
-namespace `FormalConjectures` (formal-conjectures itself uses `MovingSofa`); the one other change is
-an explicit name for the topology instance on `E(2)`, which formal-conjectures leaves anonymous, since
-Lean's generated name depends on the library that declares it.
+states the problem with definitions of its own. The Challenge restates them inside the namespace
+`FormalConjectures` (formal-conjectures itself uses `MovingSofa`), with formal-conjectures' code for
+every definition and statement. It rewords the docstrings, declares the `ℝ²` notation and the two
+instances on it that formal-conjectures takes from its utility library, and gives the topology
+instance on `E(2)`, which formal-conjectures leaves anonymous, an explicit name, since Lean's
+generated name depends on the library that declares it.
 
 ### The plane, the hallway and moving sofas
 

@@ -27,7 +27,7 @@ R_\theta S + v = G .
 So the moving sofas of maximum area are exactly the moving sofas that a rotation about the origin
 followed by a translation maps onto $G$.
 
-*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212),
+*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L355), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212),
 [`MovingSofaUniqueness.Rigid`](../../MovingSofaUniqueness/Rigid.lean).*
 
 Here $|\cdot|$ is the Lebesgue measure, $G$ is defined from the solution of Romik's system in the
@@ -743,10 +743,10 @@ area; $|G|$ is finite; and $G$ is the closure of its interior (Proposition 12.22
 $g(S) = G$, and writing $g(p) = R_\theta p + v$ gives the theorem. $\square$
 
 *Lean: [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212), [`Rigid.volume_image`](../../MovingSofaUniqueness/Rigid.lean#L143), [`Rigid.isClosed_image`](../../MovingSofaUniqueness/Rigid.lean#L136),
-[`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351).*
+[`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L289), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L355).*
 
-The Challenge's [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351) states the theorem with the definitions of Baek's paper
+The Challenge's [`Baek.gerver_sofa_unique`](../../Challenge.lean#L355) states the theorem with the definitions of Baek's paper
 in Mathlib's vocabulary; [`Solution.lean`](../../Solution.lean) derives it from [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212) through the
 identification of these definitions with the library's ([`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L31),
 [`Baek.gerverSofa_eq_lib`](../../Solution.lean#L54)). [Chapter 13](13-bridge.md) carries the theorem over to formal-conjectures'
-statement [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L396).
+statement [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L400).

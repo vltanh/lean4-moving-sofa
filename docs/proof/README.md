@@ -227,7 +227,7 @@ $2.2192 \le \lvert G \rvert \le 2.2199$.
 *Proof.* Theorems [10.8](10-gerver.md#theorem-108-gervers-sofa-is-well-defined-romik-section-4) and
 [10.21](10-gerver.md#theorem-1021-the-area-of-gervers-sofa); Appendix B gives the rigorous numerics behind both. $\square$
 
-*Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L328), [`Baek.gerver_params_unique`](../../Challenge.lean#L332), [`Baek.gerver_sofa_area`](../../Challenge.lean#L338).*
+*Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L332), [`Baek.gerver_params_unique`](../../Challenge.lean#L336), [`Baek.gerver_sofa_area`](../../Challenge.lean#L342).*
 
 The value of the area computed by Gerver and Romik, $\lvert G \rvert = 2.21953166887\ldots$ [3, 4],
 lies within these bounds. Theorem 1.4 below shows that the sofa defined from Gerver's own
@@ -240,7 +240,7 @@ So $\alpha_{\max} = \lvert G \rvert$.
 
 *Proof.* This is [Theorem 9.33](09-optimality.md#theorem-933-optimality-of-gervers-sofa-baek-theorem-111). $\square$
 
-*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L344), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302).*
+*Lean: [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L348), [`MovingSofaOptimality.theorem1_1_1`](../../MovingSofaOptimality/Main.lean#L302).*
 
 #### Theorem 1.3 (uniqueness)
 
@@ -254,7 +254,7 @@ R_\theta S + v = G.
 *Proof.* This is [Theorem 12.1](12-uniqueness.md#theorem-121-uniqueness-of-gervers-sofa), proved in
 [§12.6](12-uniqueness.md#126-proof-of-theorem-121) from the results of Chapters 11 and 12. $\square$
 
-*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L351), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212).*
+*Lean: [`Baek.gerver_sofa_unique`](../../Challenge.lean#L355), [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L212).*
 
 *Remarks.* (i) With Theorem 1.2, the moving sofas of maximum area are exactly the moving sofas that
 a rotation and a translation map onto $G$. Not every rotated copy of $G$ is a moving sofa: a motion
@@ -285,8 +285,8 @@ equations, a radius function on $[0, \pi/2]$, and a rotation path given by integ
 [13.19](13-bridge.md#theorem-1319-the-two-gervers-sofas-agree), with [Appendix A](appendix-a.md) for the uniqueness of the
 solution. $\square$
 
-*Lean: [`Bridge.isMovingSofa_iff`](../../Challenge.lean#L363), [`Bridge.sofaConstant_eq`](../../Challenge.lean#L371), [`Bridge.gerversSofa_eq`](../../Challenge.lean#L379),
-[`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L272).*
+*Lean: [`Bridge.isMovingSofa_iff`](../../Challenge.lean#L367), [`Bridge.sofaConstant_eq`](../../Challenge.lean#L375), [`Bridge.gerversSofa_eq`](../../Challenge.lean#L383),
+[`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L276).*
 
 #### Corollary 1.5 (formal-conjectures' statements)
 
@@ -301,9 +301,9 @@ so Theorem 1.3 gives a rotation and a translation that map it onto $G$, and the 
 isometry, maps $G$ onto $s$. Conversely, an isometry preserves area. Theorem
 [13.20](13-bridge.md#theorem-1320-formal-conjectures-theorems) gives the details. $\square$
 
-*Lean: [`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](../../Challenge.lean#L388),
-[`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](../../Challenge.lean#L392),
-[`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L396).*
+*Lean: [`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](../../Challenge.lean#L392),
+[`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](../../Challenge.lean#L396),
+[`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L400).*
 
 formal-conjectures marks the first statement solved and the second, the uniqueness, open.
 
@@ -326,8 +326,8 @@ formal-conjectures lists it as an open problem. The proof of Chapters 11 and 12 
 formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../../CREDITS.md)); it
 reuses Baek's machinery and has not been peer reviewed. We know of no earlier proof, but have not
 searched the literature systematically. Two earlier Lean formalizations of Baek's proof prove
-formal-conjectures' statement of the optimality, but not the uniqueness; the
-[prior work](../prior-work.md) page compares them with this one.
+formal-conjectures' statement of the optimality, but not the uniqueness; the page
+[Formalizations of Baek's proof](../formalizations.md) compares them with this one.
 
 ### 1.4 Outline of the proof
 
