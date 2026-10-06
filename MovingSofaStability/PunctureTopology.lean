@@ -80,9 +80,9 @@ theorem preconnected_sdiff_of_connected_frontier {X : Type*} [TopologicalSpace X
     exact (step B A hB hA hcover' hdisj' hFB).symm
 
 /-- Removing a disk contained in a closed connected set preserves connectedness
-in any real normed space of dimension at least two. -/
+in any nontrivial real normed space of dimension at least two. -/
 theorem connected_sdiff_ball {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    (hdim : 1 < Module.rank ℝ E) {S : Set E} (hS : IsClosed S)
+    [Nontrivial E] (hdim : 1 < Module.rank ℝ E) {S : Set E} (hS : IsClosed S)
     (hconn : IsConnected S) {p : E} {r : ℝ} (hr : 0 < r)
     (hball : closedBall p r ⊆ S) : IsConnected (S \ ball p r) := by
   have hcircle := isConnected_sphere hdim p hr.le
