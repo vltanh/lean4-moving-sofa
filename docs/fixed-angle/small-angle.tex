@@ -1,0 +1,265 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\area}[1]{\lvert #1\rvert}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\N}{\mathcal N}
+\title{The Small-Angle Optimum and Its Limiting Missing Corner}
+\author{}
+\date{October 5, 2026 --- research draft}
+\begin{document}
+\maketitle
+\begin{abstract}
+For the prescribed-net-rotation moving sofa problem in the unit-width right-angled hallway, we prove $m(\omega)=1+\omega^2/2+o(\omega^4)$ as $\omega\downarrow0$. After the unique endpoint-strip normalization, the area missing from every $o(\omega^4)$-near-optimal sofa has a unique limit in measure under the spatial scaling $p\mapsto p/\omega^2$. That limit is the first-quadrant region $x+y+(x-y)^2<3/4$, of area $5/24$. The proof constructs feasible corner-carved parallelograms and gives a separate upper argument for arbitrary near-maximizers. It does not identify an exact optimizer at any positive angle. These are paper proofs; no Lean compilation or formal verification is claimed.
+\end{abstract}
+
+\section{Definitions and the motion constraint}
+Use the hallway and fixed-net-angle convention of \texttt{paper.tex}. Thus $m(\omega)$ is the supremum over nonempty compact connected sofas that admit a motion with angular lift starting at $0$ and ending at $-\omega$. Put
+\[
+ u_t=(\cos t,\sin t),\quad v_t=(-\sin t,\cos t),\quad
+ P_\omega=\{p:0\le p_y\le1,\ 0\le\ip p{u_\omega}\le1\},
+\]
+\[
+ F_\omega=\{p:p_y\ge0,\ \ip p{u_\omega}\ge0\},\qquad
+ J_\omega=[0,\omega]\cup[\pi/2,\pi/2+\omega].
+\]
+Throughout the geometric estimates $0<\omega\le\pi/4$. The area of $P_\omega$ is $\sec\omega$.
+
+We record explicitly the two motion facts needed below. Every feasible sofa has a unique translate with $h_S(\omega)=h_S(\pi/2)=1$, and this translate lies in $P_\omega$. Moreover it avoids
+\begin{equation}\label{eq:forbidden}
+ \{p:\ip p{u_t}<h_S(t)-1,\ \ip p{v_t}<h_S(t+\pi/2)-1\}
+ \qquad(0\le t\le\omega).
+\end{equation}
+Indeed the endpoint strips bound the two widths by one, and their upper support equations have determinant $\cos\omega>0$. The angular lift of any admissible motion visits $-t$. In the frame of the sofa the hallway at that instant has outer supports at least $h_S(t)$ and $h_S(t+\pi/2)$, so its excluded corner contains the quarter-plane in \eqref{eq:forbidden}. This does not require monotone rotation, convexity of $S$, or maximizer existence.
+
+\section{A directly feasible corner-carved family}
+The relevant supports of the full parallelogram are
+\begin{equation}\label{eq:P-support}
+ h_{P_\omega}(t)=\sec\omega\cos t,\qquad
+ h_{P_\omega}(t+\pi/2)=\sec\omega\cos(\omega-t),\quad 0\le t\le\omega.
+\end{equation}
+They follow by maximizing over its four vertices. Define
+\begin{align*}
+ a_\omega(t)&=\sec\omega\cos t-1,\\
+ b_\omega(t)&=\sec\omega\cos(\omega-t)-1,\\
+ N_\omega&=F_\omega\cap\bigcup_{0<t<\omega}
+ \{p:\ip p{u_t}<a_\omega(t),\ \ip p{v_t}<b_\omega(t)\},\\
+ T_\omega&=P_\omega\setminus N_\omega.
+\end{align*}
+Notice that the niche is defined using the fan. We will prove that it lies in $P_\omega$ in the present angle range, rather than building that containment into its definition.
+
+\begin{lemma}[Size and radial structure of the niche]\label{lem:niche-size}
+Let $q_\omega=\sec\omega-1$ and $\rho_\omega=\sqrt2 q_\omega$. Then
+\[
+ O\in N_\omega\subset F_\omega\cap\{p:\lVert p\rVert<\rho_\omega\},\qquad \rho_\omega<1.
+\]
+The niche is star-shaped about $O$ and is relatively open in $F_\omega$. In particular it lies in $P_\omega$ and
+\[
+ \area{N_\omega}\le(\pi/2+\omega)(\sec\omega-1)^2=O(\omega^4).
+\]
+\end{lemma}
+\begin{proof}
+For $0<t<\omega$ both thresholds are strictly positive and at most $q_\omega$. Each intersected quarter-plane is convex, contains $O$, and is intersected with the cone $F_\omega$. Their union is therefore star-shaped about $O$ and contains $O$. Relative openness is immediate.
+
+If $p\ne O$ has polar angle $\alpha$ in the fan, then $0\le\alpha\le\pi/2+\omega$. For $0\le t\le\omega$ we have $-\pi/4\le\alpha-t\le3\pi/4$, and hence
+\[
+ \max\{\ip p{u_t},\ip p{v_t}\}
+ =\lVert p\rVert\max\{\cos(\alpha-t),\sin(\alpha-t)\}
+ \ge\lVert p\rVert/\sqrt2.
+\]
+If $p$ belongs to the niche, both scalar products at some witness angle are strictly below $q_\omega$. Thus $\lVert p\rVert<\sqrt2 q_\omega$. Since $\omega\le\pi/4$, $\rho_\omega\le2-\sqrt2<1$.
+Every point of $F_\omega$ with norm at most one lies in $P_\omega$. Finally the fan has opening $\pi/2+\omega$, so the containing sector has area $(\pi/2+\omega)\rho_\omega^2/2$. This proves the estimate.
+\end{proof}
+
+\begin{proposition}[Feasibility, not just a cap-area calculation]\label{prop:feasible}
+$T_\omega$ is a nonempty compact path-connected feasible sofa with prescribed net angle $\omega$, and
+\[
+ \area{T_\omega}=\sec\omega-\area{N_\omega}.
+\]
+Consequently $m(\omega)\ge\sec\omega-(\pi/2+\omega)(\sec\omega-1)^2$ for $0<\omega\le\pi/4$.
+\end{proposition}
+\begin{proof}
+The unit circular arc in $F_\omega$ lies in $P_\omega$ and misses $N_\omega$. Every $p\in T_\omega$ is nonzero. Join it radially to $p/\lVert p\rVert$ on that arc. The segment lies in $P_\omega$ by convexity. If $\lVert p\rVert\le1$, expanding the radius cannot enter the niche: otherwise star-shapedness would imply $p\in N_\omega$. If $\lVert p\rVert\ge1$, the segment has norm at least one and misses the niche by Lemma~\ref{lem:niche-size}. The arc connects all these radial segments. Thus $T_\omega$ is nonempty and path-connected. It is compact because the union of open quarter-planes defining the niche is open, and on $P_\omega\subset F_\omega$ its removal is a relatively closed operation.
+
+For the motion put
+\[
+ x_\omega(t)=a_\omega(t)u_t+b_\omega(t)v_t,\qquad
+ \Phi_t(p)=R_{-t}(p-x_\omega(t)),\qquad0\le t\le\omega.
+\]
+The two coordinates of $\Phi_t(p)$ are at most one for $p\in P_\omega$, by \eqref{eq:P-support}. For $p\in T_\omega$ they cannot both be negative at an interior angle, by the definition of the removed niche. At $t=0$ the second coordinate is $p_y\in[0,1]$ because $b_\omega(0)=0$, so $\Phi_0(T_\omega)\subset H_L$. At $t=\omega$ the first coordinate is $\ip p{u_\omega}\in[0,1]$ because $a_\omega(\omega)=0$, so $\Phi_\omega(T_\omega)\subset V_L$. This is a continuous admissible motion, after reparametrizing the interval to $[0,1]$.
+
+Lemma~\ref{lem:niche-size} gives $N_\omega\subset P_\omega$, so subtracting its area is justified. The quantitative lower bound follows from that lemma.
+\end{proof}
+
+\section{The rescaled niche and its area}
+For a set $E$ write $\omega^{-2}E=\{p/\omega^2:p\in E\}$. This is a spatial scaling: its area is $\omega^{-4}\area E$.
+Define the bounded first-quadrant region
+\begin{equation}\label{eq:D}
+ D_0=\{(x,y):x\ge0,\ y\ge0,\ x+y+(x-y)^2<3/4\}.
+\end{equation}
+Boundary conventions on its axes will not affect any area or convergence-in-measure statement.
+
+\begin{lemma}[Limiting niche]\label{lem:limit}
+As $\omega\downarrow0$,
+\[
+ \area{(\omega^{-2}N_\omega)\mathbin\triangle D_0}\longrightarrow0,
+ \qquad \area{N_\omega}=\frac5{24}\omega^4+o(\omega^4).
+\]
+\end{lemma}
+\begin{proof}
+Set $t=\omega s$ and define
+\[
+ A_\omega(s)=\frac{\sec\omega\cos(\omega s)-1}{\omega^2},\qquad
+ B_\omega(s)=\frac{\sec\omega\cos(\omega(1-s))-1}{\omega^2}.
+\]
+Uniform Taylor expansion for $s\in[0,1]$ gives
+\begin{equation}\label{eq:threshold-limit}
+ A_\omega(s)\longrightarrow A(s)=\frac{1-s^2}{2},\qquad
+ B_\omega(s)\longrightarrow B(s)=s-\frac{s^2}{2}.
+\end{equation}
+For a fixed $z=(x,y)$, the two scalar products with $u_{\omega s},v_{\omega s}$ converge to $x,y$ uniformly in $s$. The fan converges pointwise off the coordinate axes to the first quadrant. Thus the limiting union, up to its boundary, is
+\[
+ \bigcup_{0<s<1}\{(x,y):x\ge0,\ y\ge0,\ x<A(s),\ y<B(s)\}.
+\]
+Here $A$ is strictly decreasing and $B$ strictly increasing. Its curved boundary is parametrized by $(A(s),B(s))$, and elimination of $s$ gives $x+y+(x-y)^2=3/4$. Equivalently its upper graph is
+\[
+ y=\sqrt{1-2x}-\frac{1-2x}{2},\qquad0\le x\le1/2.
+\]
+So the union is $D_0$ up to boundary conventions, and its boundary has area zero.
+
+For completeness, convergence of membership does not require interchanging an uncontrolled union and a limit. On a bounded set of $z$ the continuous functions
+\[
+ g_\omega(z)=\max_{0\le s\le1}\min\{A_\omega(s)-\ip z{u_{\omega s}},\ B_\omega(s)-\ip z{v_{\omega s}}\}
+\]
+converge uniformly to $g_0(z)=\max_s\min\{A(s)-x,B(s)-y\}$. The endpoints $s=0,1$ add no points to the niche in the fan: one of the relevant thresholds is zero and the corresponding coordinate is nonnegative. Inside the positive quadrant, $g_0>0$ in $D_0$ and $g_0<0$ outside its closure. Together with convergence of the fan, this proves almost-everywhere convergence of the niche indicators. Lemma~\ref{lem:niche-size} supplies a common bounded disk after rescaling, since $\rho_\omega/\omega^2$ stays bounded. Dominated convergence therefore gives convergence in symmetric-difference area.
+
+Finally, the area under the decreasing boundary is
+\[
+ \area{D_0}=\int_0^1 B(s)(-A'(s))\,ds
+ =\int_0^1\left(s-\frac{s^2}{2}\right)s\,ds=\frac5{24}.
+\]
+Rescaling area yields the second assertion.
+\end{proof}
+
+\begin{corollary}[Lower asymptotic]\label{cor:lower}
+\[
+ \area{T_\omega}=1+\frac{\omega^2}{2}+o(\omega^4),\qquad
+ \liminf_{\omega\downarrow0}\frac{m(\omega)-1-\omega^2/2}{\omega^4}\ge0.
+\]
+\end{corollary}
+\begin{proof}
+Combine Proposition~\ref{prop:feasible}, Lemma~\ref{lem:limit}, and
+$\sec\omega=1+\omega^2/2+5\omega^4/24+O(\omega^6)$.
+\end{proof}
+
+\section{Near-full area controls all relevant supports}
+The next estimate is geometric and does not require the set to be a sofa or to be convex.
+
+\begin{lemma}[A triangle in a missing support slice]\label{lem:slice}
+Let $S$ be a nonempty compact subset of $P_\omega$, let $\Delta=\area{P_\omega}-\area S$, and let
+$e=h_{P_\omega}(t)-h_S(t)\ge0$ for $t\in J_\omega$. Then
+\[
+ \Delta\ge\frac18\min\{e,\sin\omega\}^2\cot\omega.
+\]
+Consequently, for any sequence $\omega\downarrow0$ with $\Delta=O(\omega^4)$,
+\begin{equation}\label{eq:support-close}
+ \sup_{t\in J_\omega}\bigl(h_{P_\omega}(t)-h_S(t)\bigr)
+ \le\sqrt{8\Delta\tan\omega}=O(\omega^{5/2})=o(\omega^2)
+\end{equation}
+for sufficiently small $\omega$.
+\end{lemma}
+\begin{proof}
+First let $0\le t\le\omega$ and $e>0$. Put $e_0=\min\{e,\sin\omega\}$, let $B=(\sec\omega,0)$, and consider the triangle with vertices
+\[
+ B,\qquad B-\frac{e_0}{2}(1,0),\qquad B+\frac{e_0}{2\sin\omega}v_\omega.
+\]
+Both nontrivial displacements are along edges of $P_\omega$ and have length at most $1/2$, whereas the edges have length $\sec\omega\ge1$. Hence the triangle lies in $P_\omega$. The decreases of $\ip p{u_t}$ from its value at $B$ are respectively
+\[
+ 0,\qquad \frac{e_0}{2}\cos t\le\frac{e_0}{2},\qquad
+ \frac{e_0}{2\sin\omega}\sin(\omega-t)\le\frac{e_0}{2}.
+\]
+Every point of this triangle therefore has scalar product at least $h_{P_\omega}(t)-e_0/2>h_S(t)$. It misses $S$ completely. Its area is $e_0^2\cot\omega/8$, proving the inequality. The case $e=0$ is immediate.
+
+For normals in $[\pi/2,\pi/2+\omega]$, apply the same argument after the reflection
+$M_\omega(x,y)=(-x\sin\omega+y\cos\omega,x\cos\omega+y\sin\omega)$, which preserves $P_\omega$ and area, and exchanges the two normal intervals. This does not presume reflection symmetry of $S$.
+
+If some deficit were at least $\sin\omega$, the first inequality would give $\Delta\ge\sin\omega\cos\omega/8$, contradicting $\Delta=O(\omega^4)$ for small $\omega$. All deficits are therefore below $\sin\omega$ simultaneously, and solving the inequality for $e$ proves \eqref{eq:support-close} uniformly in $t$.
+\end{proof}
+
+\begin{lemma}[An unavoidable missing corner]\label{lem:unavoidable}
+Let $\omega_n\downarrow0$ and let $S_n\subset P_{\omega_n}$ be normalized feasible sofas with
+$\Delta_n=\area{P_{\omega_n}}-\area{S_n}=O(\omega_n^4)$. Set
+\[
+ E_n=\omega_n^{-2}(P_{\omega_n}\setminus S_n).
+\]
+For almost every $z\in D_0$ one has $z\in E_n$ for all sufficiently large $n$. In particular
+\[
+ \liminf_{n\to\infty}\frac{\Delta_n}{\omega_n^4}\ge\frac5{24},\qquad
+ \area{D_0\setminus E_n}\longrightarrow0.
+\]
+\end{lemma}
+\begin{proof}
+For an interior point $z=(x,y)$ of $D_0$ with $x,y>0$, choose $s\in(0,1)$ such that $x<A(s)$ and $y<B(s)$, with strict margins. Lemma~\ref{lem:slice} and \eqref{eq:threshold-limit} imply
+\[
+ \frac{h_{S_n}(\omega_n s)-1}{\omega_n^2}\longrightarrow A(s),\qquad
+ \frac{h_{S_n}(\omega_n s+\pi/2)-1}{\omega_n^2}\longrightarrow B(s).
+\]
+The two scalar products of $z$ with $u_{\omega_n s}$ and $v_{\omega_n s}$ converge to $x,y$. Hence $\omega_n^2z$ lies in the forbidden quarter-plane \eqref{eq:forbidden} for all large $n$, so does not belong to $S_n$. Because $x,y>0$, it lies in $P_{\omega_n}$ for all sufficiently large $n$. Thus $z\in E_n$ eventually.
+
+The excluded axes and boundary have area zero. Fatou's lemma on $D_0$ gives the lower bound on $\area{E_n}=\Delta_n/\omega_n^4$. Dominated convergence on the bounded set $D_0$ gives $\area{D_0\setminus E_n}\to0$.
+\end{proof}
+
+\section{The optimum and an asymptotic equality case}
+\begin{theorem}[Small-angle optimum]\label{thm:optimum}
+For the fixed-net-rotation problem,
+\[
+ \boxed{\displaystyle m(\omega)=1+\frac{\omega^2}{2}+o(\omega^4)\qquad(\omega\downarrow0).}
+\]
+\end{theorem}
+\begin{proof}
+The lower bound is Corollary~\ref{cor:lower}. For an arbitrary sequence $\omega_n\downarrow0$, choose feasible sofas of area at least $m(\omega_n)-\omega_n^5$ and normalize them to $S_n\subset P_{\omega_n}$. This uses only the definition of a finite supremum: existence of an actual maximizer is unnecessary. Since $m(\omega_n)\ge\area{T_{\omega_n}}$,
+\[
+ 0\le\Delta_n\le\area{N_{\omega_n}}+\omega_n^5=O(\omega_n^4).
+\]
+Lemma~\ref{lem:unavoidable} yields $\liminf\Delta_n/\omega_n^4\ge5/24$. Therefore
+\begin{align*}
+ \limsup_{n\to\infty}\frac{m(\omega_n)-1-\omega_n^2/2}{\omega_n^4}
+ &\le\limsup_{n\to\infty}
+ \left(\frac{\sec\omega_n-1-\omega_n^2/2}{\omega_n^4}
+       -\frac{\Delta_n}{\omega_n^4}+\omega_n\right)\\
+ &\le\frac5{24}-\frac5{24}=0.
+\end{align*}
+Together with the lower limit this proves the theorem for an arbitrary sequence, hence as $\omega\downarrow0$.
+\end{proof}
+
+\begin{theorem}[Rigidity of the limiting missing corner]\label{thm:rigidity}
+Let $\omega_n\downarrow0$ and let $S_n\subset P_{\omega_n}$ be normalized feasible sofas satisfying
+\[
+ m(\omega_n)-\area{S_n}=o(\omega_n^4).
+\]
+Then
+\[
+ \boxed{\displaystyle
+ \area{\bigl(\omega_n^{-2}(P_{\omega_n}\setminus S_n)\bigr)\mathbin\triangle D_0}\longrightarrow0.}
+\]
+Thus all sufficiently accurate near-maximizers have the same limiting missing-corner region in measure. This is not exact positive-angle uniqueness and is not a Hausdorff-convergence assertion about the missing sets.
+\end{theorem}
+\begin{proof}
+Write $E_n=\omega_n^{-2}(P_{\omega_n}\setminus S_n)$. Theorem~\ref{thm:optimum} and the expansion of $\sec\omega_n$ give
+\[
+ \area{E_n}=\frac{\sec\omega_n-\area{S_n}}{\omega_n^4}\longrightarrow\frac5{24}=\area{D_0}.
+\]
+In particular the area deficit is $O(\omega_n^4)$, so Lemma~\ref{lem:unavoidable} gives $\area{D_0\setminus E_n}\to0$. It follows that $\area{E_n\cap D_0}\to\area{D_0}$ and, by subtracting from the convergent total area, $\area{E_n\setminus D_0}\to0$. Adding the two differences proves the assertion. The total-area equality is essential here: it prevents a positive amount of rescaled missing area from escaping to the other vertices of $P_{\omega_n}$.
+\end{proof}
+
+\section{What is and is not settled}
+The construction $T_\omega$ is a feasible, asymptotically optimal family. Nothing above says that it is an exact maximizer for any $\omega>0$, that an exact maximizer is unique, or that its boundary follows the parallelogram's contact pattern. The missing-corner theorem is an asymptotic rigidity result for near-maximizers, with a specified scaling and topology.
+
+The next optimization question is the first nonzero correction beyond $1+\omega^2/2$, together with the boundary/contact perturbations responsible for it. The missing-slice estimate supplies a quantitative starting point: every $O(\omega^4)$-near-full sofa has relevant supports within $O(\omega^{5/2})$ of $P_\omega$. A sharper variational analysis must improve this information rather than substituting the explicit competitor for an unknown optimizer. The note uses no global Gerver upper bound, no fixed-angle maximizer-existence theorem, and no unproved equality-case premise.
+\end{document}

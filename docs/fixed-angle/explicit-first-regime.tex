@@ -1,0 +1,143 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\title{An Explicit Analytic Bridge from One to 1.01 Radians}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+
+\section{Solving the first two contacts without a singular three-variable root}
+Let $0<L\le1/50$ and define
+\[
+ F(L)=3-L\cot(L/2),\qquad
+ H(L)=\frac{\sin L-L\cos L}{1-\cos L},\qquad G(L)=2+H(L).
+\]
+Choose the small positive solution of
+\[
+ F\cos\phi-G\sin\phi=1.
+\]
+It is explicitly
+\[
+ \phi=2\arctan\frac{F-1}{G+\sqrt{G^2+F^2-1}},\qquad
+ g_0=\sqrt{F^2+G^2-1},\qquad b=\phi+L.
+\]
+Thus rotation of the initial arms $(1,g_0)$ through $\phi$ gives $(F,G)$.
+
+\begin{lemma}[Exact contact identities]
+If the first core-only interval has length $L=b-\phi$, the two equations $e(b)=\gamma(\phi)$ are exactly satisfied by these values of $F=f(\phi)$ and $G=g(\phi)$.
+\end{lemma}
+\begin{proof}
+On this interval $f'=1$, $g'=-1$, and $r_p=g-1$. Translation of the support by a multiple of $\cos t$ translates both contact points horizontally and cancels from their difference. The two residuals in the frame at $b$ are therefore
+\[
+ (2-G)(1-\cos L)+(F-2)\sin L+L,
+ \qquad (2-G)\sin L+(F-2)\cos L+1.
+\]
+Solving these two linear equations gives precisely the displayed $F,G$. The denominator $1-\cos L$ is positive. This is an exact elimination, not an asymptotic expansion.
+\end{proof}
+
+\section{A scalar floor contact with uniform brackets}
+Put $q=F-1$ and $E_b=q\cos\phi-\sin\phi$. For $c>b$ define
+\[
+ E(c)=E_b-\frac12\int_0^{c-b}(L-H+s)\cos(b+s)\,ds.
+\]
+This is the ordinate of the inner wall envelope at $c$ when its curvature on $[b,c]$ is $g/2$.
+
+\begin{lemma}[Rational bounds and a unique floor root]\label{lem:bounds}
+Throughout $0<L\le1/50$,
+\[
+ \frac4{25}L^2\le q\le\frac{17}{100}L^2,
+ \qquad \frac{33}{50}L\le H\le\frac{67}{100}L,
+\]
+\[
+ \frac{L^2}{13}<\phi<\frac{L^2}{11},\qquad
+ \frac{L^2}{15}<E_b<\frac{L^2}{10}.
+\]
+There is exactly one root of $E(c)=0$ in
+\[
+ \frac65L<c<\frac32L.
+\]
+It depends continuously on $L$ and tends to zero with $L$.
+\end{lemma}
+\begin{proof}
+For $0<x\le1/50$, alternating Taylor bounds give
+\[
+ x^3/3-x^5/24\le\sin x-x\cos x\le x^3/3+x^5/120,
+\]
+\[
+ x-x^3/6\le\sin x\le x,\qquad
+ x^2/2-x^4/24\le1-\cos x\le x^2/2.
+\]
+Apply the first pair to $q=2(\sin x-x\cos x)/\sin x$ with $x=L/2$, and the first and third pairs to $H$. The four resulting rational inequalities imply the first two bounds in the statement.
+
+The function $F\cos t-G\sin t-1$ strictly decreases for the small positive arguments under consideration. At $t=L^2/13$ it is positive, using $q\ge4L^2/25$, $G\le2+67/(100\cdot50)$, and $\cos t\ge1-t^2/2$, $\sin t\le t$. At $t=L^2/11$ it is negative, using $q\le17L^2/100$, $G\ge2$, and $\sin t\ge t-t^3/6$. This proves the two bounds on $\phi$. Substitution into $E_b=q\cos\phi-\sin\phi$ gives the stated bounds; all the arguments here are below $1/1000$, leaving strict margins in the rational comparisons.
+
+Since $L-H>0$, the function $E(c)$ strictly decreases as long as $b<c<\pi/2$. At $c=6L/5$ its subtracted integral is at most
+\[
+ \tfrac12[(34L/100)(L/5)+(L/5)^2/2]=11L^2/250<L^2/15.
+\]
+At $c=3L/2$, one has $c-b\ge49L/100$ and $\cos(b+s)>999/1000$. Thus that integral is at least
+\[
+ \frac{999}{2000}\left[\frac{33L}{100}\frac{49L}{100}
+                         +\frac12\left(\frac{49L}{100}\right)^2\right]>L^2/10.
+\]
+The intermediate value theorem and strict decrease give existence and uniqueness. The nonzero derivative at the root gives continuous dependence on every positive $L$; the displayed brackets give convergence at zero.
+\end{proof}
+
+\section{The resulting rotation angles cover the bridge}
+Write $h=c-b$ and put
+\[
+ f_c=F+L+\frac12(G-L)h-\frac14h^2,
+ \qquad w=G+\phi+c-f_c.
+\]
+This last equation is exactly the midpoint arm condition after the core-only interval following $c$. Direct simplification gives
+\[
+ \delta:=w-1=H-q+2\phi+\frac12(L-H)h+\frac14h^2.
+\]
+The rational bounds above imply
+\[
+ \frac{13}{20}L<\delta<\frac7{10}L.
+\]
+In particular $w>1$, $c<w/2$, and $w<1.014$. The continuous function $w(L)$ tends to one at zero and exceeds $1.013$ at $L=1/50$. Consequently its image contains every $w\in(1,1.01]$. Monotonicity of $w(L)$ is not needed for this coverage assertion.
+
+\section{Uniform admissibility, without sampled geometry}
+\begin{lemma}[The support tests hold on the whole constructed family]
+For every $0<L\le1/50$, the reflected shooting solution has $p_0<5/3$, $g_0-p_0<1$, and $p''<-11/100$ on every open coefficient interval.
+\end{lemma}
+\begin{proof}
+Compare its first curvature with the relaxed curvature $w-t$, writing $\epsilon(t)=r_p(t)-(w-t)$. On the first half, before $\phi$, its magnitude is at most $51/50$. On $(\phi,b)$ and $(c,w/2)$ it is the constant
+\[
+ \epsilon_0=q-\phi-\tfrac12(L-H)h-\tfrac14h^2,
+ \qquad |\epsilon_0|<L^2/2.
+\]
+On $(b,c)$ it equals $(t-\delta+\epsilon_0)/2$, whose absolute value is less than $L$. On the reflected half it is the difference of $r_k$ from $t$. This is $-t$ before the reflected parameter reaches $\phi$, and subsequently the difference $f-1-t$. The latter starts at $q-\phi$ and changes on $[b,c]$ by the integral of $(H+\phi-t)/2$. The bounds $h<L/2$ and $c<3L/2$ give absolute value less than $L^2$. It follows that
+\[
+ \epsilon(t)\le L\quad\hbox{everywhere off the breakpoints},\qquad
+ \|\epsilon\|_1<2L^2.
+\]
+For the second estimate, the separate upper bounds are
+$(51/50)\phi$, $(51/100)(L^2/2)$, $Lh$, and $(51/100)L^2$; their sum is less than $2L^2$.
+
+The relaxed support is $p^*(t)=w-t+c_w\cos t+\sin t$. The difference $U=p-p^*$ satisfies $U''+U=\epsilon$, $U'(0)=0$, $U(w)=0$. The sine-kernel formula gives
+\[
+ |U(0)|\le\sec w\,\|\epsilon\|_1,\qquad
+ \|U\|_\infty\le(1+\sec w)\|\epsilon\|_1<6L^2.
+\]
+Here $w<1.014<51/50$, and elementary Taylor bounds at $1$ and $51/50$ give $27/100<c_w<3/10$ and $\cos w>1/2$. Consequently
+\[
+ p''=-(c_w\cos t+\sin t)+\epsilon-U
+ <-27/200+L+6L^2\le-27/200+1/50+6/2500<-11/100.
+\]
+Also $p_0=w+c_w+U(0)<1.014+0.3+6/2500<5/3$, while $p_0>1+0.27-6/2500>1.26$. The formula for $g_0$ and the bounds on $F,G$ give $g_0<2.02$, so $g_0-p_0<0.76<1$. These are the finite admissibility tests.
+\end{proof}
+
+\begin{theorem}[An explicit postcritical interval is closed]
+For every $1<w\le1.01$, at least one member of the construction above has angle $w$, and its sofa is the unique normalized unrestricted optimum. Thus the postcritical theorem no longer depends on an unspecified interval length near one.
+\end{theorem}
+\begin{proof}
+The continuous angle coverage supplies a parameter $L$. Its equations give the three exact contacts, with $0<\phi<b<c<w/2$ and $\phi<1/12$. The preceding lemma verifies the sufficient support tests. Apply \texttt{finite-admissibility-tests.tex} and the order-independent global contact certificate. If two parameters produced different optimal sofas at the same angle, the uniqueness conclusion of either certificate would rule that out.
+\end{proof}
+
+\paragraph{Scope and verification.}
+This is an analytic bridge, not a numerical root enclosure. All constants are rational Taylor bounds on explicitly stated small intervals. Continuation above $1.01$ remains a separate task. No CI, Lean compilation, or TeX compilation was used.
+\end{document}

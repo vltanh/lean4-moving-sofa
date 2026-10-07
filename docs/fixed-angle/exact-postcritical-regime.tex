@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\title{An Exact Unique Optimum Immediately Above One Radian}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+We prove that the analytic contact branch constructed in \texttt{contact-branch-existence.tex} is the unique unrestricted fixed-angle optimum on some interval $1<\omega<1+\varepsilon$. The proof verifies its entire niche boundary and applies the strictly concave lifted contact certificate to every global maximizing cap. This is an exact local-in-angle optimizer theorem, not only an asymptotic result. The interval length is existential: no explicit numerical lower bound for $\varepsilon$ or continuation through all later contact changes is claimed. The fifth-order transition formula then shows that the optimum-area function is $C^4$ but not $C^5$ at one radian.
+\end{abstract}
+
+\section{The branch and its two wall envelopes}
+Write $w=1+\delta$ and use the analytic branch of \texttt{contact-branch-existence.tex}. Its parameters satisfy
+\[
+ \phi=\tfrac3{16}\delta^2+O(\delta^3),\qquad
+ b=\tfrac32\delta+O(\delta^2),\qquad c=2\delta+O(\delta^2).
+\]
+The active supports are $p,k$, reflected about $w/2$, and the arms are $f=k-p'$, $g=p+k'$. They are positive with $f'>0$, $g'<0$; in the interior $f,g>1$ and $p,k>1$. The branch already defines a feasible normalized cap $K_\delta$ and sofa $K_\delta\setminus N_w(K_\delta)$.
+
+Put $\gamma=(p-1)u_t+(k-1)v_t$ and $e(t)=(p(t)-1)u_t+p'(t)v_t$. The shooting equations give
+\[
+ e(b)=\gamma(\phi),\qquad e(c)_y=0.
+\]
+On $[b,c]$ the first curvature density is $r_p=p+p''=g/2<1$. Thus $e'=(r_p-1)v_t$: its first coordinate increases and its ordinate decreases to zero. It lies in the fan. The proposed outer boundary of the niche consists of this arc traversed from $c$ to $b$, the corner curve from $\phi$ to $w-\phi$, and the reflected wall arc, together with the two fan-ray segments to the origin.
+
+\begin{lemma}[The relevant curvature has only one early super-unit interval]\label{lem:curvature}
+For sufficiently small positive $\delta$ there is $\tau\in(\phi,b)$ such that
+\[
+ 1-r_p(t)=t-\tau\quad(\phi<t<b),\qquad r_p(t)\le1\quad(b\le t\le w).
+\]
+The corner curve has strictly increasing tangent angle and strictly increasing polar angle in the fan.
+\end{lemma}
+\begin{proof}
+On the first core-only interval $g=A-t$, $r_p=g-1$, and $A=2+\delta+O(\delta^2)$. Set $\tau=A-2=\delta+O(\delta^2)$; the ordering follows from the expansions. On $[b,c]$, $g<2$ and $r_p=g/2<1$; on $[c,w/2]$, $r_p=g-1<1$. On the other half, reflection gives $r_p(t)=r_k(w-t)=f(w-t)-1$ while the core is present, and zero otherwise. There $f\le f(w/2)=3/2+O(\delta)<2$.
+
+Write $q=f-1>0$, $r=g-1>0$. The corner derivative is $-q u_t+r v_t$. Its tangent-angle derivative is
+\[
+ 1+\frac{rq'-qr'}{q^2+r^2}>0.
+\]
+Its polar-angle derivative is positive because $\gamma\times\gamma'=(p-1)r+(k-1)q>0$. All assertions hold piecewise with continuous matching, which suffices for strict monotonicity.
+\end{proof}
+
+\begin{lemma}[The corner joining point satisfies all later inner-wall inequalities]\label{lem:joining}
+For every $t\in[\phi,w]$,
+\[
+ \gamma(\phi)\cdot u_t\ge p(t)-1.
+\]
+\end{lemma}
+\begin{proof}
+Let $E(t)=\gamma(\phi)\cdot u_t-(p(t)-1)$. The shooting equations give $E(b)=E'(b)=0$, and $E''+E=1-r_p$. Thus $E(t)\ge0$ for $t\ge b$ by the positive sine-kernel formula and Lemma~\ref{lem:curvature}.
+
+For $\phi\le t\le b$ the backward formula is
+\[
+ E(t)=\int_t^b(u-\tau)\sin(u-t)\,du,
+\]
+and $E(\phi)=0$ because the corner lies on its own wall. If $t\ge\tau$ the integral is nonnegative. If $\phi<t<\tau$, the ratio $\sin(u-t)/\sin(u-\phi)$ is increasing in $u$. Comparing it with its value at $u=\tau$, the negative part of $u-\tau$ and the positive part give
+\[
+ E(t)\ge\frac{\sin(\tau-t)}{\sin(\tau-\phi)}
+ \int_t^b(u-\tau)\sin(u-\phi)\,du>0.
+\]
+The final integral is positive since its extension down to $\phi$ is zero and the removed portion is strictly negative. This proves the claim throughout the interval.
+\end{proof}
+
+\section{Verification of the entire niche boundary}
+\begin{lemma}[No displayed boundary arc lies inside any excluded quarter-plane]\label{lem:boundary}
+Every point of $\gamma([\phi,w-\phi])$, $e([b,c])$, and the reflected wall arc avoids every open quarter-plane defining $N_w(K_\delta)$.
+\end{lemma}
+\begin{proof}
+First consider a core point $\gamma(s)$ and a later angle $t\ge s$. If $t\le w-\phi$, the scalar projection $\gamma(r)\cdot u_t$ on $\phi\le r\le t$ has its minimum at an endpoint. Indeed its derivative is the speed times the cosine of the strictly increasing tangent angle minus $t$; this difference lies in $(0,\pi)$, so the derivative can change sign only from positive to negative. The two endpoint projections are at least $p(t)-1$, by Lemma~\ref{lem:joining} and the defining equality at $r=t$. If $t>w-\phi$, use the same endpoint-minimum argument on $[\phi,w-\phi]$. Its other endpoint satisfies the required inequality by the forward sine-kernel formula from $w-\phi$ to $t$, since $r_p\le1$ there and the initial derivative is $f(w-\phi)-1>0$. Thus every core point satisfies the later inner $b$-wall inequality. Reflection handles earlier inner $d$-walls, proving the assertion for the core.
+
+For a wall point $e(t)$ with $b\le t\le c$, the inequality $e(t)\cdot u_s\ge p(s)-1$ holds for every $s\ge b$: it follows from $p+p''\le1$ on $[b,w]$ and the forward or backward sine-kernel formula for the support. For $\phi\le s\le b$, start from $e(b)=\gamma(\phi)$ and Lemma~\ref{lem:joining}. The increment from $b$ to $t$ has nonnegative projection on $u_s$, because it is the integral of $(r_p(u)-1)\sin(s-u)\ge0$. Hence the wall point avoids every quarter-plane at angle $s\ge\phi$.
+
+It remains to check $0<s<\phi$, not to assume it. Put $\alpha=p(0)-1$. If a wall point has $x\ge\alpha$, then $p(s)=p(0)\cos s$ and $y\ge0$ imply $x\cos s+y\sin s\ge p(s)-1$. For $x$ between $\gamma_x(\phi)$ and $\alpha$, there is a unique $u\in[0,\phi]$ with $\gamma_x(u)=x$. At this fixed abscissa, the smaller branch of the quarter-plane tent is the $d$-branch for $s\le u$ and the $b$-branch for $s\ge u$.
+
+The $b$-branch decreases there: its derivative is $(x-z_b(s))/\sin^2s$, and before $\phi$ one has $z_b(s)=p(0)-\cos s\ge\alpha\ge x$. The $d$-branch increases there: its derivative is $(x-z_d(s))/\cos^2s$, where $z_d=\gamma_x-(g-1)\cos s$. Uniformly, $x\ge\gamma_x(\phi)=\alpha-O(\phi^2)$, $\gamma_x(s)\le\alpha$, and $(g-1)\cos s$ stays bounded below by a positive constant. Consequently every early tent height is at most $\gamma_y(u)$.
+
+The initial corner graph lies strictly below the wall graph to the right of their joining abscissa. They agree at $\gamma_x(\phi)$. On $0<u\le\phi$, $\gamma_y'$ is bounded below by a positive constant while $-\gamma_x'\le C\phi$, so the corner graph has slope at most $-c_0/\phi$. The wall graph has slope $-\cot t\ge-\cot b$. Since $\phi=O(\delta^2)$ and $b$ is of order $\delta$, the corner slope is strictly smaller for small $\delta$. Integration from the common endpoint proves the claimed ordering. The wall's floor endpoint is beyond $\alpha$ by the floor-extent lemma in \texttt{contact-branch-existence.tex}, so this comparison covers the whole required abscissa interval. Thus no early tent contains the wall point. Reflection completes the proof.
+\end{proof}
+
+\begin{theorem}[The asserted arcs are exactly the niche boundary, up to the fan edges]\label{thm:niche}
+The niche has the same area as the radial region bounded by the three arcs specified above and the fan-ray segments. The candidate's area therefore equals the lifted value $Q$ with core cut $a=\phi$ and the two envelope supports used in the contact certificate.
+\end{theorem}
+\begin{proof}
+On the right wall arc, $e\times e'=(p-1)(r_p-1)<0$. Traversing it backwards increases the polar angle from zero to that of $\gamma(\phi)$. The core polar angle increases strictly, and reflection supplies the final portion up to the other fan ray. Thus the three arcs form a continuous positive radial graph and bound a star-shaped region $\Omega$.
+
+Every strict radial contraction of a core point belongs to its own quarter-plane, since both thresholds are positive. A wall point satisfies its inner $b$-wall with equality and its inner $d$-wall strictly: its $v_t$ coordinate is $p'=k-f<(k-1)$. Its strict radial contractions therefore also belong to that quarter-plane; the argument is valid whether that coordinate is positive or negative. Reflection handles the other arc. Hence the interior of $\Omega$ is in the niche.
+
+Conversely the niche is star-shaped about the origin. If one of its points were radially beyond the displayed graph, its contraction to the graph would still satisfy both strict inequalities of a witnessing quarter-plane, contradicting Lemma~\ref{lem:boundary}. Thus the niche is contained in $\Omega$ up to the graph and fan boundary conventions. These boundaries have area zero. Green's formula gives its area as the core integral plus the two reversed wall integrals. The additional constant-point pieces of the lifted envelope supports contribute zero, and the joins coincide, so this is exactly the niche expression subtracted in $Q$.
+\end{proof}
+
+\section{Global optimality and uniqueness on a genuine postcritical interval}
+\begin{theorem}[Exact unique unrestricted optimizer]\label{thm:main}
+There is $\varepsilon>0$ such that for every $1<w<1+\varepsilon$, the analytic shooting branch of \texttt{contact-branch-existence.tex} gives the unique normalized unrestricted optimal sofa. It is specified by the three displayed contact equations, the explicitly given piecewise linear ODE, and the unique analytic parameter branch with limits $(3/16,3/2,2)$ after rescaling.
+\end{theorem}
+\begin{proof}
+For the candidate, define the right lifted support to be $\gamma(\phi)\cdot u_t$ on $[\phi,b]$, $p(t)-1$ on $[b,c]$, and the floor-intercept cosine on $[c,\pi/2]$. The shooting equations give matching values and derivatives. Lemma~\ref{lem:joining} verifies the obstacle on the first interval. On the final interval the sine-kernel formula and $r_p\le1$ verify it up to $w$. On the contact interval its curvature is $r_p-1<0$, and elsewhere it is zero. The reflected support has the same properties. The curvature balance equations and endpoint derivative conditions hold by construction. The global contact certificate of \texttt{lifted-contact-certificate.tex} therefore identifies this tuple as the unique maximizer of the strictly concave lifted functional over its entire obstacle domain.
+
+Now take any global maximizing cap at angle $w$. The maximizing-cap closeness lemma in \texttt{transition-asymptotics.tex} shows, uniformly over that choice, convergence in active $C^1$ supports to the angle-one relaxed cap as $w\downarrow1$. Its proof only uses the previously constructed feasible recovery bound, the original quadratic gap, and the fixed-angle curvature theorem; it does not assume the current contact branch is optimal. In particular all the positive-threshold and arm hypotheses of the lifting theorem hold for these caps.
+
+The cut separation holds uniformly as well. The chosen cuts have angle $\phi\to0$ and $w-\phi\to1$, with thresholds tending to $c_1=\sec1-\tan1$. A point in both limiting cut half-planes has ordinate at least $c_1(1+\sin1)/\cos1=1$. Their intersection remains above a fixed height greater than one half for small $\delta$. Meanwhile all maximizing-cap niche quadrilaterals lie in a fixed disk of radius less than one half, after a sufficiently small enlargement of the limiting radius $\sqrt2c_1<1/2$. Thus their niche portions beyond the two cuts are disjoint.
+
+Every global maximizing cap can consequently be lifted to an admissible tuple whose $Q$ bounds its cap functional from above. The unique lifted optimum is the candidate tuple, and Theorem~\ref{thm:niche} says its $Q$ is its actual feasible sofa area. This sandwiches the cap maximum and unrestricted sofa maximum to that value. Equality for any maximizing cap forces equality of its active supports with the candidate, by strict concavity of $Q$.
+
+Finally the candidate sofa is regular closed. Its niche is a positive continuous radial region bounded by the displayed arcs, lies strictly inside the unit fan sector, and includes the fan-edge points below the two outer floor endpoints. Every surviving boundary point can be moved a little radially outwards, then approximated by interior points of the cap outside the closed niche. Points already outside the closed niche have such interior approximations by convexity of the cap. Thus the sofa is the closure of its interior. An arbitrary optimal original sofa is a closed subset of its equal-area monotone envelope; that envelope has the unique candidate cap. The closed-subset equality lemma therefore recovers the entire candidate sofa. This proves unrestricted uniqueness, not just uniqueness of the lifted variables or the envelope.
+\end{proof}
+
+\begin{corollary}[The optimum-area function has a fifth-order transition]
+The function $m(w)$ is $C^4$ but not $C^5$ at $w=1$. Its fifth derivative from the right is $-229/16$, and from the left is zero.
+\end{corollary}
+\begin{proof}
+On the right, the parameter branch, linear ODE propagation and boundary-integral area are analytic functions of $\delta$ and extend analytically to $\delta=0$ through their explicit formulas. The fifth-order theorem gives
+\[
+ m(1+\delta)=1+(1+\delta)^2/2-(229/1920)\delta^5+o(\delta^5).
+\]
+Analyticity therefore identifies its Taylor coefficients through degree five. On the left the value is exactly the quadratic polynomial. Derivatives through order four agree, while the fifth derivatives differ by $5!\cdot229/1920=229/16$. The differentiability conclusion uses the analytic exact branch, not the asymptotic remainder alone.
+\end{proof}
+
+\paragraph{Scope and proof status.}
+The interval length in Theorem~\ref{thm:main} is existential. This does not validate the numerical continuation through all later contact-order changes or solve every angle below $\pi/2$. The proof supplies an exact postcritical regime and a rigorous global certificate framework for extending it. All statements remain paper-proof drafts awaiting independent review; no CI, Lean compilation, or TeX compilation was run.
+\end{document}

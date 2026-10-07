@@ -1,0 +1,153 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Optimality and Uniqueness for Net Rotation at Most One Radian}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+In the usual unit-width right-angled hallway, let $m(\omega)$ denote the maximum area for a prescribed net clockwise rotation $\omega$. Using fixed-angle penalized selection and first variation from the companion manuscript, we prove $m(\omega)=1+\omega^2/2$ for $0\le\omega\le1$, and identify the unique normalized optimizer. The candidate and its relaxed value are Baek's. The new steps are the fixed-angle curvature passage for every maximizing cap, an elementary arm bootstrap, and a signed-area majorization that does not require prior fan containment. A regular-closedness argument recovers arbitrary original sofas from their maximizing envelopes. This is a paper proof with explicitly identified inputs, not a Lean-checked result. Angles greater than one radian are not classified by this theorem.
+\end{abstract}
+
+\section{Statement and candidate}
+Use the prescribed-net-angle convention of \texttt{paper.tex}: sofas are nonempty compact connected subsets of the plane admitting a continuous motion from the horizontal arm to the vertical arm of
+\[
+ L=((-\infty,1]\times[0,1])\cup([0,1]\times(-\infty,1]),
+\]
+with angular lift starting at zero and ending at $-\omega$. Backtracking is allowed. For $0<\omega\le1$ put
+\[
+ u_t=(\cos t,\sin t),\quad v_t=(-\sin t,\cos t),\quad
+ c=\sec\omega-\tan\omega,\quad o=(c,1),
+\]
+\[
+ F_\omega=\{z:z_y\ge0,\ \ip z{u_\omega}\ge0\},\qquad
+ P_\omega=\{z:0\le z_y\le1,\ 0\le\ip z{u_\omega}\le1\}.
+\]
+Define
+\[
+ A(t)=o+(\omega-t)u_t-v_t,\qquad C(t)=o+t v_t-u_t,
+\]
+\[
+ K_\omega^*=\operatorname{conv}\bigl(\{O,o\}\cup A([0,\omega])\cup C([0,\omega])\bigr),
+ \qquad S_\omega^*=K_\omega^*\setminus N_\omega(K_\omega^*).
+\]
+The niche always uses the fan $F_\omega$, as defined in the companion manuscript. This is Baek's relaxed cap $K_{\omega,1}$ in the endpoint-strip normalization. Its supports are
+\[
+ p_*(t)=\omega-t+\ip o{u_t},\qquad k_*(t)=t+\ip o{v_t},
+\]
+and its canonical corner is
+\[
+ \gamma(t)=o+(\omega-t-1)u_t+(t-1)v_t.
+\]
+
+\begin{theorem}[Unrestricted fixed-angle optimum]\label{thm:main}
+For $0\le\omega\le1$,
+\[
+ \boxed{m(\omega)=1+\frac{\omega^2}{2}.}
+\]
+At zero angle the only optimizer, in the fixed initial orientation and up to translation, is the unit square. For $0<\omega\le1$, every optimal sofa becomes exactly $S_\omega^*$ after the unique translation that makes its two upper endpoint supports equal to one. In particular the optimizer is unique up to congruence when no initial coordinate orientation is prescribed.
+\end{theorem}
+
+The direct feasibility, compactness and connectedness of $S_\omega^*$, as well as its exact area $1+\omega^2/2$, are proved in \texttt{relaxation.tex}. The candidate and relaxed functional are attributed there to Baek, \emph{A Conditional Upper Bound for the Moving Sofa Problem}, arXiv:2406.10725v1. The theorem here removes the restricted-class hypothesis from that note in the specified angle interval.
+
+\section{Existence at the cap level does not need Gerver optimality}
+Let $\mathcal K_\omega$ be the normalized cap class and $\mathcal A_\omega(K)=|K|-|N_\omega(K)|$.
+
+\begin{lemma}[Compactness and upper semicontinuity]\label{lem:existence}
+For $0<\omega<\pi/2$, the cap class is compact in Hausdorff distance and $\mathcal A_\omega$ is upper semicontinuous on it. If a cap of positive sofa area is available, a positive-area global cap maximizer exists.
+\end{lemma}
+\begin{proof}
+Every cap lies in the fixed compact parallelogram $P_\omega$. Blaschke selection, or equicontinuity of its uniformly bounded support functions, gives a Hausdorff-convergent subsequence from every sequence of caps. The four pinned support values pass to the limit.
+
+We check the defining-normal condition as well. Put
+\[
+ E=[0,\omega]\cup[\pi/2,\pi/2+\omega]\cup\{\pi+\omega,3\pi/2\}
+\]
+on the circle. The boundary-length measures of the approximating caps are supported on $E$. This follows first for finite outer approximations with normals in $E$, and then for caps by the distributional identity $\sigma_K=h_K+h_K''$. The same identity and uniform support convergence show that the limiting body's measure is supported on $E$. On each complementary normal interval $(a,b)$, of length less than $\pi$, its support solves $h''+h=0$. Hence
+\[
+ h(t)=\frac{\sin(b-t)}{\sin(b-a)}h(a)+\frac{\sin(t-a)}{\sin(b-a)}h(b),\quad a<t<b.
+\]
+The same positive-coefficient identity holds for $u_t$. Thus a point satisfying the limiting body's supporting inequalities on $E$ satisfies them on every complementary interval as well. The limiting body is therefore the intersection of its half-planes with normals in $E$, and remains a cap. This proves closedness and compactness.
+
+If $K_j\to K$ and $z\in N_\omega(K)$, an interior angle witnesses two strict support inequalities. Uniform support convergence preserves those inequalities for all sufficiently large $j$, while the fan is fixed. Thus $\mathbf1_{N_\omega(K)}\le\liminf_j\mathbf1_{N_\omega(K_j)}$ pointwise. Fatou's lemma gives lower semicontinuity of niche area. Convex-body area is continuous under bounded Hausdorff convergence, so their difference is upper semicontinuous. It is bounded above by $|P_\omega|=\sec\omega$. A maximizing sequence therefore has a maximizing limit. A positive competitor ensures that its area functional, and consequently its convex-body area, is positive.
+\end{proof}
+
+\section{Optimality and rigidity of all maximizing caps}
+\begin{lemma}[Every short-angle cap maximizer is the candidate]\label{lem:cap}
+For $0<\omega\le1$,
+\[
+ \max_{K\in\mathcal K_\omega}\mathcal A_\omega(K)=1+\omega^2/2,
+ \qquad \operatorname*{argmax}_{K\in\mathcal K_\omega}\mathcal A_\omega(K)=\{K_\omega^*\}.
+\]
+\end{lemma}
+\begin{proof}
+The feasible candidate in \texttt{relaxation.tex} has cap area $1+\omega^2/2>0$, so Lemma~\ref{lem:existence} supplies a global maximizer $K$. Apply \texttt{fixed-angle-curvature.tex} to this arbitrary maximizer, and then \texttt{arm-bootstrap.tex}. Its canonical arms satisfy
+\[
+ f(t)\ge1+t/2,\qquad g(t)\ge1+(\omega-t)/2.
+\]
+Consequently its continuously differentiable corner curve has strictly decreasing first coordinate. The theorem of \texttt{monotone-majorization.tex} now gives $\mathcal A_\omega(K)\le\mathcal A_1(K)$ without requiring prior fan containment.
+
+The strict quadratic gap in \texttt{relaxation.tex} yields
+\[
+ 1+\omega^2/2=\mathcal A_\omega(K_\omega^*)
+ \le\mathcal A_\omega(K)\le\mathcal A_1(K)
+ \le\mathcal A_1(K_\omega^*)=1+\omega^2/2.
+\]
+Every inequality is equality. To make the rigidity step explicit, let $f_0,g_0$ now denote the two support differences from the candidate, not the arm functions. The gap is at least
+\[
+ \frac12(1-\omega^2/2)\int_0^\omega f_0'^2
+ +\frac12\int_0^\omega(g_0'+f_0)^2.
+\]
+Its first coefficient is positive. Equality forces $f_0'=0$, hence $f_0=0$ by $f_0(\omega)=0$, and then $g_0'=0$, hence $g_0=0$ by $g_0(0)=0$. The active supports coincide, so the caps coincide. Since $K$ was any maximizing cap, this classifies every cap maximizer.
+\end{proof}
+
+\section{Recovering the actual sofa, not merely its area}
+\begin{lemma}[The candidate sofa is regular closed]\label{lem:regular}
+For $0<\omega\le1$, $S_\omega^*=\overline{\operatorname{int}S_\omega^*}$.
+\end{lemma}
+\begin{proof}
+The geometric lemmas of \texttt{relaxation.tex} give the convex region $D$ bounded by $O\gamma(0)$, the arc $\gamma$, and $\gamma(\omega)O$. Put $r=\omega+c-1>0$. They establish
+\[
+ \operatorname{int}D\subset N_\omega(K_\omega^*)\subset D,
+ \quad D\subset F_\omega\cap\{\|z\|\le\sqrt2 r\},\quad \sqrt2 r<1,
+\]
+and $K_\omega^*$ contains the unit disk sector in $F_\omega$.
+
+We first identify the possible points of $S_\omega^*$ on $D$. The origin belongs to the niche. For $0\le x<r$, the point $(x,0)$ belongs to a contributing quarter-plane at sufficiently small positive $t$: its first strict inequality follows from $a(0)=r>x$, where $a=p_*-1$, and its second from $-x\sin t<b(t)=k_*(t)-1>0$. Reflection gives the same assertion on the other radial edge. The niche is relatively open in $F_\omega$ and contained in $D$, so it cannot contain a point of the outer arc $\gamma$, including its endpoints: each has arbitrarily close points in the fan outside $D$. Therefore
+\[
+ S_\omega^*\cap D=\gamma([0,\omega]).
+\]
+
+A point of $S_\omega^*$ outside the closed set $D$ can be approximated by points of $\operatorname{int}K_\omega^*\setminus D$, since a convex body with nonempty interior is regular closed. These are interior points of the sofa. If $z=\gamma(t)$, move it a little outward along its ray from $O$. Convexity and the boundary description of $D$ show that $\lambda z\notin D$ for $\lambda>1$. For $\lambda$ sufficiently close to one, $\|\lambda z\|<1$, so $\lambda z$ is still in $K_\omega^*$. Such points again admit interior approximations outside $D$, including when the ray is a boundary ray of the fan. Letting $\lambda\downarrow1$ approximates $z$ by interior sofa points. The sofa is compact by its already proved feasibility construction, hence closed. This proves the lemma.
+\end{proof}
+
+\begin{lemma}[Closed-subset equality]
+If $T$ is regular closed with finite area and $S\subset T$ is closed with $|S|=|T|$, then $S=T$.
+\end{lemma}
+\begin{proof}
+If $z\in T\setminus S$, a ball about $z$ misses $S$. Regular closedness supplies an interior point of $T$ in that ball, and then a smaller open ball contained in $T\setminus S$. Its positive area contradicts area equality.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+The zero-angle case is the square theorem in \texttt{paper.tex}. Let $0<\omega\le1$. The candidate is feasible with the claimed area. For an arbitrary feasible sofa $S$, make the unique endpoint-support normalization and take its monotone envelope $T$. The fixed-angle monotonization and cap identities in the companion manuscript, Section 2, give
+\[
+ S\subset T=K\setminus N_\omega(K),\quad K\in\mathcal K_\omega,
+ \qquad |S|\le|T|=\mathcal A_\omega(K).
+\]
+These identities preserve the prescribed net angle, including when the original motion backtracks. Lemma~\ref{lem:cap} bounds the last expression by $1+\omega^2/2$, proving unrestricted optimality.
+
+If $|S|=1+\omega^2/2$, the two intervening inequalities are equalities. Thus $K$ is a global maximizing cap and Lemma~\ref{lem:cap} gives $K=K_\omega^*$. Hence $T=S_\omega^*$ and $S$ is a closed subset of $S_\omega^*$ with the same area. Lemma~\ref{lem:regular} and the closed-subset equality lemma imply $S=S_\omega^*$. No regularity assumption on the original sofa beyond closedness was added.
+\end{proof}
+
+\section{Dependency ledger and scope}
+The imported companion inputs are the fixed-angle cap/monotonization identities (Section 2), penalized selection (Section 4), and floating first variation (Section 5), at commit \texttt{1ade045936f32cf76572ee668ed8aa1627772bde}. The candidate and relaxation originate in Baek's 2024 conditional-bound paper. Their concrete formulas, feasibility for $\omega\le1$, and strict equality calculation are proved in \texttt{relaxation.tex}.
+
+The new fixed-angle curvature proof, arm bootstrap, and horizontal-monotonicity majorization are in the three correspondingly named notes. Cap attainment and recovery of arbitrary original sofas are supplied here. Neither the final Gerver optimality theorem nor its right-angle equality theorem is an input. Fan containment for an unknown maximizing corner is not assumed; in fact it follows afterwards from equality in the new majorization.
+
+This closes the unrestricted small-angle theorem on $[0,1]$, not the full classification on $[0,\pi/2]$. The negative-results workstream tests extension beyond one radian. The proof has not been independently refereed or formalized, and no CI, Lean compilation, or TeX compilation was run.
+\end{document}

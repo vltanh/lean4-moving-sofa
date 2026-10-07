@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\title{A Strictly Concave Fixed-Angle Lift with an Exact Contact Certificate}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+
+\section{The lifted functional}
+Fix $0<w<\pi/2$ and $0<a<w/2$, and put $b=w-a$, $c_w=\sec w-\tan w$. For $H^1$ functions $p,k$ on $[0,w]$ and $\beta,\eta$ on $[a,\pi/2]$, impose the affine trace conditions
+\[
+ p(w)=k(0)=1,\quad \beta(a)=p(a)-1,\quad\eta(a)=k(b)-1,
+ \quad\beta(\pi/2)=\eta(\pi/2)=0.
+\]
+Define the convex obstacle domain by adding
+\[
+ \beta(t)\ge p(t)-1,\qquad\eta(t)\ge k(w-t)-1\quad(a\le t\le w).
+\]
+No cap convexity is required for this relaxed domain. Write $A=p-1$, $B=k-1$ and set
+\begin{align*}
+ Q(p,k,\beta,\eta)={}&c_w+\frac12\int_0^w(p^2+k^2-p'^2-k'^2)\\
+ &-\frac12\int_a^b(A^2+B^2+A k'-B p')
+ -\frac12[A(a)B(a)+A(b)B(b)]\\
+ &+\frac12\int_a^{\pi/2}(\beta^2-\beta'^2+\eta^2-\eta'^2).
+\end{align*}
+This is a fixed-angle support-coordinate analogue of the cap-plus-two-convex-bodies lift used by Baek in Section 8 of \emph{Optimality of Gerver's Sofa}, arXiv:2411.19826v1. The elementary strictness proof below uses the two distinct endpoint strips and does not assume a Gerver contact pattern.
+
+\begin{theorem}[Strict concavity on the whole affine trace space]\label{thm:concavity}
+$Q$ is strictly concave, hence also strictly concave on the obstacle domain. Its homogeneous quadratic part is strictly negative on every nonzero difference satisfying the homogeneous trace conditions.
+\end{theorem}
+\begin{proof}
+Let the differences be $F,G,U,V$, with $F(w)=G(0)=0$, $U(a)=F(a)$, $V(a)=G(b)$ and $U(\pi/2)=V(\pi/2)=0$. Denote the quadratic part by $q_2$.
+
+The elementary one-dimensional energy bounds give
+\[
+ \int_0^a(F^2-F'^2)\le F(a)^2\tan a,\qquad
+ \int_a^{\pi/2}(U^2-U'^2)\le-F(a)^2\tan a.
+\]
+The first follows by expanding $\int_0^a(F'+F\tan t)^2$; the second is the fixed-endpoint Dirichlet minimum for the interval of length $\pi/2-a$. Equality in both holds exactly for the same cosine continuation of $F(a)$. The reflected pair involving $G$ on $[b,w]$ and $V$ satisfies the same bounds with $G(b)$ in place of $F(a)$.
+
+Cancel these four contributions and integrate the central mixed term by parts. One obtains $-2q_2\ge N$, where
+\[
+ N=\int_a^wF'^2+\int_0^bG'^2-\int_b^wF^2-\int_0^aG^2
+   +2\int_a^bF G'+2F(a)G(a).
+\]
+Completing the square on $[a,b]$ rewrites this as
+\begin{align*}
+ N={}&\int_a^w(F'^2-F^2)+\int_a^b(G'+F)^2\\
+ &+\int_0^a(G'^2-G^2)+2F(a)G(a).
+\end{align*}
+The fixed-endpoint energy inequality, using $G(0)=0$, gives
+\[
+ \int_0^a(G'^2-G^2)\ge G(a)^2\cot a.
+\]
+Thus the last two terms are at least $-F(a)^2\tan a$, with equality only when $G(a)=-F(a)\tan a$ and $G$ is its sine interpolation. Applying the fixed-endpoint inequality once more to $F$ on $[a,w]$ gives
+\[
+ N\ge F(a)^2[\cot(w-a)-\tan a]\ge0.
+\]
+The last coefficient is strictly positive because $w<\pi/2$.
+
+For clarity, the fixed-endpoint inequality used here is
+\[
+ \int_0^L(z'^2-z^2)\ge z(0)^2\cot L\quad(z(L)=0,\ 0<L<\pi),
+\]
+with the endpoint values interchanged when needed. Subtract the sine interpolation with those traces; its cross term vanishes by its equation $z''+z=0$, and the remainder is nonnegative by the Dirichlet Poincare inequality. Equality is the sine interpolation alone.
+
+If $q_2=0$, every discarded nonnegative term vanishes. The strict final coefficient gives $F(a)=0$, then $F=0$ on $[a,w]$, $G=0$ on $[0,a]$, and $G'=-F=0$ on $[a,b]$. The four initial cosine-interpolation equalities force the remaining parts of $F,G,U,V$ to vanish. Hence the difference is zero. This proves strict concavity.
+\end{proof}
+
+\section{A geometric upper-bound lemma with explicit hypotheses}
+For a normalized cap use its active supports $p,k$ and corner $\gamma=(p-1)u_t+(k-1)v_t$. Assume its interior thresholds are positive, its arms $f=k-p'$, $g=p+k'$ exceed one, and its endpoint corner lengths are positive. Define the two cut half-planes
+\[
+ H_R=\{z:z\cdot u_a\ge p(a)-1\},\qquad
+ H_L=\{z:z\cdot v_b\ge k(b)-1\}.
+\]
+
+\begin{theorem}[Lifting a cap]\label{thm:majorant}
+If $N_w(K)\cap H_R\cap H_L$ has area zero, there are feasible lifted functions $\beta_K,\eta_K$ with
+\[
+ \mathcal A_w(K)\le Q(p,k,\beta_K,\eta_K).
+\]
+The niche is not assumed to lie in the cap.
+\end{theorem}
+\begin{proof}
+Put $A_a=p(a)-1>0$. Consider the wedge $W_R=\{y\ge0,z\cdot u_a\ge A_a\}$ and its convex subset
+\[
+ E_R=W_R\cap\bigcap_{a\le t\le w}\{z:z\cdot u_t\ge p(t)-1\}.
+\]
+The wedge lies in the fan because $a<w<\pi/2$ and $A_a>0$. Its cut line meets $E_R$: on that line moving sufficiently far in direction $v_a$ satisfies all later inequalities, uniformly also as $t\downarrow a$ by the Lipschitz support bound. Its floor also meets $E_R$, at sufficiently large positive abscissa.
+
+Let $\beta_K(t)=\inf_{z\in E_R}z\cdot u_t$ for $a\le t\le\pi/2$. These values are finite; the lower boundary between the cut line and the floor lies in a compact region, so $\beta_K$ is Lipschitz. It has the required traces and satisfies the obstacle inequalities. Equivalently it is minus the support function on the corresponding arc of a sufficiently large compact truncation of $E_R$.
+
+Every point of $W_R\setminus E_R$ belongs to the niche. To see this, let it violate a later inequality at $s>a$ and write $z-\gamma(s)=X u_s+Y v_s$. Then $X<0$. The positive-arm derivative gives $\gamma(s)\cdot u_a\le\gamma(a)\cdot u_a=A_a$. Since $z\cdot u_a\ge A_a$, one has $X\cos(s-a)-Y\sin(s-a)\ge0$, forcing $Y<0$. These are exactly the two strict niche inequalities at $s$.
+
+The area of the bounded region $W_R\setminus E_R$ is
+\[
+ -\frac12\int_a^{\pi/2}(\beta_K^2-\beta_K'^2)-\frac12A_a^2\tan a.
+\]
+This follows by tracing its floor segment, lower convex boundary, and cut segment. The endpoint support-derivative terms cancel. For nonsmooth convex boundaries the same formula follows from the support-area identity by approximation, or its bounded-variation version. Reflection gives $\eta_K$ and the analogous left region.
+
+The core region bounded by the right floor intercept, the cut segment to $\gamma(a)$, the curve $\gamma|_{[a,b]}$, the cut segment from $\gamma(b)$ to the left fan ray, and the two fan rays is contained in the niche up to its boundary. Indeed $\gamma\times\gamma'=(p-1)(g-1)+(k-1)(f-1)>0$, and strict radial contractions of every point on those segments or the corner curve satisfy a corresponding niche inequality. Its area is
+\[
+ I(\gamma|_{[a,b]})+\tfrac12[A(a)B(a)+A(b)B(b)]
+ +\tfrac12[A(a)^2+B(b)^2]\tan a.
+\]
+It lies below both cuts: the corner's projections onto $u_a$ decrease and onto $v_b$ increase, and the two cut segments satisfy the other cut inequality as well. The core and the two exterior regions are therefore pairwise disjoint up to null sets, using the stated cut-separation hypothesis. Adding their areas cancels the two tangent-square terms and gives exactly the niche lower bound equivalent to the asserted inequality.
+\end{proof}
+
+\section{A first-variation certificate}
+\begin{theorem}[Balanced contact data maximize the lift]\label{thm:certificate}
+Suppose candidate data satisfy the contact construction of \texttt{contact-equations.tex}, with the core cut $a=\phi$, a right wall interval $[s_1,s_2]$, and the reflected left interval. Assume $p'(0)=k'(w)=0$. Define $\beta$ to equal $\gamma(\phi)\cdot u_t$ before $s_1$, $p(t)-1$ on $[s_1,s_2]$, and the floor-intercept cosine after $s_2$. Define $\eta$ by reflection.
+
+Assume these functions join with matching values and derivatives, obey the obstacle inequalities, and have $\beta+\beta''\le0$ on their contact interval and $\eta+\eta''\le0$ on the reflected contact interval. If the curvature balance equations in that note hold, then the data are the unique maximizer of $Q$ over its entire obstacle domain.
+\end{theorem}
+\begin{proof}
+Let $(F,G,U,V)$ be the difference from the candidate to any feasible lifted data. Integration by parts in the first variation of $Q$ gives the cap densities $r_pF+r_kG$, minus the core densities $(g-1)F+(f-1)G$, plus the two envelope terms $\int(\beta+\beta'')U$ and $\int(\eta+\eta'')V$. The free outer-endpoint terms vanish by $p'(0)=k'(w)=0$. At the two cuts the remaining boundary terms cancel because $\beta'(a)=k(a)-1$ and $\eta'(a)=p(b)-1$, which follow from their corner-point pieces.
+
+On the right contact interval, feasibility gives $U\ge F$, while $\beta+\beta''=r_p-1\le0$. Its envelope term is therefore at most $\int(r_p-1)F$ on that interval. Outside it the envelope curvature is zero. The reflected statement gives the other estimate. The remaining coefficient of $F$ is
+\[
+ r_p-C(g-1)+B(r_p-1)=0,
+\]
+and the coefficient of $G$ vanishes by the reflected balance equation. Thus every feasible directional derivative is nonpositive. Strict concavity from Theorem~\ref{thm:concavity} proves unique global maximality of the lifted data.
+\end{proof}
+
+\begin{remark}[What is still needed for a sofa theorem]
+The certificate does not assume that a numerical root solves the original problem. To obtain a sofa theorem one must additionally verify that the candidate is feasible and that its niche has exactly the asserted boundary, so its area equals $Q$. One must also establish the geometric hypotheses of Theorem~\ref{thm:majorant} for every original maximizing cap under consideration. Near one radian these can be approached using the proved maximizing-cap closeness; across the full interval they require a separate argument. Neither root existence nor these geometric premises are supplied merely by strict concavity of the lift.
+\end{remark}
+\end{document}

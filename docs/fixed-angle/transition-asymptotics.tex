@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\title{The Unrestricted Fifth-Order Deficit Above One Radian}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+For the prescribed-net-angle sofa problem, the exact regime $m(\omega)=1+\omega^2/2$ ends at $\omega=1$. We prove the first nonzero deficit immediately afterwards:
+\[
+ m(1+\delta)=1+\frac{(1+\delta)^2}{2}-\frac{229}{1920}\delta^5+o(\delta^5).
+\]
+The lower bound is supplied by actual feasible sofas, with a repaired endpoint derivative. The upper bound applies to arbitrary global maximizing caps, using the previously proved all-maximizer geometry and an exact convex transition-model certificate. Their rescaled endpoint support differences have a unique limiting profile. This is an asymptotic theorem, not an exact optimizer classification on the remaining positive-length angle interval, and it has not been independently refereed or formalized.
+\end{abstract}
+
+\section{A local coercivity lemma}
+For $F,G\in H^1(0,w)$ with $F(w)=G(0)=0$, put
+\[
+ J_w(F,G)=\frac12\int_0^w(F'^2+G'^2+F G'-G F').
+\]
+This is the exact gap from Baek's normalized relaxed cap when $F,G$ are active support differences.
+
+\begin{lemma}[Uniform coercivity and endpoint localization]\label{lem:local}
+For $w$ in a sufficiently small fixed neighborhood of one, there is a constant $c>0$ such that
+\[
+ J_w(F,G)\ge c\bigl(\|F'\|_2^2+\|G'\|_2^2\bigr).
+\]
+For $0<2\eta<w$ one also has
+\[
+ J_w(F,G)\ge\frac12\int_0^\eta F'^2+\frac12\int_{w-\eta}^wG'^2
+ -C\eta\bigl(\|F'\|_2^2+\|G'\|_2^2\bigr)
+\]
+with a uniform constant $C$.
+\end{lemma}
+\begin{proof}
+Integration by parts and the endpoint traces give
+\[
+ J_w=\frac12\left(\|F'\|_2^2+\|G'+F\|_2^2-\|F\|_2^2\right).
+\]
+The one-ended Poincare inequality gives $\|F\|_2^2\le4w^2\|F'\|_2^2/\pi^2$. Since $w$ stays below $\pi/2$ by a fixed margin, this bounds $\|F'\|_2$ and $\|G'+F\|_2$ in terms of $J_w^{1/2}$. The triangle inequality then controls $\|G'\|_2$, proving uniform coercivity. In particular $J_w$ is nonnegative for every pair with the stated traces, whether or not the pair comes from cap supports.
+
+For localization set $F_\ell(t)=F(t)-F(\eta)$ on $[0,\eta]$ and zero afterwards, and set $G_\ell(t)=G(t)-G(w-\eta)$ on $[w-\eta,w]$ and zero before. Put $F_b=F-F_\ell$, $G_b=G-G_\ell$. The derivative energies split orthogonally, and the two localized supports are disjoint. Thus $J_w(F_\ell,G_\ell)$ is exactly the two displayed endpoint derivative energies. The bulk pair retains the pinned traces, so its $J_w$ is nonnegative.
+
+The remaining bilinear terms reduce by integration by parts to integrals of $F_\ell G_b'$ and $G_\ell F_b'$, with signs irrelevant for the bound. Endpoint terms vanish: $G_b(0)=F_b(w)=0$ and the localized functions vanish at their other support endpoints. The estimates $\|F_\ell\|_2\le\eta\|F'\|_2$ and $\|G_\ell\|_2\le\eta\|G'\|_2$ bound these terms by $C\eta(\|F'\|_2^2+\|G'\|_2^2)$. This proves the second inequality.
+\end{proof}
+
+\section{Geometry of arbitrary maximizing caps near the transition}
+Put $w=1+\delta$ and $M_\delta=1+w^2/2$. Let $\overline m(w)$ be the maximum of the cap functional. Its attainment was proved in \texttt{optimality-uniqueness.tex}; every sofa is bounded by this cap maximum. Choose any global maximizing cap $K_\delta$, write its supports as
+\[
+ p_\delta=p_\delta^*+F_\delta,\qquad k_\delta=k_\delta^*+G_\delta,
+\]
+and put $C_\delta=|N_w(K_\delta)|-I(\gamma_\delta)$.
+
+\begin{lemma}[Uniform closeness and separated tails]\label{lem:geometry}
+For all sufficiently small $\delta$, uniformly over the choice of global maximizing cap,
+\[
+ 0\le M_\delta-\overline m(w)=J_w(F_\delta,G_\delta)+C_\delta=O(\delta^5),
+\]
+\[
+ \|F_\delta'\|_2+\|G_\delta'\|_2=O(\delta^{5/2}).
+\]
+The supports converge in $C^1$ to the corresponding angle-one relaxed supports as $\delta\downarrow0$. The positive-threshold radial-core and disjoint-tail hypotheses of \texttt{endpoint-tail-functional.tex} therefore hold, and
+\[
+ C_\delta\ge\mathcal R_w(p_\delta)+\mathcal R_w(\widehat k_\delta),\qquad
+ \widehat k_\delta(t)=k_\delta(w-t).
+\]
+\end{lemma}
+\begin{proof}
+The feasible recovery family in \texttt{transition-recovery.tex}, or its unperturbed special case, gives $\overline m(w)\ge M_\delta-O(\delta^5)$. The all-angle maximizing-cap majorization gives $C_\delta\ge0$, and the exact relaxation gap gives $J_w\ge0$. Their sum is the displayed cap deficit, hence each is $O(\delta^5)$. Lemma~\ref{lem:local} gives the derivative estimates. The pinned traces imply the same order of uniform support estimates by Cauchy--Schwarz.
+
+The fixed-angle curvature theorem bounds the two active curvature densities uniformly by $\kappa(D)$, where $D$ is a diameter bound for the endpoint parallelograms for $w$ near one. The supports themselves are uniformly bounded. Thus the interior-sided first derivatives are uniformly Lipschitz on their closed active parameter intervals, including the endpoints whose atoms were excluded. Their $L^2$ differences tend to zero, so their uniform differences tend to zero as well: otherwise the uniform Lipschitz bound would produce an interval with a nonvanishing $L^2$ difference. This gives $C^1$ convergence, with the parameter endpoints interpreted on their varying intervals.
+
+At the limiting cap the thresholds are positive on the open interval. Near the two pinned endpoints positivity follows from its nonzero inward derivatives $k_*'(0)=1-c_1$ and $p_*'(1)=c_1-1$, with $c_1=\sec1-\tan1$; the other endpoints have threshold $c_1>0$. Hence the new thresholds stay positive everywhere in the interior. The arms already satisfy the strict all-angle lower bounds. Their corner is therefore a positive radial graph as in the endpoint-tail lemma.
+
+At the limit the niche quadrilaterals lie in a disk of radius $\sqrt2c_1<1/2$. Their vertices depend continuously on the supports and angle, with both cosine denominators bounded away from zero, so a common radius below one still bounds the niches. Simultaneous membership in the two limiting tail half-planes requires ordinate at least one, since $c_1(1+\sin1)/\cos1=1$. The strict gap from the niche disk persists under perturbation. Thus the two tails are disjoint, and their area bound follows from the exact core/tail lemma.
+\end{proof}
+
+\section{Blowing up a maximizing cap, not just a trial family}
+Given any sequence $\delta\downarrow0$, define functions on the positive half-line, extended by zero past $w/\delta$, by
+\[
+ v_\delta^R(s)=\delta^{-2}F_\delta'(\delta s),\qquad
+ v_\delta^L(s)=-\delta^{-2}G_\delta'(w-\delta s).
+\]
+Their $L^2$ norms are uniformly bounded by Lemma~\ref{lem:geometry}. Pass to a subsequence with weak limits $v^R,v^L\in L^2(0,\infty)$, and put $q^R(s)=\int_0^s v^R$, $q^L(s)=\int_0^s v^L$.
+
+\begin{lemma}[Lower bound by two exact transition models]\label{lem:liminf}
+Along this subsequence,
+\[
+ \liminf_{\delta\downarrow0}\frac{M_\delta-\overline m(1+\delta)}{\delta^5}
+ \ge\mathscr E(v^R)+\mathscr E(v^L),
+\]
+where $\mathscr E$ is the functional of \texttt{transition-model.tex}.
+\end{lemma}
+\begin{proof}
+The primitives of $v_\delta^R$ converge uniformly on each compact interval to $q^R$. Pointwise convergence follows by testing weak $L^2$ convergence against the indicator of $[0,s]$; uniformity follows from the common square-root modulus of continuity. These primitives equal
+\[
+ q_\delta^R(s)=\delta^{-3}\bigl(F_\delta(\delta s)-F_\delta(0)\bigr).
+\]
+The analogous reflected statement holds at the other endpoint.
+
+For the right-tail intercept, uniform support control gives $|F_\delta(0)|=O(\delta^{5/2})$. Therefore, for each fixed $s>0$,
+\begin{align*}
+ &\delta^{-3}\left(\frac{p_\delta(\delta s)-1}{\cos(\delta s)}-p_\delta(0)+1\right)\\
+ &\qquad\longrightarrow q^R(s)+s^2/2-s^3/6.
+\end{align*}
+Indeed the relaxed part follows from its exact intercept identity, the difference $F_\delta(\delta s)-F_\delta(0)$ is the primitive above, and multiplication by $\sec(\delta s)-1=O(\delta^2)$ adds only $O(\delta^{9/2})$, negligible after division by $\delta^3$.
+
+In the right-tail integral use $z=\delta^3X$. For every fixed test parameter $s$, the tent height divided by $\delta^2$ tends to $(q^R(s)+s^2/2-s^3/6-X)/s$. Taking a countable dense set of test parameters, and then Fatou's lemma for the nonnegative scaled envelope, gives
+\[
+ \liminf\frac{\mathcal R_w(p_\delta)}{\delta^5}
+ \ge\int_0^\infty\left(\sup_{s>0}\frac{q^R(s)+s^2/2-s^3/6-X}{s}\right)_+dX.
+\]
+No tightness or interchange of an uncontrolled supremum is needed for this lower bound. Reflection supplies the corresponding left-tail inequality.
+
+For the quadratic gap, apply Lemma~\ref{lem:local} with $\eta=R\delta$ for a fixed finite $R$. Its error divided by $\delta^5$ is $O(R\delta)$, by the derivative-energy bound. Weak lower semicontinuity therefore gives
+\[
+ \liminf\frac{J_w(F_\delta,G_\delta)}{\delta^5}
+ \ge\frac12\int_0^R\bigl((v^R)^2+(v^L)^2\bigr).
+\]
+Let $R\to\infty$. Combining the nonnegative core/tail bound from Lemma~\ref{lem:geometry} with the three lower estimates proves the lemma. This localization is essential: global mixed terms cannot simply be dropped from the quadratic gap.
+\end{proof}
+
+\section{The unrestricted value and asymptotic rigidity}
+\begin{theorem}[Fifth-order transition deficit]\label{thm:value}
+For the unrestricted prescribed-net-angle sofa problem,
+\[
+ \boxed{m(1+\delta)=1+\frac{(1+\delta)^2}{2}-\frac{229}{1920}\delta^5+o(\delta^5)}
+ \qquad(\delta\downarrow0).
+\]
+The cap maximum $\overline m(1+\delta)$ has the same expansion.
+\end{theorem}
+\begin{proof}
+For any sequence of positive $\delta$ tending to zero, choose maximizing caps and extract the subsequence used above. The exact model certificate gives
+\[
+ \mathscr E(v^R)+\mathscr E(v^L)\ge2\cdot\frac{229}{3840}=\frac{229}{1920}.
+\]
+Lemma~\ref{lem:liminf} therefore bounds the cap deficit from below. The actual feasible recovery sofas give the reverse upper bound on the unrestricted deficit, with that same coefficient. Since
+\[
+ |S_\delta|\le m(1+\delta)\le\overline m(1+\delta)\le M_\delta,
+\]
+the two deficits are squeezed to the common coefficient. The sequence was arbitrary, proving the two expansions.
+\end{proof}
+
+\begin{theorem}[Unique endpoint support-difference profile]
+For any choices of global maximizing caps as $\delta\downarrow0$, the primitives
+\[
+ \delta^{-3}\bigl(F_\delta(\delta s)-F_\delta(0)\bigr),\qquad
+ \delta^{-3}\bigl(G_\delta(w-\delta s)-G_\delta(w)\bigr)
+\]
+converge uniformly on every compact $s$ interval to
+\[
+ q_*(s)=\begin{cases}
+ -3s/16,&0\le s\le3/2,\\
+ s^3/12-s^2/4,&3/2\le s\le2,\\
+ -1/3,&s\ge2.
+ \end{cases}
+\]
+Their rescaled derivatives converge weakly in $L^2(0,\infty)$ to the model minimizer $v_*$.
+\end{theorem}
+\begin{proof}
+Every weakly convergent subsequence has, by the proved value limit and Lemma~\ref{lem:liminf}, $\mathscr E(v^R)+\mathscr E(v^L)$ at most twice the model minimum. Each term is at least that minimum, so both attain it. The exact model rigidity inequality forces $v^R=v^L=v_*$. Thus all weak subsequential limits agree. Compactness of the primitives on each bounded interval then gives convergence of the whole family, not just of a selected subsequence.
+\end{proof}
+
+\begin{remark}[The exact scope of the rigidity claim]
+The profile theorem concerns global maximizing caps and their endpoint-relative support differences. It does not assert exact uniqueness of a cap at a fixed angle greater than one. It also does not assert that $F_\delta(0)/\delta^3$ has a determined limit: an additive support displacement varying over the bulk may have a lower-order energy cost, and the leading local model does not fix it. Nor may the all-maximizer geometric hypotheses automatically be transferred to arbitrary near-maximizing caps or sofas.
+\end{remark}
+
+\paragraph{Dependencies and review boundary.}
+The proof uses the previously written fixed-angle curvature and all-maximizer majorization, cap attainment, the exact quadratic gap, the positive radial-core/tail lemma, the exact transition-model certificate, and the independently feasible recovery sequence. It does not use a numerical optimizer or assume the larger-angle candidate. The full optimizer classification on $1<\omega<\pi/2$ remains open in this workstream. No CI, Lean compilation, or TeX compilation was run.
+\end{document}

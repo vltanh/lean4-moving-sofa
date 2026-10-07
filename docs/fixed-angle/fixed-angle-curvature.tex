@@ -1,0 +1,149 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{fact}[theorem]{Imported fact}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\R}{\mathbb R}
+\title{Curvature Bounds for Every Fixed-Angle Maximizing Cap}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+
+\section{Setting and exact imported inputs}
+Fix $0<\omega<\pi/2$. Use the normalized cap class $\mathcal K_\omega$, the endpoint parallelogram $P_\omega$, and the fan $F_\omega$ of the companion manuscript, Section 2. Put $u_t=(\cos t,\sin t)$, $v_t=(-\sin t,\cos t)$ and
+\[
+ \kappa(z)=\max\{|z-1|,(|z-1|+1)/2\},\qquad m(z)=z-\kappa(z),\quad z\ge0.
+\]
+For a convex cap $K$, let $\sigma_K=h_K+h_K''$ be its boundary-length measure on the circle, and $A_K^\pm(t),C_K^\pm(t)$ its one-sided support points with normals $t,t+\pi/2$. Its outer corner is $y_K=h_K(t)u_t+h_K(t+\pi/2)v_t$, and its arms are
+\[
+ f_K^\pm(t)=\ip{y_K-A_K^\pm(t)}{v_t},\qquad
+ g_K^\pm(t)=\ip{y_K-C_K^\pm(t)}{u_t}.
+\]
+Both arms are nonnegative and bounded by the diameter of $K$. The canonical inner corner is $x_K=y_K-u_t-v_t$.
+
+\begin{fact}[Selection and floating defect, at the prescribed angle]\label{fact:selection}
+If $K_*$ maximizes $\mathcal A_\omega$ over caps and $\mathcal A_\omega(K_*)>0$, there are dyadic meshes $\delta_j=\omega/n_j\to0$, $n_j=2^{k_j+1}$, and polygon caps $K_j\to K_*$ in Hausdorff distance, such that at each floating normal $t=i\delta_j$, $0<i<n_j$,
+\[
+ \sigma_{K_j}(\{t\})\le\tau_{K_j}(t)+e_j(t),\qquad e_j(t)\ge0,\qquad\sum_t e_j(t)\to0.
+\]
+Here $\tau_{K_j}(t)$ is the length of the niche boundary on the inner-wall ray $x_{K_j}(t)-s v_t$, $s\ge0$.
+\end{fact}
+This combines Proposition \texttt{prop:selection} in \texttt{04-selection.tex}, Proposition \texttt{prop:floating} in \texttt{05-variations.tex}, and the floating-wall identity in Section 2 of the companion manuscript at commit \texttt{1ade045936f32cf76572ee668ed8aa1627772bde}. Those results explicitly fix arbitrary $\omega\in(0,\pi/2]$. In their notation one can take $e_j(t)=2d_H(K_j,K_*)\nu_{k_j}(t)$, whose total is at most $2d_H(K_j,K_*)$. No final Gerver optimality theorem is used.
+
+All $K_j$ lie in the fixed bounded parallelogram $P_\omega$. Its diameter is a uniform constant $D$. The polygon normals are
+\[
+ \{i\delta:0<i<n\}\cup\{\pi/2+i\delta:0<i<n\}
+ \cup\{\omega,\pi/2,\omega+\pi,3\pi/2\}.
+\]
+In particular the pinned atoms at $\omega$ and $\pi/2$ are not floating atoms. The claimed curvature estimate will exclude them.
+
+\section{The local wall estimate survives the change of angle}
+For a grid cap write $Q^-_K(t)=\{z:\ip z{u_t}<h_K(t)-1,\ \ip z{v_t}<h_K(t+\pi/2)-1\}$. Its niche is the union over interior grid angles, intersected with $F_\omega$.
+
+\begin{lemma}[One floating atom]\label{lem:atom}
+For sufficiently fine meshes $\delta\le\pi/4$, at every $t=i\delta$, $0<i<n$,
+\[
+ \sigma_K(\{t\})\le\kappa(g_K^+(t))\delta+(D+4)\delta^2+e(t)
+\]
+whenever $\sigma_K(\{t\})\le\tau_K(t)+e(t)$ and $e(t)\ge0$.
+\end{lemma}
+\begin{proof}
+Put $q=\tan(\delta/2)$ and $x=x_K(t)$. There are no polygon normals strictly between adjacent grid normals in either active interval. Intersections of adjacent supporting lines are therefore the corresponding vertices, just as in the companion's local wall calculation. On the ray $x-sv_t$, $s\ge0$, the conditions for the two neighboring inner $d$-half-planes are
+\[
+ s\le\tan\delta\,(g_K^-(t)-1+q),\qquad
+ s\le\tan\delta\,(1-g_K^+(t)+q).
+\]
+The intersection on this line of the two neighboring inner $b$-half-planes has length at most
+\[
+ \max\{2q-\sigma_K(\{t\}),0\}.
+\]
+For example the latter calculation uses
+\[
+ h_K(t+\delta)+h_K(t-\delta)-2\cos\delta\,h_K(t)
+ =\sigma_K(\{t\})\sin\delta.
+\]
+The other two formulas follow by taking scalar products of $x-C_K^\pm(t)=(g_K^\pm(t)-1)u_t-v_t$ with $v_{t\pm\delta}$.
+
+A point of the niche boundary in the interior of $F_\omega$ cannot belong to any open $Q^-_K(s)$. Moreover $Q^-_K(0)$ lies below $y=0$, and $Q^-_K(\omega)$ lies below $\ip z{u_\omega}=0$, so these endpoint quarter-planes also miss the fan. Classifying a boundary point according to whether it is in one of the neighboring $d$-half-planes gives
+\begin{align*}
+ \tau_K(t)\le{}&\max\{\tan\delta(g_K^-(t)-1+q),\tan\delta(1-g_K^+(t)+q),0\}\\
+ &+\max\{2q-\sigma_K(\{t\}),0\}.
+\end{align*}
+There are at most two excluded points on the fan boundary: the ray's line meets each fan ray at at most one point, because $0<t<\omega$. These points have zero length. This is the only boundary change from the right-angle local proof.
+
+Let $M=|g_K^+(t)-1|\le D+1$. Since $g_K^-(t)\le g_K^+(t)$, the first maximum is at most
+$\tan\delta(M+q)\le M\delta+(D+3)\delta^2$. Use $2q\le\delta+\delta^2$. If $\sigma_K(\{t\})\ge2q$, the desired estimate follows with coefficient $M$; otherwise moving the term $-\sigma_K(\{t\})$ to the left gives coefficient $(M+1)/2$. Both coefficients are at most $\kappa(g_K^+(t))$, proving the lemma.
+\end{proof}
+
+\section{Passage to the limiting measure}
+\begin{theorem}[Fixed-angle curvature bounds]\label{thm:curvature}
+Every positive-area maximizing cap $K_*$ at $0<\omega<\pi/2$ satisfies
+\[
+ \sigma_{K_*}\le\kappa(g_{K_*}^+(t))\,dt\quad\hbox{on }[0,\omega),
+\]
+\[
+ \sigma_{K_*}\le\kappa(f_{K_*}^-(t-\pi/2))\,dt
+ \quad\hbox{on }(\pi/2,\pi/2+\omega].
+\]
+In particular there are no atoms at $0$ or $\pi/2+\omega$. Atoms at the two pinned normals are permitted.
+\end{theorem}
+\begin{proof}
+Choose the sequence in Imported fact~\ref{fact:selection}. Consider a nonnegative smooth test function $\varphi$ compactly supported in $(-\varepsilon,\omega)$, where $0<\varepsilon<\pi/2$. There are no polygon normals in $(-\varepsilon,0]$. Multiplying Lemma~\ref{lem:atom} by $\varphi(t)$ and summing gives
+\[
+ \int\varphi\,d\sigma_{K_j}
+ \le\delta_j\sum_{i=0}^{n_j-1}\varphi(i\delta_j)\kappa(g_{K_j}^+(i\delta_j))+o(1).
+\]
+The artificially added $i=0$ term is nonnegative. The error tends to zero because $n_j\delta_j^2=\omega\delta_j\to0$ and $\sum e_j\to0$.
+
+On a cell $[t,t+\delta_j)$, the relevant two vertices $A,C$ are fixed, with the right-sided choice at its left endpoint, so
+\[
+ g_{K_j}^+(s)=\ip{A-C}{u_s},\qquad
+ |g_{K_j}^+(s)-g_{K_j}^+(t)|\le D\delta_j.
+\]
+This includes the first cell, using the right vertex at the pinned normal $\pi/2$. Since $\kappa$ is one-Lipschitz and bounded on $[0,D]$, the displayed Riemann sum differs from $\int_0^\omega\varphi(t)\kappa(g_{K_j}^+(t))\,dt$ by $o(1)$.
+
+Hausdorff convergence gives uniform convergence of supports. At almost every $t$, the support point of $K_*$ at normal $t+\pi/2$ is unique. At such a direction both one-sided support points of $K_j$ converge to it: any subsequential limit is a support point of the limiting cap. Hence $g_{K_j}^+(t)\to g_{K_*}^+(t)$ almost everywhere. The uniform diameter bound permits dominated convergence.
+
+Finally $\sigma_K=h_K+h_K''$ distributionally, so
+\[
+ \int\varphi\,d\sigma_{K_j}=\int(\varphi+\varphi'')h_{K_j}\,dt
+ \longrightarrow\int\varphi\,d\sigma_{K_*}.
+\]
+We obtain the first inequality for every such nonnegative test function, hence as a measure inequality on $[0,\omega)$. Allowing test functions across zero, rather than only inside $(0,\omega)$, is essential: it rules out a limiting atom at zero.
+
+The reflection $M_\omega(x,y)=(-x\sin\omega+y\cos\omega,x\cos\omega+y\sin\omega)$ preserves the cap class and sofa-area functional. It exchanges the normal $s$ with $\omega+\pi/2-s$, and exchanges right and left support points. Apply the first inequality to the reflected maximizing cap and change variables. This gives the second inequality, including the absence of the endpoint atom. No reflection symmetry of $K_*$ is assumed.
+\end{proof}
+
+\begin{corollary}[Arm inequalities with the correct endpoints]\label{cor:arms}
+Put $p(t)=h_{K_*}(t)$, $k(t)=h_{K_*}(t+\pi/2)$. Their restrictions have continuously extending one-sided derivatives at their endpoints. The arms
+\[
+ f=k-p',\qquad g=p+k'
+\]
+are nonnegative and absolutely continuous on $[0,\omega]$, satisfy $f(0)=g(\omega)=1$, and obey
+\[
+ f'\ge m(g),\qquad g'\le-m(f)\quad\hbox{almost everywhere}.
+\]
+The canonical corner is continuously differentiable with
+$x_{K_*}'=-(f-1)u_t+(g-1)v_t$.
+\end{corollary}
+\begin{proof}
+The arms are bounded, so Theorem~\ref{thm:curvature} gives bounded densities $r=p+p''$ and $s=k+k''$ on the open active arcs, with the claimed endpoint atoms absent. It follows that the support derivatives extend continuously and are Lipschitz on each closed parameter interval, using the interior-sided derivatives at the two pinned normals. The cap has no normals in $(-\pi/2,0)$, so its left support point at zero is $(h_K(0),0)$. Absence of an atom at zero makes the right support point identical, giving $p'(0)=0$. Reflection gives $k'(\omega)=0$. Since $k(0)=p(\omega)=1$, these give $f(0)=g(\omega)=1$.
+
+The support points on the active arcs lie in the cap, so $f,g\ge0$. Direct differentiation gives $f'=g-r\ge g-\kappa(g)$ and $g'=s-f\le\kappa(f)-f$. The formula for the corner derivative follows by differentiating its support-coordinate expression.
+\end{proof}
+
+\begin{corollary}[Unconditional majorization for short-angle maximizers]
+Every positive-area maximizing cap with $0<\omega\le1$ satisfies
+\[
+ \mathcal A_\omega(K_*)\le\mathcal A_1(K_*).
+\]
+\end{corollary}
+\begin{proof}
+Apply the theorem of \texttt{arm-bootstrap.tex} to Corollary~\ref{cor:arms}. It gives $f(t)\ge1+t/2$ and $g(t)\ge1+(\omega-t)/2$. The first coordinate of the canonical corner is therefore strictly decreasing. The theorem of \texttt{monotone-majorization.tex} supplies the claimed inequality directly, without a fan-containment assumption.
+\end{proof}
+
+\paragraph{Dependency boundary.}
+This proof imports fixed-angle penalized selection and floating first variation from the companion manuscript, but not its right-angle curvature proposition, final Gerver theorem, or equality analysis. The local geometry and the limiting-measure argument are supplied above at the prescribed angle. Maximizer existence and equality recovery for arbitrary original sofas are separate assembly steps. No CI or Lean compilation was run.
+\end{document}
