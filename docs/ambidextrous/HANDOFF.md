@@ -1,187 +1,119 @@
-# Ambidextrous sofa research — start a new session here
+# Ambidextrous sofa research — current handoff
 
-**Neither unrestricted frontier is closed.** The full-turn upper bound still lacks a comparison covering arbitrary competitors. The partial-turn problem still lacks completion or a sharp area bound when its strip bridge is unsafe. New work constructs tail backgrounds on a testable subclass, supplies finite strip-completion criteria, and proves a direct spatial-partition enclosure whose sharp maximum is unproved. Unrestricted uniqueness is deferred.
+**Neither the unrestricted full-turn area theorem nor unrestricted optimality is closed.** The latest uploaded partial-turn package has been audited. Its useful corner localization now has a smaller, hand-proved circular allowance. This links partial turns quantitatively to full-turn signed fibers, but does not supply the sharp margin or a connected completed competitor.
 
 Repository: `vltanh/lean4-moving-sofa`.
 Branch: `research/ambidextrous-pen-and-paper`.
-Draft PR: #3; base: `main`.
-Substantive checkpoint before this update: `eef8882b0130fc5e95fe9512f1ee664c49b855c3`.
-Always query the live tip and inspect later changes. Do not reset to the historical paper branch.
+Draft PR: #3, base `main`.
+Latest substantive review before this handoff: `8a0eb2c2bb4fba0481f1a2db59d69e43ff8f8420`.
+Always query the live tip and preserve intervening edits. Do not reset the PR base to the historical paper branch.
 
-## Latest full-turn-only checkpoint: sharp reflection budget and its two obstructions
+## 1. Scope and execution policy
 
-**The unrestricted full-turn optimality theorem is not closed.** In this pass we explored horizontal **convex-hull** symmetrization followed by actual canonical full-turn deletion. The operation is *not* the disproved average of nonconvex sofas in RA1. Read [hull-reflection-symmetrization-budget.md](hull-reflection-symmetrization-budget.md), [near-reference-midline-obstruction.md](near-reference-midline-obstruction.md), and [affine-unit-span-normalization-obstruction.md](affine-unit-span-normalization-obstruction.md). All results are written hand proofs; no independent continuum review or kernel verification is claimed. Partial turns remain frozen.
+The full-turn sharp area inequality remains the main task. The user authorized review of the new partial-turn package specifically to test whether it bridges the two frontiers; the new CC/IC work does that, not an unrelated partial-turn optimization campaign. Unrestricted uniqueness is deferred.
 
-**HS1: exact positive hull energy.** For \(K=\operatorname{conv}S\) horizontally centered, with \(J(x,y)=(-x,y)\), define \(K_{\rm s}=(K+JK)/2\), and \(h_{\rm a}=(h_K-Jh_K)/2\). Because \(h_{\rm a}\) vanishes at all four axis normals, the support-area formula and quarter-circle Dirichlet inequalities give
-\[
-\boxed{|K_{\rm s}|-|K|=\tfrac12\int_0^{2\pi}(h_{\rm a}'{}^2-h_{\rm a}^2)
-\ge\tfrac38\int_0^{2\pi}h_{\rm a}'{}^2.}
-\]
-This strictly improves the convex-hull area of any nonsymmetric K. **It does not prove that its full canonical surviving sofa area improves.** The necessary removed-area bound
-\[
-\mathscr R(K_{\rm s})-\mathscr R(K)\le|K_{\rm s}|-|K|
-\]
-is still unproved. The usual nonempty/connected-fiber issue is also not automatic.
+Prioritize pen-and-paper proofs. New calculations must be short: at most 30 seconds per invocation, preferably five/ten-second limits. The original package replay uses a ten-second subprocess limit; the new exact checker uses five seconds. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]` under `docs/ambidextrous/`.
 
-**HS2--HS5: near-reference sharp obstruction.** For the real double-tip cut convex hulls \(K_\tau\) from MCA, \(K_{\rm s,\tau}\) has central singleton top and bottom faces. The full canonical envelope cannot retain either extreme-height point: otherwise the UC1 unit-column switching contradiction applies to the retained reference flank witnesses at \(x=\pm m\). More sharply, the exact top supporting line at \(\delta=\arctan\tau\) plus the positive reference niche on the central face imply
-\[
-\operatorname{span}_y E(K_{\rm s,\tau})\le1-(m/4)\tau.
-\]
-In contrast, RB and actual retained reference intersections show
-\[
-M-O(\tau^{3/2})\le|E(K_{\rm s,\tau})|\le M.
-\]
-The hull area gain is \((m^2/2)\tau+O(\tau^{3/2})\), almost entirely consumed by newly forbidden material. Hence a fixed fraction of hull-energy gain cannot be guaranteed to remain as surviving area, and **no universal linear inequality**
-\(|S|\le M-c(1-\operatorname{span}_y S)\) holds even for connected x-symmetric full-turn sofas. This does not disprove the sign-only symmetrization comparison.
+All research proofs here are written and self-reviewed, not independently refereed or kernel-verified. A script checking identities does not verify a continuum theorem. Never treat floating-point hull-vertex retention or sampled positive fibers as a complete motion certificate.
 
-**AN1--AN3: affine normalization is not free.** Every rectangle \(R_{W,h}=[-W/2,W/2]\times[0,h]\), \(0<h\le1\), completes both quarters **if and only if** \(W/2+h\le\sqrt2\). The proof maximizes the smaller of two affine support depths exactly, retaining endpoint cases. All such rectangles have area at most one. The feasible x-symmetric rectangle \(W=9/5,h=1/2\) becomes **infeasible** after the determinant-one map \((x,y)\mapsto(hx,y/h)\): at 45 degrees its bottom midpoint has two support depths \(29/(20\sqrt2)>1\). Thus one cannot automatically normalize a symmetric subunit-span envelope to unit span while preserving fullturn feasibility and area. The example is strictly subcritical.
+## 2. Latest input and audit
 
-**NM1--NM2: the half-height background premise fails near M.** Cut the actual reference by \(y\ge1/2+\epsilon-\cot\beta(r-x)\). Both fullturn motions and connectedness remain. A new unique right hull extreme lies strictly above the midline, so its reflected-lower convex cap lacks a full half-height rectangle, even after same-hull saturation. The actual area loss is explicitly \(C\epsilon^{3/2}+O(\epsilon^2)\). The PD/PS density reduction transfers the lack of midline to saturated positive opposite-end-face fullturn approximants with areas arbitrarily close to M. The construction does not supply a sofa above M and does not rule out admission restricted to areas **strictly greater** than M.
+Read [partial-turn-package-audit.md](partial-turn-package-audit.md), [circular-corner-completion-bound.md](circular-corner-completion-bound.md), and [partial-turn-replay-review.md](partial-turn-replay-review.md).
 
-**Exact remaining full-turn obligation.** For actual compatible fullturn caps with nonempty fibers,
-\[
-|E|=\Psi(U)+\Psi(V)+G,\quad
-G\le(M/2-\Psi(U))+(M/2-\Psi(V))
-\]
-is exactly the desired area theorem and **is still unproved**. The stronger adaptive AS scalar upper bound is also unproved. A possible alternative is an area-monotone convex-hull symmetrization plus a **new** sharp bound for symmetric fullturn sofas with *subunit span*; both clauses remain unproved and cannot be inferred from RS2 (which has a unit-span premise). Do not substitute HS's positive *hull* energy for the missing *ordinary surviving-area* comparison.
+The user supplied `partial-turn-completion-package.zip`, SHA-256 `03dffee9b89a6cecb359b8b5c49d6284952f466bc34f7a3a21ceaa28636b1a81`. The archive and its original author output are preserved unchanged in the reproduction bundle; the audit lists all four original file hashes. Attribution is to the supplied package. No author name was supplied.
 
-**Verification and execution.** All new runs were bounded by an external five-second limit (a prescribed 567-trapezoid screen took about 2.02s internally). Numerical support/envelope comparisons are diagnostic only and have reference grid bias; rigorous statements above are hand proofs. No CI, Lean/Lake compilation, dependency installation, manuscript build, or long optimizer campaign. Commits include \`[skip ci]\` and stay under \`docs/ambidextrous/\`. PR remains open/draft.
+Its useful PC arguments are:
 
-## Full-turn-only checkpoint after the latest continuation
+- transport the incoming orientation along a safe-strip component;
+- localize missing late-quadrant material to one corner of the two supporting strips;
+- retain signed full fibers and add an explicit completion allowance.
 
-**The full-turn optimality theorem is still open.** Work was deliberately restricted to that problem; partial-turn SI/FS remains frozen for now. New proof material:
+Qualifications found in review: completing by deletion need not preserve connectedness; signed full-fiber area is not ordinary full-envelope area when fibers are empty; PC3 inequalities do not prove exact endpoint equality; its sampled near-reference family is not certified; and literal universal PC6 needs a competitive/small-deficit scope. An exact disk example disproves the original triangular-margin PC6 if read as applying to all angles and all areas. It does not refute the intended competitive version.
 
-- [CGA](full-turn-common-background-obstruction.md) gives a completely explicit convex full-turn parallelogram, with actual top and bottom positive faces on opposite ends, whose **canonical saturation equals the body**. The width is \(49/20\) and area \(1/20\). Any height-one cap with full niche height at most one half has top-face length at most \(2\sqrt2-1\) (a single \(45^\circ\) corner test). Hence no pair of containing backgrounds with one common top face can contain the two original caps. This disproves **unconditional** common-face-background admission, even on the saturated positive opposite-face class. The low area is essential: it does not disprove competitive-only admission. A continuum of such examples exists for diagonal rod width \(2<W<\sqrt7\).
-- [AS](adaptive-spatial-switching-bound.md) strengthens the direct SPB ordinary-area relaxation without an arbitrary spatial partition:
-  \[
-  |S|\le\mathscr C(U,V)=W-\int_I\max(n_U+n_V,\ 2-A_U-A_V).
-  \]
-  Its exact error against the canonical envelope is \(\int[a_++b_+-(a+b)_+]\), with \(a=n_U-(1-A_V)\), \(b=n_V-(1-A_U)\). It is exact on the reference, every convex feasible full-turn body, and vertically symmetric feasible envelopes. For admitted common-face tail-budget domains, existing per-cap deficit inequalities prove even \(\mathscr C\le M\). **The sharp bound \(\mathscr C\le M\) for arbitrary compatible full-turn caps is unproved** and is stronger than the necessary original clipping inequality.
-- The bounded [exact checker](computer-assisted/check_full_turn_focus.py) passed 6,561 rational frames per turn and 10,000 exact switching identities, rejecting an overwide parallelogram and a false zero-switching-error assertion. Its executed bytes match Git blob \(ee4843d19f357b315050f84f7f036d568cb61edc\). The finite tests do not verify the continuum theorem or establish sharp area optimality.
+## 3. New hand theorem CC: exact circular-corner allowance
 
-**Single remaining active acceptance criterion:** prove the sharp ordinary-area upper bound for every saturated full-turn positive opposite-end-face body. A competitive-only regular-background theorem remains possible, provided it supplies face compatibility and pays all geometry; generic inclusion-based admission is false. An alternative is a direct sharp **coupled** inequality using AS or the exact fibers; do not treat the stronger AS scalar maximum as already established. Do not resume partial turns until the full-turn step closes or a specific flaw forces a rethink.
+Let L=pi/2, alpha=L-epsilon, and 0<epsilon<L. In the two supporting unit strips, translate their lower intersection to A=(0,0). Their upper intersection is D=(k,1), where k=tan(epsilon/2). The lower cone is spanned by e_1 and n_(alpha+L). Its two tangent points to the unit circle centered at D are E=k e_1 and F=k n_(alpha+L).
 
-## 1. Instructions and validation limits
+All missing first-wall violations lie in triangle AEF. Inside this triangle the normal maximizing (D-z) dot n_t lies in [alpha,L], so the exact relaxed violation region is its part outside the unit disk centered at D. Its area is
 
-Prioritize pen-and-paper proofs. Short computations may test a proposed inequality or reject an approach; at most 30 seconds per invocation, preferably external five/ten-second limits. Do not launch a large optimizer campaign or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]`, under docs/ambidextrous. Refresh blob SHAs and preserve concurrent edits.
+$$\boxed{\lambda(\varepsilon)=\tan(\varepsilon/2)-\varepsilon/2.}$$
 
-All proofs are written and self-reviewed, not independently refereed or kernel-verified. Read [constructed-background-review.md](constructed-background-review.md) and [spatial-half-partition-bound.md](spatial-half-partition-bound.md) for the latest results and exploratory scope. The historical chains have not been independently verified by the new checks.
+This replaces PC's larger allowance tau(epsilon)=k^2 sin(epsilon)/2. Their difference is exactly (epsilon-sin(epsilon))/2. Thus lambda=epsilon^3/24+O(epsilon^5), while tau starts at epsilon^3/8. The circle calculation works without PC's auxiliary epsilon<pi/3 convexity estimate.
 
-The reference value is
+This is sharp for the first-wall/two-strip relaxation, not a claim that every point of this region can simultaneously belong to an actual feasible two-turn body.
+
+With two missing angles and actual hull caps, define
+
+$$\ell_{vis}=1-\max(d_U,n_V^{vis})-\max(d_V,n_U^{vis})\ge0,$$
+$$\ell=1-\max(d_U,n_V)-\max(d_V,n_U),$$
+
+where n_U,n_V are full niches and d_U=1-A_U,d_V=1-A_V. Then
+
+$$\ell_{vis}=\ell+\xi_-+\xi_+,$$
+$$0\le\int\xi_-\le\lambda(\varepsilon),\qquad
+0\le\int\xi_+\le\lambda(\varepsilon').$$
+
+Consequently CC2 proves
+
+$$\boxed{|S|\le\int_I\ell+\lambda(\varepsilon)+\lambda(\varepsilon')
+\le |E_{full}(K)|+\lambda(\varepsilon)+\lambda(\varepsilon').}$$
+
+The latter inequality is weaker, not an equality of signed and ordinary areas. Put Z=integral(-ell)_+ and Xi=integral(xi_-+xi_+). Then exactly
+
+$$|E_{full}|=\int\ell+Z,\qquad |E_{vis}|-|E_{full}|=\Xi-Z\ge0.$$
+
+AS gives integral ell=C-R by pointwise algebra. In general C-|E_full|=R-Z, not R. The transfer has no curvature, common-face, weighted-maximizer or Gerver input.
+
+Using the earlier TE endpoint certificate only for a numerical range gives k<=21/79, lambda<=approximately 0.006008415 per turn, instead of PC's approximately 0.017543826. A purely rational upper bound on their sum is 6174/493039. TE is not required for the geometric theorem.
+
+## 4. New exact non-completion example IC
+
+[IC1](exact-in-place-completion-obstruction.md) proves that
+
+$$T=\operatorname{conv}\{(0,0),(1/10,1),(-1,20/99)\}$$
+
+has a lower turn through alpha=L-2 arctan(1/10), and a full upper turn, but fails a missing lower angle t_*=L-arctan(1/10). Its area is 101/198. Both support depths at (0,0) exceed one at t_*, so an open positive-area piece is deleted by completion.
+
+The all-angle proof uses a two-affine-depth edge calculation and one explicitly factored rational polynomial. It is independent of the original PC numerical family. The example proves only that zero-loss **in-place** completion is not universal, even at a small missing angle. It is not competitive, does not preclude another incoming orientation, and does not establish near-M non-completable bodies.
+
+## 5. The exact unresolved target
+
+For actual full-turn caps with nonempty fibers,
+
+$$|E|=\Psi(U)+\Psi(V)+G,\qquad
+\Delta(U)=M/2-\Psi(U),$$
+$$\Delta(U)+\Delta(V)-G=M-|E|.$$
+
+Thus the universal clipping inequality is exactly the full-turn optimality claim, not an independently established lemma. The stronger AS aggregate inequality C<=M also remains unproved globally. The reference value is
 
 $$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-An upper bound for one attained unrestricted maximizer suffices for the value. Do not silently assume attainment inside a nonclosed restricted subclass or assign weighted-cap maximality to an arbitrary two-turn cap.
+The new partial-turn bridge needs a margin, for example
 
-## 2. New constructive tail admission, with its remaining assumptions
+$$\int_I\ell\le M-\Xi,$$
 
-[CB](complementary-tail-background.md) starts from an actual input cap U, not an assumed regular background. It requires:
+or the stronger condition with Xi replaced by lambda(epsilon)+lambda(epsilon'). That margin has not been proved. A completed full-turn set can be disconnected; bounding each connected component by M would not bound their total area by M. Even a total-area bound by M without a negative margin leaves the positive completion allowance unpaid.
 
-- height one, width W>2, a half-height rectangle and full niche height at most one half;
-- curvature at most one outside two sufficiently narrow top-normal tails;
-- differentiability without atoms at the two outer cut normals;
-- a displayed half-curvature support arc that dominates the input on each tail and matches its outer-end value and derivative.
+Therefore do not announce that a full-turn theorem automatically settles partial turns through CC. It would need the appropriate stronger-domain margin or a separate feasible component/area-preserving completion argument.
 
-The last smooth-fit barrier is essential to avoid creating an unallowed middle curvature atom. It is not implied merely by proximity to the reference.
+## 6. Earlier infrastructure retained, with its real boundaries
 
-On each tail, a projective lower convex envelope produces a majorant B with tail density at most one half. If e=h_B-h_U, then
+**WV2** is the existing written weighted-cap theorem sup Psi=M/2. Its PA/WP/WR/AR/PT/TS/EB/TF/HF/CG/SE/VE chain retains its independent-review limitations. In particular an arbitrary two-turn cap is not a weighted maximizer. The recent CC/IC proofs do not use this chain.
 
-$$e\ge0,\qquad e(2\rho_B-1)=0.$$
+**FAS and RS2** cover aligned positive-face full-turn bodies and the specified left-right symmetric actual unit-span class. RS2 is not a theorem for arbitrary subunit-span symmetric envelopes. **RR/PD/PS** reduce the full-turn supremum to saturated positive opposite-end faces; that subclass need not attain its supremum and has no uniform gap below M.
 
-Where repair occurs, rho_B is exactly one half. Where it is smaller, e=0. The CT surplus is therefore exactly zero; HC's adverse-density example is not contradicted because its preselected background was not this input-dependent obstacle solution.
+**TC/MT/ME/CT/CB** pay clipping on admitted regular-background/rough-tail domains. General admission, output-face compatibility, half-height geometry and regular-middle hypotheses remain unproved. **CGA** disproves unconditional common-face half-height-niche admission on the entire full-turn class, but not competitive-only admission. **NM** shows half-height rectangle failure in near-reference actual full-turn bodies, so closeness alone does not supply it.
 
-The construction preserves axis supports and glues without new non-axis atoms. Unit middle curvature, a positive top face, the required tail contact signs, separated tail abscissae and a half-height niche follow from the explicit input bounds. CB proves
+**HS** proves a positive convex-hull symmetrization energy. It does not pay the extra forbidden area or prove connectedness of arbitrary symmetrized envelopes. Near-reference cuts show that the leading hull gain is spent on forbidden material and that unit vertical span can drop linearly while area changes only in three-halves order. **AN** disproves the simple area-preserving affine unit-span normalizer and gives the exact full-turn rectangle bound area<=1.
 
-$$\Psi(B)-\Psi(U)\ge\int_a^b(1-A_U)dx,$$
+**AS/SPB** are valid ordinary-area relaxations with exact nonnegative mismatch formulas on actual nonempty fibers. Their sharp maxima are unproved. The new CC makes signed-versus-positive-part accounting explicit for partial hulls; it does not maximize these expressions.
 
-where [a,b] is B's top face. For two such constructed backgrounds with identical top-face intervals, the two budgets pay clipping and yield actual envelope area at most M through SR/AF.
+Keep the earlier negative controls RA, MCA, AF4, GR1, AX1/SAT1, SAC2, SC3, TR1, AO1, FF and HC. Saturation, repair, averaging, face filling, reference proximity and support energy do not automatically imply ordinary-area enclosure. AM/TE are scoped exact certificates, not a complete global covering.
 
-**Not proved:** arbitrary competitors satisfy the input hypotheses; independently constructed output faces match; or partial witnesses enclose the body in the full envelope. The regular middle and half-height assumptions remain substantial. CB is constructive conditional admission, not global admission.
+## 7. Reproduction and restart
 
-## 3. New finite criterion for the partial-turn bridge
+The unchanged original PC checker finished in 2.35 seconds under ten seconds and reproduced its author output, including the impossible negative approximate completion loss at epsilon=0.02. The corrected missing-angle-only replay finished in 2.90 seconds. It adds no samples inside already visited angles; all four approximate completion losses are nonnegative and below the circular allowance. These are still not certified values or continuum feasibility proofs. A rejected union-grid trial is preserved and explained in the replay review.
 
-[FS](finite-strip-bridge-criterion.md) bounds widths between two normals a,b by positive sine interpolation of their actual width bounds A,B. For c=cos(b-a), s=sin(b-a)>0 and A,B<=1, a sufficient and exhaustive test for that upper envelope to stay at most one is
+The exact CC/IC checker ran in about 0.155 seconds under five seconds: one coefficientwise identity, 7,290 triangle point/frame tests, 147 tangent tests, 462 cone tests, and 934 signed-fiber cases, including 621 negative signed full fibers. The executed source matches Git blob `a9069ce6e3fedfa4301ef1434e6012b37ac1f1b0`. The replay wrapper matches blob `bbf5a43340388f5bec248bf94e39ce32845426d8` and validates the archive and original script hashes before execution.
 
-$$B\le Ac\quad\text{or}\quad A\le Bc\quad\text{or}\quad A^2+B^2-2cAB\le s^2.$$
-
-When the normals and bounds are rational this is an exact rational test. A finite chain passing the test certifies every width in the SI bridge, giving continuous full turns for the same body and preserving area.
-
-A single sufficiently thin intermediate strip suffices:
-
-$$w((\alpha+\pi-\gamma)/2)\le\cos((\pi-\alpha-\gamma)/2).$$
-
-This is a hypothesis, not a result about every maximizer. Failure of this sufficient test does not prove the bridge unsafe. For instance constant width-one data fail every nonzero two-strip interpolation test despite all actual strips being safe. Refinement alone is not a completeness argument. The competitive unsafe-width-bump case remains open.
-
-## 4. A direct spatial alternative with the area linkage already proved
-
-[SPB](spatial-half-partition-bound.md) uses the actual two caps and the niche roofs from their actually visited angular intervals. For I=[l,r], W=r-l and J=[l+W/4,r-W/4], put
-
-$$\mathcal P_J(U)=\int_{I\setminus J}A_U-\int_J n_U.$$
-
-For the actual nonempty-fiber canonical envelope,
-
-$$|S|\le|E|\le\mathcal P_J(U)+\mathcal P_J(V).$$
-
-The exact nonnegative slack is written in SPB.4. On J it discards outer-wall restrictions; off J it discards niche restrictions. There is no hidden clipping or winding correction. The bound is exact at the reference.
-
-**The sharp maximum of P_J is not proved.** For full niches,
-
-$$\mathcal P_J(U)=\Psi(U)+\int_J(1-A_U)+\int_{I\setminus J}n_U,$$
-
-so WV2 does not bound it by M/2. Proving that stronger scalar bound, or a compatible-pair bound on the sum, would close the full-turn value directly without CB admission. This is an alternative direction, not a new completed gate.
-
-For partial turns the enclosure still uses only visited niches. Replacing them by the larger full niches lowers the alleged upper bound and is forbidden without completion. Original outgoing-strip constraints still couple the two hull caps.
-
-The retained short tests found no convincing violation, but the reference discretization itself has a positive bias about 0.000240. A fixed six-iteration numerical run exhausted its budget with a value far below the reference. Neither observation proves a maximum, feasibility of arbitrary proposed pairs or a global certificate. Do not advertise this as a solved replacement for the background route.
-
-## 5. Actual-body variation: a positive necessary result and a negative control
-
-[PV](actual-maximizer-parallel-volume.md) shows `(S+tC)/(1+t)` preserves all existing motions and endpoint strips when C is convex of diameter at most one. Thus every attained unrestricted or full-turn maximizer satisfies
-
-$$|S+tC|\le(1+t)^2|S|.$$
-
-For the unit disk D, `|S+rD|<=(1+2r)^2|S|`. Testing compactly supported deformations and expanding the planar determinant gives finite distributional perimeter with
-
-$$P(S)\le4|S|.$$
-
-This is actual-body regularity, not a hull curvature bound or a sufficient maximum condition.
-
-[RT](convex-template-rounding-obstruction.md) proves from the explicit reference arcs that `4M-P(Sigma)>92/2625`. Its even normal measure then makes every diameter-one convex template lose area to first order, with coefficient less than `-46/2625`. The same negativity persists on sufficiently small asymmetric double-tip cuts. Those cuts are suboptimal, so the whole variation family cannot automatically improve the remaining near-reference examples. No uniform finite step size or exclusion of all larger finite steps is asserted.
-
-## 6. Prior comparison domains and theorem dependencies
-
-**MT/ME:** variable regular middle supports with three exact reference collars, half-height geometry and signed rough-tail changes. Their face-loss budget pays clipping while the background middle retains a deficit `(7/50) sum integral |z_i'|^2`.
-
-**CT:** inward changes of general unit-curvature backgrounds with a common top face and projection, half-height geometry, tail signs and tail density at least one half. The surplus is integral e(2rho-1). CB replaces the lower-density assumption by complementarity on its constructed domain; it does not invalidate CT or make all tails admissible.
-
-**HC:** a density-one-quarter stadium has an inward support cut increasing its signed and symmetric actual area. This disproves unqualified CT monotonicity. The cap is not above M.
-
-**TC/RB/STW:** earlier reference-middle tail pairing, the 1/101 boundary-layer saturation theorem and a signed outward extension remain valid stated subcases.
-
-**WV2:** the signed weighted one-turn value M/2 is proved in the existing written PA/WP/WR/AR/PT/TS/EB/TF/HF/CG/SE/VE/WV/SR/AF chain. VE's continuum source-flux limit remains a principal independent-review point. SE invokes Gerver's bound on a feasible one-turn body. The newer tail-transfer route invokes SR/AF on admitted regular backgrounds instead, without requiring weighted-maximizer regularity of the input.
-
-## 7. Global reductions do not supply admission
-
-RR/PD/PS establish that the full-turn supremum equals that over saturated positive opposite-end-face bodies, allowing area-convergent approximation and changed incoming orientation. The reference has such approximants approaching M. There is no uniform strict area gap on the whole remaining class, and that subclass need not attain its supremum.
-
-SI completes partial turns across an entire safe-strip bridge. Three isolated safe normals do not suffice; the new FS tests are sufficient finite criteria for that bridge, not a universal completion theorem. RR preserves its unshaved safe-strip set.
-
-FAS covers full-turn aligned positive faces. SCG/CSF provide further retained-point completion tests. RS covers left-right reflection symmetry in a valid incoming representation, not existence of an unrestricted symmetric maximizer.
-
-AW-W/SW/AL are analytic competitive-width restrictions. AM/TE are earlier restricted exact computer certificates, not a sharp global covering or premises of the new CB/FS/PV/RT proofs.
-
-## 8. Negative controls and numerical provenance
-
-Retain RA, MCA, AF4, GR1, AX1/SAT1, SAC2, SC3, TR1, AO1, FF and HC. Body averaging, cap averaging, hull repair, saturation and face filling did not automatically preserve actual-area bounds. Any new averaging assertion must state a domain that avoids the existing counterexamples. The old occupancy LP has fractional barriers that resolution does not remove.
-
-The latest standard-library checker ran under a five-second limit in about 0.0216 seconds. It has 44 check calls, some repeated, and its record matches Git blob `41d3aaef44a80b656f39b5bcb3aee2d24d79c9dd`. These checks do not verify continuum admission or the historical chain.
-
-All exploratory runs were bounded by five seconds and retained as noncertifying diagnostics. Some regular-cap pair tests had negative fibers and are not feasible two-turn examples. Small apparent positive area errors on the discretized reference are bias, not counterexamples. The two initial spatial-script helper-name errors produced no result and were corrected before its retained run.
-
-Original user packages and author records remain preserved at their audited checkpoints. Do not overwrite them with fresh results or treat imported claimed checks as newly executed verification.
-
-## 9. Restart boundary
-
-Read the live tip, this handoff, the roadmap and current review. The choices are a specific remaining CB input/face-compatibility proof, a sharp direct spatial inequality with its actual-body linkage retained, or a partial-turn theorem that supplies the missing bridge or an area bound without it. None is already proved globally.
-
-Do not turn these choices into simultaneous indefinite searches or an assumption of imminent closure. State and repair any actual gap before using a historical result. Keep scripts short, commits substantive, all positive corrections visible, and PR #3 open/draft until the unrestricted upper value really is proved.
+Read this handoff, the current roadmap and the CC/IC proofs before using the new bridge. If review finds a specific incorrect implication, repair that implication rather than weaken hypotheses silently. The main missing work remains a sharp global ordinary-area comparison and its completion margin. No closure or imminent-completion claim is justified by the new local loss bound. PR #3 remains open and draft.
