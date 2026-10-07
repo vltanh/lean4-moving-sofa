@@ -110,6 +110,34 @@ No Lean, Lake, CI, axiom audit, Comparator, TeX build, or Lean
    (and separately the two sharp floor-corner wedges) from the Gerver
    phase formulas. This does not by itself prove the full sector atlas.
 
+9. **Coarse-angle support-box indexing.** The four intermediate rational
+   normals contribute two coordinates each (normal and tangent). The former
+   polygon clipper used stride four for those eight coordinates; the correct
+   stride is two. The native Lean source now has a box-length/index invariant.
+   The numerical search and geometric soundness remain unexecuted and open.
+
+10. **Centered-reference equivariance.** For any horizontal translation
+    \(K+a\), the midpoint-aligned reference to \(K\) is \(K+a\), not
+    \(K\). The former source identity was mathematically false. The
+    zero-deficit right-angle theorem now uses the corrected equivariance.
+
+11. **Actual-set comparison chain.** The previous effective right-angle
+    proof attempted to compose Hausdorff comparisons whose middle sets did
+    not match. The source now compares \(K\to C\to G+m(C)\to G+m(K)\);
+    its stated \(514\sqrt e\) bound follows from \(256+1.001+256<514\).
+    This is a corrected analytic source argument, not an elaborated proof.
+
+12. **Fixed-radius sector case.** An arbitrary interior-ball radius
+    \(\rho\) does not decide containment of the prescribed \(10^{-20}\)
+    ball. The source now splits directly on that fixed ball. The genuine
+    Gerver boundary sector atlas remains open.
+
+13. **Lean-only numerical trust.** The three finite proofs (full-Q operator,
+    lower trial energy, and coarse angle) must use closed Lean Boolean
+    reductions and Lean soundness theorems only. Python and JSON are not
+    eligible numerical theorem premises, nor required proof generators.
+    See `37-lean-only-certification-contract.md`.
+
 The full mathematical evidence and negative controls remain in the numbered
 notes under \`docs/stability/constants/\`.
 
