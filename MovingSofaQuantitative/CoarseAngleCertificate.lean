@@ -46,8 +46,8 @@ def segmentIntersect (a b n : QPoint) (h : Q) : QPoint :=
 
 def clip (P : Polygon) (n : QPoint) (h : Q) : Polygon :=
   (P.zip (P.tail++P.take 1)).foldl (fun out e =>
-    let ina:=dotQ e.1 n≤h
-    let inb:=dotQ e.2 n≤h
+    let ina : Bool := decide (dotQ e.1 n≤h)
+    let inb : Bool := decide (dotQ e.2 n≤h)
     if ina && inb then out++[e.2]
     else if ina && !inb then out++[segmentIntersect e.1 e.2 n h]
     else if !ina && inb then out++[segmentIntersect e.1 e.2 n h,e.2]
