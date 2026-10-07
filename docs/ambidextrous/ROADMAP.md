@@ -1,102 +1,105 @@
-# Active roadmap: hand proofs of the optimal value
+# Active roadmap: the remaining ordinary-area comparison
 
-**Unrestricted optimality remains unproved. Uniqueness is deferred.** Read [HANDOFF.md](HANDOFF.md) for the live-checkpoint procedure, provenance and detailed proof boundaries. All written results remain self-reviewed, with historical dependencies awaiting independent review.
+**Unrestricted optimality is not proved.** The signed weighted one-turn value is now established in the written WV chain. The long-face two-turn class is bounded by M through FL/LF. The primary remaining class has at least one horizontal face of length at most one. Unrestricted uniqueness is deferred.
 
-## 1. Target and current execution limits
+Read [HANDOFF.md](HANDOFF.md) and [weighted-value-proof-review.md](weighted-value-proof-review.md) before continuing. All written arguments are self-reviewed; independent verification of the complete dependency chain remains outstanding.
 
-For one attained global ambidextrous maximizer S, establish |S|<=M, where
+## 1. Target and execution policy
+
+For one attained global ambidextrous maximizer S, establish |S|<=M, where the known reference has
 
 $$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-The candidate already supplies the opposite inequality. It is unnecessary to classify all equality cases before proving the value.
+Do not add equality classification as a prerequisite. Prefer pen-and-paper proofs. Only short diagnostic scripts are authorized: maximum 30 seconds per invocation, preferably external five/ten-second limits. No large search or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantial positive and negative findings frequently with `[skip ci]`, under docs/ambidextrous.
 
-The user's latest instruction prioritizes pen-and-paper arguments and short computer checks. New diagnostic invocations have a maximum 30-second wall-clock limit; the latest exact and exploratory checks used five and ten seconds respectively. No new long searches, multistart campaigns, dependency installation, CI or Lean/Lake compilation. A timeout or an unfinished covering is not a theorem. All substantial findings use `[skip ci]` commits under `docs/ambidextrous/`.
+## 2. Weighted subproblem: completed written value proof
 
-## 2. Completed weighted reductions and their exact domain
-
-The signed cap problem is
+The exact objective is
 
 $$\Psi(U)=|U|-|N(U)|-W(U)/2,$$
 
-subtracting the full positive-height niche, not clipped surviving area. Let P=max Psi, attained by PA2. The following apply to weighted global maximizers U, not automatically to arbitrary ambidextrous maxima.
+with the entire positive-height niche subtracted. [WV2](one-turn-weighted-value.md) proves
 
-| Step | Result and scope |
+$$\boxed{\sup_U\Psi(U)=M/2}$$
+
+over the normalized full-right-angle cap domain.
+
+| Step | Result and logical role |
 |---|---|
-| PA2, ST1, HV | Attainment, height one, upper roof at least one half, niche-area continuity and uniform finite-angle approximation. |
-| WP, WR | Selection of any prescribed weighted maximizer; summable facet defects; bounded open-quarter curvature; vertical end edges exactly one half. |
-| AR7/AR5' | Same-sign curvature improvements and propagation of endpoint-arm information. |
-| PT3 | Every weighted maximizer has a positive top face. The older T=0 exception is removed. |
-| TS1--TS2 | Full niche height at most one half and both endpoint arms at most 9/4, now for every weighted maximizer. |
-| EB1/EB.10 | Finite actual exposure measures converge to curvature; the sum of absolute interior facet defects tends to zero. |
-| TF2--TF3 | Both single-wall tangencies have positive height; the niche lies strictly beneath the horizontal top-face interval. |
-| HF1 | Top-face length T equals W/2, with W>2. |
-| HF2--HF3 | Actual convex core V with U=V+([0,T] times [0,1/2]), width(V)=T, height(V)=1/2 and 2 Psi(U)=Per(V)-T. |
+| PA/WP/WR | Attainment, selection of a prescribed weighted maximizer, summable finite defects and bounded open-quarter curvature. |
+| AR/PT/TS/EB | Same-sign bounds, a positive top face, half-height niche, and exact limiting actual exposure=curvature. |
+| TF/HF | Positive tangency heights, niche confinement, zero symmetric clipping, T=W/2 and the stationary convex-core identity. |
+| CG1 | Arm threshold sqrt(17)/2 suffices for a good quarter. It is stronger than the old sufficient criterion d<=2. |
+| SE2 | Chords of the stationary core and the established Gerver bound give T<48/35; one arm is below 72/35<sqrt(17)/2. Thus one quarter is good. |
+| VE2 | With one globally good quarter and a good future for the other, prove two boundary pieces globally visible and count their source flux. |
+| WV1 | A hypothetical bad-quarter episode forces an energy to increase from above five to at most five. Contradiction: both quarters are good. |
+| AR4/SR1/AF3 | Apply the admitted sharp comparison at the attained maximizer, obtaining WV2. |
 
-The newest proofs are [TF](one-turn-tangency-floor-bound.md) and [HF](one-turn-half-width-top-face.md), with their [review](tangency-floor-review.md). They use an elementary differential-inequality comparison, baseline wall intercepts, and exact finite projection/area identities. Their claims do not depend on numerical integration or a solver's status.
+The new proof does not assume that actual exposure is maximal merely because exposure=curvature. It does not require the proposed saturated ODE SP1. VE is the main new continuum review point: it keeps the two alternating source fluxes instead of assuming convergence of ordinary perimeter.
 
-For the reflected two-turn body constructed from U, TF now gives
+The ordinary Gerver bound in SE is an explicit external theorem applied to the feasible body U minus N. It is not an assertion that the weighted optimizer also maximizes unpenalized cap area. Its rational upper constant is derived from six pinned enclosures with the signs retained.
 
-$$\boxed{|S_U|=2\Psi(U),}$$
+**Do not reopen weighted maximization or endpoint-arm search unless a specific proof gap is found in review.** The old excessive-curvature windows are intermediate reductions, not the active unresolved target after WV1.
 
-with no clipping correction. It is an actual compact connected body, and its hull has aligned horizontal faces. This is a theorem for the construction from a weighted maximizer; it is not an upper domination theorem for every ambidextrous body.
+## 3. Actual two-turn result: two long faces suffice
 
-## 3. What the exposure result does not prove
+[FL1](aligned-face-optimality.md) proves |S|<=M for a compact connected ambidextrous body whose top and bottom common-hull faces coincide in an interval of length at least one. Its proof derives full turns from the contained unit square and confines both positive niches by connectedness of their baseline interval family and retained extreme face endpoints. Clipping vanishes, and the two WV2 inequalities add.
 
-The previously proposed no-hiding argument is corrected in [exposure-saturation-gap.md](exposure-saturation-gap.md). Actual exposure tau_j can equal ell_j while remaining below a larger local upper bound L_j. The unaccounted slack L_j-ell_j is precisely what prevents inferring that the hidden contribution vanishes.
+[LF1](long-faces-force-alignment.md) derives alignment when both horizontal face lengths are strictly greater than one. Small initial angles force the left endpoints to agree; the common square forces full turns; terminal angles force the right endpoints to agree. Hence
 
-SP1 solves the proposed saturated ODE analytically. EB does not establish that actual maximizing caps follow it. TF/HF avoid this assumption. Do not reinstate it merely because the ODE has the candidate solution.
+$$\boxed{\text{both face lengths}>1\Longrightarrow |S|\le M.}$$
 
-## 4. Remaining weighted sharp-value gate
+This is an ordinary-area theorem, not merely an auxiliary maximum. It has no curvature, smoothness, symmetry or pre-assumed full-turn hypothesis. Its face-length condition remains a real restriction.
 
-With cap projection [x_L,x_R] and top face [x_tl,x_tr], write
+## 4. The remaining unrestricted cases
 
-$$d_R=x_R-x_{tl}=1+q(0),\qquad d_L=x_{tr}-x_L=1-p(\pi/2).$$
+A possible counterexample with area greater than M must have at least one horizontal exposed face of length at most one. The class includes point faces, unequal short faces, shifted face intervals and partial endpoints not forced to a quarter turn.
 
-The sufficient endpoint condition **EA2** is d_R,d_L<=2. The present bound is 9/4. EA2 for one attained weighted maximizer would give unit curvature and the sharp value P=M/2 via the signed-roof identity SR1 and AF3. It has not been proved for one.
+The exact full-turn accounting remains
 
-HF supplies the additional exact face moment T=W/2; this must be retained in any further endpoint comparison. An alternative sufficient target is Per(V)-T<=M for the **stationary cores** arising in HF. The stationary identity is not true for arbitrary convex half-height cores, so relaxing to all such V without another inequality is invalid.
+$$|E|=\Psi(U)+\Psi(V)+G,\qquad G\ge0,$$
 
-A successful next lemma must actually prove one of these sharp comparisons or furnish a different valid weighted upper bound. More regularity, another detached functional maximum, or a fixed-sign sampled control experiment is not completion of this gate.
+for nonempty surviving fibers and the actual cap definitions in OA. Empty fibers need an additional positive correction. Writing
 
-## 5. The remaining unrestricted two-turn gate
+$$\Delta(U)=M/2-\Psi(U)\ge0,$$
 
-For general full-turn cap pairs with common projection and nonempty two-turn fibers,
+WV2 now gives the exact sharp form of the remaining full-turn comparison:
 
-$$|E|=\Psi(U)+\Psi(V)+G,\qquad G\ge0.$$
+$$|E|\le M\quad\Longleftrightarrow\quad G\le\Delta(U)+\Delta(V).$$
 
-An empty-fiber correction is also needed if that hypothesis is omitted. TF sets G to zero for S_U only. Even after a proof of P=M/2, the general upper bound does not follow while G is uncontrolled.
+This is a correctly signed target, not a theorem that its right side is always large enough. No positive clipping is discarded. A valid area-improving operation at a short-face global maximizer or a different ordinary-area inequality could replace this target.
 
-Possible sufficient approaches remain: an actual area-dominating reduction to the symmetric weighted construction; an ordinary-area estimate paying the exceptional clipping/face corrections; or a sharp direct two-turn inequality. These are open geometric obligations, not consequences of the new cap face ratio.
+| Remaining obligation | What counts as completion |
+|---|---|
+| Short-face maximality or area comparison | Prove a maximizing short-face body can be improved, or bound its actual area by M; include point-face cases. |
+| Actual angular coverage | Use only orientations visited by the body's two motions, or retain the correction for missing intervals. |
+| Positive clipping / winding corrections | Bound all positive terms by a proved deficit or avoid the decomposition with a valid ordinary-area upper bound. |
+| Global assembly | Apply a proved case covering to an attained maximizer. Do not assume every maximizer has long faces. |
 
-Full turns also cannot be assumed for every original body. OT/OA provide stated face and strip subcases. CW4 supplies a sharp bound for wide actual hulls under unit curvature, but a general maximizing-hull curvature theorem is still missing.
+These are substantive geometric obligations. The new one-turn theorem does not by itself solve them. The known SC3 point-face examples approach M from below, so a fixed strict gap for the entire short-face class is not an available shortcut.
 
-The two-wing alternative retains
+## 5. Alternatives and failure controls
 
-$$|S|-\widehat{\mathcal W}=N+U-B,$$
+The two-wing functional remains calibrated on its stated domains. [MW1](weighted-maximizer-canonical-wings.md) supplies full-height canonical wing data and outward-support agreement for the symmetric weighted construction, but not its core enclosure. All-angle wings are actual surviving material, yet [AO1](all-angle-wing-reference-obstruction.md) proves the old fixed-cut functional undercounts even the reference on that choice of wings. That substitution is ruled out analytically.
 
-where N is multiplicity-weighted negative winding, U is uncovered surviving material, and B>=0. Neither positive correction has a general paid budget. The calibrated height/cut domains, actual coverage of angles, and ordinary-area admission remain necessary.
+The ordinary-area winding identity is `|S|-widehat W=N+U-B`; negative winding N and uncovered surviving material U both matter. No universal correction budget has been proved. Do not replace it by a signed curve calculation with unexplained orientation or coverage.
 
-## 6. Direct-area results retained without new long searches
+Earlier controls remain AF4, GR1, AX1/SAT1, SAC2, SC3 and TR1. Repair, saturation, shared anchors and candidate proximity did not rescue those failed enclosures. A weighted-cap maximizing premise cannot be supplied by an arbitrary two-turn maximizer. Small extreme-height difference does not imply mid-height or C1 localization.
 
-AW-W excludes W<=2 analytically. The published AL1 narrows competitive widths to W<=2999/1020<3. AM2 supplies a complete width covering for a stated steep extreme-height rectangle; TE1 proves both competitive endpoint magnitudes exceed 2 arctan(29/50)>pi/3. They are restricted theorems, not a complete global certificate or a local candidate-neighborhood theorem.
+## 6. Direct ordinary-area certificates retained
 
-The earlier [computer plan](optimality-only-computer-plan.md) must be read with the [fractional-barrier audit](occupancy-relaxation-audit.md). A triple-only occupancy LP admits z=2/3, and pairs still admit z=1/2. Arbitrary resolution does not overcome that obstruction. Anchors and exact pair certificates help only in their actually covered regions.
+AW-W excludes widths<=2 analytically. AL1 bounds competitive widths by 2999/1020. AM2 excludes its specified steep extreme-height rectangle across all widths, and TE1 proves competitive turns exceed 2 arctan(29/50)>pi/3. They do not cover the entire remaining class or supply a sharp local theorem.
 
-Under the current user instruction, do not launch a large computation simply to pursue those remaining boxes. Prefer a proved geometric reduction and use only bounded diagnostic checks.
+The unconditioned occupancy LP has a 2/3 fractional barrier; adding pairs retains a 1/2 barrier. Anchors or other genuine logical strengthening are necessary. Any future certificate must verify all geometric witnesses, angle coverage, strict inequalities and complete parameter coverage independently. The present runtime policy does not authorize launching another large search.
 
-## 7. Validation, unsuccessful tests and change log
+## 7. Review and short checks
 
-The exact TF checker ran under an external five-second cap, with internal checks under one millisecond. It checked 18 named rational identities/inequalities including 54 area-algebra instances, and rejected two overstrong claims. Its [record](computer-assisted/tangency-floor-checks.json) matches the committed source. These checks are not independent verification of the continuum proof.
+The new checker `computer-assisted/check_core_arm_reduction.py` uses only unbounded integers and rational arithmetic and ran under a five-second limit. Its 19 named checks cover rational constants and finite energy/flux/triangle identities; runtime was about 0.0021 seconds. The record matches the committed source blob. These regressions do not verify the continuum VE argument, Gerver's theorem or the entire historical chain.
 
-Three small midpoint control experiments with prescribed transition indices ran under ten-second caps. No continuous coverage, verified infeasibility certificate or cap realizability was obtained. A crude rectangle-niche bound was too weak and was abandoned. The [review](tangency-floor-review.md) records these limits; no sampled result is used in TF/HF.
+The current review records the short failed six-anchor diagnostic and the all-angle-wing test that led to AO's exact obstruction. Neither floating-point run is a proof input. Older exact certificate replay records remain distinct from diagnostic output and from their untrusted generators.
 
-Recent decisions:
+## 8. Next-session rule
 
-- Corrected balance-versus-local-saturation inference; retained valid EB.
-- Used the proved 9/4 endpoint bounds in a controlled oscillator comparison instead of assuming the saturated ODE.
-- Proved niche confinement to the top face and removed clipping in S_U.
-- Proved projection-length convergence with explicit derivative control, then T=W/2 from finite balance.
-- Retained the actual rectangular core and stationary perimeter identity, without asserting the still-missing sharp perimeter bound.
-- Kept the weighted sharp value and the unrestricted two-turn upper comparison as two separate unfinished gates.
+Read WV and VE with the review before using the new weighted result. If a flaw is found, state and repair that exact implication rather than silently weakening hypotheses. Otherwise move to a specified short-face ordinary-area comparison. No further independent auxiliary calibration is needed merely because it can be proved.
 
-Mandatory negative controls remain AF4, GR1, AX1/SAT1, SAC2, SC3 and TR1. Weighted maximality cannot be substituted for two-turn maximality; small |a-b| does not imply midpoint heights; finite support proximity is not a C1 neighborhood. Commit counts are not a progress metric. The PR remains open and draft.
+Keep all positive corrections and actual-body hypotheses visible. Commit negative findings. Do not describe a short conditional assembly as evidence that the remaining geometry is routine. The mathematical proof, not the PR state, is the goal; unrestricted optimality remains open in this work.
