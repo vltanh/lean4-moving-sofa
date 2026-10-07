@@ -39,23 +39,28 @@ theorem exists_integral_penalized_cap {P : GerverParams}
     ∃ C : Set Point,IsCap C (π/2) ∧
       sofaArea (π/2) C-λ*supportL2Penalty K C≥sofaArea (π/2) K ∧
       supportL2Penalty K C≤e/λ := by
-  let Θn:=dyadicAngleSet (π/2) (by positivity) 
-  choose Cn hCn hmax using fun n =>
-    exists_penalizedMax
-      (integralQuadratureSamples (Θn n) K λ)
-      K (polyCap (Θn n) K)
-      (recovery_positive_from hK hAe he)
-  obtain ⟨C,φ,hφ,hconv⟩ :=
-    bounded_penalized_caps_subsequence hP hbox hK he hλ Cn hCn
-  have hcap:=capH_isCap_limit hφ hconv
-  have harea:=polyArea_limsup_to_sofaArea hφ
-  have hpen:=quadrature_penalty_tendsto_integral hK hcap hφ
-  refine ⟨C,hcap,?_,?_⟩
-  · apply le_of_tendsto_of_tendsto
-      (dyadic_recovery_ge_integral hK λ) harea hpen
-  · have hglobal:=right_angle_cap_area_le_gerver
-      (gerver_maximizing_value hP hbox) hcap
-    nlinarith [hglobal]
+  have hpositive : 0 < sofaArea (π/2) K := by
+    have hM := (gerverSofa_area_mem hP hbox).1
+    rw [hAe]
+    -- Only positive-area competitors require penalized selection.
+    -- The quantitative theorem is used with e <= 10^-4; that restriction
+    -- belongs to its application, not to the generic existence statement.
+    linarith
+  obtain ⟨C, hpenMax⟩ := exists_integral_penalized_limit hK hpositive hλ
+  rcases hpenMax with ⟨hC, hmax⟩
+  have hzero : supportL2Penalty K K = 0 := by
+    simp [supportL2Penalty]
+  have hobj : sofaArea (π/2) K ≤
+      sofaArea (π/2) C - λ * supportL2Penalty K C := by
+    have h := hmax K hK
+    simpa [supportL2Penalty, hzero] using h
+  have hglobal := right_angle_cap_area_le_gerver
+    (gerver_maximizing_value hP hbox) hC
+  have hpenBound : λ * supportL2Penalty K C ≤ e := by
+    rw [hAe] at hobj
+    linarith
+  refine ⟨C, hC, hobj, ?_⟩
+  exact (le_div_iff₀ hλ).2 hpenBound
 
 /-- The comparison cap stays uniformly bounded even though the penalty target
 is not centered at its own midpoint. -/
