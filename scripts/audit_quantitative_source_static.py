@@ -181,6 +181,18 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "requires the point's minimizing property.",
         ),
     ),
+    "MovingSofaQuantitative/EffectiveRegularizationSupport.lean": (
+        (
+            r"theorem\s+exists_integral_penalized_limit[\s\S]*?"
+            r"exists_dyadic_penalizedMax[\s\S]*?"
+            r"integral_penalty_limsup_of_dyadic",
+            "The existing dyadic selector maximizes a persistent discrete "
+            "sample penalty, not the lambda-weighted Lebesgue L2 penalty "
+            "claimed by PenalizedCapMax. A real integral-penalized "
+            "maximization/limit theorem needs its own matching objective, "
+            "coercive radius control and upper-semicontinuity proof.",
+        ),
+    ),
     "MovingSofaQuantitative/EffectiveRightAngle.lean": (
         (
             r"theorem\s+penalized_cap_radius_bound[\s\S]{0,600}"
