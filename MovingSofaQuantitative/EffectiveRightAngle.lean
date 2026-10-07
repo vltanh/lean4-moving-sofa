@@ -176,17 +176,29 @@ theorem penalized_cap_radius_bound {P : GerverParams}
 theorem penalized_support_sup {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {K C : Set Point} (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
     {e : ℝ} (he : 0<e) (he4 : e≤1/(10:ℝ)^4)
     (hA : sofaArea (π/2) C≥area (gerverSofa P)-e)
     (hpen : supportL2Penalty K C≤65536*e^(3/2:ℝ)) :
     ∀t∈Icc (0:ℝ) π,|supp C t-supp K t|≤256*sqrt e := by
-  have hCr:=penalized_cap_radius_bound hP hbox hK hC he he4 hA hpen
-  have hKr:=arbitrary_positive_cap_radius_five hK (by
-    have hglobal:=right_angle_cap_area_le_gerver
-      (gerver_maximizing_value hP hbox) hK
-    nlinarith [hA])
+  have hCr0:=penalized_cap_radius_bound
+    hP hbox hK hC hKpos he he4 hA hpen
+  have hKr0:=arbitrary_positive_cap_radius_five hK hKpos
+  have hKr : ∀p∈K,
+      norm2 (p-(horizontalMidpoint K,0))≤5 := by
+    intro p hp
+    have hcp : p-(horizontalMidpoint K,0)∈centeredCopy K := by
+      rw [centeredCopy_mem_iff]
+      simpa [Prod.fst_add,Prod.snd_add,Prod.fst_sub,Prod.snd_sub]
+        using hp
+    exact (hKr0 _ hcp).le
+  have hCr : ∀p∈C,
+      norm2 (p-(horizontalMidpoint K,0))≤26 :=
+    fun p hp=>(hCr0 p hp).le
+  have hLip0 : LipschitzWith (5+26) (fun t=>supp C t-supp K t) :=
+    support_difference_lipschitz_common_center hK hC hKr hCr
   have hLip : LipschitzWith 32 (fun t=>supp C t-supp K t) :=
-    support_difference_lipschitz_of_radius hK.2.1 hC.2.1 hKr hCr
+    hLip0.mono (by norm_num)
   have htop : (fun t=>supp C t-supp K t) (π/2)=0 := by
     have hKC : supp K (π/2)=1 := hK.2.2.2.1
     have hCC : supp C (π/2)=1 := hC.2.2.2.1
@@ -201,7 +213,17 @@ theorem penalized_support_sup {P : GerverParams}
     rw [show (3/2:ℝ)=1+1/2 by norm_num,rpow_add he,Real.rpow_one,sqrt_eq_rpow]
   rw [hpow] at hcube
   intro t ht
-  have hmax:=le_csSup (bounded_abs_support_difference hCr hKr)
+  have hbounded :
+      BddAbove (|fun u=>supp C u-supp K u| '' Icc (0:ℝ) π) := by
+    refine ⟨32*π,?_⟩
+    rintro y ⟨u,hu,rfl⟩
+    have hd:=hLip.dist_le_mul u (π/2)
+    rw [Real.dist_eq,Real.dist_eq,htop,sub_zero] at hd
+    have huπ : |u-π/2|≤π := by
+      rw [abs_le]
+      constructor <;> linarith [hu.1,hu.2,pi_pos]
+    exact hd.trans (mul_le_mul_of_nonneg_left huπ (by norm_num))
+  have hmax:=le_csSup hbounded
     ⟨|supp C t-supp K t|,⟨t,ht,rfl⟩⟩
   nlinarith
 
@@ -266,7 +288,7 @@ theorem effective_right_angle_cap {P : GerverParams}
       unfold λ rightAnglePenaltyLambda at hPbound
       field_simp [sqrt_pos.mpr hp |>.ne'] at hPbound
       simpa [sqrt_eq_rpow,←Real.rpow_natCast] using hPbound
-    have hD:=penalized_support_sup hP hbox hK hC hp he4 hCarea hpen
+    have hD:=penalized_support_sup hP hbox hK hC hKpos hp he4 hCarea hpen
     have hcurv:=penalized_curvature_error hP hbox hK hC hp he4
       (penalized_max_of_global_objective hobj) hD
     have hCki:=approx_curvature_implies_Ki hC
