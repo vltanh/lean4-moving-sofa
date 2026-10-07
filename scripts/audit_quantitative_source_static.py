@@ -104,6 +104,12 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "an explicit nonemptiness hypothesis.",
         ),
         (
+            r"theorem\s+infDist_pos_of_compact[\s\S]{0,170}"
+            r"\(hK\s*:\s*IsCompact\s+K\)\s*\{p\s*:",
+            "Positive distance from a compact set also requires nonemptiness; "
+            "the empty compact set is a counterexample.",
+        ),
+        (
             r"theorem\s+exists_mem_eq_infDist[\s\S]{0,450}"
             r"le_csInf[^\n]*⟨q,hq,rfl⟩",
             "Membership proves infDist <= dist; the reverse inequality "
