@@ -96,6 +96,20 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "of the support difference is required.",
         ),
     ),
+    "MovingSofaQuantitative/NormalRecovery.lean": (
+        (
+            r"theorem\\s+exists_mem_le_infDist[\\s\\S]{0,170}"
+            r"\\(hK\\s*:\\s*IsCompact\\s+K\\)\\s*\\(p\\s*:\\s*Point\\)",
+            "A compact set can be empty. Nearest-point existence requires "
+            "an explicit nonemptiness hypothesis.",
+        ),
+        (
+            r"theorem\\s+exists_mem_eq_infDist[\\s\\S]{0,450}"
+            r"le_csInf[^\\n]*⟨q,hq,rfl⟩",
+            "Membership proves infDist <= dist; the reverse inequality "
+            "requires the point's minimizing property.",
+        ),
+    ),
     "MovingSofaQuantitative/EffectiveRightAngle.lean": (
         (
             r"theorem\s+penalized_cap_radius_bound[\s\S]{0,600}"
