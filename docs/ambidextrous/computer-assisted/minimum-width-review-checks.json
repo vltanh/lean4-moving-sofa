@@ -1,0 +1,58 @@
+{
+  "status": "exact_arithmetic_regressions_passed",
+  "fiber_cases": 4900,
+  "positive_correction_cases": 3894,
+  "negative_correction_cases": 694,
+  "circle_and_series_cases": 33,
+  "negative_controls": [
+    "wrong double-slab subtraction rejected",
+    "G_s is not sign-definite on compatible scalar fibers"
+  ],
+  "floating_point_replay_comparison": [
+    {
+      "s": 0.005801344912335082,
+      "Gamma": 0.0011796819986078788,
+      "eight_thirds_s_3_2": 0.0011783159660109163,
+      "replayed_minus_G_s": 0.0011797203701542705,
+      "replayed_area_deficit": 0.0012140108158971152,
+      "minus_G_minus_Gamma": 3.837154639169116e-08,
+      "scope": "floating-point diagnostic; no certified error sign"
+    },
+    {
+      "s": 0.011535569936893086,
+      "Gamma": 0.0033115131869949355,
+      "eight_thirds_s_3_2": 0.0033039032189971854,
+      "replayed_minus_G_s": 0.0033114894327722043,
+      "replayed_area_deficit": 0.003655674191273217,
+      "minus_G_minus_Gamma": -2.375422273118155e-08,
+      "scope": "floating-point diagnostic; no certified error sign"
+    }
+  ],
+  "python": "3.13.5",
+  "internal_seconds": 0.09300202899999022,
+  "source_sha256": "fc1b32cba87e56c0942b18ed7937c0c4c2a453e30f546e9af856273fc8302463",
+  "source_git_blob_sha": "ce6b327750f70e5bd92163f56087e07617a54b90",
+  "executed_source_matches_committed_blob": true,
+  "external_timeout_seconds": 5,
+  "continuum_geometry_verified_by_script": false,
+  "unrestricted_optimality_proved": false,
+  "ci_or_lean_used": false,
+  "original_package_replay": {
+    "archive_sha256": "21bc2d3b71b1deac325b94faca87d1eaac3d0849a012a0d689049f026f6eeff8",
+    "source_sha256": "05451e2cbad40c25612fd263569ed1d2c16a909010f0a37b92b65bbb0c92ec69",
+    "source_git_blob_sha": "1bf1e22be144bfa6cc75d805e84a7aafc5ce46ee",
+    "source_unchanged": true,
+    "original_author_record_preserved": true,
+    "external_timeout_seconds": 8,
+    "exit_code": 0,
+    "reported_seconds": 1.86,
+    "part_a_exact": true,
+    "part_a_samples": 200,
+    "part_b_expected_pattern": true,
+    "part_b_case_count": 5,
+    "offset_control_G_s": 0.004744992288242281,
+    "largest_absolute_identity_residual": 4.440892098500626e-16,
+    "threads": {"OPENBLAS_NUM_THREADS": 1, "OMP_NUM_THREADS": 1},
+    "note": "The original replay is diagnostic, not interval-certified. Complete fresh output and unchanged originals are in the session reproduction bundle."
+  }
+}
