@@ -138,3 +138,23 @@ For clarity, the diagonal segment *before* horizontal thickening has a **sharp**
 Then \(A=W\cos t-\sin t=B=W\sin t+\cos t=\ell/\sqrt2>2\). The midpoint of the diagonal segment has both inner-wall depths \(A/2=B/2>1\), so it lies strictly in the canonical forbidden quadrant at that angle. By the canonical support-tightening lemma, no alternative translation of that frame can make the segment feasible. Thus, for \(W>1\), a diagonal segment from \((0,1)\) to \((W,0)\) can make both complete canonical turns **if and only if** \(W\le\sqrt7\). The same condition holds for the reflected turn.
 
 This sharp rod computation is only an exact feasibility fact, not an area bound for general sofas. In particular it does not promote the small-area background obstruction into a counterexample to competitive-only admission.
+
+## 7. The half-height face threshold is sharp, not just a 45-degree estimate
+
+The lower bound CGA.4 is the **best universal bound depending only on the top-face length**. Let \(Q_T=[a,b]\times[0,1]\) be the rectangle beneath a top face of length \(T=b-a>0\). Every height-one downward cap having that face contains \(Q_T\), so support monotonicity implies \(N(Q_T)\subseteq N(B)\).
+
+For \(Q_T\), both inner-wall supports are attained at the two appropriate top vertices, and its inner corner at angle \(t\) has exact height
+\[
+c_y(t)=T\sin t\cos t+1-\sin t-\cos t.
+\]
+Put \(z=\sin t+\cos t\in[1,\sqrt2]\), so \(\sin t\cos t=(z^2-1)/2\). Then
+\[
+c_y(t)=\frac T2(z^2-1)+1-z.
+\]
+This is a strictly convex quadratic in \(z\), so its maximum over \([1,\sqrt2]\) is attained at an endpoint. The endpoint values are zero and \(T/2+1-\sqrt2\), respectively. The supremum of heights in each positive forbidden quadrant equals the height of its corner, since its downward-left interior approaches that corner. Therefore
+\[
+\boxed{H_N(Q_T)=\max\{0,T/2+1-\sqrt2\}.}\tag{CGA.6}
+\]
+Here \(H_N\) is the supremum of positive heights, with value zero for an empty positive niche.
+
+Together with support monotonicity, (CGA.6) proves that the infimum of full-niche heights over **all** height-one downward caps with a prescribed positive top-face length \(T\) is exactly \(\max\{0,T/2+1-\sqrt2\}\), attained by the rectangle. Thus the bound \(T\le2\sqrt2-1\) under \(H_N\le1/2\) is sharp for that premise. Neither an angular refinement nor a sharper test based only on the common top-face length can evade CGA3. A global admission theorem must use additional competitive-body geometry or replace that premise.
