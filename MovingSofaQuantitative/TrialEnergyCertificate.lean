@@ -396,19 +396,28 @@ theorem realPoint_in_parameterBox {P : GerverParams} (hbox : P.InBox) (u : ℝ)
   · simpa [parameterBox,realPoint] using hbox.2.1
   · simpa [realPoint] using hu
 
-/-- One certified t-cell bounds the real squared residual on that entire
-cell.  This is the local soundness statement needed by the integral sum. -/
+/-- A checked cell returns its *area contribution*, not its pointwise
+residual-square bound.  The distinction is essential: the contribution is
+\`(b-a)*M\`, which is generally much smaller than \`M\` for a fine mesh.
+
+The two endpoint inequalities show that the actual, parameter-dependent
+mesh subcell is covered by the outward rational interval [a,b]. -/
 theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (k : Kind) (lo hi : T) (j : Fin subcells) {U : ℚ}
     (hc : cellUpper k lo hi j = some U) :
-    ∃ a b : ℝ, a ≤ b ∧
-      (∀ u ∈ Icc a b,
+    ∃ a b M : ℚ,
+      a ≤ b ∧ 0 ≤ M ∧ U = (b-a)*M ∧
+      (a:ℝ) ≤ meshPoint (lo.realValue (realPoint P 0))
+        (hi.realValue (realPoint P 0)) subcells j.val ∧
+      meshPoint (lo.realValue (realPoint P 0))
+        (hi.realValue (realPoint P 0)) subcells (j.val+1) ≤ (b:ℝ) ∧
+      ∀ u ∈ Icc (a:ℝ) (b:ℝ),
         (match k with
-        | .r2 => CriticalTrial.r2 P u
-        | .r3 => CriticalTrial.r3 P u
-        | .r4 => CriticalTrial.r4 P u
-        | .B => CriticalTrial.rB P u
-        | .D => CriticalTrial.rD P u)^2 ≤ U) := by
+         | .r2 => CriticalTrial.r2 P u
+         | .r3 => CriticalTrial.r3 P u
+         | .r4 => CriticalTrial.r4 P u
+         | .B => CriticalTrial.rB P u
+         | .D => CriticalTrial.rD P u)^2 ≤ (M:ℝ) := by
   unfold cellUpper at hc
   cases hL : lo.intervalValue parameterBox with
   | none => simp [hL] at hc
@@ -416,58 +425,86 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     cases hH : hi.intervalValue parameterBox with
     | none => simp [hL,hH] at hc
     | some H =>
-      split at hc <;> try contradiction
-      let a : ℝ := L.lo + (H.lo-L.lo)*(j.val:ℚ)/subcells
-      let b : ℝ := H.hi + (L.hi-H.hi)*((subcells-j.val-1:ℕ):ℚ)/subcells
-      let box : Box3
-        | 0 => parameterBox 0
-        | 1 => parameterBox 1
-        | 2 => ⟨a,b⟩
-      cases hI : (residual k).intervalValue box with
-      | none => simp [hL,hH,hI] at hc
-      | some I =>
-        refine ⟨a,b,?_,?_⟩
-        · exact_mod_cast show
-            L.lo + (H.lo-L.lo)*(j.val:ℚ)/subcells ≤
-            H.hi + (L.hi-H.hi)*((subcells-j.val-1:ℕ):ℚ)/subcells by
-              nlinarith
-        · intro u hu
-          have hp : InBox box (realPoint P u) := by
-            intro i
-            fin_cases i
-            · simpa [box,realPoint] using hbox.1
-            · simpa [box,realPoint] using hbox.2.1
-            · simpa [box,realPoint,Interval.Contains] using hu
-          have hv := BranchExpr.intervalValue_sound (residual k) hp hI
-          rw [residual_real hP] at hv
-          have hs : (match k with
-              | .r2 => CriticalTrial.r2 P u
-              | .r3 => CriticalTrial.r3 P u
-              | .r4 => CriticalTrial.r4 P u
-              | .B => CriticalTrial.rB P u
-              | .D => CriticalTrial.rD P u)^2 ≤
-              max 0 (max (I.lo*I.lo) (I.hi*I.hi)) := by
-            have hlo := hv.1
-            have hhi := hv.2
-            rcases le_total 0 (match k with
-              | .r2 => CriticalTrial.r2 P u
-              | .r3 => CriticalTrial.r3 P u
-              | .r4 => CriticalTrial.r4 P u
-              | .B => CriticalTrial.rB P u
-              | .D => CriticalTrial.rD P u) with hp | hn
-            · exact_mod_cast (sq_le_sq₀ hp (hhi.trans (by exact_mod_cast
-                le_max_right (I.lo*I.lo) (I.hi*I.hi)))).2
-            · have hh := neg_le_neg hlo
-              nlinarith [sq_nonneg (match k with
+      by_cases horder : L.hi < H.lo
+      · simp only [hL,hH,if_pos horder,Option.bind_some] at hc
+        let a : ℚ := L.lo+(H.lo-L.lo)*(j.val:ℚ)/subcells
+        let b : ℚ := H.hi+(L.hi-H.hi)*((subcells-j.val-1:ℕ):ℚ)/subcells
+        let box : Box3
+          | 0 => parameterBox 0
+          | 1 => parameterBox 1
+          | 2 => ⟨a,b⟩
+        cases hI : (residual k).intervalValue box with
+        | none => simp [hI] at hc
+        | some I =>
+          let M : ℚ := max 0 (max (I.lo*I.lo) (I.hi*I.hi))
+          have hparams : InBox parameterBox (realPoint P 0) :=
+            realPoint_in_parameterBox hbox 0 (by norm_num [parameterBox,Interval.Contains])
+          have hlo := TrigExpr.intervalValue_sound lo hparams hL
+          have hhi := TrigExpr.intervalValue_sound hi hparams hH
+          have hN : (0:ℚ)<subcells := by norm_num [subcells]
+          have hj : (j.val:ℚ)+1 ≤ subcells := by
+            exact_mod_cast j.isLt
+          have hlen : a ≤ b := by
+            dsimp [a,b]
+            nlinarith [horder, hlo.1, hlo.2, hhi.1, hhi.2,
+              Nat.cast_nonneg (subcells-j.val-1)]
+          have hM : 0 ≤ M := by
+            dsimp [M]; exact le_max_left _ _
+          have hU : U=(b-a)*M := by
+            simp only [hI, Option.bind_some, Option.some.injEq] at hc
+            simpa only [a,b,M] using hc.symm
+          refine ⟨a,b,M,hlen,hM,hU,?_,?_,?_⟩
+          · unfold meshPoint
+            dsimp [a]
+            have hratio : 0 ≤ (j.val:ℝ) / subcells ∧
+                (j.val:ℝ) / subcells ≤ 1 := by
+              constructor
+              · positivity
+              · apply (div_le_one (by norm_num [subcells])).2
+                exact_mod_cast j.isLt.le
+            push_cast
+            nlinarith [hlo.1,hhi.1]
+          · unfold meshPoint
+            dsimp [b]
+            have hratio : 0 ≤ ((j.val:ℝ)+1)/subcells ∧
+                ((j.val:ℝ)+1)/subcells ≤ 1 := by
+              constructor
+              · positivity
+              · apply (div_le_one (by norm_num [subcells])).2
+                exact_mod_cast Nat.succ_le_of_lt j.isLt
+            push_cast
+            nlinarith [hlo.2,hhi.2]
+          · intro u hu
+            have hp : InBox box (realPoint P u) := by
+              intro i
+              fin_cases i
+              · simpa [box,realPoint] using hbox.1
+              · simpa [box,realPoint] using hbox.2.1
+              · simpa [box,realPoint,Interval.Contains] using hu
+            have hv := BranchExpr.intervalValue_sound (residual k) hp hI
+            rw [residual_real hP] at hv
+            have hs : (match k with
                 | .r2 => CriticalTrial.r2 P u
                 | .r3 => CriticalTrial.r3 P u
                 | .r4 => CriticalTrial.r4 P u
                 | .B => CriticalTrial.rB P u
-                | .D => CriticalTrial.rD P u)]
-          simp only [Option.some.injEq] at hc
-          subst U
-          nlinarith
-
+                | .D => CriticalTrial.rD P u)^2 ≤
+                max 0 (max (I.lo*I.lo) (I.hi*I.hi)) := by
+              have hlow:=hv.1
+              have hupp:=hv.2
+              have hsqlo : (I.lo:ℝ)^2 ≤ M := by
+                exact_mod_cast (le_max_of_le_right (le_max_left _ _))
+              have hsqhi : (I.hi:ℝ)^2 ≤ M := by
+                exact_mod_cast (le_max_of_le_right (le_max_right _ _))
+              nlinarith [sq_nonneg ((I.lo:ℝ)-
+                (match k
+                 | .r2 => CriticalTrial.r2 P u
+                 | .r3 => CriticalTrial.r3 P u
+                 | .r4 => CriticalTrial.r4 P u
+                 | .B => CriticalTrial.rB P u
+                 | .D => CriticalTrial.rD P u))]
+            simpa only [M] using hs
+      · simp [hL,hH,horder] at hc
 
 /-- The candidate retained pieces cover the requested arc. Extra pieces outside
 the arc have empty intersection and contribute no integral. This is deliberately
