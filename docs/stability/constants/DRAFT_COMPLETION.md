@@ -295,3 +295,29 @@ dependency but **does not close** the endpoint/junction normal cones,
 tail nearest-point witnesses, or uniform reference sector atlas.
 Accordingly \`explicit-local-stability\` and \`explicit-cutoff\` remain
 \`blocked_source\`. No Lean/Lake/CI or certificate computation was run.
+
+
+## Audit correction: dyadic selection is not integral-penalty maximization
+
+The integrated \`MovingSofaUniqueness.Selection.dyadicSamples\` uses
+persistent, atomic, multilevel normal weights of total mass at most one.
+The theorem \`exists_dyadic_penalizedMax\` maximizes
+\`polyArea - dyadicPenalty\` with those weights; it contains neither the
+arbitrary coefficient \(\lambda>0\) nor Lebesgue integration in the angle.
+
+Therefore selecting a dyadic maximizing subsequence does **not** by itself
+prove that the limit maximizes
+\[
+  A_{\pi/2}(C)-\lambda\int_0^\pi
+    (h_C(t)-h_K(t))^2\,dt.
+\]
+The previous source step \`integral_penalty_limsup_of_dyadic\` is an
+unproved and nontrivial change-of-objective bridge, not a consequence of the
+existing dyadic theorem. This route must either prove convergence for
+a new \(\lambda\)-scaled quadrature selector or maximize the continuous
+penalized functional directly via a coercive compactness argument.
+
+The static source audit now rejects the unsupported selector pattern.
+\`effective-entry\`, \`effective-angle-entry\`, and \`explicit-cutoff\`
+remain \`blocked_source\`. This is a mathematical/source audit result,
+not a Lean compilation result. No Lean, Lake, or CI was run.
