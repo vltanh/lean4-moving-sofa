@@ -796,6 +796,102 @@ theorem trial_residual_integrability {P : GerverParams}
   · exact CriticalTrial.trial_residual_integrable_B hP hbox
   · exact CriticalTrial.trial_residual_integrable_D hP hbox
 
+/-- The list zip and scalar endpoint evaluation commute. -/
+private theorem chain_zip_map (xs : List T) (g : T → ℝ) :
+    (xs.map g).zip (xs.map g).tail =
+      (xs.zip xs.tail).map (fun p => (g p.1,g p.2)) := by
+  induction xs with
+  | nil => rfl
+  | cons a xs ih =>
+      cases xs with
+      | nil => rfl
+      | cons b rest =>
+          simp only [List.map_cons,List.tail_cons,List.zip_cons_cons,
+            List.map_cons,ih]
+
+/-- In an ordered chain, every adjacent interval lies inside the full
+endpoint interval. -/
+private theorem chain_pair_bounds (xs : List ℝ) {a b : ℝ}
+    (hord : xs.Pairwise (· ≤ ·))
+    (hhead : xs.head? = some a)
+    (hlast : xs.getLast? = some b) :
+    ∀ p ∈ xs.zip xs.tail, a≤p.1 ∧ p.1≤p.2 ∧ p.2≤b := by
+  induction xs generalizing a b with
+  | nil =>
+      intro p hp
+      simp at hp
+  | cons x xs ih =>
+      have hax : a=x := by simpa using hhead.symm
+      subst a
+      cases xs with
+      | nil =>
+          intro p hp
+          simp at hp
+      | cons y rest =>
+          have hxy : x≤y :=
+            (List.pairwise_cons.mp hord).1 y (by simp)
+          have htail : (y::rest).Pairwise (·≤·) :=
+            (List.pairwise_cons.mp hord).2
+          have hxb : x≤b := by
+            have hfirst : x≤(y::rest).getLast! :=
+              List.pairwise_le_getLast hord hlast
+            simpa [hlast] using hfirst
+          intro p hp
+          rcases List.mem_cons.mp (by simpa [List.zip] using hp) with he|ht
+          · cases he
+            refine ⟨le_rfl,hxy,?_⟩
+            exact (List.pairwise_le_getLast htail hlast)
+          · obtain ⟨hy,hu,hb⟩ :=
+              ih htail (by simp) (by simpa using hlast) p (by simpa using ht)
+            exact ⟨hxy.trans hy,hu,hb⟩
+
+/-- A successful mapM of certified piece upper sums bounds the sum of the
+corresponding true integrals, including repeated entries if any.  No finite
+cover axiom or undeclared external helper is required. -/
+private theorem checked_piece_list_sum {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (k : Kind)
+    (ps : List (T × T)) {vs : List ℚ}
+    (hcheck : ps.mapM (fun p => pieceUpper k p.1 p.2) = some vs)
+    (hpairs : ∀ p ∈ ps,
+        let a := p.1.realValue (realPoint P 0)
+        let b := p.2.realValue (realPoint P 0)
+        a≤b ∧ IntervalIntegrable
+          (fun u => (match k with
+            | .r2 => CriticalTrial.r2 P u
+            | .r3 => CriticalTrial.r3 P u
+            | .r4 => CriticalTrial.r4 P u
+            | .B => CriticalTrial.rB P u
+            | .D => CriticalTrial.rD P u)^2) volume a b) :
+    (((ps.map fun p =>
+      ∫ u in (p.1.realValue (realPoint P 0))..
+        (p.2.realValue (realPoint P 0)),
+          (match k with
+          | .r2 => CriticalTrial.r2 P u
+          | .r3 => CriticalTrial.r3 P u
+          | .r4 => CriticalTrial.r4 P u
+          | .B => CriticalTrial.rB P u
+          | .D => CriticalTrial.rD P u)^2).sum) : ℝ) ≤ vs.sum := by
+  induction ps generalizing vs with
+  | nil =>
+      have hvs : vs=[] := by simpa [List.mapM] using hcheck.symm
+      subst vs
+      simp
+  | cons p ps ih =>
+      cases hv : pieceUpper k p.1 p.2 with
+      | none => simp [List.mapM,hv] at hcheck
+      | some v =>
+          cases htail : ps.mapM (fun q => pieceUpper k q.1 q.2) with
+          | none => simp [List.mapM,hv,htail] at hcheck
+          | some ws =>
+              have heq : vs=v::ws := by
+                simpa [List.mapM,hv,htail] using hcheck.symm
+              subst vs
+              obtain ⟨hord,hint⟩ := hpairs p (by simp)
+              have hone := pieceUpper_sound hP hbox k p.1 p.2 hv hord hint
+              have htailbound := ih htail (fun q hq => hpairs q (by simp [hq]))
+              simp only [List.map_cons,List.sum_cons]
+              exact add_le_add hone htailbound
+
 /-- Summation over the retained pieces. The exact residual formulas guarantee
 integrability; the node cover proves that no portion of the target arc is lost. -/
 theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -806,19 +902,60 @@ theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
     | .r4 => arcSquare P.φ (π/2) (CriticalTrial.r4 P) ≤ U
     | .B => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rB P) ≤ U
     | .D => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rD P) ≤ U := by
-  have hcover := retained_piece_cover hP hbox k
+  classical
+  let g : T → ℝ := fun e => e.realValue (realPoint P 0)
+  let xs := (pieceChain k).map g
+  have hgeometry := pieceChain_geometry hP hbox k
+  obtain ⟨hord,hlen,hhead,hlast⟩ := hgeometry
   have hdata := trial_residual_integrability hP hbox k
+  let f : ℝ → ℝ := fun t =>
+    match k with
+    | .r2 => CriticalTrial.r2 P t
+    | .r3 => CriticalTrial.r3 P t
+    | .r4 => CriticalTrial.r4 P t
+    | .B => CriticalTrial.rB P t
+    | .D => CriticalTrial.rD P t
+  have hintegrable : IntervalIntegrable (fun t => f t^2)
+      volume (xs.head!) (xs.getLast!) := by
+    fin_cases k <;> simpa [f,xs,pieceChain,g] using hdata
+  have hchain := CriticalTrial.arcSquare_chain hintegrable xs hord hhead hlast
+  have hpair : xs.zip xs.tail =
+      (retainedPieces k).map (fun p => (g p.1,g p.2)) := by
+    simpa [xs,retainedPieces] using chain_zip_map (pieceChain k) g
+  have hinrange : ∀ p∈retainedPieces k,
+      let a:=g p.1
+      let b:=g p.2
+      (xs.head!)≤a ∧ a≤b ∧ b≤(xs.getLast!) := by
+    intro p hp
+    have hm : (g p.1,g p.2)∈xs.zip xs.tail := by
+      rw [hpair]
+      exact List.mem_map.mpr ⟨p,hp,rfl⟩
+    exact chain_pair_bounds xs hord hhead hlast _ hm
+  have hpairs : ∀ p∈retainedPieces k,
+        let a:=g p.1
+        let b:=g p.2
+        a≤b ∧ IntervalIntegrable (fun u => f u^2) volume a b := by
+    intro p hp
+    obtain ⟨hla,hab,hbb⟩ := hinrange p hp
+    exact ⟨hab,intervalIntegrable_subinterval hintegrable hla hab hbb⟩
   unfold computedUpper at hc
   cases hs : (retainedPieces k).mapM (fun p => pieceUpper k p.1 p.2) with
   | none => simp [hs] at hc
-  | some us =>
-      simp only [hs,Option.some.injEq] at hc
+  | some vs =>
+      have hv : U=vs.sum := by
+        simpa [hs] using hc.symm
       subst U
-      exact CriticalTrial.integral_le_cover_sum hcover hdata
-        (fun p hp => by
-          obtain ⟨V,hV,hmemV⟩ := mapM_mem_sound
-            (fun p => pieceUpper k p.1 p.2) (retainedPieces k) hs hp
-          exact pieceUpper_sound hP hbox k p.1 p.2 hV) 
+      have hle := checked_piece_list_sum hP hbox k
+        (retainedPieces k) hs (by
+          intro p hp
+          simpa [f,g] using hpairs p hp)
+      have hsums : arcSquare (xs.head!) (xs.getLast!) f =
+          ((retainedPieces k).map fun p =>
+            ∫ u in (g p.1)..(g p.2),f u^2).sum := by
+        rw [hchain,hpair]
+        simp only [List.map_map,Function.comp_def,arcSquare]
+      fin_cases k <;> simpa [xs,pieceChain,f,g] using
+        (hsums.symm.trans_le hle)
 
 /-- Direct interval enclosure of q^2 tan(phi). -/
 theorem r1_interval_bound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
