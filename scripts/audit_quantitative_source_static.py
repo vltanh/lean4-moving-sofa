@@ -23,10 +23,7 @@ import sys
 # exists in the checked branch, or all callers have been refactored away.
 CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
     "MovingSofaQuantitative/ReferenceExplicitMargins.lean": (
-        "uniform_core_slack_from_C1",
         "innerSlack_down_more",
-        "sin_ge_half_of_mem",
-        "cos_ge_half_of_mem",
         "gerver_niche_envelope",
         "roof_value_of_envelope",
     ),
@@ -35,6 +32,11 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
         "inner_slack_taylor_V",
         "envelope_B_inactive_margin",
         "envelope_D_inactive_margin",
+        "envelope_B_nearest_active_slack",
+        "envelope_D_nearest_active_slack",
+        "envelope_core_inward_segment",
+        "frontier_shape_off_envelope",
+        "segment_from_niche_to_outer_crosses_envelope",
     ),
     "MovingSofaQuantitative/EffectiveRegularizationSupport.lean": (
         "integral_penalty_limsup_of_dyadic",
@@ -46,12 +48,59 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
     "MovingSofaQuantitative/ExplicitReferenceScales.lean": (
         "explicit_reference_contact_certificate",
         "explicit_fixed_floor_terminal",
-        "explicit_normal_remainder",
+        "reference_adaptive_remainder_bound",
         "explicit_normal_and_deep_niche_recovery",
+        "roof_interior_balls",
     ),
     "MovingSofaQuantitative/TrialEnergyCertificate.lean": (
-        "retained_sum_sound",
-        "computedUpper_sound",
+        "CriticalTrial.integral_le_cover_sum",
+        "List.mapM_get_of_eq_some",
+        "List.mapM_get_of_mem_eq_some",
+    ),
+    "MovingSofaQuantitative/EffectiveAngleEntry.lean": (
+        "partial_inner_triangle_area_lower",
+        "high_angle_tan_lower",
+        "partialIntegralQuadratureSamples",
+        "bounded_partial_penalized_subsequence",
+        "partial_quadrature_tendsto_integral",
+        "floating_defect_budget",
+        "completed_boundary_defect_identity",
+        "partial_pin_sine_lower",
+        "solve_two_pinned_defects",
+        "large_outer_extent_of_area",
+        "triangle_inner_of_support_witnesses",
+        "prepend_missing_rotation",
+    ),
+    "MovingSofaQuantitative/CoarseAngleCertificate.lean": (
+        "rational_polygon_clip_contains",
+        "candidateInBox",
+        "support_quantile_contraction_safe",
+        "area_mono_polygons",
+        "support_box_split_complete",
+        "terminal_candidate_of_motion",
+        "exists_hundredth_slab",
+        "contract_none_excludes",
+    ),
+}
+
+# Source-shape blockers which cannot be resolved by finding an identifier.
+# These require an actual proof rewrite; removing or renaming the marker without
+# supplying the missing argument must not be counted as progress.
+PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
+    "MovingSofaQuantitative/ReferenceSector.lean": (
+        (
+            r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
+            "A geometric boundary point's x-coordinate is not a Gerver "
+            "turning-angle parameter. The sector inclusion needs a boundary "
+            "chart/parameterization, not this five-phase split.",
+        ),
+    ),
+    "MovingSofaQuantitative/TrialEnergyCertificate.lean": (
+        (
+            r"exact\s+CriticalTrial\.integral_le_cover_sum",
+            "The residual cover/integral domination bridge is undeclared; "
+            "replace with a proof over the disjoint pieceChain.",
+        ),
     ),
 }
 
@@ -139,9 +188,19 @@ def source_audit(root: Path) -> dict:
         for symbol in symbols:
             if not re.search(r"\b" + re.escape(symbol) + r"\b", src):
                 continue  # refactored away
-            if not declared.get(symbol):
+            short = symbol.rsplit(".", 1)[-1]
+            if not declared.get(short):
                 errors.append({"kind": "undeclared_project_helper",
                                "file": path, "symbol": symbol})
+    for path, gates in PROOF_REVIEW_GATES.items():
+        src = contents.get(path)
+        if src is None:
+            errors.append({"kind": "missing_audited_source", "file": path})
+            continue
+        for pattern, explanation in gates:
+            if re.search(pattern, src):
+                errors.append({"kind": "unresolved_proof_structure",
+                               "file": path, "explanation": explanation})
     manifest_path = root / "docs/paper/quantitative_manifest.json"
     if manifest_path.is_file():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
