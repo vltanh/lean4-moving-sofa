@@ -62,13 +62,6 @@ structure LocalData (P : GerverParams) (S : Set Point) (ω ε : ℝ) where
   support_close : UpperSupportClose (kCenter*sqrt e) K P.cap
   niche_subset : niche K (π/2)⊆K
 
-theorem gerver_midpoint_cap {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) :
-    horizontalMidpoint (gerverSofa P)=horizontalMidpoint P.cap := by
-  unfold horizontalMidpoint
-  rw [gerver_upper_support hP hbox ⟨le_rfl,pi_pos.le⟩,
-      gerver_upper_support hP hbox ⟨pi_pos.le,le_rfl⟩]
-
 /-- Build all local quantitative data once support/angle entry hypotheses hold. -/
 theorem build_local_data {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
