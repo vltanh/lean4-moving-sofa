@@ -459,6 +459,22 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
   · rw [←hzeroV t ht,hFTC_V]
     nlinarith
 
+/-- Lowering a point further at a fixed first-quadrant hallway angle cannot
+increase either inner-wall slack.  This is the precise depth-extension
+calculation used after the common core clipping threshold. -/
+theorem innerSlack_down_more (K : Set Point) (s : ℝ) (q : Point)
+    (d₀ d : ℝ) (hs : s∈Icc (0:ℝ) (π/2)) (hdd : d₀≤d) :
+    innerSlackU K s (q.1,q.2-d)≤innerSlackU K s (q.1,q.2-d₀) ∧
+    innerSlackV K s (q.1,q.2-d)≤innerSlackV K s (q.1,q.2-d₀) := by
+  have hsin : 0≤sin s :=
+    sin_nonneg_of_nonneg_of_le_pi hs.1 (hs.2.trans (by linarith [pi_pos]))
+  have hcos : 0≤cos s := cos_nonneg_of_mem_Icc hs
+  constructor
+  · dsimp [innerSlackU,dot,uvec]
+    nlinarith [mul_nonneg (sub_nonneg.mpr hdd) hsin]
+  · dsimp [innerSlackV,dot,vvec]
+    nlinarith [mul_nonneg (sub_nonneg.mpr hdd) hcos]
+
 /-- Quantitative version of \`envelope_downward_slack\`.  The tails use
 their active wall (whose vertical coefficient is at least 1/2) and a compact
 inactive-wall margin.  On the core, the balancing angle from
