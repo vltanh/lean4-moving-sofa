@@ -104,16 +104,22 @@ theorem centeredReference_eq_of_midpoint {K₀ K₁ : Set Point}
     centeredReference K K = K :=
   centeredReference_eq_of_midpoint rfl
 
-/-- A horizontal translate of a reference cap recenters back to the reference. -/
+/-- A cap translated by `a` has its horizontal midpoint translated by
+`a`; hence its midpoint-aligned reference is that *translated cap*,
+not the unshifted reference. -/
 theorem centeredReference_translate_eq {K : Set Point}
     (hK : IsConvexBody K) (a : ℝ) :
-    centeredReference K (horizontalReference K a) = K := by
-  apply centeredReference_eq_of_midpoint
-  unfold horizontalMidpoint horizontalReference
-  rw [supp_translate K (a, 0) 0 hK.2.1 hK.1,
-    supp_translate K (a, 0) π hK.2.1 hK.1]
-  simp [dot, uvec]
-  ring
+    centeredReference K (horizontalReference K a) = horizontalReference K a := by
+  have hmid : horizontalMidpoint (horizontalReference K a) =
+      horizontalMidpoint K + a := by
+    unfold horizontalMidpoint horizontalReference
+    rw [supp_translate K (a, 0) 0 hK.2.1 hK.1,
+      supp_translate K (a, 0) π hK.2.1 hK.1]
+    simp [dot, uvec]
+    ring
+  unfold centeredReference
+  rw [hmid]
+  simp
 
 theorem centeredCapDifference_eq_error (K₀ K₁ : Set Point) (t : ℝ) :
     centeredCapDifference K₀ K₁ t =
