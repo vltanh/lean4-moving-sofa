@@ -112,3 +112,13 @@ This body's area is only \(1/20\), far below the candidate's \(M>8/5\). Thus CGA
 It does make a broad strategy choice precise: either prove a **competitive-only** shared-background theorem, retaining its area threshold, or pursue a direct actual-area inequality (for instance the proved SPB geometric enclosure) that does not demand a common top-face background.
 
 No computational result, CI, Lean/Lake compilation, dependency installation, manuscript build or long search is used. The complete example and inequalities above are pen-and-paper. Unrestricted full-turn optimality remains open.
+
+## 5. The example is already canonically saturated
+
+Here \(K=\operatorname{conv}(S)=S\), since the example is convex. Theorem CGA1 establishes that **every point of \(K\)** survives every canonical hallway of both complete turns. Therefore the full same-hull canonical envelope satisfies
+\[
+E(K)=K=S.
+\]
+The example is not an artifact of leaving admissible material unfilled, or a body whose actual hull shrinks after canonical tightening. It belongs to the **saturated, positive opposite-end-face** class singled out by PD/PS, although its area is far below the competitive range.
+
+Accordingly no theorem claiming universal **inclusion-based** common-face half-height-niche background admission over that entire saturated class can be true. A competitive-only admission theorem, or a replacement comparison that is not required to contain both original caps, is not refuted. These qualifications are essential to any attempt to use CB to finish full-turn optimality.
