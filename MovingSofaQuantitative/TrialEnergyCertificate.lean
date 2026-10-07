@@ -521,6 +521,60 @@ theorem retained_piece_cover {P : GerverParams} (hP : P.IsSolution) (k : Kind) :
     simp only [retainedPieces,arcEndpoints,List.mem_map,List.mem_range] <;>
     exact CriticalTrial.node_partition_cover hP hord u hu
 
+/-- Extract the checked value for one entry of a successful \`List.mapM\`.
+Unlike a bare list-index lemma, the proof keeps the output-list length
+equality explicit. -/
+private theorem mapM_get_sound {α β : Type*} (f : α → Option β)
+    (xs : List α) {ys : List β} (h : xs.mapM f = some ys)
+    (i : Fin xs.length) :
+    ∃ y : β, f xs[i.val] = some y ∧
+      ∃ hi : i.val < ys.length, ys[i.val]'hi = y := by
+  induction xs generalizing ys with
+  | nil => exact Fin.elim0 i
+  | cons x xs ih =>
+      cases hf : f x with
+      | none => simp [hf] at h
+      | some y =>
+          cases ht : xs.mapM f with
+          | none => simp [hf,ht] at h
+          | some tail =>
+              have hy : ys = y :: tail := by
+                simpa [List.mapM,hf,ht] using h.symm
+              subst ys
+              cases i using Fin.cases with
+              | zero =>
+                  refine ⟨y,by simpa using hf,by
+                    refine ⟨by simp,?_⟩
+                    simp⟩
+              | succ j =>
+                  obtain ⟨z,hz,hi,hget⟩ := ih ht j
+                  refine ⟨z,by simpa using hz,by
+                    refine ⟨by simpa using hi,?_⟩
+                    simpa using hget⟩
+
+/-- Every input element of a successful \`mapM\` has an output witness in
+the returned list, even if some input values occur more than once. -/
+private theorem mapM_mem_sound {α β : Type*} (f : α → Option β)
+    (xs : List α) {ys : List β} (h : xs.mapM f = some ys)
+    {x : α} (hx : x ∈ xs) :
+    ∃ y : β, f x = some y ∧ y ∈ ys := by
+  induction xs generalizing ys with
+  | nil => simpa using hx
+  | cons a xs ih =>
+      cases hf : f a with
+      | none => simp [hf] at h
+      | some y =>
+          cases ht : xs.mapM f with
+          | none => simp [hf,ht] at h
+          | some tail =>
+              have hy : ys = y :: tail := by
+                simpa [List.mapM,hf,ht] using h.symm
+              subst ys
+              rcases List.mem_cons.mp hx with rfl | hx'
+              · exact ⟨y,hf,by simp⟩
+              · obtain ⟨z,hz,hmem⟩ := ih ht hx'
+                exact ⟨z,hz,by simp [hmem]⟩
+
 /-- The finite-cell sum controls the integral over one retained analytic piece.
 The interval boxes are outward enclosures, so overlaps only make the upper sum
 larger. -/
@@ -564,11 +618,14 @@ theorem pieceUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
               | .B => CriticalTrial.rB P u
               | .D => CriticalTrial.rD P u)^2) ≤ V := by
         intro j
-        obtain ⟨V,hV⟩ := List.mapM_get_of_eq_some hcells j
+        obtain ⟨V,hV,hidx,hget⟩ :=
+          mapM_get_sound (cellUpper k lo hi)
+            (List.ofFn fun j : Fin subcells => j) hcells
+            ⟨j.val,by simp [subcells]⟩
         refine ⟨V,?_,?_⟩
-        · simpa [hlen] using hV.1
+        · simpa [hlen] using hget
         · obtain ⟨a,b,M,hab',hM,hVU,hleft,hright,hpoint⟩ :=
-            cellUpper_sound hP hbox k lo hi j hV.2
+            cellUpper_sound hP hbox k lo hi j hV
           let l : ℝ := meshPoint (lo.realValue (realPoint P 0))
             (hi.realValue (realPoint P 0)) subcells j.val
           let r : ℝ := meshPoint (lo.realValue (realPoint P 0))
@@ -664,7 +721,8 @@ theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
       subst U
       exact CriticalTrial.integral_le_cover_sum hcover hdata
         (fun p hp => by
-          obtain ⟨V,hV⟩ := List.mapM_get_of_mem_eq_some hs hp
+          obtain ⟨V,hV,hmemV⟩ := mapM_mem_sound
+            (fun p => pieceUpper k p.1 p.2) (retainedPieces k) hs hp
           exact pieceUpper_sound hP hbox k p.1 p.2 hV) 
 
 /-- Direct interval enclosure of q^2 tan(phi). -/
