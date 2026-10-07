@@ -82,6 +82,22 @@ No Lean, Lake, CI, axiom audit, Comparator, TeX build, or Lean
    now derives the outer-wall support gap from the top rectangle and both
    floor endpoints instead of an undeclared comparison lemma.
 
+7. **Balanced hallway remainder (October 7, 2026).** The old wall-error
+   formulas omitted the rotating-displacement term and were not the claimed
+   first-order expansions. \`NormalRecovery.lean\` now uses the exact identity
+   for a point p=q+d*w at angle s=t+lambda*d:
+   \[
+      R_U=(F_U(s,q)-F_U(t,q)-a(s-t))
+          +d\langle w,u_s-u_t\rangle,
+   \]
+   and analogously \(R_V\) with \(+b(s-t)\) and \(v_s-v_t\).
+   The direction-rotation term has a generic numerical bound. The separate
+   **Gerver support-function quadratic Taylor estimate** remains a real
+   geometric proof obligation; correcting the algebra does not establish it.
+   The source-only regression test in
+   \`scripts/tests/test_quantitative_wall_expansion.py\` contains a
+   counterexample to the old formulas.
+
 The full mathematical evidence and negative controls remain in the numbered
 notes under \`docs/stability/constants/\`.
 
