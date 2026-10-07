@@ -28,10 +28,10 @@ theorem norm2_orthogonal_sq (a b t : ℝ) :
 theorem norm2_equal_orthogonal {δ : ℝ} (hδ : 0 ≤ δ) (t : ℝ) :
     norm2 (δ • uvec t + δ • vvec t) = sqrt 2 * δ := by
   have hn := norm2_nonneg (δ • uvec t + δ • vvec t)
-  have hs := norm2_orthogonal_sq δ δ t
-  have h2 : sqrt (2 : ℝ) ^ 2 = 2 := sq_sqrt (by norm_num)
   have hp : 0 ≤ sqrt 2 * δ := mul_nonneg (sqrt_nonneg _) hδ
-  nlinarith only [hn, hs, h2, hp, sq_nonneg (norm2 (δ • uvec t + δ • vvec t) + sqrt 2 * δ)]
+  apply (sq_eq_sq₀ hn hp).mp
+  rw [norm2_orthogonal_sq, mul_pow, sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+  ring
 
 /-- Orthogonal wall corrections give the exact erosion constant sqrt(2). -/
 theorem orthogonal_reference_erosion {δ : ℝ} (hδ : 0 ≤ δ) {K₀ K : Set Point}
