@@ -4,6 +4,26 @@
 
 Read [HANDOFF.md](HANDOFF.md), [constructed-background-review.md](constructed-background-review.md), and [spatial-half-partition-bound.md](spatial-half-partition-bound.md). All results are written and self-reviewed; the historical proof chain has not been independently refereed or kernel-verified.
 
+## Latest hand results: a quantified full-turn symmetrization frontier
+
+The full-turn sharp bound \(|E|\le M\) **remains unproved**. Partial-turn work stays frozen. This continuation deliberately tested an alternative to the blocked common-background strategy: reflect the **convex hull** across the perpendicular bisector of its horizontal projection, take its Minkowski midpoint, and then **delete all forbidden full-turn quadrants**. Do not conflate this with the failed averaging of actual nonconvex sofas (RA).
+
+[HS](hull-reflection-symmetrization-budget.md) proves the **exact positive hull-energy identity**
+\[
+|K_{\rm s}|-|K|=\frac12\int[(h_{\rm a}')^2-h_{\rm a}^2]\ge\frac38\int(h_{\rm a}')^2,
+\]
+with \(h_{\rm a}=(h_K-Jh_K)/2\) and four zero axis traces. However the actual surviving-area gain equals this hull gain **minus the increment in removed forbidden area**. Neither the sign of that difference nor the connectedness of arbitrary symmetrized envelopes has been established. The new proposed niche-increment budget HS.4 is **unproved**.
+
+For the explicit near-reference double-tip cuts, the hull gains \((m^2/2)\tau+O(\tau^{3/2})\), while the two saturated surviving areas both differ from \(M\) by at most \(O(\tau^{3/2})\). The newly forbidden material therefore absorbs the full leading linear gain. No fixed positive fraction of hull-energy improvement can be guaranteed to survive as sofa area.
+
+There is also an **independent normalization obstruction**: the symmetric-hull envelope for these cuts has central point top/bottom faces, and UC's retained unit-column obstruction excludes both extreme-height points. A supporting-line and compact niche positivity proof sharpens the loss of unit vertical span to at least \(m\tau/4\), although its ordinary area remains within \(O(\tau^{3/2})\) of M. Therefore **no universal linear stability estimate** \(|S|\le M-c(1-h)\) in the missing vertical span \(1-h\) can hold for x-symmetric connected full-turn sofas. RS2 is a theorem in an **actual unit-span** incoming normalization; it cannot be invoked on these envelopes before proving a valid normalization or extending the theorem.
+
+[AN](affine-unit-span-normalization-obstruction.md) proves exactly that any rectangular \(W\times h\) body, \(0<h\le1\), makes both full turns iff \(W/2+h\le\sqrt2\); hence every full-turn rectangle has area at most one. The left-right symmetric rectangle \(W=9/5,h=1/2\) is full-turn feasible, but its determinant-one stretch \((x,y)\mapsto(hx,y/h)\) has both depth inequalities violated at \(45^\circ\). Thus the natural area-preserving unit-span affine map is **not universally feasible**. Its example is strictly below the competitive range, so it does not rule out an area-aware competitive-only normalization.
+
+[NM](near-reference-midline-obstruction.md) independently proves that a near-reference actual full-turn tip cut can have a unique rightmost hull point above \(y=1/2\), so one of its downward hull caps lacks the full half-height rectangle required by CB/CT, with area loss \(C\epsilon^{3/2}+O(\epsilon^2)\). This persists after PD/PS positive opposite-face approximation and saturation. High area *below* M and geometric closeness do not establish the missing background hypotheses.
+
+**Exact remaining route(s):** either (i) prove the original sharp clipping inequality \(\int[\min(n_U,d_V)+\min(n_V,d_U)]\le\Delta(U)+\Delta(V)\) for all compatible saturated full-turn pairs, without assuming half-height backgrounds; or (ii) prove **both** the hull-symmetrization removed-area budget and a sharp area theorem for the resulting x-symmetric *possibly subunit-span* envelopes. Neither is established. The stronger AS aggregate upper bound remains another sufficient but unproved inequality; finite numerical nonviolations are not global evidence.
+
 ## Latest full-turn falsification screen and switching-stability theorem
 
 **No sharp theorem was closed.** The newest [screening note](full-turn-aggregate-falsification-screen.md) directly evaluated the *stronger* adaptive aggregate upper bound from AS on (i) 169 signed affine reference-cut pairs, (ii) 9,409 prescribed support-plane cut pairs, (iii) 104 exact motion-preserving segment-template deformations from PV, plus separate sampled-only asymmetric ellipse and stadium diagnostics. The largest apparent values above M were no greater than the **false reference bias** of the same finite-angle/spatial quadrature. The replays at higher resolution reduced that bias; none supplied a certified counterexample or a global proof. Some scanned cuts were not covered by the previously proved top-normal tail windows; numerical nonempty-fiber checks alone are not continuum certificates.
