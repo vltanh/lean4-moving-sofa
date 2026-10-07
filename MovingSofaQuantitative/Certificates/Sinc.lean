@@ -34,7 +34,7 @@ namespace Interval
 Allowing negative w is essential: outward interval arithmetic may extend a
 cell containing the true endpoint pi/2 slightly beyond it. -/
 def sincSmall (I : Interval) : Option Interval :=
-  if -(1/10:ℚ) ≤ I.lo ∧ I.hi ≤ (1/10:ℚ) then
+  if I.lo≤I.hi ∧ -(1/10:ℚ) ≤ I.lo ∧ I.hi ≤ (1/10:ℚ) then
     some ⟨1-(max (I.lo^2) (I.hi^2))/6,1⟩
   else none
 
@@ -44,13 +44,9 @@ theorem sincSmall_lower_pos {I J : Interval}
   split_ifs at h with hb
   · obtain rfl := Option.some.inj h
     change (0:ℚ)<1-max (I.lo^2) (I.hi^2)/6
-    have hlo : -(1/10:ℚ) ≤ I.lo := hb.1
+    have hlo : -(1/10:ℚ) ≤ I.lo := hb.2.1
     have hhi : I.hi ≤ (1/10:ℚ) := hb.2
-    have horder : I.lo≤I.hi := by
-      -- The soundness applications always pass a nonempty interval.
-      by_contra hn
-      have hbad : I.hi<I.lo := lt_of_not_ge hn
-      nlinarith
+    have horder : I.lo≤I.hi := hb.1
     have hlo2 : I.lo^2≤(1/10:ℚ)^2 := by nlinarith
     have hhi2 : I.hi^2≤(1/10:ℚ)^2 := by nlinarith
     rcases le_total (I.lo^2) (I.hi^2) with hh|hh <;>
@@ -93,9 +89,9 @@ theorem sincSmall_sound {I J : Interval} {w : ℝ}
   split_ifs at h with hb
   · obtain rfl := Option.some.inj h
     have hlo : -(1/10:ℝ)≤w :=
-      (by exact_mod_cast hb.1).trans hw.1
+      (by exact_mod_cast hb.2.1).trans hw.1
     have hhi : w≤(1/10:ℝ) :=
-      hw.2.trans (by exact_mod_cast hb.2)
+      hw.2.trans (by exact_mod_cast hb.2.2)
     have habs : |w|≤1/10 := abs_le.mpr ⟨hlo,hhi⟩
     obtain ⟨hloS,hhiS⟩ := sinc_taylor_small habs
     have hsq : w^2≤max ((I.lo:ℝ)^2) ((I.hi:ℝ)^2) := by
@@ -122,8 +118,8 @@ theorem sincSmall_reciprocal_exists {I J : Interval}
     split_ifs at h with hb
     · obtain rfl := Option.some.inj h
       change (0:ℚ)<1-max (I.lo^2) (I.hi^2)/6
-      have h1 : I.lo^2≤(1/10:ℚ)^2 := by nlinarith [hb.1,hvalid]
-      have h2 : I.hi^2≤(1/10:ℚ)^2 := by nlinarith [hb.2,hvalid]
+      have h1 : I.lo^2≤(1/10:ℚ)^2 := by nlinarith [hb.2.1,hvalid]
+      have h2 : I.hi^2≤(1/10:ℚ)^2 := by nlinarith [hb.2.2,hvalid]
       exact sub_pos.mpr (by
         apply (div_lt_iff₀ (show (0:ℚ)<6 by norm_num)).2
         rcases le_total (I.lo^2) (I.hi^2) with hle|hle
