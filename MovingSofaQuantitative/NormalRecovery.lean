@@ -616,6 +616,176 @@ theorem nearest_smooth_arc_opposite_vvec {G : Set Point}
   have hres:= (div_eq_iff (ne_of_gt hd)).1 hv
   simpa [d] using hres
 
+/-- Along the interior B tail, the inward u_t ray lies in Gerver's sofa
+for a short explicit positive scale. This uses the antitone actual roof
+rather than any invented smooth-boundary chart. -/
+theorem gerver_B_inward_ray {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Ioo (π/2-P.θ) (π/2)) :
+    ∃r>0,∀s∈Ioc (0:ℝ) r,
+      envB P.path P.gs_α t+s•uvec t∈gerverSofa P := by
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  let q:=envB P.path P.gs_α t
+  have hqΓ : q∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inl (Or.inl ⟨t,⟨ht.1.le,ht.2.le⟩,rfl⟩)
+  have hqroof : γ q.1=q.2 :=
+    gerver_envelope_height_eq_roof hP hbox hroof hqΓ
+  have hqb := envelope_bounds_of_path_height henv
+    (fun u hu=>path_snd_lt_one hP hB hu.1 hu.2) q hqΓ
+  have hqb1 : q.1<gerverRoofRight P := by
+    unfold q gerverRoofRight
+    have hs := (env_B₁_strictMono henv)
+      ⟨ht.1.le,ht.2.le⟩
+      ⟨by linarith [ht.1],le_rfl⟩ ht.2
+    exact hs
+  have hcos : 0<cos t :=
+    cos_pos_of_mem_Ioo ⟨by linarith [ht.1,hB.θ_mem.2,pi_pos],ht.2⟩
+  have hsin : 0≤sin t :=
+    (sin_pos_of_pos_of_lt_pi (by linarith [ht.1,hB.θ_mem.2])
+      (by linarith [ht.2,pi_pos])).le
+  let r:=min ((gerverRoofRight P-q.1)/(2*cos t)) ((1-q.2)/2)
+  have hr : 0<r := lt_min (by positivity)
+    (by have := hqb.2.2; dsimp [q]; linarith)
+  refine ⟨r,hr,?_⟩
+  intro s hs
+  let z:=q+s•uvec t
+  have hmon:=gerver_B_roof_antitone_x hP hbox hroof
+  have hqx : q.1∈Icc
+      (envB P.path P.gs_α (π/2-P.θ)).1
+      (envB P.path P.gs_α (π/2)).1 := by
+    exact ⟨(env_B₁_strictMono henv).monotoneOn
+        ⟨le_rfl,by linarith [henv.ht.2.2.2.1,henv.ht.2.2.2.2]⟩
+        ⟨ht.1.le,ht.2.le⟩ ht.1.le,
+      hqb.1.2⟩
+  have hzx : z.1∈Icc
+      (envB P.path P.gs_α (π/2-P.θ)).1
+      (envB P.path P.gs_α (π/2)).1 := by
+    have hrl := min_le_left
+      ((gerverRoofRight P-q.1)/(2*cos t)) ((1-q.2)/2)
+    have hsr : s≤(gerverRoofRight P-q.1)/(2*cos t) :=
+      hs.2.trans hrl
+    have hzlower : q.1≤z.1 := by
+      dsimp [z]
+      simp [uvec]
+      nlinarith [hs.1.le,hcos]
+    have hzupper : z.1≤gerverRoofRight P := by
+      dsimp [z]
+      simp only [Prod.fst_add,Prod.fst_smul,uvec_fst,smul_eq_mul]
+      have hm:=mul_le_mul_of_nonneg_right hsr hcos.le
+      nlinarith
+    exact ⟨hqx.1.trans hzlower,by
+      simpa [gerverRoofRight] using hzupper⟩
+  have hbelow : γ z.1≤γ q.1 :=
+    hmon hqx hzx (by
+      dsimp [z]
+      simp [uvec]
+      nlinarith [hs.1.le,hcos])
+  have hzxAB : z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) := by
+    have htΓ:=hqb.1.1
+    exact ⟨htΓ.trans (by dsimp [z]; simp [uvec]; positivity),
+      by simpa [gerverRoofRight] using hzx.2⟩
+  have hzy0 : γ z.1≤z.2 := by
+    dsimp [z]
+    simp only [Prod.snd_add,Prod.snd_smul,uvec_snd,smul_eq_mul]
+    rw [hqroof] at hbelow
+    nlinarith [mul_nonneg hs.1.le hsin]
+  have hzy1 : z.2≤1 := by
+    have hsR : s≤(1-q.2)/2 :=
+      hs.2.trans (min_le_right _ _)
+    dsimp [z]
+    simp only [Prod.snd_add,Prod.snd_smul,uvec_snd,smul_eq_mul]
+    nlinarith [sin_le_one t,mul_le_mul_of_nonneg_left
+      (sin_le_one t) hs.1.le]
+  have hroofZ : z∈roofStrip (gerverRoofLeft P) (gerverRoofRight P) γ :=
+    ⟨hzxAB,hzy0,hzy1⟩
+  rw [gerver_shape_eq hP hbox,hroof.shape_decomposition]
+  exact Or.inl (Or.inr hroofZ)
+
+/-- Along the interior D tail, the inward v_t ray lies in Gerver's sofa.
+Its horizontal coordinate moves left while the actual roof increases to
+the right. -/
+theorem gerver_D_inward_ray {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Ioo (0:ℝ) P.θ) :
+    ∃r>0,∀s∈Ioc (0:ℝ) r,
+      envD P.path P.gs_β t+s•vvec t∈gerverSofa P := by
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  let q:=envD P.path P.gs_β t
+  have hqΓ : q∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inr ⟨t,⟨ht.1.le,ht.2.le⟩,rfl⟩
+  have hqroof : γ q.1=q.2 :=
+    gerver_envelope_height_eq_roof hP hbox hroof hqΓ
+  have hqb:=envelope_bounds_of_path_height henv
+    (fun u hu=>path_snd_lt_one hP hB hu.1 hu.2) q hqΓ
+  have hqa : gerverRoofLeft P<q.1 := by
+    unfold q gerverRoofLeft
+    exact (env_D₁_strictMono henv)
+      ⟨le_rfl,by linarith [ht.2,hB.θ_mem.2]⟩
+      ⟨ht.1.le,ht.2.le⟩ ht.1
+  have hsin : 0<sin t :=
+    sin_pos_of_pos_of_lt_pi ht.1 (by linarith [ht.2,hB.θ_mem.2,pi_pos])
+  have hcos : 0≤cos t :=
+    (cos_pos_of_mem_Ioo ⟨ht.1,by linarith [ht.2,hB.θ_mem.2,pi_pos]⟩).le
+  let r:=min ((q.1-gerverRoofLeft P)/(2*sin t)) ((1-q.2)/2)
+  have hr : 0<r := lt_min (by positivity)
+    (by have:=hqb.2.2; dsimp [q]; linarith)
+  refine ⟨r,hr,?_⟩
+  intro s hs
+  let z:=q+s•vvec t
+  have hmon:=gerver_D_roof_monotone_x hP hbox hroof
+  have hqx : q.1∈Icc
+      (envD P.path P.gs_β 0).1
+      (envD P.path P.gs_β P.θ).1 := by
+    exact ⟨hqb.1.1,
+      (env_D₁_strictMono henv).monotoneOn
+        ⟨ht.1.le,ht.2.le⟩
+        ⟨by linarith [ht.1],le_rfl⟩ ht.2.le⟩
+  have hzx : z.1∈Icc
+      (envD P.path P.gs_β 0).1
+      (envD P.path P.gs_β P.θ).1 := by
+    have hsr : s≤(q.1-gerverRoofLeft P)/(2*sin t) :=
+      hs.2.trans (min_le_left _ _)
+    have hzlo : gerverRoofLeft P≤z.1 := by
+      dsimp [z]
+      simp only [Prod.fst_add,Prod.fst_smul,vvec_fst,smul_eq_mul]
+      have hm:=mul_le_mul_of_nonneg_right hsr hsin.le
+      nlinarith
+    have hzhi : z.1≤q.1 := by
+      dsimp [z]
+      simp only [Prod.fst_add,Prod.fst_smul,vvec_fst,smul_eq_mul]
+      nlinarith [hs.1.le,hsin]
+    exact ⟨by simpa [gerverRoofLeft] using hzlo,hzhi.trans hqx.2⟩
+  have hbelow : γ z.1≤γ q.1 :=
+    hmon hzx hqx (by
+      dsimp [z]
+      simp only [Prod.fst_add,Prod.fst_smul,vvec_fst,smul_eq_mul]
+      nlinarith [hs.1.le,hsin])
+  have hzxAB : z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) :=
+    ⟨by simpa [gerverRoofLeft] using hzx.1,
+     hzx.2.trans hqb.1.2⟩
+  have hzy0 : γ z.1≤z.2 := by
+    dsimp [z]
+    simp only [Prod.snd_add,Prod.snd_smul,vvec_snd,smul_eq_mul]
+    rw [hqroof] at hbelow
+    nlinarith [mul_nonneg hs.1.le hcos]
+  have hzy1 : z.2≤1 := by
+    have hsR : s≤(1-q.2)/2 :=
+      hs.2.trans (min_le_right _ _)
+    dsimp [z]
+    simp only [Prod.snd_add,Prod.snd_smul,vvec_snd,smul_eq_mul]
+    nlinarith [cos_le_one t,mul_le_mul_of_nonneg_left
+      (cos_le_one t) hs.1.le]
+  have hroofZ : z∈roofStrip (gerverRoofLeft P) (gerverRoofRight P) γ :=
+    ⟨hzxAB,hzy0,hzy1⟩
+  rw [gerver_shape_eq hP hbox,hroof.shape_decomposition]
+  exact Or.inl (Or.inr hroofZ)
+
 /-- Tail active-wall bounds.  These are direct one-dimensional nearest-point
 conditions on the B and D envelope arcs. -/
 theorem active_tail_normal_bound_B {P : GerverParams}
