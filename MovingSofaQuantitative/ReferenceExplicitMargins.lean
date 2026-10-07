@@ -825,6 +825,58 @@ theorem gerver_envelope_downward_slack_explicit {P : GerverParams}
         exact cos_ge_half_of_mem hti.1.le ht1
       nlinarith [min_le_left ((5/51)*d) τ]
 
+
+/-- The integrated regular-closed theorem identifies Gerver's niche with the
+strict subgraph of its actual envelope (not an independent graph). -/
+theorem gerver_niche_envelope {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    niche P.cap (π/2) = envUnderStrict (gerverEnvelope P) := by
+  rw [gerver_cap_explicit hP hbox,
+    gerver_niche_eq_envUnderStrict hP (romik_bounds hP hbox)]
+  rfl
+
+/-- Two descriptions of the same strict subgraph force the graph height at
+each point of the envelope. The vertical-slope condition supplies uniqueness
+of the point of the envelope at the given horizontal coordinate. -/
+theorem roof_value_of_envelope {P : GerverParams} {H L LΓ : ℝ}
+    {γ : ℝ → ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ)
+    (hΓ : niche P.cap (π/2) = envUnderStrict (gerverEnvelope P))
+    (hSlope : VerticalSlopeBound (gerverEnvelope P) LΓ)
+    (hbounds : ∀ z ∈ gerverEnvelope P,
+      z.1 ∈ Icc (gerverRoofLeft P) (gerverRoofRight P) ∧ 0 ≤ z.2)
+    {q : Point} (hq : q ∈ gerverEnvelope P) :
+    γ q.1 = q.2 := by
+  have hx := (hbounds q hq).1
+  have hqy := (hbounds q hq).2
+  have hγ0 := hroof.roof_nonneg q.1 hx
+  by_contra hn
+  rcases lt_or_gt_of_ne hn with hlt | hgt
+  · -- If the envelope is above the proposed roof, a midpoint belongs to
+    -- the envelope subgraph but not to the roof subgraph.
+    let p : Point := (q.1, (γ q.1 + q.2)/2)
+    have hp : p ∈ envUnderStrict (gerverEnvelope P) := by
+      refine ⟨by dsimp [p]; linarith, q, hq, by simp [p], by dsimp [p]; linarith⟩
+    have hpN : p ∈ niche P.cap (π/2) := hΓ.symm ▸ hp
+    rw [hroof.niche_eq] at hpN
+    dsimp [p] at hpN
+    linarith [hpN.2.2]
+  · -- If the proposed roof is higher, its midpoint belongs to the roof
+    -- subgraph and hence has an envelope witness higher than q. The
+    -- vertical-slope bound forces that witness to be q itself.
+    let p : Point := (q.1, (γ q.1 + q.2)/2)
+    have hpN : p ∈ niche P.cap (π/2) := by
+      rw [hroof.niche_eq]
+      exact ⟨hx, by dsimp [p]; linarith, by dsimp [p]; linarith⟩
+    rw [hΓ] at hpN
+    obtain ⟨-, z, hz, hzx, hzy⟩ := hpN
+    have hzx' : z.1 = q.1 := by simpa [p] using hzx
+    have hzq : z = q := eq_of_same_abscissa hSlope hz hq hzx'
+    subst z
+    dsimp [p] at hzy
+    linarith
+
 /-- Explicit roof margin with coefficient 5/51. -/
 theorem gerver_explicit_roof_slack {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
@@ -836,6 +888,14 @@ theorem gerver_explicit_roof_slack {P : GerverParams}
   have hB:=romik_bounds hP hbox
   have henv:=gn_envHyp hP hB
   have hΓ:=gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩ := envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbounds : ∀ z ∈ gerverEnvelope P,
+      z.1 ∈ Icc (gerverRoofLeft P) (gerverRoofRight P) ∧ 0 ≤ z.2 := by
+    intro z hz
+    have h := envelope_bounds_of_path_height henv
+      (fun t ht => path_snd_lt_one hP hB ht.1 ht.2) z hz
+    exact ⟨h.1,h.2.1⟩
   refine ⟨τ,hτ,?_⟩
   intro p hp
   rw [hroof.niche_eq] at hp
@@ -844,13 +904,7 @@ theorem gerver_explicit_roof_slack {P : GerverParams}
     exact hp
   rw [hΓ] at hpN
   obtain ⟨hpy,q,hq,hqx,hlt⟩:=hpN
-  have hγq:=roof_value_of_envelope hroof hΓ
-    (envelope_slope_bound henv
-      (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])).choose_spec.2
-    (fun z hz=>⟨(envelope_bounds_of_path_height henv
-      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz).1,
-      (envelope_bounds_of_path_height henv
-      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz).2.1⟩) hq
+  have hγq := roof_value_of_envelope hroof hΓ hSlope hbounds hq
   have hd : 0<q.2-p.2:=sub_pos.mpr hlt
   obtain ⟨t,ht,hU,hV⟩:=hslack q hq (q.2-p.2) hd (by linarith [hpy])
   rw [hγq,hqx] at hU hV
