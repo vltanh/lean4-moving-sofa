@@ -321,8 +321,8 @@ theorem reference_inner_slacks_zero {P : GerverParams}
     innerSlackU P.cap t (P.path t)=0 ∧
       innerSlackV P.cap t (P.path t)=0 := by
   have hφ:= (romik_bounds hP hbox).φ_mem.1
-  have ht' : t∈Icc (0:ℝ) (π/2) :=
-    ⟨hφ.le.trans ht.1,by linarith [ht.2,hφ]⟩
+  have ht' : t∈Icc (0:ℝ) (π/2) := by
+    constructor <;> linarith [ht.1,ht.2,hφ]
   have hc := gm_innerCorner hP hbox ht'
   have hs := innerSlack_down (K:=P.cap) (t:=t) (d:=0) hc (P.path t)
   simpa using hs
