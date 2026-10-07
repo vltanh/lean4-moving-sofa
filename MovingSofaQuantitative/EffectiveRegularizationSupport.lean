@@ -7,6 +7,7 @@ public import MovingSofaUniqueness.Selection
 public import MovingSofaUniqueness.Variation
 public import MovingSofaUniqueness.Curvature
 public import MovingSofaUniqueness.Maximizing
+public import MovingSofaUniqueness.Rigid
 
 /-!
 Support lemmas for effective penalized regularization.
@@ -24,6 +25,35 @@ open Real Set MeasureTheory Filter Topology
 open MovingSofaOptimality MovingSofaUniqueness MovingSofaStability
 
 namespace MovingSofaQuantitative
+
+def centeredCopy (K : Set Point) : Set Point :=
+  Rigid.translate (-horizontalMidpoint K,0) '' K
+
+theorem centeredCopy_isCap {K : Set Point} (hK : IsCap K (π/2)) :
+    IsCap (centeredCopy K) (π/2) := by
+  unfold centeredCopy
+  exact isCap_translate_horizontal hK (-horizontalMidpoint K)
+
+theorem centeredCopy_sofaArea {K : Set Point} (hK : IsCap K (π/2)) :
+    sofaArea (π/2) (centeredCopy K)=sofaArea (π/2) K := by
+  unfold centeredCopy
+  exact sofaArea_translate_horizontal hK.2.1 (-horizontalMidpoint K)
+
+theorem centeredCopy_midpoint_zero {K : Set Point} (hK : IsCap K (π/2)) :
+    horizontalMidpoint (centeredCopy K)=0 := by
+  unfold centeredCopy horizontalMidpoint
+  rw [supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) 0,
+      supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) π]
+  simp [horizontalMidpoint]
+  ring
+
+theorem centeredCopy_mem_iff {K : Set Point} (p : Point) :
+    p∈centeredCopy K ↔ p+(horizontalMidpoint K,0)∈K := by
+  unfold centeredCopy
+  rw [Rigid.mem_translate_image]
+  constructor <;> intro h
+  · simpa [Rigid.translate_apply] using h
+  · simpa [Rigid.translate_apply] using h
 
 def supportSquareIntegral (f : ℝ→ℝ) : ℝ :=
   ∫ t in (0:ℝ)..π,(f t)^2
@@ -60,16 +90,21 @@ theorem inner_floor_triangle_area_lower {K : Set Point}
 theorem centered_cap_horizontal_bound {K : Set Point}
     (hK : IsCap K (π/2)) {W : ℝ}
     (hW : horizontalWidth K<W)
-    {p : Point} (hp : p∈centeredReference K K) :
+    {p : Point} (hp : p∈centeredCopy K) :
     |p.1|<W/2 := by
-  have href:=centeredReference_self hK
-  rw [href] at hp
-  have h0:=dot_le_supp hK.2.1.2.1 hp 0
-  have hπ:=dot_le_supp hK.2.1.2.1 hp π
-  have hm:=centeredReference_midpoint_zero hK
-  unfold horizontalWidth at hW
-  simp [dot_uvec_zero,dot,uvec_pi] at h0 hπ
+  have hc:=centeredCopy_isCap hK
+  have hm:=centeredCopy_midpoint_zero hK
+  have h0:=dot_le_supp hc.2.1.2.1 hp 0
+  have hπ:=dot_le_supp hc.2.1.2.1 hp π
+  have hw : horizontalWidth (centeredCopy K)=horizontalWidth K := by
+    unfold horizontalWidth centeredCopy
+    rw [supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) 0,
+      supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) π]
+    simp
+    ring
   unfold horizontalMidpoint at hm
+  unfold horizontalWidth at hw hW
+  simp [dot_uvec_zero,dot,uvec_pi] at h0 hπ
   nlinarith
 
 theorem cap_fst_centered_bound {K : Set Point}
@@ -77,9 +112,13 @@ theorem cap_fst_centered_bound {K : Set Point}
     (hW : horizontalWidth K<W)
     {p : Point} (hp : p∈K) :
     |p.1-horizontalMidpoint K|<W/2 := by
-  have hs:=centeredReference_mem_iff hK p
-  have hc:=centered_cap_horizontal_bound hK hW (hs.mpr hp)
-  simpa [centeredReference,horizontalReference,Rigid.translate_apply] using hc
+  let q:=p+(-horizontalMidpoint K,0)
+  have hq : q∈centeredCopy K := by
+    unfold q centeredCopy
+    exact ⟨p,hp,by simp [Rigid.translate_apply]⟩
+  have hc:=centered_cap_horizontal_bound hK hW hq
+  dsimp [q] at hc
+  simpa [abs_sub_comm] using hc
 
 theorem support_difference_bound_of_radius {K C : Set Point}
     (hK : IsCompact K) (hC : IsCompact C)
@@ -175,7 +214,17 @@ theorem center_shift_L2_lower {K C : Set Point}
       ∫t in (0:ℝ)..π,(supp C t-supp K t)^2 := by
   exact support_midpoint_l2_lower hK hC
 
-abbrev arbitrary_positive_cap_radius_five := centered_positive_cap_radius_five
+theorem arbitrary_positive_cap_radius_five {K : Set Point}
+    (hK : IsCap K (π/2)) (hA : 0<sofaArea (π/2) K) :
+    ∀p∈centeredCopy K,norm2 p<5 := by
+  have hW:=positive_cap_width_lt_nine hK hA
+  intro p hp
+  have hx:=centered_cap_horizontal_bound hK hW hp
+  have hc:=centeredCopy_isCap hK
+  have hy0:=hc.snd_nonneg hp
+  have hy1:=hc.snd_le_one hp
+  unfold norm2 dot
+  nlinarith [Real.sq_sqrt (by positivity : 0≤p.1^2+p.2^2)]
 
 def PenalizedCapMax (target C : Set Point) (λ : ℝ) : Prop :=
   IsCap C (π/2) ∧
