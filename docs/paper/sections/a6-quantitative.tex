@@ -9,9 +9,7 @@ $E_{\rm cap}\le\Delta$ and, where the canonical construction applies,
 $\Delta\le M-\cA(K)$ transfer estimates in that order. They do not transfer
 sharpness in the reverse order.
 
-\quantstatus{This is an uncompiled quantitative working appendix. Unconditional
-proof source is now present for every quantitative headline statement in this
-appendix, including the effective $10^{-600}$ proposition. This is not a claim
+\quantstatus{This is an uncompiled quantitative working appendix. Assembled uncompiled theorem bodies now exist for each headline statement, including the $10^{-600}$ proposition, but not all requisite geometric and certificate proofs have been supplied. This appendix must be treated as proposed mathematics rather than a completed formalization. This is not a claim
 of successful elaboration or kernel verification: none of the new quantitative
 modules has been compiled, and the closed finite certificate reductions have
 not been executed. The integrated verified baseline in Appendix~F is unchanged.}
@@ -245,8 +243,7 @@ The angle assertion follows from \cref{eq:quant-complementary-budget}.
 Combining the reference geometry and these estimates with the qualitative
 entry theorem in Appendix~F gives \cref{thm:quant-explicit-stability}.
 
-\quantstatus{Uncompiled source for the complete original-sofa assembly is now
-in \quantcode{ExplicitStability.lean}. The Gerver sector charts, Euclidean-normal
+\quantstatus{An uncompiled original-sofa theorem body is in \quantcode{ExplicitStability.lean}; its sector and normal recovery dependencies are still under source audit. The Gerver sector charts, Euclidean-normal
 witnesses, refined terminal budget, direct area estimate, midpoint entry adapter,
 and centered cap estimate are supplied by separate imported modules. The exact
 headline contract is \quantcode{Targets.ExplicitLocalStability}.}
@@ -432,7 +429,7 @@ remainder on a sufficiently small neighborhood. The fixed lower margin
 in \cref{thm:quant-critical-lower} excludes all coefficients below $L$.
 \end{proof}
 
-\quantstatus{Uncompiled source now includes both sides of the interval.
+\quantstatus{Uncompiled source includes proposed proofs for both sides of the interval, but the lower-family energy certificate still lacks a complete ordered-piece integral bridge.
 \quantcode{FullQCertificate.lean} connects the actual continuum kernels and
 endpoint slacks to a closed Boolean operator check, while
 \quantcode{FeasibleCriticalLower.lean} packages the actual Hermite cap,
@@ -500,7 +497,7 @@ The nonconvex reference does not contain its entire bounding rectangle;
 only the four actual corner points are used where a convex-hull width
 comparison suffices.
 
-\quantstatus{Uncompiled source for both entry propositions is now present.
+\quantstatus{Uncompiled theorem bodies for both entry propositions are present, but the penalized-cap, coarse-angle, and original-sofa transfer chains still contain unresolved proof interfaces.
 \quantcode{EffectiveAngleEntry.lean} includes the internal coarse-angle
 certificate, partial-angle penalized cap, approximate pinned bounds, and
 right-angle extension argument. \quantcode{EffectiveEntry.lean} combines that
@@ -536,8 +533,7 @@ an already-local cap, and contains no existential radius.
 \quantstatus{The mandatory exact contract is
 \quantcode{MovingSofaQuantitative.Targets.ExplicitCutoff}, and the corresponding
 uncompiled theorem body is \quantcode{MovingSofaQuantitative.explicit_cutoff}
-in \quantcode{ExplicitCutoff.lean}. Its dependencies contain no existential
-local radius. This remains proof source rather than a checked theorem until
+in \quantcode{ExplicitCutoff.lean}. Its theorem type has no existential local radius; however, several transitive geometric and effective-entry proofs are incomplete. It remains an assembled draft rather than a checked theorem until
 Lean elaboration and the closed certificate reductions are run. The exponent
 600 is a conservative effectivity bound, not an optimal or practically useful
 optimizer tolerance.}
