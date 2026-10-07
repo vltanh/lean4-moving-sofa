@@ -599,11 +599,11 @@ silently attributed to a generic scalar lemma. -/
 theorem balanced_wall_remainder_of_base {K : Set Point} {q w : Point}
     {t d λ a b : ℝ} (hd : 0≤d) (hλ : |λ|≤4) (hw : norm2 w=1)
     (hU : |innerSlackU K (t+λ*d) q-innerSlackU K t q-
-      a*((t+λ*d)-t)|≤90*d^2)
+      a*((t+λ*d)-t)|≤3000*d^2)
     (hV : |innerSlackV K (t+λ*d) q-innerSlackV K t q+
-      b*((t+λ*d)-t)|≤90*d^2) :
-    |secondOrderWallErrorU K q t (t+λ*d) d a w|≤100*d^2 ∧
-      |secondOrderWallErrorV K q t (t+λ*d) d b w|≤100*d^2 := by
+      b*((t+λ*d)-t)|≤3000*d^2) :
+    |secondOrderWallErrorU K q t (t+λ*d) d a w|≤3100*d^2 ∧
+      |secondOrderWallErrorV K q t (t+λ*d) d b w|≤3100*d^2 := by
   let s:=t+λ*d
   have hstep : |s-t|≤4*d := by
     dsimp [s]
@@ -638,8 +638,8 @@ theorem gerver_core_base_slack_taylor {P : GerverParams}
     (ha : a=-P.gs_α t) (hb : b=P.gs_β t) :
     let q:=P.path t
     let s:=t+λ*d
-    |innerSlackU P.cap s q-innerSlackU P.cap t q-a*(s-t)|≤90*d^2 ∧
-    |innerSlackV P.cap s q-innerSlackV P.cap t q+b*(s-t)|≤90*d^2 := by
+    |innerSlackU P.cap s q-innerSlackU P.cap t q-a*(s-t)|≤3000*d^2 ∧
+    |innerSlackV P.cap s q-innerSlackV P.cap t q+b*(s-t)|≤3000*d^2 := by
   have hB:=romik_bounds hP hbox
   have hφ:=hB.φ_mem.1
   have hstep : |λ*d|≤4*normalRecoveryDepth := by
@@ -684,8 +684,8 @@ theorem core_balanced_slack_remainder {P : GerverParams}
     (hd : 0≤d) (hd8 : d≤normalRecoveryDepth)
     (hλ : |λ|≤4) (hw : norm2 w=1)
     (ha : a=-P.gs_α t) (hb : b=P.gs_β t) :
-    |secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d a w|≤100*d^2 ∧
-    |secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d b w|≤100*d^2 := by
+    |secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d a w|≤3100*d^2 ∧
+    |secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d b w|≤3100*d^2 := by
   obtain ⟨hU,hV⟩ := gerver_core_base_slack_taylor hP hbox ht hd hd8 hλ ha hb
   exact balanced_wall_remainder_of_base hd hλ hw hU hV
 
@@ -770,7 +770,7 @@ theorem core_normal_slack_49 {P : GerverParams}
       ring
   have hrem:=core_balanced_slack_remainder hP hbox ht.le hd.le hd8 hλ hw
     (show a=-P.gs_α t by rfl) (show b=P.gs_β t by rfl)
-  have hgap : (49/100:ℝ)+100*normalRecoveryDepth<1/sqrt 2 := by
+  have hgap : (49/100:ℝ)+3100*normalRecoveryDepth<1/sqrt 2 := by
     have hs2:=sq_sqrt (by norm_num : (0:ℝ)≤2)
     have hspos:=sqrt_pos.2 (by norm_num : (0:ℝ)<2)
     unfold normalRecoveryDepth
