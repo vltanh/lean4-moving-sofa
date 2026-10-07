@@ -58,10 +58,11 @@ and separates their main argument from the technical estimates. It develops
 quantitative refinements of the common coercive certificate: midpoint-aligned
 cap control, explicit local coefficients for arbitrary sofas, stronger control
 by the full functional deficit, and a deliberately conservative effective
-cutoff. The new quantitative material is an uncompiled development draft;
-its proof-source and verification status are distinguished from the integrated
-baseline throughout. It must not be described as fully formalized or checked
-until the outstanding statement and dependency gates have passed.
+cutoff. The new quantitative material is a source-complete but uncompiled development
+draft: named theorem bodies are present for every quantitative headline target,
+including the explicit $10^{-600}$ cutoff. Its verification status is
+distinguished from the integrated baseline throughout. It must not be described
+as elaborated, kernel checked, or fully formalized until those later checks run.
 \end{abstract}
 \maketitle
 
@@ -72,8 +73,9 @@ Appendix~F retains the original technical stability and coercive arguments,
 and Appendix~G develops the quantitative refinements. Existing verification
 statements in the reused introduction and formalization appendix refer only
 to the integrated baseline, not to the new numerical claims. No Lean, Lake,
-CI, or TeX build has been run for this draft. A conditional Lean transfer
-lemma or an uninstantiated certificate checker is not an unconditional proof.
+CI, or TeX build has been run for this draft. The finite certificate reductions
+and all new theorem bodies remain unexecuted proof source, not kernel-verified
+results.
 \end{minipage}}
 \medskip
 
