@@ -115,28 +115,30 @@ theorem recover_from_effective_ebar {P : GerverParams}
   have hρ0 : ρ≤1/24 := by
     dsimp [ρ]
     nlinarith [hδbound,hsSmall]
-  have hr : r≤(100/1051:ℝ)*ρ/2 := by
-    have hsqrt2 : sqrt 2<3/2 := by
-      nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),sqrt_nonneg (2:ℝ)]
+  have hroot : sqrt 2 < 3/2 := by
+    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),
+      sqrt_nonneg (2:ℝ)]
+  have hreserve : r < (100/1051:ℝ)*ρ := by
     dsimp [r,ρ]
-    have hcoef : (3/2:ℝ)*514<
-        (100/1051)*10*(514+1) := by norm_num
-    nlinarith [hδbound,sqrt_nonneg E]
-  have hmissingSmall : E<((100/1051:ℝ)*ρ/2)^2 := by
-    have hs:=sqrt_pos.mpr hE
+    nlinarith [sqrt_nonneg E,hδ]
+  have hgap : sqrt E < (100/1051:ℝ)*ρ-r := by
+    dsimp [r,ρ]
+    nlinarith [sqrt_pos.mpr hE,hδ]
+  have hmissingSmall : E<((100/1051:ℝ)*ρ-r)^2 := by
     have hs2:=sq_sqrt hE.le
-    dsimp [ρ]
-    have hcoef : 1<(100/1051:ℝ)*10 := by norm_num
-    nlinarith [hδbound]
+    have hnon : 0≤(100/1051:ℝ)*ρ-r :=
+      le_of_lt (sub_pos.mpr hreserve)
+    nlinarith [hgap,hs2]
   have herode : euclideanErosion r (gerverSofa P)⊆capShape K := by
     rw [←gerver_shape_eq hP hbox]
     exact orthogonal_reference_erosion hδ
       (gm_isCap hP hbox) hK hclose
   have hUf : volume (capShape K)≠⊤ :=
     volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne
-  have hback:=directedClose_of_missing_area
+  have hback:=directedClose_of_missing_area_full_ball
     (show (0:ℝ)<100/1051 by norm_num) hρ hρ0 hballs
-    herode hr hUf hmissing hmissingSmall
+    (by dsimp [r]; positivity) hreserve
+    herode hUf hmissing hmissingSmall
   have hback' : DirectedClose (10300*sqrt E) (gerverSofa P) S :=
     hback.mono (by
       dsimp [ρ]
