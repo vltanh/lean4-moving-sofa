@@ -429,6 +429,32 @@ theorem inactive_tail_margin_D {P : GerverParams}
   exact envelope_D_inactive_margin hP hbox henv hp ht hnear hd8
     (by norm_num [normalRecoveryDepth])
 
+/-- A nearest point on the interior of a differentiable reference arc has
+displacement perpendicular to its tangent. This depends only on the arc
+belonging to the reference set; no convexity of the set is assumed. -/
+theorem nearest_smooth_arc_orthogonal {G : Set Point} {γ : ℝ → Point}
+    {a b t : ℝ} {p v : Point}
+    (ht : t ∈ Ioo a b)
+    (hcurve : ∀ s ∈ Ioo a b, γ s ∈ G)
+    (hder : HasDerivAt γ v t)
+    (hnearest : euclideanDist p (γ t) = infDist p G) :
+    dot (p - γ t) v = 0 := by
+  have hlocal : ∀ᶠ s in 𝓝 t, γ s ∈ G := by
+    filter_upwards [Ioo_mem_nhds ht.1 ht.2] with s hs
+    exact hcurve s hs
+  have hderiv : HasDerivAt
+      (fun s => euclideanDist p (γ s)^2)
+      (-2*dot (p-γ t) v) t := by
+    convert norm2_sq_deriv hder p using 1 <;> ring
+  have hzero : deriv (fun s => euclideanDist p (γ s)^2) t = 0 := by
+    apply deriv_eq_zero_of_local_min
+    filter_upwards [hlocal] with s hs
+    have hm := infDist_le_of_mem hs
+    rw [←hnearest] at hm
+    exact sq_le_sq₀ (euclideanDist_nonneg _ _) hm
+  rw [hderiv.deriv] at hzero
+  linarith
+
 /-- First-order orthogonality at a nearest point on the smooth core. -/
 theorem nearest_core_direction {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
@@ -455,29 +481,18 @@ theorem nearest_core_direction {P : GerverParams}
   have hw : norm2 w=1 := by
     dsimp [w,d,euclideanDist]
     rw [norm2_div,div_self (ne_of_gt hd)]
-  have hder:=gs_hasDerivAt_path' hP t
-  have hmin : HasDerivAt
-      (fun s=>euclideanDist p (P.path s)^2)
-      (-2*dot (p-q) (referenceBoundaryVelocity P t)) t := by
-    dsimp [q,referenceBoundaryVelocity]
-    convert (norm2_sq_deriv hder p) using 1 <;> ring
-  have hzero : deriv (fun s=>euclideanDist p (P.path s)^2) t=0 := by
-    apply deriv_eq_zero_of_local_min
-    have hlocal : ∀ᶠ s in 𝓝 t,P.path s∈gerverSofa P := by
-      have hopen : Ioo P.φ (π/2-P.φ)∈𝓝 t:=Ioo_mem_nhds ht.1 ht.2
-      filter_upwards [hopen] with s hs
-      rw [gerver_shape_eq hP hbox]
-      exact gerver_path_mem_shape hP hbox hs.le
-    filter_upwards [hlocal] with s hs
-    have hm:=infDist_le_of_mem hs
-    rw [←hnear]
-    exact sq_le_sq₀ (euclideanDist_nonneg _ _) hm
-  rw [hmin.deriv] at hzero
+  have hperp : dot (p-q) (referenceBoundaryVelocity P t)=0 := by
+    have hframe:=gs_hasDerivAt_path' hP t
+    have hv:=referenceBoundaryVelocity_eq hP t
+    rw [←hv] at hframe
+    exact nearest_smooth_arc_orthogonal ht
+      (fun s hs => gerver_path_mem_shape hP hbox hs.le)
+      hframe hnear
   refine ⟨hd,hw,?_⟩
   dsimp [w]
   rw [dot_div_left]
   field_simp [ne_of_gt hd]
-  nlinarith
+  nlinarith [hperp]
 
 /-- The nearest direction to the core is the outward unit normal. -/
 theorem nearest_core_outward_normal {P : GerverParams}
