@@ -283,8 +283,11 @@ theorem gerver_corner_angle_margin {P : GerverParams}
     linarith [hπ, hφ.2]
   · have hx : referenceSectorAperture / 2 = 153 / 200 := by
       norm_num [referenceSectorAperture, sectorHalfAngle]
-    have hs : sin (153 / 200 : ℝ) < 7 / 10 :=
-      (Real.sin_le _).trans_lt (by norm_num)
+    have hs : sin (153 / 200 : ℝ) < 7 / 10 := by
+      have hu := sin_le_sinPoly5 (show (0:ℝ)≤153/200 by norm_num)
+      have hp : sinPoly5 (153/200:ℝ)<7/10 := by
+        norm_num [sinPoly5]
+      exact hu.trans_lt hp
     have hc : 7 / 10 < cos (153 / 200 : ℝ) := by
       have h := one_sub_sq_div_two_le_cos (x := 153 / 200)
       norm_num at h ⊢
