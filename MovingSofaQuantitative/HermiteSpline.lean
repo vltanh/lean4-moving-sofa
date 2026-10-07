@@ -58,12 +58,11 @@ theorem derivative_affine (a : HermiteNode) (t : ℝ) : HasDerivAt a.affine a.sl
 
 end HermiteNode
 
-/-- Strict ordering is part of the input data, not inferred by floating-point sorting. -/
 def OrderedNodes (xs : List HermiteNode) : Prop :=
   xs.Pairwise (fun a b => a.position < b.position)
 
-/-- Extrapolation past the final node is affine. It is used only to make the
-ambient function well-defined and C1; the trial uses the closed knot interval. -/
+/-- Affine extrapolation past the final node keeps the ambient function defined
+without creating an extra endpoint jump. -/
 def hermiteChain : List HermiteNode → ℝ → ℝ
   | [] => fun _ => 0
   | [a] => a.affine
@@ -101,59 +100,62 @@ private theorem ordered_tail {a : HermiteNode} {xs : List HermiteNode}
       simp only [hermiteChainFirst, rightJoin, if_pos (ordered_head h),
         HermiteNode.segmentFirst_left a b (ordered_head h)]
 
-/-- Adjacent Hermite pieces have exactly the same value at their joint. -/
+/-- Adjacent pieces have exactly the same value at the joint. -/
 theorem hermiteChain_continuous (xs : List HermiteNode) (h : OrderedNodes xs) :
     Continuous (hermiteChain xs) := by
+  revert h
   induction xs using List.twoStepInduction with
-  | nil => exact continuous_const
-  | singleton a => unfold hermiteChain HermiteNode.affine; fun_prop
+  | nil => intro _; exact continuous_const
+  | singleton a => intro _; unfold hermiteChain HermiteNode.affine; fun_prop
   | cons_cons a b xs ih₁ ih₂ =>
+      intro h
       have hab := ordered_head h
       have htail := ordered_tail h
       apply continuous_rightJoin
       · exact continuous_iff_continuousAt.mpr fun t => (a.derivative_segment b t).continuousAt
-      · exact ih₁ htail
+      · first | exact ih₂ htail | exact ih₁ htail
       · rw [HermiteNode.segment_right a b hab, hermiteChain_first_node b xs htail]
 
-/-- Adjacent first derivatives match exactly, even though their derivatives
-need not match. -/
+/-- The first derivative is continuous even though the second derivative may jump. -/
 theorem hermiteChainFirst_continuous (xs : List HermiteNode) (h : OrderedNodes xs) :
     Continuous (hermiteChainFirst xs) := by
+  revert h
   induction xs using List.twoStepInduction with
-  | nil => exact continuous_const
-  | singleton a => exact continuous_const
+  | nil => intro _; exact continuous_const
+  | singleton a => intro _; exact continuous_const
   | cons_cons a b xs ih₁ ih₂ =>
+      intro h
       have hab := ordered_head h
       have htail := ordered_tail h
       apply continuous_rightJoin
       · exact continuous_iff_continuousAt.mpr fun t => (a.derivative_segmentFirst b t).continuousAt
-      · exact ih₁ htail
+      · first | exact ih₂ htail | exact ih₁ htail
       · rw [HermiteNode.segmentFirst_right a b hab, hermiteChainFirst_first_node b xs htail]
 
-/-- The recorded right derivative is the derivative of the actual piecewise
-function, not just of its displayed interval formulas. -/
+/-- The right derivative of the actual joined function. -/
 theorem hermiteChain_rightDeriv (xs : List HermiteNode) (t : ℝ) :
     HasDerivWithinAt (hermiteChain xs) (hermiteChainFirst xs t) (Ioi t) t := by
-  induction xs using List.twoStepInduction with
+  induction xs using List.twoStepInduction generalizing t with
   | nil => exact (hasDerivAt_const t 0).hasDerivWithinAt
   | singleton a => exact (a.derivative_affine t).hasDerivWithinAt
   | cons_cons a b xs ih₁ ih₂ =>
-      exact rightDeriv_rightJoin
-        (fun t => (a.derivative_segment b t).hasDerivWithinAt)
-        (fun t => ih₁ t) t
+      apply rightDeriv_rightJoin
+        (fun u => (a.derivative_segment b u).hasDerivWithinAt)
+      intro u
+      first | exact ih₂ u | exact ih₁ u
 
 theorem hermiteChain_second_rightDeriv (xs : List HermiteNode) (t : ℝ) :
     HasDerivWithinAt (hermiteChainFirst xs) (hermiteChainSecond xs t) (Ioi t) t := by
-  induction xs using List.twoStepInduction with
+  induction xs using List.twoStepInduction generalizing t with
   | nil => exact (hasDerivAt_const t 0).hasDerivWithinAt
   | singleton a => exact (hasDerivAt_const t a.slope).hasDerivWithinAt
   | cons_cons a b xs ih₁ ih₂ =>
-      exact rightDeriv_rightJoin
-        (fun t => (a.derivative_segmentFirst b t).hasDerivWithinAt)
-        (fun t => ih₁ t) t
+      apply rightDeriv_rightJoin
+        (fun u => (a.derivative_segmentFirst b u).hasDerivWithinAt)
+      intro u
+      first | exact ih₂ u | exact ih₁ u
 
-/-- The chain agrees with its first cubic on the entire closed first interval;
-at the right endpoint this uses the shared node value. -/
+/-- The closed first interval includes the shared right endpoint. -/
 theorem hermiteChain_on_first {a b : HermiteNode} {xs : List HermiteNode}
     (h : OrderedNodes (a :: b :: xs)) {t : ℝ} (ht : t ∈ Icc a.position b.position) :
     hermiteChain (a :: b :: xs) t = a.segment b t := by
