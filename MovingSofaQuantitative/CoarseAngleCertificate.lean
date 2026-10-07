@@ -38,6 +38,48 @@ def crossQ (p q : QPoint) : Q := p.1*q.2-p.2*q.1
 def normal (r : Q) : QPoint :=
   ((1-r^2)/(1+r^2),2*r/(1+r^2))
 
+/-- The rational half-angle vector has exactly unit squared length. -/
+theorem normal_den_pos (r : Q) : 0<1+r^2 := by positivity
+
+theorem normal_unit (r : Q) : dotQ (normal r) (normal r)=1 := by
+  unfold dotQ normal
+  have hd : (1+r^2:Q)≠0 := (normal_den_pos r).ne'
+  field_simp [hd]
+  ring
+
+/-- Every slab searched lies on the right semicircle.  This makes the
+denominator in the butterfly's x-intercepts strictly positive. -/
+theorem normal_fst_pos_on_slabs {r : Q}
+    (hr0 : (3/5:Q)≤r) (hr1 : r≤4/5) :
+    0<(normal r).1 := by
+  unfold normal
+  apply div_pos ?_ (normal_den_pos r)
+  have hr_nonneg : 0≤r := le_trans (by norm_num) hr0
+  have hsq : r^2≤(4/5:Q)^2 := sq_le_sq₀ hr_nonneg hr1
+  nlinarith
+
+theorem normal_snd_pos_on_slabs {r : Q}
+    (hr0 : (3/5:Q)≤r) (hr1 : r≤4/5) :
+    0<(normal r).2 := by
+  unfold normal
+  apply div_pos ?_ (normal_den_pos r)
+  linarith [hr0]
+
+/-- A tangent paired with the rational normal is orthogonal and has the same
+unit length.  The clipper's normal/tangent support boxes therefore use an
+orthonormal frame, with no floating trigonometry. -/
+theorem normal_tangent_orthogonal (r : Q) :
+    dotQ (normal r) (-(normal r).2,(normal r).1)=0 := by
+  unfold dotQ
+  ring
+
+theorem normal_tangent_unit (r : Q) :
+    dotQ (-(normal r).2,(normal r).1)
+      (-(normal r).2,(normal r).1)=1 := by
+  have h:=normal_unit r
+  unfold dotQ at h ⊢
+  nlinarith
+
 def segmentIntersect (a b n : QPoint) (h : Q) : QPoint :=
   let da:=dotQ a n-h
   let db:=dotQ b n-h
