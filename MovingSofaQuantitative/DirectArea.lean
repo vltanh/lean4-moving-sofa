@@ -60,8 +60,6 @@ theorem horizontalSegment_supp_pi {δ : ℝ} (hδ : 0≤δ) :
       ⟨(-δ,0),by simp [horizontalSegment,hδ]⟩ π
     simpa [dot,uvec_pi] using h
 
-def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
-
 /-- Square parallel set, written as two segment dilations so Cavalieri can be
 applied one coordinate at a time. -/
 def horizontalThickening (K : Set Point) (δ : ℝ) : Set Point :=
