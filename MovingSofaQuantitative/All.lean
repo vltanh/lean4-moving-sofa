@@ -1,5 +1,3 @@
-module
-
 public import MovingSofaQuantitative.ActualSetRecovery
 public import MovingSofaQuantitative.AugmentedGram
 public import MovingSofaQuantitative.AuxiliaryData
@@ -7,50 +5,8 @@ public import MovingSofaQuantitative.AuxiliaryPenalties
 public import MovingSofaQuantitative.AuxiliaryProfileBounds
 public import MovingSofaQuantitative.CapQuotient
 public import MovingSofaQuantitative.CenteredCap
+public import MovingSofaQuantitative.CenteredCapSharpness
 public import MovingSofaQuantitative.CenteredKernel
-public import MovingSofaQuantitative.ClosedCriticalModel
-public import MovingSofaQuantitative.CoefficientLowerBound
-public import MovingSofaQuantitative.ComparisonPairing
-public import MovingSofaQuantitative.ComparisonProfile
-public import MovingSofaQuantitative.CorrectedGramGeometry
-public import MovingSofaQuantitative.CriticalKernels
-public import MovingSofaQuantitative.CriticalTransfer
-public import MovingSofaQuantitative.DualSlack
-public import MovingSofaQuantitative.EndpointAveraging
-public import MovingSofaQuantitative.EndpointSlacks
-public import MovingSofaQuantitative.EvaluationKernel
-public import MovingSofaQuantitative.EvaluationPieces
-public import MovingSofaQuantitative.ExplicitBudget
-public import MovingSofaQuantitative.FullQCertificate
-public import MovingSofaQuantitative.FullQConsequences
-public import MovingSofaQuantitative.Hermite
-public import MovingSofaQuantitative.HermiteSpline
-public import MovingSofaQuantitative.KernelAtoms
-public import MovingSofaQuantitative.KernelGram
-public import MovingSofaQuantitative.KernelPieceModel
-public import MovingSofaQuantitative.KernelPrimitives
-public import MovingSofaQuantitative.Normalization
-public import MovingSofaQuantitative.OperatorModelTransfer
-public import MovingSofaQuantitative.OrthogonalErosion
-public import MovingSofaQuantitative.OuterDensity
-public import MovingSofaQuantitative.PiecewiseCalculus
-public import MovingSofaQuantitative.ProjectionAlgebra
-public import MovingSofaQuantitative.ReferenceDensity
-public import MovingSofaQuantitative.ResidualAlgebra
-public import MovingSofaQuantitative.ResidualHilbert
-public import MovingSofaQuantitative.ScalarTaylor
-public import MovingSofaQuantitative.SectorBudget
-public import MovingSofaQuantitative.SectorContent
-public import MovingSofaQuantitative.SectorSlicing
-public import MovingSofaQuantitative.ShortArcBounds
-public import MovingSofaQuantitative.StableGram
-public import MovingSofaQuantitative.SymmetricCapPerturbation
-public import MovingSofaQuantitative.Targets
-public import MovingSofaQuantitative.TranslationQuotient
-public import MovingSofaQuantitative.TripleEnergy
-public import MovingSofaQuantitative.TurningCap
-public import MovingSofaQuantitative.TwoSidedPieces
-public import MovingSofaQuantitative.WallDerivative
 public import MovingSofaQuantitative.Certificates.BranchExpression
 public import MovingSofaQuantitative.Certificates.Cover
 public import MovingSofaQuantitative.Certificates.CriticalExpression
@@ -59,6 +15,80 @@ public import MovingSofaQuantitative.Certificates.Interval
 public import MovingSofaQuantitative.Certificates.KernelExpression
 public import MovingSofaQuantitative.Certificates.Trig
 public import MovingSofaQuantitative.Certificates.TrigExpression
+public import MovingSofaQuantitative.ClosedCriticalModel
+public import MovingSofaQuantitative.CoarseAngleCertificate
+public import MovingSofaQuantitative.CoefficientLowerBound
+public import MovingSofaQuantitative.ComparisonPairing
+public import MovingSofaQuantitative.ComparisonProfile
+public import MovingSofaQuantitative.CorrectedGramGeometry
+public import MovingSofaQuantitative.CriticalKernels
+public import MovingSofaQuantitative.CriticalTransfer
+public import MovingSofaQuantitative.DirectArea
+public import MovingSofaQuantitative.DualSlack
+public import MovingSofaQuantitative.EffectiveAngleEntry
+public import MovingSofaQuantitative.EffectiveEntry
+public import MovingSofaQuantitative.EffectiveRecovery
+public import MovingSofaQuantitative.EffectiveRightAngle
+public import MovingSofaQuantitative.EndpointAveraging
+public import MovingSofaQuantitative.EndpointSlacks
+public import MovingSofaQuantitative.EvaluationKernel
+public import MovingSofaQuantitative.EvaluationPieces
+public import MovingSofaQuantitative.ExplicitBudget
+public import MovingSofaQuantitative.ExplicitCutoff
+public import MovingSofaQuantitative.ExplicitReferenceScales
+public import MovingSofaQuantitative.ExplicitStability
+public import MovingSofaQuantitative.ExplicitTerminal
+public import MovingSofaQuantitative.FeasibleCriticalLower
+public import MovingSofaQuantitative.FullQCertificate
+public import MovingSofaQuantitative.FullQConsequences
+public import MovingSofaQuantitative.Hermite
+public import MovingSofaQuantitative.HermiteSpline
+public import MovingSofaQuantitative.InactiveWallGap
+public import MovingSofaQuantitative.KernelAtoms
+public import MovingSofaQuantitative.KernelGram
+public import MovingSofaQuantitative.KernelPieceModel
+public import MovingSofaQuantitative.KernelPrimitives
+public import MovingSofaQuantitative.LocalizedSquare
+public import MovingSofaQuantitative.MidpointEntry
+public import MovingSofaQuantitative.NormalRecovery
+public import MovingSofaQuantitative.Normalization
+public import MovingSofaQuantitative.OneSidedSmoothing
+public import MovingSofaQuantitative.OperatorModelTransfer
+public import MovingSofaQuantitative.OrthogonalErosion
+public import MovingSofaQuantitative.OuterDensity
+public import MovingSofaQuantitative.PartialAngleCompletion
+public import MovingSofaQuantitative.PerturbationEnergy
+public import MovingSofaQuantitative.PiecewiseCalculus
+public import MovingSofaQuantitative.ProjectionAlgebra
+public import MovingSofaQuantitative.ReferenceDensity
+public import MovingSofaQuantitative.ReferenceExplicitMargins
+public import MovingSofaQuantitative.ReferenceReflection
+public import MovingSofaQuantitative.ReferenceSector
+public import MovingSofaQuantitative.ReflectedAuxiliary
+public import MovingSofaQuantitative.ResidualAlgebra
+public import MovingSofaQuantitative.ResidualHilbert
+public import MovingSofaQuantitative.ScalarTaylor
+public import MovingSofaQuantitative.SectorBudget
+public import MovingSofaQuantitative.SectorContent
+public import MovingSofaQuantitative.SectorSlicing
+public import MovingSofaQuantitative.ShortArcBounds
+public import MovingSofaQuantitative.SmoothingEnergy
+public import MovingSofaQuantitative.SmoothingError
+public import MovingSofaQuantitative.StableGram
+public import MovingSofaQuantitative.SymmetricCapPerturbation
+public import MovingSofaQuantitative.Targets
+public import MovingSofaQuantitative.TranslationQuotient
+public import MovingSofaQuantitative.TrialActiveArc
+public import MovingSofaQuantitative.TrialEnergy
+public import MovingSofaQuantitative.TrialEnergyCertificate
+public import MovingSofaQuantitative.TrialEnergySoundness
+public import MovingSofaQuantitative.TrialResidualFormulas
+public import MovingSofaQuantitative.TrialSpline
+public import MovingSofaQuantitative.TrialSupport
+public import MovingSofaQuantitative.TripleEnergy
+public import MovingSofaQuantitative.TurningCap
+public import MovingSofaQuantitative.TwoSidedPieces
+public import MovingSofaQuantitative.WallDerivative
 
 /-!
 # Quantitative appendix: uncompiled development assembly
@@ -74,12 +104,14 @@ That reduction is UNEXECUTED: its depth and reduction cost are not a successful
 certificate receipt. No Python computation is substituted for its Lean proof.
 
 TurningCap, SymmetricCapPerturbation, and the Hermite modules construct actual
-convex caps from scalar data. A concrete family and its limiting/energy analysis
-are still required for each sharpness target; generic construction lemmas do
-not themselves prove those targets.
+convex caps from scalar data. The actual one-sided smoothing family and the continuously feasible critical
+family are now included, together with their closed certificate source.
 
 The existing paper, established solutions, and default targets do not import
 this development root. All additions are uncompiled source. No Lean, Lake, CI,
 axiom audit, or exact-type audit has been run under the current instruction.
-The final arbitrary-sofa 10^-600 target remains in Targets without weakening.
+All fifteen quantitative headline target types now have named uncompiled
+proof-source declarations. The final arbitrary-sofa 10^-600 statement remains
+exactly the target in Targets; none of these declarations has been compiled or
+kernel checked.
 -/
