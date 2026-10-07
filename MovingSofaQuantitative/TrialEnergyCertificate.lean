@@ -570,12 +570,48 @@ theorem pieceUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
         obtain ⟨V,hV⟩ := List.mapM_get_of_eq_some hcells j
         refine ⟨V,?_,?_⟩
         · simpa [hlen] using hV.1
-        · obtain ⟨a,b,hab',hbnd⟩ := cellUpper_sound hP hbox k lo hi j hV.2
-          exact intervalIntegral.integral_mono_on hab'
-            (intervalIntegrable_subinterval hi (meshPoint_mem hab (by norm_num) j.isLt.le).1
-              (meshPoint_mono hab (by norm_num) (Nat.le_succ _))
-              (meshPoint_mem hab (by norm_num) (Nat.succ_le_of_lt j.isLt)).2)
-            intervalIntegrable_const (fun u hu => hbnd u hu)
+        · obtain ⟨a,b,M,hab',hM,hVU,hleft,hright,hpoint⟩ :=
+            cellUpper_sound hP hbox k lo hi j hV.2
+          let l : ℝ := meshPoint (lo.realValue (realPoint P 0))
+            (hi.realValue (realPoint P 0)) subcells j.val
+          let r : ℝ := meshPoint (lo.realValue (realPoint P 0))
+            (hi.realValue (realPoint P 0)) subcells (j.val+1)
+          have hnormal : l≤r := meshPoint_mono hab (by norm_num [subcells])
+            (Nat.le_succ j.val)
+          have hicell := intervalIntegrable_subinterval hi
+            (meshPoint_mem hab (by norm_num [subcells]) j.isLt.le).1
+            hnormal
+            (meshPoint_mem hab (by norm_num [subcells])
+              (Nat.succ_le_of_lt j.isLt)).2
+          have hcell : ∀u∈Icc l r,
+              (match k with
+               | .r2 => CriticalTrial.r2 P u
+               | .r3 => CriticalTrial.r3 P u
+               | .r4 => CriticalTrial.r4 P u
+               | .B => CriticalTrial.rB P u
+               | .D => CriticalTrial.rD P u)^2 ≤ (M:ℝ) := by
+            intro u hu
+            exact hpoint u ⟨hleft.trans hu.1,hu.2.trans hright⟩
+          have hconst := intervalIntegral.integral_mono_on hnormal hicell
+            intervalIntegrable_const hcell
+          have hwidth : r-l≤(b:ℝ)-(a:ℝ) := by
+            dsimp [l,r] at *
+            linarith
+          have hvol : (r-l)*(M:ℝ)≤((b:ℝ)-(a:ℝ))*(M:ℝ) :=
+            mul_le_mul_of_nonneg_right hwidth (by exact_mod_cast hM)
+          have hVUreal : ((b:ℝ)-(a:ℝ))*(M:ℝ)=(V:ℝ) := by
+            exact_mod_cast hVU.symm
+          calc
+            (∫ u in l..r, (match k with
+              | .r2 => CriticalTrial.r2 P u
+              | .r3 => CriticalTrial.r3 P u
+              | .r4 => CriticalTrial.r4 P u
+              | .B => CriticalTrial.rB P u
+              | .D => CriticalTrial.rD P u)^2)
+                ≤ ∫ _u in l..r, (M:ℝ) := hconst
+            _ = (r-l)*(M:ℝ) := by simp [intervalIntegral.integral_const]
+            _ ≤ ((b:ℝ)-(a:ℝ))*(M:ℝ) := hvol
+            _ = V := hVUreal
       have hsplit := intervalIntegral.sum_integral_adjacent_intervals
         (f := fun u => (match k with
           | .r2 => CriticalTrial.r2 P u
