@@ -20,6 +20,35 @@ open MovingSofaOptimality MovingSofaUniqueness MovingSofaStability
 
 namespace MovingSofaQuantitative
 
+/-- Gerver's sofa and its right-angle cap have the same horizontal midpoint. -/
+theorem gerver_midpoint_cap {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    horizontalMidpoint (gerverSofa P) = horizontalMidpoint P.cap := by
+  unfold horizontalMidpoint
+  rw [gerver_upper_support hP hbox ⟨le_rfl, pi_pos.le⟩,
+    gerver_upper_support hP hbox ⟨pi_pos.le, le_rfl⟩]
+
+/-- The cap completion preserves the horizontal midpoint of a compact set in
+the unit strip with top support one. -/
+theorem sofaCap_horizontalMidpoint {S : Set Point}
+    (hS : IsCompact S) (hne : S.Nonempty)
+    (hstrip : S ⊆ hStrip) (htop : supp S (π / 2) = 1) :
+    horizontalMidpoint (sofaCap S) = horizontalMidpoint S := by
+  unfold horizontalMidpoint
+  rw [sofaCap_upper_support hS hne hstrip htop ⟨le_rfl, pi_pos.le⟩,
+    sofaCap_upper_support hS hne hstrip htop ⟨pi_pos.le, le_rfl⟩]
+
+/-- Hence the cap of a midpoint-normalized sofa is midpoint aligned with
+Gerver's cap. -/
+theorem sofaCap_midpoint_of_midpoint_normalized {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {S : Set Point} (hS : IsCompact S) (hne : S.Nonempty)
+    (hstrip : S ⊆ hStrip) (htop : supp S (π / 2) = 1)
+    (hmid : horizontalMidpoint S = horizontalMidpoint (gerverSofa P)) :
+    horizontalMidpoint (sofaCap S) = horizontalMidpoint P.cap := by
+  rw [sofaCap_horizontalMidpoint hS hne hstrip htop, hmid,
+    gerver_midpoint_cap hP hbox]
+
 theorem horizontalMidpoint_translate {S : Set Point} (hS : IsCompact S)
     (hne : S.Nonempty) (v : Point) :
     horizontalMidpoint (Rigid.translate v '' S)=horizontalMidpoint S+v.1 := by
