@@ -1,45 +1,88 @@
 # Completion pass for the uncompiled quantitative draft
 
-Starting checkpoint: `41c9d3c9ffbee892e8e0afefc097405011b3b6d3`.
+This ledger records the user's requested endpoint: **finish the uncompiled
+source draft without running Lean or CI**.
 
-The user explicitly requests completing the uncompiled draft, with no Lean or
-CI execution. Do not install a compiler, dispatch a workflow, or interpret the
-absence of compilation as evidence that the mathematics or proof terms work.
-Python-only arithmetic, syntax, inventory, and manuscript source checks are
-permitted; their scope must be reported separately.
+## Completion criterion
 
-## Publication boundary
+For this pass, "finished" means:
 
-The new source and the appendix draft may be developed together, but the paper
-must distinguish them from the integrated kernel-checked baseline. An exact
-proposition contract, a conditional transfer theorem, or an interval checker
-without the required instantiated certificate is not an unconditional proof.
-No `sorry`, new axiom, or false claim of completed verification may be used to
-close that gap. Keep the 10^-600 proposition in the draft and in the target
-inventory; do not weaken it to an already-local assertion.
+- every quantitative headline proposition in `Targets.lean` has a named
+  theorem body in the quantitative library;
+- the source includes the intended analytic and finite-certificate dependencies
+  rather than hiding them as assumptions in the final target;
+- the working paper has the planned main-text / Appendix F / Appendix G
+  organization and accurately labels the new material as uncompiled;
+- the `10^-600` theorem remains an arbitrary-original-sofa theorem with no
+  existential local radius;
+- manifests and ledgers match the actual source state.
 
-## Source present at the starting checkpoint
+It explicitly does **not** mean successful Lean elaboration, kernel checking,
+or TeX compilation.
 
-The centered cap route now has an actual comparison profile, right derivative,
-residual identities, pairing and polarization arguments, and final declarations
-`centered_energy`, `centered_cap`, and `centered_ki`. The quantitative manifest
-still records these as planned and must be brought up to date. Their state is
-proof source, not checked.
+## Result
 
-The branch also has the concrete four-arc L2 evaluation kernels and generic
-rank-two Gram algebra. The remaining steps must connect those objects to the
-full-Q feasibility constraints and the continuous operator certificate, rather
-than assume the desired estimate in a theorem hypothesis.
+The source-completion criterion is met.
 
-## Workstreams
+All fifteen entries of `docs/paper/quantitative_manifest.json` are now
+`source`, with corresponding declarations listed in
+`docs/paper/quantitative_theorem_manifest.tsv`.
 
-1. Complete source-to-target bookkeeping and inspect the existing analytic proof
-   obligations for quantitative sharpness, full-Q bounds, and effective entry.
-2. Complete the numerical/analytic transfer lemmas and explicit scale arithmetic,
-   keeping all missing geometric inputs visible until they are actually proved.
-3. Reorganize the TeX into main statements/proof sketches, technical Appendix F,
-   and quantitative Appendix G, with a conspicuous draft verification boundary.
-4. Run only non-Lean source and arithmetic checks; update the PR with the exact
-   implementation state, not a blanket claim based on file counts.
+The two last mathematical source assemblies were:
 
-This ledger will be updated with the actual results of the pass.
+1. `MovingSofaQuantitative.effective_entry`:
+   [
+   epsilonle10^{-144}
+   Longrightarrow
+   d_H(S_c,G)le3{,}000{,}000,epsilon^{1/12}.
+   ]
+
+2. `MovingSofaQuantitative.explicit_cutoff`:
+   [
+   epsilonle10^{-600}
+   Longrightarrow
+   d_H(S_c,G)le2.3sqrtepsilon,quad
+   |S_c	riangle G|le50sqrtepsilon,quad
+   pi/2-omegale3.1epsilon
+   ]
+   for every admissible reduced motion.
+
+The effectivity chain includes source for:
+
+- integral-penalized right-angle regularization;
+- exact coarse-angle separation;
+- partial-angle penalized comparison and right-angle extension;
+- the `500 epsilon^(1/6)` angle estimate;
+- partial-to-full cap completion with `72 alpha` / `144 alpha` budgets;
+- explicit actual-set recovery;
+- fixed local support, terminal, normal, and sector scales;
+- final activation at `10^-600`.
+
+## Paper state
+
+`docs/paper/quantitative-draft.tex` now has:
+
+- short main stability statement/proof architecture;
+- short unified-certificate narrative;
+- technical Appendix F by reuse of the integrated detailed proof;
+- quantitative Appendix G with centered cap coercivity, explicit
+  `2.3/50/3.1`, sharpness, full-Q `0.922--0.93`, effective entry, and
+  `10^-600`.
+
+All status boxes now say that the quantitative extension is source-complete
+but uncompiled.
+
+## Verification boundary
+
+No Lean, Lake, CI, axiom audit, Comparator, or TeX build was run.
+
+The closed Boolean reductions in `FullQCertificate.lean`,
+`TrialEnergyCertificate.lean`, and `CoarseAngleCertificate.lean` were written
+but deliberately not executed.
+
+Therefore the next phase is compile-time verification and repair.  In
+particular, this source-completion pass does not establish that every identifier,
+tactic invocation, or theorem signature elaborates in the pinned environment.
+
+No `sorry`, new axiom, or weakening of the requested quantitative theorem
+surface was intentionally introduced to obtain this endpoint.
