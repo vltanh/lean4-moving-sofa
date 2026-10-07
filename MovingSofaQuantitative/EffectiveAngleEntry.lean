@@ -65,9 +65,12 @@ theorem high_angle_cot_le_quarter {ω : ℝ}
     exact hc
   have hcos0 : 0≤cos ω :=
     cos_nonneg_of_mem_Icc ⟨hω0,hωupper⟩
+  have hωpos : 0<ω := by
+    have hapos : 0<2*a := by linarith [ha0]
+    dsimp [a] at hapos
+    linarith [hω,hapos]
   have hsin0 : 0<sin ω :=
-    sin_pos_of_pos_of_lt_pi (lt_of_le_of_lt hω0
-      (by linarith [ha0,hω])) (by linarith [hωupper,pi_pos])
+    sin_pos_of_pos_of_lt_pi hωpos (by linarith [hωupper,pi_pos])
   have hcos2 : cos ω^2≤(9/41:ℝ)^2 :=
     sq_le_sq₀ hcos0 hcosbound
   have hunit : sin ω^2+cos ω^2=1 := sin_sq_add_cos_sq ω
