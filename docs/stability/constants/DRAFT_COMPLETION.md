@@ -1,3 +1,21 @@
+> **Additional mathematical audit repairs (October 7, 2026).** The effective
+> right-angle source contained a false unanchored \(L^2\)-to-supremum
+> inequality: a nonzero constant function has Lipschitz constant zero but
+> positive supremum. The source now uses the actual common top support
+> \(h_K(\pi/2)=h_C(\pi/2)=1\), so the support difference vanishes at
+> \(\pi/2\); its one-sided integration interval is restricted to
+> radius at most \(\pi/2\). The penalized comparison cap's radius is now
+> measured relative to the **input cap's horizontal midpoint**, not the
+> origin (absolute radius cannot be translation invariant). A relative
+> midpoint estimate and common-centre Lipschitz adapter were drafted from
+> the support penalty. Nearest-point lemmas now require a nonempty compact
+> set and use the minimizing property when equating an attained distance
+> to the infimum. Static regression patterns were added.
+>
+> These are corrections of genuine mathematical/source errors, **not**
+> proof of the still-blocked quantitative targets. No Lean, Lake, CI,
+> TeX, or finite Boolean certificate was run.
+
 > **Source-audit correction (October 7, 2026).** The earlier claim that the quantitative extension is "source-complete" is **withdrawn**. All 15 headline theorem declarations have bodies, but this is not equivalent to a self-contained draft. The source-only audit found unresolved Gerver sector/normal geometry, penalized-cap and terminal/effective-entry bridges, coarse-angle search soundness, and a feasible-trial energy-cover proof. The trial-energy cell integral and arc double-counting defects were corrected in follow-up commits, but the numerical Boolean reductions remain unexecuted. See `scripts/audit_quantitative_source_static.py` and `docs/paper/quantitative_manifest.json` for current blockers. No Lean, Lake, CI, or TeX build was run.
 
 ---
