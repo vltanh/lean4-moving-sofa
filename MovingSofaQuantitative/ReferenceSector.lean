@@ -39,6 +39,67 @@ theorem referenceSectorRadius_pos : 0 < referenceSectorRadius := by
   unfold referenceSectorRadius
   positivity
 
+/-- A narrow cone has axial projection at least half its Euclidean length.
+It is enough that its sine is positive and does not exceed its cosine; no
+trigonometric numerical approximation is used in the geometric argument. -/
+theorem interiorSector_axis_half {p q : Point} {θ h R : ℝ}
+    (hs : 0<sin h) (hsc : sin h≤cos h)
+    (hq : q∈interiorSector p θ h R) :
+    euclideanDist p q / 2 ≤ dot (q-p) (uvec θ) := by
+  let w:=q-p
+  let a:=dot w (uvec θ)
+  let b:=dot w (vvec θ)
+  have hplus : 0≤a*sin h+b*cos h := by
+    have hh:=hq.1
+    simpa [a,b,w,dot,uvec,vvec,cos_add,sin_add,
+      cos_pi_div_two_sub,sin_pi_div_two_sub] using hh
+  have hminus : 0≤a*sin h-b*cos h := by
+    have hh:=hq.2.1
+    simpa [a,b,w,dot,uvec,vvec,cos_sub,sin_sub,
+      cos_pi_div_two_sub,sin_pi_div_two_sub] using hh
+  have ha : 0≤a := by nlinarith [hs]
+  have hb1 : b≤a := by
+    have hh:=mul_le_mul_of_nonneg_left hsc ha
+    have hc : 0<cos h := lt_of_lt_of_le hs hsc
+    nlinarith
+  have hb2 : -a≤b := by
+    have hh:=mul_le_mul_of_nonneg_left hsc ha
+    have hc : 0<cos h := lt_of_lt_of_le hs hsc
+    nlinarith
+  have hbSq : b^2≤a^2 := by
+    nlinarith [mul_nonneg (by linarith : 0≤a-b) (by linarith : 0≤a+b)]
+  have hframe : a^2+b^2=euclideanDist p q^2 := by
+    dsimp [a,b,w,euclideanDist]
+    rw [norm2_sq]
+    simp [dot,uvec,vvec,cos_sq_add_sin_sq]
+    ring
+  have hd : 0≤euclideanDist p q := euclideanDist_nonneg _ _
+  dsimp [a]
+  nlinarith [hbSq,hframe,ha,hd]
+
+/-- A cone whose half-angle is below pi/4 fits in the ball tangent at the
+vertex in its axial direction.  The ball has radius R, and the cone is
+truncated to a radius not exceeding R. -/
+theorem sector_subset_tangent_ball {p : Point} {θ h r R : ℝ}
+    (hR : 0≤R) (hr : r≤R)
+    (hs : 0<sin h) (hsc : sin h≤cos h) :
+    interiorSector p θ h r ⊆
+      euclideanBall (p+R•uvec θ) R := by
+  intro q hq
+  have ha:=interiorSector_axis_half hs hsc hq
+  have hd : euclideanDist p q≤R := hq.2.2.trans hr
+  have hq0 : 0≤euclideanDist p q := euclideanDist_nonneg _ _
+  have hsq :
+      euclideanDist (p+R•uvec θ) q^2 =
+      euclideanDist p q^2+R^2-
+        2*R*dot (q-p) (uvec θ) := by
+    rw [euclideanDist,euclideanDist,norm2_sq,norm2_sq]
+    simp [dot,uvec,Prod.fst_add,Prod.snd_add,
+      Prod.fst_smul,Prod.snd_smul,Prod.fst_sub,Prod.snd_sub]
+    nlinarith [sin_sq_add_cos_sq θ]
+  show euclideanDist (p+R•uvec θ) q≤R
+  nlinarith [hsq,ha,hd,hq0,euclideanDist_nonneg (p+R•uvec θ) q]
+
 /-- The smallest explicit boundary openings clear beta=1.53. -/
 theorem gerver_corner_angle_margin {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
