@@ -39,6 +39,68 @@ theorem gerver_roof_height_lt_two_thirds {P : GerverParams}
   rw [hmid] at hmax
   nlinarith [hB.c₁_mem.2,hB.κ₃₂_mem.2]
 
+/-- An elementary support-gap bound using only the cap's two floor endpoints
+and the unit-height rectangle over its niche roof.  This works for every
+normal in [0,pi], including the two horizontal normals. -/
+theorem cap_niche_outer_slack
+    {K : Set Point} {a b H L : ℝ} {γ : ℝ → ℝ}
+    (hroof : CapRoofData K a b H L γ)
+    {p : Point} (hp : p ∈ niche K (π/2))
+    (hw : (4/5:ℝ) ≤ min (a + supp K π) (supp K 0 - b))
+    (hH : H ≤ 2/3)
+    {t : ℝ} (ht : t ∈ Icc (0:ℝ) π) :
+    max ((4/5)*|cos t|-(2/3)*|sin t|) ((1/3)*|sin t|)
+      ≤ supp K t-dot p (uvec t) := by
+  have hpRoof : p.1 ∈ Icc a b ∧ 0 ≤ p.2 ∧ p.2 < γ p.1 := by
+    rw [hroof.niche_eq] at hp
+    exact hp
+  have hheight : p.2 ≤ H :=
+    (le_of_lt hpRoof.2.2).trans (hroof.roof_le p.1 hpRoof.1)
+  have hs : 0 ≤ sin t :=
+    sin_nonneg_of_nonneg_of_le_pi ht.1 ht.2
+  have habss : |sin t| = sin t := abs_of_nonneg hs
+  have htop : (p.1,(1:ℝ)) ∈ K :=
+    hroof.rectangle ⟨hpRoof.1,zero_le_one,le_rfl⟩
+  have hTopSupport :=
+    dot_le_supp hroof.cap.2.1.2.1 htop t
+  have hTopGap : (1/3:ℝ)*|sin t| ≤
+      supp K t-dot p (uvec t) := by
+    rw [habss]
+    simp only [dot,uvec] at hTopSupport ⊢
+    nlinarith [mul_nonneg (show (0:ℝ)≤1-p.2/1 by linarith)
+      hs, mul_nonneg (sub_nonneg.mpr (show p.2≤2/3 by linarith))
+      hs]
+  have hwidthL : (4/5:ℝ) ≤ a+supp K π :=
+    hw.trans (min_le_left _ _)
+  have hwidthR : (4/5:ℝ) ≤ supp K 0-b :=
+    hw.trans (min_le_right _ _)
+  have hFloorGap :
+      (4/5:ℝ)*|cos t|-(2/3)*|sin t|
+        ≤ supp K t-dot p (uvec t) := by
+    rw [habss]
+    rcases le_total 0 (cos t) with hc | hc
+    · have hA := opt_cap_A_mem hroof.cap
+      have hAupper :=
+        dot_le_supp hroof.cap.2.1.2.1 hA t
+      rw [abs_of_nonneg hc]
+      simp only [dot,uvec] at hAupper ⊢
+      have hwR : (4/5:ℝ)≤supp K 0-p.1 := by
+        linarith [hpRoof.1.2,hwidthR]
+      nlinarith [mul_nonneg (sub_nonneg.mpr hwR)
+        hc, mul_nonneg (sub_nonneg.mpr (show p.2≤2/3 by linarith))
+        hs]
+    · have hC := opt_cap_C_mem hroof.cap
+      have hCupper :=
+        dot_le_supp hroof.cap.2.1.2.1 hC t
+      rw [abs_of_nonpos hc]
+      simp only [dot,uvec] at hCupper ⊢
+      have hwL : (4/5:ℝ)≤p.1+supp K π := by
+        linarith [hpRoof.1.1,hwidthL]
+      nlinarith [mul_nonneg (sub_nonneg.mpr hwL)
+        (neg_nonneg.mpr hc),mul_nonneg
+        (sub_nonneg.mpr (show p.2≤2/3 by linarith)) hs]
+  exact max_le hFloorGap hTopGap
+
 /-- Explicit support margin from the niche to the outer cap. -/
 theorem gerver_outer_margin_one_fifth {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
@@ -62,7 +124,7 @@ theorem gerver_outer_margin_one_fifth {P : GerverParams}
     gerver_wing_width_min hP hbox
   have hslack : max ((4/5)*c-(2/3)*s) ((1/3)*s)
       ≤ supp P.cap t-dot p (uvec t) :=
-    cap_niche_outer_slack hroof hp hD hH t
+    cap_niche_outer_slack hroof hp hD hH ht
   by_contra hn
   have h1 : (1/3)*s<1/5 := lt_of_le_of_lt (le_max_right _ _) (hslack.trans_lt (not_le.mp hn))
   have h2 : (4/5)*c-(2/3)*s<1/5 :=
