@@ -544,7 +544,7 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
     positivity
   have hd₀1 : d₀≤1:=min_le_left _ _
   have hDU : ∀t∈I,∀d∈Icc (0:ℝ) d₀,
-      deriv (fun x=>FU (t,x)) d≤-(5/51:ℝ) := by
+      RU (t,d)≤-(5/51:ℝ) := by
     intro t ht d hd
     have hdη : d<η:=by
       have hhalf:=hd.2.trans (min_le_right (1:ℝ) _)
@@ -565,7 +565,7 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
     dsimp [εr] at hu
     nlinarith [abs_le.mp (le_of_lt hu) |>.2]
   have hDV : ∀t∈I,∀d∈Icc (0:ℝ) d₀,
-      deriv (fun x=>FV (t,x)) d≤-(5/51:ℝ) := by
+      RV (t,d)≤-(5/51:ℝ) := by
     intro t ht d hd
     have hdη : d<η:=by
       have hhalf:=hd.2.trans (min_le_right (1:ℝ) _)
@@ -602,20 +602,39 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
   refine ⟨d₀,hd₀,?_⟩
   intro t ht d hd
   have hs:=hangle t ht d hd
-  have hIU:=intervalIntegral.integral_mono_on
-    hd.1 hd.2 (hDU t ht d hd)
-  have hIV:=intervalIntegral.integral_mono_on
-    hd.1 hd.2 (hDV t ht d hd)
-  have hFTC_U:=intervalIntegral.integral_deriv_eq_sub
-    (fun x hx=>hjointU ⟨ht,⟨by linarith [hx.1,hd₀1],by linarith [hx.2,hd₀1]⟩⟩)
-  have hFTC_V:=intervalIntegral.integral_deriv_eq_sub
-    (fun x hx=>hjointV ⟨ht,⟨by linarith [hx.1,hd₀1],by linarith [hx.2,hd₀1]⟩⟩)
+  have hUder : ∀x∈Icc (0:ℝ) d,
+      HasDerivAt (fun y=>FU (t,y)) (RU (t,x)) x := by
+    intro x hx
+    exact corePathSlackU_hasDerivAt hP λ t x
+  have hVder : ∀x∈Icc (0:ℝ) d,
+      HasDerivAt (fun y=>FV (t,y)) (RV (t,x)) x := by
+    intro x hx
+    exact corePathSlackV_hasDerivAt hP λ t x
+  have hUI : ContinuousOn (fun x=>RU (t,x)) (Icc (0:ℝ) d) := by
+    apply hjointU.comp
+      (continuous_const.prodMk continuous_id).continuousOn
+    intro x hx
+    exact ⟨ht,⟨by linarith [hx.1],by linarith [hx.2,hd.2,hd₀1]⟩⟩
+  have hVI : ContinuousOn (fun x=>RV (t,x)) (Icc (0:ℝ) d) := by
+    apply hjointV.comp
+      (continuous_const.prodMk continuous_id).continuousOn
+    intro x hx
+    exact ⟨ht,⟨by linarith [hx.1],by linarith [hx.2,hd.2,hd₀1]⟩⟩
+  have hUle : FU (t,d) ≤ -(5/51:ℝ)*d :=
+    core_slack_of_uniform_derivative_bound hd.1 hUder hUI
+      (fun x hx=>hDU t ht x ⟨hx.1,hx.2.trans hd.2⟩)
+      (hzeroU t ht)
+  have hVle : FV (t,d) ≤ -(5/51:ℝ)*d :=
+    core_slack_of_uniform_derivative_bound hd.1 hVder hVI
+      (fun x hx=>hDV t ht x ⟨hx.1,hx.2.trans hd.2⟩)
+      (hzeroV t ht)
+  obtain ⟨hmatchU,hmatchV⟩ :=
+    corePathSlack_eq_innerSlack hP hbox λ t d hs.le
+  dsimp [FU,FV] at hUle hVle
   dsimp
-  refine ⟨hs,?_,?_⟩
-  · rw [←hzeroU t ht,hFTC_U]
-    nlinarith
-  · rw [←hzeroV t ht,hFTC_V]
-    nlinarith
+  exact ⟨hs,by simpa [coreLoweredPoint,coreAdjustedAngle] using
+    hmatchU ▸ hUle,by simpa [coreLoweredPoint,coreAdjustedAngle] using
+    hmatchV ▸ hVle⟩
 
 /-- Lowering a point further at a fixed first-quadrant hallway angle cannot
 increase either inner-wall slack.  This is the precise depth-extension
