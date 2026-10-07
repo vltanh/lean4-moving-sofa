@@ -122,3 +122,73 @@ The minimum-width transport MF1 and its signed identity MF2 are valid and remain
 For partial turns the circular completion allowance CC2 is still an *actual* extra cost; its cubic size cannot be erased by assuming a universally negative minimum-width correction. The SB class closes by an *actual safe strip bridge* and SM's exact reference-specific deficit, not by a general sign convention.
 
 No CI, Lean/Lake compilation, dependency installation, manuscript build or long computation was used. This is a self-reviewed hand argument based on existing HC, MF, SR/AF and canonical-saturation dependencies. Unrestricted full-turn and partial-turn optimality remain unproved.
+
+
+## 6. Explicit quantitative failure: \(G_s>3s/4\) for \(s\le1/256\)
+
+The stadium example admits an entirely **finite, explicit** parameter range; the existence claim in MS.4 need not rest only on a dominated-convergence limit. Keep its data
+\[
+k=1-s,\quad b_s=\frac45k,\quad R_s=\frac34k+s=\frac34+\frac{s}{4},\quad
+0<s\le\frac1{256}.
+\]
+For \(0\le t\le L=\pi/2\), its exact first-quarter supports are
+\[
+f_s(t)=k/4+b_s\cos t+R_s\sin t,\qquad
+g_s(t)=k/4+b_s\sin t+R_s\cos t.
+\]
+Hence \(p_s=f_s'-g_s+1=1-k/4-2b_s\sin t\), which is strictly negative on \([\pi/4,L]\). Indeed \(\sin t\ge2/3\) and \(k\ge255/256\) give
+\[
+p_s\le1-\frac{79k}{60}<0.
+\]
+The global first-wall tangency abscissa is \(b_s-R_s\cos t\), nondecreasing throughout the quarter because \(f_s''+f_s=k/4\le1\). At its tangency point the companion wall is strictly higher because \(p_s<0\). Thus the **actual full** niche roof, not merely an upper bound, equals
+\[
+\boxed{n_s(b_s-d)=R_s-\sqrt{R_s^2-d^2}
+\quad(0\le d\le R_s/\sqrt2).}\tag{MS.5}
+\]
+Horizontal symmetry gives the corresponding formula near \(-b_s\).
+
+On the central interval \(|x|\le b_s-R_s/\sqrt2\), the single angle \(t=\pi/4\) supplies the lower bound
+\[
+n_s(x)\ge H_s-|x|,\qquad
+H_s=b_s+R_s-\sqrt2(1-k/4).
+\]
+At the central interval's worst endpoint,
+\[
+H_s-(b_s-R_s/\sqrt2)
+=R_s(1+1/\sqrt2)-\sqrt2(1-k/4)
+>\frac{253}{2048}>\frac1{256}\ge s.
+\]
+The strict rational estimate uses \(R_s\ge3/4\), \(k\ge255/256\), \(4/3<\sqrt2<3/2\). Therefore \(n_s\ge s\) throughout the entire central interval.
+
+Set \(D_s=\sqrt{2R_s s}\). Since \(R_s<1\) and \(s\le1/256\),
+\[
+D_s<\sqrt{2/256}<1/8<R_s/\sqrt2.
+\]
+On the right circular tail with \(d\ge D_s\),
+\[
+n_s(b_s-d)=R_s-\sqrt{R_s^2-d^2}
+\ge d^2/(2R_s)\ge s,
+\]
+and similarly on the left. The positive part \((s-n_s)_+\) can therefore be supported **only in the two disjoint endpoint strips of length \(D_s\)**. There, the same circular formula gives
+\[
+0\le(s-n_s(b_s-d))_+
+\le(s-d^2/(2R_s))_+\quad(0\le d\le D_s).
+\]
+Integrating both endpoint strips gives
+\[
+\int_{J_s}(s-n_s)_+\le
+2\int_0^{D_s}\left(s-\frac{d^2}{2R_s}\right)dd
+=\frac43 sD_s.
+\]
+Since \(|J_s|=kT\), \(W_s=kW\), the exact relation MS.2 becomes
+\[
+\begin{aligned}
+G_s&=s(2kT-kW)-2\int_{J_s}(s-n_s)_+\\
+&\ge\frac{11}{10}ks-\frac83sD_s\\
+&>\left(\frac{11}{10}\frac{255}{256}-\frac13\right)s
+=\frac{5855}{7680}s>\boxed{\frac34s}.
+\end{aligned}\tag{MS.6}
+\]
+This is an explicit quantitative counterexample for **every** \(0<s\le1/256\), with the same exact canonical feasibility and global minimum-width verification as before. The strong positive correction is paid by the stadium's nonzero weighted deficits; no area above M is claimed.
+
+The bounds in MS.6 use only rational inequalities and the displayed circle identity, not numerical quadrature or an asymptotic fit.
