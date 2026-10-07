@@ -99,6 +99,318 @@ theorem balanced_angle_adjustment_le_one {t a b : ℝ} {w : Point}
   apply (div_le_div_iff₀ hab).2
   nlinarith [hu.trans hw,hv.trans hw]
 
+
+theorem abs_dot_uvec_le_norm2 (w : Point) (t : ℝ) :
+    |dot w (uvec t)|≤norm2 w := by
+  rw [abs_le]
+  constructor
+  · have h:=dot_uvec_le_norm2 (-w) t
+    simpa [dot_neg_left] using h
+  · exact dot_uvec_le_norm2 w t
+
+theorem abs_dot_vvec_le_norm2 (w : Point) (t : ℝ) :
+    |dot w (vvec t)|≤norm2 w := by
+  simpa [vvec] using abs_dot_uvec_le_norm2 w (t+π/2)
+
+theorem dot_uvec_sub_le_dist (p q : Point) (t : ℝ) :
+    dot (p-q) (uvec t)≤euclideanDist p q := by
+  exact (dot_uvec_le_norm2 (p-q) t)
+
+theorem norm2_div (w : Point) {d : ℝ} (hd : 0<d) :
+    norm2 (w/d)=norm2 w/d := by
+  unfold norm2 dot
+  have hd0 : 0≤d:=hd.le
+  rw [show ((w/d).1)^2+((w/d).2)^2=(w.1^2+w.2^2)/d^2 by
+    simp [div_pow]; ring]
+  rw [Real.sqrt_div (by positivity)]
+  rw [Real.sqrt_sq hd0]
+  rfl
+
+theorem exists_mem_eq_infDist {K : Set Point} (hK : IsCompact K)
+    {p : Point} (hne : K.Nonempty) :
+    ∃q∈K,euclideanDist p q=infDist p K := by
+  obtain ⟨q,hq,hmin⟩:=hK.exists_isMinOn hne
+    (continuous_const.sub continuous_id |>.norm)
+  refine ⟨q,hq,?_⟩
+  apply le_antisymm
+  · exact le_csInf (Metric.bddBelow_dist p) ⟨q,hq,rfl⟩
+  · exact csInf_le (Metric.bddBelow_dist p) ⟨q,hq,rfl⟩
+
+theorem infDist_zero_of_mem {K : Set Point} {p : Point} (hp : p∈K) :
+    infDist p K=0 := by
+  apply le_antisymm
+  · exact (infDist_le_of_mem hp).trans (by rw [euclideanDist_self])
+  · exact infDist_nonneg
+
+theorem infDist_pos_of_compact {K : Set Point} (hK : IsCompact K)
+    {p : Point} (hp : p∉K) :
+    0<infDist p K := by
+  by_contra hn
+  have hz : infDist p K=0:=le_antisymm (not_lt.mp hn) infDist_nonneg
+  obtain ⟨q,hq,hq0⟩:=exists_mem_eq_infDist hK
+    (by
+      by_contra he
+      rw [Set.not_nonempty_iff_eq_empty.mp he,infDist_empty] at hz
+      exact top_ne_zero hz)
+  rw [hz] at hq0
+  have hpq:=euclideanDist_eq_zero.mp hq0
+  subst q
+  exact hp hq
+
+theorem exists_mem_le_infDist {K : Set Point} (hK : IsCompact K)
+    (p : Point) :
+    ∃q∈K,euclideanDist p q≤infDist p K := by
+  by_cases hne : K.Nonempty
+  · obtain ⟨q,hq,hEq⟩:=exists_mem_eq_infDist hK hne
+    exact ⟨q,hq,hEq.le⟩
+  · exfalso
+    have he:=Set.not_nonempty_iff_eq_empty.mp hne
+    rw [he] at hK
+    simpa using hK.nonempty
+
+theorem gerver_path_mem_shape {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc P.φ (π/2-P.φ)) :
+    P.path t∈gerverSofa P := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  rw [gerver_shape_eq hP hbox,gerver_niche_envelope hP hbox]
+  refine ⟨?_,?_⟩
+  · have hx:=gm_innerCorner hP hbox
+      ⟨(hB.φ_mem.1.trans_le ht.1).le,by linarith [ht.2,hB.φ_mem.1]⟩
+    rw [←hx]
+    exact innerCorner_mem_cap (gm_isCap hP hbox)
+      ⟨(hB.φ_mem.1.trans_le ht.1).le,by linarith [ht.2,hB.φ_mem.1]⟩
+  · intro hn
+    obtain ⟨hy,q,hq,hqx,hlt⟩:=hn
+    have hself : P.path t∈gerverEnvelope P := by
+      unfold gerverEnvelope
+      exact Or.inl (Or.inr ⟨t,ht,rfl⟩)
+    have hgraph:=env_x₁_strictAnti henv
+    have hsame:=env_same_fst_eq henv hself hq hqx
+    subst q
+    linarith
+
+/-- A nearest point from an exterior point lies on the frontier. -/
+theorem nearest_point_frontier {K : Set Point} (hK : IsCompact K)
+    {p q : Point} (hp : p∉K) (hq : q∈K)
+    (hnear : euclideanDist p q=infDist p K) :
+    q∈frontier K := by
+  refine ⟨hK.isClosed.mem_closure hq,?_⟩
+  intro hqi
+  obtain ⟨r,hr,hball⟩:=Metric.isOpen_iff.1 isOpen_interior q hqi
+  let z:=q+(min (r/2) (euclideanDist p q/2)/euclideanDist p q)•(p-q)
+  have hd:=infDist_pos_of_compact hK hp
+  have hzK : z∈K := by
+    apply interior_subset
+    apply hball
+    dsimp [z]
+    have hcoef : 0<euclideanDist p q:=by rw [hnear]; exact hd
+    have hstep : euclideanDist q z<r := by
+      unfold euclideanDist
+      simp [norm2_smul,hcoef.ne']
+      nlinarith [min_le_left (r/2) (euclideanDist p q/2)]
+    exact hstep
+  have hcloser : euclideanDist p z<euclideanDist p q := by
+    dsimp [z]
+    have hcoef : 0<euclideanDist p q:=by rw [hnear]; exact hd
+    exact point_toward_distance_lt hcoef hr
+  have hmin:=infDist_le_of_mem hzK
+  rw [←hnear] at hmin
+  exact (not_lt_of_ge hmin) hcloser
+
+/-- For a point in the open niche, a nearest point of the sofa lies on the
+niche envelope. -/
+theorem nearest_from_niche_lands_on_envelope {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p q : Point}
+    (hp : p∈niche P.cap (π/2))
+    (hqG : q∈gerverSofa P)
+    (hqfront : q∈frontier (gerverSofa P))
+    (hnear : euclideanDist p q=infDist p (gerverSofa P)) :
+    q∈gerverEnvelope P := by
+  have hB:=romik_bounds hP hbox
+  have hreg:=gerver_regularClosed hP hbox
+  have hN:=gerver_niche_envelope hP hbox
+  have hshape:=gerver_shape_eq hP hbox
+  have houter : frontier (gerverSofa P)\gerverEnvelope P⊆frontier P.cap := by
+    exact frontier_shape_off_envelope hreg hN hshape
+  by_contra hn
+  have hqOuter:=houter ⟨hqfront,hn⟩
+  have hseg:=segment_from_niche_to_outer_crosses_envelope hP hbox hp hqOuter
+  obtain ⟨z,hzEnv,hzBetween,hzStrict⟩:=hseg
+  have hzG : z∈gerverSofa P:=envelope_subset_shape hP hbox hzEnv
+  have hdist:=segment_point_closer hp hqG hzBetween hzStrict
+  have hmin:=infDist_le_of_mem hzG
+  rw [←hnear] at hmin
+  exact (not_lt_of_ge hmin) hdist
+
+/-- A core endpoint cannot be the nearest sofa point to a point of the strict
+niche; the adjacent envelope tail gives a closer point. -/
+theorem endpoint_not_nearest_from_open_niche {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ}
+    (hnear : euclideanDist p (P.path t)=infDist p (gerverSofa P))
+    (hend : t=P.φ ∨ t=π/2-P.φ) : False := by
+  have hB:=romik_bounds hP hbox
+  rcases hend with rfl|rfl
+  · obtain ⟨s,hs,hclose⟩:=env_D_closer_than_core_endpoint hP hB hp hnear
+    exact (not_lt_of_ge (infDist_le_of_mem
+      (envelope_subset_shape hP hbox hs.1))) hclose
+  · obtain ⟨s,hs,hclose⟩:=env_B_closer_than_core_endpoint hP hB hp hnear
+    exact (not_lt_of_ge (infDist_le_of_mem
+      (envelope_subset_shape hP hbox hs.1))) hclose
+
+/-- Orthogonality to the core tangent determines the magnitude of the dot
+product with the perpendicular normal. -/
+theorem unit_perp_dot_eq_norm {t a b : ℝ} {w : Point}
+    (hw : norm2 w=1)
+    (hortho : dot w (-a•uvec t+b•vvec t)=0) :
+    |dot w (b•uvec t+a•vvec t)|=sqrt(a^2+b^2) := by
+  have hcoords:=norm2_sq_in_frame w t
+  have hu:=dot w (uvec t)
+  have hv:=dot w (vvec t)
+  simp only [dot_add_right,dot_smul_right] at hortho ⊢
+  rw [←sq_eq_sq₀ (abs_nonneg _) (sqrt_nonneg _)]
+  rw [sq_abs,sq_sqrt (by positivity)]
+  nlinarith [hcoords]
+
+/-- The inward core normal points into the reference sofa. -/
+theorem core_inward_normal_enters_shape {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Ioo P.φ (π/2-P.φ)) :
+    ∃r>0,∀s∈Ioc (0:ℝ) r,
+      P.path t+s•
+        ((P.gs_β t)•uvec t+(-P.gs_α t)•vvec t)∈gerverSofa P := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  exact envelope_core_inward_segment hP hbox henv ht
+
+theorem nearest_vector_opposes_inward {K : Set Point}
+    {p q n : Point} {d : ℝ}
+    (hnear : euclideanDist p q=infDist p K)
+    (hin : ∃r>0,∀s∈Ioc (0:ℝ) r,q+s•n∈K)
+    (hd : 0<d) (hdEq : d=euclideanDist p q)
+    (hnorm : norm2 n>0) :
+    dot ((p-q)/d) n≤0 := by
+  obtain ⟨r,hr,hin⟩:=hin
+  by_contra hp
+  have hdot : 0<dot (p-q) n:=by
+    rw [←hdEq] at hp
+    have:=mul_pos hd (not_le.mp hp)
+    simpa [dot_div_left] using this
+  let s:=min (r/2) (dot (p-q) n/(2*norm2 n^2))
+  have hs : s∈Ioc (0:ℝ) r := by
+    constructor
+    · dsimp [s]
+      positivity
+    · exact (min_le_left _ _).trans_lt (by linarith [hr])
+  have hK:=hin s hs
+  have hcloser : euclideanDist p (q+s•n)<euclideanDist p q := by
+    rw [←sq_lt_sq₀ (euclideanDist_nonneg _ _) (euclideanDist_nonneg _ _)]
+    unfold euclideanDist
+    rw [norm2_sq,norm2_sq]
+    simp only [Prod.fst_sub,Prod.snd_sub,Prod.fst_add,Prod.snd_add,
+      Prod.fst_smul,Prod.snd_smul]
+    have hs2:=sq_nonneg s
+    nlinarith [norm2_sq n]
+  have hmin:=infDist_le_of_mem hK
+  rw [←hnear] at hmin
+  exact (not_lt_of_ge hmin) hcloser
+
+/-- Uniform second-order expansion of the two hallway slacks on the core. -/
+theorem innerSlackU_balanced_expansion {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} {t a b d λ : ℝ} {w : Point}
+    (ht : t∈Icc P.φ (π/2-P.φ))
+    (hp : p=P.path t+d•w)
+    (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
+    innerSlackU P.cap (t+λ*d) p =
+      d*wallVariationU t a b w λ+
+        secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d := by
+  subst p
+  have hcorner:=gm_innerCorner hP hbox
+  exact inner_slack_taylor_U hP hbox ht hcorner hvel
+
+theorem innerSlackV_balanced_expansion {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} {t a b d λ : ℝ} {w : Point}
+    (ht : t∈Icc P.φ (π/2-P.φ))
+    (hp : p=P.path t+d•w)
+    (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
+    innerSlackV P.cap (t+λ*d) p =
+      d*wallVariationV t a b w λ+
+        secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d := by
+  subst p
+  have hcorner:=gm_innerCorner hP hbox
+  exact inner_slack_taylor_V hP hbox ht hcorner hvel
+
+def secondOrderWallErrorU (K : Set Point) (q : Point)
+    (t s d : ℝ) : ℝ :=
+  innerSlackU K s q-
+    innerSlackU K t q+
+    (s-t)*sin t
+
+def secondOrderWallErrorV (K : Set Point) (q : Point)
+    (t s d : ℝ) : ℝ :=
+  innerSlackV K s q-
+    innerSlackV K t q+
+    (s-t)*cos t
+
+/-- Absolute sine/cosine increments are bounded by the angular increment. -/
+theorem abs_sin_sub_le (s t : ℝ) : |sin s-sin t|≤|s-t| := by
+  exact abs_sub_le_of_lipschitz (Real.lipschitzWith_sin) s t
+
+theorem abs_cos_sub_le (s t : ℝ) : |cos s-cos t|≤|s-t| := by
+  exact abs_sub_le_of_lipschitz (Real.lipschitzWith_cos) s t
+
+/-- Tail active-wall bounds.  These are direct one-dimensional nearest-point
+conditions on the B and D envelope arcs. -/
+theorem active_tail_normal_bound_B {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
+    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
+    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_B_nearest_active_slack hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
+theorem inactive_tail_margin_B {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
+    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
+    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_B_inactive_margin hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
+theorem active_tail_normal_bound_D {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
+    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
+    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_D_nearest_active_slack hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
+theorem inactive_tail_margin_D {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
+    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
+    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_D_inactive_margin hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
 /-- First-order orthogonality at a nearest point on the smooth core. -/
 theorem nearest_core_direction {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
