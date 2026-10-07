@@ -2,6 +2,7 @@ module
 
 public import MovingSofaQuantitative.PartialAngleCompletion
 public import MovingSofaQuantitative.EffectiveRightAngle
+public import MovingSofaQuantitative.EffectiveRecovery
 public import MovingSofaQuantitative.ExplicitReferenceScales
 
 /-!
@@ -115,20 +116,12 @@ theorem recover_from_effective_ebar {P : GerverParams}
   have hρ0 : ρ≤1/24 := by
     dsimp [ρ]
     nlinarith [hδbound,hsSmall]
-  have hroot : sqrt 2 < 3/2 := by
-    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),
-      sqrt_nonneg (2:ℝ)]
-  have hreserve : r < (100/1051:ℝ)*ρ := by
-    dsimp [r,ρ]
-    nlinarith [sqrt_nonneg E,hδ]
-  have hgap : sqrt E < (100/1051:ℝ)*ρ-r := by
-    dsimp [r,ρ]
-    nlinarith [sqrt_pos.mpr hE,hδ]
+  have hgap : sqrt E<(100/1051:ℝ)*ρ-r := by
+    simpa [ρ,r] using effective_recovery_ball_gap hδ hE
+  have hreserve : r<(100/1051:ℝ)*ρ := by
+    linarith [hgap,sqrt_pos.mpr hE]
   have hmissingSmall : E<((100/1051:ℝ)*ρ-r)^2 := by
-    have hs2:=sq_sqrt hE.le
-    have hnon : 0≤(100/1051:ℝ)*ρ-r :=
-      le_of_lt (sub_pos.mpr hreserve)
-    nlinarith [hgap,hs2]
+    simpa [ρ,r] using effective_recovery_ball_area_gap hδ hE
   have herode : euclideanErosion r (gerverSofa P)⊆capShape K := by
     rw [←gerver_shape_eq hP hbox]
     exact orthogonal_reference_erosion hδ
