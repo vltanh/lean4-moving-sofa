@@ -606,10 +606,16 @@ How it was made:
   README, the page of results and this file; the merged build is clean, the audit checks 5,868 declarations, the
   route check and the audits of the second proof and of the coercive route pass, Comparator accepts both solutions,
   and the continuous integration passed on the merge. Main now points to this work. The branches of the merged pull
-  requests were deleted.
+  requests were deleted, and the three open pull requests that targeted the manuscript's branch now target main.
+- 19:26 to 19:47, at the owner's request: pull requests #2 (a separate manuscript of 3 October) and #6 (the
+  experiment that led to the stability proof) were closed, their heads kept as the tags
+  `archive/stationarity-deficit-rigidity` and `archive/original-sofa-discovery`, and their branches deleted. The
+  preflight workflow now pins Palomar's current pipeline (`d4e41c1`, commit `701ec74`), and Palomar's preflight passed
+  on `701ec74` (`status: pass`, with one warning: the Challenge exceeds the preferred review size of 300 lines); the
+  continuous integration passed on it too. It is the commit prepared for version 5, and the manuscript cites it.
 
-Figures, from 18:16 to 18:30:
-- elapsed time: 14 minutes;
+Figures, from 18:16 to 18:30 and from 19:26 to 19:47:
+- elapsed time: 14 and 21 minutes;
 - sub-agents: none;
-- tool calls: 35 by the main session; tokens: 0.04 million output, 0.06 million input, 26 million cache reads;
-- model calls: 36, all to `claude-opus-5-5`.
+- tool calls: 54 by the main session; tokens: 0.05 million output, 0.08 million input, 42 million cache reads;
+- model calls: 55, all to `claude-opus-5-5`.

@@ -256,7 +256,7 @@ The library is registered in the [Palomar](https://palomar-registry.org) registr
 version 2 adds the uniqueness (commit `cf4feff`), version 3 adds the bridge to formal-conjectures, which brings the
 Challenge to twelve theorems (commit `eb93296`), and version 4 registers the simplified proofs that follow Baek's
 arguments (commit `16653ae`). The three stability theorems, which bring the Challenge to fifteen, are not registered
-yet. Palomar checks the proofs against
+yet; Palomar's preflight passed on commit `701ec74`, prepared for version 5. Palomar checks the proofs against
 [`Challenge.lean`](Challenge.lean), which imports only Mathlib; [`comparator.json`](comparator.json) selects its fifteen theorems, and
 [`formalization.yaml`](formalization.yaml) records provenance, authorship and AI use. The workflow
 [`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's mechanical verification on a commit

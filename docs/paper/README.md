@@ -96,9 +96,10 @@ undefined reference.
   Challenge's names.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `22f0b37d0567f5cbbefe810b8fb4b92c9cf99178`, on which the
-  continuous integration passed; Palomar's preflight has not been run on it. Version 4 of the Palomar entry
-  registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those of stability.
+- The links to the repository are pinned to commit `701ec744a73a5fe21c3ac1703ac83cf31df853c2`, on which the
+  continuous integration and Palomar's preflight passed; it is the commit prepared for version 5 of the Palomar
+  entry. Version 4 registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those
+  of stability.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
   by `assert`s in the scripts.
 
@@ -144,7 +145,8 @@ These are the author's to settle; the text settles none of them.
 7. [`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) list the four versions of the Palomar
    entry; `CREDITS.md` has a section for each later round. Version 4 registers `16653ae`, and the libraries have
    grown since: the Challenge now has fifteen theorems, and `formalization.yaml` describes them. Palomar's preflight
-   has not been run on the cited commit; whether to run it and register a version 5 is for the author to decide.
+   passed on the cited commit `701ec74` on 6 October, with one warning (the Challenge exceeds the preferred review
+   size of 300 lines); submitting it as version 5 is for the author.
 
 ## How it was made
 
@@ -434,6 +436,8 @@ one commit of its own, the comparison of the three formalizations of Baek's proo
 2.1.3 along his argument; every name of Appendix D still exists after it. Appendix D.1 now says, as main's pages
 do, that the Challenge restates formal-conjectures' definitions with its code rather than verbatim. The manuscript
 cites `22f0b37` and has 117 pages.
+Palomar's preflight, run at the author's request with Palomar's current pipeline, then passed on `701ec74`, the
+commit prepared for version 5, and the manuscript now cites that commit.
 
 ## What has not been done
 
@@ -449,7 +453,7 @@ cites `22f0b37` and has 117 pages.
 - The edits after the second round of checks, the E-label marks added in it, and this file were not checked again.
 - Version 4 of the Palomar entry registers `16653ae`; the Lean results of 4 and 5 October, the three stability
   theorems that the Challenge states since 6 October, and the derivation of Section 11, are not in a registered
-  version, and Palomar's preflight has not been run on the cited commit.
+  version yet; Palomar's preflight passed on the cited commit.
 - Sections 10 and 11 and the passages on them added on 6 October have been read by model runs only, not by the
   author. Section 1.6 and Appendix E say that the author has proofread and edited the abstract and Section 1
   only (the author's statement of 6 October), except the parts of Section 1 written later; until 6 October the
