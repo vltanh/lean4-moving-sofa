@@ -6,8 +6,10 @@ public import MovingSofaStability.Global
 /-!
 # Exact coarse terminal-angle separation
 
-UNCOMPILED SOURCE.  This is the Lean-side version of the rational outer search
-in note 20.  It proves only the coarse entry fact used by the effective
+UNCOMPILED SOURCE. The rational outer search and its acceptance predicate
+are defined in Lean, with no external script, generated acceptance file, or
+foreign solver in the proof path. The intended theorem is the coarse entry
+fact used by the effective
 angle argument:
 
   deficit < 1/5000  ->  tan(omega/2) > 4/5.
