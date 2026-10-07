@@ -1,160 +1,184 @@
-# Quantitative formalization progress — not complete
+# Quantitative formalization progress — source-complete, uncompiled
 
-This records implementation of roadmap 34 after the user authorized proceeding.
-It is deliberately not a completion or verification report.
+This file records the state of the quantitative appendix under the user's
+explicit instruction **not to run Lean, Lake, or CI**.
 
-## Integration and preservation
+It is a source-completion report, not a verification report.
 
-The quantitative branch now includes the integrated paper libraries at
-`859ba93f8bb73ccc4378118a7b47415827710c2f`, through merge
-`3635e01821a9c45bb3f5dd8ceedb29b5d098fad9`. The paper, both older uniqueness
-routes, faithful Baek formalization, bridge, Challenge, and canonical solutions
-were preserved from that baseline. Eleven older uncompiled constants prototypes
-were archived byte-for-byte under `docs/archive/constants/lean-source/`, because
-they imported modules removed by the integrated refactor.
+## Current branch state
 
-The new optional library is `MovingSofaQuantitative`. It is separate from the
-existing checked-library globs, and `defaultTargets` is unchanged. No workflow
-was edited, dispatched, or rerun. All continuation commits use `[skip ci]`.
+The optional quantitative library is `MovingSofaQuantitative`.  It remains
+separate from the existing integrated verified baseline and from the default
+build targets.  The quantitative working manuscript is
+`docs/paper/quantitative-draft.tex`.
 
-## What has proof source
+No Lean compiler, Lake build, CI workflow, axiom audit, Comparator run, or TeX
+build has been executed for the quantitative extension in this pass.
 
-`TranslationQuotient.lean` proves the rank-one uniform-approximation criterion by
-intersection of scalar intervals, then the exact two-point supremum formula and
-attainment of an optimal translation. Zero and sign-changing weights are treated
-explicitly; no division by a zero cosine is hidden in the construction.
+## Headline theorem inventory
 
-`Normalization.lean` separates the old left-support pin, midpoint alignment, and
-free horizontal alignment. It proves the centered endpoint identities, residual
-invariance, support-to-Euclidean-distance adapters for actual caps, and area/deficit
-preservation of the original sofa's midpoint/top translation.
+`MovingSofaQuantitative/Targets.lean` fixes fifteen quantitative statement
+contracts.  All fifteen now have named, unconditional **proof-source
+declarations** registered in `docs/paper/quantitative_manifest.json` and
+`docs/paper/quantitative_theorem_manifest.tsv`.
 
-`CapQuotient.lean` identifies the geometric horizontal-translation distance with
-the scalar quotient and proves attainment. Its operational definition of the
-intrinsic Q coefficient uses the infimum of local uniform coefficients. It proves
-nonemptiness from the integrated pinned certificate, so the infimum is not being
-interpreted through an empty-set convention.
+"source" means only that a theorem body has been written against the intended
+contract.  It does **not** mean that the source elaborates.
 
-`CenteredKernel.lean` proves the six centered scalar profile identities, their
-uniform upper bound, and a generic integral Cauchy--Schwarz estimate from actual
-Gram integrals. It also supplies the rational source-box sec(phi) enclosure.
-**It does not yet instantiate the actual four-residual kernel and covariance
-integrals.** Therefore it is not a completed proof of centered cap coercivity.
+The declarations are:
 
-`CoefficientLowerBound.lean` contains two proofs at exact registered target types:
+1. `centered_energy`
+2. `centered_cap`
+3. `centered_ki`
+4. `centeredNumeric`
+5. `explicit_local_stability`
+6. `sofaCoefficientLower`
+7. `centered_residual_sharpness`
+8. `critical_face_upper`
+9. `full_q_finite`
+10. `full_q_094`
+11. `feasible_critical_lower`
+12. `intrinsic_interval`
+13. `effective_entry`
+14. `effective_angle_entry`
+15. `explicit_cutoff`
 
-- the scalar sec(phi) enclosure;
-- the universal coefficient lower bound 1/sqrt(pi), derived from the integrated
-  puncture theorem including its every-rigid-alignment lower bound.
+The final contract remains the exact original-sofa theorem
 
-All of this is uncompiled proof source. There are no successful Lean/axiom/type
-check results for this extension in this session.
+    0 <= epsilon <= 1 / 10^600
 
-## Frozen statements, not assumed results
+with simultaneous coefficients 2.3, 50, and 3.1.  It has not been weakened to
+an already-local cap statement.
 
-`Targets.lean` defines fifteen proposition contracts. These are definitions of
-what must be proved, not theorem proofs, axioms, or admitted placeholders.
-`docs/paper/quantitative_manifest.json` records two targets as `source` and
-thirteen as `planned`. No target is recorded as kernel-checked.
+## Main quantitative source groups
 
-The mandatory `Targets.ExplicitCutoff` states the simultaneous 2.3/50/3.1 result
-for every original moving sofa with deficit between zero and the exact rational
-1/10^600. It does not assume prior entry into a local neighborhood, does not
-replace the sofa by a maximizing envelope, and contains no existential radius.
+### Centered cap coercivity
 
-The actual-set, cap-energy, and full-Q deficits are distinct in the target types.
-The midpoint and free-translation conclusions are also separate. The angle
-conclusion quantifies over every admissible reduced motion.
+`CenteredCap.lean`, `ComparisonProfile.lean`, and
+`ComparisonPairing.lean` assemble midpoint-aligned reconstruction from the
+actual four residual energies and give the factor `sec(phi)`.  The Ki and
+full-Q consequences are written separately.
 
-## A corrected strictness condition
+### Explicit 2.3 / 50 / 3.1 stability
 
-The earlier operational lower statement, 'for every eta there is a small-deficit
-example with ratio greater than 461/500', does not alone prove that the asymptotic
-coefficient is strictly greater than 461/500. Ratios might converge to that value
-from above.
+The final assembly is `ExplicitStability.lean`.
 
-The registered target therefore requires a FIXED L>461/500, valid at arbitrarily
-small deficits. `uniform_trial_lower_bound` and
-`strict_intrinsic_lower_of_uniform_trial` prove the needed infimum implication.
-The future feasible-family construction must supply that uniform margin; neither
-a finite numerical sample nor pointwise strict inequalities can replace it.
+Its supporting source includes:
 
-## What is not implemented yet
+- `ExplicitTerminal.lean`: complementary terminal deficit budget and 3.1;
+- `ReferenceSector.lean`: uniform 1.53-radian sectors in Gerver;
+- `NormalRecovery.lean`: Euclidean-normal 49/100 hallway witness;
+- `DirectArea.lean`: direct cap-layer/niche-band symmetric-difference estimate;
+- `ReferenceExplicitMargins.lean`: explicit phase-aware roof margins;
+- `MidpointEntry.lean`: adapter from the integrated compactness theorem to
+  midpoint/top normalization.
 
-The following are still substantive proof-source obligations, not merely pending
-compilation of completed final theorems:
+The local theorem still uses an existential entry threshold, intentionally
+separating the sharp coefficients from the later effectivity argument.
 
-1. The concrete centered four-arc reconstruction/Gram identities and final cap
-   energy/Q/Ki estimates.
-2. Uniform sector and Euclidean-normal recovery for the actual reference boundary,
-   the explicit terminal budget, and the combined 2.3/50/3.1 theorem.
-3. The actual convex-cap smoothing family and limiting residual sharpness.
-4. Critical-face reduction, nonzero-slack estimates, a Lean-sound interval/cover
-   verifier and its data, and the continuously feasible lower Q family.
-5. Effective penalized global entry, all numerical local geometry radii, and the
-   final 10^-600 theorem.
-6. The complete baseline-plus-extension paper claim map, proof-preserving TeX
-   restructuring, Appendix G, and the final bridge/Comparator updates.
+### Sharpness
 
-The analytic notes and their Python certificates remain research inputs to these
-proofs. Their prior numerical success is not being reclassified as formalization.
+`CoefficientLowerBound.lean` packages the puncture lower coefficient
+`1/sqrt(pi)`.
 
-## Gate and inventory infrastructure
+`CenteredCapSharpness.lean` constructs the one-sided smoothing family as
+actual convex caps and packages sharpness of `sec(phi)` for cap residual
+energy modulo horizontal translation.
 
-`scripts/paper_claim_inventory.py` follows literal TeX inputs, ignores comments
-and verbatim/listing bodies, preserves locations, groups sublabels with their
-statement, and rejects duplicate labels, cyclic inputs, path escapes, and
-unhandled dynamic/unbraced inputs. It is an inventory, not a proof checker;
-custom macros and unnumbered mathematical prose require manual review.
+### Full-Q coercivity
 
-The existing `docs/paper_routes.tsv` is left intact: it records the Baek source's
-route extraction, not a complete numerical-appendix theorem inventory.
+`FullQCertificate.lean` packages the zero-slack 0.93 theorem, the
+finite-deficit
 
-`scripts/quantitative_gate.py` separates three actions:
+    0.93 sqrt(Delta) + 8 Delta^(2/3)
 
-    python scripts/quantitative_gate.py --inventory
-    python scripts/quantitative_gate.py --emit /tmp/QuantitativeStatements.lean
-    python scripts/quantitative_gate.py --verify
+theorem, and the 0.94 corollary.
 
-Inventory and emission never create a verification receipt. Full verification
-refuses planned targets. On a Lean-enabled machine it checks pinned dependency
-revisions, builds the optional library, and runs a generated Lean audit that
-compares each proof's exact type with its target and permits only the project's
-standard axioms. It checks all declarations owned by the quantitative library,
-including intermediates, and binds a successful receipt to source hashes.
+The analytic chain includes the translation quotient, critical-face reduction,
+actual endpoint-slack estimates, corrected rank-two Gram geometry, and a closed
+Boolean interval-model reduction.  The Boolean reduction has **not** been run.
 
-`--verify --allow-partial` is explicitly a development check: a successful receipt
-still lists all pending targets and cannot be called completion of the appendix.
-No such receipt exists yet. Even the full extension gate is not a replacement
-for the manual full-paper correspondence and the existing route/Comparator audits.
+The lower family is packaged in `FeasibleCriticalLower.lean`.  Its support
+construction uses the committed rational Hermite data, actual active-arc
+auxiliary convex bodies, exact zero dual slack, exact quadratic deficit, and a
+closed trial-energy certificate.  The fixed margin is
 
-## Tests actually executed
+    L = 9221 / 10000 > 461 / 500.
 
-The committed Python suite passed 24 regression tests. It covers TeX fixtures,
-invalid or misleading manifest states, refusal to drop or weaken the cutoff,
-missing toolchains producing no receipt, and exact rational verification of the
-finite quotient formula in 702 three-point examples with zero/negative weights.
+The lower energy Boolean reduction has also **not** been run.
 
-Run:
+Together the source states
 
-    python -m unittest discover -s scripts/tests -p test_quantitative_gate.py -v
+    461/500 < C_Q^* <= 93/100.
 
-`formalization-python-tests.json` records the exact tested source hashes. All
-three tested Git blob hashes match their committed files. These tests do NOT
-check Lean elaboration, the generated Lean audit, geometric arguments, the full
-repository claim map, or any new numerical stability theorem.
+### Effective entry and explicit cutoff
 
-## Execution blocker and next acceptance step
+The effectivity chain is now written rather than left as a roadmap:
 
-The current container has no Lean or Lake executable and no installed pinned
-Mathlib environment. Direct network installation was unavailable. Fetching an
-existing upstream Lean artifact, without starting a workflow, was rejected by
-the connector's size limit. A remote execution plugin was suggested, but no
-connected Lean-enabled machine was available during this work.
+- `EffectiveRightAngle.lean`: integral-penalized right-angle regularization;
+- `CoarseAngleCertificate.lean`: exact rational coarse terminal-angle search;
+- `EffectiveAngleEntry.lean`: angle entry `500 epsilon^(1/6)`;
+- `PartialAngleCompletion.lean`: partial-to-full cap comparison with the
+  `72 alpha`, `144 alpha`, and `16 alpha` budgets;
+- `EffectiveRecovery.lean`: explicit roof/erosion/interior-ball recovery;
+- `EffectiveEntry.lean`: global
+  `3,000,000 epsilon^(1/12)` entry theorem;
+- `ExplicitReferenceScales.lean`: the fixed `10^-40`, `10^-20`,
+  `10^-10`, `10^-20`, and roof-clipping scales;
+- `ExplicitCutoff.lean`: final arbitrary-sofa `10^-600` theorem.
 
-Accordingly no Lean, Lake, CI, axiom audit, Comparator run, or TeX build was
-performed, and no complete-paper or kernel verification is claimed. The next
-acceptance step is to elaborate these foundations in the pinned environment,
-repair any errors, and then implement the six remaining groups above. The paper
-continues to state its integrated baseline results until the stronger theorems
-actually pass their gates. The requested cutoff has not been dropped.
+No existential local radius remains in the source statement or the final
+activation chain of `explicit_cutoff`.
+
+## Paper organization
+
+The working paper now implements the planned organization:
+
+- short quantitative Stability section: `q10-stability-overview.tex`;
+- short unified-certificate section: `q11-certificate-overview.tex`;
+- updated quantitative questions: `q12-questions.tex`;
+- Appendix F reuses the integrated detailed stability/coercive proof;
+- Appendix G is `a6-quantitative.tex`.
+
+Appendix G contains the final `10^-600` proposition, but explicitly labels all
+new quantitative work as **uncompiled proof source** rather than verified Lean.
+
+The default integrated manuscript is not silently reclassified as containing
+verified versions of these stronger numerical results.
+
+## Certificate trust boundary
+
+Python receipts remain development/reproducibility inputs only.
+
+The source now contains proof-producing interval infrastructure and closed
+Boolean reductions for the main finite certificates.  The intended trust model
+is:
+
+1. untrusted data or subdivision choices may be generated externally;
+2. Lean checks interval soundness, box coverage, analytic-model identification,
+   and the final rational inequality;
+3. only after those reductions actually run may the numerical theorem be called
+   kernel checked.
+
+Under the current no-compilation instruction, step 3 has deliberately not
+occurred.
+
+## What remains after this source-completion pass
+
+No quantitative headline theorem is intentionally left as a mere target or
+conditional transfer.
+
+The remaining work is **verification and repair**, not planned mathematics:
+
+- run Lean in the pinned environment;
+- repair syntax, identifiers, theorem signatures, tactic failures, or hidden
+  dependency mistakes exposed by elaboration;
+- execute the two closed finite reductions;
+- run exact-type and axiom audits;
+- run the paper/Challenge/Comparator correspondence audits;
+- build the TeX working copy;
+- only then promote the quantitative statements from "source" to
+  "kernel-checked".
+
+Because none of those steps has run, this file must not be cited as evidence
+that the new Lean source is accepted by Lean.
