@@ -893,6 +893,43 @@ theorem gerver_niche_envelope {P : GerverParams}
     gerver_niche_eq_envUnderStrict hP (romik_bounds hP hbox)]
   rfl
 
+/-- Every point of Gerver's lower envelope belongs to the sofa.  The
+envelope is in the closure of the niche, hence in the cap.  It is not in
+the open niche: its strictly monotone horizontal graph has only one point
+at any abscissa.  This is the missing boundary inclusion in the normal
+and sector recovery chains. -/
+theorem gerver_envelope_subset_shape {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    gerverEnvelope P ⊆ gerverSofa P := by
+  have hB := romik_bounds hP hbox
+  have henv := gn_envHyp hP hB
+  obtain ⟨LΓ,hLΓ,hSlope⟩ := envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hnc : envNiche P.path = niche P.cap (π/2) := by
+    calc
+      envNiche P.path =
+          niche (capOf (gerverSofa P) (π/2)) (π/2) :=
+        (gn_niche_eq hP hB).symm
+      _ = niche P.cap (π/2) := by
+        rw [(gs_monotone_K hP hB).2,gerver_cap_explicit hP hbox]
+  intro q hq
+  have hclos : q ∈ closure (envNiche P.path) := by
+    have hmem := env_mem_closure henv
+    rcases hq with (⟨t,ht,rfl⟩ | ⟨t,ht,rfl⟩) | ⟨t,ht,rfl⟩
+    · exact hmem.2.1 t ht
+    · exact hmem.1 t ht
+    · exact hmem.2.2 t ht
+  have hcap : q∈P.cap :=
+    gm_closure_niche_subset_cap hP hbox (by rwa [←hnc])
+  have hnot : q∉niche P.cap (π/2) := by
+    rw [gerver_niche_envelope hP hbox]
+    rintro ⟨_,z,hz,hzx,hlt⟩
+    have heq : z=q := eq_of_same_abscissa hSlope hz hq hzx
+    rw [heq] at hlt
+    exact lt_irrefl _ hlt
+  rw [←gerver_shape_eq hP hbox]
+  exact ⟨hcap,hnot⟩
+
 /-- Two descriptions of the same strict subgraph force the graph height at
 each point of the envelope. The vertical-slope condition supplies uniqueness
 of the point of the envelope at the given horizontal coordinate. -/
