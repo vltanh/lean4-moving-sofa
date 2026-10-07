@@ -327,6 +327,19 @@ theorem reference_inner_slacks_zero {P : GerverParams}
   have hs := innerSlack_down (K:=P.cap) (t:=t) (d:=0) hc (P.path t)
   simpa using hs
 
+/-- On the whole right-angle turn, the two Gerver hallway slacks at
+angle s are simply the projections of q-x(s). This is the exact geometric
+identity from the integrated inner-corner theorem, with no support derivative
+and no differentiability assumption on a competitor. -/
+theorem gerver_slack_eq_path_projection {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {s : ℝ} (hs : s∈Icc (0:ℝ) (π/2)) (q : Point) :
+    innerSlackU P.cap s q=dot (q-P.path s) (uvec s) ∧
+      innerSlackV P.cap s q=dot (q-P.path s) (vvec s) := by
+  have hc:=gm_innerCorner hP hbox hs
+  have he:=innerSlack_down (K:=P.cap) (t:=s) (d:=0) hc q
+  simpa using he
+
 /-- An exact algebraic decomposition, requiring no differentiability of the
 competitor. The geometric derivative coefficients enter only when the
 remainder is subsequently estimated. -/
