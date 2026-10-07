@@ -138,6 +138,24 @@ No Lean, Lake, CI, axiom audit, Comparator, TeX build, or Lean
     eligible numerical theorem premises, nor required proof generators.
     See `37-lean-only-certification-contract.md`.
 
+14. **Core roof FTC repaired (uncompiled).** An earlier proof applied
+    `integral_mono_on` to an inequality at just the integration endpoint,
+    and treated continuity of the *derivative* as a stand-in for a
+    differentiability/FTC theorem. The proof source now contains:
+    - `corePathSlackU/V`, written using Gerver's actual path instead of
+      an unjustified derivative of its abstract support function;
+    - exact depth derivatives `corePathRateU/V`, including the moving
+      frame term;
+    - `corePathSlack_eq_innerSlack`, using the integrated corner
+      support identities on the reference turning interval;
+    - `core_slack_of_uniform_derivative_bound`, which assumes derivative
+      bounds at **every** depth, continuity/integrability, and a genuine
+      HasDerivAt FTC hypothesis;
+    - `uniform_core_slack_from_C1` wired through these lemmas.
+    This removes the invalid pointwise-integral inference, but the
+    lengthy C1 composition/source proof and `fun_prop` obligations
+    remain **uncompiled and not yet kernel verified**.
+
 The full mathematical evidence and negative controls remain in the numbered
 notes under \`docs/stability/constants/\`.
 
