@@ -4,7 +4,7 @@
   "coverage": "Quantitative headline statements. Baseline paper lemmas and unnumbered prose additionally require the full-paper inventory and manual correspondence review.",
   "baseline_commit": "859ba93f8bb73ccc4378118a7b47415827710c2f",
   "statement_module": "MovingSofaQuantitative.Targets",
-  "policy": "Status records source progress only. source means a named unconditional proof-source declaration intended to inhabit the registered target type. No quantitative source in this branch has been compiled, elaborated, axiom-audited, or kernel checked under the current user instruction; source status is therefore not verification.",
+  "policy": "UNCOMPILED SOURCE ONLY. An assembled theorem body is not evidence that its mathematical dependencies exist or that Lean accepts it. 'source_draft' means a body is present with no currently identified project-owned blocker; 'certificate_unexecuted' means finite checking and soundness still require verification; 'blocked_source' means named mathematical/source bridges remain unresolved. These statuses are not kernel verification.",
   "required_ids": [
     "centered-energy",
     "centered-cap",
@@ -28,7 +28,7 @@
       "target": "MovingSofaQuantitative.Targets.CenteredEnergy",
       "declaration": "MovingSofaQuantitative.centered_energy",
       "module": "MovingSofaQuantitative.CenteredCap",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "thm:quant-centered-energy",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment of two actual caps",
@@ -40,7 +40,7 @@
       "target": "MovingSofaQuantitative.Targets.CenteredCap",
       "declaration": "MovingSofaQuantitative.centered_cap",
       "module": "MovingSofaQuantitative.CenteredCap",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "thm:quant-centered-cap",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
@@ -52,7 +52,7 @@
       "target": "MovingSofaQuantitative.Targets.CenteredKi",
       "declaration": "MovingSofaQuantitative.centered_ki",
       "module": "MovingSofaQuantitative.CenteredCap",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "cor:quant-centered-ki",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
@@ -64,7 +64,7 @@
       "target": "MovingSofaQuantitative.Targets.CenteredNumeric",
       "declaration": "MovingSofaQuantitative.centeredNumeric",
       "module": "MovingSofaQuantitative.CoefficientLowerBound",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "cor:quant-centered-numeric",
       "placement": "G.1",
       "normalization": "Scalar coefficient",
@@ -76,19 +76,19 @@
       "target": "MovingSofaQuantitative.Targets.ExplicitLocalStability",
       "declaration": "MovingSofaQuantitative.explicit_local_stability",
       "module": "MovingSofaQuantitative.ExplicitStability",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "thm:quant-explicit-stability",
       "placement": "Main 10 / G.2 proof",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "M-area(S)",
-      "remaining": "Complementary terminal budget, 1.53-sector recovery, 49/100 normal recovery and direct area coefficient 50 are assembled with qualitative compactness entry. Uncompiled."
+      "remaining": "Assembled statement, but the fixed 1.53-sector proof uses a coordinate-to-angle phase split not justified by any boundary parametrization; normal/roof/terminal bridge interfaces also need proof-source audit. NOT SOURCE-COMPLETE."
     },
     {
       "id": "sofa-coefficient-lower",
       "target": "MovingSofaQuantitative.Targets.SofaCoefficientLower",
       "declaration": "MovingSofaQuantitative.sofaCoefficientLower",
       "module": "MovingSofaQuantitative.CoefficientLowerBound",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "cor:quant-sofa-lower",
       "placement": "G.3",
       "normalization": "All orientation-preserving rigid alignments",
@@ -100,7 +100,7 @@
       "target": "MovingSofaQuantitative.Targets.CenteredResidualSharpness",
       "declaration": "MovingSofaQuantitative.centered_residual_sharpness",
       "module": "MovingSofaQuantitative.CenteredCapSharpness",
-      "status": "source",
+      "status": "source_draft",
       "paper_label": "thm:quant-centered-sharpness",
       "placement": "G.3",
       "normalization": "Best horizontal translation; actual caps arbitrarily near Gerver",
@@ -112,96 +112,109 @@
       "target": "MovingSofaQuantitative.Targets.CriticalFaceUpper",
       "declaration": "MovingSofaQuantitative.critical_face_upper",
       "module": "MovingSofaQuantitative.FullQCertificate",
-      "status": "source",
+      "status": "certificate_unexecuted",
       "paper_label": "thm:quant-critical-face",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "M-Q with zero dual slack",
-      "remaining": "Closed Boolean operator-certificate source plus analytic transfer. The reduction is deliberately unexecuted. Uncompiled."
+      "remaining": "Closed Boolean operator-certificate source plus analytic transfer. The reduction is deliberately unexecuted. Uncompiled. The closed Boolean certificate is unexecuted and its analytic-model/cover bridge has not been independently checked."
     },
     {
       "id": "full-q-finite",
       "target": "MovingSofaQuantitative.Targets.FullQFinite",
       "declaration": "MovingSofaQuantitative.full_q_finite",
       "module": "MovingSofaQuantitative.FullQCertificate",
-      "status": "source",
+      "status": "certificate_unexecuted",
       "paper_label": "thm:quant-full-q",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "0<M-Q<=1/512",
-      "remaining": "Endpoint wall-slack estimate and operator transfer are assembled. Closed check unexecuted; source uncompiled."
+      "remaining": "Endpoint wall-slack estimate and operator transfer are assembled. Closed check unexecuted; source uncompiled. The closed Boolean certificate is unexecuted and its analytic-model/cover bridge has not been independently checked."
     },
     {
       "id": "full-q-094",
       "target": "MovingSofaQuantitative.Targets.FullQ094",
       "declaration": "MovingSofaQuantitative.full_q_094",
       "module": "MovingSofaQuantitative.FullQCertificate",
-      "status": "source",
+      "status": "certificate_unexecuted",
       "paper_label": "cor:quant-full-q-094",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "0<=M-Q<=10^-18",
-      "remaining": "Scalar consequence including zero deficit. Uncompiled."
+      "remaining": "Scalar consequence including zero deficit. Uncompiled. The closed Boolean certificate is unexecuted and its analytic-model/cover bridge has not been independently checked."
     },
     {
       "id": "feasible-critical-lower",
       "target": "MovingSofaQuantitative.Targets.FeasibleCriticalLower",
       "declaration": "MovingSofaQuantitative.feasible_critical_lower",
       "module": "MovingSofaQuantitative.FeasibleCriticalLower",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "thm:quant-critical-lower",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "Actual feasible zero-slack triples at arbitrarily small positive M-Q",
-      "remaining": "Concrete Hermite cap, actual active-arc auxiliary bodies, exact zero slack, quadratic deficit and closed energy-certificate source give fixed L=9221/10000. Closed check unexecuted; source uncompiled."
+      "remaining": "The concrete Hermite family exists in source. The energy checker previously double-counted integration intervals and incorrectly used a cell integral bound pointwise; these were corrected. The ordered piece-chain integral bridge still requires a complete proof and the closed Boolean reduction is unexecuted. NOT SOURCE-COMPLETE."
     },
     {
       "id": "intrinsic-interval",
       "target": "MovingSofaQuantitative.Targets.IntrinsicInterval",
       "declaration": "MovingSofaQuantitative.intrinsic_interval",
       "module": "MovingSofaQuantitative.FeasibleCriticalLower",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "cor:quant-intrinsic-interval",
       "placement": "G.4",
       "normalization": "Infimum of local uniform coefficients",
       "deficit": "Positive M-Q tending to zero",
-      "remaining": "Combines full-Q upper theorem with fixed-margin feasible lower family. Uncompiled."
+      "remaining": "Corrected strict lower-margin quantifier, but depends on the unresolved feasible critical-family energy certificate. NOT SOURCE-COMPLETE."
     },
     {
       "id": "effective-entry",
       "target": "MovingSofaQuantitative.Targets.EffectiveEntry",
       "declaration": "MovingSofaQuantitative.effective_entry",
       "module": "MovingSofaQuantitative.EffectiveEntry",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "prop:quant-effective-entry",
       "placement": "G.5 prerequisite",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "0<=M-area(S)<=10^-144",
-      "remaining": "Partial-to-full cap completion, effective angle entry, right-angle penalized regularization and explicit actual-set recovery assembled. Uncompiled."
+      "remaining": "Assembled global-entry theorem; depends on effective angle, penalized right-angle curvature, and original-sofa recovery where several quantitative helper lemmas are not yet supplied. NOT SOURCE-COMPLETE."
     },
     {
       "id": "effective-angle-entry",
       "target": "MovingSofaQuantitative.Targets.EffectiveAngleEntry",
       "declaration": "MovingSofaQuantitative.effective_angle_entry",
       "module": "MovingSofaQuantitative.EffectiveAngleEntry",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "prop:quant-effective-angle",
       "placement": "G.5 prerequisite",
       "normalization": "Every admissible reduced motion of the original sofa",
       "deficit": "0<M-area(S)<=10^-30",
-      "remaining": "Internal exact coarse-angle certificate, partial-angle penalized cap, approximate pinned bounds, remaining-angle extension and right-angle contradiction assembled. Uncompiled."
+      "remaining": "Assembled proof with undeclared project helpers in partial-angle penalization, pinned variations, and geometric extension; coarse-angle search coverage also needs proof. NOT SOURCE-COMPLETE."
     },
     {
       "id": "explicit-cutoff",
       "target": "MovingSofaQuantitative.Targets.ExplicitCutoff",
       "declaration": "MovingSofaQuantitative.explicit_cutoff",
       "module": "MovingSofaQuantitative.ExplicitCutoff",
-      "status": "source",
+      "status": "blocked_source",
       "paper_label": "prop:quant-explicit-cutoff",
       "placement": "Final proposition of Appendix G",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "0<=M-area(S)<=exact rational 1/10^600",
-      "remaining": "Effective entry activates fixed 10^-40/10^-20 local certificates; explicit normal, sector, direct-area and terminal estimates yield simultaneous 2.3/50/3.1 conclusions. No existential local radius remains. Uncompiled."
+      "remaining": "The exact 1/10^600 original-sofa target and final activation arithmetic are in source, but the proof transitively depends on open reference sectors, normal/terminal scales, effective entry, and certificate bridges. NOT SOURCE-COMPLETE."
     }
-  ]
+  ],
+  "audit": {
+    "checked_branch": "research/global-stability-constants",
+    "note": "Manuscript statements remain working-draft claims, not formalized results. Full project theorem inventory (including baseline proved=0 labels) still requires separate exhaustive paper audit.",
+    "mandatory_cutoff": "1/10^600",
+    "lean_or_ci_run": false,
+    "known_blockers": [
+      "ReferenceSector: phase split on point x-coordinate does not establish boundary tangent chart",
+      "TrialEnergyCertificate: finite piece cover / summation soundness bridge incomplete; arithmetic reduction not run",
+      "EffectiveRegularizationSupport: penalized limit/curvature/arm iteration interfaces unresolved",
+      "EffectiveAngleEntry and CoarseAngleCertificate: geometric and search-soundness interfaces unresolved",
+      "ExplicitReferenceScales and NormalRecovery: quantitative reference margins and normal recovery interfaces unresolved"
+    ]
+  }
 }
