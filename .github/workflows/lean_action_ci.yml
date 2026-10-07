@@ -33,7 +33,7 @@ jobs:
         run: lake env lean scripts/AuditMaximizerRoute.lean
       - name: Check that the coercive route uses neither Baek's Theorem 1.1.1 nor the first proof of uniqueness
         run: lake env lean scripts/AuditCoerciveRoute.lean
-      - name: Check the Challenge's copy of the shared definitions
+      - name: Check the Challenges' copies of the shared definitions
         run: python3 scripts/sync_challenge_defs.py --check
       - name: Check that the documentation's links to the code are current
         run: python3 scripts/linkify_docs.py --check

@@ -15,10 +15,12 @@ Throughout, `P` is the solution of Romik's system in the box (`P.IsSolution`, `P
 Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and areas are Baek's
 ([definitions](definitions.md)).
 
-[`Challenge.lean`](../Challenge.lean) restates the three main theorems in Mathlib's vocabulary, as
-[`Baek.gerver_sofa_stable`](../Challenge.lean#L405), [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L415) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L425)
-([Results](results.md#stability)); below are the library's forms, from which [`Solution.lean`](../Solution.lean)
-proves them.
+The statements of record of the three main theorems are in the Challenge of the certificate entry, at the root of
+the repository, [`Challenge.lean`](../Challenge.lean), in Mathlib's vocabulary: [`Baek.gerver_sofa_stable`](../Challenge.lean#L697),
+[`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L707) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L717) ([Results](results.md#stability)). Baek's entry,
+[`baek/Challenge.lean`](../baek/Challenge.lean), does not state them. Below are the library's forms, from which [`SolutionCoercive.lean`](../SolutionCoercive.lean)
+proves them, the first two through [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38);
+[`Solution.lean`](../Solution.lean) restates them under the Challenge's names for Comparator.
 
 ## The theorems
 
@@ -120,8 +122,9 @@ the proof of stability uses. Note 01 of the archive argues that `2 sec φ` is th
 space of residuals; that is not proved in Lean, and no claim is made that it is the best constant
 over feasible caps or after optimizing the translation. The proof of the stability theorem takes the
 cap estimate, with the coefficient `2 sec φ`, from the coercive certificate
-[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) ([the coercive route](coercive.md)); the constants of the theorem are existential, so
-the coefficient does not appear in its statement.
+[`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) ([the coercive route](coercive.md)), which the certificate entry's Challenge states as
+[`Certificate.coercive_certificate`](../Challenge.lean#L644); the constants of the theorem are existential, so the coefficient does not appear
+in its statement.
 
 ## The proof
 

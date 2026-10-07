@@ -1,0 +1,503 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+# The Palomar entry PALOMAR-2026-10-02-000008, whose versions 1 to 4 were registered from the root of
+# the repository: the Challenge baek/Challenge.lean, the Solution baek/Solution.lean, the Comparator
+# configuration baek/comparator.json. The entry at the root (Challenge.lean, Solution.lean,
+# comparator.json, formalization.yaml) is the coercive certificate.
+
+project:
+  name: "Optimality (Baek 2024) and uniqueness of Gerver's sofa, formalized in Lean 4"
+  # The description is shown as plain text that keeps line breaks. Its paragraphs are separated by
+  # two empty lines, which this folded block turns into one empty line.
+  description: >-
+    The moving sofa problem asks for the largest area of a planar shape that can be moved around the
+    right-angled corner of a hallway of unit width. This repository formalizes in Lean 4, with
+    Mathlib, Jineon Baek's proof (arXiv:2411.19826) that Gerver's sofa, of area 2.2195..., is optimal:
+    the numbered results of the paper (the few that the proofs do not need are listed in REPORT.md,
+    Section 9), the results it cites (Schneider's area formula for convex
+    bodies, and the existence and uniqueness of the solution of Romik's equations, which define
+    Gerver's sofa), and the structure of Gerver's sofa (Theorem 8.4.1), which the paper states without
+    proof.
+
+
+    It also proves that Gerver's sofa is the only moving sofa of maximum area up to rigid motions: a
+    rotation followed by a translation maps every moving sofa of that area onto Gerver's sofa. Baek's
+    paper does not prove this.
+
+
+    It proves that Gerver's sofa is stable, and it derives optimality, uniqueness and stability
+    from one estimate for Baek's upper bound, a coercive certificate; that work is the repository's
+    other Palomar entry, at its root (formalization.yaml), whose Challenge states it.
+
+
+    Finally, it bridges Baek's definitions and those of Google DeepMind's formal-conjectures: the two
+    notions of moving sofa agree, the sofa constant of formal-conjectures is the supremum of the areas
+    of Baek's moving sofas, and the two definitions of Gerver's sofa, from Gerver's four constants and
+    from Romik's equations, give the same set. Gerver's four constants are proved unique by elementary
+    inequalities. Formal-conjectures' statements follow, including the uniqueness, which it lists as
+    open.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.MG", "math.OC"]
+  msc2020: ["49Q10", "52A10", "52A38", "52A40", "68V20"]
+
+sources:
+  - title: "Optimality of Gerver's Sofa"
+    authors:
+      - "Jineon Baek"
+    id: "arXiv:2411.19826v1"
+    type: paper
+    location: "https://arxiv.org/abs/2411.19826v1"
+    relationship: formalizes
+    note: >-
+      The formalization follows version 1 of the preprint (the only version), audited against its
+      LaTeX source. Statements that are false or meaningless as printed are formalized in their
+      intended form; REPORT.md (Sections 3 and 6) lists every correction.
+    author_endorsement: not-contacted
+  - title: "Uniqueness of Gerver's sofa: complete paper argument"
+    id: "docs/archive/uniqueness/20-complete-paper-proof.md"
+    type: other
+    location: "https://github.com/vltanh/lean4-moving-sofa/blob/02af5017769d67982a217596b4ad97a10f4f180d/docs/uniqueness/20-complete-paper-proof.md"
+    relationship: formalizes
+    note: >-
+      An informal proof that every moving sofa with the area of Gerver's sofa is congruent to it,
+      written by ChatGPT Pro 6 (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
+      before it in docs/archive/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
+      does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
+      its six propositions; docs/proof/ (Chapters 11 and 12) gives the proof with the Lean form of
+      each step and the places where the formal proof takes a different route.
+    author_endorsement: n/a
+  - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
+    authors:
+      - "Dan Romik"
+    id: "doi:10.1080/10586458.2016.1270858"
+    type: paper
+    location: "Experimental Mathematics 27 (2018), no. 3, 316-330; arXiv:1606.08111"
+    relationship: background
+    note: >-
+      Gerver's sofa is defined, in the paper and in the Challenge, from Romik's rotation path,
+      Equations (25)-(44) and (8). Romik solves the system numerically and asserts without proof that
+      the solution is unique. The existence of the solution, and its uniqueness in the box
+      phi in [0.039, 0.04], theta in [0.68, 0.69], are proved here (MovingSofaOptimality/External/Romik.lean).
+    author_endorsement: not-contacted
+  - title: "On Moving a Sofa around a Corner"
+    authors:
+      - "Joseph L. Gerver"
+    id: "doi:10.1007/BF02414066"
+    type: paper
+    location: "Geometriae Dedicata 42 (1992), no. 3, 267-283"
+    relationship: background
+    note: >-
+      Constructs the sofa and conjectures its optimality. The paper quotes Gerver's Theorem 1 for
+      context and cites Gerver's Theorem 2 in the proof of Theorem 6.1.2, which is proved here from
+      Romik's equations instead (REPORT.md, E12).
+    author_endorsement: not-contacted
+  - title: "Convex Bodies: The Brunn-Minkowski Theory (2nd edition)"
+    authors:
+      - "Rolf Schneider"
+    id: "doi:10.1017/CBO9781139003858"
+    type: book
+    location: "Encyclopedia of Mathematics and Its Applications 151, Cambridge University Press, 2013"
+    relationship: background
+    note: >-
+      The paper cites several facts from this book. The area formula |K| = (1/2) int h_K d sigma_K
+      (Remark 5.1.2, Eq. (5.19)) is proved in MovingSofaOptimality/External/AreaFormula.lean. The other cited
+      facts, such as the weak convergence of surface area measures (the paper's Theorem 4.1.3), are
+      proved where they are used or taken from Mathlib (REPORT.md, Section 2).
+    author_endorsement: n/a
+  - title: "Problem 66-11, Moving Furniture Through a Hallway"
+    authors:
+      - "Leo Moser"
+    type: paper
+    location: "SIAM Review 8 (1966), no. 3, 381"
+    relationship: background
+    note: "The origin of the moving sofa problem; context only."
+    author_endorsement: n/a
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean"
+    relationship: other
+    note: >-
+      Google DeepMind's formal-conjectures states the optimality (solved) and the uniqueness
+      (category research open, volume_eq_sofaConstant_iff_congruent_gerversSofa) with different
+      definitions: moving sofas in EuclideanSpace R (Fin 2) moved from the identity, the optimal area
+      as a supremum, and Gerver's sofa from Gerver's four constants. The Challenge restates its
+      definitions and its four statements in the namespace FormalConjectures.MovingSofa, states three
+      theorems relating its definitions to Baek's (namespace Bridge, proved in MovingSofaBridge/), and
+      derives the four statements from Baek's theorems through them.
+  - id: "https://github.com/deancureton/MovingSofa"
+    relationship: other
+    note: >-
+      An earlier Lean 4 formalization of the same paper, written by AI coding agents directed by
+      Dean Cureton. It proves the formal-conjectures statement sofaConstant = volume gerversSofa,
+      with Gerver's description of the sofa and vendored libraries. docs/prior-work.md compares the
+      two.
+  - id: "https://github.com/RuifengCao/sofa-formal"
+    relationship: other
+    note: >-
+      An earlier Lean 4 formalization of the same paper. It proves the formal-conjectures statement
+      sofaConstant = volume gerversSofa, with Gerver's description of the sofa. docs/prior-work.md
+      compares the two.
+
+status:
+  scope: >-
+    Formalized: the numbered results of Chapters 1-8 of the paper, except those listed below, the
+    main theorem (Theorem 1.1.1),
+    and the existence and uniqueness of Gerver's parameters in the stated box. Also formalized: the
+    results from the literature that the proofs use (Schneider's area formula, the solution of
+    Romik's system, the weak convergence of surface area measures, Blaschke selection via Mathlib),
+    and Theorem 8.4.1, which the paper states without proof. The paper's statements that are false
+    or meaningless as printed (REPORT.md, E1, E3, E6, E7, E9, E11, E13, E18, E21, E23, E25, E26)
+    are formalized in their intended form, and Theorem 3.1.2 gets the boundedness hypothesis that
+    the paper leaves out (REPORT.md, Section 4); no other result is weakened. Not formalized, because the
+    formalization does not use them: the Jordan curve theorem and the area enclosed by a Jordan curve
+    (Theorems 7.2.1, 7.2.3, Proposition 7.2.7), whose uses are replaced by direct area computations;
+    Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
+    surface area measure is defined directly and the properties the paper uses are proved; the
+    quotation of Gerver's Theorem 1 (Theorem 1.3.1), whose parts that the paper uses it reproves in
+    Chapter 3; and the remarks (except Remark 2.5.2) and figures. Also formalized: the uniqueness of the optimal sofa up to rigid
+    motions (MovingSofaUniqueness/), with the theorem and the six propositions of
+    docs/archive/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
+    estimate of note 17, which the theorem does not use. The repository also proves the stability of
+    Gerver's sofa and derives optimality, uniqueness and stability from one coercive certificate; the
+    Palomar entry at its root (formalization.yaml) states these results. Also
+    formalized: the bridge between
+    formal-conjectures' definitions and Baek's (MovingSofaBridge/): the two notions of moving sofa,
+    the two optimal areas and the two Gerver's sofas agree, and Gerver's four constants are unique on
+    their whole domain; formal-conjectures' four statements follow.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: agent
+      models: ["Claude Opus 5.5 (claude-opus-5-5)"]
+      framework: "Claude Code (Anthropic)"
+      tool_setup: >-
+        Baek's paper: Claude Code 2.1.285, with one coordinating agent and 19 sub-agents of the same
+        model (at most 13 running at once), each sub-agent owning a group of files. The work followed
+        the formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
+        cbdedac): statements first, then proofs, verification, cleanup and the audit. The agents had
+        a Lean 4 and Lake toolchain, a local Mathlib checkout, Python with NumPy, SciPy, SymPy and
+        mpmath for the numerics, and the paper's arXiv LaTeX source. Two Lean files of interval
+        arithmetic are generated by Python scripts kept in the repository (scripts/romik,
+        scripts/area). Uniqueness: Claude Code 2.1.287 with the same skill (version 1.3.0) compiled
+        ChatGPT Pro's Lean draft, replaced its 54 failing proofs by sorry, and had them proved again
+        by 8 sub-agents, starting from the draft's proofs; a ninth sub-agent reviewed the statements
+        against the informal proof. The connection with formal-conjectures: the same session ported
+        ChatGPT Pro 6's draft, and 7 sub-agents proved its 78 failing proofs again; one more checked
+        the analytic argument numerically and the definitions against formal-conjectures, and one
+        cleaned up. Consolidation: a later Claude Code 2.1.287 session merged the uniqueness and
+        bridge libraries from 75 files into 12 modules, removed the declarations that no final
+        theorem uses, made the bridge independent of the optimality and uniqueness theorems, and
+        restated it in the Challenge; one sub-agent rewrote the documentation of the uniqueness
+        modules. Simplification: a later Claude Code 2.1.287 session, with one coordinating agent and
+        26 sub-agents of the same model (at most 18 running at once), merged about 190 duplicated
+        helper lemmas into the Basic modules, simplified every file, split the file of Baek's §3.4
+        into four modules and unified the interval arithmetic of the two generated files (the three
+        libraries went from 50,304 to 45,783 lines; no statement of the Challenge or of a numbered
+        result changed), fixed the axiom audit's list of imports, audited the illustrated text
+        against the Lean statements, and checked that the proofs still follow Baek's arguments
+        (REPORT.md now records every departure, in section 7). Following Baek's proofs: the same
+        session, with version 1.4.0 of the skill (commit e37a7ea) and 21 sub-agents of the same model
+        (at most 6 running at once), added a route check (scripts/route_check.py, in CI) that
+        compares the numbered results each Lean proof uses with those Baek's proof cites, extracted
+        from the LaTeX source; three sub-agents reviewed the differences against the LaTeX source by
+        chapter and fixed about thirty proofs, nine rewrote about 25 proofs along Baek's arguments,
+        and three compared every changed proof with the LaTeX source. Three statements changed to
+        match the paper (Theorem 8.5.2 regained its hypothesis b < a + pi; Lemma 6.2.4 lost an unused
+        hypothesis; Theorem 8.4.3 (2) gained the curve-area equalities of "as oriented curves").
+        What's next: the same session, with version 2.1.0 of the skill (commit 397f71c) and 3
+        sub-agents, one at a time, wrote the report's What's next section from a literature search,
+        moved the run log to CREDITS.md, added to the audit the twelve findings of another
+        formalization's notes that it had missed, and restored two statements (Lemma 7.1.6, Theorem
+        8.4.1 (4)) that were weaker than the paper's. Stability: Claude Code 2.1.289, with version
+        2.1.0 of the skill, compiled ChatGPT Pro 6's 85 Lean modules (pull request #8): every
+        statement was made to elaborate, the 123 proofs that failed were proved again by 16
+        sub-agents starting from the draft's proofs, and a seventeenth compared every repaired proof
+        with the draft's. Twenty lemmas were false as compiled, because Lean 4 leaves out of a
+        statement the section variables it does not mention; their hypotheses are now included.
+        The Challenge then gained the three stability theorems. The coercive route: the same session
+        compiled ChatGPT Pro 6's Lean modules of pull request #9 (one proof failed), moved the
+        stability proof onto the route, stated the certificate and the theorem that gives the three
+        results together, extended the second solution to the fifteen statements, and rewrote and
+        ran its audit (scripts/AuditCoerciveRoute.lean, in CI). Simplifying the new libraries: the
+        same session gave the two new proofs of optimality one shared assembly, merged the 86 files
+        of the stability library into eleven modules and removed the declarations that no theorem
+        uses; 8 sub-agents (at most 8 running at once), each on its own copy of the build, then
+        rewrote the modules, keeping the name and statement of every declaration used elsewhere.
+        The stability library went from 12,550 to 7,585 lines; Baek's library, the bridge, the
+        Challenge and the proofs of Solution.lean did not change.
+      cost:
+        wall_time: >-
+          Baek's paper: about 3 hours 50 minutes of elapsed time to the audited formalization
+          (2026-10-01 22:38 to 2026-10-02 02:28, US Central Time), with about 18 hours of sub-agent
+          working time; the Palomar packaging came afterwards. Uniqueness: about 1 hour of elapsed
+          time from ChatGPT Pro's draft to the documented proof (2026-10-02 21:55 to 22:56), with
+          about 0.9 hours of sub-agent working time. Connection with formal-conjectures: about 1 hour
+          (2026-10-02 23:05 to 2026-10-03 00:02), with about 1.3 hours of sub-agent working time.
+          Consolidation: about 1 hour 5 minutes (2026-10-03 07:48 to 08:53), with about 0.4 hours of
+          sub-agent working time. Simplification: about 3 hours 10 minutes (2026-10-03 12:35 to
+          15:45), with about 12.5 hours of sub-agent working time. Following Baek's proofs: about
+          4 hours 15 minutes (2026-10-03 16:30 to 20:45), with about 6.3 hours of sub-agent working
+          time. What's next: about 1 hour 6 minutes (2026-10-03 20:46 to 21:52), with about 0.8 hours of
+          sub-agent working time. Stability: about 1 hour (2026-10-05 22:17 to 23:13), with about 2.3
+          hours of sub-agent working time. The coercive route, with the manuscript's section on it: about
+          3 hours 26 minutes (2026-10-06 09:56 to 13:22), with about 3.8 hours of sub-agent working time.
+          Simplifying the new libraries, with the manuscript's revision: about 2 hours 44 minutes
+          (2026-10-06 13:25 to 16:09), with about 7.1 hours of sub-agent working time. Comparator for
+          the second solution, and the manuscript reorganized: about 45 minutes (2026-10-06 16:13 to
+          16:58), with about 0.4 hours of sub-agent working time. The manuscript's readability: about
+          51 minutes (2026-10-06 16:59 to 17:50), with about 3.1 hours of sub-agent working time.
+          CREDITS.md gives the figures of each round
+        spend_usd: "not tracked"
+        hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
+      prompting_notes: >-
+        One instruction, to formalize arXiv:2411.19826 following the formalize-math-paper skill, and
+        later approvals: of the correction of Proposition 5.1.4, of publishing the repository, and of
+        packaging it for Palomar. The coordinating agent wrote the statements, split the proofs among
+        sub-agents by chapter, reviewed and integrated every result, and wrote the audit. For the
+        uniqueness, one instruction to make ChatGPT Pro's draft into a complete proof in this
+        repository's definitions, then instructions on the layout of the repository and on the
+        Palomar submission. For the consolidation, one instruction: simplify the uniqueness proof,
+        consolidate the Lean files, give the Challenge's namespaces clearer names, present the
+        bridge between formal-conjectures' definitions and Baek's as the core of that part, and
+        shorten this file's description. For the simplification, one instruction: a deep audit to
+        simplify the Lean and the text proofs and make them more human-friendly, then a check
+        that the proofs remain faithful to Baek's before committing. For following Baek's proofs,
+        one instruction: after the skill gained rules requiring the proofs to follow the paper's and
+        every departure to be reported, bring this formalization in line with them. For What's next,
+        two approvals: to run Palomar's preflight, and to bring the formalization in line with the
+        skill's later versions. For the comparison of the formalizations, one instruction to compare
+        the three formalizations of Baek's proof, then an approval of the changes it suggested. For
+        the stability, one instruction to incorporate pull request #8,
+        then approvals to state its theorems in the Challenge and in the manuscript. For the
+        coercive route, one instruction to integrate pull request #9 so that one theorem proves
+        optimality, uniqueness and stability. For the simplification of the new libraries, one
+        instruction: simplify and consolidate the stability library and the other new code, keeping
+        the formalization of Baek's paper and the connection with formal-conjectures intact; then
+        approvals to check the second solution with Comparator too, and to merge this work into the
+        main branch for a new version of the Palomar entry. Then instructions to give the certificate
+        path a Palomar entry of its own, and to keep this entry's files in baek/.
+    - method: agent
+      models: ["ChatGPT Pro 6 (OpenAI)"]
+      framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
+      tool_setup: >-
+        Wrote the informal uniqueness proof (docs/archive/uniqueness/, notes 01-20) and a Lean draft of it
+        without a Lean compiler, and a draft of the connection with formal-conjectures' definitions,
+        in pull request #1 (151 commits on 2026-10-02, 15:01 to 22:43 US Central Time). The draft's
+        statements compiled after porting; 54 proofs of the uniqueness draft and 78 of the connection
+        did not. On 2026-10-05 it wrote the Lean modules of a second proof of optimality (pull request
+        #5), which compiled without change, and the stability argument (docs/archive/stability/) with
+        85 Lean modules (pull request #8), of which 123 proofs did not compile and twenty statements
+        had lost their hypotheses, and the coercive route (pull request #9: 7 Lean modules, a second
+        solution and an audit), of which one proof did not compile.
+      cost:
+        wall_time: "about 7 hours 40 minutes between the first and the last commit of pull request #1"
+        spend_usd: "not tracked"
+  spend_usd: "not tracked"
+  notes: >-
+    The Lean code of Baek's paper, the numerical verification scripts and the audit were written by
+    Claude Opus 5.5 in Claude Code, at the request of The-Anh Vu-Le, the author and maintainer of this
+    repository. The uniqueness argument and its first Lean draft were written by ChatGPT Pro 6, and
+    Claude Opus 5.5 made the draft compile and completed it.
+    Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
+    only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
+    pair (baek/Challenge.lean, baek/Solution.lean, baek/comparator.json). The entry at the root of the
+    repository has its own Challenge and Solution (Challenge.lean, Solution.lean, comparator.json).
+
+fidelity:
+  divergences: >-
+    (1) Corrections of the paper's statements, each the minimal change that makes the statement true
+    and each explained in the docstring of the corresponding declaration:
+    Definition 2.3.9 ("x-axis" for "y-axis"); Proposition 2.2.2 (the missing "-1" in Q^-);
+    Proposition 2.5.4 (the exchanges a<->c, b<->d, W<->Z, and K for K^m on the right); Definition
+    3.2.5 (the fan F_omega for P_omega); Proposition 3.3.1 (2) (the bottom normals omega + pi, 3 pi/2);
+    Lemma 4.2.4 (omega in [arcsec 2.2, pi/2)); Proposition 5.1.4 (integrable instead of bounded
+    density; proposition5_1_4_as_stated_false refutes the printed version); Proposition 6.2.2
+    (argument pi/2 - t); Lemma 6.5.5 (range (0, pi/2]); Lemma 8.1.7 (4)
+    (phi^L for phi^R); Definition 8.3.3 (pi + phi^R for pi/2 + phi^R); Lemma 8.3.6 (3) (evaluation at
+    pi/2); Theorem 8.4.3 (2) (B(t3) for D(t3)); Proposition 8.4.4 (4) (shifted by pi/2); Theorem 3.1.2
+    (the Nef polygon is bounded, a hypothesis that the paper leaves out; REPORT.md, Section 4); Lemma
+    7.1.6 (in a real vector space, where K + c is defined, for every convex-bilinear h; E18).
+    (2) Readings: the plane is R x R and area is Lebesgue measure; a rigid motion is a continuous
+    angle and translation, with the angle 0 at time 0 (equivalent to a continuous curve in SE(2) by
+    lifting); the one-dimensional Hausdorff measure, used only for subsets of lines, is the length
+    along the line; the surface area measure sigma_K is the Lebesgue-Stieltjes measure of
+    t -> <v_K^+(t), v_t> + int_0^t h_K, a 2 pi-periodic measure on R; Hausdorff distance of convex
+    bodies is sup_t |h_K(t) - h_L(t)|; Chapter 8 is stated for a parameter phi in [0.039, 0.04]
+    standing for Gerver's angle; Theorem 8.4.1 (2), which the paper states as a Jordan-region
+    statement, is stated as what the paper uses (the boundary curves and the area of the niche),
+    and the proof shows that the niche is exactly the region below these curves; the measurability
+    claim of Theorem 7.4.1 is read on [a, b]; Lemma 7.1.4 is stated as the formula for the one-sided
+    derivative, whose closing remark (the derivative is well defined and linear) follows from it;
+    the polyline p_K of a polygon cap is the set boundary(F_omega \ N_Theta(K)) minus the two
+    half-lines, and tau_K(t) is the sum over the lines l(t, c) of the length of p_K on them (edges of
+    polylines are not formalized); Lemma 7.3.5 (1), that a boundary is a counterclockwise Jordan
+    curve, is stated as the area of the region it bounds, which is what the paper uses it for; in
+    Theorem 8.4.3 (2), "the tails are the curves D and B as oriented curves" is stated as the equality
+    of the sets together with the equality of their curve area functionals, which is what Theorem
+    8.4.6 uses; Theorem 8.4.1 (4) is stated with one-sided derivatives at the junctions and the
+    endpoints of the phases, where the curves have no two-sided derivative.
+    (3) Results about Gerver's sofa are stated for every solution of Romik's system in the box
+    phi in [0.039, 0.04], theta in [0.68, 0.69] (the paper quotes phi in [0.039, 0.040]); the box
+    contains exactly one solution.
+    (4) Some hypotheses of the paper's statements are not needed and are omitted, which makes those
+    Lean statements more general (REPORT.md, Section 5).
+    (5) Every proof follows the paper's argument (the same intermediate claims, and the results
+    that the paper's proof cites; scripts/route_check.py checks the cited results in CI) except at
+    these steps, each necessary (REPORT.md, Section 7; docs/route_differences.tsv). The paper's step
+    is wrong or has a gap: Theorem 6.1.2 (from Romik's equations, since Gerver's Theorem 2 does not give it, E12);
+    Lemma 6.3.1 (N_Theta(K) in K by Theorem 3.4.10, since Theorem 3.5.4 does not apply, E15);
+    Theorem 6.5.6 (the bounds at the endpoints by continuity, E17); Lemma 8.1.7 (2), (4) and
+    Theorem 8.2.4 (without N(K) in K, which the cap space K^i does not provide, E21); Lemma 8.3.5
+    (the area split at the atom pi/2, outside the range of Theorem 7.3.2, E20); Theorem 8.4.1
+    (stated without proof; proved from Romik's equations by interval arithmetic, E24). The step
+    needs mathematics that Mathlib lacks: Theorem 7.3.2, Lemma 7.3.5 (1) and Lemmas 8.2.2, 8.2.3
+    (areas computed directly instead of with Jordan curves and Green's theorem); Theorem 8.1.1 (1)
+    (horizontal slices instead of the Brunn-Minkowski inequality); Theorem 8.5.1 (integration by
+    parts instead of mixed volumes); Theorem 5.2.2 (integration by parts in the definition of sigma_K
+    instead of a limit along polygons with prescribed edges, which Mathlib lacks; also reason 3). The
+    step has no meaning in the representation of sigma_K as a Lebesgue-Stieltjes measure:
+    Proposition 2.1.2 and the case of Theorem 7.3.2 where the arc is a point follow from the
+    definition of sigma_K instead of from Schneider's description of it (Theorem 2.1.1); and the
+    curve area equalities of Theorem 8.4.3 (2) are computed from the densities of sigma, as
+    orientations of curves are not formalized and J of a convex arc is (1/2) int h d sigma.
+    (6) The uniqueness: "U(S) = G for a Euclidean isometry U" is formalized with U a rotation about
+    the origin followed by a translation, which is stronger. Some proofs take different routes from
+    note 20 (docs/proof/, Chapters 11 and 12): the selection uses a fixed penalty on persistent dyadic support
+    samples instead of a vanishing continuous penalty; the selection needs the cap to have positive
+    area, which is proved where it is used; the arm inequalities come from the lower sequence of
+    Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of
+    Gerver's sofa uses that its rotation path stays strictly below the top of the cap.
+    (7) Formal-conjectures' statements: its definitions and statements are restated inside the
+    namespace FormalConjectures (formal-conjectures uses the namespace MovingSofa) with
+    formal-conjectures' code, except that its anonymous topology instance on E(2) gets an explicit
+    name (an automatically generated name depends on the library that declares it, and Comparator
+    compares constants by name). The docstrings are reworded, and the R^2 notation and the two
+    instances on it that formal-conjectures takes from its utility library are declared in the
+    Challenge. Its theorems are stated
+    after its definitions instead of between them. The Challenge adds three theorems, in the
+    namespace Bridge, that relate its definitions to Baek's.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "Claude Opus 5.5 sub-agents, separate from the proving agents: a statement-fidelity review against the LaTeX source, and an audit of the paper's findings against the LaTeX source"
+    - "A Claude Opus 5.5 sub-agent, separate from the proving agents: a review of the uniqueness statements against the informal proof"
+  notes: >-
+    No human has reviewed the proofs, the statements or the audit. Before any proof was written, a
+    separate agent reviewed every statement against the paper's LaTeX source. Every statement change
+    after that was compared with the original statements by script (stmt_diff), and each one is
+    documented. Every finding about the paper was checked against the LaTeX source, and every
+    numerical claim was recomputed by script. Lean's kernel checks the proofs; Comparator checks
+    that the Solution proves the Challenge's statements with the standard axioms only. The
+    uniqueness argument has been reviewed only by AI systems: ChatGPT Pro's own reviews, and a
+    separate agent that compared the Lean statements with the informal proof and found no weakening,
+    vacuous definition or hidden assumption.
+
+alignment:
+  namespaces:
+    Baek: "the definitions of Baek's paper (the plane R x R, Romik's description of Gerver's sofa)"
+    Bridge: "theorems relating formal-conjectures' definitions to Baek's"
+    FormalConjectures.MovingSofa: "the definitions of formal-conjectures, restated with its code"
+  statements:
+    - source: "Definition 8.1.2 (Gerver's sofa, from Romik's system), existence of the parameters"
+      lean: "Baek.gerver_params_exists"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        Romik's system (27)-(44) has a solution with phi in [0.039, 0.04] and theta in [0.68, 0.69].
+        Romik finds it numerically; the paper uses it to define Gerver's sofa.
+    - source: "Definition 8.1.2, uniqueness of the parameters"
+      lean: "Baek.gerver_params_unique"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        The solution in the box is unique, so Gerver's sofa is well defined. Romik asserts uniqueness
+        without proof; the paper relies on it.
+    - source: "Introduction (Section 1.1), the display |G| = 2.2195... (label eqn:area-bounds)"
+      lean: "Baek.gerver_sofa_area"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        The area of the shape defined from Romik's parameters lies in [2.2192, 2.2199], consistent
+        with Gerver's value 2.21953.... This identifies the Challenge's definition with Gerver's sofa.
+    - source: "Theorem 1.1.1 (thm:main)"
+      lean: "Baek.gerver_sofa_optimal"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        Gerver's sofa is a moving sofa (a nonempty, connected, closed set moved by a continuous rigid
+        motion from the horizontal to the vertical side of the hallway L, inside L), and every moving
+        sofa has area at most the area of Gerver's sofa. The paper's moving sofas are translates of
+        subsets of H_L, and its rigid motions are continuous curves in SE(2) starting at a
+        translation; baek/Challenge.lean's docstring explains the equivalent formulation used.
+    - source: "Uniqueness of Gerver's sofa, docs/archive/uniqueness/20-complete-paper-proof.md, Theorem (not a result of Baek's paper)"
+      lean: "Baek.gerver_sofa_unique"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        Every moving sofa whose area equals that of Gerver's sofa is mapped onto Gerver's sofa, as a
+        set, by a rotation about the origin followed by a translation. With gerver_sofa_optimal, the
+        moving sofas of maximum area are exactly the moving sofas congruent to Gerver's sofa.
+    - source: "The correspondence between formal-conjectures' moving sofas and Baek's"
+      lean: "Bridge.isMovingSofa_iff"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        A set s in EuclideanSpace R (Fin 2) is a moving sofa of formal-conjectures (moved from the
+        identity) if and only if it lies in the horizontal side of the hallway and its coordinates
+        (p 0, p 1) form a moving sofa of Baek's paper (moved from a translation).
+    - source: "The correspondence between formal-conjectures' sofa constant and Baek's optimal area"
+      lean: "Bridge.sofaConstant_eq"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        The sofa constant of formal-conjectures is the supremum of the areas of Baek's moving sofas.
+    - source: "The correspondence between formal-conjectures' Gerver's sofa and Baek's"
+      lean: "Bridge.gerversSofa_eq"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        In coordinates, formal-conjectures' Gerver's sofa, defined from Gerver's four constants, is
+        the Gerver's sofa of every solution of Romik's system in the box.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, GerversSofa.ABφθSpec.existsUnique"
+      lean: "FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        Gerver's system for the constants A, B, phi, theta (Romik 2018, Equations (1)-(4)) has exactly
+        one solution with 0 <= phi <= theta <= pi/4 and A, B >= 0. The definitions of Gerver's sofa in
+        formal-conjectures choose this solution.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, isMovingSofa_gerversSofa"
+      lean: "FormalConjectures.MovingSofa.isMovingSofa_gerversSofa"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        Formal-conjectures' Gerver's sofa admits a motion through the hallway from the identity.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, sofaConstant_eq_volume_gerversSofa"
+      lean: "FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        The sofa constant, the supremum of the areas of moving sofas, is the area of Gerver's sofa.
+    - source: "formal-conjectures, FormalConjectures/Wikipedia/MovingSofa.lean, volume_eq_sofaConstant_iff_congruent_gerversSofa (research open there)"
+      lean: "FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+      module: "baek.Challenge"
+      status: "proved"
+      note: >-
+        A moving sofa has area the sofa constant if and only if an isometry of the plane maps Gerver's
+        sofa onto it.
+
+acknowledgements: >-
+  Mathlib and the Lean toolchain (Lean 4, Lake, Comparator). The audit used the arXiv LaTeX source of
+  arXiv:2411.19826v1. Google DeepMind's formal-conjectures pointed to the uniqueness of the optimal
+  sofa as an open problem.

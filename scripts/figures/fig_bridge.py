@@ -498,7 +498,7 @@ def dependencies():
     bridge = {'gerversSofa_eq': 3.75, 'isMovingSofa_iff': 6.4, 'sofaConstant_eq': 9.1}
     yb, yf, yr = 3.35, 1.95, 0.55
     wf, hf = 2.45, 0.5
-    # Arrows: the proof of the head in Solution.lean uses the tail.
+    # Arrows: the proof of the head in baek/Solution.lean uses the tail.
     uses = {'isMovingSofa_gerversSofa': (['gerver_params_exists', 'gerver_sofa_optimal'],
                                          ['isMovingSofa_iff', 'gerversSofa_eq']),
             'sofaConstant_eq_volume_gerversSofa': (['gerver_params_exists', 'gerver_sofa_optimal'],
@@ -540,7 +540,7 @@ def dependencies():
                   "A diagram of the twelve theorems of the Challenge in three rows: Baek's five "
                   "above, formal-conjectures' four in the middle, the bridge's three below. Arrows "
                   "lead from a theorem to the theorems of formal-conjectures whose proofs in "
-                  "Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three "
+                  "baek/Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three "
                   "theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, "
                   "isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the "
                   "second and the third, and gerversSofa_eq to all three; a dashed arrow leads from "

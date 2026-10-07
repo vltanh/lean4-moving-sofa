@@ -4,19 +4,23 @@ public import Mathlib
 public import MovingSofaBridge.RomikParams
 
 /-!
-# The definitions of the Challenge
+# The definitions of the Challenges
 
-The definitions of `Challenge.lean`: those of Baek's paper, in the namespace `Baek`, and those of
-formal-conjectures, in the namespace `FormalConjectures.MovingSofa`. `Challenge.lean` may not import
-the project, so `scripts/sync_challenge_defs.py` copies the two marked blocks into it verbatim;
-`Solution.lean` and the bridge library use the constants defined here, so Comparator sees the same
-constants in the Challenge and in the Solution. Between the blocks, the Challenge states
-`ABφθSpec.existsUnique` and this module proves it (`MovingSofaBridge.GerverConstants`).
+The definitions of the two Challenges, `Challenge.lean` (the certificate entry, at the root) and
+`baek/Challenge.lean` (Baek's entry): those of Baek's paper, in the namespace `Baek`, and those of
+formal-conjectures, in the namespace `FormalConjectures.MovingSofa`. The Challenges may not import
+the project, so `scripts/sync_challenge_defs.py` copies the marked blocks into them verbatim; the
+Solutions and the bridge library use the constants defined here, so Comparator sees the same
+constants in the Challenges and in the Solutions. Baek's definitions form two blocks: the core, up
+to Gerver's sofa, which both Challenges copy, and the definitions of the stability statements, which
+only the certificate entry copies. The formal-conjectures definitions form two more blocks, which
+both Challenges copy; between them, the Challenges state `ABφθSpec.existsUnique` and this module
+proves it (`MovingSofaBridge.GerverConstants`).
 -/
 
 @[expose] public section
 
--- BEGIN SHARED DEFINITIONS 1
+-- BEGIN BAEK CORE DEFINITIONS
 open Real Set MeasureTheory
 
 namespace Baek
@@ -130,6 +134,12 @@ def shapeOfPath (x : ℝ → ℝ × ℝ) : Set (ℝ × ℝ) :=
 /-- Gerver's sofa. -/
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
+end Baek
+-- END BAEK CORE DEFINITIONS
+
+-- BEGIN BAEK STABILITY DEFINITIONS
+namespace Baek
+
 /-- A moving sofa that turns clockwise by the angle `ω`: a motion as in `IsMovingSofa` that ends
 with the rotation by `-ω`. -/
 def IsMovingSofaWithAngle (S : Set (ℝ × ℝ)) (ω : ℝ) : Prop :=
@@ -158,7 +168,9 @@ def EuclideanClose (r : ℝ) (S T : Set (ℝ × ℝ)) : Prop :=
   (∀ p ∈ S, ∃ q ∈ T, euclideanDist p q ≤ r) ∧ (∀ q ∈ T, ∃ p ∈ S, euclideanDist q p ≤ r)
 
 end Baek
+-- END BAEK STABILITY DEFINITIONS
 
+-- BEGIN SHARED DEFINITIONS 1
 scoped[EuclideanGeometry] notation "ℝ²" => EuclideanSpace ℝ (Fin 2)
 
 open scoped EuclideanGeometry

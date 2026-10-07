@@ -1,15 +1,12 @@
 {
-  "challenge_module": "Challenge",
-  "solution_module": "SolutionCoerciveComparator",
+  "challenge_module": "baek.Challenge",
+  "solution_module": "baek.Solution",
   "theorem_names": [
     "Baek.gerver_params_exists",
     "Baek.gerver_params_unique",
     "Baek.gerver_sofa_area",
     "Baek.gerver_sofa_optimal",
     "Baek.gerver_sofa_unique",
-    "Baek.gerver_sofa_stable",
-    "Baek.gerver_sofa_angle_stable",
-    "Baek.gerver_sofa_stability_exponent",
     "Bridge.isMovingSofa_iff",
     "Bridge.sofaConstant_eq",
     "Bridge.gerversSofa_eq",

@@ -15,7 +15,8 @@ was not recorded.
   sub-agents of the session that wrote the manuscript (Claude Code 2.1.289, whose main agent is Claude Sonnet 5.5),
   the extension of the libraries below; and on 5 and 6 October, in another session of Claude Code 2.1.289, the
   merge of the second proof of optimality below, the compilation of the stability proof, the compilation and
-  completion of the coercive route, the simplification of the new libraries, and the merge of this work into main.
+  completion of the coercive route, the simplification of the new libraries, the merge of this work into main, and
+  the certificate entry, with Baek's entry moved into [`baek/`](baek).
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
   Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
@@ -29,8 +30,9 @@ was not recorded.
   audit's findings against the same source, the uniqueness statements against the informal
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
   the report's "What's next" section against its sources, the comparison of the formalizations
-  against the three projects' sources, the manuscript against the Lean statements and proofs, and every
-  repaired proof of the stability library against the draft's.
+  against the three projects' sources, the manuscript against the Lean statements and proofs, every
+  repaired proof of the stability library against the draft's, and the definitions of the certificate entry's
+  Challenge against Baek's paper and the libraries.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -107,7 +109,7 @@ Figures, from 23:05 to 00:02:
 
 The owner asked to simplify the uniqueness proof, consolidate the Lean files, give the Challenge's
 namespaces clearer names, present the bridge between formal-conjectures' definitions and Baek's as
-the core of that part, and shorten the description in [`formalization.yaml`](formalization.yaml).
+the core of that part, and shorten the description in [`formalization.yaml`](baek/formalization.yaml).
 
 How it was made:
 - 07:48 to 08:53: Claude Opus 5.5, in Claude Code 2.1.287. The 75 files of the uniqueness and bridge
@@ -347,7 +349,7 @@ How it was made:
   status line and Section 9 now name the results that the formalization leaves out, item E17 notes
   that the overview states f(0) = 1, and Section 10 gains O'Keefe's upper bounds for the ambidextrous
   sofa and says how the findings of RuifengCao/sofa-formal compare with the audit's. The Challenge,
-  the README, the definitions page and [`formalization.yaml`](formalization.yaml) no longer call the Challenge's copy of
+  the README, the definitions page and [`formalization.yaml`](baek/formalization.yaml) no longer call the Challenge's copy of
   formal-conjectures verbatim: its docstrings are reworded, and the `ℝ²` notation and two instances are
   declared in it. [`ChallengeDefs`](ChallengeDefs.lean) and the definitions and verification pages no longer say that
   all the libraries use the constants of [`ChallengeDefs`](ChallengeDefs.lean).
@@ -401,11 +403,11 @@ formalize-math-paper skill the pitfall that the previous round had met.
 
 How it was made:
 - 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
-- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L405),
-  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L415), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L425)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
-  and, in [`Solution.lean`](Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L697),
+  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L707), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L717)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
+  and, in [`Solution.lean`](baek/Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
   the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
-  [`formalization.yaml`](formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
+  [`formalization.yaml`](baek/formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
   request #8.
 - The manuscript gained Section 10, the stability (Theorems 10.1 to 10.4 with their proofs, about sixteen pages),
   and the passages on it in the abstract, Sections 1 and 11 and Appendices D and E; it now cites commit `92b2f86`.
@@ -507,7 +509,7 @@ How it was made:
 - The stability library went from 12,550 lines in 87 files to 7,585 lines in 12, and the coercive route from 661
   lines in 7 files to 235 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
   coercive route 743 instead of 958. Baek's library, the bridge, the Challenge, its definitions and the proofs of
-  [`Solution.lean`](Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
+  [`Solution.lean`](baek/Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
   changed. The audits and the route check pass, and Comparator accepts the fifteen theorems.
 - Commit `1856810` brought the documentation up to date, and commit `7b8c0a8` the docstring of
   [`MovingSofaExtremal/All.lean`](MovingSofaExtremal/All.lean), which still listed the old modules; the continuous integration passed on both, and
@@ -544,10 +546,10 @@ and of the uniqueness proof, with a remark on the certificate that gives the thr
 How it was made:
 - 16:13 to 16:58: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
 - Comparator now checks the second solution too (commit `3d3ea3e`, on which the continuous integration passed):
-  [`SolutionCoerciveComparator.lean`](SolutionCoerciveComparator.lean) states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
-  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and [`comparator-coercive.json`](comparator-coercive.json) points Comparator at it;
+  `SolutionCoerciveComparator.lean` states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
+  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and `comparator-coercive.json` points Comparator at it;
   Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
-  have exactly the statement of the matching theorem of [`Solution.lean`](Solution.lean), where it accepted a definitionally equal one.
+  have exactly the statement of the matching theorem of [`Solution.lean`](baek/Solution.lean), where it accepted a definitionally equal one.
   The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
   translation.
 - The manuscript cites commit `3d3ea3e`. The main session moved its description of the formalization from Section 12
@@ -619,3 +621,53 @@ Figures, from 18:16 to 18:30 and from 19:26 to 19:47:
 - sub-agents: none;
 - tool calls: 54 by the main session; tokens: 0.05 million output, 0.08 million input, 42 million cache reads;
 - model calls: 55, all to `claude-opus-5-5`.
+
+## The certificate entry, and Baek's entry in its own directory (6 October 2026)
+
+The owner asked whether the coercive proof should become the entry point for Palomar, judged that it deserves a
+submission of its own, and chose that its Challenge state the certificate. The owner then set three aims: the
+repository holds all the formalization (Baek's paper, the first proof of uniqueness and the certificate path), it
+connects to formal-conjectures, and it can be submitted to Palomar, the last two through the certificate path. The
+owner chose two entries: the registered one stays, as the formalization of Baek's paper with the uniqueness proof
+that comes with it, and a new one holds the new result, optimality, uniqueness and stability through the
+certificate; both state formal-conjectures' theorems. Finally the owner asked to clean up the root, which now holds
+the certificate entry, with Baek's entry in a directory of its own.
+
+How it was made:
+- 19:53 to 21:53: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
+  sub-agents of the same model.
+- A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](CertificateDefs.lean) restates, in the
+  namespace `Certificate`, the 39 definitions that the certificate's statement needs, each with the body of the
+  library's definition, except the surface area measure: the library's contains proofs, which a Challenge cannot
+  carry, so the Challenge defines it by cases on the two properties that these proofs establish.
+  [`CertificateProof.lean`](CertificateProof.lean) proves that each definition is the library's, by definition except for three that
+  agree on convex bodies, and derives the certificate from the library's. Comparator first rejected the copy of
+  Gerver's cap: Lean shares the auxiliary proofs of numerals within a module, so the Challenge, which holds every
+  block, and the two modules of definitions named one of these proofs differently. A line in
+  [`CertificateDefs.lean`](CertificateDefs.lean) makes them agree, and the Challenge keeps its blocks in the order that this needs, which
+  [`scripts/sync_challenge_defs.py`](scripts/sync_challenge_defs.py) now checks. The definitions of [`ChallengeDefs.lean`](ChallengeDefs.lean) were split into blocks, so
+  that Baek's entry copies Baek's definitions without those of stability: its Challenge states the twelve theorems of
+  version 4 again, with the same code. `SolutionCoerciveComparator.lean` and `comparator-coercive.json` were
+  removed, since the certificate entry checks the second solution.
+- A sub-agent that could not edit compared the certificate's definitions with Baek's paper and the libraries. It
+  found no error. Its nine findings on docstrings were applied, and the Lean sub-agent added
+  [`Certificate.gerver_triple`](Challenge.lean#L655), which shows that the certificate's hypothesis can be met and that its bound is
+  attained, so the certificate entry states seventeen theorems.
+- A sub-agent rewrote the README and the pages of [`docs/`](docs) for the two entries. The main session wrote the new
+  entry's metadata, gave the preflight workflow inputs that choose the entry, and rewrote Appendix D of the
+  manuscript (the two entries, the statement of the certificate, the dictionary). The manuscript has 119 pages.
+- At the owner's request, the root now holds the certificate entry: [`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean),
+  [`comparator.json`](comparator.json) and [`formalization.yaml`](formalization.yaml). Baek's entry, registered as PALOMAR-2026-10-02-000008, keeps the
+  same four files in [`baek/`](baek); its versions 1 to 4 were registered from the root. The build is clean, with the
+  seventeen `sorry`s of [`Challenge.lean`](Challenge.lean) and the twelve of [`baek/Challenge.lean`](baek/Challenge.lean); the audit checks 5,992 declarations,
+  the audit of the coercive route 867, with 22 positive and 8 negative controls; the route check and the audit of
+  the second proof pass; Comparator accepts both entries; and Palomar's checks of the metadata and the sources
+  pass for both.
+
+Figures, from 19:53 to 21:53:
+- elapsed time: 1 hour 59 minutes;
+- sub-agents: 3, at most 2 at the same time, about 2.2 hours of work;
+- tool calls: 638 by the sub-agents, 179 by the main session;
+- tokens of the sub-agents: 0.70 million output, 3.48 million input, 214 million cache reads; of the main
+  session: 0.22 million output, 0.46 million input, 80 million cache reads;
+- model calls: 537 by the sub-agents and 183 by the main session, all to `claude-opus-5-5`.

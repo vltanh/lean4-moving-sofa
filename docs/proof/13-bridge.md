@@ -32,7 +32,8 @@ that Comparator can check them.
 
 ## 13.1 The two sets of definitions
 
-The statements of record are in [`Challenge.lean`](../../Challenge.lean). It restates
+The statements of record are in the Challenges of the two Palomar entries,
+[`Challenge.lean`](../../Challenge.lean) and [`baek/Challenge.lean`](../../baek/Challenge.lean). Both restate
 formal-conjectures' definitions verbatim from its file `FormalConjectures/Wikipedia/MovingSofa.lean`
 (Git blob `59b6ed7eb42e11b208b09539c245da4d3f11ed00`), inside the namespace
 `FormalConjectures.MovingSofa` instead of `MovingSofa`. The only other change is an explicit name
@@ -82,14 +83,14 @@ part are continuous. A set $S \subseteq \mathbb{E}^2$ is a *moving sofa of forma
 3. $S \subseteq \chi^{-1}(H_L)$, $m(t)(S) \subseteq \chi^{-1}(L)$ for every $t \in [0, 1]$, and
    $m(1)(S) \subseteq \chi^{-1}(V_L)$.
 
-*Lean: [`FormalConjectures.MovingSofa.IsMovingSofa`](../../Challenge.lean#L280),
-[`FormalConjectures.MovingSofa.horizontalHallway`](../../Challenge.lean#L263),
-[`FormalConjectures.MovingSofa.verticalHallway`](../../Challenge.lean#L266),
-[`FormalConjectures.MovingSofa.hallway`](../../Challenge.lean#L269),
-[`FormalConjectures.MovingSofa.instTopologicalSpaceAffineIsometryEquivRealEuclideanSpaceFinOfNatNat`](../../Challenge.lean#L274).*
+*Lean: [`FormalConjectures.MovingSofa.IsMovingSofa`](../../Challenge.lean#L337),
+[`FormalConjectures.MovingSofa.horizontalHallway`](../../Challenge.lean#L320),
+[`FormalConjectures.MovingSofa.verticalHallway`](../../Challenge.lean#L323),
+[`FormalConjectures.MovingSofa.hallway`](../../Challenge.lean#L326),
+[`FormalConjectures.MovingSofa.instTopologicalSpaceAffineIsometryEquivRealEuclideanSpaceFinOfNatNat`](../../Challenge.lean#L331).*
 
 Baek's moving sofas ([§1.1](README.md#11-the-problem), [Chapter 2](02-preliminaries.md);
-[`Baek.IsMovingSofa`](../../Challenge.lean#L122), in the library
+[`Baek.IsMovingSofa`](../../Challenge.lean#L171), in the library
 [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59)) differ in two
 ways. Their motion is given by a rotation angle $\vartheta$ and a translation $c$, continuous on
 $[0, 1]$ with $\vartheta(0) = 0$, while formal-conjectures' motion is any continuous path in
@@ -108,7 +109,7 @@ The *sofa constant* of formal-conjectures is
 
 where $\lvert S \rvert$ is the Lebesgue outer measure of $\mathbb{E}^2$ (`volume`).
 
-*Lean: [`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L362).*
+*Lean: [`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L419).*
 
 Baek's optimal area $\alpha_{\max}$ is the supremum of $\lvert S \rvert$ over Baek's moving sofas
 $S \subseteq \mathbb{R}^2$; Theorem 13.10 also takes it in $[0, \infty]$.
@@ -137,11 +138,11 @@ solution, the witness of the statement taken with `Exists.choose`. Numerically (
 A = 0.0944265608\ldots, \qquad B = 1.3992037273\ldots, \qquad \varphi = 0.0391773647\ldots, \qquad \theta = 0.6813015093\ldots .
 ```
 
-*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec`](../../Challenge.lean#L305),
-[`FormalConjectures.MovingSofa.GerversSofa.A`](../../Challenge.lean#L321),
-[`FormalConjectures.MovingSofa.GerversSofa.B`](../../Challenge.lean#L322),
-[`FormalConjectures.MovingSofa.GerversSofa.φ`](../../Challenge.lean#L323),
-[`FormalConjectures.MovingSofa.GerversSofa.θ`](../../Challenge.lean#L324),
+*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec`](../../Challenge.lean#L362),
+[`FormalConjectures.MovingSofa.GerversSofa.A`](../../Challenge.lean#L378),
+[`FormalConjectures.MovingSofa.GerversSofa.B`](../../Challenge.lean#L379),
+[`FormalConjectures.MovingSofa.GerversSofa.φ`](../../Challenge.lean#L380),
+[`FormalConjectures.MovingSofa.GerversSofa.θ`](../../Challenge.lean#L381),
 [`MovingSofaBridge.GerverConstants.Spec`](../../MovingSofaBridge/GerverConstants.lean#L117).*
 
 The angles $\varphi$ and $\theta$ are those of Romik's description used by Baek
@@ -183,13 +184,13 @@ sofa* is the sofa of the path $p$,
 G_{\mathrm{fc}} = T_{0, p(0)}\bigl(\chi^{-1}(H_L)\bigr) \cap T_{\pi/2, p(\pi/2)}\bigl(\chi^{-1}(V_L)\bigr) \cap \bigcap_{\alpha \in [0, \pi/2]} T_{\alpha, p(\alpha)}\bigl(\chi^{-1}(L)\bigr).
 ```
 
-*Lean: [`FormalConjectures.MovingSofa.GerversSofa.r`](../../Challenge.lean#L326),
-[`FormalConjectures.MovingSofa.GerversSofa.x`](../../Challenge.lean#L341),
-[`FormalConjectures.MovingSofa.GerversSofa.y`](../../Challenge.lean#L338),
-[`FormalConjectures.MovingSofa.GerversSofa.p`](../../Challenge.lean#L344),
-[`FormalConjectures.MovingSofa.rotateTranslate`](../../Challenge.lean#L290),
-[`FormalConjectures.MovingSofa.sofaOfRotateTranslatePath`](../../Challenge.lean#L297),
-[`FormalConjectures.MovingSofa.gerversSofa`](../../Challenge.lean#L355).*
+*Lean: [`FormalConjectures.MovingSofa.GerversSofa.r`](../../Challenge.lean#L383),
+[`FormalConjectures.MovingSofa.GerversSofa.x`](../../Challenge.lean#L398),
+[`FormalConjectures.MovingSofa.GerversSofa.y`](../../Challenge.lean#L395),
+[`FormalConjectures.MovingSofa.GerversSofa.p`](../../Challenge.lean#L401),
+[`FormalConjectures.MovingSofa.rotateTranslate`](../../Challenge.lean#L347),
+[`FormalConjectures.MovingSofa.sofaOfRotateTranslatePath`](../../Challenge.lean#L354),
+[`FormalConjectures.MovingSofa.gerversSofa`](../../Challenge.lean#L412).*
 
 The functions $X$ and $Y$ are formal-conjectures' `x` and `y`; capital letters keep them apart from
 the coordinates. Baek's Gerver's sofa is the shape of Romik's rotation path $\mathbf{x}$
@@ -329,7 +330,7 @@ jumps to $\pi$.
 A set $S \subseteq \mathbb{E}^2$ is a moving sofa of formal-conjectures, for some motion, if and
 only if $S \subseteq \chi^{-1}(H_L)$ and $\chi(S)$ is a moving sofa.
 
-*Lean: [`Bridge.isMovingSofa_iff`](../../Challenge.lean#L439),
+*Lean: [`Bridge.isMovingSofa_iff`](../../Challenge.lean#L731),
 [`MovingSofaBridge.isMovingSofa_iff`](../../MovingSofaBridge/Motion.lean#L562),
 [`MovingSofaBridge.isMovingSofa_coordinates`](../../MovingSofaBridge/Motion.lean#L460),
 [`MovingSofaBridge.isMovingSofa_of_coordinates`](../../MovingSofaBridge/Motion.lean#L490).*
@@ -381,7 +382,7 @@ The sofa constant is the supremum of the areas of Baek's moving sofas:
 \alpha_{\mathrm{fc}} = \sup \bigl\lbrace \lvert S \rvert : S \subseteq \mathbb{R}^2 \text{ is a moving sofa} \bigr\rbrace = \alpha_{\max}.
 ```
 
-*Lean: [`Bridge.sofaConstant_eq`](../../Challenge.lean#L447),
+*Lean: [`Bridge.sofaConstant_eq`](../../Challenge.lean#L739),
 [`MovingSofaBridge.sofaConstant_eq`](../../MovingSofaBridge/Motion.lean#L600),
 [`MovingSofaBridge.exists_isMovingSofa_volume_eq`](../../MovingSofaBridge/Motion.lean#L574).*
 
@@ -521,7 +522,7 @@ Gerver's system has exactly one solution $D$. For every solution $P$ of Romik's 
 $\varphi \in [0.039, 0.04]$ and $\theta \in [0.68, 0.69]$, $D = \mathrm{ofRomik}(P)$ and
 $\mathrm{toRomik}(D) = P$.
 
-*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L316),
+*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L373),
 [`MovingSofaBridge.GerverConstants.spec_existsUnique`](../../MovingSofaBridge/RomikParams.lean#L345),
 [`MovingSofaBridge.GerverConstants.eq_ofRomik`](../../MovingSofaBridge/RomikParams.lean#L355),
 [`MovingSofaBridge.GerverConstants.romik_solution`](../../MovingSofaBridge/RomikParams.lean#L362).*
@@ -738,7 +739,7 @@ $\theta \in [0.68, 0.69]$, the coordinates of formal-conjectures' Gerver's sofa 
 \chi(G_{\mathrm{fc}}) = G .
 ```
 
-*Lean: [`Bridge.gerversSofa_eq`](../../Challenge.lean#L455),
+*Lean: [`Bridge.gerversSofa_eq`](../../Challenge.lean#L747),
 [`MovingSofaBridge.gerversSofa_eq`](../../MovingSofaBridge/GerverSofa.lean#L507),
 [`MovingSofaBridge.coordinates_gerversSofa`](../../MovingSofaBridge/GerverSofa.lean#L496),
 [`MovingSofaBridge.GerverConstants.shape_eq_gerverSofa_of_isSolution`](../../MovingSofaBridge/GerverSofa.lean#L362).*
@@ -762,10 +763,10 @@ $\mathrm{toRomik}(D)$. By Theorem 13.13, $\mathrm{toRomik}(D) = P$. $\square$
    $\lvert S \rvert = \alpha_{\mathrm{fc}}$ if and only if $S = g(G_{\mathrm{fc}})$ for some
    $g \in \mathrm{E}(2)$.
 
-*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L316),
-[`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](../../Challenge.lean#L464),
-[`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](../../Challenge.lean#L468),
-[`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L472).*
+*Lean: [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L373),
+[`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](../../Challenge.lean#L756),
+[`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](../../Challenge.lean#L760),
+[`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L764).*
 
 formal-conjectures marks (2) and (3) solved and (4) open. The Challenge leaves out its test lemmas
 and its theorem `MovingSofa.sofaConstant_eq`, which states (3) inside formal-conjectures' `answer`
@@ -774,7 +775,7 @@ marker, a notation that Mathlib does not have.
 *Proof.* The bridge carries Baek's theorems over. (1) is Theorem 13.13. For the others, fix a
 solution $P$ of Romik's system in the box
 ([Theorem 1.1](README.md#theorem-11-gervers-sofa-is-well-defined),
-[`Baek.gerver_params_exists`](../../Challenge.lean#L372)), and let $G$ be its Gerver's sofa. By
+[`Baek.gerver_params_exists`](../../Challenge.lean#L664)), and let $G$ be its Gerver's sofa. By
 Theorem 13.19, $\chi(G_{\mathrm{fc}}) = G$, so $\lvert G_{\mathrm{fc}} \rvert = \lvert G \rvert$ by
 Lemma 13.5. By [Theorem 1.2](README.md#theorem-12-optimality-baek-theorem-111), $G$ is a moving sofa
 and every moving sofa has area at most $\lvert G \rvert$.
@@ -798,12 +799,12 @@ since $g$ preserves area (Lemma 13.6). $\square$
 In (4) the isometry found is a rotation followed by a translation. formal-conjectures allows every
 element of $\mathrm{E}(2)$, reflections included, which adds no new sets, since Gerver's sofa is
 symmetric under the reflection in a vertical line. Figure 13.5 shows, for each of these proofs, the
-theorems of the Challenge that it uses.
+theorems of the Challenge of Baek's entry that it uses.
 
-![A diagram of the twelve theorems of the Challenge in three rows: Baek's five above, formal-conjectures' four in the middle, the bridge's three below. Arrows lead from a theorem to the theorems of formal-conjectures whose proofs in Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the second and the third, and gerversSofa_eq to all three; a dashed arrow leads from ABφθSpec.existsUnique, which defines Gerver's constants, to gerversSofa_eq. gerver_params_unique and gerver_sofa_area have no arrows](figures/13-bridge/dependencies.svg)
+![A diagram of the twelve theorems of the Challenge in three rows: Baek's five above, formal-conjectures' four in the middle, the bridge's three below. Arrows lead from a theorem to the theorems of formal-conjectures whose proofs in baek/Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the second and the third, and gerversSofa_eq to all three; a dashed arrow leads from ABφθSpec.existsUnique, which defines Gerver's constants, to gerversSofa_eq. gerver_params_unique and gerver_sofa_area have no arrows](figures/13-bridge/dependencies.svg)
 
-*Figure 13.5.* The twelve theorems of the Challenge and the proofs of formal-conjectures' theorems
-in [`Solution.lean`](../../Solution.lean): an arrow leads from a theorem to each theorem whose proof
+*Figure 13.5.* The twelve theorems of Baek's entry and the proofs of formal-conjectures' theorems
+in its Solution, [`baek/Solution.lean`](../../baek/Solution.lean): an arrow leads from a theorem to each theorem whose proof
 uses it. Baek's theorems (blue) come from the libraries
 [`MovingSofaOptimality`](../../MovingSofaOptimality) and
 [`MovingSofaUniqueness`](../../MovingSofaUniqueness), the bridge's (green) from
@@ -813,7 +814,7 @@ which [`gerversSofa_eq`](../../MovingSofaBridge/GerverSofa.lean#L507) and the ot
 of the middle row speak. The uniqueness of Romik's parameters and the area bounds of Gerver's sofa
 are not used.
 
-In [`Solution.lean`](../../Solution.lean), two private lemmas,
+In [`SolutionCoercive.lean`](../../SolutionCoercive.lean), as in [`baek/Solution.lean`](../../baek/Solution.lean), two private lemmas,
 $\alpha_{\mathrm{fc}} = \lvert G \rvert$ and $\lvert G_{\mathrm{fc}} \rvert = \lvert G \rvert$,
 carry (3), and the element $\rho$ of Lemma 13.6 turns the rotation and the translation of Theorem
 1.3 into an element of $\mathrm{E}(2)$
@@ -821,45 +822,56 @@ carry (3), and the element $\rho$ of Lemma 13.6 turns the rotation and the trans
 
 ## 13.7 The Challenge, the Solution and Comparator
 
-[`Challenge.lean`](../../Challenge.lean) states twelve theorems with `sorry`: Baek's five
-([`Baek.gerver_params_exists`](../../Challenge.lean#L372),
-[`Baek.gerver_params_unique`](../../Challenge.lean#L376),
-[`Baek.gerver_sofa_area`](../../Challenge.lean#L382),
-[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L388),
-[`Baek.gerver_sofa_unique`](../../Challenge.lean#L395)), the bridge's three, and formal-conjectures'
-four. [`Solution.lean`](../../Solution.lean) proves them: it restates eleven, and the twelfth,
+The repository has two Palomar entries, each with a Challenge that states its theorems with `sorry`
+and a Solution that proves them. The certificate entry, at the root, states seventeen theorems in
+[`Challenge.lean`](../../Challenge.lean): the twelve below, three on the stability of Gerver's sofa and
+two about a certificate for Baek's upper bound; [`Solution.lean`](../../Solution.lean) proves them
+through the certificate ([Results](../results.md)). Baek's entry, in [`baek/`](../../baek), states the
+twelve in [`baek/Challenge.lean`](../../baek/Challenge.lean): Baek's five
+([`Baek.gerver_params_exists`](../../Challenge.lean#L664),
+[`Baek.gerver_params_unique`](../../Challenge.lean#L668),
+[`Baek.gerver_sofa_area`](../../Challenge.lean#L674),
+[`Baek.gerver_sofa_optimal`](../../Challenge.lean#L680),
+[`Baek.gerver_sofa_unique`](../../Challenge.lean#L687)), the bridge's three, and formal-conjectures'
+four. [`baek/Solution.lean`](../../baek/Solution.lean) proves them: it restates eleven, and the twelfth,
 `ABφθSpec.existsUnique`, is proved in [`ChallengeDefs.lean`](../../ChallengeDefs.lean), which it
-imports. Lake's Comparator, configured by [`comparator.json`](../../comparator.json), checks in a
-sandbox that the Solution proves exactly the Challenge's statements, with no axioms beyond
+imports. Lake's Comparator, configured by [`comparator.json`](../../comparator.json) for the certificate
+entry and by [`baek/comparator.json`](../../baek/comparator.json) for Baek's, checks in a sandbox that a
+Solution proves exactly the statements of its Challenge, with no axioms beyond
 [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
 and
 [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice).
+The two entries are arranged in the same way.
 
 Comparator compares the statements through the names of the constants they use: every constant that
 a statement mentions must be the same, by name and by definition, in the environment of the
 Challenge and in that of the Solution. The Challenge may import only Mathlib, so it carries its own
 copies of the definitions, while the Solution imports the libraries. The shared definitions
-therefore live once, in [`ChallengeDefs.lean`](../../ChallengeDefs.lean), in two marked blocks.
-[`scripts/sync_challenge_defs.py`](../../scripts/sync_challenge_defs.py) copies the blocks verbatim
-into [`Challenge.lean`](../../Challenge.lean); with `--check` it only compares them, as the CI does.
+therefore live once, in [`ChallengeDefs.lean`](../../ChallengeDefs.lean), in marked blocks: Baek's
+core definitions, the definitions of the stability statements, and formal-conjectures' definitions
+in two blocks.
+[`scripts/sync_challenge_defs.py`](../../scripts/sync_challenge_defs.py) copies the four blocks verbatim
+into [`Challenge.lean`](../../Challenge.lean), followed by the certificate's block of
+[`CertificateDefs.lean`](../../CertificateDefs.lean), and all but the stability block into
+[`baek/Challenge.lean`](../../baek/Challenge.lean); with `--check` it only compares them, as the CI does.
 The bridge modules [`MovingSofaBridge.Motion`](../../MovingSofaBridge/Motion.lean) and
 [`MovingSofaBridge.GerverSofa`](../../MovingSofaBridge/GerverSofa.lean) import
 [`ChallengeDefs`](../../ChallengeDefs.lean) and state their theorems about its constants, such as
-[`FormalConjectures.MovingSofa.gerversSofa`](../../Challenge.lean#L355) and
-[`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L362). So the bridge speaks about
-the very constants of the Challenge, not about copies of them. Baek's definitions in the Challenge
-are copies of the library's, and [`Solution.lean`](../../Solution.lean) proves that they agree
-([`Baek.isMovingSofa_iff_lib`](../../Solution.lean#L34), and
-[`Baek.gerverSofa_eq_lib`](../../Solution.lean#L57), which holds by definition).
+[`FormalConjectures.MovingSofa.gerversSofa`](../../Challenge.lean#L412) and
+[`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L419). So the bridge speaks about
+the very constants of the Challenges, not about copies of them. Baek's definitions in the Challenges
+are copies of the library's: [`SolutionCoercive.lean`](../../SolutionCoercive.lean) proves that they agree for the certificate entry,
+and [`baek/Solution.lean`](../../baek/Solution.lean) for Baek's ([`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35), and
+[`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58), which holds by definition).
 
-Between the two blocks the Challenge states
-[`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L316),
-because the second block defines $A$, $B$, $\varphi$ and $\theta$ as the components of the solution
+Between formal-conjectures' two blocks the Challenges state
+[`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L373),
+because the second of them defines $A$, $B$, $\varphi$ and $\theta$ as the components of the solution
 that this theorem provides. So [`ChallengeDefs.lean`](../../ChallengeDefs.lean) must prove the
 theorem at that point, with a module that it imports,
 [`MovingSofaBridge.RomikParams`](../../MovingSofaBridge/RomikParams.lean). That module cannot
-mention [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec`](../../Challenge.lean#L305), which
+mention [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec`](../../Challenge.lean#L362), which
 [`ChallengeDefs`](../../ChallengeDefs.lean) defines only after importing it. So
 [`MovingSofaBridge.GerverConstants.Spec`](../../MovingSofaBridge/GerverConstants.lean#L117) is a
 word-for-word copy of it, and [`ChallengeDefs`](../../ChallengeDefs.lean) proves the theorem by

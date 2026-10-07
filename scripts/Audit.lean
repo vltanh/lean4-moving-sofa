@@ -87,8 +87,10 @@ import all MovingSofaExtremal.All
 import all MovingSofaExtremal.Main
 import all MovingSofaExtremal.Unified
 import all ChallengeDefs
-import all Solution
+import all baek.Solution
 import all SolutionCoercive
+import all CertificateDefs
+import all CertificateProof
 
 /-!
 # Axiom and dependency audit
@@ -387,34 +389,40 @@ meta def coerciveResults : List (String × Name) :=
    ("Coercive route: optimality, uniqueness and stability",
     ``MovingSofaExtremal.gerver_sofa_optimal_unique_stable)]
 
-/-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
+/-- The theorems that Palomar's comparator checks: the twelve of Baek's entry (`theorem_names` of
+`baek/comparator.json`, proved in `baek/Solution.lean`), and the two about the certificate in the
+certificate entry (`comparator.json`). The other fifteen theorems of the certificate entry are
+restatements, in the root's `Solution.lean`, of theorems of `SolutionCoercive`, which the audit
+checks as declarations of the library; it cannot import the root's `Solution`, which declares the
+names of `baek.Solution`. -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
    ``Baek.gerver_params_unique,
    ``Baek.gerver_sofa_area,
    ``Baek.gerver_sofa_optimal,
    ``Baek.gerver_sofa_unique,
-   ``Baek.gerver_sofa_stable,
-   ``Baek.gerver_sofa_angle_stable,
-   ``Baek.gerver_sofa_stability_exponent,
    ``Bridge.isMovingSofa_iff,
    ``Bridge.sofaConstant_eq,
    ``Bridge.gerversSofa_eq,
    ``FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique,
    ``FormalConjectures.MovingSofa.isMovingSofa_gerversSofa,
    ``FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa,
-   ``FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa]
+   ``FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa,
+   ``Certificate.coercive_certificate,
+   ``Certificate.gerver_triple]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
 /-- Whether `m` is a module of the library (Baek's paper, the uniqueness of Gerver's sofa, the
 bridge to formal-conjectures' definitions, the stability of Gerver's sofa, the coercive route, the
-Challenge's definitions, and the second solution). -/
+Challenges' definitions, the fifteen proofs of the certificate entry in `SolutionCoercive`, and the
+definitions and the proof of the coercive certificate). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
     (`MovingSofaBridge).isPrefixOf m || (`MovingSofaStability).isPrefixOf m ||
-    (`MovingSofaExtremal).isPrefixOf m || m == `ChallengeDefs || m == `SolutionCoercive
+    (`MovingSofaExtremal).isPrefixOf m || m == `ChallengeDefs || m == `SolutionCoercive ||
+    m == `CertificateDefs || m == `CertificateProof
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

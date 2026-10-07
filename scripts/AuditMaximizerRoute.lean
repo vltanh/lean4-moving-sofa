@@ -136,7 +136,7 @@ meta def constantsIn (env : Environment) (select : Name → Bool) : NameSet := I
 
 meta def isRepositoryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||
-    (`MovingSofaBridge).isPrefixOf m || m == `ChallengeDefs || m == `Solution
+    (`MovingSofaBridge).isPrefixOf m || m == `ChallengeDefs || m == `baek.Solution
 
 meta def usedConstants (env : Environment) (c : Name) : Array Name :=
   match env.find? c with

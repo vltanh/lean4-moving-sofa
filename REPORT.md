@@ -20,15 +20,15 @@ Status of the formalization:
     (Section 2).
 - Theorem 8.4.1 (the structure of Gerver's sofa), which the paper states without proof, is proved
   from Romik's equations by interval arithmetic ([`MovingSofaOptimality/Gerver/`](MovingSofaOptimality/Gerver)).
-- `lake build` succeeds. The only `sorry`s are the statements of [`Challenge.lean`](Challenge.lean), which are
-  `sorry` by design and proved in [`Solution.lean`](Solution.lean). There is no `axiom`, `admit`, `native_decide` or
-  `implemented_by`.
+- `lake build` succeeds. The only `sorry`s are the statements of the repository's two Challenges,
+  [`Challenge.lean`](Challenge.lean) and [`baek/Challenge.lean`](baek/Challenge.lean), which are `sorry` by design and proved in [`Solution.lean`](Solution.lean) and
+  [`baek/Solution.lean`](baek/Solution.lean). There is no `axiom`, `admit`, `native_decide` or `implemented_by`.
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the library, every paper result and the
   Challenge theorems depend only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound). It also lists the
   results from prior work that each paper result uses (Section 8).
-- [`Challenge.lean`](Challenge.lean) restates Theorem 1.1.1, together with the existence and uniqueness of Gerver's
+- [`baek/Challenge.lean`](baek/Challenge.lean) restates Theorem 1.1.1, together with the existence and uniqueness of Gerver's
   parameters and the area of Gerver's sofa (between 2.2192 and 2.2199), using Mathlib's vocabulary
-  only. [`Solution.lean`](Solution.lean) proves these statements from the
+  only. [`baek/Solution.lean`](baek/Solution.lean) proves these statements from the
   library, and `lake comparator` accepts the solution. The Challenge also states the uniqueness of
   the optimal sofa, which is not a result of the paper; the README describes it.
 - Statements of the paper that are false as printed are formalized in their intended form; Section 6
@@ -602,7 +602,7 @@ formalization uses (Section 6). Gaps that can be repaired along the paper's line
 and are not listed (for example E4 in Lemma 2.5.6, E5 in Lemma 3.4.7, and E8 in Theorems 3.4.3,
 3.5.2 and 3.5.4). The docstring of each
 Lean declaration describes its departure ("Departure from the paper"), and so do
-[`formalization.yaml`](formalization.yaml) and [`docs/route_differences.tsv`](docs/route_differences.tsv).
+[`baek/formalization.yaml`](baek/formalization.yaml) and [`docs/route_differences.tsv`](docs/route_differences.tsv).
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |

@@ -18,8 +18,8 @@ The declaration locations come from the `.ilean` files that `lake build` writes.
 
 Configure the block below for the project: the documents to process, the namespaces in which the
 documents name declarations without their prefix, the top-level module names of the project, and
-the module whose declarations win when a name is declared twice (the Challenge, whose theorems
-the Solution restates).
+the modules whose declarations win, in order, when a name is declared in several modules (the
+Challenges, whose theorems the Solutions restate).
 """
 
 import argparse
@@ -37,9 +37,12 @@ NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'Movi
               'MovingSofaBridge', 'MovingSofaBridge.GerverConstants', 'MovingSofaStability']
 # Top-level module names of the project: a code span naming such a module links to its file.
 MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'MovingSofaStability',
-                'MovingSofaExtremal', 'ChallengeDefs', 'Challenge', 'Solution', 'SolutionCoercive')
-# The module whose declarations win when a name is declared in several modules.
-PREFERRED_MODULE = 'Challenge'
+                'MovingSofaExtremal', 'ChallengeDefs', 'Challenge', 'Solution', 'SolutionCoercive',
+                'CertificateDefs', 'CertificateProof', 'baek')
+# The modules whose declarations win when a name is declared in several modules, the first
+# winning over the second: the Challenges of the two Palomar entries, the certificate entry's at
+# the root and Baek's entry's in baek/.
+PREFERRED_MODULES = ('Challenge', 'baek.Challenge')
 # Directories, besides the repository root, against which the paths in the documents of a
 # given directory are resolved.
 PATH_BASES = {'': ['.github/workflows']}
@@ -81,18 +84,20 @@ def mathlib_page(module):
 
 def load_locations():
     """Each declaration's module and the line of its name, read from the `.ilean` files."""
-    locations, preferred = {}, {}
+    locations = {}
+    preferred = {module: {} for module in PREFERRED_MODULES}
     for ilean in sorted(BUILD.rglob('*.ilean')):
         data = json.loads(ilean.read_text(encoding='utf-8'))
         # A restored build cache keeps the outputs of deleted modules; skip them.
         if not (ROOT / module_file(data['module'])).is_file():
             continue
-        # The preferred module's declarations win over restatements elsewhere.
-        target = preferred if data['module'] == PREFERRED_MODULE else locations
+        # The preferred modules' declarations win over restatements elsewhere.
+        target = preferred.get(data['module'], locations)
         for name, ranges in data.get('decls', {}).items():
             # `ranges` holds the declaration's range, then its name's; lines count from 0.
             target[name] = (data['module'], ranges[4] + 1)
-    locations.update(preferred)
+    for module in reversed(PREFERRED_MODULES):
+        locations.update(preferred[module])
     if not locations:
         sys.exit('no .ilean files under %s; run `lake build` first' % BUILD)
     return locations

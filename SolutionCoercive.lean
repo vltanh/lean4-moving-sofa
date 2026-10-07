@@ -6,17 +6,23 @@ public import MovingSofaStability.Sharpness
 public import MovingSofaBridge.GerverSofa
 
 /-!
-# A second solution of the Challenge, through the coercive route
+# The certificate entry: fifteen of its theorems
 
-This module proves the fifteen theorems of `Challenge.lean` again, from the definitions of
-`ChallengeDefs` and the bridge `MovingSofaBridge`, with optimality, uniqueness and stability taken
-from the coercive route `MovingSofaExtremal` (`gerver_sofa_optimal_unique_stable`). It imports
-neither `Solution` nor `MovingSofaUniqueness.Main`.
+This module proves fifteen of the seventeen theorems of `Challenge.lean` (the certificate entry):
+the twelve that `baek/Challenge.lean` (Baek's entry) states too, and the three stability theorems.
+It uses the definitions of `ChallengeDefs` and the bridge `MovingSofaBridge`, with optimality,
+uniqueness and stability taken from the coercive route `MovingSofaExtremal`
+(`gerver_sofa_optimal_unique_stable`). It imports neither `baek.Solution` nor
+`MovingSofaUniqueness.Main`. `Solution`, the solution of the certificate entry, states these
+theorems under the Challenge's names, with the two theorems about the certificate of
+`CertificateProof`.
 
-The theorems are in the namespace `CoerciveSolution`, so that both solutions can be loaded together;
-`scripts/AuditCoerciveRoute.lean` checks that each has the type of the theorem of `Solution.lean`
-with the same name after the namespace, and that none uses Baek's Theorem 1.1.1, his results on
-balanced caps, or the first proof of uniqueness.
+The theorems are in the namespace `CoerciveSolution`, so that the audits can load them together with
+`baek/Solution.lean`; `scripts/AuditCoerciveRoute.lean` checks that the twelve that
+`baek/Solution.lean` also states have exactly the types of the matching theorems of
+`baek/Solution.lean` (it lists the pairs; for the bridge and formal-conjectures' theorems the names
+differ, as in `bridge_isMovingSofa_iff` for `Bridge.isMovingSofa_iff`), and that none of the fifteen
+uses Baek's Theorem 1.1.1, his results on balanced caps, or the first proof of uniqueness.
 -/
 
 @[expose] public section

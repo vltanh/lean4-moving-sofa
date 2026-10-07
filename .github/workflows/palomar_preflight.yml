@@ -6,8 +6,24 @@ name: Palomar preflight
 # Pin `uses` and `pipeline_commit` to the same full PalomarSubmission commit:
 #   git ls-remote https://github.com/PalomarRegistry/PalomarSubmission.git HEAD
 # `request_id` must be exactly 12 lowercase letters or digits.
+# The repository holds two entries: at the root, the coercive certificate (comparator.json,
+# formalization.yaml), and in baek/, Baek's optimality with the first proof of uniqueness
+# (baek/comparator.json, baek/formalization.yaml). Choose one with the inputs:
+#   gh workflow run palomar_preflight.yml --ref main
+#   gh workflow run palomar_preflight.yml --ref main -f comparator_config_path=baek/comparator.json \
+#     -f formalization_metadata_path=baek/formalization.yaml -f request_id=preflightb05
 on:
   workflow_dispatch:
+    inputs:
+      comparator_config_path:
+        description: "The entry's Comparator configuration"
+        default: "comparator.json"
+      formalization_metadata_path:
+        description: "The entry's metadata (its file name must be formalization.yaml)"
+        default: "formalization.yaml"
+      request_id:
+        description: "An id of exactly 12 lowercase letters or digits"
+        default: "preflightc01"
 
 permissions:
   contents: read
@@ -19,7 +35,7 @@ jobs:
       repository: ${{ github.repository }}
       commit: ${{ github.sha }}
       pipeline_commit: d4e41c1d5b0d114c4859e6e5831dc6d3ad1d0d44
-      request_id: preflightv05
+      request_id: ${{ inputs.request_id }}
       mode: full
       execution_profile: palomar-standard-v1
-      options: '{"comparator_config_path":"comparator.json","authorization_relationship":"I am a responsible author or maintainer"}'
+      options: '{"comparator_config_path":"${{ inputs.comparator_config_path }}","formalization_metadata_path":"${{ inputs.formalization_metadata_path }}","authorization_relationship":"I am a responsible author or maintainer"}'

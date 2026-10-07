@@ -16,7 +16,9 @@
     "FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique",
     "FormalConjectures.MovingSofa.isMovingSofa_gerversSofa",
     "FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa",
-    "FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa"
+    "FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa",
+    "Certificate.coercive_certificate",
+    "Certificate.gerver_triple"
   ],
   "definition_names": [],
   "permitted_axioms": [

@@ -41,8 +41,9 @@ rigid motions, and that shapes of nearly the largest area are close to it:
 More on each definition: [docs/definitions.md](docs/definitions.md).
 
 Read these before trusting the results: Lean's kernel checks the proofs, not that the statements mean
-what you intend. [`Challenge.lean`](Challenge.lean) states the results with Mathlib's vocabulary and two sets of
-definitions, Baek's and formal-conjectures'.
+what you intend. The Challenges of the two Palomar entries, [`Challenge.lean`](Challenge.lean) for the certificate entry and
+[`baek/Challenge.lean`](baek/Challenge.lean) for Baek's entry, state the results with Mathlib's vocabulary and two sets of definitions, Baek's
+and formal-conjectures'; the first also defines the terms of the stability theorems and of the certificate.
 
 Baek's (namespace `Baek`): the plane is `ℝ × ℝ`, and the hallway is the union of its horizontal side
 `(-∞, 1] × [0, 1]` and its vertical side `[0, 1] × (-∞, 1]`. A moving sofa is a closed, connected set
@@ -75,11 +76,26 @@ formal-conjectures' (namespace `FormalConjectures.MovingSofa`, with formal-conje
 `EuclideanSpace ℝ (Fin 2)`, moved by continuous paths of isometries that start at the identity; the
 sofa constant, the supremum of their areas; and Gerver's sofa, from Gerver's four constants.
 
+The certificate's (namespace `Certificate`, in [`Challenge.lean`](Challenge.lean) only), restated from the libraries: Baek's
+convex bodies, caps, surface area measures and curve areas, his upper bound 𝒬, the enlarged domain of triples, on
+which the cap need not satisfy his injectivity condition, and Gerver's cap.
+
 ## Results
 
 More on each theorem: [docs/results.md](docs/results.md).
 
-[`Solution.lean`](Solution.lean) proves the fifteen theorems of [`Challenge.lean`](Challenge.lean). The four main ones:
+The repository has two Palomar entries. Each has a Challenge, which states the theorems and imports only Mathlib,
+and a Solution, which proves them:
+
+- **the certificate entry**, at the root, not registered yet: [`Challenge.lean`](Challenge.lean) states seventeen theorems (Baek's
+  five, the bridge's three, formal-conjectures' four, the three stability theorems, the coercive certificate and the
+  theorem that Gerver's triple meets its hypothesis), and [`Solution.lean`](Solution.lean) proves them through the certificate,
+  without Baek's Theorem 1.1.1, the results of his balance argument or the first proof of uniqueness;
+- **Baek's entry**, in [`baek/`](baek), registered as PALOMAR-2026-10-02-000008: [`baek/Challenge.lean`](baek/Challenge.lean) states twelve of these
+  theorems (all but the stability theorems and the two about the certificate), and [`baek/Solution.lean`](baek/Solution.lean) proves them
+  through Baek's Theorem 1.1.1 and the first proof of uniqueness.
+
+The main ones:
 
 ```lean
 theorem Baek.gerver_sofa_optimal (P : GerverParams) (hP : P.IsSolution) (hPb : P.InBox) :
@@ -95,26 +111,38 @@ theorem Baek.gerver_sofa_stable (P : GerverParams) (hP : P.IsSolution) (hPb : P.
         EuclideanClose (C * √(sofaDeficit P S)) (normalizedSofa P S) (gerverSofa P) ∧
         (volume (normalizedSofa P S ∆ gerverSofa P)).toReal ≤ C' * √(sofaDeficit P S)
 
+theorem Certificate.coercive_certificate (P : Baek.GerverParams) (hP : P.IsSolution)
+    (hPb : P.InBox) (K B D : Set (ℝ × ℝ)) (h : Certificate.InWideL P.φ K B D) :
+    Certificate.upperQ P.φ K B D ≤ (volume (Baek.gerverSofa P)).toReal ∧
+      Baek.EuclideanClose
+        ((2 / cos P.φ) * √((volume (Baek.gerverSofa P)).toReal - Certificate.upperQ P.φ K B D))
+        K (Certificate.shiftedReferenceCap (Certificate.gerverCap P) K)
+
 theorem FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa
     (s : Set ℝ²) (hs : ∃ m, IsMovingSofa s m) :
     volume s = sofaConstant ↔ ∃ g : E(2), s = g '' gerversSofa
 ```
 
 - In `Baek`: Romik's equations have exactly one solution in a small box around Romik's numerical
-  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L372), [`Baek.gerver_params_unique`](Challenge.lean#L376)). Its area lies
-  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L382)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L388), Baek's Theorem
-  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L395)). A moving sofa whose area is ε less
-  than Gerver's is, once translated, within `C√ε` of it ([`Baek.gerver_sofa_stable`](Challenge.lean#L405)) and turns through at
-  least `π/2 - Cε` ([`Baek.gerver_sofa_angle_stable`](Challenge.lean#L415)), and no rate `C εᵃ` with `a > 1/2` holds
-  ([`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L425)).
-- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L439)), the sofa constant is
-  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L447)), and the two Gerver's sofas
-  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L455)).
+  one, so Gerver's sofa is well defined ([`Baek.gerver_params_exists`](Challenge.lean#L664), [`Baek.gerver_params_unique`](Challenge.lean#L668)). Its area lies
+  between 2.2192 and 2.2199 ([`Baek.gerver_sofa_area`](Challenge.lean#L674)). It is optimal ([`Baek.gerver_sofa_optimal`](Challenge.lean#L680), Baek's Theorem
+  1.1.1) and unique up to rigid motions ([`Baek.gerver_sofa_unique`](Challenge.lean#L687)). The certificate entry adds that a moving sofa
+  whose area is ε less than Gerver's is, once translated, within `C√ε` of it ([`Baek.gerver_sofa_stable`](Challenge.lean#L697)) and turns
+  through at least `π/2 - Cε` ([`Baek.gerver_sofa_angle_stable`](Challenge.lean#L707)), and that no rate `C εᵃ` with `a > 1/2` holds
+  ([`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L717)).
+- In `Certificate`, in the certificate entry only: on the enlarged domain of triples, Baek's upper bound 𝒬 is at most the area
+  `|G|` of Gerver's sofa, and the cap lies within `2 sec φ √(|G| - 𝒬)` of Gerver's cap translated horizontally,
+  where `φ` is Gerver's angle ([`Certificate.coercive_certificate`](Challenge.lean#L644), Theorem 11.1 of the
+  [manuscript](docs/paper/README.md)). Gerver's cap, with the tails of Gerver's triple, lies in this domain and attains
+  `𝒬 = |G|` ([`Certificate.gerver_triple`](Challenge.lean#L655)), so the hypothesis can be met.
+- In `Bridge`: the two notions of moving sofa agree ([`Bridge.isMovingSofa_iff`](Challenge.lean#L731)), the sofa constant is
+  the supremum of the areas of Baek's moving sofas ([`Bridge.sofaConstant_eq`](Challenge.lean#L739)), and the two Gerver's sofas
+  are the same set ([`Bridge.gerversSofa_eq`](Challenge.lean#L747)).
 - In `FormalConjectures.MovingSofa`: formal-conjectures' four statements, among them the open one
   above, derived from the theorems of `Baek` and `Bridge`.
 
-[docs/stability.md](docs/stability.md) states the stability theorems with the library's own forms. [`SolutionCoercive.lean`](SolutionCoercive.lean) proves the fifteen
-theorems again through the coercive route ([docs/coercive.md](docs/coercive.md)).
+[docs/stability.md](docs/stability.md) states the stability theorems with the library's own forms, and [docs/coercive.md](docs/coercive.md)
+describes the certificate and how the certificate entry proves its seventeen theorems.
 
 ## Proof outline
 
@@ -204,9 +232,15 @@ of Baek's proofs that came up while formalizing them.
 More on each file: [docs/layout.md](docs/layout.md).
 
 ```text
-Challenge.lean            the statements of record, for the Palomar registry
-ChallengeDefs.lean        the definitions that Challenge.lean copies
-Solution.lean             the proofs of the statements of record
+Challenge.lean            the statements of record of the certificate entry, for the Palomar registry
+Solution.lean             their proofs, through the certificate
+ChallengeDefs.lean        the definitions that the two Challenges copy
+CertificateDefs.lean      the certificate's definitions, which Challenge.lean copies
+CertificateProof.lean     the two theorems about the certificate, proved in these definitions
+SolutionCoercive.lean     fifteen theorems of the certificate entry, proved through the coercive route
+comparator.json           the Comparator configuration of the certificate entry
+formalization.yaml        its Palomar metadata
+baek/                     Baek's entry: its Challenge, Solution, Comparator configuration and metadata
 MovingSofaOptimality/     Baek's paper, one directory per chapter, with External/ for
                           the results it cites and Gerver/ for Gerver's sofa
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
@@ -215,7 +249,6 @@ MovingSofaBridge/         the bridge to formal-conjectures' definitions
 MovingSofaStability/      the stability of Gerver's sofa, and the punctured sofas that show
                           that its exponent is optimal
 MovingSofaExtremal/       the coercive route: optimality and uniqueness from one certificate
-SolutionCoercive.lean     the statements of record, proved again through the coercive route
 REPORT.md                 the audit of Baek's paper
 docs/                     these pages, the illustrated text (docs/proof/), the
                           manuscript (docs/paper/) and the archived notes of the
@@ -235,32 +268,40 @@ python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_d
 lake env lean scripts/AuditMaximizerRoute.lean
 lake env lean scripts/AuditCoerciveRoute.lean
 lake env lake comparator --config=comparator.json
-lake env lake comparator --config=comparator-coercive.json
+lake env lake comparator --config=baek/comparator.json
 ```
 
 The build uses Lean and Mathlib `v4.35.0-rc3`, pinned by [`lean-toolchain`](lean-toolchain) and [`lake-manifest.json`](lake-manifest.json).
-`lake build` succeeds, and its only `sorry`s are the fifteen statements of [`Challenge.lean`](Challenge.lean). The audit
-checks that every declaration of the libraries uses only the axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
-[`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's paper uses the
-results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
-that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean), and, with the second configuration, that the
-second solution [`SolutionCoercive.lean`](SolutionCoercive.lean) does too. Two more audits check that the second proof
-of Baek's theorem does not use Baek's Theorem 1.1.1, and that the coercive route and the stability proof use neither
-that theorem, nor Baek's balance argument, nor the first proof of uniqueness. GitHub Actions builds the project, runs
-the three audits and the route check, and checks the documentation on every push.
+`lake build` succeeds, and its only `sorry`s are the seventeen statements of [`Challenge.lean`](Challenge.lean) and the twelve of
+[`baek/Challenge.lean`](baek/Challenge.lean). The audit checks that every declaration of the libraries uses only the axioms
+[`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that every proof of a result of Baek's
+paper uses the results that Baek's proof cites, except the differences recorded with their reasons; and Comparator,
+that [`Solution.lean`](Solution.lean) proves exactly the statements of [`Challenge.lean`](Challenge.lean) ([`comparator.json`](comparator.json)), and
+[`baek/Solution.lean`](baek/Solution.lean) exactly those of [`baek/Challenge.lean`](baek/Challenge.lean) ([`baek/comparator.json`](baek/comparator.json)). Two more audits check
+that the second proof of Baek's theorem does not use Baek's Theorem 1.1.1, and that the proofs of the certificate
+entry (the coercive route, the stability proof and the certificate) use neither that theorem, nor Baek's balance
+argument, nor the first proof of uniqueness. GitHub Actions builds the project, runs the three audits, the route
+check and the check of the Challenges' copies of the definitions, and checks the documentation on every push.
 
 ## Palomar registry
 
-The library is registered in the [Palomar](https://palomar-registry.org) registry as
-[PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008): version 1 registers the optimality (commit `d0b42d2`),
-version 2 adds the uniqueness (commit `cf4feff`), version 3 adds the bridge to formal-conjectures, which brings the
-Challenge to twelve theorems (commit `eb93296`), and version 4 registers the simplified proofs that follow Baek's
-arguments (commit `16653ae`). The three stability theorems, which bring the Challenge to fifteen, are not registered
-yet; Palomar's preflight passed on commit `701ec74`, prepared for version 5. Palomar checks the proofs against
-[`Challenge.lean`](Challenge.lean), which imports only Mathlib; [`comparator.json`](comparator.json) selects its fifteen theorems, and
-[`formalization.yaml`](formalization.yaml) records provenance, authorship and AI use. The workflow
-[`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's mechanical verification on a commit
-([verification](docs/verification.md#continuous-integration-and-the-palomar-preflight)).
+The repository holds two entries for the [Palomar](https://palomar-registry.org) registry. Palomar checks the proofs of an
+entry against its Challenge, which imports only Mathlib; the entry's Comparator configuration selects the theorems,
+and its metadata records provenance, authorship and AI use.
+
+- **The certificate entry**, at the root, not registered yet: optimality, uniqueness and stability through the
+  coercive certificate ([`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean), [`comparator.json`](comparator.json), [`formalization.yaml`](formalization.yaml)). Its Challenge
+  states the twelve theorems of Baek's entry, the three stability theorems, the certificate and the theorem that
+  Gerver's triple meets the certificate's hypothesis.
+- **Baek's entry**, in [`baek/`](baek), registered as [PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008): Baek's paper, with the first
+  proof of uniqueness and the bridge to formal-conjectures ([`baek/Challenge.lean`](baek/Challenge.lean), [`baek/Solution.lean`](baek/Solution.lean),
+  [`baek/comparator.json`](baek/comparator.json), [`baek/formalization.yaml`](baek/formalization.yaml)). Versions 1 to 4 were registered from the root of the repository:
+  version 1 registers the optimality (commit `d0b42d2`), version 2 adds the uniqueness (commit `cf4feff`), version 3
+  adds the bridge to formal-conjectures, which brings the Challenge to twelve theorems (commit `eb93296`), and
+  version 4 registers the simplified proofs that follow Baek's arguments (commit `16653ae`).
+
+The workflow [`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's mechanical verification of either entry
+on a commit ([verification](docs/verification.md#continuous-integration-and-the-palomar-preflight)).
 
 ## License
 
@@ -285,6 +326,9 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
 - Claude Opus 5.5, with 8 sub-agents, then simplified the new libraries (6 October 2026): the two new proofs of
   optimality share one assembly, the stability library went from 87 files to 12 and from 12,550 lines to 7,585,
   and the formalization of Baek's paper and the connection with formal-conjectures did not change.
-- No person has reviewed the proofs; Lean's kernel checks every one of them. The work took seventeen
+- Claude Opus 5.5, with 3 sub-agents, then gave the certificate a Palomar entry of its own (6 October 2026),
+  whose Challenge states the certificate with the three results proved through it; the root of the repository
+  holds it, and Baek's entry is in [`baek/`](baek).
+- No person has reviewed the proofs; Lean's kernel checks every one of them. The work took nineteen
   rounds between 1 and 6 October 2026, with up to 26 sub-agents in a round.
 - Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).

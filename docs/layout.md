@@ -2,8 +2,8 @@
 
 [Back to the README](../README.md)
 
-The project has five libraries, one per result and one for the coercive route, and the files of the Palomar
-registry at its root.
+The project has five libraries, one per result and one for the coercive route. Its root holds the files of the
+certificate entry for the Palomar registry, and [`baek/`](../baek) those of Baek's entry.
 
 | Path | Contents |
 | --- | --- |
@@ -12,11 +12,13 @@ registry at its root.
 | [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
 | [`MovingSofaStability/`](../MovingSofaStability) | the stability of Gerver's sofa, with Baek's definitions, and the punctured sofas that show its exponent is optimal |
 | [`MovingSofaExtremal/`](../MovingSofaExtremal) | the coercive route: optimality and uniqueness from one certificate of the stability proof |
-| [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the definitions of the statements of record, which the Challenge copies |
-| [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the statements of record and their proofs |
-| [`SolutionCoercive.lean`](../SolutionCoercive.lean) | the statements of record proved again through the coercive route |
-| [`SolutionCoerciveComparator.lean`](../SolutionCoerciveComparator.lean) | the theorems of [`SolutionCoercive.lean`](../SolutionCoercive.lean) under the Challenge's names, for Comparator; no module imports it |
-| [`comparator.json`](../comparator.json), [`comparator-coercive.json`](../comparator-coercive.json), [`formalization.yaml`](../formalization.yaml) | Comparator's configurations for the two solutions, and the Palomar metadata |
+| [`ChallengeDefs.lean`](../ChallengeDefs.lean) | Baek's and formal-conjectures' definitions, which the two Challenges copy |
+| [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the certificate entry: its seventeen statements of record, and the same theorems under the Challenge's names, proved through the certificate; no module imports [`Solution.lean`](../Solution.lean) |
+| [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | the certificate entry: Comparator's configuration and the Palomar metadata |
+| [`CertificateDefs.lean`](../CertificateDefs.lean) | the definitions of the certificate's statements, which [`Challenge.lean`](../Challenge.lean) copies |
+| [`CertificateProof.lean`](../CertificateProof.lean) | the two theorems about the certificate in these definitions, proved from [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) and [`MovingSofaStability.wideGerver_value`](../MovingSofaStability/Deficit.lean#L350), and the lemmas that identify the definitions with the libraries' |
+| [`SolutionCoercive.lean`](../SolutionCoercive.lean) | fifteen theorems of the certificate entry, the twelve of Baek's entry and the three stability theorems, proved through the coercive route in the namespace `CoerciveSolution` |
+| [`baek/`](../baek) | Baek's entry: its twelve statements of record ([`baek/Challenge.lean`](../baek/Challenge.lean)), their proofs through Baek's Theorem 1.1.1 and the first proof of uniqueness ([`baek/Solution.lean`](../baek/Solution.lean)), Comparator's configuration ([`baek/comparator.json`](../baek/comparator.json)) and the Palomar metadata ([`baek/formalization.yaml`](../baek/formalization.yaml)) |
 | [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
 | [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
@@ -129,9 +131,9 @@ prove the theorem again from it (a remark at the end of Section 8 of the [manusc
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
 | [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
-| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the coercive route and the stability library use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves exactly the statements of [`Solution.lean`](../Solution.lean) |
+| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the proofs of the certificate entry (the coercive route, the stability library, [`SolutionCoercive.lean`](../SolutionCoercive.lean) and the certificate's modules) use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that the twelve theorems that [`SolutionCoercive.lean`](../SolutionCoercive.lean) shares with [`baek/Solution.lean`](../baek/Solution.lean) have the same statements |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |
-| [`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py) | copies the shared definitions into the Challenge, or checks the copy |
+| [`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py) | copies the shared definitions into the two Challenges, or checks the copies and their order |
 | [`scripts/linkify_docs.py`](../scripts/linkify_docs.py), [`scripts/check_md_tables.py`](../scripts/check_md_tables.py) | link the documents to the code; check their tables |
