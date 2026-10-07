@@ -93,37 +93,5 @@ theorem effective_coarse_recovery {P : GerverParams}
       nlinarith [hδbound])
   exact ⟨hfront',hback'⟩
 
-/-- The helper used by the right-angle module. -/
-theorem effective_disk_recovery_10300 {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {K S : Set Point} {ε δ : ℝ}
-    (hε0 : 0≤ε) (hε20 : ε≤1/(10:ℝ)^20)
-    (hSK : S⊆capShape K)
-    (herode : euclideanErosion (sqrt 2*δ) (gerverSofa P)⊆capShape K)
-    (hmissing : area (capShape K\S)≤ε)
-    (hcap : EuclideanClose δ K P.cap) :
-    EuclideanClose (10300*sqrt ε) S (gerverSofa P) := by
-  rcases hε0.eq_or_lt with hz|hp
-  · subst ε
-    have hm : area (capShape K\S)=0 := by
-      exact le_antisymm (hmissing.trans (by norm_num)) ENNReal.toReal_nonneg
-    have hsEq:=measurable_subset_eq_of_area_sdiff_zero
-      (measurable_capShape hcap.left_cap) hcap.left_cap_compact.measure_lt_top.ne hSK hm
-    subst S
-    exact EuclideanClose.refl _ (by positivity)
-  · have hK:=hcap.left_cap
-    have hclose:=hcap.abs_supp_sub_le hK.2.1.2.1
-      (gm_isConvexBody_cap hP hbox).2.1 hK.2.1.1
-      (gm_isConvexBody_cap hP hbox).1
-    have hδbound : δ≤514*sqrt ε := by
-      have := hcap.radius_nonneg
-      exact le_trans (le_mul_of_one_le_left this (by norm_num : (1:ℝ)≤514))
-        (by simp)
-    have hhall : ApproxHallways K (capShape K) 0 :=
-      capShape_exact_hallways hK
-    exact effective_coarse_recovery hP hbox hK
-      (show capShape K⊆K from sdiff_subset)
-      hp hε20 (by exact hcap.radius_nonneg) le_rfl hδbound
-      (by simp) hclose hhall hmissing
 
 end MovingSofaQuantitative
