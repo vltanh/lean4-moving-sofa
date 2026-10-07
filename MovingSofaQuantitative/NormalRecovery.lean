@@ -204,6 +204,18 @@ theorem nearest_point_frontier {K : Set Point} (hK : IsCompact K)
   rw [←hnear] at hmin
   exact (not_lt_of_ge hmin) hcloser
 
+/-- The product metric is the maximum coordinate distance, so it is
+dominated by the Euclidean norm used in the sofa geometry. -/
+theorem product_dist_le_euclideanDist (p q : Point) :
+    dist p q≤euclideanDist p q := by
+  have hx:=abs_fst_le_norm2 (p-q)
+  have hy:=abs_snd_le_norm2 (p-q)
+  rw [Prod.dist_eq]
+  simp only [Real.dist_eq]
+  apply max_le
+  · simpa [euclideanDist,Prod.fst_sub,abs_sub_comm] using hx
+  · simpa [euclideanDist,Prod.snd_sub,abs_sub_comm] using hy
+
 /-- A nearest point of the complement of a removed region in a convex body
 belongs to the closure of the removed region. Otherwise a short step from the
 nearest point toward the deleted point remains in the complement but is
@@ -249,7 +261,10 @@ theorem nearest_cap_complement_mem_closure {K N G : Set Point}
     nlinarith
   have hzOutside : z∉closure N := by
     have hzball : z∈Metric.ball q r := by
-      simpa [Metric.mem_ball,dist_eq] using hznear
+      change dist z q<r
+      have hmetric:=product_dist_le_euclideanDist q z
+      rw [dist_comm] at hmetric
+      exact lt_of_le_of_lt hmetric hznear
     exact hball hzball
   have hzNotN : z∉N := fun hzN => hzOutside (subset_closure hzN)
   have hzG : z∈G := by
