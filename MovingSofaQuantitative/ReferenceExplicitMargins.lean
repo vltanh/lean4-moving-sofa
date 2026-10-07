@@ -1181,6 +1181,79 @@ theorem gerver_envelope_height_eq_roof {P : GerverParams}
     exact ⟨h.1,h.2.1⟩
   exact roof_value_of_envelope hroof hΓ hSlope hbounds hq
 
+/-- A point lying both in the closure of Gerver's niche and in the sofa
+must lie on the true envelope graph. The graph identity is from the integrated
+regular-closed proof, and the graph's uniqueness comes from its vertical
+slope estimate, rather than any Jordan curve assumption. -/
+theorem gerver_closure_niche_inter_shape_subset_envelope {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    closure (niche P.cap (π/2)) ∩ gerverSofa P ⊆
+      gerverEnvelope P := by
+  classical
+  let a:=gerverRoofLeft P
+  let b:=gerverRoofRight P
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hΓ:=gerver_niche_envelope hP hbox
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbounds : ∀z∈gerverEnvelope P,
+      z.1∈Icc a b ∧ 0≤z.2 := by
+    intro z hz
+    obtain ⟨hx,hy⟩:=envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP (romik_bounds hP hbox)
+        ht.1 ht.2) z hz
+    exact ⟨hx,hy.1⟩
+  let γc : ℝ→ℝ := fun x=>γ (max a (min x b))
+  have hγc : Continuous γc :=
+    continuous_clamped_roof hroof.order.le hroof.slope_nonneg
+      hroof.roof_lipschitz
+  let C : Set Point :=
+    {z | z.1∈Icc a b ∧ 0≤z.2 ∧ z.2≤γc z.1}
+  have hCclosed : IsClosed C := by
+    have hx : IsClosed {z : Point | z.1∈Icc a b} :=
+      isClosed_Icc.preimage continuous_fst
+    have hy0 : IsClosed {z : Point | 0≤z.2} :=
+      isClosed_le continuous_const continuous_snd
+    have hy : IsClosed {z : Point | z.2≤γc z.1} :=
+      isClosed_le continuous_snd (hγc.comp continuous_fst)
+    exact (hx.inter hy0).inter hy
+  have hNsub : niche P.cap (π/2)⊆C := by
+    intro p hp
+    rw [hroof.niche_eq] at hp
+    have hcl : max a (min p.1 b)=p.1 := by
+      have hlo:=hp.1.1
+      have hhi:=hp.1.2
+      simp [min_eq_left hhi,max_eq_right hlo]
+    exact ⟨hp.1,hp.2.1,by simpa [C,γc,hcl] using hp.2.2.le⟩
+  intro q hq
+  have hqc : q∈C :=
+    hCclosed.closure_subset (closure_mono hNsub hq.1)
+  obtain ⟨hx,hy0,hyup⟩ := hqc
+  have hcl : max a (min q.1 b)=q.1 := by
+    simp [min_eq_left hx.2,max_eq_right hx.1]
+  have hge : γ q.1≤q.2 := by
+    by_contra hn
+    have hqn : q∈niche P.cap (π/2) := by
+      rw [hroof.niche_eq]
+      exact ⟨hx,hy0,lt_of_not_ge hn⟩
+    have hqNot : q∉niche P.cap (π/2) := by
+      have hG:=gerver_shape_eq hP hbox
+      have hqS:=hq.2
+      rw [hG,capShape] at hqS
+      exact hqS.2
+    exact hqNot hqn
+  have heq : q.2=γ q.1 := by
+    simpa [C,γc,hcl] using le_antisymm hyup hge
+  obtain ⟨z,hz,hzx⟩ := env_exists_curve_fst henv hx
+  have hzheight:=roof_value_of_envelope hroof hΓ hSlope hbounds hz
+  have hqz : q=z := by
+    apply Prod.ext
+    · exact hzx.symm
+    · rw [heq,hzx,hzheight]
+  rw [hqz]
+  exact hz
+
 /-- Explicit roof margin with coefficient 5/51. -/
 theorem gerver_explicit_roof_slack {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
