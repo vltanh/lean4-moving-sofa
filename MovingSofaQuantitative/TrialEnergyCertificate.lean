@@ -298,6 +298,164 @@ def closedCheck : Bool :=
   componentCheck .r2 && componentCheck .r3 && componentCheck .r4 &&
   componentCheck .B && componentCheck .D && scalarCheck
 
+
+/-- Real parameter vector used by the specialized certificate. -/
+def realPoint (P : GerverParams) (u : ℝ) : Fin 3 → ℝ
+  | 0 => P.φ | 1 => P.θ | 2 => u
+
+/-- The encoded Hermite value is the actual fixed trial value.  The proof is
+piecewise on the sixteen intervals; all coefficients are the literals in
+\`CriticalTrial.node\`. -/
+theorem g_real {P : GerverParams} (hP : P.IsSolution) (u : ℝ) :
+    (g t).realValue (realPoint P u) = CriticalTrial.g P u := by
+  unfold g CriticalTrial.g
+  simp only [BranchExpr.realValue,TrigExpr.realValue,realPoint]
+  by_cases hu : u ≤ P.φ
+  · rw [if_pos hu]
+    simp [gapValue,CriticalTrial.q]
+  · rw [if_neg hu]
+    have hord := CriticalTrial.ordered hP
+    exact CriticalTrial.hermite_expr_value_eq hP hord u
+
+theorem dg_real {P : GerverParams} (hP : P.IsSolution) (u : ℝ) :
+    (dg t).realValue (realPoint P u) = CriticalTrial.dg P u := by
+  unfold dg CriticalTrial.dg
+  simp only [BranchExpr.realValue,TrigExpr.realValue,realPoint]
+  by_cases hu : u ≤ P.φ
+  · rw [if_pos hu]
+    simp [gapDeriv,CriticalTrial.q]
+  · rw [if_neg hu]
+    have hord := CriticalTrial.ordered hP
+    exact CriticalTrial.hermite_expr_deriv_eq hP hord u
+
+/-- Each residual expression has exactly the semantics used by the scalar
+energy.  Singular endpoints are irrelevant to the interval integral and are
+never inverted by a cell that contains them. -/
+theorem residual_real {P : GerverParams} (hP : P.IsSolution) (k : Kind)
+    {u : ℝ} :
+    (residual k).realValue (realPoint P u) =
+      match k with
+      | .r2 => CriticalTrial.r2 P u
+      | .r3 => CriticalTrial.r3 P u
+      | .r4 => CriticalTrial.r4 P u
+      | .B => CriticalTrial.rB P u
+      | .D => CriticalTrial.rD P u := by
+  fin_cases k <;>
+    simp [residual,r2,r3,r4,rB,rD,BranchExpr.realValue,TrigExpr.realValue,
+      realPoint,g_real hP,dg_real hP,CriticalTrial.r2,CriticalTrial.r3,
+      CriticalTrial.r4,CriticalTrial.rB,CriticalTrial.rD,
+      CriticalTrial.startValue,CriticalTrial.c]
+
+/-- The parameter box contains the actual Gerver parameters at every t. -/
+theorem realPoint_in_parameterBox {P : GerverParams} (hbox : P.InBox) (u : ℝ)
+    (hu : (parameterBox 2).Contains u) :
+    InBox parameterBox (realPoint P u) := by
+  intro i
+  fin_cases i
+  · simpa [parameterBox,realPoint] using hbox.1
+  · simpa [parameterBox,realPoint] using hbox.2.1
+  · simpa [realPoint] using hu
+
+/-- One certified t-cell bounds the real squared residual on that entire
+cell.  This is the local soundness statement needed by the integral sum. -/
+theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    (k : Kind) (lo hi : T) (j : Fin subcells) {U : ℚ}
+    (hc : cellUpper k lo hi j = some U) :
+    ∃ a b : ℝ, a ≤ b ∧
+      (∀ u ∈ Icc a b,
+        (match k with
+        | .r2 => CriticalTrial.r2 P u
+        | .r3 => CriticalTrial.r3 P u
+        | .r4 => CriticalTrial.r4 P u
+        | .B => CriticalTrial.rB P u
+        | .D => CriticalTrial.rD P u)^2 ≤ U) := by
+  unfold cellUpper at hc
+  cases hL : lo.intervalValue parameterBox with
+  | none => simp [hL] at hc
+  | some L =>
+    cases hH : hi.intervalValue parameterBox with
+    | none => simp [hL,hH] at hc
+    | some H =>
+      split at hc <;> try contradiction
+      let a : ℝ := L.lo + (H.lo-L.lo)*(j.val:ℚ)/subcells
+      let b : ℝ := H.hi + (L.hi-H.hi)*((subcells-j.val-1:ℕ):ℚ)/subcells
+      let box : Box3
+        | 0 => parameterBox 0
+        | 1 => parameterBox 1
+        | 2 => ⟨a,b⟩
+      cases hI : (residual k).intervalValue box with
+      | none => simp [hL,hH,hI] at hc
+      | some I =>
+        refine ⟨a,b,?_,?_⟩
+        · exact_mod_cast show
+            L.lo + (H.lo-L.lo)*(j.val:ℚ)/subcells ≤
+            H.hi + (L.hi-H.hi)*((subcells-j.val-1:ℕ):ℚ)/subcells by
+              nlinarith
+        · intro u hu
+          have hp : InBox box (realPoint P u) := by
+            intro i
+            fin_cases i
+            · simpa [box,realPoint] using hbox.1
+            · simpa [box,realPoint] using hbox.2.1
+            · simpa [box,realPoint,Interval.Contains] using hu
+          have hv := BranchExpr.intervalValue_sound (residual k) hp hI
+          rw [residual_real hP] at hv
+          have hs : (match k with
+              | .r2 => CriticalTrial.r2 P u
+              | .r3 => CriticalTrial.r3 P u
+              | .r4 => CriticalTrial.r4 P u
+              | .B => CriticalTrial.rB P u
+              | .D => CriticalTrial.rD P u)^2 ≤
+              max 0 (max (I.lo*I.lo) (I.hi*I.hi)) := by
+            have hlo := hv.1
+            have hhi := hv.2
+            rcases le_total 0 (match k with
+              | .r2 => CriticalTrial.r2 P u
+              | .r3 => CriticalTrial.r3 P u
+              | .r4 => CriticalTrial.r4 P u
+              | .B => CriticalTrial.rB P u
+              | .D => CriticalTrial.rD P u) with hp | hn
+            · exact_mod_cast (sq_le_sq₀ hp (hhi.trans (by exact_mod_cast
+                le_max_right (I.lo*I.lo) (I.hi*I.hi)))).2
+            · have hh := neg_le_neg hlo
+              nlinarith [sq_nonneg (match k with
+                | .r2 => CriticalTrial.r2 P u
+                | .r3 => CriticalTrial.r3 P u
+                | .r4 => CriticalTrial.r4 P u
+                | .B => CriticalTrial.rB P u
+                | .D => CriticalTrial.rD P u)]
+          simp only [Option.some.injEq] at hc
+          subst U
+          nlinarith
+
+/-- Summing the accepted cells over every retained analytic piece bounds the
+corresponding real integral.  Piece endpoints are exact affine expressions in
+phi, theta and pi; \`CriticalTrial.ordered\` proves that the retained list is a
+partition of the relevant arc. -/
+theorem computedUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
+    (k : Kind) {U : ℚ} (hc : computedUpper k = some U) :
+    match k with
+    | .r2 => arcSquare P.φ (π/2-P.φ) (CriticalTrial.r2 P) ≤ U
+    | .r3 => arcSquare (π/2-P.φ) (π/2) (CriticalTrial.r3 P) ≤ U
+    | .r4 => arcSquare P.φ (π/2) (CriticalTrial.r4 P) ≤ U
+    | .B => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rB P) ≤ U
+    | .D => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rD P) ≤ U := by
+  have hord := CriticalTrial.ordered hP
+  have hpartition := CriticalTrial.retained_piece_partition hP k
+  unfold computedUpper at hc
+  exact CriticalTrial.integral_le_retained_cell_sum hP hbox k hord hpartition
+    (fun lo hi j V hV => cellUpper_sound hP hbox k lo hi j hV) hc
+
+/-- The two non-mesh energy pieces have direct interval enclosures. -/
+theorem scalar_closed_parts {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+    CriticalTrial.q^2*tan P.φ ≤ r1Upper ∧
+    CriticalTrial.bridgeSineCoefficient P^2 *
+      (tan (CriticalTrial.c P)-tan P.φ) ≤ bGapUpper := by
+  constructor
+  · exact CriticalTrial.r1_interval_bound hP hbox
+  · exact CriticalTrial.bridge_gap_interval_bound hP hbox
+
+
 /-
 Soundness bridge.  The proof follows the same pattern for every retained
 piece: interval evaluation bounds r(t)^2 on the whole subcell, then
@@ -320,24 +478,14 @@ theorem componentCheck_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
     · exact hbox.1
     · exact hbox.2.1
     · norm_num [parameterBox, Interval.Contains]
-  -- The retained-piece ordering is exactly the 17-node ordering of CriticalTrial.
-  have hord := CriticalTrial.ordered hP
-  -- Expanding componentCheck/computedUpper produces the finite list of
-  -- interval cell bounds.  Each is converted to a real bound with
-  -- BranchExpr.intervalValue_sound and then integrated.
-  unfold componentCheck computedUpper at hc
-  split at hc <;> simp_all
-  all_goals
-    first
-    | exact CriticalTrial.integral_component_le_of_closed_cells
-        hP hbox k hparams hord hc
-    | aesop
-
-theorem scalar_closed_parts {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
-    CriticalTrial.q^2*tan P.φ ≤ r1Upper ∧
-    CriticalTrial.bridgeSineCoefficient P^2 *
-      (tan (CriticalTrial.c P)-tan P.φ) ≤ bGapUpper := by
-  exact CriticalTrial.closed_piece_interval_bounds hP hbox
+  unfold componentCheck at hc
+  cases hU : computedUpper k with
+  | none => simp [hU] at hc
+  | some U =>
+      have hreal := computedUpper_sound hP hbox k hU
+      have hle : U ≤ componentUpper k := by
+        simpa only [hU,decide_eq_true_eq] using hc
+      exact hreal.trans (by exact_mod_cast hle)
 
 /-- The exact scalar trial energy is below 147/125 on the entire parameter box. -/
 theorem energy_lt_147_125 {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
