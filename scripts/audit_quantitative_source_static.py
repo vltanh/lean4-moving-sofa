@@ -98,8 +98,8 @@ LEAN_ONLY_FINITE_PROOFS: tuple[tuple[str, str, str], ...] = (
     ),
 )
 FORBIDDEN_FINITE_PROOF_ORACLES = re.compile(
-    r"\\b(?:native_decide|run_tac|unsafe|runIO|readFile|readProcess|"
-    r"evalIO|sorry|admit|axiom)\\b"
+    r"\b(?:native_decide|run_tac|unsafe|runIO|readFile|readProcess|"
+    r"evalIO|sorry|admit|axiom)\b"
 )
 
 # Source-shape blockers which cannot be resolved by finding an identifier.
@@ -283,10 +283,10 @@ def source_audit(root: Path) -> dict:
             errors.append({"kind": "missing_lean_native_certificate_file",
                            "checker": checker, "proof": proof_file})
             continue
-        if not re.search(r"\\bdef\\s+closedCheck\\b", checker_src):
+        if not re.search(r"\bdef\s+closedCheck\b", checker_src):
             errors.append({"kind": "no_closed_lean_boolean", "file": checker})
-        if not re.search(r"\\btheorem\\s+" + re.escape(reduction) +
-                         r"\\b[\\s\\S]*?:=\\s*by\\s+decide\\b", proof_src):
+        if not re.search(r"\btheorem\s+" + re.escape(reduction) +
+                         r"\b[\s\S]*?:=\s*by\s+decide\b", proof_src):
             errors.append({"kind": "no_kernel_decide_reduction",
                            "file": proof_file, "theorem": reduction})
         for source_file in {checker, proof_file}:
@@ -303,7 +303,7 @@ def source_audit(root: Path) -> dict:
          ("checkTree_sound", "contract_safe")),
     ):
         for name in names:
-            if not re.search(r"\\btheorem\\s+" + re.escape(name) + r"\\b",
+            if not re.search(r"\btheorem\s+" + re.escape(name) + r"\b",
                              contents.get(path, "")):
                 errors.append({"kind": "missing_lean_soundness_bridge",
                                "file": path, "theorem": name})
