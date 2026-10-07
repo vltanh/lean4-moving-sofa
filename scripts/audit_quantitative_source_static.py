@@ -106,6 +106,16 @@ FORBIDDEN_FINITE_PROOF_ORACLES = re.compile(
 # These require an actual proof rewrite; removing or renaming the marker without
 # supplying the missing argument must not be counted as progress.
 PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
+    "MovingSofaQuantitative/ReferenceExplicitMargins.lean": (
+        (
+            r"have\\s+hIU\\s*:=\\s*intervalIntegral\\.integral_mono_on"
+            r"\\s+hd\\.1\\s+hd\\.2",
+            "The final core-roof step invokes integral_mono_on with a "
+            "pointwise bound only at d; it needs an inequality for every "
+            "integration variable, integrability hypotheses, and a valid "
+            "FTC theorem from the Gerver support-function derivative.",
+        ),
+    ),
     "MovingSofaQuantitative/EffectiveRegularizationSupport.lean": (
         (
             r"subset\s*:\s*∀r≥0,interval\s+r⊆Icc",
