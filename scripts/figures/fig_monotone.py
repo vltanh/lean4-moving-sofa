@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""The figures of Chapters 2 and 3, in docs/proof/figures/02-preliminaries/ and
-docs/proof/figures/03-monotone/.
+"""The figures of Chapters 2 and 3, in baek/proof/figures/02-preliminaries/ and
+baek/proof/figures/03-monotone/.
 
     python3 scripts/figures/fig_monotone.py
 

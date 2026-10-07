@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""The figures of Chapters 8 and 9, in docs/proof/figures/08-convex-curves/ and
-docs/proof/figures/09-optimality/.
+"""The figures of Chapters 8 and 9, in baek/proof/figures/08-convex-curves/ and
+baek/proof/figures/09-optimality/.
 
     python3 scripts/figures/fig_optimality.py
 

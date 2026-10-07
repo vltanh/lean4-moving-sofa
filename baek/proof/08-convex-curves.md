@@ -401,7 +401,7 @@ $\lbrace \langle \cdot, u_t \rangle = h_K(t) \rbrace$, so $e_K(t) = \lbrace P \r
 If $P \notin K$, then $\alpha, \beta > 0$, so $v_K^+(a) \ne v_K^-(b)$ and the three points are not
 collinear, which is (1). The difference $v_K^-(b) - v_K^+(a) = \alpha v_a + \beta v_b$ is a positive
 multiple of $v_{t'}$ for some $t' \in (a, b)$, which is (2). (Baek's proof writes this difference
-with the opposite sign; [`baek/REPORT.md`](../../baek/REPORT.md), E27.) Let $T = X \cap H'$, the triangle with
+with the opposite sign; [`baek/REPORT.md`](../REPORT.md), E27.) Let $T = X \cap H'$, the triangle with
 vertices $v_K^+(a)$, $P$, $v_K^-(b)$. Then $K'$ lies in $T$, contains the side of $T$ on $l'$, and
 meets the other two sides only at $v_K^+(a)$ and $v_K^-(b)$. This gives (i), (iii) and (iv). For
 (ii), let $t \in (a, b)$. The function $\langle \cdot, u_t \rangle$ decreases along both sides of

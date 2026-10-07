@@ -33,13 +33,13 @@ that Comparator can check them.
 ## 13.1 The two sets of definitions
 
 The statements of record are in the Challenges of the two Palomar entries,
-[`Challenge.lean`](../../Challenge.lean) and [`baek/Challenge.lean`](../../baek/Challenge.lean). Both restate
+[`Challenge.lean`](../../Challenge.lean) and [`baek/Challenge.lean`](../Challenge.lean). Both restate
 formal-conjectures' definitions verbatim from its file `FormalConjectures/Wikipedia/MovingSofa.lean`
 (Git blob `59b6ed7eb42e11b208b09539c245da4d3f11ed00`), inside the namespace
 `FormalConjectures.MovingSofa` instead of `MovingSofa`. The only other change is an explicit name
 for the topology instance on $\mathrm{E}(2)$, which formal-conjectures leaves anonymous: the name
 that Lean generates for an anonymous instance depends on the library that declares it. The
-[Definitions](../definitions.md) page shows the Lean code; this section states the definitions in
+[Definitions](../../docs/definitions.md) page shows the Lean code; this section states the definitions in
 the notation of this text.
 
 Write $\mathbb{E}^2$ for `EuclideanSpace ℝ (Fin 2)`, with points $q = (q_0, q_1)$, and
@@ -804,7 +804,7 @@ theorems of the Challenge of Baek's entry that it uses.
 ![A diagram of the twelve theorems of the Challenge in three rows: Baek's five above, formal-conjectures' four in the middle, the bridge's three below. Arrows lead from a theorem to the theorems of formal-conjectures whose proofs in baek/Solution.lean use it: gerver_params_exists and gerver_sofa_optimal to the three theorems about Gerver's sofa, gerver_sofa_unique to the congruence theorem, isMovingSofa_iff to the first and the third of them, sofaConstant_eq to the second and the third, and gerversSofa_eq to all three; a dashed arrow leads from ABφθSpec.existsUnique, which defines Gerver's constants, to gerversSofa_eq. gerver_params_unique and gerver_sofa_area have no arrows](figures/13-bridge/dependencies.svg)
 
 *Figure 13.5.* The twelve theorems of Baek's entry and the proofs of formal-conjectures' theorems
-in its Solution, [`baek/Solution.lean`](../../baek/Solution.lean): an arrow leads from a theorem to each theorem whose proof
+in its Solution, [`baek/Solution.lean`](../Solution.lean): an arrow leads from a theorem to each theorem whose proof
 uses it. Baek's theorems (blue) come from the libraries
 [`MovingSofaOptimality`](../../MovingSofaOptimality) and
 [`MovingSofaUniqueness`](../../MovingSofaUniqueness), the bridge's (green) from
@@ -814,7 +814,7 @@ which [`gerversSofa_eq`](../../MovingSofaBridge/GerverSofa.lean#L507) and the ot
 of the middle row speak. The uniqueness of Romik's parameters and the area bounds of Gerver's sofa
 are not used.
 
-In [`MovingSofaExtremal/Statements.lean`](../../MovingSofaExtremal/Statements.lean), as in [`baek/Solution.lean`](../../baek/Solution.lean), two private lemmas,
+In [`MovingSofaExtremal/Statements.lean`](../../MovingSofaExtremal/Statements.lean), as in [`baek/Solution.lean`](../Solution.lean), two private lemmas,
 $\alpha_{\mathrm{fc}} = \lvert G \rvert$ and $\lvert G_{\mathrm{fc}} \rvert = \lvert G \rvert$,
 carry (3), and the element $\rho$ of Lemma 13.6 turns the rotation and the translation of Theorem
 1.3 into an element of $\mathrm{E}(2)$
@@ -826,17 +826,17 @@ The repository has two Palomar entries, each with a Challenge that states its th
 and a Solution that proves them. The certificate entry, at the root, states seventeen theorems in
 [`Challenge.lean`](../../Challenge.lean): the twelve below, three on the stability of Gerver's sofa and
 two about a certificate for Baek's upper bound; [`Solution.lean`](../../Solution.lean) proves them
-through the certificate ([Results](../results.md)). Baek's entry, in [`baek/`](../../baek), states the
-twelve in [`baek/Challenge.lean`](../../baek/Challenge.lean): Baek's five
+through the certificate ([Results](../../docs/results.md)). Baek's entry, in [`baek/`](..), states the
+twelve in [`baek/Challenge.lean`](../Challenge.lean): Baek's five
 ([`Baek.gerver_params_exists`](../../Challenge.lean#L664),
 [`Baek.gerver_params_unique`](../../Challenge.lean#L668),
 [`Baek.gerver_sofa_area`](../../Challenge.lean#L674),
 [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L680),
 [`Baek.gerver_sofa_unique`](../../Challenge.lean#L687)), the bridge's three, and formal-conjectures'
-four. [`baek/Solution.lean`](../../baek/Solution.lean) proves them: it restates eleven, and the twelfth,
+four. [`baek/Solution.lean`](../Solution.lean) proves them: it restates eleven, and the twelfth,
 `ABφθSpec.existsUnique`, is proved in [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), which it
 imports. Lake's Comparator, configured by [`comparator.json`](../../comparator.json) for the certificate
-entry and by [`baek/comparator.json`](../../baek/comparator.json) for Baek's, checks in a sandbox that a
+entry and by [`baek/comparator.json`](../comparator.json) for Baek's, checks in a sandbox that a
 Solution proves exactly the statements of its Challenge, with no axioms beyond
 [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext),
 [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
@@ -854,7 +854,7 @@ in two blocks.
 [`scripts/sync_challenge_defs.py`](../../scripts/sync_challenge_defs.py) copies the four blocks verbatim
 into [`Challenge.lean`](../../Challenge.lean), followed by the certificate's block of
 [`MovingSofaExtremal/CertificateDefs.lean`](../../MovingSofaExtremal/CertificateDefs.lean), and all but the stability block into
-[`baek/Challenge.lean`](../../baek/Challenge.lean); with `--check` it only compares them, as the CI does.
+[`baek/Challenge.lean`](../Challenge.lean); with `--check` it only compares them, as the CI does.
 The bridge modules [`MovingSofaBridge.Motion`](../../MovingSofaBridge/Motion.lean) and
 [`MovingSofaBridge.GerverSofa`](../../MovingSofaBridge/GerverSofa.lean) import
 [`MovingSofaBridge.Defs`](../../MovingSofaBridge/Defs.lean) and state their theorems about its constants, such as
@@ -862,8 +862,8 @@ The bridge modules [`MovingSofaBridge.Motion`](../../MovingSofaBridge/Motion.lea
 [`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L419). So the bridge speaks about
 the very constants of the Challenges, not about copies of them. Baek's definitions in the Challenges
 are copies of the library's: [`MovingSofaExtremal/Statements.lean`](../../MovingSofaExtremal/Statements.lean) proves that they agree for the certificate entry,
-and [`baek/Solution.lean`](../../baek/Solution.lean) for Baek's ([`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35), and
-[`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58), which holds by definition).
+and [`baek/Solution.lean`](../Solution.lean) for Baek's ([`Baek.isMovingSofa_iff_lib`](../Solution.lean#L35), and
+[`Baek.gerverSofa_eq_lib`](../Solution.lean#L58), which holds by definition).
 
 Between formal-conjectures' two blocks the Challenges state
 [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L373),

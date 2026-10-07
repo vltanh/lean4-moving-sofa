@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The figures of Chapter 6 (the surface area measure) and Chapter 7 (the injectivity condition), in
-docs/proof/figures/06-surface-area/ and docs/proof/figures/07-injectivity/.
+baek/proof/figures/06-surface-area/ and baek/proof/figures/07-injectivity/.
 
     python3 scripts/figures/fig_injectivity.py
 

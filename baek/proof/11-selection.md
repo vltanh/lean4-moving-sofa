@@ -7,7 +7,7 @@ to a rotation and a translation: a rotation about the origin followed by a trans
 moving sofa $S$ with $|S| = |G|$ onto $G$, as a set
 ([Theorem 12.1](12-uniqueness.md#theorem-121-uniqueness-of-gervers-sofa)). Baek's paper does not
 prove this. The argument is that of note 20
-([`docs/archive/uniqueness/20-complete-paper-proof.md`](../archive/uniqueness/20-complete-paper-proof.md)), an informal proof in six propositions,
+([`docs/archive/uniqueness/20-complete-paper-proof.md`](../../docs/archive/uniqueness/20-complete-paper-proof.md)), an informal proof in six propositions,
 written for this formalization by ChatGPT Pro 6 and not peer reviewed
 ([§1.3](README.md#13-background)); the library [`MovingSofaUniqueness/`](../../MovingSofaUniqueness) formalizes it. The two chapters follow the formal proof, and a
 remark marks each place where it takes a different route from note 20.
@@ -40,7 +40,7 @@ which Baek's upper bound $\mathcal{Q}$ rests ([Chapter 9](09-optimality.md)).
 
 Uniqueness needs both properties for the cap of the given sofa $S$, and Baek's argument does not
 provide them. Note 03
-([`docs/archive/uniqueness/03-global-reduction-obstructions.md`](../archive/uniqueness/03-global-reduction-obstructions.md)) records three obstructions, which note 20 is
+([`docs/archive/uniqueness/03-global-reduction-obstructions.md`](../../docs/archive/uniqueness/03-global-reduction-obstructions.md)) records three obstructions, which note 20 is
 designed to avoid.
 
 1. *Exact maximizers do not select a given maximizer.* A cap that maximizes $\mathcal{A}_\omega$

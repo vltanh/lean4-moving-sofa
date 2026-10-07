@@ -34,7 +34,7 @@ rigid motions, and that shapes of nearly the largest area are close to it:
   own, which describe the same moving sofas, the same optimal area and the same Gerver's sofa as
   Baek's. Its statements, the open one included, follow from the optimality and the uniqueness.
 
-![Gerver's sofa sliding along the horizontal side of the hallway, turning the corner, and leaving along the vertical side](docs/proof/figures/01-introduction/gerver-moving.gif)
+![Gerver's sofa sliding along the horizontal side of the hallway, turning the corner, and leaving along the vertical side](baek/proof/figures/01-introduction/gerver-moving.gif)
 
 ## Definitions
 
@@ -147,16 +147,16 @@ describes the certificate and how the certificate entry proves its seventeen the
 ## Proof outline
 
 The proofs are written out as an illustrated textbook, every numbered result linked to its Lean
-declarations: [docs/proof/](docs/proof/README.md).
+declarations: [baek/proof/](baek/proof/README.md).
 
-- **Optimality** ([Chapters 2 to 10](docs/proof/02-preliminaries.md)). A maximum sofa can be taken
+- **Optimality** ([Chapters 2 to 10](baek/proof/02-preliminaries.md)). A maximum sofa can be taken
   *monotone*: a convex *cap* minus the *niche* that the hallway's inner corner carves out of it.
   Limits of maximum polygon sofas give a *balanced* maximum sofa, which turns through a full right
   angle, and a differential inequality shows that the hallway's inner corner, seen from the sofa,
   moves steadily leftward and so never crosses its own path: the *injectivity condition*. Under that condition Baek's upper bound $\mathcal{Q}$, a quadratic
   functional of three convex bodies, is concave by Mamikon's theorem, and Gerver's sofa maximizes it
   and has area equal to it.
-- **Uniqueness** ([Chapters 11 and 12](docs/proof/11-selection.md)). Baek's argument gives the right-angle turn
+- **Uniqueness** ([Chapters 11 and 12](baek/proof/11-selection.md)). Baek's argument gives the right-angle turn
   and the injectivity condition only to a maximum chosen by compactness. The uniqueness proof
   approximates a given maximum by polygon maximizers of a penalized problem; their balance passes to
   the limit as bounds on curvature, which give the given sofa both properties. Equality in Baek's
@@ -172,7 +172,7 @@ declarations: [docs/proof/](docs/proof/README.md).
   cap of maximal sofa area has 𝒬 at least the area of Gerver's sofa, as Gerver's cap competes with it; so the gap is
   zero, which bounds the maximum and makes the cap a translate of Gerver's. The reductions of Baek's proof and of the
   first uniqueness proof then give optimality and uniqueness, and at small deficit the same estimate gives stability.
-- **The bridge** ([Chapter 13](docs/proof/13-bridge.md), [Appendix A](docs/proof/appendix-a.md)). A continuous path of isometries
+- **The bridge** ([Chapter 13](baek/proof/13-bridge.md), [Appendix A](baek/proof/appendix-a.md)). A continuous path of isometries
   from the identity consists of rotations whose angle lifts to a continuous function, which matches
   the two notions of moving sofa. Gerver's four constants are unique by elementary inequalities; they
   are read off Romik's parameters; and formal-conjectures' integrals are the coordinates of Romik's
@@ -195,7 +195,7 @@ forced by an error or gap of the paper (E12, E15, E17, E20, E21, E24), by mathem
 Mathlib lacks (the Jordan curve theorem and Green's theorem, the Brunn–Minkowski inequality, mixed
 volumes), or by the definition of the surface area measure as a Lebesgue–Stieltjes measure. A route
 check in CI compares the results that each Lean proof uses with those that Baek's proof cites, and
-[`docs/route_differences.tsv`](docs/route_differences.tsv) gives the reason for every difference.
+[`baek/route_differences.tsv`](baek/route_differences.tsv) gives the reason for every difference.
 
 ## Prior work
 
@@ -213,7 +213,7 @@ More on each earlier result, with references: [docs/prior-work.md](docs/prior-wo
   convexity assumptions (Deng, arXiv:2407.02587).
 - Two Lean formalizations of Baek's proof appeared shortly before this one,
   [deancureton/MovingSofa](https://github.com/deancureton/MovingSofa) and [RuifengCao/sofa-formal](https://github.com/RuifengCao/sofa-formal). Both prove
-  formal-conjectures' statement of the optimality; [docs/formalizations.md](docs/formalizations.md) compares the three.
+  formal-conjectures' statement of the optimality; [baek/formalizations.md](baek/formalizations.md) compares the three.
 
 ## What's next
 
@@ -237,7 +237,10 @@ Solution.lean             their proofs, through the certificate
 comparator.json           the Comparator configuration of the certificate entry
 formalization.yaml        its Palomar metadata
 baek/                     Baek's entry (its Challenge, Solution, Comparator configuration and
-                          metadata) and the audit of Baek's paper (REPORT.md)
+                          metadata), the audit of Baek's paper (REPORT.md), the illustrated text
+                          of the proofs (proof/), the comparison of the formalizations of Baek's
+                          proof (formalizations.md) and the tables of the route check
+                          (paper_routes.tsv, route_differences.tsv)
 MovingSofaOptimality/     Baek's paper, one directory per chapter, with External/ for
                           the results it cites and Gerver/ for Gerver's sofa
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
@@ -250,9 +253,8 @@ MovingSofaExtremal/       the coercive route: optimality and uniqueness from one
                           certificate's definitions, which Challenge.lean copies (CertificateDefs),
                           its two theorems (Certificate) and the other fifteen theorems of the
                           certificate entry (Statements)
-docs/                     these pages, the credits (CREDITS.md), the illustrated text (docs/proof/),
-                          the manuscript (docs/paper/) and the archived notes of the uniqueness and
-                          stability proofs (docs/archive/)
+docs/                     these pages, the credits (CREDITS.md), the manuscript (docs/paper/) and
+                          the archived notes of the uniqueness and stability proofs (docs/archive/)
 scripts/                  the axiom audits, generators, documentation tools, figures
 README.md, LICENSE        this page and the license
 lakefile.toml, lake-manifest.json, lean-toolchain
@@ -267,7 +269,7 @@ More on each check: [docs/verification.md](docs/verification.md).
 lake exe cache get
 lake build
 lake env lean scripts/Audit.lean
-python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
+python3 scripts/route_check.py check baek/paper_routes.tsv --accept baek/route_differences.tsv
 lake env lean scripts/AuditMaximizerRoute.lean
 lake env lean scripts/AuditCoerciveRoute.lean
 lake env lake comparator --config=comparator.json

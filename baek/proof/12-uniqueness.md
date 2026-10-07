@@ -752,10 +752,10 @@ $g(S) = G$, and writing $g(p) = R_\theta p + v$ gives the theorem. $\square$
 [`gerver_regularClosed`](../../MovingSofaUniqueness/RegularClosed.lean#L369), [`Baek.gerver_sofa_unique`](../../Challenge.lean#L687).*
 
 Both Challenges state the theorem as [`Baek.gerver_sofa_unique`](../../Challenge.lean#L687), with the definitions of Baek's paper
-in Mathlib's vocabulary. The certificate entry derives it through the coercive certificate ([the coercive route](../coercive.md));
-in Baek's entry, [`baek/Solution.lean`](../../baek/Solution.lean) derives it from [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301) through the
-identification of these definitions with the library's ([`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35),
-[`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58)). [Chapter 13](13-bridge.md) carries the theorem over to formal-conjectures'
+in Mathlib's vocabulary. The certificate entry derives it through the coercive certificate ([the coercive route](../../docs/coercive.md));
+in Baek's entry, [`baek/Solution.lean`](../Solution.lean) derives it from [`image_eq_gerver_of_volume_eq`](../../MovingSofaUniqueness/Main.lean#L301) through the
+identification of these definitions with the library's ([`Baek.isMovingSofa_iff_lib`](../Solution.lean#L35),
+[`Baek.gerverSofa_eq_lib`](../Solution.lean#L58)). [Chapter 13](13-bridge.md) carries the theorem over to formal-conjectures'
 statement [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../../Challenge.lean#L764).
 
 ## 12.7 The maximizing right-angle caps, and the rotation

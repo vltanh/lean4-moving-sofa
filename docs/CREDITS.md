@@ -138,7 +138,7 @@ How it was made:
   Palomar's preflight on it (commit `02af501`, `status: pass`), updated the formal-conjectures pull
   request to link the Solution at that commit, and drew Gerver's sofa in the hallway and its
   animation.
-- It wrote the illustrated text of the proofs in [`docs/proof/`](proof/README.md), with the pages
+- It wrote the illustrated text of the proofs in [`docs/proof/`](../baek/proof/README.md), with the pages
   of [`docs/`](.) and the README; the earlier documents moved to [`docs/archive/`](archive). Seven
   sub-agents wrote two chapters each, Chapters 2 to 13 and the two appendices, with their figures,
   all seven running at the same time. The coordinating agent wrote Chapter 1 and the other pages,
@@ -196,7 +196,7 @@ How it was made:
 - 16:30 to 20:45: Claude Opus 5.5, in the same session. A new route check compares, for every
   numbered result, the numbered results that its Lean proof uses, which the axiom audit now records,
   with those that Baek's proof cites, extracted from the LaTeX source
-  ([`docs/paper_routes.tsv`](paper_routes.tsv)); CI runs it. Of its first 269 differences, 132
+  ([`docs/paper_routes.tsv`](../baek/paper_routes.tsv)); CI runs it. Of its first 269 differences, 132
   came from facts that the paper uses throughout without citing them.
 - Three sub-agents reviewed the other 137 against the LaTeX source, one per group of chapters. They
   fixed about thirty proofs that reached a cited result by a detour, recorded the uses that the
@@ -211,7 +211,7 @@ How it was made:
   gained the equalities of curve area functionals that the paper's "as oriented curves" provides.
 - Sixteen results still depart from Baek's proofs, each for an error or gap of the paper, for
   mathematics that Mathlib lacks, or for the definition of the surface area measure; [`REPORT.md`](../baek/REPORT.md)
-  lists them in its Section 7, and [`docs/route_differences.tsv`](route_differences.tsv) gives
+  lists them in its Section 7, and [`docs/route_differences.tsv`](../baek/route_differences.tsv) gives
   the reason for each of the 222 route differences. The work also found a wrong citation in the
   proof of Theorem 2.5.9 and two small gaps in the proof of Theorem 3.4.3. The three libraries went
   from 45,783 to 47,894 lines. Commit `0c5c1d3`.
@@ -342,7 +342,7 @@ How it was made:
   numbered environments onto the three, and a merged list of the errors that the three found in the
   paper, checked against its LaTeX source. Two more sub-agents checked the new page against the
   sources; the first found 18 problems and the second 16 more, all fixed. The result is
-  [`docs/formalizations.md`](formalizations.md), which replaces the comparison table of [`docs/prior-work.md`](prior-work.md).
+  [`docs/formalizations.md`](../baek/formalizations.md), which replaces the comparison table of [`docs/prior-work.md`](prior-work.md).
 - From 22:02, at the owner's request, the changes. The comparison had found that Theorem 2.1.3 was
   proved by compactness instead of by Baek's ε-triangle, a departure that the report's Section 7 did
   not list; the proof now follows Baek's argument, and Chapter 2 of the text with it. The report's
@@ -631,11 +631,12 @@ connects to formal-conjectures, and it can be submitted to Palomar, the last two
 owner chose two entries: the registered one stays, as the formalization of Baek's paper with the uniqueness proof
 that comes with it, and a new one holds the new result, optimality, uniqueness and stability through the
 certificate; both state formal-conjectures' theorems. Finally the owner asked to clean up the root, which now holds
-the certificate entry, with Baek's entry in a directory of its own, and then to move the remaining helper files out
-of it.
+the certificate entry, with Baek's entry in a directory of its own, then to move the remaining helper files out of
+it, and then to move the documents that concern only Baek's entry into its directory. The owner then asked to push
+the result and to run Palomar's preflight on the certificate entry, which the owner will submit.
 
 How it was made:
-- 19:53 to 22:25: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
+- 19:53 to 22:46: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
   sub-agents of the same model.
 - A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates, in the
   namespace `Certificate`, the 39 definitions that the certificate's statement needs, each with the body of the
@@ -666,15 +667,22 @@ How it was made:
   [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean), [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) and
   [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), with the same declarations. The audit of Baek's paper is now
   [`baek/REPORT.md`](../baek/REPORT.md), next to Baek's entry, and this file is in `docs/`. The root holds the certificate entry, the
-  README, the license and the Lake files. The build is clean, with the seventeen `sorry`s of
-  [`Challenge.lean`](../Challenge.lean) and the twelve of [`baek/Challenge.lean`](../baek/Challenge.lean); the audit checks 5,992 declarations, the audit of the
-  coercive route 867, with 22 positive and 8 negative controls; the route check and the audit of the second
-  proof pass; Comparator accepts both entries; and Palomar's checks of the metadata and the sources pass for both.
+  README, the license and the Lake files.
+- At the owner's request, the documents that concern only Baek's entry moved into [`baek/`](../baek) as well: the illustrated
+  text is now [`baek/proof/`](../baek/proof/README.md), whose figures the scripts now draw there, byte for byte as before; the
+  comparison of the formalizations is [`baek/formalizations.md`](../baek/formalizations.md); and the route check reads
+  [`baek/paper_routes.tsv`](../baek/paper_routes.tsv) and [`baek/route_differences.tsv`](../baek/route_differences.tsv). `docs/` keeps the pages on both entries and on the certificate
+  entry, the manuscript, these credits, the prior work and the archived notes. A sub-agent rewrote the links and
+  checked every relative link of the Markdown files.
+- The build is clean, with the seventeen `sorry`s of [`Challenge.lean`](../Challenge.lean) and the twelve of [`baek/Challenge.lean`](../baek/Challenge.lean); the
+  audit checks 5,992 declarations, the audit of the coercive route 867, with 22 positive and 8 negative controls;
+  the route check and the audit of the second proof pass; Comparator accepts both entries; and Palomar's checks of
+  the metadata and the sources pass for both.
 
-Figures, from 19:53 to 22:25:
-- elapsed time: 2 hours 32 minutes;
+Figures, from 19:53 to 22:46:
+- elapsed time: 2 hours 53 minutes;
 - sub-agents: 3, at most 2 at the same time, about 2.6 hours of work;
-- tool calls: 738 by the sub-agents, 223 by the main session;
-- tokens of the sub-agents: 0.79 million output, 5.06 million input, 280 million cache reads; of the main
-  session: 0.29 million output, 0.56 million input, 97 million cache reads;
-- model calls: 627 by the sub-agents and 230 by the main session, all to `claude-opus-5-5`.
+- tool calls: 757 by the sub-agents, 248 by the main session;
+- tokens of the sub-agents: 0.81 million output, 5.87 million input, 294 million cache reads; of the main
+  session: 0.31 million output, 0.61 million input, 109 million cache reads;
+- model calls: 646 by the sub-agents and 258 by the main session, all to `claude-opus-5-5`.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""The figures of Chapter 13 (the bridge to formal-conjectures), in docs/proof/figures/13-bridge/,
-and of Appendix A (Gerver's four constants), in docs/proof/figures/appendix-a/.
+"""The figures of Chapter 13 (the bridge to formal-conjectures), in baek/proof/figures/13-bridge/,
+and of Appendix A (Gerver's four constants), in baek/proof/figures/appendix-a/.
 
     python3 scripts/figures/fig_bridge.py
 

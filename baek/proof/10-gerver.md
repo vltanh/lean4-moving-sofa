@@ -126,10 +126,10 @@ The tuple *lies in the box* if $\varphi \in [0.039, 0.04]$ and $\theta \in [0.68
 
 Both Challenges state Definitions 10.1, 10.3 and 10.4, with the contact paths $\mathbf{B}$ and
 $\mathbf{D}$ that (43)–(44) use, in Mathlib's vocabulary, in the namespace `Baek` of
-[`Challenge.lean`](../../Challenge.lean) and of [`baek/Challenge.lean`](../../baek/Challenge.lean). They are copied verbatim from
+[`Challenge.lean`](../../Challenge.lean) and of [`baek/Challenge.lean`](../Challenge.lean). They are copied verbatim from
 [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), and they agree field by field with the library's
 definitions in [`Defs.lean`](../../MovingSofaOptimality/Gerver/Defs.lean)
-([`Baek.GerverParams.toLib`](../../baek/Solution.lean#L45); [`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58) holds by `rfl`).
+([`Baek.GerverParams.toLib`](../Solution.lean#L45); [`Baek.gerverSofa_eq_lib`](../Solution.lean#L58) holds by `rfl`).
 
 Romik derived the five phases from the contacts of the sofa with the moving hallway. On each phase
 the sofa touches the walls at a fixed set of contact points, and on the walls of each direction the

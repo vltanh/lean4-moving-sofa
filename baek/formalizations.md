@@ -114,7 +114,7 @@ translate of such a set, by rotations and translations. Both conventions give th
   which is a moving sofa in formal-conjectures' sense
   ([`IsSofaWithAngle`](https://github.com/RuifengCao/sofa-formal/blob/ca8585c28c3c39528d5f5da87976af8fbfe48c18/Sofa/StdPos.lean#L167-L172)).
 - This repository states Baek's definitions on ℝ × ℝ in their own namespace
-  ([Definitions](definitions.md)), and Comparator checks the bridge theorems [`Bridge.isMovingSofa_iff`](../Challenge.lean#L731)
+  ([Definitions](../docs/definitions.md)), and Comparator checks the bridge theorems [`Bridge.isMovingSofa_iff`](../Challenge.lean#L731)
   and [`Bridge.sofaConstant_eq`](../Challenge.lean#L739).
 
 Cureton's and Cao's formalizations work in formal-conjectures' plane, `EuclideanSpace ℝ (Fin 2)`; this
@@ -165,7 +165,7 @@ Baek's paper has 301 numbered environments: 68 theorems, 44 lemmas, 38 propositi
   (Gerver's theorem, quoted for orientation), Theorem 2.1.1 (Schneider's theorem in its Hausdorff
   measure form), and Theorems 7.2.1 and 7.2.3 and Proposition 7.2.7 (the Jordan curve theorem, Green's
   theorem and the orientation of Jordan curves), whose uses are replaced
-  ([report, Section 9](../baek/REPORT.md#9-not-formalized)).
+  ([report, Section 9](REPORT.md#9-not-formalized)).
 - In Cao's formalization, docstrings and section headers cite 112 of them, and the content of 18 more,
   in whole or in part, is in lemmas that do not cite them (for instance Lemma 3.4.1 and Proposition
   3.5.1, on mirror images). Its README says that the Jordan curve arguments are replaced by direct
@@ -205,7 +205,7 @@ Sources: Cureton's notes ([errors and their repairs](https://github.com/deancure
 [other routes](https://github.com/deancureton/MovingSofa/blob/4d5569131940815f47a9ccf3e90a4c5043c56127/NOTES.md?plain=1#L113-L124)); Cao's
 [README](https://github.com/RuifengCao/sofa-formal/blob/ca8585c28c3c39528d5f5da87976af8fbfe48c18/README.md?plain=1#L49-L54), its
 [blueprint](https://github.com/RuifengCao/sofa-formal/blob/ca8585c28c3c39528d5f5da87976af8fbfe48c18/blueprint/ch3-8.md) (a development log) and the headers of its files; this repository's
-[report, Section 7](../baek/REPORT.md#7-departures-from-the-papers-proofs), and the route check of its
+[report, Section 7](REPORT.md#7-departures-from-the-papers-proofs), and the route check of its
 continuous integration, which records 222 differences between the results that the Lean proofs use
 and those that Baek's proofs cite, each with its reason ([route_differences.tsv](route_differences.tsv)).
 We read the Lean declarations behind each entry. For Cao's formalization, the dependency graph of the
@@ -217,7 +217,7 @@ both add. Cao's Theorems 8.1.8 and 8.2.4 assume that the niche of the cap lies i
 ([`IsInjectiveCap.inL`](https://github.com/RuifengCao/sofa-formal/blob/ca8585c28c3c39528d5f5da87976af8fbfe48c18/Sofa/NicheCore.lean#L835-L839)); it applies them to balanced maximum
 caps and to Gerver's cap, which satisfy it, so its main theorem is unaffected. The paper uses this
 fact without stating it, and Cureton's formalization and this repository prove the two theorems
-without it (E21 in the [report](../baek/REPORT.md#3-errors-and-gaps-in-the-paper)).
+without it (E21 in the [report](REPORT.md#3-errors-and-gaps-in-the-paper)).
 
 ## 4. Gerver's sofa
 
@@ -240,7 +240,7 @@ with Gerver's value 2.21953….
 ## 5. Errors found in the paper
 
 Each project records the places where Baek's proofs need repair: this repository in its
-[report](../baek/REPORT.md) (Sections 2 to 7), Cureton's in its notes, Cao's in its blueprint and in
+[report](REPORT.md) (Sections 2 to 7), Cureton's in its notes, Cao's in its blueprint and in
 comments. We merged the three lists, matching items by content and classifying each against the
 paper's LaTeX source. They describe 99 distinct issues: 12 errors or gaps (a step fails, or a claim is
 used without proof, and a new argument or hypothesis is needed), 57 misprints with an evident fix, 15
@@ -352,7 +352,7 @@ The first two columns come from the projects' own documents: Cureton's
 [README](https://github.com/deancureton/MovingSofa/blob/4d5569131940815f47a9ccf3e90a4c5043c56127/README.md?plain=1#L11) and
 [metadata](https://github.com/deancureton/MovingSofa/blob/4d5569131940815f47a9ccf3e90a4c5043c56127/formalization.yaml#L135-L183), and Cao's
 [prize submission](https://github.com/TheJustinSunPrize/awards/pull/4441) and the comments of its files. The rounds of this
-repository are in [CREDITS.md](CREDITS.md).
+repository are in [CREDITS.md](../docs/CREDITS.md).
 
 ## 10. Other Lean projects on the moving sofa
 

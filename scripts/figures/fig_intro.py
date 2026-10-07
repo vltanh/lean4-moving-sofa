@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The figures of Chapter 1, in docs/proof/figures/01-introduction/: Gerver's sofa in the hallway,
+"""The figures of Chapter 1, in baek/proof/figures/01-introduction/: Gerver's sofa in the hallway,
 and an animation of its motion around the corner.
 
     python3 scripts/figures/fig_intro.py

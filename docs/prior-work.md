@@ -41,7 +41,7 @@ Two Lean 4 formalizations of Baek's proof appeared shortly before this one:
 Google DeepMind's
 [formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean),
 `sofaConstant = volume gerversSofa`, and neither proves the uniqueness of the optimal sofa.
-[Formalizations of Baek's proof](formalizations.md) compares the three: what each proves, their
+[Formalizations of Baek's proof](../baek/formalizations.md) compares the three: what each proves, their
 definitions, how closely each follows the paper, how each treats Gerver's sofa, the errors each found
 in the paper, how each is checked, and how each was made.
 

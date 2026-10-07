@@ -168,12 +168,12 @@ related_formalizations:
     relationship: other
     note: >-
       An earlier Lean 4 formalization of Baek's optimality theorem; it does not state the uniqueness,
-      the stability or the certificate. docs/formalizations.md compares it with this repository.
+      the stability or the certificate. baek/formalizations.md compares it with this repository.
   - id: "https://github.com/RuifengCao/sofa-formal"
     relationship: other
     note: >-
       An earlier Lean 4 formalization of Baek's optimality theorem; it does not state the uniqueness,
-      the stability or the certificate. docs/formalizations.md compares it with this repository.
+      the stability or the certificate. baek/formalizations.md compares it with this repository.
 
 status:
   scope: >-
@@ -212,8 +212,8 @@ automation:
           The stability: about 1 hour (2026-10-05 22:17 to 23:13) and 2 hours 41 minutes (2026-10-06
           07:08 to 09:49). The coercive route: about 3 hours 26 minutes (2026-10-06 09:56 to
           13:22). The simplification: about 2 hours 44 minutes (2026-10-06 13:25 to 16:09). This
-          entry's Challenge and Solution, and the move of the other entry into baek/: about 2 hours 32 minutes
-          (2026-10-06 19:53 to 22:25), with about 2.6 hours of sub-agent working time.
+          entry's Challenge and Solution, and the move of the other entry into baek/: about 2 hours 53 minutes
+          (2026-10-06 19:53 to 22:46), with about 2.6 hours of sub-agent working time.
           docs/CREDITS.md gives the figures of each round.
         spend_usd: "not tracked"
     - method: agent

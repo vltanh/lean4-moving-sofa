@@ -6,7 +6,7 @@
 lake exe cache get                                  # Mathlib's compiled files
 lake build                                          # the five libraries, the two Challenges and their Solutions
 lake env lean scripts/Audit.lean                    # axioms and dependencies
-python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
+python3 scripts/route_check.py check baek/paper_routes.tsv --accept baek/route_differences.tsv
                                                     # the proofs follow the routes of Baek's proofs
 lake env lean scripts/AuditMaximizerRoute.lean      # the second proof of optimality avoids Baek's theorem
 lake env lean scripts/AuditCoerciveRoute.lean       # the certificate entry's proofs avoid it and the first uniqueness proof
@@ -40,11 +40,11 @@ alone.
   from a plain import), and CI checks that these lines name exactly the modules of the five
   libraries.
 - The audit also writes the *route* of every numbered result of Baek's paper: the other numbered
-  results that its Lean proof uses. `python3 scripts/route_check.py check docs/paper_routes.tsv
-  --accept docs/route_differences.tsv` compares the routes with the results that the paper's own
-  proofs cite, which [`docs/paper_routes.tsv`](paper_routes.tsv) records (extracted from the
+  results that its Lean proof uses. `python3 scripts/route_check.py check baek/paper_routes.tsv
+  --accept baek/route_differences.tsv` compares the routes with the results that the paper's own
+  proofs cite, which [`baek/paper_routes.tsv`](../baek/paper_routes.tsv) records (extracted from the
   paper's LaTeX source by `route_check.py extract`). It fails on any difference that
-  [`docs/route_differences.tsv`](route_differences.tsv) does not record with its reason: a result
+  [`baek/route_differences.tsv`](../baek/route_differences.tsv) does not record with its reason: a result
   that the paper uses without citing it, a citation made only in passing, or a departure from the
   paper's proof, which [`baek/REPORT.md`](../baek/REPORT.md) lists with its reason (Section 7).
 - [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks the second proof of Baek's optimality theorem, in
@@ -126,15 +126,16 @@ Mathlib `master`.
 
 ## The documentation
 
-The pages of [`docs/`](.) and [`docs/proof/`](proof/README.md) link every Lean name they cite to its declaration, by file and line.
+The README and the pages of [`docs/`](.), [`baek/`](../baek) and [`baek/proof/`](../baek/proof/README.md) link every Lean name they cite to its
+declaration, by file and line.
 `python3 scripts/linkify_docs.py` refreshes the links from the `.ilean` files that `lake build`
 writes, and warns about a name that matches no declaration or several; CI runs it with `--check`. A name that a
 Challenge and a Solution both declare links to the Challenge, the root's [`Challenge.lean`](../Challenge.lean) before [`baek/Challenge.lean`](../baek/Challenge.lean).
-`python3 scripts/check_md_tables.py README.md baek/REPORT.md docs/*.md docs/proof/*.md` finds table rows
+`python3 scripts/check_md_tables.py README.md baek/*.md baek/proof/*.md docs/*.md` finds table rows
 that a `|` inside a cell would break. [`docs/archive/`](archive) is kept as it was.
 
 `python3 scripts/figures/make_all.py` redraws every figure of the text, in
-[`docs/proof/figures/`](proof/figures). Each chapter's figures come from its module `scripts/figures/fig_<chapter>.py`;
+[`baek/proof/figures/`](../baek/proof/figures). Each chapter's figures come from its module `scripts/figures/fig_<chapter>.py`;
 [`scripts/figures/gerver.py`](../scripts/figures/gerver.py) computes Gerver's sofa from the formalization's definitions, and checks its area,
 `2.21954` with the default grid, against Gerver's `2.21953…`.
 
@@ -147,4 +148,4 @@ Python 3 with SymPy and mpmath:
 - [`MovingSofaOptimality/Gerver/AreaBounds.lean`](../MovingSofaOptimality/Gerver/AreaBounds.lean):
   `cd scripts/area && python3 gen.py emit ../../MovingSofaOptimality/Gerver/AreaBounds.lean`.
 
-[Appendix B](proof/appendix-b.md) of the text explains what they prove.
+[Appendix B](../baek/proof/appendix-b.md) of the text explains what they prove.

@@ -8,9 +8,9 @@ lemmas, which `scripts/Audit.lean` (from the skill's `assets/`) writes to `.lake
 A formal proof that follows the paper's argument cites the same results. Every difference is
 either a proof to fix or a departure from the paper to record.
 
-    route_check.py extract main.tex [MORE.tex | DIR ...] > docs/paper_routes.tsv
-    route_check.py check docs/paper_routes.tsv [--deps .lake/route_deps.tsv]
-                         [--accept docs/route_differences.tsv]
+    route_check.py extract main.tex [MORE.tex | DIR ...] > baek/paper_routes.tsv
+    route_check.py check baek/paper_routes.tsv [--deps .lake/route_deps.tsv]
+                         [--accept baek/route_differences.tsv]
 
 `extract` reads the TeX source, following `\\input` and `\\include` from each file given (a
 directory stands for its `.tex` files in sorted order), and writes one line per labelled

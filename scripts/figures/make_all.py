@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Redraw every figure of docs/proof/, in docs/proof/figures/.
+"""Redraw every figure of baek/proof/, in baek/proof/figures/.
 
     python3 scripts/figures/make_all.py
 

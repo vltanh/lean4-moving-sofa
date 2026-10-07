@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Drawing helpers for the figures of docs/proof/, written as SVG files in docs/proof/figures/.
+"""Drawing helpers for the figures of baek/proof/, written as SVG files in baek/proof/figures/.
 
 The palette, the serif labels and the `Figure` class follow the figures of
 lean4-squares-in-circles, by the same author, so that the two texts look alike. Each chapter's
@@ -9,7 +9,7 @@ them all. Every figure is computed from the definitions of the formalization (ge
 import math
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parents[2] / 'docs' / 'proof' / 'figures'
+OUT = Path(__file__).resolve().parents[2] / 'baek' / 'proof' / 'figures'
 
 INK = '#1f2937'
 FAINT = '#9ca3af'

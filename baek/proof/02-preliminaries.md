@@ -115,7 +115,7 @@ start $\Phi_0(S) \subseteq H_L$ (dashed), halfway $\Phi_{1/2}(S)$, turned clockw
 at the end $\Phi_1(S) \subseteq V_L$ (dashed), turned clockwise by $\pi/2$.
 
 *Lean: [`IsMovement`](../../MovingSofaOptimality/Sofa/Defs.lean#L43), [`IsMovingSofaWithAngle`](../../MovingSofaOptimality/Sofa/Defs.lean#L54), [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59),
-[`Baek.IsMovingSofa`](../../Challenge.lean#L171), [`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35).*
+[`Baek.IsMovingSofa`](../../Challenge.lean#L171), [`Baek.isMovingSofa_iff_lib`](../Solution.lean#L35).*
 
 Baek's Definition 1.1.2 (with the paper's footnotes) moves a nonempty, connected and closed set
 inside $L$ from $H_L$ to $V_L$ by a continuous curve $\Phi_s$ in the group $\mathrm{SE}(2)$ of
@@ -127,7 +127,7 @@ uses the lifted form from the start; [Chapter 13](13-bridge.md) proves the lifti
 of formal-conjectures. Baek's rotation angle (Baek's Definition 2.3.3) is the clockwise angle
 $\theta(0) - \theta(1) = -\theta(1)$ through which the sofa turns. Both Challenges state the
 definition as [`Baek.IsMovingSofa`](../../Challenge.lean#L171), which leaves $\theta(1)$ free, and
-[`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35) identifies it with [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59).
+[`Baek.isMovingSofa_iff_lib`](../Solution.lean#L35) identifies it with [`MovingSofaOptimality.IsMovingSofa`](../../MovingSofaOptimality/Sofa/Defs.lean#L59).
 
 *Remark.* The rotation angle belongs to the movement, not to the set: a disk of diameter 1 has
 movements with every rotation angle. "A moving sofa $S$ with rotation angle $\omega$" means a set

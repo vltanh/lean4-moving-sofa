@@ -27,8 +27,8 @@ jobs:
       # results that the paper's proofs cite. Every difference is recorded with its reason.
       - name: Check that the proofs follow the routes of the paper's proofs
         run: >-
-          python3 scripts/route_check.py check docs/paper_routes.tsv
-          --accept docs/route_differences.tsv
+          python3 scripts/route_check.py check baek/paper_routes.tsv
+          --accept baek/route_differences.tsv
       - name: Check that the second proof of optimality does not use Baek's Theorem 1.1.1
         run: lake env lean scripts/AuditMaximizerRoute.lean
       - name: Check that the coercive route uses neither Baek's Theorem 1.1.1 nor the first proof of uniqueness
@@ -38,4 +38,4 @@ jobs:
       - name: Check that the documentation's links to the code are current
         run: python3 scripts/linkify_docs.py --check
       - name: Check the Markdown tables
-        run: python3 scripts/check_md_tables.py README.md baek/REPORT.md docs/*.md docs/proof/*.md
+        run: python3 scripts/check_md_tables.py README.md baek/*.md baek/proof/*.md docs/*.md

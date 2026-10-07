@@ -4,7 +4,7 @@
 
 A companion text to the Lean 4 formalization in this repository
 ([lean4-moving-sofa](https://github.com/vltanh/lean4-moving-sofa)); for its authorship see
-[Credits](../CREDITS.md).
+[Credits](../../docs/CREDITS.md).
 
 **Abstract.** A moving sofa is a connected planar shape that can be moved around the right-angled
 corner of a hallway of unit width. The moving sofa problem asks for the largest area of a moving
@@ -162,7 +162,7 @@ sofa, on its way around the corner. Asking for a closed set costs nothing, since
 set moves along the same motion. Connectedness is part of the problem as Moser posed it. [Definition
 2.4](02-preliminaries.md#definition-24-moving-sofa-and-rotation-angle-baek-definitions-112-and-233)
 restates the definition in the notation of the formalization, and the
-[Definitions](../definitions.md) page compares it with that of formal-conjectures.
+[Definitions](../../docs/definitions.md) page compares it with that of formal-conjectures.
 
 ![The L-shaped hallway of unit width, with the horizontal side H on the left and the vertical side V at the bottom. Gerver's sofa, in blue, is halfway through its turn around the inner corner o, rotated by 45 degrees; dashed outlines show the sofa where its turn starts, pushed into the corner of the horizontal side, and where its turn ends, in the vertical side](figures/01-introduction/hallway.svg)
 
@@ -324,7 +324,7 @@ Chapters 2 to 10 follow Baek's proof.
 
 That Gerver's sofa is the only moving sofa of maximum area is not proved in Baek's paper, and
 formal-conjectures lists it as an open problem. The proof of Chapters 11 and 12 was written for this
-formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../CREDITS.md)); it
+formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../../docs/CREDITS.md)); it
 reuses Baek's machinery and has not been peer reviewed. We know of no earlier proof, but have not
 searched the literature systematically. Two earlier Lean formalizations of Baek's proof prove
 formal-conjectures' statement of the optimality, but not the uniqueness; the page
@@ -542,7 +542,7 @@ Chapters 2 to 10 follow Baek's paper. Chapters 2 and 3 cover its Chapter 2, with
 of its Chapter 1; Chapters 4 to 9 cover its Chapters 3 to 8, in order; and Chapter 10 covers what the
 paper states about Gerver's sofa (its Section 8.4 and Theorem 6.1.2), with Romik's description of
 the sofa. Chapters 11 and 12 prove the uniqueness, following the informal proof written for this
-formalization ("note 20", in the [archive](../archive/uniqueness/20-complete-paper-proof.md)).
+formalization ("note 20", in the [archive](../../docs/archive/uniqueness/20-complete-paper-proof.md)).
 Chapter 13 and Appendix A prove the bridge, and Appendix B explains the rigorous numerics.
 Definitions, lemmas, propositions, theorems and corollaries are numbered together within each
 chapter; figures and tables are numbered separately. A result of Baek's paper carries the paper's
@@ -554,8 +554,8 @@ prove it, linked to their source. The proofs here follow the formal proofs, exce
 says otherwise, but they are written for a human reader. The longest are sketches that give the
 steps and the key estimates and say where the full argument is. Where a statement of Baek's paper is
 false as printed, the text states and proves the intended version and says so; the audit in
-[`baek/REPORT.md`](../../baek/REPORT.md) lists every such correction. The formal proofs are checked by Lean's
-kernel; the [verification](../verification.md) page explains how to build them and audit their
+[`baek/REPORT.md`](../REPORT.md) lists every such correction. The formal proofs are checked by Lean's
+kernel; the [verification](../../docs/verification.md) page explains how to build them and audit their
 axioms. The figures are computed from the same definitions by the scripts in
 [`scripts/figures/`](../../scripts/figures).
 

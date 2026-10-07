@@ -13,7 +13,7 @@ proved through the certificate; the one in [`baek/`](../../baek), the formalizat
 too, proved through Baek's theorem.
 
 This is a draft for the author to read. An AI model (Claude Sonnet 5.5, in Claude Code) wrote the text from
-the Lean library, the illustrated text of the proofs in [`docs/proof/`](../proof/README.md) and the text of
+the Lean library, the illustrated text of the proofs in [`baek/proof/`](../../baek/proof/README.md) and the text of
 Baek's paper, and independent model runs checked it. The author has read and edited the abstract and the
 introduction (4 and 5 October); the rest of the text has been checked by model runs only. The sentence of the
 abstract on the second proof of optimality, and its mentions in Sections 1.6 and 1.7, were added later on
@@ -162,7 +162,7 @@ day, the description of the formalization moved to Appendix D.1, and Section 12 
 
 The manuscript was written on 4 October 2026 by Claude Sonnet 5.5 in Claude Code (version 2.1.289), at the
 author's request ("prepare an arXiv paper for the uniqueness of Gerver's sofa"), from the Lean library,
-[`docs/proof/`](../proof/README.md), [`REPORT.md`](../../baek/REPORT.md), [`CREDITS.md`](../CREDITS.md) and the
+[`docs/proof/`](../../baek/proof/README.md), [`REPORT.md`](../../baek/REPORT.md), [`CREDITS.md`](../CREDITS.md) and the
 LaTeX source of Baek's paper. The text is a translation of the formal proofs, in the order of
 `MovingSofaUniqueness/`; the figures are drawn from the definitions of the formalization.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The figures of Chapters 11 and 12, the uniqueness of Gerver's sofa, in
-docs/proof/figures/11-selection/ and docs/proof/figures/12-uniqueness/.
+baek/proof/figures/11-selection/ and baek/proof/figures/12-uniqueness/.
 
     python3 scripts/figures/fig_uniqueness.py
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""The figures of Chapters 4 and 5, in docs/proof/figures/04-balanced/ and 05-rotation-angle/.
+r"""The figures of Chapters 4 and 5, in baek/proof/figures/04-balanced/ and 05-rotation-angle/.
 
     python3 scripts/figures/fig_balanced.py
 

@@ -31,7 +31,7 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process (glob patterns; docs/archive/ is left as it was).
-DOCS = ['README.md', 'baek/REPORT.md', 'docs/*.md', 'docs/proof/*.md']
+DOCS = ['README.md', 'baek/*.md', 'baek/proof/*.md', 'docs/*.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'MovingSofaUniqueness',
               'MovingSofaBridge', 'MovingSofaBridge.GerverConstants', 'MovingSofaStability']

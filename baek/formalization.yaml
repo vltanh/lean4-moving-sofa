@@ -70,7 +70,7 @@ sources:
       written by ChatGPT Pro 6 (OpenAI) on 2026-10-02 at the request of The-Anh Vu-Le, with the notes
       before it in docs/archive/uniqueness/. It has not been peer reviewed. It relies on Baek's paper, which
       does not prove uniqueness. The formalization (MovingSofaUniqueness/) proves its theorem and
-      its six propositions; docs/proof/ (Chapters 11 and 12) gives the proof with the Lean form of
+      its six propositions; baek/proof/ (Chapters 11 and 12) gives the proof with the Lean form of
       each step and the places where the formal proof takes a different route.
     author_endorsement: n/a
   - title: "Differential Equations and Exact Solutions in the Moving Sofa Problem"
@@ -353,7 +353,7 @@ fidelity:
     Lean statements more general (baek/REPORT.md, Section 5).
     (5) Every proof follows the paper's argument (the same intermediate claims, and the results
     that the paper's proof cites; scripts/route_check.py checks the cited results in CI) except at
-    these steps, each necessary (baek/REPORT.md, Section 7; docs/route_differences.tsv). The paper's step
+    these steps, each necessary (baek/REPORT.md, Section 7; baek/route_differences.tsv). The paper's step
     is wrong or has a gap: Theorem 6.1.2 (from Romik's equations, since Gerver's Theorem 2 does not give it, E12);
     Lemma 6.3.1 (N_Theta(K) in K by Theorem 3.4.10, since Theorem 3.5.4 does not apply, E15);
     Theorem 6.5.6 (the bounds at the endpoints by continuity, E17); Lemma 8.1.7 (2), (4) and
@@ -372,7 +372,7 @@ fidelity:
     orientations of curves are not formalized and J of a convex arc is (1/2) int h d sigma.
     (6) The uniqueness: "U(S) = G for a Euclidean isometry U" is formalized with U a rotation about
     the origin followed by a translation, which is stronger. Some proofs take different routes from
-    note 20 (docs/proof/, Chapters 11 and 12): the selection uses a fixed penalty on persistent dyadic support
+    note 20 (baek/proof/, Chapters 11 and 12): the selection uses a fixed penalty on persistent dyadic support
     samples instead of a vanishing continuous penalty; the selection needs the cap to have positive
     area, which is proved where it is used; the arm inequalities come from the lower sequence of
     Baek's Lemma 6.5.5 instead of note 20's maximum-deficit argument; and the regular closedness of

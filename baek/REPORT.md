@@ -602,7 +602,7 @@ formalization uses (Section 6). Gaps that can be repaired along the paper's line
 and are not listed (for example E4 in Lemma 2.5.6, E5 in Lemma 3.4.7, and E8 in Theorems 3.4.3,
 3.5.2 and 3.5.4). The docstring of each
 Lean declaration describes its departure ("Departure from the paper"), and so do
-[`baek/formalization.yaml`](formalization.yaml) and [`docs/route_differences.tsv`](../docs/route_differences.tsv).
+[`baek/formalization.yaml`](formalization.yaml) and [`baek/route_differences.tsv`](route_differences.tsv).
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
@@ -647,8 +647,8 @@ enters only through Definition 8.1.2.
 The audit also records, for every numbered result, the numbered results that its Lean proof uses.
 [`scripts/route_check.py`](../scripts/route_check.py), run in CI, compares them with the results that
 the paper's proof cites, extracted from the TeX source into
-[`docs/paper_routes.tsv`](../docs/paper_routes.tsv). Every difference is recorded, with its reason, in
-[`docs/route_differences.tsv`](../docs/route_differences.tsv): a departure of Section 7, a result that
+[`baek/paper_routes.tsv`](paper_routes.tsv). Every difference is recorded, with its reason, in
+[`baek/route_differences.tsv`](route_differences.tsv): a departure of Section 7, a result that
 the paper uses without citing it, or a citation that the paper makes in passing.
 
 ## 9. Not formalized
@@ -687,12 +687,12 @@ concurrent work is in the README's account of prior work.
   gaps and 33 misprints. This audit had missed twelve of them, which are now among its findings
   (E2, E5, E10, E17, E18, E24, E27, and Sections 2 and 4). Of the 20 issues that the blueprint and
   the comments of RuifengCao/sofa-formal record, 15 are among this audit's findings; the other five are
-  conventions, routine details or not errors ([`docs/formalizations.md`](../docs/formalizations.md), Section 5).
+  conventions, routine details or not errors ([`baek/formalizations.md`](formalizations.md), Section 5).
 - **Formal verification.** Three Lean 4 formalizations of the optimality appeared in September and
   October 2026: [deancureton/MovingSofa](https://github.com/deancureton/MovingSofa),
   [RuifengCao/sofa-formal](https://github.com/RuifengCao/sofa-formal) and this one. Each proves the
   statement `sofaConstant = volume gerversSofa` of Google DeepMind's formal-conjectures. They are
-  checked by Lean's kernel, not refereed; [`docs/formalizations.md`](../docs/formalizations.md) compares them.
+  checked by Lean's kernel, not refereed; [`baek/formalizations.md`](formalizations.md) compares them.
   RuifengCao/sofa-formal also replaces the Jordan curve arguments of Chapters 7 and 8 by explicit
   area computations and avoids the Portmanteau step of Lemma 6.4.2, as the simpler proofs below do.
 - **Uniqueness.** Baek's paper does not claim that Gerver's sofa is the only sofa of maximum area. An

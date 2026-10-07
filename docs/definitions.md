@@ -100,7 +100,7 @@ def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L664) and [`Baek.gerver_params_unique`](../Challenge.lean#L668) prove that the box holds exactly one solution, so
 Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L674) that its area lies between `2.2192` and `2.2199`, around
 Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L93) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L109) are in
-[`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
+[`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 10](../baek/proof/10-gerver.md) of the text explains them.
 
 ### Stability
 
@@ -205,8 +205,8 @@ def sofaOfRotateTranslatePath (p : ℝ → ℝ²) : Set ℝ² :=
 def gerversSofa : Set ℝ² := sofaOfRotateTranslatePath GerversSofa.p
 ```
 
-The definitions of `r`, `x`, `y` and `p` are in [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 13](proof/13-bridge.md) of
-the text explains them, and [Appendix A](proof/appendix-a.md) proves that the constants are unique.
+The definitions of `r`, `x`, `y` and `p` are in [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 13](../baek/proof/13-bridge.md) of
+the text explains them, and [Appendix A](../baek/proof/appendix-a.md) proves that the constants are unique.
 
 ## The two sets of definitions side by side
 

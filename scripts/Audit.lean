@@ -108,7 +108,7 @@ It also writes the route of every numbered result of the paper to `.lake/route_d
 other numbered results that its proof uses, found by following the proof through the library's
 helper lemmas and stopping at numbered results, with the TeX label that the result's docstring
 names in backticks. `scripts/route_check.py` compares these routes with the results that the
-paper's proofs cite (`docs/paper_routes.tsv`).
+paper's proofs cite (`baek/paper_routes.tsv`).
 
 The library's modules are imported with `import all`, which makes the proofs of their theorems
 available: the module system does not export them otherwise. The traversal tests membership in a

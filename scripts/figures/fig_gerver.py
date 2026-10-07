@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The figures of Chapter 10 (Gerver's sofa) and Appendix B (rigorous numerics), in
-docs/proof/figures/10-gerver/ and docs/proof/figures/appendix-b/.
+baek/proof/figures/10-gerver/ and baek/proof/figures/appendix-b/.
 
     python3 scripts/figures/fig_gerver.py
 

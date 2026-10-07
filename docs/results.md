@@ -164,7 +164,7 @@ theorem gerversSofa_eq (P : Baek.GerverParams) (hP : P.IsSolution) (hPb : P.InBo
 - [`Bridge.gerversSofa_eq`](../Challenge.lean#L747): in coordinates, formal-conjectures' Gerver's sofa, defined from Gerver's four
   constants, is Baek's, defined from Romik's parameters.
 
-The bridge uses no result about optimal sofas. [Chapter 13](proof/13-bridge.md) of the text proves it.
+The bridge uses no result about optimal sofas. [Chapter 13](../baek/proof/13-bridge.md) of the text proves it.
 
 ## Formal-conjectures' theorems
 
@@ -183,7 +183,7 @@ theorem volume_eq_sofaConstant_iff_congruent_gerversSofa (s : Set ℝ²)
 
 - [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../Challenge.lean#L373): Gerver's four constants exist and are unique, so formal-conjectures'
   definitions make sense. The uniqueness is proved by elementary inequalities, without numerical
-  certificates ([Appendix A](proof/appendix-a.md)).
+  certificates ([Appendix A](../baek/proof/appendix-a.md)).
 - [`FormalConjectures.MovingSofa.isMovingSofa_gerversSofa`](../Challenge.lean#L756) and [`FormalConjectures.MovingSofa.sofaConstant_eq_volume_gerversSofa`](../Challenge.lean#L760): Gerver's sofa is a moving sofa whose area is the sofa
   constant. formal-conjectures marks these solved.
 - [`FormalConjectures.MovingSofa.volume_eq_sofaConstant_iff_congruent_gerversSofa`](../Challenge.lean#L764): a moving sofa has area the sofa constant if and only if an isometry maps
@@ -205,7 +205,7 @@ first three:
   [`MovingSofaOptimality.GerverParams.romik_unique`](../MovingSofaOptimality/External/Romik.lean#L360)), and the structure of Gerver's sofa (Theorem 8.4.1). [`scripts/Audit.lean`](../scripts/Audit.lean) lists them all, and the
   [report](../baek/REPORT.md#9-not-formalized) lists the few results left out.
 - [`MovingSofaUniqueness/`](../MovingSofaUniqueness), the uniqueness: [`MovingSofaUniqueness.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/Main.lean#L301), and one module per proposition of the
-  informal proof ([Chapters 11 and 12](proof/11-selection.md)). [`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean) proves Baek's theorem a second time, from the
+  informal proof ([Chapters 11 and 12](../baek/proof/11-selection.md)). [`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean) proves Baek's theorem a second time, from the
   maximizing caps of [`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean) and without Baek's Theorem 1.1.1, [`MovingSofaUniqueness.MaximizerRoute.gerver_sofa_optimal`](../MovingSofaUniqueness/MaximizerRoute.lean#L92), and the
   uniqueness from it, [`MovingSofaUniqueness.MaximizerRoute.image_eq_gerver_of_volume_eq`](../MovingSofaUniqueness/MaximizerRoute.lean#L99) (a remark at
   the end of Section 8 of the [manuscript](paper/README.md)); [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks that this proof does not use Baek's theorem.
