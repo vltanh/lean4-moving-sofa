@@ -639,7 +639,7 @@ repository's Comparator configuration, and decided that the root is version 5 of
 the files of versions 1 to 4 kept in [`baek/`](../baek).
 
 How it was made:
-- 19:53 to 23:11: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with four
+- 19:53 to 23:12 on 6 October and 07:23 to 07:58 on 7 October: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with four
   sub-agents of the same model.
 - A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates, in the
   namespace `Certificate`, the 39 definitions that the certificate's statement needs, each with the body of the
@@ -694,12 +694,15 @@ How it was made:
   PALOMAR-2026-10-02-000008 as a related formalization; it says that versions 1 to 4 registered the formalization
   that [`baek/`](../baek) keeps, and points to that formalization's corrections of Baek's paper. [`baek/formalization.yaml`](../baek/formalization.yaml) is the
   metadata of versions 1 to 4, and the README, the documentation, the Lean docstrings, the preflight workflow and
-  the manuscript say the same. Two sub-agents reworded the Lean files and the Markdown pages.
+  the manuscript say the same. Two sub-agents reworded the Lean files and the Markdown pages. Only wording changed:
+  the build, the audits, the route check and Comparator on both configurations pass as before. The continuous
+  integration passed on the commit, `0addd87`, and so did Palomar's preflight (`status: pass`, with the same
+  warning); it is the commit prepared for version 5, and the manuscript cites it.
 
-Figures, from 19:53 to 23:11:
-- elapsed time: 3 hours 17 minutes;
-- sub-agents: 4, at most 2 at the same time, about 2.8 hours of work;
-- tool calls: 788 by the sub-agents, 282 by the main session;
-- tokens of the sub-agents: 0.88 million output, 6.08 million input, 298 million cache reads; of the main
-  session: 0.37 million output, 0.69 million input, 126 million cache reads;
-- model calls: 672 by the sub-agents and 295 by the main session, all to `claude-opus-5-5`.
+Figures, from 19:53 to 23:12 on 6 October and from 07:23 to 07:58 on 7 October:
+- elapsed time: 3 hours 18 minutes and 35 minutes;
+- sub-agents: 4, at most 2 at the same time, about 3.0 hours of work;
+- tool calls: 844 by the sub-agents, 318 by the main session;
+- tokens of the sub-agents: 0.93 million output, 7.80 million input, 346 million cache reads; of the
+  main session: 0.41 million output, 1.25 million input, 147 million cache reads;
+- model calls: 730 by the sub-agents and 334 by the main session, all to `claude-opus-5-5`.

@@ -100,10 +100,10 @@ undefined reference.
   `Challenge.lean`.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `44ddd4c75b9ed901c78e0b255d673841ebf04aeb`, on which the
-  continuous integration and Palomar's preflight of the certificate entry passed; that entry, at the root of the
-  repository, is prepared for submission. Baek's entry, in `baek/`, is registered as PALOMAR-2026-10-02-000008, and
-  its version 4 registers the earlier commit `16653ae`, from the time when its files were at the root.
+- The links to the repository are pinned to commit `0addd87e5a0a4550ab8a60019180f012167fa24f`, on which the
+  continuous integration and Palomar's preflight passed; it is the commit prepared for version 5 of
+  PALOMAR-2026-10-02-000008. Versions 1 to 4 registered the formalization of Baek's paper, whose files are now in
+  `baek/`; version 4 registers the earlier commit `16653ae`.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
   by `assert`s in the scripts.
 
@@ -454,7 +454,8 @@ that the Solution at the root restates in `MovingSofaExtremal/Statements.lean` a
 `MovingSofaExtremal/Certificate.lean`. Palomar's preflight of the certificate entry passed on `44ddd4c`, and the
 manuscript cited that commit. Palomar does not register a second entry for the repository's Comparator
 configuration, so the author decided that the root is version 5 of PALOMAR-2026-10-02-000008 and that the files of
-versions 1 to 4 stay in `baek/`; Appendices D.1 and E and Section 1.6 say so. It has 119 pages.
+versions 1 to 4 stay in `baek/`; Appendices D.1 and E and Section 1.6 say so. Palomar's preflight passed on
+`0addd87`, the commit prepared for version 5, and the manuscript cites that commit. It has 119 pages.
 
 ## What has not been done
 
