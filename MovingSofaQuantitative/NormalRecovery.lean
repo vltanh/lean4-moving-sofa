@@ -818,7 +818,8 @@ theorem active_B_wall_at_smooth_parameter {P : GerverParams}
     exact ⟨by linarith [ht.1,hord.1,hord.2.1],
       by linarith [ht.1,hord.2.1,hord.2.2.1],
       by linarith [ht.1],hregular⟩
-  have hd:=henv.B_deriv t ht hnot
+  have hd:=henv.B_deriv t
+    ⟨by linarith [ht.1,(romik_bounds hP hbox).θ_mem.2,pi_pos],ht.2⟩ hnot
   have hsign : P.gs_ρA t-1<0 := by
     have hh:=henv.ρA_lt t ⟨ht.1.le,ht.2.le⟩
     linarith
@@ -864,7 +865,8 @@ theorem active_D_wall_at_smooth_parameter {P : GerverParams}
     exact ⟨hregular,by linarith [ht.2],
       by linarith [ht.2,hord.2.2.1],
       by linarith [ht.2,hord.2.2.2.1]⟩
-  have hd:=henv.D_deriv t ht hnot
+  have hd:=henv.D_deriv t
+    ⟨ht.1,by linarith [ht.2,(romik_bounds hP hbox).θ_mem.2,pi_pos]⟩ hnot
   have hsign : 0<1-P.gs_ρC t := by
     have hh:=henv.ρC_lt t ⟨ht.1.le,ht.2.le⟩
     linarith
