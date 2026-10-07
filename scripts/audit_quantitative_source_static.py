@@ -125,6 +125,31 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "Measure the radius relative to the input midpoint.",
         ),
     ),
+    "MovingSofaQuantitative/EffectiveRecovery.lean": (
+        (
+            r"have\\s+hr\\s*:\\s*r\\s*≤\\s*\\(100/1051:ℝ\\)\\*ρ/2",
+            "The 10300 recovery radius does not satisfy the old half-ball "
+            "hypothesis when delta=514 sqrt(E). Use the full surviving-ball "
+            "condition E < (kappa*rho-r)^2 instead.",
+        ),
+        (
+            r"have\\s+hback\\s*:=\\s*directedClose_of_missing_area\\b",
+            "Coarse recovery must use directedClose_of_missing_area_full_ball; "
+            "the generic half-radius lemma is quantitatively insufficient.",
+        ),
+    ),
+    "MovingSofaQuantitative/EffectiveEntry.lean": (
+        (
+            r"have\\s+hr\\s*:\\s*r\\s*≤\\s*\\(100/1051:ℝ\\)\\*ρ/2",
+            "The entry proof must inherit the correct full surviving-ball "
+            "geometry; r<=kappa*rho/2 is false at the worst-case cap error.",
+        ),
+        (
+            r"have\\s+hback\\s*:=\\s*directedClose_of_missing_area\\b",
+            "Effective global entry must use the sharpened missing-area "
+            "lemma at its advertised radius.",
+        ),
+    ),
     "MovingSofaQuantitative/ReferenceSector.lean": (
         (
             r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
