@@ -277,6 +277,51 @@ theorem quantitative_envelope_excess {P : GerverParams}
     nlinarith
   nlinarith
 
+
+/-- Same excess estimate with the reference roof and clipping scale exposed, so
+a global theorem can choose its deficit threshold before seeing the competitor. -/
+theorem quantitative_envelope_excess_with_margin {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P) (gerverRoofRight P) H L γ)
+    {τ : ℝ} (hτ : 0<τ) (hmargin : RoofSlackMargin P.cap γ (5/51) τ)
+    {K : Set Point} (hK : IsCap K (π/2)) {δ : ℝ}
+    (hδ : 0≤δ) (hδτ : δ<τ) (hclose : UpperSupportClose δ K P.cap) :
+    area (capShape K\gerverSofa P)≤(62307/2500)*δ+4*δ^2 := by
+  have hwidth:=gerver_quantitative_widths hP hbox
+  have hcap:=cap_layer_area hP hbox hK hδ hclose
+  have hbandSub :
+      (capShape K\gerverSofa P)∩P.cap ⊆
+        {p : Point | p.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
+          γ p.1-(51/5)*δ≤p.2 ∧ p.2≤γ p.1} := by
+    intro p hp
+    have hpN : p∈niche P.cap (π/2) := by
+      rw [←gerver_shape_eq hP hbox] at hp
+      by_contra hn
+      exact hp.1.2 ⟨hp.2,hn⟩
+    have hd:=envelope_roof_depth_le hK (by norm_num : (0:ℝ)<5/51)
+      hclose hδτ hmargin hp.1.1 hpN
+    rw [hroof.niche_eq] at hpN
+    exact ⟨hpN.1,by nlinarith,hpN.2.2.le⟩
+  have hbandArea :
+      area ((capShape K\gerverSofa P)∩P.cap)≤
+        (51/5)*δ*(gerverRoofRight P-gerverRoofLeft P) := by
+    have hm:=area_mono_of_finite hbandSub
+      (by
+        rw [roof_band_area hroof.order.le (by positivity)
+          (continuous_clamped_roof hroof.order.le hroof.slope_nonneg hroof.roof_lipschitz)]
+        exact ENNReal.ofReal_ne_top)
+    exact hm
+  have hsplit :
+      area (capShape K\gerverSofa P)≤area (K\P.cap)+
+        area ((capShape K\gerverSofa P)∩P.cap) := by
+    exact area_split_by_measurable P.cap (capShape K\gerverSofa P)
+      (gm_isConvexBody_cap hP hbox).2.1.measurableSet
+  have hw : 2*(horizontalWidth P.cap+1)+(51/5)*
+      (gerverRoofRight P-gerverRoofLeft P)<62307/2500 := by
+    nlinarith [hwidth.1,hwidth.2]
+  nlinarith
+
 /-- The final 50 coefficient from the complementary area budget. -/
 theorem symmetric_difference_50 {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
