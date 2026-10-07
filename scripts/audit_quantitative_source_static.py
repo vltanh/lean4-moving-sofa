@@ -82,6 +82,29 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
 # These require an actual proof rewrite; removing or renaming the marker without
 # supplying the missing argument must not be counted as progress.
 PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
+    "MovingSofaQuantitative/EffectiveRegularizationSupport.lean": (
+        (
+            r"subset\s*:\s*∀r≥0,interval\s+r⊆Icc",
+            "A one-sided interval of length r stays in [0, pi] only for a "
+            "bounded radius. Require r <= pi/2 or truncate the interval.",
+        ),
+        (
+            r"theorem\s+sup_le_of_L2_lipschitz[\s\S]{0,350}"
+            r"\(hD\s*:\s*∀t∈Icc",
+            "An L2-to-sup bound proportional only to the Lipschitz constant "
+            "is false for a nonzero constant function. An anchored zero "
+            "of the support difference is required.",
+        ),
+    ),
+    "MovingSofaQuantitative/EffectiveRightAngle.lean": (
+        (
+            r"theorem\s+penalized_cap_radius_bound[\s\S]{0,600}"
+            r"∀p∈C,norm2\s+p<26",
+            "An absolute origin-centred radius bound contradicts the "
+            "horizontal translation invariance of cap area and penalty. "
+            "Measure the radius relative to the input midpoint.",
+        ),
+    ),
     "MovingSofaQuantitative/ReferenceSector.lean": (
         (
             r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
