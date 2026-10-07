@@ -133,7 +133,7 @@ def contractCoordinate (lo hi : Q) (target : Q)
     let n:=if j%2=0 then n0 else (-n0.2,n0.1)
     let a:=box[j]!
     let hi':=min a.2 (dyadicUp 32
-      ((Ps.flatMap id).map (fun p=>dotQ p n) |>.foldl max a.2))
+      ((Ps.flatMap id).map (fun p=>dotQ p n) |>.foldl max a.1))
     let mid:=(a.1+hi')/2
     let lowArea:=Ps.foldl (fun s P=>s+area (clip P n mid)) 0
     let lo':=if lowArea<target then max a.1 (dyadicDown 32 mid) else a.1
