@@ -28,6 +28,7 @@ public import MovingSofaQuantitative.DualSlack
 public import MovingSofaQuantitative.EffectiveAngleEntry
 public import MovingSofaQuantitative.EffectiveEntry
 public import MovingSofaQuantitative.EffectiveRecovery
+public import MovingSofaQuantitative.EffectiveRegularizationSupport
 public import MovingSofaQuantitative.EffectiveRightAngle
 public import MovingSofaQuantitative.EndpointAveraging
 public import MovingSofaQuantitative.EndpointSlacks
