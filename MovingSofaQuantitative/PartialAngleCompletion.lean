@@ -26,6 +26,101 @@ open MovingSofaOptimality MovingSofaStability
 
 namespace MovingSofaQuantitative
 
+theorem niche_volume_ne_top_right_angle {K : Set Point}
+    (hK : IsCap K (π/2)) :
+    volume (niche K (π/2))≠⊤ := by
+  obtain ⟨R,hR⟩:=hK.2.1.2.1.exists_bound_of_continuousOn
+    continuous_norm2.continuousOn
+  let R':=max 1 R
+  have hR' : 0≤R':=le_max_of_le_left zero_le_one
+  have hbox : K⊆Icc (-R') R'×ˢIcc (0:ℝ) 1 := by
+    intro p hp
+    have hn:=hR p hp
+    have hxy:=norm2_le_abs_add p
+    have hx:=abs_fst_le_norm2 p
+    exact ⟨⟨by
+      have:=hx.trans hn
+      dsimp [R']
+      linarith [le_max_right (1:ℝ) R],
+      by
+      have:=hx.trans hn
+      dsimp [R']
+      linarith [le_max_right (1:ℝ) R]⟩,
+      hK.snd_nonneg hp,hK.snd_le_one hp⟩
+  exact volume_ne_top_of_subset
+    (niche_subset_box hK hR' hbox)
+    (isCompact_Icc.prod isCompact_Icc).measure_lt_top.ne
+
+/-- Full-angle envelope area equals the sofa functional plus the part of the
+niche lying outside the cap. -/
+theorem capShape_area_eq_sofaArea_add_exterior {K : Set Point}
+    (hK : IsCap K (π/2)) :
+    area (capShape K)=sofaArea (π/2) K+area (niche K (π/2)\K) := by
+  have hKf:=hK.2.1.2.1.measure_lt_top.ne
+  have hNf:=niche_volume_ne_top_right_angle hK
+  have eK:=area_inter_add_sdiff (S:=K) (niche_measurable K) hKf
+  have eN:=area_inter_add_sdiff (S:=niche K (π/2))
+    hK.2.1.2.1.measurableSet hNf
+  rw [inter_comm (niche K (π/2)) K] at eN
+  change area (K∩niche K (π/2))+area (capShape K)=area K at eK
+  unfold sofaArea
+  linarith
+
+/-- The Gerver horizontal midpoint lies strictly between -1 and 1. -/
+theorem gerver_midpoint_abs_lt_one {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    |horizontalMidpoint P.cap|<1 := by
+  have hB:=romik_bounds hP hbox
+  have hX:=gs_X₀_bounds hP hB
+  have h0 : supp P.cap 0=1 := by
+    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB le_rfl pi_pos.le,gs_H_zero hP]
+  have hπ : supp P.cap π=1-(P.path (π/2)).1 := by
+    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB pi_pos.le le_rfl,gs_H_pi]
+  unfold horizontalMidpoint
+  rw [h0,hπ]
+  rw [abs_lt]
+  constructor <;> nlinarith [hX.1,hX.2]
+
+/-- The Euclidean unit normal is 1-Lipschitz in its angle. -/
+theorem norm2_uvec_sub_le_one (s t : ℝ) :
+    norm2 (uvec s-uvec t)≤|s-t| := by
+  have hs:=norm2_sq (uvec s-uvec t)
+  have hc:=one_sub_sq_div_two_le_cos (x:=s-t)
+  have hsq : norm2 (uvec s-uvec t)^2=
+      2-2*cos (s-t) := by
+    rw [hs]
+    simp [dot,uvec,cos_sub]
+    ring
+  have hn:=norm2_nonneg (uvec s-uvec t)
+  rw [hsq]
+  nlinarith [sq_abs (s-t)]
+
+theorem abs_dot_uvec_angle_le {p : Point} {R : ℝ}
+    (hp : norm2 p≤R) (hR : 0≤R) (s t : ℝ) :
+    |dot p (uvec s)-dot p (uvec t)|≤R*|s-t| := by
+  rw [←dot_sub_right]
+  exact (abs_dot_le_norm2_mul p _).trans
+    ((mul_le_mul hp (norm2_uvec_sub_le_one s t)
+      (norm2_nonneg _) hR).trans_eq (by ring))
+
+theorem support_angle_bound_sharp {K : Set Point}
+    (hK : IsConvexBody K) {R : ℝ} (hR : 0≤R)
+    (hr : ∀p∈K,norm2 p≤R) (s t : ℝ) :
+    |supp K s-supp K t|≤R*|s-t| := by
+  have one : supp K s-supp K t≤R*|s-t| := by
+    obtain ⟨p,hp,heq⟩:=exists_dot_eq_supp hK.2.1 hK.1 s
+    have hdot:=abs_dot_uvec_angle_le (hr p hp) hR s t
+    have hle:=dot_le_supp hK.2.1 hp t
+    rw [heq]
+    nlinarith [le_abs_self (dot p (uvec s)-dot p (uvec t))]
+  have two : supp K t-supp K s≤R*|s-t| := by
+    obtain ⟨p,hp,heq⟩:=exists_dot_eq_supp hK.2.1 hK.1 t
+    have hdot:=abs_dot_uvec_angle_le (hr p hp) hR t s
+    have hle:=dot_le_supp hK.2.1 hp s
+    rw [heq,abs_sub_comm] at hdot
+    nlinarith [le_abs_self (dot p (uvec t)-dot p (uvec s))]
+  exact abs_sub_le_iff.2 ⟨one,two⟩
+
 /-- Horizontal projection of a normalized reduced moving sofa has width at most six. -/
 theorem midpoint_sofa_horizontal_width_six {P : GerverParams}
     {S : Set Point} {ω : ℝ}
@@ -274,21 +369,44 @@ theorem build_partial_completion {P : GerverParams}
   have hW : supp N 0+supp N π≤6 := by
     have h:=hwidthPoint r hr l hl
     rw [hlx,hrx] at h
-    simpa [abs_of_nonneg (by
-      have:=support_width_nonneg hNc hNn 0
-      simpa [uvec_add_pi] using this)] using h
-  have hproj : ∀p∈K,p.1∈Icc (-supp N π) (supp N 0) := by
-    intro p hp
-    have h0:=dot_le_supp hK.2.1.2.1 hp 0
-    have hπ:=dot_le_supp hK.2.1.2.1 hp π
-    rw [sofaCap_upper_support hNc hNn hstrip htop
-      ⟨le_rfl,pi_pos.le⟩,
-      sofaCap_upper_support hNc hNn hstrip htop
-      ⟨pi_pos.le,le_rfl⟩,
-      dot_uvec_zero,dot_uvec_pi] at h0 hπ
-    exact ⟨by linarith,by linarith⟩
+    have hnon : 0≤supp N 0+supp N π := by
+      have hp:=dot_le_supp hNc hr π
+      rw [hrx,dot_uvec_pi] at hp
+      linarith
+    simpa [abs_of_nonneg hnon] using h
+  have hK0 : supp K 0=supp N 0 :=
+    sofaCap_upper_support hNc hNn hstrip htop ⟨le_rfl,pi_pos.le⟩
+  have hKπ : supp K π=supp N π :=
+    sofaCap_upper_support hNc hNn hstrip htop ⟨pi_pos.le,le_rfl⟩
+  have hprojEq : -supp K π=-supp N π ∧ supp K 0=supp N 0 := by
+    exact ⟨by rw [hKπ],hK0⟩
+  have hmidG:=gerver_midpoint_abs_lt_one hP hbox
+  have hmidN : horizontalMidpoint N=horizontalMidpoint P.cap := by
+    exact (midpointNormalizedSofa_midpoint P
+      (ms_isCompact_of_isMovingSofaWithAngle hS) hS.2.1.nonempty).trans
+      (gerver_midpoint_cap hP hbox)
+  have hmidK : horizontalMidpoint K=horizontalMidpoint P.cap := by
+    unfold horizontalMidpoint
+    rw [hK0,hKπ]
+    exact hmidN
+  have hKrad : ∀q∈K,norm2 q≤5 := by
+    intro q hq
+    have h0:=dot_le_supp hK.2.1.2.1 hq 0
+    have hπ:=dot_le_supp hK.2.1.2.1 hq π
+    rw [hK0,hKπ,dot_uvec_zero,dot_uvec_pi] at h0 hπ
+    have hcenter : |q.1-horizontalMidpoint N|≤3 := by
+      unfold horizontalMidpoint
+      rw [abs_le]
+      constructor <;> nlinarith [hW]
+    have hmx : |horizontalMidpoint N|<1 := by rw [hmidN]; exact hmidG
+    have hx : |q.1|<4 := (abs_le_abs_sub_add_abs _ _).trans_lt (by linarith)
+    have hy0:=hK.snd_nonneg hq
+    have hy1:=hK.snd_le_one hq
+    have hn:=norm2_le_abs_add q
+    rw [abs_of_nonneg hy0] at hn
+    linarith
   have hα0 : 0≤π/2-ω:=sub_nonneg.mpr hω.2
-  have homit:=omitted_wedges_area_72 hK rfl hα0 hα4 hproj
+  have homit:=omitted_wedges_area_72 hK rfl hα0 hα4 hprojEq
     (by simpa using hW)
   have hsurSub : N\U⊆omittedFloorWedges K ω := by
     intro p hp
@@ -310,7 +428,7 @@ theorem build_partial_completion {P : GerverParams}
     exact ⟨hy,t,ht,hωt,hu,hv⟩
   have hsur : area (N\U)≤72*(π/2-ω) :=
     (area_mono_of_finite hsurSub
-      (volume_ne_top_of_subset (omitted_wedges_box hK rfl hα0 hα4 hproj
+      (volume_ne_top_of_subset (omitted_wedges_box hK rfl hα0 hα4 hprojEq
         (by simpa using hW))
         (isCompact_Icc.prod isCompact_Icc).measure_lt_top.ne)).trans homit
   have hextSub : niche K (π/2)\K⊆omittedFloorWedges K ω :=
@@ -318,19 +436,19 @@ theorem build_partial_completion {P : GerverParams}
       ⟨(arccos_nonneg _).trans hω.1,hω.2⟩ htop
   have hext : area (niche K (π/2)\K)≤72*(π/2-ω) :=
     (area_mono_of_finite hextSub
-      (volume_ne_top_of_subset (omitted_wedges_box hK rfl hα0 hα4 hproj
+      (volume_ne_top_of_subset (omitted_wedges_box hK rfl hα0 hα4 hprojEq
         (by simpa using hW))
         (isCompact_Icc.prod isCompact_Icc).measure_lt_top.ne)).trans homit
   have hAupper:=right_angle_cap_area_le_gerver
     (gerver_maximizing_value hP hbox) hK
+  have hshapeArea:=capShape_area_eq_sofaArea_add_exterior hK
+  have hSbal:=area_sdiff_balance hNc.measurableSet
+    (measurable_capShape hK) hNc.measure_lt_top.ne
+    (volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne)
   have hAlower :
       area N-144*(π/2-ω)≤sofaArea (π/2) K := by
-    have hbalance1:=area_sdiff_balance hNc.measurableSet
-      (measurable_capShape hK) hNc.measure_lt_top.ne
-      (volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne)
-    have hbalance2:=niche_exterior_area_identity hK
     unfold U at hsur
-    nlinarith [hsur,hext,hbalance1,hbalance2]
+    nlinarith [hsur,hext,hSbal,hshapeArea]
   have hεN : ε=area (gerverSofa P)-area N := by
     rw [hε,sofaDeficit,area_midpointNormalizedSofa]
   have hdef0 : 0≤area (gerverSofa P)-sofaArea (π/2) K :=
@@ -340,15 +458,13 @@ theorem build_partial_completion {P : GerverParams}
     rw [hεN]
     linarith
   have hmissing : area (U\N)≤ε+144*(π/2-ω) := by
-    have hb:=missing_area_identity hNc.measurableSet
+    have hb:=area_sdiff_balance hNc.measurableSet
       (measurable_capShape hK) hNc.measure_lt_top.ne
       (volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne)
-      (area (gerverSofa P))
-    have hUdef : area (gerverSofa P)-area U≤
-        area (gerverSofa P)-sofaArea (π/2) K+
-          area (niche K (π/2)\K) := by
-      exact capShape_deficit_le_sofaArea_deficit_plus_exterior_niche hK
-    nlinarith [hb,hUdef,hdefB,hext,hsur]
+    unfold U at hb
+    rw [hshapeArea] at hb
+    rw [hεN]
+    nlinarith [hsur,hext]
   have hhall : ApproxHallways K N (16*(π/2-ω)) := by
     intro p hp t ht
     by_cases hvis : t≤ω
@@ -358,19 +474,28 @@ theorem build_partial_completion {P : GerverParams}
         ⟨by linarith [ht.1,pi_pos],by linarith [ht.2]⟩
       simpa [innerSlackU,innerSlackV,h1,h2] using
         moving_hallway_slacks hNm hp ⟨ht.1.le,hvis⟩
-    · have hspan : ∀q∈N,norm2 q≤8 := midpoint_normalized_radius_eight
-        hP hbox hNm hω
-      exact approximate_slack_after_terminal hNc hNn hspan hp ht
-        (not_le.mp hvis) hω.2
-  have hmid : horizontalMidpoint K=horizontalMidpoint P.cap := by
-    unfold horizontalMidpoint K
-    rw [sofaCap_upper_support hNc hNn hstrip htop
-      ⟨le_rfl,pi_pos.le⟩,
-      sofaCap_upper_support hNc hNn hstrip htop
-      ⟨pi_pos.le,le_rfl⟩]
-    exact (midpointNormalizedSofa_midpoint P
-      (ms_isCompact_of_isMovingSofaWithAngle hS) hS.2.1.nonempty).trans
-      (gerver_midpoint_cap hP hbox)
+    · have hωI : ω∈Icc (0:ℝ) (π/2):=
+        ⟨(arccos_nonneg _).trans hω.1,hω.2⟩
+      have hterminal:=moving_hallway_slacks hNm hp hωI
+      have hdt : 0≤t-ω ∧ t-ω≤π/2-ω := ⟨sub_nonneg.mpr (not_le.mp hvis).le,
+        sub_le_sub_right ht.2 ω⟩
+      have hsuppU:=support_angle_bound_sharp hK.2.1 (R:=5) (by norm_num) hKrad t ω
+      have hdotU:=abs_dot_uvec_angle_le (hKrad p (hsub hp)) (by norm_num : (0:ℝ)≤5) t ω
+      have hsuppV:=support_angle_bound_sharp hK.2.1 (R:=5) (by norm_num) hKrad
+        (t+π/2) (ω+π/2)
+      have hdotV:=abs_dot_uvec_angle_le (hKrad p (hsub hp)) (by norm_num : (0:ℝ)≤5)
+        (t+π/2) (ω+π/2)
+      unfold innerSlackU innerSlackV at *
+      rw [abs_of_nonneg hdt.1] at hsuppU hdotU
+      have hab : |(t+π/2)-(ω+π/2)|=t-ω := by
+        rw [show (t+π/2)-(ω+π/2)=t-ω by ring,abs_of_nonneg hdt.1]
+      rw [hab] at hsuppV hdotV
+      rcases hterminal with hu|hv
+      · left
+        nlinarith [abs_le.mp hsuppU,abs_le.mp hdotU]
+      · right
+        nlinarith [abs_le.mp hsuppV,abs_le.mp hdotV]
+  have hmid : horizontalMidpoint K=horizontalMidpoint P.cap := hmidK
   refine ⟨{
     N:=N,K:=K,U:=U,N_eq:=rfl,K_eq:=rfl,U_eq:=rfl,
     Nmove:=hNm,Kcap:=hK,subset_cap:=hsub,top:=htop,midpoint:=hmid,
