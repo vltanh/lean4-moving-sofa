@@ -52,11 +52,6 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
         "explicit_normal_and_deep_niche_recovery",
         "roof_interior_balls",
     ),
-    "MovingSofaQuantitative/TrialEnergyCertificate.lean": (
-        "CriticalTrial.integral_le_cover_sum",
-        "List.mapM_get_of_eq_some",
-        "List.mapM_get_of_mem_eq_some",
-    ),
     "MovingSofaQuantitative/EffectiveAngleEntry.lean": (
         "partial_inner_triangle_area_lower",
         "high_angle_tan_lower",
@@ -90,16 +85,14 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
     "MovingSofaQuantitative/ReferenceSector.lean": (
         (
             r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
-            "A geometric boundary point's x-coordinate is not a Gerver "
-            "turning-angle parameter. The sector inclusion needs a boundary "
-            "chart/parameterization, not this five-phase split.",
+            "The boundary point's horizontal coordinate is not a turning "
+            "parameter. A genuine boundary contact/envelope chart is required.",
         ),
-    ),
-    "MovingSofaQuantitative/TrialEnergyCertificate.lean": (
         (
-            r"exact\s+CriticalTrial\.integral_le_cover_sum",
-            "The residual cover/integral domination bridge is undeclared; "
-            "replace with a proof over the disjoint pieceChain.",
+            r"refine\s+⟨π\s*/\s*2,\s*\?_⟩[\s\S]*?have\s+hconv:Convex",
+            "A vertical-centered sector cannot be inferred for an entire "
+            "convex wing, especially at its outer horizontal endpoint. "
+            "Prove a location-dependent wedge using the actual boundary.",
         ),
     ),
 }
