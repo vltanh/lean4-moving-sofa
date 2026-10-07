@@ -568,27 +568,19 @@ theorem gerver_sector_radius_explicit {P : GerverParams}
       ∃ θ, interiorSector p θ referenceSectorHalfAngle referenceSectorRadius ⊆
         gerverSofa P := by
   intro p hp
-  by_cases hi : p ∈ interior (gerverSofa P)
-  · obtain ⟨ρ, hρ, hball⟩ := Metric.isOpen_iff.1 isOpen_interior p hi
-    by_cases hr : referenceSectorRadius < ρ
-    · refine ⟨0, ?_⟩
-      intro q hq
-      exact interior_subset (hball (hq.2.2.trans_lt hr))
-    · apply gerver_near_boundary_sector hP hbox hp
-      intro hball
-      have hself : p∈euclideanBall p referenceSectorRadius := by
-        rw [euclideanBall,mem_setOf_eq,euclideanDist_self]
-        exact le_of_not_gt hr
-      have := hball hself
-      exact hi (interior_mono (fun q hq=>hq) this)
-  · have hclosed : IsClosed (gerverSofa P) :=
-      (ms_isCompact_of_isMovingSofaWithAngle
-        (gm_movingSofa_std hP hbox).1).isClosed
-    have hfront : p ∈ frontier (gerverSofa P) := by
-      rw [frontier_eq_closure_inter]
-      exact ⟨hclosed.closure_subset hp, by simpa [mem_compl_iff] using hi⟩
-    obtain ⟨θ, r, hr, hsector⟩ := gerver_boundary_chart hP hbox hfront
-    exact ⟨θ, fun q hq => hsector ⟨hq.1, hq.2.1, hq.2.2.trans hr⟩⟩
+  -- Test the *specified radius* directly. An arbitrary open-neighborhood
+  -- radius ρ<referenceSectorRadius says nothing about whether the larger
+  -- ball is contained; that earlier inference was invalid.
+  by_cases hball : euclideanBall p referenceSectorRadius ⊆ gerverSofa P
+  · refine ⟨0, ?_⟩
+    intro q hq
+    exact hball hq.2.2
+  · have hnear :
+        ¬ euclideanBall p referenceSectorRadius ⊆
+          interior (gerverSofa P) := by
+      intro hinner
+      exact hball (hinner.trans interior_subset)
+    exact gerver_near_boundary_sector hP hbox hp hnear
 
 theorem gerver_uniform_sector {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
