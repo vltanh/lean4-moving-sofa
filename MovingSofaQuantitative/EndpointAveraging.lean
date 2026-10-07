@@ -38,9 +38,8 @@ theorem integral_subinterval_abs_le {a b t : ℝ} (ht : t ∈ Icc a b)
   exact hcs'.trans (mul_le_mul (sqrt_le_sqrt (by linarith [ht.2])) hr
     (sqrt_nonneg _) (sqrt_nonneg _))
 
-/-- The value at the left endpoint is bounded by average mass plus square-root
-length times derivative energy. No differentiability of a competing boundary
-is being inferred here: the derivative hypotheses are explicit. -/
+/-- Average mass plus square-root length times derivative energy bounds the
+left endpoint. The right-derivative hypotheses remain explicit. -/
 theorem endpoint_average_bound {a b : ℝ} (hab : a < b) {f d : ℝ → ℝ}
     (hf : ContinuousOn f (Icc a b))
     (hderiv : ∀ t ∈ Ioo a b, HasDerivWithinAt f (d t) (Ioi t) t)
@@ -64,13 +63,10 @@ theorem endpoint_average_bound {a b : ℝ} (hab : a < b) {f d : ℝ → ℝ}
     hi hpoint
   simp only [intervalIntegral.integral_const, smul_eq_mul] at havg
   have hlen : 0 < b - a := sub_pos.mpr hab
-  apply (le_div_iff₀ hlen).mp
-  have he : (A / (b - a) + sqrt (b - a) * B) * (b - a) =
-      A + (b - a) * sqrt (b - a) * B := by
-    field_simp [hlen.ne']
-    ring
-  rw [he]
-  nlinarith only [havg, hmass]
+  have hdiv : f a - sqrt (b - a) * B ≤ A / (b - a) := by
+    apply (le_div_iff₀ hlen).2
+    nlinarith only [havg, hmass]
+  linarith
 
 /-- The optimized scalar remainder at the exact cube-root scale. -/
 theorem endpoint_cube_root_arithmetic {Δ : ℝ} (hΔ : 0 < Δ) :
@@ -89,7 +85,7 @@ theorem endpoint_cube_root_arithmetic {Δ : ℝ} (hΔ : 0 < Δ) :
     _ = 8 * (Δ / Δ ^ (1 / 3 : ℝ)) + 8 * (sqrt (Δ ^ (1 / 3 : ℝ)) * sqrt Δ) := by ring
     _ = _ := by rw [hfirst, hsecond]; ring
 
-/-- For Delta<=1/512 the selected interval fits inside an available length1/8. -/
+/-- For Delta<=1/512 the selected interval fits inside an available length 1/8. -/
 theorem cube_root_fits_eighth {Δ : ℝ} (hΔ : 0 ≤ Δ) (hsmall : Δ ≤ 1 / 512) :
     Δ ^ (1 / 3 : ℝ) ≤ 1 / 8 := by
   calc
