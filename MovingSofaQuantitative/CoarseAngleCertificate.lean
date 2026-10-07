@@ -458,7 +458,7 @@ theorem coarse_area_separation {S : Set Point} {ω : ℝ}
   have hr0 : (3/5:ℝ)≤tan(ω/2) :=
     coarse_half_angle_lower hω0 hω1
   have hr1 : tan(ω/2)≤4/5 := by
-    rw [show tan((2*arctan (4/5:ℝ))/2)=4/5 by
+    rw [← show tan((2*arctan (4/5:ℝ))/2)=4/5 by
       rw [show (2*arctan (4/5:ℝ))/2=arctan (4/5:ℝ) by ring,
           tan_arctan]]
     exact tan_mono_on_quadrant (by linarith [hω0,arccos_nonneg (5/11:ℝ)])
