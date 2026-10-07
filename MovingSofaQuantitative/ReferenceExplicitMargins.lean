@@ -1,6 +1,7 @@
 module
 
 public import MovingSofaStability.Margins
+public import MovingSofaQuantitative.ScalarTaylor
 
 /-!
 # Explicit phase-aware reference margins
@@ -46,52 +47,150 @@ theorem phase_velocity_large {a b s c : ℝ}
 theorem explicit_margin_reserve :
     (0:ℝ)<10/101-5/51 ∧ (10/101:ℝ)-5/51=5/5151 := by norm_num
 
-/-- The reference core velocity decomposes as -a u + b v with positive
-coefficients, and its horizontal projection has a fixed fraction of a+b. -/
+/-- Gerver's actual reference velocity, using the integrated frame API. -/
+def referenceBoundaryVelocity (P : GerverParams) (t : ℝ) : Point := P.gs_pathD t
+
+theorem referenceBoundaryVelocity_eq {P : GerverParams}
+    (hP : P.IsSolution) (t : ℝ) :
+    referenceBoundaryVelocity P t =
+      P.gs_α t • uvec t + P.gs_β t • vvec t := by
+  unfold referenceBoundaryVelocity
+  rw [←gs_deriv_path hP t]
+  exact (gs_hasDerivAt_path' hP t).deriv
+
+/-- On the left end of the core the negative u-coordinate of the velocity has
+the explicit lower bound used in the phase-aware transversality estimate. -/
+theorem gerver_left_core_a_lower {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc P.φ (1/8:ℝ)) :
+    (59/625:ℝ)≤-P.gs_α t := by
+  have hB:=romik_bounds hP hbox
+  have htθ : t≤P.θ := by nlinarith [ht.2,hB.θ_mem.1]
+  rw [gs_α_eq hP (show gs_piece P 1 t from ⟨ht.1,htθ⟩),gs_α₂_eq]
+  nlinarith [hB.b₁_mem.1]
+
+theorem gerver_left_core_b_upper {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc P.φ (1/8:ℝ)) :
+    P.gs_β t≤7/5 := by
+  have hB:=romik_bounds hP hbox
+  have htθ : t≤P.θ := by nlinarith [ht.2,hB.θ_mem.1]
+  rw [gs_β_eq hP (show gs_piece P 1 t from ⟨ht.1,htθ⟩),gs_β₂_eq]
+  have hs:=sq_nonneg (t-1/8)
+  nlinarith [hB.b₁_mem.1,hB.b₁_mem.2,hB.b₂_mem.2,ht.1,ht.2]
+
+/-- The right end is the reflected phase-2 calculation. -/
+theorem gerver_right_core_b_lower {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc (π/2-1/8) (π/2-P.φ)) :
+    (59/625:ℝ)≤P.gs_β t := by
+  have hB:=romik_bounds hP hbox
+  let s:=π/2-t
+  have hs : s∈Icc P.φ (1/8:ℝ) := by
+    dsimp [s]
+    constructor <;> linarith [ht.1,ht.2]
+  have hphase : gs_piece P 3 t := by
+    constructor
+    · have hθ:=hB.θ_mem.2
+      nlinarith [ht.1]
+    · exact ht.2
+  rw [gs_β_eq hP hphase]
+  have he:=gs_β₄_eq hP s
+  have htEq : t=π/2-s := by dsimp [s]; ring
+  rw [htEq,he]
+  nlinarith [gerver_left_core_a_lower hP hbox hs]
+
+theorem gerver_right_core_a_upper {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc (π/2-1/8) (π/2-P.φ)) :
+    -P.gs_α t≤7/5 := by
+  have hB:=romik_bounds hP hbox
+  let s:=π/2-t
+  have hs : s∈Icc P.φ (1/8:ℝ) := by
+    dsimp [s]
+    constructor <;> linarith [ht.1,ht.2]
+  have hphase : gs_piece P 3 t := by
+    constructor
+    · nlinarith [hB.θ_mem.2,ht.1]
+    · exact ht.2
+  rw [gs_α_eq hP hphase]
+  have he:=gs_α₄_eq hP s
+  have htEq : t=π/2-s := by dsimp [s]; ring
+  rw [htEq,he]
+  nlinarith [gerver_left_core_b_upper hP hbox hs]
+
+/-- The reference core velocity is -a u_t + b v_t with a,b>0, and its
+horizontal transversality is at least 10/101 of a+b. -/
 theorem gerver_core_transversality {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {t : ℝ} (ht : t∈Icc P.φ (π/2-P.φ)) :
     ∃ a b : ℝ,0<a ∧ 0<b ∧
       referenceBoundaryVelocity P t=-a•uvec t+b•vvec t ∧
       (10/101:ℝ)*(a+b)≤a*cos t+b*sin t := by
-  obtain ⟨a,b,ha,hb,hvel⟩ := gerver_velocity_frame hP hbox ht
+  let a:=-P.gs_α t
+  let b:=P.gs_β t
+  have hB:=romik_bounds hP hbox
+  have ht0 : 0<t := hB.φ_mem.1.trans_le ht.1
+  have ht1 : t<π/2 := by linarith [ht.2,hB.φ_mem.1]
+  have ha : 0<a := by
+    dsimp [a]
+    exact neg_pos.mpr (gs_α_neg hP hB ht0 ht1.le)
+  have hb : 0<b := by
+    dsimp [b]
+    exact gs_β_pos hP hB ht0.le ht1
+  have hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t := by
+    rw [referenceBoundaryVelocity_eq hP]
+    dsimp [a,b]
+    module
+    abel
   refine ⟨a,b,ha,hb,hvel,?_⟩
-  by_cases hsmall : t≤1/8
-  · have ha' : (59/625:ℝ)≤a :=
-      gerver_second_phase_a_lower hP hbox ht hsmall
-    have hb' : b≤7/5 := gerver_second_phase_b_upper hP hbox ht hsmall
+  by_cases hleft : t≤1/8
+  · have htl : t∈Icc P.φ (1/8:ℝ):=⟨ht.1,hleft⟩
+    have ha' := gerver_left_core_a_lower hP hbox htl
+    have hb' := gerver_left_core_b_upper hP hbox htl
     have hs : (39/1000:ℝ)≤sin t := by
-      have hφ:=hbox.1
-      have hlo:=sin_lower_cubic t
-      nlinarith [hφ.1,ht.1]
+      have hlo:=sinPoly3_le_sin ht0.le
+      simp [sinPoly3] at hlo
+      nlinarith [ht.1,hB.φ_mem.1]
     have hc : (127/128:ℝ)≤cos t := by
       have hc0:=one_sub_sq_div_two_le_cos (x:=t)
-      nlinarith [hsmall,ht.1]
-    exact phase_transversality_small ha' hb.le hb' hs hc
-  · have hs : sin t∈Icc (1/9:ℝ) 1 := by
-      constructor
-      · have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
-          (by linarith [not_le.mp hsmall])
-          (by linarith [ht.2,pi_pos])
-        have hs8:=sin_lower_cubic (1/8:ℝ)
-        nlinarith
-      · exact sin_le_one t
-    by_cases hright : π/2-1/8≤t
-    · have hc : cos t∈Icc (1/9:ℝ) 1 := by
-        rw [←sin_pi_div_two_sub]
-        constructor
-        · have hu : 1/8≤π/2-t := by linarith [ht.2,hbox.1.1]
-          have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
-            hu (by linarith [ht.1,pi_pos])
-          have hs8:=sin_lower_cubic (1/8:ℝ)
-          nlinarith
-        · exact sin_le_one _
-      exact phase_velocity_large ha.le hb.le hs hc
-    · have hc : cos t∈Icc (1/9:ℝ) 1 := by
-        have hc0 : 1/9≤cos t :=
-          cos_lower_on_middle hP hbox ht (not_le.mp hright)
-        exact ⟨hc0,cos_le_one t⟩
-      exact phase_velocity_large ha.le hb.le hs hc
+      nlinarith [hleft,ht0]
+    exact phase_transversality_small
+      (by simpa [a] using ha') hb.le (by simpa [b] using hb') hs hc
+  by_cases hright : π/2-1/8≤t
+  · have htr : t∈Icc (π/2-1/8) (π/2-P.φ):=⟨hright,ht.2⟩
+    have hb' := gerver_right_core_b_lower hP hbox htr
+    have ha' := gerver_right_core_a_upper hP hbox htr
+    have hc : (39/1000:ℝ)≤cos t := by
+      rw [←sin_pi_div_two_sub]
+      have hnon : 0≤π/2-t := by linarith [ht1]
+      have hlo:=sinPoly3_le_sin hnon
+      simp [sinPoly3] at hlo
+      nlinarith [ht.2,hB.φ_mem.1]
+    have hs : (127/128:ℝ)≤sin t := by
+      rw [←cos_pi_div_two_sub]
+      have hc0:=one_sub_sq_div_two_le_cos (x:=π/2-t)
+      nlinarith [hright,ht1]
+    have hswap:=phase_transversality_small
+      (a:=b) (b:=a) (s:=cos t) (c:=sin t)
+      (by simpa [b] using hb') ha.le (by simpa [a] using ha') hc hs
+    nlinarith
+  · have htL : 1/8<t:=lt_of_not_ge hleft
+    have htR : t<π/2-1/8:=lt_of_not_ge hright
+    have hs : (1/9:ℝ)≤sin t := by
+      have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
+        htL.le (by linarith [htR,pi_pos])
+      have h8:=sinPoly3_le_sin (show (0:ℝ)≤1/8 by norm_num)
+      simp [sinPoly3] at h8
+      nlinarith
+    have hc : (1/9:ℝ)≤cos t := by
+      rw [←sin_pi_div_two_sub]
+      have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
+        (by linarith [htR]) (by linarith [htL,pi_pos])
+      have h8:=sinPoly3_le_sin (show (0:ℝ)≤1/8 by norm_num)
+      simp [sinPoly3] at h8
+      nlinarith
+    exact phase_velocity_large ha.le hb.le ⟨hs,sin_le_one t⟩ ⟨hc,cos_le_one t⟩
 
 /-- Exact balancing identity for the adaptive witness angle. -/
 theorem balanced_slack_rates {a b s c : ℝ} (hab : a+b≠0) :
