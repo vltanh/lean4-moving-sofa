@@ -393,13 +393,70 @@ theorem exists_hundredth_slab {r : ℝ}
   · norm_num
     linarith [hr1]
 
+/-- Coarse lower bound for the half-angle tangent.
+
+At the threshold omega = arccos(5/11), the half-angle identity gives
+tan(omega/2)^2 = 3/8 > 9/25.  The following proof avoids evaluating
+an arctangent numerically. -/
+theorem coarse_half_angle_lower {ω : ℝ}
+    (hω0 : arccos (5/11:ℝ)≤ω)
+    (hω1 : ω≤2*arctan (4/5:ℝ)) :
+    (3/5:ℝ)≤tan (ω/2) := by
+  have hbase : 0≤ω := (arccos_nonneg _).trans hω0
+  have hup : ω≤π/2 := by
+    have htan := arctan_lt_pi_div_two (4/5:ℝ)
+    linarith
+  have hπ : ω≤π := hup.trans (by linarith [pi_pos])
+  have hcosbound : cos ω≤5/11 := by
+    have hcos0 := cos_le_cos_of_nonneg_of_le_pi
+      (arccos_nonneg (5/11:ℝ)) hω0 hπ
+    have heq : cos (arccos (5/11:ℝ))=5/11 := by
+      exact cos_arccos (by norm_num) (by norm_num)
+    rw [heq] at hcos0
+    exact hcos0
+  let x:=ω/2
+  have hx0 : 0≤x := by dsimp [x]; linarith
+  have hx1 : x<π/2 := by dsimp [x]; linarith [hup,pi_pos]
+  have hcx : 0<cos x :=
+    cos_pos_of_mem_Ioo ⟨by linarith [hx0,pi_pos],hx1⟩
+  have hsx : 0≤sin x :=
+    sin_nonneg_of_nonneg_of_le_pi hx0 (by linarith [hx1,pi_pos])
+  have htan_eq : tan x*cos x=sin x := by
+    rw [tan_eq_sin_div_cos]
+    field_simp [ne_of_gt hcx]
+  have htan0 : 0≤tan x := by
+    rw [tan_eq_sin_div_cos]
+    exact div_nonneg hsx hcx.le
+  have htrig : cos ω = cos x^2-sin x^2 := by
+    have heq : ω=x+x := by dsimp [x]; ring
+    rw [heq,cos_add]
+    ring
+  have hunit : sin x^2+cos x^2=1 := sin_sq_add_cos_sq x
+  have hsinLower : (3/11:ℝ)≤sin x^2 := by
+    nlinarith [hcosbound,htrig,hunit]
+  have hcosUpper : cos x^2≤8/11 := by
+    nlinarith [hcosbound,htrig,hunit]
+  have hcos2pos : 0<cos x^2 := sq_pos_of_pos hcx
+  have hquadratic : sin x^2=(tan x)^2*cos x^2 := by
+    nlinarith [htan_eq]
+  by_contra hn
+  have ht : tan x<3/5 := lt_of_not_ge hn
+  have hsquare : (tan x)^2<(3/5:ℝ)^2 := sq_lt_sq₀ htan0 ht
+  have hprod : (tan x)^2*cos x^2<
+      (3/5:ℝ)^2*cos x^2 :=
+    mul_lt_mul_of_pos_right hsquare hcos2pos
+  have hupper : (3/5:ℝ)^2*cos x^2≤(3/5)^2*(8/11) :=
+    mul_le_mul_of_nonneg_left hcosUpper (by norm_num)
+  rw [hquadratic] at hsinLower
+  nlinarith [hprod,hupper,hsinLower]
+
 theorem coarse_area_separation {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω)
     (hω0 : arccos (5/11:ℝ)≤ω)
     (hω1 : ω≤2*arctan (4/5:ℝ)) :
     area S<2219/1000 := by
   have hr0 : (3/5:ℝ)≤tan(ω/2) :=
-    coarse_half_angle_lower hω0
+    coarse_half_angle_lower hω0 hω1
   have hr1 : tan(ω/2)≤4/5 := by
     rw [show tan((2*arctan (4/5:ℝ))/2)=4/5 by
       rw [show (2*arctan (4/5:ℝ))/2=arctan (4/5:ℝ) by ring,
