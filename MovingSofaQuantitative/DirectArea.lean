@@ -172,6 +172,104 @@ theorem area_horizontalThickening_cap {K : Set Point}
     first | exact hle.trans (by simpa [lintegral_add_left] using hmass)
           | positivity
 
+/-- Vertical sections of a compact convex set are intervals. -/
+theorem convex_vertical_fiber_interval {K : Set Point}
+    (hK : IsConvexBody K) (x : ℝ) :
+    ∃ a b : ℝ, {y | (x,y)∈K}=Icc a b ∨ {y | (x,y)∈K}=∅ := by
+  by_cases hn : ∃y,(x,y)∈K
+  · have hc : IsCompact {y : ℝ | (x,y)∈K} :=
+      hK.2.1.preimage_of_continuousOn (by fun_prop)
+        (isClosed_embedding_prodMk_left x)
+    have hv : Convex ℝ {y : ℝ | (x,y)∈K} := by
+      intro y hy z hz a b ha hb hab
+      simpa only [Prod.fst_add,Prod.snd_add,Prod.smul_fst,Prod.smul_snd,
+        smul_eq_mul] using hK.2.2 hy hz ha hb hab
+    obtain ⟨a,ha⟩ := hc.exists_isMinOn hn continuous_id.continuousOn
+    obtain ⟨b,hb⟩ := hc.exists_isMaxOn hn continuous_id.continuousOn
+    refine ⟨a,b,Or.inl ?_⟩
+    ext y
+    constructor
+    · intro hy; exact ⟨ha hy,hb hy⟩
+    · intro hy
+      have hs : y∈segment ℝ a b := by
+        simpa [segment_eq_Icc (ha.1 |> fun h => h)] using hy
+      exact hv.segment_subset ha.1 hb.1 hs
+  · exact ⟨0,0,Or.inr (by ext y; simp [hn])⟩
+
+theorem vertical_fiber_thickening_length {K : Set Point}
+    (hK : IsConvexBody K) {δ : ℝ} (hδ : 0≤δ) (x : ℝ) :
+    volume {y : ℝ | (x,y)∈K+verticalSegment δ} =
+      if (Set.Nonempty {y : ℝ | (x,y)∈K})
+      then volume {y : ℝ | (x,y)∈K}+ENNReal.ofReal (2*δ)
+      else 0 := by
+  obtain ⟨a,b,hfiber|hfiber⟩ := convex_vertical_fiber_interval hK x
+  · have hab : a≤b := by
+      have hn : (Icc a b).Nonempty := by
+        rw [←hfiber]
+        exact ⟨a,by simp⟩
+      exact hn.some_mem.1.trans hn.some_mem.2
+    rw [if_pos (by rw [hfiber]; exact ⟨a,by simp [hab]⟩)]
+    rw [hfiber,show {y : ℝ | (x,y)∈K+verticalSegment δ}=Icc (a-δ) (b+δ) by
+      ext y
+      simp [verticalSegment,Set.mem_add,hfiber]
+      constructor
+      · rintro ⟨u,hu,v,hv,rfl⟩
+        linarith [hu.1,hu.2,hv.1,hv.2]
+      · intro hy
+        let u:=max a (min y b)
+        refine ⟨u,?_,y-u,?_,by ring⟩
+        · exact ⟨le_max_left _ _,max_le hab (min_le_right _ _)⟩
+        · constructor <;> dsimp [u] <;> linarith [hy.1,hy.2]]
+    simp [Real.volume_Icc,hab,hδ]
+    rw [←ENNReal.ofReal_add (sub_nonneg.mpr hab) (by positivity)]
+    congr 1
+    ring
+  · rw [if_neg (by simpa [hfiber])]
+    have he : {y : ℝ | (x,y)∈K+verticalSegment δ}=∅ := by
+      ext y
+      simp [verticalSegment,Set.mem_add,hfiber]
+    rw [he,measure_empty]
+
+/-- A vertical segment dilation of a compact convex body adds at most
+twice delta times its horizontal width. -/
+theorem area_verticalThickening_le {K : Set Point}
+    (hK : IsConvexBody K) {δ : ℝ} (hδ : 0≤δ) :
+    area (K+verticalSegment δ)≤area K+2*δ*(supp K 0+supp K π) := by
+  have hmeasK:=hK.2.1.measurableSet
+  have hmeasT : MeasurableSet (K+verticalSegment δ) :=
+    (hK.2.1.add_isCompact (verticalSegment_isConvexBody hδ).2.1).measurableSet
+  rw [area,Measure.volume_eq_lintegral_prod_snd hmeasT,
+    Measure.volume_eq_lintegral_prod_snd hmeasK]
+  have hfiber:=vertical_fiber_thickening_length hK hδ
+  have hsupport :
+      {x : ℝ | Set.Nonempty {y : ℝ | (x,y)∈K}}⊆
+        Icc (-supp K π) (supp K 0) := by
+    rintro x ⟨y,hy⟩
+    have h0:=dot_le_supp hK.2.1 hy 0
+    have hπ:=dot_le_supp hK.2.1 hy π
+    rw [dot_uvec_zero] at h0
+    simp only [dot,uvec_pi] at hπ
+    exact ⟨by linarith,by linarith⟩
+  have hle:=lintegral_mono fun x => by
+    rw [hfiber x]
+    split
+    · gcongr
+    · simp
+  have hmass :
+      ∫⁻x in {x : ℝ | Set.Nonempty {y : ℝ | (x,y)∈K}},
+        ENNReal.ofReal (2*δ)≤
+      ENNReal.ofReal (2*δ*(supp K 0+supp K π)) := by
+    rw [lintegral_const,Measure.restrict_apply_univ]
+    have hm:=measure_mono hsupport
+    rw [Real.volume_Icc] at hm
+    rw [←ENNReal.ofReal_mul (by positivity)]
+    gcongr
+    simpa [sub_neg_eq_add] using hm
+  rw [ENNReal.toReal_le_toReal] <;>
+    first
+    | exact hle.trans (by simpa [lintegral_add_left] using hmass)
+    | positivity
+
 /-- Vertical dilation of the horizontally thickened set adds at most
 2 delta times its horizontal span W+2delta. -/
 theorem area_squareThickening_cap {K : Set Point}
