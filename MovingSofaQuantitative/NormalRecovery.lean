@@ -133,8 +133,12 @@ theorem exists_mem_eq_infDist {K : Set Point} (hK : IsCompact K)
     (continuous_const.sub continuous_id |>.norm)
   refine ⟨q,hq,?_⟩
   apply le_antisymm
-  · exact le_csInf (Metric.bddBelow_dist p) ⟨q,hq,rfl⟩
-  · exact csInf_le (Metric.bddBelow_dist p) ⟨q,hq,rfl⟩
+  · -- Minimality, not membership alone, supplies dist(p,q) <= infDist.
+    apply le_csInf (Metric.bddBelow_dist p)
+    rintro d ⟨y,hy,rfl⟩
+    simpa [euclideanDist,norm2] using hmin hy
+  · -- Membership supplies the reverse inequality infDist <= dist(p,q).
+    exact csInf_le (Metric.bddBelow_dist p) ⟨q,hq,rfl⟩
 
 theorem infDist_zero_of_mem {K : Set Point} {p : Point} (hp : p∈K) :
     infDist p K=0 := by
