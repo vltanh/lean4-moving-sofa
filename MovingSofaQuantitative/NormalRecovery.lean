@@ -5,6 +5,7 @@ public import MovingSofaQuantitative.ReferenceExplicitMargins
 public import MovingSofaQuantitative.ActualSetRecovery
 public import MovingSofaStability.Recovery
 public import MovingSofaUniqueness.RegularClosed
+public import MovingSofaOptimality.External.Romik.Fix
 
 /-!
 # Euclidean-normal hallway recovery with coefficient 100/49
@@ -551,6 +552,42 @@ theorem wall_direction_rotation_bound {w : Point} (hw : norm2 w=1)
     have hsy:=mul_le_mul (abs_le.mp hy).2 hcos (abs_nonneg _)
       (abs_nonneg _)
     nlinarith [hsum,abs_mul w.1 (sin s-sin t),abs_mul w.2 (cos s-cos t)]
+
+/-- A quadratic remainder from a Lipschitz derivative, using the already
+formalized scalar mean-value theorem \`rom_mvt\`. The estimate is symmetric
+in the two endpoints and does not require a second derivative. -/
+theorem scalar_quadratic_remainder_of_deriv_lip
+    {f df : ℝ→ℝ} {s t L : ℝ}
+    (hL : 0≤L)
+    (hder : ∀u∈Icc (min s t) (max s t),HasDerivAt f (df u) u)
+    (hlip : ∀u∈Icc (min s t) (max s t),
+       |df u-df t|≤L*|u-t|) :
+    |f s-f t-df t*(s-t)|≤L*|s-t|^2 := by
+  let g : ℝ→ℝ := fun u=>f u-f t-df t*(u-t)
+  have hg : ∀u∈Icc (min s t) (max s t),
+      HasDerivAt g (df u-df t) u := by
+    intro u hu
+    dsimp [g]
+    convert ((hder u hu).sub_const _).sub
+      ((hasDerivAt_id u).sub_const t |>.const_mul (df t)) using 1 <;> ring
+  have hbound : ∀u∈Icc (min s t) (max s t),
+      |df u-df t|≤L*|s-t| := by
+    intro u hu
+    have hd : |u-t|≤|s-t| := by
+      rcases le_total s t with hst|hts
+      · rw [min_eq_left hst,max_eq_right hst] at hu
+        rw [abs_of_nonpos (sub_nonpos.mpr hst),
+          abs_of_nonpos (sub_nonpos.mpr hu.2)]
+        linarith [hu.1]
+      · rw [min_eq_right hts,max_eq_left hts] at hu
+        rw [abs_of_nonneg (sub_nonneg.mpr hts),
+          abs_of_nonneg (sub_nonneg.mpr hu.1)]
+        linarith [hu.2]
+    exact (hlip u hu).trans (mul_le_mul_of_nonneg_left hd hL)
+  have hs : s∈Icc (min s t) (max s t) := ⟨min_le_left _ _,le_max_left _ _⟩
+  have ht : t∈Icc (min s t) (max s t) := ⟨min_le_right _ _,le_max_right _ _⟩
+  have hmvt:=rom_mvt hg hbound hs ht
+  simpa [g,sub_self,sub_zero,mul_zero] using hmvt
 
 /-- Reducing second-order normal recovery to two *actual* support-function
 Taylor estimates. These estimates must use the Gerver cap support, not merely
