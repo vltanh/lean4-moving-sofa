@@ -403,10 +403,10 @@ theorem coarse_half_angle_lower {ω : ℝ}
     (hω1 : ω≤2*arctan (4/5:ℝ)) :
     (3/5:ℝ)≤tan (ω/2) := by
   have hbase : 0≤ω := (arccos_nonneg _).trans hω0
-  have hup : ω≤π/2 := by
+  have hπstrict : ω<π := by
     have htan := arctan_lt_pi_div_two (4/5:ℝ)
-    linarith
-  have hπ : ω≤π := hup.trans (by linarith [pi_pos])
+    linarith [hω1,htan]
+  have hπ : ω≤π := hπstrict.le
   have hcosbound : cos ω≤5/11 := by
     have hcos0 := cos_le_cos_of_nonneg_of_le_pi
       (arccos_nonneg (5/11:ℝ)) hω0 hπ
@@ -416,7 +416,7 @@ theorem coarse_half_angle_lower {ω : ℝ}
     exact hcos0
   let x:=ω/2
   have hx0 : 0≤x := by dsimp [x]; linarith
-  have hx1 : x<π/2 := by dsimp [x]; linarith [hup,pi_pos]
+  have hx1 : x<π/2 := by dsimp [x]; linarith [hπstrict]
   have hcx : 0<cos x :=
     cos_pos_of_mem_Ioo ⟨by linarith [hx0,pi_pos],hx1⟩
   have hsx : 0≤sin x :=
