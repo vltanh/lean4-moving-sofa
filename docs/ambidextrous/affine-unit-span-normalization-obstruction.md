@@ -89,3 +89,15 @@ AN2 now shows why a natural determinant-one correction to that span cannot be si
 Neither is established here. The full-turn maximum remains unproved.
 
 This is a pen-and-paper proof. A prescribed, five-second-capped rectangle-grid calculation first suggested the counterexample; the exact algebra in AN.1--AN.2 replaces that diagnostic and is the mathematical proof. No CI, Lean/Lake compilation, dependency installation, manuscript build, or large search was used.
+
+## 4. These rectangular obstructions are all strictly subcritical
+
+The full-turn rectangle criterion also implies a sharp area bound on this entire family:
+\[
+|R_{W,h}|=Wh\le2h(\sqrt2-h)
+=1-2(h-1/\sqrt2)^2\le1.
+\tag{AN.3}
+\]
+Equality occurs at \(h=1/\sqrt2,\ W=\sqrt2\), for which AN.1 is an equality and \(W\ge h\) holds.
+
+Thus no rectangle in the range \(W\ge h\) can challenge Romik's area \(M>8/5\), despite their usefulness as exact tests of full-quarter feasibility and of proposed area-preserving normalizers. The statement does not extend to all convex or all nonconvex ambidextrous bodies; it is confined to the specified rectangles.
