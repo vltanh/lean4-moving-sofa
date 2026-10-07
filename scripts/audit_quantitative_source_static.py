@@ -108,8 +108,8 @@ FORBIDDEN_FINITE_PROOF_ORACLES = re.compile(
 PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
     "MovingSofaQuantitative/ReferenceExplicitMargins.lean": (
         (
-            r"have\\s+hIU\\s*:=\\s*intervalIntegral\\.integral_mono_on"
-            r"\\s+hd\\.1\\s+hd\\.2",
+            r"have\s+hIU\s*:=\s*intervalIntegral\.integral_mono_on"
+            r"\s+hd\.1\s+hd\.2",
             "The final core-roof step invokes integral_mono_on with a "
             "pointwise bound only at d; it needs an inequality for every "
             "integration variable, integrability hypotheses, and a valid "
