@@ -97,11 +97,14 @@ theorem penalized_support_sup {P : GerverParams}
     nlinarith [hA])
   have hLip : LipschitzWith 32 (fun t=>supp C t-supp K t) :=
     support_difference_lipschitz_of_radius hK.2.1 hC.2.1 hKr hCr
+  have htop : (fun t=>supp C t-supp K t) (π/2)=0 := by
+    have hKC : supp K (π/2)=1 := hK.2.2.2.1
+    have hCC : supp C (π/2)=1 := hC.2.2.2.1
+    simp [hKC,hCC]
   have hcube:=sup_le_of_L2_lipschitz
     (f:=fun t=>supp C t-supp K t)
-    (P:=65536*e^(3/2:ℝ)) (L:=32) (D:=32)
-    (by simpa [supportL2Penalty] using hpen) hLip (by norm_num)
-    (fun t ht=>support_difference_bound_of_radius hK.2.1 hC.2.1 hKr hCr t)
+    (P:=65536*e^(3/2:ℝ)) (L:=32)
+    (by simpa [supportL2Penalty] using hpen) hLip (by norm_num) htop
   have hs:=sqrt_nonneg e
   have hs2:=sq_sqrt he.le
   have hpow : e^(3/2:ℝ)=e*sqrt e := by
