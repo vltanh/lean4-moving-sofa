@@ -42,37 +42,89 @@ theorem midpoint_sofa_horizontal_width_six {P : GerverParams}
   have h2:=moving_horizontal_span_le_six hN hω htop hq hp
   exact abs_le.mpr ⟨by linarith,by linarith⟩
 
-/-- Every visited floor-truncated inner wedge is contained in the full cap of
-the connected sofa.  No injectivity of the cap is used. -/
-theorem visited_wedge_subset_sofaCap {S : Set Point} {ω t : ℝ}
+/-- At every visited open angle whose full-cap inner corner lies above the
+floor, connectedness of the actual sofa forces that corner into the full cap. -/
+theorem visited_positive_innerCorner_mem_sofaCap {S : Set Point} {ω t : ℝ}
     (hS : IsMovingSofaWithAngle S ω)
-    (ht : t∈Icc (0:ℝ) ω)
-    (htop : supp S (π/2)=1) :
-    floorTruncatedInnerWedge (sofaCap S) t⊆sofaCap S := by
+    (hω : ω∈Icc (0:ℝ) (π/2))
+    (ht : t∈Ioo (0:ℝ) ω)
+    (htop : supp S (π/2)=1)
+    (hxy : 0<(innerCorner (sofaCap S) t).2) :
+    innerCorner (sofaCap S) t∈sofaCap S := by
+  let K:=sofaCap S
   have hc:=ms_isCompact_of_isMovingSofaWithAngle hS
+  have hn:=hS.2.1.nonempty
   have hstrip:=moving_strip_of_top ⟨ω,hS⟩ htop
-  have hcap:=sofaCap_isCap hc hS.2.1.nonempty hstrip htop
-  intro p hp
-  obtain ⟨l,r,hl,hr,hcorner,hconv⟩:=
-    floor_wedge_vertices (sofaCap S) hcap t
-  have hlS : ∃q∈S,q.1=l.1 := sofaCap_floor_endpoint_realized hc
-    hS.2.1.nonempty hstrip htop ht l hl
-  have hrS : ∃q∈S,q.1=r.1 := sofaCap_floor_endpoint_realized hc
-    hS.2.1.nonempty hstrip htop ht r hr
-  have hcS : hcorner∈sofaCap S := by
-    by_contra hn
-    have hline : ∀q∈sofaCap S,q.1=hcorner.1 →
-        q∈floorTruncatedInnerWedge (sofaCap S) t := by
-      exact vertical_line_if_corner_above_cap hcap hn
-    have hcross:=connected_vertical_crossing hS.2.1 hlS hrS
-      (corner_between_wedge_feet hcap ht)
-    obtain ⟨q,hqS,hqx⟩:=hcross
-    have hqW:=hline q (subset_sofaCap hc hstrip hqS) hqx
-    have hhall:=moving_supporting_hallways hS ht hqS
-    exact floor_wedge_disjoint_hallway hqW hhall
-  exact hconv hcS hp
+  have hK:=sofaCap_isCap hc hn hstrip htop
+  have htL : t∈Ioo (0:ℝ) (π/2):=⟨ht.1,ht.2.trans_le hω.2⟩
+  have hs : 0<sin t:=sin_pos_of_pos_of_lt_pi ht.1 (by linarith [htL.2,pi_pos])
+  have hco : 0<cos t:=cos_pos_of_mem_Ioo ⟨by linarith [ht.1,pi_pos],htL.2⟩
+  have hsu : supp K t=supp S t :=
+    sofaCap_upper_support hc hn hstrip htop
+      ⟨ht.1.le,by linarith [htL.2,pi_pos]⟩
+  have hsv : supp K (t+π/2)=supp S (t+π/2) :=
+    sofaCap_upper_support hc hn hstrip htop
+      ⟨by linarith [ht.1,pi_pos],by linarith [htL.2]⟩
+  obtain ⟨qR,hqR,hqReq⟩:=exists_dot_eq_supp hc hn t
+  obtain ⟨qL,hqL,hqLeq⟩:=exists_dot_eq_supp hc hn (t+π/2)
+  have hqRstrip:=hstrip hqR
+  have hqLstrip:=hstrip hqL
+  have hqRx : wedgeRightFoot K t≤qR.1 := by
+    rw [wedgeRightFoot,le_div_iff₀ hco,hsu,←hqReq]
+    simp only [dot,uvec]
+    have hys : qR.2*sin t≤1 := by
+      exact (mul_le_mul hqRstrip.2 (sin_le_one t)
+        (sin_nonneg_of_nonneg_of_le_pi ht.1.le (by linarith [htL.2,pi_pos]))
+        zero_le_one).trans_eq (one_mul 1)
+    linarith
+  have hqLx : qL.1≤wedgeLeftFoot K t := by
+    rw [wedgeLeftFoot,le_div_iff₀ hs,hsv,←hqLeq]
+    rw [uvec_add_pi_div_two]
+    simp only [dot,vvec]
+    have hyc : qL.2*cos t≤1 := by
+      exact (mul_le_mul hqLstrip.2 (cos_le_one t) hco.le zero_le_one).trans_eq
+        (one_mul 1)
+    linarith
+  obtain ⟨hxU,hxV⟩:=cn_innerCorner_dot K t
+  rw [uvec_add_pi_div_two] at hxV
+  have hleft : wedgeLeftFoot K t<(innerCorner K t).1 := by
+    rw [wedgeLeftFoot,div_lt_iff₀ hs]
+    simp only [dot,vvec] at hxV
+    nlinarith [mul_pos hxy hco]
+  have hright : (innerCorner K t).1<wedgeRightFoot K t := by
+    rw [wedgeRightFoot,lt_div_iff₀ hco]
+    simp only [dot,uvec] at hxU
+    nlinarith [mul_pos hxy hs]
+  have hcross :
+      (innerCorner K t).1∈Icc qL.1 qR.1 :=
+    ⟨hqLx.trans hleft.le,hright.le.trans hqRx⟩
+  have hfst : ContinuousOn (fun z : Point=>z.1) S:=continuous_fst.continuousOn
+  obtain ⟨q,hq,hqx⟩:=
+    hS.2.1.isPreconnected.intermediate_value hqL hqR hfst hcross
+  by_contra hcorner
+  have hqK : q∈K:=subset_sofaCap hc hstrip hq
+  have hqy : q.2<(innerCorner K t).2 := by
+    by_contra hnq
+    have hdown:=opt_cap_down hK hqK hxy.le (not_lt.mp hnq)
+    have heq : (q.1,(innerCorner K t).2)=innerCorner K t := by
+      ext <;> simp [hqx]
+    exact hcorner (heq ▸ hdown)
+  have hu : innerSlackU K t q<0 := by
+    unfold innerSlackU
+    rw [←hxU]
+    simp only [dot,uvec] at hxU ⊢
+    nlinarith [mul_pos (sub_pos.mpr hqy) hs]
+  have hv : innerSlackV K t q<0 := by
+    unfold innerSlackV
+    rw [←hxV]
+    simp only [dot,vvec] at hxV ⊢
+    nlinarith [mul_pos (sub_pos.mpr hqy) hco]
+  have hcon:=sofaCap_partial_constraints hS hω htop
+  have hfeas:=hcon.2.1 q hq t ⟨ht.1.le,ht.2.le⟩
+  exact (not_lt_of_ge hfeas) (max_lt hu hv)
 
-/-- Any niche point outside K must come from an omitted angle. -/
+/-- Any full-angle niche point outside the full cap must come from an
+angle not yet visited by the original motion. -/
 theorem exterior_niche_omitted {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω)
     (hω : ω∈Icc (0:ℝ) (π/2))
@@ -83,10 +135,19 @@ theorem exterior_niche_omitted {S : Set Point} {ω : ℝ}
   obtain ⟨hy,t,ht,hu,hv⟩:=(mem_niche_iff_slacks (sofaCap S) p).1 hp.1
   have hnotVisited : ω≤t := by
     by_contra hn
-    have hw : p∈floorTruncatedInnerWedge (sofaCap S) t :=
-      floor_wedge_of_negative_slacks hy hu hv
-    exact hp.2 (visited_wedge_subset_sofaCap hS
-      ⟨ht.1.le,(lt_of_not_ge hn).le⟩ htop hw)
+    have htv : t∈Ioo (0:ℝ) ω:=⟨ht.1,lt_of_not_ge hn⟩
+    have hcornerPos : 0<(innerCorner (sofaCap S) t).2 := by
+      have hb:=point_below_corner_of_negative_slacks ht hu hv
+      linarith
+    have hcorner:=visited_positive_innerCorner_mem_sofaCap hS hω htv htop hcornerPos
+    have hw : p∈wedge (sofaCap S) (π/2) t := by
+      refine ⟨?_,?_⟩
+      · simpa [fan,halfPlus,dot_uvec_pi_div_two] using hy
+      · exact (cn_mem_qMinus.2 ⟨hu,hv⟩)
+    exact hp.2 (lemma2_5_6
+      (sofaCap_isCap (ms_isCompact_of_isMovingSofaWithAngle hS)
+        hS.2.1.nonempty (moving_strip_of_top ⟨ω,hS⟩ htop) htop)
+      ht hcorner hw)
   exact ⟨hy,t,ht,hnotVisited,hu,hv⟩
 
 /-- Omitted wedges of a six-wide, height-one cap lie below 12 alpha. -/
