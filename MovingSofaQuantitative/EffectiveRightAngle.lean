@@ -211,7 +211,9 @@ theorem effective_right_angle_sofa {P : GerverParams}
   have hK:=sofaCap_isCap hNc hNn hstrip htop
   have hpc:=sofaCap_partial_constraints hNm ⟨by positivity,le_rfl⟩ htop
   have hsub : N⊆capShape K := right_angle_sofa_subset_capShape hK hpc
-  have hNK : niche K (π/2)⊆K := niche_subset_of_right_angle_movement hK hpc
+  have hNK : niche K (π/2)⊆K := by
+    dsimp [K]
+    exact niche_subset_of_right_angle_movement hNm htop
   let e:=area (gerverSofa P)-sofaArea (π/2) K
   have he0 : 0≤e := sub_nonneg.mpr
     (right_angle_cap_area_le_gerver (gerver_maximizing_value hP hbox) hK)
