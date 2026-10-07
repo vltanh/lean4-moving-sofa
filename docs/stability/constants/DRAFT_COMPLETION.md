@@ -1,112 +1,124 @@
-> **Additional mathematical audit repairs (October 7, 2026).** The effective
-> right-angle source contained a false unanchored \(L^2\)-to-supremum
-> inequality: a nonzero constant function has Lipschitz constant zero but
-> positive supremum. The source now uses the actual common top support
-> \(h_K(\pi/2)=h_C(\pi/2)=1\), so the support difference vanishes at
-> \(\pi/2\); its one-sided integration interval is restricted to
-> radius at most \(\pi/2\). The penalized comparison cap's radius is now
-> measured relative to the **input cap's horizontal midpoint**, not the
-> origin (absolute radius cannot be translation invariant). A relative
-> midpoint estimate and common-centre Lipschitz adapter were drafted from
-> the support penalty. Nearest-point lemmas now require a nonempty compact
-> set and use the minimizing property when equating an attained distance
-> to the infimum. Static regression patterns were added.
->
-> These are corrections of genuine mathematical/source errors, **not**
-> proof of the still-blocked quantitative targets. No Lean, Lake, CI,
-> TeX, or finite Boolean certificate was run.
+# Quantitative appendix — authoritative uncompiled draft status
 
-> **Source-audit correction (October 7, 2026).** The earlier claim that the quantitative extension is "source-complete" is **withdrawn**. All 15 headline theorem declarations have bodies, but this is not equivalent to a self-contained draft. The source-only audit found unresolved Gerver sector/normal geometry, penalized-cap and terminal/effective-entry bridges, coarse-angle search soundness, and a feasible-trial energy-cover proof. The trial-energy cell integral and arc double-counting defects were corrected in follow-up commits, but the numerical Boolean reductions remain unexecuted. See `scripts/audit_quantitative_source_static.py` and `docs/paper/quantitative_manifest.json` for current blockers. No Lean, Lake, CI, or TeX build was run.
+**Status: source audit open. Not kernel checked. Not yet self-contained.**
 
----
+This is the current concise status ledger for [PR #10](https://github.com/vltanh/lean4-moving-sofa/pull/10).
+The earlier claim that the quantitative extension was "15/15 source-complete"
+was withdrawn after a branch-local proof-dependency review. All 15 headline
+theorems have source bodies, but some invoke missing project-specific lemmas or
+contain geometric arguments that are not justified by the present source.
+A Lean theorem *declaration* does not establish its proof.
 
-## Historical draft-completion report (superseded)
+The authoritative per-theorem inventory is
+[quantitative_manifest.json](../../paper/quantitative_manifest.json).
+The source-only audit is
+[scripts/audit_quantitative_source_static.py](../../../scripts/audit_quantitative_source_static.py).
 
-# Completion pass for the uncompiled quantitative draft
+## Current classification
 
-This ledger records the user's requested endpoint: **finish the uncompiled
-source draft without running Lean or CI**.
+| Status | Count | Interpretation |
+| --- | ---: | --- |
+| \`source_draft\` | 6 | Main proof bodies have been drafted; not elaborated |
+| \`certificate_unexecuted\` | 3 | Analytic/finite checking source exists; closed computations not run |
+| \`blocked_source\` | 6 | Genuine mathematical/source dependencies still require proofs |
 
-## Completion criterion
+No Lean, Lake, CI, axiom audit, Comparator, TeX build, or Lean
+\`decide\` certificate check was run in this work.
 
-For this pass, "finished" means:
+## Consolidated mathematical source
 
-- every quantitative headline proposition in `Targets.lean` has a named
-  theorem body in the quantitative library;
-- the source includes the intended analytic and finite-certificate dependencies
-  rather than hiding them as assumptions in the final target;
-- the working paper has the planned main-text / Appendix F / Appendix G
-  organization and accurately labels the new material as uncompiled;
-- the `10^-600` theorem remains an arbitrary-original-sofa theorem with no
-  existential local radius;
-- manifests and ledgers match the actual source state.
+- Centered coercivity and its \(1.001\) enclosure, cap residual sharpness,
+  and the puncture lower bound are in separate modules with recorded contracts.
+- Full-\(Q\) upper estimates use the actual translation quotient,
+  endpoint-slack transfer, and an unexecuted closed operator certificate.
+- The feasible lower trial has exact Hermite data, continuous active-arc
+  auxiliary bodies, a source-level energy checker, and a fixed strict margin
+  \`9221/10000 > 461/500\`; the real-model/finite-cover proof and Boolean
+  acceptance still need verification.
+- The quantitative local sofa theorem has a complementary deficit budget,
+  an explicit terminal comparison, direct area comparison and normal/sector
+  drafts. Its Gerver-specific geometric transitions are **not** complete.
+- The global effectivity and \`10^-600\` theorem statements are kept at their
+  requested arbitrary-original-sofa strength. Their final algebra is drafted,
+  but the entry and local-radius hypotheses are not all derived in Lean.
 
-It explicitly does **not** mean successful Lean elaboration, kernel checking,
-or TeX compilation.
+## Substantive corrections retained
 
-## Result
+1. **Anchored support error.** An unanchored Lipschitz \`L² → sup³\` estimate
+   was false for constant functions. The new argument fixes
+   \`f(π/2)=0\` and bounds the one-sided integration radius.
+2. **Translation-invariant cap radius.** The penalized cap cannot have an
+   absolute origin-centered radius bound from translation-invariant input
+   data. Comparison is now relative to the input midpoint.
+3. **Nearest-point nonemptiness.** Compactness alone does not imply a nearest
+   point to an empty set. The revised statements require nonempty compact
+   reference sets and use the minimizer property.
+4. **Trial-energy cover.** Integrating both reflected and unreflected branch
+   partitions double-counted energy. The checker now integrates disjoint
+   ordered residual arcs and uses real-valued cell-integral bounds.
+5. **Whole surviving-ball recovery (October 7, 2026).**
+   At \(\delta=514\sqrt E\), the old prerequisite
+   \[
+     \sqrt2\,\delta\le\frac{\kappa\rho}{2},
+     \qquad \rho=20(\delta+\sqrt E),\quad \kappa=\frac{100}{1051}
+   \]
+   is **false**. It would invalidate the advertised \`10300\` coarse
+   constant. The correct square-witness condition is
+   \[
+      E<(\kappa\rho-\sqrt2\,\delta)^2,
+   \]
+   because
+   \[
+      \kappa\rho-\sqrt2\,\delta
+      =\left(\frac{2000}{1051}-\sqrt2\right)\delta
+        +\frac{2000}{1051}\sqrt E>\sqrt E.
+   \]
+   \`EffectiveRecovery.lean\` now has a general full-ball missing-area
+   lemma and shared rational/square-root reserves; \`EffectiveEntry.lean\`
+   uses it too. This is source, **not** a Lean-verified correction.
+6. **Reference widths and cap outer margin.** Exact Gerver endpoint formulas
+   are centralized in \`ReferenceExplicitMargins.lean\`, including both
+   floor-wing lower bounds \(>4/5\). \`ExplicitReferenceScales.lean\`
+   now derives the outer-wall support gap from the top rectangle and both
+   floor endpoints instead of an undeclared comparison lemma.
 
-The source-completion criterion is met.
+The full mathematical evidence and negative controls remain in the numbered
+notes under \`docs/stability/constants/\`.
 
-All fifteen entries of `docs/paper/quantitative_manifest.json` are now
-`source`, with corresponding declarations listed in
-`docs/paper/quantitative_theorem_manifest.tsv`.
+## Remaining mathematical gates
 
-The two last mathematical source assemblies were:
+1. **Actual Gerver sector atlas:** prove a uniform \(1.53\)-radian cone
+   using the true contact/envelope parameter, not a case split on the
+   boundary point's horizontal coordinate. The current source still has
+   an unjustified chart step.
+2. **Normal/roof/terminal scales:** discharge the fixed \(49/100\),
+   \(5/51\), explicit support/niche radii and terminal trapezoid transitions
+   against existing \`EnvHyp\`, \`CapRoofData\` and Gerver frame lemmas.
+3. **Penalized right-angle comparison:** close the dyadic-to-integral
+   objective limit and the robust curvature/arm bootstrap.
+4. **Incomplete-angle entry:** prove the partial-angle pinned variation,
+   exact coarse polygon search coverage, and geometric extension.
+5. **Feasible \(Q\)-trial certificate:** confirm the ordered-piece
+   integral/real-model bridge and check the finite Boolean reduction.
 
-1. `MovingSofaQuantitative.effective_entry`:
-   [
-   epsilonle10^{-144}
-   Longrightarrow
-   d_H(S_c,G)le3{,}000{,}000,epsilon^{1/12}.
-   ]
+The final cutoff stays
+\[
+  0\le\varepsilon\le10^{-600}
+  \ \Longrightarrow\
+  d_H(S_c,G)\le 2.3\sqrt\varepsilon,\quad
+  |S_c\triangle G|\le50\sqrt\varepsilon,\quad
+  0\le\frac\pi2-\omega\le3.1\varepsilon.
+\]
+It is an **uncompiled target** until all transitive dependencies have
+source proofs and (in a separately authorized phase) pass Lean's kernel.
 
-2. `MovingSofaQuantitative.explicit_cutoff`:
-   [
-   epsilonle10^{-600}
-   Longrightarrow
-   d_H(S_c,G)le2.3sqrtepsilon,quad
-   |S_c	riangle G|le50sqrtepsilon,quad
-   pi/2-omegale3.1epsilon
-   ]
-   for every admissible reduced motion.
+## Working-paper boundary
 
-The effectivity chain includes source for:
+The quantitative working copy is
+[docs/paper/quantitative-draft.tex](../../paper/quantitative-draft.tex):
+short main quantitative results; technical Appendix F; numerical Appendix G,
+ending with the \(10^{-600}\) proposition. It must continue to label the
+new results as uncompiled, not fully formalized.
 
-- integral-penalized right-angle regularization;
-- exact coarse-angle separation;
-- partial-angle penalized comparison and right-angle extension;
-- the `500 epsilon^(1/6)` angle estimate;
-- partial-to-full cap completion with `72 alpha` / `144 alpha` budgets;
-- explicit actual-set recovery;
-- fixed local support, terminal, normal, and sector scales;
-- final activation at `10^-600`.
-
-## Paper state
-
-`docs/paper/quantitative-draft.tex` now has:
-
-- short main stability statement/proof architecture;
-- short unified-certificate narrative;
-- technical Appendix F by reuse of the integrated detailed proof;
-- quantitative Appendix G with centered cap coercivity, explicit
-  `2.3/50/3.1`, sharpness, full-Q `0.922--0.93`, effective entry, and
-  `10^-600`.
-
-All status boxes now say that the quantitative extension is source-complete
-but uncompiled.
-
-## Verification boundary
-
-No Lean, Lake, CI, axiom audit, Comparator, or TeX build was run.
-
-The closed Boolean reductions in `FullQCertificate.lean`,
-`TrialEnergyCertificate.lean`, and `CoarseAngleCertificate.lean` were written
-but deliberately not executed.
-
-Therefore the next phase is compile-time verification and repair.  In
-particular, this source-completion pass does not establish that every identifier,
-tactic invocation, or theorem signature elaborates in the pinned environment.
-
-No `sorry`, new axiom, or weakening of the requested quantitative theorem
-surface was intentionally introduced to obtain this endpoint.
+This ledger supersedes the older "source-complete" handoff. No result or
+failed intermediate approach has been silently deleted.
