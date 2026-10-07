@@ -114,12 +114,12 @@ theorem terminalTrapezoid_measurable (P : GerverParams) (α : ℝ) :
     (measurableSet_Iic.preimage (measurable_const.mul
       (measurable_const.sub measurable_fst)))
 
-theorem terminalTrapezoid_area {P : GerverParams} {α : ℝ} (hα : 0≤α) :
+theorem terminalTrapezoid_area {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) {α : ℝ} (hα : 0≤α) :
     area (terminalTrapezoid P α) =
       (999/1000)*(499/1000)*(gerverLeftWingWidth P)^2*α := by
   unfold terminalTrapezoid terminalFloorInterval
-  have hD:=gerver_left_wing_width_lower (P:=P)
-    (by infer_instance) (by infer_instance)
+  have hD:=gerver_left_wing_width_lower hP hbox
   have hlr :
       -supp P.cap π+terminalEta P≤gerverRoofLeft P-terminalEta P := by
     unfold terminalEta gerverLeftWingWidth
@@ -302,7 +302,7 @@ theorem explicit_terminal_comparison {P : GerverParams}
           ((min_le_right _ _).trans (min_le_left _ _))))
         α hp (hα.trans ((min_le_right _ _).trans (min_le_left _ _)))
         S hconstraints.2.2
-      have hareaT := terminalTrapezoid_area (P:=P) hα0
+      have hareaT := terminalTrapezoid_area hP hbox (P:=P) hα0
       have hcoef :
           (10/31:ℝ)<(999/1000)*(499/1000)*(gerverLeftWingWidth P)^2-1/1000 := by
         have hD := gerver_left_wing_width_lower hP hbox
