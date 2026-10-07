@@ -21,7 +21,6 @@ open MovingSofaOptimality MovingSofaStability MovingSofaOptimality.GerverParams
 
 namespace MovingSofaQuantitative
 
-/-- The B curve is the outer contact minus its unit normal. -/
 theorem contactB_eq_contactA_sub (P : GerverParams) (t : ℝ) :
     contactB P.path t=contactA P.path t-uvec t := by
   unfold contactB contactA
@@ -58,8 +57,8 @@ theorem active_inner_density_margin {P : GerverParams} (hP : P.IsSolution) (hbox
   have hB := romik_bounds hP hbox
   have hb : -(528/1000 : ℝ) ≤ P.b₁ := by linarith [hB.b₁_mem.1]
   have hθ : P.θ ≤ 682/1000 := by linarith [hB.θ_mem.2]
-  have hn0 : ¬t<P.φ := by linarith [hO.2.1,hO.2.2]
-  have hn1 : ¬t<P.θ := by linarith [hO.2.2]
+  have hn0 : ¬t<P.φ := by linarith [ht.1,hO.2.1,hO.2.2]
+  have hn1 : ¬t<P.θ := by linarith [ht.1,hO.2.2]
   have hn2 : ¬t<π/2-P.θ := not_lt.mpr ht.1
   unfold outerDensityR gs_ridx
   simp only [if_neg hn0,if_neg hn1,if_neg hn2]
@@ -80,8 +79,6 @@ theorem perturbedInnerDensity_nonneg {P : GerverParams} (hP : P.IsSolution) (hbo
   unfold perturbedInnerDensity
   linarith
 
-/-- The last inner point remains on the floor because the profile's top value
-is zero. Its tangent term is horizontal there. -/
 theorem perturbedInnerCurve_floor_end {P : GerverParams} (hP : P.IsSolution)
     (F : HalfCapProfile P.φ) (τ : ℝ) : (perturbedInnerCurve P F τ (π/2)).2=0 := by
   simp only [perturbedInnerCurve,Prod.snd_add,Prod.smul_snd,smul_eq_mul,
@@ -105,7 +102,6 @@ theorem perturbedInnerCurve_above_floor {P : GerverParams} (hP : P.IsSolution) (
   rw [perturbedInnerCurve_floor_end hP F τ] at h
   exact h
 
-/-- A strict upper-wall margin holds on the closure of the reference niche. -/
 theorem gerver_closed_niche_margin {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
     ∃ μ : ℝ, 0<μ ∧ ∀ p∈closure(niche P.cap (π/2)), ∀ s∈Icc (0 : ℝ) π,
       μ ≤ supp P.cap s-dot p (uvec s) := by
@@ -118,8 +114,6 @@ theorem gerver_closed_niche_margin {P : GerverParams} (hP : P.IsSolution) (hbox 
       (isClosed_le continuous_const (by unfold dot; fun_prop))
   exact hsub hp
 
-/-- Harmonic interpolation is exactly projection of the matched endpoint
-support vector. This proves the cut contact without rounded arithmetic. -/
 theorem HalfCapProfile.bridge_projection {φ c : ℝ} (F : HalfCapProfile φ)
     (hs : sin(c-φ) ≠ 0)
     (hjet : F.first c=harmonicBridgeFirst φ c (F.value φ) (F.value c) c) (t : ℝ) :
@@ -140,16 +134,16 @@ theorem HalfCapProfile.bridge_projection {φ c : ℝ} (F : HalfCapProfile φ)
   apply (eq_div_iff hs).mpr
   linarith
 
-/-- Every matched profile yields an interval of continuously feasible active
-arcs. Its size may depend on the fixed profile; no radius is assumed. -/
+/-- The explicit amplitude proof is bound as an argument, so no proof term is
+implicitly obtained from the left side of a conjunction. -/
 theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
     (F : HalfCapProfile P.φ)
     (hjet : F.first (π/2-P.θ)=harmonicBridgeFirst P.φ (π/2-P.θ)
       (F.value P.φ) (F.value (π/2-P.θ)) (π/2-P.θ)) :
     ∃ τ₀ : ℝ, 0<τ₀ ∧ τ₀≤F.safeAmplitude ∧
-      ∀ (τ : ℝ) (hτ : 0≤τ) (hτ₀ : τ≤τ₀),
+      ∀ (τ : ℝ) (hτ : 0≤τ) (hτ₀ : τ≤τ₀) (hsafe : τ≤F.safeAmplitude),
       ∃ D : ActiveArcData P.φ (π/2-P.θ)
-          (perturbedCap hP hbox F τ hτ (hτ₀.trans ‹τ₀≤F.safeAmplitude›)).1,
+          (perturbedCap hP hbox F τ hτ hsafe).1,
         D.curve=perturbedInnerCurve P F τ := by
   have hO := gs_ord hP
   have hφc : P.φ<π/2-P.θ := by linarith [hO.2.1,hO.2.2]
@@ -168,8 +162,8 @@ theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox
   have hτ₀ : 0<τ₀ := lt_min F.safeAmplitude_pos (lt_min (by positivity) (by positivity))
   have hτsafe : τ₀≤F.safeAmplitude := min_le_left _ _
   refine ⟨τ₀,hτ₀,hτsafe,?_⟩
-  intro τ hτ hsmall
-  let K := perturbedCap hP hbox F τ hτ (hsmall.trans hτsafe)
+  intro τ hτ hsmall hcapSmall
+  let K := perturbedCap hP hbox F τ hτ hcapSmall
   have hgapτ : τ*B≤1/250 := by
     have ht := hsmall.trans ((min_le_right _ _).trans (min_le_left _ _))
     have hh := (le_div_iff₀ (show 0<250*B by positivity)).mp ht
@@ -190,8 +184,8 @@ theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox
     simpa only [Real.norm_eq_abs,abs_of_nonneg (norm2_nonneg _)] using hr.trans (le_abs_self R)
   have hcurveK : ∀ t∈Icc (π/2-P.θ) (π/2), perturbedInnerCurve P F τ t∈K.1 := by
     intro t ht
-    apply (cap_mem_iff_upper (perturbedCap_isCap hP hbox F τ hτ (hsmall.trans hτsafe)) _).mpr
-    refine ⟨perturbedInnerCurve_above_floor hP hbox F hτ (hsmall.trans hτsafe) ht,?_⟩
+    apply (cap_mem_iff_upper (perturbedCap_isCap hP hbox F τ hτ hcapSmall) _).mpr
+    refine ⟨perturbedInnerCurve_above_floor hP hbox F hτ hcapSmall ht,?_⟩
     intro s hsu
     have hmem := (theorem8_4_1_niche hP hbox).1 t ht
     have hm := hmargin _ hmem s hsu
@@ -199,14 +193,14 @@ theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox
     have hδ := (abs_le.mp (hvalue s hsu)).1
     have hmul := mul_le_mul_of_nonneg_left hd hτ
     have hmul' := mul_le_mul_of_nonneg_left hδ hτ
-    rw [perturbedCap_support hP hbox F τ hτ (hsmall.trans hτsafe) hsu]
+    rw [perturbedCap_support hP hbox F τ hτ hcapSmall hsu]
     simp only [perturbedInnerCurve,dot_add_left,dot_smul_left]
     dsimp [L] at hτμ
     linarith
   have hcontact : ∀ t∈Icc (π/2-P.θ) (π/2),
       dot (perturbedInnerCurve P F τ t) (uvec t)=supp K.1 t-1 := by
     intro t ht
-    rw [perturbedCap_support hP hbox F τ hτ (hsmall.trans hτsafe)
+    rw [perturbedCap_support hP hbox F τ hτ hcapSmall
       ⟨by linarith [ht.1,hO.2.2,pi_pos],by linarith [ht.2,pi_pos]⟩]
     rw [(gerver_support_path_pair hP hbox
       ⟨by linarith [ht.1,hO.2.2,pi_pos],ht.2⟩).1]
@@ -224,7 +218,7 @@ theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox
     have hweight : 0≤(t-P.φ)*(π/2-P.θ-t)^2 := mul_nonneg (sub_nonneg.mpr ht.1) (sq_nonneg _)
     have htau := mul_le_mul_of_nonneg_left hp hτ
     have hcoeff := mul_le_mul_of_nonneg_right hgapτ hweight
-    rw [perturbedCap_support hP hbox F τ hτ (hsmall.trans hτsafe)
+    rw [perturbedCap_support hP hbox F τ hτ hcapSmall
       ⟨htupper.1,by linarith [htupper.2,pi_pos]⟩,
       (gerver_support_path_pair hP hbox htupper).1]
     simp only [perturbedInnerCurve,dot_add_left,dot_smul_left,
@@ -234,18 +228,18 @@ theorem exists_perturbed_active_arc {P : GerverParams} (hP : P.IsSolution) (hbox
     rw [dot_sub_left] at hg
     nlinarith only [hg,htau,hcoeff]
   have hcut : dot (perturbedInnerCurve P F τ (π/2-P.θ)) (uvec P.φ)=supp K.1 P.φ-1 := by
-    rw [perturbedCap_support hP hbox F τ hτ (hsmall.trans hτsafe)
+    rw [perturbedCap_support hP hbox F τ hτ hcapSmall
       ⟨hO.1.le,by linarith [hO.2.1,hO.2.2,pi_pos]⟩,
       (gerver_support_path_pair hP hbox ⟨hO.1.le,by linarith [hO.2.1,hO.2.2,pi_pos]⟩).1]
     simp only [perturbedInnerCurve,gs_contactB_t₃ hP,dot_add_left,dot_smul_left,
       HalfCapProfile.symmetricValue,if_pos (show P.φ≤π/2 by linarith [hO.2.1,hO.2.2,pi_pos])]
     rw [F.bridge_projection hs hjet,(harmonicBridge_endpoints hs).1]
     ring
-  refine ⟨⟨perturbedCap_isCap hP hbox F τ hτ (hsmall.trans hτsafe),
+  refine ⟨⟨perturbedCap_isCap hP hbox F τ hτ hcapSmall,
     ⟨hO.1,hφc,hcv⟩,perturbedInnerCurve P F τ,perturbedInnerDensity P F τ,
     (perturbedInnerCurve_continuous hP F τ).continuousOn,
     (fun t _ => perturbedInnerCurve_derivative hP F τ t),
-    (fun t ht => perturbedInnerDensity_nonneg hP hbox F hτ (hsmall.trans hτsafe) ⟨ht.1,ht.2.le⟩),
+    (fun t ht => perturbedInnerDensity_nonneg hP hbox F hτ hcapSmall ⟨ht.1,ht.2.le⟩),
     hcurveK,hcontact,hgapactual,hcut⟩,rfl⟩
 
 end MovingSofaQuantitative
