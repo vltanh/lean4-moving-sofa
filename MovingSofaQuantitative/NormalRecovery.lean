@@ -398,7 +398,7 @@ theorem inactive_tail_margin_D {P : GerverParams}
 theorem nearest_core_direction {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} {t : ℝ}
-    (ht : t∈Icc P.φ (π/2-P.φ))
+    (ht : t∈Ioo P.φ (π/2-P.φ))
     (hp : p∉gerverSofa P)
     (hnear : euclideanDist p (P.path t)=infDist p (gerverSofa P)) :
     let d:=euclideanDist p (P.path t)
@@ -410,7 +410,7 @@ theorem nearest_core_direction {P : GerverParams}
   let w:=(p-q)/d
   have hqG : q∈gerverSofa P := by
     rw [gerver_shape_eq hP hbox]
-    exact gerver_path_mem_shape hP hbox ht
+    exact gerver_path_mem_shape hP hbox ht.le
   have hd : 0<d := by
     dsimp [d]
     exact euclideanDist_pos_of_ne (by
@@ -448,7 +448,7 @@ theorem nearest_core_direction {P : GerverParams}
 theorem nearest_core_outward_normal {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} {t : ℝ}
-    (ht : t∈Icc P.φ (π/2-P.φ))
+    (ht : t∈Ioo P.φ (π/2-P.φ))
     (hp : p∉gerverSofa P)
     (hpN : p∈niche P.cap (π/2))
     (hnear : euclideanDist p (P.path t)=infDist p (gerverSofa P)) :
@@ -529,7 +529,7 @@ theorem core_balanced_slack_remainder {P : GerverParams}
 theorem core_normal_slack_49 {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} {t : ℝ}
-    (ht : t∈Icc P.φ (π/2-P.φ))
+    (ht : t∈Ioo P.φ (π/2-P.φ))
     (hp : p∉gerverSofa P) (hpN : p∈niche P.cap (π/2))
     (hnear : euclideanDist p (P.path t)=infDist p (gerverSofa P))
     (hd8 : euclideanDist p (P.path t)≤normalRecoveryDepth) :
@@ -554,7 +554,7 @@ theorem core_normal_slack_49 {P : GerverParams}
     have hab : 0<a+b:=add_pos ha hb
     have hraw:=balanced_angle_adjustment_le_one (t:=t) ha.le hb.le hab hw.le
     have hablo : 1/2≤a+b := by
-      have htr:=gerver_core_transversality hP hbox ht
+      have htr:=gerver_core_transversality hP hbox ht.le
       obtain ⟨a',b',ha',hb',hvel,htrans⟩:=htr
       have heq : a=a'∧b=b':=by
         have hv:=referenceBoundaryVelocity_eq hP t
@@ -591,17 +591,17 @@ theorem core_normal_slack_49 {P : GerverParams}
       exact mul_le_mul_of_nonneg_left hout
         (div_nonneg (sqrt_nonneg _) (add_pos ha hb).le) |>.trans
           (by nlinarith [hratio])
-  have hrem:=core_balanced_slack_remainder hP hbox ht hd.le hd8 hλ
+  have hrem:=core_balanced_slack_remainder hP hbox ht.le hd.le hd8 hλ
   have hgap : (49/100:ℝ)+100*normalRecoveryDepth<1/sqrt 2 := by
     have hs2:=sq_sqrt (by norm_num : (0:ℝ)≤2)
     have hspos:=sqrt_pos.2 (by norm_num : (0:ℝ)<2)
     unfold normalRecoveryDepth
     nlinarith
   refine ⟨s,hs,?_,?_⟩
-  · have hexp:=innerSlackU_balanced_expansion hP hbox ht hpN hnear
+  · have hexp:=innerSlackU_balanced_expansion hP hbox ht.le hpN hnear
       (a:=a) (b:=b) (w:=w) (λ:=λ)
     nlinarith [hlead.1,hrem.1,hd8,mul_nonneg hd.le hd8]
-  · have hexp:=innerSlackV_balanced_expansion hP hbox ht hpN hnear
+  · have hexp:=innerSlackV_balanced_expansion hP hbox ht.le hpN hnear
       (a:=a) (b:=b) (w:=w) (λ:=λ)
     nlinarith [hlead.2,hrem.2,hd8,mul_nonneg hd.le hd8]
 
@@ -661,7 +661,7 @@ theorem gerver_niche_normal_slack_explicit {P : GerverParams}
     rw [gerver_shape_eq hP hbox] at hqG
     have hn:=gerver_niche_envelope hP hbox
     exact nearest_from_niche_lands_on_envelope hP hbox hp hqG hqfront hnear
-  by_cases hcore : q∈P.path '' Icc P.φ (π/2-P.φ)
+  by_cases hcore : q∈P.path '' Ioo P.φ (π/2-P.φ)
   · obtain ⟨t,ht,rfl⟩:=hcore
     simpa [hnear] using core_normal_slack_49 hP hbox ht
       (by
