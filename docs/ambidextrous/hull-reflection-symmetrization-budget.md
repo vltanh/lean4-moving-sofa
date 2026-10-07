@@ -94,3 +94,40 @@ The task is now precise: either **prove or refute HS.4** for genuinely compatibl
 A useful negative control is the explicit near-reference tip-cut family in [near-reference-midline-obstruction.md](near-reference-midline-obstruction.md): it shows that half-height-rectangle admission and exact background-face matching cannot be assumed even at arbitrarily high subcritical areas. Horizontal **hull** symmetrization does not require those hypotheses at the outset.
 
 All area identities in Sections 1–3 are pen-and-paper. The diagnostics used short invocations under five-second limits, with no optimizer campaign, CI, Lean/Lake compilation, dependency installation, or manuscript build. Full-turn optimality remains unproved.
+
+
+## 6. An exact normalization obstruction even if the area budget were proved
+
+There is a **second independent missing implication** in any attempted global solution via hull reflection: after canonical saturation, the symmetrized envelope can lose its **entire unit vertical span**. Consequently the existing x-reflection symmetric optimality theorem RS2, which requires a common incoming **unit-span** normalization, cannot simply be applied to that saturated body.
+
+This is already rigorous on the explicit symmetric-in-height double-tip cut family of [MCA](convex-cap-averaging-obstruction.md). For sufficiently small \(\tau>0\), let \(K_\tau\) be the actual convex hull of
+\[
+\Sigma\cap\{\tau(x+m/2)\le y\le1-\tau(x+m/2)\},
+\]
+in centered reference coordinates with horizontal projection \([-m,m]\), \(m>1\). The original reference hull \(K_*\) and the reference sofa \(\Sigma\) are invariant under the horizontal reflection \(J:(x,y)\mapsto(-x,y)\). The cut is vertically symmetric under \(\rho:(x,y)\mapsto(x,1-y)\), so \(K_\tau\) has that symmetry and so does its x-reflection average
+\[
+B_\tau=\tfrac12(K_\tau+JK_\tau).
+\]
+
+The top face of \(K_\tau\) is the **single point** \((-m/2,1)\), and its bottom face is the single point \((-m/2,0)\); these are the actual retained reference-tip points. The top face of \(JK_\tau\) is \((m/2,1)\), and analogously below. Support faces of a Minkowski sum add as sets. Consequently **both the top and bottom faces of \(B_\tau\) are the central singleton** at abscissa zero. The horizontal projection of \(B_\tau\) is still exactly \([-m,m]\), and its leftmost and rightmost points \((\pm m,1/2)\) are retained, since the original cuts leave those points unchanged.
+
+Moreover \(B_\tau\subseteq K_*\): each summand lies in \(K_*\), which is convex and J-invariant. Since \(h_{B_\tau}\le h_{K_*}\), the canonical forbidden quadrants defined by \(B_\tau\) are contained in those defined by \(K_*\), pointwise in every turn orientation. Hence **both original extreme reference sofa points** \((\pm m,1/2)\), which survive the full reference motions, also survive all full canonical constraints of \(B_\tau\). Thus the envelope \(E(B_\tau)\) has horizontal projection containing \([-m,m]\), with a genuinely retained flank more than one horizontal unit to each side of zero.
+
+Suppose \(E(B_\tau)\) retained a point at height one. Because the top face of \(B_\tau\) is just \((0,1)\), it would retain this exact point. The envelope is invariant under \(\rho\), because \(B_\tau\) is and the two complete handed turn families are interchanged by \(\rho\), so it would also retain \((0,0)\). Those two retained baseline points and the extreme flank points \((\pm m,1/2)\) contradict **UC1**, the previously proved simultaneous two-turn switching obstruction for a retained vertical unit chord with flanks farther than one on both sides. UC's pointwise switching argument only uses hallway containment and these retained points; it does not require the entire tentative envelope to be connected.
+
+It follows that **neither** \((0,1)\) nor \((0,0)\) survives. No other points of \(B_\tau\) have those extreme heights. The envelope is compact, so
+\[
+\boxed{\max_{E(B_\tau)} y<1,\qquad
+\min_{E(B_\tau)}y>0.}
+\tag{HS.5}
+\]
+It is nonempty, since it contains the two outer reference tips (and in fact contains a nonempty middle portion for sufficiently small \(\tau\)); no empty-set convention is used.
+
+This provides an exact counterexample to the premise that **hull symmetrization followed by canonical deletion automatically yields a symmetric *unit-span* full-turn sofa**. It does not refute the possible area monotonicity HS.4. Rather, it shows that *even if HS.4 were proved*, completing the route to M would additionally require either:
+
+- a sharp x-reflection-symmetric theorem valid for full-turn sofas with *subunit* incoming vertical span (without an unjustified dilation), or
+- a separate feasible area-preserving unit-span normalization for the symmetrized saturated envelope.
+
+Neither statement is established here. The earlier RA failure of averaging actual nonconvex sets is not being recycled: \(B_\tau\) is a convex hull average, and its envelope correctly **deletes** the forbidden central top and bottom points instead of assuming they survive.
+
+The top-face and retained-flank calculations are exact and use no numerical sampling. This example also explains why numerical area improvement after hull symmetrization, by itself, is not a proof of full-turn optimality.
