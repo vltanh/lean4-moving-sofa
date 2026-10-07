@@ -85,7 +85,13 @@ theorem effective_recovery_ball_area_gap {δ E : ℝ}
   have hs:=sq_sqrt hE.le
   have hpos : 0≤(100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ :=
     le_of_lt (lt_trans (sqrt_pos.mpr hE) hgap)
-  nlinarith
+  have hprod : 0 <
+      (((100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ)-sqrt E) *
+      (((100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ)+sqrt E) := by
+    apply mul_pos
+    · exact sub_pos.mpr hgap
+    · exact add_pos_of_nonneg_of_pos hpos (sqrt_pos.mpr hE)
+  nlinarith [hprod]
 
 /-- One coarse recovery lemma shared by the right-angle and partial-angle
 effective arguments. -/
