@@ -2,6 +2,7 @@ module
 
 public import MovingSofaQuantitative.EffectiveAngleEntry
 public import MovingSofaQuantitative.EffectiveRecovery
+public import MovingSofaQuantitative.MidpointEntry
 public import MovingSofaStability.Global
 
 /-!
