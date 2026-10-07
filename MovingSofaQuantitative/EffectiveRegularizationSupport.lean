@@ -550,6 +550,31 @@ theorem centered_reference_distance_from_support {K C : Set Point} {δ : ℝ}
     constructor <;> linarith [h0.1,h0.2,hπ.1,hπ.2]
   exact (close_horizontal_translate K a).symm.mono ha
 
+/-- Midpoint alignment of the *same reference* cap at two comparison
+midpoints. This is a comparison of two translated copies of G, not a
+comparison of a cap C with a translated copy of an unrelated cap K. -/
+theorem centered_reference_alignment_of_support {G K C : Set Point} {δ : ℝ}
+    (h : ∀ t ∈ Icc (0:ℝ) π, |supp C t - supp K t| ≤ δ)
+    (hδ : 0 ≤ δ) :
+    EuclideanClose δ (centeredReference G C) (centeredReference G K) := by
+  let a := horizontalMidpoint C - horizontalMidpoint K
+  have h0 := abs_le.mp (h 0 ⟨le_rfl, pi_pos.le⟩)
+  have hπ := abs_le.mp (h π ⟨pi_pos.le, le_rfl⟩)
+  have ha : |a| ≤ δ := by
+    dsimp [a, horizontalMidpoint]
+    apply abs_le.mpr
+    constructor <;> linarith [h0.1, h0.2, hπ.1, hπ.2]
+  have heq : centeredReference G C =
+      Rigid.translate (a, 0) '' centeredReference G K := by
+    unfold centeredReference horizontalReference
+    rw [Rigid.coe_translate]
+    simp only [Set.image_image, Function.comp_def]
+    congr 1
+    funext p
+    ext <;> simp [a, horizontalMidpoint, Prod.fst_add, Prod.snd_add] <;> ring
+  rw [heq]
+  exact (close_horizontal_translate (centeredReference G K) a).mono ha
+
 theorem maximizing_cap_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Point} (hK : IsCap K (π/2))
