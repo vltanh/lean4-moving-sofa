@@ -26,15 +26,49 @@ open MovingSofaOptimality MovingSofaStability
 
 namespace MovingSofaQuantitative
 
+def horizontalSegment (δ : ℝ) : Set Point := Icc (-δ) δ ×ˢ ({0} : Set ℝ)
+def verticalSegment (δ : ℝ) : Set Point := ({0} : Set ℝ) ×ˢ Icc (-δ) δ
+
+theorem horizontalSegment_isConvexBody {δ : ℝ} (hδ : 0≤δ) :
+    IsConvexBody (horizontalSegment δ) := by
+  refine ⟨⟨(0,0),by simp [horizontalSegment,hδ]⟩,
+    isCompact_Icc.prod isCompact_singleton,convex_Icc.prod convex_singleton⟩
+
+theorem verticalSegment_isConvexBody {δ : ℝ} (hδ : 0≤δ) :
+    IsConvexBody (verticalSegment δ) := by
+  refine ⟨⟨(0,0),by simp [verticalSegment,hδ]⟩,
+    isCompact_singleton.prod isCompact_Icc,convex_singleton.prod convex_Icc⟩
+
+theorem horizontalSegment_supp_zero {δ : ℝ} (hδ : 0≤δ) :
+    supp (horizontalSegment δ) 0=δ := by
+  apply le_antisymm
+  · apply supp_le_of_forall (horizontalSegment_isConvexBody hδ).1
+    rintro p ⟨hp,-⟩
+    simpa [dot_uvec_zero] using hp.2
+  · have h:=dot_le_supp (horizontalSegment_isConvexBody hδ).2.1
+      ⟨(δ,0),by simp [horizontalSegment,hδ]⟩ 0
+    simpa [dot_uvec_zero] using h
+
+theorem horizontalSegment_supp_pi {δ : ℝ} (hδ : 0≤δ) :
+    supp (horizontalSegment δ) π=δ := by
+  apply le_antisymm
+  · apply supp_le_of_forall (horizontalSegment_isConvexBody hδ).1
+    rintro p ⟨hp,-⟩
+    simp only [dot,uvec_pi]
+    linarith [hp.1]
+  · have h:=dot_le_supp (horizontalSegment_isConvexBody hδ).2.1
+      ⟨(-δ,0),by simp [horizontalSegment,hδ]⟩ π
+    simpa [dot,uvec_pi] using h
+
 def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
 
 /-- Square parallel set, written as two segment dilations so Cavalieri can be
 applied one coordinate at a time. -/
 def horizontalThickening (K : Set Point) (δ : ℝ) : Set Point :=
-  K + (Icc (-δ) δ ×ˢ ({0} : Set ℝ))
+  K + horizontalSegment δ
 
 def squareThickening (K : Set Point) (δ : ℝ) : Set Point :=
-  horizontalThickening K δ + (({0} : Set ℝ) ×ˢ Icc (-δ) δ)
+  horizontalThickening K δ + verticalSegment δ
 
 /-- Every Euclidean delta-neighbor lies in the square thickening. -/
 theorem euclidean_parallel_subset_square {K L : Set Point} {δ : ℝ}
@@ -146,10 +180,10 @@ theorem area_squareThickening_cap {K : Set Point}
       2*(horizontalWidth K+1)*δ+4*δ^2 := by
   have hh := area_horizontalThickening_cap hK hδ
   have hconv : IsConvexBody (horizontalThickening K δ) :=
-    convexBody_add hK.2.1 (convexBody_horizontal_segment hδ)
+    convexBody_add hK.2.1 (horizontalSegment_isConvexBody hδ)
   have hspan : horizontalWidth (horizontalThickening K δ)=horizontalWidth K+2*δ := by
     unfold horizontalWidth horizontalThickening
-    rw [supp_add,horizontal_segment_supp_zero,horizontal_segment_supp_pi]
+    rw [supp_add,horizontalSegment_supp_zero hδ,horizontalSegment_supp_pi hδ]
     ring
   have hv := area_verticalThickening_le hconv hδ
   unfold squareThickening at hv
