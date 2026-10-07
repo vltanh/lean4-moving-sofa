@@ -1,102 +1,103 @@
-# Active roadmap: a sharp background comparison still needs global admission
+# Active roadmap: remaining global comparisons and testable alternatives
 
-**Unrestricted optimality remains unproved.** The fixed-middle clipping theorem now extends to variable curvature-controlled middles with an explicit quantitative deficit, and to inward tail changes of more general backgrounds without exact reference collars. No theorem produces those backgrounds from every competitor. The uncovered partial-turn problem also remains separate. Unrestricted uniqueness is deferred.
+**The unrestricted full-turn and partial-turn problems are both still open.** CB constructs a regular tail background only under explicit input and face-compatibility tests. SPB supplies a direct ordinary-area enclosure but not its sharp maximum. FS supplies finite sufficient criteria for a safe strip bridge but does not prove all competitive partial-turn bodies meet them. Unrestricted uniqueness remains deferred.
 
-Read [HANDOFF.md](HANDOFF.md) and [middle-tail-transfer-review.md](middle-tail-transfer-review.md). All proofs are written and self-reviewed, not independently refereed or kernel-verified.
+Read [HANDOFF.md](HANDOFF.md), [constructed-background-review.md](constructed-background-review.md), and [spatial-half-partition-bound.md](spatial-half-partition-bound.md). All results are written and self-reviewed; the historical proof chain has not been independently refereed or kernel-verified.
 
-## 1. Target and execution policy
+## 1. Acceptance criterion and execution policy
 
-For one attained unrestricted ambidextrous maximizer S, establish
+Prove |S|<=M for one attained unrestricted maximizer, where
 
-$$|S|\le M,\qquad M=1+4Y^2+\arctan Y,\quad4Y^3+3Y-1=0,\quad Y>0.$$
+$$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-Do not add unrestricted equality classification as a prerequisite. Prefer hand proofs; short computations are for checking identities and rejecting unsupported premises. At most 30 seconds per invocation, preferably external five/ten-second limits. No long search or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]`, under docs/ambidextrous, while preserving concurrent edits.
+Do not require unrestricted equality classification first. Prefer hand proofs. Computers may reject a proposed step or test an attack direction in brief runs: maximum 30 seconds per invocation, preferably external five/ten-second limits. No long search or iterative refinement campaign without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]`, under docs/ambidextrous, preserving concurrent work.
 
-## 2. The positive comparison now proved
+## 2. Constructive background route: what is no longer merely assumed
 
-The exact full-turn identity is
+[CB](complementary-tail-background.md) constructs a background B from U by taking a projective lower convex envelope with curvature ceiling one half in two top-normal windows. The input still needs:
 
-$$|E|=\Psi(U)+\Psi(V)+G,\qquad
-\Psi(U)=|U|-|N(U)|-W(U)/2,\qquad G\ge0,$$
+- a regular unit-curvature middle and differentiable outer joins;
+- a half-height rectangle and full niche height at most one half;
+- domination by the explicitly written half-curvature arc matching each outer-end value and derivative.
 
-for nonempty surviving fibers and the stated cap definitions. The full niche is subtracted. Empty fibers outside this class require their separate correction.
+The construction yields nonnegative repair e=h_B-h_U and
 
-The new approach distinguishes a regular background cap B from its possibly rough altered cap U. It proves
+$$e(2\rho_B-1)=0.$$
 
-$$\Psi(B)-\Psi(U)\ge L(U),\qquad L(U)=\int_a^b(1-A_U)dx,$$
+It therefore pays the CT tail comparison without separately requiring rho_B>=1/2 everywhere. The smooth-fit barrier is what prevents new middle atoms. A short-window bound derives the contact signs, tail separation and half-height niche of the output. The one-cap result is
 
-on the admitted domains below. For two backgrounds with a common face interval, L(U)+L(V) pays the actual cross-clipping. An already proved sharp bound on the regular backgrounds then gives an ordinary-area bound on the rough envelope. This is not a universal hull repair or a presumption that the altered caps maximize Psi.
+$$\Psi(B)-\Psi(U)\ge\int_{a_B}^{b_B}(1-A_U)dx.$$
 
-| Domain | Proved statement | Still required |
-|---|---|---|
-| MT/ME | Variable middle supports; independent signed rough-tail changes; `area(E)<=M-(7/50) sum integral |z_i'|^2`. | Three exact reference collars, unit background curvature, half-height rectangle/niche, top-window support barriers. |
-| CT | No exact reference collars; arbitrary independent inward top-window changes; `area(E)<=Psi(B_1)+Psi(B_2)-sum J_i<=M`. | Unit background curvature, common projection and face interval, half-height geometry, specified tail signs and lower density one half. |
+Two such backgrounds with matching face intervals give |E|<=M through the existing SR/AF comparison. **Matching is not automatic.** Neither regularity of an arbitrary middle nor the half-height geometry or smooth-fit barrier is proved for general competitors. An unrestricted proof through this route must resolve those genuine admission conditions, not simply repeat the convex-envelope construction.
 
-MT's signed pairing checks the unchanged companion wall instead of assuming the changed parameter remains globally active. ME's derivative energy applies only to the regular middle, not the rough tail that defeated the earlier energy budgets.
+The earlier MT/ME and CT theorems remain available on their stated domains. MT/ME retain a quantitative middle deficit and allow signed rough tails with reference collars. CT permits more general inward changes with its lower tail-density condition. HC shows why that condition cannot be removed for arbitrary unrelated backgrounds. CB replaces it only through its constructed complementarity.
 
-CT's surplus is
+## 3. Direct spatial alternative: no missing area linkage, but an open maximum
 
-$$J_B(U)=\int_{late}e_f(2\rho_f-1)+\int_{early}e_g(2\rho_g-1)\ge0.$$
+[SPB1](spatial-half-partition-bound.md) partitions I=[l,r] into its middle half J and exterior quarters. For the actual upper/reflected-lower caps and their actually visited niche roofs, define
 
-It comes from the two exact area Jacobians rho and 1-rho. Exact circular collars are not needed for inward changes. The analytic SR/AF bound applies to the backgrounds; these new results do not need WV's maximizing-cap selection/exposure chain or Gerver's upper bound.
+$$\mathcal P_J(U)=\int_{I\setminus J}A_U-\int_J n_U.$$
 
-## 3. One lower-bound premise cannot be deleted
+Discard outer constraints on J and niche constraints outside J. For the actual nonempty-fiber envelope,
 
-[HC](tail-half-curvature-obstruction.md) is a genuine feasible background with quarter density 1/4 and a small inward support cut that increases signed objective and actual symmetric surviving area. Its exact gain is
+$$|S|\le|E|\le\mathcal P_J(U)+\mathcal P_J(V).$$
 
-$$\frac\varepsilon2\int\phi-\varepsilon^2\int(\phi'^2-\phi^2)>0.$$
+The complete difference is the explicit sum of nonnegative fiber terms in SPB.4. The bound is exact on the reference. This is an already proved ordinary-area comparison, not an auxiliary functional whose geometric linkage is postponed.
 
-Thus unit upper curvature alone does not guarantee monotone tail transfer. A proposed extension below density one half must retain and pay the adverse term; it cannot round the density up to one half or infer the sign from numerical agreement on the reference. The same CT surplus can have the wrong sign for outward defects when rho>1/2.
+The sharp scalar bound P_J(U)<=M/2 is **unproved**. With full niches,
 
-The counterexample is not above M. It rejects a stronger intermediate comparison, not the goal of optimality.
+$$\mathcal P_J(U)=\Psi(U)+\int_J(1-A_U)+\int_{I\setminus J}n_U,$$
 
-## 4. The next actual admission gate
+so WV2 does not establish it. A universal scalar bound on relevant caps, or a coupled bound using pair compatibility, would directly close full-turn optimality. That is a possible alternative to background admission, not an additional completed result.
 
-A sufficient new theorem would construct admitted background pairs for the remaining actual-body class, with a proved ordinary-area comparison. It must justify rather than assume:
+The bounded prescribed tests and six-iteration discovery run did not establish a maximum. The reference discretization already has a small positive bias, and no sampled excess is a rigorous counterexample. Do not run an indefinite optimizer or claim the cap problem is solved because no violation appeared.
 
-- background unit curvature and the permitted tail density/sign regime;
-- a common background face interval and the correct cap widths;
-- that changing the middle, if necessary, does not lose the required upper comparison for the original body;
-- actual full-turn coverage, or the appropriate correction for partial turns.
+## 4. Partial turns: finite safe-bridge admission
 
-The new MT theorem does not supply this construction just because its middle supports are variable. CT does not supply it merely because exact reference collars are no longer required. Middle facets and arbitrary cap curvature remain outside the stated regular background domains.
+[FS](finite-strip-bridge-criterion.md) gives a finite exact test for the full SI bridge. Two width bounds A,B<=1 at normals separated by delta have a safe intervening sine-interpolation envelope if, writing c=cos(delta), s=sin(delta)>0,
 
-A different sharp ordinary-area inequality may bypass this gate. In either case an auxiliary deficit or data membership alone is insufficient: retain clipping, winding, uncovered material and the original body containment.
+$$B\le Ac\quad\text{or}\quad A\le Bc\quad\text{or}\quad A^2+B^2-2cAB\le s^2.$$
 
-Do not spend another pass re-maximizing the background functional F. The unresolved task is the geometric transfer for arbitrary competitors, not its already known sharp value.
+A finite chain of such tests supplies the continuum safe-strip hypothesis. In particular one additional strip suffices if
 
-## 5. Full-turn supremum and partial turns
+$$w((\alpha+\pi-\gamma)/2)\le\cos((\pi-\alpha-\gamma)/2).$$
 
-RR/PD/PS prove
+These conditions produce full turns for the same body with no area change. They are not known for every competitor. Failure of FS is not proof of an unsafe bridge, and refinement alone is not guaranteed to certify every actually safe bridge. The unsafe-width-bump configurations remain an unresolved geometric/area class.
 
-$$\sup_{full\ turns}|S|=\sup_{saturated\ positive\ opposite\ faces}|S|.$$
+SPB applies directly to partial bodies only with their visited niches. Substituting full niches is an unjustified strengthening unless completion has been proved. The terminal-strip inequalities couple the two hull caps and must be retained by any direct partial-turn optimization.
 
-The reduction permits approximation and change of incoming orientation. The positive-face subclass need not attain its supremum. A local improvement theorem only for attained maxima inside that subclass does not automatically prove the value.
+## 5. A feasible actual-body variation, and why it does not close either frontier
 
-Reference approximants show there is no uniform strict gap below M for the entire positive opposite-face class, including after saturation. A long search for such a gap is not an appropriate strategy.
+[PV](actual-maximizer-parallel-volume.md) proves that every diameter-one convex template C gives a feasible deformation `(S+tC)/(1+t)` preserving the original angular intervals, including partial turns. At an attained actual maximum,
 
-SI completes partial turns when the whole required interval of straight-strip normals has width at most one. An unsafe width bump is not removed by RR, which preserves the unshaved safe-strip set. The present background transfer does not create the missing angles.
+$$|S+tC|\le(1+t)^2|S|.$$
 
-Thus both the sharp full-turn admission and the uncovered partial-turn comparison remain substantive obligations.
+The disk case and compactly supported deformations imply finite distributional perimeter with P(S)<=4|S|. This does not imply hull curvature regularity or optimality from the converse inequality.
 
-## 6. Earlier inputs and case bounds
+[RT](convex-template-rounding-obstruction.md) proves all these classical first variations are strictly negative at the reference, uniformly in C, and remain negative on sufficiently small prescribed asymmetric tip cuts. Those cuts are suboptimal. Thus the entire family does not provide an automatic local improvement in the remaining near-reference configurations. Other selective deformations are not ruled out; neither a uniform finite step size nor all larger steps are classified.
 
-WV2 gives the signed weighted one-turn maximum M/2 in the current written chain; its VE limiting source-flux argument and historical inputs remain independent-review points. Do not assign weighted maximality to an arbitrary two-turn cap.
+## 6. Global domain reductions retained
 
-FAS covers every full-turn aligned positive-face body. SCG/CSF give additional six-point conditions forcing full turns. RS covers the left-right reflection-symmetric common incoming class without requiring symmetric original motions. No symmetry-reduction theorem for unrestricted maximizers is known in this work.
+RR/PD/PS show that the full-turn supremum equals the supremum over saturated positive opposite-end faces. The subclass can approximate the reference and need not attain its supremum. There is no fixed positive gap below M over the whole class. A proof only about an attained maximum inside that nonclosed subclass is insufficient.
 
-TC/RB/STW retain their earlier exact-reference-middle results, including arbitrary boundary-layer shavings and signed tail changes. MT/ME and CT enlarge those admitted domains but do not turn them into a global neighborhood theorem.
+FAS proves the full-turn aligned positive-face class; RS proves the reflection-symmetric incoming class; SCG/CSF give further retained-point sufficient tests. No unrestricted symmetric-maximizer theorem is available. AW-W/SW/AL are analytic width restrictions, while AM/TE are earlier restricted computer certificates rather than a full sharp covering.
 
-AW-W/SW/AL are analytic competitive-width restrictions. AM and TE are restricted exact computer certificates; they are not premises of the new MT/ME/CT/HC proofs and do not provide a complete sharp covering.
+WV2 supplies the signed one-turn value in its written dependency chain. Its source-flux and regularity arguments remain independent-review points; it is not permission to assume weighted maximality for a two-turn cap. The newer tail comparisons invoke SR/AF only on admitted regular backgrounds.
 
-## 7. Checks and failure controls
+The general full-turn identity remains
 
-The new exact checker ran under five seconds in about 0.105 seconds internally. It checks 578 scalar remainders, 768 integrand expansions, 420 pruning samples, 100 signed pairings, 25 Jacobian cases and nine finite gains, with three stronger-claim controls. Its record matches the executed Git blob. These finite regressions do not prove geometric admission or verify the continuum SR/AF dependency chain.
+$$|E|=\Psi(U)+\Psi(V)+G,\quad G\ge0.$$
 
-A single 48-cut exploratory run took about 1.079 seconds under a five-second cap. Its reference approximation already has a small positive bias, so no raw sampled excess was accepted as a counterexample and no universal inequality was inferred. The analytic HC counterexample does not rely on this run.
+CB/CT/MT pay G on their domains. SPB avoids this particular unpaid term by a different proved relaxation, whose sharp bound must still be established. Neither route currently covers arbitrary opposite-face bodies.
 
-Retain the earlier negative controls RA, MCA, AF4, GR1, AX1/SAT1, SAC2, SC3, TR1, AO1 and FF. Saturation, averaging, face filling and support-energy admission did not automatically preserve actual sofa area. The old occupancy LP's fractional barriers cannot be removed just by resolution.
+## 7. Failure controls and checks
+
+Retain RA, MCA, AF4, GR1, AX1/SAT1, SAC2, SC3, TR1, AO1, FF and HC. Averaging actual bodies or caps, saturation, face filling and curvature repair did not automatically preserve area upper bounds. The old occupancy LP has structural fractional barriers. A finite grid is not a certified neighborhood or a proof of continuous motion.
+
+The latest exact checker ran under five seconds in about 0.0216 seconds internally and matches its committed Git blob. It checks algebra and finite instances, not continuum admission. All exploratory runs were short. Two regular-cap pair samples had negative fibers and must not be described as feasible sofas. The new partition run ended at its fixed six-iteration limit and did not establish convergence or any global upper bound.
 
 ## 8. Next-session discipline
 
-Read the new proofs with their review. If an implication is wrong, state and repair that exact point. Otherwise attack a specified background-admission or partial-turn comparison. Do not replace a stated curvature or support constraint by a claim of closeness to the reference. Keep scripts bounded, preserve all correction signs, and commit negative findings. PR #3 remains open and draft; unrestricted closure and independent verification are unfinished.
+Choose one precise missing implication: CB admission or output-face compatibility; a sharp SPB bound on the actual admissible domain; or a partial-turn completion/area theorem retaining its endpoint constraints. Review the relevant written proof before using it. Do not introduce a new detached calibration or silently replace any hypothesis with reference proximity.
+
+Both global problems and independent verification remain unfinished. Keep scripts bounded, records honest and commits substantive. PR #3 remains open and draft until the unrestricted ordinary-area upper bound is actually proved.
