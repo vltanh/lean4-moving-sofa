@@ -100,7 +100,7 @@ theorem rightAuxiliaryProfile_bound {P : GerverParams} (hP : P.IsSolution)
     |rightAuxiliaryProfile hP hbox x t| ≤ 5 * sqrt (qDeficit P x) := by
   obtain ⟨hp, hpc, hcb, hb, hvd, hdT, hTp⟩ := critical_arc_order hP
   have hloc := endpoint_short_arc_locations hP hbox
-  have htv : t < π / 2 := ht.2.trans_lt (hloc.1.trans hcb.lt_or_eq.resolve_right (by linarith))
+  have htv : t < π / 2 := ht.2.trans_lt (hloc.1.trans hb)
   have htshort : t ∈ Icc 0 (51 / 50) := ⟨hp.le.trans ht.1, ht.2.trans hloc.2.1.le⟩
   have hc : ∀ u ∈ Icc P.φ t, 0 < cos u := by
     intro u hu
@@ -119,13 +119,12 @@ theorem rightAuxiliaryProfile_bound {P : GerverParams} (hP : P.IsSolution)
     linarith
   have hE := (arcSquare_mono hi2 le_rfl ht.1 htv.le).trans
     (auxiliary_energies_le_deficit hP hbox x).1
-  have hΔ := (q_energy_component_bounds hP hbox x).1
   have hI : |∫ u in P.φ..t, (1 / cos u) * rightAuxiliaryResidual hP hbox x u| ≤
       2 * sqrt (qDeficit P x) := by
     apply abs_le_mul_sqrt_of_sq_le (by norm_num)
     have hm := mul_le_mul_of_nonneg_right hker hcs.energy_nonneg
     nlinarith only [hcs.bound, hm, hE]
-  have hrec := tangent_reconstruct_right ht.1 hcont.continuousOn
+  have hrec := tangent_reconstruct_right (T := π / 2) ht.1 hcont.continuousOn
     (fun u _ => hder u)
     (fun u hu => by rw [sin_pi_div_two_sub]; exact (hc u hu).ne')
     (by
@@ -170,7 +169,9 @@ theorem leftAuxiliaryProfile_bound {P : GerverParams} (hP : P.IsSolution)
       ((hk.pow 2).intervalIntegrable_of_Icc ht.1)
       (intervalIntegrable_const (c := (4 : ℝ))) (fun u hu => by
         have hh := (active_cot_bounds hP hbox ⟨hu.1, hu.2.trans ht.2⟩).2.2
-        have hn : 0 ≤ 1 / sin (π - P.φ - u) := by positivity
+        have hn : 0 ≤ 1 / sin (π - P.φ - u) := by
+          have hh := (active_sine_bounds hP hbox ⟨hu.1, hu.2.trans ht.2⟩).2
+          positivity
         nlinarith)
     simp only [intervalIntegral.integral_const, smul_eq_mul] at hm
     have hθ := hbox.2
@@ -185,7 +186,7 @@ theorem leftAuxiliaryProfile_bound {P : GerverParams} (hP : P.IsSolution)
     have hm := mul_le_mul_of_nonneg_right hker hcs.energy_nonneg
     have hΔ := (q_energy_component_bounds hP hbox x).1
     nlinarith only [hcs.bound, hm, hE, hΔ]
-  have hrec := tangent_reconstruct_right ht.1 hcont.continuousOn
+  have hrec := tangent_reconstruct_right (T := π - P.φ) ht.1 hcont.continuousOn
     (fun u _ => hder u) (fun u hu => (hs u hu).ne')
     (by
       simpa only [div_eq_mul_inv, mul_comm] using
