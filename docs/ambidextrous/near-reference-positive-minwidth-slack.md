@@ -122,3 +122,60 @@ and its arbitrary-pair extension. NR.10 is consistent with it: these explicitly 
 For partial turns, a bridge based only on comparing asymptotic exponents \(s^{3/2}\) and \(\varepsilon^3\) is also insufficient without geometric relations and an actual signed loss bound. The completed reference-scale safe-strip theorem SB has its separate hypotheses; NR does not put arbitrary competitors into that family.
 
 All new proofs are pen and paper, using the explicit reference, MS, HV2 and the established regular SR/AF comparison. No script, CI, Lean/Lake compilation, dependency installation, or manuscript build is a mathematical premise. Both unrestricted full-turn and partial-turn optimality remain unproved.
+
+
+## 5. The weighted deficit has an explicit quadratic hand bound
+
+The qualitative strict inequality in NR.7 can be quantified **without** invoking the long WV maximizing-cap source-flux proof. It is a direct application of the already written unrestricted \(H^1\) calibration AF and the reference's exact sign intervals.
+
+On the first quarter write \(f_\delta=f_*+v\), \(g_\delta=g_*+w\), where
+\[
+v(t)=\frac\delta2\cos t,\qquad
+w(t)=\frac\delta2\sin t.
+\]
+Let \(F\) be the exact signed-roof functional AF equation (A.1). The vertical height is one, the width \(W_\delta>2\), and the support has open-quarter densities between zero and one; hence SR1 identifies the actual full-niche value with
+\[
+\Psi(U_\delta)=F(f_\delta,g_\delta)-W_\delta/2.
+\]
+The candidate is an interior stationary point of the **full width-variable** calibrated functional: the interior Euler and switching fluxes vanish and its natural width boundary condition is \(P(0)=1/2\) (AF A.8--A.11). Therefore its exact expansion along this affine admissible direction has **zero linear term** after including the width penalty.
+
+The unpenalized quadratic part of F, computed directly from AF A.1, is
+\[
+\frac12\int_0^L\left[
+2(v^2+w^2)-v'^2-w'^2+v\,w'-w\,v'
+\right]dt
+=\frac{\delta^2 L}{4},
+\quad L=\pi/2.
+\]
+The two contact-loss functions are \(\min(p,0)^2\) and \(\max(q,0)^2\). Their arguments change by
+\[
+p_\delta-p_* =v'-w=-\delta\sin t,\qquad
+q_\delta-q_*=w'+v=\delta\cos t.
+\]
+The reference has \(p_*<0\) on \((\beta,L)\) and \(q_*>0\) on \((0,L-\beta)\), with \(\beta=\arctan Y\). These signs remain unchanged under the corresponding one-sided perturbations for **every** \(\delta>0\). On those intervals the respective convex square's Bregman remainder equals exactly \(\delta^2\sin^2t\) or \(\delta^2\cos^2t\). On the other intervals the remainder is nonnegative by convexity; no assumption about their shifted switching locations is needed.
+
+Thus, subtracting the quadratic change from the positive contact remainders gives
+\[
+\begin{aligned}
+\Delta(U_\delta)
+&=\frac M2-\Psi(U_\delta)\\
+&\ge\frac{\delta^2}{2}\left[
+\int_\beta^L\sin^2t\,dt+
+\int_0^{L-\beta}\cos^2t\,dt
+\right]-\frac{\delta^2 L}{4}\\
+&=\boxed{\frac{L-2\beta+\sin(2\beta)}4\,\delta^2.}
+\end{aligned}\tag{NR.11}
+\]
+
+The coefficient is strictly positive. An entirely rational lower bound is
+\[
+\frac{L-2\beta+\sin(2\beta)}4
+>\frac{3/2-3/5}{4}=\frac9{40},
+\]
+using \(L=\pi/2>3/2\), \(0<\beta=\arctan Y<Y<3/10\), and \(\sin(2\beta)>0\). Hence
+\[
+\boxed{|E_\delta|=2\Psi(U_\delta)
+\le M-\frac9{20}\delta^2<M.}\tag{NR.12}
+\]
+
+This explicitly displays the deficit that pays the later positive signed slab correction for sufficiently small s at each fixed \(\delta\). The bound is uniform over \(0<\delta\le1/16\) and remains a *regular-cap* result; it is not an ordinary-area bound for arbitrary rough opposite-face competitors. As \(\delta,s\downarrow0\), both the positive \(G_{\delta,s}\) and the cap deficit tend to zero, so the general frontier is still a sharp comparison of two small quantities.
