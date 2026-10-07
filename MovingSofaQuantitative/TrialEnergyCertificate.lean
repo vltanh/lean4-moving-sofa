@@ -619,7 +619,11 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
         (hi.realValue (realPoint P 0)) subcells j.val ∧
       meshPoint (lo.realValue (realPoint P 0))
         (hi.realValue (realPoint P 0)) subcells (j.val+1) ≤ (b:ℝ) ∧
-      ∀ u ∈ Icc (a:ℝ) (b:ℝ),
+      ∀ u ∈ Icc
+          (meshPoint (lo.realValue (realPoint P 0))
+            (hi.realValue (realPoint P 0)) subcells j.val)
+          (meshPoint (lo.realValue (realPoint P 0))
+            (hi.realValue (realPoint P 0)) subcells (j.val+1)),
         (match k with
          | .r2 => CriticalTrial.r2 P u
          | .r3 => CriticalTrial.r3 P u
@@ -641,7 +645,7 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
           | 0 => parameterBox 0
           | 1 => parameterBox 1
           | 2 => ⟨a,b⟩
-        cases hI : (residual k).intervalValue box with
+        cases hI : cellResidualInterval k lo hi box with
         | none => simp [hI] at hc
         | some I =>
           let M : ℚ := max 0 (max (I.lo*I.lo) (I.hi*I.hi))
@@ -661,8 +665,10 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
           have hU : U=(b-a)*M := by
             simp only [hI, Option.bind_some, Option.some.injEq] at hc
             simpa only [a,b,M] using hc.symm
-          refine ⟨a,b,M,hlen,hM,hU,?_,?_,?_⟩
-          · unfold meshPoint
+          have hleft : (a:ℝ) ≤ meshPoint
+              (lo.realValue (realPoint P 0))
+              (hi.realValue (realPoint P 0)) subcells j.val := by
+            unfold meshPoint
             dsimp [a]
             have hratio : 0 ≤ (j.val:ℝ) / subcells ∧
                 (j.val:ℝ) / subcells ≤ 1 := by
@@ -672,7 +678,11 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
                 exact_mod_cast j.isLt.le
             push_cast
             nlinarith [hlo.1,hhi.1]
-          · unfold meshPoint
+          have hright : meshPoint
+              (lo.realValue (realPoint P 0))
+              (hi.realValue (realPoint P 0)) subcells (j.val+1)
+              ≤ (b:ℝ) := by
+            unfold meshPoint
             dsimp [b]
             have hratio : 0 ≤ ((j.val:ℝ)+1)/subcells ∧
                 ((j.val:ℝ)+1)/subcells ≤ 1 := by
@@ -682,16 +692,33 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
                 exact_mod_cast Nat.succ_le_of_lt j.isLt
             push_cast
             nlinarith [hlo.2,hhi.2]
-          · intro u hu
-            have hp : InBox box (realPoint P u) := by
-              intro i
-              fin_cases i
-              · simpa [box,realPoint] using hbox.1
-              · simpa [box,realPoint] using hbox.2.1
-              · simpa [box,realPoint,Interval.Contains] using hu
-            have hv := BranchExpr.intervalValue_sound (residual k) hp hI
-            rw [residual_real hP] at hv
-            have hs : (match k with
+          refine ⟨a,b,M,hlen,hM,hU,hleft,hright,?_⟩
+          intro u hu
+          have huOuter : u∈Icc (a:ℝ) (b:ℝ) :=
+            ⟨hleft.trans hu.1,hu.2.trans hright⟩
+          have hrealOrder :
+              lo.realValue (realPoint P 0) ≤
+              hi.realValue (realPoint P 0) := by
+            have hbound : (L.hi:ℝ)<(H.lo:ℝ) := by
+              exact_mod_cast horder
+            exact (hlo.2.trans (le_of_lt hbound)).trans hhi.1
+          have huTrue : u∈Icc
+              (lo.realValue (realPoint P 0))
+              (hi.realValue (realPoint P 0)) := by
+            have hl := meshPoint_mem hrealOrder (by norm_num [subcells])
+              j.isLt.le
+            have hr := meshPoint_mem hrealOrder (by norm_num [subcells])
+              (Nat.succ_le_of_lt j.isLt)
+            exact ⟨hl.1.trans hu.1,hu.2.trans hr.2⟩
+          have hp : InBox box (realPoint P u) := by
+            intro i
+            fin_cases i
+            · simpa [box,realPoint] using hbox.1
+            · simpa [box,realPoint] using hbox.2.1
+            · simpa [box,realPoint,Interval.Contains] using huOuter
+          have hv := cellResidualInterval_sound hP hbox k lo hi
+            hI huTrue hp
+          have hs : (match k with
                 | .r2 => CriticalTrial.r2 P u
                 | .r3 => CriticalTrial.r3 P u
                 | .r4 => CriticalTrial.r4 P u
@@ -951,7 +978,7 @@ theorem pieceUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
                | .B => CriticalTrial.rB P u
                | .D => CriticalTrial.rD P u)^2 ≤ (M:ℝ) := by
             intro u hu
-            exact hpoint u ⟨hleft.trans hu.1,hu.2.trans hright⟩
+            exact hpoint u hu
           have hconst := intervalIntegral.integral_mono_on hnormal hicell
             intervalIntegrable_const hcell
           have hwidth : r-l≤(b:ℝ)-(a:ℝ) := by
