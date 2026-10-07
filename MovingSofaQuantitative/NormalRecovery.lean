@@ -146,16 +146,13 @@ theorem infDist_zero_of_mem {K : Set Point} {p : Point} (hp : p∈K) :
   · exact (infDist_le_of_mem hp).trans (by rw [euclideanDist_self])
   · exact infDist_nonneg
 
-theorem infDist_pos_of_compact {K : Set Point} (hK : IsCompact K)
+theorem infDist_pos_of_compact {K : Set Point}
+    (hK : IsCompact K) (hne : K.Nonempty)
     {p : Point} (hp : p∉K) :
     0<infDist p K := by
   by_contra hn
   have hz : infDist p K=0:=le_antisymm (not_lt.mp hn) infDist_nonneg
-  obtain ⟨q,hq,hq0⟩:=exists_mem_eq_infDist hK
-    (by
-      by_contra he
-      rw [Set.not_nonempty_iff_eq_empty.mp he,infDist_empty] at hz
-      exact top_ne_zero hz)
+  obtain ⟨q,hq,hq0⟩:=exists_mem_eq_infDist hK hne
   rw [hz] at hq0
   have hpq:=euclideanDist_eq_zero.mp hq0
   subst q
@@ -202,7 +199,7 @@ theorem nearest_point_frontier {K : Set Point} (hK : IsCompact K)
   intro hqi
   obtain ⟨r,hr,hball⟩:=Metric.isOpen_iff.1 isOpen_interior q hqi
   let z:=q+(min (r/2) (euclideanDist p q/2)/euclideanDist p q)•(p-q)
-  have hd:=infDist_pos_of_compact hK hp
+  have hd:=infDist_pos_of_compact hK ⟨q,hq⟩ hp
   have hzK : z∈K := by
     apply interior_subset
     apply hball
@@ -744,9 +741,10 @@ theorem directed_to_gerver_normal {P : GerverParams}
         rw [←gerver_shape_eq hP hbox] at hpG
         exact Classical.byContradiction fun hn=>hpG ⟨hp0,not_not.mp hn⟩
       let d:=infDist p (gerverSofa P)
+      have hGmove := (gm_movingSofa_std hP hbox).1
       have hd : 0<d:=infDist_pos_of_compact
-        (ms_isCompact_of_isMovingSofaWithAngle (gm_movingSofa_std hP hbox).1)
-        hpG
+        (ms_isCompact_of_isMovingSofaWithAngle hGmove)
+        hGmove.2.1.nonempty hpG
       by_cases hdbig : normalRecoveryDepth<d
       · obtain ⟨t,ht,hU,hV⟩:=hroofSlack p hpN
         have hpRoof:=by
