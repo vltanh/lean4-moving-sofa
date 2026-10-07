@@ -86,10 +86,8 @@ theorem isCompact_squareThickening {K : Set Point} (hK : IsCompact K)
     (verticalSegment_isConvexBody hδ).2.1
 
 theorem area_sdiff_of_subset {A B : Set Point} (hAB : A⊆B)
-    (hA : MeasurableSet A) (hBf : volume B≠⊤) :
+    (hA : MeasurableSet A) (hB : MeasurableSet B) (hBf : volume B≠⊤) :
     area (B\A)=area B-area A := by
-  have hB : MeasurableSet B := by
-    exact (measure_mono_null (measure_empty) (by simp)).toMeasurable
   have hsplit:=area_sdiff_balance hB hA hBf
     (volume_ne_top_of_subset hAB hBf)
   have hzero : area (A\B)=0 := by
@@ -98,17 +96,14 @@ theorem area_sdiff_of_subset {A B : Set Point} (hAB : A⊆B)
   linarith
 
 theorem area_split_by_measurable (A E : Set Point) (hA : MeasurableSet A)
-    (hEf : volume E≠⊤) :
+    (hE : MeasurableSet E) (hEf : volume E≠⊤) :
     area E=area (E\A)+area (E∩A) := by
-  have hEA : MeasurableSet (E∩A) := by
-    exact (hA.inter measurableSet_univ).mono inter_subset_right
+  have hEA : MeasurableSet (E∩A) := hE.inter hA
   have hdiff : E\A = E\(E∩A) := by
     ext p
     by_cases hpE:p∈E <;> by_cases hpA:p∈A <;> simp [hpE,hpA]
   have hsubset : E∩A⊆E := inter_subset_left
-  have hbal:=area_sdiff_balance
-    (show MeasurableSet E from measurableSet_of_finite_measure hEf)
-    hEA hEf (volume_ne_top_of_subset hsubset hEf)
+  have hbal:=area_sdiff_balance hE hEA hEf (volume_ne_top_of_subset hsubset hEf)
   rw [hdiff] at hbal
   have hzero : area ((E∩A)\E)=0 := by
     rw [sdiff_eq_empty.mpr hsubset,area,measure_empty,ENNReal.toReal_zero]
@@ -369,6 +364,7 @@ theorem cap_layer_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
   have hsplit:=area_sdiff_of_subset
     (subset_squareThickening hδ)
     (gm_isConvexBody_cap hP hbox).2.1.measurableSet
+    (isCompact_squareThickening (gm_isConvexBody_cap hP hbox).2.1 hδ).measurableSet
     (isCompact_squareThickening (gm_isConvexBody_cap hP hbox).2.1 hδ).measure_lt_top.ne
   linarith
 
@@ -515,6 +511,9 @@ theorem quantitative_envelope_excess_with_margin {P : GerverParams}
         area ((capShape K\gerverSofa P)∩P.cap) := by
     exact area_split_by_measurable P.cap (capShape K\gerverSofa P)
       (gm_isConvexBody_cap hP hbox).2.1.measurableSet
+      ((measurable_capShape hK).diff
+        (ms_isCompact_of_isMovingSofaWithAngle
+          (gm_movingSofa_std hP hbox).1).measurableSet)
   have hw : 2*(horizontalWidth P.cap+1)+(51/5)*
       (gerverRoofRight P-gerverRoofLeft P)<62307/2500 := by
     nlinarith [hwidth.1,hwidth.2]
