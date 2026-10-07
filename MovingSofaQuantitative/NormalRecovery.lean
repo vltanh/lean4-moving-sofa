@@ -321,9 +321,12 @@ theorem gerver_closure_niche_inter_shape_subset_envelope {P : GerverParams}
     have hqn : q∈niche P.cap (π/2) := by
       rw [hroof.niche_eq]
       exact ⟨hx,hy0,lt_of_not_ge hn⟩
-    have hG:=gerver_shape_eq hP hbox
-    rw [hG] at hq
-    exact hq.2 hqn
+    have hqNot : q∉niche P.cap (π/2) := by
+      have hG:=gerver_shape_eq hP hbox
+      have hqS:=hq.2
+      rw [hG,capShape] at hqS
+      exact hqS.2
+    exact hqNot hqn
   have heq : q.2=γ q.1 := by
     simpa [C,γc,hcl] using le_antisymm hyup hge
   obtain ⟨z,hz,hzx⟩ := env_exists_curve_fst henv hx
@@ -347,11 +350,12 @@ theorem nearest_from_niche_lands_on_envelope {P : GerverParams}
     (hnear : euclideanDist p q=infDist p (gerverSofa P)) :
     q∈gerverEnvelope P := by
   have hK:=gm_isConvexBody_cap hP hbox
-  have hN⊆ : niche P.cap (π/2)⊆P.cap :=
-    (theorem2_5_9 (gm_isCap hP hbox)).1
-      ⟨gerverSofa P,gm_isMonotone hP hbox,rfl⟩
-  have hG:=gerver_shape_eq hP hbox
-  have hqclosure := nearest_cap_complement_mem_closure hK hN⊆
+  have hNsub : niche P.cap (π/2)⊆P.cap := by
+    intro z hz
+    exact gm_closure_niche_subset_cap hP hbox (subset_closure hz)
+  have hG : gerverSofa P=P.cap\niche P.cap (π/2) := by
+    simpa [capShape] using gerver_shape_eq hP hbox
+  have hqclosure := nearest_cap_complement_mem_closure hK hNsub
     hG hp hqG hnear
   exact gerver_closure_niche_inter_shape_subset_envelope hP hbox
     ⟨hqclosure,hqG⟩
