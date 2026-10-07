@@ -87,7 +87,7 @@ and of the coercive route, and the check of the Challenge's definitions, and che
 to the code are current and that the Markdown tables are well formed.
 [`.github/workflows/palomar_preflight.yml`](../.github/workflows/palomar_preflight.yml), run by hand with `gh workflow run palomar_preflight.yml --ref main`,
 runs Palomar's complete mechanical verification of a commit without submitting it; its report, the
-artifact `mechanical-report-preflight001`, must say `status: pass`. It does not cover the rendering
+artifact `mechanical-report-preflightv05`, must say `status: pass`. It does not cover the rendering
 of the Challenge, which Palomar runs after verification with Verso: keep Mathlib on the release tag
 that matches the toolchain, since the render fails when a package that Mathlib and Verso share, such
 as `plausible`, is pinned at two different revisions, as it soon is on Mathlib `master`.
