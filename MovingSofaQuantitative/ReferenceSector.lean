@@ -198,6 +198,77 @@ theorem vertical_sector_inside_unit_lipschitz_epigraph
   have hdx := abs_sub_comm q.1 p.1
   linarith
 
+/-- The frame-invariant version of the sector slope estimate.  In axes
+\`u_theta\` (inward) and \`v_theta\` (tangent), a narrow sector rises at least
+as much as it moves sideways. -/
+theorem sector_transverse_le_axis {p q : Point} {θ h r : ℝ}
+    (hs : 0<sin h) (hsc : sin h≤cos h)
+    (hq : q∈interiorSector p θ h r) :
+    |dot (q-p) (vvec θ)|≤dot (q-p) (uvec θ) := by
+  let w:=q-p
+  let a:=dot w (uvec θ)
+  let b:=dot w (vvec θ)
+  have hplus : 0≤a*sin h+b*cos h := by
+    have hh:=hq.1
+    simpa [a,b,w,dot,uvec,vvec,cos_add,sin_add,
+      cos_pi_div_two_sub,sin_pi_div_two_sub] using hh
+  have hminus : 0≤a*sin h-b*cos h := by
+    have hh:=hq.2.1
+    simpa [a,b,w,dot,uvec,vvec,cos_sub,sin_sub,
+      cos_pi_div_two_sub,sin_pi_div_two_sub] using hh
+  have ha : 0≤a := by nlinarith [hs]
+  have hsc' := mul_le_mul_of_nonneg_left hsc ha
+  dsimp [a,b,w]
+  rw [abs_le]
+  constructor <;> nlinarith
+
+/-- Generic local-epigraph chart for a fixed inward direction. A chart uses
+coordinates along v_theta and u_theta about a common origin; the graph
+\`gamma\` is a globally 1-Lipschitz extension of the local boundary graph.
+The chart condition itself is local to a radius R ball.
+
+This theorem is the exact chart-to-sector implication needed in the Gerver
+atlas. It makes no claims about which Gerver arcs admit such charts; those
+must be supplied by the contact/envelope calculations. -/
+theorem sector_of_local_epigraph_chart
+    {G : Set Point} {origin p : Point} {θ h r R : ℝ}
+    {γ : ℝ→ℝ}
+    (hs : 0<sin h) (hsc : sin h≤cos h)
+    (hr : 0≤r)
+    (hp : p∈G) (hpR : euclideanDist origin p+r≤R)
+    (hLip : ∀x y,|γ x-γ y|≤|x-y|)
+    (hchart : ∀z,euclideanDist origin z≤R →
+       (z∈G ↔
+         γ (dot (z-origin) (vvec θ))≤
+           dot (z-origin) (uvec θ))) :
+    interiorSector p θ h r ⊆ G := by
+  intro q hq
+  have hdist:=euclideanDist_triangle origin p q
+  have hqR : euclideanDist origin q≤R := by
+    nlinarith [hdist,hq.2.2,hpR]
+  have hpR' : euclideanDist origin p≤R := by linarith
+  have hchartp := (hchart p hpR').mp hp
+  have hqX := hLip
+    (dot (q-origin) (vvec θ))
+    (dot (p-origin) (vvec θ))
+  have hframe := sector_transverse_le_axis hs hsc hq
+  have hX :
+      dot (q-origin) (vvec θ)-dot (p-origin) (vvec θ)=
+        dot (q-p) (vvec θ) := by
+    simp [dot_sub_left]
+    ring
+  have hY :
+      dot (q-origin) (uvec θ)-dot (p-origin) (uvec θ)=
+        dot (q-p) (uvec θ) := by
+    simp [dot_sub_left]
+    ring
+  exact (hchart q hqR).mpr (by
+    have hh:=le_abs_self
+      (γ (dot (q-origin) (vvec θ))-
+        γ (dot (p-origin) (vvec θ)))
+    rw [←hX] at hframe
+    linarith [hchartp,hqX,hh,hY])
+
 /-- The smallest explicit boundary openings clear beta=1.53. -/
 theorem gerver_corner_angle_margin {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
