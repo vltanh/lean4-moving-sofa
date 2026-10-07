@@ -106,3 +106,28 @@ Unlike the individual \(\mathcal P_J\) route, AS.7 is genuinely **coupled** and 
 The large unresolved global admission issue remains: the previous CB/CT method cannot assign common half-height-niche backgrounds to every full-turn body merely by containment. The explicit parallelogram obstruction in [full-turn-common-background-obstruction.md](full-turn-common-background-obstruction.md) proves that unconditional claim false. Its area is too small to rule out a **competitive-only** admission theorem. The direct spatial inequality above avoids the background premise entirely but has a separate sharp maximization obligation.
 
 No long computation, CI, Lean/Lake compilation, dependency installation or manuscript build was used. All identities are hand proofs. Unrestricted full-turn optimality is **not** claimed.
+
+## 5. Relation to the weighted deficits, and cases where no relaxation is lost
+
+For full niches on a common width, the signed cap identity gives
+\[
+\Psi(U)+\Psi(V)=W-\int_I(D+N).
+\]
+Consequently there is the **exact** equality
+\[
+\boxed{\mathscr C(U,V)=\Psi(U)+\Psi(V)+\int_I\min(D,N)\,dx.}
+\tag{AS.8}
+\]
+The original two-turn positive clipping term is
+\[
+G=\int_I[\min(n_U,d_V)+\min(n_V,d_U)]\,dx
+\le\int_I\min(N,D)\,dx,
+\]
+and the difference is exactly the mismatch remainder AS.3. Thus the proposed scalar bound AS.7 is *stronger* than the original sharp clipping budget. A proof of AS.7 would suffice, but it must not be inferred from the existing weighted inequality; a counterexample to this stronger aggregate bound would not be a counterexample to the moving-sofa conjecture.
+
+There are two elementary situations in which this stronger comparison loses **no** material:
+
+1. If the two caps agree, \(U=V\), their cross-deficits are equal, \(a=b=n_U-(1-A_U)\), and AS.3 vanishes. Thus AS is exact on every nonempty-fiber vertically symmetric full-turn envelope, whether or not its niche is clipped.
+2. If the actual feasible full-turn body is convex, then its convex hull is the body itself. Canonical tightening deletes no point of this hull, so its full envelope equals the body. At each abscissa, \(n_U\le d_V\) and \(n_V\le d_U\) (all retained vertical fiber points must meet both motions). Both cross-deficits are nonpositive, and AS.3 again vanishes. The explicit thin full-turn parallelogram in CGA is one such example.
+
+These examples show that AS is geometrically faithful for both the reference sofa and certain very different full-turn shapes. They do **not** establish the unproved global maximum of \(\mathscr C\). In general the cross-deficits can have opposite signs, and the new aggregate clipping charge \(\int\min(D,N)\) exceeds the actual \(G\); that excess must be treated as relaxation error, not charged twice.
