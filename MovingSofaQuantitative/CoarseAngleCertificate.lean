@@ -218,12 +218,12 @@ def split (box : Box) : Box×Box :=
 
 inductive SearchTree
   | pruned
-  | branch (j : Nat) (left right : SearchTree)
+  | branch (left right : SearchTree)
   deriving Decidable,Repr
 
 def checkTree (lo hi target : Q) : Box→SearchTree→Bool
   | box,.pruned => bound lo hi box<target
-  | box,.branch _ l r =>
+  | box,.branch l r =>
       match contract lo hi target (split box).1,
             contract lo hi target (split box).2 with
       | none,none => true
@@ -240,7 +240,7 @@ def searchTree (lo hi target : Q) : Nat→Box→SearchTree
       if bound lo hi box<target then .pruned
       else
         let s:=split box
-        .branch (widestCoordinate box)
+        .branch
           (match contract lo hi target s.1 with
            | none=>.pruned | some b=>searchTree lo hi target n b)
           (match contract lo hi target s.2 with
@@ -286,7 +286,7 @@ theorem checkTree_sound {lo hi target : Q} {box : Box} {T : SearchTree}
       have hsub:=candidate_subset_polygons hcand
       exact (area_mono_polygons hS hsub).trans_lt
         (by simpa [checkTree] using hc)
-  | branch j l r ihl ihr =>
+  | branch l r ihl ihr =>
       intro S hS hcand
       have hs:=support_box_split_complete hcand (split box)
       rcases hs with hs|hs
