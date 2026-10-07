@@ -122,6 +122,41 @@ theorem sector_subset_tangent_ball {p : Point} {θ h r R : ℝ}
   show euclideanDist (p+R•uvec θ) q≤R
   nlinarith [hsq,ha,hd,hq0,euclideanDist_nonneg (p+R•uvec θ) q]
 
+/-- A tangent ball also contains a translated narrow cone at any point lying
+a distance d along its inward normal. The condition r+d<=R is sufficient and
+is stable under the tiny 10^-20 cutoff scale. -/
+theorem translated_sector_subset_tangent_ball {b : Point} {θ h d r R : ℝ}
+    (hd : 0≤d) (hR : 0≤R) (hr : 0≤r)
+    (hfit : d+r≤R)
+    (hs : 0<sin h) (hsc : sin h≤cos h) :
+    interiorSector (b+d•uvec θ) θ h r ⊆
+      euclideanBall (b+R•uvec θ) R := by
+  let p:=b+d•uvec θ
+  let c:=b+R•uvec θ
+  intro q hq
+  let ρ:=euclideanDist p q
+  have hρ : 0≤ρ:=euclideanDist_nonneg _ _
+  have hρr : ρ≤r:=hq.2.2
+  have ha:=interiorSector_axis_half hs hsc hq
+  have hRd : 0≤R-d:=by linarith
+  have hρd : ρ≤R-d:=by linarith
+  have hcenter :
+      euclideanDist c q^2=
+      ρ^2+(R-d)^2-
+        2*(R-d)*dot (q-p) (uvec θ) := by
+    dsimp [c,p,ρ]
+    rw [euclideanDist,euclideanDist,norm2_sq,norm2_sq]
+    simp [dot,uvec,Prod.fst_add,Prod.snd_add,
+      Prod.fst_smul,Prod.snd_smul,Prod.fst_sub,Prod.snd_sub]
+    nlinarith [sin_sq_add_cos_sq θ]
+  have hdrop : ρ^2-(R-d)*ρ≤0 := by
+    nlinarith [mul_nonneg hρ (sub_nonneg.mpr hρd)]
+  have hball : euclideanDist c q^2≤R^2 := by
+    nlinarith [hcenter,ha,hdrop,hd,hfit]
+  have hdistNonneg:=euclideanDist_nonneg c q
+  show euclideanDist c q≤R
+  nlinarith
+
 /-- The smallest explicit boundary openings clear beta=1.53. -/
 theorem gerver_corner_angle_margin {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
