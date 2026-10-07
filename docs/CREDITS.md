@@ -633,10 +633,11 @@ that comes with it, and a new one holds the new result, optimality, uniqueness a
 certificate; both state formal-conjectures' theorems. Finally the owner asked to clean up the root, which now holds
 the certificate entry, with Baek's entry in a directory of its own, then to move the remaining helper files out of
 it, and then to move the documents that concern only Baek's entry into its directory. The owner then asked to push
-the result and to run Palomar's preflight on the certificate entry, which the owner will submit.
+the result and to run Palomar's preflight on the certificate entry, which the owner will submit, and to shorten
+each section of the README.
 
 How it was made:
-- 19:53 to 22:46: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
+- 19:53 to 23:11: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with four
   sub-agents of the same model.
 - A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates, in the
   namespace `Certificate`, the 39 definitions that the certificate's statement needs, each with the body of the
@@ -678,11 +679,20 @@ How it was made:
   audit checks 5,992 declarations, the audit of the coercive route 867, with 22 positive and 8 negative controls;
   the route check and the audit of the second proof pass; Comparator accepts both entries; and Palomar's checks of
   the metadata and the sources pass for both.
+- The three commits were pushed to main (`eef7203`, `f40ff92`, `44ddd4c`). The continuous integration passed on
+  `44ddd4c`, and so did Palomar's preflight of the certificate entry (`status: pass`, request `preflightc01`, with one
+  warning: the Challenge exceeds the preferred review size of 300 lines); the preflight's three kernels, Lean's,
+  nanoda and con-ron, accept the Solution. The manuscript cites `44ddd4c`.
+- The main session shortened the README, section by section, from 339 lines to 231, leaving the detail to the pages
+  that it links. A sub-agent that could not edit compared the two versions sentence by sentence. It found that every
+  disclosure had survived, and ten places where the shorter text said more or less than before (the count of the
+  theorems in the namespace `Baek`, a certificate route that read as if it used no part of the first uniqueness
+  proof, a claim that every result of the paper is proved here), which the main session corrected.
 
-Figures, from 19:53 to 22:46:
-- elapsed time: 2 hours 53 minutes;
-- sub-agents: 3, at most 2 at the same time, about 2.6 hours of work;
-- tool calls: 757 by the sub-agents, 248 by the main session;
-- tokens of the sub-agents: 0.81 million output, 5.87 million input, 294 million cache reads; of the main
-  session: 0.31 million output, 0.61 million input, 109 million cache reads;
-- model calls: 646 by the sub-agents and 258 by the main session, all to `claude-opus-5-5`.
+Figures, from 19:53 to 23:11:
+- elapsed time: 3 hours 17 minutes;
+- sub-agents: 4, at most 2 at the same time, about 2.8 hours of work;
+- tool calls: 788 by the sub-agents, 282 by the main session;
+- tokens of the sub-agents: 0.88 million output, 6.08 million input, 298 million cache reads; of the main
+  session: 0.37 million output, 0.69 million input, 126 million cache reads;
+- model calls: 672 by the sub-agents and 295 by the main session, all to `claude-opus-5-5`.

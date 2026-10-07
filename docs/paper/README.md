@@ -99,10 +99,10 @@ undefined reference.
   all of them through the route; Comparator checks it against the root's `Challenge.lean`.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
-- The links to the repository are pinned to commit `701ec744a73a5fe21c3ac1703ac83cf31df853c2`, on which the
-  continuous integration and Palomar's preflight passed; it is the commit prepared for version 5 of the Palomar
-  entry. Version 4 registers the earlier commit `16653ae`, whose Challenge has the twelve theorems other than those
-  of stability.
+- The links to the repository are pinned to commit `44ddd4c75b9ed901c78e0b255d673841ebf04aeb`, on which the
+  continuous integration and Palomar's preflight of the certificate entry passed; that entry, at the root of the
+  repository, is prepared for submission. Baek's entry, in `baek/`, is registered as PALOMAR-2026-10-02-000008, and
+  its version 4 registers the earlier commit `16653ae`, from the time when its files were at the root.
 - Figures are computed from the definitions of the formalization; the facts that a caption states are checked
   by `assert`s in the scripts.
 
@@ -442,6 +442,16 @@ do, that the Challenge restates formal-conjectures' definitions with its code ra
 cites `22f0b37` and has 117 pages.
 Palomar's preflight, run at the author's request with Palomar's current pipeline, then passed on `701ec74`, the
 commit prepared for version 5, and the manuscript now cites that commit.
+
+At the author's request, the repository then got two Palomar entries: the certificate entry at its root, whose
+Challenge states seventeen theorems (among them the certificate and `Certificate.gerver_triple`, by which Gerver's
+triple meets the certificate's hypothesis), and Baek's entry in `baek/`, the registered one, with the twelve
+theorems of version 4. Appendix D.1 now describes both entries, Appendix D.4 states the certificate and that
+theorem, and Appendix D and the dictionary name the files at their new places: the definitions that the
+Challenges copy are in `MovingSofaBridge/Defs.lean` and `MovingSofaExtremal/CertificateDefs.lean`, and the proofs
+that the Solution at the root restates in `MovingSofaExtremal/Statements.lean` and
+`MovingSofaExtremal/Certificate.lean`. Palomar's preflight of the certificate entry passed on `44ddd4c`, and the
+manuscript cites that commit. It has 119 pages.
 
 ## What has not been done
 
