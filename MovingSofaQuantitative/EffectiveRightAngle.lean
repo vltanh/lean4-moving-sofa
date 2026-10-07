@@ -2,7 +2,7 @@ module
 
 public import MovingSofaQuantitative.CenteredCap
 public import MovingSofaQuantitative.ReferenceExplicitMargins
-public import MovingSofaQuantitative.OrthogonalErosion
+public import MovingSofaQuantitative.EffectiveRecovery
 public import MovingSofaStability.Recovery
 public import MovingSofaUniqueness.Selection
 public import MovingSofaUniqueness.Maximizing
@@ -303,17 +303,26 @@ theorem effective_right_angle_sofa {P : GerverParams}
     (gm_isConvexBody_cap hP hbox).1
   have hδ : (514:ℝ)*sqrt e≤514*sqrt ε :=
     mul_le_mul_of_nonneg_left (sqrt_le_sqrt heε) (by norm_num)
-  have herode:=orthogonal_reference_erosion
-    (show 0≤514*sqrt ε by positivity)
-    (gm_isCap hP hbox) hK
-    (fun t ht => (hsupport t).trans hδ)
   have hmissing : area (capShape K\N)≤ε := by
     rw [area_sdiff_balance hNc.measurableSet
       (measurable_capShape hK) hNc.measure_lt_top.ne
       (volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne)]
     rw [area_capShape_of_niche_subset hK hNK,hε,sofaDeficit]
     nlinarith [heε]
-  exact effective_disk_recovery_10300 hP hbox hε0 hε20 hsub
-    herode hmissing hcap
+  rcases hε0.eq_or_lt with hz | hp
+  · subst ε
+    have hzero : sofaDeficit P S=0 := hε.symm
+    have hEq:=normalizedSofa_eq_gerver_of_zero_deficit hP hbox ⟨π/2,hS⟩ hzero
+    have hmid:=midpoint_entry_of_pinned hP hbox ⟨π/2,hS⟩ le_rfl
+      (by simpa [hEq] using (EuclideanClose.refl (gerverSofa P) le_rfl))
+    simpa using hmid
+  · have hhall : ApproxHallways K N 0 := by
+      intro p hp t ht
+      have hs:=sofaCap_partial_constraints hNm ⟨by positivity,le_rfl⟩ htop
+      simpa using hs.2.1 p hp t ht
+    exact effective_coarse_recovery hP hbox hK
+      (show N⊆K from hsub.trans sdiff_subset)
+      hp hε20 (by positivity) le_rfl hδ (by simp)
+      (fun t ht => (hsupport t).trans hδ) hhall hmissing
 
 end MovingSofaQuantitative
