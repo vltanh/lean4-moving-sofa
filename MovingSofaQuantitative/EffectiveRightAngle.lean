@@ -296,19 +296,37 @@ theorem effective_right_angle_cap {P : GerverParams}
             (gerverSofa_area_mem hP hbox).1.trans (by norm_num)
           nlinarith [hCarea,he4])
       hcurv
-    have hCG:=centered_ki hP hbox C hCki
-    have hCK : EuclideanClose (512*sqrt e)
-        C (centeredReference K C) := by
-      exact cap_close_of_support_sup hK hC hD |>.mono (by nlinarith)
-    have hcenters : EuclideanClose (512*sqrt e)
-        (centeredReference K K) (centeredReference K C) :=
-      centered_reference_distance_from_support hK hC hD
-    have htri:=hcenters.symm.trans hCG
-    have href:=centeredReference_self hK
-    rw [href] at htri
-    exact htri.mono (by
-      have hsec:=centeredNumeric P.φ hbox.1
-      nlinarith [sqrt_nonneg e])
+    -- The three comparisons have genuinely matching intermediate sets:
+    -- original K -> penalized C -> G aligned to C -> G aligned to K.
+    have hKC : EuclideanClose (256*sqrt e) K C :=
+      (cap_close_of_support_sup hK hC hD
+        (by positivity)).symm
+    let eC := area (gerverSofa P)-sofaArea (π/2) C
+    have heC0 : 0≤eC := by
+      dsimp [eC]
+      exact sub_nonneg.mpr (right_angle_cap_area_le_gerver
+        (gerver_maximizing_value hP hbox) hC)
+    have heCe : eC≤e := by dsimp [eC]; linarith [hCarea]
+    have hCG0 := centered_ki hP hbox C hCki
+    have hsec : 1/cos P.φ≤1001/1000 := by
+      obtain ⟨h1,h2⟩:=centeredNumeric P.φ
+        ⟨by linarith [hbox.1.1],by linarith [hbox.1.2]⟩
+      exact h1.trans h2.le
+    have hCG : EuclideanClose ((1001/1000)*sqrt e)
+        C (centeredReference P.cap C) := by
+      exact hCG0.mono (by
+        have hs:=sqrt_le_sqrt heCe
+        have hss:=sqrt_nonneg e
+        have hsc:=sqrt_nonneg eC
+        nlinarith [mul_nonneg
+          (sub_nonneg.mpr hsec) hsc])
+    have hGalign : EuclideanClose (256*sqrt e)
+        (centeredReference P.cap C) (centeredReference P.cap K) :=
+      centered_reference_alignment_of_support hD (by positivity)
+    have hthree := hKC.trans (hCG.trans hGalign)
+    exact hthree.mono (by
+      have hs:=sqrt_nonneg e
+      nlinarith)
 
 /-- Right-angle original sofa: coarse effective actual-set stability. -/
 theorem effective_right_angle_sofa {P : GerverParams}
