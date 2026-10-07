@@ -9,9 +9,11 @@ Every mathematical result stated as an author result anywhere in the final paper
 (main text, appendix, theorem, proposition, lemma, corollary, or quantitative remark)
 must have a corresponding Lean theorem whose proof is accepted by the kernel.
 
-For computer-assisted inequalities, Python may generate certificates, but the
-paper theorem must be discharged by a Lean checker. Python output is evidence
-for development only, not part of the trusted proof.
+For computer-assisted inequalities, the finite certificate, its search/checking
+procedure, all soundness arguments and the closed acceptance proof must be
+internal to Lean. External Python scripts/JSON receipts are historical research
+diagnostics, not generators or inputs required by the paper proof. See
+37-lean-only-certification-contract.md for the binding trust policy.
 
 Externally attributed results may remain external if clearly cited as such.
 They must not be presented as new proved results of this paper unless formalized.
@@ -333,7 +335,8 @@ original moving sofas, not merely a theorem about already-local caps.
 
 # IV. Verified finite certificates in Lean
 
-The current Python interval work should become a certificate GENERATOR only.
+The historical Python interval work remains research-only. The paper's finite
+search, certificate data and acceptance proof must instead be given in Lean.
 
 Create a small trusted Lean certificate layer, for example:
 
@@ -354,13 +357,14 @@ The generic soundness layer should prove:
 - a passing cell proves the intended inequality on its whole rectangle;
 - the finite binary-cell collection covers the entire parameter/angle domain.
 
-Python may emit the certificate data, but Lean checks:
+Lean defines the finite data/search and itself proves:
 
 1. coverage;
 2. every local inequality;
 3. the final rational comparison.
 
-No paper theorem may rely on an unverified Python assertion.
+No paper theorem may use a Python or JSON result as a proof premise, nor
+require an external generator to supply its accepted proof data.
 
 If the 0.93 certificate is prohibitively expensive for kernel checking, weaken
 the paper constant slightly rather than enlarge the trusted base.
