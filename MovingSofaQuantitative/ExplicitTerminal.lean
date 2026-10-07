@@ -1,6 +1,7 @@
 module
 
 public import MovingSofaQuantitative.ExplicitBudget
+public import MovingSofaQuantitative.ScalarTaylor
 public import MovingSofaStability.Terminal
 
 /-!
@@ -19,6 +20,64 @@ open Real Set MeasureTheory
 open MovingSofaOptimality MovingSofaStability
 
 namespace MovingSofaQuantitative
+
+/-- Area balance used by the terminal witness: a set S and a disjoint witness
+T inside U satisfy |S|+|T| <= |U|+|S\U|. -/
+theorem area_add_witness_le_envelope_add_surplus {S U T : Set Point}
+    (hS : MeasurableSet S) (hU : MeasurableSet U) (hT : MeasurableSet T)
+    (hSf : volume S≠⊤) (hUf : volume U≠⊤)
+    (hTU : T⊆U) (hdis : Disjoint S T) :
+    area S+area T≤area U+area (S\U) := by
+  have hSI : MeasurableSet (S∩U):=hS.inter hU
+  have hSU : S=(S∩U)∪(S\U) := by
+    ext p
+    by_cases hp:p∈U <;> simp [hp]
+  have hdisSU : Disjoint (S∩U) (S\U) := by
+    rw [Set.disjoint_left]
+    rintro p ⟨-,hpU⟩ ⟨-,hnU⟩
+    exact hnU hpU
+  have hinside : (S∩U)∪T⊆U := by
+    rintro p (hp|hp)
+    · exact hp.2
+    · exact hTU hp
+  have hdisIT : Disjoint (S∩U) T :=
+    hdis.mono inter_subset_left subset_rfl
+  have hSI_f : volume (S∩U)≠⊤ :=
+    volume_ne_top_of_subset inter_subset_left hSf
+  have hSU_f : volume (S\U)≠⊤ :=
+    volume_ne_top_of_subset sdiff_subset hSf
+  have hT_f : volume T≠⊤ :=
+    volume_ne_top_of_subset hTU hUf
+  have hA := area_union_of_disjoint hdisIT hT hSI_f hT_f
+  have hmono := area_mono_of_finite hinside hUf
+  rw [hA] at hmono
+  have hSsplit := area_union_of_disjoint hdisSU (hS.diff hU) hSI_f hSU_f
+  rw [←hSU] at hSsplit
+  linarith
+
+/-- Specialized Cavalieri formula for the affine terminal trapezoid. -/
+theorem area_under_affine_on_interval {l r a c : ℝ}
+    (hlr : l≤r) (hc : 0≤c) (hra : r≤a) :
+    area {p : Point | p.1∈Icc l r ∧ 0≤p.2 ∧ p.2≤c*(a-p.1)} =
+      c*((a-l)^2-(a-r)^2)/2 := by
+  have hnonneg : ∀x∈Icc l r,0≤c*(a-x) := by
+    intro x hx
+    exact mul_nonneg hc (sub_nonneg.mpr (hx.2.trans hra))
+  rw [area,Measure.volume_eq_prod]
+  rw [volume_regionBetween_eq_lintegral'
+    measurable_const (measurable_const.mul
+      (measurable_const.sub measurable_id)) measurableSet_Icc]
+  rw [lintegral_ofReal_eq_integral (by
+    exact (ContinuousOn.mul continuousOn_const
+      (continuousOn_const.sub continuousOn_id)).aestronglyMeasurable)]
+  simp only [Pi.zero_apply,sub_zero,ENNReal.toReal_ofReal (hnonneg _)]
+  rw [MeasureTheory.integral_indicator measurableSet_Icc]
+  have hi :
+      (∫x in Icc l r,c*(a-x))=
+        c*((a-l)^2-(a-r)^2)/2 := by
+    rw [←intervalIntegral.integral_of_le hlr]
+    convert (intervalIntegral.integral_const_sub_id l r a).const_mul c using 1 <;> ring
+  exact hi
 
 /-- Width of the left reference wing along the floor. -/
 def gerverLeftWingWidth (P : GerverParams) : ℝ :=
@@ -58,8 +117,19 @@ theorem terminalTrapezoid_measurable (P : GerverParams) (α : ℝ) :
 theorem terminalTrapezoid_area {P : GerverParams} {α : ℝ} (hα : 0≤α) :
     area (terminalTrapezoid P α) =
       (999/1000)*(499/1000)*(gerverLeftWingWidth P)^2*α := by
-  unfold terminalTrapezoid terminalFloorInterval terminalEta gerverLeftWingWidth
-  rw [area_under_affine_on_interval]
+  unfold terminalTrapezoid terminalFloorInterval
+  have hD:=gerver_left_wing_width_lower (P:=P)
+    (by infer_instance) (by infer_instance)
+  have hlr :
+      -supp P.cap π+terminalEta P≤gerverRoofLeft P-terminalEta P := by
+    unfold terminalEta gerverLeftWingWidth
+    linarith
+  have hra :
+      gerverRoofLeft P-terminalEta P≤gerverRoofLeft P := by
+    unfold terminalEta
+    linarith
+  rw [area_under_affine_on_interval hlr (by positivity) hra]
+  unfold terminalEta gerverLeftWingWidth
   ring
 
 /-- The trapezoid lies in the full-angle shape for every sufficiently nearby
@@ -145,7 +215,8 @@ theorem terminalTrapezoid_disjoint {P : GerverParams}
   have hv : terminalEta P≤gerverRoofLeft P-p.1 := by
     unfold terminalTrapezoid terminalFloorInterval at hpF
     linarith [hpF.1.2]
-  have hsin : α-α^3/6≤sin α := sin_bound_lower_cubic (by linarith [hα,hαsmall.1])
+  have hsin : α-α^3/6≤sin α := by
+    simpa [sinPoly3] using sinPoly3_le_sin (show 0≤α by linarith [hα])
   have hcos : 1-α^2/2≤cos α := one_sub_sq_div_two_le_cos
   have hup := dot_le_supp hK.2.1.2.1 hq (π/2-α)
   simp only [dot,uvec,cos_pi_div_two_sub,sin_pi_div_two_sub,hqy,one_mul] at hup
@@ -236,13 +307,18 @@ theorem explicit_terminal_comparison {P : GerverParams}
           (10/31:ℝ)<(999/1000)*(499/1000)*(gerverLeftWingWidth P)^2-1/1000 := by
         have hD := gerver_left_wing_width_lower hP hbox
         nlinarith [sq_lt_sq₀ (by norm_num : (0:ℝ)<403/500) hD]
-      have hbalance := area_union_of_disjoint_subsets hSm
-        (terminalTrapezoid_measurable P α) hSV hTin hTd
+      have hSf : volume S≠⊤ :=
+        volume_ne_top_of_subset hconstraints.1 hK.2.1.2.1.measure_lt_top.ne
+      have hUf : volume (capShape K)≠⊤ :=
+        volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne
+      have hbalance := area_add_witness_le_envelope_add_surplus
+        hSm (measurable_capShape hK) (terminalTrapezoid_measurable P α)
+        hSf hUf hTin hTd
       rw [hareaT] at hbalance
       nlinarith [hbalance,hgain,hcoef]
   obtain ⟨he0,heε,hangle,hsurplus,hmissing⟩ :=
     precise_terminal_budget hSm
-      (measurable_capShape hK) (ms_area_ne_top_of_measurable hSm)
+      (measurable_capShape hK) (volume_ne_top_of_subset hconstraints.1 hK.2.1.2.1.measure_lt_top.ne)
       hK.2.1.2.1.measure_lt_top.ne hα0 hmax hloss hgain
   refine ⟨he0,heε,?_,hsurplus,hmissing,?_⟩
   · simpa [α] using hangle
