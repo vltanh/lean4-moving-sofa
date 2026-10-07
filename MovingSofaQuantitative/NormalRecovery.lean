@@ -301,19 +301,35 @@ theorem nearest_vector_opposes_inward {K : Set Point}
   rw [←hnear] at hmin
   exact (not_lt_of_ge hmin) hcloser
 
+/-- The base support-slack remainder plus the change of the test direction.
+The direction increment is essential: omitting it would make the claimed
+balanced expansion false even for a smooth circle. -/
 def secondOrderWallErrorU (K : Set Point) (q : Point)
-    (t s d : ℝ) : ℝ :=
-  innerSlackU K s q-
-    innerSlackU K t q+
-    (s-t)*sin t
+    (t s d a : ℝ) (w : Point) : ℝ :=
+  (innerSlackU K s q-innerSlackU K t q-a*(s-t))+
+    d*dot w (uvec s-uvec t)
 
 def secondOrderWallErrorV (K : Set Point) (q : Point)
-    (t s d : ℝ) : ℝ :=
-  innerSlackV K s q-
-    innerSlackV K t q+
-    (s-t)*cos t
+    (t s d b : ℝ) (w : Point) : ℝ :=
+  (innerSlackV K s q-innerSlackV K t q+b*(s-t))+
+    d*dot w (vvec s-vvec t)
 
-/-- Uniform second-order expansion of the two hallway slacks on the core. -/
+/-- Both reference wall slacks vanish at the Gerver inner corner. -/
+theorem reference_inner_slacks_zero {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t∈Icc P.φ (π/2-P.φ)) :
+    innerSlackU P.cap t (P.path t)=0 ∧
+      innerSlackV P.cap t (P.path t)=0 := by
+  have hφ:= (romik_bounds hP hbox).φ_mem.1
+  have ht' : t∈Icc (0:ℝ) (π/2) :=
+    ⟨hφ.le.trans ht.1,by linarith [ht.2,hφ]⟩
+  have hc := gm_innerCorner hP hbox ht'
+  have hs := innerSlack_down (K:=P.cap) (t:=t) (d:=0) hc (P.path t)
+  simpa using hs
+
+/-- An exact algebraic decomposition, requiring no differentiability of the
+competitor. The geometric derivative coefficients enter only when the
+remainder is subsequently estimated. -/
 theorem innerSlackU_balanced_expansion {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} {t a b d λ : ℝ} {w : Point}
@@ -322,10 +338,13 @@ theorem innerSlackU_balanced_expansion {P : GerverParams}
     (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
     innerSlackU P.cap (t+λ*d) p =
       d*wallVariationU t a b w λ+
-        secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d := by
+        secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d a w := by
+  have hzero := (reference_inner_slacks_zero hP hbox ht).1
   subst p
-  have hcorner:=gm_innerCorner hP hbox
-  exact inner_slack_taylor_U hP hbox ht hcorner hvel
+  dsimp [secondOrderWallErrorU,wallVariationU,innerSlackU]
+  simp only [dot_add_left,dot_smul_left,dot_sub_right]
+  rw [hzero]
+  ring
 
 theorem innerSlackV_balanced_expansion {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
@@ -335,10 +354,13 @@ theorem innerSlackV_balanced_expansion {P : GerverParams}
     (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
     innerSlackV P.cap (t+λ*d) p =
       d*wallVariationV t a b w λ+
-        secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d := by
+        secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d b w := by
+  have hzero := (reference_inner_slacks_zero hP hbox ht).2
   subst p
-  have hcorner:=gm_innerCorner hP hbox
-  exact inner_slack_taylor_V hP hbox ht hcorner hvel
+  dsimp [secondOrderWallErrorV,wallVariationV,innerSlackV]
+  simp only [dot_add_left,dot_smul_left,dot_sub_right]
+  rw [hzero]
+  ring
 
 /-- Absolute sine/cosine increments are bounded by the angular increment. -/
 theorem abs_sin_sub_le (s t : ℝ) : |sin s-sin t|≤|s-t| := by
