@@ -457,12 +457,14 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
       innerSlackU P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d ∧
       innerSlackV P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d := by
   let I:=Icc P.φ (π/2-P.φ)
-  let FU : ℝ×ℝ→ℝ:=fun z=>
-    innerSlackU P.cap (z.1+λ z.1*z.2)
-      ((P.path z.1).1,(P.path z.1).2-z.2)
-  let FV : ℝ×ℝ→ℝ:=fun z=>
-    innerSlackV P.cap (z.1+λ z.1*z.2)
-      ((P.path z.1).1,(P.path z.1).2-z.2)
+  -- Use the reference path rather than differentiating the abstract
+  -- support function. The path is C1 on all of R, and the exact
+  -- corePathSlack_eq_innerSlack lemma transfers back to the genuine wall
+  -- support slacks once the adjusted angle lies in [0,pi/2].
+  let FU : ℝ×ℝ→ℝ:=fun z=>corePathSlackU P λ z.1 z.2
+  let FV : ℝ×ℝ→ℝ:=fun z=>corePathSlackV P λ z.1 z.2
+  let RU : ℝ×ℝ→ℝ:=fun z=>corePathRateU P λ z.1 z.2
+  let RV : ℝ×ℝ→ℝ:=fun z=>corePathRateV P λ z.1 z.2
   have hI : IsCompact I:=isCompact_Icc
   have hφ:=romik_bounds hP hbox |>.φ_mem
   have hinside : ∀t∈I,t∈Ioo (0:ℝ) (π/2) := by
@@ -470,45 +472,51 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
     exact ⟨hφ.1.trans_le ht.1,by linarith [ht.2,hφ.1]⟩
   have hzeroU : ∀t∈I,FU (t,0)=0 := by
     intro t ht
-    dsimp [FU]
-    rw [show t+λ t*0=t by ring]
-    rw [←gm_innerCorner hP hbox ht]
-    simp [innerSlackU]
+    simp [FU,corePathSlackU,coreAdjustedAngle,coreLoweredPoint]
   have hzeroV : ∀t∈I,FV (t,0)=0 := by
     intro t ht
-    dsimp [FV]
-    rw [show t+λ t*0=t by ring]
-    rw [←gm_innerCorner hP hbox ht]
-    simp [innerSlackV]
-  have hderU : ∀t∈I,
-      HasDerivAt (fun d=>FU (t,d)) (wallVerticalRateU P t (λ t)) 0 := by
+    simp [FV,corePathSlackV,coreAdjustedAngle,coreLoweredPoint]
+  have hrateU_zero : ∀t∈I,RU (t,0)=wallVerticalRateU P t (λ t) := by
     intro t ht
-    dsimp [FU,wallVerticalRateU]
-    have hx:=gs_hasDerivAt_path' hP t
-    fun_prop
-  have hderV : ∀t∈I,
-      HasDerivAt (fun d=>FV (t,d)) (wallVerticalRateV P t (λ t)) 0 := by
+    have hD := (P.gs_hasDerivAt_path hP t).deriv
+    unfold RU corePathRateU coreAdjustedAngle coreLoweredPoint wallVerticalRateU
+    simp only [mul_zero,add_zero,sub_zero,sub_self,dot_zero_left,mul_zero,
+      add_zero,smul_eq_mul]
+    rw [←hD]
+    simp only [gs_α,dot_smul_left,dot_sub_left]
+    ring
+  have hrateV_zero : ∀t∈I,RV (t,0)=wallVerticalRateV P t (λ t) := by
     intro t ht
-    dsimp [FV,wallVerticalRateV]
-    have hx:=gs_hasDerivAt_path' hP t
+    have hD := (P.gs_hasDerivAt_path hP t).deriv
+    unfold RV corePathRateV coreAdjustedAngle coreLoweredPoint wallVerticalRateV
+    simp only [mul_zero,add_zero,sub_zero,sub_self,dot_zero_left,mul_zero,
+      sub_zero,smul_eq_mul]
+    rw [←hD]
+    simp only [gs_β,dot_smul_left,dot_sub_left]
+    ring
+  have hpathD : Continuous P.gs_pathD := by
+    have heq : P.gs_pathD=deriv P.path := by
+      funext t
+      exact (P.gs_hasDerivAt_path hP t).deriv.symm
+    rw [heq]
+    exact hC1.continuous_deriv
+  have hpathC : Continuous P.path := hC1.continuous
+  have hλJ : ContinuousOn (fun z : Point=>λ z.1)
+      (I×ˢIcc (-1:ℝ) 1) :=
+    hλ.comp continuous_fst.continuousOn (fun z hz=>hz.1)
+  have hjointU : ContinuousOn RU (I×ˢIcc (-1:ℝ) 1) := by
+    dsimp [RU,corePathRateU,coreAdjustedAngle,coreLoweredPoint]
     fun_prop
-  have hjointU : ContinuousOn (fun z : ℝ×ℝ=>
-      deriv (fun d=>FU (z.1,d)) z.2) (I×ˢIcc (-1:ℝ) 1) := by
-    have hx:=hC1.continuous_deriv
-    dsimp [FU]
+  have hjointV : ContinuousOn RV (I×ˢIcc (-1:ℝ) 1) := by
+    dsimp [RV,corePathRateV,coreAdjustedAngle,coreLoweredPoint]
     fun_prop
-  have hjointV : ContinuousOn (fun z : ℝ×ℝ=>
-      deriv (fun d=>FV (z.1,d)) z.2) (I×ˢIcc (-1:ℝ) 1) := by
-    have hx:=hC1.continuous_deriv
-    dsimp [FV]
-    fun_prop
-  have h0U : ∀t∈I,deriv (fun d=>FU (t,d)) 0≤-(10/101:ℝ) := by
+  have h0U : ∀t∈I,RU (t,0)≤-(10/101:ℝ) := by
     intro t ht
-    rw [(hderU t ht).deriv]
+    rw [hrateU_zero t ht]
     exact (hrate t ht).1
-  have h0V : ∀t∈I,deriv (fun d=>FV (t,d)) 0≤-(10/101:ℝ) := by
+  have h0V : ∀t∈I,RV (t,0)≤-(10/101:ℝ) := by
     intro t ht
-    rw [(hderV t ht).deriv]
+    rw [hrateV_zero t ht]
     exact (hrate t ht).2
   let εr:=((10/101:ℝ)-5/51)/2
   have hεr : 0<εr:=by dsimp [εr]; linarith
