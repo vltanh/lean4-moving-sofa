@@ -55,6 +55,100 @@ theorem centeredCopy_mem_iff {K : Set Point} (p : Point) :
   · simpa [Rigid.translate_apply] using h
   · simpa [Rigid.translate_apply] using h
 
+theorem euclideanDist_translate (a p q : Point) :
+    euclideanDist (p+a) (q+a)=euclideanDist p q := by
+  unfold euclideanDist
+  congr 1
+  abel
+
+theorem euclideanClose_translate {A B : Set Point} {r : ℝ}
+    (h : EuclideanClose r A B) (a : Point) :
+    EuclideanClose r (Rigid.translate a '' A) (Rigid.translate a '' B) := by
+  constructor
+  · rintro _ ⟨p,hp,rfl⟩
+    obtain ⟨q,hq,hd⟩:=h.1 p hp
+    refine ⟨q+a,⟨q,hq,by simp [Rigid.translate_apply]⟩,?_⟩
+    simpa [Rigid.translate_apply,euclideanDist_translate] using hd
+  · rintro _ ⟨q,hq,rfl⟩
+    obtain ⟨p,hp,hd⟩:=h.2 q hq
+    refine ⟨p+a,⟨p,hp,by simp [Rigid.translate_apply]⟩,?_⟩
+    simpa [Rigid.translate_apply,euclideanDist_translate] using hd
+
+theorem centeredReference_translate_to_centeredCopies {G K : Set Point} :
+    Rigid.translate (-horizontalMidpoint K,0) '' centeredReference G K =
+      centeredCopy G := by
+  unfold centeredReference horizontalReference centeredCopy
+  ext p
+  simp only [Rigid.mem_translate_image,Rigid.translate_apply]
+  constructor
+  · rintro ⟨q,⟨z,hz,rfl⟩,rfl⟩
+    refine ⟨z,hz,?_⟩
+    ext <;> simp [horizontalMidpoint] <;> ring
+  · rintro ⟨z,hz,rfl⟩
+    refine ⟨z+(horizontalMidpoint K-horizontalMidpoint G,0),
+      ⟨z,hz,by rfl⟩,?_⟩
+    ext <;> simp [horizontalMidpoint] <;> ring
+
+theorem centeredCopy_translate_back {K : Set Point} :
+    Rigid.translate (horizontalMidpoint K,0) '' centeredCopy K=K := by
+  unfold centeredCopy
+  ext p
+  simp [Rigid.mem_translate_image,Rigid.translate_apply]
+  constructor
+  · rintro ⟨q,hq,rfl⟩
+    simpa using hq
+  · intro hp
+    refine ⟨p+(-horizontalMidpoint K,0),?_,?_⟩
+    · simpa using hp
+    · ext <;> simp <;> ring
+
+theorem abs_supp_le_radius {K : Set Point} (hK : IsCompact K)
+    {R : ℝ} (hR : ∀p∈K,norm2 p≤R) (t : ℝ) :
+    |supp K t|≤R := by
+  obtain ⟨p,hp,hpeq⟩:=exists_dot_eq_supp hK
+    (by
+      by_contra hn
+      rw [Set.not_nonempty_iff_eq_empty.mp hn,supp_empty] at hpeq
+      simp at hpeq) t
+  rw [←hpeq,abs_le]
+  constructor
+  · have hd:=dot_uvec_le_norm2 (-p) t
+    simpa [dot_neg_left] using hd.trans (hR p hp)
+  · exact (dot_uvec_le_norm2 p t).trans (hR p hp)
+
+theorem area_isosceles_triangle (m : ℝ) {h : ℝ} (hh : 0≤h) :
+    area {p : Point | p.2∈Icc (0:ℝ) h ∧ |p.1-m|≤h-p.2}=h^2 := by
+  rw [area,Measure.volume_eq_prod]
+  rw [Measure.volume_eq_lintegral_prod_snd]
+  have hfiber : ∀y : ℝ,
+      volume {x : ℝ | y∈Icc (0:ℝ) h ∧ |x-m|≤h-y} =
+      if y∈Icc (0:ℝ) h then ENNReal.ofReal (2*(h-y)) else 0 := by
+    intro y
+    by_cases hy:y∈Icc (0:ℝ) h
+    · rw [if_pos hy]
+      have he : {x : ℝ | y∈Icc (0:ℝ) h ∧ |x-m|≤h-y} =
+          Icc (m-(h-y)) (m+(h-y)) := by
+        ext x
+        simp [hy,abs_le]
+      rw [he,Real.volume_Icc]
+      simp [hy.2]
+      ring
+    · rw [if_neg hy]
+      simp [hy]
+  simp_rw [hfiber]
+  rw [lintegral_ite measurableSet_Icc]
+  simp only [lintegral_zero,add_zero]
+  rw [←ofReal_integral_eq_lintegral_ofReal]
+  · rw [MeasureTheory.integral_indicator measurableSet_Icc]
+    rw [←intervalIntegral.integral_of_le hh,
+      intervalIntegral.integral_const_sub_id]
+    simp
+    ring
+  · exact (intervalIntegrable_const.mul
+      (intervalIntegrable_const.sub intervalIntegrable_id)).integrableOn
+  · filter_upwards with y
+    positivity
+
 def supportSquareIntegral (f : ℝ→ℝ) : ℝ :=
   ∫ t in (0:ℝ)..π,(f t)^2
 
