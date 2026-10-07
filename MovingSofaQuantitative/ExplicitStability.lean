@@ -261,7 +261,7 @@ theorem recover_local_23_50 {P : GerverParams}
     (hτ : 0<τ) (hmargin : RoofSlackMargin P.cap γ (5/51) τ)
     (hδτ : kCenter*sqrt D.e<τ)
     (hsmallArea : sqrt ε≤1/200) :
-    SofaConclusions P S := by
+    Targets.SofaConclusions P S := by
   have hback:=reverse_distance_23 hP hbox D hε hR₀ hcones hscale
   have hclose : EuclideanClose (CHaus*sqrt ε) D.N (gerverSofa P) :=
     ⟨hnormal.mono hforward,hback⟩
