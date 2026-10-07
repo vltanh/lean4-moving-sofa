@@ -81,7 +81,7 @@
       "placement": "Main 10 / G.2 proof",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "M-area(S)",
-      "remaining": "Assembled statement, but the fixed 1.53-sector proof uses a coordinate-to-angle phase split not justified by any boundary parametrization; normal/roof/terminal bridge interfaces also need proof-source audit. NOT SOURCE-COMPLETE."
+      "remaining": "Assembled numerical sofa statement. Gerver endpoint support identities and both floor-wing widths are now consolidated, and the outer support gap has a direct cap-rectangle proof draft. The fixed 1.53-sector boundary atlas and the 49/100 normal/terminal quantitative transitions remain unproved in source. NOT SOURCE-COMPLETE."
     },
     {
       "id": "sofa-coefficient-lower",
@@ -177,7 +177,7 @@
       "placement": "G.5 prerequisite",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "0<=M-area(S)<=10^-144",
-      "remaining": "Assembled global-entry theorem; depends on effective angle, penalized right-angle curvature, and original-sofa recovery where several quantitative helper lemmas are not yet supplied. NOT SOURCE-COMPLETE."
+      "remaining": "Assembled global-entry theorem. Coarse actual-set recovery now uses a sound full surviving-ball criterion rather than the false half-radius condition and shares its scalar reserve with the right-angle path. Penalized-cap curvature, effective angle, local-radius, and original-sofa transfers still have unresolved proofs. NOT SOURCE-COMPLETE."
     },
     {
       "id": "effective-angle-entry",
@@ -206,7 +206,7 @@
   ],
   "audit": {
     "checked_branch": "research/global-stability-constants",
-    "note": "Manuscript statements remain working-draft claims, not formalized results. Full project theorem inventory (including baseline proved=0 labels) still requires separate exhaustive paper audit.",
+    "note": "Uncompiled source audit only. The previous source-complete claim is withdrawn. The coarse 10300 ball-recovery argument was repaired to use E < (kappa*rho-r)^2; half-radius erosion is not available at delta=514 sqrt(E).",
     "mandatory_cutoff": "1/10^600",
     "lean_or_ci_run": false,
     "known_blockers": [
