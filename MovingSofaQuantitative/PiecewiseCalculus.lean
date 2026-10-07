@@ -24,23 +24,30 @@ def rightJoin (a : ℝ) (f g : ℝ → ℝ) (t : ℝ) : ℝ :=
 theorem continuous_rightJoin {a : ℝ} {f g : ℝ → ℝ}
     (hf : Continuous f) (hg : Continuous g) (hmatch : f a = g a) :
     Continuous (rightJoin a f g) := by
-  have h := continuous_if_le continuous_const continuous_id
-    hg.continuousOn hf.continuousOn (fun t ht => by subst t; exact hmatch.symm)
-  simpa only [rightJoin, not_lt, ite_not] using h
+  have h : Continuous (fun t : ℝ => if a ≤ t then g t else f t) :=
+    continuous_if_le continuous_const continuous_id hg.continuousOn hf.continuousOn
+      (fun t ht => by subst t; exact hmatch.symm)
+  have he : rightJoin a f g = (fun t : ℝ => if a ≤ t then g t else f t) := by
+    funext t
+    by_cases ht : t < a
+    · simp [rightJoin, ht, not_le.mpr ht]
+    · simp [rightJoin, ht, not_lt.mp ht]
+  rwa [he]
 
-/-- Right derivatives glue at a value-matched cut; the right derivative may jump. -/
+/-- Right derivatives glue at the right-assigned cut; the right derivative may jump. -/
 theorem rightDeriv_rightJoin {a : ℝ} {f g df dg : ℝ → ℝ}
     (hf : ∀ t, HasDerivWithinAt f (df t) (Ioi t) t)
     (hg : ∀ t, HasDerivWithinAt g (dg t) (Ioi t) t) (t : ℝ) :
     HasDerivWithinAt (rightJoin a f g) (rightJoin a df dg t) (Ioi t) t := by
+  change HasDerivWithinAt (rightJoin a f g) (if t < a then df t else dg t) (Ioi t) t
   by_cases ht : t < a
-  · rw [rightJoin, if_pos ht]
+  · rw [if_pos ht]
     apply (hf t).congr_of_eventuallyEq _ (by simp [rightJoin, ht])
     have hnb : Iio a ∈ 𝓝[Ioi t] t :=
       mem_nhdsWithin_of_mem_nhds (isOpen_Iio.mem_nhds ht)
     filter_upwards [hnb] with u hu
     simp only [rightJoin, if_pos hu]
-  · rw [rightJoin, if_neg ht]
+  · rw [if_neg ht]
     apply (hg t).congr_of_eventuallyEq _ (by simp [rightJoin, ht])
     filter_upwards [self_mem_nhdsWithin] with u hu
     have hua : ¬u < a := not_lt.mpr ((not_lt.mp ht).trans (le_of_lt hu))
