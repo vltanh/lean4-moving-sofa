@@ -153,7 +153,7 @@
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "Actual feasible zero-slack triples at arbitrarily small positive M-Q",
-      "remaining": "The concrete Hermite family exists in source. The energy checker previously double-counted integration intervals and incorrectly used a cell integral bound pointwise; these were corrected. The ordered piece-chain integral bridge still requires a complete proof and the closed Boolean reduction is unexecuted. NOT SOURCE-COMPLETE."
+      "remaining": "Concrete Hermite cap and auxiliary bodies have uncompiled source. The trial-energy checker now uses non-overlapping ordered residual arcs, true-cell integral contributions, a real-model bridge for the final B Hermite piece, symmetric sinc enclosures at the removable t=pi/2 singularity, and a higher-order full-box r1 Taylor bound. All are uncompiled; the closed Boolean reductions have NOT run, their proof terms may not elaborate, and the complete feasible-family conclusion remains blocked."
     },
     {
       "id": "intrinsic-interval",
@@ -165,7 +165,7 @@
       "placement": "G.4",
       "normalization": "Infimum of local uniform coefficients",
       "deficit": "Positive M-Q tending to zero",
-      "remaining": "Corrected strict lower-margin quantifier, but depends on the unresolved feasible critical-family energy certificate. NOT SOURCE-COMPLETE."
+      "remaining": "Depends on the still-blocked feasible critical lower certificate; the closed numerical acceptance and Lean soundness have not been checked."
     },
     {
       "id": "effective-entry",
@@ -211,7 +211,7 @@
     "lean_or_ci_run": false,
     "known_blockers": [
       "ReferenceSector: phase split on point x-coordinate does not establish boundary tangent chart",
-      "TrialEnergyCertificate: finite piece cover / summation soundness bridge incomplete; arithmetic reduction not run",
+      "TrialEnergyCertificate: last B singularity and r1 enclosure now have analytic draft fixes, but the ordered-piece integral/interval soundness and the final Boolean reduction remain uncompiled and unexecuted",
       "EffectiveRegularizationSupport: penalized limit/curvature/arm iteration interfaces unresolved",
       "EffectiveAngleEntry and CoarseAngleCertificate: geometric and search-soundness interfaces unresolved",
       "ExplicitReferenceScales and NormalRecovery: quantitative reference margins and normal recovery interfaces unresolved"
