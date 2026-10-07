@@ -2,6 +2,7 @@ module
 
 public import MovingSofaQuantitative.Certificates.Trig
 public import MovingSofaQuantitative.SectorContent
+public import MovingSofaQuantitative.ScalarTaylor
 public import MovingSofaStability.Margins
 public import MovingSofaUniqueness.RegularClosed
 
@@ -38,6 +39,27 @@ theorem referenceSectorHalfAngle_pos :
 theorem referenceSectorRadius_pos : 0 < referenceSectorRadius := by
   unfold referenceSectorRadius
   positivity
+
+/-- The concrete 1.53-radian sector is narrower than a right angle.
+This is the only numerical fact required by the tangent-ball reduction. -/
+theorem referenceSectorHalfAngle_sin_le_cos :
+    0<sin referenceSectorHalfAngle ∧
+      sin referenceSectorHalfAngle≤cos referenceSectorHalfAngle := by
+  have hh : 0≤referenceSectorHalfAngle := by
+    unfold referenceSectorHalfAngle sectorHalfAngle
+    norm_num
+  have hs:=MovingSofaQuantitative.sin_le_sinPoly5 hh
+  have hc:=one_sub_sq_div_two_le_cos (x:=referenceSectorHalfAngle)
+  have hpositive : 0<sin referenceSectorHalfAngle := by
+    apply sin_pos_of_pos_of_lt_pi
+    · exact referenceSectorHalfAngle_pos.1
+    · linarith [referenceSectorHalfAngle_pos.2,pi_pos]
+  constructor
+  · exact hpositive
+  · unfold referenceSectorHalfAngle sectorHalfAngle at *
+    dsimp [MovingSofaQuantitative.sinPoly5] at hs
+    norm_num at *
+    linarith
 
 /-- A narrow cone has axial projection at least half its Euclidean length.
 It is enough that its sine is positive and does not exceed its cosine; no
