@@ -4,6 +4,18 @@
 
 Read [HANDOFF.md](HANDOFF.md), [constructed-background-review.md](constructed-background-review.md), and [spatial-half-partition-bound.md](spatial-half-partition-bound.md). All results are written and self-reviewed; the historical proof chain has not been independently refereed or kernel-verified.
 
+## Latest full-turn falsification screen and switching-stability theorem
+
+**No sharp theorem was closed.** The newest [screening note](full-turn-aggregate-falsification-screen.md) directly evaluated the *stronger* adaptive aggregate upper bound from AS on (i) 169 signed affine reference-cut pairs, (ii) 9,409 prescribed support-plane cut pairs, (iii) 104 exact motion-preserving segment-template deformations from PV, plus separate sampled-only asymmetric ellipse and stadium diagnostics. The largest apparent values above M were no greater than the **false reference bias** of the same finite-angle/spatial quadrature. The replays at higher resolution reduced that bias; none supplied a certified counterexample or a global proof. Some scanned cuts were not covered by the previously proved top-normal tail windows; numerical nonempty-fiber checks alone are not continuum certificates.
+
+[AS.10--AS.11](adaptive-spatial-switching-bound.md) prove an exact new hand inequality for the relaxation error. With one-turn survivor thickness profiles \(s_U=A_U-n_U\), \(s_V=A_V-n_V\),
+\[
+\boxed{0\le\mathscr C(U,V)-|E|\le\tfrac12\int_I|s_U-s_V|dx.}
+\]
+The pointwise error is the triangle defect \((|a|+|b|-|a+b|)/2\) for cross-deficits \(a=n_U-d_V\), \(b=n_V-d_U\). Thus \(\mathscr C=|E|\) whenever the survivor profiles coincide, even if \(U\ne V\). This is **stability of the stronger relaxation**, not payment of its error by \(M-|E|\). The exact standard-library checker ran in about 0.036 seconds under a five-second cap: 1,296 rational tests, 450 strict mismatch instances and 110 equal-profile cases; source bytes match recorded Git blob \`312a2c15bd2f2d39f85635db2063c8872af0dd8e\`.
+
+The next hand-proof question remains: can the aggregate clipping budget be proved for *genuinely compatible competitive* full-turn cap pairs, including asymmetric middle-support changes, or can one prove the weaker **actual** clipping comparison instead? Do not interpret unsuccessful finite falsification as validation. Do not resume partial-turn work while full-turn sharpness remains open.
+
 ## Current single focus: prove the full-turn sharp area bound
 
 **Stop developing the partial-turn frontier until the full-turn value is closed.** Its earlier SI/FS results are preserved but are not an active workstream. The target is still the sharp bound \( |S|\le M \) for every complete two-turn body, with the full-turn supremum already reduced by PD/PS to canonically saturated positive opposite-end faces.
