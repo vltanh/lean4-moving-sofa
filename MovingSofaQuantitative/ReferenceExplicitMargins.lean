@@ -141,7 +141,6 @@ theorem gerver_core_transversality {P : GerverParams}
   have hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t := by
     rw [referenceBoundaryVelocity_eq hP]
     dsimp [a,b]
-    module
     abel
   refine ⟨a,b,ha,hb,hvel,?_⟩
   by_cases hleft : t≤1/8
