@@ -240,14 +240,18 @@ theorem gerver_B_alpha_le_neg_four_fifths {P : GerverParams}
   by_cases hmiddle : t ≤ π/2-P.φ
   · have hphase : gs_piece P 3 t := ⟨ht.1,hmiddle⟩
     have hsφ : P.φ ≤ s := by dsimp [s]; linarith
-    rw [gs_α_eq hP hphase,gs_α₄_eq hP s]
+    rw [gs_α_eq hP hphase]
+    have htEq : t=π/2-s := by dsimp [s]; ring
+    rw [htEq,gs_α₄_eq hP s]
     have hb : P.gs_β s =
         1/2-s^2/4+P.b₁*s+P.b₂ := by
       rw [gs_β_eq hP (gs_piece₁ hsφ hs.2),gs_β₂_eq]
     linarith
   · have hphase : gs_piece P 4 t := (not_le.mp hmiddle).le
     have hsφ : s ≤ P.φ := by dsimp [s]; linarith
-    rw [gs_α_eq hP hphase,gs_α₅_eq hP s]
+    rw [gs_α_eq hP hphase]
+    have htEq : t=π/2-s := by dsimp [s]; ring
+    rw [htEq,gs_α₅_eq hP s]
     have hb : P.gs_β s =
         2*P.a₁*cos s-sin s/2-1 := by
       rw [gs_β_eq hP (gs_piece₀ hsφ),gs_β₁_eq hP]
