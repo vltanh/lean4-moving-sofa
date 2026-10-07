@@ -9,12 +9,12 @@ $E_{\rm cap}\le\Delta$ and, where the canonical construction applies,
 $\Delta\le M-\cA(K)$ transfer estimates in that order. They do not transfer
 sharpness in the reverse order.
 
-\quantstatus{This is an uncompiled quantitative working appendix. The displayed
-statements are the fixed targets of the development, not a claim of completed
-formalization. Each subsection identifies its remaining source obligations.
-The integrated existential stability proof in Appendix~F is unchanged.
-A numerical interval certificate proves its scalar inequalities only after its
-coverage and its connection to the actual analytic model have been established.}
+\quantstatus{This is an uncompiled quantitative working appendix. Unconditional
+proof source is now present for every quantitative headline statement in this
+appendix, including the effective $10^{-600}$ proposition. This is not a claim
+of successful elaboration or kernel verification: none of the new quantitative
+modules has been compiled, and the closed finite certificate reductions have
+not been executed. The integrated verified baseline in Appendix~F is unchanged.}
 
 \subsection{Midpoint alignment halves the cap coefficient}
 \label{sec:quant-centering}
@@ -245,11 +245,11 @@ The angle assertion follows from \cref{eq:quant-complementary-budget}.
 Combining the reference geometry and these estimates with the qualitative
 entry theorem in Appendix~F gives \cref{thm:quant-explicit-stability}.
 
-\quantstatus{The exact budget, orthogonal erosion, sector slicing and scalar
-sector optimization have proof source. The uniform sectors and normal witnesses
-for Gerver, the refined terminal geometry, and their final original-sofa
-assembly remain separate obligations. A generic theorem assuming these inputs
-does not yet prove \quantcode{Targets.ExplicitLocalStability}.}
+\quantstatus{Uncompiled source for the complete original-sofa assembly is now
+in \quantcode{ExplicitStability.lean}. The Gerver sector charts, Euclidean-normal
+witnesses, refined terminal budget, direct area estimate, midpoint entry adapter,
+and centered cap estimate are supplied by separate imported modules. The exact
+headline contract is \quantcode{Targets.ExplicitLocalStability}.}
 
 \subsection{Sharpness: three different questions}
 \label{sec:quant-sharpness}
@@ -299,10 +299,11 @@ the two endpoint supports give an error at least $\tau A^2$. The ratio is
 therefore at least $A^2/\sqrt{E(C_{\eta'})}\to A$. First choose $\eta'$
 for the requested strict ratio, then $\tau$ for feasibility and proximity.
 \end{proof}
-\quantstatus{The puncture corollary has unconditional proof source.
-The actual-cap realization and smoothing convergence in the second theorem
-still require their Lean construction. This is sharpness for cap residual
-energy, not for $M-\cQ$ or the original sofa-area deficit.}
+\quantstatus{Both sharpness statements now have uncompiled proof source.
+\quantcode{CenteredCapSharpness.lean} constructs the one-sided smoothing family
+as actual convex caps and proves the limiting residual-energy obstruction.
+This is sharpness for cap residual energy, not for $M-\cQ$ or the original
+sofa-area deficit.}
 
 \subsection{The full deficit supplies additional coercivity}
 \label{sec:quant-full-q}
@@ -431,12 +432,13 @@ remainder on a sufficiently small neighborhood. The fixed lower margin
 in \cref{thm:quant-critical-lower} excludes all coefficients below $L$.
 \end{proof}
 
-\quantstatus{The actual augmented-energy and endpoint-slack reductions have
-proof source. The final continuum certificate must still be instantiated
-against those actual kernels; the interval checker alone is insufficient.
-The continuously feasible trial family also remains a construction obligation.
-The finite and asymptotic consequences are written as explicit transfers until
-these inputs are supplied.}
+\quantstatus{Uncompiled source now includes both sides of the interval.
+\quantcode{FullQCertificate.lean} connects the actual continuum kernels and
+endpoint slacks to a closed Boolean operator check, while
+\quantcode{FeasibleCriticalLower.lean} packages the actual Hermite cap,
+continuous auxiliary bodies, zero slack, quadratic deficit, and a closed
+trial-energy certificate with fixed margin $L=0.9221$. The Boolean reductions
+are deliberately unexecuted under the current no-compilation instruction.}
 
 \subsection{Numerical certificates and their scope}
 \label{sec:quant-certificates}
@@ -498,14 +500,15 @@ The nonconvex reference does not contain its entire bounding rectangle;
 only the four actual corner points are used where a convex-hull width
 comparison suffices.
 
-\quantstatus{The penalized polygon variation and limiting estimates, the
-transfer to an arbitrary original sofa, and these explicit geometric radii
-are still to be completed in Lean source. Existing exact-arithmetic receipts
-check scalar/reference inequalities, not those analytic implications. These
-two entry propositions are retained as obligations, not assumed inputs hidden
-inside the final proposition.}
+\quantstatus{Uncompiled source for both entry propositions is now present.
+\quantcode{EffectiveAngleEntry.lean} includes the internal coarse-angle
+certificate, partial-angle penalized cap, approximate pinned bounds, and
+right-angle extension argument. \quantcode{EffectiveEntry.lean} combines that
+angle estimate with the partial-to-full cap budget, effective right-angle
+regularization, and explicit actual-set recovery. The source still requires
+later elaboration and kernel checking.}
 
-\begin{proposition}[effective sharp-coefficient cutoff; quantitative draft]
+\begin{proposition}[effective sharp-coefficient cutoff; uncompiled quantitative source]
 \label{prop:quant-explicit-cutoff}
 For every original moving sofa with $0\le\eps=M-\abs S\le10^{-600}$,
 \[
@@ -515,7 +518,7 @@ For every original moving sofa with $0\le\eps=M-\abs S\le10^{-600}$,
 Every admissible reduced motion also satisfies
 $0\le\pi/2-\omega\le(31/10)\eps$.
 \end{proposition}
-\begin{proof}[Assembly, with the preceding obligations explicit]
+\begin{proof}[Assembly]
 The coarse entry propositions give
 \[
  d_H(S_c,\Gs)\le3\cdot10^{-44}<10^{-40},\qquad
@@ -531,8 +534,10 @@ and normalization theorem. The statement is over the original sofa, not
 an already-local cap, and contains no existential radius.
 \end{proof}
 \quantstatus{The mandatory exact contract is
-\quantcode{MovingSofaQuantitative.Targets.ExplicitCutoff}.
-It is not yet an unconditional Lean theorem. The displayed exponent 600 is
-only a conservative effectivity bound, not an optimal cutoff or a useful
-optimizer tolerance. It must remain labelled as a draft until the entry,
-reference-radius, and final statement dependencies are complete.}
+\quantcode{MovingSofaQuantitative.Targets.ExplicitCutoff}, and the corresponding
+uncompiled theorem body is \quantcode{MovingSofaQuantitative.explicit_cutoff}
+in \quantcode{ExplicitCutoff.lean}. Its dependencies contain no existential
+local radius. This remains proof source rather than a checked theorem until
+Lean elaboration and the closed certificate reductions are run. The exponent
+600 is a conservative effectivity bound, not an optimal or practically useful
+optimizer tolerance.}
