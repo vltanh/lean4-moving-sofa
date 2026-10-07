@@ -172,24 +172,9 @@ theorem gerver_path_mem_shape {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {t : ℝ} (ht : t∈Icc P.φ (π/2-P.φ)) :
     P.path t∈gerverSofa P := by
-  have hB:=romik_bounds hP hbox
-  have henv:=gn_envHyp hP hB
-  rw [gerver_shape_eq hP hbox,gerver_niche_envelope hP hbox]
-  refine ⟨?_,?_⟩
-  · have hx:=gm_innerCorner hP hbox
-      ⟨(hB.φ_mem.1.trans_le ht.1).le,by linarith [ht.2,hB.φ_mem.1]⟩
-    rw [←hx]
-    exact innerCorner_mem_cap (gm_isCap hP hbox)
-      ⟨(hB.φ_mem.1.trans_le ht.1).le,by linarith [ht.2,hB.φ_mem.1]⟩
-  · intro hn
-    obtain ⟨hy,q,hq,hqx,hlt⟩:=hn
-    have hself : P.path t∈gerverEnvelope P := by
-      unfold gerverEnvelope
-      exact Or.inl (Or.inr ⟨t,ht,rfl⟩)
-    have hgraph:=env_x₁_strictAnti henv
-    have hsame:=env_same_fst_eq henv hself hq hqx
-    subst q
-    linarith
+  apply gerver_envelope_subset_shape hP hbox
+  unfold gerverEnvelope
+  exact Or.inl (Or.inr ⟨t,ht,rfl⟩)
 
 /-- A nearest point from an exterior point lies on the frontier. -/
 theorem nearest_point_frontier {K : Set Point} (hK : IsCompact K)
