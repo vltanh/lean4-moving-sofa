@@ -252,8 +252,14 @@ In particular ebar<10^(-4), and (12) gives
 
 Thus the explicit reference roof-slack and outer-margin estimates apply.
 Orthogonal erosion places the reference eroded by sqrt(2)delta inside U.
-Its missing area is at most ebar by (11). The same surviving-disk argument as
-in note26 gives reverse radius rho=20*(delta+sqrt(ebar)); it is below 1/24.
+Its missing area is at most ebar by (11). The surviving-ball argument of
+note26 uses rho=20*(delta+sqrt(ebar)) and erosion radius
+r=sqrt(2)*delta. Crucially, the correct sufficient area condition is
+
+    ebar < (kappa*rho-r)^2,   kappa=100/1051,
+
+not the overly strong r<=kappa*rho/2. Indeed
+kappa*rho-r>sqrt(ebar). The radius rho is below 1/24.
 Forward recovery costs at most (51/5)*(delta+16alpha), which is less than rho
 because 16alpha<=ebar/9<=sqrt(ebar). Consequently
 
