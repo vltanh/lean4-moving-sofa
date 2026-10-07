@@ -58,12 +58,19 @@ def body : Set Point :=
     p ∈ D.body ↔ 0 ≤ p.2 ∧ ∀ t ∈ Icc (0 : ℝ) π, dot p (uvec t) ≤ D.support t := by
   simp [body, halfMinus]
 
+private theorem right_dot_continuous (σ : ℝ) :
+    ContinuousOn (fun t => dot (D.rightArc t) (uvec σ)) (Icc (0 : ℝ) (π / 2)) :=
+  (continuous_dot (uvec σ)).comp_continuousOn D.right_continuous
+
+private theorem left_dot_continuous (σ : ℝ) :
+    ContinuousOn (fun t => dot (D.leftArc t) (uvec σ)) (Icc (0 : ℝ) (π / 2)) :=
+  (continuous_dot (uvec σ)).comp_continuousOn D.left_continuous
+
 theorem right_mono {σ a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ π / 2)
     (hs : ∀ t ∈ Ico a b, 0 ≤ sin (σ - t)) :
     dot (D.rightArc a) (uvec σ) ≤ dot (D.rightArc b) (uvec σ) := by
   apply le_of_right_deriv_nonneg hab
-    (((continuous_dot _).continuousOn.comp D.right_continuous (fun t ht => ht)).mono
-      (Icc_subset_Icc ha hb))
+    ((D.right_dot_continuous σ).mono (Icc_subset_Icc ha hb))
   · intro t ht
     have hd := hasDerivWithinAt_dot (D.right_derivative t ⟨ha.trans ht.1, ht.2.trans_le hb⟩) (uvec σ)
     simpa only [dot_smul_left, dot_vvec_uvec'] using hd
@@ -74,8 +81,7 @@ theorem right_anti {σ a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ π 
     (hs : ∀ t ∈ Ico a b, sin (σ - t) ≤ 0) :
     dot (D.rightArc b) (uvec σ) ≤ dot (D.rightArc a) (uvec σ) := by
   apply le_of_right_deriv_nonpos hab
-    (((continuous_dot _).continuousOn.comp D.right_continuous (fun t ht => ht)).mono
-      (Icc_subset_Icc ha hb))
+    ((D.right_dot_continuous σ).mono (Icc_subset_Icc ha hb))
   · intro t ht
     have hd := hasDerivWithinAt_dot (D.right_derivative t ⟨ha.trans ht.1, ht.2.trans_le hb⟩) (uvec σ)
     simpa only [dot_smul_left, dot_vvec_uvec'] using hd
@@ -87,21 +93,19 @@ theorem left_mono {σ a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ π /
     (hc : ∀ t ∈ Ico a b, cos (t - σ) ≤ 0) :
     dot (D.leftArc a) (uvec σ) ≤ dot (D.leftArc b) (uvec σ) := by
   apply le_of_right_deriv_nonneg hab
-    (((continuous_dot _).continuousOn.comp D.left_continuous (fun t ht => ht)).mono
-      (Icc_subset_Icc ha hb))
+    ((D.left_dot_continuous σ).mono (Icc_subset_Icc ha hb))
   · intro t ht
     have hd := hasDerivWithinAt_dot (D.left_derivative t ⟨ha.trans ht.1, ht.2.trans_le hb⟩) (uvec σ)
     simpa only [dot_smul_left, dot_uvec_uvec] using hd
   · intro t ht
-    exact mul_nonneg (neg_nonneg.mpr (D.left_nonneg t ⟨ha.trans ht.1, ht.2.trans_le hb⟩))
-      (neg_nonneg.mpr (hc t ht)) |>.trans_eq (by ring)
+    exact mul_nonneg_of_nonpos_of_nonpos
+      (neg_nonpos.mpr (D.left_nonneg t ⟨ha.trans ht.1, ht.2.trans_le hb⟩)) (hc t ht)
 
 theorem left_anti {σ a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ π / 2)
     (hc : ∀ t ∈ Ico a b, 0 ≤ cos (t - σ)) :
     dot (D.leftArc b) (uvec σ) ≤ dot (D.leftArc a) (uvec σ) := by
   apply le_of_right_deriv_nonpos hab
-    (((continuous_dot _).continuousOn.comp D.left_continuous (fun t ht => ht)).mono
-      (Icc_subset_Icc ha hb))
+    ((D.left_dot_continuous σ).mono (Icc_subset_Icc ha hb))
   · intro t ht
     have hd := hasDerivWithinAt_dot (D.left_derivative t ⟨ha.trans ht.1, ht.2.trans_le hb⟩) (uvec σ)
     simpa only [dot_smul_left, dot_uvec_uvec] using hd
