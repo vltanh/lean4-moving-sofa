@@ -150,29 +150,57 @@ theorem exterior_niche_omitted {S : Set Point} {ω : ℝ}
       ht hcorner hw)
   exact ⟨hy,t,ht,hnotVisited,hu,hv⟩
 
+theorem cot_eq_tan_complement (t : ℝ) :
+    cot t=tan (π/2-t) := by
+  rw [cot_eq_cos_div_sin,tan_eq_sin_div_cos,
+    sin_pi_div_two_sub,cos_pi_div_two_sub]
+
 /-- Omitted wedges of a six-wide, height-one cap lie below 12 alpha. -/
 theorem omitted_wedges_box {K : Set Point} {ω α x₋ x₊ : ℝ}
     (hK : IsCap K (π/2))
     (hα : α=π/2-ω)
     (hα0 : 0≤α) (hα4 : α≤1/4)
-    (hproj : ∀p∈K,p.1∈Icc x₋ x₊)
+    (hproj : -supp K π=x₋ ∧ supp K 0=x₊)
     (hwidth : x₊-x₋≤6) :
     omittedFloorWedges K ω⊆Icc x₋ x₊×ˢIcc (0:ℝ) (12*α) := by
   intro p hp
   obtain ⟨hy,t,ht,hωt,hu,hv⟩:=hp
-  have hpK:=floor_wedge_point_in_cap_projection hK hy ht hu hv
-  have hx:=hproj _ hpK
-  have hheight : p.2≤(x₊-x₋)*cot t :=
-    floor_wedge_height_le_width_cot hK hp hproj
+  have htopen : t∈Ioo (0:ℝ) (π/2):=ht
+  obtain ⟨hleft,hright⟩:=wedge_point_between_feet htopen hy hu hv
+  have hgap:=theorem2_5_5_supp hK htopen
+  have hs : 0<sin t:=sin_pos_of_pos_of_lt_pi ht.1 (by linarith [ht.2,pi_pos])
+  have hc : 0<cos t:=cos_pos_of_mem_Ioo ⟨by linarith [ht.1,pi_pos],ht.2⟩
+  have hfootL : x₋<wedgeLeftFoot K t := by
+    rw [hproj.1,wedgeLeftFoot,lt_div_iff₀ hs]
+    have h2:=hgap.2
+    rw [show π/2+π/2=π by ring,cos_pi_div_two_sub] at h2
+    nlinarith
+  have hfootR : wedgeRightFoot K t<x₊ := by
+    rw [hproj.2,wedgeRightFoot,div_lt_iff₀ hc]
+    exact hgap.1
+  have hx : p.1∈Icc x₋ x₊ :=
+    ⟨(hfootL.trans hleft).le,(hright.trans hfootR).le⟩
+  have hheight : p.2≤(x₊-x₋)*cot t := by
+    unfold innerSlackU at hu
+    have hsu:=hK.dot_le (show (x₊,0)∈K by
+      rw [←hproj.2]
+      exact opt_cap_A_mem hK) t
+    simp only [dot,uvec] at hu hsu
+    rw [cot_eq_cos_div_sin]
+    have hsin0:=hs.le
+    rw [le_div_iff₀ hs]
+    nlinarith [mul_nonneg (sub_nonneg.mpr hx.1) hc.le]
+  have hcomp : 0≤π/2-t ∧ π/2-t≤α := by
+    constructor
+    · linarith [ht.2]
+    · rw [hα]
+      linarith [hωt]
   have hcot : cot t≤tan α := by
     rw [cot_eq_tan_complement]
-    exact tan_mono_on_quadrant
-      (by linarith [hωt,hα0])
-      (by linarith [ht.2,pi_pos])
-      (by linarith [hωt,hα])
-      (by linarith [hωt,hα])
-  have htan : tan α≤2*α := tan_le_two_mul
-    hα0 (by linarith [hα4])
+    exact strictMonoOn_tan.monotoneOn
+      ⟨by linarith [hcomp.1,pi_pos],by linarith [hcomp.2,hα4,pi_pos]⟩
+      ⟨by linarith [hα0,pi_pos],by linarith [hα4,pi_pos]⟩ hcomp.2
+  have htan : tan α≤2*α := tan_le_two_mul hα0 hα4
   exact ⟨hx,hy,by nlinarith [hheight,hwidth,hcot,htan]⟩
 
 /-- Area of the union of all omitted wedges is at most 72 alpha. -/
@@ -180,7 +208,7 @@ theorem omitted_wedges_area_72 {K : Set Point} {ω α x₋ x₊ : ℝ}
     (hK : IsCap K (π/2))
     (hα : α=π/2-ω)
     (hα0 : 0≤α) (hα4 : α≤1/4)
-    (hproj : ∀p∈K,p.1∈Icc x₋ x₊)
+    (hproj : -supp K π=x₋ ∧ supp K 0=x₊)
     (hwidth : x₊-x₋≤6) :
     area (omittedFloorWedges K ω)≤72*α := by
   have hsub:=omitted_wedges_box hK hα hα0 hα4 hproj hwidth
