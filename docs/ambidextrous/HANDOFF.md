@@ -8,6 +8,45 @@ Draft PR: #3; base: `main`.
 Substantive checkpoint before this update: `eef8882b0130fc5e95fe9512f1ee664c49b855c3`.
 Always query the live tip and inspect later changes. Do not reset to the historical paper branch.
 
+## Latest full-turn-only checkpoint: sharp reflection budget and its two obstructions
+
+**The unrestricted full-turn optimality theorem is not closed.** In this pass we explored horizontal **convex-hull** symmetrization followed by actual canonical full-turn deletion. The operation is *not* the disproved average of nonconvex sofas in RA1. Read [hull-reflection-symmetrization-budget.md](hull-reflection-symmetrization-budget.md), [near-reference-midline-obstruction.md](near-reference-midline-obstruction.md), and [affine-unit-span-normalization-obstruction.md](affine-unit-span-normalization-obstruction.md). All results are written hand proofs; no independent continuum review or kernel verification is claimed. Partial turns remain frozen.
+
+**HS1: exact positive hull energy.** For \(K=\operatorname{conv}S\) horizontally centered, with \(J(x,y)=(-x,y)\), define \(K_{\rm s}=(K+JK)/2\), and \(h_{\rm a}=(h_K-Jh_K)/2\). Because \(h_{\rm a}\) vanishes at all four axis normals, the support-area formula and quarter-circle Dirichlet inequalities give
+\[
+\boxed{|K_{\rm s}|-|K|=\tfrac12\int_0^{2\pi}(h_{\rm a}'{}^2-h_{\rm a}^2)
+\ge\tfrac38\int_0^{2\pi}h_{\rm a}'{}^2.}
+\]
+This strictly improves the convex-hull area of any nonsymmetric K. **It does not prove that its full canonical surviving sofa area improves.** The necessary removed-area bound
+\[
+\mathscr R(K_{\rm s})-\mathscr R(K)\le|K_{\rm s}|-|K|
+\]
+is still unproved. The usual nonempty/connected-fiber issue is also not automatic.
+
+**HS2--HS5: near-reference sharp obstruction.** For the real double-tip cut convex hulls \(K_\tau\) from MCA, \(K_{\rm s,\tau}\) has central singleton top and bottom faces. The full canonical envelope cannot retain either extreme-height point: otherwise the UC1 unit-column switching contradiction applies to the retained reference flank witnesses at \(x=\pm m\). More sharply, the exact top supporting line at \(\delta=\arctan\tau\) plus the positive reference niche on the central face imply
+\[
+\operatorname{span}_y E(K_{\rm s,\tau})\le1-(m/4)\tau.
+\]
+In contrast, RB and actual retained reference intersections show
+\[
+M-O(\tau^{3/2})\le|E(K_{\rm s,\tau})|\le M.
+\]
+The hull area gain is \((m^2/2)\tau+O(\tau^{3/2})\), almost entirely consumed by newly forbidden material. Hence a fixed fraction of hull-energy gain cannot be guaranteed to remain as surviving area, and **no universal linear inequality**
+\(|S|\le M-c(1-\operatorname{span}_y S)\) holds even for connected x-symmetric full-turn sofas. This does not disprove the sign-only symmetrization comparison.
+
+**AN1--AN3: affine normalization is not free.** Every rectangle \(R_{W,h}=[-W/2,W/2]\times[0,h]\), \(0<h\le1\), completes both quarters **if and only if** \(W/2+h\le\sqrt2\). The proof maximizes the smaller of two affine support depths exactly, retaining endpoint cases. All such rectangles have area at most one. The feasible x-symmetric rectangle \(W=9/5,h=1/2\) becomes **infeasible** after the determinant-one map \((x,y)\mapsto(hx,y/h)\): at 45 degrees its bottom midpoint has two support depths \(29/(20\sqrt2)>1\). Thus one cannot automatically normalize a symmetric subunit-span envelope to unit span while preserving fullturn feasibility and area. The example is strictly subcritical.
+
+**NM1--NM2: the half-height background premise fails near M.** Cut the actual reference by \(y\ge1/2+\epsilon-\cot\beta(r-x)\). Both fullturn motions and connectedness remain. A new unique right hull extreme lies strictly above the midline, so its reflected-lower convex cap lacks a full half-height rectangle, even after same-hull saturation. The actual area loss is explicitly \(C\epsilon^{3/2}+O(\epsilon^2)\). The PD/PS density reduction transfers the lack of midline to saturated positive opposite-end-face fullturn approximants with areas arbitrarily close to M. The construction does not supply a sofa above M and does not rule out admission restricted to areas **strictly greater** than M.
+
+**Exact remaining full-turn obligation.** For actual compatible fullturn caps with nonempty fibers,
+\[
+|E|=\Psi(U)+\Psi(V)+G,\quad
+G\le(M/2-\Psi(U))+(M/2-\Psi(V))
+\]
+is exactly the desired area theorem and **is still unproved**. The stronger adaptive AS scalar upper bound is also unproved. A possible alternative is an area-monotone convex-hull symmetrization plus a **new** sharp bound for symmetric fullturn sofas with *subunit span*; both clauses remain unproved and cannot be inferred from RS2 (which has a unit-span premise). Do not substitute HS's positive *hull* energy for the missing *ordinary surviving-area* comparison.
+
+**Verification and execution.** All new runs were bounded by an external five-second limit (a prescribed 567-trapezoid screen took about 2.02s internally). Numerical support/envelope comparisons are diagnostic only and have reference grid bias; rigorous statements above are hand proofs. No CI, Lean/Lake compilation, dependency installation, manuscript build, or long optimizer campaign. Commits include \`[skip ci]\` and stay under \`docs/ambidextrous/\`. PR remains open/draft.
+
 ## Full-turn-only checkpoint after the latest continuation
 
 **The full-turn optimality theorem is still open.** Work was deliberately restricted to that problem; partial-turn SI/FS remains frozen for now. New proof material:
