@@ -451,11 +451,25 @@ theorem quantitative_envelope_excess_with_margin {P : GerverParams}
   have hsplit :
       area (capShape K\gerverSofa P)≤area (K\P.cap)+
         area ((capShape K\gerverSofa P)∩P.cap) := by
-    exact area_split_by_measurable P.cap (capShape K\gerverSofa P)
-      (gm_isConvexBody_cap hP hbox).2.1.measurableSet
-      ((measurable_capShape hK).diff
+    let E:=capShape K\gerverSofa P
+    have hEm : MeasurableSet E :=
+      (measurable_capShape hK).diff
         (ms_isCompact_of_isMovingSofaWithAngle
-          (gm_movingSofa_std hP hbox).1).measurableSet)
+          (gm_movingSofa_std hP hbox).1).measurableSet
+    have hEf : volume E≠⊤ := volume_ne_top_of_subset
+      (show E⊆K by
+        intro p hp
+        exact hp.1.1) hK.2.1.2.1.measure_lt_top.ne
+    have heq:=area_split_by_measurable P.cap E
+      (gm_isConvexBody_cap hP hbox).2.1.measurableSet hEm hEf
+    have hpart : E\P.cap⊆K\P.cap := by
+      rintro p ⟨hpE,hpN⟩
+      exact ⟨hpE.1.1,hpN⟩
+    have hfinite : volume (K\P.cap)≠⊤ :=
+      volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne
+    have hmono:=area_mono_of_finite hpart hfinite
+    dsimp [E] at heq hmono
+    linarith
   have hw : 2*(horizontalWidth P.cap+1)+(51/5)*
       (gerverRoofRight P-gerverRoofLeft P)<62307/2500 := by
     nlinarith [hwidth.1,hwidth.2]
