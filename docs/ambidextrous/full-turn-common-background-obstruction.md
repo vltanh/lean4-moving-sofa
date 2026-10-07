@@ -122,3 +122,19 @@ E(K)=K=S.
 The example is not an artifact of leaving admissible material unfilled, or a body whose actual hull shrinks after canonical tightening. It belongs to the **saturated, positive opposite-end-face** class singled out by PD/PS, although its area is far below the competitive range.
 
 Accordingly no theorem claiming universal **inclusion-based** common-face half-height-niche background admission over that entire saturated class can be true. A competitive-only admission theorem, or a replacement comparison that is not required to contain both original caps, is not refuted. These qualifications are essential to any attempt to use CB to finish full-turn optimality.
+
+## 6. A continuum of exact obstructions, and the sharp diagonal-rod threshold
+
+The fixed values in CGA.1 are illustrative; the same argument supplies a whole family. Let \(W\in(2,\sqrt7)\), let \(\ell=\sqrt{W^2+1}<2\sqrt2\), and choose
+\[
+0<\varepsilon<\min\left\{W,\ 1-\frac{\ell}{2\sqrt2}\right\}.
+\]
+Then the parallelogram with top face \([0,\varepsilon]\times\{1\}\) and bottom face \([W,W+\varepsilon]\times\{0\}\) has both complete turns: in the opposite-extrema angular regimes the maximum smaller depth is at most \(\ell/(2\sqrt2)+\varepsilon<1\); in the same-extremum regimes a single wall protects all points, with maximal depth at most \(s-(W-\varepsilon)c\) or \(c-(W-\varepsilon)s\), each at most one. All conclusions of CGA3 still hold because the common top-face span would exceed \(W>2>2\sqrt2-1\). These bodies are convex, canonically saturated, and have arbitrarily small positive areas \(\varepsilon\).
+
+For clarity, the diagonal segment *before* horizontal thickening has a **sharp** full-quarter threshold within this coordinate family. The sufficiency of \(W^2+1\le8\) is CGA.3 with \(\varepsilon=0\). If \(W^2+1>8\), choose the lower-turn angle
+\[
+\tan t=\frac{W-1}{W+1}\quad(0<t<\pi/4).
+\]
+Then \(A=W\cos t-\sin t=B=W\sin t+\cos t=\ell/\sqrt2>2\). The midpoint of the diagonal segment has both inner-wall depths \(A/2=B/2>1\), so it lies strictly in the canonical forbidden quadrant at that angle. By the canonical support-tightening lemma, no alternative translation of that frame can make the segment feasible. Thus, for \(W>1\), a diagonal segment from \((0,1)\) to \((W,0)\) can make both complete canonical turns **if and only if** \(W\le\sqrt7\). The same condition holds for the reflected turn.
+
+This sharp rod computation is only an exact feasibility fact, not an area bound for general sofas. In particular it does not promote the small-area background obstruction into a counterexample to competitive-only admission.
