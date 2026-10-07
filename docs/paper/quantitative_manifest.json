@@ -215,6 +215,14 @@
       "EffectiveRegularizationSupport: penalized limit/curvature/arm iteration interfaces unresolved",
       "EffectiveAngleEntry and CoarseAngleCertificate: geometric and search-soundness interfaces unresolved",
       "ExplicitReferenceScales and NormalRecovery: quantitative reference margins and normal recovery interfaces unresolved"
-    ]
+    ],
+    "numerical_proof_policy": "Lean-only: closed Boolean predicates, exact interval/domain/analytic soundness lemmas, and kernel-checked `by decide` acceptance. No Python script, JSON receipt, external generator or native oracle is an accepted theorem dependency.",
+    "concrete_source_fixes": [
+      "CoarseAngleCertificate: paired box-coordinate stride corrected from 4*i to 2*i and finite index theorem added.",
+      "Normalization: centered reference of horizontally translated cap remains translated; old unshifted identity corrected.",
+      "EffectiveRightAngle: corrected original-to-penalized-to-two-aligned-reference Hausdorff chain.",
+      "ReferenceSector: fixed-radius ball case split replaces invalid inference from an arbitrary interior-neighborhood radius."
+    ],
+    "status": "Open. Uncompiled; no closed certificate has executed; geometry and effective-entry proof bridges remain."
   }
 }
