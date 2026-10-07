@@ -3,6 +3,7 @@ module
 public import MovingSofaQuantitative.CenteredCap
 public import MovingSofaQuantitative.ReferenceExplicitMargins
 public import MovingSofaQuantitative.EffectiveRecovery
+public import MovingSofaQuantitative.MidpointEntry
 public import MovingSofaStability.Recovery
 public import MovingSofaUniqueness.Selection
 public import MovingSofaUniqueness.Maximizing
@@ -295,8 +296,11 @@ theorem effective_right_angle_sofa {P : GerverParams}
   have he4 : e≤1/(10:ℝ)^4 := heε.trans (hε20.trans (by norm_num))
   have hcap:=effective_right_angle_cap hP hbox hK rfl he0 he4
   have href : centeredReference P.cap K=P.cap := by
-    have hm:=sofaCap_midpoint_of_midpoint_normalized hP hbox hNm htop hstrip
-    exact centeredReference_eq_of_midpoint hm
+    have hmN := midpointNormalizedSofa_midpoint P
+      (ms_isCompact_of_isMovingSofaWithAngle hS) hS.2.1.nonempty
+    have hmK := sofaCap_midpoint_of_midpoint_normalized hP hbox
+      hNc hNn hstrip htop hmN
+    exact centeredReference_eq_of_midpoint hmK
   rw [href] at hcap
   have hsupport:=hcap.abs_supp_sub_le hK.2.1.2.1
     (gm_isConvexBody_cap hP hbox).2.1 hK.2.1.1
