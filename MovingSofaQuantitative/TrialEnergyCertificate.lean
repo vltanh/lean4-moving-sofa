@@ -259,31 +259,28 @@ def pieceUpper (k : Kind) (lo hi : T) : Option ℚ := do
   let us ← (List.ofFn fun j : Fin subcells => j).mapM (cellUpper k lo hi)
   return us.sum
 
-/-- Non-overlapping integration pieces for each *actual* residual arc.
-
-The r2 arc ends at b=pi/2-phi, before the final Hermite node pi/2;
-the last piece is clipped at b. The r3 arc is the short [b,pi/2]
-interval, not the entire [phi,pi/2] chain. In particular reflected
-Hermite nodes are NOT added as extra integration intervals: doing so
-would double count positive energy. BranchExpr evaluates both branches
-on any cell crossing a reflected node. This can weaken a bound, but
-never weakens soundness.
-
-More subdivision may be required before \`closedCheck\` reduces to true.
--/
-def retainedPieces (k : Kind) : List (T × T) :=
-  match k with
+/-- Ordered candidate endpoints of each *actual* energy integral.  Finite
+indices avoid the unprovable \`by omega\` obligations in maps over Nat.range. -/
+def pieceChain : Kind → List T
   | .r2 =>
-      (List.range 15).map (fun i => (nodePosition ⟨i,by omega⟩,
-        nodePosition ⟨i+1,by omega⟩)) ++
-      [(nodePosition 15,b)]
-  | .r3 => [(b,halfPi)]
-  | .r4 => (List.range 16).map (fun i => (nodePosition ⟨i,by omega⟩,
-      nodePosition ⟨i+1,by omega⟩))
-  | .B => (List.range 8).map (fun i => (nodePosition ⟨i+8,by omega⟩,
-      nodePosition ⟨i+9,by omega⟩))
-  | .D => (List.range 8).map (fun i => (nodePosition ⟨i+8,by omega⟩,
-      nodePosition ⟨i+9,by omega⟩))
+      (List.ofFn fun i : Fin 16 =>
+        nodePosition ⟨i.val,by have hi:=i.isLt; omega⟩) ++ [b]
+  | .r3 => [b,halfPi]
+  | .r4 => List.ofFn fun i : Fin 17 => nodePosition i
+  | .B =>
+      List.ofFn fun i : Fin 9 =>
+        nodePosition ⟨i.val+8,by have hi:=i.isLt; omega⟩
+  | .D =>
+      List.ofFn fun i : Fin 9 =>
+        nodePosition ⟨i.val+8,by have hi:=i.isLt; omega⟩
+
+/-- The consecutive, non-overlapping intervals.  In particular the r2
+chain ends at b=pi/2-phi and r3 starts there: neither integrates over the
+other's domain.  Adding reflected nodes as whole extra intervals would double
+count the positive integrand, so reflected branch switches are handled by
+the sound hull evaluator instead. -/
+def retainedPieces (k : Kind) : List (T × T) :=
+  (pieceChain k).zip (pieceChain k).tail
 
 def computedUpper (k : Kind) : Option ℚ := do
   let xs ← (retainedPieces k).mapM (fun p => pieceUpper k p.1 p.2)
