@@ -61,6 +61,32 @@ theorem directedClose_of_missing_area_full_ball
   rw [area_centeredSquare z ha.le] at harea
   exact (not_lt_of_ge (harea.trans hmissing)) hsmall
 
+/-- The exact scalar reserve used by both effective recovery theorems.
+The coefficient \`20\` is large enough because \`2000/1051>sqrt 2\`.
+In particular no assumption \`sqrt 2*delta <= kappa*rho/2\` is required. -/
+theorem effective_recovery_ball_gap {δ E : ℝ}
+    (hδ : 0≤δ) (hE : 0<E) :
+    sqrt E <
+      (100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ := by
+  have hs : 0<sqrt E := sqrt_pos.mpr hE
+  have hroot : sqrt 2<3/2 := by
+    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),
+      sqrt_nonneg (2:ℝ)]
+  have hcoef : 0≤((2000/1051:ℝ)-sqrt 2)*δ := by
+    apply mul_nonneg
+    · linarith [hroot]
+    · exact hδ
+  nlinarith [hcoef,hs]
+
+theorem effective_recovery_ball_area_gap {δ E : ℝ}
+    (hδ : 0≤δ) (hE : 0<E) :
+    E < ((100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ)^2 := by
+  have hgap:=effective_recovery_ball_gap hδ hE
+  have hs:=sq_sqrt hE.le
+  have hpos : 0≤(100/1051:ℝ)*(20*(δ+sqrt E))-sqrt 2*δ :=
+    le_of_lt (lt_trans (sqrt_pos.mpr hE) hgap)
+  nlinarith
+
 /-- One coarse recovery lemma shared by the right-angle and partial-angle
 effective arguments. -/
 theorem effective_coarse_recovery {P : GerverParams}
@@ -108,20 +134,12 @@ theorem effective_coarse_recovery {P : GerverParams}
     dsimp [ρ]
     have hsum : δ+sqrt E≤515*sqrt E := by nlinarith [hδbound]
     nlinarith [hs10]
-  have hroot : sqrt 2 < 3/2 := by
-    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),
-      sqrt_nonneg (2:ℝ)]
+  have hgap : sqrt E < (100/1051:ℝ)*ρ-r := by
+    simpa [ρ,r] using effective_recovery_ball_gap hδ hE
   have hreserve : r<(100/1051:ℝ)*ρ := by
-    dsimp [ρ,r]
-    nlinarith [sqrt_nonneg E,hδ]
-  have hgap : sqrt E<(100/1051:ℝ)*ρ-r := by
-    dsimp [ρ,r]
-    nlinarith [sqrt_nonneg E,hδ]
+    linarith [hgap,sqrt_pos.mpr hE]
   have hmissSmall : E<((100/1051:ℝ)*ρ-r)^2 := by
-    have hs2:=sq_sqrt hE.le
-    have hnon : 0≤(100/1051:ℝ)*ρ-r :=
-      le_of_lt (sub_pos.mpr hreserve)
-    nlinarith [hgap,hs2]
+    simpa [ρ,r] using effective_recovery_ball_area_gap hδ hE
   have herode : euclideanErosion r (gerverSofa P)⊆capShape K := by
     rw [←gerver_shape_eq hP hbox]
     exact orthogonal_reference_erosion hδ
