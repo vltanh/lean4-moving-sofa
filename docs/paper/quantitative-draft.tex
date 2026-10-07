@@ -1,0 +1,115 @@
+\pdfoutput=1
+\documentclass[11pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx,enumitem,array,booktabs,longtable,aliascnt,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,
+  pdftitle={Uniqueness and stability of Gerver's sofa: quantitative working draft},
+  pdfauthor={The-Anh Vu-Le}]{hyperref}
+\usepackage[capitalize,noabbrev]{cleveref}
+\input{macros}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newcommand{\shared}[3]{%
+  \newaliascnt{#1}{theorem}\newtheorem{#1}[#1]{#2}\aliascntresetthe{#1}\crefname{#1}{#2}{#3}}
+\shared{proposition}{Proposition}{Propositions}
+\shared{lemma}{Lemma}{Lemmas}
+\shared{corollary}{Corollary}{Corollaries}
+\shared{fact}{Fact}{Facts}
+\theoremstyle{definition}
+\shared{definition}{Definition}{Definitions}
+\shared{example}{Example}{Examples}
+\theoremstyle{remark}
+\shared{remark}{Remark}{Remarks}
+\emergencystretch=1.5em
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\numberwithin{equation}{section}
+
+% A statement in this draft is not advertised as a new checked theorem.
+% Keep this notice until the exact statement/dependency gates have passed.
+\newcommand{\quantstatus}[1]{\par\smallskip\noindent
+  {\small\textbf{Draft source status.} #1}\par\smallskip}
+\newcommand{\quantcode}[1]{\texttt{\detokenize{#1}}}
+
+\title{Uniqueness and stability of Gerver's sofa\\
+  \normalfont\large Quantitative working draft}
+\author{The-Anh Vu-Le}
+\address{Siebel School of Computing and Data Science, University of Illinois
+Urbana-Champaign, Urbana, IL 61801, USA}
+\email{vltanh@illinois.edu}
+\date{October 2026}
+\subjclass[2020]{Primary 52A38, 52A40; Secondary 52A10, 49Q10, 68V20}
+\keywords{moving sofa problem, Gerver's sofa, uniqueness, stability, quantitative rigidity,
+formal verification, Lean}
+
+\begin{document}
+\begin{abstract}
+Gerver's sofa is the unique optimal moving sofa, and every sufficiently
+near-optimal sofa is close to it at the square-root rate. This working draft
+retains the established proofs of optimality, uniqueness, stability and sharpness,
+and separates their main argument from the technical estimates. It develops
+quantitative refinements of the common coercive certificate: midpoint-aligned
+cap control, explicit local coefficients for arbitrary sofas, stronger control
+by the full functional deficit, and a deliberately conservative effective
+cutoff. The new quantitative material is an uncompiled development draft;
+its proof-source and verification status are distinguished from the integrated
+baseline throughout. It must not be described as fully formalized or checked
+until the outstanding statement and dependency gates have passed.
+\end{abstract}
+\maketitle
+
+\noindent\fbox{\begin{minipage}{0.94\textwidth}
+\textbf{Working-copy boundary.} The default manuscript \quantcode{main.tex}
+is unchanged. Sections~10--11 below give short statements and proof sketches;
+Appendix~F retains the original technical stability and coercive arguments,
+and Appendix~G develops the quantitative refinements. Existing verification
+statements in the reused introduction and formalization appendix refer only
+to the integrated baseline, not to the new numerical claims. No Lean, Lake,
+CI, or TeX build has been run for this draft. A conditional Lean transfer
+lemma or an uninstantiated certificate checker is not an unconditional proof.
+\end{minipage}}
+\medskip
+
+\input{sections/01-introduction}
+\input{sections/02-setting}
+\input{sections/03-reduction}
+\input{sections/04-selection}
+\input{sections/05-variations}
+\input{sections/06-right-angle}
+\input{sections/07-injectivity}
+\input{sections/08-equality}
+\input{sections/09-recovery}
+\input{sections/q10-stability-overview}
+\input{sections/q11-certificate-overview}
+\input{sections/q12-questions}
+
+\appendix
+\input{sections/a0-baek}
+\input{sections/a1-gerver}
+\input{sections/a2-corrections}
+\input{sections/a3-lean}
+\input{sections/a4-ai}
+
+% Appendix F. Reuse the original proof text rather than duplicating or losing it.
+% Its original labels remain unique; the main-text restatements use new labels.
+\input{sections/10-stability}
+\begingroup
+  \let\quantoriginalsubsection\subsection
+  \let\section\quantoriginalsubsection
+  \let\subsection\subsubsection
+  \input{sections/11-unified}
+\endgroup
+
+% Appendix G. Its final proposition is the requested 10^{-600} cutoff.
+\input{sections/a6-quantitative}
+
+\bibliographystyle{amsplain}
+\bibliography{refs}
+\end{document}
