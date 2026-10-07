@@ -557,10 +557,9 @@ theorem tailBInterval_sound {P : GerverParams} (hP : P.IsSolution)
                           simp only [hW,hS,hInv,hC,hF,hD,Option.bind_some,
                             Option.some.injEq] at hcheck
                           subst I
-                          rw [←hmodel]
+                          rw [hmodel]
                           simpa [lastW,TrigExpr.realValue,
-                            BranchExpr.realValue,hDmodel,div_eq_mul_inv,
-                            sincRegularized] using htotal
+                            BranchExpr.realValue,hDmodel,div_eq_mul_inv] using htotal
 
 /-- The interval model is sound at every real point of its *true*
 integration piece.  The last B model is valid only on its last Hermite
