@@ -197,6 +197,14 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "lemma at its advertised radius.",
         ),
     ),
+    "MovingSofaQuantitative/EffectiveAngleEntry.lean": (
+        (
+            r"have\s+ht\s*:\s*4\s*<\s*tan\s+ω\s*:=\s*high_angle_tan_lower",
+            "The cap domain permits omega = pi/2. Lean's total tangent "
+            "at pi/2 is zero, so 4 < tan omega is false at this endpoint. "
+            "Prove the required cotangent bound directly, including pi/2.",
+        ),
+    ),
     "MovingSofaQuantitative/ReferenceSector.lean": (
         (
             r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
