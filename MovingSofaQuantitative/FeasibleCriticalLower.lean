@@ -2,7 +2,7 @@ module
 
 public import MovingSofaQuantitative.TrialEnergyCertificate
 public import MovingSofaQuantitative.TrialActiveArc
-public import MovingSofaQuantitative.FullQConsequences
+public import MovingSofaQuantitative.FullQCertificate
 
 /-!
 # The continuously feasible lower family for the intrinsic full-Q coefficient
