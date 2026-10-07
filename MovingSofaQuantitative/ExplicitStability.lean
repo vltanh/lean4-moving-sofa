@@ -31,9 +31,9 @@ open MovingSofaOptimality MovingSofaUniqueness MovingSofaStability
 
 namespace MovingSofaQuantitative
 
-def kCenter : ℝ := 1001/1000
+abbrev kCenter : ℝ := centeredCapCoefficient
 def CHaus : ℝ := 23/10
-def lambdaMissing : ℝ := 10031/10000
+abbrev lambdaMissing : ℝ := missingBudgetCoefficient
 
 structure LocalData (P : GerverParams) (S : Set Point) (ω ε : ℝ) where
   N : Set Point
