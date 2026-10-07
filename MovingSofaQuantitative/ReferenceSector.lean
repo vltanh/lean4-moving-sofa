@@ -157,6 +157,47 @@ theorem translated_sector_subset_tangent_ball {b : Point} {θ h d r R : ℝ}
   show euclideanDist c q≤R
   nlinarith
 
+/-- A sector of half-angle h<=pi/4 directed vertically rises at least as
+fast as its horizontal displacement.  This converts an exact cone inequality
+into the epigraph comparison needed by the Gerver boundary charts. -/
+theorem vertical_sector_rise_ge_horizontal {p q : Point} {h r : ℝ}
+    (hs : 0<sin h) (hsc : sin h≤cos h)
+    (hq : q∈interiorSector p (π/2) h r) :
+    |q.1-p.1|≤q.2-p.2 := by
+  have h1:=hq.1
+  have h2:=hq.2.1
+  have hc : 0<cos h:=lt_of_lt_of_le hs hsc
+  have hplus : 0≤(q.2-p.2)*sin h+(q.1-p.1)*cos h := by
+    simpa [interiorSector,dot,uvec,cos_pi_div_two_add,
+      sin_pi_div_two_add,cos_pi_div_two_sub,sin_pi_div_two_sub,
+      sub_sub_cancel] using h1
+  have hminus : 0≤(q.2-p.2)*sin h-(q.1-p.1)*cos h := by
+    simpa [interiorSector,dot,uvec,cos_pi_div_two_add,
+      sin_pi_div_two_add,cos_pi_div_two_sub,sin_pi_div_two_sub,
+      sub_sub_cancel] using h2
+  have hy : 0≤q.2-p.2 := by nlinarith [hs]
+  have hh := mul_le_mul_of_nonneg_left hsc hy
+  rw [abs_le]
+  constructor <;> nlinarith
+
+/-- Local epigraph stability under the sector.  No differentiability or
+convexity is assumed of the graph; the proof uses only a unit Lipschitz
+bound on the chosen chart. -/
+theorem vertical_sector_inside_unit_lipschitz_epigraph
+    {γ : ℝ→ℝ} {a b : ℝ} {p q : Point} {h r : ℝ}
+    (hs : 0<sin h) (hsc : sin h≤cos h)
+    (hpX : p.1∈Icc a b) (hqX : q.1∈Icc a b)
+    (hpY : γ p.1≤p.2)
+    (hLip : ∀x∈Icc a b,∀y∈Icc a b,
+       |γ x-γ y|≤|x-y|)
+    (hq : q∈interiorSector p (π/2) h r) :
+    γ q.1≤q.2 := by
+  have hrise := vertical_sector_rise_ge_horizontal hs hsc hq
+  have hγ := hLip q.1 hqX p.1 hpX
+  have hγupper := le_abs_self (γ q.1-γ p.1)
+  have hdx := abs_sub_comm q.1 p.1
+  linarith
+
 /-- The smallest explicit boundary openings clear beta=1.53. -/
 theorem gerver_corner_angle_margin {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
