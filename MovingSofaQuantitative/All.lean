@@ -1,60 +1,85 @@
 module
 
-public import MovingSofaQuantitative.TranslationQuotient
-public import MovingSofaQuantitative.Normalization
-public import MovingSofaQuantitative.CenteredKernel
-public import MovingSofaQuantitative.CapQuotient
-public import MovingSofaQuantitative.Targets
-public import MovingSofaQuantitative.CoefficientLowerBound
-public import MovingSofaQuantitative.PiecewiseCalculus
-public import MovingSofaQuantitative.ResidualAlgebra
-public import MovingSofaQuantitative.ProjectionAlgebra
-public import MovingSofaQuantitative.ComparisonProfile
-public import MovingSofaQuantitative.ComparisonPairing
-public import MovingSofaQuantitative.CenteredCap
-public import MovingSofaQuantitative.OrthogonalErosion
-public import MovingSofaQuantitative.ExplicitBudget
 public import MovingSofaQuantitative.ActualSetRecovery
+public import MovingSofaQuantitative.AugmentedGram
+public import MovingSofaQuantitative.AuxiliaryData
+public import MovingSofaQuantitative.AuxiliaryPenalties
+public import MovingSofaQuantitative.AuxiliaryProfileBounds
+public import MovingSofaQuantitative.CapQuotient
+public import MovingSofaQuantitative.CenteredCap
+public import MovingSofaQuantitative.CenteredKernel
+public import MovingSofaQuantitative.ClosedCriticalModel
+public import MovingSofaQuantitative.CoefficientLowerBound
+public import MovingSofaQuantitative.ComparisonPairing
+public import MovingSofaQuantitative.ComparisonProfile
+public import MovingSofaQuantitative.CorrectedGramGeometry
+public import MovingSofaQuantitative.CriticalKernels
+public import MovingSofaQuantitative.CriticalTransfer
+public import MovingSofaQuantitative.DualSlack
+public import MovingSofaQuantitative.EndpointAveraging
+public import MovingSofaQuantitative.EndpointSlacks
+public import MovingSofaQuantitative.EvaluationKernel
+public import MovingSofaQuantitative.EvaluationPieces
+public import MovingSofaQuantitative.ExplicitBudget
+public import MovingSofaQuantitative.FullQCertificate
 public import MovingSofaQuantitative.FullQConsequences
-public import MovingSofaQuantitative.Certificates.Interval
-public import MovingSofaQuantitative.Certificates.Expression
+public import MovingSofaQuantitative.Hermite
+public import MovingSofaQuantitative.HermiteSpline
+public import MovingSofaQuantitative.KernelAtoms
+public import MovingSofaQuantitative.KernelGram
+public import MovingSofaQuantitative.KernelPieceModel
+public import MovingSofaQuantitative.KernelPrimitives
+public import MovingSofaQuantitative.Normalization
+public import MovingSofaQuantitative.OperatorModelTransfer
+public import MovingSofaQuantitative.OrthogonalErosion
+public import MovingSofaQuantitative.OuterDensity
+public import MovingSofaQuantitative.PiecewiseCalculus
+public import MovingSofaQuantitative.ProjectionAlgebra
+public import MovingSofaQuantitative.ReferenceDensity
+public import MovingSofaQuantitative.ResidualAlgebra
+public import MovingSofaQuantitative.ResidualHilbert
+public import MovingSofaQuantitative.ScalarTaylor
+public import MovingSofaQuantitative.SectorBudget
+public import MovingSofaQuantitative.SectorContent
+public import MovingSofaQuantitative.SectorSlicing
+public import MovingSofaQuantitative.ShortArcBounds
+public import MovingSofaQuantitative.StableGram
+public import MovingSofaQuantitative.SymmetricCapPerturbation
+public import MovingSofaQuantitative.Targets
+public import MovingSofaQuantitative.TranslationQuotient
+public import MovingSofaQuantitative.TripleEnergy
+public import MovingSofaQuantitative.TurningCap
+public import MovingSofaQuantitative.TwoSidedPieces
+public import MovingSofaQuantitative.WallDerivative
+public import MovingSofaQuantitative.Certificates.BranchExpression
 public import MovingSofaQuantitative.Certificates.Cover
+public import MovingSofaQuantitative.Certificates.CriticalExpression
+public import MovingSofaQuantitative.Certificates.Expression
+public import MovingSofaQuantitative.Certificates.Interval
+public import MovingSofaQuantitative.Certificates.KernelExpression
 public import MovingSofaQuantitative.Certificates.Trig
+public import MovingSofaQuantitative.Certificates.TrigExpression
 
 /-!
-# Quantitative extension: uncompiled development root
+# Quantitative appendix: uncompiled development assembly
 
-This optional library is not imported by the established paper solutions.
-No Lean, Lake, or CI is being run under the current instruction.
+This optional root imports the drafted intermediate modules as well as the
+headline statements, so a later source/type audit cannot silently omit a module
+merely because an earlier version of this root did not list it.
 
-There is now an intended end-to-end proof-source chain for the centered cap
-estimate: a concrete continuous comparison profile, its actual right derivative
-and four residuals, exact endpoint pairing, exact energy polarization, and a
-scalar projection argument applied to the integrated pinned estimate. It gives:
+CenteredCap contains the actual cap-energy, Q-deficit, and Ki-deficit estimates.
+FullQCertificate contains the critical-face and finite-deficit upper statements,
+with an isolated closed Boolean reduction of the concrete interval model.
+That reduction is UNEXECUTED: its depth and reduction cost are not a successful
+certificate receipt. No Python computation is substituted for its Lean proof.
 
-* `centered_energy : Targets.CenteredEnergy`;
-* `centered_cap : Targets.CenteredCap`;
-* `centered_ki : Targets.CenteredKi`.
+TurningCap, SymmetricCapPerturbation, and the Hermite modules construct actual
+convex caps from scalar data. A concrete family and its limiting/energy analysis
+are still required for each sharpness target; generic construction lemmas do
+not themselves prove those targets.
 
-No Gram-integral or centered-coercivity premise remains in those targets.
-The scalar sec(phi) enclosure and puncture coefficient lower bound retain their
-separate direct proof source.
-
-The root also includes actual orthogonal erosion and missing-area recovery,
-complementary scalar budgets, and implication lemmas for the full-Q finite and
-asymptotic consequences. Those implications do not replace the still separate
-critical-face/operator and feasible-family proofs.
-
-The certificate foundation includes rational arithmetic with real semantics,
-expression evaluation, complete binary covers, and exact Taylor enclosures for
-sine and cosine. It is not yet a completed certificate for the .93 operator:
-that certificate must instantiate the concrete analytical model and its cover.
-
-All additions remain uncompiled proof source and may contain elaboration or
-proof errors. The mandatory 10^-600 arbitrary-sofa target is unchanged. A target
-proposition, a conditional transfer lemma, or a Python test is not counted as a
-proof of an unconditional quantitative target.
-
-See docs/paper/quantitative_manifest.json and the continuation ledger. No new
-kernel-verification or successful full quantitative-gate receipt is claimed.
+The existing paper, established solutions, and default targets do not import
+this development root. All additions are uncompiled source. No Lean, Lake, CI,
+axiom audit, or exact-type audit has been run under the current instruction.
+The final arbitrary-sofa 10^-600 target remains in Targets without weakening.
 -/
