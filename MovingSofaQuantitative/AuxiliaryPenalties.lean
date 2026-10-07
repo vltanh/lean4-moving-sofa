@@ -61,11 +61,10 @@ theorem right_auxiliary_penalty {p c : ℝ} (hp : 0 < p) (hpc : p < c)
     sin_pi_div_two_sub, hleft, hright] at hFTC
   have hweighted : (∫ t in p..c, (1 / cos t) * tangentResidual (π / 2) B dB t) =
       -(f p / cos p - f c / cos c - s / cos c) := by
-    have hi' : (∫ t in p..c, tangentResidual (π / 2) B dB t / sin (π / 2 - t)) =
+    have hi' : (∫ t in p..c, tangentResidual (π / 2) B dB t / cos t) =
         ∫ t in p..c, (1 / cos t) * tangentResidual (π / 2) B dB t := by
       apply intervalIntegral.integral_congr
       intro t _
-      rw [sin_pi_div_two_sub]
       ring
     rw [hi'] at hFTC
     rw [hFTC]
@@ -87,9 +86,11 @@ theorem left_auxiliary_penalty {p d : ℝ} (hp : 0 < p)
     (hr2 : IntervalIntegrable (fun t => tangentResidual (π - p) D dD t ^ 2)
       volume (π / 2) d)
     (henergy : arcSquare (π / 2) d (tangentResidual (π - p) D dD) ≤ E)
-    (hweight : 0 < cotangent (π - p - d) - tan p) :
-    (f d / sin (π - p - d) - (cotangent (π - p - d) - tan p) * f (π - p) +
-      s / sin (π - p - d)) ^ 2 / (cotangent (π - p - d) - tan p) ≤ E := by
+    (hweight : 0 < cos (π - p - d) / sin (π - p - d) - tan p) :
+    (f d / sin (π - p - d) -
+      (cos (π - p - d) / sin (π - p - d) - tan p) * f (π - p) +
+      s / sin (π - p - d)) ^ 2 /
+        (cos (π - p - d) / sin (π - p - d) - tan p) ≤ E := by
   have hs : ∀ t ∈ Icc (π / 2) d, sin (π - p - t) ≠ 0 := by
     intro t ht
     exact (sin_pos_of_pos_of_lt_pi (by linarith [ht.2]) (by linarith [ht.1, pi_pos])).ne'
@@ -97,15 +98,16 @@ theorem left_auxiliary_penalty {p d : ℝ} (hp : 0 < p)
     continuousOn_const.div (by fun_prop) hs
   have hi := residual_div_sin_integrable hd.le hr hs
   have hFTC := tangent_quotient_integral hd.le hDcont.continuousOn hdD hs hi
-  have he : cotangent (π - p - π / 2) = tan p := by
-    simp only [cotangent, show π - p - π / 2 = π / 2 - p by ring,
+  have he : cos (π - p - π / 2) / sin (π - p - π / 2) = tan p := by
+    simp only [show π - p - π / 2 = π / 2 - p by ring,
       cos_pi_div_two_sub, sin_pi_div_two_sub, tan_eq_sin_div_cos]
   have hn : (∫ t in (π / 2)..d, (1 / sin (π - p - t)) ^ 2) =
-      cotangent (π - p - d) - tan p := by
+      cos (π - p - d) / sin (π - p - d) - tan p := by
     rw [shifted_cosecant_sq_integral hd.le hs, he]
   have hweighted : (∫ t in (π / 2)..d,
       (1 / sin (π - p - t)) * tangentResidual (π - p) D dD t) =
-      f d / sin (π - p - d) - (cotangent (π - p - d) - tan p) * f (π - p) +
+      f d / sin (π - p - d) -
+        (cos (π - p - d) / sin (π - p - d) - tan p) * f (π - p) +
         s / sin (π - p - d) := by
     have hi' : (∫ t in (π / 2)..d, tangentResidual (π - p) D dD t / sin (π - p - t)) =
         ∫ t in (π / 2)..d, (1 / sin (π - p - t)) * tangentResidual (π - p) D dD t := by
@@ -115,9 +117,7 @@ theorem left_auxiliary_penalty {p d : ℝ} (hp : 0 < p)
     rw [hi'] at hFTC
     rw [hFTC]
     simp only [tangentQuotient, htop, hend, hvalue, zero_sub, neg_mul, sub_neg_eq_add]
-    have he' : cos (π - p - π / 2) / sin (π - p - π / 2) = tan p := he
-    unfold cotangent
-    rw [← he']
+    rw [← he]
     ring
   have h := weighted_endpoint_penalty hd.le hweight hk hr hr2 hn henergy
   simpa only [hweighted] using h
