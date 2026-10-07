@@ -39,8 +39,8 @@ NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'Movi
 MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'MovingSofaStability',
                 'MovingSofaExtremal', 'Challenge', 'Solution', 'baek')
 # The modules whose declarations win when a name is declared in several modules, the first
-# winning over the second: the Challenges of the two Palomar entries, the certificate entry's at
-# the root and Baek's entry's in baek/.
+# winning over the second: the two Challenges, that of version 5 of the Palomar entry at the root
+# and that of versions 1 to 4 in baek/.
 PREFERRED_MODULES = ('Challenge', 'baek.Challenge')
 # Directories, besides the repository root, against which the paths in the documents of a
 # given directory are resolved.

@@ -5,20 +5,21 @@ public import Mathlib
 /-!
 # Gerver's sofa through one certificate: optimality, uniqueness and stability
 
-The main entry of this repository, the certificate entry (`comparator.json`, with the solution
-`Solution.lean`): seventeen statements of record, in Mathlib's vocabulary only. The coercive
-certificate, Theorem 11.1 of the manuscript *Uniqueness and stability of Gerver's sofa*
+Version 5 of the Palomar entry PALOMAR-2026-10-02-000008 (`comparator.json`, with the solution
+`Solution.lean`; not registered yet): seventeen statements of record, in Mathlib's vocabulary only.
+The coercive certificate, Theorem 11.1 of the manuscript *Uniqueness and stability of Gerver's sofa*
 (`docs/paper`), is an estimate for the upper bound `𝒬` of Jineon Baek, *Optimality of Gerver's Sofa*
-(arXiv:2411.19826v1). The solution of this entry proves three results through it: Gerver's sofa has
+(arXiv:2411.19826v1). The solution of version 5 proves three results through it: Gerver's sofa has
 maximum area (Baek's Theorem 1.1.1), it is the only moving sofa of that area up to rigid motions,
 and it is stable; formal-conjectures' statements of optimality and uniqueness follow from the first
 two through the bridge. Comparator checks the statements, that the kernel accepts the proofs, and
 their axioms; which results the proofs use is checked by `scripts/AuditCoerciveRoute.lean`: these
-proofs use neither Baek's Theorem 1.1.1 nor the first proof of uniqueness. Baek's entry, the
-formalization of Baek's paper with the first proof of uniqueness (`baek/Challenge.lean`,
-`baek/comparator.json`, registered as PALOMAR-2026-10-02-000008), states twelve of these theorems
-(all but the three stability statements and the two about the certificate) and proves optimality and
-uniqueness through Baek's Theorem 1.1.1.
+proofs use neither Baek's Theorem 1.1.1 nor the first proof of uniqueness. Versions 1 to 4 of the
+entry registered the formalization of Baek's paper with the first proof of uniqueness, which the
+repository keeps, brought up to date, in `baek/` (`baek/Challenge.lean`, `baek/comparator.json`):
+its Challenge states twelve of these theorems (all but the three stability statements and the two
+about the certificate), and its solution proves optimality and uniqueness through Baek's Theorem
+1.1.1.
 
 The statements and their definitions come in four groups: `Baek` (Baek's definitions and theorems,
 and the stability statements, which Baek's paper does not have), `Certificate` (the certificate, and

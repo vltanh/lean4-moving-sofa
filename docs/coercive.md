@@ -7,8 +7,8 @@ library [`MovingSofaExtremal/`](../MovingSofaExtremal) derives optimality and un
 [`MovingSofaStability/`](../MovingSofaStability) derives stability from it and from that uniqueness. The route was written by ChatGPT
 Pro 6 (pull request #9), without compiling it, and compiled and completed here; no person has reviewed
 the argument, and Lean's kernel checks every proof ([verification](verification.md)). Baek's paper does not
-contain it. The Palomar entry at the root of the repository, the certificate entry, states the certificate with the
-three results and proves them through this route ([The certificate entry](#the-certificate-entry)).
+contain it. Version 5 of the repository's Palomar entry, at the root, states the certificate with the three results
+and proves them through this route ([Version 5 of the Palomar entry](#version-5-of-the-palomar-entry)).
 
 Throughout, `P` is the solution of Romik's system in the box (`P.IsSolution`, `P.InBox`), `G` is
 Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and areas are Baek's
@@ -33,7 +33,7 @@ theorem coercive_certificate {P : GerverParams} (hP : P.IsSolution) (hbox : P.In
 [`MovingSofaStability.wideUpperQ_le_gerver`](../MovingSofaStability/Deficit.lean#L343), from the concavity of `𝒬` and its first variation at Gerver's triple, and
 [`MovingSofaStability.sharp_wide_cap_distance_bound`](../MovingSofaStability/CapEstimate.lean#L1061), from the residual energies of the deficit. `shiftedReferenceCap P.cap K` is
 Gerver's cap translated horizontally so that its leftmost point has the abscissa of the leftmost
-point of `K`. The certificate entry states the certificate in Mathlib's vocabulary as [`Certificate.coercive_certificate`](../Challenge.lean#L644)
+point of `K`. The Challenge at the root states the certificate in Mathlib's vocabulary as [`Certificate.coercive_certificate`](../Challenge.lean#L645)
 ([Results](results.md#the-certificate)), Theorem 11.1 of the [manuscript](paper/README.md).
 
 ## Optimality, uniqueness and stability
@@ -100,12 +100,12 @@ and at small deficit it bounds the distance.
 
 [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) follows the proofs through the bodies of all repository declarations, private and
 generated ones included. It checks that none of the 867 declarations of [`MovingSofaExtremal`](../MovingSofaExtremal), which holds the
-proofs of the certificate entry, and of [`MovingSofaStability`](../MovingSofaStability) reaches Baek's Theorem 1.1.1, the results of his balance argument (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3,
+proofs of version 5, and of [`MovingSofaStability`](../MovingSofaStability) reaches Baek's Theorem 1.1.1, the results of his balance argument (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3,
 6.5.6, Corollary 6.4.4 and Theorem 8.1.1 (2)), a declaration of the first proof of uniqueness ([`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean), [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean)) or of the second proof of
-optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or the Solution of Baek's entry ([`baek.Solution`](../baek/Solution.lean)); that all use only the
+optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or the Solution of versions 1 to 4 ([`baek.Solution`](../baek/Solution.lean)); that all use only the
 standard axioms; that the optimality and uniqueness of the route ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean), [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)) do not
 reach the stability proof after the certificate, which uses them; that the route uses the certificate where it
-should (twenty-two positive controls, among them that the certificate entry's two theorems about the certificate
+should (twenty-two positive controls, among them that the two theorems of version 5 about the certificate
 reach the library's certificate and its value of `𝒬` at Gerver's triple); and that the older proofs do reach what
 they are known to reach (eight negative controls, which show that the traversal sees proof bodies).
 
@@ -117,14 +117,14 @@ helpers that the first proof and the route both use are in neutral modules:
 [`MovingSofaUniqueness/Mamikon.lean`](../MovingSofaUniqueness/Mamikon.lean) (square integrals and Mamikon displacements) and
 [`MovingSofaUniqueness/Rigid.lean`](../MovingSofaUniqueness/Rigid.lean) (horizontal translates of caps, niches and sofas).
 
-## The certificate entry
+## Version 5 of the Palomar entry
 
-The Palomar entry at the root of the repository, not registered yet, states the certificate with the three results
-and proves them through the route. Its Challenge, [`Challenge.lean`](../Challenge.lean), states seventeen theorems: the twelve of Baek's
-entry ([`baek/Challenge.lean`](../baek/Challenge.lean)), the three stability theorems, the certificate and the theorem that Gerver's triple meets
+Version 5 of the repository's Palomar entry, at the root and not registered yet, states the certificate with the three
+results and proves them through the route. Its Challenge, [`Challenge.lean`](../Challenge.lean), states seventeen theorems: the twelve of
+versions 1 to 4 ([`baek/Challenge.lean`](../baek/Challenge.lean)), the three stability theorems, the certificate and the theorem that Gerver's triple meets
 the certificate's hypothesis ([Results](results.md)). Baek's functional
 `𝒬`, the enlarged domain of triples and Gerver's cap are defined in [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) and copied into the
-Challenge ([Definitions](definitions.md#the-certificates-definitions)). [`comparator.json`](../comparator.json) is the entry's Comparator configuration, and
+Challenge ([Definitions](definitions.md#the-certificates-definitions)). [`comparator.json`](../comparator.json) is its Comparator configuration, and
 [`formalization.yaml`](../formalization.yaml) its metadata.
 
 - [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves fifteen of the seventeen theorems through the route, in the namespace
@@ -136,14 +136,14 @@ Challenge ([Definitions](definitions.md#the-certificates-definitions)). [`compar
 - [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) proves the two theorems about the certificate, from
   [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) and [`MovingSofaStability.wideGerver_value`](../MovingSofaStability/Deficit.lean#L350), with lemmas that identify each definition of
   [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) with the library's, such as [`Certificate.upperQ_eq_lib`](../MovingSofaExtremal/Certificate.lean#L147).
-- [`Solution.lean`](../Solution.lean), the entry's Solution, states fourteen of the theorems under the Challenge's names, each proved by
+- [`Solution.lean`](../Solution.lean), the Solution of version 5, states fourteen of the theorems under the Challenge's names, each proved by
   the matching theorem of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean); `ABφθSpec.existsUnique` is proved in [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean), for both
-  entries, and the two theorems about the certificate in [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean). It declares the names that
+  Challenges, and the two theorems about the certificate in [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean). It declares the names that
   [`baek/Solution.lean`](../baek/Solution.lean) declares, so no module imports it, and the audits read [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) and
   [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) instead.
 
 Comparator checks [`Solution.lean`](../Solution.lean) against [`Challenge.lean`](../Challenge.lean), as it checks [`baek/Solution.lean`](../baek/Solution.lean) against
-[`baek/Challenge.lean`](../baek/Challenge.lean) for Baek's entry ([verification](verification.md#comparator)).
+[`baek/Challenge.lean`](../baek/Challenge.lean) for the formalization in [`baek/`](../baek) ([verification](verification.md#comparator)).
 
 ## The Lean code and the pull request
 

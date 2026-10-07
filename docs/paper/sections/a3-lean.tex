@@ -38,14 +38,17 @@ which it lists as open, follows from \cref{thm:main};
 \item \texttt{MovingSofaExtremal} (6 files, about 1,000 lines):
 \cref{sec:unified}, with the steps that it shares with the second proof of
 optimality imported from \texttt{MovingSofaUniqueness}, and the proofs of the
-statements of record of the entry at the root of the repository (below), with
-the definitions of the certificate that its Challenge copies;
+statements of record at the root of the repository (below), with the
+definitions of the certificate that the Challenge copies;
 \texttt{MovingSofaStability} takes its optimality and uniqueness theorems from
 \texttt{MovingSofaExtremal}.
 \end{itemize}
-The repository carries two Palomar entries, each a Challenge, a Solution and a
-Comparator configuration. The entry at its root states the results of this
-paper. Its Challenge, \texttt{Challenge.lean}, states seventeen theorems: Baek's
+The repository is registered in the Palomar registry as
+PALOMAR-2026-10-02-000008. Versions~1 to~4 of this entry register the
+formalization of Baek's paper with the first proof of uniqueness; version~5,
+prepared for submission, registers the Challenge, the Solution and the
+Comparator configuration at the root of the repository, which state the results
+of this paper. The Challenge, \texttt{Challenge.lean}, states seventeen theorems: Baek's
 theorem (\path{Baek.gerver_sofa_optimal}), \cref{thm:main}
 (\path{Baek.gerver_sofa_unique}), the existence and uniqueness of Gerver's
 parameters and the area of Gerver's sofa in the namespace \texttt{Baek}; three
@@ -58,12 +61,12 @@ those of formal-conjectures, and formal-conjectures' four statements;
 \cref{thm:certificate} (\path{Certificate.coercive_certificate}); and the
 theorem \path{Certificate.gerver_triple}, by which Gerver's triple lies in
 $\bar\cT$ and attains $\cQ=\abs\Gs$. Baek's functional $\cQ$ and the domain
-$\bar\cT$ are restated in the Challenge. Its Solution, \texttt{Solution.lean},
+$\bar\cT$ are restated in the Challenge. The Solution, \texttt{Solution.lean},
 proves all seventeen through the certificate, as \cref{sec:unified} does,
-without the module \texttt{Main} of \texttt{MovingSofaUniqueness}. The other
-entry, in the directory \texttt{baek}, is the formalization of Baek's paper with
-the first proof of uniqueness: \path{baek/Challenge.lean} states the first
-twelve of these theorems, and \path{baek/Solution.lean} proves them through
+without the module \texttt{Main} of \texttt{MovingSofaUniqueness}. The
+directory \texttt{baek} keeps the Challenge and the Solution of versions~1 to~4,
+with their own Comparator configuration: \path{baek/Challenge.lean} states the
+first twelve of these theorems, and \path{baek/Solution.lean} proves them through
 Baek's theorem and the proof of
 \cref{sec:reduction,sec:selection,sec:variations,sec:right-angle,sec:injectivity,sec:equality,sec:recovery}.
 The theorems of the
@@ -78,11 +81,7 @@ its own, is declared in the Challenge), and the theorems of the namespace
 end in \texttt{sorry} by design; Comparator checks that each Solution proves
 exactly the statements of its Challenge. \texttt{lake build} succeeds, and an
 audit checks that every declaration of the libraries depends only on the axioms
-\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The entry
-in \texttt{baek} is registered in the Palomar registry as
-PALOMAR-2026-10-02-000008, whose versions~1 to~4 register earlier commits, from
-the time when its files were at the root; the entry at the root is prepared for
-submission.
+\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
 The continuous integration and Palomar's preflight passed on the commit cited
 in~\cite{Companion}. To rebuild, run \texttt{lake exe cache get \&\& lake build},
 then the commands listed in the repository's \texttt{README.md}. The
@@ -143,7 +142,7 @@ optimality nor uniqueness. A third audit,
 follows the proofs through the bodies of all the declarations of the repository,
 private and generated ones included. It checks that each of the 867 declarations
 of \texttt{MovingSofaExtremal}, which also restates and proves the statements of
-the entry at the root, and of \texttt{MovingSofaStability} uses only the three
+record at the root, and of \texttt{MovingSofaStability} uses only the three
 axioms above. It also checks
 that none of them reaches Baek's theorem \baek{Thm.~1.1.1}, the results listed
 in the previous paragraph, \path{baek/Solution.lean}, or a declaration of the

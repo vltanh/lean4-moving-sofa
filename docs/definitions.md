@@ -3,16 +3,16 @@
 [Back to the README](../README.md)
 
 Read these before trusting the results: Lean's kernel checks the proofs, not that the statements mean
-what you intend. The statements of record of the two Palomar entries ([Results](results.md)) use only Mathlib and
-the definitions below. There are three sets of definitions, each in its own namespace: those of Baek's paper,
+what you intend. The statements of record of the two Challenges, version 5's at the root and that of versions 1 to 4
+in [`baek/`](../baek) ([Results](results.md)), use only Mathlib and the definitions below. There are three sets of definitions, each in its own namespace: those of Baek's paper,
 `Baek`, those of Google DeepMind's formal-conjectures, `FormalConjectures.MovingSofa`, and those of the
-certificate, `Certificate`, which only the certificate entry uses. The bridge theorems
+certificate, `Certificate`, which only the Challenge at the root uses. The bridge theorems
 ([Results](results.md#the-bridge)) show that the first two describe the same objects.
 
 The Challenges may import only Mathlib, so they copy their definitions verbatim from marked blocks of two modules
 of the libraries ([`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py)):
 
-| Block | Module | Definitions | [`Challenge.lean`](../Challenge.lean) (the certificate entry) | [`baek/Challenge.lean`](../baek/Challenge.lean) (Baek's entry) |
+| Block | Module | Definitions | [`Challenge.lean`](../Challenge.lean) (version 5) | [`baek/Challenge.lean`](../baek/Challenge.lean) (versions 1 to 4) |
 | --- | --- | --- | --- | --- |
 | `BAEK CORE DEFINITIONS` | [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | Baek's, up to Gerver's sofa | yes | yes |
 | `BAEK STABILITY DEFINITIONS` | [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | the terms of the stability theorems | yes | no |
@@ -97,14 +97,14 @@ Romik's numerical solution `φ = 0.039177…`, `θ = 0.681301…`. Then
 def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 ```
 
-The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L664) and [`Baek.gerver_params_unique`](../Challenge.lean#L668) prove that the box holds exactly one solution, so
-Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L674) that its area lies between `2.2192` and `2.2199`, around
+The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L665) and [`Baek.gerver_params_unique`](../Challenge.lean#L669) prove that the box holds exactly one solution, so
+Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L675) that its area lies between `2.2192` and `2.2199`, around
 Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L93) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L109) are in
 [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 10](../baek/proof/10-gerver.md) of the text explains them.
 
 ### Stability
 
-The stability theorems ([Results](results.md#stability)), which only the certificate entry states, use five more
+The stability theorems ([Results](results.md#stability)), which only the Challenge at the root states, use five more
 definitions, in [`Challenge.lean`](../Challenge.lean) and not in [`baek/Challenge.lean`](../baek/Challenge.lean). A moving sofa *with
 angle* `ω` is one whose motion ends with the rotation by `-ω`, that is, turns it clockwise by `ω`. The
 *deficit* of a set is the area of Gerver's sofa minus its area. `normalizedSofa P S` translates `S` so
@@ -219,23 +219,23 @@ the text explains them, and [Appendix A](../baek/proof/appendix-a.md) proves tha
 
 ## The certificate's definitions
 
-The certificate ([Results](results.md#the-certificate)), which only the certificate entry states, is an estimate for
+The certificate ([Results](results.md#the-certificate)), which only the Challenge at the root states, is an estimate for
 Baek's upper bound `𝒬`, a functional of a cap and two convex bodies. [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates what it needs in the
 namespace `Certificate`, each definition with the body of the matching definition of [`MovingSofaOptimality`](../MovingSofaOptimality) or
 [`MovingSofaStability`](../MovingSofaStability), written with Mathlib and Baek's definitions above, except as said below:
 
-- convex bodies ([`Certificate.IsConvexBody`](../Challenge.lean#L444)), support functions `h_K` ([`Certificate.supp`](../Challenge.lean#L447)), the vertices `v_K^±(t)`
-  of their edges ([`Certificate.vplus`](../Challenge.lean#L457), [`Certificate.vminus`](../Challenge.lean#L462)), and the surface area measure `σ_K` ([`Certificate.sigma`](../Challenge.lean#L478)),
+- convex bodies ([`Certificate.IsConvexBody`](../Challenge.lean#L445)), support functions `h_K` ([`Certificate.supp`](../Challenge.lean#L448)), the vertices `v_K^±(t)`
+  of their edges ([`Certificate.vplus`](../Challenge.lean#L458), [`Certificate.vminus`](../Challenge.lean#L463)), and the surface area measure `σ_K` ([`Certificate.sigma`](../Challenge.lean#L479)),
   the Lebesgue–Stieltjes measure of `G_K(t) = ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K`;
-- caps with rotation angle `ω` ([`Certificate.IsCap`](../Challenge.lean#L496)), the cap `𝒞(S)` of a set ([`Certificate.capOf`](../Challenge.lean#L526)), and the inner
-  corner `𝐱_S(t)` of its supporting hallway ([`Certificate.innerCorner`](../Challenge.lean#L530));
-- the curve areas `𝒥(𝐱) = ½ ∫ 𝐱 × d𝐱` ([`Certificate.curveArea`](../Challenge.lean#L580)), `𝒥([p, q]) = (p × q)/2` ([`Certificate.segArea`](../Challenge.lean#L584)) and
-  `½ ∫_{(a,b)} h_K dσ_K` ([`Certificate.convexCurveArea`](../Challenge.lean#L536));
-- Baek's upper bound `𝒬` ([`Certificate.upperQ`](../Challenge.lean#L603), his Definition 8.2.2) and the enlarged domain `T̄` of triples
-  ([`Certificate.InWideL`](../Challenge.lean#L612)): Baek's triples `(K, B, D)`, with `K` any cap with rotation angle `π/2` in place of a cap of
+- caps with rotation angle `ω` ([`Certificate.IsCap`](../Challenge.lean#L497)), the cap `𝒞(S)` of a set ([`Certificate.capOf`](../Challenge.lean#L527)), and the inner
+  corner `𝐱_S(t)` of its supporting hallway ([`Certificate.innerCorner`](../Challenge.lean#L531));
+- the curve areas `𝒥(𝐱) = ½ ∫ 𝐱 × d𝐱` ([`Certificate.curveArea`](../Challenge.lean#L581)), `𝒥([p, q]) = (p × q)/2` ([`Certificate.segArea`](../Challenge.lean#L585)) and
+  `½ ∫_{(a,b)} h_K dσ_K` ([`Certificate.convexCurveArea`](../Challenge.lean#L537));
+- Baek's upper bound `𝒬` ([`Certificate.upperQ`](../Challenge.lean#L604), his Definition 8.2.2) and the enlarged domain `T̄` of triples
+  ([`Certificate.InWideL`](../Challenge.lean#L613)): Baek's triples `(K, B, D)`, with `K` any cap with rotation angle `π/2` in place of a cap of
   his class `𝒦ⁱ`, so that `K` need not satisfy his injectivity condition;
-- Gerver's cap `K_G` ([`Certificate.gerverCap`](../Challenge.lean#L624)), the cap of Gerver's sofa with rotation angle `π/2`, and its horizontal
-  translate with the leftmost abscissa of a cap `K` ([`Certificate.shiftedReferenceCap`](../Challenge.lean#L632)).
+- Gerver's cap `K_G` ([`Certificate.gerverCap`](../Challenge.lean#L625)), the cap of Gerver's sofa with rotation angle `π/2`, and its horizontal
+  translate with the leftmost abscissa of a cap `K` ([`Certificate.shiftedReferenceCap`](../Challenge.lean#L633)).
 
 ```lean
 def upperQ (φ : ℝ) (K B D : Set (ℝ × ℝ)) : ℝ :=
@@ -252,13 +252,13 @@ def InWideL (φ : ℝ) (K B D : Set (ℝ × ℝ)) : Prop :=
     supp K (π / 2 + (π / 2 - φ)) + supp D (3 * π / 2 + (π / 2 - φ)) = 1
 ```
 
-Three definitions are written differently and are equal to the library's by definition: [`Certificate.gerverCap`](../Challenge.lean#L624) is
-the library's [`GerverParams.cap`](../MovingSofaOptimality/Gerver/Properties.lean#L67), [`Certificate.innerCorner`](../Challenge.lean#L530) writes `(0, 0)` for the library's `xL`, and
-[`Certificate.upperQ`](../Challenge.lean#L603) writes `(volume K).toReal` for the library's `area K`. One body differs. The library's
+Three definitions are written differently and are equal to the library's by definition: [`Certificate.gerverCap`](../Challenge.lean#L625) is
+the library's [`GerverParams.cap`](../MovingSofaOptimality/Gerver/Properties.lean#L67), [`Certificate.innerCorner`](../Challenge.lean#L531) writes `(0, 0)` for the library's `xL`, and
+[`Certificate.upperQ`](../Challenge.lean#L604) writes `(volume K).toReal` for the library's `area K`. One body differs. The library's
 surface area measure contains the library's proofs that `G_K` is monotone and right-continuous, which a Challenge
-cannot carry, so [`Certificate.sigma`](../Challenge.lean#L478) tests the two properties instead, and is Lebesgue measure when they fail, as
+cannot carry, so [`Certificate.sigma`](../Challenge.lean#L479) tests the two properties instead, and is Lebesgue measure when they fail, as
 the library's is on sets that are not convex bodies. The two agree on convex bodies, where the properties hold,
-but can differ on other sets: on `∅`, `G_K` is zero, and [`Certificate.sigma`](../Challenge.lean#L478) is the zero measure.
-[`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) proves that each definition is the library's: by definition, except [`Certificate.sigma`](../Challenge.lean#L478) and
-[`Certificate.convexCurveArea`](../Challenge.lean#L536), which agree with the library's on convex bodies, and [`Certificate.upperQ`](../Challenge.lean#L603), which
+but can differ on other sets: on `∅`, `G_K` is zero, and [`Certificate.sigma`](../Challenge.lean#L479) is the zero measure.
+[`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) proves that each definition is the library's: by definition, except [`Certificate.sigma`](../Challenge.lean#L479) and
+[`Certificate.convexCurveArea`](../Challenge.lean#L537), which agree with the library's on convex bodies, and [`Certificate.upperQ`](../Challenge.lean#L604), which
 agrees with it when `B` and `D` are convex bodies, as they are in `T̄`.

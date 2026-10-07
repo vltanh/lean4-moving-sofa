@@ -20,7 +20,8 @@ caps, or the modules of the first proof of uniqueness:
 * `Unified`: `gerver_sofa_optimal_unique_stable`, with the stability theorems of
   `MovingSofaStability`, whose global step uses the uniqueness of `Main`.
 
-The certificate entry (`Challenge.lean`, `Solution.lean`) is proved by three more modules:
+Version 5 of the Palomar entry (`Challenge.lean`, `Solution.lean`) is proved through three more
+modules:
 
 * `Statements`: fifteen of its theorems, in the definitions of `MovingSofaBridge.Defs` and in the
   namespace `CoerciveSolution`, with optimality, uniqueness and stability from `Unified`;

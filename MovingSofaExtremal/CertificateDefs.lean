@@ -6,7 +6,7 @@ public import MovingSofaBridge.Defs
 /-!
 # The definitions of the certificate's Challenge
 
-The definitions that the certificate entry (`Challenge.lean`) needs for the certificate, beyond
+The definitions that the Challenge at the root (`Challenge.lean`) needs for the certificate, beyond
 those of `MovingSofaBridge.Defs`: convex bodies, caps, the surface area measure, curve areas, Baek's
 upper bound `𝒬`, the enlarged domain `T̄` of triples, and Gerver's cap and its horizontal
 translates. Each restates, in Mathlib's vocabulary and with the constants of
@@ -16,9 +16,9 @@ translates. Each restates, in Mathlib's vocabulary and with the constants of
 `(volume K).toReal` for the library's `area K`; these three are equal to the library's by
 definition. The fourth is the surface area measure `sigma`, below. `Challenge.lean` may not import
 the project, so `scripts/sync_challenge_defs.py` copies the marked block into it verbatim, after the
-blocks of `MovingSofaBridge.Defs`. The solution of the certificate entry (`Solution.lean`) uses the
-constants defined here, so Comparator sees the same constants in the Challenge and in the Solution,
-and `MovingSofaExtremal.Certificate` proves that they agree with the library's.
+blocks of `MovingSofaBridge.Defs`. The solution at the root (`Solution.lean`) uses the constants
+defined here, so Comparator sees the same constants in the Challenge and in the Solution, and
+`MovingSofaExtremal.Certificate` proves that they agree with the library's.
 
 **The surface area measure.** `σ_K` is the Lebesgue–Stieltjes measure of
 `G_K(t) = ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K` (manuscript, Definition 2.1 (c); formally `σ_K = h_K'' + h_K`).

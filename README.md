@@ -56,7 +56,7 @@ def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 
 Formal-conjectures' definitions (namespace `FormalConjectures.MovingSofa`) use formal-conjectures' code: sofas in
 `EuclideanSpace ℝ (Fin 2)` moved by continuous paths of isometries that start at the identity, the sofa constant as
-the supremum of their areas, and Gerver's sofa built from Gerver's four constants. The certificate entry also
+the supremum of their areas, and Gerver's sofa built from Gerver's four constants. The Challenge at the root also
 defines, in `Baek`, the terms of the stability theorems, and in `Certificate`, Baek's upper bound 𝒬, the enlarged
 domain of triples and Gerver's cap.
 
@@ -64,13 +64,13 @@ domain of triples and Gerver's cap.
 
 More on each theorem: [docs/results.md](docs/results.md).
 
-The repository has two Palomar entries. Each has a Challenge, which states theorems and imports only Mathlib, and a
-Solution, which proves them.
+The repository has one Palomar entry, PALOMAR-2026-10-02-000008. Each version has a Challenge, which states
+theorems and imports only Mathlib, and a Solution, which proves them.
 
-| Entry | Challenge and Solution | Statements | Proved through |
+| Version | Challenge and Solution | Statements | Proved through |
 | --- | --- | --- | --- |
-| The certificate entry, at the root | [`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean) | 17: Baek's five, the bridge's three, formal-conjectures' four, three on stability and two on the certificate | the coercive certificate, without Baek's Theorem 1.1.1, his balance argument or the equality analysis of the first uniqueness proof |
-| Baek's entry, PALOMAR-2026-10-02-000008 | [`baek/Challenge.lean`](baek/Challenge.lean), [`baek/Solution.lean`](baek/Solution.lean) | 12: all but the three on stability and the two on the certificate | Baek's Theorem 1.1.1 and the first uniqueness proof |
+| 5, at the root, not registered yet | [`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean) | 17: Baek's five, the bridge's three, formal-conjectures' four, three on stability and two on the certificate | the coercive certificate, without Baek's Theorem 1.1.1, his balance argument or the equality analysis of the first uniqueness proof |
+| 1 to 4, registered; kept up to date in [`baek/`](baek) | [`baek/Challenge.lean`](baek/Challenge.lean), [`baek/Solution.lean`](baek/Solution.lean) | 12: all but the three on stability and the two on the certificate | Baek's Theorem 1.1.1 and the first uniqueness proof |
 
 The main statements:
 
@@ -162,16 +162,17 @@ simpler arguments for several of Baek's proofs.
 More on each file: [docs/layout.md](docs/layout.md).
 
 ```text
-Challenge.lean, Solution.lean   the certificate entry: its statements and their proofs
+Challenge.lean, Solution.lean   version 5 of the Palomar entry: its statements and their proofs
 comparator.json                 its Comparator configuration
 formalization.yaml              its Palomar metadata
-baek/                           Baek's entry, the audit of Baek's paper (REPORT.md), the illustrated
-                                text (proof/) and the comparison of the formalizations
+baek/                           the formalization that versions 1 to 4 registered, the audit of Baek's
+                                paper (REPORT.md), the illustrated text (proof/) and the comparison of
+                                the formalizations
 MovingSofaOptimality/           Baek's paper
 MovingSofaUniqueness/           the uniqueness, and the second proof of optimality
 MovingSofaBridge/               the bridge to formal-conjectures, and the definitions the Challenges copy
 MovingSofaStability/            the stability
-MovingSofaExtremal/             the certificate route, and the proofs of the certificate entry
+MovingSofaExtremal/             the certificate route, and the proofs of version 5
 docs/                           these pages, the credits and the manuscript
 scripts/                        the audits, the documentation tools and the figures
 ```
@@ -195,24 +196,25 @@ Lean and Mathlib are pinned at `v4.35.0-rc3`. The build's only `sorry`s are the 
 The audit checks that every declaration of the libraries, and every theorem that Comparator checks, uses only the
 axioms [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound); the route check, that each proof of a result of Baek's paper
 uses what Baek's proof cites, up to recorded differences; the two route audits, that the second proof of optimality
-avoids Baek's Theorem 1.1.1, and that the certificate entry's proofs avoid it, his balance argument, and the main
+avoids Baek's Theorem 1.1.1, and that the proofs of version 5 avoid it, his balance argument, and the main
 theorem and equality analysis of the first uniqueness proof. Comparator checks that each Solution proves exactly
 its Challenge. GitHub Actions runs all of these but Comparator on every push, and also checks the Challenges'
 copies of the definitions and the documentation.
 
 ## Palomar
 
-[Palomar](https://palomar-registry.org) checks each entry's proofs against its Challenge; the entry's Comparator configuration
-selects the theorems, and its metadata records provenance, authorship and AI use.
+The repository has one entry in [Palomar](https://palomar-registry.org),
+[PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008). Palomar checks each version's proofs against its Challenge; the
+Comparator configuration selects the theorems, and the metadata records provenance, authorship and AI use.
 
-- **The certificate entry** ([`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean), [`comparator.json`](comparator.json), [`formalization.yaml`](formalization.yaml)) is not
-  registered yet.
-- **Baek's entry** (in [`baek/`](baek)) is registered as
-  [PALOMAR-2026-10-02-000008](https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008). Its versions 1 to 4 were registered from the root of the
-  repository: version 1 registers the optimality (`d0b42d2`), version 2 adds the uniqueness (`cf4feff`), version 3
-  the bridge (`eb93296`) and version 4 the proofs that follow Baek's arguments (`16653ae`).
+- **Versions 1 to 4** were registered from the root of the repository: version 1 registers the optimality
+  (`d0b42d2`), version 2 adds the uniqueness (`cf4feff`), version 3 the bridge (`eb93296`) and version 4 the proofs
+  that follow Baek's arguments (`16653ae`). Their Challenge and Solution, kept up to date, are in [`baek/`](baek), with
+  their Comparator configuration and metadata, so that Comparator still checks them; [`baek/`](baek) is not registered on
+  its own.
+- **Version 5** ([`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean), [`comparator.json`](comparator.json), [`formalization.yaml`](formalization.yaml)) is not registered yet.
 
-[`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's preflight on either entry.
+[`.github/workflows/palomar_preflight.yml`](.github/workflows/palomar_preflight.yml) runs Palomar's preflight on the root, and on [`baek/`](baek) with inputs.
 
 ## License
 
@@ -228,4 +230,4 @@ Apache-2.0 ([`LICENSE`](LICENSE)), as for Mathlib.
   and #9). Claude Opus 5.5 made the drafts compile and completed them; the second proof of optimality compiled
   unchanged, and Claude Opus 5.5 merged it and extended its audit.
 - No person has reviewed the proofs, the statements or the definitions; Lean's kernel checks every proof. The work
-  took nineteen rounds between 1 and 6 October 2026, with up to 26 sub-agents in a round: [docs/CREDITS.md](docs/CREDITS.md).
+  took nineteen rounds between 1 and 7 October 2026, with up to 26 sub-agents in a round: [docs/CREDITS.md](docs/CREDITS.md).

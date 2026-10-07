@@ -4,7 +4,7 @@ public import MovingSofaExtremal.Statements
 public import MovingSofaExtremal.Certificate
 
 /-!
-# The solution of the certificate entry: the seventeen theorems of `Challenge.lean`
+# The solution of version 5: the seventeen theorems of `Challenge.lean`
 
 This module is the solution that Comparator checks against `Challenge.lean` (`comparator.json`).
 `MovingSofaExtremal.Statements` proves fifteen of its theorems, with optimality, uniqueness and
@@ -12,7 +12,7 @@ stability through the coercive certificate, in the namespace `CoerciveSolution`,
 can load it together with `baek/Solution.lean`; this module states fourteen of them under the
 Challenge's names, each proved by the theorem of `MovingSofaExtremal.Statements`. The fifteenth,
 `FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`, is proved in
-`MovingSofaBridge.Defs`, for both entries, and the last two, `Certificate.coercive_certificate` and
+`MovingSofaBridge.Defs`, for both Challenges, and the last two, `Certificate.coercive_certificate` and
 `Certificate.gerver_triple`, in `MovingSofaExtremal.Certificate`. The module declares the names that
 `baek/Solution.lean` declares, so no module imports it.
 -/

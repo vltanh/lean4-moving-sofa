@@ -5,12 +5,12 @@ sofa: every moving sofa of the same area is a rotated and translated copy of it,
 that this uniqueness is stable: a moving sofa whose area is ε less than the maximum lies, after a translation,
 within Hausdorff distance O(√ε) of Gerver's sofa, and the exponent 1/2 cannot be improved. Section 11 derives
 optimality, uniqueness and stability from one estimate of the stability proof (the coercive certificate). The manuscript
-follows the formalization in this repository and cites it for the machine-checked statements. The repository has
-two Palomar entries. The one at its root, [`Challenge.lean`](../../Challenge.lean), states Theorem 1.1 (`Baek.gerver_sofa_unique`)
-with the stability theorems (`Baek.gerver_sofa_stable`, `Baek.gerver_sofa_angle_stable`,
-`Baek.gerver_sofa_stability_exponent`) and the certificate of Section 11 (`Certificate.coercive_certificate`), all
-proved through the certificate; the one in [`baek/`](../../baek), the formalization of Baek's paper, states Theorem 1.1
-too, proved through Baek's theorem.
+follows the formalization in this repository and cites it for the machine-checked statements. The repository's
+Challenge, [`Challenge.lean`](../../Challenge.lean), states Theorem 1.1 (`Baek.gerver_sofa_unique`) with the stability theorems
+(`Baek.gerver_sofa_stable`, `Baek.gerver_sofa_angle_stable`, `Baek.gerver_sofa_stability_exponent`) and the
+certificate of Section 11 (`Certificate.coercive_certificate`), all proved through the certificate; it is version 5
+of the Palomar entry PALOMAR-2026-10-02-000008. Versions 1 to 4 registered the formalization of Baek's paper, which
+[`baek/`](../../baek) keeps; its Challenge states Theorem 1.1 too, proved through Baek's theorem.
 
 This is a draft for the author to read. An AI model (Claude Sonnet 5.5, in Claude Code) wrote the text from
 the Lean library, the illustrated text of the proofs in [`baek/proof/`](../../baek/proof/README.md) and the text of
@@ -94,9 +94,10 @@ undefined reference.
   optimality and uniqueness of its compactness step and of its case of zero deficit, from these theorems, and its
   local cap estimate from the certificate. ChatGPT Pro 6 wrote the route in pull request #9, without compiling it; Claude
   Opus 5.5 compiled and completed it on 6 October, and `scripts/AuditCoerciveRoute.lean` checks its
-  dependencies. The Palomar entry at the root of the repository states the certificate (Theorem 11.1) with
-  optimality, uniqueness, the stability theorems and formal-conjectures' statements, and its `Solution.lean` proves
-  all of them through the route; Comparator checks it against the root's `Challenge.lean`.
+  dependencies. The Challenge at the root of the repository, version 5 of the Palomar entry, states the certificate
+  (Theorem 11.1) with optimality, uniqueness, the stability theorems and formal-conjectures' statements, and the
+  root's `Solution.lean` proves all of them through the route; Comparator checks it against the root's
+  `Challenge.lean`.
 - Three Facts (the equality case of Baek's bound needs a proof that avoids $\mathcal N(K)\subset K$; the structure
   of Gerver's sofa; the height of its rotation path) are known only from the formalization.
 - The links to the repository are pinned to commit `44ddd4c75b9ed901c78e0b255d673841ebf04aeb`, on which the
@@ -145,12 +146,12 @@ These are the author's to settle; the text settles none of them.
    > formalized in Lean 4 with Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
 
 6. `\date{October 2026}` in `main.tex`.
-7. [`README.md`](../../README.md) and [`CREDITS.md`](../CREDITS.md) list the four versions of the registered Palomar
-   entry; `CREDITS.md` has a section for each later round. The repository now carries two entries: at its root
-   (`Challenge.lean`, seventeen theorems, `formalization.yaml`), the certificate and the three results proved through
-   it; and in `baek/` (`baek/Challenge.lean`, twelve theorems, `baek/formalization.yaml`), the formalization of
-   Baek's paper with the first proof of uniqueness, registered as PALOMAR-2026-10-02-000008, whose version 4
-   registers `16653ae`. Submitting the entry at the root is for the author, after its preflight.
+7. [`README.md`](../../README.md) and [`CREDITS.md`](../CREDITS.md) list the four registered versions of the Palomar entry
+   PALOMAR-2026-10-02-000008; `CREDITS.md` has a section for each later round. Versions 1 to 4 registered the
+   formalization of Baek's paper with the first proof of uniqueness (version 4: `16653ae`), whose files are now in
+   `baek/` (`baek/Challenge.lean`, twelve theorems). Version 5 is the root (`Challenge.lean`, seventeen theorems,
+   `formalization.yaml`): the certificate and the three results proved through it. Submitting version 5 is for the
+   author, after its preflight.
 
 ## How it was made
 
@@ -451,7 +452,9 @@ theorem, and Appendix D and the dictionary name the files at their new places: t
 Challenges copy are in `MovingSofaBridge/Defs.lean` and `MovingSofaExtremal/CertificateDefs.lean`, and the proofs
 that the Solution at the root restates in `MovingSofaExtremal/Statements.lean` and
 `MovingSofaExtremal/Certificate.lean`. Palomar's preflight of the certificate entry passed on `44ddd4c`, and the
-manuscript cites that commit. It has 119 pages.
+manuscript cited that commit. Palomar does not register a second entry for the repository's Comparator
+configuration, so the author decided that the root is version 5 of PALOMAR-2026-10-02-000008 and that the files of
+versions 1 to 4 stay in `baek/`; Appendices D.1 and E and Section 1.6 say so. It has 119 pages.
 
 ## What has not been done
 
@@ -465,9 +468,10 @@ manuscript cites that commit. It has 119 pages.
   by the route check and by model runs, not proved again by hand. Baek's paper is itself unrefereed.
 - Appendix D's paraphrase of the Lean definitions was compared with `Challenge.lean` by model runs, in two rounds.
 - The edits after the second round of checks, the E-label marks added in it, and this file were not checked again.
-- Version 4 of the registered Palomar entry, now in `baek/`, registers `16653ae`; the Lean results of 4 and
+- Version 4 of the Palomar entry registers `16653ae`, whose files are now in `baek/`; the Lean results of 4 and
   5 October, the three stability theorems and the certificate, which the Challenge at the root states, and the
-  derivation of Section 11 are not in a registered entry yet; Palomar's preflight passed on the cited commit.
+  derivation of Section 11 are not in a registered version yet; they are version 5, whose preflight passed on the
+  cited commit.
 - Sections 10 and 11 and the passages on them added on 6 October have been read by model runs only, not by the
   author. Section 1.6 and Appendix E say that the author has proofread and edited the abstract and Section 1
   only (the author's statement of 6 October), except the parts of Section 1 written later; until 6 October the

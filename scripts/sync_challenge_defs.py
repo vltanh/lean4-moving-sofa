@@ -35,12 +35,13 @@ CERTIFICATE = ('-- BEGIN CERTIFICATE DEFINITIONS\n', '-- END CERTIFICATE DEFINIT
 # Each copy: the library module that holds the shared definitions, the Challenge file, and its
 # blocks. The blocks of each Challenge appear in it in the order of this list.
 COPIES = [
-    # The certificate entry (comparator.json), at the root. The certificate's block comes after all
-    # the blocks of MovingSofaBridge/Defs.lean, as `MovingSofaExtremal.CertificateDefs` assumes.
+    # Version 5 of the Palomar entry (comparator.json), at the root. The certificate's block comes
+    # after all the blocks of MovingSofaBridge/Defs.lean, as `MovingSofaExtremal.CertificateDefs`
+    # assumes.
     ('MovingSofaBridge/Defs.lean', 'Challenge.lean',
      [BAEK_CORE, BAEK_STABILITY, SHARED_1, SHARED_2]),
     ('MovingSofaExtremal/CertificateDefs.lean', 'Challenge.lean', [CERTIFICATE]),
-    # Baek's entry (baek/comparator.json).
+    # The Challenge of versions 1 to 4 (baek/comparator.json).
     ('MovingSofaBridge/Defs.lean', 'baek/Challenge.lean', [BAEK_CORE, SHARED_1, SHARED_2]),
 ]
 # ---------------------------------------------------------------------------------------------

@@ -1,10 +1,13 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
 version: "v0.4"
 
-# The Palomar entry PALOMAR-2026-10-02-000008, whose versions 1 to 4 were registered from the root of
-# the repository: the Challenge baek/Challenge.lean, the Solution baek/Solution.lean, the Comparator
-# configuration baek/comparator.json. The entry at the root (Challenge.lean, Solution.lean,
-# comparator.json, formalization.yaml) is the coercive certificate.
+# The metadata of versions 1 to 4 of PALOMAR-2026-10-02-000008, which registered this formalization
+# from the root of the repository (commits d0b42d2, cf4feff, eb93296, 16653ae). Its Challenge, Solution
+# and Comparator configuration are kept here, brought up to date (baek/Challenge.lean,
+# baek/Solution.lean, baek/comparator.json), so that Comparator can still check them. Palomar registers
+# one entry for the root's Comparator configuration, so this directory is not an entry of its own:
+# version 5 of the entry, at the root (Challenge.lean, Solution.lean, comparator.json,
+# formalization.yaml), registers the coercive certificate.
 
 project:
   name: "Optimality (Baek 2024) and uniqueness of Gerver's sofa, formalized in Lean 4"
@@ -27,8 +30,8 @@ project:
 
 
     It proves that Gerver's sofa is stable, and it derives optimality, uniqueness and stability
-    from one estimate for Baek's upper bound, a coercive certificate; that work is the repository's
-    other Palomar entry, at its root (formalization.yaml), whose Challenge states it.
+    from one estimate for Baek's upper bound, a coercive certificate; version 5 of this entry, at
+    the root of the repository (formalization.yaml), states that work.
 
 
     Finally, it bridges Baek's definitions and those of Google DeepMind's formal-conjectures: the two
@@ -165,8 +168,8 @@ status:
     motions (MovingSofaUniqueness/), with the theorem and the six propositions of
     docs/archive/uniqueness/20-complete-paper-proof.md. Not formalized there: the quantitative stability
     estimate of note 17, which the theorem does not use. The repository also proves the stability of
-    Gerver's sofa and derives optimality, uniqueness and stability from one coercive certificate; the
-    Palomar entry at its root (formalization.yaml) states these results. Also
+    Gerver's sofa and derives optimality, uniqueness and stability from one coercive certificate;
+    version 5 of this entry, at its root (formalization.yaml), states these results. Also
     formalized: the bridge between
     formal-conjectures' definitions and Baek's (MovingSofaBridge/): the two notions of moving sofa,
     the two optimal areas and the two Gerver's sofas agree, and Gerver's four constants are unique on
@@ -284,8 +287,9 @@ automation:
         instruction: simplify and consolidate the stability library and the other new code, keeping
         the formalization of Baek's paper and the connection with formal-conjectures intact; then
         approvals to check the second solution with Comparator too, and to merge this work into the
-        main branch for a new version of the Palomar entry. Then instructions to give the certificate
-        path a Palomar entry of its own, and to keep this entry's files in baek/.
+        main branch for a new version of the Palomar entry. Then instructions to register the
+        certificate path, which became version 5 of this entry at the root, and to keep these files
+        in baek/.
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
       framework: "ChatGPT (OpenAI), committing to the repository through GitHub"
@@ -310,8 +314,9 @@ automation:
     Claude Opus 5.5 made the draft compile and completed it.
     Every result is compiled. scripts/Audit.lean checks that every declaration of the library uses
     only propext, Classical.choice and Quot.sound, and lake comparator checks the Challenge/Solution
-    pair (baek/Challenge.lean, baek/Solution.lean, baek/comparator.json). The entry at the root of the
-    repository has its own Challenge and Solution (Challenge.lean, Solution.lean, comparator.json).
+    pair (baek/Challenge.lean, baek/Solution.lean, baek/comparator.json). Version 5, at the root of
+    the repository, has its own Challenge and Solution (Challenge.lean, Solution.lean,
+    comparator.json).
 
 fidelity:
   divergences: >-

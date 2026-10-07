@@ -6,9 +6,10 @@ name: Palomar preflight
 # Pin `uses` and `pipeline_commit` to the same full PalomarSubmission commit:
 #   git ls-remote https://github.com/PalomarRegistry/PalomarSubmission.git HEAD
 # `request_id` must be exactly 12 lowercase letters or digits.
-# The repository holds two entries: at the root, the coercive certificate (comparator.json,
-# formalization.yaml), and in baek/, Baek's optimality with the first proof of uniqueness
-# (baek/comparator.json, baek/formalization.yaml). Choose one with the inputs:
+# The repository's Palomar entry, PALOMAR-2026-10-02-000008, is the root (comparator.json,
+# formalization.yaml): version 5, the coercive certificate. Versions 1 to 4 registered the
+# formalization of Baek's paper with the first proof of uniqueness, which baek/ keeps with its own
+# Comparator configuration; the inputs can run the same checks on it:
 #   gh workflow run palomar_preflight.yml --ref main
 #   gh workflow run palomar_preflight.yml --ref main -f comparator_config_path=baek/comparator.json \
 #     -f formalization_metadata_path=baek/formalization.yaml -f request_id=preflightb05

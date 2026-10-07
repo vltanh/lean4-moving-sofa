@@ -6,16 +6,16 @@ public import MovingSofaBridge.RomikParams
 /-!
 # The definitions of the Challenges
 
-The definitions of the two Challenges, `Challenge.lean` (the certificate entry, at the root) and
-`baek/Challenge.lean` (Baek's entry): those of Baek's paper, in the namespace `Baek`, and those of
-formal-conjectures, in the namespace `FormalConjectures.MovingSofa`. The Challenges may not import
-the project, so `scripts/sync_challenge_defs.py` copies the marked blocks into them verbatim; the
-Solutions and the bridge library use the constants defined here, so Comparator sees the same
-constants in the Challenges and in the Solutions. Baek's definitions form two blocks: the core, up
-to Gerver's sofa, which both Challenges copy, and the definitions of the stability statements, which
-only the certificate entry copies. The formal-conjectures definitions form two more blocks, which
-both Challenges copy; between them, the Challenges state `ABφθSpec.existsUnique` and this module
-proves it (`MovingSofaBridge.GerverConstants`).
+The definitions of the two Challenges, `Challenge.lean` (version 5 of the Palomar entry, at the
+root) and `baek/Challenge.lean` (the Challenge of versions 1 to 4): those of Baek's paper, in the
+namespace `Baek`, and those of formal-conjectures, in the namespace `FormalConjectures.MovingSofa`.
+The Challenges may not import the project, so `scripts/sync_challenge_defs.py` copies the marked
+blocks into them verbatim; the Solutions and the bridge library use the constants defined here, so
+Comparator sees the same constants in the Challenges and in the Solutions. Baek's definitions form
+two blocks: the core, up to Gerver's sofa, which both Challenges copy, and the definitions of the
+stability statements, which only the Challenge at the root copies. The formal-conjectures
+definitions form two more blocks, which both Challenges copy; between them, the Challenges state
+`ABφθSpec.existsUnique` and this module proves it (`MovingSofaBridge.GerverConstants`).
 -/
 
 @[expose] public section

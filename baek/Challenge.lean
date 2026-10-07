@@ -5,9 +5,11 @@ public import Mathlib
 /-!
 # The moving sofa problem: Gerver's sofa has maximum area and is the only such sofa
 
-Baek's entry of this repository (`baek/comparator.json`, registered as PALOMAR-2026-10-02-000008):
-the formalization of Baek's paper with the first proof of uniqueness, kept in `baek/`. It has twelve
-statements of record, in Mathlib's vocabulary only, in three groups.
+The Challenge of versions 1 to 4 of the Palomar entry PALOMAR-2026-10-02-000008, which registered it
+from the root of the repository: the formalization of Baek's paper with the first proof of
+uniqueness. The repository keeps it, brought up to date, in `baek/` (`baek/comparator.json`), so
+that Comparator can still check it; `baek/` is not registered on its own. It has twelve statements
+of record, in Mathlib's vocabulary only, in three groups.
 
 * `Baek`: the definitions of Jineon Baek, *Optimality of Gerver's Sofa* (arXiv:2411.19826v1), the
   paper's main theorem (Theorem 1.1.1), and the uniqueness of the optimal sofa up to rigid motions,
@@ -18,8 +20,8 @@ statements of record, in Mathlib's vocabulary only, in three groups.
 * `Bridge`: the two sets of definitions describe the same objects. Formal-conjectures' statements
   follow from Baek's through these three theorems.
 
-The solution of this entry (`baek/Solution.lean`) proves optimality and uniqueness through Baek's
-Theorem 1.1.1. The repository's main entry, the certificate entry at the root (`Challenge.lean`,
+Its solution (`baek/Solution.lean`) proves optimality and uniqueness through Baek's Theorem 1.1.1.
+Version 5 of the entry, prepared at the root and not registered yet (`Challenge.lean`,
 `comparator.json`), states the same twelve theorems among its seventeen, with the stability of
 Gerver's sofa and the coercive certificate, and proves optimality, uniqueness and stability through
 the certificate.

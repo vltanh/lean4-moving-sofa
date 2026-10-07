@@ -1,9 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
 version: "v0.4"
 
-# The Palomar entry at the root of this repository: the Challenge Challenge.lean, the Solution
-# Solution.lean, the Comparator configuration comparator.json. The other entry (baek/Challenge.lean,
-# baek/Solution.lean, baek/comparator.json, baek/formalization.yaml) formalizes Baek's paper.
+# Version 5 of PALOMAR-2026-10-02-000008, the Palomar entry of this repository: the Challenge
+# Challenge.lean, the Solution Solution.lean, the Comparator configuration comparator.json. Versions 1
+# to 4 registered the formalization of Baek's paper with the first proof of uniqueness, whose files the
+# repository keeps in baek/ (baek/Challenge.lean, baek/Solution.lean, baek/comparator.json,
+# baek/formalization.yaml).
 
 project:
   name: "Optimality, uniqueness and stability of Gerver's sofa from one coercive certificate, formalized in Lean 4"
@@ -37,12 +39,14 @@ project:
     which it lists as open; here they are proved through the certificate.
 
 
-    The repository's other Palomar entry, PALOMAR-2026-10-02-000008, formalizes Baek's paper and a
-    first proof of uniqueness that uses his Theorem 1.1.1, and states the same optimality, uniqueness
-    and formal-conjectures theorems, proved through Baek's argument. A script in the repository,
-    scripts/AuditCoerciveRoute.lean, run by the continuous integration, checks that the proofs of
-    this entry reach neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor that
-    first proof of uniqueness.
+    Versions 1 to 4 of this entry registered the formalization of Baek's paper with a first proof of
+    uniqueness that uses his Theorem 1.1.1; they state the same optimality, uniqueness and
+    formal-conjectures theorems, proved through Baek's argument, and the repository keeps their
+    Challenge and Solution in baek/. This version proves those theorems through the certificate and
+    adds the certificate and the stability. A script in the repository,
+    scripts/AuditCoerciveRoute.lean, run by the continuous integration, checks that its proofs reach
+    neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the main theorem and
+    the equality analysis of the first proof of uniqueness.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -149,14 +153,6 @@ sources:
     author_endorsement: n/a
 
 related_formalizations:
-  - id: "https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-02-000008"
-    relationship: builds-on
-    note: >-
-      The repository's other entry, in its directory baek/: the formalization of Baek's paper,
-      with a first proof of uniqueness and the bridge to formal-conjectures. This entry uses its
-      libraries and states the same optimality, uniqueness and formal-conjectures theorems, proved
-      through the certificate instead of through Baek's Theorem 1.1.1; it adds the certificate and
-      the stability.
   - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean"
     relationship: other
     note: >-
@@ -212,7 +208,7 @@ automation:
           The stability: about 1 hour (2026-10-05 22:17 to 23:13) and 2 hours 41 minutes (2026-10-06
           07:08 to 09:49). The coercive route: about 3 hours 26 minutes (2026-10-06 09:56 to
           13:22). The simplification: about 2 hours 44 minutes (2026-10-06 13:25 to 16:09). This
-          entry's Challenge and Solution, and the move of the other entry into baek/: about 3 hours 17 minutes
+          version's Challenge and Solution, and the move of the files of versions 1 to 4 into baek/: about 3 hours 17 minutes
           (2026-10-06 19:53 to 23:11), with about 2.8 hours of sub-agent working time.
           docs/CREDITS.md gives the figures of each round.
         spend_usd: "not tracked"
@@ -242,7 +238,7 @@ fidelity:
     7.2.6 and 7.2.8, the convex curve areas his Theorem 7.3.2, the caps his Definition 2.4.1, and the
     enlarged domain is Baek's domain of triples with the cap in the set of all caps with rotation angle
     pi/2 instead of the caps with the injectivity condition (the stability notes' definition).
-    (2) Readings, as in Baek's entry: the plane is R x R and area is Lebesgue measure; the support
+    (2) Readings, as in versions 1 to 4: the plane is R x R and area is Lebesgue measure; the support
     function is a supremum; the surface area measure sigma_K is the Lebesgue-Stieltjes measure of
     t -> <v_K^+(t), v_t> + int_0^t h_K; the curve area functional of a continuous curve of bounded
     variation is (1/2) int x(t) x dx(t), with dx the Lebesgue-Stieltjes vector measure of the curve on
@@ -260,11 +256,15 @@ fidelity:
     The proofs follow the notes' arguments as written in pull request #8's Lean code.
     (4) The uniqueness is stated with a rotation and a translation, as formal-conjectures states it;
     the proof through the certificate also shows that a translation suffices.
+    (5) The proofs use the repository's formalization of Baek's paper. Its corrections of the
+    paper's statements and its departures from the paper's proofs are listed in
+    baek/formalization.yaml (the metadata of versions 1 to 4) and audited in baek/REPORT.md.
 review:
   status: "agent-reviewed"
   reviewers:
     - "A Claude Opus 5.5 sub-agent, separate from the repairing agents: a comparison of every repaired stability proof with the uncompiled draft's"
     - "Claude Opus 5.5 sub-agents, separate from the writing agents: comparisons of the manuscript's Sections 10 and 11 with the Lean"
+    - "A Claude Opus 5.5 sub-agent that could not edit: a comparison of the Challenge's certificate definitions with Baek's paper and the libraries"
   notes: >-
     No human has reviewed the proofs, the statements or the definitions. Lean's kernel checks the
     proofs, and Comparator checks that the Solution proves the Challenge's statements with the

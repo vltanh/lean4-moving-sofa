@@ -37,16 +37,17 @@ name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
 
 # Optimality, uniqueness and stability from the coercive certificate of MovingSofaStability, and the
-# proofs of the certificate entry: fifteen of its theorems, in the namespace CoerciveSolution
-# (MovingSofaExtremal.Statements), the certificate's definitions that Challenge.lean copies verbatim
-# (MovingSofaExtremal.CertificateDefs), and its two theorems about the certificate
-# (MovingSofaExtremal.Certificate).
+# proofs of version 5 of the Palomar entry: fifteen of its theorems, in the namespace
+# CoerciveSolution (MovingSofaExtremal.Statements), the certificate's definitions that
+# Challenge.lean copies verbatim (MovingSofaExtremal.CertificateDefs), and its two theorems about
+# the certificate (MovingSofaExtremal.Certificate).
 [[lean_lib]]
 name = "MovingSofaExtremal"
 globs = ["MovingSofaExtremal.+"]
 
-# The certificate entry (comparator.json), at the root: optimality, uniqueness and stability through
-# the coercive certificate. Its seventeen statements, in Mathlib's vocabulary only.
+# Version 5 of the Palomar entry PALOMAR-2026-10-02-000008 (comparator.json), at the root, not
+# registered yet: optimality, uniqueness and stability through the coercive certificate. Its
+# seventeen statements, in Mathlib's vocabulary only.
 [[lean_lib]]
 name = "Challenge"
 
@@ -54,11 +55,13 @@ name = "Challenge"
 [[lean_lib]]
 name = "Solution"
 
-# Baek's entry (baek/comparator.json, registered as PALOMAR-2026-10-02-000008), in baek/: Baek's
-# paper with the first proof of uniqueness. Its twelve statements (baek/Challenge.lean) and their
-# proofs, with optimality and uniqueness through Baek's Theorem 1.1.1 (baek/Solution.lean). The
-# glob selects the modules baek.Challenge and baek.Solution: `.+` takes the submodules of baek
-# without a module baek itself, which does not exist (`.*` would take it too).
+# The formalization that versions 1 to 4 of PALOMAR-2026-10-02-000008 registered, from the root,
+# kept up to date in baek/ so that Comparator can still check it (baek/comparator.json; baek/ is not
+# registered on its own): Baek's paper with the first proof of uniqueness. Its twelve statements
+# (baek/Challenge.lean) and their proofs, with optimality and uniqueness through Baek's Theorem
+# 1.1.1 (baek/Solution.lean). The glob selects the modules baek.Challenge and baek.Solution: `.+`
+# takes the submodules of baek without a module baek itself, which does not exist (`.*` would take
+# it too).
 [[lean_lib]]
 name = "BaekEntry"
 globs = ["baek.+"]

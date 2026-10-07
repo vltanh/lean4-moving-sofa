@@ -16,7 +16,7 @@ was not recorded.
   the extension of the libraries below; and on 5 and 6 October, in another session of Claude Code 2.1.289, the
   merge of the second proof of optimality below, the compilation of the stability proof, the compilation and
   completion of the coercive route, the simplification of the new libraries, the merge of this work into main, and
-  the certificate entry, with Baek's entry moved into [`baek/`](../baek).
+  version 5 of the Palomar entry, with the files of versions 1 to 4 moved into [`baek/`](../baek).
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
   Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
@@ -31,8 +31,8 @@ was not recorded.
   argument, the text of the proofs against the Lean statements, every changed proof against Baek's,
   the report's "What's next" section against its sources, the comparison of the formalizations
   against the three projects' sources, the manuscript against the Lean statements and proofs, every
-  repaired proof of the stability library against the draft's, and the definitions of the certificate entry's
-  Challenge against Baek's paper and the libraries.
+  repaired proof of the stability library against the draft's, and the certificate's definitions in the Challenge
+  of version 5 against Baek's paper and the libraries.
 
 ## Baek's paper (1 and 2 October 2026)
 
@@ -403,8 +403,8 @@ formalize-math-paper skill the pitfall that the previous round had met.
 
 How it was made:
 - 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
-- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](../Challenge.lean#L697),
-  [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L707), [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L717)), with five definitions in [`ChallengeDefs`](../MovingSofaBridge/Defs.lean)
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](../Challenge.lean#L698),
+  [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L708), [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L718)), with five definitions in [`ChallengeDefs`](../MovingSofaBridge/Defs.lean)
   and, in [`Solution.lean`](../baek/Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
   the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
   [`formalization.yaml`](../baek/formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
@@ -622,7 +622,7 @@ Figures, from 18:16 to 18:30 and from 19:26 to 19:47:
 - tool calls: 54 by the main session; tokens: 0.05 million output, 0.08 million input, 42 million cache reads;
 - model calls: 55, all to `claude-opus-5-5`.
 
-## The certificate entry, and Baek's entry in its own directory (6 October 2026)
+## Version 5 at the root, and Baek's formalization in its own directory (6 and 7 October 2026)
 
 The owner asked whether the coercive proof should become the entry point for Palomar, judged that it deserves a
 submission of its own, and chose that its Challenge state the certificate. The owner then set three aims: the
@@ -634,7 +634,9 @@ certificate; both state formal-conjectures' theorems. Finally the owner asked to
 the certificate entry, with Baek's entry in a directory of its own, then to move the remaining helper files out of
 it, and then to move the documents that concern only Baek's entry into its directory. The owner then asked to push
 the result and to run Palomar's preflight on the certificate entry, which the owner will submit, and to shorten
-each section of the README.
+each section of the README. On 7 October the owner found that Palomar does not register a second entry for the
+repository's Comparator configuration, and decided that the root is version 5 of PALOMAR-2026-10-02-000008, with
+the files of versions 1 to 4 kept in [`baek/`](../baek).
 
 How it was made:
 - 19:53 to 23:11: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with four
@@ -654,7 +656,7 @@ How it was made:
   removed, since the certificate entry checks the second solution.
 - A sub-agent that could not edit compared the certificate's definitions with Baek's paper and the libraries. It
   found no error. Its nine findings on docstrings were applied, and the Lean sub-agent added
-  [`Certificate.gerver_triple`](../Challenge.lean#L655), which shows that the certificate's hypothesis can be met and that its bound is
+  [`Certificate.gerver_triple`](../Challenge.lean#L656), which shows that the certificate's hypothesis can be met and that its bound is
   attained, so the certificate entry states seventeen theorems.
 - A sub-agent rewrote the README and the pages of [`docs/`](.) for the two entries. The main session wrote the new
   entry's metadata, gave the preflight workflow inputs that choose the entry, and rewrote Appendix D of the
@@ -688,6 +690,11 @@ How it was made:
   disclosure had survived, and ten places where the shorter text said more or less than before (the count of the
   theorems in the namespace `Baek`, a certificate route that read as if it used no part of the first uniqueness
   proof, a claim that every result of the paper is proved here), which the main session corrected.
+- The two-entry wording then gave way to one entry with five versions. The metadata at the root no longer lists
+  PALOMAR-2026-10-02-000008 as a related formalization; it says that versions 1 to 4 registered the formalization
+  that [`baek/`](../baek) keeps, and points to that formalization's corrections of Baek's paper. [`baek/formalization.yaml`](../baek/formalization.yaml) is the
+  metadata of versions 1 to 4, and the README, the documentation, the Lean docstrings, the preflight workflow and
+  the manuscript say the same. Two sub-agents reworded the Lean files and the Markdown pages.
 
 Figures, from 19:53 to 23:11:
 - elapsed time: 3 hours 17 minutes;

@@ -389,12 +389,12 @@ meta def coerciveResults : List (String × Name) :=
    ("Coercive route: optimality, uniqueness and stability",
     ``MovingSofaExtremal.gerver_sofa_optimal_unique_stable)]
 
-/-- The theorems that Palomar's comparator checks: the twelve of Baek's entry (`theorem_names` of
-`baek/comparator.json`, proved in `baek/Solution.lean`), and the two about the certificate in the
-certificate entry (`comparator.json`). The other fifteen theorems of the certificate entry are
-restatements, in the root's `Solution.lean`, of theorems of `MovingSofaExtremal.Statements`, which
-the audit checks as declarations of the library; it cannot import the root's `Solution`, which
-declares the names of `baek.Solution`. -/
+/-- The theorems that Comparator checks: the twelve of the Challenge of versions 1 to 4 of the
+Palomar entry (`theorem_names` of `baek/comparator.json`, proved in `baek/Solution.lean`), and the
+two about the certificate in the Challenge at the root (`comparator.json`, version 5). The other
+fifteen theorems at the root are restatements, in the root's `Solution.lean`, of theorems of
+`MovingSofaExtremal.Statements`, which the audit checks as declarations of the library; it cannot
+import the root's `Solution`, which declares the names of `baek.Solution`. -/
 meta def solutionResults : List Name :=
   [``Baek.gerver_params_exists,
    ``Baek.gerver_params_unique,
@@ -417,7 +417,7 @@ meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.so
 /-- Whether `m` is a module of the library: of Baek's paper (`MovingSofaOptimality`), the
 uniqueness of Gerver's sofa (`MovingSofaUniqueness`), the bridge to formal-conjectures' definitions
 with the Challenges' definitions (`MovingSofaBridge`), the stability of Gerver's sofa
-(`MovingSofaStability`), or the coercive route with the proofs of the certificate entry
+(`MovingSofaStability`), or the coercive route with the proofs of version 5 of the Palomar entry
 (`MovingSofaExtremal`). -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`MovingSofaOptimality).isPrefixOf m || (`MovingSofaUniqueness).isPrefixOf m ||

@@ -6,15 +6,15 @@ public import MovingSofaStability.Sharpness
 public import MovingSofaBridge.GerverSofa
 
 /-!
-# The certificate entry: fifteen of its theorems
+# Version 5: fifteen of its theorems
 
-This module proves fifteen of the seventeen theorems of `Challenge.lean` (the certificate entry):
-the twelve that `baek/Challenge.lean` (Baek's entry) states too, and the three stability theorems.
-It uses the definitions of `MovingSofaBridge.Defs` and the bridge `MovingSofaBridge`, with
-optimality, uniqueness and stability taken from the coercive route `MovingSofaExtremal`
-(`gerver_sofa_optimal_unique_stable`). It imports neither `baek.Solution` nor
-`MovingSofaUniqueness.Main`. `Solution`, the solution of the certificate entry, states these
-theorems under the Challenge's names, with the two theorems about the certificate of
+This module proves fifteen of the seventeen theorems of `Challenge.lean`, the Challenge at the root
+(version 5 of the Palomar entry): the twelve that `baek/Challenge.lean` (the Challenge of versions 1
+to 4) states too, and the three stability theorems. It uses the definitions of
+`MovingSofaBridge.Defs` and the bridge `MovingSofaBridge`, with optimality, uniqueness and stability
+taken from the coercive route `MovingSofaExtremal` (`gerver_sofa_optimal_unique_stable`). It imports
+neither `baek.Solution` nor `MovingSofaUniqueness.Main`. `Solution`, the solution at the root,
+states these theorems under the Challenge's names, with the two theorems about the certificate of
 `MovingSofaExtremal.Certificate`.
 
 The theorems are in the namespace `CoerciveSolution`, so that the audits can load them together with

@@ -9,11 +9,11 @@ lake env lean scripts/Audit.lean                    # axioms and dependencies
 python3 scripts/route_check.py check baek/paper_routes.tsv --accept baek/route_differences.tsv
                                                     # the proofs follow the routes of Baek's proofs
 lake env lean scripts/AuditMaximizerRoute.lean      # the second proof of optimality avoids Baek's theorem
-lake env lean scripts/AuditCoerciveRoute.lean       # the certificate entry's proofs avoid it and the first uniqueness proof
+lake env lean scripts/AuditCoerciveRoute.lean       # the proofs of version 5 avoid it and the first uniqueness proof
 python3 scripts/sync_challenge_defs.py --check      # the Challenges' copies of the definitions
-lake env lake comparator --config=comparator.json   # the certificate entry: Solution.lean proves Challenge.lean
+lake env lake comparator --config=comparator.json   # version 5: Solution.lean proves Challenge.lean
 lake env lake comparator --config=baek/comparator.json
-                                                    # Baek's entry: baek/Solution.lean proves baek/Challenge.lean
+                                                    # versions 1 to 4: baek/Solution.lean proves baek/Challenge.lean
 ```
 
 Needs [elan](https://github.com/leanprover/elan) and network access for Mathlib, and
@@ -25,12 +25,12 @@ alone.
 - `lake build` must succeed, and its only warnings are the seventeen `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean) and the twelve of [`baek/Challenge.lean`](../baek/Challenge.lean), whose theorems are the statements of record.
 - [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the five libraries (5,992 declarations),
-  which hold the definitions that the Challenges copy and the proofs of the certificate entry too, and
-  of the theorems that Comparator checks: the certificate entry's two theorems about the certificate, and the twelve
-  of Baek's entry, as [`baek/Solution.lean`](../baek/Solution.lean) proves them. Fourteen other theorems of the certificate entry are
+  which hold the definitions that the Challenges copy and the proofs of version 5 too, and of the theorems that
+  Comparator checks: the two theorems of version 5 about the certificate, and the twelve of versions 1 to 4, as
+  [`baek/Solution.lean`](../baek/Solution.lean) proves them. Fourteen other theorems of version 5 are
   restatements, in [`Solution.lean`](../Solution.lean), of theorems of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), whose declarations the audit checks;
   it cannot import [`Solution.lean`](../Solution.lean), which declares the names of [`baek/Solution.lean`](../baek/Solution.lean). The seventeenth,
-  `ABφθSpec.existsUnique`, is the theorem of [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) that Baek's entry uses too. The audit fails unless
+  `ABφθSpec.existsUnique`, is the theorem of [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) that versions 1 to 4 use too. The audit fails unless
   each one uses only the three standard axioms: an unproved lemma would add `sorryAx`, and `native_decide`, which
   trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
@@ -55,8 +55,8 @@ alone.
   condition of Baek's cap from its balance (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3, 6.5.6,
   Corollary 6.4.4 and Theorem 8.1.1 (2)), or a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean). Negative controls
   check that the traversal finds these results in the first proof.
-- [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks the proofs of the certificate entry ([the coercive route](coercive.md)): every
-  declaration of [`MovingSofaExtremal/`](../MovingSofaExtremal), which holds the certificate entry's proofs, and of [`MovingSofaStability/`](../MovingSofaStability), 867 with
+- [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks the proofs of version 5 ([the coercive route](coercive.md)): every
+  declaration of [`MovingSofaExtremal/`](../MovingSofaExtremal), which holds the proofs of version 5, and of [`MovingSofaStability/`](../MovingSofaStability), 867 with
   the private and generated ones. It fails if one of them uses an axiom other than the three standard ones, or
   if, following the proofs through all the repository's declarations, it
   reaches Baek's Theorem 1.1.1, the results of his balance argument listed above, a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) or [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean) (the first proof of
@@ -65,7 +65,7 @@ alone.
   [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)) reaches the stability proof after the certificate, which uses them
   ([`MovingSofaStability.Margins`](../MovingSofaStability/Margins.lean) and the ten modules that import it),
   if one of twenty-two positive controls is missing (for example, that the uniqueness reaches the certificate
-  [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120), and that the certificate entry's statement of the certificate does too), if one of
+  [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120), and that the statement of the certificate in the Challenge at the root does too), if one of
   eight negative controls fails, or if one of the twelve theorems that [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) shares with
   [`baek/Solution.lean`](../baek/Solution.lean) does not have exactly the statement of the theorem of [`baek/Solution.lean`](../baek/Solution.lean) that it restates.
 - `scripts/sync_challenge_defs.py --check` checks that the Challenges copy marked blocks of definitions word for
@@ -87,11 +87,11 @@ Lake's Comparator checks in a sandbox that a Solution proves exactly the stateme
 definitions, with the three standard axioms only, and replays the proofs through Lean's kernel and the NanoDa
 kernel. Each of the two configurations must end with `Your solution is okay!`:
 
-- [`comparator.json`](../comparator.json), the certificate entry: [`Solution.lean`](../Solution.lean) proves the seventeen statements of
+- [`comparator.json`](../comparator.json), version 5: [`Solution.lean`](../Solution.lean) proves the seventeen statements of
   [`Challenge.lean`](../Challenge.lean).
-- [`baek/comparator.json`](../baek/comparator.json), Baek's entry: [`baek/Solution.lean`](../baek/Solution.lean) proves the twelve statements of [`baek/Challenge.lean`](../baek/Challenge.lean).
+- [`baek/comparator.json`](../baek/comparator.json), versions 1 to 4: [`baek/Solution.lean`](../baek/Solution.lean) proves the twelve statements of [`baek/Challenge.lean`](../baek/Challenge.lean).
 
-[`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves fifteen theorems of the certificate entry in the namespace `CoerciveSolution`, so that
+[`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves fifteen theorems of version 5 in the namespace `CoerciveSolution`, so that
 the audits can load it together with [`baek/Solution.lean`](../baek/Solution.lean). [`Solution.lean`](../Solution.lean) states fourteen of them under the
 Challenge's names, each proved by the matching theorem of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), and takes
 `ABφθSpec.existsUnique` from [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) and the two theorems about the certificate from
@@ -107,10 +107,10 @@ proof of optimality and of the coercive route, and the check of the Challenges' 
 links from the documentation to the code are current and that the Markdown tables are well formed.
 
 [`.github/workflows/palomar_preflight.yml`](../.github/workflows/palomar_preflight.yml), run by hand, runs Palomar's complete mechanical verification of a commit
-without submitting it. Its inputs choose the entry: the Comparator configuration, the metadata, whose file name
-must be formalization.yaml, and a request id of exactly 12 lowercase letters or digits. Without inputs it checks the
-certificate entry ([`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml), request id `preflightc01`); the second command checks
-Baek's entry:
+without submitting it. Its inputs choose what it checks: the Comparator configuration, the metadata, whose file name
+must be formalization.yaml, and a request id of exactly 12 lowercase letters or digits. Without inputs it checks
+version 5, at the root ([`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml), request id `preflightc01`); the second command
+checks the formalization of versions 1 to 4 in [`baek/`](../baek):
 
 ```sh
 gh workflow run palomar_preflight.yml --ref main
@@ -119,7 +119,7 @@ gh workflow run palomar_preflight.yml --ref main -f comparator_config_path=baek/
 ```
 
 The report, the artifact `mechanical-report-` followed by the request id (`mechanical-report-preflightc01` for
-the certificate entry), must say `status: pass`. It does not cover the rendering of the Challenge, which Palomar runs after
+version 5), must say `status: pass`. It does not cover the rendering of the Challenge, which Palomar runs after
 verification with Verso: keep Mathlib on the release tag that matches the toolchain, since the render fails when a
 package that Mathlib and Verso share, such as `plausible`, is pinned at two different revisions, as it soon is on
 Mathlib `master`.

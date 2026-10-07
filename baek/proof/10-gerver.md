@@ -38,7 +38,7 @@ Let $\mathbf{x} : [0, \pi/2] \to \mathbb{R}^2$. The *shape* of the rotation path
 S_{\mathbf{x}} = H_L \cap \bigcap_{t \in [0, \pi/2]} \bigl(\mathbf{x}(t) + R_t L\bigr) \cap \bigl(\mathbf{x}(\pi/2) + R_{\pi/2} V_L\bigr) .
 ```
 
-*Lean: [`Baek.shapeOfPath`](../../Challenge.lean#L258), [`MovingSofaOptimality.shapeOfPath`](../../MovingSofaOptimality/Gerver/Defs.lean#L115).*
+*Lean: [`Baek.shapeOfPath`](../../Challenge.lean#L259), [`MovingSofaOptimality.shapeOfPath`](../../MovingSofaOptimality/Gerver/Defs.lean#L115).*
 
 Seen from the sofa, at the moment the sofa has turned by $t$ the hallway occupies
 $\mathbf{x}(t) + R_t L$ ([Section 1.2](README.md#12-the-main-theorems)). A point $q$ lies in this
@@ -64,7 +64,7 @@ $\beta(t) = \langle \mathbf{x}'(t), v_t \rangle$, and
 
 *Lean: [`MovingSofaOptimality.GerverParams.contactA`](../../MovingSofaOptimality/Gerver/Defs.lean#L79), [`MovingSofaOptimality.GerverParams.contactB`](../../MovingSofaOptimality/Gerver/Defs.lean#L82),
 [`MovingSofaOptimality.GerverParams.contactC`](../../MovingSofaOptimality/Gerver/Defs.lean#L85), [`MovingSofaOptimality.GerverParams.contactD`](../../MovingSofaOptimality/Gerver/Defs.lean#L88),
-[`Baek.GerverParams.contactB`](../../Challenge.lean#L235), [`Baek.GerverParams.contactD`](../../Challenge.lean#L238).*
+[`Baek.GerverParams.contactB`](../../Challenge.lean#L236), [`Baek.GerverParams.contactD`](../../Challenge.lean#L239).*
 
 In hallway coordinates $\mathbf{A}(t) = (1, \alpha(t))$, $\mathbf{B}(t) = (0, \alpha(t))$,
 $\mathbf{C}(t) = (-\beta(t), 1)$ and $\mathbf{D}(t) = (-\beta(t), 0)$, so the four points lie on the
@@ -97,7 +97,7 @@ on the $i$th phase, where the five phases are $[t_0, t_1)$, $[t_1, t_2)$, $[t_2,
 and $(t_4, t_5]$. Its contact paths are written $\mathbf{A}, \mathbf{B}, \mathbf{C}, \mathbf{D}$
 (Baek's Definitions 8.4.2 and 8.4.3).
 
-*Lean: [`Baek.GerverParams`](../../Challenge.lean#L188), [`MovingSofaOptimality.GerverParams`](../../MovingSofaOptimality/Gerver/Defs.lean#L31), [`MovingSofaOptimality.GerverParams.x₁`](../../MovingSofaOptimality/Gerver/Defs.lean#L55),
+*Lean: [`Baek.GerverParams`](../../Challenge.lean#L189), [`MovingSofaOptimality.GerverParams`](../../MovingSofaOptimality/Gerver/Defs.lean#L31), [`MovingSofaOptimality.GerverParams.x₁`](../../MovingSofaOptimality/Gerver/Defs.lean#L55),
 [`MovingSofaOptimality.GerverParams.x₂`](../../MovingSofaOptimality/Gerver/Defs.lean#L58), [`MovingSofaOptimality.GerverParams.x₃`](../../MovingSofaOptimality/Gerver/Defs.lean#L61),
 [`MovingSofaOptimality.GerverParams.x₄`](../../MovingSofaOptimality/Gerver/Defs.lean#L63), [`MovingSofaOptimality.GerverParams.x₅`](../../MovingSofaOptimality/Gerver/Defs.lean#L66),
 [`MovingSofaOptimality.GerverParams.path`](../../MovingSofaOptimality/Gerver/Defs.lean#L70), [`MovingSofaOptimality.GerverParams.tPt`](../../MovingSofaOptimality/Gerver/Properties.lean#L58),
@@ -120,7 +120,7 @@ A parameter tuple *solves Romik's equations* if $0 < \varphi < \theta < \pi/4$ a
 The tuple *lies in the box* if $\varphi \in [0.039, 0.04]$ and $\theta \in [0.68, 0.69]$.
 *Gerver's sofa* is the shape $G = S_{\mathbf{x}}$ of its rotation path.
 
-*Lean: [`Baek.GerverParams.IsSolution`](../../Challenge.lean#L241), [`Baek.GerverParams.InBox`](../../Challenge.lean#L253), [`Baek.gerverSofa`](../../Challenge.lean#L263),
+*Lean: [`Baek.GerverParams.IsSolution`](../../Challenge.lean#L242), [`Baek.GerverParams.InBox`](../../Challenge.lean#L254), [`Baek.gerverSofa`](../../Challenge.lean#L264),
 [`MovingSofaOptimality.GerverParams.IsSolution`](../../MovingSofaOptimality/Gerver/Defs.lean#L93), [`MovingSofaOptimality.GerverParams.InBox`](../../MovingSofaOptimality/Gerver/Defs.lean#L109),
 [`MovingSofaOptimality.gerverSofa`](../../MovingSofaOptimality/Gerver/Defs.lean#L120).*
 
@@ -129,7 +129,7 @@ $\mathbf{D}$ that (43)–(44) use, in Mathlib's vocabulary, in the namespace `Ba
 [`Challenge.lean`](../../Challenge.lean) and of [`baek/Challenge.lean`](../Challenge.lean). They are copied verbatim from
 [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), and they agree field by field with the library's
 definitions in [`Defs.lean`](../../MovingSofaOptimality/Gerver/Defs.lean)
-([`Baek.GerverParams.toLib`](../Solution.lean#L45); [`Baek.gerverSofa_eq_lib`](../Solution.lean#L58) holds by `rfl`).
+([`Baek.GerverParams.toLib`](../Solution.lean#L46); [`Baek.gerverSofa_eq_lib`](../Solution.lean#L59) holds by `rfl`).
 
 Romik derived the five phases from the contacts of the sofa with the moving hallway. On each phase
 the sofa touches the walls at a fixed set of contact points, and on the walls of each direction the
@@ -335,7 +335,7 @@ Romik's equations have exactly one solution in the box. Its angles satisfy
 and its other parameters lie in explicit intervals of width at most $1.5 \cdot 10^{-8}$ around the
 values of Table 10.2.
 
-*Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L664), [`Baek.gerver_params_unique`](../../Challenge.lean#L668), [`romik_exists`](../../MovingSofaOptimality/External/Romik.lean#L354), [`romik_unique`](../../MovingSofaOptimality/External/Romik.lean#L360),
+*Lean: [`Baek.gerver_params_exists`](../../Challenge.lean#L665), [`Baek.gerver_params_unique`](../../Challenge.lean#L669), [`romik_exists`](../../MovingSofaOptimality/External/Romik.lean#L354), [`romik_unique`](../../MovingSofaOptimality/External/Romik.lean#L360),
 [`rom_angles_mem`](../../MovingSofaOptimality/External/Romik.lean#L372), [`romik_bounds`](../../MovingSofaOptimality/External/Romik.lean#L522), [`definition8_1_2_exists`](../../MovingSofaOptimality/Main.lean#L32), [`definition8_1_2_unique`](../../MovingSofaOptimality/Main.lean#L37).*
 
 *Proof sketch.* By Proposition 10.7, $(\varphi, \theta) \mapsto P(\varphi, \theta)$ is a bijection from
@@ -871,7 +871,7 @@ and $\mathbf{A}(\pi/2)_y = \mathbf{C}(0)_y = 1$. $\square$
 
 and $2.2192 \le \lvert G \rvert \le 2.2199$; in particular $\lvert G \rvert \ge 2.2$.
 
-*Lean: [`Baek.gerver_sofa_area`](../../Challenge.lean#L674), [`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L291), [`gv_area_mem`](../../MovingSofaOptimality/Gerver/Niche.lean#L467), [`gv_area_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L444),
+*Lean: [`Baek.gerver_sofa_area`](../../Challenge.lean#L675), [`gerverSofa_area_mem`](../../MovingSofaOptimality/Main.lean#L291), [`gv_area_mem`](../../MovingSofaOptimality/Gerver/Niche.lean#L467), [`gv_area_eq`](../../MovingSofaOptimality/Gerver/Niche.lean#L444),
 [`gerverSofa_area`](../../MovingSofaOptimality/Gerver/Properties.lean#L187), [`gv_area`](../../MovingSofaOptimality/Gerver/Niche.lean#L461), [`gerverSofa_volume_ne_top`](../../MovingSofaOptimality/Main.lean#L296).*
 
 | Term | Lean enclosure | Value |

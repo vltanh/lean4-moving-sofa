@@ -6,10 +6,11 @@ public import MovingSofaUniqueness.Main
 public import MovingSofaBridge.GerverSofa
 
 /-!
-# The solution of Baek's entry: the theorems of `baek/Challenge.lean`, proved
+# The solution of versions 1 to 4: the theorems of `baek/Challenge.lean`, proved
 
-This module restates every theorem of `baek/Challenge.lean` (Baek's entry, `baek/comparator.json`)
-and proves it, with the Challenge's definitions from `MovingSofaBridge.Defs`:
+This module restates every theorem of `baek/Challenge.lean` (the Challenge of versions 1 to 4 of the
+Palomar entry, `baek/comparator.json`) and proves it, with the Challenge's definitions from
+`MovingSofaBridge.Defs`:
 
 * Baek's theorems (`Baek`), from the libraries `MovingSofaOptimality` (Baek's paper, with its
   Theorem 1.1.1) and `MovingSofaUniqueness` (the first proof of the uniqueness of the optimal
@@ -18,8 +19,8 @@ and proves it, with the Challenge's definitions from `MovingSofaBridge.Defs`:
 * formal-conjectures' theorems (`FormalConjectures.MovingSofa`), from the two groups above only: the
   bridge carries Baek's theorems over to formal-conjectures' definitions.
 
-The solution of the certificate entry, the root's `Solution.lean`, proves the same theorems, with
-optimality and uniqueness through the coercive certificate.
+The solution of version 5, the root's `Solution.lean`, proves the same theorems, with optimality and
+uniqueness through the coercive certificate.
 -/
 
 @[expose] public section

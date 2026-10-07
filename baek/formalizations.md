@@ -114,8 +114,8 @@ translate of such a set, by rotations and translations. Both conventions give th
   which is a moving sofa in formal-conjectures' sense
   ([`IsSofaWithAngle`](https://github.com/RuifengCao/sofa-formal/blob/ca8585c28c3c39528d5f5da87976af8fbfe48c18/Sofa/StdPos.lean#L167-L172)).
 - This repository states Baek's definitions on ℝ × ℝ in their own namespace
-  ([Definitions](../docs/definitions.md)), and Comparator checks the bridge theorems [`Bridge.isMovingSofa_iff`](../Challenge.lean#L731)
-  and [`Bridge.sofaConstant_eq`](../Challenge.lean#L739).
+  ([Definitions](../docs/definitions.md)), and Comparator checks the bridge theorems [`Bridge.isMovingSofa_iff`](../Challenge.lean#L732)
+  and [`Bridge.sofaConstant_eq`](../Challenge.lean#L740).
 
 Cureton's and Cao's formalizations work in formal-conjectures' plane, `EuclideanSpace ℝ (Fin 2)`; this
 repository works in ℝ × ℝ and converts at the bridge.
@@ -151,7 +151,7 @@ Baek's paper defines it from Romik's solution of his Equations (25)–(44) (Defi
 - Cao's uses formal-conjectures' set only. It obtains Baek's curves 𝐀 and 𝐂 as vertex curves of the
   cap, and the tails 𝐁 and 𝐃 as envelopes of the inner walls.
 - This repository uses Romik's solution, as the paper does, and proves formal-conjectures' set equal
-  to the result ([`Bridge.gerversSofa_eq`](../Challenge.lean#L747)).
+  to the result ([`Bridge.gerversSofa_eq`](../Challenge.lean#L748)).
 
 ## 3. How closely each follows the paper
 
