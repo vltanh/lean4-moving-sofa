@@ -163,3 +163,84 @@ The endpoint caps are point-top caps, and no claim is made here about concavity 
 A profitable narrowed direction is to test a **fixed-width** convex cap class, where the positive \((1+\lambda)^2/4\) variation used above is unavailable. The uploaded record contains fixed-width negative second-difference samples, but no continuum proof of fixed-width concavity, no proof of reference criticality on a suitable domain, and no theorem putting every competitive two-turn cap there. Fixed-width concavity by itself also does not optimize over width; that requires an additional exact sharp width envelope.
 
 No CI, Lean/Lake compilation, dependency installation, manuscript build or long numerical optimization was used. This proof is self-reviewed rather than independently refereed or kernel-verified.
+
+## 5. The counterexample persists for **positive horizontal top faces**
+
+One might try to save CF5 by excluding point-top caps, since PD/PS reduce the full-turn supremum to competitors with positive horizontal faces. That restriction **does not** rescue the conjectured concavity.
+
+Let \(\varepsilon=1/128\), \(\delta=\varepsilon/16=1/2048\), and \(H_\delta=[-\delta/2,\delta/2]e_x\). Define
+\[
+U_\lambda^\delta=U_\lambda+H_\delta
+\qquad(\lambda\in\{\varepsilon,2\varepsilon,3\varepsilon\}).
+\]
+Each \(U_\lambda^\delta\) has **strictly positive top-face length \(\delta\)**, height one, a full bottom projection, and width
+\[
+W_\lambda^\delta=2+2\lambda+\delta\in(2,21/10).
+\]
+Because Minkowski addition is associative and homogeneous, the same midpoint identity holds exactly:
+\[
+\boxed{U_{2\varepsilon}^\delta
+=\frac12U_\varepsilon^\delta+\frac12U_{3\varepsilon}^\delta.}
+\tag{CN.10}
+\]
+
+The horizontal summand increases both upper supports by
+\[
+f_{\lambda,\delta}=f_\lambda+\frac\delta2\cos t,\quad
+g_{\lambda,\delta}=g_\lambda+\frac\delta2\sin t
+\quad(0<t<\pi/2).
+\]
+Hence the corner ordinate increases by exactly \(\delta sc\). On the late-middle interval \(t_0\le t\le\pi/4\), CN.5 has the strict negative estimate
+\[
+C_{\lambda,\delta}
+\le-(1-2/\sqrt5)+\lambda+\delta/2<0.
+\]
+For \(0<t<t_0\),
+\[
+\boxed{C_{\lambda,\delta}(t)
+\le-\frac25s^2+(\lambda+\delta)s
+\le\frac58(\lambda+\delta)^2.}
+\]
+The baseline interval of this quadrant now satisfies
+\[
+-\delta/2\le x\le\lambda+\delta/2.
+\]
+Horizontal symmetry gives the mirrored range for the late angles. Therefore its entire full positive niche lies in
+\([-\lambda-\delta/2,\lambda+\delta/2]\), and
+\[
+\boxed{
+N_{\lambda,\delta}:=\int_{J_{\lambda,\delta}}n_{\lambda,\delta}(x)\,dx
+\le\frac58(2\lambda+\delta)(\lambda+\delta)^2.}
+\tag{CN.11}
+\]
+The niche support is strictly inside the middle-half window for our parameters, so the integral above accounts for the whole positive niche.
+
+Write \(a_{\lambda,\delta}=1+\lambda+\delta/2\) for the horizontal half-width. Because \(1>3\lambda+\delta/2\), both exterior quarters still lie on the **same linear flank** of the upper roof,
+\[
+A_{\lambda,\delta}(x)=a_{\lambda,\delta}-|x|
+\quad(a_{\lambda,\delta}/2\le|x|\le a_{\lambda,\delta}).
+\]
+Consequently
+\[
+\boxed{
+P_J(U_\lambda^\delta)
+=\frac{(1+\lambda+\delta/2)^2}{4}-N_{\lambda,\delta}.}
+\tag{CN.12}
+\]
+
+The outer-roof part contributes exactly \(\varepsilon^2/4\) to the midpoint concavity defect. By CN.11 and nonnegativity of \(N_{2\varepsilon,\delta}\),
+\[
+\begin{aligned}
+&\frac{P_J(U_\varepsilon^\delta)+P_J(U_{3\varepsilon}^\delta)}2
+-P_J(U_{2\varepsilon}^\delta)\\
+&\qquad\ge\frac{\varepsilon^2}{4}
+-\frac5{16}\left[(2\varepsilon+\delta)(\varepsilon+\delta)^2
++(6\varepsilon+\delta)(3\varepsilon+\delta)^2\right]\\
+&\qquad=\varepsilon^2\left(\frac14-\frac{606085}{32768}\varepsilon\right)
+=\boxed{\frac{442491}{68719476736}>0.}
+\end{aligned}\tag{CN.13}
+\]
+
+Thus CF5 fails **even for a Minkowski-convex family of normalized caps with positive top faces and widths strictly between 2 and 2.05**. The failure is not a degeneracy caused by a zero-length top face.
+
+This does **not** imply that the above individual caps are the actual compatible hull caps of a competitive full-turn sofa; those would impose additional two-turn geometric constraints. The sharp scalar value conjecture \(P_J\le M/2\) remains unrefuted, and a fixed-width concavity theorem remains an open, genuinely narrower possibility.
