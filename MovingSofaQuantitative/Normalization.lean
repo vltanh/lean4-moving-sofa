@@ -89,6 +89,32 @@ def centeredReference (K₀ K₁ : Set Point) : Set Point :=
 def centeredCapDifference (K₀ K₁ : Set Point) : ℝ → ℝ :=
   centerFunction (fun t => supp K₁ t - supp K₀ t)
 
+/-- If the horizontal midpoints already agree, the centered reference is the
+untranslated reference cap. -/
+theorem centeredReference_eq_of_midpoint {K₀ K₁ : Set Point}
+    (hmid : horizontalMidpoint K₁ = horizontalMidpoint K₀) :
+    centeredReference K₀ K₁ = K₀ := by
+  unfold centeredReference horizontalReference
+  rw [hmid, sub_self]
+  ext p
+  simp
+
+/-- Centering a set relative to itself does nothing. -/
+@[simp] theorem centeredReference_self (K : Set Point) :
+    centeredReference K K = K :=
+  centeredReference_eq_of_midpoint rfl
+
+/-- A horizontal translate of a reference cap recenters back to the reference. -/
+theorem centeredReference_translate_eq {K : Set Point}
+    (hK : IsConvexBody K) (a : ℝ) :
+    centeredReference K (horizontalReference K a) = K := by
+  apply centeredReference_eq_of_midpoint
+  unfold horizontalMidpoint horizontalReference
+  rw [supp_translate K (a, 0) 0 hK.2.1 hK.1,
+    supp_translate K (a, 0) π hK.2.1 hK.1]
+  simp [dot, uvec]
+  ring
+
 theorem centeredCapDifference_eq_error (K₀ K₁ : Set Point) (t : ℝ) :
     centeredCapDifference K₀ K₁ t =
       horizontalError K₀ K₁ (horizontalMidpoint K₁ - horizontalMidpoint K₀) t := by
