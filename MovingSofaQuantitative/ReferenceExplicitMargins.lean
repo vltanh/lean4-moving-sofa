@@ -352,9 +352,87 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
     intro t ht
     rw [(hderV t ht).deriv]
     exact (hrate t ht).2
-  obtain ⟨d₀,hd₀,hd₀1,hDU,hDV,hangle⟩ :=
-    compact_uniform_derivative_tube hI hinside hλ hjointU hjointV
-      h0U h0V hreserve
+  let εr:=((10/101:ℝ)-5/51)/2
+  have hεr : 0<εr:=by dsimp [εr]; linarith
+  have hJ : IsCompact (I×ˢIcc (-1:ℝ) 1):=hI.prod isCompact_Icc
+  have hucU:=hJ.uniformContinuousOn_of_continuous hjointU
+  have hucV:=hJ.uniformContinuousOn_of_continuous hjointV
+  rw [Metric.uniformContinuousOn_iff] at hucU hucV
+  obtain ⟨ηU,hηU,hcloseU⟩:=hucU εr hεr
+  obtain ⟨ηV,hηV,hcloseV⟩:=hucV εr hεr
+  obtain ⟨M,hM⟩:=hI.exists_bound_of_continuousOn hλ
+  have hM0 : 0≤M:=by
+    obtain ⟨t,ht⟩ : I.Nonempty:=⟨P.φ,by
+      dsimp [I]
+      constructor
+      · exact le_rfl
+      · have hφ:=romik_bounds hP hbox |>.φ_mem
+        linarith [hφ.2,pi_gt_three]⟩
+    exact (norm_nonneg (λ t)).trans (hM t ht)
+  let η:=min ηU ηV
+  let d₀:=min 1 (min (η/2) (P.φ/(2*(M+1))))
+  have hφ0:=romik_bounds hP hbox |>.φ_mem.1
+  have hη : 0<η:=lt_min hηU hηV
+  have hd₀ : 0<d₀:=by
+    dsimp [d₀]
+    positivity
+  have hd₀1 : d₀≤1:=min_le_left _ _
+  have hDU : ∀t∈I,∀d∈Icc (0:ℝ) d₀,
+      deriv (fun x=>FU (t,x)) d≤-(5/51:ℝ) := by
+    intro t ht d hd
+    have hdη : d<η:=by
+      have hhalf:=hd.2.trans (min_le_right (1:ℝ) _)
+      have hη2:=hhalf.trans (min_le_left _ _)
+      linarith
+    have hpt0 : (t,0)∈I×ˢIcc (-1:ℝ) 1:=⟨ht,by norm_num⟩
+    have hptd : (t,d)∈I×ˢIcc (-1:ℝ) 1:=⟨ht,by
+      constructor
+      · linarith [hd.1]
+      · linarith [hd.2,hd₀1]⟩
+    have hdist : dist (t,d) (t,0)<ηU:=by
+      have : d<ηU:=hdη.trans_le (min_le_left _ _)
+      simpa [Prod.dist_eq,Real.dist_eq,abs_of_nonneg hd.1] using this
+    have hu:=hcloseU hptd hpt0 hdist
+    rw [Real.dist_eq] at hu
+    have h0:=h0U t ht
+    have hres:=explicit_margin_reserve.2
+    dsimp [εr] at hu
+    nlinarith [abs_le.mp (le_of_lt hu) |>.2]
+  have hDV : ∀t∈I,∀d∈Icc (0:ℝ) d₀,
+      deriv (fun x=>FV (t,x)) d≤-(5/51:ℝ) := by
+    intro t ht d hd
+    have hdη : d<η:=by
+      have hhalf:=hd.2.trans (min_le_right (1:ℝ) _)
+      have hη2:=hhalf.trans (min_le_left _ _)
+      linarith
+    have hpt0 : (t,0)∈I×ˢIcc (-1:ℝ) 1:=⟨ht,by norm_num⟩
+    have hptd : (t,d)∈I×ˢIcc (-1:ℝ) 1:=⟨ht,by
+      constructor
+      · linarith [hd.1]
+      · linarith [hd.2,hd₀1]⟩
+    have hdist : dist (t,d) (t,0)<ηV:=by
+      have : d<ηV:=hdη.trans_le (min_le_right _ _)
+      simpa [Prod.dist_eq,Real.dist_eq,abs_of_nonneg hd.1] using this
+    have hv:=hcloseV hptd hpt0 hdist
+    rw [Real.dist_eq] at hv
+    have h0:=h0V t ht
+    dsimp [εr] at hv
+    nlinarith [abs_le.mp (le_of_lt hv) |>.2]
+  have hangle : ∀t∈I,∀d∈Icc (0:ℝ) d₀,
+      t+λ t*d∈Ioo (0:ℝ) (π/2) := by
+    intro t ht d hd
+    have hλM : |λ t|≤M:=by
+      simpa [Real.norm_eq_abs] using hM t ht
+    have hdφ : d≤P.φ/(2*(M+1)) :=
+      hd.2.trans ((min_le_right (1:ℝ) _).trans (min_le_right _ _))
+    have hshift : |λ t*d|≤P.φ/2:=by
+      rw [abs_mul]
+      have hm:=mul_le_mul hλM hdφ (abs_nonneg _) hM0
+      have hM1 : 0<M+1:=by linarith
+      nlinarith
+    constructor
+    · nlinarith [ht.1,hφ0,neg_abs_le (λ t*d)]
+    · nlinarith [ht.2,hφ0,le_abs_self (λ t*d)]
   refine ⟨d₀,hd₀,?_⟩
   intro t ht d hd
   have hs:=hangle t ht d hd
