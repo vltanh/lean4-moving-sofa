@@ -98,6 +98,19 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
     ),
     "MovingSofaQuantitative/NormalRecovery.lean": (
         (
+            r"def\s+secondOrderWallErrorU[\s\S]{0,200}"
+            r"\(s\s*-\s*t\)\s*\*\s*sin\s+t",
+            "The former direction-free wall remainder is not the exact"
+            " balanced expansion. It must include -a(s-t) and the"
+            " displacement-direction rotation term.",
+        ),
+        (
+            r"def\s+secondOrderWallErrorV[\s\S]{0,200}"
+            r"\(s\s*-\s*t\)\s*\*\s*cos\s+t",
+            "The former direction-free V-wall remainder lacks the"
+            " first-order -b*lambda term and the rotating frame term.",
+        ),
+        (
             r"theorem\s+exists_mem_le_infDist[\s\S]{0,170}"
             r"\(hK\s*:\s*IsCompact\s+K\)\s*\(p\s*:\s*Point\)",
             "A compact set can be empty. Nearest-point existence requires "
