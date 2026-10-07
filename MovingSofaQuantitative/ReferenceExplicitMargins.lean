@@ -257,6 +257,50 @@ theorem gerver_B_alpha_le_neg_four_fifths {P : GerverParams}
       rw [gs_β_eq hP (gs_piece₀ hsφ),gs_β₁_eq hP]
     linarith
 
+/-- A continuous strictly increasing abscissa parameter and antitone
+ordinate turn a parametrized arc into an antitone graph on its full image.
+This is the only intermediate-value argument needed for the B tail. -/
+theorem antitone_graph_of_parametric_arc {a b : ℝ}
+    {X Y γ : ℝ→ℝ}
+    (hab : a≤b)
+    (hX : ContinuousOn X (Icc a b))
+    (hXmono : StrictMonoOn X (Icc a b))
+    (hY : AntitoneOn Y (Icc a b))
+    (hγ : ∀t∈Icc a b,γ (X t)=Y t) :
+    AntitoneOn γ (Icc (X a) (X b)) := by
+  intro x hx y hy hxy
+  have hXa : X a≤X b :=
+    (hXmono.monotoneOn) ⟨le_rfl,hab⟩ ⟨hab,le_rfl⟩ hab
+  obtain ⟨t,ht,htx⟩:=intermediate_value_Icc hab hX hx
+  obtain ⟨u,hu,huy⟩:=intermediate_value_Icc hab hX hy
+  have htu : t≤u := by
+    by_contra hn
+    have hstrict:=hXmono hu ht (lt_of_not_ge hn)
+    rw [htx,huy] at hstrict
+    exact (not_lt_of_ge hxy) hstrict
+  rw [←htx,←huy,hγ t ht,hγ u hu]
+  exact hY ht hu htu
+
+/-- Increasing x/y tails similarly produce a nondecreasing graph. -/
+theorem monotone_graph_of_parametric_arc {a b : ℝ}
+    {X Y γ : ℝ→ℝ}
+    (hab : a≤b)
+    (hX : ContinuousOn X (Icc a b))
+    (hXmono : StrictMonoOn X (Icc a b))
+    (hY : MonotoneOn Y (Icc a b))
+    (hγ : ∀t∈Icc a b,γ (X t)=Y t) :
+    MonotoneOn γ (Icc (X a) (X b)) := by
+  intro x hx y hy hxy
+  obtain ⟨t,ht,htx⟩:=intermediate_value_Icc hab hX hx
+  obtain ⟨u,hu,huy⟩:=intermediate_value_Icc hab hX hy
+  have htu : t≤u := by
+    by_contra hn
+    have hstrict:=hXmono hu ht (lt_of_not_ge hn)
+    rw [htx,huy] at hstrict
+    exact (not_lt_of_ge hxy) hstrict
+  rw [←htx,←huy,hγ t ht,hγ u hu]
+  exact hY ht hu htu
+
 /-- The B arc of the niche roof moves strictly right and down.  In
 particular the fixed roof height is nonincreasing along the B arc. -/
 theorem gerver_B_roof_antitone {P : GerverParams}
