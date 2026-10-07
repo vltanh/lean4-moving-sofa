@@ -450,6 +450,76 @@ theorem coarse_half_angle_lower {ω : ℝ}
   rw [hquadratic] at hsinLower
   nlinarith [hprod,hupper,hsinLower]
 
+/-- Exact cosine of the doubled threshold angle; no floating evaluation. -/
+private theorem cos_twice_arctan_four_fifths :
+    cos (2*arctan (4/5:ℝ))=9/41 := by
+  let a : ℝ:=arctan (4/5:ℝ)
+  have ha0 : 0<a := arctan_pos (by norm_num : (0:ℝ)<4/5)
+  have ha1 : a<π/2 := arctan_lt_pi_div_two _
+  have hca : 0<cos a :=
+    cos_pos_of_mem_Ioo ⟨by linarith [ha0,pi_pos],ha1⟩
+  have htan : tan a=4/5 := tan_arctan _
+  have hsin : sin a=(4/5:ℝ)*cos a := by
+    rw [tan_eq_sin_div_cos] at htan
+    exact (div_eq_iff hca.ne').mp htan
+  have hunit : sin a^2+cos a^2=1 := sin_sq_add_cos_sq a
+  have heq : 2*a=a+a := by ring
+  change cos (2*a)=9/41
+  rw [heq,cos_add]
+  rw [hsin] at hunit ⊢
+  nlinarith [hunit]
+
+/-- Upper half-angle bound on the full coarse slab range, including its
+terminal endpoint. The direct cosine argument avoids relying on an
+unidentified project-specific tangent-monotonicity helper. -/
+theorem coarse_half_angle_upper {ω : ℝ}
+    (hω0 : 0≤ω) (hω1 : ω≤2*arctan (4/5:ℝ)) :
+    tan (ω/2)≤4/5 := by
+  let a : ℝ:=arctan (4/5:ℝ)
+  have ha1 : a<π/2 := arctan_lt_pi_div_two _
+  have hcos0 : (9/41:ℝ)≤cos ω := by
+    have hc:=cos_le_cos_of_nonneg_of_le_pi hω0
+      (by simpa [a] using hω1)
+      (by linarith [ha1,pi_pos] : 2*a≤π)
+    rw [show cos (2*a)=9/41 by
+      simpa [a] using cos_twice_arctan_four_fifths] at hc
+    exact hc
+  let x:=ω/2
+  have hx0 : 0≤x := by dsimp [x]; linarith
+  have hx1 : x<π/2 := by dsimp [x,a] at *; linarith [hω1,ha1]
+  have hcx : 0<cos x :=
+    cos_pos_of_mem_Ioo ⟨by linarith [hx0,pi_pos],hx1⟩
+  have hsx : 0≤sin x :=
+    sin_nonneg_of_nonneg_of_le_pi hx0 (by linarith [hx1,pi_pos])
+  have htan_eq : tan x*cos x=sin x := by
+    rw [tan_eq_sin_div_cos]
+    field_simp [ne_of_gt hcx]
+  have htan0 : 0≤tan x := by
+    rw [tan_eq_sin_div_cos]
+    exact div_nonneg hsx hcx.le
+  have htrig : cos ω=cos x^2-sin x^2 := by
+    have heq : ω=x+x := by dsimp [x]; ring
+    rw [heq,cos_add]
+    ring
+  have hunit : sin x^2+cos x^2=1 := sin_sq_add_cos_sq x
+  have hcosLower : (25/41:ℝ)≤cos x^2 := by
+    nlinarith [hcos0,htrig,hunit]
+  have hsinUpper : sin x^2≤16/41 := by
+    nlinarith [hcos0,htrig,hunit]
+  have hcos2pos : 0<cos x^2 := sq_pos_of_pos hcx
+  have hquadratic : sin x^2=(tan x)^2*cos x^2 := by
+    nlinarith [htan_eq]
+  by_contra hn
+  have ht : (4/5:ℝ)<tan x := lt_of_not_ge hn
+  have hsquare : (4/5:ℝ)^2<(tan x)^2 :=
+    sq_lt_sq₀ (by norm_num) ht
+  have hprod : (4/5:ℝ)^2*cos x^2<(tan x)^2*cos x^2 :=
+    mul_lt_mul_of_pos_right hsquare hcos2pos
+  have hlower : (4/5:ℝ)^2*(25/41)≤(4/5)^2*cos x^2 :=
+    mul_le_mul_of_nonneg_left hcosLower (by norm_num)
+  rw [hquadratic] at hprod
+  nlinarith [hprod,hlower,hsinUpper]
+
 theorem coarse_area_separation {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω)
     (hω0 : arccos (5/11:ℝ)≤ω)
@@ -457,12 +527,8 @@ theorem coarse_area_separation {S : Set Point} {ω : ℝ}
     area S<2219/1000 := by
   have hr0 : (3/5:ℝ)≤tan(ω/2) :=
     coarse_half_angle_lower hω0 hω1
-  have hr1 : tan(ω/2)≤4/5 := by
-    rw [← show tan((2*arctan (4/5:ℝ))/2)=4/5 by
-      rw [show (2*arctan (4/5:ℝ))/2=arctan (4/5:ℝ) by ring,
-          tan_arctan]]
-    exact tan_mono_on_quadrant (by linarith [hω0,arccos_nonneg (5/11:ℝ)])
-      (by linarith [hω1,arctan_lt_pi_div_two (4/5:ℝ)]) (by linarith) hω1
+  have hr1 : tan(ω/2)≤4/5 :=
+    coarse_half_angle_upper ((arccos_nonneg _).trans hω0) hω1
   obtain ⟨i,hi,hr,hr'⟩:=exists_hundredth_slab hr0 hr1
   by_contra hn
   have harea : (2219/1000:ℝ)≤area S:=not_lt.mp hn
