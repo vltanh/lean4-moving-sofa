@@ -414,62 +414,6 @@ theorem roof_band_area {a b d : ℝ} {γ : ℝ→ℝ}
   rw [ENNReal.toReal_ofReal (mul_nonneg hd (sub_nonneg.mpr hab))]
   ring
 
-/-- Excess of the full-angle envelope over Gerver. -/
-theorem quantitative_envelope_excess {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {K : Set Point} (hK : IsCap K (π/2)) {δ : ℝ}
-    (hδ : 0≤δ) (hclose : UpperSupportClose δ K P.cap) :
-    ∃ τ : ℝ,0<τ ∧ δ<τ →
-      area (capShape K\gerverSofa P)≤
-        (62307/2500)*δ+4*δ^2 := by
-  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
-  obtain ⟨τ,hτ,hmargin⟩:=gerver_explicit_roof_slack hP hbox hroof
-  refine ⟨τ,hτ,?_⟩
-  intro hδτ
-  have hwidth:=gerver_quantitative_widths hP hbox
-  have hcap:=cap_layer_area hP hbox hK hδ hclose
-  have hbandSub :
-      (capShape K\gerverSofa P)∩P.cap ⊆
-        {p : Point | p.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
-          γ p.1-(51/5)*δ≤p.2 ∧ p.2≤γ p.1} := by
-    intro p hp
-    have hpN : p∈niche P.cap (π/2) := by
-      rw [←gerver_shape_eq hP hbox] at hp
-      by_contra hn
-      exact hp.1.2 ⟨hp.2,hn⟩
-    have hd:=envelope_roof_depth_le hK (by norm_num : (0:ℝ)<5/51)
-      hclose hδτ hmargin hp.1.1 hpN
-    rw [hroof.niche_eq] at hpN
-    refine ⟨hpN.1,?_,hpN.2.2.le⟩
-    nlinarith
-  have hbandArea :
-      area ((capShape K\gerverSofa P)∩P.cap)≤
-        (51/5)*δ*(gerverRoofRight P-gerverRoofLeft P) := by
-    have hmono:=area_mono_of_finite hbandSub
-      (volume_ne_top_of_subset (s:=_)
-        (t:= {p : Point | p.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
-          γ p.1-(51/5)*δ≤p.2 ∧ p.2≤γ p.1}) subset_rfl
-        (by rw [roof_band_area hroof.order.le (by positivity)
-          (continuous_clamped_roof hroof.order.le hroof.slope_nonneg hroof.roof_lipschitz)];
-            exact ENNReal.ofReal_ne_top))
-    exact hmono
-  have hsplit :
-      area (capShape K\gerverSofa P)≤area (K\P.cap)+
-        area ((capShape K\gerverSofa P)∩P.cap) := by
-    apply area_mono_union_bound
-    intro p hp
-    by_cases hpK : p∈P.cap
-    · exact Or.inr ⟨hp,hpK⟩
-    · exact Or.inl ⟨hp.1.1,hpK⟩
-  have hw : 2*(horizontalWidth P.cap+1)+(51/5)*
-      (gerverRoofRight P-gerverRoofLeft P)<62307/2500 := by
-    unfold horizontalWidth at *
-    have hW : horizontalWidth P.cap<323/100 := hwidth.1
-    have hR : gerverRoofRight P-gerverRoofLeft P<807/500 := hwidth.2
-    nlinarith
-  nlinarith
-
-
 /-- Same excess estimate with the reference roof and clipping scale exposed, so
 a global theorem can choose its deficit threshold before seeing the competitor. -/
 theorem quantitative_envelope_excess_with_margin {P : GerverParams}
@@ -516,6 +460,20 @@ theorem quantitative_envelope_excess_with_margin {P : GerverParams}
       (gerverRoofRight P-gerverRoofLeft P)<62307/2500 := by
     nlinarith [hwidth.1,hwidth.2]
   nlinarith
+
+/-- Existential-scale corollary of the single fixed-margin excess theorem. -/
+theorem quantitative_envelope_excess {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {K : Set Point} (hK : IsCap K (π/2)) {δ : ℝ}
+    (hδ : 0≤δ) (hclose : UpperSupportClose δ K P.cap) :
+    ∃ τ : ℝ,0<τ ∧ δ<τ →
+      area (capShape K\gerverSofa P)≤
+        (62307/2500)*δ+4*δ^2 := by
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  obtain ⟨τ,hτ,hmargin⟩:=gerver_explicit_roof_slack hP hbox hroof
+  exact ⟨τ,hτ,fun hδτ=>
+    quantitative_envelope_excess_with_margin hP hbox hroof hτ hmargin
+      hK hδ hδτ hclose⟩
 
 /-- The final 50 coefficient from the complementary area budget. -/
 theorem symmetric_difference_50 {P : GerverParams}
