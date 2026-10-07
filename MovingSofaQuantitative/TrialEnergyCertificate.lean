@@ -421,6 +421,141 @@ theorem residual_real {P : GerverParams} (hP : P.IsSolution) (k : Kind)
       CriticalTrial.r4,CriticalTrial.rB,CriticalTrial.rD,
       CriticalTrial.startValue,CriticalTrial.c]
 
+/-- The last Hermite polynomial factors exactly at the top endpoint.
+This is the physical-coordinate (not normalized-coordinate) factorization.
+It follows by expanding the last cubic using the literal jets at nodes
+15 and 16. The endpoint value is zero. -/
+theorem final_hermite_factorization {P : GerverParams}
+    (hP : P.IsSolution) (u : ℝ)
+    (hu : u∈Icc (CriticalTrial.x P 15) (π/2)) :
+    CriticalTrial.g P u =
+      (π/2-u)*
+        ((lastPolynomial).realValue (realPoint P u)) := by
+  have hord := CriticalTrial.ordered hP
+  have hn16 := CriticalTrial.profile_at_node hP (16:Fin 17)
+  have hn15 := CriticalTrial.profile_at_node hP (15:Fin 17)
+  have hsegment : CriticalTrial.g P u =
+      (CriticalTrial.node P 15).segment (CriticalTrial.node P 16) u := by
+    rw [←CriticalTrial.profile_value hP]
+    -- All earlier right-join cuts lie to the left of node 15. The last
+    -- interval is therefore the final cubic, not the affine extrapolation.
+    simp only [CriticalTrial.profile,CriticalTrial.splineData,
+      CriticalTrial.nodes,hermiteChain,rightJoin]
+    repeat' first | split_ifs <;> simp_all [CriticalTrial.ordered,hord]
+                    | exact (hermiteChain_on_first hord hu)
+  rw [hsegment]
+  have hwidth : 0 < (CriticalTrial.node P 16).position -
+      (CriticalTrial.node P 15).position := by
+    simpa [CriticalTrial.node,CriticalTrial.x] using
+      (CriticalTrial.positions hP).2
+  simp only [HermiteNode.segment,hermiteValue,hermiteCoefficients,
+    Cubic.value,lastPolynomial,lastA,lastB,lastC,lastD,lastH,
+    TrigExpr.realValue,nodePosition,nodeSlope,nodeValue,realPoint]
+  field_simp [ne_of_gt hwidth]
+  ring
+
+/-- The endpoint-regularized formula is equal to the actual right auxiliary
+residual throughout the last Hermite interval, including t=pi/2 where
+CriticalTrial.rB is defined by its continuous limiting value. -/
+theorem final_B_residual_regularization {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (u : ℝ)
+    (hu : u∈Icc (CriticalTrial.x P 15) (π/2)) :
+    CriticalTrial.rB P u =
+      cos (π/2-u)*
+        (lastPolynomial.realValue (realPoint P u))/
+          sincRegularized (π/2-u) + CriticalTrial.dg P u := by
+  let w := π/2-u
+  have hw : 0≤w := sub_nonneg.mpr hu.2
+  have hwSmall : w≤1/10 := by
+    have hθ := hbox.2.1
+    dsimp [w,CriticalTrial.x,CriticalTrial.c] at *
+    norm_num at *
+    nlinarith [hθ.2]
+  have hpositiveSinc : 0<sincRegularized w := by
+    have h:=sinc_taylor_small (abs_le.mpr
+      ⟨by dsimp [w]; linarith [hw],
+       by simpa [abs_of_nonneg hw] using hwSmall⟩)
+    nlinarith [sq_nonneg w,hwSmall]
+  have hfactor := final_hermite_factorization hP u hu
+  by_cases hzero : w=0
+  · have huTop : u=π/2 := by dsimp [w] at hzero; linarith
+    subst u
+    have htop := (CriticalTrial.profile_at_node hP (16:Fin 17)).2
+    simp [CriticalTrial.rB,sincRegularized,realPoint,lastPolynomial,
+      CriticalTrial.profile_first hP,CriticalTrial.node] at htop ⊢
+    linarith [htop]
+  · have hsinpos : 0<sin w :=
+      sin_pos_of_pos_of_lt_pi (lt_of_le_of_ne hw (Ne.symm hzero))
+        (by linarith [hwSmall,pi_gt_three])
+    have hcoeq : cos u=sin w := by
+      dsimp [w]
+      rw [sin_pi_div_two_sub]
+    have hsineq : sin u=cos w := by
+      dsimp [w]
+      rw [cos_pi_div_two_sub]
+    have hsinc : sincRegularized w=sin w/w := by
+      simp [sincRegularized,hzero]
+    unfold CriticalTrial.rB
+    rw [if_neg (by intro he; dsimp [w] at hzero; exact hzero (by linarith))]
+    rw [hfactor,tan_eq_sin_div_cos,hsineq,hcoeq,hsinc]
+    field_simp [hsinpos.ne',hzero,hpositiveSinc.ne']
+    ring
+
+/-- A successful last-cell interval model encloses the actual residual,
+assuming the real point belongs to the last Hermite segment. The outward
+interval itself may extend slightly past the true endpoint. -/
+theorem tailBInterval_sound {P : GerverParams} (hP : P.IsSolution)
+    (hbox : P.InBox) {box : Box3} {I : Interval}
+    (hcheck : tailBInterval box=some I) {u : ℝ}
+    (hu : u∈Icc (CriticalTrial.x P 15) (π/2))
+    (hparams : InBox box (realPoint P u)) :
+    I.Contains (CriticalTrial.rB P u) := by
+  unfold tailBInterval at hcheck
+  cases hW : lastW.intervalValue box with
+  | none => simp [hW] at hcheck
+  | some W =>
+      cases hS : W.sincSmall with
+      | none => simp [hW,hS] at hcheck
+      | some S =>
+          cases hInv : S.reciprocal with
+          | none => simp [hW,hS,hInv] at hcheck
+          | some Inv =>
+              cases hC : (cos lastW).intervalValue box with
+              | none => simp [hW,hS,hInv,hC] at hcheck
+              | some C =>
+                  cases hF : lastPolynomial.intervalValue box with
+                  | none => simp [hW,hS,hInv,hC,hF] at hcheck
+                  | some F =>
+                      cases hD : (dg t).intervalValue box with
+                      | none => simp [hW,hS,hInv,hC,hF,hD] at hcheck
+                      | some D =>
+                          have hWreal := TrigExpr.intervalValue_sound lastW
+                            hparams hW
+                          have hSreal := Interval.sincSmall_sound hS hWreal
+                          have hInvreal :=
+                            Interval.contains_reciprocal hSreal hInv
+                          have hCreal := TrigExpr.intervalValue_sound
+                            (cos lastW) hparams hC
+                          have hFreal := TrigExpr.intervalValue_sound
+                            lastPolynomial hparams hF
+                          have hDreal := BranchExpr.intervalValue_sound
+                            (dg t) hparams hD
+                          have hmodel := final_B_residual_regularization
+                            hP hbox u hu
+                          have hDmodel := dg_real hP u
+                          have hproduct :=
+                            Interval.contains_mul
+                              (Interval.contains_mul hCreal hFreal)
+                              hInvreal
+                          have htotal := Interval.contains_add hproduct hDreal
+                          simp only [hW,hS,hInv,hC,hF,hD,Option.bind_some,
+                            Option.some.injEq] at hcheck
+                          subst I
+                          rw [←hmodel]
+                          simpa [lastW,TrigExpr.realValue,
+                            BranchExpr.realValue,hDmodel,div_eq_mul_inv,
+                            sincRegularized] using htotal
+
 /-- The parameter box contains the actual Gerver parameters at every t. -/
 theorem realPoint_in_parameterBox {P : GerverParams} (hbox : P.InBox) (u : ℝ)
     (hu : (parameterBox 2).Contains u) :
