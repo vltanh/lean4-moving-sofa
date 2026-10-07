@@ -177,15 +177,23 @@ theorem gerver_core_transversality {P : GerverParams}
   · have htL : 1/8<t:=lt_of_not_ge hleft
     have htR : t<π/2-1/8:=lt_of_not_ge hright
     have hs : (1/9:ℝ)≤sin t := by
-      have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
-        htL.le (by linarith [htR,pi_pos])
+      have hm:=strictMonoOn_sin.monotoneOn
+        (show (1/8:ℝ)∈Icc (-(π/2)) (π/2) by
+          constructor <;> linarith [pi_gt_three])
+        (show t∈Icc (-(π/2)) (π/2) by
+          constructor <;> linarith [htL,htR,pi_pos])
+        htL.le
       have h8:=sinPoly3_le_sin (show (0:ℝ)≤1/8 by norm_num)
       simp [sinPoly3] at h8
       nlinarith
     have hc : (1/9:ℝ)≤cos t := by
       rw [←sin_pi_div_two_sub]
-      have hm:=sin_mono_quadrant (show (0:ℝ)≤1/8 by norm_num)
-        (by linarith [htR]) (by linarith [htL,pi_pos])
+      have hm:=strictMonoOn_sin.monotoneOn
+        (show (1/8:ℝ)∈Icc (-(π/2)) (π/2) by
+          constructor <;> linarith [pi_gt_three])
+        (show π/2-t∈Icc (-(π/2)) (π/2) by
+          constructor <;> linarith [htL,htR,pi_pos])
+        (by linarith [htR])
       have h8:=sinPoly3_le_sin (show (0:ℝ)≤1/8 by norm_num)
       simp [sinPoly3] at h8
       nlinarith
