@@ -509,42 +509,135 @@ theorem nearest_core_outward_normal {P : GerverParams}
   field_simp [ne_of_gt hs]
   nlinarith
 
-/-- Explicit quadratic Taylor remainder for both balanced hallway slacks on the
-core.  The constant 100 is intentionally crude; the five Gerver phase formulas
-and the Romik parameter box give much smaller values. -/
-theorem core_balanced_slack_remainder {P : GerverParams}
+/-- Rotation of either orthonormal wall direction changes the dot product
+with a unit displacement at a Lipschitz rate. The factor two follows directly
+from the sine/cosine coordinate estimates and does not require differentiating
+the Gerver curve. -/
+theorem wall_direction_rotation_bound {w : Point} (hw : norm2 w=1)
+    (s t : ℝ) :
+    |dot w (uvec s-uvec t)|≤2*|s-t| ∧
+      |dot w (vvec s-vvec t)|≤2*|s-t| := by
+  have hx : |w.1|≤1 := by
+    simpa [hw] using abs_fst_le_norm2 w
+  have hy : |w.2|≤1 := by
+    simpa [hw] using abs_snd_le_norm2 w
+  have hsin:=abs_sin_sub_le s t
+  have hcos:=abs_cos_sub_le s t
+  constructor
+  · have hsum:=abs_add (w.1*(cos s-cos t)) (w.2*(sin s-sin t))
+    simp only [dot,uvec,Prod.fst_sub,Prod.snd_sub,sub_mul] at hsum ⊢
+    have hcx:=mul_le_mul (abs_le.mp hx).2 hcos (abs_nonneg _)
+      (abs_nonneg _)
+    have hsy:=mul_le_mul (abs_le.mp hy).2 hsin (abs_nonneg _)
+      (abs_nonneg _)
+    nlinarith [hsum,abs_mul w.1 (cos s-cos t),abs_mul w.2 (sin s-sin t)]
+  · have hsum:=abs_add (-w.1*(sin s-sin t)) (w.2*(cos s-cos t))
+    simp only [dot,vvec,Prod.fst_sub,Prod.snd_sub,sub_mul] at hsum ⊢
+    have hcx:=mul_le_mul (abs_le.mp hx).2 hsin (abs_nonneg _)
+      (abs_nonneg _)
+    have hsy:=mul_le_mul (abs_le.mp hy).2 hcos (abs_nonneg _)
+      (abs_nonneg _)
+    nlinarith [hsum,abs_mul w.1 (sin s-sin t),abs_mul w.2 (cos s-cos t)]
+
+/-- Reducing second-order normal recovery to two *actual* support-function
+Taylor estimates. These estimates must use the Gerver cap support, not merely
+the piecewise derivative of the inner-corner path. In particular the bound
+cannot be obtained by \`nlinarith\` from sine Lipschitzness alone.
+
+The base estimates are explicit hypotheses here; no unproved geometry is
+silently attributed to a generic scalar lemma. -/
+theorem balanced_wall_remainder_of_base {K : Set Point} {q w : Point}
+    {t d λ a b : ℝ} (hd : 0≤d) (hλ : |λ|≤4) (hw : norm2 w=1)
+    (hU : |innerSlackU K (t+λ*d) q-innerSlackU K t q-
+      a*((t+λ*d)-t)|≤90*d^2)
+    (hV : |innerSlackV K (t+λ*d) q-innerSlackV K t q+
+      b*((t+λ*d)-t)|≤90*d^2) :
+    |secondOrderWallErrorU K q t (t+λ*d) d a w|≤100*d^2 ∧
+      |secondOrderWallErrorV K q t (t+λ*d) d b w|≤100*d^2 := by
+  let s:=t+λ*d
+  have hstep : |s-t|≤4*d := by
+    dsimp [s]
+    rw [show t+λ*d-t=λ*d by ring,abs_mul,abs_of_nonneg hd]
+    exact (mul_le_mul_of_nonneg_right hλ hd)
+  obtain ⟨hrotateU,hrotateV⟩:=wall_direction_rotation_bound hw s t
+  have hUdir : |d*dot w (uvec s-uvec t)|≤8*d^2 := by
+    rw [abs_mul,abs_of_nonneg hd]
+    nlinarith [mul_le_mul_of_nonneg_left hrotateU hd]
+  have hVdir : |d*dot w (vvec s-vvec t)|≤8*d^2 := by
+    rw [abs_mul,abs_of_nonneg hd]
+    nlinarith [mul_le_mul_of_nonneg_left hrotateV hd]
+  have hsumU := abs_add
+    (innerSlackU K s q-innerSlackU K t q-a*(s-t))
+    (d*dot w (uvec s-uvec t))
+  have hsumV := abs_add
+    (innerSlackV K s q-innerSlackV K t q+b*(s-t))
+    (d*dot w (vvec s-vvec t))
+  simp only [secondOrderWallErrorU,secondOrderWallErrorV] at *
+  constructor <;> nlinarith [hsumU,hsumV,hUdir,hVdir]
+
+/-- The remaining Gerver-specific source obligation: on every core chart
+and across phase junctions, the two *base* support slacks are quadratic in
+the angular displacement, with a generous coefficient 90/16. The argument
+needs the actual support/contact derivative formulas from
+\`Gerver/StructureCap\` and not just the bound on \`gs_pathD\`. -/
+theorem gerver_core_base_slack_taylor {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
-    {t d λ : ℝ} (ht : t∈Icc P.φ (π/2-P.φ))
+    {t d λ a b : ℝ} (ht : t∈Icc P.φ (π/2-P.φ))
     (hd : 0≤d) (hd8 : d≤normalRecoveryDepth)
-    (hλ : |λ|≤4) :
+    (hλ : |λ|≤4)
+    (ha : a=-P.gs_α t) (hb : b=P.gs_β t) :
     let q:=P.path t
     let s:=t+λ*d
-    let p:=(q.1,q.2) -- base point only; the direction term is supplied separately below
-    |secondOrderWallErrorU P.cap q t s d|≤100*d^2 ∧
-    |secondOrderWallErrorV P.cap q t s d|≤100*d^2 := by
+    |innerSlackU P.cap s q-innerSlackU P.cap t q-a*(s-t)|≤90*d^2 ∧
+    |innerSlackV P.cap s q-innerSlackV P.cap t q+b*(s-t)|≤90*d^2 := by
   have hB:=romik_bounds hP hbox
+  have hφ:=hB.φ_mem.1
+  have hstep : |λ*d|≤4*normalRecoveryDepth := by
+    rw [abs_mul,abs_of_nonneg hd]
+    exact (mul_le_mul_of_nonneg_right hλ hd8).trans (by ring)
+  have hinside : t+λ*d∈Icc (0:ℝ) (π/2) := by
+    constructor <;> nlinarith [ht.1,ht.2,hφ,
+      neg_abs_le (λ*d),le_abs_self (λ*d)]
+  -- Exact Gerver support identities:
+  have hsup:=gerver_cap_explicit hP hbox
+  have hcorner:=gm_innerCorner hP hbox
+    ⟨hφ.le.trans ht.1,by linarith [ht.2,hφ]⟩
+  -- Work on each true turning-parameter phase, including one-sided
+  -- intervals at a junction. The cap contact derivatives are explicit.
   rcases gs_cases (P:=P) t with h1|h2|h3|h4|h5
   all_goals
-    have hstep : |s-t|≤4*d := by
-      dsimp
-      rw [abs_mul]
-      nlinarith [abs_nonneg λ]
-    have hsmall : |s-t|≤1/(10:ℝ)^7 := by
-      unfold normalRecoveryDepth at hd8
-      nlinarith
-    simp only
+    have hA:=gs_hasDerivAt_path' hP t
+    have hBframe:=romik_bounds hP hbox
+    have hsmall:=hstep
+    first
+    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
+        gs_α_eq hP h1,gs_β_eq hP h1] at *
+    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
+        gs_α_eq hP h2,gs_β_eq hP h2] at *
+    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
+        gs_α_eq hP h3,gs_β_eq hP h3] at *
+    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
+        gs_α_eq hP h4,gs_β_eq hP h4] at *
+    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
+        gs_α_eq hP h5,gs_β_eq hP h5] at *
     all_goals
-      first
-      | rw [gs_pathD_eq_phase hP h1]
-      | rw [gs_pathD_eq_phase hP h2]
-      | rw [gs_pathD_eq_phase hP h3]
-      | rw [gs_pathD_eq_phase hP h4]
-      | rw [gs_pathD_eq_phase hP h5]
-    all_goals
-      have hsine:=abs_sin_sub_le s t
-      have hcosine:=abs_cos_sub_le s t
-      norm_num at *
+      have hsine:=abs_sin_sub_le (t+λ*d) t
+      have hcosine:=abs_cos_sub_le (t+λ*d) t
       nlinarith
+
+/-- Uniform quadratic Taylor remainder for the two balanced hallway slacks,
+including the previously omitted rotation of the displacement direction. -/
+theorem core_balanced_slack_remainder {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t d λ a b : ℝ} {w : Point}
+    (ht : t∈Icc P.φ (π/2-P.φ))
+    (hd : 0≤d) (hd8 : d≤normalRecoveryDepth)
+    (hλ : |λ|≤4) (hw : norm2 w=1)
+    (ha : a=-P.gs_α t) (hb : b=P.gs_β t) :
+    |secondOrderWallErrorU P.cap (P.path t) t (t+λ*d) d a w|≤100*d^2 ∧
+    |secondOrderWallErrorV P.cap (P.path t) t (t+λ*d) d b w|≤100*d^2 := by
+  obtain ⟨hU,hV⟩ := gerver_core_base_slack_taylor hP hbox ht hd hd8 hλ ha hb
+  exact balanced_wall_remainder_of_base hd hλ hw hU hV
 
 /-- Core normal estimate with the common 49/100 coefficient. -/
 theorem core_normal_slack_49 {P : GerverParams}
