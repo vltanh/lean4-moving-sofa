@@ -178,11 +178,24 @@ reference estimates are: clipped roof factor 51/5 with clipping threshold
 For epsilon<=10^(-20), delta<=514*10^(-10)<1/2040000. Forward recovery costs
 at most (51/5)*delta. In the reverse direction choose
 
-    rho=20*(delta+sqrt(epsilon)).
+    rho=20*(delta+sqrt(epsilon)),    r=sqrt(2)*delta,
+    kappa=100/1051.
 
-It is below 1/24, and (100/1051)*rho is strictly greater than
-sqrt(2)*delta+sqrt(epsilon/pi). The surviving disk therefore has more area
-than |U minus S| and meets S. This proves both directed distances and
+It is below 1/24. The key numerical bound is not the stronger and
+generally FALSE r<=kappa*rho/2: at delta=514*sqrt(epsilon), the left
+side is about 727*sqrt(epsilon) while the right is only about
+490*sqrt(epsilon). Instead,
+
+    kappa*rho-r
+      =(2000/1051-sqrt(2))*delta+(2000/1051)*sqrt(epsilon)
+      >sqrt(epsilon),
+
+since sqrt(2)<3/2<2000/1051. A square of side
+kappa*rho-r inside the surviving interior ball is contained in
+the eroded reference shape and has area greater than epsilon.
+It must meet the original sofa. This is the sharp surviving-ball
+recovery lemma used by the Lean draft; no unjustified half-radius
+hypothesis is required. This proves both directed distances and
 
     d_H(S_c,G)<=20*(514+1)*sqrt(epsilon)=10300*sqrt(epsilon).
 
