@@ -265,6 +265,134 @@ set_option maxHeartbeats 0 in
 set_option maxRecDepth 1000000 in
 private theorem closed_reduction : closedCheck=true := by decide
 
+/-- Exact finite coverage of the twenty half-angle slabs [0.60,0.61],
+[0.61,0.62], ..., [0.79,0.80]. Endpoints are included so no gap can
+remain at a rational grid boundary. -/
+theorem exists_hundredth_slab {r : ℝ}
+    (hr0 : (3/5:ℝ)≤r) (hr1 : r≤4/5) :
+    ∃ i : Fin 20, i.val<20 ∧
+      (((60+i.val:ℚ)/100:ℚ):ℝ)≤r ∧
+      r≤(((61+i.val:ℚ)/100:ℚ):ℝ) := by
+  by_cases h0 : r≤(61/100:ℝ)
+  · refine ⟨⟨0,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [hr0]
+    · norm_num
+      linarith [h0]
+  by_cases h1 : r≤(62/100:ℝ)
+  · refine ⟨⟨1,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h0]
+    · norm_num
+      linarith [h1]
+  by_cases h2 : r≤(63/100:ℝ)
+  · refine ⟨⟨2,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h1]
+    · norm_num
+      linarith [h2]
+  by_cases h3 : r≤(64/100:ℝ)
+  · refine ⟨⟨3,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h2]
+    · norm_num
+      linarith [h3]
+  by_cases h4 : r≤(65/100:ℝ)
+  · refine ⟨⟨4,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h3]
+    · norm_num
+      linarith [h4]
+  by_cases h5 : r≤(66/100:ℝ)
+  · refine ⟨⟨5,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h4]
+    · norm_num
+      linarith [h5]
+  by_cases h6 : r≤(67/100:ℝ)
+  · refine ⟨⟨6,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h5]
+    · norm_num
+      linarith [h6]
+  by_cases h7 : r≤(68/100:ℝ)
+  · refine ⟨⟨7,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h6]
+    · norm_num
+      linarith [h7]
+  by_cases h8 : r≤(69/100:ℝ)
+  · refine ⟨⟨8,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h7]
+    · norm_num
+      linarith [h8]
+  by_cases h9 : r≤(70/100:ℝ)
+  · refine ⟨⟨9,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h8]
+    · norm_num
+      linarith [h9]
+  by_cases h10 : r≤(71/100:ℝ)
+  · refine ⟨⟨10,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h9]
+    · norm_num
+      linarith [h10]
+  by_cases h11 : r≤(72/100:ℝ)
+  · refine ⟨⟨11,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h10]
+    · norm_num
+      linarith [h11]
+  by_cases h12 : r≤(73/100:ℝ)
+  · refine ⟨⟨12,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h11]
+    · norm_num
+      linarith [h12]
+  by_cases h13 : r≤(74/100:ℝ)
+  · refine ⟨⟨13,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h12]
+    · norm_num
+      linarith [h13]
+  by_cases h14 : r≤(75/100:ℝ)
+  · refine ⟨⟨14,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h13]
+    · norm_num
+      linarith [h14]
+  by_cases h15 : r≤(76/100:ℝ)
+  · refine ⟨⟨15,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h14]
+    · norm_num
+      linarith [h15]
+  by_cases h16 : r≤(77/100:ℝ)
+  · refine ⟨⟨16,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h15]
+    · norm_num
+      linarith [h16]
+  by_cases h17 : r≤(78/100:ℝ)
+  · refine ⟨⟨17,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h16]
+    · norm_num
+      linarith [h17]
+  by_cases h18 : r≤(79/100:ℝ)
+  · refine ⟨⟨18,by decide⟩,by decide,?_,?_⟩
+    · norm_num
+      linarith [not_le.mp h17]
+    · norm_num
+      linarith [h18]
+  refine ⟨⟨19,by decide⟩,by decide,?_,?_⟩
+  · norm_num
+    linarith [not_le.mp h18]
+  · norm_num
+    linarith [hr1]
+
 theorem coarse_area_separation {S : Set Point} {ω : ℝ}
     (hS : IsMovingSofaWithAngle S ω)
     (hω0 : arccos (5/11:ℝ)≤ω)
