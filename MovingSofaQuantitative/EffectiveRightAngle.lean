@@ -34,18 +34,12 @@ penalty. -/
 theorem exists_integral_penalized_cap {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {K : Set Point} (hK : IsCap K (π/2))
+    (hpositive : 0 < sofaArea (π/2) K)
     {e λ : ℝ} (he : 0<e) (hλ : 0<λ)
     (hAe : sofaArea (π/2) K=area (gerverSofa P)-e) :
     ∃ C : Set Point,IsCap C (π/2) ∧
       sofaArea (π/2) C-λ*supportL2Penalty K C≥sofaArea (π/2) K ∧
       supportL2Penalty K C≤e/λ := by
-  have hpositive : 0 < sofaArea (π/2) K := by
-    have hM := (gerverSofa_area_mem hP hbox).1
-    rw [hAe]
-    -- Only positive-area competitors require penalized selection.
-    -- The quantitative theorem is used with e <= 10^-4; that restriction
-    -- belongs to its application, not to the generic existence statement.
-    linarith
   obtain ⟨C, hpenMax⟩ := exists_integral_penalized_limit hK hpositive hλ
   rcases hpenMax with ⟨hC, hmax⟩
   have hzero : supportL2Penalty K K = 0 := by
@@ -163,8 +157,12 @@ theorem effective_right_angle_cap {P : GerverParams}
       EuclideanClose.refl _ (by positivity)
   · let λ:=rightAnglePenaltyLambda e
     have hλ : 0<λ := by unfold λ rightAnglePenaltyLambda; positivity
+    have hKpos : 0 < sofaArea (π/2) K := by
+      rw [he]
+      have hM := (gerverSofa_area_mem hP hbox).1
+      linarith [he4]
     obtain ⟨C,hC,hobj,hPbound⟩ :=
-      exists_integral_penalized_cap hP hbox hK hp hλ
+      exists_integral_penalized_cap hP hbox hK hKpos hp hλ
         (by rw [he]; ring)
     have hCarea : sofaArea (π/2) C≥area (gerverSofa P)-e := by
       have hnon:=supportL2Penalty_nonneg K C
