@@ -103,7 +103,10 @@ theorem convex_horizontal_fiber_interval {K : Set Point}
     constructor
     · intro hx; exact ⟨ha hx,hb hx⟩
     · intro hx
-      exact convex_interval_mem hv ha.1 hb.1 hx
+      have hab : a≤b := ha hb.1
+      have hs : x∈segment ℝ a b := by
+        simpa [segment_eq_Icc hab] using hx
+      exact hv.segment_subset ha.1 hb.1 hs
   · exact ⟨0,0,Or.inr (by ext x; simp [hn])⟩
 
 /-- Extending every nonempty horizontal interval by delta adds exactly 2 delta
@@ -191,8 +194,9 @@ theorem convex_vertical_fiber_interval {K : Set Point}
     constructor
     · intro hy; exact ⟨ha hy,hb hy⟩
     · intro hy
+      have hab : a≤b := ha hb.1
       have hs : y∈segment ℝ a b := by
-        simpa [segment_eq_Icc (ha.1 |> fun h => h)] using hy
+        simpa [segment_eq_Icc hab] using hy
       exact hv.segment_subset ha.1 hb.1 hs
   · exact ⟨0,0,Or.inr (by ext y; simp [hn])⟩
 
