@@ -462,12 +462,18 @@ The underlying integral uses the continuous endpoint value, so it does
 not attempt to invert an interval containing zero. This is currently
 uncompiled Lean proof source, not a verified numerical certificate.
 
-A certificate for a root rectangle must prove coverage of the entire root,
-the validity of every local interval bound, positivity of every denominator
-used, and the final rational comparison. The analytic model links those
-expressions to the actual residual-space Gram entries. Python is permitted
-to generate subdivisions and data; the intended final formal theorem uses
-only the soundness theorem of the Lean checker and accepted certificate data.
+The certificate is a finite mathematical witness emph{internal to Lean},
+not an external program or a numerical receipt. The proof must establish
+coverage of the entire root rectangle, correctness of every outward interval
+bound, positivity of every denominator used, and the final rational comparison.
+The analytic identification of those expressions with the actual
+residual-space Gram entries is also a Lean theorem. Subdivision, checking,
+and the final success proof are defined in Lean, using exact rational
+arithmetic and the kernel-checked proof produced by 	exttt{decide}.
+No Python script, JSON file, native oracle, or outside success flag is
+accepted as a mathematical hypothesis or trusted proof step. Until these
+closed checks actually elaborate and reduce successfully, the numerical
+claims remain unverified.
 
 The research replay of the all-pairs $0.93$ estimate has 21 region-pair roots
 and 145306 accepted leaf rectangles. These counts and the generated-data hashes
