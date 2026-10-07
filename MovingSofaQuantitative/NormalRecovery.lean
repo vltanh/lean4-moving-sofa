@@ -705,17 +705,31 @@ theorem core_normal_slack_49 {P : GerverParams}
       exact mul_le_mul_of_nonneg_left hout
         (div_nonneg (sqrt_nonneg _) (add_pos ha hb).le) |>.trans
           (by nlinarith [hratio])
-  have hrem:=core_balanced_slack_remainder hP hbox ht.le hd.le hd8 hλ
+  have hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t := by
+    rw [referenceBoundaryVelocity_eq hP]
+    dsimp [a,b]
+    abel
+  have hpdecomp : p=P.path t+d•w := by
+    dsimp [w]
+    have hdne : d≠0:=ne_of_gt hd
+    ext <;> simp only [Prod.fst_add,Prod.snd_add,Prod.fst_smul,
+      Prod.snd_smul,Prod.fst_sub,Prod.snd_sub]
+    all_goals
+      dsimp [div_eq_mul_inv]
+      field_simp [hdne]
+      ring
+  have hrem:=core_balanced_slack_remainder hP hbox ht.le hd.le hd8 hλ hw
+    (show a=-P.gs_α t by rfl) (show b=P.gs_β t by rfl)
   have hgap : (49/100:ℝ)+100*normalRecoveryDepth<1/sqrt 2 := by
     have hs2:=sq_sqrt (by norm_num : (0:ℝ)≤2)
     have hspos:=sqrt_pos.2 (by norm_num : (0:ℝ)<2)
     unfold normalRecoveryDepth
     nlinarith
   refine ⟨s,hs,?_,?_⟩
-  · have hexp:=innerSlackU_balanced_expansion hP hbox ht.le hpN hnear
+  · have hexp:=innerSlackU_balanced_expansion hP hbox ht.le hpdecomp hvel
       (a:=a) (b:=b) (w:=w) (λ:=λ)
     nlinarith [hlead.1,hrem.1,hd8,mul_nonneg hd.le hd8]
-  · have hexp:=innerSlackV_balanced_expansion hP hbox ht.le hpN hnear
+  · have hexp:=innerSlackV_balanced_expansion hP hbox ht.le hpdecomp hvel
       (a:=a) (b:=b) (w:=w) (λ:=λ)
     nlinarith [hlead.2,hrem.2,hd8,mul_nonneg hd.le hd8]
 
