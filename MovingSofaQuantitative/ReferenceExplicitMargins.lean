@@ -257,6 +257,81 @@ theorem gerver_B_alpha_le_neg_four_fifths {P : GerverParams}
       rw [gs_β_eq hP (gs_piece₀ hsφ),gs_β₁_eq hP]
     linarith
 
+/-- The B arc of the niche roof moves strictly right and down.  In
+particular the fixed roof height is nonincreasing along the B arc. -/
+theorem gerver_B_roof_antitone {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ)
+    {t s : ℝ}
+    (ht : t∈Icc (π/2-P.θ) (π/2))
+    (hs : s∈Icc (π/2-P.θ) (π/2))
+    (hts : t≤s) :
+    (envB P.path P.gs_α t).1≤(envB P.path P.gs_α s).1 ∧
+    γ (envB P.path P.gs_α s).1 ≤
+      γ (envB P.path P.gs_α t).1 := by
+  have hB := romik_bounds hP hbox
+  have henv := gn_envHyp hP hB
+  have hΓ := gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbds : ∀z∈gerverEnvelope P,
+      z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
+      0≤z.2 := by
+    intro z hz
+    have h := envelope_bounds_of_path_height henv
+      (fun u hu => path_snd_lt_one hP hB hu.1 hu.2) z hz
+    exact ⟨h.1,h.2.1⟩
+  have hBt : envB P.path P.gs_α t∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inl (Or.inl ⟨t,ht,rfl⟩)
+  have hBs : envB P.path P.gs_α s∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inl (Or.inl ⟨s,hs,rfl⟩)
+  have hγt:=roof_value_of_envelope hroof hΓ hSlope hbds hBt
+  have hγs:=roof_value_of_envelope hroof hΓ hSlope hbds hBs
+  have hx:=(env_B₁_strictMono henv).monotoneOn ht hs hts
+  have hy:=(env_B₂_strictAnti henv).antitoneOn ht hs hts
+  exact ⟨hx,by rw [hγs,hγt]; exact hy⟩
+
+/-- The D arc of the niche roof moves strictly right and up. -/
+theorem gerver_D_roof_monotone {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ)
+    {t s : ℝ}
+    (ht : t∈Icc (0:ℝ) P.θ)
+    (hs : s∈Icc (0:ℝ) P.θ)
+    (hts : t≤s) :
+    (envD P.path P.gs_β t).1≤(envD P.path P.gs_β s).1 ∧
+    γ (envD P.path P.gs_β t).1 ≤
+      γ (envD P.path P.gs_β s).1 := by
+  have hB := romik_bounds hP hbox
+  have henv := gn_envHyp hP hB
+  have hΓ := gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbds : ∀z∈gerverEnvelope P,
+      z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
+      0≤z.2 := by
+    intro z hz
+    have h := envelope_bounds_of_path_height henv
+      (fun u hu => path_snd_lt_one hP hB hu.1 hu.2) z hz
+    exact ⟨h.1,h.2.1⟩
+  have hDt : envD P.path P.gs_β t∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inr ⟨t,ht,rfl⟩
+  have hDs : envD P.path P.gs_β s∈gerverEnvelope P := by
+    unfold gerverEnvelope
+    exact Or.inr ⟨s,hs,rfl⟩
+  have hγt:=roof_value_of_envelope hroof hΓ hSlope hbds hDt
+  have hγs:=roof_value_of_envelope hroof hΓ hSlope hbds hDs
+  have hx:=(env_D₁_strictMono henv).monotoneOn ht hs hts
+  have hy:=(env_D₂_strictMono henv).monotoneOn ht hs hts
+  exact ⟨hx,by rw [hγt,hγs]; exact hy⟩
+
 /-- Horizontal support width, shared by the area and effectivity modules. -/
 def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
 
