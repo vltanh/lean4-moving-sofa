@@ -490,6 +490,97 @@ theorem nearest_smooth_arc_orthogonal {G : Set Point} {γ : ℝ → Point}
   linarith
 
 /-- First-order orthogonality at a nearest point on the smooth core. -/
+
+/-- A nearest point on a smooth B-type arc, whose tangent is a nonzero
+multiple of v_t and whose u_t ray enters the sofa, has exterior displacement
+exactly opposite u_t. -/
+theorem nearest_smooth_arc_opposite_uvec {G : Set Point}
+    {γ : ℝ→Point} {p : Point} {a b t k : ℝ}
+    (ht : t∈Ioo a b)
+    (hcurve : ∀s∈Ioo a b,γ s∈G)
+    (hder : HasDerivAt γ (k•vvec t) t)
+    (hk : k≠0)
+    (hinside : ∃r>0,∀s∈Ioc (0:ℝ) r,γ t+s•uvec t∈G)
+    (hp : p∉G)
+    (hnear : euclideanDist p (γ t)=infDist p G) :
+    dot (p-γ t) (uvec t) = -euclideanDist p (γ t) := by
+  let q:=γ t
+  let d:=euclideanDist p q
+  have hq : q∈G := hcurve t ht
+  have hd : 0<d := by
+    dsimp [d]
+    apply euclideanDist_pos_of_ne
+    intro he
+    subst p
+    exact hp hq
+  let w:=(p-q)/d
+  have hw : norm2 w=1 := by
+    dsimp [w,d,euclideanDist]
+    rw [norm2_div,div_self (ne_of_gt hd)]
+  have horth:=nearest_smooth_arc_orthogonal ht hcurve hder hnear
+  have hperp : dot w (vvec t)=0 := by
+    have hh : dot (p-q) (vvec t)=0 := by
+      rw [dot_smul_right] at horth
+      exact (mul_eq_zero.mp horth).resolve_left hk
+    dsimp [w]
+    rw [dot_div_left,hh,zero_div]
+  have hsign : dot w (uvec t)≤0 := by
+    have hn : 0<norm2 (uvec t) := by
+      rw [norm2_uvec]; norm_num
+    exact nearest_vector_opposes_inward hnear hinside hd rfl hn
+  have hf:=norm2_sq_in_frame w t
+  have hu : dot w (uvec t)=-1 := by
+    rw [hw,hperp] at hf
+    nlinarith [hsign]
+  dsimp [w] at hu
+  rw [dot_div_left] at hu
+  have hres:= (div_eq_iff (ne_of_gt hd)).1 hu
+  simpa [d] using hres
+
+/-- The D-type companion, with u_t tangent and v_t inward normal. -/
+theorem nearest_smooth_arc_opposite_vvec {G : Set Point}
+    {γ : ℝ→Point} {p : Point} {a b t k : ℝ}
+    (ht : t∈Ioo a b)
+    (hcurve : ∀s∈Ioo a b,γ s∈G)
+    (hder : HasDerivAt γ (k•uvec t) t)
+    (hk : k≠0)
+    (hinside : ∃r>0,∀s∈Ioc (0:ℝ) r,γ t+s•vvec t∈G)
+    (hp : p∉G)
+    (hnear : euclideanDist p (γ t)=infDist p G) :
+    dot (p-γ t) (vvec t) = -euclideanDist p (γ t) := by
+  let q:=γ t
+  let d:=euclideanDist p q
+  have hq : q∈G := hcurve t ht
+  have hd : 0<d := by
+    dsimp [d]
+    apply euclideanDist_pos_of_ne
+    intro he
+    subst p
+    exact hp hq
+  let w:=(p-q)/d
+  have hw : norm2 w=1 := by
+    dsimp [w,d,euclideanDist]
+    rw [norm2_div,div_self (ne_of_gt hd)]
+  have horth:=nearest_smooth_arc_orthogonal ht hcurve hder hnear
+  have hperp : dot w (uvec t)=0 := by
+    have hh : dot (p-q) (uvec t)=0 := by
+      rw [dot_smul_right] at horth
+      exact (mul_eq_zero.mp horth).resolve_left hk
+    dsimp [w]
+    rw [dot_div_left,hh,zero_div]
+  have hsign : dot w (vvec t)≤0 := by
+    have hn : 0<norm2 (vvec t) := by
+      rw [norm2_vvec]; norm_num
+    exact nearest_vector_opposes_inward hnear hinside hd rfl hn
+  have hf:=norm2_sq_in_frame w t
+  have hv : dot w (vvec t)=-1 := by
+    rw [hw,hperp] at hf
+    nlinarith [hsign]
+  dsimp [w] at hv
+  rw [dot_div_left] at hv
+  have hres:= (div_eq_iff (ne_of_gt hd)).1 hv
+  simpa [d] using hres
+
 theorem nearest_core_direction {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p : Point} {t : ℝ}
