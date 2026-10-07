@@ -262,3 +262,13 @@ Here \(n_{B_\tau}\) denotes the **actual full** lower forbidden roof of the conv
 Combining the central forbidden-roof estimate with the external supporting-line estimate proves \(\max_{E_\tau}y\le1-b\tau/4\). The envelope \(E_\tau\) is itself \(\rho\)-invariant, so its minimum ordinate is at least \(b\tau/4\) as well. It is nonempty by HS.7, and compact, so the extrema are attained. QED.
 
 **Scope of the obstruction.** HS.9 does **not** disprove the sign-only hull-symmetrization conjecture HS.4. It does rule out assigning a negligible (e.g. \(O(\tau^{3/2})\)) cost to restoring exact unit vertical span by a generic width-preserving operation: the geometric span defect is order \(\tau\), while the original area deficit is smaller order. AN2 separately gives an exact low-area full-turn counterexample to the simplest determinant-one affine normalization. A successful full-turn symmetry proof would have to establish both an area comparison *and* a compatible sharp symmetric area theorem or genuinely feasible normalization, rather than invoke RS2 at the wrong span.
+
+
+**Corollary HS5 (no linear vertical-span stability).** There is no constant \(c>0\) for which every **x-reflection symmetric, connected, full-turn** sofa \(S\) with vertical span \(h\le1\) necessarily satisfies
+\[
+|S|\le M-c(1-h).
+\tag{HS.12, false}
+\]
+Indeed \(E_\tau\) contains the midline belt intersection \(S_\tau\cap JS_\tau\) and has nonempty interval fibers through that common retained middle region, hence is connected and full-turn feasible. By HS.7 it has area at least \(M-C\tau^{3/2}\); by HS.10 its span is at most \(1-b\tau/2\). For any fixed \(c>0\), choose \(\tau\) so small that \(C\sqrt\tau<cb/2\). Then \(|E_\tau|>M-c(1-h_\tau)\), contradicting the proposed bound.
+
+This is an exact negative result about a possible **symmetric near-unit-span stability estimate**, not a counterexample to \(|S|\le M\). It makes clear that a sharp extension of RS2 to subunit spans cannot be bought by a fixed linear penalty in the missing span. The construction is genuinely connected: both \(K_\tau\) and \(B_\tau\) contain the reference central belt, whose middle horizontal segment is retained by the original reference's full canonical turns; support monotonicity makes that segment survive the smaller \(B_\tau\) sweeps, and vertical sections of \(E_\tau\) are intervals. Its horizontal projection is complete since the extreme reference tips also survive. These fibers share the retained horizontal midline, proving connectedness.
