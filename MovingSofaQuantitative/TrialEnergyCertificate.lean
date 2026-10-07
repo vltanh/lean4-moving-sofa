@@ -301,6 +301,10 @@ def closedCheck : Bool :=
 
 
 
+/-- Real parameter vector used by the specialized certificate. -/
+def realPoint (P : GerverParams) (u : ℝ) : Fin 3 → ℝ
+  | 0 => P.φ | 1 => P.θ | 2 => u
+
 /-- The nested expression selects exactly the same cubic as \`hermiteChain\`.
 This is a finite sixteen-piece induction, with the node order supplied by the
 committed rational data. -/
@@ -331,10 +335,6 @@ theorem hermite_deriv_semantics {P : GerverParams} (hP : P.IsSolution) (u : ℝ)
         HermiteNode.segmentFirst,hermiteFirst,Cubic.first]
     | next
   exact rfl
-
-/-- Real parameter vector used by the specialized certificate. -/
-def realPoint (P : GerverParams) (u : ℝ) : Fin 3 → ℝ
-  | 0 => P.φ | 1 => P.θ | 2 => u
 
 /-- The encoded Hermite value is the actual fixed trial value.  The proof is
 piecewise on the sixteen intervals; all coefficients are the literals in
