@@ -413,12 +413,6 @@ theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L D : ℝ}
     nlinarith
 
 
-theorem center_shift_L2_lower {K C : Set Point}
-    (hK : IsCap K (π/2)) (hC : IsCap C (π/2)) :
-    π/2*(horizontalMidpoint C-horizontalMidpoint K)^2≤
-      ∫t in (0:ℝ)..π,(supp C t-supp K t)^2 := by
-  exact support_midpoint_l2_lower hK hC
-
 theorem arbitrary_positive_cap_radius_five {K : Set Point}
     (hK : IsCap K (π/2)) (hA : 0<sofaArea (π/2) K) :
     ∀p∈centeredCopy K,norm2 p<5 := by
@@ -522,7 +516,16 @@ theorem centered_reference_distance_from_support {K C : Set Point} {δ : ℝ}
     (h : ∀t∈Icc (0:ℝ) π,|supp C t-supp K t|≤δ)
     (hδ : 0≤δ) :
     EuclideanClose δ (centeredReference K K) (centeredReference K C) := by
-  exact centered_reference_lipschitz hK hC h hδ
+  rw [centeredReference_self]
+  unfold centeredReference horizontalReference horizontalMidpoint
+  let a:=(supp C 0-supp C π)/2-(supp K 0-supp K π)/2
+  have h0:=h 0 ⟨le_rfl,pi_pos.le⟩
+  have hπ:=h π ⟨pi_pos.le,le_rfl⟩
+  have ha : |a|≤δ := by
+    dsimp [a]
+    rw [abs_le] at h0 hπ ⊢
+    constructor <;> linarith [h0.1,h0.2,hπ.1,hπ.2]
+  exact (close_horizontal_translate K a).symm.mono ha
 
 theorem maximizing_cap_eq_gerver {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
@@ -543,12 +546,42 @@ theorem right_angle_sofa_subset_capShape {K S : Set Point}
   have hf:=hcon.2.1 p hp t ht.le
   exact (not_lt_of_ge hf) (max_lt hU hV)
 
-theorem niche_subset_of_right_angle_movement {K S : Set Point}
-    (hK : IsCap K (π/2))
-    (hcon : PartialSofaConstraints K S (π/2))
-    (hconn : IsConnected S)
-    (hcap : K=sofaCap S) :
-    niche K (π/2)⊆K := by
-  exact connected_motion_niche_subset hK hcon hconn hcap
+/-- At right angle the stability cap agrees with Baek's cap of the
+standard-position sofa. -/
+theorem sofaCap_eq_capOf_right_angle {S : Set Point}
+    (hS : IsMovingSofaWithAngle S (π/2))
+    (htop : supp S (π/2)=1) :
+    sofaCap S=capOf S (π/2) := by
+  have hc:=ms_isCompact_of_isMovingSofaWithAngle hS
+  have hn:=hS.2.1.nonempty
+  have hstrip:=moving_strip_of_top ⟨π/2,hS⟩ htop
+  have hSC:=sofaCap_isCap hc hn hstrip htop
+  have hstd:IsStandardPosition S (π/2):=⟨htop,htop⟩
+  have hCO:=theorem2_4_1 pi_div_two_mem_Ioc hS hstd
+  apply caps_eq_of_upper_supports hSC hCO
+  intro t ht
+  have hJ:=ht
+  rw [sofaCap_upper_support hc hn hstrip htop
+      (by rcases ht with ht|ht <;> constructor <;> linarith [ht.1,ht.2,pi_pos])]
+  exact (lemma2_3_5_supp pi_div_two_mem_Ioc hS hstd hJ).2.symm
+
+/-- The full right-angle cap of an actual moving sofa contains its niche.
+This is an immediate consequence of Baek's connected-monotonization
+criterion, avoiding a separate floor-wedge API. -/
+theorem niche_subset_of_right_angle_movement {S : Set Point}
+    (hS : IsMovingSofaWithAngle S (π/2))
+    (htop : supp S (π/2)=1) :
+    niche (sofaCap S) (π/2)⊆sofaCap S := by
+  have hstd:IsStandardPosition S (π/2):=⟨htop,htop⟩
+  have hcapOf:=theorem2_4_1 pi_div_two_mem_Ioc hS hstd
+  have hmono:IsMonotoneSofa (monotonization S (π/2)) (π/2) :=
+    ⟨pi_div_two_mem_Ioc,S,hS,hstd,rfl⟩
+  have hconn: IsConnected (capOf S (π/2)\niche (capOf S (π/2)) (π/2)) := by
+    rw [←theorem2_4_2 pi_div_two_mem_Ioc hS hstd]
+    exact hmono.isMovingSofaWithAngle.2.1
+  have hN : niche (capOf S (π/2)) (π/2)⊆capOf S (π/2) :=
+    ((theorem2_5_8 hcapOf).out 4 1).1 hconn
+  rw [sofaCap_eq_capOf_right_angle hS htop]
+  exact hN
 
 end MovingSofaQuantitative
