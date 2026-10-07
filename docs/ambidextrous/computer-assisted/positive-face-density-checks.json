@@ -1,0 +1,25 @@
+{
+  "status": "exact_regressions_passed",
+  "named_checks": 93,
+  "depth_cases": 80,
+  "convex_strip_samples": 101,
+  "rectangle_shaved_width": "6737/6500",
+  "rectangle_face_gap": "19297/16250",
+  "arithmetic": "Python unbounded integers and Fraction",
+  "negative_controls": [
+    "oversized rounding",
+    "shaving excludes centers",
+    "finite area monotonicity",
+    "isolated strips are not a bridge"
+  ],
+  "continuum_density_verified_by_script": false,
+  "arbitrary_sofa_feasibility_verified_by_script": false,
+  "unrestricted_optimality_proved": false,
+  "python_version": "3.13.5",
+  "internal_seconds": 0.006955871999707597,
+  "source_sha256": "adbf1fab0e4aee1a6d40d61eef40c060dc28721acbdf943ec176e63d392428ec",
+  "ci_or_lean_used": false,
+  "source_git_blob_sha": "761900d38540215411807cbd7a40c23cd6927b2f",
+  "executed_source_matches_committed_blob": true,
+  "external_timeout_seconds": 5
+}
