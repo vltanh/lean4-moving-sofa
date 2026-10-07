@@ -42,9 +42,9 @@ theorem gerver_roof_height_lt_two_thirds {P : GerverParams}
 /-- Explicit support margin from the niche to the outer cap. -/
 theorem gerver_outer_margin_one_fifth {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    ∀p∈niche P.cap (π/2),∀t : ℝ,
+    ∀p∈niche P.cap (π/2),∀t∈Icc (0:ℝ) π,
       1/5≤supp P.cap t-dot p (uvec t) := by
-  intro p hp t
+  intro p hp t ht
   obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
   have hH : H≤2/3 := by
     have hpmax:=hroof.roof_height_upper
