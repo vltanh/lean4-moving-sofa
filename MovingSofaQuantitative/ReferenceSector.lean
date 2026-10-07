@@ -106,7 +106,7 @@ theorem endpoint_sector_mem_right {P : GerverParams}
     have hxq:=abs_fst_le_norm2 (q-(1,0))
     nlinarith [hxq.trans hd,hscale,hB.φ_mem.1]
 
-/-- Reflected left outer floor corner. -/
+/-- Left outer floor corner, proved directly from the support half-planes. -/
 theorem endpoint_sector_mem_left {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     (hopen : referenceSectorAperture < π/2-P.φ)
@@ -116,11 +116,41 @@ theorem endpoint_sector_mem_left {P : GerverParams}
     (hq : q∈interiorSector (xm,0) (π/2+P.φ/2)
       referenceSectorHalfAngle referenceSectorRadius) :
     q∈gerverSofa P := by
-  have href:=gerver_reflection_symmetry hP hbox
-  have hr:=endpoint_sector_mem_right hP hbox hopen hscale
-    (q:=verticalReflection q) (by
-      simpa [interiorSector,verticalReflection,dot,uvec] using hq)
-  simpa [href,verticalReflection] using hr
+  have hB:=romik_bounds hP hbox
+  have hK:=gm_isCap hP hbox
+  rw [gerver_shape_eq hP hbox]
+  refine ⟨?_,?_⟩
+  · apply (cap_mem_iff_upper hK q).2
+    refine ⟨?_,?_⟩
+    · simp only [interiorSector,mem_setOf_eq] at hq
+      have h1:=hq.1
+      have h2:=hq.2.1
+      simp [dot,uvec] at h1 h2
+      nlinarith
+    · intro t ht
+      rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB ht.1 ht.2]
+      have hC:=gs_C_le_H hP hB ht.1 ht.2
+        (show (0:ℝ)≤π/2 by positivity) le_rfl
+      have hCend:=gs_C_pi_div_two hP
+      have hd:=hq.2.2
+      have hx:=abs_fst_le_norm2 (q-(xm,0))
+      have hy:=abs_snd_le_norm2 (q-(xm,0))
+      have hxmB:=gs_X₀_bounds hP hB
+      simp [hCend,dot,uvec] at hC ⊢
+      nlinarith [hx.trans hd,hy.trans hd,hopen,hscale,hxmB.1,hxmB.2]
+  · intro hn
+    rw [gerver_niche_eq_envUnderStrict hP hB] at hn
+    have hx:=envUnderStrict_fst_mem_Ioo (gn_envHyp hP hB) hn
+    rcases gerver_corner_points hP hbox with ⟨a,b,xm',ha,hb,hxm',h10,ha0,hbx⟩
+    have hd:=hq.2.2
+    have hxq:=abs_fst_le_norm2 (q-(xm,0))
+    have heq : xm=xm' := by
+      have h0:=hxm
+      have h0':=(hxm')
+      have hmin:=gerver_floor_left_endpoint_unique hP hbox h0 h0'
+      exact hmin
+    rw [heq] at hxq
+    nlinarith [hxq.trans hd,hscale,hB.φ_mem.1]
 
 /-- Points of Gerver's sofa within one chart radius of its frontier inherit the
 same sector from the local phase chart.  This is the translated-epigraph part
