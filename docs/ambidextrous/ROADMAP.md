@@ -1,92 +1,99 @@
-# Active roadmap: asymmetric end-face geometry and actual area
+# Active roadmap: a sharp opposite-face bound, not a uniform exclusion gap
 
-**Unrestricted optimality remains unproved.** WV2 establishes the signed weighted one-turn value in the written chain. FAS1 now covers every full-turn aligned positive-face body, regardless of face length. RS2 also covers left-right reflection-symmetric bodies in the common incoming representation, without assuming full or symmetric motions. The remaining unrestricted cases are not eliminated by these class theorems. Uniqueness remains deferred.
+**Unrestricted optimality is not proved.** The newest RR/PD/PS hand proofs show that the saturated positive opposite-end-face class carries the entire full-turn supremum. They remove point faces as a separate upper-value obligation, but do not bound that supremum. Remaining partial-turn bodies with an unsafe strip bridge still need an additional argument. Unrestricted uniqueness stays deferred.
 
-Read [HANDOFF.md](HANDOFF.md), [short-face-extension-review.md](short-face-extension-review.md), and the latest [switching](full-turn-unit-chord-obstruction.md) and [reflection](reflection-symmetric-optimality.md) notes. All written results are self-reviewed; the historical dependency chain has not been independently refereed or kernel-verified.
+Read [HANDOFF.md](HANDOFF.md) and [positive-face-density-review.md](positive-face-density-review.md). All written results are self-reviewed; the historical proof chain has not been independently refereed or kernel-verified.
 
-## 1. Acceptance criterion and execution limits
+## 1. Target and runtime policy
 
-For one attained global ambidextrous maximizer S, establish |S|<=M, where
+Prove the ordinary area of an attained unrestricted ambidextrous maximizer is at most
 
 $$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-Do not impose unrestricted equality classification first. Prefer hand proofs. Use brief computations to reject faulty premises or check explicit algebra: maximum 30 seconds per invocation, preferably external five/ten-second caps. No large search or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantial positive and negative findings with `[skip ci]`, under docs/ambidextrous.
+One attained maximizer suffices for the value. Do not impose unrestricted uniqueness first. Prefer pen-and-paper proofs, with short checks to reject faulty premises or verify explicit algebra. Maximum 30 seconds per invocation, preferably external five/ten-second limits. No long optimizer campaign or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantial positive and negative findings with `[skip ci]`, under docs/ambidextrous.
 
-## 2. Weighted value: retained as a written input
+## 2. New full-turn reduction: positive opposite faces suffice
 
-[WV2](one-turn-weighted-value.md) proves
+[RR1](rounded-strip-regularization.md) proves that
 
-$$\sup_U\Psi(U)=M/2,\qquad\Psi(U)=|U|-|N(U)|-W(U)/2,$$
+$$R_\lambda=\lambda S+\frac{1-\lambda}{2}B$$
 
-on the normalized full-right-angle cap domain. The entire niche is subtracted. PA/WP/WR establish attainment and selected-polygon regularity. AR/PT/TS/EB establish same-sign bounds, a positive top face, a half-height niche and actual limiting exposure balance. TF/HF supply confinement and the stationary core. CG/SE force one good quarter, using an existing ordinary Gerver area bound on a genuinely feasible one-turn body. VE's globally visible source-flux lower bound and WV's energy contradiction force the other quarter good. AR4/SR1/AF3 then supply the value.
+preserves every canonical hallway containing S. The same rounding preserves the exact set of straight-strip normals whose width is at most one. Shaving each of two opposite supports by less than the rounding radius leaves the connected center set lambda S intact and creates two actual positive-length support chords. Connectedness follows from a union of convex disk portions attached to those centers.
 
-The main independent-review point remains VE's continuum source-flux argument and its historical inputs. No new computation verifies that chain. Do not reopen weighted maximization unless a particular implication is found incorrect; do not give an arbitrary ambidextrous cap the premise of weighted maximality.
+[PD2](full-turn-positive-face-density.md) chooses a width-record normal just outside the safe-strip component. Semiconvex width estimates control the entire bridge after shaving; a further shrink makes that whole interval safe. SI2 transports the full motions to the new unit-span incoming orientation. The positive left derivative of width makes the two horizontal faces strictly separated. Their areas converge to the original area, and can be chosen strictly below it.
 
-## 3. Completed actual-body classes
+For competitive bodies, AW-W and FD1 place those positive faces in opposite unit end strips. Therefore
 
-### Full turns and any aligned positive faces
+$$\boxed{\sup_{\rm full\ turns}|S|=\sup_{\rm positive\ opposite\ faces}|S|.}$$
 
-[FAS1](full-turn-aligned-short-faces.md) proves |S|<=M whenever the common unit-span hull has identical top and bottom exposed faces of positive length and both conventional turns are full. No minimum positive length, curvature, smoothness, reflection symmetry or endpoint-height condition remains.
+PS1 in [the review](positive-face-density-review.md) additionally saturates every approximant at its actual hull. The fibers remain nonempty intervals, the envelope is connected, its hull and faces are unchanged, and area does not decrease. Thus the same supremum is obtained over **saturated positive opposite-end-face bodies**.
 
-The proof derives the two SCG no-clipping conditions from retained-point flank bounds. Their failure would force width below 1201/600, while [SW1](scaled-width-margin.md) already excludes every width at most 1001/500>1201/600. SW1 is a uniform-scaling consequence of the analytic AW-W bound, not a new computational certificate. The polynomial estimate in FAS is an explicit sum of nonnegative terms.
+This is a genuine value reduction: a full-turn body above M would give a positive opposite-face body above M. It is not a theorem that every full-turn maximizer can be chosen with those positive faces. The approximating face lengths can vanish, and this subclass need not attain its supremum.
 
-The older FL/LF conclusions are retained: aligned faces of length at least one force full turns; two faces longer than one force alignment as well. They require no separate full-turn premise.
+## 3. A negative result that prevents the wrong computer strategy
 
-### Additional short-face classes force full turns
+Applying the from-below approximation to the reference gives actual positive opposite-end-face full-turn bodies with
 
-[SCG1](short-chord-optimality.md) gives two explicit inequalities in six actual retained points. They force every needed angle and zero clipping. [CSF1](central-short-face-optimality.md) gives sufficient central-face width/height regimes, including W>1+sqrt(2) with unrestricted extreme heights, W>7/3 for extreme heights in [1/4,3/4], and W>sqrt(5) for mid-height extremes.
+$$|S_j|<M,\qquad |S_j|\to M.$$
 
-The right-endpoint retention is proved only after alignment; hull-interior face points are not silently treated as actual points of S. A fully verified elliptic example in CSF has face length 9/10, so the admitted positive short-face class is nonempty.
+Thus a fixed epsilon>0 cannot make the whole remaining positive-face class satisfy |S|<=M-epsilon. Saturation does not restore such a gap. Excluding literal point faces does not make the remaining geometry a uniformly suboptimal exception.
 
-### Left-right reflection symmetry
+This is stronger than merely finding point-face perturbations near the reference. The unresolved positive-face class itself carries the whole full-turn supremum. A sharp hand theorem, a valid limiting argument, or a computer/local combination with its exact residual class is still needed. Counting fewer face alternatives is not evidence that a small final estimate will finish the proof.
 
-[RS1--RS2](reflection-symmetric-optimality.md) complete both turns of a competitive body symmetric under J(x,y)=(-x,y). Reflecting a lower hallway at t exchanges its two normals and gives the same body's hallway at pi/2-t. The initial motion beyond pi/4 therefore covers the whole quarter. The upper turn follows independently.
+FD3 is not contradicted: it excluded aligned positive-face approximants at fixed unit span; PD constructs separated faces and changes the incoming orientation through a proved safe-strip bridge.
 
-The two horizontal faces are centered. A point face would be central and contradict UC2; opposite-end positive faces cannot be centered. FD1 consequently forces identical positive faces, and FAS1 proves the area bound. Thus the reference is optimal within this stated reflection-symmetric incoming class, without a symmetric-motion premise.
+## 4. Exact full-turn acceptance target
 
-This does not prove existence of a symmetric unrestricted maximizer. Invariance of a nonconvex optimization problem under reflection is insufficient.
+It now suffices to prove
 
-## 4. Exact remaining full-turn alternatives
+$$\boxed{|E|\le M}$$
 
-For width W>2 and two full turns, [FD1](full-turn-face-dichotomy.md) classifies positive face intervals: either they coincide and span [l+1,r-1], or they lie in opposite unit end strips [l,l+1] and [r-1,r]. FAS handles the coincident case.
+for every compact connected full-turn canonical envelope E whose unit-span hull has positive faces in opposite unit end strips, at competitive widths. A proof on this class covers point-face limits by PD/PS. A statement only about an attained maximizer inside the positive-face subclass is insufficient unless such attainment is separately justified.
 
-[UC1](full-turn-unit-chord-obstruction.md) proves that a retained unit vertical column cannot have actual points at horizontal distances greater than one on both sides. Each motion supplies an interior angle where both safe-wall alternatives hold; the right flank would require r+s>1 while the left would require r+s+3rs<1, for positive half-angle parameters r,s. This contradiction is independent of weighted optimality or any numerical area bound.
-
-UC2 then places every point face of a full-turn body in one of the two unit end strips. The central common-point case is excluded.
-
-A possible full-turn counterexample must therefore have either:
-
-- a point face in an end strip; or
-- two nondegenerate faces in opposite end strips.
-
-These configurations necessarily break the left-right symmetry covered by RS2. They are not proved suboptimal. General partial-turn competitors also remain outside the covered SCG/CSF/RS regimes.
-
-## 5. What a final comparison still needs
-
-For full-turn cap pairs with nonempty surviving fibers,
+For actual cap pairs with the same hull and nonempty fibers, the exact accounting is
 
 $$|E|=\Psi(U)+\Psi(V)+G,\qquad G\ge0.$$
 
-Since Delta(U)=M/2-Psi(U)>=0, one possible remaining theorem is G<=Delta(U)+Delta(V). FAS proves G=0 in its admitted class, not universally. A valid area-improving operation at a maximizing asymmetric end-face body, or another ordinary-area inequality, could replace this deficit comparison.
+The written weighted theorem supplies
 
-Partial turns require actual angle coverage or an explicit bound on the missing geometry. A finite support neighborhood is not automatically the topology required by a local analytic theorem. Known end-point-face perturbations approach M, so no fixed strict gap below M can dispose of the whole remaining class.
+$$\Psi(U)\le M/2,\qquad\Delta(U)=M/2-\Psi(U)\ge0.$$
 
-## 6. Negative approaches already eliminated
+Thus one sufficient sharp comparison remains
 
-[FD3](full-turn-face-dichotomy.md) rules out approximating an aligned point-face hull of width W>2 by aligned positive-face full-turn unit-span hulls: the approximating face lengths are at least W_j-2 and remain positive in the limit. Shrinking first changes the required vertical span; restoring it requires a separate feasible operation.
+$$\boxed{G\le\Delta(U)+\Delta(V).}$$
 
-[RA1](reflection-averaging-obstruction.md) rules out naive Minkowski averaging of actual bodies with their reflection. Applied even to the already symmetric reference, the average fills central top and bottom midpoint points while retaining width greater than two. The same hull forces the incoming orientation, reflection completes the turns, and UC1 makes the resulting body infeasible. This does not rule out a different, proved cap or motion symmetrization.
+This is a target, not a theorem that the clipping is paid. An ordinary-area comparison avoiding the cap decomposition, or a justified reduction to an admitted class, would also suffice. No signed-area replacement can omit positive clipping, negative winding or uncovered surviving material.
 
-Earlier controls AF4, GR1, AX1/SAT1, SAC2, SC3, TR1 and AO1 remain in force. Repair, saturation and auxiliary data admission alone do not establish the actual-area inequality. Canonical-wing accounting keeps both negative winding and uncovered material. Small extreme-height difference is not mid-height or C1 localization.
+The main missing upper bound has not been supplied by RR/PD. The new construction keeps feasibility and limiting area, but does not increase the area of an actual maximizer at a finite step.
 
-## 7. Checks and existing certificates
+## 5. Partial turns remain a separate obligation
 
-The new standard-library short-face checker verifies the FAS polynomial coefficient by coefficient and finite rational regressions; its runtime is about 0.03 seconds under a five-second cap. The separate UC checker verifies the switching identity and strict-boundary examples in about 0.03 seconds. Executed-source hashes and scope are recorded. Neither checks the full continuum proof or the historical WV chain.
+[SI3--SI4](strip-interval-completion.md) transport a partial-turn body to full turns when its entire interval of relevant outgoing strip normals has width at most one. These are actual motions of the same body, followed to a unit-span endpoint of that safe component.
 
-AW-W and AL1 are analytic width restrictions; SW1 strengthens the lower competitive restriction to W>1001/500. AM2 and TE1 retain their scoped exact computer exclusions but are not premises of the new hand-proof case closures. No complete global certificate exists. The occupancy model's fractional barriers still prevent simply refining the old unconditioned LP.
+The remaining partial-turn case has a width bump above one on that interval. Width at most one at three separate directions does not establish a safe bridge. RR's unshaved safe-strip set is unchanged, and PD starts from already full motions. Neither is a universal partial-turn completion theorem.
 
-## 8. Next work
+Therefore unrestricted closure still requires both the full-turn sharp target in Section 4 and a value bound or full-turn reduction for the uncovered partial-turn configurations. A theorem on one attained unrestricted maximizer may combine these tasks, but cannot assume its motion endpoints.
 
-Choose a specific asymmetric end-face comparison or a rigorously specified partial-turn case. A genuine area-preserving or area-improving symmetry reduction could also finish the value, but RA1 shows the simplest average is not it. Do not assume such a reduction or return to an already disproved enlargement.
+## 6. Previously established written inputs and classes
 
-Keep actual retained points, full-turn hypotheses, positive clipping corrections and verification limits visible. Commit negative findings. Unrestricted optimality, independent review and global assembly remain unfinished; PR #3 stays open and draft.
+**Weighted one-turn value WV2.** The cap problem subtracts the entire positive niche. PA/WP/WR give attainment, selected polygons and regularity; AR/PT/TS/EB give same-sign estimates, a positive top, half-height niche and exact limiting exposure. TF/HF give confinement and a stationary core. CG/SE force one good quarter using the known ordinary Gerver area bound on a feasible one-turn body. VE's visible-source lower bound and WV's energy contradiction force the other good, then SR1/AF3 give the value. VE's continuum source-flux limit remains a principal independent-review point. No arbitrary two-turn cap is assigned weighted maximality.
+
+**Aligned faces and symmetry.** FAS bounds every full-turn aligned positive-face body. SCG/CSF give additional conditions forcing full turns; FL/LF cover long faces without assuming them. RS bounds the left-right reflection-symmetric common incoming class using complementary-angle completion, UC and FD. None proves the existence of a symmetric unrestricted optimizer.
+
+**Width/angle restrictions.** AW-W and SW give competitive width >1001/500; AL gives width <=2999/1020. AM/TE retain scoped exact computational exclusions, including the endpoint-angle bound beyond sixty degrees. They are not a global sharp covering and are not inputs to RR/PD beyond the explicitly cited analytic width localization.
+
+## 7. Failure controls
+
+RA1 rules out naive reflection averaging of actual nonconvex bodies. MCA1 rules out the analogous convex-cap averaged enclosure on a feasible double-cut reference family: its actual area loss is smaller-order than its averaged weighted loss. RR differs because its rounding budget is paid by shrinking; no finite area monotonicity is assumed.
+
+The earlier controls AF4, GR1, AX1/SAT1, SAC2, SC3, TR1 and AO1 remain relevant. The canonical-wing identity keeps both negative winding and uncovered material. Saturation and auxiliary data admission do not by themselves prove an area inequality. A finite support grid is not a C1 neighborhood. Small extreme-height difference does not center the endpoints at one half.
+
+The occupancy relaxation's fractional barriers still prevent a resolution-only fix of the unconditioned LP. Do not launch a long search for the uniform opposite-face gap that Section 3 now disproves.
+
+## 8. Execution record and next-session discipline
+
+`computer-assisted/check_positive_face_density.py` ran under a five-second cap in about 0.007 seconds internally. Its 93 named checks include 80 depth budgets, 101 rational convex-strip samples and four negative controls. The JSON record matches the executed Git blob. These regressions do not verify the continuum approximation, saturation connectivity or the historical motion/width chain.
+
+Two earlier exploratory five-second-capped rectangle/parallelogram tests supplied neither a sharp bound nor a continuum feasibility certificate. They are recorded as unsuccessful discovery, not proof inputs. No large search was run.
+
+Read RR/PD/PS with the review. If a specific implication is wrong, state and repair it. Otherwise pursue the sharp saturated opposite-face bound or a genuinely uncovered partial-turn comparison. Do not reopen solved auxiliary optimization merely to generate more lemmas. Keep supremum-versus-attainment, actual support witnesses, safe-angle coverage and correction signs explicit. The PR remains open and draft; unrestricted optimality and independent verification remain unfinished.
