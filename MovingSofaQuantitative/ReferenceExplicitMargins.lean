@@ -317,6 +317,125 @@ private theorem core_slack_of_uniform_derivative_bound
   rw [hFTC, intervalIntegral.integral_const, hzero] at hle
   nlinarith
 
+/-!
+### Exact C1 core residuals
+
+For \`s=t+λ(t)d\` the support function at \`s\` is recovered from
+\`innerCorner P.cap s=P.path s\` (for \`s∈[0,π/2]\`).
+To differentiate in \`d\`, use the *explicit path expression* below, not an
+unjustified derivative of the abstract support function.
+
+The velocity \`gs_pathD\` is the already-formalized derivative of \`P.path\`.
+-/
+
+private def coreAdjustedAngle (λ : ℝ → ℝ) (t d : ℝ) : ℝ :=
+  t + λ t * d
+
+private def coreLoweredPoint (P : GerverParams) (t d : ℝ) : Point :=
+  ((P.path t).1, (P.path t).2 - d)
+
+private def corePathSlackU (P : GerverParams) (λ : ℝ → ℝ)
+    (t d : ℝ) : ℝ :=
+  dot (coreLoweredPoint P t d - P.path (coreAdjustedAngle λ t d))
+    (uvec (coreAdjustedAngle λ t d))
+
+private def corePathSlackV (P : GerverParams) (λ : ℝ → ℝ)
+    (t d : ℝ) : ℝ :=
+  dot (coreLoweredPoint P t d - P.path (coreAdjustedAngle λ t d))
+    (vvec (coreAdjustedAngle λ t d))
+
+private def corePathRateU (P : GerverParams) (λ : ℝ → ℝ)
+    (t d : ℝ) : ℝ :=
+  let s := coreAdjustedAngle λ t d
+  dot ((0,-1) - λ t • P.gs_pathD s) (uvec s) +
+    λ t * dot (coreLoweredPoint P t d - P.path s) (vvec s)
+
+private def corePathRateV (P : GerverParams) (λ : ℝ → ℝ)
+    (t d : ℝ) : ℝ :=
+  let s := coreAdjustedAngle λ t d
+  dot ((0,-1) - λ t • P.gs_pathD s) (vvec s) -
+    λ t * dot (coreLoweredPoint P t d - P.path s) (uvec s)
+
+/-- Exact derivative of the U residual for every depth, including zero. -/
+private theorem corePathSlackU_hasDerivAt {P : GerverParams}
+    (hP : P.IsSolution) (λ : ℝ → ℝ) (t d : ℝ) :
+    HasDerivAt (fun x => corePathSlackU P λ t x)
+      (corePathRateU P λ t d) d := by
+  let s := coreAdjustedAngle λ t d
+  have hs : HasDerivAt (fun x : ℝ => coreAdjustedAngle λ t x)
+      (λ t) d := by
+    dsimp [coreAdjustedAngle]
+    convert ((hasDerivAt_id d).const_mul (λ t)).const_add t using 1 <;> ring
+  have hp : HasDerivAt (fun x => P.path (coreAdjustedAngle λ t x))
+      (λ t • P.gs_pathD s) d := by
+    simpa [s] using (P.gs_hasDerivAt_path hP s).comp d hs
+  have hq : HasDerivAt (fun x => coreLoweredPoint P t x)
+      ((0,-1) : Point) d := by
+    dsimp [coreLoweredPoint]
+    convert (hasDerivAt_const d (P.path t).1).prodMk
+      ((hasDerivAt_id d).const_sub (P.path t).2) using 1 <;> ext <;> simp
+  have hu : HasDerivAt
+      (fun x => uvec (coreAdjustedAngle λ t x))
+      (λ t • vvec s) d := by
+    simpa [s] using (hasDerivAt_uvec s).comp d hs
+  have hdot := hasDerivAt_dot' (hq.sub hp) hu
+  convert hdot using 1
+  · ext x
+    simp [corePathSlackU]
+  · simp [corePathRateU,s,coreAdjustedAngle,dot_add_left,dot_smul_right]
+    ring
+
+/-- Exact derivative of the V residual for every depth, including zero. -/
+private theorem corePathSlackV_hasDerivAt {P : GerverParams}
+    (hP : P.IsSolution) (λ : ℝ → ℝ) (t d : ℝ) :
+    HasDerivAt (fun x => corePathSlackV P λ t x)
+      (corePathRateV P λ t d) d := by
+  let s := coreAdjustedAngle λ t d
+  have hs : HasDerivAt (fun x : ℝ => coreAdjustedAngle λ t x)
+      (λ t) d := by
+    dsimp [coreAdjustedAngle]
+    convert ((hasDerivAt_id d).const_mul (λ t)).const_add t using 1 <;> ring
+  have hp : HasDerivAt (fun x => P.path (coreAdjustedAngle λ t x))
+      (λ t • P.gs_pathD s) d := by
+    simpa [s] using (P.gs_hasDerivAt_path hP s).comp d hs
+  have hq : HasDerivAt (fun x => coreLoweredPoint P t x)
+      ((0,-1) : Point) d := by
+    dsimp [coreLoweredPoint]
+    convert (hasDerivAt_const d (P.path t).1).prodMk
+      ((hasDerivAt_id d).const_sub (P.path t).2) using 1 <;> ext <;> simp
+  have hv : HasDerivAt
+      (fun x => vvec (coreAdjustedAngle λ t x))
+      (-λ t • uvec s) d := by
+    simpa [s] using (hasDerivAt_vvec s).comp d hs
+  have hdot := hasDerivAt_dot' (hq.sub hp) hv
+  convert hdot using 1
+  · ext x
+    simp [corePathSlackV]
+  · simp [corePathRateV,s,coreAdjustedAngle,dot_add_left,dot_smul_right]
+    ring
+
+/-- On the reference turning interval, the explicit path residual is the
+actual inner-wall slack of Gerver's cap. -/
+private theorem corePathSlack_eq_innerSlack {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    (λ : ℝ → ℝ) (t d : ℝ)
+    (hs : coreAdjustedAngle λ t d ∈ Icc (0 : ℝ) (π/2)) :
+    corePathSlackU P λ t d =
+        innerSlackU P.cap (coreAdjustedAngle λ t d)
+          (coreLoweredPoint P t d) ∧
+    corePathSlackV P λ t d =
+        innerSlackV P.cap (coreAdjustedAngle λ t d)
+          (coreLoweredPoint P t d) := by
+  have hcorner := P.gm_innerCorner hP hbox hs
+  have heq := cn_innerCorner_dot P.cap (coreAdjustedAngle λ t d)
+  rw [hcorner] at heq
+  constructor
+  · simp only [corePathSlackU,innerSlackU,dot_sub_left]
+    linarith [heq.1]
+  · simp only [corePathSlackV,innerSlackV,dot_sub_left,
+      ←uvec_add_pi_div_two]
+    linarith [heq.2]
+
 /-- Compact C1 persistence of the adaptive first-order inequality.  This is
 the source-level compactness lemma behind the existential clipping depth.  Its
 proof uses only continuity of Gerver's C1 path and the strict rational reserve;
