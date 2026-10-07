@@ -276,6 +276,36 @@ theorem support_difference_lipschitz_of_radius {K C : Set Point}
   nlinarith [abs_sub_abs_le_abs_sub
     (supp C s-supp C t) (supp K s-supp K t)]
 
+/-- A common horizontal translation cancels from the difference of two
+support functions.  The Lipschitz estimate therefore only needs radii
+relative to one shared centre, not absolute radii from the origin. -/
+theorem support_difference_lipschitz_common_center {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    {m RK RC : ℝ}
+    (hKr : ∀p∈K,norm2 (p-(m,0))≤RK)
+    (hCr : ∀p∈C,norm2 (p-(m,0))≤RC) :
+    LipschitzWith (RK+RC) (fun t=>supp C t-supp K t) := by
+  let K' := Rigid.translate (-m,0) '' K
+  let C' := Rigid.translate (-m,0) '' C
+  have hK' : IsCap K' (π/2) := isCap_translate_horizontal hK (-m)
+  have hC' : IsCap C' (π/2) := isCap_translate_horizontal hC (-m)
+  have hKr' : ∀p∈K',norm2 p≤RK := by
+    rintro p ⟨q,hq,rfl⟩
+    simpa [K',Rigid.translate_apply,Prod.fst_sub,Prod.snd_sub] using hKr q hq
+  have hCr' : ∀p∈C',norm2 p≤RC := by
+    rintro p ⟨q,hq,rfl⟩
+    simpa [C',Rigid.translate_apply,Prod.fst_sub,Prod.snd_sub] using hCr q hq
+  have hLip := support_difference_lipschitz_of_radius
+    hK'.2.1 hC'.2.1 hKr' hCr'
+  have heq : (fun t=>supp C' t-supp K' t) =
+      (fun t=>supp C t-supp K t) := by
+    funext t
+    dsimp [C',K']
+    rw [supp_translate_horizontal hC.2.1 (-m) t,
+        supp_translate_horizontal hK.2.1 (-m) t]
+    ring
+  simpa only [heq] using hLip
+
 theorem bounded_abs_support_difference {K C : Set Point}
     (hK : IsCompact K) (hC : IsCompact C)
     {RK RC : ℝ}
