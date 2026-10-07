@@ -624,8 +624,10 @@ theorem pieceUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
             ⟨j.val,by simp [subcells]⟩
         refine ⟨V,?_,?_⟩
         · simpa [hlen] using hget
-        · obtain ⟨a,b,M,hab',hM,hVU,hleft,hright,hpoint⟩ :=
-            cellUpper_sound hP hbox k lo hi j hV
+        · have hcellValue : cellUpper k lo hi j = some V := by
+            simpa only [List.getElem_ofFn] using hV
+          obtain ⟨a,b,M,hab',hM,hVU,hleft,hright,hpoint⟩ :=
+            cellUpper_sound hP hbox k lo hi j hcellValue
           let l : ℝ := meshPoint (lo.realValue (realPoint P 0))
             (hi.realValue (realPoint P 0)) subcells j.val
           let r : ℝ := meshPoint (lo.realValue (realPoint P 0))
