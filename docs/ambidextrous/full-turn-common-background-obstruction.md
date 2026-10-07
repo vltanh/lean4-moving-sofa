@@ -1,0 +1,114 @@
+# A genuine full-turn obstruction to universal common-face background admission
+
+**Scope.** This is a hand-proof negative control for the proposed global CB/CT background construction. An explicit compact convex ambidextrous body has both *full* conventional turns, strictly positive horizontal faces in opposite end strips, and a horizontal face separation that no pair of containing height-one caps can bridge with **one common top-face interval** while each has full niche height at most one half. It has small area and **does not** exclude common-face admission for all *competitive* bodies. It is not a counterexample to Romik optimality.
+
+The argument is independent of the weighted cap theorem and of curvature regularization. Labels CGA are local. No numerical search or computation is a premise.
+
+## 1. The exact full-turn parallelogram
+
+Put
+\[
+W=\frac{12}{5},\qquad \varepsilon=\frac1{20},\qquad
+S=\operatorname{conv}\{(0,1),(\varepsilon,1),(W,0),(W+\varepsilon,0)\}.
+\tag{CGA.1}
+\]
+This is the Minkowski sum of the diagonal segment
+\[
+S_0=[(0,1),(W,0)]
+\]
+and the horizontal segment \([0,\varepsilon]e_x\). Its fibers are
+\[
+S_y=[W(1-y),\,W(1-y)+\varepsilon]\quad(0\le y\le1).
+\]
+Hence it is compact, convex and connected, has incoming vertical span exactly one, and
+\[
+|S|=\varepsilon=\frac1{20}.
+\tag{CGA.2}
+\]
+Its top face is \([0,\varepsilon]\times\{1\}\), its bottom face is \([W,W+\varepsilon]\times\{0\}\), and its horizontal projection is \([0,W+\varepsilon]\) of width \(49/20\). The two faces are strictly separated and lie in the opposite unit end intervals.
+
+**Theorem CGA1.** The *same* body \(S\) admits both complete canonical conventional quarter turns. It need not be reoriented, shrunk, rounded or disconnected.
+
+**Proof.** Write \(L=\pi/2\), \(c=\cos t\), \(s=\sin t\), \(u=(c,s)\), \(v=(-s,c)\), with \(0\le t\le L\). For a convex hull with support \(h\), a point lies in the canonical hallway if at least one of its inner-wall support depths
+\[
+D_u(z)=h(u)-z\cdot u,\qquad D_v(z)=h(v)-z\cdot v
+\]
+is at most one. Both outer supporting inequalities are automatic. The canonical corner path is continuous by support continuity, and the incoming and outgoing axes have width one in the required normal. Thus it is enough to verify the depth disjunction for every \(t\).
+
+First use the lower turn, on \(S_0\). Parameterize a point by its fraction \(\lambda\in[0,1]\) from the top endpoint to the bottom endpoint. The two signed projection differences are
+\[
+A=Wc-s,\qquad B=Ws+c>0,\qquad A^2+B^2=W^2+1=(13/5)^2.
+\]
+If \(A\ge0\), its depths are \(A(1-\lambda)\) and \(B\lambda\). For all positive \(A,B\),
+\[
+\min(A(1-\lambda),B\lambda)
+\le\frac{AB}{A+B}
+\le\frac{A+B}{4}
+\le\frac{\sqrt{A^2+B^2}}{2\sqrt2}
+=\frac{13}{10\sqrt2}.
+\tag{CGA.3}
+\]
+For the horizontal summand, each depth increases by at most \(\varepsilon\), so the smaller new depth is at most \(13/(10\sqrt2)+\varepsilon<1\). The last strict inequality is exact: \(13/(10\sqrt2)<19/20\) is equivalent, after squaring positive quantities, to \(676<722\).
+
+If \(A<0\), the first wall alone protects the whole thickened segment. Its maximum depth is at most
+\[
+s-Wc+\varepsilon c=s-(W-\varepsilon)c\le s\le1,
+\]
+because \(W>\varepsilon\). This also covers the terminal angle, where equality is allowed.
+
+For the upper turn, reflect the body vertically. Reflection does not alter its horizontal summand. The diagonal segment now runs from \((0,0)\) to \((W,1)\), with projection differences
+\[
+A'=Wc+s>0,\qquad B'=c-Ws,\qquad (A')^2+(B')^2=(13/5)^2.
+\]
+If \(B'\le0\), the two support maxima occur at opposite endpoints; their depths are again bounded by (CGA.3) plus \(\varepsilon\). If \(B'>0\), the second wall alone protects every point, with maximum depth
+\[
+c-Ws+\varepsilon s=c-(W-\varepsilon)s\le c\le1.
+\]
+Thus the reflected body makes a full lower turn, which is exactly a full upper turn of \(S\). The canonical placement lemma supplies continuous actual motions throughout both closed quarters. QED.
+
+## 2. A universal half-height niche ceiling on the top face
+
+**Lemma CGA2 (face-length obstruction).** Let \(B\) be *any* compact downward convex cap of height one, and suppose its horizontal top face is \([a,b]\times\{1\}\), length \(T=b-a\). Let \(N(B)\) denote its **full** positive-height one-turn niche. Then
+\[
+\boxed{H_N(B)\ge\max\{0,\,T/2+1-\sqrt2\}.}
+\tag{CGA.4}
+\]
+Consequently
+\[
+H_N(B)\le\frac12\quad\Longrightarrow\quad T\le2\sqrt2-1.
+\tag{CGA.5}
+\]
+
+**Proof.** At the turn angle \(t=\pi/4\), the two upper supporting values \(f=h_B(t)\), \(g=h_B(t+\pi/2)\) obey
+\[
+f\ge(b+1)/\sqrt2,\qquad g\ge(1-a)/\sqrt2
+\]
+by the retained top-face endpoints. The two inner-wall lines meet at a corner of height
+\[
+c_y=(f-1)\sin t+(g-1)\cos t
+=\frac{f+g}{\sqrt2}-\sqrt2
+\ge\frac{T}{2}+1-\sqrt2.
+\]
+When the corner height is positive, points of its open forbidden quadrant approach that corner from below while retaining positive height. Hence the full niche height is at least that corner height. If it is not positive, the stated lower bound is zero. Rearranging a bound by one half gives (CGA.5). QED.
+
+This estimate requires neither a curvature bound nor smoothness, an aligned face, or a cap actually optimal for any functional. It is a direct necessary condition for the half-height niche hypothesis used in TC/CT/CB.
+
+## 3. A common-face background is impossible for this feasible pair
+
+Form the two downward caps \(U,V\) of the *actual* common hull of \(S\): \(U\) has top roof from \(S\), while \(V\) has the vertically reflected bottom roof. They have the same projection and height one. The first contains \((0,1)\) and \((\varepsilon,1)\); the second contains \((W,1)\) and \((W+\varepsilon,1)\).
+
+Suppose there were containing height-one caps \(B_1\supseteq U\), \(B_2\supseteq V\) whose horizontal top-face intervals **coincide**, and both had full niche height at most one half. A containing cap of height one necessarily contains each original height-one point in its own top face. The common interval must therefore contain \([0,W+\varepsilon]\) and have length at least \(49/20>2\).
+
+But CGA.5 gives length at most \(2\sqrt2-1<2\), since \(\sqrt2<3/2\). Contradiction.
+
+**Theorem CGA3 (exact admission obstruction).** No such pair of containing half-height-niche backgrounds with one common top-face interval exists for the genuine full-turn body (CGA.1). In particular the common-background-face requirement in CB/CT cannot be established by a universal inclusion construction for **all** full-turn bodies. Adding upper-curvature restrictions only makes that input class smaller.
+
+The obstruction is specifically to this *background-admission architecture*. It does not disprove the true full-turn area inequality, another area-aware repair that does not require common faces, or admission after an explicitly paid replacement rather than simple containment.
+
+## 4. Competitive scope and next gate
+
+This body's area is only \(1/20\), far below the candidate's \(M>8/5\). Thus CGA3 does **not** rule out a theorem saying that every *competitive* saturated opposite-face body has compatible backgrounds. Such a theorem would need to use competitive area quantitatively; neither full-turn feasibility nor smooth convexity alone is enough.
+
+It does make a broad strategy choice precise: either prove a **competitive-only** shared-background theorem, retaining its area threshold, or pursue a direct actual-area inequality (for instance the proved SPB geometric enclosure) that does not demand a common top-face background.
+
+No computational result, CI, Lean/Lake compilation, dependency installation, manuscript build or long search is used. The complete example and inequalities above are pen-and-paper. Unrestricted full-turn optimality remains open.
