@@ -4,12 +4,23 @@
   "coverage": "Quantitative headline statements. Baseline paper lemmas and unnumbered prose additionally require the full-paper inventory and manual correspondence review.",
   "baseline_commit": "859ba93f8bb73ccc4378118a7b47415827710c2f",
   "statement_module": "MovingSofaQuantitative.Targets",
-  "policy": "Status records source progress only. Source means an unconditional proof term at the registered target type, not kernel verification. Conditional transfer lemmas do not close their input obligations. The current user instruction forbids Lean compilation and CI.",
+  "policy": "Status records source progress only. source means a named unconditional proof-source declaration intended to inhabit the registered target type. No quantitative source in this branch has been compiled, elaborated, axiom-audited, or kernel checked under the current user instruction; source status is therefore not verification.",
   "required_ids": [
-    "centered-energy", "centered-cap", "centered-ki", "centered-numeric",
-    "explicit-local-stability", "sofa-coefficient-lower", "centered-residual-sharpness",
-    "critical-face-upper", "full-q-finite", "full-q-094", "feasible-critical-lower",
-    "intrinsic-interval", "effective-entry", "effective-angle-entry", "explicit-cutoff"
+    "centered-energy",
+    "centered-cap",
+    "centered-ki",
+    "centered-numeric",
+    "explicit-local-stability",
+    "sofa-coefficient-lower",
+    "centered-residual-sharpness",
+    "critical-face-upper",
+    "full-q-finite",
+    "full-q-094",
+    "feasible-critical-lower",
+    "intrinsic-interval",
+    "effective-entry",
+    "effective-angle-entry",
+    "explicit-cutoff"
   ],
   "results": [
     {
@@ -22,7 +33,7 @@
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment of two actual caps",
       "deficit": "Four cap residual energies",
-      "remaining": "Uncompiled. The concrete comparison profile, actual residual pairing and polarization instantiate the integrated pinned bound. Later exact-type and axiom checks remain required."
+      "remaining": "Concrete comparison profile, residual pairing and polarization are drafted. Uncompiled."
     },
     {
       "id": "centered-cap",
@@ -34,7 +45,7 @@
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
       "deficit": "M-Q of an actual feasible WideTriple",
-      "remaining": "Uncompiled. Uses centered energy and the integrated wide-deficit bound; no Gram or desired-coercivity assumption remains."
+      "remaining": "Centered residual estimate plus integrated full-Q deficit. Uncompiled."
     },
     {
       "id": "centered-ki",
@@ -46,7 +57,7 @@
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
       "deficit": "M-A(K), with IsKi K",
-      "remaining": "Uncompiled. Uses the actual canonical triple and the geometric area bound."
+      "remaining": "Canonical triple and geometric area bound. Uncompiled."
     },
     {
       "id": "centered-numeric",
@@ -56,21 +67,21 @@
       "status": "source",
       "paper_label": "cor:quant-centered-numeric",
       "placement": "G.1",
-      "normalization": "Not applicable: scalar coefficient only",
+      "normalization": "Scalar coefficient",
       "deficit": "None",
-      "remaining": "Uncompiled; later exact-type and standard-axiom checks are required."
+      "remaining": "Exact rational/Taylor proof source. Uncompiled."
     },
     {
       "id": "explicit-local-stability",
       "target": "MovingSofaQuantitative.Targets.ExplicitLocalStability",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.explicit_local_stability",
+      "module": "MovingSofaQuantitative.ExplicitStability",
+      "status": "source",
       "paper_label": "thm:quant-explicit-stability",
       "placement": "Main 10 / G.2 proof",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "M-area(S)",
-      "remaining": "Instantiate actual-reference sector/normal geometry and the refined terminal budget, then assemble the existing sector area, scalar budget and compactness entry."
+      "remaining": "Complementary terminal budget, 1.53-sector recovery, 49/100 normal recovery and direct area coefficient 50 are assembled with qualitative compactness entry. Uncompiled."
     },
     {
       "id": "sofa-coefficient-lower",
@@ -82,115 +93,115 @@
       "placement": "G.3",
       "normalization": "All orientation-preserving rigid alignments",
       "deficit": "M-area(S)",
-      "remaining": "Uncompiled corollary of the integrated puncture family, retaining every rigid alignment."
+      "remaining": "Corollary of the integrated puncture family. Uncompiled."
     },
     {
       "id": "centered-residual-sharpness",
       "target": "MovingSofaQuantitative.Targets.CenteredResidualSharpness",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.centered_residual_sharpness",
+      "module": "MovingSofaQuantitative.CenteredCapSharpness",
+      "status": "source",
       "paper_label": "thm:quant-centered-sharpness",
       "placement": "G.3",
       "normalization": "Best horizontal translation; actual caps arbitrarily near Gerver",
-      "deficit": "Cap residual energy, NOT M-Q or M-area(S)",
-      "remaining": "Construct one-sided smoothing, prove nonnegative curvature measure and actual-cap realization, and establish residual convergence."
+      "deficit": "Cap residual energy, not M-Q or sofa deficit",
+      "remaining": "One-sided smoothing, actual convex-cap realization, energy convergence and width obstruction are assembled. Uncompiled."
     },
     {
       "id": "critical-face-upper",
       "target": "MovingSofaQuantitative.Targets.CriticalFaceUpper",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.critical_face_upper",
+      "module": "MovingSofaQuantitative.FullQCertificate",
+      "status": "source",
       "paper_label": "thm:quant-critical-face",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
-      "deficit": "M-Q for feasible triples with exactly zero dual slack",
-      "remaining": "Connect the implemented exact active-face and rank-two energy reductions to the full continuum operator certificate."
+      "deficit": "M-Q with zero dual slack",
+      "remaining": "Closed Boolean operator-certificate source plus analytic transfer. The reduction is deliberately unexecuted. Uncompiled."
     },
     {
       "id": "full-q-finite",
       "target": "MovingSofaQuantitative.Targets.FullQFinite",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.full_q_finite",
+      "module": "MovingSofaQuantitative.FullQCertificate",
+      "status": "source",
       "paper_label": "thm:quant-full-q",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
-      "deficit": "0 < M-Q <= 1/512",
-      "remaining": "Discharge the endpoint derivative-energy hypotheses for actual auxiliary supports and instantiate the continuum operator bound."
+      "deficit": "0<M-Q<=1/512",
+      "remaining": "Endpoint wall-slack estimate and operator transfer are assembled. Closed check unexecuted; source uncompiled."
     },
     {
       "id": "full-q-094",
       "target": "MovingSofaQuantitative.Targets.FullQ094",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.full_q_094",
+      "module": "MovingSofaQuantitative.FullQCertificate",
+      "status": "source",
       "paper_label": "cor:quant-full-q-094",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
-      "deficit": "0 <= M-Q <= 10^-18",
-      "remaining": "The scalar and zero-deficit implication fullQ094_of_finite is written. Its FullQFinite input is not yet an unconditional theorem."
+      "deficit": "0<=M-Q<=10^-18",
+      "remaining": "Scalar consequence including zero deficit. Uncompiled."
     },
     {
       "id": "feasible-critical-lower",
       "target": "MovingSofaQuantitative.Targets.FeasibleCriticalLower",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.feasible_critical_lower",
+      "module": "MovingSofaQuantitative.FeasibleCriticalLower",
+      "status": "source",
       "paper_label": "thm:quant-critical-lower",
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "Actual feasible zero-slack triples at arbitrarily small positive M-Q",
-      "remaining": "Construct the cap and auxiliary bodies and prove continuous wall feasibility and trial energy, with a FIXED ratio L>461/500 uniformly at all small scales."
+      "remaining": "Concrete Hermite cap, actual active-arc auxiliary bodies, exact zero slack, quadratic deficit and closed energy-certificate source give fixed L=9221/10000. Closed check unexecuted; source uncompiled."
     },
     {
       "id": "intrinsic-interval",
       "target": "MovingSofaQuantitative.Targets.IntrinsicInterval",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.intrinsic_interval",
+      "module": "MovingSofaQuantitative.FeasibleCriticalLower",
+      "status": "source",
       "paper_label": "cor:quant-intrinsic-interval",
       "placement": "G.4",
-      "normalization": "Infimum of local uniform coefficients for the best horizontal translation",
+      "normalization": "Infimum of local uniform coefficients",
       "deficit": "Positive M-Q tending to zero",
-      "remaining": "The exact infimum transfer is written in FullQConsequences; both unconditional upper and uniform feasible lower inputs remain required."
+      "remaining": "Combines full-Q upper theorem with fixed-margin feasible lower family. Uncompiled."
     },
     {
       "id": "effective-entry",
       "target": "MovingSofaQuantitative.Targets.EffectiveEntry",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.effective_entry",
+      "module": "MovingSofaQuantitative.EffectiveEntry",
+      "status": "source",
       "paper_label": "prop:quant-effective-entry",
       "placement": "G.5 prerequisite",
       "normalization": "Original sofa, horizontal midpoint and top support",
-      "deficit": "0 <= M-area(S) <= 10^-144",
-      "remaining": "Prove penalized polygon variation and limit estimates, approximate pinned inequalities, support-gap transfer and actual-set recovery."
+      "deficit": "0<=M-area(S)<=10^-144",
+      "remaining": "Partial-to-full cap completion, effective angle entry, right-angle penalized regularization and explicit actual-set recovery assembled. Uncompiled."
     },
     {
       "id": "effective-angle-entry",
       "target": "MovingSofaQuantitative.Targets.EffectiveAngleEntry",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.effective_angle_entry",
+      "module": "MovingSofaQuantitative.EffectiveAngleEntry",
+      "status": "source",
       "paper_label": "prop:quant-effective-angle",
       "placement": "G.5 prerequisite",
       "normalization": "Every admissible reduced motion of the original sofa",
-      "deficit": "0 < M-area(S) <= 10^-30",
-      "remaining": "Prove the effective remaining-angle comparison and check its coarse-angle input internally."
+      "deficit": "0<M-area(S)<=10^-30",
+      "remaining": "Internal exact coarse-angle certificate, partial-angle penalized cap, approximate pinned bounds, remaining-angle extension and right-angle contradiction assembled. Uncompiled."
     },
     {
       "id": "explicit-cutoff",
       "target": "MovingSofaQuantitative.Targets.ExplicitCutoff",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.explicit_cutoff",
+      "module": "MovingSofaQuantitative.ExplicitCutoff",
+      "status": "source",
       "paper_label": "prop:quant-explicit-cutoff",
       "placement": "Final proposition of Appendix G",
       "normalization": "Original sofa, horizontal midpoint and top support",
-      "deficit": "0 <= M-area(S) <= exact rational 1/10^600",
-      "remaining": "Prove effective global entry and every numerical local geometry radius. Scalar cutoff implications alone do not discharge these geometric obligations."
+      "deficit": "0<=M-area(S)<=exact rational 1/10^600",
+      "remaining": "Effective entry activates fixed 10^-40/10^-20 local certificates; explicit normal, sector, direct-area and terminal estimates yield simultaneous 2.3/50/3.1 conclusions. No existential local radius remains. Uncompiled."
     }
   ]
 }
