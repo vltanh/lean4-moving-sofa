@@ -21,11 +21,11 @@ formalization of Baek's paper with the first proof of uniqueness (`baek/Challeng
 uniqueness through Baek's Theorem 1.1.1.
 
 The statements and their definitions come in four groups: `Baek` (Baek's definitions and theorems,
-and the stability statements, which Baek's paper does not have), `Certificate` (the certificate,
-and Gerver's triple, which meets its hypothesis), `FormalConjectures.MovingSofa`
-(formal-conjectures' definitions and statements) and `Bridge` (the two sets of definitions describe
-the same objects). The definitions are copies of `ChallengeDefs.lean` and `CertificateDefs.lean`
-(`scripts/sync_challenge_defs.py`).
+and the stability statements, which Baek's paper does not have), `Certificate` (the certificate, and
+Gerver's triple, which meets its hypothesis), `FormalConjectures.MovingSofa` (formal-conjectures'
+definitions and statements) and `Bridge` (the two sets of definitions describe the same objects).
+The definitions are copies of `MovingSofaBridge/Defs.lean` and
+`MovingSofaExtremal/CertificateDefs.lean` (`scripts/sync_challenge_defs.py`).
 
 ## Baek's definitions (namespace `Baek`)
 

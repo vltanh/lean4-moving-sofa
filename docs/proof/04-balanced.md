@@ -188,7 +188,7 @@ if $H_i$ is open. There are $\varepsilon > 0$ and $C$ such that for $\lvert \del
 *Lean: [`theorem3_1_2`](../../MovingSofaOptimality/Balanced/NefPolygon.lean#L697).*
 
 The paper leaves out that $X$ is bounded; without it the areas can be infinite, as for a
-half-plane, and the statement fails (REPORT.md, Section 4). Every application, to the polygon caps
+half-plane, and the statement fails (baek/REPORT.md, Section 4). Every application, to the polygon caps
 and niches, is to bounded sets. Here $\mathcal{H}^1$ is the length along a line
 ([`lineLength`](../../MovingSofaOptimality/Basic/Plane.lean#L78)).
 
@@ -275,7 +275,7 @@ functional* are
 *Lean: [`polyNiche`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L53), [`polyArea`](../../MovingSofaOptimality/Balanced/PolygonCap.lean#L58).*
 
 Baek's Definition 3.2.5 writes the parallelogram $P_\omega$ where the fan $F_\omega$ is meant; the
-rest of the paper uses $F_\omega$ (REPORT.md, E6). With $P_\omega$, Proposition 4.16 and Lemma 4.22
+rest of the paper uses $F_\omega$ (baek/REPORT.md, E6). With $P_\omega$, Proposition 4.16 and Lemma 4.22
 below are false. Figure 4.5 shows the caps that break Lemma 4.22.
 
 ![A polygon cap in blue with rotation angle 1.2 inside a dashed parallelogram, and the fan, the region above two dark half-lines from the origin O, one along the x-axis to the right and one up and to the left. Two inner corners x_K(0.4) and x_K(0.8), marked as orange dots above O, each with two dashed walls going down to the edge of the fan; the polygon niche, in orange, is the part of the fan below these walls, a small region around O inside the blue cap](figures/04-balanced/cap-niche.svg)
@@ -359,7 +359,7 @@ $\pi/2$, hence $0$ at $\omega + \pi$ and $3\pi/2$ by (1), and it is a polygon ca
 Baek's statement asks in (2) for normal angles in $\Theta^\diamond$. No convex body is such an
 intersection: since $\Theta^\diamond \subset (0, \pi)$, it would contain with each point every point
 below it. The bottom normal angles $\omega + \pi$ and $3\pi/2$, which the paper's proof of
-Proposition 4.12 uses, are meant (REPORT.md, E7).
+Proposition 4.12 uses, are meant (baek/REPORT.md, E7).
 
 ### Proposition 4.12 (support values determine the cap; Baek, Proposition 3.3.2)
 
@@ -566,7 +566,7 @@ selection theorem.
 *Lean: [`theorem3_4_3`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L1164), [`mpc_tendsto_area_polyNiche`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L1050), [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846).*
 
 The paper requires only $\mathcal{A}_\Theta(K) \ge 0$ in $\mathcal{B}_\Theta$, while Lemma 4.22 needs
-$\mathcal{A}_\Theta(K) > 0$, and it does not show that the limit is a polygon cap (REPORT.md, E8).
+$\mathcal{A}_\Theta(K) > 0$, and it does not show that the limit is a polygon cap (baek/REPORT.md, E8).
 
 ## 4.6 Balanced polygon caps
 
@@ -709,9 +709,9 @@ $\lvert \mathcal{N}_\Theta(h^+) \rvert = \lvert \mathcal{N}_\Theta(h) \rvert - (
 *Lean: [`lemma3_4_7`](../../MovingSofaOptimality/Balanced/MaximumPolygonCap.lean#L570).*
 
 The paper's proof prints the change of $\lvert \mathcal{N}_\Theta \rvert$ in the second case with the
-opposite sign (REPORT.md, E27). It also applies Theorem 4.3 twice in a row, the second time to a
+opposite sign (baek/REPORT.md, E27). It also applies Theorem 4.3 twice in a row, the second time to a
 polygon that the first application has changed. The disjointness of the two strips justifies this,
-as above (REPORT.md, E5).
+as above (baek/REPORT.md, E5).
 
 ### Lemma 4.30 (the pushed cap is a translate; Baek, Lemma 3.4.8)
 
@@ -868,7 +868,7 @@ for $h = h_{K_m}$. The identity passes to the limit $h = h_K$. Since its coeffic
 nonnegative, it shows that $H_K(a) \cap H_K(b) \subseteq H_K(r)$ for $a < r < b$. So the half-planes
 $H_K(r)$ with $r$ in a gap can be dropped from $K = \bigcap_r H_K(r)$
 ([Lemma 2.7](02-preliminaries.md#lemma-27-the-support-function)). The paper calls this check easy
-(REPORT.md, E8). $\square$
+(baek/REPORT.md, E8). $\square$
 
 *Lean: [`theorem3_5_2`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L326), [`mpc_blaschke`](../../MovingSofaOptimality/Balanced/MaxPolygonCapExists.lean#L846), [`mpc_gap_limit`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L197).*
 
@@ -885,7 +885,7 @@ $\square$
 *Lean: [`lemma3_5_3`](../../MovingSofaOptimality/Balanced/BalancedMaximumSofa.lean#L373).*
 
 The proof of Theorem 4.37 applies Lemma 4.36 to single points, which lie in the polygon niches of all
-late $K_i$ (REPORT.md, E8).
+late $K_i$ (baek/REPORT.md, E8).
 
 ### Theorem 4.37 (the niche lies in the cap; Baek, Theorem 3.5.4)
 
@@ -911,7 +911,7 @@ $\lbrace p \rbrace \subseteq K_i$, gives $p \in K$. $\square$
 
 The paper argues that the polygon niches $\mathcal{N}_{\Theta_j}(K_i)$ converge to $\mathcal{N}_{\Theta_j}(K)$
 unless the latter is empty. This can fail when a wedge is empty for $K$ but not for the $K_i$; the
-eventual membership above is what Lemma 4.36 needs (REPORT.md, E8).
+eventual membership above is what Lemma 4.36 needs (baek/REPORT.md, E8).
 
 ### Theorem 4.38 (maximality; Baek, Theorem 3.5.5)
 

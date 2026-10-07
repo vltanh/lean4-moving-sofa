@@ -180,8 +180,8 @@ declarations: [docs/proof/](docs/proof/README.md).
 
 ## The audit of Baek's paper
 
-[`REPORT.md`](REPORT.md) audits the paper against its LaTeX source and the formalization. Definition 3.2.5
-uses the parallelogram $P_\omega$ where the fan $F_\omega$ is meant, which makes Proposition 3.3.5 and
+[`baek/REPORT.md`](baek/REPORT.md), with Baek's entry, audits the paper against its LaTeX source and the formalization.
+Definition 3.2.5 uses the parallelogram $P_\omega$ where the fan $F_\omega$ is meant, which makes Proposition 3.3.5 and
 Lemma 3.4.2 false as written (E6), and one direction of Proposition 5.1.4 is false (E11). Theorem
 8.4.1 has no proof (E24), and the proof of Theorem 6.1.2 misreads Gerver's Theorem 2 (E12). Two
 statements need a hypothesis that the paper leaves out: Schneider's theorem on the surface area
@@ -190,7 +190,7 @@ bounded Nef polygon; every use satisfies both. Every result holds in its intende
 theorem included, and the formalization proves it. Twelve of the findings come from the notes of
 another formalization, deancureton/MovingSofa, and are credited in the report.
 
-Every proof follows Baek's argument, except at the steps that REPORT.md lists in Section 7, each
+Every proof follows Baek's argument, except at the steps that the report lists in Section 7, each
 forced by an error or gap of the paper (E12, E15, E17, E20, E21, E24), by mathematics that
 Mathlib lacks (the Jordan curve theorem and Green's theorem, the Brunn–Minkowski inequality, mixed
 volumes), or by the definition of the surface area measure as a Lebesgue–Stieltjes measure. A route
@@ -223,7 +223,7 @@ errors and gaps in its proofs. Since it appeared, two other Lean formalizations 
 verified its result, and preprints have studied a three-dimensional sofa by computer search,
 rectangular sofas, and corridors with other corner angles; another Lean formalization bounds the area
 of sofas that turn both ways. The report's
-[What's next](REPORT.md#10-whats-next) also lists open directions (other angles, the ambidextrous sofa, and
+[What's next](baek/REPORT.md#10-whats-next) also lists open directions (other angles, the ambidextrous sofa, and
 stability, which this repository now proves: [docs/stability.md](docs/stability.md)) and simpler arguments for several
 of Baek's proofs that came up while formalizing them.
 
@@ -234,26 +234,29 @@ More on each file: [docs/layout.md](docs/layout.md).
 ```text
 Challenge.lean            the statements of record of the certificate entry, for the Palomar registry
 Solution.lean             their proofs, through the certificate
-ChallengeDefs.lean        the definitions that the two Challenges copy
-CertificateDefs.lean      the certificate's definitions, which Challenge.lean copies
-CertificateProof.lean     the two theorems about the certificate, proved in these definitions
-SolutionCoercive.lean     fifteen theorems of the certificate entry, proved through the coercive route
 comparator.json           the Comparator configuration of the certificate entry
 formalization.yaml        its Palomar metadata
-baek/                     Baek's entry: its Challenge, Solution, Comparator configuration and metadata
+baek/                     Baek's entry (its Challenge, Solution, Comparator configuration and
+                          metadata) and the audit of Baek's paper (REPORT.md)
 MovingSofaOptimality/     Baek's paper, one directory per chapter, with External/ for
                           the results it cites and Gerver/ for Gerver's sofa
 MovingSofaUniqueness/     the uniqueness, one module per step of the argument, and a
                           second proof of Baek's theorem (Maximizing, MaximizerRoute)
-MovingSofaBridge/         the bridge to formal-conjectures' definitions
+MovingSofaBridge/         the bridge to formal-conjectures' definitions, and the definitions that
+                          the two Challenges copy (Defs)
 MovingSofaStability/      the stability of Gerver's sofa, and the punctured sofas that show
                           that its exponent is optimal
-MovingSofaExtremal/       the coercive route: optimality and uniqueness from one certificate
-REPORT.md                 the audit of Baek's paper
-docs/                     these pages, the illustrated text (docs/proof/), the
-                          manuscript (docs/paper/) and the archived notes of the
-                          uniqueness and stability proofs (docs/archive/)
+MovingSofaExtremal/       the coercive route: optimality and uniqueness from one certificate; the
+                          certificate's definitions, which Challenge.lean copies (CertificateDefs),
+                          its two theorems (Certificate) and the other fifteen theorems of the
+                          certificate entry (Statements)
+docs/                     these pages, the credits (CREDITS.md), the illustrated text (docs/proof/),
+                          the manuscript (docs/paper/) and the archived notes of the uniqueness and
+                          stability proofs (docs/archive/)
 scripts/                  the axiom audits, generators, documentation tools, figures
+README.md, LICENSE        this page and the license
+lakefile.toml, lake-manifest.json, lean-toolchain
+                          the Lake project, with Lean and Mathlib pinned at v4.35.0-rc3
 ```
 
 ## Verification
@@ -331,4 +334,4 @@ Apache-2.0 ([`LICENSE`](LICENSE)), matching Mathlib and the Lean ecosystem.
   holds it, and Baek's entry is in [`baek/`](baek).
 - No person has reviewed the proofs; Lean's kernel checks every one of them. The work took nineteen
   rounds between 1 and 6 October 2026, with up to 26 sub-agents in a round.
-- Who did what and when, with the time and effort of each round: [CREDITS.md](CREDITS.md).
+- Who did what and when, with the time and effort of each round: [docs/CREDITS.md](docs/CREDITS.md).

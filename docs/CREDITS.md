@@ -16,7 +16,7 @@ was not recorded.
   the extension of the libraries below; and on 5 and 6 October, in another session of Claude Code 2.1.289, the
   merge of the second proof of optimality below, the compilation of the stability proof, the compilation and
   completion of the coercive route, the simplification of the new libraries, the merge of this work into main, and
-  the certificate entry, with Baek's entry moved into [`baek/`](baek).
+  the certificate entry, with Baek's entry moved into [`baek/`](../baek).
   ChatGPT Pro 6 (OpenAI) wrote the informal uniqueness argument and uncompiled Lean drafts of the
   uniqueness proof and of the connection with formal-conjectures, and on 5 October the uncompiled
   Lean modules of a second proof of Baek's theorem (pull request #5), the stability argument
@@ -64,7 +64,7 @@ congruent to Gerver's sofa.
 
 How it was made:
 - 15:01 to 22:43: ChatGPT Pro 6 wrote the informal uniqueness proof (note 20 and the notes before
-  it, now in [`docs/archive/uniqueness/`](docs/archive/uniqueness)), a Lean draft of it, and a draft of
+  it, now in [`docs/archive/uniqueness/`](archive/uniqueness)), a Lean draft of it, and a draft of
   the connection with formal-conjectures, all without a compiler, in 151 commits of pull request #1.
 - 21:55 to 22:56: Claude Opus 5.5, in Claude Code 2.1.287, with the skill's version 1.3.0, checked
   every module of the draft and replaced the 54 proofs that did not compile by `sorry`; every
@@ -109,7 +109,7 @@ Figures, from 23:05 to 00:02:
 
 The owner asked to simplify the uniqueness proof, consolidate the Lean files, give the Challenge's
 namespaces clearer names, present the bridge between formal-conjectures' definitions and Baek's as
-the core of that part, and shorten the description in [`formalization.yaml`](baek/formalization.yaml).
+the core of that part, and shorten the description in [`formalization.yaml`](../baek/formalization.yaml).
 
 How it was made:
 - 07:48 to 08:53: Claude Opus 5.5, in Claude Code 2.1.287. The 75 files of the uniqueness and bridge
@@ -138,13 +138,13 @@ How it was made:
   Palomar's preflight on it (commit `02af501`, `status: pass`), updated the formal-conjectures pull
   request to link the Solution at that commit, and drew Gerver's sofa in the hallway and its
   animation.
-- It wrote the illustrated text of the proofs in [`docs/proof/`](docs/proof/README.md), with the pages
-  of [`docs/`](docs) and the README; the earlier documents moved to [`docs/archive/`](docs/archive). Seven
+- It wrote the illustrated text of the proofs in [`docs/proof/`](proof/README.md), with the pages
+  of [`docs/`](.) and the README; the earlier documents moved to [`docs/archive/`](archive). Seven
   sub-agents wrote two chapters each, Chapters 2 to 13 and the two appendices, with their figures,
   all seven running at the same time. The coordinating agent wrote Chapter 1 and the other pages,
   and checked and integrated the chapters.
 - Writing the text found a sign slip in the paper's proof of Lemma 7.3.1, two inaccuracies in the
-  audit, now corrected in [`REPORT.md`](REPORT.md), and a few docstrings that misdescribed their
+  audit, now corrected in [`REPORT.md`](../baek/REPORT.md), and a few docstrings that misdescribed their
   declarations. No statement or proof changed.
 - Version 3 of the Palomar entry registers commit `eb93296`, the end of this round, at 11:46. Its
   Challenge states twelve theorems, seven more than in version 2: the bridge to formal-conjectures.
@@ -196,7 +196,7 @@ How it was made:
 - 16:30 to 20:45: Claude Opus 5.5, in the same session. A new route check compares, for every
   numbered result, the numbered results that its Lean proof uses, which the axiom audit now records,
   with those that Baek's proof cites, extracted from the LaTeX source
-  ([`docs/paper_routes.tsv`](docs/paper_routes.tsv)); CI runs it. Of its first 269 differences, 132
+  ([`docs/paper_routes.tsv`](paper_routes.tsv)); CI runs it. Of its first 269 differences, 132
   came from facts that the paper uses throughout without citing them.
 - Three sub-agents reviewed the other 137 against the LaTeX source, one per group of chapters. They
   fixed about thirty proofs that reached a cited result by a detour, recorded the uses that the
@@ -210,8 +210,8 @@ How it was made:
   which its proof needs; Lemma 6.2.4 lost a hypothesis that its proof does not use; Theorem 8.4.3 (2)
   gained the equalities of curve area functionals that the paper's "as oriented curves" provides.
 - Sixteen results still depart from Baek's proofs, each for an error or gap of the paper, for
-  mathematics that Mathlib lacks, or for the definition of the surface area measure; [`REPORT.md`](REPORT.md)
-  lists them in its Section 7, and [`docs/route_differences.tsv`](docs/route_differences.tsv) gives
+  mathematics that Mathlib lacks, or for the definition of the surface area measure; [`REPORT.md`](../baek/REPORT.md)
+  lists them in its Section 7, and [`docs/route_differences.tsv`](route_differences.tsv) gives
   the reason for each of the 222 route differences. The work also found a wrong citation in the
   proof of Theorem 2.5.9 and two small gaps in the proof of Theorem 3.4.3. The three libraries went
   from 45,783 to 47,894 lines. Commit `0c5c1d3`.
@@ -244,7 +244,7 @@ How it was made:
   found a preprint that the search had missed (Georgiev, Gómez-Serrano, Tao and Wagner), and the notes
   of deancureton/MovingSofa, which list errors and gaps of the paper. A second sub-agent compared
   those notes, and the blueprint of RuifengCao/sofa-formal, with the audit. Twelve of their findings
-  were missing from it; they are now in [`REPORT.md`](REPORT.md), credited to the notes. Two statements need a
+  were missing from it; they are now in [`REPORT.md`](../baek/REPORT.md), credited to the notes. Two statements need a
   hypothesis that the paper leaves out (Section 4), and a new E18 concerns Lemma 7.1.6, so the later
   E-items moved up by one.
 - A third sub-agent restored two Lean statements that were weaker than the paper's: Lemma 7.1.6 now
@@ -269,7 +269,7 @@ everywhere else.
 How it was made:
 - 11:48 to 14:15: Claude Sonnet 5.5, in Claude Code 2.1.289, the session that wrote the manuscript, coordinated
   sub-agents running Claude Opus 5.5.
-- One sub-agent extended [`MovingSofaUniqueness/`](MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](MovingSofaUniqueness/Rigid.lean#L88)): a right-angle cap
+- One sub-agent extended [`MovingSofaUniqueness/`](../MovingSofaUniqueness) (`Main`, `Rigidity`, `RegularClosed`, [`Rigid`](../MovingSofaUniqueness/Rigid.lean#L88)): a right-angle cap
   has the sofa area of Gerver's sofa if and only if it is a horizontal translate of Gerver's cap; the maximal
   sofas are the moving sofas that a rigid map takes onto Gerver's sofa; the width of Gerver's sofa exceeds one in
   every direction but the vertical, so that no rotation is needed and a rotated copy of Gerver's sofa moves only if
@@ -300,9 +300,9 @@ How it was made:
   (`Maximizers`, `Optimality`, `Alternative`; 428 lines), a separate dependency audit and notes,
   none of them compiled or run, and left every existing file unchanged. The modules compiled without change and
   without warnings, and the audit passed: none of their 24 declarations depends on Baek's Theorem 1.1.1 or on
-  [`MovingSofaUniqueness.Main`](MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
-- Commit `51c9be1` makes CI check the new code. [`scripts/Audit.lean`](scripts/Audit.lean) imports the three modules, as the CI step
-  that compares its imports with the libraries requires. The second audit, [`scripts/AuditMaximizerRoute.lean`](scripts/AuditMaximizerRoute.lean),
+  [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean). Commit `3af9279` merges the pull request as it was.
+- Commit `51c9be1` makes CI check the new code. [`scripts/Audit.lean`](../scripts/Audit.lean) imports the three modules, as the CI step
+  that compares its imports with the libraries requires. The second audit, [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean),
   also rejects the results from which Baek derives the right-angle motion and the injectivity condition of
   Baek's cap from its balance (Theorems 1.5.2 and 8.1.1 (2), and the eight results they rest on), and it passes;
   CI runs it. The docstrings and the documentation describe the second proof. The continuous integration and
@@ -342,17 +342,17 @@ How it was made:
   numbered environments onto the three, and a merged list of the errors that the three found in the
   paper, checked against its LaTeX source. Two more sub-agents checked the new page against the
   sources; the first found 18 problems and the second 16 more, all fixed. The result is
-  [`docs/formalizations.md`](docs/formalizations.md), which replaces the comparison table of [`docs/prior-work.md`](docs/prior-work.md).
+  [`docs/formalizations.md`](formalizations.md), which replaces the comparison table of [`docs/prior-work.md`](prior-work.md).
 - From 22:02, at the owner's request, the changes. The comparison had found that Theorem 2.1.3 was
   proved by compactness instead of by Baek's ε-triangle, a departure that the report's Section 7 did
   not list; the proof now follows Baek's argument, and Chapter 2 of the text with it. The report's
   status line and Section 9 now name the results that the formalization leaves out, item E17 notes
   that the overview states f(0) = 1, and Section 10 gains O'Keefe's upper bounds for the ambidextrous
   sofa and says how the findings of RuifengCao/sofa-formal compare with the audit's. The Challenge,
-  the README, the definitions page and [`formalization.yaml`](baek/formalization.yaml) no longer call the Challenge's copy of
+  the README, the definitions page and [`formalization.yaml`](../baek/formalization.yaml) no longer call the Challenge's copy of
   formal-conjectures verbatim: its docstrings are reworded, and the `ℝ²` notation and two instances are
-  declared in it. [`ChallengeDefs`](ChallengeDefs.lean) and the definitions and verification pages no longer say that
-  all the libraries use the constants of [`ChallengeDefs`](ChallengeDefs.lean).
+  declared in it. [`ChallengeDefs`](../MovingSofaBridge/Defs.lean) and the definitions and verification pages no longer say that
+  all the libraries use the constants of [`ChallengeDefs`](../MovingSofaBridge/Defs.lean).
 
 Figures, from 16:35 to 18:48 and from 22:02 to 22:17:
 - elapsed time: 2 hours 13 minutes and 15 minutes;
@@ -364,7 +364,7 @@ Figures, from 16:35 to 18:48 and from 22:02 to 22:17:
 ## The stability (5 October 2026)
 
 The owner asked to incorporate pull request #8, which proves that sofas of nearly maximal area are close to Gerver's
-sofa. Its argument (the notes now in [`docs/archive/stability/`](docs/archive/stability)) and its Lean code, 85 modules and about
+sofa. Its argument (the notes now in [`docs/archive/stability/`](archive/stability)) and its Lean code, 85 modules and about
 12,200 lines, had been written by ChatGPT Pro 6 and never compiled.
 
 How it was made:
@@ -383,8 +383,8 @@ How it was made:
   target, part of the axiom audit and part of CI. A seventeenth sub-agent compared every repaired proof with the
   draft's and found no change of argument. The audit passes: the 5,957 declarations of the libraries use only the
   standard axioms.
-- [Stability](docs/stability.md) describes the result. The pull request's notes, numerical checks and status documents
-  moved to [`docs/archive/stability/`](docs/archive/stability); the README, the report's "What's next", and the pages on the layout
+- [Stability](stability.md) describes the result. The pull request's notes, numerical checks and status documents
+  moved to [`docs/archive/stability/`](archive/stability); the README, the report's "What's next", and the pages on the layout
   and the verification mention the new library. The manuscript is unchanged.
 
 Figures, from 22:17 to 23:13:
@@ -403,11 +403,11 @@ formalize-math-paper skill the pitfall that the previous round had met.
 
 How it was made:
 - 07:08 to 09:49: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous round.
-- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](Challenge.lean#L697),
-  [`Baek.gerver_sofa_angle_stable`](Challenge.lean#L707), [`Baek.gerver_sofa_stability_exponent`](Challenge.lean#L717)), with five definitions in [`ChallengeDefs`](ChallengeDefs.lean)
-  and, in [`Solution.lean`](baek/Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
+- Commit `92b2f86` states three stability theorems in the Challenge ([`Baek.gerver_sofa_stable`](../Challenge.lean#L697),
+  [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L707), [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L717)), with five definitions in [`ChallengeDefs`](../MovingSofaBridge/Defs.lean)
+  and, in [`Solution.lean`](../baek/Solution.lean), the proofs that they agree with the library's. Comparator accepts the fifteen theorems,
   the audit passes with 5,962 declarations, and the continuous integration passed; Palomar's preflight was not run.
-  [`formalization.yaml`](baek/formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
+  [`formalization.yaml`](../baek/formalization.yaml) describes the stability, and the documents name ChatGPT Pro 6 as the author of pull
   request #8.
 - The manuscript gained Section 10, the stability (Theorems 10.1 to 10.4 with their proofs, about sixteen pages),
   and the passages on it in the abstract, Sections 1 and 11 and Appendices D and E; it now cites commit `92b2f86`.
@@ -431,28 +431,28 @@ Figures, from 07:08 to 09:49:
 
 The owner asked to integrate pull request #9 so that one theorem gives another proof of optimality, uniqueness and
 stability at once, and to present it in the manuscript as a new section or subsection. ChatGPT Pro 6 had written the
-pull request on the evening of 5 October, without compiling it: the library [`MovingSofaExtremal`](MovingSofaExtremal), which proves
+pull request on the evening of 5 October, without compiling it: the library [`MovingSofaExtremal`](../MovingSofaExtremal), which proves
 optimality and uniqueness from two estimates of the stability library, a second solution of twelve statements of the
 Challenge, and an audit. It had left for later the step that moves the stability proof onto the route.
 
 How it was made:
 - 09:56 to 13:22: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with version 2.1.1
   of the formalize-math-paper skill.
-- The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](lakefile.toml)
+- The manuscript's branch was merged into the pull request's branch (commit `bcb4562`; the conflicts in [`lakefile.toml`](../lakefile.toml)
   and `MamikonEnergy.lean` were resolved for the compiled code). One proof did not compile, a `change` whose two sides
   are not definitionally equal, and one linter warning remained (commit `ae0162a`).
 - A search through the proofs found the four places where the stability library still reached the first proofs: the
   sign of the deficit and the compactness step, through Baek's theorem; the identification of the limit, through the
   first proof of uniqueness; and the lemma that a moving sofa lies in a strip of height one. Commit `70ccc8a` takes
   them from the route or from a neutral module, states the certificate as one theorem
-  ([`MovingSofaStability.coercive_certificate`](MovingSofaStability/CapEstimate.lean#L1120)), which the route's classification of the maximizing caps and the
+  ([`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120)), which the route's classification of the maximizing caps and the
   stability library's local estimate both use, adds to the route the theorem that no rotation is needed, states the
-  three results in one theorem ([`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](MovingSofaExtremal/Unified.lean#L38)), and extends the second
+  three results in one theorem ([`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38)), and extends the second
   solution to the fifteen statements. The pull request's audit had never run, and on the merged branch it failed;
   it was rewritten for the whole route, the stability library included, and now runs in CI: none of the 958
   declarations reaches Baek's Theorem 1.1.1, his balance results or the first proof of uniqueness, and optimality
   and uniqueness do not reach the stability theorem. The main audit passes with 6,062 declarations, Comparator
-  accepts the fifteen theorems, and [The coercive route](docs/coercive.md) describes the result.
+  accepts the fifteen theorems, and [The coercive route](coercive.md) describes the result.
 - The pull request was retargeted at the manuscript's branch and merged as commit `94a1bcf`, on which the continuous
   integration passed; Palomar's preflight was not run.
 - The manuscript gained Section 11, the derivation of the three results from one estimate, and the formalization
@@ -467,7 +467,7 @@ How it was made:
   Section 10 of the manuscript changed with it.
 - At the owner's request, Section 8.4 of the manuscript (the second proof of optimality of pull request #5) was
   shortened to a remark at the end of Section 8 (Remark 8.6), which outlines the second proof with Baek's own bound
-  and says that the formalization proves it ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean)); its lemma on the right-angle
+  and says that the formalization proves it ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)); its lemma on the right-angle
   motion moved to the end of Section 6 (Lemma 6.10), and Section 11 writes the proof out with the certificate. The
   docstrings of the second proof now cite the remark (commit `6ed7657`). The manuscript has 99 pages and cites
   `6ed7657`.
@@ -492,10 +492,10 @@ How it was made:
   of the formalize-math-paper skill.
 - Commit `0b7978c` removes what the two new proofs of optimality repeated. Both turned the value and the shape of
   the maximizing right-angle caps into optimality and uniqueness by the same steps; one assembly now does it
-  ([`MovingSofaUniqueness.Maximizing`](MovingSofaUniqueness/Maximizing.lean)), and each proof gives the two facts in its own way
-  ([`MovingSofaUniqueness.MaximizerRoute`](MovingSofaUniqueness/MaximizerRoute.lean), from Baek's bound and the equality analysis; [`MovingSofaExtremal.Main`](MovingSofaExtremal/Main.lean), from
-  the certificate). The helpers that the coercive route had copied from [`MovingSofaUniqueness.Rigidity`](MovingSofaUniqueness/Rigidity.lean), so as not
-  to import it, moved to two modules that both proofs import ([`MovingSofaUniqueness.Mamikon`](MovingSofaUniqueness/Mamikon.lean), [`MovingSofaUniqueness.Rigid`](MovingSofaUniqueness/Rigid.lean)).
+  ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean)), and each proof gives the two facts in its own way
+  ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean), from Baek's bound and the equality analysis; [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean), from
+  the certificate). The helpers that the coercive route had copied from [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean), so as not
+  to import it, moved to two modules that both proofs import ([`MovingSofaUniqueness.Mamikon`](../MovingSofaUniqueness/Mamikon.lean), [`MovingSofaUniqueness.Rigid`](../MovingSofaUniqueness/Rigid.lean)).
 - Commit `830b03d` merges the 86 files of the stability library (87 before `0b7978c` moved `MamikonFoundation` out),
   most of them 100 to 200 lines long and in one chain of imports, into eleven modules, one for each step of the
   proof, besides the root module `All`, and removes 74 declarations that no
@@ -509,10 +509,10 @@ How it was made:
 - The stability library went from 12,550 lines in 87 files to 7,585 lines in 12, and the coercive route from 661
   lines in 7 files to 235 in 3; the main audit now checks 5,860 declarations instead of 6,062, and the audit of the
   coercive route 743 instead of 958. Baek's library, the bridge, the Challenge, its definitions and the proofs of
-  [`Solution.lean`](baek/Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
+  [`Solution.lean`](../baek/Solution.lean) are unchanged, and no statement of the Challenge, of a numbered result or of a main theorem
   changed. The audits and the route check pass, and Comparator accepts the fifteen theorems.
 - Commit `1856810` brought the documentation up to date, and commit `7b8c0a8` the docstring of
-  [`MovingSofaExtremal/All.lean`](MovingSofaExtremal/All.lean), which still listed the old modules; the continuous integration passed on both, and
+  [`MovingSofaExtremal/All.lean`](../MovingSofaExtremal/All.lean), which still listed the old modules; the continuous integration passed on both, and
   Palomar's preflight was not run.
 - A sub-agent then revised the manuscript for the simplified libraries, with five sub-agents that it launched, which
   compared each part of Section 10 with the Lean before and after the rewrite. Appendix D names the declarations at
@@ -546,10 +546,10 @@ and of the uniqueness proof, with a remark on the certificate that gives the thr
 How it was made:
 - 16:13 to 16:58: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds.
 - Comparator now checks the second solution too (commit `3d3ea3e`, on which the continuous integration passed):
-  `SolutionCoerciveComparator.lean` states the theorems of [`SolutionCoercive.lean`](SolutionCoercive.lean) under the Challenge's names, each
-  proved by the theorem of [`SolutionCoercive.lean`](SolutionCoercive.lean), and `comparator-coercive.json` points Comparator at it;
+  `SolutionCoerciveComparator.lean` states the theorems of [`SolutionCoercive.lean`](../MovingSofaExtremal/Statements.lean) under the Challenge's names, each
+  proved by the theorem of [`SolutionCoercive.lean`](../MovingSofaExtremal/Statements.lean), and `comparator-coercive.json` points Comparator at it;
   Comparator accepts both solutions. The audit of the coercive route now requires each theorem of the second solution to
-  have exactly the statement of the matching theorem of [`Solution.lean`](baek/Solution.lean), where it accepted a definitionally equal one.
+  have exactly the statement of the matching theorem of [`Solution.lean`](../baek/Solution.lean), where it accepted a definitionally equal one.
   The page of results now notes that the Challenge's stability theorem, at zero deficit, gives the uniqueness up to a
   translation.
 - The manuscript cites commit `3d3ea3e`. The main session moved its description of the formalization from Section 12
@@ -631,43 +631,50 @@ connects to formal-conjectures, and it can be submitted to Palomar, the last two
 owner chose two entries: the registered one stays, as the formalization of Baek's paper with the uniqueness proof
 that comes with it, and a new one holds the new result, optimality, uniqueness and stability through the
 certificate; both state formal-conjectures' theorems. Finally the owner asked to clean up the root, which now holds
-the certificate entry, with Baek's entry in a directory of its own.
+the certificate entry, with Baek's entry in a directory of its own, and then to move the remaining helper files out
+of it.
 
 How it was made:
-- 19:53 to 21:53: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
+- 19:53 to 22:25: Claude Opus 5.5, in Claude Code 2.1.289, in the session of the previous rounds, with three
   sub-agents of the same model.
-- A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](CertificateDefs.lean) restates, in the
+- A sub-agent wrote the certificate entry's Challenge and Solution. [`CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates, in the
   namespace `Certificate`, the 39 definitions that the certificate's statement needs, each with the body of the
   library's definition, except the surface area measure: the library's contains proofs, which a Challenge cannot
   carry, so the Challenge defines it by cases on the two properties that these proofs establish.
-  [`CertificateProof.lean`](CertificateProof.lean) proves that each definition is the library's, by definition except for three that
+  [`CertificateProof.lean`](../MovingSofaExtremal/Certificate.lean) proves that each definition is the library's, by definition except for three that
   agree on convex bodies, and derives the certificate from the library's. Comparator first rejected the copy of
   Gerver's cap: Lean shares the auxiliary proofs of numerals within a module, so the Challenge, which holds every
   block, and the two modules of definitions named one of these proofs differently. A line in
-  [`CertificateDefs.lean`](CertificateDefs.lean) makes them agree, and the Challenge keeps its blocks in the order that this needs, which
-  [`scripts/sync_challenge_defs.py`](scripts/sync_challenge_defs.py) now checks. The definitions of [`ChallengeDefs.lean`](ChallengeDefs.lean) were split into blocks, so
+  [`CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) makes them agree, and the Challenge keeps its blocks in the order that this needs, which
+  [`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py) now checks. The definitions of [`ChallengeDefs.lean`](../MovingSofaBridge/Defs.lean) were split into blocks, so
   that Baek's entry copies Baek's definitions without those of stability: its Challenge states the twelve theorems of
   version 4 again, with the same code. `SolutionCoerciveComparator.lean` and `comparator-coercive.json` were
   removed, since the certificate entry checks the second solution.
 - A sub-agent that could not edit compared the certificate's definitions with Baek's paper and the libraries. It
   found no error. Its nine findings on docstrings were applied, and the Lean sub-agent added
-  [`Certificate.gerver_triple`](Challenge.lean#L655), which shows that the certificate's hypothesis can be met and that its bound is
+  [`Certificate.gerver_triple`](../Challenge.lean#L655), which shows that the certificate's hypothesis can be met and that its bound is
   attained, so the certificate entry states seventeen theorems.
-- A sub-agent rewrote the README and the pages of [`docs/`](docs) for the two entries. The main session wrote the new
+- A sub-agent rewrote the README and the pages of [`docs/`](.) for the two entries. The main session wrote the new
   entry's metadata, gave the preflight workflow inputs that choose the entry, and rewrote Appendix D of the
   manuscript (the two entries, the statement of the certificate, the dictionary). The manuscript has 119 pages.
-- At the owner's request, the root now holds the certificate entry: [`Challenge.lean`](Challenge.lean), [`Solution.lean`](Solution.lean),
-  [`comparator.json`](comparator.json) and [`formalization.yaml`](formalization.yaml). Baek's entry, registered as PALOMAR-2026-10-02-000008, keeps the
-  same four files in [`baek/`](baek); its versions 1 to 4 were registered from the root. The build is clean, with the
-  seventeen `sorry`s of [`Challenge.lean`](Challenge.lean) and the twelve of [`baek/Challenge.lean`](baek/Challenge.lean); the audit checks 5,992 declarations,
-  the audit of the coercive route 867, with 22 positive and 8 negative controls; the route check and the audit of
-  the second proof pass; Comparator accepts both entries; and Palomar's checks of the metadata and the sources
-  pass for both.
+- At the owner's request, the root now holds the certificate entry: [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean),
+  [`comparator.json`](../comparator.json) and [`formalization.yaml`](../formalization.yaml). Baek's entry, registered as PALOMAR-2026-10-02-000008, keeps the
+  same four files in [`baek/`](../baek); its versions 1 to 4 were registered from the root.
+- At the owner's request, the helper files then left the root, with the owner choosing where each went: the
+  definitions that both Challenges copy are now [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) (they were `ChallengeDefs.lean`), and the
+  certificate's definitions, its two theorems and the fifteen other theorems of the certificate entry are now
+  [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean), [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) and
+  [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), with the same declarations. The audit of Baek's paper is now
+  [`baek/REPORT.md`](../baek/REPORT.md), next to Baek's entry, and this file is in `docs/`. The root holds the certificate entry, the
+  README, the license and the Lake files. The build is clean, with the seventeen `sorry`s of
+  [`Challenge.lean`](../Challenge.lean) and the twelve of [`baek/Challenge.lean`](../baek/Challenge.lean); the audit checks 5,992 declarations, the audit of the
+  coercive route 867, with 22 positive and 8 negative controls; the route check and the audit of the second
+  proof pass; Comparator accepts both entries; and Palomar's checks of the metadata and the sources pass for both.
 
-Figures, from 19:53 to 21:53:
-- elapsed time: 1 hour 59 minutes;
-- sub-agents: 3, at most 2 at the same time, about 2.2 hours of work;
-- tool calls: 638 by the sub-agents, 179 by the main session;
-- tokens of the sub-agents: 0.70 million output, 3.48 million input, 214 million cache reads; of the main
-  session: 0.22 million output, 0.46 million input, 80 million cache reads;
-- model calls: 537 by the sub-agents and 183 by the main session, all to `claude-opus-5-5`.
+Figures, from 19:53 to 22:25:
+- elapsed time: 2 hours 32 minutes;
+- sub-agents: 3, at most 2 at the same time, about 2.6 hours of work;
+- tool calls: 738 by the sub-agents, 223 by the main session;
+- tokens of the sub-agents: 0.79 million output, 5.06 million input, 280 million cache reads; of the main
+  session: 0.29 million output, 0.56 million input, 97 million cache reads;
+- model calls: 627 by the sub-agents and 230 by the main session, all to `claude-opus-5-5`.

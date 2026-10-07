@@ -127,7 +127,7 @@ The tuple *lies in the box* if $\varphi \in [0.039, 0.04]$ and $\theta \in [0.68
 Both Challenges state Definitions 10.1, 10.3 and 10.4, with the contact paths $\mathbf{B}$ and
 $\mathbf{D}$ that (43)–(44) use, in Mathlib's vocabulary, in the namespace `Baek` of
 [`Challenge.lean`](../../Challenge.lean) and of [`baek/Challenge.lean`](../../baek/Challenge.lean). They are copied verbatim from
-[`ChallengeDefs.lean`](../../ChallengeDefs.lean), and they agree field by field with the library's
+[`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), and they agree field by field with the library's
 definitions in [`Defs.lean`](../../MovingSofaOptimality/Gerver/Defs.lean)
 ([`Baek.GerverParams.toLib`](../../baek/Solution.lean#L45); [`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58) holds by `rfl`).
 
@@ -375,7 +375,7 @@ about $2 \cdot 10^{-7}$ around these values, which are what the numerical verifi
 
 Romik solves the equations numerically and states without proof that the solution with
 $0 < \varphi < \theta < \pi/4$ is unique. The paper relies on this uniqueness when it defines $G$
-from "the" solution (its Definition 8.1.2, which notes that $\varphi \in [0.039, 0.040]$; REPORT.md,
+from "the" solution (its Definition 8.1.2, which notes that $\varphi \in [0.039, 0.040]$; baek/REPORT.md,
 Section 2). The formalization proves uniqueness in the box, which is all that the definition of $G$
 needs. Figure 10.3 shows the zero sets of $H_1$ and $H_2$ in the box.
 
@@ -477,10 +477,10 @@ Here $A_K = A_K^- = v_K^-$ and $C_K = C_K^+ = v_K^+(\cdot + \frac\pi2)$ are the 
 with its outer walls
 ([Definition 7.21](07-injectivity.md#definition-721-contacts-and-arms-of-a-cap-baek-definition-641)).
 Baek's paper states Theorem 8.4.1 without proof; its Remark 8.4.1 notes that the properties are easy
-to verify numerically and are assumed in the earlier literature (REPORT.md, E24). Part (2), the
+to verify numerically and are assumed in the earlier literature (baek/REPORT.md, E24). Part (2), the
 niche, is Theorem 10.19. In (4) the curves $\mathbf{B}$ and $\mathbf{D}$ have corners at $t_4$ and
 $t_1$, where $\rho_A$ and $\rho_C$ jump, so there, and at the ends of the phases, the derivatives are
-one-sided (REPORT.md, E24). Figure 10.4
+one-sided (baek/REPORT.md, E24). Figure 10.4
 shows the cap with its supporting hallway at a time of phase 2.
 
 ![The cap K of Gerver's sofa, a blue-outlined region with a flat bottom on the x-axis, with its niche shaded orange, inside the grey supporting hallway at a time t of phase 2, turned by t: the outer wall c(t) touches the cap at C(t) on its left shoulder, the outer wall a(t) at A(t) on its right shoulder, the inner wall d(t) passes through D(t) at the left foot of the niche, and the inner corner x(t) lies on the arch of the niche, from where the inner wall b(t) runs down to the right](figures/10-gerver/cap.svg)
@@ -812,7 +812,7 @@ The paper states that the niche is the region enclosed counterclockwise by $\mat
 $\mathbf{x}|_{[t_1, t_4]}$, $\mathbf{D}$ reversed and the segment of the $x$-axis from
 $\mathbf{D}(0)$ to $\mathbf{B}(\pi/2)$, a statement about a Jordan curve, which the formalization does
 not use. Theorem 10.19 is what the paper uses from it, and Theorem 10.17 says more: the niche is the
-region strictly under these curves (REPORT.md, Section 6).
+region strictly under these curves (baek/REPORT.md, Section 6).
 
 *Proof.* The first claims are Theorem 10.17 and Lemma 10.6 (4). By Theorem 10.17 the niche is the
 union of the regions strictly under $\mathbf{D}|_{[0, t_2]}$, $\mathbf{x}|_{[t_1, t_4]}$ and
@@ -941,12 +941,12 @@ Let $B = B_K$ and $D = D_K$.
 [`gm_D_mem_leftBody`](../../MovingSofaOptimality/Gerver/Properties.lean#L495), [`gm_D_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L524), [`gm_B_edge`](../../MovingSofaOptimality/Gerver/Properties.lean#L653), [`gm_tailD`](../../MovingSofaOptimality/Gerver/Properties.lean#L728), [`gm_tailB`](../../MovingSofaOptimality/Gerver/Properties.lean#L757), [`lemma8_1_6_left`](../../MovingSofaOptimality/Optimality/Domain.lean#L916).*
 
 Baek's paper writes $\mathbf{x}_K^\mathrm{R} = X_{B_K} = \mathbf{D}(t_3)$ in (2); $\mathbf{B}(t_3)$ is
-meant, as $\mathbf{D}$ is defined on $[t_0, t_2]$ only (REPORT.md, E25). The formalization reads
+meant, as $\mathbf{D}$ is defined on $[t_0, t_2]$ only (baek/REPORT.md, E25). The formalization reads
 "as oriented curves" as the equality of the sets together with the equality of the curve area
 functionals, which is what Theorem 10.26 uses. Orientations of curves are not formalized, and
 $\mathcal{J}$ of a convex arc is $\frac12 \int h\, d\sigma$, so both sides are computed: from the
 density of $\breve\sigma$ (Proposition 10.23) and from the pieces of $\mathbf{D}$ and $\mathbf{B}$
-(REPORT.md, Section 7).
+(baek/REPORT.md, Section 7).
 
 *Proof sketch.* The proof follows the paper. We treat the left body $D$; the right body is the
 mirror image. The idea is that $\mathbf{D}(t)$ lies in $D$ and on its supporting line $d_K(t)$.
@@ -995,7 +995,7 @@ $\mathbf{D}(s) = v_D(\frac{3\pi}2 + s)$, the measure $\breve\sigma_D$ lives on
 $(\frac\pi2 + t_0, \frac\pi2 + t_2]$, with the shifted density of item (3), the form that
 Theorem 10.25 and
 [Theorem 9.30](09-optimality.md#theorem-930-the-directional-derivative-of-the-upper-bound-baek-theorem-856)
-use. As printed, the left side is $\breve\sigma_D$ on $(t_0, t_2]$, which vanishes (REPORT.md, E26).
+use. As printed, the left side is $\breve\sigma_D$ on $(t_0, t_2]$, which vanishes (baek/REPORT.md, E26).
 
 *Proof.* As in Baek's proof, $dv_K^+ = v_t\, \sigma_K$ (Theorem 6.12). On an interval where the
 vertex $v_K^+(t)$ follows one of the curves $\mathbf{A}, \mathbf{B}, \mathbf{C}, \mathbf{D}$, which

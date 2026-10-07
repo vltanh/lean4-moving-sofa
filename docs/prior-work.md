@@ -26,7 +26,7 @@
   Kallus and Romik from 2.37 to 2.3337; and Deng's
   [calculus of variations approach](https://arxiv.org/abs/2407.02587), which recovers Gerver's sofa
   as a solution of the Euler–Lagrange equations under convexity assumptions.
-- Later work is in the report's [What's next](../REPORT.md#10-whats-next).
+- Later work is in the report's [What's next](../baek/REPORT.md#10-whats-next).
 - That Gerver's sofa is the only optimal sofa, up to rigid motions, is not proved in Baek's paper.
   Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/MovingSofa.lean)
   states it as `volume_eq_sofaConstant_iff_congruent_gerversSofa`, in its category `research open`;

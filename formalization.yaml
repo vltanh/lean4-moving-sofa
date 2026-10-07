@@ -212,9 +212,9 @@ automation:
           The stability: about 1 hour (2026-10-05 22:17 to 23:13) and 2 hours 41 minutes (2026-10-06
           07:08 to 09:49). The coercive route: about 3 hours 26 minutes (2026-10-06 09:56 to
           13:22). The simplification: about 2 hours 44 minutes (2026-10-06 13:25 to 16:09). This
-          entry's Challenge and Solution, and the move of the other entry into baek/: about 2 hours
-          (2026-10-06 19:53 to 21:53), with about 2.2 hours of sub-agent working time. CREDITS.md
-          gives the figures of each round.
+          entry's Challenge and Solution, and the move of the other entry into baek/: about 2 hours 32 minutes
+          (2026-10-06 19:53 to 22:25), with about 2.6 hours of sub-agent working time.
+          docs/CREDITS.md gives the figures of each round.
         spend_usd: "not tracked"
     - method: agent
       models: ["ChatGPT Pro 6 (OpenAI)"]
@@ -254,8 +254,9 @@ fidelity:
     (3) The stability: the Euclidean Hausdorff distance of note 08 is stated as EuclideanClose (every
     point of each set within the given distance of a point of the other), which is the same for
     nonempty compact sets; its normalization h(pi/2) = 1, h(pi) = h_G(pi) is stated in the Challenge
-    with the highest and leftmost points, and SolutionCoercive.lean proves that the two agree. The angle
-    theorem is stated for rotation angles in [arccos(5/11), pi/2], which Baek's Theorem 1.5.1 provides.
+    with the highest and leftmost points, and MovingSofaExtremal/Statements.lean proves that the two
+    agree. The angle theorem is stated for rotation angles in [arccos(5/11), pi/2], which Baek's
+    Theorem 1.5.1 provides.
     The proofs follow the notes' arguments as written in pull request #8's Lean code.
     (4) The uniqueness is stated with a rotation and a translation, as formal-conjectures states it;
     the proof through the certificate also shows that a translation suffices.

@@ -814,7 +814,7 @@ which [`gerversSofa_eq`](../../MovingSofaBridge/GerverSofa.lean#L507) and the ot
 of the middle row speak. The uniqueness of Romik's parameters and the area bounds of Gerver's sofa
 are not used.
 
-In [`SolutionCoercive.lean`](../../SolutionCoercive.lean), as in [`baek/Solution.lean`](../../baek/Solution.lean), two private lemmas,
+In [`MovingSofaExtremal/Statements.lean`](../../MovingSofaExtremal/Statements.lean), as in [`baek/Solution.lean`](../../baek/Solution.lean), two private lemmas,
 $\alpha_{\mathrm{fc}} = \lvert G \rvert$ and $\lvert G_{\mathrm{fc}} \rvert = \lvert G \rvert$,
 carry (3), and the element $\rho$ of Lemma 13.6 turns the rotation and the translation of Theorem
 1.3 into an element of $\mathrm{E}(2)$
@@ -834,7 +834,7 @@ twelve in [`baek/Challenge.lean`](../../baek/Challenge.lean): Baek's five
 [`Baek.gerver_sofa_optimal`](../../Challenge.lean#L680),
 [`Baek.gerver_sofa_unique`](../../Challenge.lean#L687)), the bridge's three, and formal-conjectures'
 four. [`baek/Solution.lean`](../../baek/Solution.lean) proves them: it restates eleven, and the twelfth,
-`ABφθSpec.existsUnique`, is proved in [`ChallengeDefs.lean`](../../ChallengeDefs.lean), which it
+`ABφθSpec.existsUnique`, is proved in [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), which it
 imports. Lake's Comparator, configured by [`comparator.json`](../../comparator.json) for the certificate
 entry and by [`baek/comparator.json`](../../baek/comparator.json) for Baek's, checks in a sandbox that a
 Solution proves exactly the statements of its Challenge, with no axioms beyond
@@ -848,33 +848,33 @@ Comparator compares the statements through the names of the constants they use: 
 a statement mentions must be the same, by name and by definition, in the environment of the
 Challenge and in that of the Solution. The Challenge may import only Mathlib, so it carries its own
 copies of the definitions, while the Solution imports the libraries. The shared definitions
-therefore live once, in [`ChallengeDefs.lean`](../../ChallengeDefs.lean), in marked blocks: Baek's
+therefore live once, in [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean), in marked blocks: Baek's
 core definitions, the definitions of the stability statements, and formal-conjectures' definitions
 in two blocks.
 [`scripts/sync_challenge_defs.py`](../../scripts/sync_challenge_defs.py) copies the four blocks verbatim
 into [`Challenge.lean`](../../Challenge.lean), followed by the certificate's block of
-[`CertificateDefs.lean`](../../CertificateDefs.lean), and all but the stability block into
+[`MovingSofaExtremal/CertificateDefs.lean`](../../MovingSofaExtremal/CertificateDefs.lean), and all but the stability block into
 [`baek/Challenge.lean`](../../baek/Challenge.lean); with `--check` it only compares them, as the CI does.
 The bridge modules [`MovingSofaBridge.Motion`](../../MovingSofaBridge/Motion.lean) and
 [`MovingSofaBridge.GerverSofa`](../../MovingSofaBridge/GerverSofa.lean) import
-[`ChallengeDefs`](../../ChallengeDefs.lean) and state their theorems about its constants, such as
+[`MovingSofaBridge.Defs`](../../MovingSofaBridge/Defs.lean) and state their theorems about its constants, such as
 [`FormalConjectures.MovingSofa.gerversSofa`](../../Challenge.lean#L412) and
 [`FormalConjectures.MovingSofa.sofaConstant`](../../Challenge.lean#L419). So the bridge speaks about
 the very constants of the Challenges, not about copies of them. Baek's definitions in the Challenges
-are copies of the library's: [`SolutionCoercive.lean`](../../SolutionCoercive.lean) proves that they agree for the certificate entry,
+are copies of the library's: [`MovingSofaExtremal/Statements.lean`](../../MovingSofaExtremal/Statements.lean) proves that they agree for the certificate entry,
 and [`baek/Solution.lean`](../../baek/Solution.lean) for Baek's ([`Baek.isMovingSofa_iff_lib`](../../baek/Solution.lean#L35), and
 [`Baek.gerverSofa_eq_lib`](../../baek/Solution.lean#L58), which holds by definition).
 
 Between formal-conjectures' two blocks the Challenges state
 [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`](../../Challenge.lean#L373),
 because the second of them defines $A$, $B$, $\varphi$ and $\theta$ as the components of the solution
-that this theorem provides. So [`ChallengeDefs.lean`](../../ChallengeDefs.lean) must prove the
+that this theorem provides. So [`MovingSofaBridge/Defs.lean`](../../MovingSofaBridge/Defs.lean) must prove the
 theorem at that point, with a module that it imports,
 [`MovingSofaBridge.RomikParams`](../../MovingSofaBridge/RomikParams.lean). That module cannot
 mention [`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec`](../../Challenge.lean#L362), which
-[`ChallengeDefs`](../../ChallengeDefs.lean) defines only after importing it. So
+[`MovingSofaBridge.Defs`](../../MovingSofaBridge/Defs.lean) defines only after importing it. So
 [`MovingSofaBridge.GerverConstants.Spec`](../../MovingSofaBridge/GerverConstants.lean#L117) is a
-word-for-word copy of it, and [`ChallengeDefs`](../../ChallengeDefs.lean) proves the theorem by
+word-for-word copy of it, and [`MovingSofaBridge.Defs`](../../MovingSofaBridge/Defs.lean) proves the theorem by
 [`MovingSofaBridge.GerverConstants.spec_existsUnique`](../../MovingSofaBridge/RomikParams.lean#L345):
 the two definitions are equal by unfolding. The restated definitions compile with this
 repository's Lean v4.35.0-rc3; formal-conjectures pins v4.33.1.

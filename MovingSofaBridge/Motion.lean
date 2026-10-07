@@ -1,6 +1,6 @@
 module
 
-public import ChallengeDefs
+public import MovingSofaBridge.Defs
 public import MovingSofaOptimality.Main
 
 /-!

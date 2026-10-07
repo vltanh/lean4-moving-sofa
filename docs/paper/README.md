@@ -145,7 +145,7 @@ These are the author's to settle; the text settles none of them.
    > formalized in Lean 4 with Mathlib and checked by Lean's kernel, using only Lean's standard axioms.
 
 6. `\date{October 2026}` in `main.tex`.
-7. [`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) list the four versions of the registered Palomar
+7. [`README.md`](../../README.md) and [`CREDITS.md`](../CREDITS.md) list the four versions of the registered Palomar
    entry; `CREDITS.md` has a section for each later round. The repository now carries two entries: at its root
    (`Challenge.lean`, seventeen theorems, `formalization.yaml`), the certificate and the three results proved through
    it; and in `baek/` (`baek/Challenge.lean`, twelve theorems, `baek/formalization.yaml`), the formalization of
@@ -162,7 +162,7 @@ day, the description of the formalization moved to Appendix D.1, and Section 12 
 
 The manuscript was written on 4 October 2026 by Claude Sonnet 5.5 in Claude Code (version 2.1.289), at the
 author's request ("prepare an arXiv paper for the uniqueness of Gerver's sofa"), from the Lean library,
-[`docs/proof/`](../proof/README.md), [`REPORT.md`](../../REPORT.md), [`CREDITS.md`](../../CREDITS.md) and the
+[`docs/proof/`](../proof/README.md), [`REPORT.md`](../../baek/REPORT.md), [`CREDITS.md`](../CREDITS.md) and the
 LaTeX source of Baek's paper. The text is a translation of the formal proofs, in the order of
 `MovingSofaUniqueness/`; the figures are drawn from the definitions of the formalization.
 
@@ -200,7 +200,7 @@ was split, the stress italics were removed), the lead-in of Section 3, the prove
 of Section 10, two passages of the abstract, and 28 passages of Sections 2 and 4 to 9 and Appendices A to C. It
 changed the run-in headings from bold to italic and rewrote this file. Section 10.2 now also lists the ninth
 sub-agent above, and Section 10.1 says that version 4 of the Palomar entry registers the commit that it cites.
-[`README.md`](../../README.md) and [`CREDITS.md`](../../CREDITS.md) now list the four versions of the entry and
+[`README.md`](../../README.md) and [`CREDITS.md`](../CREDITS.md) now list the four versions of the entry and
 date the rounds from 1 to 3 October.
 
 Two more sub-agents (Opus 5.5) took part, neither able to edit. One read Sections 2 and 4 to 9 and the
@@ -252,7 +252,7 @@ passes):
 - model calls: 1,907 by the sub-agents (all to `claude-opus-5-5`) and 700 to `claude-sonnet-5-5`, of which 589 by the main session.
 
 The third pass alone, from 11:48 to 14:15: 2 hours 26 minutes, 16 sub-agents, about 7.3 hours of
-sub-agent work; [`CREDITS.md`](../../CREDITS.md) has its figures.
+sub-agent work; [`CREDITS.md`](../CREDITS.md) has its figures.
 
 On 4 and 5 October the author walked through the abstract and the introduction with Claude (Sonnet 5.5, then Opus
 5.5, in Claude Code) and had them rewritten sentence by sentence. The same session moved the corrections to Baek's

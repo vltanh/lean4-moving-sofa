@@ -226,7 +226,7 @@ Baek proves step 2 by contradiction, as above: if no line through $p$ in a direc
 $\theta \in [\omega, \pi/2]$, met $S$, these lines would split $S$ into a nonempty part on their
 left and a nonempty part on their right. Baek asserts that the complement of the lines has exactly two
 components; the proof needs only that each of its points lies on one side of all the lines. Baek's Definition 2.3.9 of the left and right sides of a line
-should read "not parallel to the $x$-axis" where it says "$y$-axis" (REPORT.md, E1); the Lean
+should read "not parallel to the $x$-axis" where it says "$y$-axis" (baek/REPORT.md, E1); the Lean
 definitions [`leftSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L154) and [`rightSide`](../../MovingSofaOptimality/Sofa/Defs.lean#L157) follow the intended reading.
 
 *Proof of Theorem 3.3.* For $s \in [0, 1]$ let $\theta(s) = -s\omega$ and
@@ -313,7 +313,7 @@ angles in $J_\omega \cup \lbrace \omega + \pi, 3\pi/2 \rbrace$. $\square$
 *Lean: [`theorem2_4_1`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L78).*
 
 In the paper's proof, the directions $v_0$ and $u_\omega$ in which $Q_S^+(t)$ is closed should be
-$-v_0$ and $-u_\omega$ (REPORT.md, E27).
+$-v_0$ and $-u_\omega$ (baek/REPORT.md, E27).
 
 ### Definition 3.11 (fan and niche; Baek, Definitions 2.4.4 and 2.4.5)
 
@@ -364,7 +364,7 @@ niche lies in the niche.
 The fan, not the parallelogram, cuts the niche: for a cap that does not contain its niche, the
 quarter-planes can reach above $P_\omega$ (Example 3.27). Baek's Definition 3.2.5 of the niche of a
 polygon cap writes $P_\omega$ where $F_\omega$ is meant, which makes two later results false as
-printed (REPORT.md, E6); [Chapter 4](04-balanced.md) uses the fan.
+printed (baek/REPORT.md, E6); [Chapter 4](04-balanced.md) uses the fan.
 
 *Example (Hammersley's sofa).* Let $K$ be the union of the rectangle
 $[-\frac2\pi, \frac2\pi] \times [0, 1]$ and the quarter-disks of radius 1 centred at
@@ -406,7 +406,7 @@ with $F_\omega$. Finally $Q_S^-(t) = Q_K^-(t)$ for $t \in [0, \omega]$ by Lemma 
 *Lean: [`theorem2_4_2`](../../MovingSofaOptimality/Monotone/CapNiche.lean#L191).*
 
 The paper's proof takes the union over $[0, \omega]$ while the niche is a union over $(0, \omega)$;
-the end angles contribute nothing, as shown above (REPORT.md, E2).
+the end angles contribute nothing, as shown above (baek/REPORT.md, E2).
 
 ![Three panels for Gerver's sofa. (a) The cap K, light blue, below the grey outer walls of nine supporting hallways, whose envelope is the top and the rounded ends of K. (b) The niche N(K), orange, an arch on the floor below the orange rotation path x(t), with nine inner corners marked and the dashed walls of their quarter-planes; the cap is outlined dashed around it. (c) The sofa S, the cap minus the niche, with its upper boundary drawn thick and a vertical segment from a point of S just above the niche up to the upper boundary](figures/03-monotone/cap-niche.svg)
 
@@ -480,9 +480,9 @@ since $s - \omega \in [-\pi/2, \pi/2]$ and $\langle q, u_\omega \rangle \ge 0$. 
 $\langle C, u_s \rangle \le h_K(s)$, and $C \in K$ by (3.1). It lies on $l_K(\omega + \pi/2)$, and
 it is the point of that edge farthest in the direction $v_{\omega + \pi/2} = -u_\omega$, since
 $\langle \cdot, u_\omega \rangle \ge 0$ on $K$. That is, $C = C_K^+(\omega)$. Baek's proofs use both
-facts without stating them (REPORT.md, E4 (a)).
+facts without stating them (baek/REPORT.md, E4 (a)).
 
-They also use that the origin $O$ lies in $K$ when $\omega < \pi/2$ (REPORT.md, E4 (b)). Here
+They also use that the origin $O$ lies in $K$ when $\omega < \pi/2$ (baek/REPORT.md, E4 (b)). Here
 $h_K(0) \ge 0$, since $\langle A_K^-(0), u_\omega \rangle = h_K(0) \cos\omega \ge 0$ and
 $\cos\omega > 0$. For $s \in [0, \omega]$, $h_K(s) \ge \langle A_K^-(0), u_s \rangle = h_K(0)\cos s \ge 0$.
 For $s \in [\pi/2, \omega + \pi/2]$,
@@ -603,8 +603,8 @@ Let $t \in \mathbb{R}$.
 The paper's first item claims $?_{K^{\mathrm m}}(t) = M_\omega(?_K(\omega - t))$ also for the walls
 $a, b, c, d$ and the ends $W, Z$, and its second item has $K^{\mathrm m}$ on the right. The
 reflection exchanges the two arms of the hallway, so the walls and the ends are exchanged as above
-(Figure 3.6), and the right side involves $K$ (REPORT.md, E3). Items (2)–(5) hold for every set $K$,
-and the formalization states them so (REPORT.md, §5).
+(Figure 3.6), and the right side involves $K$ (baek/REPORT.md, E3). Items (2)–(5) hold for every set $K$,
+and the formalization states them so (baek/REPORT.md, §5).
 
 ![Two panels. Left: the cap K of Figure 3.3 in blue with its supporting hallway at the angle s = 0.3, whose outer walls are labelled a on the right and c on the left and whose inner walls b and d, and the purple dashed mirror line through O and o_omega. Right: the reflected cap K^m in green with its supporting hallway at the angle omega minus s, the reflection of the left hallway, again with a on the right and c on the left; the reflection carries the wall labelled a on the left to the wall labelled c on the right, and b to d](figures/03-monotone/mirror.svg)
 
@@ -686,7 +686,7 @@ Let $t \in (0, \omega)$. If the inner corner $\mathbf{x}_K(t)$ lies in $K$, then
 lies in $K$.
 
 *Proof.* Every vertex of $T_K(t)$ lies in $K$, so $T_K(t) \subseteq K$ by convexity. Two facts
-about caps are used (REPORT.md, E4): $A_K^-(0) = (h_K(0), 0)$ and
+about caps are used (baek/REPORT.md, E4): $A_K^-(0) = (h_K(0), 0)$ and
 $C_K^+(\omega) = h_K(\omega + \pi/2)\, v_\omega$; and $O \in K$ when $\omega < \pi/2$, since
 $h_K(s) \ge \langle A_K^-(0), u_s \rangle \ge 0$ for $s \in [0, \pi/2]$,
 $h_K(s) \ge \langle C_K^+(\omega), u_s \rangle \ge 0$ for $s \in [\omega, \omega + \pi/2]$, and
@@ -821,7 +821,7 @@ Conversely, suppose $\mathcal{N}(K) \subseteq K$, and let $S = K \setminus \math
 
 In the paper's proof, "$\mathcal{N}(K)$ contains $K$" should read "$K$ contains $\mathcal{N}(K)$",
 and the paper cites Baek's Theorem 2.4.3 for $\mathcal{I}(S) = K \setminus \mathcal{N}(K)$, which
-assumes $S$ monotone; Theorem 2.4.2 (here Theorem 3.12) is the one that applies (REPORT.md, E27).
+assumes $S$ monotone; Theorem 2.4.2 (here Theorem 3.12) is the one that applies (baek/REPORT.md, E27).
 
 ### Example 3.27 (a cap that does not contain its niche; Baek, Remark 2.5.2)
 

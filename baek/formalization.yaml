@@ -14,7 +14,7 @@ project:
     The moving sofa problem asks for the largest area of a planar shape that can be moved around the
     right-angled corner of a hallway of unit width. This repository formalizes in Lean 4, with
     Mathlib, Jineon Baek's proof (arXiv:2411.19826) that Gerver's sofa, of area 2.2195..., is optimal:
-    the numbered results of the paper (the few that the proofs do not need are listed in REPORT.md,
+    the numbered results of the paper (the few that the proofs do not need are listed in baek/REPORT.md,
     Section 9), the results it cites (Schneider's area formula for convex
     bodies, and the existence and uniqueness of the solution of Romik's equations, which define
     Gerver's sofa), and the structure of Gerver's sofa (Theorem 8.4.1), which the paper states without
@@ -58,7 +58,7 @@ sources:
     note: >-
       The formalization follows version 1 of the preprint (the only version), audited against its
       LaTeX source. Statements that are false or meaningless as printed are formalized in their
-      intended form; REPORT.md (Sections 3 and 6) lists every correction.
+      intended form; baek/REPORT.md (Sections 3 and 6) lists every correction.
     author_endorsement: not-contacted
   - title: "Uniqueness of Gerver's sofa: complete paper argument"
     id: "docs/archive/uniqueness/20-complete-paper-proof.md"
@@ -96,7 +96,7 @@ sources:
     note: >-
       Constructs the sofa and conjectures its optimality. The paper quotes Gerver's Theorem 1 for
       context and cites Gerver's Theorem 2 in the proof of Theorem 6.1.2, which is proved here from
-      Romik's equations instead (REPORT.md, E12).
+      Romik's equations instead (baek/REPORT.md, E12).
     author_endorsement: not-contacted
   - title: "Convex Bodies: The Brunn-Minkowski Theory (2nd edition)"
     authors:
@@ -109,7 +109,7 @@ sources:
       The paper cites several facts from this book. The area formula |K| = (1/2) int h_K d sigma_K
       (Remark 5.1.2, Eq. (5.19)) is proved in MovingSofaOptimality/External/AreaFormula.lean. The other cited
       facts, such as the weak convergence of surface area measures (the paper's Theorem 4.1.3), are
-      proved where they are used or taken from Mathlib (REPORT.md, Section 2).
+      proved where they are used or taken from Mathlib (baek/REPORT.md, Section 2).
     author_endorsement: n/a
   - title: "Problem 66-11, Moving Furniture Through a Hallway"
     authors:
@@ -153,9 +153,9 @@ status:
     results from the literature that the proofs use (Schneider's area formula, the solution of
     Romik's system, the weak convergence of surface area measures, Blaschke selection via Mathlib),
     and Theorem 8.4.1, which the paper states without proof. The paper's statements that are false
-    or meaningless as printed (REPORT.md, E1, E3, E6, E7, E9, E11, E13, E18, E21, E23, E25, E26)
+    or meaningless as printed (baek/REPORT.md, E1, E3, E6, E7, E9, E11, E13, E18, E21, E23, E25, E26)
     are formalized in their intended form, and Theorem 3.1.2 gets the boundedness hypothesis that
-    the paper leaves out (REPORT.md, Section 4); no other result is weakened. Not formalized, because the
+    the paper leaves out (baek/REPORT.md, Section 4); no other result is weakened. Not formalized, because the
     formalization does not use them: the Jordan curve theorem and the area enclosed by a Jordan curve
     (Theorems 7.2.1, 7.2.3, Proposition 7.2.7), whose uses are replaced by direct area computations;
     Schneider's Theorem 4.2.3 in its Hausdorff-measure form (the paper's Theorem 2.1.1), where the
@@ -256,7 +256,7 @@ automation:
           the second solution, and the manuscript reorganized: about 45 minutes (2026-10-06 16:13 to
           16:58), with about 0.4 hours of sub-agent working time. The manuscript's readability: about
           51 minutes (2026-10-06 16:59 to 17:50), with about 3.1 hours of sub-agent working time.
-          CREDITS.md gives the figures of each round
+          docs/CREDITS.md gives the figures of each round
         spend_usd: "not tracked"
         hardware: "a local Linux workstation (20 cores, 62 GB RAM) for Lean builds; models via API"
       prompting_notes: >-
@@ -325,7 +325,7 @@ fidelity:
     (argument pi/2 - t); Lemma 6.5.5 (range (0, pi/2]); Lemma 8.1.7 (4)
     (phi^L for phi^R); Definition 8.3.3 (pi + phi^R for pi/2 + phi^R); Lemma 8.3.6 (3) (evaluation at
     pi/2); Theorem 8.4.3 (2) (B(t3) for D(t3)); Proposition 8.4.4 (4) (shifted by pi/2); Theorem 3.1.2
-    (the Nef polygon is bounded, a hypothesis that the paper leaves out; REPORT.md, Section 4); Lemma
+    (the Nef polygon is bounded, a hypothesis that the paper leaves out; baek/REPORT.md, Section 4); Lemma
     7.1.6 (in a real vector space, where K + c is defined, for every convex-bilinear h; E18).
     (2) Readings: the plane is R x R and area is Lebesgue measure; a rigid motion is a continuous
     angle and translation, with the angle 0 at time 0 (equivalent to a continuous curve in SE(2) by
@@ -350,10 +350,10 @@ fidelity:
     phi in [0.039, 0.04], theta in [0.68, 0.69] (the paper quotes phi in [0.039, 0.040]); the box
     contains exactly one solution.
     (4) Some hypotheses of the paper's statements are not needed and are omitted, which makes those
-    Lean statements more general (REPORT.md, Section 5).
+    Lean statements more general (baek/REPORT.md, Section 5).
     (5) Every proof follows the paper's argument (the same intermediate claims, and the results
     that the paper's proof cites; scripts/route_check.py checks the cited results in CI) except at
-    these steps, each necessary (REPORT.md, Section 7; docs/route_differences.tsv). The paper's step
+    these steps, each necessary (baek/REPORT.md, Section 7; docs/route_differences.tsv). The paper's step
     is wrong or has a gap: Theorem 6.1.2 (from Romik's equations, since Gerver's Theorem 2 does not give it, E12);
     Lemma 6.3.1 (N_Theta(K) in K by Theorem 3.4.10, since Theorem 3.5.4 does not apply, E15);
     Theorem 6.5.6 (the bounds at the endpoints by continuity, E17); Lemma 8.1.7 (2), (4) and

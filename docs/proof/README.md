@@ -4,7 +4,7 @@
 
 A companion text to the Lean 4 formalization in this repository
 ([lean4-moving-sofa](https://github.com/vltanh/lean4-moving-sofa)); for its authorship see
-[Credits](../../CREDITS.md).
+[Credits](../CREDITS.md).
 
 **Abstract.** A moving sofa is a connected planar shape that can be moved around the right-angled
 corner of a hallway of unit width. The moving sofa problem asks for the largest area of a moving
@@ -324,7 +324,7 @@ Chapters 2 to 10 follow Baek's proof.
 
 That Gerver's sofa is the only moving sofa of maximum area is not proved in Baek's paper, and
 formal-conjectures lists it as an open problem. The proof of Chapters 11 and 12 was written for this
-formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../../CREDITS.md)); it
+formalization, by an AI model, ChatGPT Pro 6, in October 2026 (see [Credits](../CREDITS.md)); it
 reuses Baek's machinery and has not been peer reviewed. We know of no earlier proof, but have not
 searched the literature systematically. Two earlier Lean formalizations of Baek's proof prove
 formal-conjectures' statement of the optimality, but not the uniqueness; the page
@@ -554,7 +554,7 @@ prove it, linked to their source. The proofs here follow the formal proofs, exce
 says otherwise, but they are written for a human reader. The longest are sketches that give the
 steps and the key estimates and say where the full argument is. Where a statement of Baek's paper is
 false as printed, the text states and proves the intended version and says so; the audit in
-[`REPORT.md`](../../REPORT.md) lists every such correction. The formal proofs are checked by Lean's
+[`baek/REPORT.md`](../../baek/REPORT.md) lists every such correction. The formal proofs are checked by Lean's
 kernel; the [verification](../verification.md) page explains how to build them and audit their
 axioms. The figures are computed from the same definitions by the scripts in
 [`scripts/figures/`](../../scripts/figures).

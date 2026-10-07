@@ -1,6 +1,6 @@
 module
 
-public import ChallengeDefs
+public import MovingSofaBridge.Defs
 public import MovingSofaOptimality.Main
 public import MovingSofaUniqueness.Main
 public import MovingSofaBridge.GerverSofa
@@ -9,7 +9,7 @@ public import MovingSofaBridge.GerverSofa
 # The solution of Baek's entry: the theorems of `baek/Challenge.lean`, proved
 
 This module restates every theorem of `baek/Challenge.lean` (Baek's entry, `baek/comparator.json`)
-and proves it, with the Challenge's definitions from `ChallengeDefs`:
+and proves it, with the Challenge's definitions from `MovingSofaBridge.Defs`:
 
 * Baek's theorems (`Baek`), from the libraries `MovingSofaOptimality` (Baek's paper, with its
   Theorem 1.1.1) and `MovingSofaUniqueness` (the first proof of the uniqueness of the optimal

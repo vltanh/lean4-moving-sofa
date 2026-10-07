@@ -2,6 +2,9 @@ module
 
 public import MovingSofaExtremal.Main
 public import MovingSofaExtremal.Unified
+public import MovingSofaExtremal.Statements
+public import MovingSofaExtremal.CertificateDefs
+public import MovingSofaExtremal.Certificate
 
 /-!
 # The coercive route
@@ -17,5 +20,12 @@ caps, or the modules of the first proof of uniqueness:
 * `Unified`: `gerver_sofa_optimal_unique_stable`, with the stability theorems of
   `MovingSofaStability`, whose global step uses the uniqueness of `Main`.
 
-`SolutionCoercive.lean` proves the statements of `Challenge.lean` through these theorems.
+The certificate entry (`Challenge.lean`, `Solution.lean`) is proved by three more modules:
+
+* `Statements`: fifteen of its theorems, in the definitions of `MovingSofaBridge.Defs` and in the
+  namespace `CoerciveSolution`, with optimality, uniqueness and stability from `Unified`;
+* `CertificateDefs`: the definitions that its statement of the certificate needs beyond those of
+  `MovingSofaBridge.Defs`, which `Challenge.lean` copies;
+* `Certificate`: its two theorems about the certificate (`Certificate.coercive_certificate` and
+  `Certificate.gerver_triple`), from `MovingSofaStability`.
 -/

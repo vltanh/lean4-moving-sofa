@@ -19,7 +19,9 @@ one module per step of the argument, the module \texttt{Maximizing}, shared by
 from their two properties in \cref{prop:unified-caps} to optimality and
 uniqueness), and the module \texttt{MaximizerRoute} (the rest of the second
 proof of optimality);
-\item \texttt{MovingSofaBridge} (4 files, about 2,600 lines): the connection
+\item \texttt{MovingSofaBridge} (5 files, about 2,900 lines): the definitions
+that the Challenges copy (those of Appendices~\ref{app:lean-main}
+and~\ref{app:lean-stability}, and formal-conjectures' own), and the connection
 with the definitions of formal-conjectures~\cite{FormalConjectures}, which are
 different (a motion there is a path of isometries that starts at the identity,
 and Gerver's sofa is defined from Gerver's four constants); it shows that a set
@@ -33,9 +35,11 @@ which it lists as open, follows from \cref{thm:main};
 \item \texttt{MovingSofaStability} (12 files, about 7,600 lines):
 \cref{sec:stability}, one module per step of the proof, and the certificate of
 \cref{sec:unified} (\cref{thm:certificate});
-\item \texttt{MovingSofaExtremal} (3 files, about 240 lines):
+\item \texttt{MovingSofaExtremal} (6 files, about 1,000 lines):
 \cref{sec:unified}, with the steps that it shares with the second proof of
-optimality imported from \texttt{MovingSofaUniqueness};
+optimality imported from \texttt{MovingSofaUniqueness}, and the proofs of the
+statements of record of the entry at the root of the repository (below), with
+the definitions of the certificate that its Challenge copies;
 \texttt{MovingSofaStability} takes its optimality and uniqueness theorems from
 \texttt{MovingSofaExtremal}.
 \end{itemize}
@@ -138,10 +142,9 @@ optimality nor uniqueness. A third audit,
 \path{scripts/AuditCoerciveRoute.lean}, which the continuous integration runs,
 follows the proofs through the bodies of all the declarations of the repository,
 private and generated ones included. It checks that each of the 867 declarations
-of \texttt{MovingSofaExtremal}, \texttt{MovingSofaStability},
-\path{SolutionCoercive.lean} and of the modules that restate and prove the
-certificate (\path{CertificateDefs.lean}, \path{CertificateProof.lean}) uses
-only the three axioms above. It also checks
+of \texttt{MovingSofaExtremal}, which also restates and proves the statements of
+the entry at the root, and of \texttt{MovingSofaStability} uses only the three
+axioms above. It also checks
 that none of them reaches Baek's theorem \baek{Thm.~1.1.1}, the results listed
 in the previous paragraph, \path{baek/Solution.lean}, or a declaration of the
 module \texttt{Main} of \texttt{MovingSofaUniqueness}, of the module
@@ -160,7 +163,7 @@ and the stability theorems reach the certificate and the uniqueness theorem of
 \texttt{MovingSofaExtremal}. Eight checks confirm that the search finds, in the
 older proofs, results that these are known to use, which shows that the search
 sees proof bodies. Finally, the audit checks that the twelve theorems that
-\path{SolutionCoercive.lean} shares with \path{baek/Solution.lean} have exactly
+\path{MovingSofaExtremal/Statements.lean} shares with \path{baek/Solution.lean} have exactly
 the same types; the Solution at the root states them under the Challenge's
 names.
 
@@ -168,7 +171,7 @@ names.
 
 The statement of record is \path{Baek.gerver_sofa_unique} in
 \texttt{Challenge.lean}. It uses Mathlib's vocabulary and the definitions below,
-which \texttt{Challenge.lean} copies verbatim from \texttt{ChallengeDefs.lean};
+which \texttt{Challenge.lean} copies verbatim from \path{MovingSofaBridge/Defs.lean};
 they are those of this paper. In Lean the plane is $\R\times\R$, the area of a
 set is its Lebesgue measure \path{volume}, and \texttt{rot t} is the
 counterclockwise rotation by $t$.
@@ -221,7 +224,7 @@ In \texttt{Challenge.lean}, the statements of record of \cref{thm:stability},
 \path{Baek.gerver_sofa_stable}, \path{Baek.gerver_sofa_angle_stable} and
 \path{Baek.gerver_sofa_stability_exponent}. Besides the definitions above, they
 use five more, which \texttt{Challenge.lean} copies from
-\texttt{ChallengeDefs.lean}. Here $\abs X$ is the Lebesgue measure of $X$ as a
+\path{MovingSofaBridge/Defs.lean}. Here $\abs X$ is the Lebesgue measure of $X$ as a
 real number.
 \begin{itemize}
 \item \texttt{IsMovingSofaWithAngle S}~$\omega$ holds if $S$ satisfies the
@@ -273,9 +276,9 @@ fails for every $\theta\in\R$ and $v\in\R\times\R$.
 In \texttt{Challenge.lean}, the statement of record of
 \cref{thm:certificate} is \path{Certificate.coercive_certificate}. Besides the
 definitions above, it uses those of the namespace \texttt{Certificate}, which
-the Challenge copies from \path{CertificateDefs.lean}. Each is the definition
-of the same name in the libraries, and \path{CertificateProof.lean} proves
-that the two agree.
+the Challenge copies from \path{MovingSofaExtremal/CertificateDefs.lean}. Each
+is the definition of the same name in the libraries, and
+\path{MovingSofaExtremal/Certificate.lean} proves that the two agree.
 \begin{itemize}
 \item \path{supp}, \path{IsConvexBody}, \path{vplus}, \path{vminus}: the support
 function $h_K$, convex bodies and the vertices $v_K^\pm$
@@ -435,7 +438,7 @@ are also given by their paths from the root.
 \eqref{eq:stab-segment} & \path{segmentEnergy}, \path{deficit_eq_neg_dirDeriv_add_energy} (\texttt{WideDomain})\\
 \eqref{eq:stab-gap} & \path{displacementEnergy}, \path{mamikon_combo_energy} (\texttt{WideDomain}), \path{capResidualEnergy}, \path{capResidualEnergy_gap}, \path{tangent_energy_gap}, \path{outer_energy_gap} (\texttt{Deficit}); \eqref{eq:gap}, on which it rests: \path{halfSquareIntegral_combo_gap}, \path{displacement_combo}, \path{mamikon_eq_halfSquareIntegral} (\path{MovingSofaUniqueness/Mamikon.lean})\\
 \cref{lem:stab-wide} & \path{inWideL_comb}, \path{wide_upperQ_decomposition}, \path{wideUpperQ_quadratic}, \path{wideUpperQ_concave}, \path{cap_mamikon_upperP_affine}, \path{mamikonS_convex_all}, \path{mamikonS_add_upperP_nonsmooth}, \path{capAffineBoundary}, \path{cap_area_four_arcs}, \path{edgeArea_eq_atom}, \path{outer_inner_area_affine} (\texttt{WideDomain}); the convexity of $\cS$, $\cR$, $\cL$: \path{lemma8_3_3}, \path{opt_mamikon_tangent}, \path{opt_mamikon_outer} (\texttt{Optimality/Concavity})\\
-\cref{lem:stab-variation} & \path{gerver_wide_firstVariation_nonpos}, \path{wideUpperQ_le_gerver}, \path{wideGerver_value}, \path{wide_reference_firstVariation}, \path{reference_core_firstVariation} (\texttt{Deficit}), \path{area_firstVariation_caps}, \path{mixedArea_symm}, \path{wide_maximum_iff_firstVariation} (\texttt{WideDomain}), with \path{theorem8_5_2}, \path{theorem8_5_3}, \path{theorem8_5_4} (\texttt{Optimality/Variation}); $\xi_G\in\bar\cT$ and $\cQ(\xi_G)=\abs\Gs$: \path{Certificate.gerver_triple} (stated in \texttt{Challenge.lean}, proved in \path{CertificateProof.lean}) from \path{wideGerverTriple}, \path{wideGerver_value} (\texttt{Deficit})\\
+\cref{lem:stab-variation} & \path{gerver_wide_firstVariation_nonpos}, \path{wideUpperQ_le_gerver}, \path{wideGerver_value}, \path{wide_reference_firstVariation}, \path{reference_core_firstVariation} (\texttt{Deficit}), \path{area_firstVariation_caps}, \path{mixedArea_symm}, \path{wide_maximum_iff_firstVariation} (\texttt{WideDomain}), with \path{theorem8_5_2}, \path{theorem8_5_3}, \path{theorem8_5_4} (\texttt{Optimality/Variation}); $\xi_G\in\bar\cT$ and $\cQ(\xi_G)=\abs\Gs$: \path{Certificate.gerver_triple} (stated in \texttt{Challenge.lean}, proved in \path{MovingSofaExtremal/Certificate.lean}) from \path{wideGerverTriple}, \path{wideGerver_value} (\texttt{Deficit})\\
 \cref{prop:stab-certificate} & \path{wideEnergy_eq_integrals}, \path{wide_deficit_eq_slack_add_integrals}, \path{wide_capResidualEnergy_le_deficit} (\texttt{Deficit})\\
 \eqref{eq:stab-ftc} & \path{tangentResidual}, \path{cornerResidual} (\texttt{Deficit}), \path{hasDerivWithinAt_tangentQuotient}, \path{tangent_quotient_integral}, \path{corner_reconstruct} (\texttt{CapEstimate})\\
 \cref{lem:stab-residuals} & the displacements: \path{tangent_displacement_formula}, \path{outer_displacement_formula} (\path{MovingSofaUniqueness/Mamikon.lean}); \path{tangent_displacement_sub}, \path{outer_displacement_sub}, \path{tangentResidual_pinned}, \path{cornerResidual_pinned}, \path{tangentResidual_translation} (\texttt{Deficit}), \path{capDifference}, \path{capDifferenceDeriv}, \path{tangent_capDifference_integrable}, \path{corner_capDifference_integrable}, \path{capDifference_data} (\texttt{CapEstimate})\\
@@ -459,7 +462,7 @@ are also given by their paths from the root.
 \cref{prop:stab-entry} & \path{near_maximizers_enter_neighborhood}, \path{maximizing_subsequence}, \path{gerver_reduced_angle_eq} (\texttt{Global}), \path{pinned_maximizer_eq_gerver} (\texttt{Recovery})\\
 \cref{lem:stab-puncture} & \path{puncture_connected}, \path{connected_sdiff_of_connected_frontier}, \path{puncture_area_loss}, \path{area_openEuclideanBall}, \path{puncture_euclideanClose}, \path{puncture_movingWithAngle} (\texttt{Sharpness})\\
 \cref{lem:stab-rigid} & \path{rigid_copies_retain_interior} (\texttt{Sharpness})\\
-\cref{thm:certificate} & \path{Certificate.coercive_certificate} (stated in \texttt{Challenge.lean}, proved in \path{CertificateProof.lean}) from \path{coercive_certificate} (\path{MovingSofaStability/CapEstimate.lean}), the conjunction of \path{wideUpperQ_le_gerver}, \path{wideGerver_value} (\path{MovingSofaStability/Deficit.lean}; \cref{lem:stab-variation}) and \path{sharp_wide_cap_distance_bound} (\path{MovingSofaStability/CapEstimate.lean}; \cref{thm:stability-cap}\ref{thm:stability-cap:wide}); $\KG+(s_K,0)$: \path{shiftedReferenceCap}, \path{capReferenceShift} (\path{MovingSofaStability/CapEstimate.lean})\\
+\cref{thm:certificate} & \path{Certificate.coercive_certificate} (stated in \texttt{Challenge.lean}, proved in \path{MovingSofaExtremal/Certificate.lean}) from \path{coercive_certificate} (\path{MovingSofaStability/CapEstimate.lean}), the conjunction of \path{wideUpperQ_le_gerver}, \path{wideGerver_value} (\path{MovingSofaStability/Deficit.lean}; \cref{lem:stab-variation}) and \path{sharp_wide_cap_distance_bound} (\path{MovingSofaStability/CapEstimate.lean}; \cref{thm:stability-cap}\ref{thm:stability-cap:wide}); $\KG+(s_K,0)$: \path{shiftedReferenceCap}, \path{capReferenceShift} (\path{MovingSofaStability/CapEstimate.lean})\\
 \cref{lem:zero-deficit} & \path{wide_zero_deficit_cap} (\path{MovingSofaExtremal/Main.lean}), with \path{EuclideanClose.eq_of_zero} (\path{MovingSofaStability/Basic.lean})\\
 \cref{prop:unified-caps} & \ref{prop:unified-caps:value} \path{right_angle_maximizer_certificate}, \path{right_angle_maximizer_value} (\path{MovingSofaExtremal/Main.lean}), \path{gerver_le_of_maximizes}, \path{isKi_of_maximizes} (\texttt{Maximizing}), with \path{theorem8_2_4} (\texttt{Optimality/UpperBound}); $\xi_K$ as a triple of $\bar\cT$: \path{kiExtensionTriple} (\texttt{Mamikon}), \path{toWideTriple} (\path{MovingSofaStability/WideDomain.lean}); \ref{prop:unified-caps:shape} \path{right_angle_maximizer_eq_gerver} (\path{MovingSofaExtremal/Main.lean}), with \path{cap_minus_niche_translate} (\texttt{Rigid}); maximizing caps: \path{IsCap} (\texttt{Monotone/CapDefs}) together with \path{MaximizesCap} (\texttt{Maximizing}); the two properties for all maximizing caps $K\in\Kc_{\pi/2}$: \path{MaximizingValue}, \path{MaximizingShape} (\texttt{Maximizing})\\
 \cref{thm:unified-optimality} & \ref{thm:unified-optimality:right} \path{Maximizing.right_angle_cap_area_le_gerver}, \path{Maximizing.right_angle_maximizes_iff_translate_gerver}, \path{Maximizing.right_angle_sofaArea_eq_gerver_iff} (\texttt{Maximizing}), with their specializations \path{right_angle_cap_area_le_gerver}, \path{right_angle_maximizes_iff_translate_gerver}, \path{right_angle_sofaArea_eq_gerver_iff} (\path{MovingSofaExtremal/Main.lean}); \ref{thm:unified-optimality:sofa} \path{Maximizing.gerver_sofa_optimal}, \path{Maximizing.right_angle_area_le_gerver}, \path{Maximizing.area_le_gerver_of_large}, \path{Maximizing.area_le_gerver} (\texttt{Maximizing}), with the specializations \path{gerver_sofa_optimal}, \path{area_le_gerver} (\path{MovingSofaExtremal/Main.lean}); \ref{thm:unified-optimality:caps} \path{Maximizing.cap_area_le_gerver} (\texttt{Maximizing}), with the specialization \path{cap_area_le_gerver} (\path{MovingSofaExtremal/Main.lean}); \cref{fact:exists} in this proof: \path{exists_maximizing_cap} (\texttt{Maximizing})\\

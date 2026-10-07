@@ -1,24 +1,24 @@
 module
 
 public import Mathlib
-public import ChallengeDefs
+public import MovingSofaBridge.Defs
 
 /-!
 # The definitions of the certificate's Challenge
 
 The definitions that the certificate entry (`Challenge.lean`) needs for the certificate, beyond
-those of `ChallengeDefs`: convex bodies, caps, the surface area measure, curve areas, Baek's upper
-bound `𝒬`, the enlarged domain `T̄` of triples, and Gerver's cap and its horizontal translates. Each
-restates, in Mathlib's vocabulary and with the constants of `ChallengeDefs`, the definition of the
-same name in `MovingSofaOptimality` or `MovingSofaStability`, with the same body, with four
-exceptions. `gerverCap` is the library's `GerverParams.cap`, `innerCorner` writes `(0, 0)` for the
-library's `xL`, and `upperQ` writes `(volume K).toReal` for the library's `area K`; these three are
-equal to the library's by definition. The fourth is the surface area measure `sigma`, below.
-`Challenge.lean` may not import the project, so `scripts/sync_challenge_defs.py` copies the marked
-block into it verbatim, after the blocks of `ChallengeDefs`. The solution of the certificate entry
-(`Solution.lean`) uses the constants defined here, so Comparator sees the same constants in the
-Challenge and in the Solution, and `CertificateProof.lean` proves that they agree with the
-library's.
+those of `MovingSofaBridge.Defs`: convex bodies, caps, the surface area measure, curve areas, Baek's
+upper bound `𝒬`, the enlarged domain `T̄` of triples, and Gerver's cap and its horizontal
+translates. Each restates, in Mathlib's vocabulary and with the constants of
+`MovingSofaBridge.Defs`, the definition of the same name in `MovingSofaOptimality` or
+`MovingSofaStability`, with the same body, with four exceptions. `gerverCap` is the library's
+`GerverParams.cap`, `innerCorner` writes `(0, 0)` for the library's `xL`, and `upperQ` writes
+`(volume K).toReal` for the library's `area K`; these three are equal to the library's by
+definition. The fourth is the surface area measure `sigma`, below. `Challenge.lean` may not import
+the project, so `scripts/sync_challenge_defs.py` copies the marked block into it verbatim, after the
+blocks of `MovingSofaBridge.Defs`. The solution of the certificate entry (`Solution.lean`) uses the
+constants defined here, so Comparator sees the same constants in the Challenge and in the Solution,
+and `MovingSofaExtremal.Certificate` proves that they agree with the library's.
 
 **The surface area measure.** `σ_K` is the Lebesgue–Stieltjes measure of
 `G_K(t) = ⟨v_K⁺(t), v_t⟩ + ∫₀ᵗ h_K` (manuscript, Definition 2.1 (c); formally `σ_K = h_K'' + h_K`).
@@ -32,8 +32,8 @@ The certificate's statements apply `sigma` only to the tails `B` and `D` of a tr
 `InWideL` makes convex bodies.
 
 Before the block, a command gives Lean's cache of auxiliary theorems the state it has in the
-Challenge after the definitions of `ChallengeDefs`, so that the block elaborates to the same terms
-here as there.
+Challenge after the definitions of `MovingSofaBridge.Defs`, so that the block elaborates to the
+same terms here as there.
 -/
 
 @[expose] public section
@@ -41,18 +41,19 @@ here as there.
 /- Lean turns the proofs inside a definition, such as the proof of `Nat.AtLeastTwo 2` behind the
 numeral `2 : ℝ`, into auxiliary theorems, and reuses an auxiliary theorem with the same statement
 made earlier in the same module; `.olean` files do not store this cache. In
-`Challenge.lean`, the definitions of `ChallengeDefs` (all of its blocks) precede the
+`Challenge.lean`, the definitions of `MovingSofaBridge.Defs` (all of its blocks) precede the
 certificate's in one module, so the certificate's definitions reuse their auxiliary theorems, such
 as `Baek.GerverParams.x₁._proof_1` for `2` and
 `FormalConjectures.MovingSofa.GerversSofa.ABφθSpec._proof_1` for `3`. This command puts the
-auxiliary theorems of `ChallengeDefs`, which all come from those definitions, into the cache, so
+auxiliary theorems of `MovingSofaBridge.Defs`, which all come from those definitions, into the
+cache, so
 that the definitions below elaborate to the same terms as in the Challenge, which Comparator
 requires. `scripts/sync_challenge_defs.py` checks that the Challenge keeps this order. -/
 open Lean Meta in
 run_meta do
   let env ← getEnv
-  let some idx := env.getModuleIdx? `ChallengeDefs
-    | throwError "ChallengeDefs is not imported"
+  let some idx := env.getModuleIdx? `MovingSofaBridge.Defs
+    | throwError "MovingSofaBridge.Defs is not imported"
   for n in env.header.moduleData[idx.toNat]!.constNames do
     if n.components.any (·.toString.startsWith "_proof") then
       let ci ← getConstInfo n

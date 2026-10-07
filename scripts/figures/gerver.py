@@ -2,10 +2,10 @@
 """The geometry of Gerver's sofa, computed from the definitions of the formalization.
 
 Gerver's four constants A, B, phi, theta solve the system `ABφθSpec` of formal-conjectures
-(`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec` in `ChallengeDefs.lean`); they are found here
-by Newton's method in 40-digit arithmetic. Romik's parameters are rebuilt from them by the formulas
-of `MovingSofaBridge.GerverConstants.toRomik`, and Romik's rotation path is glued from the five
-phases `Baek.GerverParams.x₁`, ..., `x₅`. Gerver's sofa is the shape of that path
+(`FormalConjectures.MovingSofa.GerversSofa.ABφθSpec` in `MovingSofaBridge/Defs.lean`); they are
+found here by Newton's method in 40-digit arithmetic. Romik's parameters are rebuilt from them by
+the formulas of `MovingSofaBridge.GerverConstants.toRomik`, and Romik's rotation path is glued from
+the five phases `Baek.GerverParams.x₁`, ..., `x₅`. Gerver's sofa is the shape of that path
 (`Baek.shapeOfPath`):
 
     S = H ∩ ⋂_{t ∈ [0, π/2]} (x(t) + R_t L) ∩ (x(π/2) + R_{π/2} V).

@@ -2,8 +2,7 @@ name = "MovingSofa"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["MovingSofaOptimality", "MovingSofaUniqueness", "MovingSofaBridge",
-  "MovingSofaStability", "MovingSofaExtremal", "ChallengeDefs", "SolutionCoercive",
-  "CertificateDefs", "CertificateProof", "Challenge", "Solution", "BaekEntry"]
+  "MovingSofaStability", "MovingSofaExtremal", "Challenge", "Solution", "BaekEntry"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -25,7 +24,9 @@ globs = ["MovingSofaOptimality.+"]
 name = "MovingSofaUniqueness"
 globs = ["MovingSofaUniqueness.+"]
 
-# The bridge between the definitions of formal-conjectures and those of Baek's paper.
+# The bridge between the definitions of formal-conjectures and those of Baek's paper, and the
+# definitions that both Challenges copy verbatim (MovingSofaBridge.Defs,
+# scripts/sync_challenge_defs.py).
 [[lean_lib]]
 name = "MovingSofaBridge"
 globs = ["MovingSofaBridge.+"]
@@ -35,32 +36,17 @@ globs = ["MovingSofaBridge.+"]
 name = "MovingSofaStability"
 globs = ["MovingSofaStability.+"]
 
-# Optimality, uniqueness and stability from the coercive certificate of MovingSofaStability.
+# Optimality, uniqueness and stability from the coercive certificate of MovingSofaStability, and the
+# proofs of the certificate entry: fifteen of its theorems, in the namespace CoerciveSolution
+# (MovingSofaExtremal.Statements), the certificate's definitions that Challenge.lean copies verbatim
+# (MovingSofaExtremal.CertificateDefs), and its two theorems about the certificate
+# (MovingSofaExtremal.Certificate).
 [[lean_lib]]
 name = "MovingSofaExtremal"
 globs = ["MovingSofaExtremal.+"]
 
-# The definitions that both Challenges copy verbatim (scripts/sync_challenge_defs.py).
-[[lean_lib]]
-name = "ChallengeDefs"
-
 # The certificate entry (comparator.json), at the root: optimality, uniqueness and stability through
-# the coercive certificate.
-# Fifteen of its theorems, in the namespace CoerciveSolution: optimality, uniqueness and stability
-# through MovingSofaExtremal.
-[[lean_lib]]
-name = "SolutionCoercive"
-
-# The definitions that Challenge.lean copies verbatim, after those of ChallengeDefs
-# (scripts/sync_challenge_defs.py).
-[[lean_lib]]
-name = "CertificateDefs"
-
-# The two theorems about the certificate, proved from MovingSofaStability.
-[[lean_lib]]
-name = "CertificateProof"
-
-# The seventeen statements of the certificate entry, in Mathlib's vocabulary only.
+# the coercive certificate. Its seventeen statements, in Mathlib's vocabulary only.
 [[lean_lib]]
 name = "Challenge"
 

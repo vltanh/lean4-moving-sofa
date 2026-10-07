@@ -9,18 +9,13 @@ certificate entry for the Palomar registry, and [`baek/`](../baek) those of Baek
 | --- | --- |
 | [`MovingSofaOptimality/`](../MovingSofaOptimality) | Baek's paper: its numbered results (the report's Section 9 lists the few left out), the results it cites, and the structure of Gerver's sofa |
 | [`MovingSofaUniqueness/`](../MovingSofaUniqueness) | the uniqueness of Gerver's sofa, with Baek's definitions |
-| [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's |
+| [`MovingSofaBridge/`](../MovingSofaBridge) | the bridge between formal-conjectures' definitions and Baek's, and the definitions that the two Challenges copy |
 | [`MovingSofaStability/`](../MovingSofaStability) | the stability of Gerver's sofa, with Baek's definitions, and the punctured sofas that show its exponent is optimal |
-| [`MovingSofaExtremal/`](../MovingSofaExtremal) | the coercive route: optimality and uniqueness from one certificate of the stability proof |
-| [`ChallengeDefs.lean`](../ChallengeDefs.lean) | Baek's and formal-conjectures' definitions, which the two Challenges copy |
+| [`MovingSofaExtremal/`](../MovingSofaExtremal) | the coercive route: optimality and uniqueness from one certificate of the stability proof, and the proofs of the certificate entry |
 | [`Challenge.lean`](../Challenge.lean), [`Solution.lean`](../Solution.lean) | the certificate entry: its seventeen statements of record, and the same theorems under the Challenge's names, proved through the certificate; no module imports [`Solution.lean`](../Solution.lean) |
 | [`comparator.json`](../comparator.json), [`formalization.yaml`](../formalization.yaml) | the certificate entry: Comparator's configuration and the Palomar metadata |
-| [`CertificateDefs.lean`](../CertificateDefs.lean) | the definitions of the certificate's statements, which [`Challenge.lean`](../Challenge.lean) copies |
-| [`CertificateProof.lean`](../CertificateProof.lean) | the two theorems about the certificate in these definitions, proved from [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) and [`MovingSofaStability.wideGerver_value`](../MovingSofaStability/Deficit.lean#L350), and the lemmas that identify the definitions with the libraries' |
-| [`SolutionCoercive.lean`](../SolutionCoercive.lean) | fifteen theorems of the certificate entry, the twelve of Baek's entry and the three stability theorems, proved through the coercive route in the namespace `CoerciveSolution` |
-| [`baek/`](../baek) | Baek's entry: its twelve statements of record ([`baek/Challenge.lean`](../baek/Challenge.lean)), their proofs through Baek's Theorem 1.1.1 and the first proof of uniqueness ([`baek/Solution.lean`](../baek/Solution.lean)), Comparator's configuration ([`baek/comparator.json`](../baek/comparator.json)) and the Palomar metadata ([`baek/formalization.yaml`](../baek/formalization.yaml)) |
-| [`REPORT.md`](../REPORT.md) | the audit of Baek's paper against its LaTeX source and the formalization |
-| [`CREDITS.md`](../CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
+| [`baek/`](../baek) | Baek's entry: its twelve statements of record ([`baek/Challenge.lean`](../baek/Challenge.lean)), their proofs through Baek's Theorem 1.1.1 and the first proof of uniqueness ([`baek/Solution.lean`](../baek/Solution.lean)), Comparator's configuration ([`baek/comparator.json`](../baek/comparator.json)) and the Palomar metadata ([`baek/formalization.yaml`](../baek/formalization.yaml)); and the audit of Baek's paper against its LaTeX source and the formalization ([`baek/REPORT.md`](../baek/REPORT.md)) |
+| [`docs/CREDITS.md`](CREDITS.md) | how the formalization was made: who, by which procedure, and the time and effort of each round |
 | [`docs/proof/`](proof/README.md) | the illustrated text of the proofs, with its figures |
 | [`docs/paper/`](paper/README.md) | the arXiv manuscript of the uniqueness of Gerver's sofa, with its figures and Makefile |
 | [`docs/archive/`](archive) | earlier documents: the first map of the uniqueness proof, and ChatGPT Pro 6's notes on the uniqueness, the stability and the coercive route |
@@ -92,6 +87,7 @@ prove the theorem again from it (a remark at the end of Section 8 of the [manusc
 | --- | --- |
 | [`MovingSofaBridge/GerverConstants.lean`](../MovingSofaBridge/GerverConstants.lean) | Gerver's four constants are unique, by elementary inequalities |
 | [`MovingSofaBridge/RomikParams.lean`](../MovingSofaBridge/RomikParams.lean) | Gerver's four constants and Romik's parameters; the constants exist |
+| [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | the definitions of the statements of record, Baek's (with the terms of the stability theorems) and formal-conjectures', in marked blocks that the two Challenges copy ([Definitions](definitions.md)), and the proof that Gerver's four constants exist and are unique |
 | [`MovingSofaBridge/Motion.lean`](../MovingSofaBridge/Motion.lean) | the two notions of moving sofa agree, and so do the two optimal areas |
 | [`MovingSofaBridge/GerverSofa.lean`](../MovingSofaBridge/GerverSofa.lean) | the two Gerver's sofas are the same set |
 
@@ -116,14 +112,18 @@ prove the theorem again from it (a remark at the end of Section 8 of the [manusc
 
 ### `MovingSofaExtremal/`: the coercive route
 
-[The coercive route](coercive.md) describes the theorems and the proof. The library imports the stability library up to
-`CapEstimate`, and the stability library's `Recovery` and `Global` import its `Main`:
+[The coercive route](coercive.md) describes the theorems and the proof. Its `Main` imports the stability library up to
+`CapEstimate`, and the stability library's `Recovery` and `Global` import `Main`. The last three modules hold the
+proofs of the certificate entry:
 
 | Module | Content |
 | --- | --- |
 | [`MovingSofaExtremal/Main.lean`](../MovingSofaExtremal/Main.lean) | the value and the shape of the maximizing right-angle caps from the coercive certificate, and optimality and uniqueness from them, through the assembly of [`MovingSofaUniqueness/Maximizing.lean`](../MovingSofaUniqueness/Maximizing.lean) |
 | [`MovingSofaExtremal/Unified.lean`](../MovingSofaExtremal/Unified.lean) | optimality, uniqueness and stability in one theorem |
 | [`MovingSofaExtremal/All.lean`](../MovingSofaExtremal/All.lean) | imports all the others |
+| [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) | the definitions of the certificate's statements, which [`Challenge.lean`](../Challenge.lean) copies |
+| [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) | the two theorems about the certificate in these definitions, proved from [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) and [`MovingSofaStability.wideGerver_value`](../MovingSofaStability/Deficit.lean#L350), and the lemmas that identify the definitions with the libraries' |
+| [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) | fifteen theorems of the certificate entry, the twelve of Baek's entry and the three stability theorems, proved through the coercive route in the namespace `CoerciveSolution` |
 
 ### `scripts/`
 
@@ -131,7 +131,7 @@ prove the theorem again from it (a remark at the end of Section 8 of the [manusc
 | --- | --- |
 | [`scripts/Audit.lean`](../scripts/Audit.lean) | the axiom and dependency audit, which also records the route of every result of the paper |
 | [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) | checks that the second proof of optimality uses neither Baek's Theorem 1.1.1, nor the results from which Baek derives the right-angle motion and the injectivity condition of Baek's cap from its balance, nor [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) |
-| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the proofs of the certificate entry (the coercive route, the stability library, [`SolutionCoercive.lean`](../SolutionCoercive.lean) and the certificate's modules) use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that the twelve theorems that [`SolutionCoercive.lean`](../SolutionCoercive.lean) shares with [`baek/Solution.lean`](../baek/Solution.lean) have the same statements |
+| [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) | checks that the proofs of the certificate entry (the modules of [`MovingSofaExtremal/`](../MovingSofaExtremal) and of the stability library) use neither Baek's Theorem 1.1.1, nor the results of his balance argument, nor the first proof of uniqueness, that optimality and uniqueness do not use stability, and that the twelve theorems that [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) shares with [`baek/Solution.lean`](../baek/Solution.lean) have the same statements |
 | [`scripts/route_check.py`](../scripts/route_check.py), [`docs/paper_routes.tsv`](paper_routes.tsv), [`docs/route_differences.tsv`](route_differences.tsv) | the route check: the results that each of Baek's proofs cites (extracted from the paper's LaTeX source), and the reviewed differences from the Lean proofs, each with its reason |
 | [`scripts/romik/`](../scripts/romik), [`scripts/area/`](../scripts/area) | the generators of the two Lean files of interval arithmetic |
 | [`scripts/figures/`](../scripts/figures) | the figures of the text: the geometry of Gerver's sofa (`gerver.py`), the drawing helpers (`sofa_figures.py`), one module per chapter, and `make_all.py` |

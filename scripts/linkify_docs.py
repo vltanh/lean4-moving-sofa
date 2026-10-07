@@ -31,14 +31,13 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process (glob patterns; docs/archive/ is left as it was).
-DOCS = ['README.md', 'REPORT.md', 'CREDITS.md', 'docs/*.md', 'docs/proof/*.md']
+DOCS = ['README.md', 'baek/REPORT.md', 'docs/*.md', 'docs/proof/*.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['MovingSofaOptimality', 'MovingSofaOptimality.GerverParams', 'MovingSofaUniqueness',
               'MovingSofaBridge', 'MovingSofaBridge.GerverConstants', 'MovingSofaStability']
 # Top-level module names of the project: a code span naming such a module links to its file.
 MODULE_ROOTS = ('MovingSofaOptimality', 'MovingSofaUniqueness', 'MovingSofaBridge', 'MovingSofaStability',
-                'MovingSofaExtremal', 'ChallengeDefs', 'Challenge', 'Solution', 'SolutionCoercive',
-                'CertificateDefs', 'CertificateProof', 'baek')
+                'MovingSofaExtremal', 'Challenge', 'Solution', 'baek')
 # The modules whose declarations win when a name is declared in several modules, the first
 # winning over the second: the Challenges of the two Palomar entries, the certificate entry's at
 # the root and Baek's entry's in baek/.

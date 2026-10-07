@@ -99,9 +99,8 @@ and at small deficit it bounds the distance.
 ## What the route does not use
 
 [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) follows the proofs through the bodies of all repository declarations, private and
-generated ones included. It checks that none of the 867 declarations of [`MovingSofaExtremal`](../MovingSofaExtremal),
-[`MovingSofaStability`](../MovingSofaStability), [`SolutionCoercive`](../SolutionCoercive.lean), [`CertificateDefs`](../CertificateDefs.lean) and [`CertificateProof`](../CertificateProof.lean) reaches Baek's
-Theorem 1.1.1, the results of his balance argument (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3,
+generated ones included. It checks that none of the 867 declarations of [`MovingSofaExtremal`](../MovingSofaExtremal), which holds the
+proofs of the certificate entry, and of [`MovingSofaStability`](../MovingSofaStability) reaches Baek's Theorem 1.1.1, the results of his balance argument (Theorems 1.5.2, 4.1.2, 4.1.4, 4.2.5, 6.1.1, 6.3.3, 6.4.3,
 6.5.6, Corollary 6.4.4 and Theorem 8.1.1 (2)), a declaration of the first proof of uniqueness ([`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean), [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean)) or of the second proof of
 optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or the Solution of Baek's entry ([`baek.Solution`](../baek/Solution.lean)); that all use only the
 standard axioms; that the optimality and uniqueness of the route ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean), [`MovingSofaExtremal.Main`](../MovingSofaExtremal/Main.lean)) do not
@@ -124,39 +123,39 @@ The Palomar entry at the root of the repository, not registered yet, states the 
 and proves them through the route. Its Challenge, [`Challenge.lean`](../Challenge.lean), states seventeen theorems: the twelve of Baek's
 entry ([`baek/Challenge.lean`](../baek/Challenge.lean)), the three stability theorems, the certificate and the theorem that Gerver's triple meets
 the certificate's hypothesis ([Results](results.md)). Baek's functional
-`𝒬`, the enlarged domain of triples and Gerver's cap are defined in [`CertificateDefs.lean`](../CertificateDefs.lean) and copied into the
+`𝒬`, the enlarged domain of triples and Gerver's cap are defined in [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) and copied into the
 Challenge ([Definitions](definitions.md#the-certificates-definitions)). [`comparator.json`](../comparator.json) is the entry's Comparator configuration, and
 [`formalization.yaml`](../formalization.yaml) its metadata.
 
-- [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves fifteen of the seventeen theorems through the route, in the namespace
+- [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves fifteen of the seventeen theorems through the route, in the namespace
   `CoerciveSolution`: optimality and uniqueness from [`MovingSofaExtremal`](../MovingSofaExtremal), the first two stability theorems from
   [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38), the third from the punctured sofas of [`MovingSofaStability.Sharpness`](../MovingSofaStability/Sharpness.lean), and the
   bridge to formal-conjectures as in [`baek/Solution.lean`](../baek/Solution.lean). The audit checks that the twelve theorems that it shares
   with [`baek/Solution.lean`](../baek/Solution.lean) have exactly the types of the matching theorems of [`baek/Solution.lean`](../baek/Solution.lean), for example
-  [`CoerciveSolution.formal_volume_eq_sofaConstant_iff_congruent_gerversSofa`](../SolutionCoercive.lean#L154) for formal-conjectures' open statement.
-- [`CertificateProof.lean`](../CertificateProof.lean) proves the two theorems about the certificate, from
+  [`CoerciveSolution.formal_volume_eq_sofaConstant_iff_congruent_gerversSofa`](../MovingSofaExtremal/Statements.lean#L154) for formal-conjectures' open statement.
+- [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) proves the two theorems about the certificate, from
   [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120) and [`MovingSofaStability.wideGerver_value`](../MovingSofaStability/Deficit.lean#L350), with lemmas that identify each definition of
-  [`CertificateDefs.lean`](../CertificateDefs.lean) with the library's, such as [`Certificate.upperQ_eq_lib`](../CertificateProof.lean#L146).
+  [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) with the library's, such as [`Certificate.upperQ_eq_lib`](../MovingSofaExtremal/Certificate.lean#L147).
 - [`Solution.lean`](../Solution.lean), the entry's Solution, states fourteen of the theorems under the Challenge's names, each proved by
-  the matching theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean); `ABφθSpec.existsUnique` is proved in [`ChallengeDefs.lean`](../ChallengeDefs.lean), for both
-  entries, and the two theorems about the certificate in [`CertificateProof.lean`](../CertificateProof.lean). It declares the names that
-  [`baek/Solution.lean`](../baek/Solution.lean) declares, so no module imports it, and the audits read [`SolutionCoercive.lean`](../SolutionCoercive.lean) and
-  [`CertificateProof.lean`](../CertificateProof.lean) instead.
+  the matching theorem of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean); `ABφθSpec.existsUnique` is proved in [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean), for both
+  entries, and the two theorems about the certificate in [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean). It declares the names that
+  [`baek/Solution.lean`](../baek/Solution.lean) declares, so no module imports it, and the audits read [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) and
+  [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) instead.
 
 Comparator checks [`Solution.lean`](../Solution.lean) against [`Challenge.lean`](../Challenge.lean), as it checks [`baek/Solution.lean`](../baek/Solution.lean) against
 [`baek/Challenge.lean`](../baek/Challenge.lean) for Baek's entry ([verification](verification.md#comparator)).
 
 ## The Lean code and the pull request
 
-ChatGPT Pro 6 wrote the route, the module `MamikonFoundation`, [`SolutionCoercive`](../SolutionCoercive.lean) with twelve statements,
-and the audit, without compiling or running them. One proof did not compile (a `change` in
+ChatGPT Pro 6 wrote the route, the module `MamikonFoundation`, a second solution with twelve statements (now
+[`MovingSofaExtremal.Statements`](../MovingSofaExtremal/Statements.lean)), and the audit, without compiling or running them. One proof did not compile (a `change` in
 `HorizontalTranslation` whose two sides are not definitionally equal, now a rewrite) and one linter
 warning remained. The pull request left one step for later, which was done here: the certificate is now
 one theorem; the route proves that no rotation is needed; the stability library takes its four uses of
 the earlier proofs (the sign of the deficit, the compactness step, the pinned maximizer, and the lemma
 that a moving sofa lies in a strip of height one, now in [`MovingSofaUniqueness/Rigid.lean`](../MovingSofaUniqueness/Rigid.lean)) from the route
 or from neutral modules, and its local estimate from the certificate; the packaged theorem states the
-three results; [`SolutionCoercive`](../SolutionCoercive.lean) covers fifteen statements, the twelve and the three stability theorems; and the
+three results; the second solution covers fifteen statements, the twelve and the three stability theorems; and the
 audit was rewritten for the whole route and run. The pull request's notes, written before the compilation, are in
 [`docs/archive/coercive/`](archive/coercive).
 

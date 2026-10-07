@@ -28,7 +28,7 @@ from pathlib import Path
 BAEK_CORE = ('-- BEGIN BAEK CORE DEFINITIONS\n', '-- END BAEK CORE DEFINITIONS\n')
 BAEK_STABILITY = ('-- BEGIN BAEK STABILITY DEFINITIONS\n', '-- END BAEK STABILITY DEFINITIONS\n')
 # Formal-conjectures' definitions. Between the two blocks, the Challenges state
-# `ABφθSpec.existsUnique` and `ChallengeDefs` proves it.
+# `ABφθSpec.existsUnique` and `MovingSofaBridge.Defs` proves it.
 SHARED_1 = ('-- BEGIN SHARED DEFINITIONS 1\n', '-- END SHARED DEFINITIONS 1\n')
 SHARED_2 = ('-- BEGIN SHARED DEFINITIONS 2\n', '-- END SHARED DEFINITIONS 2\n')
 CERTIFICATE = ('-- BEGIN CERTIFICATE DEFINITIONS\n', '-- END CERTIFICATE DEFINITIONS\n')
@@ -36,11 +36,12 @@ CERTIFICATE = ('-- BEGIN CERTIFICATE DEFINITIONS\n', '-- END CERTIFICATE DEFINIT
 # blocks. The blocks of each Challenge appear in it in the order of this list.
 COPIES = [
     # The certificate entry (comparator.json), at the root. The certificate's block comes after all
-    # the blocks of ChallengeDefs, as `CertificateDefs` assumes.
-    ('ChallengeDefs.lean', 'Challenge.lean', [BAEK_CORE, BAEK_STABILITY, SHARED_1, SHARED_2]),
-    ('CertificateDefs.lean', 'Challenge.lean', [CERTIFICATE]),
+    # the blocks of MovingSofaBridge/Defs.lean, as `MovingSofaExtremal.CertificateDefs` assumes.
+    ('MovingSofaBridge/Defs.lean', 'Challenge.lean',
+     [BAEK_CORE, BAEK_STABILITY, SHARED_1, SHARED_2]),
+    ('MovingSofaExtremal/CertificateDefs.lean', 'Challenge.lean', [CERTIFICATE]),
     # Baek's entry (baek/comparator.json).
-    ('ChallengeDefs.lean', 'baek/Challenge.lean', [BAEK_CORE, SHARED_1, SHARED_2]),
+    ('MovingSofaBridge/Defs.lean', 'baek/Challenge.lean', [BAEK_CORE, SHARED_1, SHARED_2]),
 ]
 # ---------------------------------------------------------------------------------------------
 

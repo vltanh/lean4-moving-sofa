@@ -538,7 +538,7 @@ only at $t$ (Lemma 11.15). The weights $w(t)$ in (11.2) add up to at most one, w
 ## 11.7 Pinned normals
 
 In this section $\omega < \pi/2$. Every polygon cap $K$ of angle $\omega$ then contains the origin
-$O$, so $h_K \ge 0$ (REPORT.md, E4). It also contains the corner $o_\omega$ of $P_\omega$, where
+$O$, so $h_K \ge 0$ (baek/REPORT.md, E4). It also contains the corner $o_\omega$ of $P_\omega$, where
 the lines $l(\omega, 1)$ and $l(\pi/2, 1)$ meet ([§4.5](04-balanced.md#45-maximum-polygon-caps)); so
 $o_\omega \cdot u_s = 1$ for $s \in \lbrace \omega, \pi/2 \rbrace$.
 

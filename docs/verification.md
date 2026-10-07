@@ -24,13 +24,13 @@ alone.
 
 - `lake build` must succeed, and its only warnings are the seventeen `declaration uses 'sorry'` of
   [`Challenge.lean`](../Challenge.lean) and the twelve of [`baek/Challenge.lean`](../baek/Challenge.lean), whose theorems are the statements of record.
-- [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the five libraries and of
-  [`ChallengeDefs.lean`](../ChallengeDefs.lean), [`SolutionCoercive.lean`](../SolutionCoercive.lean), [`CertificateDefs.lean`](../CertificateDefs.lean) and [`CertificateProof.lean`](../CertificateProof.lean) (5,992 declarations), and
+- [`scripts/Audit.lean`](../scripts/Audit.lean) collects the axioms of every declaration of the five libraries (5,992 declarations),
+  which hold the definitions that the Challenges copy and the proofs of the certificate entry too, and
   of the theorems that Comparator checks: the certificate entry's two theorems about the certificate, and the twelve
   of Baek's entry, as [`baek/Solution.lean`](../baek/Solution.lean) proves them. Fourteen other theorems of the certificate entry are
-  restatements, in [`Solution.lean`](../Solution.lean), of theorems of [`SolutionCoercive.lean`](../SolutionCoercive.lean), whose declarations the audit checks;
+  restatements, in [`Solution.lean`](../Solution.lean), of theorems of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), whose declarations the audit checks;
   it cannot import [`Solution.lean`](../Solution.lean), which declares the names of [`baek/Solution.lean`](../baek/Solution.lean). The seventeenth,
-  `ABφθSpec.existsUnique`, is the theorem of [`ChallengeDefs.lean`](../ChallengeDefs.lean) that Baek's entry uses too. The audit fails unless
+  `ABφθSpec.existsUnique`, is the theorem of [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) that Baek's entry uses too. The audit fails unless
   each one uses only the three standard axioms: an unproved lemma would add `sorryAx`, and `native_decide`, which
   trusts the compiler,
   `Lean.ofReduceBool`. It also prints, for each numbered result of Baek's paper, each step of the
@@ -46,7 +46,7 @@ alone.
   paper's LaTeX source by `route_check.py extract`). It fails on any difference that
   [`docs/route_differences.tsv`](route_differences.tsv) does not record with its reason: a result
   that the paper uses without citing it, a citation made only in passing, or a departure from the
-  paper's proof, which [`REPORT.md`](../REPORT.md) lists with its reason (Section 7).
+  paper's proof, which [`baek/REPORT.md`](../baek/REPORT.md) lists with its reason (Section 7).
 - [`scripts/AuditMaximizerRoute.lean`](../scripts/AuditMaximizerRoute.lean) checks the second proof of Baek's optimality theorem, in
   [`MovingSofaUniqueness/Maximizing.lean`](../MovingSofaUniqueness/Maximizing.lean) and [`MovingSofaUniqueness/MaximizerRoute.lean`](../MovingSofaUniqueness/MaximizerRoute.lean) (a remark at the end of Section 8 of the
   [manuscript](paper/README.md)), 35 declarations. It fails if a declaration of these modules uses an axiom other than the three
@@ -56,9 +56,9 @@ alone.
   Corollary 6.4.4 and Theorem 8.1.1 (2)), or a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean). Negative controls
   check that the traversal finds these results in the first proof.
 - [`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) checks the proofs of the certificate entry ([the coercive route](coercive.md)): every
-  declaration of [`MovingSofaExtremal/`](../MovingSofaExtremal), [`MovingSofaStability/`](../MovingSofaStability), [`SolutionCoercive.lean`](../SolutionCoercive.lean), [`CertificateDefs.lean`](../CertificateDefs.lean) and
-  [`CertificateProof.lean`](../CertificateProof.lean), 867 with the private and generated ones. It fails if one of them uses an axiom other
-  than the three standard ones, or if, following the proofs through all the repository's declarations, it
+  declaration of [`MovingSofaExtremal/`](../MovingSofaExtremal), which holds the certificate entry's proofs, and of [`MovingSofaStability/`](../MovingSofaStability), 867 with
+  the private and generated ones. It fails if one of them uses an axiom other than the three standard ones, or
+  if, following the proofs through all the repository's declarations, it
   reaches Baek's Theorem 1.1.1, the results of his balance argument listed above, a declaration of [`MovingSofaUniqueness.Main`](../MovingSofaUniqueness/Main.lean) or [`MovingSofaUniqueness.Rigidity`](../MovingSofaUniqueness/Rigidity.lean) (the first proof of
   uniqueness), of the second proof of optimality ([`MovingSofaUniqueness.MaximizerRoute`](../MovingSofaUniqueness/MaximizerRoute.lean)), or of [`baek/Solution.lean`](../baek/Solution.lean). It also fails if
   one of the 41 declarations of the route's optimality and uniqueness ([`MovingSofaUniqueness.Maximizing`](../MovingSofaUniqueness/Maximizing.lean),
@@ -66,20 +66,20 @@ alone.
   ([`MovingSofaStability.Margins`](../MovingSofaStability/Margins.lean) and the ten modules that import it),
   if one of twenty-two positive controls is missing (for example, that the uniqueness reaches the certificate
   [`MovingSofaStability.coercive_certificate`](../MovingSofaStability/CapEstimate.lean#L1120), and that the certificate entry's statement of the certificate does too), if one of
-  eight negative controls fails, or if one of the twelve theorems that [`SolutionCoercive.lean`](../SolutionCoercive.lean) shares with
+  eight negative controls fails, or if one of the twelve theorems that [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) shares with
   [`baek/Solution.lean`](../baek/Solution.lean) does not have exactly the statement of the theorem of [`baek/Solution.lean`](../baek/Solution.lean) that it restates.
 - `scripts/sync_challenge_defs.py --check` checks that the Challenges copy marked blocks of definitions word for
-  word (without `--check`, it copies them): [`Challenge.lean`](../Challenge.lean) four blocks of [`ChallengeDefs.lean`](../ChallengeDefs.lean), Baek's core
+  word (without `--check`, it copies them): [`Challenge.lean`](../Challenge.lean) four blocks of [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean), Baek's core
   definitions, the definitions of the stability theorems and formal-conjectures' two blocks, and the block of
-  [`CertificateDefs.lean`](../CertificateDefs.lean); [`baek/Challenge.lean`](../baek/Challenge.lean) the same blocks of [`ChallengeDefs.lean`](../ChallengeDefs.lean) except the stability
+  [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean); [`baek/Challenge.lean`](../baek/Challenge.lean) the same blocks of [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) except the stability
   block ([Definitions](definitions.md)). The Challenges may import only Mathlib, and Comparator compares constants by
   name, so the Solutions state their theorems with the constants of
-  [`ChallengeDefs`](../ChallengeDefs.lean), which the bridge library uses too, and of [`CertificateDefs`](../CertificateDefs.lean). The script also checks that each
+  [`MovingSofaBridge.Defs`](../MovingSofaBridge/Defs.lean), which the rest of the bridge library uses too, and of [`MovingSofaExtremal.CertificateDefs`](../MovingSofaExtremal/CertificateDefs.lean). The script also checks that each
   Challenge holds its blocks in the order in which the script lists them: Lean names the auxiliary theorems that it
   makes from proofs inside definitions after the first definition that needs them in a module, so a block must
-  follow the same blocks in the Challenge as in the library. [`CertificateDefs.lean`](../CertificateDefs.lean) starts with a command that gives
+  follow the same blocks in the Challenge as in the library. [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) starts with a command that gives
   Lean's cache of auxiliary theorems the state it has in [`Challenge.lean`](../Challenge.lean) after the blocks of
-  [`ChallengeDefs.lean`](../ChallengeDefs.lean), so that its block elaborates to the same terms in both.
+  [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean), so that its block elaborates to the same terms in both.
 
 ## Comparator
 
@@ -91,12 +91,12 @@ kernel. Each of the two configurations must end with `Your solution is okay!`:
   [`Challenge.lean`](../Challenge.lean).
 - [`baek/comparator.json`](../baek/comparator.json), Baek's entry: [`baek/Solution.lean`](../baek/Solution.lean) proves the twelve statements of [`baek/Challenge.lean`](../baek/Challenge.lean).
 
-[`SolutionCoercive.lean`](../SolutionCoercive.lean) proves fifteen theorems of the certificate entry in the namespace `CoerciveSolution`, so that
+[`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves fifteen theorems of the certificate entry in the namespace `CoerciveSolution`, so that
 the audits can load it together with [`baek/Solution.lean`](../baek/Solution.lean). [`Solution.lean`](../Solution.lean) states fourteen of them under the
-Challenge's names, each proved by the matching theorem of [`SolutionCoercive.lean`](../SolutionCoercive.lean), and takes
-`ABφθSpec.existsUnique` from [`ChallengeDefs.lean`](../ChallengeDefs.lean) and the two theorems about the certificate from
-[`CertificateProof.lean`](../CertificateProof.lean). It declares the names that [`baek/Solution.lean`](../baek/Solution.lean) declares, so no module imports it.
-[`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) also checks that the twelve theorems that [`SolutionCoercive.lean`](../SolutionCoercive.lean) shares with
+Challenge's names, each proved by the matching theorem of [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean), and takes
+`ABφθSpec.existsUnique` from [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) and the two theorems about the certificate from
+[`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean). It declares the names that [`baek/Solution.lean`](../baek/Solution.lean) declares, so no module imports it.
+[`scripts/AuditCoerciveRoute.lean`](../scripts/AuditCoerciveRoute.lean) also checks that the twelve theorems that [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) shares with
 [`baek/Solution.lean`](../baek/Solution.lean) have exactly the same statements.
 
 ## Continuous integration and the Palomar preflight
@@ -130,7 +130,7 @@ The pages of [`docs/`](.) and [`docs/proof/`](proof/README.md) link every Lean n
 `python3 scripts/linkify_docs.py` refreshes the links from the `.ilean` files that `lake build`
 writes, and warns about a name that matches no declaration or several; CI runs it with `--check`. A name that a
 Challenge and a Solution both declare links to the Challenge, the root's [`Challenge.lean`](../Challenge.lean) before [`baek/Challenge.lean`](../baek/Challenge.lean).
-`python3 scripts/check_md_tables.py README.md REPORT.md CREDITS.md docs/*.md docs/proof/*.md` finds table rows
+`python3 scripts/check_md_tables.py README.md baek/REPORT.md docs/*.md docs/proof/*.md` finds table rows
 that a `|` inside a cell would break. [`docs/archive/`](archive) is kept as it was.
 
 `python3 scripts/figures/make_all.py` redraws every figure of the text, in

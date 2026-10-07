@@ -4,12 +4,13 @@ and of Appendix A (Gerver's four constants), in docs/proof/figures/appendix-a/.
 
     python3 scripts/figures/fig_bridge.py
 
-Formal-conjectures' Gerver's sofa is computed from its own definitions (`ChallengeDefs.lean`): the
-radius `GerversSofa.r`, the integrals `GerversSofa.x`, `GerversSofa.y` and the path
-`GerversSofa.p`, from Gerver's four constants (gerver.py). The script checks the facts that the
-captions state: rotating formal-conjectures' path by the angle gives Romik's path (gerver.path),
-the integrals are the coordinates of Romik's contact points, the moving sets stay in the hallway,
-and the residuals of Appendix A vanish at Gerver's constants with the signs the appendix proves.
+Formal-conjectures' Gerver's sofa is computed from its own definitions
+(`MovingSofaBridge/Defs.lean`): the radius `GerversSofa.r`, the integrals `GerversSofa.x`,
+`GerversSofa.y` and the path `GerversSofa.p`, from Gerver's four constants (gerver.py). The script
+checks the facts that the captions state: rotating formal-conjectures' path by the angle gives
+Romik's path (gerver.path), the integrals are the coordinates of Romik's contact points, the moving
+sets stay in the hallway, and the residuals of Appendix A vanish at Gerver's constants with the
+signs the appendix proves.
 """
 import math
 

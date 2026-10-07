@@ -10,19 +10,19 @@ certificate, `Certificate`, which only the certificate entry uses. The bridge th
 ([Results](results.md#the-bridge)) show that the first two describe the same objects.
 
 The Challenges may import only Mathlib, so they copy their definitions verbatim from marked blocks of two modules
-of the project ([`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py)):
+of the libraries ([`scripts/sync_challenge_defs.py`](../scripts/sync_challenge_defs.py)):
 
 | Block | Module | Definitions | [`Challenge.lean`](../Challenge.lean) (the certificate entry) | [`baek/Challenge.lean`](../baek/Challenge.lean) (Baek's entry) |
 | --- | --- | --- | --- | --- |
-| `BAEK CORE DEFINITIONS` | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | Baek's, up to Gerver's sofa | yes | yes |
-| `BAEK STABILITY DEFINITIONS` | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | the terms of the stability theorems | yes | no |
-| `SHARED DEFINITIONS 1` and `2` | [`ChallengeDefs.lean`](../ChallengeDefs.lean) | formal-conjectures' | yes | yes |
-| `CERTIFICATE DEFINITIONS` | [`CertificateDefs.lean`](../CertificateDefs.lean) | the certificate's | yes | no |
+| `BAEK CORE DEFINITIONS` | [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | Baek's, up to Gerver's sofa | yes | yes |
+| `BAEK STABILITY DEFINITIONS` | [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | the terms of the stability theorems | yes | no |
+| `SHARED DEFINITIONS 1` and `2` | [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean) | formal-conjectures' | yes | yes |
+| `CERTIFICATE DEFINITIONS` | [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) | the certificate's | yes | no |
 
-The bridge library and the Solutions use the constants of these modules, since Comparator compares constants by
-name. [`SolutionCoercive.lean`](../SolutionCoercive.lean) and [`baek/Solution.lean`](../baek/Solution.lean) prove that the definitions of the optimality library, which
-the uniqueness library uses too, agree with those of `Baek`; [`SolutionCoercive.lean`](../SolutionCoercive.lean) also proves that the
-libraries' forms of the stability terms agree with the Challenge's, and [`CertificateProof.lean`](../CertificateProof.lean) that the
+The Solutions, and the modules of the libraries that state the Challenges' theorems for them, use the constants of
+these modules, since Comparator compares constants by name. [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) and [`baek/Solution.lean`](../baek/Solution.lean) prove that the definitions of the optimality library, which
+the uniqueness library uses too, agree with those of `Baek`; [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) also proves that the
+libraries' forms of the stability terms agree with the Challenge's, and [`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) that the
 certificate's definitions agree with the libraries'.
 
 ## Baek's definitions
@@ -100,7 +100,7 @@ def gerverSofa (P : GerverParams) : Set (ℝ × ℝ) := shapeOfPath P.path
 The theorems [`Baek.gerver_params_exists`](../Challenge.lean#L664) and [`Baek.gerver_params_unique`](../Challenge.lean#L668) prove that the box holds exactly one solution, so
 Gerver's sofa is well defined, and [`Baek.gerver_sofa_area`](../Challenge.lean#L674) that its area lies between `2.2192` and `2.2199`, around
 Gerver's `2.21953…`. The definitions of `x₁`, …, `x₅`, [`IsSolution`](../MovingSofaOptimality/Gerver/Defs.lean#L93) and [`InBox`](../MovingSofaOptimality/Gerver/Defs.lean#L109) are in
-[`ChallengeDefs.lean`](../ChallengeDefs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
+[`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 10](proof/10-gerver.md) of the text explains them.
 
 ### Stability
 
@@ -135,7 +135,7 @@ def EuclideanClose (r : ℝ) (S T : Set (ℝ × ℝ)) : Prop :=
 ```
 
 The library states the same theorems with its own forms of these definitions: the normalization
-with support functions, and the distance through its Euclidean norm; [`SolutionCoercive.lean`](../SolutionCoercive.lean) proves that
+with support functions, and the distance through its Euclidean norm; [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean) proves that
 the two forms agree.
 
 ## Formal-conjectures' definitions
@@ -205,7 +205,7 @@ def sofaOfRotateTranslatePath (p : ℝ → ℝ²) : Set ℝ² :=
 def gerversSofa : Set ℝ² := sofaOfRotateTranslatePath GerversSofa.p
 ```
 
-The definitions of `r`, `x`, `y` and `p` are in [`ChallengeDefs.lean`](../ChallengeDefs.lean); [Chapter 13](proof/13-bridge.md) of
+The definitions of `r`, `x`, `y` and `p` are in [`MovingSofaBridge/Defs.lean`](../MovingSofaBridge/Defs.lean); [Chapter 13](proof/13-bridge.md) of
 the text explains them, and [Appendix A](proof/appendix-a.md) proves that the constants are unique.
 
 ## The two sets of definitions side by side
@@ -220,7 +220,7 @@ the text explains them, and [Appendix A](proof/appendix-a.md) proves that the co
 ## The certificate's definitions
 
 The certificate ([Results](results.md#the-certificate)), which only the certificate entry states, is an estimate for
-Baek's upper bound `𝒬`, a functional of a cap and two convex bodies. [`CertificateDefs.lean`](../CertificateDefs.lean) restates what it needs in the
+Baek's upper bound `𝒬`, a functional of a cap and two convex bodies. [`MovingSofaExtremal/CertificateDefs.lean`](../MovingSofaExtremal/CertificateDefs.lean) restates what it needs in the
 namespace `Certificate`, each definition with the body of the matching definition of [`MovingSofaOptimality`](../MovingSofaOptimality) or
 [`MovingSofaStability`](../MovingSofaStability), written with Mathlib and Baek's definitions above, except as said below:
 
@@ -259,6 +259,6 @@ surface area measure contains the library's proofs that `G_K` is monotone and ri
 cannot carry, so [`Certificate.sigma`](../Challenge.lean#L478) tests the two properties instead, and is Lebesgue measure when they fail, as
 the library's is on sets that are not convex bodies. The two agree on convex bodies, where the properties hold,
 but can differ on other sets: on `∅`, `G_K` is zero, and [`Certificate.sigma`](../Challenge.lean#L478) is the zero measure.
-[`CertificateProof.lean`](../CertificateProof.lean) proves that each definition is the library's: by definition, except [`Certificate.sigma`](../Challenge.lean#L478) and
+[`MovingSofaExtremal/Certificate.lean`](../MovingSofaExtremal/Certificate.lean) proves that each definition is the library's: by definition, except [`Certificate.sigma`](../Challenge.lean#L478) and
 [`Certificate.convexCurveArea`](../Challenge.lean#L536), which agree with the library's on convex bodies, and [`Certificate.upperQ`](../Challenge.lean#L603), which
 agrees with it when `B` and `D` are convex bodies, as they are in `T̄`.

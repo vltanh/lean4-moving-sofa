@@ -80,17 +80,17 @@ import all MovingSofaStability.Sharpness
 import all MovingSofaStability.Terminal
 import all MovingSofaStability.WideDomain
 import all MovingSofaExtremal.All
+import all MovingSofaExtremal.Certificate
+import all MovingSofaExtremal.CertificateDefs
 import all MovingSofaExtremal.Main
+import all MovingSofaExtremal.Statements
 import all MovingSofaExtremal.Unified
+import all MovingSofaBridge.Defs
 import all MovingSofaBridge.GerverConstants
 import all MovingSofaBridge.GerverSofa
 import all MovingSofaBridge.Motion
 import all MovingSofaBridge.RomikParams
-import all ChallengeDefs
 import all baek.Solution
-import all SolutionCoercive
-import all CertificateDefs
-import all CertificateProof
 
 /-!
 # Audit of the coercive route
@@ -98,11 +98,12 @@ import all CertificateProof
 `MovingSofaExtremal` proves optimality and uniqueness from the coercive certificate
 `MovingSofaStability.coercive_certificate`, and `MovingSofaStability` proves stability from the same
 certificate and from that uniqueness theorem. The certificate entry (`Challenge.lean`,
-`comparator.json`) is proved from them: `SolutionCoercive` proves fifteen of its theorems, with
-optimality, uniqueness and stability from these, and `CertificateProof` proves its two statements
-about the certificate, with the definitions of `CertificateDefs`. This script
-checks, for every declaration of `MovingSofaExtremal`, `MovingSofaStability`, `SolutionCoercive`,
-`CertificateDefs` and `CertificateProof`, private and generated ones included:
+`comparator.json`) is proved from them, in three more modules of `MovingSofaExtremal`:
+`MovingSofaExtremal.Statements` proves fifteen of its theorems, with optimality, uniqueness and
+stability from these, and `MovingSofaExtremal.Certificate` proves its two statements about the
+certificate, with the definitions of `MovingSofaExtremal.CertificateDefs`. This script checks, for
+every declaration of `MovingSofaExtremal` and `MovingSofaStability`, private and generated ones
+included:
 
 1. its axioms are among `propext`, `Classical.choice` and `Quot.sound`;
 2. its proof does not reach, through the proof bodies of any repository declarations, Baek's
@@ -113,10 +114,10 @@ checks, for every declaration of `MovingSofaExtremal`, `MovingSofaStability`, `S
 
 It also checks that the optimality and uniqueness theorems of the route do not reach the stability
 proof after the certificate (`MovingSofaStability.Margins` and the modules that import it; no
-circularity: the stability theorem uses uniqueness), that the route does use
-the certificate where it should (positive controls), that the old routes do reach what they are known
-to reach (negative controls, which show that the traversal sees proof bodies), and that the twelve
-theorems that `SolutionCoercive` shares with `baek/Solution.lean` (Baek's entry) have exactly the
+circularity: the stability theorem uses uniqueness), that the route does use the certificate where
+it should (positive controls), that the old routes do reach what they are known to reach (negative
+controls, which show that the traversal sees proof bodies), and that the twelve theorems that
+`MovingSofaExtremal.Statements` shares with `baek/Solution.lean` (Baek's entry) have exactly the
 types of the matching theorems of `baek/Solution.lean`. Comparator checks all seventeen theorems of
 the certificate entry against `Challenge.lean`, through the root's `Solution.lean`, which declares
 the names of `baek.Solution` and so cannot be imported here.
@@ -128,14 +129,12 @@ namespace CoerciveRouteAudit
 
 meta def isRepositoryModule (m : Name) : Bool :=
   [`MovingSofaOptimality, `MovingSofaUniqueness, `MovingSofaStability,
-    `MovingSofaExtremal, `MovingSofaBridge].any (·.isPrefixOf m) ||
-    m == `ChallengeDefs || m == `baek.Solution || m == `SolutionCoercive ||
-    m == `CertificateDefs || m == `CertificateProof
+    `MovingSofaExtremal, `MovingSofaBridge].any (·.isPrefixOf m) || m == `baek.Solution
 
-/-- The modules of the coercive route, all of whose declarations are audited. -/
+/-- The modules of the coercive route, all of whose declarations are audited; `MovingSofaExtremal`
+includes the proofs of the certificate entry. -/
 meta def auditedModule (m : Name) : Bool :=
-  (`MovingSofaExtremal).isPrefixOf m || (`MovingSofaStability).isPrefixOf m ||
-    m == `SolutionCoercive || m == `CertificateDefs || m == `CertificateProof
+  (`MovingSofaExtremal).isPrefixOf m || (`MovingSofaStability).isPrefixOf m
 
 /-- The modules whose declarations the route must not reach. -/
 meta def forbiddenModules : List Name :=
@@ -315,8 +314,8 @@ meta def negativeEdges : List (Name × Name) :=
    (``MovingSofaUniqueness.MaximizerRoute.right_angle_maximizer_eq_gerver,
       ``MovingSofaUniqueness.CapKernel.eq_horizontal_translation)]
 
-/-- The twelve theorems that both `baek/Solution.lean` (Baek's entry) and `SolutionCoercive.lean`
-(the certificate entry) state, with the same statements. -/
+/-- The twelve theorems that both `baek/Solution.lean` (Baek's entry) and
+`MovingSofaExtremal.Statements` (the certificate entry) state, with the same statements. -/
 meta def statementPairs : List (Name × Name) :=
   [(``Baek.gerver_params_exists, ``CoerciveSolution.gerver_params_exists),
    (``Baek.gerver_params_unique, ``CoerciveSolution.gerver_params_unique),
@@ -389,8 +388,8 @@ elab "#audit_coercive_route" : command => do
     Baek's Theorem 1.1.1, his balance results or the first proof of uniqueness; the \
     {core.size} declarations of optimality and uniqueness do not reach the global stability \
     layer ({upper.size} modules); {requiredEdges.length} positive and {negativeEdges.length + 1} \
-    negative controls passed; the {statementPairs.length} statements that SolutionCoercive shares \
-    with baek/Solution.lean agree."
+    negative controls passed; the {statementPairs.length} statements that \
+    MovingSofaExtremal.Statements shares with baek/Solution.lean agree."
 
 end CoerciveRouteAudit
 

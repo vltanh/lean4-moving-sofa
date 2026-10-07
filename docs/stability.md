@@ -18,7 +18,7 @@ Gerver's sofa `gerverSofa P`, and the definitions of moving sofas, caps and area
 The statements of record of the three main theorems are in the Challenge of the certificate entry, at the root of
 the repository, [`Challenge.lean`](../Challenge.lean), in Mathlib's vocabulary: [`Baek.gerver_sofa_stable`](../Challenge.lean#L697),
 [`Baek.gerver_sofa_angle_stable`](../Challenge.lean#L707) and [`Baek.gerver_sofa_stability_exponent`](../Challenge.lean#L717) ([Results](results.md#stability)). Baek's entry,
-[`baek/Challenge.lean`](../baek/Challenge.lean), does not state them. Below are the library's forms, from which [`SolutionCoercive.lean`](../SolutionCoercive.lean)
+[`baek/Challenge.lean`](../baek/Challenge.lean), does not state them. Below are the library's forms, from which [`MovingSofaExtremal/Statements.lean`](../MovingSofaExtremal/Statements.lean)
 proves them, the first two through [`MovingSofaExtremal.gerver_sofa_optimal_unique_stable`](../MovingSofaExtremal/Unified.lean#L38);
 [`Solution.lean`](../Solution.lean) restates them under the Challenge's names for Comparator.
 

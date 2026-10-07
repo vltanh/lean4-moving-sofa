@@ -119,7 +119,7 @@ $\sigma_K$ are convex-linear in $K$. $\square$
 
 The paper assumes $a < b < a + \pi$ in (2). The Lean statement holds for all $a, b$, because the
 formalization defines $v_K(a, b)$ by the formula above for all $a$ and $b$
-([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L81); REPORT.md, Section 5).
+([`vint`](../../MovingSofaOptimality/Basic/ConvexBody.lean#L81); baek/REPORT.md, Section 5).
 
 ### Theorem 8.4 (the area is quadratic; Baek, Theorem 7.1.3)
 
@@ -238,7 +238,7 @@ and each term is convex-linear in $K$. $\square$
 
 For a bilinear $h$ the difference is $h(c_1, K) + h(K, c_2) + h(c_1, c_2)$, as in Baek's proof. Baek
 states the lemma on a convex domain, where $K + c$ is not defined, and the paper's proof treats $h$ as
-bilinear (REPORT.md, E18).
+bilinear (baek/REPORT.md, E18).
 
 *Lean: [`lemma7_1_6`](../../MovingSofaOptimality/Convex/ConvexDomain.lean#L163).*
 
@@ -310,7 +310,7 @@ $\lbrace \langle \cdot, u_t \rangle = 0 \rbrace$ for some $t$, so (3) is (2) wit
 [`proposition7_2_5`](../../MovingSofaOptimality/Convex/CurveArea.lean#L695).*
 
 Baek's Proposition 7.2.4 also assumes that $q$ lies on the line $l(t, h)$; this follows from the
-other hypotheses (REPORT.md, Section 5).
+other hypotheses (baek/REPORT.md, Section 5).
 
 ### Proposition 8.13 (additivity; Baek, Proposition 7.2.6)
 
@@ -333,7 +333,7 @@ from below (Lemmas 8.2.2 and 8.2.3) and to compute the niche of Gerver's sofa (T
 The formalization replaces them, in this order, by an explicit parametrization (Theorem 8.16), a
 difference of areas (Lemma 8.19), regions between graphs and Fubini's theorem
 ([Chapter 9](09-optimality.md)), and a description of the niche as the region under a curve
-([Theorem 10.19](10-gerver.md)) (REPORT.md, Section 7).
+([Theorem 10.19](10-gerver.md)) (baek/REPORT.md, Section 7).
 
 ## 8.3 Convex curves
 
@@ -401,7 +401,7 @@ $\lbrace \langle \cdot, u_t \rangle = h_K(t) \rbrace$, so $e_K(t) = \lbrace P \r
 If $P \notin K$, then $\alpha, \beta > 0$, so $v_K^+(a) \ne v_K^-(b)$ and the three points are not
 collinear, which is (1). The difference $v_K^-(b) - v_K^+(a) = \alpha v_a + \beta v_b$ is a positive
 multiple of $v_{t'}$ for some $t' \in (a, b)$, which is (2). (Baek's proof writes this difference
-with the opposite sign; [`REPORT.md`](../../REPORT.md), E27.) Let $T = X \cap H'$, the triangle with
+with the opposite sign; [`baek/REPORT.md`](../../baek/REPORT.md), E27.) Let $T = X \cap H'$, the triangle with
 vertices $v_K^+(a)$, $P$, $v_K^-(b)$. Then $K'$ lies in $T$, contains the side of $T$ on $l'$, and
 meets the other two sides only at $v_K^+(a)$ and $v_K^-(b)$. This gives (i), (iii) and (iv). For
 (ii), let $t \in (a, b)$. The function $\langle \cdot, u_t \rangle$ decreases along both sides of
@@ -581,7 +581,7 @@ backwards, is a counterclockwise Jordan curve; the paper then reads $\lvert R \r
 Green's theorem. The Lean statement defines $R$ directly, as $T^\circ$ minus the half-planes, and
 states its area, which is how the paper uses (1); so (3) holds by definition, and the paper's
 argument for it (the region enclosed by $\Gamma$ is simply connected) is not needed. Mathlib has
-neither the Jordan curve theorem nor Green's theorem (REPORT.md, Sections 6 and 7).
+neither the Jordan curve theorem nor Green's theorem (baek/REPORT.md, Sections 6 and 7).
 
 *Proof.* The idea is that $R$ is the triangle $T$ minus the body $K'$ of Lemma 8.15 (Figure 8.3).
 The vertices of $T$ lie in $H_K(a) \cap H_K(b)$, hence so does $T$, and $R \subseteq T^\circ$ lies
@@ -678,8 +678,8 @@ $d(\mathbf{z} \times \mathbf{v})((a, b)) = \mathbf{z}(b) \times v_K^-(b) - \math
 These are twice the terms of Definition 8.20. $\square$
 
 In the paper's last line $\alpha u_t$ should read $\alpha v_t$, with $dv_t = -u_t\, dt$; the result is
-unaffected (REPORT.md, E27). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is
-constrained (REPORT.md, Section 6).
+unaffected (baek/REPORT.md, E27). The measurability claim is read on $[a, b]$, where $\mathbf{z}$ is
+constrained (baek/REPORT.md, Section 6).
 
 ### Theorem 8.22 (Mamikon areas are convex; Baek, Theorem 7.4.2)
 

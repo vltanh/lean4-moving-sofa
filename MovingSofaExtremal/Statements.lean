@@ -1,6 +1,6 @@
 module
 
-public import ChallengeDefs
+public import MovingSofaBridge.Defs
 public import MovingSofaExtremal.Unified
 public import MovingSofaStability.Sharpness
 public import MovingSofaBridge.GerverSofa
@@ -10,12 +10,12 @@ public import MovingSofaBridge.GerverSofa
 
 This module proves fifteen of the seventeen theorems of `Challenge.lean` (the certificate entry):
 the twelve that `baek/Challenge.lean` (Baek's entry) states too, and the three stability theorems.
-It uses the definitions of `ChallengeDefs` and the bridge `MovingSofaBridge`, with optimality,
-uniqueness and stability taken from the coercive route `MovingSofaExtremal`
+It uses the definitions of `MovingSofaBridge.Defs` and the bridge `MovingSofaBridge`, with
+optimality, uniqueness and stability taken from the coercive route `MovingSofaExtremal`
 (`gerver_sofa_optimal_unique_stable`). It imports neither `baek.Solution` nor
 `MovingSofaUniqueness.Main`. `Solution`, the solution of the certificate entry, states these
 theorems under the Challenge's names, with the two theorems about the certificate of
-`CertificateProof`.
+`MovingSofaExtremal.Certificate`.
 
 The theorems are in the namespace `CoerciveSolution`, so that the audits can load them together with
 `baek/Solution.lean`; `scripts/AuditCoerciveRoute.lean` checks that the twelve that
@@ -118,7 +118,7 @@ theorem bridge_gerversSofa_eq (P : Baek.GerverParams) (hP : P.IsSolution) (hPb :
   exact MovingSofaBridge.gerversSofa_eq ((toLib_isSolution P).2 hP) ((toLib_inBox P).2 hPb)
 
 /-- The statement of `FormalConjectures.MovingSofa.GerversSofa.ABφθSpec.existsUnique`, which
-`ChallengeDefs` proves. -/
+`MovingSofaBridge.Defs` proves. -/
 theorem gerver_constants_existsUnique : ∃! ABφθ : ℝ × ℝ × ℝ × ℝ,
     MovingSofa.GerversSofa.ABφθSpec ABφθ.1 ABφθ.2.1 ABφθ.2.2.1 ABφθ.2.2.2 :=
   MovingSofa.GerversSofa.ABφθSpec.existsUnique

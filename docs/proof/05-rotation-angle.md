@@ -138,7 +138,7 @@ $w^\circ_K$ long.
 We prove the first inequality; the second is the same argument on the line $l(\omega, 0)$, or the
 first for the mirror image
 ([Lemma 4.21](04-balanced.md#lemma-421-mirror-image-baek-lemma-341)). As $\omega < \pi/2$, the
-bottom side $e_K(3\pi/2)$ is the segment from $O$ to $A^-_K(0) = (h_K(0), 0)$ (REPORT.md, E4). Its
+bottom side $e_K(3\pi/2)$ is the segment from $O$ to $A^-_K(0) = (h_K(0), 0)$ (baek/REPORT.md, E4). Its
 length $h_K(0)$ is at least $w^\circ_K$: as $t \to \omega$,
 $w_K(t) \to h_K(0) - (h_K(\omega) - 1)/\cos\omega = h_K(0)$. For $t \in \Theta$, the wedge $T_K(t)$ meets the $x$-axis only to the left of
 $W_K(t)$, where $\langle p, u_t \rangle < h_K(t) - 1$, and $W_K(t)$ lies at the distance $w_K(t)$ to
@@ -317,11 +317,11 @@ is fixed, so $f$ is convex by Lemma 5.10 and lies below the chord of its endpoin
 These are $0.9576$ and $0.8714$ on the first interval, and $0.9349$ and exactly $1$ at $\pi/2$ on the
 second. On the second interval a convex function with value below $1$ at the left end and $1$ at the
 right end is below $1$ inside, which proves the strict inequality on $[\tan^{-1}(2.2), \pi/2)$; the
-paper leaves out this line (REPORT.md, E9). $\square$
+paper leaves out this line (baek/REPORT.md, E9). $\square$
 
 Baek's statement takes $\omega \in [\tan^{-1}(2.2), \pi/2)$. Its proof also treats the angles below
 $\tan^{-1}(2.2)$, and Theorem 5.13 uses the lemma on all of $[\sec^{-1}(2.2), \pi/2)$, the range
-stated here (REPORT.md, E9).
+stated here (baek/REPORT.md, E9).
 
 ![A plot of f(omega) = (1 - d cot omega)^2 + 4 cos^2 omega against omega from sec^-1 2.2 to pi/2, with a dashed horizontal line at 1. The curve has two convex pieces: on the short first interval it falls from 0.9576 to 0.8714; at tan^-1 2.2 it jumps to 0.9349, then falls to a minimum near 0.76 and rises to exactly 1 at pi/2. Both pieces stay below the dashed line except at the right end](figures/05-rotation-angle/margin.svg)
 
@@ -453,7 +453,7 @@ and $c_\omega\cos\omega = 1 - \sin\omega$,
 So a sofa $K \setminus \mathcal{N}(K)$ as in the lemma lies in the pentagon $P_\omega \setminus \Delta_\omega$,
 up to the far side of $\Delta_\omega$. The width of the pentagon in the direction $u_t$,
 $t \in [\omega, \pi/2]$, is $\max(\sin t, \cos(t - \omega)) \le 1$ (Figure 5.7). Baek's proof of
-Theorem 1.5.2 asserts this width bound without proof (REPORT.md, E10). The full parallelogram
+Theorem 1.5.2 asserts this width bound without proof (baek/REPORT.md, E10). The full parallelogram
 $P_\omega$ has width $c_\omega\cos t + \sin t$ there, more than one for $\omega < t < \pi/2$.
 
 ![Three rows, each a horizontal strip with a light grey floor between two dark lines. In each row the blue pentagon P_omega minus Delta_omega, for omega = 1.1, rests on the floor, turned counterclockwise by pi/2 - omega in the first row, by half of that in the second, and not at all in the third; in all three it fits between the lines. The triangle Delta_omega is drawn dashed in orange at its place: in the middle row it sticks out below the floor](figures/05-rotation-angle/rotate.svg)

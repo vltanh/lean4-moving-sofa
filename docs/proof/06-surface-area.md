@@ -140,7 +140,7 @@ Let $f$ be right-continuous and of bounded variation on $[a, b]$.
 [`absolutelyContinuousOnInterval_of_lsMeasure_eq`](../../MovingSofaOptimality/Basic/LebesgueStieltjes.lean#L570).*
 
 Baek asks for a *bounded* density in (1). Then the "only if" direction is false
-(Proposition 6.6), so the text asks for an integrable density (REPORT.md, E11). The paper uses the
+(Proposition 6.6), so the text asks for an integrable density (baek/REPORT.md, E11). The paper uses the
 proposition once, in the proof of
 [Theorem 7.23](07-injectivity.md#theorem-723-differential-inequality-baek-theorem-651), in the "if"
 direction and with a bounded density, where it is correct.
@@ -247,7 +247,7 @@ $\sigma_K(\lbrace t\rbrace)$.
 Since $v_K^+$, $v_t$ and $h_K$ have period $2\pi$,
 $G_K(t + 2\pi) = G_K(t) + \int_0^{2\pi} h_K$, and $\sigma_K$ is $2\pi$-periodic:
 $\sigma_K(X + 2\pi) = \sigma_K(X)$. Baek's measure on the circle $S^1 = \mathbb{R}/2\pi\mathbb{Z}$ is
-the restriction of $\sigma_K$ to any interval of length $2\pi$, usually $[0, 2\pi)$ (REPORT.md,
+the restriction of $\sigma_K$ to any interval of length $2\pi$, usually $[0, 2\pi)$ (baek/REPORT.md,
 Section 6). By Lemma 6.7, $G_K$ is the right derivative of $h_K$ plus a primitive of $h_K$. So
 $\sigma_K = h_K'' + h_K$ in the sense of measures, the classical formula for the surface area measure
 of a planar convex body. Two cases show what it means.
@@ -331,10 +331,10 @@ definition of $v_K^\pm(t)$. $\square$
 
 Baek derives Proposition 2.1.2 from Schneider's Theorem 4.2.3 (Baek's Theorem 2.1.1), the
 description of $\sigma_K$ by lengths of edges recalled at the start of the chapter. The
-formalization does not state that theorem in this form (REPORT.md, Sections 7 and 9). Its arc-length form
+formalization does not state that theorem in this form (baek/REPORT.md, Sections 7 and 9). Its arc-length form
 is step 1 of the proof of the area formula (§6.4). As Baek states it, for convex bodies that may have
 empty interior, the theorem fails for a segment, whose two edges with opposite normal angles are the
-same set (REPORT.md, Section 4); Baek uses it only for single angles and for arcs shorter than $\pi$,
+same set (baek/REPORT.md, Section 4); Baek uses it only for single angles and for arcs shorter than $\pi$,
 where it holds.
 
 ## 6.3 The differential Gauss–Minkowski theorem
@@ -356,7 +356,7 @@ The functions $h_K$, its primitive, $u_t$ and $v_t$ are Lipschitz, and $G_K$ is 
 products of functions of bounded variation. $\square$
 
 Baek's proof cuts $[0, 2\pi]$ into intervals on which each coordinate of $v_K^+$ is monotone. Its
-last interval, $[3\pi/4, 2\pi]$, is not one of them and has to be cut further (REPORT.md, E27).
+last interval, $[3\pi/4, 2\pi]$, is not one of them and has to be cut further (baek/REPORT.md, E27).
 
 ### Theorem 6.12 (differential Gauss–Minkowski theorem; Baek, Theorem 5.2.2)
 
@@ -376,7 +376,7 @@ v_K^+(d) - v_K^+(c) = \int_{(c, d]} v_t \,\mathrm{d}\sigma_K(t) .
 
 *Lean: [`theorem5_2_2`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L403), [`vplus_sub_vplus`](../../MovingSofaOptimality/Basic/SurfaceArea.lean#L383).*
 
-Baek assumes $b \le a + 2\pi$; the formalization does not need it (REPORT.md, Section 5). On the left
+Baek assumes $b \le a + 2\pi$; the formalization does not need it (baek/REPORT.md, Section 5). On the left
 endpoint $\lbrace a\rbrace$ the identity fails in general: $\mathrm{d}v_K^+$ gives it no mass by
 Definition 6.1, while $\sigma_K$ may have an atom at $a$. Figure 6.3 shows the integrated form.
 
@@ -428,8 +428,8 @@ sum over the edges with normal angles in $(a, b]$ telescopes to $v_K^+(b) - v_K^
 Figure 6.3. A general $K$ is a Hausdorff limit of polygons with the same edges at $a$ and $b$, and
 the weak convergence of the surface area measures (Theorem 6.14) passes the identity to the limit.
 The formalization's proof uses neither polygons nor weak convergence, since $\sigma_K$ is defined
-from $v_K^+$ (REPORT.md, Section 7). Baek's proof once writes
-$u_t\,\sigma$ for $v_t\,\sigma$ (REPORT.md, E27).
+from $v_K^+$ (baek/REPORT.md, Section 7). Baek's proof once writes
+$u_t\,\sigma$ for $v_t\,\sigma$ (baek/REPORT.md, E27).
 
 With $(c, d] = (0, 2\pi]$, the periodicity of $v_K^+$ gives
 $\int_{(0, 2\pi]} v_t\,\mathrm{d}\sigma_K(t) = 0$. Rotating by a quarter turn,
@@ -536,7 +536,7 @@ function $g \ge 0$ is the increasing limit of the continuous functions
 $g_k(x) = \inf_y \bigl(g(y) + k \lvert x - y \rvert\bigr)$; the upper semicontinuous case applies
 this to $M - g$; and indicator functions give the forms for open and closed sets
 ([`ang_portmanteau_lsc`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L969), [`ang_portmanteau_usc`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L999), [`ang_portmanteau_open`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1034), [`ang_portmanteau_closed`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1048)).
-Theorem 6.12 has a direct proof (REPORT.md, Section 7). Figure 6.5 shows an example.
+Theorem 6.12 has a direct proof (baek/REPORT.md, Section 7). Figure 6.5 shows an example.
 
 ![A graph over the angles from 0 to 2π: the straight line G(t) = t of the unit disk, and the staircases of the regular 4-gon, 8-gon and 16-gon inscribed in the unit circle, with jumps at the angles 2πk/n; the finer the polygon, the closer its staircase to the line](figures/06-surface-area/weak-convergence.svg)
 

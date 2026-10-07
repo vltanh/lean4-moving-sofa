@@ -1,24 +1,25 @@
 module
 
-public import ChallengeDefs
-public import CertificateDefs
+public import MovingSofaBridge.Defs
+public import MovingSofaExtremal.CertificateDefs
 public import MovingSofaStability.CapEstimate
 
 /-!
 # The certificate's statements, proved
 
 This module proves the two statements of `Challenge.lean` (the certificate entry) about the
-certificate, with the definitions of `ChallengeDefs` and `CertificateDefs`:
-`Certificate.coercive_certificate`, from `MovingSofaStability.coercive_certificate`, and
-`Certificate.gerver_triple` (Gerver's triple meets the certificate's hypothesis and attains its
-bound), from `MovingSofaStability.wideGerverTriple` and `MovingSofaStability.wideGerver_value`.
+certificate, with the definitions of `MovingSofaBridge.Defs` and
+`MovingSofaExtremal.CertificateDefs`: `Certificate.coercive_certificate`, from
+`MovingSofaStability.coercive_certificate`, and `Certificate.gerver_triple` (Gerver's triple meets
+the certificate's hypothesis and attains its bound), from `MovingSofaStability.wideGerverTriple` and
+`MovingSofaStability.wideGerver_value`.
 
-The bridge lemmas say that each definition of `CertificateDefs` is the library's definition of the
-same name (for `gerverCap`, the library's `GerverParams.cap`): by definition, except the surface
-area measure `sigma` and the curve area `convexCurveArea` that uses it, which agree with the
-library's on convex bodies, and Baek's upper bound `upperQ`, which agrees with the library's when
-its two tails are convex bodies. `Solution`, the solution of the certificate entry, imports this
-module, which imports neither `baek.Solution` nor `MovingSofaUniqueness.Main`;
+The bridge lemmas say that each definition of `MovingSofaExtremal.CertificateDefs` is the library's
+definition of the same name (for `gerverCap`, the library's `GerverParams.cap`): by definition,
+except the surface area measure `sigma` and the curve area `convexCurveArea` that uses it, which
+agree with the library's on convex bodies, and Baek's upper bound `upperQ`, which agrees with the
+library's when its two tails are convex bodies. `Solution`, the solution of the certificate entry,
+imports this module, which imports neither `baek.Solution` nor `MovingSofaUniqueness.Main`;
 `scripts/AuditCoerciveRoute.lean` checks that the proofs use neither Baek's Theorem 1.1.1 nor the
 first proof of uniqueness.
 -/

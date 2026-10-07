@@ -45,7 +45,7 @@ The formalization follows the paper with three main changes of route. Theorem 9.
 slicing instead of the Brunn–Minkowski inequality. Lemmas 9.15 and 9.16 compute areas directly
 instead of with Jordan curves (§8.2). Lemma 9.11 and Theorem 9.18 avoid the inclusion
 $\mathcal{N}(K) \subseteq K$, which the paper uses but which $\mathcal{K}^\mathrm{i}$ does not
-provide (REPORT.md, E21). Smaller departures, in Lemmas 9.9 and 9.24 and Theorems 9.29 and 9.33,
+provide (baek/REPORT.md, E21). Smaller departures, in Lemmas 9.9 and 9.24 and Theorems 9.29 and 9.33,
 are noted where they occur.
 
 *Notation*, as in Chapters 2, 3 and 7. The hallway $L_K(t)$ supporting a cap $K$ has the inner
@@ -149,7 +149,7 @@ The formalization states §9.1 to §9.4 for an arbitrary parameter $\varphi \in 
 place of $\varphi^\mathrm{R}$, with $\varphi^\mathrm{L} = \pi/2 - \varphi$; this range contains
 Gerver's angle. The numerical facts the paper takes from Gerver's angle, such as
 $\sec \varphi < 1.1$ and $2 \sec \varphi + 2 \tan \varphi = 2.08\ldots < 2.2$, hold on this range
-(REPORT.md, Section 6). The statements about $\mathcal{Q}$ alone need only $0 < \varphi < \pi/4$.
+(baek/REPORT.md, Section 6). The statements about $\mathcal{Q}$ alone need only $0 < \varphi < \pi/4$.
 
 ### Definition 9.4 (the domain of triples; Baek, Definition 8.1.3)
 
@@ -285,7 +285,7 @@ The point $Z_K^\mathrm{L}$ is the mirror case. $\square$
 
 The paper argues that the bottom edge has length at least $\lvert K \rvert \ge 2.2$ without
 justification. This holds because the width of a cap with rotation angle $\pi/2$ does not increase
-with the height (REPORT.md, E19). The proof above avoids it.
+with the height (baek/REPORT.md, E19). The proof above avoids it.
 
 ### Lemma 9.10 (the core leaves the cut half-planes; Baek, Lemma 8.1.6)
 
@@ -352,7 +352,7 @@ The paper writes "$t = 0, \varphi^\mathrm{R}$" in (4); $\varphi^\mathrm{L}$ is m
 satisfy. For example, the union of $[1, 4] \times [0, 1]$ and the quarter discs of radius 1 about
 $(1, 0)$ and $(4, 0)$ is in $\mathcal{K}^\mathrm{i}$, but its inner corner
 $\mathbf{x}_K(\pi/4) = (2.5, 1.5)$ lies outside it. The statements hold nevertheless, by the
-argument below (REPORT.md, E21).
+argument below (baek/REPORT.md, E21).
 
 *Proof.* (1) The body $B$ contains $A_K(0) = (h_K(0), 0)$, so it is not empty. Indeed, for
 $t \in [0, \pi/2]$, $u_t = \cos t\, u_0 + \sin t\, u_{\pi/2}$ gives
@@ -592,7 +592,7 @@ The full computation is in
 $\square$
 
 The paper encloses $G$ by a Jordan curve. The formalization describes it as a region between graphs,
-which needs the monotonicity of $X$ (REPORT.md, Section 7).
+which needs the monotonicity of $X$ (baek/REPORT.md, Section 7).
 
 ### Lemma 9.17 (the niche avoids the overlap of the cut half-planes)
 
@@ -618,7 +618,7 @@ $W_0 / 2 < (W_0 \cos \varphi - 2) / (2 \sin \varphi)$, and the two sets are disj
 
 This lemma is not in the paper, which obtains the disjointness from Lemma 9.8 and
 $\mathcal{N}(K) \subseteq K$; the latter may fail on $\mathcal{K}^\mathrm{i}$ (Lemma 9.11,
-REPORT.md, E21).
+baek/REPORT.md, E21).
 
 ### Theorem 9.18 (the upper bound; Baek, Theorem 8.2.4)
 
@@ -646,7 +646,7 @@ What remains is
 which is $\mathcal{Q}(K, B_K, D_K)$. $\square$
 
 The paper obtains the disjointness of the three parts from $\mathcal{N}(K) \subseteq K$, which may
-fail on $\mathcal{K}^\mathrm{i}$; Lemma 9.17 replaces it (REPORT.md, E21 and Section 7).
+fail on $\mathcal{K}^\mathrm{i}$; Lemma 9.17 replaces it (baek/REPORT.md, E21 and Section 7).
 
 *Lean: [`theorem8_2_4`](../../MovingSofaOptimality/Optimality/UpperBound.lean#L1089),
 [`segArea_add_of_mem_line`](../../MovingSofaOptimality/Convex/CurveArea.lean#L767).*
@@ -694,7 +694,7 @@ $\square$
 *Lean: [`theorem8_3_1`](../../MovingSofaOptimality/Optimality/Concavity.lean#L212),
 [`theorem8_3_2`](../../MovingSofaOptimality/Optimality/Concavity.lean#L256).*
 
-Baek's Theorem 8.3.2 also assumes $a > t - \pi$, which (2) does not need (REPORT.md, Section 5).
+Baek's Theorem 8.3.2 also assumes $a > t - \pi$, which (2) does not need (baek/REPORT.md, Section 5).
 
 ### Definition 9.21 (the Mamikon terms; Baek, Definitions 8.3.2–8.3.4)
 
@@ -720,7 +720,7 @@ For $K \in \mathcal{K}^\mathrm{i}$ and convex bodies $B, D$:
 
 The paper writes $\pi/2 + \varphi^\mathrm{R}$ for the first angle of $\mathcal{R}_B$. The tail
 $\mathbf{b}_B$ and Lemma 9.23 need $\pi + \varphi^\mathrm{R}$, which the formalization uses
-(REPORT.md, E27). The term $\mathcal{P}_K$ is $\lvert K \rvert$ minus the lower bound of Lemma 9.16
+(baek/REPORT.md, E27). The term $\mathcal{P}_K$ is $\lvert K \rvert$ minus the lower bound of Lemma 9.16
 for the core part of the niche. $\mathcal{R}_B$ and $\mathcal{L}_D$ are the lower bounds of Lemma
 9.15 for the two tails (Lemma 9.23). $\mathcal{S}_K$ is the area swept by tangent segments of $K$
 above the cap (Figure 9.5).
@@ -797,7 +797,7 @@ $\square$
 *Lean: [`lemma8_3_5`](../../MovingSofaOptimality/Optimality/Concavity.lean#L854).*
 
 The paper applies its Theorem 7.3.2 to the arc $\mathbf{u}_K^{0, \pi}$, outside its range
-$b < a + \pi$. The splitting above avoids this (REPORT.md, E20).
+$b < a + \pi$. The splitting above avoids this (baek/REPORT.md, E20).
 
 ### Lemma 9.25 (linear differences; Baek, Lemma 8.3.6)
 
@@ -813,7 +813,7 @@ $I = [\varphi^\mathrm{R}, \varphi^\mathrm{L}]$:
 In (3) the paper evaluates $\mathbf{l}_K^{\pi/2 + \varphi^\mathrm{L}}$ at $\varphi^\mathrm{L}$,
 where it equals $\mathbf{y}_K(\varphi^\mathrm{L})$. The left side would then vanish, and the
 statement would be false, since $\mathcal{J}(Z_K^\mathrm{L}, \mathbf{x}_K^\mathrm{L})$ is not linear
-in $K$. The value at $\pi/2$, which Lemma 8.3.7 uses, is meant (REPORT.md, E23).
+in $K$. The value at $\pi/2$, which Lemma 8.3.7 uses, is meant (baek/REPORT.md, E23).
 
 *Proof.* In each item, the two sides differ by shifts that do not depend on $K$. (1)
 $\mathbf{y}_K(t) = \mathbf{x}_K(t) + c_t$ with $c_t = u_t + v_t$, and
@@ -879,7 +879,7 @@ $\square$
 
 In the paper's proof the last regrouping reads $\frac12 h_K(\pi/2)$ for $\frac12 h_K(\pi)$, and a
 factor $\frac12$ is missing in the second term of the first row. Both terms are linear anyway
-(REPORT.md, E27).
+(baek/REPORT.md, E27).
 
 ### Theorem 9.27 (concavity; Baek, Theorem 8.3.8)
 
@@ -1008,7 +1008,7 @@ Integrating over $I$ gives the integral over $I \cup (I + \pi/2)$. $\square$
 
 The paper proves (1) with Schneider's formula for the mixed area, which Mathlib lacks; the
 formalization proves the symmetry of $\beta$ by the integration by parts above ([`opt_Bs_symm`](../../MovingSofaOptimality/Optimality/Variation.lean#L408);
-REPORT.md, Section 7). The proofs of (2) and (4) are the paper's ([`opt_curveBilin_antisymm`](../../MovingSofaOptimality/Optimality/Variation.lean#L527)).
+baek/REPORT.md, Section 7). The proofs of (2) and (4) are the paper's ([`opt_curveBilin_antisymm`](../../MovingSofaOptimality/Optimality/Variation.lean#L527)).
 
 ### Theorem 9.30 (the directional derivative of the upper bound; Baek, Theorem 8.5.6)
 
@@ -1096,7 +1096,7 @@ case, with Definition 9.4 (4). $\square$
 
 In the paper's proof, "nonnegative" should read "nonpositive" (twice), and $J_1$ should read
 $J_{10}$ in the last case. The constraints on an arbitrary $(K^*, B^*, D^*)$ are Definition 8.1.3
-(2)–(5), not Lemma 8.1.7 (1), (3), which concerns $(K, B_K, D_K)$ (REPORT.md, E27).
+(2)–(5), not Lemma 8.1.7 (1), (3), which concerns $(K, B_K, D_K)$ (baek/REPORT.md, E27).
 
 The table is the measure-theoretic form of the balancing argument of Gerver and Romik. On each
 interval, Romik's equations balance the pieces of the boundary of $G$ that change when the

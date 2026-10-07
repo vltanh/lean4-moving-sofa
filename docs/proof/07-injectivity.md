@@ -214,7 +214,7 @@ direction $v_t$. So their difference is its own $v_t$-component $f_K^\pm(t)\,v_t
 $\mathbf{y}_K(t)$ and $C_K^\pm(t)$ lie on $c_K(t)$, which has the direction $u_t$. $\square$
 
 The identity holds for every convex body and every $t$; Baek's hypotheses that $K$ is a cap and
-$t \in [0, \pi/2]$ are not used (REPORT.md, Section 5).
+$t \in [0, \pi/2]$ are not used (baek/REPORT.md, Section 5).
 
 ### Proposition 7.6 (mirror image; Baek, Proposition 6.2.2)
 
@@ -230,7 +230,7 @@ f_{K^\mathrm{m}}^\pm(t) = g_K^\mp(\pi/2 - t) , \qquad g_{K^\mathrm{m}}^\pm(t) = 
 *Lean: [`proposition6_2_2`](../../MovingSofaOptimality/Injectivity/ArmLengths.lean#L158), [`mirrorCap`](../../MovingSofaOptimality/Monotone/CapDefs.lean#L79).*
 
 Baek's statement omits the change of angle and writes $g_K^\mp(t)$. The reflection reverses the
-angle, and Lemma 6.5.2 of the paper uses the corrected form (REPORT.md, E13).
+angle, and Lemma 6.5.2 of the paper uses the corrected form (baek/REPORT.md, E13).
 
 *Proof.* The reflection $M$ maps the hallway of $K$ at $\pi/2 - t$ to the hallway of $K^\mathrm{m}$
 at $t$ and exchanges the two outer walls
@@ -259,7 +259,7 @@ and the left derivatives given by the same formulas with $f_K^-$ and $g_K^-$.
 
 Baek's Definition 6.2.2 calls $\partial^+$ the left derivative, while Baek's Theorem 6.2.3 uses it as
 the right one, and the second display of the theorem writes $\partial^+\mathbf{x}_K$ for
-$\partial^-\mathbf{x}_K$ (REPORT.md, E14). Baek restricts $t$ to $[0, \pi/2)$ and $(0, \pi/2]$; the
+$\partial^-\mathbf{x}_K$ (baek/REPORT.md, E14). Baek restricts $t$ to $[0, \pi/2)$ and $(0, \pi/2]$; the
 formulas hold for every $t$.
 
 *Proof.* Differentiate $\mathbf{y}_K(t) = h_K(t)\,u_t + h_K(t + \pi/2)\,v_t$ from the right, with
@@ -295,7 +295,7 @@ of $-(f(t) - 1)\,u_t$ and $(g(t) - 1)\,v_t$.
 ### Lemma 7.8 (the arm as an integral; Baek, Lemma 6.2.4)
 
 For every convex body $K$ and every angle $t$ (Baek states it for caps and $t \in [0, \pi/2]$; the
-proof uses neither, REPORT.md, Section 5),
+proof uses neither, baek/REPORT.md, Section 5),
 
 ```math
 g_K^+(t) = \int_{(t, t + \pi/2]} \sin(s - t)\,\mathrm{d}\sigma_K(s) .
@@ -414,7 +414,7 @@ This is a vector between two points of $K$, of length
 $\sqrt{f_K^\pm(t)^2 + g_K^\pm(t)^2} \le 5$. $\square$
 
 Baek's proof takes the height bound from Baek's Theorem 3.5.4, which is about balanced maximum caps.
-For maximum polygon caps the applicable result is Theorem 4.32 (REPORT.md, E15).
+For maximum polygon caps the applicable result is Theorem 4.32 (baek/REPORT.md, E15).
 
 ### Definition 7.12 (half-planes above the inner walls; Baek, Definition 6.3.3)
 
@@ -442,7 +442,7 @@ of the parts of the inner half-wall $\vec b_K(t)$ in the half-planes of the neig
 *Lean: [`lemma6_3_2`](../../MovingSofaOptimality/Injectivity/DiscreteIneq.lean#L677), [`lineLength`](../../MovingSofaOptimality/Basic/Plane.lean#L78).*
 
 Here $\mathcal{H}^1$ is the length of a subset of a line. In Baek's proof of (1), two occurrences of
-$t + \delta$ should read $t - \delta$ (REPORT.md, E27).
+$t + \delta$ should read $t - \delta$ (baek/REPORT.md, E27).
 
 The computation uses only that $t - \delta$, $t$ and $t + \delta$ are consecutive normal angles of
 $K$, so the lemma holds for every polygon cap with the angle set $\Theta_n$, maximum or not
@@ -574,7 +574,7 @@ $s \le k_0(g_K^+(t))\,\delta + O(\delta^2)$. The error terms are bounded by an a
 times $\delta^2$ because the arms are at most $5$ (Lemma 7.11). $\square$
 
 In Baek's proof one $\mathcal{H}^1$ is missing inside a maximum, and $\nu_K$ stands for $\tau_K$
-(REPORT.md, E27).
+(baek/REPORT.md, E27).
 
 ![The supporting hallway L(t) of the polygon cap drawn upright, with the cap shaded light blue and the polygon niche, the union of three open quadrants above the x-axis of the sofa (a grey line at 45 degrees), shaded orange. Dashed lines d(t − δ) (purple) and d(t + δ) (green) cross the hallway near the corner, and dotted lines b(t − δ) (purple) and b(t + δ) (green) cross the inner wall b(t) further down. On b(t), two thick orange segments form the side of the niche: one from the corner x(t) down to the point p where d(t − δ) crosses, labelled in R, and a short one between the crossing points B₋ and B₊ of b(t − δ) and b(t + δ), labelled in S](figures/07-injectivity/discrete-inequality.svg)
 
@@ -635,8 +635,8 @@ weak convergence $\sigma_{K_n} \to \sigma_K$
 $\limsup_n g_{K_n}^+(t) \le g_K^+(t)$ and $\liminf_n g_{K_n}^-(t) \ge g_K^-(t)$. Hence
 $g_{K_n}^+(t) \to g_K^+(t)$. $\square$
 
-The polygon caps need not have rotation angle $\pi/2$ (REPORT.md, Section 5). In Baek's proof,
-$\sigma(\lbrace t\rbrace) = 0$ should read $\sigma(\lbrace t + \pi/2\rbrace) = 0$ (REPORT.md, E27).
+The polygon caps need not have rotation angle $\pi/2$ (baek/REPORT.md, Section 5). In Baek's proof,
+$\sigma(\lbrace t\rbrace) = 0$ should read $\sigma(\lbrace t + \pi/2\rbrace) = 0$ (baek/REPORT.md, E27).
 
 ### Theorem 7.18 (limit inequality; Baek, Theorem 6.4.3)
 
@@ -681,7 +681,7 @@ Let $K_i \to K$ be maximum polygon caps with $n_i$ steps of size $\delta_i \to 0
 
 *Lean: [`inj_step_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L577), [`inj_polygon_Ico_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L605), [`inj_limit_Ioo_bound`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L768), [`ang_portmanteau_open`](../../MovingSofaOptimality/Angle/HorizontalSide.lean#L1034), [`inj_measure_le_of_Ioo`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L423).*
 
-In the paper the difference $g_{K_n}^+ - g_{K_n}^+$ should read $g_{K_n}^+ - g_K^+$ (REPORT.md, E27).
+In the paper the difference $g_{K_n}^+ - g_{K_n}^+$ should read $g_{K_n}^+ - g_K^+$ (baek/REPORT.md, E27).
 
 ### Corollary 7.19 (condition (1); Baek, Corollary 6.4.4)
 
@@ -718,7 +718,7 @@ $A_K^\pm$ and $f_K^\pm$ on $[0, \pi/2)$, and of $C_K^\pm$ and $g_K^\pm$ on $(0, 
 *Lean: [`MovingSofaOptimality.aK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1055), [`MovingSofaOptimality.fK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1057), [`MovingSofaOptimality.cK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1060),
 [`MovingSofaOptimality.gK`](../../MovingSofaOptimality/Injectivity/LimitIneq.lean#L1062).*
 
-Baek's definition gives $f_K$ and $g_K$ the values $\mathbb{R}^2$ by a slip (REPORT.md, E16).
+Baek's definition gives $f_K$ and $g_K$ the values $\mathbb{R}^2$ by a slip (baek/REPORT.md, E16).
 
 ### Proposition 7.22 (regularity of the corners; Baek, Proposition 6.4.6)
 
@@ -809,7 +809,7 @@ $K^\mathrm{m}$, which gives the bound on $g_K$. $\square$
 
 *Lean: [`inj_fK_zero`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L30), [`inj_gK_eq_fK_mirror`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L54).*
 
-The paper uses $f_K(0) = 1$ without stating it (REPORT.md, E17), and writes
+The paper uses $f_K(0) = 1$ without stating it (baek/REPORT.md, E17), and writes
 $m_0(f_K(\pi/2 - u))$ for $m_0(f_n(\pi/2 - u))$ in the last integral (E27).
 
 ### Lemma 7.26 (one round of the iteration; Baek, Lemma 6.5.3)
@@ -873,7 +873,7 @@ $f_{11}(x) > 1$ for every $x \in (0, \pi/2]$.
 
 *Lean: [`lemma6_5_5`](../../MovingSofaOptimality/Injectivity/BoundingArms.lean#L408).*
 
-Baek states it on $(0, 1]$; Theorem 7.29 needs $(0, \pi/2]$, which the proof gives (REPORT.md, E17).
+Baek states it on $(0, 1]$; Theorem 7.29 needs $(0, \pi/2]$, which the proof gives (baek/REPORT.md, E17).
 
 *Proof.* Each round raises the floor $c$ of $j_c$ by $\frac1{12}$, until $c = \frac34$. First
 $f_1 = \max(0, 1 - x) = j_0$. If $f_m \ge j_{(m - 1)/12}$ for some $1 \le m \le 9$, then
@@ -907,7 +907,7 @@ $t = \pi/2$, Lemma 7.25 gives no bound, but $f_K$ and $f_{11}$ are continuous
 $g_K(t) \ge f_{11}(\pi/2 - t) > 1$ for $t \in (0, \pi/2)$, and at $t = 0$ by continuity. $\square$
 
 The paper deduces the endpoint values from Lemma 6.5.2 directly, which covers only the open interval
-there; continuity closes the gap (REPORT.md, E17).
+there; continuity closes the gap (baek/REPORT.md, E17).
 
 *Proof of Theorem 7.2.* Let $K$ be a balanced maximum cap. Condition (1) is Corollary 7.19, and
 condition (2) is Proposition 7.22 (2). By the same proposition,
@@ -933,7 +933,7 @@ cannot be right. The cap of $G$ would then maximize $\mathcal{A}$
 [Theorems 5.1](05-rotation-angle.md#theorem-51-a-first-bound-on-the-rotation-angle-baek-theorem-151)
 and [5.2](05-rotation-angle.md#theorem-52-the-right-angle-baek-theorem-152) this would already prove
 the optimality of $G$, which Gerver only conjectured. Gerver's Theorem 2 shows that $G$ satisfies
-the balancing condition (REPORT.md, E12). Baek's Remark 6.1.1 observes that the statement can be
+the balancing condition (baek/REPORT.md, E12). Baek's Remark 6.1.1 observes that the statement can be
 checked on Romik's equations, and the formalization does so.
 
 *Proof of Theorem 7.3.* This is

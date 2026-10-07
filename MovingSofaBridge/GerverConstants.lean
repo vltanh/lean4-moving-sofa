@@ -8,7 +8,7 @@ public import Mathlib
 Formal-conjectures defines Gerver's sofa from the solution `(A, B, φ, θ)` of Gerver's system
 `ABφθSpec` (Romik 2018, Equations (1)–(4)) on the domain `0 ≤ φ ≤ θ ≤ π/4`, `A, B ≥ 0`. This module
 proves that the system has at most one solution (`spec_unique`), by elementary inequalities.
-`Spec` is a copy of `ABφθSpec`: `ChallengeDefs`, which defines `ABφθSpec`, uses this result.
+`Spec` is a copy of `ABφθSpec`: `MovingSofaBridge.Defs`, which defines `ABφθSpec`, uses this result.
 
 The angles determine `A` and `B` (`Spec.coefficients`). Every solution has `0 < φ < θ` and
 `φ < 1/20` (`Spec.phi_lt_twentieth`). On that strip the third equation `F`, with `A` and `B`
