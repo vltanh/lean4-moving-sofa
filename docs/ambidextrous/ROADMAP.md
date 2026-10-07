@@ -1,90 +1,71 @@
-# Active roadmap: the general minimum-width slack inequality
+# Active roadmap after trying four directions
 
-**Unrestricted full-turn and partial-turn optimality remain unproved.** The new uploaded minimum-width package supplies a useful frame and an exact signed correction. New SM/SB hand results establish a sharp area margin and same-body partial completion on the explicitly specified near-unit reference-scale hull class. No theorem places arbitrary competitors or maximizers in that class. Uniqueness remains deferred.
+**General full-turn and partial-turn optimality remain unproved.** The latest user request was to commit the different directions and try all of them. The first pass is documented in [four-direction-first-pass-review.md](four-direction-first-pass-review.md); the original plan is [four-direction-research-plan.md](four-direction-research-plan.md). This roadmap replaces the previous default of extending the most recent conditional family.
 
-Read [HANDOFF.md](HANDOFF.md), [minimum-width-package-review.md](minimum-width-package-review.md), [minimum-width-frame.md](minimum-width-frame.md), [scaled-reference-slack-margin.md](scaled-reference-slack-margin.md), and [scaled-reference-safe-strip-bridge.md](scaled-reference-safe-strip-bridge.md). All proofs retain their self-review and dependency limitations.
+## 1. Goal and rules
 
-## 1. Goal and execution policy
-
-The goal remains the ordinary-area inequality |S|<=M, where
+The goal is ordinary area at most the explicit reference value
 
 $$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-Prioritize hand proofs. Use short computations to check algebra or reject a precise proposed implication; at most 30 seconds per invocation, preferably five/ten-second external caps. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]` under `docs/ambidextrous/`.
+A new result should eliminate a possible maximizing configuration, give a correctly oriented universal area comparison on its domain, or reduce the target to a complete smaller class. A special-case margin is not global admission, and rewriting the target as a clipping inequality does not establish it.
 
-The full-turn comparison is the main work. The supplied partial/minimum-width packages authorize directly related angle-coverage review, not an unrelated search campaign. A result on a family is not global closure; a script verifying scalar identities is not a continuum certificate.
+Prefer hand proofs. Keep each computation under an external five/ten-second cap where practical, never over 30 seconds without new authorization. Commit substantive positive and negative findings frequently with `[skip ci]` under docs/ambidextrous. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Preserve concurrent work. All written arguments and historical dependencies remain self-reviewed rather than independently verified. Unrestricted uniqueness stays deferred.
 
-## 2. Proved frame and exact remaining area budget
+## 2. Results and decisions
 
-For an already full-turn body, SI2 permits a change of incoming normal inside its connected safe-strip component. Minimize width within that component, giving actual span 1-s. Rotate and translate into s<=y<=1 without stretching. MF1 proves the horizontal top and bottom face intervals overlap. Other safe components may exist; no global claim w>1 outside the chosen component is made.
+| Direction | First attempt produced | Decision and next gate |
+|---|---|---|
+| D1: actual maximizer structure | Exact second-order rejection of feasible balanced saddles; finite critical-face candidates for bounded rational quadratic charts. | Continue on actual unresolved geometric charts. Do not re-derive the already known first-order balance or drop its normal cone. The continuum curvature/injectivity theorem is still missing. |
+| D2: coupled dual | An overlap-safe dual, and an exact counterexample to sharpness with one constant weight per quadrant. | Stop that unsplit-weight version. Continue spatial allocation valid across parameter boxes. No globally sharp allocation yet. |
+| D3: finite-angle exclusion | One complete eight-offset box has upper area 709/480<M. Two independent rational methods and a hand integration agree. A larger box was not excluded. | Combine exact boxes with D1 critical faces. Record every residual region; no claim of complete global covering or improved global constant. |
+| D4: area versus angle | Exact allowance Lambda(p,q;e) using actual strip widths; zero allowance when arccos(p)+arccos(q)>=e. | Insert into genuine partial-endpoint branches. Positive allowances still require a deficit. No automatic minimum-width/slack relation or connected deletion. |
 
-For actual hull roof A and floor B, define the height-one downward caps with roofs A and 1+s-B and full niche roofs n_U,n_V. Their nonempty-fiber canonical envelope satisfies
+The notes are [D1](direction-1-critical-face-reduction.md), [D2](direction-2-overlap-safe-duality.md), [D3](direction-3-robust-finite-angle-box.md), and [D4](direction-4-width-aware-completion.md).
 
-$$|E|=\Psi(U)+\Psi(V)+G_s,$$
+## 3. Concrete next experiment
 
-$$G_s=\int[\min(n_U,B)+\min(n_V,1+s-A)]-sW=T_s+C_s-sW,$$
+Use one precisely stated finite-angle placement region, with rational normals and a proved bounding box. The robust forbidden-union method first gives an upper bound for every placement in that region. If inconclusive, subdivide into actual line-arrangement charts and apply the exact critical-face candidate reduction. Keep all candidates at chart boundaries and all actual connectedness/hull-retention constraints if optimizing the connected class.
 
-where T_s is the sum of the two niche areas below the actual body levels and C_s>=0 is the remaining clipping above those levels.
+This combines Directions 1 and 3 with the spatial accounting retained from Direction 2. It avoids two unproved substitutions: treating arbitrary caps as weighted maximizers and pretending that a hull-area gain survives niche deletion. It also avoids the fractional occupancy barrier by evaluating the finite geometric envelope rather than only pair/triple occupancy constraints.
 
-The universal target is
+**What would count as a decisive next result:** a complete exclusion of a genuinely unresolved compact configuration region, an explicit surviving critical configuration with a valid analytic improving direction, or a sharp residual theorem covering all remaining branches. A growing list of individually successful boxes is not complete coverage. The number of finite charts can be large; the abstract finite-candidate theorem is not a runtime guarantee.
 
-$$\boxed{T_s+C_s-sW\le\Delta(U)+\Delta(V),\quad\Delta=M/2-\Psi.}$$
+For a branch with partial endpoint angles, use Direction 4's actual incoming/outgoing widths. It reduces the worst-case CC cost and can sometimes supply a zero-loss bridge. Do not choose a more favorable incoming frame unless the actual body has a proved motion to it.
 
-This is still equivalent to the missing full-turn value bound on actual compatible pairs. Overlap is useful but does not prove matching faces, centrality, a small niche footprint or a nonpositive G_s.
+## 4. The global equality that is still not paid
 
-Under the package's explicit central-face conditions, MF3 makes C_s=0. Then a sufficient condition is T_s<=sW; a stronger convenient condition is that the two niche footprint lengths total at most W. Neither is established globally. At s=0, nondegenerate overlapping faces fall into FAS; end-point-face configurations remain.
+For compatible full-turn cap pairs with nonempty surviving fibers,
 
-## 3. The package's reference-scale phenomenon now has a hand proof
+$$|E|=\Psi(U)+\Psi(V)+G,\qquad
+\Delta(U)+\Delta(V)-G=M-|E|.$$
 
-SM1 studies K_s=(1-s)K_*+(0,s), 0<=s<=1/64, and its **whole** canonical full-turn envelope E_s. A known scaled reference sofa inside it proves connected full-turn feasibility and actual hull equality. A contained face rectangle proves its vertical direction is the minimum-width normal.
+Thus G<=Delta(U)+Delta(V) is the desired full-turn theorem itself. The weighted value in the existing written WV chain does not pay G. AS's adaptive aggregate upper bound is a stronger sufficient target and is also unproved globally.
 
-The height-one caps have top-face length W/2 and open-quarter curvature at most one. Thus their niches stay within the top face and
+In the valid minimum-width frame, the identity instead reads
 
-$$G_s=-2\int_{J_s}(s-n_s)_+.$$
+$$G_s=T_s+C_s-sW.$$
 
-The two endpoint circular regions have inner radius R=(1+s)/2. Global first-wall monotonicity and elementary integration give
+The universal shortcut G_s<=0 is **false**. MS proves G_s/s -> 2T-W on a regular scaling family, with an explicit positive stadium example. NR gives positive G_s arbitrarily near M from below. These are in `minimum-width-positive-slack-counterexample.md` and `near-reference-positive-minwidth-slack.md`. Retain cap deficits; do not reopen the false sign-only strategy.
 
-$$-G_s\ge\Gamma(s)=(1+s)^2\arctan\sqrt{s}-(1-s)\sqrt{s}\ge\frac83s^{3/2}.$$
+MF's same-body face overlap, FO's conditional overhang budget, and SM/SB's reference-scale margin and exact bridge remain useful scoped results. They do not place arbitrary competitors in their domains. The current four attempts do not independently audit the entire WV/SR/AF continuum chain.
 
-With the admitted regular-cap SR/AF comparison,
+## 5. Partial-turn bookkeeping
 
-$$\boxed{|E_s|\le M-2\Delta_s-\Gamma(s)\le M-\frac83s^{3/2}.}$$
+CC gives the unit-strip allowance lambda(e)=tan(e/2)-e/2 and the exact relation between visited and signed full fibers. Direction 4 replaces each lambda by a no-larger Lambda using actual endpoint widths. For p,q<=1 and a=arccos p, b=arccos q:
 
-This turns the numerical power-law observation into an explicit signed area margin. It does not rely on WV's maximizing-cap exposure chain or Gerver's area bound, but it does retain the existing written SR/AF dependency. It is not a complete neighborhood theorem: middle facets and arbitrary asymmetric perturbations are outside the fixed reference-scale family.
+$$\Lambda=0\quad\text{if }a+b\ge e,$$
 
-## 4. The corresponding partial-to-full bridge is exact on that class
+and otherwise
 
-SB1 proves that for those same hulls the entire safe-strip set modulo pi is
+$$\Lambda=\frac12\left[\frac{2pq-\cos(e)(p^2+q^2)}{\sin(e)}-p\sqrt{1-p^2}-q\sqrt{1-q^2}-e+a+b\right].$$
 
-$$[L-\eta_s,L+\eta_s],\qquad\eta_s=\arcsin\bigl(s/((1-s)m)\bigr).$$
+The signed full length may be negative on some fibers. Its integral is not the area of a connected full-turn body; the empty-fiber correction and possibly disconnected components cannot be ignored. If both allowances vanish the same body completes; otherwise a genuine area margin or another feasible construction remains necessary.
 
-The exact width near vertical is (1-s)(1+m sin(delta)); a contained rectangle excludes every other direction. All incoming/outgoing strip normals of any conventional partial-turn pair with such an actual hull lie in the same component. SI therefore completes both turns for the same body without area loss, and SM supplies the bound above.
+## 6. Reproduction and stop rules
 
-This closes both questions on hulls congruent to k K_* with 63/64<=k<=1. It does **not** establish that all competitive partial-turn bodies have a connected safe-strip bridge. No comparison of asymptotic exponents is substituted for angle coverage.
+The committed `computer-assisted/check_four_directions.py` passed all prescribed tests in about 0.01055 seconds internally and 0.605 seconds including subprocess startup, under a five-second cap. D1--D3 use exact rational arithmetic. D4's numerical integration is diagnostic, with its theorem proved in the note. Source and result identities are in `computer-assisted/four-direction-checks.json`.
 
-## 5. General partial turns still require a margin or safe completion
+No untrusted optimizer output or unsupported external ambidextrous bound is a premise. Negative results from earlier repair, averaging, midline, face-matching, span and occupancy tests remain active controls. Stop a proposed mechanism when one of them refutes it; do not spend another pass improving constants on an already adequate obstruction.
 
-The earlier uploaded PC package and reviewed CC theorem give the cubic allowance
-
-$$\lambda(e)=\tan(e/2)-e/2=e^3/24+O(e^5).$$
-
-With visited and full signed fibers one has ell_vis=ell+xi_-+xi_+ and integral xi_-/+ bounded by the two allowances. Empty full fibers require Z=integral(-ell)_+. Completion by deletion can disconnect the body; a bound on each component does not bound their total area by M.
-
-Thus a global full-turn theorem alone does not pay the positive completion allowance. A sufficient larger-domain inequality is integral ell<=M-integral(xi_-+xi_+), or a stronger uniform allowance budget. This remains unproved. The minimum-width frame starts with full turns; it cannot be used to manufacture missing orientations outside a verified safe component.
-
-## 6. What not to infer
-
-- The reference-scale class is not all nearby hulls, nor the whole PD/PS positive-opposite-face supremum class.
-- G_s need not be assigned a nonpositive sign merely because -sW occurs in its identity. Above-slab clipping and excessive footprint remain possible.
-- Arbitrary cap regularity, background face compatibility and a half-height rectangle are not supplied by the new frame.
-- No actual-body symmetrization or affine rescaling theorem has been proved; HS/AN/NM and earlier repair/averaging counterexamples remain relevant.
-- WV2, FAS, RS, SR/AF and the older geometric reductions retain their stated domains and independent-review limitations.
-- The stronger AS aggregate upper bound and the ordinary full-turn inequality are not identical optimization targets.
-
-## 7. Validation record and next implication
-
-The original minimum-width checker was replayed unchanged under an eight-second cap, reporting 1.86 seconds. Its 200 Fraction samples and prescribed numerical pattern passed; its author output was preserved. The proof-table mesh and supplied executable mesh differ, as recorded in the review.
-
-The new checker ran under five seconds in about 0.093 seconds, with 4,900 exact scalar-fiber and 33 circle/series cases. Its source blob is `ce6b327750f70e5bd92163f56087e07617a54b90`. Numerical comparisons to Gamma have errors of both signs near 10^-8; they are not rigorous upper/lower bounds. Neither program proves geometric admission.
-
-The next global mathematical implication is control of T_s+C_s-sW by the two actual cap deficits outside the central/reference-scale cases, or another ordinary-area comparison with all hypotheses verified. Do not spend another pass re-proving a reference family merely to increase the theorem count. The new exact family margin is useful evidence for a mechanism, not a completion claim. PR #3 remains open and draft.
+The research has not reached a general proof. Keep PR #3 draft and preserve that distinction in every status report.
