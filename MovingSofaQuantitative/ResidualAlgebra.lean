@@ -99,9 +99,7 @@ theorem residualPair_self (φ : ℝ) (f df : ℝ → ℝ) :
 
 theorem residualPair_comm (φ : ℝ) (f df g dg : ℝ → ℝ) :
     residualPair φ f df g dg = residualPair φ g dg f df := by
-  unfold residualPair
-  congr 1 <;> try congr 1 <;> try congr 1 <;>
-    apply intervalIntegral.integral_congr <;> intro t _ <;> ring
+  simp only [residualPair, mul_comm]
 
 /-- The actual data class is closed under subtraction of a comparison profile. -/
 theorem fourResidualData_sub_smul {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
@@ -148,10 +146,11 @@ theorem fourResidualEnergy_sub_smul {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
 
 theorem fourResidualEnergy_nonneg' {φ : ℝ} (hφ : φ ∈ Ioo 0 (π / 4))
     (f df : ℝ → ℝ) : 0 ≤ fourResidualEnergy φ f df := by
+  have h1 := arcSquare_nonneg hφ.1.le (tangentResidual (π / 2) f df)
+  have h2 := arcSquare_nonneg (by linarith [hφ.2] : φ ≤ π / 2 - φ) (cornerResidual f df)
+  have h3 := arcSquare_nonneg (by linarith [hφ.1] : π / 2 - φ ≤ π / 2) (tangentResidual (π - φ) f df)
+  have h4 := arcSquare_nonneg (by linarith [pi_pos] : π / 2 ≤ π) (tangentResidual π f df)
   unfold fourResidualEnergy
-  positivity [arcSquare_nonneg hφ.1.le (tangentResidual (π / 2) f df),
-    arcSquare_nonneg (by linarith [hφ.2] : φ ≤ π / 2 - φ) (cornerResidual f df),
-    arcSquare_nonneg (by linarith [hφ.1] : π / 2 - φ ≤ π / 2) (tangentResidual (π - φ) f df),
-    arcSquare_nonneg (by linarith [pi_pos] : π / 2 ≤ π) (tangentResidual π f df)]
+  linarith
 
 end MovingSofaQuantitative
