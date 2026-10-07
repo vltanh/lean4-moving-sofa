@@ -266,3 +266,32 @@ numerical activation and theorem body are already drafted.
 
 No result listed here is a kernel-checked theorem. The correct status remains
 **partial uncompiled source**, not source-complete and not verified.
+
+
+## Core normal Taylor bridge — source-only consolidation
+
+The core two-wall quadratic estimate in
+\`MovingSofaQuantitative/NormalRecovery.lean\` no longer rests on
+a phase-split \`simp\`/\`nlinarith\` placeholder.
+A new \`gerver_path_quadratic_remainder\` lemma uses the **existing**
+global 40-Lipschitz estimate for Gerver's glued \`gs_pathD\` and the
+scalar derivative mean-value inequality, obtaining
+
+\[
+ \|x(s)-x(t)-(s-t)x'(t)\|_2\le80|s-t|^2.
+\]
+
+The actual inner-corner support identities give
+\[
+ R_U=-\langle R,u_s\rangle-(s-t)\langle x'(t),u_s-u_t\rangle,\quad
+ R_V=-\langle R,v_s\rangle-(s-t)\langle x'(t),v_s-v_t\rangle.
+\]
+Using \(\|x'(t)\|\le10\) and the 2-Lipschitz angular frame gives
+\(|R_U|,|R_V|\le100|s-t|^2\le1600d^2\), hence the
+advertised conservative \(3000d^2\) bound when \(|s-t|\le4d\).
+
+This is uncompiled proof source. It narrows one normal-recovery
+dependency but **does not close** the endpoint/junction normal cones,
+tail nearest-point witnesses, or uniform reference sector atlas.
+Accordingly \`explicit-local-stability\` and \`explicit-cutoff\` remain
+\`blocked_source\`. No Lean/Lake/CI or certificate computation was run.
