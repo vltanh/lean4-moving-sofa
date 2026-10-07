@@ -429,7 +429,7 @@ remainder on a sufficiently small neighborhood. The fixed lower margin
 in \cref{thm:quant-critical-lower} excludes all coefficients below $L$.
 \end{proof}
 
-\quantstatus{Uncompiled source includes proposed proofs for both sides of the interval, but the lower-family energy certificate still lacks a complete ordered-piece integral bridge.
+\quantstatus{Uncompiled source includes proposed proofs for both sides of the interval. The lower-family energy certificate now has a draft ordered-piece integral bridge and a removable-singularity endpoint model, but neither its soundness proofs nor its Boolean reduction has been run through Lean.
 \quantcode{FullQCertificate.lean} connects the actual continuum kernels and
 endpoint slacks to a closed Boolean operator check, while
 \quantcode{FeasibleCriticalLower.lean} packages the actual Hermite cap,
@@ -448,6 +448,19 @@ Their Gram entries are exact primitive differences. Possible empty or changing
 overlap intervals must be enclosed, not selected by a midpoint test.
 The angle endpoints, where an integrating factor would be singular, are
 handled by the endpoint support identities rather than an improper integral.
+For the trial family's final $B$-residual cell, put $w=\pi/2-t$ and factor
+the exact last Hermite cubic as
+\[
+ g(\pi/2-w)=w(-d_{16}+Aw+Bw^2).
+\]
+The product $\tan(t)g(t)$ then has the regularized form
+$\cos w\,(-d_{16}+Aw+Bw^2)/\operatorname{sinc}w$, where
+$\operatorname{sinc}0=1$. The auxiliary interval layer encloses
+$1-w^2/6\le\operatorname{sinc}w\le1$ for $|w|\le1/10$;
+this remains valid when an outward endpoint box straddles $w=0$.
+The underlying integral uses the continuous endpoint value, so it does
+not attempt to invert an interval containing zero. This is currently
+uncompiled Lean proof source, not a verified numerical certificate.
 
 A certificate for a root rectangle must prove coverage of the entire root,
 the validity of every local interval bound, positivity of every denominator
