@@ -231,3 +231,38 @@ geometry, polygon containment, support-box contraction soundness, and
 the whole search-tree cover to be justified. The finite Boolean reduction
 has not been run. The six blocked theorem groups and three unexecuted
 certificate groups remain blocked/unexecuted; **no target is promoted**.
+
+
+## October 7 source-only follow-up: geometric audit progress
+
+The following new source components have been committed with \`[skip ci]\` and
+**no Lean/Lake/CI execution**:
+
+- \`ReferenceExplicitMargins.lean\`: \`gerver_niche_envelope\`,
+  \`roof_value_of_envelope\`, \`gerver_envelope_subset_shape\`,
+  \`gerver_envelope_height_eq_roof\`, the explicit B/D inactive-wall
+  lower margins, actual-tail monotonicity both in turning parameter and
+  horizontal coordinate, and the shared parametric-graph IVT transfer.
+- \`NormalRecovery.lean\`: a generic nearest-point/closed-complement
+  closure lemma, graph-closure-to-envelope theorem, nearest-niche-envelope
+  theorem, reusable smooth-arc orthogonality, explicit product/Euclidean
+  metric comparison, actual short inward rays on the smooth B/D tails,
+  and the smooth B/D active-wall estimates.
+- \`scripts/audit_quantitative_source_static.py\`: repaired a duplicated
+  coarse-angle audit key and separated declaration checks from source-shape
+  diagnostics so neither set of checks is silently discarded.
+
+This advances but does **not** discharge the \`blocked_source\` target
+\`explicit-local-stability\`: the junction/endpoint normal cones and the
+reference 1.53-sector atlas remain to be proved without an unjustified
+boundary-coordinate phase split or blanket \`aesop\` fallback.
+
+There are still independently open formal source interfaces for explicit
+terminal/local radii, the penalized right-angle/partial-angle comparison,
+the exact coarse-angle search's geometric soundness, and the finite
+feasible-trial certificate's integration bridge. Therefore the
+\`10^{-600}\` headline theorem remains \`blocked_source\`, even though its
+numerical activation and theorem body are already drafted.
+
+No result listed here is a kernel-checked theorem. The correct status remains
+**partial uncompiled source**, not source-complete and not verified.
