@@ -98,6 +98,18 @@ No Lean, Lake, CI, axiom audit, Comparator, TeX build, or Lean
    \`scripts/tests/test_quantitative_wall_expansion.py\` contains a
    counterexample to the old formulas.
 
+8. **Tangent-ball reduction for sectors (October 7, 2026).**
+   \`ReferenceSector.lean\` now isolates a quantitative geometric fact:
+   for the prescribed half-angle \(h=153/200\), a cone of radius \(r\)
+   at a rolling-ball tangency point fits inside the interior tangent
+   ball of radius \(R\) whenever \(r\le R\). The same containment
+   transfers to a point displaced inward by \(d\) when \(r+d\le R\).
+   The proof uses the exact inequalities \(\sin h\le\cos h\) and the
+   orthonormal frame identity; it requires no Gerver-specific smoothness.
+   **Still open:** deriving uniform actual tangent balls/contact charts
+   (and separately the two sharp floor-corner wedges) from the Gerver
+   phase formulas. This does not by itself prove the full sector atlas.
+
 The full mathematical evidence and negative controls remain in the numbered
 notes under \`docs/stability/constants/\`.
 
