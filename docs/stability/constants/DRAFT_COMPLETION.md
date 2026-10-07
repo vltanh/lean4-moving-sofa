@@ -196,3 +196,38 @@ new results as uncompiled, not fully formalized.
 
 This ledger supersedes the older "source-complete" handoff. No result or
 failed intermediate approach has been silently deleted.
+
+
+## Rational coarse-angle and effective-angle source repairs (October 7, 2026)
+
+This source-only pass supplied previously undeclared elementary geometry and
+domain lemmas without running Lean:
+
+- **Half-angle coverage:** \`exists_hundredth_slab\` covers every real
+  \(r\in[3/5,4/5]\) by the twenty closed rational slabs; both endpoint
+  inequalities are derived from cosine/sine identities instead of using
+  the missing \`tan_mono_on_quadrant\` helper. The lower proof uses
+  \(\omega<\pi\), not the unjustified \(\omega\le\pi/2\) implication.
+- **Right-angle endpoint:** \`EffectiveAngleEntry.high_angle_cot_le_quarter\`
+  handles \(\omega=\pi/2\). The old premise \(4<\tan\omega\) was false
+  there because tangent is totalized; the proof now directly bounds
+  \(\cot\omega=\cos\omega/\sin\omega\).
+- **Exact search primitives:** rational polygon clipping now has explicitly
+  decided Boolean endpoint tests; the upper-support contraction takes its
+  maximum from the lower box endpoint, not the existing upper endpoint.
+  Unused split-coordinate storage was removed from \`SearchTree\`.
+  The rational normal has proven unit length, its paired tangent is
+  orthogonal, its first component is positive on the searched slabs,
+  and rational edge-line intersections have exact support values and
+  parameters in \([0,1]\) when an edge crosses the support line.
+- **Anchored support-error hygiene:** a zero-case branch no longer shadows
+  the hypothesis fixing the top-normal support error.
+- The static linter now flags recurrence of the tangent-endpoint,
+  rational-clipping, contraction, and incorrect \(\pi/2\) deductions.
+
+These are **uncompiled source lemmas**, not successful proof checks.
+The entire coarse-search soundness still needs the terminal-pinned candidate
+geometry, polygon containment, support-box contraction soundness, and
+the whole search-tree cover to be justified. The finite Boolean reduction
+has not been run. The six blocked theorem groups and three unexecuted
+certificate groups remain blocked/unexecuted; **no target is promoted**.
