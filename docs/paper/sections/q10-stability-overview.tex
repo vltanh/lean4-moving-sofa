@@ -29,17 +29,18 @@ $\omega\in[\arccos(5/11),\pi/2]$ satisfies
 No smoothness, injectivity, or monotonicity of the input sofa is assumed.
 \end{theorem}
 \quantstatus{The exact statement is
-\quantcode{MovingSofaQuantitative.Targets.ExplicitLocalStability}.
-The centered-cap proof source is written, but the full numerical
-reference-geometry and terminal assembly is not yet an unconditional Lean
-theorem. The established existential-coefficient version remains
-\cref{thm:stability,thm:stability-angle}.}
+\quantcode{MovingSofaQuantitative.Targets.ExplicitLocalStability}, with an
+uncompiled theorem body in \quantcode{MovingSofaQuantitative.explicit_local_stability}.
+The numerical sector, normal, terminal, and direct-area assemblies are present
+in the quantitative library. None of these new modules has been compiled or
+kernel checked; the integrated existential-coefficient theorem remains the
+verified baseline \cref{thm:stability,thm:stability-angle}.}
 
 The coefficient $23/10$ is an upper bound, not an optimal constant. The
 threshold is initially left existential: this isolates the geometric content
 of the square-root estimate from the effectivity calculations. The final
-proposition of \cref{sec:quant-refinements} records the proposed common cutoff
-$10^{-600}$, with its separate proof-source obligations.
+proposition of \cref{sec:quant-refinements} records the explicit common cutoff
+$10^{-600}$; its uncompiled proof source is kept separate from this local proof.
 
 \subsection{Why the square root occurs}
 
