@@ -57,7 +57,8 @@ $$\frac{u(t)}{\sin t}\le A_*(x_{out})-A_U(x_{out}).$$
 
 To use the first wall as a niche lower test, its companion must still be higher. At this reference tail point the reference companion gap is
 
-$$L_*(t,x_{in})-n_*(x_{in})=rac{(3m/2)\sin t-1}{\cos t}\ge19/8.$$
+$$L_*(t,x_{in})-n_*(x_{in})=
+\frac{(3m/2)\sin t-1}{\cos t}\ge19/8.$$
 
 The largest allowed upward displacement of the first wall follows from STW.2:
 
