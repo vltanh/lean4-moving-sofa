@@ -1158,6 +1158,29 @@ theorem roof_value_of_envelope {P : GerverParams} {H L LΓ : ℝ}
     dsimp [p] at hzy
     linarith
 
+/-- The fixed Gerver envelope is the graph of any roof satisfying
+\`CapRoofData\`. The vertical-slope bound gives uniqueness at each abscissa. -/
+theorem gerver_envelope_height_eq_roof {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ)
+    {q : Point} (hq : q∈gerverEnvelope P) :
+    γ q.1=q.2 := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hΓ:=gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbounds : ∀ z∈gerverEnvelope P,
+      z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧
+      0≤z.2 := by
+    intro z hz
+    have h:=envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz
+    exact ⟨h.1,h.2.1⟩
+  exact roof_value_of_envelope hroof hΓ hSlope hbounds hq
+
 /-- Explicit roof margin with coefficient 5/51. -/
 theorem gerver_explicit_roof_slack {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
