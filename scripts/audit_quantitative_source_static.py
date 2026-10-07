@@ -52,6 +52,26 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
         "explicit_normal_and_deep_niche_recovery",
         "roof_interior_balls",
     ),
+    "MovingSofaQuantitative/CoarseAngleCertificate.lean": (
+        (
+            r"\.foldl\s+max\s+a\.2\)\)",
+            "Seeding the polygon-vertex maximum with the existing upper "
+            "support endpoint makes the upper contraction a no-op. Use "
+            "the previous lower endpoint and prove the outer support bound.",
+        ),
+        (
+            r"have\s+hup\s*:\s*ω\s*≤\s*π/2[\s\S]{0,130}"
+            r"arctan_lt_pi_div_two",
+            "arctan(4/5)<pi/2 implies twice the angle is below pi, "
+            "not below pi/2. The half-angle cosine proof needs only "
+            "omega<pi; do not infer a stronger bound.",
+        ),
+        (
+            r"let\s+ina\s*:=\s*dotQ\s+e\.1\s+n\s*≤\s*h",
+            "Polygon clipping branches on Booleans. Explicitly decide "
+            "each exact rational inequality before using && or !.",
+        ),
+    ),
     "MovingSofaQuantitative/EffectiveAngleEntry.lean": (
         "partial_inner_triangle_area_lower",
         "high_angle_tan_lower",
