@@ -157,16 +157,14 @@ theorem infDist_pos_of_compact {K : Set Point} (hK : IsCompact K)
   subst q
   exact hp hq
 
-theorem exists_mem_le_infDist {K : Set Point} (hK : IsCompact K)
-    (p : Point) :
+/-- A compact *nonempty* set contains a nearest point.  The nonempty
+hypothesis is necessary: the corresponding assertion for the empty compact
+set would be false. -/
+theorem exists_mem_le_infDist {K : Set Point}
+    (hK : IsCompact K) (hne : K.Nonempty) (p : Point) :
     ∃q∈K,euclideanDist p q≤infDist p K := by
-  by_cases hne : K.Nonempty
-  · obtain ⟨q,hq,hEq⟩:=exists_mem_eq_infDist hK hne
-    exact ⟨q,hq,hEq.le⟩
-  · exfalso
-    have he:=Set.not_nonempty_iff_eq_empty.mp hne
-    rw [he] at hK
-    simpa using hK.nonempty
+  obtain ⟨q,hq,hEq⟩:=exists_mem_eq_infDist hK hne
+  exact ⟨q,hq,hEq.le⟩
 
 theorem gerver_path_mem_shape {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
