@@ -101,3 +101,33 @@ The full-turn rectangle criterion also implies a sharp area bound on this entire
 Equality occurs at \(h=1/\sqrt2,\ W=\sqrt2\), for which AN.1 is an equality and \(W\ge h\) holds.
 
 Thus no rectangle in the range \(W\ge h\) can challenge Romik's area \(M>8/5\), despite their usefulness as exact tests of full-quarter feasibility and of proposed area-preserving normalizers. The statement does not extend to all convex or all nonconvex ambidextrous bodies; it is confined to the specified rectangles.
+
+
+## 5. Extension: the sharp rectangle test holds at every aspect ratio
+
+The assumption \(W\ge h\) in the proof of AN1 is dispensable if the endpoint cases of the two affine depth functions are retained rather than silently assuming their crossing lies in the base segment.
+
+**Theorem AN3 (all rectangles).** For **every** \(W>0\) and \(0<h\le1\), the rectangle \(R_{W,h}\) performs both complete quarter turns **if and only if** \(W/2+h\le\sqrt2\). Consequently its area is at most one, with equality exactly at \(h=1/\sqrt2,\ W=\sqrt2\).
+
+**Proof.** Keep the exact lower-turn depth functions \(d_u(q)=c(W-q)+sh\), \(d_v(q)=sq+ch\) on the worst lower edge. Their formal crossing is \(q_*=[cW+h(s-c)]/(s+c)\).
+
+If \(q_*<0\), the decreasing first depth is smaller than the second throughout \(q\in[0,W]\). Its maximum is at \(q=0\), and the inequality \(q_*<0\) itself gives
+\[
+d_u(0)=cW+sh<ch\le h\le1.
+\]
+If \(q_*>W\), the second depth is smaller throughout the segment, and its maximum is at \(q=W\). The crossing inequality yields
+\[
+d_v(W)=sW+ch<sh\le h\le1.
+\]
+Thus either endpoint regime is automatically safe.
+
+When \(q_*\in[0,W]\), the maximum equals the crossing value \(H(z)=Wz/2+(h-W/2)/z\), for \(z=s+c\in[1,\sqrt2]\). If \(h-W/2\ge0\), this function is convex, so its maximum is attained at an endpoint of \([1,\sqrt2]\), with values
+\(h\) and \((W/2+h)/\sqrt2\). If \(h-W/2<0\), \(H'(z)>0\), and its maximum is the second value. Under the displayed inequality, both are at most one. This proves complete lower-turn feasibility at all angles; vertical reflection gives the other full turn. Conversely the \(45^\circ\) angle has \(q_*=W/2\) for every \(W>0\) and makes its maximal depth exactly \((W/2+h)/\sqrt2\). Thus the criterion is necessary.
+
+Finally,
+\[
+|R_{W,h}|=Wh\le 2h(\sqrt2-h)=1-2(h-1/\sqrt2)^2\le1.
+\]
+The equality parameters satisfy the turning criterion and \(0<h\le1\), so the bound is attained. QED.
+
+This extension settles the convex **rectangular** full-turn class completely, without any comparison with the weighted one-turn functional. It does not settle arbitrary convex shapes or arbitrary nonconvex full-turn sofas. The affine-normalization counterexample AN2 remains valid and is not dependent on the extension.
