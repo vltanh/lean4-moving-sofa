@@ -25,16 +25,65 @@ namespace MovingSofaQuantitative
 
 def partialPenaltyLambda : ℝ := 1/(2:ℝ)^20
 
+/-- Exact high-angle cotangent bound including the right-angle endpoint.
+
+At \`omega = pi/2\`, the totalized tangent vanishes, so the tempting
+intermediate claim \`4 < tan omega\` is *false*.  We work with
+\`cot omega = cos omega / sin omega\` directly.  At
+\`a = arctan (4/5)\`, the exact identity \`cos (2a) = 9/41\` gives
+\`cos omega <= 9/41\` and \`sin omega >= 40/41\` for
+\`2a <= omega <= pi/2\`, whence \`cot omega <= 9/40 < 1/4\`.
+-/
+theorem high_angle_cot_le_quarter {ω : ℝ}
+    (hω : 2*arctan (4/5:ℝ)<ω) (hωupper : ω≤π/2) :
+    cot ω≤1/4 := by
+  let a : ℝ := arctan (4/5:ℝ)
+  have ha0 : 0<a := arctan_pos (by norm_num : (0:ℝ)<4/5)
+  have ha1 : a<π/2 := arctan_lt_pi_div_two _
+  have hcosApos : 0<cos a :=
+    cos_pos_of_mem_Ioo ⟨by linarith [ha0,pi_pos],ha1⟩
+  have htanA : tan a=4/5 := tan_arctan _
+  have hsinA : sin a=(4/5:ℝ)*cos a := by
+    rw [tan_eq_sin_div_cos] at htanA
+    exact (div_eq_iff hcosApos.ne').mp htanA
+  have hunitA : sin a^2+cos a^2=1 := sin_sq_add_cos_sq a
+  have hcosA : cos (2*a)=9/41 := by
+    have hsum : 2*a=a+a := by ring
+    rw [hsum,cos_add]
+    rw [hsinA] at hunitA ⊢
+    nlinarith [hunitA]
+  have hω0 : 0≤ω := by
+    have ha : 0<2*a := by linarith [ha0]
+    dsimp [a] at ha
+    linarith [hω]
+  have hωπ : ω≤π := hωupper.trans (by linarith [pi_pos])
+  have hcosbound : cos ω≤9/41 := by
+    have hc:=cos_le_cos_of_nonneg_of_le_pi
+      (by linarith [ha0] : 0≤2*a)
+      (by simpa [a] using hω.le) hωπ
+    rw [hcosA] at hc
+    exact hc
+  have hcos0 : 0≤cos ω :=
+    cos_nonneg_of_mem_Icc ⟨hω0,hωupper⟩
+  have hsin0 : 0<sin ω :=
+    sin_pos_of_pos_of_lt_pi (lt_of_le_of_lt hω0
+      (by linarith [ha0,hω])) (by linarith [hωupper,pi_pos])
+  have hcos2 : cos ω^2≤(9/41:ℝ)^2 :=
+    sq_le_sq₀ hcos0 hcosbound
+  have hunit : sin ω^2+cos ω^2=1 := sin_sq_add_cos_sq ω
+  have hsinlower : (40/41:ℝ)≤sin ω := by
+    nlinarith [hunit,hcos2,hsin0]
+  rw [cot_eq_cos_div_sin]
+  exact (div_le_iff₀ hsin0).2 (by nlinarith [hcosbound,hsinlower])
+
 /-- Positive partial-angle sofa area forces a uniform width bound once the
 angle has entered the coarse high-angle range. -/
 theorem positive_partial_cap_width_lt_32 {K : Set Point} {ω : ℝ}
     (hK : IsCap K ω) (hω : 2*arctan (4/5:ℝ)<ω)
     (hA : 0<sofaArea ω K) :
     horizontalWidth K<32 := by
-  have hcot : cot ω≤1/4 := by
-    have ht : 4<tan ω := high_angle_tan_lower hω
-    rw [cot_eq_one_div_tan]
-    exact (one_div_le (by positivity) (by positivity)).2 ht.le
+  have hcot : cot ω≤1/4 :=
+    high_angle_cot_le_quarter hω hK.1.2
   let W:=horizontalWidth K
   have hniche : max 0 (W/4-sqrt 2)^2≤area (niche K ω) :=
     partial_inner_triangle_area_lower hK hcot
