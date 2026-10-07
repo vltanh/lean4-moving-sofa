@@ -503,10 +503,83 @@ theorem cellUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
             simpa only [M] using hs
       · simp [hL,hH,horder] at hc
 
-/-- The candidate retained pieces cover the requested arc. Extra pieces outside
-the arc have empty intersection and contribute no integral. This is deliberately
-a set statement, avoiding any reliance on a sorting algorithm. -/
-theorem retained_piece_cover {P : GerverParams} (hP : P.IsSolution) (k : Kind) :
+/-- A monotone list with at least two entries covers the full interval
+between its endpoints by its adjacent closed intervals.  This is a
+purely order-theoretic cover, not a numerical sampling assertion. -/
+private theorem consecutive_interval_cover (xs : List ℝ)
+    {a b : ℝ} (hhead : xs.head? = some a)
+    (hlast : xs.getLast? = some b)
+    (hord : xs.Pairwise (· ≤ ·)) (hlen : 2 ≤ xs.length)
+    {u : ℝ} (hu : u ∈ Icc a b) :
+    ∃ p ∈ xs.zip xs.tail, u ∈ Icc p.1 p.2 := by
+  induction xs using List.twoStepInduction generalizing a b with
+  | nil => simp at hlen
+  | singleton x => simp at hlen
+  | cons_cons x y xs ih₁ ih₂ =>
+      have hx : x = a := by simpa using hhead
+      subst a
+      have hxy : x ≤ y := by
+        exact (List.pairwise_cons.mp hord).1 y (by simp)
+      by_cases hfirst : u ≤ y
+      · refine ⟨(x,y),?_,⟨hu.1,hfirst⟩⟩
+        simp [List.zip]
+      · cases xs with
+        | nil =>
+            have hy : b = y := by simpa using hlast.symm
+            subst b
+            linarith [hu.2,not_le.mp hfirst]
+        | cons z zs =>
+            have htail : (y :: z :: zs).Pairwise (· ≤ ·) :=
+              (List.pairwise_cons.mp hord).2
+            have hlast' : (y :: z :: zs).getLast? = some b := by
+              simpa using hlast
+            have hu' : u ∈ Icc y b := ⟨le_of_lt (not_le.mp hfirst),hu.2⟩
+            obtain ⟨p,hp,hup⟩ :=
+              ih₂ (by simp) hlast' htail (by simp) hu'
+            refine ⟨p,?_,hup⟩
+            simp [List.zip,hp]
+
+/-- The endpoint chains represent exactly the reference arc endpoints.
+The sole non-node cut is b=pi/2-phi in r2. It lies after node 15
+because theta/8 > phi on the Romik parameter box. -/
+private theorem pieceChain_geometry {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (k : Kind) :
+    let xs := (pieceChain k).map (fun e => e.realValue (realPoint P 0))
+    xs.Pairwise (· ≤ ·) ∧ 2 ≤ xs.length ∧
+    xs.head? = some (match k with
+      | .r2 | .r4 => P.φ
+      | .r3 => π/2-P.φ
+      | .B | .D => CriticalTrial.c P) ∧
+    xs.getLast? = some (π/2) := by
+  have hord := CriticalTrial.ordered hP
+  have hpos := CriticalTrial.positions hP
+  have hφ := hbox.1
+  have hθ := hbox.2.1
+  have hcut : CriticalTrial.x P 15 ≤ π/2-P.φ := by
+    unfold CriticalTrial.x CriticalTrial.c
+    norm_num
+    nlinarith [hφ.2,hθ.1,pi_gt_three]
+  -- Finite node positions are equal to their TrigExpr encodings.
+  have hnode : ∀i : Fin 17,
+      (nodePosition i).realValue (realPoint P 0) =
+      (CriticalTrial.node P i).position := by
+    intro i
+    fin_cases i <;>
+      norm_num [nodePosition,CriticalTrial.node,CriticalTrial.x,
+        CriticalTrial.c,TrigExpr.realValue,realPoint,x,φ,θ,c,halfPi]
+  -- The strict ordering of CriticalTrial.nodes is already proved from
+  -- phi < c < pi/2. Restriction to subchains preserves it; appending b
+  -- uses hcut.
+  fin_cases k <;>
+    simp [pieceChain,List.map_ofFn,hnode,CriticalTrial.nodes,
+      CriticalTrial.node,CriticalTrial.x,CriticalTrial.c,
+      OrderedNodes] at * <;>
+    first | exact hord | nlinarith [hcut,hpos.1,hpos.2]
+
+/-- The retained intervals cover precisely the intended energy arc.  No
+reflected Hermite interval is integrated twice. -/
+theorem retained_piece_cover {P : GerverParams} (hP : P.IsSolution)
+    (hbox : P.InBox) (k : Kind) :
     let I : Set ℝ := match k with
       | .r2 => Icc P.φ (π/2-P.φ)
       | .r3 => Icc (π/2-P.φ) (π/2)
@@ -514,12 +587,32 @@ theorem retained_piece_cover {P : GerverParams} (hP : P.IsSolution) (k : Kind) :
       | .B => Icc (CriticalTrial.c P) (π/2)
       | .D => Icc (CriticalTrial.c P) (π/2)
     I ⊆ ⋃ p ∈ retainedPieces k,
-      Icc ((p.1.realValue (realPoint P 0))) ((p.2.realValue (realPoint P 0))) := by
-  intro I u hu
-  have hord := CriticalTrial.ordered hP
-  fin_cases k <;>
-    simp only [retainedPieces,arcEndpoints,List.mem_map,List.mem_range] <;>
-    exact CriticalTrial.node_partition_cover hP hord u hu
+      Icc ((p.1.realValue (realPoint P 0)))
+        ((p.2.realValue (realPoint P 0))) := by
+  dsimp
+  intro u hu
+  obtain ⟨hord,hlen,hhead,hlast⟩ :=
+    pieceChain_geometry hP hbox k
+  let xs := (pieceChain k).map (fun e => e.realValue (realPoint P 0))
+  have hu' : u ∈ Icc (xs.head!) (xs.getLast!) := by
+    dsimp [xs]
+    fin_cases k <;> simpa [pieceChain] using hu
+  obtain ⟨p,hp,hpu⟩ :=
+    consecutive_interval_cover xs hhead hlast hord hlen hu'
+  have hpair : xs.zip xs.tail =
+      (retainedPieces k).map (fun p =>
+        (p.1.realValue (realPoint P 0),p.2.realValue (realPoint P 0))) := by
+    dsimp [xs,retainedPieces]
+    induction pieceChain k with
+    | nil => rfl
+    | cons e tail ih =>
+        cases tail with
+        | nil => rfl
+        | cons e' rest => simpa [List.zip] using ih
+  rw [hpair] at hp
+  obtain ⟨e,he,hpe⟩ := List.mem_map.mp hp
+  subst p
+  exact Set.mem_iUnion.mpr ⟨e,Set.mem_iUnion.mpr ⟨he,hpu⟩⟩
 
 /-- Extract the checked value for one entry of a successful \`List.mapM\`.
 Unlike a bare list-index lemma, the proof keeps the output-list length
@@ -713,7 +806,7 @@ theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
     | .r4 => arcSquare P.φ (π/2) (CriticalTrial.r4 P) ≤ U
     | .B => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rB P) ≤ U
     | .D => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rD P) ≤ U := by
-  have hcover := retained_piece_cover hP k
+  have hcover := retained_piece_cover hP hbox k
   have hdata := trial_residual_integrability hP hbox k
   unfold computedUpper at hc
   cases hs : (retainedPieces k).mapM (fun p => pieceUpper k p.1 p.2) with
