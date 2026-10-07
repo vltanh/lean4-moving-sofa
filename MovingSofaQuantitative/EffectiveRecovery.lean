@@ -119,8 +119,8 @@ theorem effective_coarse_recovery {P : GerverParams}
     nlinarith [sqrt_nonneg E,hδ]
   have hmissSmall : E<((100/1051:ℝ)*ρ-r)^2 := by
     have hs2:=sq_sqrt hE.le
-    have hnon : 0≤(100/1051:ℝ)*ρ-r := le_of_lt hreserve
-      |>.trans_eq (by ring)
+    have hnon : 0≤(100/1051:ℝ)*ρ-r :=
+      le_of_lt (sub_pos.mpr hreserve)
     nlinarith [hgap,hs2]
   have herode : euclideanErosion r (gerverSofa P)⊆capShape K := by
     rw [←gerver_shape_eq hP hbox]
