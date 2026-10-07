@@ -259,18 +259,25 @@ def pieceUpper (k : Kind) (lo hi : T) : Option ℚ := do
   let us ← (List.ofFn fun j : Fin subcells => j).mapM (cellUpper k lo hi)
   return us.sum
 
-/-- Sort-free retained piece list.  The exact order is proved below from the
-node formulas; duplicated/non-overlapping candidates contribute zero only after
-their order has been certified. -/
+/-- Non-overlapping integration pieces for each *actual* residual arc.
+
+The r2 arc ends at b=pi/2-phi, before the final Hermite node pi/2;
+the last piece is clipped at b. The r3 arc is the short [b,pi/2]
+interval, not the entire [phi,pi/2] chain. In particular reflected
+Hermite nodes are NOT added as extra integration intervals: doing so
+would double count positive energy. BranchExpr evaluates both branches
+on any cell crossing a reflected node. This can weaken a bound, but
+never weakens soundness.
+
+More subdivision may be required before \`closedCheck\` reduces to true.
+-/
 def retainedPieces (k : Kind) : List (T × T) :=
   match k with
   | .r2 =>
-      (List.range 16).map (fun i => (nodePosition ⟨i,by omega⟩,
+      (List.range 15).map (fun i => (nodePosition ⟨i,by omega⟩,
         nodePosition ⟨i+1,by omega⟩)) ++
-      (List.range 16).map (fun i => (sub halfPi (nodePosition ⟨i+1,by omega⟩),
-        sub halfPi (nodePosition ⟨i,by omega⟩)))
-  | .r3 => (List.range 16).map (fun i => (nodePosition ⟨i,by omega⟩,
-      nodePosition ⟨i+1,by omega⟩))
+      [(nodePosition 15,b)]
+  | .r3 => [(b,halfPi)]
   | .r4 => (List.range 16).map (fun i => (nodePosition ⟨i,by omega⟩,
       nodePosition ⟨i+1,by omega⟩))
   | .B => (List.range 8).map (fun i => (nodePosition ⟨i+8,by omega⟩,
