@@ -275,6 +275,14 @@ def breakpoints (k : Kind) : List T :=
   | .r2 => base ++ ns.map (fun z => sub halfPi z)
   | _ => base
 
+/-- The normal residual evaluator and the endpoint-regularized B evaluator
+are selected by *piece identity*, not by sampling a point in a cell. -/
+def cellResidualInterval (k : Kind) (lo hi : T)
+    (box : Box3) : Option Interval :=
+  if k = .B ∧ lo = nodePosition 15 ∧ hi = nodePosition 16 then
+    tailBInterval box
+  else (residual k).intervalValue box
+
 /-- A cell is accepted only if all parameter/trigonometric interval operations
 succeed and the residual square upper endpoint is finite. -/
 def cellUpper (k : Kind) (lo hi : T) (j : Fin subcells) : Option ℚ := do
@@ -287,9 +295,7 @@ def cellUpper (k : Kind) (lo hi : T) (j : Fin subcells) : Option ℚ := do
     | 0 => parameterBox 0
     | 1 => parameterBox 1
     | 2 => ⟨a,b⟩
-  let I ← if k = .B && lo = nodePosition 15 && hi = nodePosition 16
-    then tailBInterval box
-    else (residual k).intervalValue box
+  let I ← cellResidualInterval k lo hi box
   let U := max 0 (max (I.lo*I.lo) (I.hi*I.hi))
   return (b-a) * U
 
@@ -555,6 +561,38 @@ theorem tailBInterval_sound {P : GerverParams} (hP : P.IsSolution)
                           simpa [lastW,TrigExpr.realValue,
                             BranchExpr.realValue,hDmodel,div_eq_mul_inv,
                             sincRegularized] using htotal
+
+/-- The interval model is sound at every real point of its *true*
+integration piece.  The last B model is valid only on its last Hermite
+segment; this restriction is supplied explicitly here rather than
+incorrectly asserting the formula throughout an outward rational box. -/
+theorem cellResidualInterval_sound {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    (k : Kind) (lo hi : T) {box : Box3} {I : Interval}
+    (hI : cellResidualInterval k lo hi box=some I)
+    {u : ℝ}
+    (hu : u∈Icc (lo.realValue (realPoint P 0))
+      (hi.realValue (realPoint P 0)))
+    (hp : InBox box (realPoint P u)) :
+    I.Contains (match k with
+      | .r2 => CriticalTrial.r2 P u
+      | .r3 => CriticalTrial.r3 P u
+      | .r4 => CriticalTrial.r4 P u
+      | .B => CriticalTrial.rB P u
+      | .D => CriticalTrial.rD P u) := by
+  unfold cellResidualInterval at hI
+  split_ifs at hI with hspecial
+  · rcases hspecial with ⟨hk,hlo,hhi⟩
+    subst k
+    subst lo
+    subst hi
+    have hactual : u∈Icc (CriticalTrial.x P 15) (π/2) := by
+      simpa [nodePosition,CriticalTrial.x,TrigExpr.realValue,
+        realPoint,x,halfPi,πe,rat,nodeValue,nodeSlope] using hu
+    exact tailBInterval_sound hP hbox hI hactual hp
+  · have he := BranchExpr.intervalValue_sound (residual k) hp hI
+    rw [residual_real hP] at he
+    exact he
 
 /-- The parameter box contains the actual Gerver parameters at every t. -/
 theorem realPoint_in_parameterBox {P : GerverParams} (hbox : P.InBox) (u : ℝ)
