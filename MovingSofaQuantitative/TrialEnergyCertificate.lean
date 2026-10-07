@@ -622,6 +622,28 @@ theorem pieceUpper_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
       rw [hsplit]
       exact Finset.sum_le_sum fun j hj => (hcell j).choose_spec.2
 
+/-- Integrability by residual kind, assembled from the actual five
+trial-residual theorems rather than an undeclared generic interface. -/
+theorem trial_residual_integrability {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (k : Kind) :
+    match k with
+    | .r2 => IntervalIntegrable (fun t => (CriticalTrial.r2 P t)^2)
+        volume P.φ (π/2-P.φ)
+    | .r3 => IntervalIntegrable (fun t => (CriticalTrial.r3 P t)^2)
+        volume (π/2-P.φ) (π/2)
+    | .r4 => IntervalIntegrable (fun t => (CriticalTrial.r4 P t)^2)
+        volume P.φ (π/2)
+    | .B => IntervalIntegrable (fun t => (CriticalTrial.rB P t)^2)
+        volume (CriticalTrial.c P) (π/2)
+    | .D => IntervalIntegrable (fun t => (CriticalTrial.rD P t)^2)
+        volume (CriticalTrial.c P) (π/2) := by
+  cases k
+  · exact CriticalTrial.trial_residual_integrable_r2 hP hbox
+  · exact CriticalTrial.trial_residual_integrable_r3 hP hbox
+  · exact CriticalTrial.trial_residual_integrable_r4 hP hbox
+  · exact CriticalTrial.trial_residual_integrable_B hP hbox
+  · exact CriticalTrial.trial_residual_integrable_D hP hbox
+
 /-- Summation over the retained pieces. The exact residual formulas guarantee
 integrability; the node cover proves that no portion of the target arc is lost. -/
 theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
@@ -633,7 +655,7 @@ theorem retained_sum_sound {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBo
     | .B => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rB P) ≤ U
     | .D => arcSquare (CriticalTrial.c P) (π/2) (CriticalTrial.rD P) ≤ U := by
   have hcover := retained_piece_cover hP k
-  have hdata := CriticalTrial.trial_residual_integrability hP hbox k
+  have hdata := trial_residual_integrability hP hbox k
   unfold computedUpper at hc
   cases hs : (retainedPieces k).mapM (fun p => pieceUpper k p.1 p.2) with
   | none => simp [hs] at hc
