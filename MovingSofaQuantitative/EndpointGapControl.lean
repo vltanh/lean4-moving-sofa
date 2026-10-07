@@ -121,7 +121,6 @@ theorem weighted_endpoint_bound {a b M : ℝ} (hab : a < b) (hM : 0 ≤ M)
   have hlin : |f t| ≤ M*(b-a)*(t-a) := abs_le.mpr ⟨by linarith, by linarith⟩
   have hquad := quadratic_endpoint_bound hab.le hM hf hdf hd hdd hfb hdb hbound ht
   have hL : 0 < b-a := sub_pos.mpr hab
-  apply (le_div_iff₀ hL).mp
   rw [show (4*M/(b-a))*(t-a)*(b-t)^2 = (4*M*(t-a)*(b-t)^2)/(b-a) by ring]
   apply (le_div_iff₀ hL).mpr
   rcases le_total t ((a+b)/2) with hleft | hright
@@ -157,11 +156,12 @@ theorem HalfCapProfile.bridge_error_bound {φ c : ℝ} (F : HalfCapProfile φ)
     intro t ht
     have hc := F.central_right t ⟨ht.1.le, ht.2.le.trans hcv.le⟩
     have hr := hR t ⟨ht.1.le, ht.2.le⟩
+    have hr' : |F.value t|+|H t| ≤ R := by
+      simpa only [Real.norm_eq_abs, abs_of_nonneg (add_nonneg (abs_nonneg _) (abs_nonneg _))] using hr
     have he : ddw t = (F.secondR t+F.value t)+(H t-F.value t) := by dsimp [ddw]; ring
     rw [he]
     have hh := (abs_add_le _ _).trans (add_le_add hc (abs_sub _ _))
     dsimp [M]
-    simp only [Real.norm_eq_abs] at hr
     linarith [le_abs_self R]
   have hs : sin(c-φ) ≠ 0 :=
     (sin_pos_of_pos_of_lt_pi (sub_pos.mpr hφc) (by linarith [pi_pos])).ne'
@@ -174,8 +174,8 @@ theorem HalfCapProfile.bridge_error_bound {φ c : ℝ} (F : HalfCapProfile φ)
       (harmonicBridge_second φ c (F.value φ) (F.value c) u).continuousAt)).continuousOn)
     (fun u _ => ((F.derivative u).sub (harmonicBridge_derivative φ c (F.value φ) (F.value c) u)).hasDerivWithinAt)
     (fun u _ => by
-      convert (F.second_right u).mono (show Ioi u ⊆ Ici u from Ioi_subset_Ici_self) |>.sub
-        (harmonicBridge_second φ c (F.value φ) (F.value c) u).hasDerivWithinAt using 1 <;> ring)
+      have hfirst := (F.second_right u).mono (show Ioi u ⊆ Ici u from Ioi_subset_Ici_self)
+      convert hfirst.sub (harmonicBridge_second φ c (F.value φ) (F.value c) u).hasDerivWithinAt using 1 <;> ring)
     (by dsimp [w, H]; rw [he.1]; ring)
     (by dsimp [w, H]; rw [he.2]; ring)
     (by dsimp [dw, dH]; rw [hjet]; ring) hbound ht
