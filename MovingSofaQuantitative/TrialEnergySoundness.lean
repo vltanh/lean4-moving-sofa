@@ -2,6 +2,7 @@ module
 
 public import MovingSofaQuantitative.TrialResidualFormulas
 public import MovingSofaQuantitative.Certificates.TrigExpression
+public import MovingSofaQuantitative.ScalarTaylor
 
 /-!
 # Soundness lemmas for the feasible-trial energy certificate
@@ -110,26 +111,57 @@ theorem node_partition_cover {P : GerverParams} (hP : P.IsSolution)
   have hlast : (node P 16).position=π/2 := rfl
   exact exists_adjacent_interval_of_mem_ordered_nodes hord hfirst hlast hu
 
-/-- Elementary rational bound for the first harmonic residual energy. -/
-theorem r1_closed_interval {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox) :
+/-- Full-box Taylor enclosure of q² tan(phi).
+
+The earlier coarse sin(phi)<=phi, cos(phi)>=1249/1250 estimate is too weak
+to imply the published 90-bit rational receipt. Retain the exact Romik
+phi interval and use fifth-degree sine upper and sixth-degree cosine lower
+bounds. This is an analytic implication between exact rationals, not an
+invocation of the external Python receipt. -/
+theorem r1_closed_interval {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
     q^2*tan P.φ ≤
       (58017271195847425899889281 /
         1237940039285380274899124224 : ℚ) := by
-  have hφ := hbox.1
-  have hp : 0≤P.φ := hφ.1.trans (by norm_num)
-  have hc : 1249/1250 ≤ cos P.φ := by
-    calc
-      (1249/1250:ℝ) ≤ 1-(P.φ)^2/2 := by
-        have hs := sq_le_sq₀ hp (hφ.2.trans (by norm_num : (0.04:ℝ)≤0.04))
-        nlinarith
-      _ ≤ cos P.φ := one_sub_sq_div_two_le_cos
-  have hs : sin P.φ ≤ P.φ := Real.sin_le (by linarith)
-  have htan : tan P.φ ≤ (0.04:ℝ)/(1249/1250) := by
+  let a : ℝ := 39177264/1000000000
+  let b : ℝ := 39177465/1000000000
+  let sUpper : ℝ := b-a^3/6+b^5/120
+  let cLower : ℝ := 1-b^2/2+a^4/24-b^6/720
+  have ha : 0≤a := by norm_num [a]
+  have hb : 0≤b := by norm_num [b]
+  have hφ0 : 0≤P.φ := ha.trans hbox.1.1
+  have hφa : a≤P.φ := hbox.1.1
+  have hφb : P.φ≤b := hbox.1.2
+  have hφpi : P.φ≤π := by linarith [pi_gt_three,hφb]
+  have h3 : a^3≤P.φ^3 := pow_le_pow_left₀ ha hφa 3
+  have h5 : P.φ^5≤b^5 := pow_le_pow_left₀ hφ0 hφb 5
+  have h2 : P.φ^2≤b^2 := pow_le_pow_left₀ hφ0 hφb 2
+  have h4 : a^4≤P.φ^4 := pow_le_pow_left₀ ha hφa 4
+  have h6 : P.φ^6≤b^6 := pow_le_pow_left₀ hφ0 hφb 6
+  have hsin : sin P.φ≤sUpper := by
+    have hTaylor := MovingSofaQuantitative.sin_le_sinPoly5 hφ0
+    dsimp [MovingSofaQuantitative.sinPoly5] at hTaylor
+    dsimp [sUpper]
+    linarith [hφb,h3,h5]
+  have hcos : cLower≤cos P.φ := by
+    have hTaylor := MovingSofaQuantitative.cosPoly6_le_cos hφ0
+    dsimp [MovingSofaQuantitative.cosPoly6] at hTaylor
+    dsimp [cLower]
+    linarith [h2,h4,h6]
+  have hcPos : 0<cLower := by
+    norm_num [cLower,a,b]
+  have hsinNonneg : 0≤sin P.φ :=
+    sin_nonneg_of_nonneg_of_le_pi hφ0 hφpi
+  have hcosPos : 0<cos P.φ := hcPos.trans_le hcos
+  have htan : tan P.φ≤sUpper/cLower := by
     rw [tan_eq_sin_div_cos]
-    exact div_le_div₀ (by linarith) hs hc (by norm_num)
-  unfold q CriticalTrial.q
-  norm_num at htan ⊢
-  nlinarith
+    exact div_le_div₀ hsinNonneg hsin hcos hcPos
+  have hrat :
+      q^2*(sUpper/cLower)≤
+      (58017271195847425899889281 /
+        1237940039285380274899124224 : ℚ) := by
+    norm_num [q,sUpper,cLower,a,b]
+  exact (mul_le_mul_of_nonneg_left htan (sq_nonneg q)).trans hrat
 
 namespace BridgeGapCheck
 
