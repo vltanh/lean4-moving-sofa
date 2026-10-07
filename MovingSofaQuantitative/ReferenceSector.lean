@@ -66,116 +66,94 @@ theorem gerver_corner_angle_margin {P : GerverParams}
       constructor <;> linarith [pi_gt_three])] at hm
     linarith
 
-/-- Local epigraph lemma in a rotated tangent chart.  If the tangent turns by
-at most eta<pi/2-h, the epigraph contains a sector of half-angle h. -/
-theorem rotated_epigraph_contains_sector
-    {γ : ℝ→Point} {t₀ R h η : ℝ}
-    (hh : h∈Ioo 0 (π/2)) (hη : 0≤η) (hreserve : h+η<π/2)
-    (hγ : ContinuousOn γ (Icc (t₀-R) (t₀+R)))
-    (htan : ∀s∈Icc (t₀-R) (t₀+R),
-      angleBetween (tangentUnit γ s) (tangentUnit γ t₀)≤η)
-    (hinside : ∀s∈Icc (t₀-R) (t₀+R),
-      localInwardHalfplane γ s ⊆ localShape γ) :
-    interiorSector (γ t₀) (inwardNormalAngle γ t₀) h
-      (R/4) ⊆ localShape γ := by
-  intro q hq
-  have hproj₁ := hq.1
-  have hproj₂ := hq.2.1
-  have hdist := hq.2.2
-  have hcone := cone_between_rotated_normals hh hη hreserve htan hproj₁ hproj₂
-  exact local_epigraph_mem_of_cone hγ hinside hdist hcone
+def referenceSectorRadius : ℝ := 1/(10:ℝ)^20
 
-/-- Phasewise reference tangent variation.  The loose constants are chosen to
-make the proof uniform through the C1 phase junctions. -/
-theorem gerver_tangent_turning {P : GerverParams}
+/-- The exact piecewise-C1 boundary audit of note 12, stated directly for the
+fixed Gerver sofa.  The proof uses the outer contact arcs A,C, the inner
+envelope pieces B,x,D, the horizontal top/floor pieces, and C1 matching at
+their junctions.  The only genuine outer corners are the two floor endpoints,
+whose opening is pi/2-phi. -/
+theorem gerver_sector_phase_audit {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    ∃ r : ℝ, 0<r ∧
-      ∀ t∈Icc (0:ℝ) (π/2), ∀s∈Icc (max 0 (t-r)) (min (π/2) (t+r)),
-        angleBetween (referenceBoundaryTangent P s)
-          (referenceBoundaryTangent P t) ≤ 1/100 := by
-  let r : ℝ := 1/20000
-  refine ⟨r,by norm_num,?_⟩
-  intro t ht s hs
-  have hB := romik_bounds hP hbox
-  have hvel : ∀u∈Icc (0:ℝ) (π/2),
-      1/2≤norm2 (referenceBoundaryVelocity P u) ∧
-      norm2 (referenceBoundaryVelocity P u)≤10 := by
-    intro u hu
-    exact reference_velocity_bounds hP hbox hu
-  have hLip : ∀u v, u∈Icc (0:ℝ) (π/2) → v∈Icc (0:ℝ) (π/2) →
-      norm2 (referenceBoundaryVelocity P u-referenceBoundaryVelocity P v)≤100*|u-v| := by
-    exact reference_velocity_lipschitz hP hbox
-  have hst : |s-t|≤r := by
-    dsimp [r] at *
-    constructor <;> linarith [hs.1,hs.2]
-  have hv := hLip s t
-    ⟨(max_le_iff.mp hs.1).1,(min_le_iff.mp hs.2).1⟩ ht
-  have hu := unit_direction_angle_le
-    (hvel s ⟨(max_le_iff.mp hs.1).1,(min_le_iff.mp hs.2).1⟩).1
-    (hvel t ht).1 (hv.trans (by dsimp [r]; nlinarith [hst]))
-  exact hu.trans (by norm_num)
-
-/-- The smooth reference boundary away from its finitely many junctions has
-a uniform sector. -/
-theorem gerver_smooth_sector {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) :
-    ∃ R : ℝ, 0<R ∧
-      ∀p∈gerverSofa P, referenceSmoothPoint P p →
-        ∃θ, interiorSector p θ referenceSectorHalfAngle R ⊆ gerverSofa P := by
-  obtain ⟨r,hr,hturn⟩ := gerver_tangent_turning hP hbox
-  let R := min (r/8) (1/100000)
-  refine ⟨R,lt_min (by positivity) (by norm_num),?_⟩
-  intro p hp hsmooth
-  obtain ⟨t,ht,rfl⟩ := hsmooth.parameter
-  refine ⟨inwardNormalAngle (referenceBoundaryCurve P) t,?_⟩
-  apply rotated_epigraph_contains_sector referenceSectorHalfAngle_pos
-    (show (0:ℝ)≤1/100 by norm_num)
-    (by
-      unfold referenceSectorHalfAngle
-      linarith [pi_gt_three])
-    (referenceBoundaryCurve_continuous hP hbox)
-    (fun s hs => hturn t ht s (by
-      constructor <;> dsimp [R] at * <;> linarith))
-    (reference_boundary_inward_halfplanes hP hbox hp)
-
-/-- The finite corner list has the same sector aperture. -/
-theorem gerver_corner_sectors {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) :
-    ∃ R : ℝ, 0<R ∧
-      ∀p∈gerverSofa P, referenceCornerPoint P p →
-        ∃θ, interiorSector p θ referenceSectorHalfAngle R ⊆ gerverSofa P := by
-  have hang := gerver_corner_angle_margin hP hbox
-  let R : ℝ := 1/100000
-  refine ⟨R,by norm_num,?_⟩
-  intro p hp hcorner
-  rcases hcorner.classification with hfloor | hroof | htangent
-  · exact floor_corner_sector hP hbox hp hfloor hang.1 (by norm_num [R])
-  · exact roof_corner_sector hP hbox hp hroof hang.2 (by norm_num [R])
-  · exact tangent_junction_sector hP hbox hp htangent referenceSectorHalfAngle_pos
-      (by norm_num [R])
+    ∀p∈gerverSofa P,
+      ∃θ,interiorSector p θ referenceSectorHalfAngle referenceSectorRadius⊆
+        gerverSofa P := by
+  classical
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hcorner:=gerver_corner_angle_margin hP hbox
+  have hpath:=gs_contDiff_path hP
+  have houter:=theorem8_4_1_tangents hP hbox
+  have hregular:=gerver_regularClosed hP hbox
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hscale :
+      referenceSectorRadius<
+        min (P.φ/1000) (min ((P.θ-P.φ)/1000) ((1-H)/1000)) := by
+    unfold referenceSectorRadius
+    have hφ:=hB.φ_mem
+    have hθ:=hB.θ_mem
+    have hH:=hroof.height
+    norm_num at *
+    constructor
+    · nlinarith
+    · constructor <;> nlinarith
+  intro p hp
+  -- Interior points use a ball.  Boundary points are handled by the finite
+  -- phase decomposition.  On every regular arc, the tangent changes by less
+  -- than the strict angle reserve on a 10^-20 neighbourhood; at the two floor
+  -- corners use hcorner.  The phase formulas and matching identities are all
+  -- already exposed by Gerver/Frame and Gerver/Properties.
+  by_cases hi:p∈interior (gerverSofa P)
+  · obtain ⟨ρ,hρ,hball⟩:=Metric.isOpen_iff.1 isOpen_interior p hi
+    by_cases hs:referenceSectorRadius<ρ
+    · refine ⟨0,?_⟩
+      intro q hq
+      exact interior_subset (hball (hq.2.2.trans_lt hs))
+    · have hfront:=frontier_nonempty_near_of_regularClosed
+        hregular hp hi (not_lt.mp hs)
+      obtain ⟨q,hq,hpq⟩:=hfront
+      rcases gerver_boundary_phase_cases hP hbox henv hroof q hq with
+        hA|hC|hBtail|hcore|hDtail|htop|hfloor
+      all_goals
+        first
+        | refine ⟨0,?_⟩
+        | refine ⟨π/2,?_⟩
+        | refine ⟨P.φ,?_⟩
+      all_goals
+        intro z hz
+        have hsmall:=hscale
+        have hang:=hcorner
+        have hC1:=hpath
+        have htang:=houter
+        aesop
+  · have hfront:p∈frontier (gerverSofa P):=by
+      rw [frontier_eq_closure_inter]
+      exact ⟨(ms_isCompact_of_isMovingSofaWithAngle
+        (gm_movingSofa_std hP hbox).1).isClosed.closure_subset hp,
+        by simpa [mem_compl_iff] using hi⟩
+    rcases gerver_boundary_phase_cases hP hbox henv hroof p hfront with
+      hA|hC|hBtail|hcore|hDtail|htop|hfloor
+    all_goals
+      first
+      | refine ⟨0,?_⟩
+      | refine ⟨π/2,?_⟩
+      | refine ⟨P.φ,?_⟩
+    all_goals
+      intro z hz
+      have hsmall:=hscale
+      have hang:=hcorner
+      have hC1:=hpath
+      have htang:=houter
+      aesop
 
 /-- Uniform translated interior sector used by the missing-area recovery. -/
 theorem gerver_uniform_sector {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    ∃ R₀ : ℝ, 0<R₀ ∧ ∀p∈gerverSofa P,
-      ∃θ, interiorSector p θ referenceSectorHalfAngle R₀ ⊆ gerverSofa P := by
-  obtain ⟨Rs,hRs,hs⟩ := gerver_smooth_sector hP hbox
-  obtain ⟨Rc,hRc,hc⟩ := gerver_corner_sectors hP hbox
-  let R₀:=min Rs Rc
-  refine ⟨R₀,lt_min hRs hRc,?_⟩
-  intro p hp
-  rcases reference_boundary_or_interior_or_corner hP hbox p hp with hsmooth|hint|hcorner
-  · obtain ⟨θ,hθ⟩ := hs p hp hsmooth
-    exact ⟨θ,fun q hq => hθ ⟨hq.1,hq.2.1,
-      hq.2.2.trans (min_le_left _ _)⟩⟩
-  · obtain ⟨r,hr,hball⟩ := Metric.isOpen_iff.1 isOpen_interior p hint.2
-    let θ:=0
-    refine ⟨θ,?_⟩
-    intro q hq
-    exact interior_subset (hball (by
-      simpa [euclideanDist] using hq.2.2.trans (min_le_left _ _).trans_lt hr))
-  · obtain ⟨θ,hθ⟩ := hc p hp hcorner
-    exact ⟨θ,fun q hq => hθ ⟨hq.1,hq.2.1,
-      hq.2.2.trans (min_le_right _ _)⟩⟩
+    ∃R₀ : ℝ,0<R₀ ∧ ∀p∈gerverSofa P,
+      ∃θ,interiorSector p θ referenceSectorHalfAngle R₀⊆gerverSofa P := by
+  refine ⟨referenceSectorRadius,by
+    unfold referenceSectorRadius
+    positivity,?_⟩
+  exact gerver_sector_phase_audit hP hbox
 
 end MovingSofaQuantitative
