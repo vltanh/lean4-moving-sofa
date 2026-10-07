@@ -678,39 +678,68 @@ theorem gerver_explicit_roof_slack {P : GerverParams}
   rw [hγq,hqx] at hU hV
   simpa [sub_sub_cancel] using ⟨t,ht,hU,hV⟩
 
-/-- Tighter reference width and niche-roof span, directly from Gerver's
-endpoint formulas and parameter enclosures. -/
-theorem gerver_quantitative_widths {P : GerverParams}
+/-- Common endpoint formulas for Gerver's cap, used for both the total
+cap width and the two floor-wing widths. -/
+theorem gerver_endpoint_width_formulas {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    horizontalWidth P.cap<323/100 ∧
-    gerverRoofRight P-gerverRoofLeft P<807/500 := by
-  have hB:=romik_bounds hP hbox
-  have hX:=gs_X₀_bounds hP hB
-  have ha:=hB.a₁_mem
-  have hs0 : supp P.cap 0=1 := by
-    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB le_rfl pi_pos.le,gs_H_zero hP]
-  have hsπ : supp P.cap π=1-(P.path (π/2)).1 := by
-    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB pi_pos.le le_rfl,gs_H_pi]
-  have hleft : gerverRoofLeft P=1-2*P.a₁ := by
+    supp P.cap 0 = 1 ∧
+    supp P.cap π = 1 - (P.path (π/2)).1 ∧
+    gerverRoofLeft P = 1 - 2*P.a₁ ∧
+    gerverRoofRight P = (P.path (π/2)).1 + 2*P.a₁ - 1 := by
+  have hB := romik_bounds hP hbox
+  have hzero : supp P.cap 0 = 1 := by
+    rw [gerver_cap_explicit hP hbox,
+      gs_supp_K hP hB le_rfl pi_pos.le,gs_H_zero hP]
+  have hpi : supp P.cap π = 1 - (P.path (π/2)).1 := by
+    rw [gerver_cap_explicit hP hbox,
+      gs_supp_K hP hB pi_pos.le le_rfl,gs_H_pi]
+  have hleft : gerverRoofLeft P = 1 - 2*P.a₁ := by
     unfold gerverRoofLeft envD
     rw [gs_path_zero hP]
-    have hβ : P.gs_β 0=2*P.a₁-1 := by
+    have hβ : P.gs_β 0 = 2*P.a₁ - 1 := by
       rw [gs_β_eq hP (show gs_piece P 0 0 by
         linarith [hB.φ_mem.1]),gs_β₁_eq hP]
       norm_num
     rw [hβ]
     simp [uvec]
     ring
-  have hright : gerverRoofRight P=(P.path (π/2)).1+2*P.a₁-1 := by
+  have hright : gerverRoofRight P =
+      (P.path (π/2)).1 + 2*P.a₁ - 1 := by
     unfold gerverRoofRight envB
     rw [gs_α_pi_div_two hP]
     simp [vvec]
     ring
+  exact ⟨hzero,hpi,hleft,hright⟩
+
+/-- Each of the two floor wings is more than 4/5 wide.
+No numerical geometry beyond the existing Romik box is used. -/
+theorem gerver_wing_width_min {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    (4/5:ℝ) ≤ min
+      (gerverRoofLeft P + supp P.cap π)
+      (supp P.cap 0 - gerverRoofRight P) := by
+  obtain ⟨h0,hpi,hl,hr⟩ :=
+    gerver_endpoint_width_formulas hP hbox
+  have hB := romik_bounds hP hbox
+  have hX := gs_X₀_bounds hP hB
+  have ha := hB.a₁_mem
+  rw [hl,hpi,h0,hr,le_min_iff]
+  constructor <;> nlinarith [hX.2,ha.2]
+
+/-- Tighter reference cap width and niche-floor span. -/
+theorem gerver_quantitative_widths {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    horizontalWidth P.cap<323/100 ∧
+    gerverRoofRight P-gerverRoofLeft P<807/500 := by
+  obtain ⟨h0,hpi,hl,hr⟩ :=
+    gerver_endpoint_width_formulas hP hbox
+  have hB := romik_bounds hP hbox
+  have hX := gs_X₀_bounds hP hB
+  have ha := hB.a₁_mem
+  unfold horizontalWidth
+  rw [h0,hpi,hl,hr]
   constructor
-  · unfold horizontalWidth
-    rw [hs0,hsπ]
-    nlinarith [hX.1]
-  · rw [hleft,hright]
-    nlinarith [hX.2,ha.2]
+  · nlinarith [hX.1]
+  · nlinarith [hX.2,ha.2]
 
 end MovingSofaQuantitative
