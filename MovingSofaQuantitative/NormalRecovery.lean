@@ -87,6 +87,18 @@ theorem balanced_ratio_half {a b : ℝ} (ha : 0≤a) (hb : 0≤b)
   nlinarith [sq_sqrt (by positivity : 0≤a^2+b^2),
     sq_sqrt (by norm_num : (0:ℝ)≤2)]
 
+theorem abs_dot_uvec_le_norm2 (w : Point) (t : ℝ) :
+    |dot w (uvec t)|≤norm2 w := by
+  rw [abs_le]
+  constructor
+  · have h:=dot_uvec_le_norm2 (-w) t
+    simpa [dot_neg_left] using h
+  · exact dot_uvec_le_norm2 w t
+
+theorem abs_dot_vvec_le_norm2 (w : Point) (t : ℝ) :
+    |dot w (vvec t)|≤norm2 w := by
+  simpa [vvec] using abs_dot_uvec_le_norm2 w (t+π/2)
+
 theorem balanced_angle_adjustment_le_one {t a b : ℝ} {w : Point}
     (ha : 0≤a) (hb : 0≤b) (hab : 0<a+b)
     (hw : norm2 w≤1) :
@@ -99,18 +111,6 @@ theorem balanced_angle_adjustment_le_one {t a b : ℝ} {w : Point}
   apply (div_le_div_iff₀ hab).2
   nlinarith [hu.trans hw,hv.trans hw]
 
-
-theorem abs_dot_uvec_le_norm2 (w : Point) (t : ℝ) :
-    |dot w (uvec t)|≤norm2 w := by
-  rw [abs_le]
-  constructor
-  · have h:=dot_uvec_le_norm2 (-w) t
-    simpa [dot_neg_left] using h
-  · exact dot_uvec_le_norm2 w t
-
-theorem abs_dot_vvec_le_norm2 (w : Point) (t : ℝ) :
-    |dot w (vvec t)|≤norm2 w := by
-  simpa [vvec] using abs_dot_uvec_le_norm2 w (t+π/2)
 
 theorem dot_uvec_sub_le_dist (p q : Point) (t : ℝ) :
     dot (p-q) (uvec t)≤euclideanDist p q := by
@@ -302,6 +302,18 @@ theorem nearest_vector_opposes_inward {K : Set Point}
   rw [←hnear] at hmin
   exact (not_lt_of_ge hmin) hcloser
 
+def secondOrderWallErrorU (K : Set Point) (q : Point)
+    (t s d : ℝ) : ℝ :=
+  innerSlackU K s q-
+    innerSlackU K t q+
+    (s-t)*sin t
+
+def secondOrderWallErrorV (K : Set Point) (q : Point)
+    (t s d : ℝ) : ℝ :=
+  innerSlackV K s q-
+    innerSlackV K t q+
+    (s-t)*cos t
+
 /-- Uniform second-order expansion of the two hallway slacks on the core. -/
 theorem innerSlackU_balanced_expansion {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
@@ -328,18 +340,6 @@ theorem innerSlackV_balanced_expansion {P : GerverParams}
   subst p
   have hcorner:=gm_innerCorner hP hbox
   exact inner_slack_taylor_V hP hbox ht hcorner hvel
-
-def secondOrderWallErrorU (K : Set Point) (q : Point)
-    (t s d : ℝ) : ℝ :=
-  innerSlackU K s q-
-    innerSlackU K t q+
-    (s-t)*sin t
-
-def secondOrderWallErrorV (K : Set Point) (q : Point)
-    (t s d : ℝ) : ℝ :=
-  innerSlackV K s q-
-    innerSlackV K t q+
-    (s-t)*cos t
 
 /-- Absolute sine/cosine increments are bounded by the angular increment. -/
 theorem abs_sin_sub_le (s t : ℝ) : |sin s-sin t|≤|s-t| := by
