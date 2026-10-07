@@ -1,3 +1,9 @@
+> **Source-audit correction (October 7, 2026).** The earlier claim that the quantitative extension is "source-complete" is **withdrawn**. All 15 headline theorem declarations have bodies, but this is not equivalent to a self-contained draft. The source-only audit found unresolved Gerver sector/normal geometry, penalized-cap and terminal/effective-entry bridges, coarse-angle search soundness, and a feasible-trial energy-cover proof. The trial-energy cell integral and arc double-counting defects were corrected in follow-up commits, but the numerical Boolean reductions remain unexecuted. See `scripts/audit_quantitative_source_static.py` and `docs/paper/quantitative_manifest.json` for current blockers. No Lean, Lake, CI, or TeX build was run.
+
+---
+
+## Historical draft-completion report (superseded)
+
 # Completion pass for the uncompiled quantitative draft
 
 This ledger records the user's requested endpoint: **finish the uncompiled
