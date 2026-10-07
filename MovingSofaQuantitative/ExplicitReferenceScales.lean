@@ -21,8 +21,8 @@ namespace MovingSofaQuantitative
 
 def localSupportRadius : ℝ := 1/(10:ℝ)^40
 def localAngleRadius : ℝ := 1/(10:ℝ)^20
-def explicitSectorRadius : ℝ := 1/(10:ℝ)^20
-def explicitNormalDepth : ℝ := 1/(10:ℝ)^8
+abbrev explicitSectorRadius : ℝ := referenceSectorRadius
+abbrev explicitNormalDepth : ℝ := normalRecoveryDepth
 def explicitNormalError : ℝ := 1/(10:ℝ)^10
 def explicitRoofClip : ℝ := 1/2040000
 
@@ -95,19 +95,6 @@ theorem gerver_roof_slack_explicit {P : GerverParams}
       (by norm_num [explicitRoofClip])
   exact integrate_reference_slack_to_roof_margin hP hbox hroof hlead hrem
     (by norm_num [explicitRoofClip])
-
-/-- Explicit 1.53-sector radius from the quantitative boundary charts. -/
-theorem gerver_sector_radius_explicit {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox) :
-    ∀p∈gerverSofa P,
-      ∃θ,interiorSector p θ sectorHalfAngle explicitSectorRadius⊆gerverSofa P := by
-  intro p hp
-  have hcurv:=gerver_boundary_curvature_lipschitz hP hbox
-    (show (2:ℝ)^20*1024*(10^6*explicitSectorRadius)<1/10000 by
-      norm_num [explicitSectorRadius])
-  have hcorn:=gerver_corner_angle_margin hP hbox
-  exact explicit_sector_chart hP hbox hp hcurv hcorn
-    (by norm_num [explicitSectorRadius])
 
 /-- Explicit normal-slack depth and error reserve. -/
 theorem gerver_normal_slack_explicit {P : GerverParams}
