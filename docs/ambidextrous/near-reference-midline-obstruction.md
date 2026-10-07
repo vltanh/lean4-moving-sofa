@@ -95,3 +95,58 @@ Letting \(\varepsilon\downarrow0\) and choosing sufficiently close PD approximan
 This is a geometric exclusion of a specific background-admission shortcut, **not** a counterexample to the conjectured sharp full-turn value.
 
 No numerical search, CI, Lean/Lake compilation, dependency installation, manuscript build or long computation was used. All arguments are pen and paper, relative to the documented explicit reference and RR/PD/PS dependencies.
+
+## 5. Sharp leading-order cost of destroying the midline
+
+The tip cut in NM.3 admits an explicit leading-order area-loss calculation, which makes its lack of uniform admission slack quantitative.
+
+The support of the reference upper-right flank immediately after \(\beta\) is the middle reference formula
+\[
+f_*(t)=R\cos(t/2+\pi/8)+k\cos t+\tfrac12\sin t.
+\]
+Its positive right-hand curvature density at the join is
+\[
+\rho_\beta=(f_*+f_*'')(\beta+)
+=\tfrac34R\cos(\beta/2+\pi/8)>0.
+\]
+The actual flank is analytic on its right-hand arc, with tangent slope \(A_*'(r-)=-\cot\beta=-K\). Standard curvature of a concave roof graph gives
+\[
+A_*''(r-)=-\frac{(1+K^2)^{3/2}}{\rho_\beta}
+=-\frac1{\rho_\beta\sin^3\beta}.
+\]
+Thus, putting \(c_\beta=(2\rho_\beta\sin^3\beta)^{-1}\),
+\[
+\boxed{A_*(r-d)=\tfrac12+Kd-c_\beta d^2+O(d^3),\quad
+1-A_*(r-d)=\tfrac12-Kd+c_\beta d^2+O(d^3).}
+\tag{NM.7}
+\]
+Both are *actual* upper and lower surviving reference roofs for sufficiently small \(d>0\), because the positive niche is confined to the central reference face and vanishes on this outer flank.
+
+The cutting line is \(\ell_\varepsilon(r-d)=1/2+\varepsilon-Kd\). The material deleted from the fiber at \(r-d\) has height
+\[
+q_\varepsilon(d)=
+\min\left\{2A_*(r-d)-1,\,
+\bigl[\ell_\varepsilon(r-d)-(1-A_*(r-d))\bigr]_+\right\}.
+\]
+By NM.7, on the relevant small window its two expressions are
+\[
+2Kd+O(d^2),\qquad
+[\varepsilon-c_\beta d^2+O(d^3)]_+.
+\]
+The first branch matters only for \(d=O(\varepsilon)\), whose integrated area is \(O(\varepsilon^2)\). The second remains positive up to
+\(d=\sqrt{\varepsilon/c_\beta}+O(\varepsilon)\). Outside this interval the supporting cut lies below the original lower flank. Consequently
+\[
+\begin{aligned}
+M-|S_\varepsilon|
+&=\int_0^{\sqrt{\varepsilon/c_\beta}}
+(\varepsilon-c_\beta d^2)\,dd+O(\varepsilon^2)\\
+&=\boxed{\frac{2}{3}\sqrt{2\rho_\beta}\,
+\sin^{3/2}\beta\;\varepsilon^{3/2}
++O(\varepsilon^2).}
+\end{aligned}\tag{NM.8}
+\]
+This is an ordinary-area statement about the **actual** unsaturated cut reference, not an estimate for its possible increased full canonical saturation.
+
+As a quick arithmetic diagnostic only, evaluating the explicit support arc gave loss/\(\varepsilon^{3/2}\) approximately \(0.133108,0.133644,0.134398,0.135458\) at \(\varepsilon=0.0005,0.001,0.002,0.004\), respectively; the exact coefficient in NM.8 is approximately \(0.131809\). All four samples have the expected convergence trend. The computation took about 0.020 seconds under an external five-second limit. No sampled number is used to prove NM.7--NM.8.
+
+Thus even a *positive* order-\(\varepsilon\) violation of the midline requirement can cost only order \(\varepsilon^{3/2}\) in actual sofa area. A claimed linear penalty for losing that geometric admission hypothesis would be false near the reference unless it uses further properties not included in this cut family.
