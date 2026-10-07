@@ -131,3 +131,21 @@ There are two elementary situations in which this stronger comparison loses **no
 2. If the actual feasible full-turn body is convex, then its convex hull is the body itself. Canonical tightening deletes no point of this hull, so its full envelope equals the body. At each abscissa, \(n_U\le d_V\) and \(n_V\le d_U\) (all retained vertical fiber points must meet both motions). Both cross-deficits are nonpositive, and AS.3 again vanishes. The explicit thin full-turn parallelogram in CGA is one such example.
 
 These examples show that AS is geometrically faithful for both the reference sofa and certain very different full-turn shapes. They do **not** establish the unproved global maximum of \(\mathscr C\). In general the cross-deficits can have opposite signs, and the new aggregate clipping charge \(\int\min(D,N)\) exceeds the actual \(G\); that excess must be treated as relaxation error, not charged twice.
+
+## 6. The stronger aggregate bound is proved on the existing paid-tail domains
+
+The AS sufficient inequality is not a mere numerical guess near the reference. The already proved TC/CT/MT clipped-tail bounds actually imply the **stronger** AS.7 whenever the two input caps have their positive niches supported in one common interval \(J\), and their signed deficits satisfy
+\[
+\Delta(U)\ge\int_J(1-A_U),\qquad
+\Delta(V)\ge\int_J(1-A_V).
+\tag{AS.9}
+\]
+Indeed \(N=0\) outside \(J\), while \(D\ge0\) everywhere, so
+\[
+\int_I\min(D,N)
+=\int_J\min(D,N)\le\int_JD
+\le\Delta(U)+\Delta(V).
+\]
+Insert this into AS.8 to get \(\mathscr C(U,V)\le M\). This is an exact hand proof without an appeal to the switching remainder. In particular it applies to the actual TC tail cuts, the signed fixed-middle variants, and admitted two-background comparisons for which the relevant per-cap deficits and common projection/face interval are verified.
+
+Thus the direct aggregate target is compatible with all of those sharp near-reference cases. What is **not** proved is AS.9 or an alternative aggregate compensation for arbitrary saturated opposite-end-face competitors. The new CGA example prevents assigning compatible common half-height-niche backgrounds to *every* member of that class merely by containing its original caps. Competitive-only admission or a different global inequality remains necessary.
