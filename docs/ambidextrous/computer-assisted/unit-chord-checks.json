@@ -1,0 +1,16 @@
+{
+  "status": "exact_checks_passed",
+  "rational_angle_pairs": 1521,
+  "incompatible_right_conditions": 741,
+  "boundary_frame_tests": 82,
+  "arithmetic": "Python integers and Fraction",
+  "internal_seconds": 0.027495695000197884,
+  "python_version": "3.13.5",
+  "source_sha256": "96a6d92a35d9893e21ea5c2a2f8a02175696e1a606ff0f2af9650bb5674b38f5",
+  "continuum_geometry_verified": false,
+  "unrestricted_optimality_proved": false,
+  "ci_or_lean_used": false,
+  "source_git_blob_sha": "ccaf007fa865dd97f1dea08140f73da273154839",
+  "executed_source_matches_fetched_git_blob": true,
+  "external_timeout_seconds": 5
+}
