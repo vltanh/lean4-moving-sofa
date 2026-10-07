@@ -19,6 +19,48 @@ open MovingSofaOptimality MovingSofaStability
 
 namespace MovingSofaQuantitative
 
+/-- Refined missing-area recovery.  The full interior ball of radius
+\`κρ\` survives erosion after losing only radius \`r\`.  The earlier
+\`directedClose_of_missing_area\` bound required \`r ≤ κρ/2\`, which loses
+too much for the 10300 coefficient.  An inscribed square of side
+\`κρ-r\` suffices; no convexity of S or G is used. -/
+theorem directedClose_of_missing_area_full_ball
+    {G U S : Set Point} {κ r₀ r ρ η : ℝ}
+    (hκ : 0<κ) (hρ : 0<ρ) (hρ₀ : ρ≤r₀)
+    (hballs : HasInteriorBalls G κ r₀)
+    (hr : 0≤r) (hreserve : r<κ*ρ)
+    (herosion : euclideanErosion r G⊆U)
+    (hUf : volume U≠⊤) (hmissing : area (U\S)≤η)
+    (hsmall : η<(κ*ρ-r)^2) :
+    DirectedClose ρ G S := by
+  intro p hp
+  by_contra hnone
+  obtain ⟨z,hz⟩:=hballs p hp ρ hρ hρ₀
+  let a:=κ*ρ-r
+  have ha : 0<a := sub_pos.mpr hreserve
+  have hsq : centeredSquare z a ⊆ U\S := by
+    intro q hq
+    have hqz : euclideanDist z q≤a :=
+      centeredSquare_subset_ball z hq
+    have hqR : euclideanDist z q≤κ*ρ := by
+      dsimp [a] at hqz
+      linarith [hr]
+    have hqG : q∈G := (hz hqR).1
+    have hqP : euclideanDist p q≤ρ := (hz hqR).2
+    refine ⟨herosion ?_,?_⟩
+    · intro q' hqq'
+      apply (hz ?_).1
+      have htriangle:=euclideanDist_triangle z q q'
+      dsimp [a] at hqz
+      linarith
+    · intro hqS
+      exact hnone ⟨q,hqS,hqP⟩
+  have hfinite : volume (U\S)≠⊤ :=
+    volume_ne_top_of_subset sdiff_subset hUf
+  have harea:=area_mono_of_finite hsq hfinite
+  rw [area_centeredSquare z ha.le] at harea
+  exact (not_lt_of_ge (harea.trans hmissing)) hsmall
+
 /-- One coarse recovery lemma shared by the right-angle and partial-angle
 effective arguments. -/
 theorem effective_coarse_recovery {P : GerverParams}
@@ -66,27 +108,30 @@ theorem effective_coarse_recovery {P : GerverParams}
     dsimp [ρ]
     have hsum : δ+sqrt E≤515*sqrt E := by nlinarith [hδbound]
     nlinarith [hs10]
-  have hr : r≤(100/1051:ℝ)*ρ/2 := by
-    dsimp [r,ρ]
-    have hsqrt2 : sqrt 2<3/2 := by
-      nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),sqrt_nonneg (2:ℝ)]
-    have hrat : (3/2:ℝ)*δ<
-        (100/1051)*10*(δ+sqrt E) := by
-      nlinarith [hs]
-    nlinarith [mul_le_mul_of_nonneg_right hδbound (sqrt_nonneg (2:ℝ))]
-  have hmissSmall : E<((100/1051:ℝ)*ρ/2)^2 := by
-    dsimp [ρ]
-    have hcoef : 1<(100/1051:ℝ)*10 := by norm_num
-    nlinarith [hs2,hs]
+  have hroot : sqrt 2 < 3/2 := by
+    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),
+      sqrt_nonneg (2:ℝ)]
+  have hreserve : r<(100/1051:ℝ)*ρ := by
+    dsimp [ρ,r]
+    nlinarith [sqrt_nonneg E,hδ]
+  have hgap : sqrt E<(100/1051:ℝ)*ρ-r := by
+    dsimp [ρ,r]
+    nlinarith [sqrt_nonneg E,hδ]
+  have hmissSmall : E<((100/1051:ℝ)*ρ-r)^2 := by
+    have hs2:=sq_sqrt hE.le
+    have hnon : 0≤(100/1051:ℝ)*ρ-r := le_of_lt hreserve
+      |>.trans_eq (by ring)
+    nlinarith [hgap,hs2]
   have herode : euclideanErosion r (gerverSofa P)⊆capShape K := by
     rw [←gerver_shape_eq hP hbox]
     exact orthogonal_reference_erosion hδ
       (gm_isCap hP hbox) hK hclose
   have hUf : volume (capShape K)≠⊤ :=
     volume_ne_top_of_subset sdiff_subset hK.2.1.2.1.measure_lt_top.ne
-  have hback:=directedClose_of_missing_area
+  have hback:=directedClose_of_missing_area_full_ball
     (show (0:ℝ)<100/1051 by norm_num) hρ hρ0 hballs
-    herode hr hUf hmissing hmissSmall
+    (by dsimp [r]; positivity) hreserve
+    herode hUf hmissing hmissSmall
   have hback' : DirectedClose (10300*sqrt E) (gerverSofa P) S :=
     hback.mono (by
       dsimp [ρ]
