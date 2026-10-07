@@ -268,8 +268,13 @@ theorem effective_right_angle_cap {P : GerverParams}
     obtain ⟨s,hs,-⟩:=maximizing_cap_eq_gerver
       (gerver_maximizing_value hP hbox) hK hmax
     rw [hs]
-    exact (centeredReference_translate_eq hK (gm_isCap hP hbox) s).symm ▸
-      EuclideanClose.refl _ (by positivity)
+    have hreference :
+        centeredReference P.cap (Rigid.translate (s,0) '' P.cap) =
+          Rigid.translate (s,0) '' P.cap := by
+      simpa only [Rigid.coe_translate] using
+        (centeredReference_translate_eq (gm_isConvexBody_cap hP hbox) s)
+    rw [hreference]
+    exact EuclideanClose.refl _ (by positivity)
   · let λ:=rightAnglePenaltyLambda e
     have hλ : 0<λ := by unfold λ rightAnglePenaltyLambda; positivity
     have hKpos : 0 < sofaArea (π/2) K := by
