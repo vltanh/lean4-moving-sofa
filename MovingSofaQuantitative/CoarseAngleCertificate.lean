@@ -86,6 +86,23 @@ def segmentIntersect (a b n : QPoint) (h : Q) : QPoint :=
   let λ:=da/(da-db)
   (a.1+λ*(b.1-a.1),a.2+λ*(b.2-a.2))
 
+/-- If the two edge endpoints have distinct support coordinates, the
+intersection computed by rational clipping lies exactly on the clipping
+support line.  This is the basic algebraic fact used by the clipper
+soundness argument. -/
+theorem segmentIntersect_on_line {a b n : QPoint} {h : Q}
+    (hdiff : dotQ a n≠dotQ b n) :
+    dotQ (segmentIntersect a b n h) n=h := by
+  have hd : (dotQ a n-h)-(dotQ b n-h)≠0 := by
+    intro hz
+    apply hdiff
+    linarith
+  unfold segmentIntersect
+  simp only [dotQ] at *
+  dsimp
+  field_simp [hd]
+  ring
+
 def clip (P : Polygon) (n : QPoint) (h : Q) : Polygon :=
   (P.zip (P.tail++P.take 1)).foldl (fun out e =>
     let ina : Bool := decide (dotQ e.1 n≤h)
