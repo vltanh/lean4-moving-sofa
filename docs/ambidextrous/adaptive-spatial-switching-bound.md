@@ -149,3 +149,35 @@ Indeed \(N=0\) outside \(J\), while \(D\ge0\) everywhere, so
 Insert this into AS.8 to get \(\mathscr C(U,V)\le M\). This is an exact hand proof without an appeal to the switching remainder. In particular it applies to the actual TC tail cuts, the signed fixed-middle variants, and admitted two-background comparisons for which the relevant per-cap deficits and common projection/face interval are verified.
 
 Thus the direct aggregate target is compatible with all of those sharp near-reference cases. What is **not** proved is AS.9 or an alternative aggregate compensation for arbitrary saturated opposite-end-face competitors. The new CGA example prevents assigning compatible common half-height-niche backgrounds to *every* member of that class merely by containing its original caps. Competitive-only admission or a different global inequality remains necessary.
+
+## 7. An exact \(L^1\) stability bound for the aggregate switching error
+
+The switching mismatch is controlled by **asymmetry of the two actual one-turn surviving thickness profiles**, without any curvature or reference hypotheses. Continue to write
+\[
+a=n_U-d_V,\qquad b=n_V-d_U.
+\]
+The identity \(x_+=(x+|x|)/2\) improves AS.3 to the exact triangle-defect formula
+\[
+\boxed{\mathscr C(U,V)-|E|
+=\frac12\int_I\bigl(|a|+|b|-|a+b|\bigr)\,dx.}\tag{AS.10}
+\]
+For two real numbers the integrand vanishes if \(a,b\) have the same sign. If their signs differ, it is twice the smaller absolute value, at most \(|a-b|\). Therefore
+\[
+\boxed{0\le \mathscr C(U,V)-|E|
+\le\frac12\int_I
+\left|(A_U-n_U)-(A_V-n_V)\right|dx.}\tag{AS.11}
+\]
+Indeed
+\[
+a-b=(n_U-d_V)-(n_V-d_U)
+=(A_V-n_V)-(A_U-n_U).
+\]
+No assumption that one of these profiles is a signed objective maximizer occurs in the derivation.
+
+**Corollary AS2.** If the two full one-turn survivor thickness profiles coincide almost everywhere,
+\[
+A_U(x)-n_U(x)=A_V(x)-n_V(x)\quad\text{for a.e. }x,
+\]
+then \(\mathscr C(U,V)=|E|\). This includes identical caps as a special case but does not require that the actual upper and reflected-lower convex caps themselves coincide. The same estimate bounds the overcount when the two profiles are merely close in \(L^1\).
+
+This is a **stability of the relaxation**, not a global area bound: it does not show that the right side of AS.11 is paid by \(M-|E|\). In particular a small mismatch does not imply \(\mathscr C\le M\) when a feasible body's area is close to \(M\). The bounded falsification screens are consistent with this estimate, but it holds by the algebra above, not by their measurements.
