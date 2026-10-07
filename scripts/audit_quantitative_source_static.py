@@ -78,6 +78,30 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# The actual theorem reduction must be a closed Lean computation.
+# This Python program is a STATIC LINTER ONLY and is NEVER proof evidence.
+LEAN_ONLY_FINITE_PROOFS: tuple[tuple[str, str, str], ...] = (
+    (
+        "MovingSofaQuantitative/Certificates/CriticalExpression.lean",
+        "MovingSofaQuantitative/FullQCertificate.lean",
+        "critical_operator_reduction",
+    ),
+    (
+        "MovingSofaQuantitative/TrialEnergyCertificate.lean",
+        "MovingSofaQuantitative/TrialEnergyCertificate.lean",
+        "closed_reduction",
+    ),
+    (
+        "MovingSofaQuantitative/CoarseAngleCertificate.lean",
+        "MovingSofaQuantitative/CoarseAngleCertificate.lean",
+        "closed_reduction",
+    ),
+)
+FORBIDDEN_FINITE_PROOF_ORACLES = re.compile(
+    r"\\b(?:native_decide|run_tac|unsafe|runIO|readFile|readProcess|"
+    r"evalIO|sorry|admit|axiom)\\b"
+)
+
 # Source-shape blockers which cannot be resolved by finding an identifier.
 # These require an actual proof rewrite; removing or renaming the marker without
 # supplying the missing argument must not be counted as progress.
@@ -249,6 +273,40 @@ def source_audit(root: Path) -> dict:
                     if target not in contents:
                         errors.append({"kind": "missing_quantitative_import",
                                        "file": path, "import": module})
+    # Requiring a Lean Boolean and a kernel-facing `by decide` proof makes
+    # external numerical success flags ineligible as final evidence. This
+    # remains a source-shape check; Lean has NOT checked any reduction here.
+    for checker, proof_file, reduction in LEAN_ONLY_FINITE_PROOFS:
+        checker_src = contents.get(checker)
+        proof_src = contents.get(proof_file)
+        if checker_src is None or proof_src is None:
+            errors.append({"kind": "missing_lean_native_certificate_file",
+                           "checker": checker, "proof": proof_file})
+            continue
+        if not re.search(r"\\bdef\\s+closedCheck\\b", checker_src):
+            errors.append({"kind": "no_closed_lean_boolean", "file": checker})
+        if not re.search(r"\\btheorem\\s+" + re.escape(reduction) +
+                         r"\\b[\\s\\S]*?:=\\s*by\\s+decide\\b", proof_src):
+            errors.append({"kind": "no_kernel_decide_reduction",
+                           "file": proof_file, "theorem": reduction})
+        for source_file in {checker, proof_file}:
+            for match in FORBIDDEN_FINITE_PROOF_ORACLES.finditer(contents[source_file]):
+                errors.append({"kind": "forbidden_certificate_oracle",
+                               "file": source_file, "token": match.group()})
+    # The analytical soundness bridges are as important as the finite Booleans.
+    for path, names in (
+        ("MovingSofaQuantitative/Certificates/CriticalExpression.lean",
+         ("closedCheck_sound", "leafCheck_sound")),
+        ("MovingSofaQuantitative/TrialEnergyCertificate.lean",
+         ("energy_lt_147_125", "cellUpper_sound")),
+        ("MovingSofaQuantitative/CoarseAngleCertificate.lean",
+         ("checkTree_sound", "contract_safe")),
+    ):
+        for name in names:
+            if not re.search(r"\\btheorem\\s+" + re.escape(name) + r"\\b",
+                             contents.get(path, "")):
+                errors.append({"kind": "missing_lean_soundness_bridge",
+                               "file": path, "theorem": name})
     for name, paths in sorted(quant_decls.items()):
         if len(set(paths)) > 1:
             warnings.append({"kind": "same_short_declaration_name",
