@@ -11,9 +11,9 @@ hypothesis asserting the desired operator estimate. `decide` uses Lean's own
 reduction; no native evaluator or external oracle is introduced.
 
 The reduction below has NOT been run. The direct rational expression checker
-can be very expensive, and its chosen depth has not been replayed by the Python
-checker. The earlier Python receipt verifies a differently organized evaluator
-of the same mathematical model; it is not an execution receipt for this file.
+can be very expensive. This theorem deliberately invokes the closed Lean
+computation only; it does not read a file, invoke an external process, import
+a Python result, or accept any precomputed success flag.
 If this closed check exhausts its bound or cannot reduce within practical
 resources, the draft must be repaired with explicit accepted subtrees and/or
 proved dyadic rounding. Do not report its kernel acceptance before that run.
