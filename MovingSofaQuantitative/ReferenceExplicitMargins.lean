@@ -191,6 +191,42 @@ theorem gerver_core_transversality {P : GerverParams}
       nlinarith
     exact phase_velocity_large ha.le hb.le ⟨hs,sin_le_one t⟩ ⟨hc,cos_le_one t⟩
 
+/-- Horizontal support width, shared by the area and effectivity modules. -/
+def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
+
+/-- First variations of the two inner-wall slacks under vertical lowering and
+an angular correction \`lambda*d\`.  Gerver's frame coordinates are exactly
+\`gs_alpha, gs_beta\`. -/
+def wallVerticalRateU (P : GerverParams) (t λ : ℝ) : ℝ :=
+  -sin t-P.gs_α t*λ
+
+def wallVerticalRateV (P : GerverParams) (t λ : ℝ) : ℝ :=
+  -cos t-P.gs_β t*λ
+
+theorem wallVerticalRateU_formula {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) {t a b λ : ℝ}
+    (ht : t∈Icc P.φ (π/2-P.φ))
+    (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
+    wallVerticalRateU P t λ=-sin t+a*λ := by
+  have hv:=referenceBoundaryVelocity_eq hP t
+  rw [hv] at hvel
+  have hu:=congrArg (fun z=>dot z (uvec t)) hvel
+  simp [dot_add_left,dot_smul_left] at hu
+  unfold wallVerticalRateU
+  nlinarith
+
+theorem wallVerticalRateV_formula {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) {t a b λ : ℝ}
+    (ht : t∈Icc P.φ (π/2-P.φ))
+    (hvel : referenceBoundaryVelocity P t=-a•uvec t+b•vvec t) :
+    wallVerticalRateV P t λ=-cos t-b*λ := by
+  have hv:=referenceBoundaryVelocity_eq hP t
+  rw [hv] at hvel
+  have hu:=congrArg (fun z=>dot z (vvec t)) hvel
+  simp [dot_add_left,dot_smul_left] at hu
+  unfold wallVerticalRateV
+  nlinarith
+
 /-- Exact balancing identity for the adaptive witness angle. -/
 theorem balanced_slack_rates {a b s c : ℝ} (hab : a+b≠0) :
     -s+a*((s-c)/(a+b))=-(a*c+b*s)/(a+b) ∧
@@ -227,41 +263,221 @@ theorem gerver_adaptive_downward_slack {P : GerverParams}
     exact (le_div_iff₀ hab).2 (by
       nlinarith [mul_nonneg (show (0:ℝ)≤5/51 by norm_num) hab.le])
 
-/-- Explicit roof margin.  Endpoint/tail phases use their active wall; the
-inactive wall has a strict compact reserve. -/
+/-- Quantitative version of \`envelope_downward_slack\`.  The tails use
+their active wall (whose vertical coefficient is at least 1/2) and a compact
+inactive-wall margin.  On the core, the balancing angle from
+\`gerver_adaptive_downward_slack\` gives derivative at most -10/101 at depth
+zero.  C1 continuity of Gerver's path makes the two depth derivatives jointly
+continuous on the compact core; the rational reserve 5/5151 therefore yields
+one positive depth on which both are at most -5/51.  Below that depth the same
+angle is frozen and further vertical lowering only decreases both slacks. -/
+theorem gerver_envelope_downward_slack_explicit {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    ∃ τ : ℝ,0<τ ∧
+      ∀ q∈gerverEnvelope P,∀d : ℝ,0<d → 0≤q.2-d →
+      ∃t∈Ioo (0:ℝ) (π/2),
+        innerSlackU P.cap t (q.1,q.2-d)≤-min ((5/51)*d) τ ∧
+        innerSlackV P.cap t (q.1,q.2-d)≤-min ((5/51)*d) τ := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hpath : ∀t∈Icc (0:ℝ) (π/2),innerCorner P.cap t=P.path t :=
+    fun t ht=>gm_innerCorner hP hbox ht
+  -- Inactive tail slacks have a positive compact minimum.
+  obtain ⟨τD,hτD,hD⟩:=isCompact_Icc.exists_forall_le'
+    (s:=Icc (0:ℝ) P.θ)
+    ((gs_continuous_β hP).continuousOn.mono
+      (Icc_subset_Icc le_rfl (by linarith [hB.θ_mem.2,pi_pos])))
+    (fun t ht=>by
+      rcases ht.1.eq_or_lt with rfl|hp
+      · have h0:=gs_β_pos hP hB (show (0:ℝ)≤0 by norm_num)
+          (by linarith [hB.θ_mem.2,pi_pos])
+        exact h0
+      · exact gs_β_pos hP hB hp.le
+          (by linarith [ht.2,hB.θ_mem.2,pi_pos]))
+  obtain ⟨τB,hτB,hBtail⟩:=isCompact_Icc.exists_forall_le'
+    (s:=Icc (π/2-P.θ) (π/2))
+    (f:=fun t=>-P.gs_α t)
+    ((gs_continuous_α hP).continuousOn.neg.mono
+      (Icc_subset_Icc (by linarith [hB.θ_mem.2,pi_pos]) le_rfl))
+    (fun t ht=>by
+      exact neg_pos.mpr (gs_α_neg hP hB
+        (by linarith [ht.1,hB.θ_mem.2,pi_pos]) ht.2))
+  -- Core angle adjustment.  We keep the compactness step explicit: the rate
+  -- functions are continuous because gs_pathD, alpha, beta and the trig frame
+  -- are continuous, and the denominator -alpha+beta is uniformly positive.
+  let λ : ℝ→ℝ:=fun t=>(sin t-cos t)/(-P.gs_α t+P.gs_β t)
+  have hden : ∀t∈Icc P.φ (π/2-P.φ),0<-P.gs_α t+P.gs_β t := by
+    intro t ht
+    have ht0 : 0<t:=lt_of_lt_of_le hB.φ_mem.1 ht.1
+    have ht1 : t<π/2:=by linarith [ht.2,hB.φ_mem.1]
+    nlinarith [gs_α_neg hP hB ht0 ht1.le,gs_β_pos hP hB ht0.le ht1]
+  have hλc : ContinuousOn λ (Icc P.φ (π/2-P.φ)) := by
+    unfold λ
+    fun_prop
+  have hrate0 : ∀t∈Icc P.φ (π/2-P.φ),
+      wallVerticalRateU P t (λ t)≤-(10/101:ℝ) ∧
+      wallVerticalRateV P t (λ t)≤-(10/101:ℝ) := by
+    intro t ht
+    obtain ⟨a,b,ha,hb,hvel,htr⟩:=gerver_core_transversality hP hbox ht
+    have hu:=wallVerticalRateU_formula hP hbox ht hvel (λ:=λ t)
+    have hv:=wallVerticalRateV_formula hP hbox ht hvel (λ:=λ t)
+    have hid:=balanced_slack_rates (s:=sin t) (c:=cos t)
+      (show a+b≠0 by positivity)
+    unfold λ at hu hv
+    have hα:=congrArg (fun z=>dot z (uvec t))
+      ((referenceBoundaryVelocity_eq hP t).symm.trans hvel)
+    have hβ:=congrArg (fun z=>dot z (vvec t))
+      ((referenceBoundaryVelocity_eq hP t).symm.trans hvel)
+    simp [dot_add_left,dot_smul_left] at hα hβ
+    rw [show -P.gs_α t+P.gs_β t=a+b by linarith [hα,hβ]] at hu hv
+    rw [hid.1] at hu
+    rw [hid.2] at hv
+    have hab : 0<a+b:=add_pos ha hb
+    constructor <;> nlinarith [(le_div_iff₀ hab).2 htr]
+  -- Uniform C1 persistence of the strict rate inequality.  This is the only
+  -- compactness step in the quantitative roof lemma; it introduces the
+  -- clipping threshold but not the coefficient.
+  obtain ⟨d₀,hd₀,hcore⟩ :
+      ∃d₀ : ℝ,0<d₀ ∧
+        ∀t∈Icc P.φ (π/2-P.φ),∀d∈Icc (0:ℝ) d₀,
+        let s:=t+λ t*d
+        s∈Ioo (0:ℝ) (π/2) ∧
+        innerSlackU P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d ∧
+        innerSlackV P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d := by
+    have hC1:=gs_contDiff_path hP
+    have hreserve:=explicit_margin_reserve.1
+    exact uniform_core_slack_from_C1 hP hbox hλc hden hrate0 hC1 hreserve
+  let τ:=min (min τD τB) ((5/51)*d₀)
+  refine ⟨τ,lt_min (lt_min hτD hτB) (mul_pos (by norm_num) hd₀),?_⟩
+  intro q hq d hd hfloor
+  rw [gerverEnvelope] at hq
+  rcases hq with (⟨t,ht,rfl⟩|⟨t,ht,rfl⟩)|⟨t,ht,rfl⟩
+  · -- right B-tail
+    have hti : t∈Ioo (0:ℝ) (π/2):=⟨by linarith [ht.1,hB.θ_mem.2],
+      ht.2.lt_of_ne (by
+        rintro rfl
+        rw [henv.B_end] at hfloor
+        linarith)⟩
+    obtain ⟨hU,hV⟩:=innerSlack_down (d:=d) (hpath t hti.le)
+      (envB P.path P.gs_α t)
+    refine ⟨t,hti,?_,?_⟩
+    · rw [hU,env_dot_B_self]
+      have hs : (1/2:ℝ)≤sin t:=by
+        have ht0 : π/6≤t:=by
+          have hθ:=hB.θ_mem.2
+          linarith [ht.1,pi_gt_three]
+        exact sin_ge_half_of_mem ht0 (by linarith [hti.2])
+      have hmin:=min_le_left ((5/51)*d) τ
+      nlinarith
+    · rw [hV]
+      have hdot : dot (envB P.path P.gs_α t-P.path t) (vvec t)=P.gs_α t := by
+        simp [envB,dot_smul_left]
+      rw [hdot]
+      have hin : P.gs_α t≤-τB:=by
+        nlinarith [hBtail t ⟨ht.1,ht.2.le⟩]
+      have hc:=cos_nonneg_of_mem_Icc ⟨by linarith [hti.1,pi_pos],hti.2.le⟩
+      have hmin:=min_le_left τB τ
+      nlinarith [mul_nonneg hd.le hc]
+  · -- core path
+    by_cases hsmall : d≤d₀
+    · obtain ⟨hs,hU,hV⟩:=hcore t ht d ⟨hd.le,hsmall⟩
+      exact ⟨t+λ t*d,hs,
+        hU.trans (neg_le_neg (min_le_left _ _)),
+        hV.trans (neg_le_neg (min_le_left _ _))⟩
+    · obtain ⟨hs,hU,hV⟩:=hcore t ht d₀ ⟨le_rfl,le_rfl⟩
+      let s:=t+λ t*d₀
+      have hmore:=innerSlack_down_more P.cap s
+        (P.path t) d₀ d hsmall.le hfloor
+      refine ⟨s,hs,?_,?_⟩ <;>
+        nlinarith [hU,hV,min_le_right ((5/51)*d) τ,
+          min_le_right (min τD τB) ((5/51)*d₀)]
+  · -- left D-tail
+    have hti : t∈Ioo (0:ℝ) (π/2):=⟨ht.1.lt_of_ne (by
+        rintro rfl
+        rw [henv.D_end] at hfloor
+        linarith),by linarith [ht.2,hB.θ_mem.2,pi_pos]⟩
+    obtain ⟨hU,hV⟩:=innerSlack_down (d:=d) (hpath t hti.le)
+      (envD P.path P.gs_β t)
+    refine ⟨t,hti,?_,?_⟩
+    · rw [hU]
+      have hdot : dot (envD P.path P.gs_β t-P.path t) (uvec t)=-P.gs_β t := by
+        simp [envD,dot_neg_left,dot_smul_left]
+      rw [hdot]
+      have hin : τD≤P.gs_β t:=hD t ht
+      have hs:=sin_nonneg_of_nonneg_of_le_pi hti.1.le (by linarith [hti.2,pi_pos])
+      nlinarith [min_le_left τD τ,mul_nonneg hd.le hs]
+    · rw [hV,env_dot_D_self]
+      have hc : (1/2:ℝ)≤cos t:=by
+        have ht1 : t≤π/3:=by
+          have hθ:=hB.θ_mem.2
+          linarith [ht.2,pi_gt_three]
+        exact cos_ge_half_of_mem hti.1.le ht1
+      nlinarith [min_le_left ((5/51)*d) τ]
+
+/-- Explicit roof margin with coefficient 5/51. -/
 theorem gerver_explicit_roof_slack {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {H L : ℝ} {γ : ℝ→ℝ}
     (hroof : CapRoofData P.cap (gerverRoofLeft P)
       (gerverRoofRight P) H L γ) :
-    ∃ τ : ℝ,0<τ ∧ RoofSlackMargin P.cap γ (5/51) τ := by
-  have henv:=gn_envHyp hP (romik_bounds hP hbox)
-  have hcore:=gerver_adaptive_downward_slack hP hbox
-  obtain ⟨τtail,hτtail,htail⟩ :=
-    reference_tail_slack_compact hP hbox (5/51) (by norm_num)
-  obtain ⟨τcore,hτcore,hcoreFinite⟩ :=
-    integrate_adaptive_slack hP hbox hcore (5/5151)
-      explicit_margin_reserve.1
-  let τ:=min τtail τcore
-  refine ⟨τ,lt_min hτtail hτcore,?_⟩
+    ∃τ : ℝ,0<τ ∧ RoofSlackMargin P.cap γ (5/51) τ := by
+  obtain ⟨τ,hτ,hslack⟩:=gerver_envelope_downward_slack_explicit hP hbox
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hΓ:=gerver_niche_envelope hP hbox
+  refine ⟨τ,hτ,?_⟩
   intro p hp
   rw [hroof.niche_eq] at hp
-  obtain ⟨t,ht,hslack⟩ :=
-    reference_downward_slack_phase_split hP hbox htail hcoreFinite p hp
-  exact ⟨t,ht,
-    (hslack.1.trans (neg_le_neg (min_le_left _ _))),
-    (hslack.2.trans (neg_le_neg (min_le_right _ _)))⟩
+  have hpN : p∈niche P.cap (π/2):=by
+    rw [hroof.niche_eq]
+    exact hp
+  rw [hΓ] at hpN
+  obtain ⟨hpy,q,hq,hqx,hlt⟩:=hpN
+  have hγq:=roof_value_of_envelope hroof hΓ
+    (envelope_slope_bound henv
+      (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])).choose_spec.2
+    (fun z hz=>⟨(envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz).1,
+      (envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz).2.1⟩) hq
+  have hd : 0<q.2-p.2:=sub_pos.mpr hlt
+  obtain ⟨t,ht,hU,hV⟩:=hslack q hq (q.2-p.2) hd (by linarith [hpy])
+  rw [hγq,hqx] at hU hV
+  simpa [sub_sub_cancel] using ⟨t,ht,hU,hV⟩
 
-/-- Tighter reference width and niche-roof span. -/
+/-- Tighter reference width and niche-roof span, directly from Gerver's
+endpoint formulas and parameter enclosures. -/
 theorem gerver_quantitative_widths {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
     horizontalWidth P.cap<323/100 ∧
     gerverRoofRight P-gerverRoofLeft P<807/500 := by
-  have h:=romik_bounds hP hbox
-  have hk:=h.κ₃₁_mem
-  have ha:=h.a₁_mem
-  rw [gerver_horizontal_width_formula hP hbox,
-    gerver_roof_span_formula hP hbox]
-  constructor <;> linarith [hk.1,hk.2,ha.1,ha.2]
+  have hB:=romik_bounds hP hbox
+  have hX:=gs_X₀_bounds hP hB
+  have ha:=hB.a₁_mem
+  have hs0 : supp P.cap 0=1 := by
+    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB le_rfl pi_pos.le,gs_H_zero hP]
+  have hsπ : supp P.cap π=1-(P.path (π/2)).1 := by
+    rw [gerver_cap_explicit hP hbox,gs_supp_K hP hB pi_pos.le le_rfl,gs_H_pi]
+  have hleft : gerverRoofLeft P=1-2*P.a₁ := by
+    unfold gerverRoofLeft envD
+    rw [gs_path_zero hP]
+    have hβ : P.gs_β 0=2*P.a₁-1 := by
+      rw [gs_β_eq hP (show gs_piece P 0 0 by
+        linarith [hB.φ_mem.1]),gs_β₁_eq hP]
+      norm_num
+    rw [hβ]
+    simp [uvec]
+    ring
+  have hright : gerverRoofRight P=(P.path (π/2)).1+2*P.a₁-1 := by
+    unfold gerverRoofRight envB
+    rw [gs_α_pi_div_two hP]
+    simp [vvec]
+    ring
+  constructor
+  · unfold horizontalWidth
+    rw [hs0,hsπ]
+    nlinarith [hX.1]
+  · rw [hleft,hright]
+    nlinarith [hX.2,ha.2]
 
 end MovingSofaQuantitative
