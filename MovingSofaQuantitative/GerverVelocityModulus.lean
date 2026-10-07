@@ -197,9 +197,9 @@ theorem phase_velocity_lipschitz {P : GerverParams}
   let α:=phaseAlpha P i
   let β:=phaseBeta P i
   have hcoef:=phase_coefficients_lipschitz hP hbox i hs ht
-  have hbound: |α t|≤5 ∧ |β t|≤5 :=
-    (phase_coefficient_bounds hP hbox i ht).1.antisymm
-      (phase_coefficient_bounds hP hbox i ht).2.1
+  have hbound : |α t|≤5 ∧ |β t|≤5 := by
+    have hh:=phase_coefficient_bounds hP hbox i ht
+    exact ⟨hh.1,hh.2.1⟩
   have hframes:=angular_frame_modulus s t
   have hexp :
       (P.gs_phase i.val).X' s-(P.gs_phase i.val).X' t =
@@ -228,7 +228,7 @@ theorem phase_velocity_norm_le_ten {P : GerverParams}
     {t : ℝ} (ht : t∈Icc (0:ℝ) (π/2)) :
     norm2 ((P.gs_phase i.val).X' t)≤10 := by
   have hb:=phase_coefficient_bounds hP hbox i ht
-  rw [gs_Phase.X']
+  simp only [gs_Phase.X']
   have hu:=norm2_uvec t
   have hv:=norm2_vvec t
   have hh:=norm2_add_le
