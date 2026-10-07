@@ -786,6 +786,99 @@ theorem gerver_D_inward_ray {P : GerverParams}
   rw [gerver_shape_eq hP hbox,hroof.shape_decomposition]
   exact Or.inl (Or.inr hroofZ)
 
+/-- Active U-wall at a smooth interior B-tail point.  The nearest
+direction is exactly -u_t because the actual B curve is tangent to v_t
+and its positive u_t ray enters Gerver's sofa. -/
+theorem active_B_wall_at_smooth_parameter {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ}
+    (ht : t∈Ioo (π/2-P.θ) (π/2))
+    (hregular : t≠π/2-P.φ)
+    (hnear : euclideanDist p (envB P.path P.gs_α t)=
+      infDist p (gerverSofa P)) :
+    innerSlackU P.cap t p=-
+      euclideanDist p (envB P.path P.gs_α t) := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have ht0 : t∈Icc (0:ℝ) (π/2) := by
+    constructor <;> linarith [ht.1,ht.2,hB.θ_mem.2,pi_pos]
+  have hpNot : p∉gerverSofa P := by
+    rw [gerver_shape_eq hP hbox,capShape]
+    exact fun h=>h.2 hp
+  have hcurve : ∀u∈Ioo (π/2-P.θ) (π/2),
+      envB P.path P.gs_α u∈gerverSofa P := by
+    intro u hu
+    apply gerver_envelope_subset_shape hP hbox
+    unfold gerverEnvelope
+    exact Or.inl (Or.inl ⟨u,⟨hu.1.le,hu.2.le⟩,rfl⟩)
+  have hnot : t∉({P.φ,P.θ,π/2-P.θ,π/2-P.φ}:Set ℝ) := by
+    simp only [Set.mem_insert_iff,Set.mem_singleton_iff,not_or]
+    have hord:=henv.ht
+    exact ⟨by linarith [ht.1,hord.1,hord.2.1],
+      by linarith [ht.1,hord.2.1,hord.2.2.1],
+      by linarith [ht.1],hregular⟩
+  have hd:=henv.B_deriv t ht hnot
+  have hsign : P.gs_ρA t-1<0 := by
+    have hh:=henv.ρA_lt t ⟨ht.1.le,ht.2.le⟩
+    linarith
+  have hnormal:=nearest_smooth_arc_opposite_uvec ht hcurve hd
+    hsign.ne (gerver_B_inward_ray hP hbox ht)
+    hpNot hnear
+  have hslack:=(gerver_slack_eq_path_projection hP hbox ht0 p).1
+  have hcoord : dot (p-P.path t) (uvec t)=
+      dot (p-envB P.path P.gs_α t) (uvec t) := by
+    simp [envB,dot_sub_left,dot_add_left,dot_smul_left,
+      dot_vvec_uvec]
+  rw [hslack,hcoord]
+  exact hnormal
+
+/-- The D-tail companion: its tangent is along u_t and the inward ray
+along v_t. -/
+theorem active_D_wall_at_smooth_parameter {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ}
+    (ht : t∈Ioo (0:ℝ) P.θ)
+    (hregular : t≠P.φ)
+    (hnear : euclideanDist p (envD P.path P.gs_β t)=
+      infDist p (gerverSofa P)) :
+    innerSlackV P.cap t p=-
+      euclideanDist p (envD P.path P.gs_β t) := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have ht0 : t∈Icc (0:ℝ) (π/2) := by
+    constructor <;> linarith [ht.1,ht.2,hB.θ_mem.2,pi_pos]
+  have hpNot : p∉gerverSofa P := by
+    rw [gerver_shape_eq hP hbox,capShape]
+    exact fun h=>h.2 hp
+  have hcurve : ∀u∈Ioo (0:ℝ) P.θ,
+      envD P.path P.gs_β u∈gerverSofa P := by
+    intro u hu
+    apply gerver_envelope_subset_shape hP hbox
+    unfold gerverEnvelope
+    exact Or.inr ⟨u,⟨hu.1.le,hu.2.le⟩,rfl⟩
+  have hnot : t∉({P.φ,P.θ,π/2-P.θ,π/2-P.φ}:Set ℝ) := by
+    simp only [Set.mem_insert_iff,Set.mem_singleton_iff,not_or]
+    have hord:=henv.ht
+    exact ⟨hregular,by linarith [ht.2],
+      by linarith [ht.2,hord.2.2.1],
+      by linarith [ht.2,hord.2.2.2.1]⟩
+  have hd:=henv.D_deriv t ht hnot
+  have hsign : 0<1-P.gs_ρC t := by
+    have hh:=henv.ρC_lt t ⟨ht.1.le,ht.2.le⟩
+    linarith
+  have hnormal:=nearest_smooth_arc_opposite_vvec ht hcurve hd
+    hsign.ne (gerver_D_inward_ray hP hbox ht)
+    hpNot hnear
+  have hslack:=(gerver_slack_eq_path_projection hP hbox ht0 p).2
+  have hcoord : dot (p-P.path t) (vvec t)=
+      dot (p-envD P.path P.gs_β t) (vvec t) := by
+    simp [envD,dot_sub_left,dot_add_left,dot_smul_left,
+      dot_uvec_vvec]
+  rw [hslack,hcoord]
+  exact hnormal
+
 /-- Tail active-wall bounds.  These are direct one-dimensional nearest-point
 conditions on the B and D envelope arcs. -/
 theorem active_tail_normal_bound_B {P : GerverParams}
