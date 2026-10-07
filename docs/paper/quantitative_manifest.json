@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "scope": "quantitative_extension",
-  "coverage": "Proposed quantitative headline statements. Baseline paper lemmas and unnumbered prose still require the full-paper inventory and manual correspondence review.",
+  "coverage": "Quantitative headline statements. Baseline paper lemmas and unnumbered prose additionally require the full-paper inventory and manual correspondence review.",
   "baseline_commit": "859ba93f8bb73ccc4378118a7b47415827710c2f",
   "statement_module": "MovingSofaQuantitative.Targets",
-  "policy": "Status records source progress only. No result is kernel-checked until a fresh exact-statement and axiom audit succeeds. Do not insert unproved targets into the paper.",
+  "policy": "Status records source progress only. Source means an unconditional proof term at the registered target type, not kernel verification. Conditional transfer lemmas do not close their input obligations. The current user instruction forbids Lean compilation and CI.",
   "required_ids": [
     "centered-energy", "centered-cap", "centered-ki", "centered-numeric",
     "explicit-local-stability", "sofa-coefficient-lower", "centered-residual-sharpness",
@@ -15,38 +15,38 @@
     {
       "id": "centered-energy",
       "target": "MovingSofaQuantitative.Targets.CenteredEnergy",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.centered_energy",
+      "module": "MovingSofaQuantitative.CenteredCap",
+      "status": "source",
       "paper_label": "thm:quant-centered-energy",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment of two actual caps",
       "deficit": "Four cap residual energies",
-      "remaining": "Instantiate the actual four-arc kernel reconstruction and all Gram integral identities; the scalar centered profile alone is insufficient."
+      "remaining": "Uncompiled. The concrete comparison profile, actual residual pairing and polarization instantiate the integrated pinned bound. Later exact-type and axiom checks remain required."
     },
     {
       "id": "centered-cap",
       "target": "MovingSofaQuantitative.Targets.CenteredCap",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.centered_cap",
+      "module": "MovingSofaQuantitative.CenteredCap",
+      "status": "source",
       "paper_label": "thm:quant-centered-cap",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
       "deficit": "M-Q of an actual feasible WideTriple",
-      "remaining": "Combine centered energy with the integrated full-Q deficit certificate."
+      "remaining": "Uncompiled. Uses centered energy and the integrated wide-deficit bound; no Gram or desired-coercivity assumption remains."
     },
     {
       "id": "centered-ki",
       "target": "MovingSofaQuantitative.Targets.CenteredKi",
-      "declaration": null,
-      "module": null,
-      "status": "planned",
+      "declaration": "MovingSofaQuantitative.centered_ki",
+      "module": "MovingSofaQuantitative.CenteredCap",
+      "status": "source",
       "paper_label": "cor:quant-centered-ki",
       "placement": "G.1",
       "normalization": "Horizontal midpoint alignment",
       "deficit": "M-A(K), with IsKi K",
-      "remaining": "Instantiate canonical feasible triple and the existing geometric area bound."
+      "remaining": "Uncompiled. Uses the actual canonical triple and the geometric area bound."
     },
     {
       "id": "centered-numeric",
@@ -58,7 +58,7 @@
       "placement": "G.1",
       "normalization": "Not applicable: scalar coefficient only",
       "deficit": "None",
-      "remaining": "Elaborate source and execute the exact-type and standard-axiom audit."
+      "remaining": "Uncompiled; later exact-type and standard-axiom checks are required."
     },
     {
       "id": "explicit-local-stability",
@@ -70,7 +70,7 @@
       "placement": "Main 10 / G.2 proof",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "M-area(S)",
-      "remaining": "Prove sector and normal recovery, complementary deficit budgets, explicit terminal coefficient, and assemble via the existing existential entry theorem."
+      "remaining": "Instantiate actual-reference sector/normal geometry and the refined terminal budget, then assemble the existing sector area, scalar budget and compactness entry."
     },
     {
       "id": "sofa-coefficient-lower",
@@ -82,7 +82,7 @@
       "placement": "G.3",
       "normalization": "All orientation-preserving rigid alignments",
       "deficit": "M-area(S)",
-      "remaining": "Elaborate the corollary of the integrated puncture family and execute the exact-type and standard-axiom audit."
+      "remaining": "Uncompiled corollary of the integrated puncture family, retaining every rigid alignment."
     },
     {
       "id": "centered-residual-sharpness",
@@ -94,7 +94,7 @@
       "placement": "G.3",
       "normalization": "Best horizontal translation; actual caps arbitrarily near Gerver",
       "deficit": "Cap residual energy, NOT M-Q or M-area(S)",
-      "remaining": "Prove one-sided smoothing, nonnegative curvature measure, actual-cap construction and residual convergence."
+      "remaining": "Construct one-sided smoothing, prove nonnegative curvature measure and actual-cap realization, and establish residual convergence."
     },
     {
       "id": "critical-face-upper",
@@ -106,7 +106,7 @@
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "M-Q for feasible triples with exactly zero dual slack",
-      "remaining": "Critical-face reduction, actual functional inequalities and a Lean-checked continuum cover certificate."
+      "remaining": "Connect the implemented exact active-face and rank-two energy reductions to the full continuum operator certificate."
     },
     {
       "id": "full-q-finite",
@@ -118,7 +118,7 @@
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "0 < M-Q <= 1/512",
-      "remaining": "Quantify the nonzero-slack perturbation and prove the 8 Delta^(2/3) remainder."
+      "remaining": "Discharge the endpoint derivative-energy hypotheses for actual auxiliary supports and instantiate the continuum operator bound."
     },
     {
       "id": "full-q-094",
@@ -130,7 +130,7 @@
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "0 <= M-Q <= 10^-18",
-      "remaining": "Derive from FullQFinite, including a separate zero-deficit case."
+      "remaining": "The scalar and zero-deficit implication fullQ094_of_finite is written. Its FullQFinite input is not yet an unconditional theorem."
     },
     {
       "id": "feasible-critical-lower",
@@ -142,7 +142,7 @@
       "placement": "G.4",
       "normalization": "Best horizontal translation",
       "deficit": "Actual feasible zero-slack triples at arbitrarily small positive M-Q",
-      "remaining": "Construct actual cap and auxiliary bodies with continuous wall inequalities. Prove a fixed lower ratio L>461/500 uniformly at all small scales; pointwise strictness alone does not prove strictness of the asymptotic coefficient."
+      "remaining": "Construct the cap and auxiliary bodies and prove continuous wall feasibility and trial energy, with a FIXED ratio L>461/500 uniformly at all small scales."
     },
     {
       "id": "intrinsic-interval",
@@ -154,7 +154,7 @@
       "placement": "G.4",
       "normalization": "Infimum of local uniform coefficients for the best horizontal translation",
       "deficit": "Positive M-Q tending to zero",
-      "remaining": "Use the attained geometric quotient, finite-deficit upper estimate, and uniform strict lower margin."
+      "remaining": "The exact infimum transfer is written in FullQConsequences; both unconditional upper and uniform feasible lower inputs remain required."
     },
     {
       "id": "effective-entry",
@@ -166,7 +166,7 @@
       "placement": "G.5 prerequisite",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "0 <= M-area(S) <= 10^-144",
-      "remaining": "Formalize penalized polygon limits, approximate pinned inequalities, support-gap transfer, and actual-set recovery. Scalar cutoff arithmetic is not a proof of these steps."
+      "remaining": "Prove penalized polygon variation and limit estimates, approximate pinned inequalities, support-gap transfer and actual-set recovery."
     },
     {
       "id": "effective-angle-entry",
@@ -178,7 +178,7 @@
       "placement": "G.5 prerequisite",
       "normalization": "Every admissible reduced motion of the original sofa",
       "deficit": "0 < M-area(S) <= 10^-30",
-      "remaining": "Formalize the effective remaining-angle comparison, including its published coarse-angle input or an internally checked substitute."
+      "remaining": "Prove the effective remaining-angle comparison and check its coarse-angle input internally."
     },
     {
       "id": "explicit-cutoff",
@@ -190,7 +190,7 @@
       "placement": "Final proposition of Appendix G",
       "normalization": "Original sofa, horizontal midpoint and top support",
       "deficit": "0 <= M-area(S) <= exact rational 1/10^600",
-      "remaining": "Prove every numerical local geometry radius, combine effective entry with the local 2.3/50/3.1 theorem, and check all arithmetic in Lean. No already-local assumption or existential radius is allowed in the final theorem."
+      "remaining": "Prove effective global entry and every numerical local geometry radius. Scalar cutoff implications alone do not discharge these geometric obligations."
     }
   ]
 }
