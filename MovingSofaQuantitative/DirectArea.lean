@@ -70,6 +70,67 @@ def horizontalThickening (K : Set Point) (δ : ℝ) : Set Point :=
 def squareThickening (K : Set Point) (δ : ℝ) : Set Point :=
   horizontalThickening K δ + verticalSegment δ
 
+theorem subset_squareThickening {K : Set Point} {δ : ℝ} (hδ : 0≤δ) :
+    K⊆squareThickening K δ := by
+  intro p hp
+  refine ⟨p,?_,(0,0),?_,by simp⟩
+  · refine ⟨p,hp,(0,0),?_,by simp⟩
+    simp [horizontalSegment,hδ]
+  · simp [verticalSegment,hδ]
+
+theorem isCompact_squareThickening {K : Set Point} (hK : IsCompact K)
+    {δ : ℝ} (hδ : 0≤δ) :
+    IsCompact (squareThickening K δ) := by
+  unfold squareThickening horizontalThickening
+  exact (hK.add_isCompact (horizontalSegment_isConvexBody hδ).2.1).add_isCompact
+    (verticalSegment_isConvexBody hδ).2.1
+
+theorem area_sdiff_of_subset {A B : Set Point} (hAB : A⊆B)
+    (hA : MeasurableSet A) (hBf : volume B≠⊤) :
+    area (B\A)=area B-area A := by
+  have hB : MeasurableSet B := by
+    exact (measure_mono_null (measure_empty) (by simp)).toMeasurable
+  have hsplit:=area_sdiff_balance hB hA hBf
+    (volume_ne_top_of_subset hAB hBf)
+  have hzero : area (A\B)=0 := by
+    rw [sdiff_eq_empty.mpr hAB,area,measure_empty,ENNReal.toReal_zero]
+  rw [hzero] at hsplit
+  linarith
+
+theorem area_split_by_measurable (A E : Set Point) (hA : MeasurableSet A)
+    (hEf : volume E≠⊤) :
+    area E=area (E\A)+area (E∩A) := by
+  have hEA : MeasurableSet (E∩A) := by
+    exact (hA.inter measurableSet_univ).mono inter_subset_right
+  have hdiff : E\A = E\(E∩A) := by
+    ext p
+    by_cases hpE:p∈E <;> by_cases hpA:p∈A <;> simp [hpE,hpA]
+  have hsubset : E∩A⊆E := inter_subset_left
+  have hbal:=area_sdiff_balance
+    (show MeasurableSet E from measurableSet_of_finite_measure hEf)
+    hEA hEf (volume_ne_top_of_subset hsubset hEf)
+  rw [hdiff] at hbal
+  have hzero : area ((E∩A)\E)=0 := by
+    rw [sdiff_eq_empty.mpr hsubset,area,measure_empty,ENNReal.toReal_zero]
+  rw [hzero] at hbal
+  linarith
+
+theorem area_mono_union_bound {E A B : Set Point}
+    (hsub:E⊆A∪B) (hAf:volume A≠⊤) (hBf:volume B≠⊤) :
+    area E≤area A+area B := by
+  have hm:=measure_mono hsub
+  have hu:=measure_union_le A B
+  have ht:=hm.trans hu
+  have htop : volume (A∪B)≠⊤ := by
+    exact lt_top_iff_ne_top.mp ((hu.trans_lt
+      (ENNReal.add_lt_top.mpr ⟨lt_top_iff_ne_top.mpr hAf,
+        lt_top_iff_ne_top.mpr hBf⟩))))
+  have hto:=ENNReal.toReal_mono htop ht
+  have huReal:=ENNReal.toReal_mono
+    (ENNReal.add_ne_top.mpr ⟨hAf,hBf⟩) hu
+  rw [ENNReal.toReal_add hAf hBf] at huReal
+  exact hto.trans huReal
+
 /-- Every Euclidean delta-neighbor lies in the square thickening. -/
 theorem euclidean_parallel_subset_square {K L : Set Point} {δ : ℝ}
     (hδ : 0≤δ) (hK : IsCompact K)
@@ -306,8 +367,9 @@ theorem cap_layer_area {P : GerverParams} (hP : P.IsSolution) (hbox : P.InBox)
       (isCompact_squareThickening (gm_isConvexBody_cap hP hbox).2.1 hδ).measure_lt_top.ne)
   have hsquare:=area_squareThickening_cap (gm_isCap hP hbox) hδ
   have hsplit:=area_sdiff_of_subset
-    (subset_squareThickening hδ (gm_isConvexBody_cap hP hbox).1)
+    (subset_squareThickening hδ)
     (gm_isConvexBody_cap hP hbox).2.1.measurableSet
+    (isCompact_squareThickening (gm_isConvexBody_cap hP hbox).2.1 hδ).measure_lt_top.ne
   linarith
 
 /-- Support error changes either inner slack by at most delta. -/
