@@ -486,7 +486,7 @@ theorem coarse_half_angle_upper {ω : ℝ}
     exact hc
   let x:=ω/2
   have hx0 : 0≤x := by dsimp [x]; linarith
-  have hx1 : x<π/2 := by dsimp [x,a] at *; linarith [hω1,ha1]
+  have hx1 : x<π/2 := by dsimp [x]; linarith [hω1,ha1]
   have hcx : 0<cos x :=
     cos_pos_of_mem_Ioo ⟨by linarith [hx0,pi_pos],hx1⟩
   have hsx : 0≤sin x :=
