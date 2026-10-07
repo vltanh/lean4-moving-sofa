@@ -144,14 +144,10 @@ theorem centeredCopy_translate_back {K : Set Point} :
     · simpa using hp
     · ext <;> simp <;> ring
 
-theorem abs_supp_le_radius {K : Set Point} (hK : IsCompact K)
+theorem abs_supp_le_radius {K : Set Point} (hK : IsConvexBody K)
     {R : ℝ} (hR : ∀p∈K,norm2 p≤R) (t : ℝ) :
     |supp K t|≤R := by
-  obtain ⟨p,hp,hpeq⟩:=exists_dot_eq_supp hK
-    (by
-      by_contra hn
-      rw [Set.not_nonempty_iff_eq_empty.mp hn,supp_empty] at hpeq
-      simp at hpeq) t
+  obtain ⟨p,hp,hpeq⟩:=exists_dot_eq_supp hK.2.1 hK.1 t
   rw [←hpeq,abs_le]
   constructor
   · have hd:=dot_uvec_le_norm2 (-p) t
@@ -257,7 +253,7 @@ theorem cap_fst_centered_bound {K : Set Point}
   simpa [abs_sub_comm] using hc
 
 theorem support_difference_bound_of_radius {K C : Set Point}
-    (hK : IsCompact K) (hC : IsCompact C)
+    (hK : IsConvexBody K) (hC : IsConvexBody C)
     {RK RC : ℝ}
     (hKr : ∀p∈K,norm2 p≤RK)
     (hCr : ∀p∈C,norm2 p≤RC)
@@ -268,7 +264,7 @@ theorem support_difference_bound_of_radius {K C : Set Point}
   nlinarith [abs_sub_le_iff.2 ⟨by nlinarith [hCs,hKs],by nlinarith [hCs,hKs]⟩]
 
 theorem support_difference_lipschitz_of_radius {K C : Set Point}
-    (hK : IsCompact K) (hC : IsCompact C)
+    (hK : IsConvexBody K) (hC : IsConvexBody C)
     {RK RC : ℝ}
     (hKr : ∀p∈K,norm2 p≤RK)
     (hCr : ∀p∈C,norm2 p≤RC) :
