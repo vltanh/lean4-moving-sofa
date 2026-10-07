@@ -381,8 +381,8 @@ theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L : ℝ}
     (sSup (|f| '' Icc (0:ℝ) π))^3≤8*L*P := by
   obtain ⟨t,ht,hmax⟩:=compact_abs_max continuousOn_of_lipschitz hL
   let M:=|f t|
-  rcases eq_or_lt_of_le (abs_nonneg (f t)) with hzero|hM
-  · simp [hzero]
+  rcases eq_or_lt_of_le (abs_nonneg (f t)) with hMzero | hM
+  · simp [hMzero]
   · have hLpos : 0<L := by
       by_contra hn
       have hLz : L=0 := le_antisymm (le_of_not_gt hn) hL0
