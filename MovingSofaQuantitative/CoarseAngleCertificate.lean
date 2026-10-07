@@ -103,6 +103,32 @@ theorem segmentIntersect_on_line {a b n : QPoint} {h : Q}
   field_simp [hd]
   ring
 
+/-- An edge crossing the rational support line has an intersection parameter
+between zero and one. This is the remaining order fact needed to interpret
+\`segmentIntersect\` as a point of the original polygon edge. -/
+theorem segmentIntersect_parameter_in_unit {a b n : QPoint} {h : Q}
+    (hdiff : dotQ a n≠dotQ b n)
+    (hcross : (dotQ a n≤h ∧ h≤dotQ b n) ∨
+      (dotQ b n≤h ∧ h≤dotQ a n)) :
+    (dotQ a n-h)/(dotQ a n-dotQ b n)∈Icc (0:Q) 1 := by
+  rcases hcross with ⟨ha,hb⟩ | ⟨hb,ha⟩
+  · have hlt : dotQ a n<dotQ b n := by
+      have hle : dotQ a n≤dotQ b n := ha.trans hb
+      exact lt_of_le_of_ne hle hdiff
+    have hden : dotQ a n-dotQ b n<0 := sub_neg.mpr hlt
+    constructor
+    · exact div_nonneg_of_nonpos_of_nonpos (sub_nonpos.mpr ha) hden.le
+    · apply (div_le_iff_of_neg hden).2
+      linarith [hb]
+  · have hlt : dotQ b n<dotQ a n := by
+      have hle : dotQ b n≤dotQ a n := hb.trans ha
+      exact lt_of_le_of_ne hle hdiff.symm
+    have hden : 0<dotQ a n-dotQ b n := sub_pos.mpr hlt
+    constructor
+    · exact div_nonneg (sub_nonneg.mpr ha) hden.le
+    · apply (div_le_iff₀ hden).2
+      linarith [hb]
+
 def clip (P : Polygon) (n : QPoint) (h : Q) : Polygon :=
   (P.zip (P.tail++P.take 1)).foldl (fun out e =>
     let ina : Bool := decide (dotQ e.1 n≤h)
