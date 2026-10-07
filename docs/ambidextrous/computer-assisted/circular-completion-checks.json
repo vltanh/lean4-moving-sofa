@@ -1,0 +1,23 @@
+{
+  "status": "exact_regressions_passed",
+  "triangle_polynomial_identity": true,
+  "triangle_frame_point_cases": 7290,
+  "circle_tangent_cases": 147,
+  "bisector_cone_cases": 462,
+  "signed_fiber_cases": 934,
+  "negative_full_fiber_cases": 621,
+  "negative_controls": [
+    "strict missing-angle triangle violation",
+    "signed full fiber differs from actual positive-part length",
+    "unqualified original PC6 fails on large-deficit disk"
+  ],
+  "arithmetic": "Python unbounded integers and Fraction",
+  "continuum_proof_verified_by_script": false,
+  "unrestricted_optimality_proved": false,
+  "ci_or_lean_used": false,
+  "source_sha256": "641674c36732787f6e8346356cb31b86e509d6ed1e5454cb444f9ecd981898f0",
+  "internal_seconds": 0.1551541390000466,
+  "source_git_blob_sha": "a9069ce6e3fedfa4301ef1434e6012b37ac1f1b0",
+  "executed_source_matches_committed_blob": true,
+  "external_timeout_seconds": 5
+}
