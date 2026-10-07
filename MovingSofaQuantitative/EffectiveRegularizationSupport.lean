@@ -303,17 +303,19 @@ theorem compact_abs_max {f : ℝ→ℝ}
 
 structure OneSidedInterval (t : ℝ) where
   interval : ℝ→Set ℝ
-  subset : ∀r≥0,interval r⊆Icc (0:ℝ) π
+  subset : ∀r≥0, r≤π/2 → interval r⊆Icc (0:ℝ) π
   length : ∀r≥0, r≤π/2 → volume.real (interval r)≥r
   near : ∀r≥0,∀u∈interval r,|u-t|≤r
 
 def one_sided_interval_inside {t : ℝ} (ht : t∈Icc (0:ℝ) π) :
     OneSidedInterval t where
   interval r:=if t≤π/2 then Icc t (t+r) else Icc (t-r) t
-  subset r hr:=by
+  subset r hr hrπ:=by
     split_ifs with h
-    · intro u hu; exact ⟨ht.1,by linarith [hu.2,pi_pos]⟩
-    · intro u hu; exact ⟨by linarith [hu.1,ht.2,pi_pos],ht.2⟩
+    · intro u hu
+      exact ⟨ht.1.trans hu.1, by linarith [hu.2,h,hrπ]⟩
+    · intro u hu
+      exact ⟨by linarith [hu.1,ht.1,hrπ,not_le.mp h],hu.2.trans ht.2⟩
   length r hr hrπ:=by
     split_ifs <;> simp [Real.volume_Icc,hr]
   near r hr u hu:=by
@@ -342,10 +344,10 @@ theorem integral_square_lower_on_interval {f : ℝ→ℝ} {I : Set ℝ} {m ℓ :
 
 /-- L2 closeness plus a Lipschitz bound controls the supremum by a cubic
 one-dimensional estimate. -/
-theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L D : ℝ}
+theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L : ℝ}
     (hP : supportSquareIntegral f≤P)
     (hL : LipschitzWith L f) (hL0 : 0≤L)
-    (hD : ∀t∈Icc (0:ℝ) π,|f t|≤D) :
+    (hzero : f (π/2)=0) :
     (sSup (|f| '' Icc (0:ℝ) π))^3≤8*L*P := by
   obtain ⟨t,ht,hmax⟩:=compact_abs_max continuousOn_of_lipschitz hL
   let M:=|f t|
@@ -353,32 +355,27 @@ theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L D : ℝ}
   · simp [hzero]
   · have hLpos : 0<L := by
       by_contra hn
-      have hLz : L=0:=le_antisymm (not_lt.mp hn) hL0
-      have hconst:=hL.eq_zero hLz
-      have :=hconst t 0
-      simp [Real.dist_eq] at this
-      nlinarith [hM]
+      have hLz : L=0 := le_antisymm (le_of_not_gt hn) hL0
+      have hd := hL.dist_le_mul t (π/2)
+      rw [hLz,zero_mul] at hd
+      have heq : f t=f (π/2) := dist_le_zero.mp hd
+      simp [M,heq,hzero] at hM
     let r:=M/(2*L)
     have hsmall : r≤π/2 := by
-      by_contra hn
-      have hall : ∀u∈Icc (0:ℝ) π,M/2≤|f u| := by
-        intro u hu
-        have hd:=hL.dist_le_mul u t
-        rw [Real.dist_eq] at hd
-        have hdist : |u-t|≤π := by
-          rw [abs_le]; constructor <;> linarith [hu.1,hu.2,ht.1,ht.2]
-        have hrπ : L*π<M/2 := by
-          dsimp [r] at hn
-          rw [lt_div_iff₀ hLpos] at hn
-          nlinarith
-        nlinarith [abs_sub_abs_le_abs_sub (f u) (f t)]
-      have hint : (M/2)^2*π≤supportSquareIntegral f := by
-        unfold supportSquareIntegral
-        apply intervalIntegral.integral_mono_on pi_pos.le intervalIntegrable_const
-          ((hL.continuous.sub continuous_const).pow 2 |>.intervalIntegrable 0 π)
-        intro u hu
-        nlinarith [hall u hu,abs_nonneg (f u),sq_abs (f u)]
-      nlinarith [hP,pi_gt_three,hM]
+      have hd:=hL.dist_le_mul t (π/2)
+      rw [hzero,Real.dist_eq,Real.dist_eq] at hd
+      have hnear : |t-π/2|≤π := by
+        rw [abs_le]
+        constructor <;> linarith [ht.1,ht.2,pi_pos]
+      have hMbound : M≤L*π := by
+        dsimp [M]
+        simpa [abs_sub_comm] using
+          (show |f t| ≤ L*π from
+            (by simpa [sub_zero] using hd).trans
+              (mul_le_mul_of_nonneg_left hnear hL0))
+      dsimp [r]
+      apply (div_le_iff₀ (mul_pos (by norm_num : (0:ℝ)<2) hLpos)).2
+      nlinarith [hMbound]
     have hside:=one_sided_interval_inside ht
     have hlower : ∀u∈hside.interval r, M/2≤|f u| := by
       intro u hu
@@ -398,7 +395,7 @@ theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L D : ℝ}
     have hint:=integral_square_lower_on_interval
       (m:=M/2) (ℓ:=M/(2*L)) (by positivity) (by positivity)
       hmeasure hlower hmeas hintg
-    have hsubset:=hside.subset r (by positivity)
+    have hsubset:=hside.subset r (by positivity) hsmall
     have hwhole : ∫u in hside.interval r,(f u)^2≤supportSquareIntegral f := by
       unfold supportSquareIntegral
       exact setIntegral_mono_set (by positivity)
