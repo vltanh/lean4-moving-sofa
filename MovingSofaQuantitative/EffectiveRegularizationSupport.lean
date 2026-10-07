@@ -26,6 +26,48 @@ open MovingSofaOptimality MovingSofaUniqueness MovingSofaStability
 
 namespace MovingSofaQuantitative
 
+def supportL2Penalty (K C : Set Point) : ℝ :=
+  ∫ t in (0:ℝ)..π,(supp C t-supp K t)^2
+
+def rightAnglePenaltyLambda (e : ℝ) : ℝ :=
+  1/(65536*sqrt e)
+
+/-- Every positive-area right-angle cap has width below nine. -/
+theorem positive_cap_width_lt_nine {K : Set Point}
+    (hK : IsCap K (π/2)) (hA : 0<sofaArea (π/2) K) :
+    horizontalWidth K<9 := by
+  let W:=horizontalWidth K
+  have htri : max 0 (W/2-sqrt 2)^2≤area (niche K (π/2)) :=
+    inner_floor_triangle_area_lower hK
+  have harea : sofaArea (π/2) K≤W-max 0 (W/2-sqrt 2)^2 := by
+    unfold sofaArea
+    have hKarea:=cap_area_le_width hK
+    nlinarith
+  by_contra hn
+  have hW : 9≤W:=not_lt.mp hn
+  have hs : sqrt 2<3/2 := by
+    nlinarith [sq_sqrt (by norm_num : (0:ℝ)≤2),sqrt_nonneg (2:ℝ)]
+  have hm : W-(W/2-sqrt 2)^2≤0 := by
+    have hcoarse : (W/2-3/2)^2≤(W/2-sqrt 2)^2 := by nlinarith
+    have hz : W-(W/2-3/2)^2≤0 := by ring_nf; nlinarith [hW]
+    nlinarith
+  have hmax : max 0 (W/2-sqrt 2)^2=(W/2-sqrt 2)^2 := by
+    rw [max_eq_right]; positivity
+  rw [hmax] at harea
+  linarith
+
+/-- Centering a positive-area cap puts it in the radius-five box. -/
+theorem centered_positive_cap_radius_five {K : Set Point}
+    (hK : IsCap K (π/2)) (hA : 0<sofaArea (π/2) K) :
+    ∀p∈centeredReference K K,norm2 p<5 := by
+  have hW:=positive_cap_width_lt_nine hK hA
+  intro p hp
+  have hx:=centered_cap_horizontal_bound hK hW p hp
+  have hy:=hK.snd_le_one (centeredReference_self_mem hK p hp)
+  have hy0:=hK.snd_nonneg (centeredReference_self_mem hK p hp)
+  unfold norm2 dot
+  nlinarith [Real.sq_sqrt (by positivity : 0≤p.1^2+p.2^2)]
+
 def centeredCopy (K : Set Point) : Set Point :=
   Rigid.translate (-horizontalMidpoint K,0) '' K
 
@@ -301,6 +343,75 @@ theorem integral_square_lower_on_interval {f : ℝ→ℝ} {I : Set ℝ} {m ℓ :
     (fun u hu=>hpoint u hu)
   simp [MeasureTheory.integral_const,hm] at hmInt
   nlinarith
+
+/-- L2 closeness plus a Lipschitz bound controls the supremum by a cubic
+one-dimensional estimate. -/
+theorem sup_le_of_L2_lipschitz {f : ℝ→ℝ} {P L D : ℝ}
+    (hP : supportSquareIntegral f≤P)
+    (hL : LipschitzWith L f) (hL0 : 0≤L)
+    (hD : ∀t∈Icc (0:ℝ) π,|f t|≤D) :
+    (sSup (|f| '' Icc (0:ℝ) π))^3≤8*L*P := by
+  obtain ⟨t,ht,hmax⟩:=compact_abs_max continuousOn_of_lipschitz hL
+  let M:=|f t|
+  rcases eq_or_lt_of_le (abs_nonneg (f t)) with hzero|hM
+  · simp [hzero]
+  · have hLpos : 0<L := by
+      by_contra hn
+      have hLz : L=0:=le_antisymm (not_lt.mp hn) hL0
+      have hconst:=hL.eq_zero hLz
+      have :=hconst t 0
+      simp [Real.dist_eq] at this
+      nlinarith [hM]
+    let r:=M/(2*L)
+    have hsmall : r≤π/2 := by
+      by_contra hn
+      have hall : ∀u∈Icc (0:ℝ) π,M/2≤|f u| := by
+        intro u hu
+        have hd:=hL.dist_le_mul u t
+        rw [Real.dist_eq] at hd
+        have hdist : |u-t|≤π := by
+          rw [abs_le]; constructor <;> linarith [hu.1,hu.2,ht.1,ht.2]
+        have hrπ : L*π<M/2 := by
+          dsimp [r] at hn
+          rw [lt_div_iff₀ hLpos] at hn
+          nlinarith
+        nlinarith [abs_sub_abs_le_abs_sub (f u) (f t)]
+      have hint : (M/2)^2*π≤supportSquareIntegral f := by
+        unfold supportSquareIntegral
+        apply intervalIntegral.integral_mono_on pi_pos.le intervalIntegrable_const
+          ((hL.continuous.sub continuous_const).pow 2 |>.intervalIntegrable 0 π)
+        intro u hu
+        nlinarith [hall u hu,abs_nonneg (f u),sq_abs (f u)]
+      nlinarith [hP,pi_gt_three,hM]
+    have hside:=one_sided_interval_inside ht
+    have hlower : ∀u∈hside.interval r, M/2≤|f u| := by
+      intro u hu
+      have hd:=hL.dist_le_mul u t
+      rw [Real.dist_eq] at hd
+      have hnear:=hside.near r (by positivity) u hu
+      dsimp [r] at hnear
+      nlinarith [abs_sub_abs_le_abs_sub (f u) (f t)]
+    have hmeasure : M/(2*L)≤volume.real (hside.interval r) :=
+      one_sided_interval_length ht hM hLpos hsmall
+    have hmeas : MeasurableSet (hside.interval r) := by
+      unfold one_sided_interval_inside
+      split <;> exact measurableSet_Icc
+    have hintg : IntegrableOn (fun u=>(f u)^2) (hside.interval r) := by
+      exact (hL.continuous.pow 2).integrableOn_compact
+        (by unfold one_sided_interval_inside; split <;> exact isCompact_Icc)
+    have hint:=integral_square_lower_on_interval
+      (m:=M/2) (ℓ:=M/(2*L)) (by positivity) (by positivity)
+      hmeasure hlower hmeas hintg
+    have hsubset:=hside.subset r (by positivity)
+    have hwhole : ∫u in hside.interval r,(f u)^2≤supportSquareIntegral f := by
+      unfold supportSquareIntegral
+      exact setIntegral_mono_set (by positivity)
+        ((hL.continuous.pow 2).integrableOn_compact isCompact_Icc) hsubset
+    have hsup:=hint.trans (hwhole.trans hP)
+    rw [show sSup (|f| '' Icc (0:ℝ) π)=M by exact hmax]
+    dsimp [M,r] at *
+    nlinarith
+
 
 theorem center_shift_L2_lower {K C : Set Point}
     (hK : IsCap K (π/2)) (hC : IsCap C (π/2)) :
