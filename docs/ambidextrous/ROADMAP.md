@@ -4,6 +4,21 @@
 
 Read [HANDOFF.md](HANDOFF.md), [constructed-background-review.md](constructed-background-review.md), and [spatial-half-partition-bound.md](spatial-half-partition-bound.md). All results are written and self-reviewed; the historical proof chain has not been independently refereed or kernel-verified.
 
+## Current single focus: prove the full-turn sharp area bound
+
+**Stop developing the partial-turn frontier until the full-turn value is closed.** Its earlier SI/FS results are preserved but are not an active workstream. The target is still the sharp bound \( |S|\le M \) for every complete two-turn body, with the full-turn supremum already reduced by PD/PS to canonically saturated positive opposite-end faces.
+
+The new [adaptive spatial bound](adaptive-spatial-switching-bound.md) proves the direct ordinary-area comparison
+\[
+|S|\le\mathscr C(U,V)
+=W-\int_I\max\{n_U+n_V,\ 2-A_U-A_V\}\,dx.
+\]
+It dominates the prior fixed-middle-half SPB upper bound and is exact both on Romik's reference and on any already convex feasible full-turn body. Its error against the actual envelope is a specified nonnegative cross-wall switching mismatch. **The sharp global bound \(\mathscr C(U,V)\le M\) is unproved and is stronger than the necessary actual-area inequality.** The existing TC/CT/MT clipped-tail budgets do prove this stronger aggregate inequality in their admitted common-face domains; see AS.9.
+
+The new [common-background obstruction](full-turn-common-background-obstruction.md) constructs an *actual convex, canonically saturated, full-turn* opposite-face parallelogram of width \(49/20\) and area \(1/20\). It cannot have two containing half-height-niche backgrounds with the same top-face interval: such a background has top-face length at most \(2\sqrt2-1\), while a common face containing both input faces would have length at least \(49/20\). A whole family exists for diagonal widths \(2<W<\sqrt7\). **This disproves unconditional inclusion-based CB admission over the entire saturated full-turn class, not competitive-only admission.** The example has low area, so any useful competitive-only background construction must explicitly use the area threshold rather than assert automatic face compatibility.
+
+Continue with **one** exact problem: prove the competitive full-turn inequality, either by a valid competitive-only common-background construction paying all changes, or directly through the coupled actual-area comparison. Do not infer either from finitely sampled supports, symmetry averaging, curvature repair, or a half-height niche assumption not established for the actual competitor.
+
 ## 1. Acceptance criterion and execution policy
 
 Prove |S|<=M for one attained unrestricted maximizer, where
