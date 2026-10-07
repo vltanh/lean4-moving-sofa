@@ -100,6 +100,16 @@ def rootBox (lo hi : Q) : Box :=
     [(dyadicDown 32 a.1,dyadicUp 32 a.2),
      (dyadicDown 32 b.1,dyadicUp 32 b.2)]
 
+/-- There are exactly eight support coordinates: two for each of the
+four intermediate normals. This guards the native search's indexing scheme,
+which must use stride two, not stride four. -/
+theorem rootBox_length (lo hi : Q) : (rootBox lo hi).length = 8 := by
+  simp [rootBox, interTangents]
+
+theorem paired_coordinate_indices (i : Fin 4) :
+    2 * i.val < 8 ∧ 2 * i.val + 1 < 8 := by
+  omega
+
 def polygons (lo hi : Q) (box : Box) : List Polygon :=
   (interTangents.zipIdx.foldl (fun Ps rn =>
     let n:=normal rn.1
