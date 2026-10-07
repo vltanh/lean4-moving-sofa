@@ -106,14 +106,33 @@ theorem endpoint_sector_mem_right {P : GerverParams}
     have hxq:=abs_fst_le_norm2 (q-(1,0))
     nlinarith [hxq.trans hd,hscale,hB.φ_mem.1]
 
+def gerverFloorLeft (P : GerverParams) : ℝ := (P.path (π/2)).1-1
+
+theorem gerverFloorLeft_mem {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    (gerverFloorLeft P,0)∈gerverSofa P := by
+  have hB:=romik_bounds hP hbox
+  have hC:=gs_C_mem_K hP hB (τ:=π/2) (by positivity) le_rfl
+  rw [gs_C_pi_div_two hP] at hC
+  rw [gerver_shape_eq hP hbox,gerver_niche_eq_envUnderStrict hP hB]
+  refine ⟨?_,?_⟩
+  · simpa [gerver_cap_explicit hP hbox,gerverFloorLeft] using hC
+  · intro hn
+    have hx:=envUnderStrict_fst_mem_Ioo (gn_envHyp hP hB) hn
+    have hC0:=gs_C_mem_K hP hB (τ:=0) le_rfl (by positivity)
+    rw [gerver_contactC_zero hP hB] at hC0
+    have hxa : gerverFloorLeft P≤gerverRoofLeft P := by
+      unfold gerverFloorLeft gerverRoofLeft
+      exact (gs_K_bounds hP hC0).1
+    exact (not_lt_of_ge hxa) hx.1
+
 /-- Left outer floor corner, proved directly from the support half-planes. -/
 theorem endpoint_sector_mem_left {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     (hopen : referenceSectorAperture < π/2-P.φ)
     (hscale : referenceSectorRadius < P.φ/1000)
-    {xm : ℝ} (hxm : (xm,0)∈gerverSofa P)
     {q : Point}
-    (hq : q∈interiorSector (xm,0) (π/2+P.φ/2)
+    (hq : q∈interiorSector (gerverFloorLeft P,0) (π/2+P.φ/2)
       referenceSectorHalfAngle referenceSectorRadius) :
     q∈gerverSofa P := by
   have hB:=romik_bounds hP hbox
@@ -133,24 +152,21 @@ theorem endpoint_sector_mem_left {P : GerverParams}
         (show (0:ℝ)≤π/2 by positivity) le_rfl
       have hCend:=gs_C_pi_div_two hP
       have hd:=hq.2.2
-      have hx:=abs_fst_le_norm2 (q-(xm,0))
-      have hy:=abs_snd_le_norm2 (q-(xm,0))
-      have hxmB:=gs_X₀_bounds hP hB
-      simp [hCend,dot,uvec] at hC ⊢
-      nlinarith [hx.trans hd,hy.trans hd,hopen,hscale,hxmB.1,hxmB.2]
+      have hx:=abs_fst_le_norm2 (q-(gerverFloorLeft P,0))
+      have hy:=abs_snd_le_norm2 (q-(gerverFloorLeft P,0))
+      simp [gerverFloorLeft,hCend,dot,uvec] at hC ⊢
+      nlinarith [hx.trans hd,hy.trans hd,hopen,hscale]
   · intro hn
     rw [gerver_niche_eq_envUnderStrict hP hB] at hn
     have hx:=envUnderStrict_fst_mem_Ioo (gn_envHyp hP hB) hn
-    rcases gerver_corner_points hP hbox with ⟨a,b,xm',ha,hb,hxm',h10,ha0,hbx⟩
     have hd:=hq.2.2
-    have hxq:=abs_fst_le_norm2 (q-(xm,0))
-    have heq : xm=xm' := by
-      have h0:=hxm
-      have h0':=(hxm')
-      have hmin:=gerver_floor_left_endpoint_unique hP hbox h0 h0'
-      exact hmin
-    rw [heq] at hxq
-    nlinarith [hxq.trans hd,hscale,hB.φ_mem.1]
+    have hxq:=abs_fst_le_norm2 (q-(gerverFloorLeft P,0))
+    have hleft : gerverFloorLeft P≤gerverRoofLeft P := by
+      have hC0:=gs_C_mem_K hP hB (τ:=0) le_rfl (by positivity)
+      rw [gerver_contactC_zero hP hB] at hC0
+      unfold gerverFloorLeft gerverRoofLeft
+      exact (gs_K_bounds hP hC0).1
+    nlinarith [hxq.trans hd,hscale,hB.φ_mem.1,hleft]
 
 /-- Points of Gerver's sofa within one chart radius of its frontier inherit the
 same sector from the local phase chart.  This is the translated-epigraph part
@@ -272,12 +288,12 @@ theorem gerver_boundary_chart {P : GerverParams}
     simp only [interiorSector, mem_setOf_eq] at hq
     rw [← gerver_shape_eq hP hbox]
     exact endpoint_sector_mem_right hP hbox hangle.1 hsep hq
-  by_cases hL : p = (xm, 0)
+  by_cases hL : p = (gerverFloorLeft P, 0)
   · subst p
     refine ⟨π / 2 + P.φ / 2, referenceSectorRadius, le_rfl, ?_⟩
     intro q hq
     rw [← gerver_shape_eq hP hbox]
-    exact endpoint_sector_mem_left hP hbox hangle.1 hsep hxm hq
+    exact endpoint_sector_mem_left hP hbox hangle.1 hsep hq
   · -- All remaining boundary points lie on one of the regular contact/envelope
     -- pieces or the horizontal top segment.  The following direct phase split
     -- uses only declarations from Gerver/Frame, Gerver/Properties and Envelope.
