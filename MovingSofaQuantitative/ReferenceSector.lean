@@ -1,5 +1,6 @@
 module
 
+public import MovingSofaQuantitative.Certificates.Trig
 public import MovingSofaQuantitative.SectorContent
 public import MovingSofaStability.Margins
 public import MovingSofaUniqueness.RegularClosed
@@ -46,13 +47,15 @@ theorem gerver_corner_angle_margin {P : GerverParams}
   have hφ := hbox.1
   constructor
   · unfold referenceSectorAperture sectorHalfAngle
-    norm_num
-    linarith [pi_gt_three, hφ.2]
+    have hπ : (314159265358979323846 / 100000000000000000000 : ℝ) ≤ π :=
+      (Certificates.Interval.contains_pi).1
+    norm_num at *
+    linarith [hπ, hφ.2]
   · have hx : referenceSectorAperture / 2 = 153 / 200 := by
       norm_num [referenceSectorAperture, sectorHalfAngle]
     have hs : sin (153 / 200 : ℝ) < 7 / 10 :=
       (Real.sin_le _).trans_lt (by norm_num)
-    have hc : 4 / 5 < cos (153 / 200 : ℝ) := by
+    have hc : 7 / 10 < cos (153 / 200 : ℝ) := by
       have h := one_sub_sq_div_two_le_cos (x := 153 / 200)
       norm_num at h ⊢
       linarith
