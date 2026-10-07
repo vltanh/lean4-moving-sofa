@@ -22,7 +22,7 @@ namespace MovingSofaQuantitative
 theorem missing_area_identity {S U : Set Point} (hS : MeasurableSet S)
     (hU : MeasurableSet U) (hSf : volume S ≠ ⊤) (hUf : volume U ≠ ⊤) (M : ℝ) :
     area (U \ S) = (M - area S) - (M - area U) + area (S \ U) := by
-  have he := area_sdiff_balance hS hU hSf hUf
+  have he := area_sdiff_balance hS hU hSf hUf M
   linarith
 
 /-- A terminal loss and an endpoint-wedge gain give the complementary budget.
@@ -93,7 +93,6 @@ theorem midpoint_area_budget {ε e : ℝ} (he : 0 ≤ e) (heε : e ≤ ε) :
 theorem midpoint_area_coefficient {ε : ℝ} (hε : 0 ≤ ε) (hs : sqrt ε ≤ 1 / 200) :
     (62369307 / 1250000) * sqrt ε + (1377001 / 125000) * ε ≤ 50 * sqrt ε := by
   have hmul := mul_le_mul_of_nonneg_right hs (sqrt_nonneg ε)
-  rw [sq, ← mul_assoc] at hmul
   have he := sq_sqrt hε
   nlinarith [sqrt_nonneg ε]
 
