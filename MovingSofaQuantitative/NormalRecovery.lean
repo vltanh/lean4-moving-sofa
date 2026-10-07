@@ -498,86 +498,6 @@ theorem abs_sin_sub_le (s t : ℝ) : |sin s-sin t|≤|s-t| := by
 theorem abs_cos_sub_le (s t : ℝ) : |cos s-cos t|≤|s-t| := by
   exact abs_sub_le_of_lipschitz (Real.lipschitzWith_cos) s t
 
-/-- Tail active-wall bounds.  These are direct one-dimensional nearest-point
-conditions on the B and D envelope arcs. -/
-theorem active_tail_normal_bound_B {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {p : Point} (hp : p∈niche P.cap (π/2))
-    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
-    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
-    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
-    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
-  have henv:=gn_envHyp hP (romik_bounds hP hbox)
-  exact envelope_B_nearest_active_slack hP hbox henv hp ht hnear hd8
-    (by norm_num [normalRecoveryDepth])
-
-theorem inactive_tail_margin_B {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {p : Point} (hp : p∈niche P.cap (π/2))
-    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
-    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
-    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
-    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
-  let q:=envB P.path P.gs_α t
-  let d:=euclideanDist p q
-  have ht0 : t∈Icc (0:ℝ) (π/2) := by
-    have hB:=(romik_bounds hP hbox).θ_mem.2
-    constructor <;> linarith [ht.1,ht.2,hB,pi_pos]
-  have hslack := (gerver_slack_eq_path_projection hP hbox ht0 p).2
-  have hsplit : dot (p-P.path t) (vvec t) =
-      P.gs_α t + dot (p-q) (vvec t) := by
-    dsimp [q,envB]
-    simp only [dot_sub_left,dot_add_left,dot_smul_left,dot_vvec_self]
-    ring
-  have hdir : dot (p-q) (vvec t)≤d := by
-    exact (le_abs_self _).trans (by
-      simpa [d,euclideanDist] using abs_dot_vvec_le_norm2 (p-q) t)
-  have hmargin := gerver_B_alpha_le_neg_four_fifths hP hbox ht
-  have hsmall : d≤(1/100:ℝ) := hd8.trans (by
-    norm_num [normalRecoveryDepth])
-  dsimp [d]
-  rw [hslack,hsplit]
-  nlinarith [hdir,hmargin,hsmall,euclideanDist_nonneg p q]
-
-theorem active_tail_normal_bound_D {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {p : Point} (hp : p∈niche P.cap (π/2))
-    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
-    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
-    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
-    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
-  have henv:=gn_envHyp hP (romik_bounds hP hbox)
-  exact envelope_D_nearest_active_slack hP hbox henv hp ht hnear hd8
-    (by norm_num [normalRecoveryDepth])
-
-theorem inactive_tail_margin_D {P : GerverParams}
-    (hP : P.IsSolution) (hbox : P.InBox)
-    {p : Point} (hp : p∈niche P.cap (π/2))
-    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
-    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
-    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
-    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
-  let q:=envD P.path P.gs_β t
-  let d:=euclideanDist p q
-  have ht0 : t∈Icc (0:ℝ) (π/2) := by
-    have hB:=(romik_bounds hP hbox).θ_mem.2
-    constructor <;> linarith [ht.1,ht.2,hB,pi_pos]
-  have hslack := (gerver_slack_eq_path_projection hP hbox ht0 p).1
-  have hsplit : dot (p-P.path t) (uvec t) =
-      -P.gs_β t + dot (p-q) (uvec t) := by
-    dsimp [q,envD]
-    simp only [dot_sub_left,dot_add_left,dot_smul_left,dot_uvec_self]
-    ring
-  have hdir : dot (p-q) (uvec t)≤d := by
-    exact (le_abs_self _).trans (by
-      simpa [d,euclideanDist] using abs_dot_uvec_le_norm2 (p-q) t)
-  have hmargin := gerver_D_beta_ge_four_fifths hP hbox ht
-  have hsmall : d≤(1/100:ℝ) := hd8.trans (by
-    norm_num [normalRecoveryDepth])
-  dsimp [d]
-  rw [hslack,hsplit]
-  nlinarith [hdir,hmargin,hsmall,euclideanDist_nonneg p q]
-
 /-- A nearest point on the interior of a differentiable reference arc has
 displacement perpendicular to its tangent. This depends only on the arc
 belonging to the reference set; no convexity of the set is assumed. -/
@@ -695,6 +615,86 @@ theorem nearest_smooth_arc_opposite_vvec {G : Set Point}
   rw [dot_div_left] at hv
   have hres:= (div_eq_iff (ne_of_gt hd)).1 hv
   simpa [d] using hres
+
+/-- Tail active-wall bounds.  These are direct one-dimensional nearest-point
+conditions on the B and D envelope arcs. -/
+theorem active_tail_normal_bound_B {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
+    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
+    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_B_nearest_active_slack hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
+theorem inactive_tail_margin_B {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (π/2-P.θ) (π/2))
+    (hnear : euclideanDist p (envB P.path P.gs_α t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envB P.path P.gs_α t)≤normalRecoveryDepth) :
+    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envB P.path P.gs_α t) := by
+  let q:=envB P.path P.gs_α t
+  let d:=euclideanDist p q
+  have ht0 : t∈Icc (0:ℝ) (π/2) := by
+    have hB:=(romik_bounds hP hbox).θ_mem.2
+    constructor <;> linarith [ht.1,ht.2,hB,pi_pos]
+  have hslack := (gerver_slack_eq_path_projection hP hbox ht0 p).2
+  have hsplit : dot (p-P.path t) (vvec t) =
+      P.gs_α t + dot (p-q) (vvec t) := by
+    dsimp [q,envB]
+    simp only [dot_sub_left,dot_add_left,dot_smul_left,dot_vvec_self]
+    ring
+  have hdir : dot (p-q) (vvec t)≤d := by
+    exact (le_abs_self _).trans (by
+      simpa [d,euclideanDist] using abs_dot_vvec_le_norm2 (p-q) t)
+  have hmargin := gerver_B_alpha_le_neg_four_fifths hP hbox ht
+  have hsmall : d≤(1/100:ℝ) := hd8.trans (by
+    norm_num [normalRecoveryDepth])
+  dsimp [d]
+  rw [hslack,hsplit]
+  nlinarith [hdir,hmargin,hsmall,euclideanDist_nonneg p q]
+
+theorem active_tail_normal_bound_D {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
+    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
+    innerSlackV P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  exact envelope_D_nearest_active_slack hP hbox henv hp ht hnear hd8
+    (by norm_num [normalRecoveryDepth])
+
+theorem inactive_tail_margin_D {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈niche P.cap (π/2))
+    {t : ℝ} (ht : t∈Icc (0:ℝ) P.θ)
+    (hnear : euclideanDist p (envD P.path P.gs_β t)=infDist p (gerverSofa P))
+    (hd8 : euclideanDist p (envD P.path P.gs_β t)≤normalRecoveryDepth) :
+    innerSlackU P.cap t p≤-(49/100)*euclideanDist p (envD P.path P.gs_β t) := by
+  let q:=envD P.path P.gs_β t
+  let d:=euclideanDist p q
+  have ht0 : t∈Icc (0:ℝ) (π/2) := by
+    have hB:=(romik_bounds hP hbox).θ_mem.2
+    constructor <;> linarith [ht.1,ht.2,hB,pi_pos]
+  have hslack := (gerver_slack_eq_path_projection hP hbox ht0 p).1
+  have hsplit : dot (p-P.path t) (uvec t) =
+      -P.gs_β t + dot (p-q) (uvec t) := by
+    dsimp [q,envD]
+    simp only [dot_sub_left,dot_add_left,dot_smul_left,dot_uvec_self]
+    ring
+  have hdir : dot (p-q) (uvec t)≤d := by
+    exact (le_abs_self _).trans (by
+      simpa [d,euclideanDist] using abs_dot_uvec_le_norm2 (p-q) t)
+  have hmargin := gerver_D_beta_ge_four_fifths hP hbox ht
+  have hsmall : d≤(1/100:ℝ) := hd8.trans (by
+    norm_num [normalRecoveryDepth])
+  dsimp [d]
+  rw [hslack,hsplit]
+  nlinarith [hdir,hmargin,hsmall,euclideanDist_nonneg p q]
 
 theorem nearest_core_direction {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
