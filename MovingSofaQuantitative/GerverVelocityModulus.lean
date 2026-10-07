@@ -149,4 +149,92 @@ theorem phase_coefficient_bounds {P : GerverParams}
     · constructor <;> nlinarith [htA.1,htA.2.1,hsin,hcos]
     · constructor <;> nlinarith [htA.1,htA.2.1,hsin,hcos]
 
+/-- The four scalar coefficient functions in every Gerver phase have a
+common Lipschitz constant five on the full right-angle domain. -/
+theorem phase_coefficients_lipschitz {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (i : Fin 5)
+    {s t : ℝ} (hs : s∈Icc (0:ℝ) (π/2)) (ht : t∈Icc (0:ℝ) (π/2)) :
+    |phaseAlpha P i s-phaseAlpha P i t|≤5*|s-t| ∧
+      |phaseBeta P i s-phaseBeta P i t|≤5*|s-t| := by
+  have hda : ∀u∈Icc (0:ℝ) (π/2),
+      HasDerivAt (phaseAlpha P i) (phaseAlphaPrime P i u) u :=
+    fun u _=>phase_alpha_hasDerivAt P i u
+  have hdb : ∀u∈Icc (0:ℝ) (π/2),
+      HasDerivAt (phaseBeta P i) (phaseBetaPrime P i u) u :=
+    fun u _=>phase_beta_hasDerivAt P i u
+  have hba : ∀u∈Icc (0:ℝ) (π/2),
+      |phaseAlphaPrime P i u|≤5 := fun u hu=>
+    (phase_coefficient_bounds hP hbox i hu).2.2.1
+  have hbb : ∀u∈Icc (0:ℝ) (π/2),
+      |phaseBetaPrime P i u|≤5 := fun u hu=>
+    (phase_coefficient_bounds hP hbox i hu).2.2.2
+  exact ⟨rom_mvt hda hba hs ht,rom_mvt hdb hbb hs ht⟩
+
+/-- The orthonormal angular frame is at most 2-Lipschitz in the elementary
+sum-of-coordinate norm.  The second frame vector has the same bound. -/
+theorem angular_frame_modulus (s t : ℝ) :
+    norm2 (uvec s-uvec t)≤2*|s-t| ∧
+    norm2 (vvec s-vvec t)≤2*|s-t| := by
+  have hsin:=Real.lipschitzWith_sin.dist_le_mul s t
+  have hcos:=Real.lipschitzWith_cos.dist_le_mul s t
+  simp only [Real.dist_eq] at hsin hcos
+  constructor
+  · exact (norm2_le_abs_add _).trans (by
+      simp only [uvec,Prod.fst_sub,Prod.snd_sub]
+      linarith)
+  · exact (norm2_le_abs_add _).trans (by
+      simp only [vvec,Prod.fst_sub,Prod.snd_sub,abs_neg]
+      linarith)
+
+/-- A single phase's frame velocity is 40-Lipschitz (the direct elementary
+estimate gives 30). The statement does not assert that the global glued
+velocity has the same formula at every point. -/
+theorem phase_velocity_lipschitz {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (i : Fin 5)
+    {s t : ℝ} (hs : s∈Icc (0:ℝ) (π/2)) (ht : t∈Icc (0:ℝ) (π/2)) :
+    norm2 ((P.gs_phase i.val).X' s-(P.gs_phase i.val).X' t)
+      ≤40*|s-t| := by
+  let α:=phaseAlpha P i
+  let β:=phaseBeta P i
+  have hcoef:=phase_coefficients_lipschitz hP hbox i hs ht
+  have hbound: |α t|≤5 ∧ |β t|≤5 :=
+    (phase_coefficient_bounds hP hbox i ht).1.antisymm
+      (phase_coefficient_bounds hP hbox i ht).2.1
+  have hframes:=angular_frame_modulus s t
+  have hexp :
+      (P.gs_phase i.val).X' s-(P.gs_phase i.val).X' t =
+      (α s-α t)•uvec s+(β s-β t)•vvec s+
+        α t•(uvec s-uvec t)+β t•(vvec s-vvec t) := by
+    dsimp [α,β,phaseAlpha,phaseBeta,gs_Phase.X']
+    abel
+  rw [hexp]
+  have hnorm:=norm2_add_le
+    ((α s-α t)•uvec s+(β s-β t)•vvec s)
+    (α t•(uvec s-uvec t)+β t•(vvec s-vvec t))
+  have hnorm1:=norm2_add_le ((α s-α t)•uvec s) ((β s-β t)•vvec s)
+  have hnorm2:=norm2_add_le (α t•(uvec s-uvec t)) (β t•(vvec s-vvec t))
+  have hu : norm2 (uvec s)=1 := norm2_uvec s
+  have hv : norm2 (vvec s)=1 := norm2_vvec s
+  simp only [norm2_smul,hu,hv,mul_one] at hnorm1 hnorm2
+  have hmulU : |α t|*norm2 (uvec s-uvec t)≤10*|s-t| := by
+    nlinarith [mul_le_mul hbound.1 hframes.1 (abs_nonneg _) (by positivity)]
+  have hmulV : |β t|*norm2 (vvec s-vvec t)≤10*|s-t| := by
+    nlinarith [mul_le_mul hbound.2 hframes.2 (abs_nonneg _) (by positivity)]
+  nlinarith [hnorm,hnorm1,hnorm2,hcoef.1,hcoef.2,hmulU,hmulV]
+
+/-- A uniform phase speed estimate. -/
+theorem phase_velocity_norm_le_ten {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) (i : Fin 5)
+    {t : ℝ} (ht : t∈Icc (0:ℝ) (π/2)) :
+    norm2 ((P.gs_phase i.val).X' t)≤10 := by
+  have hb:=phase_coefficient_bounds hP hbox i ht
+  rw [gs_Phase.X']
+  have hu:=norm2_uvec t
+  have hv:=norm2_vvec t
+  have hh:=norm2_add_le
+    ((P.gs_phase i.val).α t•uvec t)
+    ((P.gs_phase i.val).β t•vvec t)
+  simpa [norm2_smul,hu,hv,phaseAlpha,phaseBeta] using
+    hh.trans (by nlinarith [hb.1,hb.2.1])
+
 end MovingSofaQuantitative
