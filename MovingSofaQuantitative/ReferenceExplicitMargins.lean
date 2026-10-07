@@ -406,7 +406,7 @@ private theorem corePathSlackV_hasDerivAt {P : GerverParams}
   have hv : HasDerivAt
       (fun x => vvec (coreAdjustedAngle λ t x))
       (-λ t • uvec s) d := by
-    simpa [s] using (hasDerivAt_vvec s).comp d hs
+    simpa [s, smul_neg, neg_smul] using (hasDerivAt_vvec s).comp d hs
   have hdot := hasDerivAt_dot' (hq.sub hp) hv
   convert hdot using 1
   · ext x
@@ -469,7 +469,8 @@ theorem uniform_core_slack_from_C1 {P : GerverParams}
   have hφ:=romik_bounds hP hbox |>.φ_mem
   have hinside : ∀t∈I,t∈Ioo (0:ℝ) (π/2) := by
     intro t ht
-    exact ⟨hφ.1.trans_le ht.1,by linarith [ht.2,hφ.1]⟩
+    exact ⟨by linarith [ht.1,hφ.1],
+      by linarith [ht.2,hφ.1]⟩
   have hzeroU : ∀t∈I,FU (t,0)=0 := by
     intro t ht
     simp [FU,corePathSlackU,coreAdjustedAngle,coreLoweredPoint]
