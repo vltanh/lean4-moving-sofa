@@ -1,0 +1,129 @@
+\section{Quantitative stability}\label{sec:quant-stability-overview}
+
+Write $M=\abs\Gs$ and $\eps(S)=M-\abs S$. Throughout this section distance
+means Euclidean Hausdorff distance between the actual compact sets, not between
+their convex hulls. For a nonempty compact set $S$, put
+\[
+ m(S)=\frac{h_S(0)-h_S(\pi)}2,
+ \qquad
+ S_c=S+\bigl(m(\Gs)-m(S),\,1-h_S(\pi/2)\bigr).
+\]
+This translation aligns the midpoints of the horizontal projections and the
+upper supports. It differs from the left-support normalization $S^\natural$
+used in the simpler stability proof in \cref{sec:stability}.
+
+\begin{theorem}[explicit local stability; quantitative draft]
+\label{thm:quant-explicit-stability}
+There is $\eps_0>0$ such that every moving sofa $S$ with
+$0\le\eps=\eps(S)<\eps_0$ satisfies
+\[
+ d_H(S_c,\Gs)\le\frac{23}{10}\sqrt\eps,
+ \qquad
+ \abs{S_c\triangle\Gs}\le50\sqrt\eps.
+\]
+Moreover, every admissible reduced motion of $S$ with total rotation
+$\omega\in[\arccos(5/11),\pi/2]$ satisfies
+\[
+ 0\le\frac\pi2-\omega\le\frac{31}{10}\eps.
+\]
+No smoothness, injectivity, or monotonicity of the input sofa is assumed.
+\end{theorem}
+\quantstatus{The exact statement is
+\quantcode{MovingSofaQuantitative.Targets.ExplicitLocalStability}.
+The centered-cap proof source is written, but the full numerical
+reference-geometry and terminal assembly is not yet an unconditional Lean
+theorem. The established existential-coefficient version remains
+\cref{thm:stability,thm:stability-angle}.}
+
+The coefficient $23/10$ is an upper bound, not an optimal constant. The
+threshold is initially left existential: this isolates the geometric content
+of the square-root estimate from the effectivity calculations. The final
+proposition of \cref{sec:quant-refinements} records the proposed common cutoff
+$10^{-600}$, with its separate proof-source obligations.
+
+\subsection{Why the square root occurs}
+
+The starting point is Baek's upper-bound functional on the enlarged domain of
+triples. For $\xi=(K,B,D)$, its deficit has an exact decomposition
+\[
+ M-\cQ(\xi)=L(\xi)+E_{\mathrm{cap}}(\xi)+E_B(\xi)+E_D(\xi),
+ \qquad L,E_{\mathrm{cap}},E_B,E_D\ge0.
+\]
+Each energy is half an integral of a squared residual. Integrating the four
+residual equations reconstructs the upper support of the cap, modulo a
+horizontal translation. Cauchy--Schwarz therefore converts the energy into a
+square-root support error. The simpler, left-pinned form is
+\[
+ d_H\bigl(K,\KG+(s_{\mathrm{left}},0)\bigr)
+ \le 2\sec\varphi\sqrt{M-\cQ(\xi)}.
+\]
+This is \cref{thm:stability-cap}; its detailed proof is retained in
+\cref{sec:stab-certificate,sec:stab-cap}. Centering the horizontal projection
+instead of pinning one endpoint halves the coefficient to $\sec\varphi$;
+\cref{thm:quant-centered-energy,thm:quant-centered-cap} give the refinement.
+
+\subsection{From the cap back to the sofa}
+
+Here is the proof architecture of \cref{thm:quant-explicit-stability}; the
+technical estimates and numerical reductions are deferred to the appendices.
+First, compactness and the uniqueness theorem place every sufficiently
+near-optimal normalized sofa in a fixed neighborhood of Gerver's. The local
+canonical construction then assigns a right-angle cap $K$ and its full-angle
+envelope $U=K\setminus N(K)$. The construction gives
+\[
+ \cA(K)=\abs U\le\cQ(\xi_K)\le M.
+\]
+Set $e=M-\abs U$. An incomplete turn may leave points of $S$ outside $U$;
+one must not assume $S\subseteq U$. The refined terminal comparison gives
+\[
+ 0\le e\le\eps,
+ \qquad
+ \abs{U\setminus S}\le\frac{10031}{10000}(\eps-e),
+ \qquad
+ \frac\pi2-\omega\le\frac{31}{10}(\eps-e).
+\]
+The complementary budgets $e$ and $\eps-e$ are important: the cap deformation
+and the missing set do not each spend the entire deficit independently.
+
+The centered cap estimate bounds the support error by
+$\delta\le(1001/1000)\sqrt e$. For the direction from $S$ to $\Gs$, a nearby
+point outside Gerver's sofa has a strict hallway violation. Choosing the
+witness angle to balance the two violations controls Euclidean normal distance,
+without paying for the slope of the roof in fixed coordinates. For the reverse
+direction, every reference point admits a small interior sector of aperture
+$153/100$. After erosion by $\sqrt2\,\delta$, the entire surviving sector
+lies in $U$. If the reference point were too far from $S$, this whole region
+would be missing from $S$, contradicting the complementary area budget.
+
+Optimizing the exact sector area over $e/\eps$ gives the coefficient $23/10$.
+A separate comparison by a cap boundary layer and a niche band gives the
+symmetric-difference coefficient $50$; it does not multiply the Hausdorff
+coefficient by another rough perimeter estimate. These are the only places
+where the displayed numerical coefficients enter. The simpler estimates in
+\cref{sec:stability} prove the rates without these optimizations.
+
+\subsection{The exponent cannot improve}
+
+The sharpness argument is short enough to retain here. Choose a fixed interior
+point $p$ of $\Gs$ and remove an open disk of sufficiently small radius $r$:
+\[
+ \Gs_r=\Gs\setminus\mathbb B^\circ(p,r).
+\]
+The circle is retained. Removing the disk preserves connectedness, and the
+same hallway motion moves this closed connected subset. Its deficit is
+$\pi r^2$, while its distance to the rigid orbit of $\Gs$ is exactly $r$;
+these facts are established together in \cref{thm:stability-exponent:family}.
+
+The minimization over rigid motions is essential. Sufficiently close rigid
+copies of one fixed compact set retain a prescribed interior point. Hence
+an alignment at distance less than $r$ would still contain $p$ and would need
+a point of $\Gs_r$ within distance less than $r$ of $p$, which is impossible.
+Identity alignment attains $r$. Thus, for every $a>1/2$,
+\[
+ \frac{d_{\mathrm{rig}}(\Gs_r,\Gs)}{\eps(\Gs_r)^a}
+ =\pi^{-a}r^{1-2a}\longrightarrow\infty.
+\]
+This proves the optimality of the exponent, not of the upper coefficient
+$23/10$. It also forces every universal square-root Hausdorff coefficient,
+even with freely optimized rigid alignment, to be at least $1/\sqrt\pi$;
+see \cref{cor:quant-sofa-lower}.

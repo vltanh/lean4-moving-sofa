@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "energy_enclosure": {
+    "lower_numerator": 1452029865842512113660751001,
+    "upper_numerator": 1454291015334141451605245283,
+    "denominator": 1237940039285380274899124224
+  },
+  "energy_display": [1.1729403846415036, 1.1747669266547458],
+  "strict_energy_upper": "147/125",
+  "strict_quotient_lower": "461/500",
+  "rational_final_check": "31240587/31250000",
+  "parameter_box": {
+    "phi": ["0.039177264", "0.039177465"],
+    "theta": ["0.681301409", "0.681301610"]
+  },
+  "subcells_per_analytic_piece": 512,
+  "cells": 32768,
+  "unhalved_components": {
+    "r1": {"lower_numerator": 58016961791691028129795810, "upper_numerator": 58017271195847425899889281, "denominator": 1237940039285380274899124224},
+    "r2": {"lower_numerator": 2255998100129046826952439382, "upper_numerator": 2258104122005795636567409029, "denominator": 1237940039285380274899124224},
+    "r3": {"lower_numerator": 102887091566806072329103970, "upper_numerator": 102904735206523009294488778, "denominator": 1237940039285380274899124224},
+    "r4": {"lower_numerator": 271815540110113603764772783, "upper_numerator": 273745126176414033344744773, "denominator": 1237940039285380274899124224},
+    "B": {"lower_numerator": 8549469611223704775715430, "upper_numerator": 8714252570405865425907216, "denominator": 1237940039285380274899124224},
+    "D": {"lower_numerator": 107636517903515676386557936, "upper_numerator": 107939870328054940662623917, "denominator": 1237940039285380274899124224},
+    "B_gap": {"lower_numerator": 99156050572627314983116692, "upper_numerator": 99156653185241992015427571, "denominator": 1237940039285380274899124224}
+  },
+  "arithmetic": "90-bit outward dyadic intervals; no floating-point acceptance",
+  "source_hashes": {
+    "feasible-trial-data.json": "b7f69c6c3e480c837f51c6af6d5d0101e9c6123d71fc8a7694a86a42b109d636",
+    "certify_feasible_trial.py": "30b5923a73e46765eb6aaa487c5cdbb8a43702c3037177e860f572d32fd1d9d6",
+    "dyadic_interval.py": "a95a6ff832bdcefaa1410b59b3709756580c19f4c10087a7c910463480bd8d7b"
+  },
+  "scope": "full six-residual energy of specified trial; support-feasibility proof is analytic",
+  "not_claimed": ["effective original-sofa entry", "optimal feasible coefficient", "Lean verification"],
+  "seconds": 8.108239889144897
+}

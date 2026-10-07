@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "smoothing_width": "0.01",
+      "residual_energy": "1.0015384895524596774",
+      "endpoint_quotient_lower_ratio": "1.0007668989800730394",
+      "safe_perturbation_amplitude": "0.00295714586022",
+      "energy_excess": "2.05173123554809e-6"
+    },
+    {
+      "smoothing_width": "0.003",
+      "residual_energy": "1.0015370533406087325",
+      "endpoint_quotient_lower_ratio": "1.0007676165335376242",
+      "safe_perturbation_amplitude": "0.000934227618134",
+      "energy_excess": "6.15519384603254e-7"
+    },
+    {
+      "smoothing_width": "0.001",
+      "residual_energy": "1.0015366429943524453",
+      "endpoint_quotient_lower_ratio": "1.0007678215491032886",
+      "safe_perturbation_amplitude": "0.000316202034032",
+      "energy_excess": "2.05173128316031e-7"
+    },
+    {
+      "smoothing_width": "0.0003",
+      "residual_energy": "1.0015364993731626253",
+      "endpoint_quotient_lower_ratio": "1.0007678933045810978",
+      "safe_perturbation_amplitude": "9.53743001305e-5",
+      "energy_excess": "6.155193849607e-8"
+    },
+    {
+      "smoothing_width": "0.0001",
+      "residual_energy": "1.0015364583385369613",
+      "endpoint_quotient_lower_ratio": "1.0007679138061490216",
+      "safe_perturbation_amplitude": "3.18406951058e-5",
+      "energy_excess": "2.05173128320345e-8"
+    }
+  ],
+  "abstract_optimal_coefficient": "1.0007679240569334561",
+  "scope": "smoothed actual-cap support witness using the reference curvature lower bound",
+  "not_claimed": [
+    "feasible auxiliary bodies with negligible deficit",
+    "sharp Q coefficient",
+    "sharp area-deficit coefficient",
+    "Lean or interval verification"
+  ],
+  "python": "3.13.5",
+  "mpmath": "1.3.0",
+  "decimal_digits": 50,
+  "source_git_blob_sha1": "3a4449a4e8cfc48b2ce5d3862ce3cc1c79f2c64c"
+}

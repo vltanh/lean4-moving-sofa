@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "coefficient": "49/50",
+  "slack_sensitivity": "1/2",
+  "phi_interval": ["0.039177264", "0.039177465"],
+  "theta_interval": ["0.681301409", "0.681301610"],
+  "arithmetic": "exact integers with 90-bit dyadic outward rounding",
+  "scale": 1237940039285380274899124224,
+  "visited": 1636,
+  "leaves": 821,
+  "worst_squared_upper": "594427345875065306095488207/618970019642690137449562112",
+  "failed": [],
+  "matrix": {
+    "DB": "[739128918979221842782507461/618970019642690137449562112, 369564744772056143856410343/309485009821345068724781056]",
+    "DD": "[1038281944242409772723013345/1237940039285380274899124224, 1038283446614133683020551693/1237940039285380274899124224]",
+    "G11": "[368898812839287097727273277/309485009821345068724781056, 1480922435219846296614023947/1237940039280274899124224]",
+    "G12": "[-75267858676135241211369821/309485009821345068724781056, -37625139683204227952295387/154742504910672534362390528]",
+    "G22": "[259570237089469292922890719/309485009821345068724781056, 16223194414090340140320283/19342813113834066795298816]",
+    "det": "[4881672387104441935542663513/1237940039285380274899124224, 4890656443909964532575549411/1237940039285380274899124224]"
+  },
+  "source_hashes": {
+    "certify_critical_rank2.py": "1f35f661552ed3f314dc355d26679fe2f3549b83b45ae971d969c317025b1d4a",
+    "dyadic_interval.py": "a95a6ff832bdcefaa1410b59b3709756580c19f4c10087a7c910463480bd8d7b"
+  },
+  "scope": "continuum rank-two norm and slack sensitivity; analytic identities are inputs",
+  "not_claimed": ["global original-sofa entry", "sharp feasible-Q constant", "Lean verification"],
+  "test_status": "passed",
+  "test_counts": {
+    "exact_arithmetic": 1634,
+    "zero_division": 1,
+    "exact_reference_bounds": 8,
+    "exact_scalar_bounds": 7,
+    "certificate": 1,
+    "coverage": 821,
+    "leaf_bounds": 1642,
+    "negative_control": 1
+  },
+  "tests": 4115,
+  "negative_control_failed_cells": 60,
+  "python": "3.13.5",
+  "certificate_sha256": "927977a584835aec07769bca855aa8c32da694f0cc04b6bbc84a70bb8d7c89a8"
+}

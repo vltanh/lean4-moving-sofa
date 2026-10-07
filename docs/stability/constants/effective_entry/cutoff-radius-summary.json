@@ -1,0 +1,130 @@
+{
+  "status": "passed_after_recomputation",
+  "checks": 5440,
+  "groups": {
+    "reference_scalars": 18,
+    "reference_phase_cover": 5120,
+    "reference_arms_extended": 256,
+    "rational_local_and_cutoff": 41,
+    "exact_roots": 3,
+    "negative_controls": 2
+  },
+  "cutoff": {
+    "epsilon": "1/10^600",
+    "entry_support_upper": "3/10^44",
+    "entry_angle_upper": "5/10^98",
+    "local_cap_support_radius": "1/10^40",
+    "local_terminal_angle_radius": "1/10^20",
+    "normal_depth": "1/10^8",
+    "normal_error_threshold": "1/10^10",
+    "sector_radius": "1/10^20"
+  },
+  "reference_enclosures": {
+    "wing_width": {
+      "lower_numerator": 998870559281915250091498530,
+      "upper_numerator": 998871554585706835537239552,
+      "denominator": 1237940039285380274899124224
+    },
+    "roof_floor_width": {
+      "lower_numerator": 1997741371103598514400573140,
+      "upper_numerator": 1997742864059285892569184674,
+      "denominator": 1237940039285380274899124224
+    },
+    "core_endpoint_height": {
+      "lower_numerator": 68317651539670983355386573,
+      "upper_numerator": 68318148460510568008345672,
+      "denominator": 1237940039285380274899124224
+    },
+    "corner_abscissa_gaps": {
+      "lower_numerator": 1241567583483962281351483032,
+      "upper_numerator": 1512348318003296037326345160,
+      "denominator": 1237940039285380274899124224
+    },
+    "extended_arm_range": {
+      "lower_numerator": 58552844438608142002678504,
+      "upper_numerator": 1746087032377902017892501748,
+      "denominator": 1237940039285380274899124224
+    },
+    "speed_squared_range": {
+      "lower_numerator": 1748827317037949027774327418,
+      "upper_numerator": 2498450800475904181572551556,
+      "denominator": 1237940039285380274899124224
+    },
+    "acceleration_squared_range": {
+      "lower_numerator": 7519084633789733390075170602,
+      "upper_numerator": 18576838972526421337853139631,
+      "denominator": 1237940039285380274899124224
+    },
+    "core_abs_slope_range": {
+      "lower_numerator": 0,
+      "upper_numerator": 11595991786041431002014985788,
+      "denominator": 1237940039285380274899124224
+    },
+    "curved_outer_density_range": {
+      "lower_numerator": 677417043649675903467810200,
+      "upper_numerator": 1732130515144771689996611712,
+      "denominator": 1237940039285380274899124224
+    },
+    "tail_speed_range": {
+      "lower_numerator": 163066903340112968698710960,
+      "upper_numerator": 618970019642690137449562112,
+      "denominator": 1237940039285380274899124224
+    }
+  },
+  "positive_margin_names": [
+    "support_tolerance_1/100000",
+    "top_face_error_1/100000",
+    "far_foot_error_1/100000",
+    "support_tolerance_1/100000000",
+    "top_face_error_1/100000000",
+    "far_foot_error_1/100000000",
+    "arm_error",
+    "cut_reference_gap",
+    "far_cut_perturbation",
+    "niche_height",
+    "niche_containment",
+    "visited_angle",
+    "interior_floor_slack",
+    "early_first_wall",
+    "omitted_wedge_area",
+    "floor_top_margin",
+    "trapezoid_height",
+    "trapezoid_niche_separation",
+    "terminal_top_point",
+    "terminal_angle_remainder",
+    "terminal_loss",
+    "cone_angular_reserve",
+    "cone_tangent_variation",
+    "cone_corner_separation",
+    "cone_other_graph_separation",
+    "roof_opposite_boundary",
+    "normal_angle_range",
+    "normal_derivative_error",
+    "deep_point_exclusion",
+    "tail_inactive_slack",
+    "entry_theorem_range",
+    "angle_theorem_range",
+    "entry_cap_radius",
+    "entry_terminal_radius",
+    "refined_full_angle_slack",
+    "sector_recovery_radius",
+    "forward_coefficient",
+    "area_coefficient",
+    "area_remainder_scale",
+    "sector_all_splits",
+    "sector_nonempty"
+  ],
+  "full_invariants_sha256": "5d1a503086145b5e521e81692f3dc79ba3f74eb0e81017bd0710b80a148b9061",
+  "checker_sha256": "4c2fbdf3464b95fe436786d9200cd8a45393680c8908ca9e0c79346a2002bec4",
+  "checker_git_blob": "ee82b0f3817efd6137e21a8e32afba082fce3d87",
+  "interval_backend_sha256": "a95a6ff832bdcefaa1410b59b3709756580c19f4c10087a7c910463480bd8d7b",
+  "replay_sha256": "84fa32735532ad585d4a1d19b22e39aee9ac479e91ec3ac441452c9daaf9b979",
+  "scope": "numerical reference formulas and scalar implications of the analytic radius lemmas",
+  "not_verified": [
+    "penalized polygon-limit arguments in notes26-27",
+    "contact classification",
+    "arbitrary-set local area comparison",
+    "uniform epigraph proof",
+    "Lean or CI"
+  ]
+}

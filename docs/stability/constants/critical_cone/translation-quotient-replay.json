@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "coefficient": "93/100",
+  "parameter_box": {
+    "phi": ["0.039177264", "0.039177465"],
+    "theta": ["0.681301409", "0.681301610"]
+  },
+  "roots": 21,
+  "visited": 290591,
+  "leaves": 145306,
+  "frontier": 0,
+  "maximum_squared_upper_exact": "535347164580060136196379395/618970019642690137449562112",
+  "per_root_leaves": {
+    "0,0": 28,
+    "0,1": 764,
+    "0,2": 1,
+    "0,3": 1,
+    "0,4": 24780,
+    "0,5": 63468,
+    "1,1": 13006,
+    "1,2": 3,
+    "1,3": 3,
+    "1,4": 26181,
+    "1,5": 16432,
+    "2,2": 1,
+    "2,3": 1,
+    "2,4": 4,
+    "2,5": 1,
+    "3,3": 1,
+    "3,4": 4,
+    "3,5": 1,
+    "4,4": 559,
+    "4,5": 63,
+    "5,5": 4
+  },
+  "all_root_areas_exactly_one": true,
+  "tree_partition_verified": true,
+  "canonical_leaf_sha256": "5dc8a0c99f0800e5c08b47f19837f5da410a7b67e59530206f7326181feee71f",
+  "source_hashes": {
+    "certify_translation_quotient_compact.py": "88c0ed262c0371f743e9e7de93007e8912e25c79523c8012b8f0915d8ea8fef3",
+    "compact_rank2.py": "b60820909af98b00759cab65f886226a91599d5e6c4bb6bbc88559121827387d",
+    "certify_critical_rank2.py": "13e391c58fe6ec7cc69856aa05c3e6dca71882bd5ec735615af85fe69f3c1e45",
+    "dyadic_interval.py": "a95a6ff832bdcefaa1410b59b3709756580c19f4c10087a7c910463480bd8d7b"
+  },
+  "arithmetic": "90-bit outward dyadic intervals; exact rational comparisons",
+  "scope": "rank-two continuum quotient upper bound; analytic identities are inputs",
+  "not_claimed": ["effective original-sofa entry", "optimal feasible coefficient", "Lean verification"],
+  "negative_control": {
+    "coefficient": "1/2",
+    "status": "inconclusive",
+    "visited": 100,
+    "failed_cells": 48,
+    "frontier": 19
+  },
+  "replay_source_sha256": "7447f94df8541b42144e0e7481889304eb4e3bfef84cb751b7348ec0b702a2a1"
+}
