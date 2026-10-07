@@ -71,6 +71,14 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
             "Polygon clipping branches on Booleans. Explicitly decide "
             "each exact rational inequality before using && or !.",
         ),
+        "rational_polygon_clip_contains",
+        "candidateInBox",
+        "support_quantile_contraction_safe",
+        "area_mono_polygons",
+        "support_box_split_complete",
+        "terminal_candidate_of_motion",
+        "exists_hundredth_slab",
+        "contract_none_excludes",
     ),
     "MovingSofaQuantitative/EffectiveAngleEntry.lean": (
         "partial_inner_triangle_area_lower",
@@ -85,16 +93,6 @@ CRITICAL_INTERFACES: dict[str, tuple[str, ...]] = {
         "large_outer_extent_of_area",
         "triangle_inner_of_support_witnesses",
         "prepend_missing_rotation",
-    ),
-    "MovingSofaQuantitative/CoarseAngleCertificate.lean": (
-        "rational_polygon_clip_contains",
-        "candidateInBox",
-        "support_quantile_contraction_safe",
-        "area_mono_polygons",
-        "support_box_split_complete",
-        "terminal_candidate_of_motion",
-        "exists_hundredth_slab",
-        "contract_none_excludes",
     ),
 }
 
@@ -226,6 +224,16 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
         ),
     ),
     "MovingSofaQuantitative/ReferenceSector.lean": (
+        (
+            r"theorem\s+gerver_boundary_chart[\s\S]*?rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
+            "A boundary point's abscissa is not the turning parameter. "
+            "Obtain an actual contact/envelope parameter first.",
+        ),
+        (
+            r"theorem\s+gerver_boundary_chart[\s\S]*?all_goals[\s\S]*?aesop",
+            "A blanket automation fallback does not prove the quantitative "
+            "Gerver sector atlas. Supply certified phase/contact charts.",
+        ),
         (
             r"rcases\s+gs_cases\s+\(P\s*:=\s*P\)\s+p\.1",
             "The boundary point's horizontal coordinate is not a turning "
