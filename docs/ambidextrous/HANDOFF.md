@@ -8,6 +8,20 @@ Draft PR: #3; base: `main`.
 Substantive checkpoint before this update: `eef8882b0130fc5e95fe9512f1ee664c49b855c3`.
 Always query the live tip and inspect later changes. Do not reset to the historical paper branch.
 
+## Full-turn-only checkpoint after the latest continuation
+
+**The full-turn optimality theorem is still open.** Work was deliberately restricted to that problem; partial-turn SI/FS remains frozen for now. New proof material:
+
+- [CGA](full-turn-common-background-obstruction.md) gives a completely explicit convex full-turn parallelogram, with actual top and bottom positive faces on opposite ends, whose **canonical saturation equals the body**. The width is \(49/20\) and area \(1/20\). Any height-one cap with full niche height at most one half has top-face length at most \(2\sqrt2-1\) (a single \(45^\circ\) corner test). Hence no pair of containing backgrounds with one common top face can contain the two original caps. This disproves **unconditional** common-face-background admission, even on the saturated positive opposite-face class. The low area is essential: it does not disprove competitive-only admission. A continuum of such examples exists for diagonal rod width \(2<W<\sqrt7\).
+- [AS](adaptive-spatial-switching-bound.md) strengthens the direct SPB ordinary-area relaxation without an arbitrary spatial partition:
+  \[
+  |S|\le\mathscr C(U,V)=W-\int_I\max(n_U+n_V,\ 2-A_U-A_V).
+  \]
+  Its exact error against the canonical envelope is \(\int[a_++b_+-(a+b)_+]\), with \(a=n_U-(1-A_V)\), \(b=n_V-(1-A_U)\). It is exact on the reference, every convex feasible full-turn body, and vertically symmetric feasible envelopes. For admitted common-face tail-budget domains, existing per-cap deficit inequalities prove even \(\mathscr C\le M\). **The sharp bound \(\mathscr C\le M\) for arbitrary compatible full-turn caps is unproved** and is stronger than the necessary original clipping inequality.
+- The bounded [exact checker](computer-assisted/check_full_turn_focus.py) passed 6,561 rational frames per turn and 10,000 exact switching identities, rejecting an overwide parallelogram and a false zero-switching-error assertion. Its executed bytes match Git blob \(ee4843d19f357b315050f84f7f036d568cb61edc\). The finite tests do not verify the continuum theorem or establish sharp area optimality.
+
+**Single remaining active acceptance criterion:** prove the sharp ordinary-area upper bound for every saturated full-turn positive opposite-end-face body. A competitive-only regular-background theorem remains possible, provided it supplies face compatibility and pays all geometry; generic inclusion-based admission is false. An alternative is a direct sharp **coupled** inequality using AS or the exact fibers; do not treat the stronger AS scalar maximum as already established. Do not resume partial turns until the full-turn step closes or a specific flaw forces a rethink.
+
 ## 1. Instructions and validation limits
 
 Prioritize pen-and-paper proofs. Short computations may test a proposed inequality or reject an approach; at most 30 seconds per invocation, preferably external five/ten-second limits. Do not launch a large optimizer campaign or repeated refinement without a new instruction. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Commit substantive positive and negative findings with `[skip ci]`, under docs/ambidextrous. Refresh blob SHAs and preserve concurrent edits.
