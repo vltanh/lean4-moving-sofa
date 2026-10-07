@@ -263,6 +263,116 @@ theorem gerver_adaptive_downward_slack {P : GerverParams}
     exact (le_div_iff₀ hab).2 (by
       nlinarith [mul_nonneg (show (0:ℝ)≤5/51 by norm_num) hab.le])
 
+theorem sin_ge_half_of_mem {t : ℝ}
+    (h0 : π/6≤t) (h1 : t≤π/2) : (1/2:ℝ)≤sin t := by
+  have hm:=strictMonoOn_sin.monotoneOn
+    (show t∈Icc (-(π/2)) (π/2) by constructor <;> linarith [h0,h1,pi_pos])
+    (show π/6∈Icc (-(π/2)) (π/2) by constructor <;> linarith [pi_pos])
+  have :=hm (by linarith)
+  simpa using this
+
+theorem cos_ge_half_of_mem {t : ℝ}
+    (h0 : 0≤t) (h1 : t≤π/3) : (1/2:ℝ)≤cos t := by
+  rw [←sin_pi_div_two_sub]
+  apply sin_ge_half_of_mem
+  · linarith
+  · linarith [h0]
+
+/-- Compact C1 persistence of the adaptive first-order inequality.  This is
+the source-level compactness lemma behind the existential clipping depth.  Its
+proof uses only continuity of Gerver's C1 path and the strict rational reserve;
+no second derivative is assumed. -/
+theorem uniform_core_slack_from_C1 {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {λ : ℝ→ℝ}
+    (hλ : ContinuousOn λ (Icc P.φ (π/2-P.φ)))
+    (hden : ∀t∈Icc P.φ (π/2-P.φ),0<-P.gs_α t+P.gs_β t)
+    (hrate : ∀t∈Icc P.φ (π/2-P.φ),
+      wallVerticalRateU P t (λ t)≤-(10/101:ℝ) ∧
+      wallVerticalRateV P t (λ t)≤-(10/101:ℝ))
+    (hC1 : ContDiff ℝ 1 P.path)
+    (hreserve : 0<(10/101:ℝ)-5/51) :
+    ∃d₀ : ℝ,0<d₀ ∧
+      ∀t∈Icc P.φ (π/2-P.φ),∀d∈Icc (0:ℝ) d₀,
+      let s:=t+λ t*d
+      s∈Ioo (0:ℝ) (π/2) ∧
+      innerSlackU P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d ∧
+      innerSlackV P.cap s ((P.path t).1,(P.path t).2-d)≤-(5/51)*d := by
+  let I:=Icc P.φ (π/2-P.φ)
+  let FU : ℝ×ℝ→ℝ:=fun z=>
+    innerSlackU P.cap (z.1+λ z.1*z.2)
+      ((P.path z.1).1,(P.path z.1).2-z.2)
+  let FV : ℝ×ℝ→ℝ:=fun z=>
+    innerSlackV P.cap (z.1+λ z.1*z.2)
+      ((P.path z.1).1,(P.path z.1).2-z.2)
+  have hI : IsCompact I:=isCompact_Icc
+  have hφ:=romik_bounds hP hbox |>.φ_mem
+  have hinside : ∀t∈I,t∈Ioo (0:ℝ) (π/2) := by
+    intro t ht
+    exact ⟨hφ.1.trans_le ht.1,by linarith [ht.2,hφ.1]⟩
+  have hzeroU : ∀t∈I,FU (t,0)=0 := by
+    intro t ht
+    dsimp [FU]
+    rw [show t+λ t*0=t by ring]
+    rw [←gm_innerCorner hP hbox ht]
+    simp [innerSlackU]
+  have hzeroV : ∀t∈I,FV (t,0)=0 := by
+    intro t ht
+    dsimp [FV]
+    rw [show t+λ t*0=t by ring]
+    rw [←gm_innerCorner hP hbox ht]
+    simp [innerSlackV]
+  have hderU : ∀t∈I,
+      HasDerivAt (fun d=>FU (t,d)) (wallVerticalRateU P t (λ t)) 0 := by
+    intro t ht
+    dsimp [FU,wallVerticalRateU]
+    have hx:=gs_hasDerivAt_path' hP t
+    fun_prop
+  have hderV : ∀t∈I,
+      HasDerivAt (fun d=>FV (t,d)) (wallVerticalRateV P t (λ t)) 0 := by
+    intro t ht
+    dsimp [FV,wallVerticalRateV]
+    have hx:=gs_hasDerivAt_path' hP t
+    fun_prop
+  have hjointU : ContinuousOn (fun z : ℝ×ℝ=>
+      deriv (fun d=>FU (z.1,d)) z.2) (I×ˢIcc (-1:ℝ) 1) := by
+    have hx:=hC1.continuous_deriv
+    dsimp [FU]
+    fun_prop
+  have hjointV : ContinuousOn (fun z : ℝ×ℝ=>
+      deriv (fun d=>FV (z.1,d)) z.2) (I×ˢIcc (-1:ℝ) 1) := by
+    have hx:=hC1.continuous_deriv
+    dsimp [FV]
+    fun_prop
+  have h0U : ∀t∈I,deriv (fun d=>FU (t,d)) 0≤-(10/101:ℝ) := by
+    intro t ht
+    rw [(hderU t ht).deriv]
+    exact (hrate t ht).1
+  have h0V : ∀t∈I,deriv (fun d=>FV (t,d)) 0≤-(10/101:ℝ) := by
+    intro t ht
+    rw [(hderV t ht).deriv]
+    exact (hrate t ht).2
+  obtain ⟨d₀,hd₀,hd₀1,hDU,hDV,hangle⟩ :=
+    compact_uniform_derivative_tube hI hinside hλ hjointU hjointV
+      h0U h0V hreserve
+  refine ⟨d₀,hd₀,?_⟩
+  intro t ht d hd
+  have hs:=hangle t ht d hd
+  have hIU:=intervalIntegral.integral_mono_on
+    hd.1 hd.2 (hDU t ht d hd)
+  have hIV:=intervalIntegral.integral_mono_on
+    hd.1 hd.2 (hDV t ht d hd)
+  have hFTC_U:=intervalIntegral.integral_deriv_eq_sub
+    (fun x hx=>hjointU ⟨ht,⟨by linarith [hx.1,hd₀1],by linarith [hx.2,hd₀1]⟩⟩)
+  have hFTC_V:=intervalIntegral.integral_deriv_eq_sub
+    (fun x hx=>hjointV ⟨ht,⟨by linarith [hx.1,hd₀1],by linarith [hx.2,hd₀1]⟩⟩)
+  dsimp
+  refine ⟨hs,?_,?_⟩
+  · rw [←hzeroU t ht,hFTC_U]
+    nlinarith
+  · rw [←hzeroV t ht,hFTC_V]
+    nlinarith
+
 /-- Quantitative version of \`envelope_downward_slack\`.  The tails use
 their active wall (whose vertical coefficient is at least 1/2) and a compact
 inactive-wall margin.  On the core, the balancing angle from
@@ -386,11 +496,32 @@ theorem gerver_envelope_downward_slack_explicit {P : GerverParams}
         hV.trans (neg_le_neg (min_le_left _ _))⟩
     · obtain ⟨hs,hU,hV⟩:=hcore t ht d₀ ⟨le_rfl,le_rfl⟩
       let s:=t+λ t*d₀
-      have hmore:=innerSlack_down_more P.cap s
-        (P.path t) d₀ d hsmall.le hfloor
-      refine ⟨s,hs,?_,?_⟩ <;>
-        nlinarith [hU,hV,min_le_right ((5/51)*d) τ,
-          min_le_right (min τD τB) ((5/51)*d₀)]
+      have hsin : 0≤sin s :=
+        sin_nonneg_of_nonneg_of_le_pi hs.1.le (by linarith [hs.2,pi_pos])
+      have hcos : 0≤cos s :=
+        cos_nonneg_of_mem_Icc ⟨by linarith [hs.1,pi_pos],hs.2.le⟩
+      have hUmore :
+          innerSlackU P.cap s ((P.path t).1,(P.path t).2-d)=
+            innerSlackU P.cap s ((P.path t).1,(P.path t).2-d₀)
+              -(d-d₀)*sin s := by
+        unfold innerSlackU dot uvec
+        ring
+      have hVmore :
+          innerSlackV P.cap s ((P.path t).1,(P.path t).2-d)=
+            innerSlackV P.cap s ((P.path t).1,(P.path t).2-d₀)
+              -(d-d₀)*cos s := by
+        unfold innerSlackV dot uvec
+        simp only [sin_add,cos_add,sin_pi_div_two,cos_pi_div_two]
+        ring
+      refine ⟨s,hs,?_,?_⟩
+      · rw [hUmore]
+        nlinarith [hU,min_le_right ((5/51)*d) τ,
+          min_le_right (min τD τB) ((5/51)*d₀),
+          mul_nonneg (sub_nonneg.mpr hsmall.le) hsin]
+      · rw [hVmore]
+        nlinarith [hV,min_le_right ((5/51)*d) τ,
+          min_le_right (min τD τB) ((5/51)*d₀),
+          mul_nonneg (sub_nonneg.mpr hsmall.le) hcos]
   · -- left D-tail
     have hti : t∈Ioo (0:ℝ) (π/2):=⟨ht.1.lt_of_ne (by
         rintro rfl
