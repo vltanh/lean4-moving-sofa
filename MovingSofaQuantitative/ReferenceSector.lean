@@ -22,8 +22,8 @@ open MovingSofaOptimality MovingSofaStability
 
 namespace MovingSofaQuantitative
 
-def referenceSectorAperture : ℝ := 153/100
-def referenceSectorHalfAngle : ℝ := 153/200
+abbrev referenceSectorHalfAngle : ℝ := sectorHalfAngle
+def referenceSectorAperture : ℝ := 2 * sectorHalfAngle
 
 theorem referenceSectorHalfAngle_pos :
     referenceSectorHalfAngle ∈ Ioo 0 (π/2) := by
