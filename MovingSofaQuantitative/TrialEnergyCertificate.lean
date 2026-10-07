@@ -3,6 +3,7 @@ module
 public import MovingSofaQuantitative.TrialResidualFormulas
 public import MovingSofaQuantitative.TrialEnergySoundness
 public import MovingSofaQuantitative.Certificates.IntegralMesh
+public import MovingSofaQuantitative.Certificates.Sinc
 
 /-!
 # Closed certificate for the feasible critical trial energy
@@ -187,6 +188,41 @@ def rD : B :=
     (bsub (lift startValue) (bmul (g t) (lift (cos (sub t φ)))))
     (lift (sin (sub t φ))))
 
+/-- Final cubic Hermite interval, with physical width \`lastH\`. -/
+def lastH : T := sub (nodePosition 16) (nodePosition 15)
+def lastC : T :=
+  sub (mul (rat 3) (sub (nodeValue 16) (nodeValue 15)))
+    (mul lastH (add (mul (rat 2) (nodeSlope 15)) (nodeSlope 16)))
+def lastD : T :=
+  add (mul (rat 2) (sub (nodeValue 15) (nodeValue 16)))
+    (mul lastH (add (nodeSlope 15) (nodeSlope 16)))
+
+/-- In physical coordinate \`w = pi/2-t\`, the last cubic factors as
+\`g(pi/2-w) = w*(-d16 + lastA*w + lastB*w²)\`.
+Both coefficients are exact Hermite interpolation expressions. -/
+def lastA : T := div (add lastC (mul (rat 3) lastD)) (pow lastH 2)
+def lastB : T := neg (div lastD (pow lastH 3))
+def lastW : T := sub halfPi t
+def lastPolynomial : T :=
+  add (neg (nodeSlope 16))
+    (add (mul lastA lastW) (mul lastB (pow lastW 2)))
+
+/-- Removable-singularity evaluation of the B residual on the last Hermite
+piece. Using a raw reciprocal of cos(t) would reject the last interval cell,
+as it intersects t=pi/2. The polynomial factorization replaces
+tan(t)*g(t) by cos(w)*polynomial(w)/sinc(w), w=pi/2-t.
+
+The sinc interval is valid even if the outward rational box extends slightly
+past the true endpoint, using the even Taylor enclosure. -/
+def tailBInterval (box : Box3) : Option Interval := do
+  let W ← lastW.intervalValue box
+  let S ← W.sincSmall
+  let invS ← S.reciprocal
+  let C ← (cos lastW).intervalValue box
+  let F ← lastPolynomial.intervalValue box
+  let D ← (dg t).intervalValue box
+  return ((C.mul F).mul invS).add D
+
 inductive Kind | r2 | r3 | r4 | B | D
   deriving DecidableEq, Repr
 
@@ -251,7 +287,9 @@ def cellUpper (k : Kind) (lo hi : T) (j : Fin subcells) : Option ℚ := do
     | 0 => parameterBox 0
     | 1 => parameterBox 1
     | 2 => ⟨a,b⟩
-  let I ← (residual k).intervalValue box
+  let I ← if k = .B && lo = nodePosition 15 && hi = nodePosition 16
+    then tailBInterval box
+    else (residual k).intervalValue box
   let U := max 0 (max (I.lo*I.lo) (I.hi*I.hi))
   return (b-a) * U
 
