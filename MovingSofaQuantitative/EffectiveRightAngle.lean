@@ -56,6 +56,73 @@ theorem exists_integral_penalized_cap {P : GerverParams}
   refine ⟨C, hC, hobj, ?_⟩
   exact (le_div_iff₀ hλ).2 hpenBound
 
+/-- Translation-invariant control of the relative horizontal midpoint.
+
+Both positive-area caps have centered radius below five.  Subtract their
+centered support functions: the remainder is uniformly bounded by ten, while
+the difference of original supports contains the harmonic
+\`(midpoint C - midpoint K) * cos t\`.  Squaring and integrating gives
+\`m^2 * (π/2) ≤ 2 * penalty + 200 * π\`.  A penalty at most 1/10
+therefore forces \`|m| < 21\`.
+
+An absolute bound on the midpoint of C would be false, since translating
+K and C together preserves the hypotheses. -/
+theorem center_shift_le_21_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    (hpen : supportL2Penalty K C≤1/10) :
+    |horizontalMidpoint C-horizontalMidpoint K|<21 := by
+  let m : ℝ := horizontalMidpoint C-horizontalMidpoint K
+  let r : ℝ→ℝ := fun t =>
+    supp (centeredCopy C) t-supp (centeredCopy K) t
+  have hKC : ∀t,|supp (centeredCopy K) t|≤5 := by
+    intro t
+    exact abs_supp_le_radius (centeredCopy_isCap hK).2.1
+      (fun p hp=>(arbitrary_positive_cap_radius_five hK hKpos p hp).le) t
+  have hCC : ∀t,|supp (centeredCopy C) t|≤5 := by
+    intro t
+    exact abs_supp_le_radius (centeredCopy_isCap hC).2.1
+      (fun p hp=>(arbitrary_positive_cap_radius_five hC hCpos p hp).le) t
+  have hr : ∀t,|r t|≤10 := by
+    intro t
+    dsimp [r]
+    nlinarith [hKC t,hCC t,abs_sub_le_iff.2
+      ⟨by nlinarith [hKC t,hCC t],by nlinarith [hKC t,hCC t]⟩]
+  have hdecomp : ∀t,supp C t-supp K t=m*cos t+r t := by
+    intro t
+    unfold r m centeredCopy
+    rw [supp_translate_horizontal hC.2.1 (-horizontalMidpoint C) t,
+        supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) t]
+    ring
+  have hpoint : ∀t,(m*cos t)^2≤
+      2*(supp C t-supp K t)^2+200 := by
+    intro t
+    have hbound:=hr t
+    have heq:=hdecomp t
+    have hsq : (r t)^2≤100 := by
+      nlinarith [abs_le.mp hbound,sq_abs (r t)]
+    nlinarith [sq_nonneg ((supp C t-supp K t)+r t)]
+  have hcos : (∫ t in (0:ℝ)..π,(cos t)^2)=π/2 := by
+    simp
+  have hint : m^2*(π/2)≤2*supportL2Penalty K C+200*π := by
+    have hmono:=intervalIntegral.integral_mono_on pi_pos.le
+      (by fun_prop :
+        IntervalIntegrable (fun t=>(m*cos t)^2) volume 0 π)
+      (by fun_prop :
+        IntervalIntegrable (fun t=>
+          2*(supp C t-supp K t)^2+200) volume 0 π)
+      (fun t ht=>hpoint t)
+    convert hmono using 1 <;>
+      simp [supportL2Penalty,pow_mul,hcos,
+        intervalIntegral.integral_add,intervalIntegral.integral_const] <;> ring
+  have hpi : 3<π := pi_gt_three
+  by_contra hn
+  have hm : 21≤|m| := le_of_not_gt hn
+  have hsq : 441≤m^2 := by nlinarith [sq_abs m]
+  have hmul := mul_nonneg (sub_nonneg.mpr hsq) pi_pos.le
+  nlinarith [hpen,hint,hmul,hpi]
+
 /-- The comparison cap stays uniformly bounded even though the penalty target
 is not centered at its own midpoint. -/
 theorem penalized_cap_radius_bound {P : GerverParams}
