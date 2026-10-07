@@ -1129,7 +1129,7 @@ theorem gerver_path_quadratic_remainder {P : GerverParams}
     (s:=s) (t:=t) (L:=40) (by norm_num) hder₂ hlip₂
   have hsum:=norm2_le_abs_add
     (P.path s-P.path t-(s-t)•P.gs_pathD t)
-  simp only [Prod.fst_sub,Prod.snd_sub,Prod.fst_smul,Prod.snd_smul,
+  simp only [Prod.fst_sub,Prod.snd_sub,Prod.smul_fst,Prod.smul_snd,
     smul_eq_mul] at hsum
   nlinarith
 
@@ -1152,7 +1152,7 @@ theorem gerver_core_base_slack_taylor {P : GerverParams}
   let s:=t+λ*d
   let v:=P.gs_pathD t
   let R:=P.path s-P.path t-(s-t)•v
-  have hφ:0<P.φ := (romik_bounds hP hbox).φ_mem.1
+  have hφ:0<P.φ := lt_of_lt_of_le (by norm_num) (romik_bounds hP hbox).φ_mem.1
   have ht0:t∈Icc (0:ℝ) (π/2) := by
     constructor <;> linarith [ht.1,ht.2,hφ]
   have hstep : |s-t|≤4*d := by
@@ -1173,15 +1173,19 @@ theorem gerver_core_base_slack_taylor {P : GerverParams}
     calc
       _ ≤ norm2 v*norm2 (uvec s-uvec t) :=
         abs_dot_le_norm2_mul _ _
-      _ ≤ 10*(2*|s-t|) := by
-        gcongr
+      _ ≤ norm2 v*(2*|s-t|) :=
+        mul_le_mul_of_nonneg_left hfr.1 (norm2_nonneg v)
+      _ ≤ 10*(2*|s-t|) :=
+        mul_le_mul_of_nonneg_right hspeed (by positivity)
       _ = 20*|s-t| := by ring
   have hfrV : |dot v (vvec s-vvec t)|≤20*|s-t| := by
     calc
       _ ≤ norm2 v*norm2 (vvec s-vvec t) :=
         abs_dot_le_norm2_mul _ _
-      _ ≤ 10*(2*|s-t|) := by
-        gcongr
+      _ ≤ norm2 v*(2*|s-t|) :=
+        mul_le_mul_of_nonneg_left hfr.2 (norm2_nonneg v)
+      _ ≤ 10*(2*|s-t|) :=
+        mul_le_mul_of_nonneg_right hspeed (by positivity)
       _ = 20*|s-t| := by ring
   have hdotU : dot v (uvec t)=-a := by
     have he : dot v (uvec t)=P.gs_α t := by
