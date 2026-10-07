@@ -8,9 +8,10 @@ public import MovingSofaQuantitative.Certificates.Sinc
 /-!
 # Closed certificate for the feasible critical trial energy
 
-UNCOMPILED SOURCE. This is the Lean-side transcription of
-\`critical_cone/certify_feasible_trial.py\`.  It does not import the JSON
-receipt.  The receipt is useful only as a regression oracle.
+UNCOMPILED SOURCE. The trial-energy interval arithmetic, the fixed Hermite
+parameters, and the Boolean acceptance predicate are all defined in Lean.
+No external script, JSON receipt, or precomputed success flag participates
+in the proof; the independent research program is not a trusted dependency.
 
 The checker keeps the two Gerver parameters interval-valued and subdivides
 every analytic residual piece into 512 cells.  The Hermite values and slopes
