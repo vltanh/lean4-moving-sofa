@@ -199,6 +199,60 @@ theorem gerver_core_transversality {P : GerverParams}
       nlinarith
     exact phase_velocity_large ha.le hb.le ⟨hs,sin_le_one t⟩ ⟨hc,cos_le_one t⟩
 
+
+/-- The inactive D-tail wall has a generous uniform reserve. This is a
+direct two-phase consequence of the Romik parameter box. -/
+theorem gerver_D_beta_ge_four_fifths {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t ∈ Icc (0:ℝ) P.θ) :
+    (4/5:ℝ) ≤ P.gs_β t := by
+  have hB := romik_bounds hP hbox
+  by_cases hfirst : t ≤ P.φ
+  · rw [gs_β_eq hP (gs_piece₀ hfirst), gs_β₁_eq hP]
+    have ht0 : 0 ≤ t := ht.1
+    have ht04 : t ≤ (4/100:ℝ) :=
+      hfirst.trans (hB.φ_mem.2.trans (by norm_num))
+    have hcos := one_sub_sq_div_two_le_cos (x:=t)
+    have hsin := Real.sin_le t
+    have hcos0 : 0 ≤ cos t := by
+      nlinarith [ht0,ht04,hcos]
+    have hprod := mul_le_mul_of_nonneg_right hB.a₁_mem.1 hcos0
+    nlinarith [hprod,ht0,ht04]
+  · have hphase : gs_piece P 1 t := ⟨(not_le.mp hfirst).le,ht.2⟩
+    rw [gs_β_eq hP hphase,gs_β₂_eq]
+    have ht07 : t ≤ (7/10:ℝ) :=
+      ht.2.trans (hB.θ_mem.2.trans (by norm_num))
+    have hbs : (-53/100:ℝ) ≤ P.b₁ :=
+      (by norm_num : (-53/100:ℝ) ≤ -0.527624699).trans hB.b₁_mem.1
+    have hmul := mul_le_mul_of_nonneg_right hbs ht.1
+    nlinarith [sq_nonneg (t-7/10),hB.b₂_mem.1,ht.1,ht07,hmul]
+
+/-- Reflection of the Gerver frame exchanges the D and B inactive slacks. -/
+theorem gerver_B_alpha_le_neg_four_fifths {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {t : ℝ} (ht : t ∈ Icc (π/2-P.θ) (π/2)) :
+    P.gs_α t ≤ -(4/5:ℝ) := by
+  let s := π/2-t
+  have hs : s ∈ Icc (0:ℝ) P.θ := by
+    dsimp [s]
+    constructor <;> linarith [ht.1,ht.2]
+  have hβ := gerver_D_beta_ge_four_fifths hP hbox hs
+  by_cases hmiddle : t ≤ π/2-P.φ
+  · have hphase : gs_piece P 3 t := ⟨ht.1,hmiddle⟩
+    have hsφ : P.φ ≤ s := by dsimp [s]; linarith
+    rw [gs_α_eq hP hphase,gs_α₄_eq hP s]
+    have hb : P.gs_β s =
+        1/2-s^2/4+P.b₁*s+P.b₂ := by
+      rw [gs_β_eq hP (gs_piece₁ hsφ hs.2),gs_β₂_eq]
+    linarith
+  · have hphase : gs_piece P 4 t := (not_le.mp hmiddle).le
+    have hsφ : s ≤ P.φ := by dsimp [s]; linarith
+    rw [gs_α_eq hP hphase,gs_α₅_eq hP s]
+    have hb : P.gs_β s =
+        2*P.a₁*cos s-sin s/2-1 := by
+      rw [gs_β_eq hP (gs_piece₀ hsφ),gs_β₁_eq hP]
+    linarith
+
 /-- Horizontal support width, shared by the area and effectivity modules. -/
 def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
 
