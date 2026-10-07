@@ -286,6 +286,37 @@ theorem cos_ge_half_of_mem {t : ℝ}
   · linarith
   · linarith [h0]
 
+/-- The exact analytic integration principle for the core margin.
+
+The derivative inequality is required at *every* point of the integration
+interval, not just at its right endpoint. This is the mathematical
+hypothesis missing from an earlier \`integral_mono_on\` invocation.
+
+The statement uses no geometric premises, so it can be reused for both
+perpendicular hallway walls. -/
+private theorem core_slack_of_uniform_derivative_bound
+    {F F' : ℝ → ℝ} {d c : ℝ}
+    (hd : 0 ≤ d)
+    (hder : ∀ x ∈ Icc (0 : ℝ) d, HasDerivAt F (F' x) x)
+    (hcont : ContinuousOn F' (Icc (0 : ℝ) d))
+    (hupper : ∀ x ∈ Icc (0 : ℝ) d, F' x ≤ -c)
+    (hzero : F 0 = 0) :
+    F d ≤ -c * d := by
+  have hi : IntervalIntegrable F' volume 0 d :=
+    hcont.intervalIntegrable_of_Icc hd
+  have hFTC : (∫ x in (0 : ℝ)..d, F' x) = F d - F 0 :=
+    intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x hx => hder x (by rwa [uIcc_of_le hd] at hx)) hi
+  have hconstant :
+      IntervalIntegrable (fun _ : ℝ => -c) volume 0 d :=
+    intervalIntegrable_const
+  have hle : (∫ x in (0 : ℝ)..d, F' x) ≤
+      ∫ _x in (0 : ℝ)..d, (-c) :=
+    intervalIntegral.integral_mono_on hd hi hconstant
+      (fun x hx => hupper x hx)
+  rw [hFTC, intervalIntegral.integral_const, hzero] at hle
+  nlinarith
+
 /-- Compact C1 persistence of the adaptive first-order inequality.  This is
 the source-level compactness lemma behind the existential clipping depth.  Its
 proof uses only continuity of Gerver's C1 path and the strict rational reserve;
