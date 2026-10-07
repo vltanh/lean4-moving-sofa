@@ -2,6 +2,7 @@ module
 
 public import MovingSofaQuantitative.ReferenceSector
 public import MovingSofaQuantitative.ReferenceExplicitMargins
+public import MovingSofaQuantitative.GerverVelocityModulus
 public import MovingSofaQuantitative.ActualSetRecovery
 public import MovingSofaStability.Recovery
 public import MovingSofaUniqueness.RegularClosed
@@ -1087,11 +1088,57 @@ theorem balanced_wall_remainder_of_base {K : Set Point} {q w : Point}
   simp only [secondOrderWallErrorU,secondOrderWallErrorV] at *
   constructor <;> nlinarith [hsumU,hsumV,hUdir,hVdir]
 
-/-- The remaining Gerver-specific source obligation: on every core chart
-and across phase junctions, the two *base* support slacks are quadratic in
-the angular displacement, with a generous coefficient 90/16. The argument
-needs the actual support/contact derivative formulas from
-\`Gerver/StructureCap\` and not just the bound on \`gs_pathD\`. -/
+/-- The Gerver path has a quadratic Taylor remainder across *all* five
+phases. The proof uses the globally glued C1 velocity and its 40-Lipschitz
+bound, not a phase formula evaluated at the wrong side of a junction. -/
+theorem gerver_path_quadratic_remainder {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {s t : ℝ} (hs : s∈Icc (0:ℝ) (π/2))
+    (ht : t∈Icc (0:ℝ) (π/2)) :
+    norm2 (P.path s-P.path t-(s-t)•P.gs_pathD t)≤80*|s-t|^2 := by
+  have hinterval : ∀u∈Icc (min s t) (max s t),
+      u∈Icc (0:ℝ) (π/2) := by
+    intro u hu
+    exact ⟨(le_min hs.1 ht.1).trans hu.1,
+      hu.2.trans (max_le hs.2 ht.2)⟩
+  have hder₁ : ∀u∈Icc (min s t) (max s t),
+      HasDerivAt (fun v : ℝ => (P.path v).1) (P.gs_pathD u).1 u := by
+    intro u hu
+    exact (gs_hasDerivAt_path hP u).fst
+  have hder₂ : ∀u∈Icc (min s t) (max s t),
+      HasDerivAt (fun v : ℝ => (P.path v).2) (P.gs_pathD u).2 u := by
+    intro u hu
+    exact (gs_hasDerivAt_path hP u).snd
+  have hlip₁ : ∀u∈Icc (min s t) (max s t),
+      |(P.gs_pathD u).1-(P.gs_pathD t).1|≤40*|u-t| := by
+    intro u hu
+    exact (abs_fst_le_norm2 _).trans
+      (gerver_path_velocity_lipschitz hP hbox (hinterval u hu) ht)
+  have hlip₂ : ∀u∈Icc (min s t) (max s t),
+      |(P.gs_pathD u).2-(P.gs_pathD t).2|≤40*|u-t| := by
+    intro u hu
+    exact (abs_snd_le_norm2 _).trans
+      (gerver_path_velocity_lipschitz hP hbox (hinterval u hu) ht)
+  have h₁:=scalar_quadratic_remainder_of_deriv_lip
+    (f:=fun u : ℝ => (P.path u).1)
+    (df:=fun u : ℝ => (P.gs_pathD u).1)
+    (s:=s) (t:=t) (L:=40) (by norm_num) hder₁ hlip₁
+  have h₂:=scalar_quadratic_remainder_of_deriv_lip
+    (f:=fun u : ℝ => (P.path u).2)
+    (df:=fun u : ℝ => (P.gs_pathD u).2)
+    (s:=s) (t:=t) (L:=40) (by norm_num) hder₂ hlip₂
+  have hsum:=norm2_le_abs_add
+    (P.path s-P.path t-(s-t)•P.gs_pathD t)
+  simp only [Prod.fst_sub,Prod.snd_sub,Prod.fst_smul,Prod.snd_smul,
+    smul_eq_mul] at hsum
+  nlinarith
+
+/-- Quadratic base-slack control using the *actual* Gerver path/cap identity:
+both hallway slacks at a reference angle are projections of
+\`q - P.path angle\`. The velocity is 40-Lipschitz globally, and the frame
+is 2-Lipschitz; no differentiability at an artificial phase cut is used.
+
+The elementary bound is 100 |s-t|² <= 1600 d² < 3000 d². -/
 theorem gerver_core_base_slack_taylor {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {t d λ a b : ℝ} (ht : t∈Icc P.φ (π/2-P.φ))
@@ -1102,41 +1149,102 @@ theorem gerver_core_base_slack_taylor {P : GerverParams}
     let s:=t+λ*d
     |innerSlackU P.cap s q-innerSlackU P.cap t q-a*(s-t)|≤3000*d^2 ∧
     |innerSlackV P.cap s q-innerSlackV P.cap t q+b*(s-t)|≤3000*d^2 := by
-  have hB:=romik_bounds hP hbox
-  have hφ:=hB.φ_mem.1
-  have hstep : |λ*d|≤4*normalRecoveryDepth := by
-    rw [abs_mul,abs_of_nonneg hd]
-    exact (mul_le_mul_of_nonneg_right hλ hd8).trans (by ring)
-  have hinside : t+λ*d∈Icc (0:ℝ) (π/2) := by
-    constructor <;> nlinarith [ht.1,ht.2,hφ,
-      neg_abs_le (λ*d),le_abs_self (λ*d)]
-  -- Exact Gerver support identities:
-  have hsup:=gerver_cap_explicit hP hbox
-  have hcorner:=gm_innerCorner hP hbox
-    ⟨hφ.le.trans ht.1,by linarith [ht.2,hφ]⟩
-  -- Work on each true turning-parameter phase, including one-sided
-  -- intervals at a junction. The cap contact derivatives are explicit.
-  rcases gs_cases (P:=P) t with h1|h2|h3|h4|h5
-  all_goals
-    have hA:=gs_hasDerivAt_path' hP t
-    have hBframe:=romik_bounds hP hbox
-    have hsmall:=hstep
-    first
-    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
-        gs_α_eq hP h1,gs_β_eq hP h1] at *
-    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
-        gs_α_eq hP h2,gs_β_eq hP h2] at *
-    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
-        gs_α_eq hP h3,gs_β_eq hP h3] at *
-    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
-        gs_α_eq hP h4,gs_β_eq hP h4] at *
-    | simp [ha,hb,innerSlackU,innerSlackV,gs_supp_K hP hBframe,
-        gs_α_eq hP h5,gs_β_eq hP h5] at *
-    all_goals
-      have hsine:=abs_sin_sub_le (t+λ*d) t
-      have hcosine:=abs_cos_sub_le (t+λ*d) t
-      nlinarith
-
+  let s:=t+λ*d
+  let v:=P.gs_pathD t
+  let R:=P.path s-P.path t-(s-t)•v
+  have hφ:0<P.φ := (romik_bounds hP hbox).φ_mem.1
+  have ht0:t∈Icc (0:ℝ) (π/2) := by
+    constructor <;> linarith [ht.1,ht.2,hφ]
+  have hstep : |s-t|≤4*d := by
+    dsimp [s]
+    rw [show t+λ*d-t=λ*d by ring,abs_mul,abs_of_nonneg hd]
+    exact mul_le_mul_of_nonneg_right hλ hd
+  have hs0:s∈Icc (0:ℝ) (π/2) := by
+    constructor <;> nlinarith [ht.1,ht.2,hφ,hstep,
+      neg_abs_le (s-t),le_abs_self (s-t),
+      (show (4:ℝ)*normalRecoveryDepth < P.φ by
+        unfold normalRecoveryDepth
+        nlinarith [(romik_bounds hP hbox).φ_mem.1])]
+  have hR : norm2 R≤80*|s-t|^2 := by
+    exact gerver_path_quadratic_remainder hP hbox hs0 ht0
+  have hspeed : norm2 v≤10 := gerver_path_velocity_bound hP hbox ht0
+  have hfr:=angular_frame_modulus s t
+  have hfrU : |dot v (uvec s-uvec t)|≤20*|s-t| := by
+    calc
+      _ ≤ norm2 v*norm2 (uvec s-uvec t) :=
+        abs_dot_le_norm2_mul _ _
+      _ ≤ 10*(2*|s-t|) := by
+        gcongr
+      _ = 20*|s-t| := by ring
+  have hfrV : |dot v (vvec s-vvec t)|≤20*|s-t| := by
+    calc
+      _ ≤ norm2 v*norm2 (vvec s-vvec t) :=
+        abs_dot_le_norm2_mul _ _
+      _ ≤ 10*(2*|s-t|) := by
+        gcongr
+      _ = 20*|s-t| := by ring
+  have hdotU : dot v (uvec t)=-a := by
+    have he : dot v (uvec t)=P.gs_α t := by
+      simp [v,GerverParams.gs_α,gs_deriv_path hP]
+    rw [ha]
+    linarith
+  have hdotV : dot v (vvec t)=b := by
+    have he : dot v (vvec t)=P.gs_β t := by
+      simp [v,GerverParams.gs_β,gs_deriv_path hP]
+    rw [hb]
+    exact he
+  have hsu:innerSlackU P.cap s (P.path t)=
+      dot (P.path t-P.path s) (uvec s) :=
+    (gerver_slack_eq_path_projection hP hbox hs0 (P.path t)).1
+  have hsv:innerSlackV P.cap s (P.path t)=
+      dot (P.path t-P.path s) (vvec s) :=
+    (gerver_slack_eq_path_projection hP hbox hs0 (P.path t)).2
+  have htu:innerSlackU P.cap t (P.path t)=0 := by
+    rw [(gerver_slack_eq_path_projection hP hbox ht0 (P.path t)).1]
+    simp
+  have htv:innerSlackV P.cap t (P.path t)=0 := by
+    rw [(gerver_slack_eq_path_projection hP hbox ht0 (P.path t)).2]
+    simp
+  have hExprU :
+      innerSlackU P.cap s (P.path t)-innerSlackU P.cap t (P.path t)
+        -a*(s-t) =
+      -dot R (uvec s)-(s-t)*dot v (uvec s-uvec t) := by
+    rw [hsu,htu]
+    dsimp [R]
+    simp [dot_sub_left,dot_smul_left,dot_sub_right,hdotU]
+    ring
+  have hExprV :
+      innerSlackV P.cap s (P.path t)-innerSlackV P.cap t (P.path t)
+        +b*(s-t) =
+      -dot R (vvec s)-(s-t)*dot v (vvec s-vvec t) := by
+    rw [hsv,htv]
+    dsimp [R]
+    simp [dot_sub_left,dot_smul_left,dot_sub_right,hdotV]
+    ring
+  have hprojU := abs_dot_uvec_le_norm2 R s
+  have hprojV := abs_dot_vvec_le_norm2 R s
+  have hrotU : |(s-t)*dot v (uvec s-uvec t)|≤20*|s-t|^2 := by
+    rw [abs_mul]
+    have hh:=mul_le_mul_of_nonneg_left hfrU (abs_nonneg (s-t))
+    nlinarith
+  have hrotV : |(s-t)*dot v (vvec s-vvec t)|≤20*|s-t|^2 := by
+    rw [abs_mul]
+    have hh:=mul_le_mul_of_nonneg_left hfrV (abs_nonneg (s-t))
+    nlinarith
+  have hsumU:=abs_add (-dot R (uvec s)) (-(s-t)*dot v (uvec s-uvec t))
+  have hsumV:=abs_add (-dot R (vvec s)) (-(s-t)*dot v (vvec s-vvec t))
+  have hSq:=sq_le_sq₀ (abs_nonneg (s-t)) hstep
+  have hU : |innerSlackU P.cap s (P.path t)-
+      innerSlackU P.cap t (P.path t)-a*(s-t)|≤100*|s-t|^2 := by
+    rw [hExprU]
+    nlinarith [hprojU,hrotU,hsumU,hR]
+  have hV : |innerSlackV P.cap s (P.path t)-
+      innerSlackV P.cap t (P.path t)+b*(s-t)|≤100*|s-t|^2 := by
+    rw [hExprV]
+    nlinarith [hprojV,hrotV,hsumV,hR]
+  dsimp
+  constructor <;>
+    nlinarith [hSq,hU,hV,sq_nonneg d]
 /-- Uniform quadratic Taylor remainder for the two balanced hallway slacks,
 including the previously omitted rotation of the displacement direction. -/
 theorem core_balanced_slack_remainder {P : GerverParams}
