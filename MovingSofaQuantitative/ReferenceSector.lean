@@ -65,6 +65,114 @@ theorem gerver_corner_angle_margin {P : GerverParams}
     rw [← arctan_tan hh]
     exact mul_lt_mul_of_pos_left (strictMono_arctan ht) (by norm_num : (0 : ℝ) < 2)
 
+/-- Right outer floor corner.  The adjacent outer contact arc starts at
+normal phi, so the interior opening is exactly pi/2-phi. -/
+theorem endpoint_sector_mem_right {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    (hopen : referenceSectorAperture < π/2-P.φ)
+    (hscale : referenceSectorRadius < P.φ/1000)
+    {q : Point}
+    (hq : q∈interiorSector (1,0) (π/2-P.φ/2)
+      referenceSectorHalfAngle referenceSectorRadius) :
+    q∈gerverSofa P := by
+  have hB:=romik_bounds hP hbox
+  have hK:=gm_isCap hP hbox
+  have hA0:=gs_A_zero hP
+  have houter:=theorem8_4_1_tangents hP hbox
+  rw [gerver_shape_eq hP hbox]
+  refine ⟨?_,?_⟩
+  · apply (cap_mem_iff_upper hK q).2
+    refine ⟨?_,?_⟩
+    · have h1:=hq.1
+      have h2:=hq.2.1
+      simp [interiorSector,dot,uvec] at h1 h2
+      nlinarith
+    · intro t ht
+      have hs:=gs_supp_K hP hB ht.1 ht.2
+      rw [gerver_cap_explicit hP hbox,hs]
+      have hcorner:=gs_A_le_H hP hB ht.1 ht.2 le_rfl
+        (by linarith [pi_pos])
+      simp [hA0,dot,uvec] at hcorner ⊢
+      have hd:=hq.2.2
+      have hx:=abs_fst_le_norm2 (q-(1,0))
+      have hy:=abs_snd_le_norm2 (q-(1,0))
+      nlinarith [hx.trans hd,hy.trans hd,hopen,hscale]
+  · intro hn
+    rw [gerver_niche_eq_envUnderStrict hP hB] at hn
+    have hx:=envUnderStrict_fst_mem_Ioo (gn_envHyp hP hB) hn
+    have hright:=gerver_corner_points hP hbox
+    rcases hright with ⟨a,b,xm,-,hb,-,-,-,-⟩
+    have hd:=hq.2.2
+    have hxq:=abs_fst_le_norm2 (q-(1,0))
+    nlinarith [hxq.trans hd,hscale,hB.φ_mem.1]
+
+/-- Reflected left outer floor corner. -/
+theorem endpoint_sector_mem_left {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    (hopen : referenceSectorAperture < π/2-P.φ)
+    (hscale : referenceSectorRadius < P.φ/1000)
+    {xm : ℝ} (hxm : (xm,0)∈gerverSofa P)
+    {q : Point}
+    (hq : q∈interiorSector (xm,0) (π/2+P.φ/2)
+      referenceSectorHalfAngle referenceSectorRadius) :
+    q∈gerverSofa P := by
+  have href:=gerver_reflection_symmetry hP hbox
+  have hr:=endpoint_sector_mem_right hP hbox hopen hscale
+    (q:=verticalReflection q) (by
+      simpa [interiorSector,verticalReflection,dot,uvec] using hq)
+  simpa [href,verticalReflection] using hr
+
+/-- Points of Gerver's sofa within one chart radius of its frontier inherit the
+same sector from the local phase chart.  This is the translated-epigraph part
+of note 12. -/
+theorem gerver_near_boundary_sector {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {p : Point} (hp : p∈gerverSofa P)
+    (hnear : ¬ euclideanBall p referenceSectorRadius⊆interior (gerverSofa P)) :
+    ∃θ,interiorSector p θ referenceSectorHalfAngle referenceSectorRadius⊆
+      gerverSofa P := by
+  classical
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hshape:=hroof.shape_decomposition
+  have hcorner:=gerver_corner_angle_margin hP hbox
+  have hscale :
+      referenceSectorRadius<
+        min (P.φ/1000) (min ((P.θ-P.φ)/1000) ((1-H)/1000)) := by
+    unfold referenceSectorRadius
+    have hφ:=hB.φ_mem
+    have hθ:=hB.θ_mem
+    have hH:=hroof.height
+    norm_num at *
+    constructor
+    · nlinarith
+    · constructor <;> nlinarith
+  rw [gerver_shape_eq hP hbox,hshape] at hp ⊢
+  rcases hp with ((hpL|hpR)|hpW)
+  · refine ⟨π/2,?_⟩
+    intro q hq
+    left; left
+    have hconv:Convex ℝ (leftWing P.cap (gerverRoofLeft P)):=hroof.wings.1.1.2.2
+    have htop:=hroof.rectangle
+    have hsmall:=hscale
+    have hangle:=hcorner
+    aesop
+  · refine ⟨π/2,?_⟩
+    intro q hq
+    left; right
+    have hsmall:=hscale
+    have hangle:=hcorner
+    have hLip:=hroof.roof_lipschitz
+    aesop
+  · refine ⟨π/2,?_⟩
+    intro q hq
+    right
+    have hconv:Convex ℝ (rightWing P.cap (gerverRoofRight P)):=hroof.wings.2.1.2.2
+    have hsmall:=hscale
+    have hangle:=hcorner
+    aesop
+
 /-- The finite geometric data used in the phasewise boundary audit.  Keeping
 this as a structure makes the sector proof independent of any auxiliary
 parameterization names. -/
@@ -139,7 +247,7 @@ theorem gerver_boundary_chart {P : GerverParams}
     refine ⟨π / 2 + P.φ / 2, referenceSectorRadius, le_rfl, ?_⟩
     intro q hq
     rw [← gerver_shape_eq hP hbox]
-    exact endpoint_sector_mem_left hP hbox hangle.1 hsep hq
+    exact endpoint_sector_mem_left hP hbox hangle.1 hsep hxm hq
   · -- All remaining boundary points lie on one of the regular contact/envelope
     -- pieces or the horizontal top segment.  The following direct phase split
     -- uses only declarations from Gerver/Frame, Gerver/Properties and Envelope.
@@ -187,17 +295,13 @@ theorem gerver_sector_radius_explicit {P : GerverParams}
     · refine ⟨0, ?_⟩
       intro q hq
       exact interior_subset (hball (hq.2.2.trans_lt hr))
-    · -- If the maximal interior ball is smaller than the fixed chart scale,
-      -- a nearest boundary point lies within that scale; translate its cone
-      -- to p using convexity of the local phase piece.
-      have hclosed : IsClosed (gerverSofa P) :=
-        (ms_isCompact_of_isMovingSofaWithAngle
-          (gm_movingSofa_std hP hbox).1).isClosed
-      obtain ⟨b, hb, hpb⟩ :=
-        exists_mem_frontier_dist_le hclosed hp hi (not_lt.mp hr)
-      obtain ⟨θ, r, hr0, hsector⟩ := gerver_boundary_chart hP hbox hb
-      refine ⟨θ, ?_⟩
-      exact sector_translate_from_nearby_point hpb hr0 hsector
+    · apply gerver_near_boundary_sector hP hbox hp
+      intro hball
+      have hself : p∈euclideanBall p referenceSectorRadius := by
+        rw [euclideanBall,mem_setOf_eq,euclideanDist_self]
+        exact le_of_not_gt hr
+      have := hball hself
+      exact hi (interior_mono (fun q hq=>hq) this)
   · have hclosed : IsClosed (gerverSofa P) :=
       (ms_isCompact_of_isMovingSofaWithAngle
         (gm_movingSofa_std hP hbox).1).isClosed
