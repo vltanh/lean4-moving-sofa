@@ -1,0 +1,538 @@
+\section{Quantitative refinements of the certificate}
+\label{sec:quant-refinements}
+
+This appendix separates three quantities which should not be conflated:
+the energy $E_{\rm cap}$ of the four cap residuals, the functional deficit
+$\Delta=M-\cQ(\xi)$ of a feasible triple, and the area deficit
+$\eps=M-\abs S$ of an original moving sofa. The inequalities
+$E_{\rm cap}\le\Delta$ and, where the canonical construction applies,
+$\Delta\le M-\cA(K)$ transfer estimates in that order. They do not transfer
+sharpness in the reverse order.
+
+\quantstatus{This is an uncompiled quantitative working appendix. The displayed
+statements are the fixed targets of the development, not a claim of completed
+formalization. Each subsection identifies its remaining source obligations.
+The integrated existential stability proof in Appendix~F is unchanged.
+A numerical interval certificate proves its scalar inequalities only after its
+coverage and its connection to the actual analytic model have been established.}
+
+\subsection{Midpoint alignment halves the cap coefficient}
+\label{sec:quant-centering}
+
+For two normalized right-angle caps write
+$F(t)=h_{K_1}(t)-h_{K_0}(t)$ and
+\[
+ f(t)=F(t)+F(\pi)\cos t,
+ \qquad
+ g(t)=f(t)-\tfrac12 f(0)\cos t.
+\]
+Thus $f(\pi)=f(\pi/2)=0$, whereas
+$g(0)=g(\pi)=f(0)/2$. The function $g$ is the support difference after
+aligning horizontal midpoints. Horizontal translation changes neither the
+tangent residuals nor the corner residual.
+
+\begin{theorem}[centered cap energy estimate]
+\label{thm:quant-centered-energy}
+Let $0<\varphi<\pi/4$ and let $K_0,K_1$ be normalized right-angle caps.
+With $s=m(K_1)-m(K_0)$,
+\[
+ d_H\bigl(K_1,K_0+(s,0)\bigr)
+ \le \sec\varphi\,\sqrt{E_{\rm cap}(K_0,K_1)}.
+\]
+\end{theorem}
+
+\begin{proof}
+Put $A=\sec\varphi$, $v=\pi/2$, $b=v-\varphi$, and $T=\pi-\varphi$.
+In the direct sum of the four residual $L^2$ spaces, let $H_t$ be the
+reconstruction kernel: $f(t)=\langle H_t,r\rangle$ and
+$\|r\|^2=2E_{\rm cap}$. Its covariance with $H_0$ is
+\[
+ C(t)=\langle H_t,H_0\rangle=
+ \begin{cases}
+ 2A^2\cos t-\sin t,&0\le t\le\varphi,\\
+ A+A^2\cos t-\sin t,&\varphi\le t\le b,\\
+ (A^2+A\sin\varphi)\cos t,&b\le t\le v,\\
+ A(A-\sin\varphi)\cos t,&v\le t\le v+\varphi,\\
+ A+A^2\cos t-\sin t,&v+\varphi\le t\le T,\\
+ -\sin t,&T\le t\le\pi.
+ \end{cases}
+\]
+These identities follow by integrating the four kernels in Appendix~F;
+the formulas agree at each endpoint. In particular $\|H_0\|^2=2A^2$.
+Consequently the centered kernel $\overline H_t=H_t-\frac12\cos t\,H_0$
+has squared norm
+\[
+ D(t)=
+ \begin{cases}
+ \frac12A^2\cos^2t,&0\le t\le\varphi,\\
+ A\cos t-\frac12A^2\cos^2t,&\varphi\le t\le b,\\
+ \sin t\cos t+B\cos^2t,&b\le t\le v,\\
+ -\sin t\cos t+B\cos^2t,&v\le t\le v+\varphi,\\
+ -A\cos t-\frac12A^2\cos^2t,&v+\varphi\le t\le T,\\
+ \frac12A^2\cos^2t,&T\le t\le\pi,
+ \end{cases}
+ \qquad B=-\tfrac12(\tan\varphi-1)^2\le0.
+\]
+The second and fifth expressions are $z-z^2/2\le1/2$; the third and
+fourth are at most $1/2$. The other two are at most $A^2/2$.
+Since $A\ge1$, Cauchy--Schwarz gives
+$|g(t)|\le\sqrt{D(t)}\sqrt{2E_{\rm cap}}\le A\sqrt{E_{\rm cap}}$.
+The lower-half support identities for caps extend the estimate to all
+normals. The support characterization of Euclidean Hausdorff distance
+between convex bodies finishes the proof.
+\end{proof}
+
+\begin{corollary}[centered functional certificate]
+\label{thm:quant-centered-cap}
+For every feasible wide triple $\xi=(K,B,D)$,
+\[
+ d_H\bigl(K,\KG+(s_{\rm mid},0)\bigr)
+ \le\sec\varphi\sqrt{M-\cQ(\xi)}.
+\]
+\end{corollary}
+\begin{proof}
+Apply \cref{thm:quant-centered-energy} and $E_{\rm cap}\le M-\cQ(\xi)$.
+\end{proof}
+
+\begin{corollary}[the injective cap class]
+\label{cor:quant-centered-ki}
+For $K\in\mathcal K^i$, the same centered distance is at most
+$\sec\varphi\sqrt{M-\cA(K)}$.
+\end{corollary}
+\begin{proof}
+The canonical feasible triple satisfies $\cA(K)\le\cQ(\xi_K)$.
+\end{proof}
+
+\begin{corollary}[a rational cap coefficient]
+\label{cor:quant-centered-numeric}
+On the parameter box $0.039\le\varphi\le0.04$,
+\[
+ \sec\varphi\le\frac{1250}{1249}<\frac{1001}{1000}.
+\]
+\end{corollary}
+\begin{proof}
+The inequality $\cos\varphi\ge1-\varphi^2/2\ge1249/1250>0$
+permits reciprocation. The final comparison is rational arithmetic.
+\end{proof}
+\quantstatus{Unconditional proof source for the three geometric conclusions
+is in \quantcode{CenteredCap.lean}; the actual comparison profile, its residual
+pairing, and polarization are supplied in \quantcode{ComparisonProfile.lean}
+and \quantcode{ComparisonPairing.lean}. The scalar bound is separate. None
+has been compiled in this development.}
+
+\subsection{Complementary deficits and recovery of the actual sofa}
+\label{sec:quant-actual-recovery}
+
+We explain the constants of \cref{thm:quant-explicit-stability}. Let $K$ be
+the local right-angle completion, $U=K\setminus N(K)$, and
+\[
+ e=M-\abs U,\qquad m=\abs{U\setminus S},\qquad
+ a=\abs{S\setminus U},\qquad \alpha=\pi/2-\omega.
+\]
+The exact identity is $m=\eps-e+a$. The refined terminal comparison gives
+\begin{equation}\label{eq:quant-complementary-budget}
+ 0\le e\le\eps,\quad
+ a\le\frac{31}{10000}(\eps-e),\quad
+ m\le\lambda(\eps-e),\quad
+ \alpha\le\frac{31}{10}(\eps-e),\qquad
+ \lambda=\frac{10031}{10000}.
+\end{equation}
+In particular, this argument does not assume $S\subseteq U$.
+Set $k=1001/1000$. Centered cap coercivity gives support error
+$\delta\le k\sqrt e$. Orthogonality of the two inner walls gives
+\[
+ \Gs\ominus\mathbb B\bigl(0,\sqrt2\delta\bigr)\subseteq U.
+\]
+Indeed, if both wall violations of a point were greater than $-\delta$,
+there would be a displacement of Euclidean length at most $\sqrt2\delta$
+putting it in the reference niche. This contradicts membership in the erosion.
+
+\subsubsection{The complete eroded sector}
+
+Every point of the reference admits, at a uniform sufficiently small scale,
+a translated interior sector of aperture $\beta=153/100$. The two outer
+floor angles are $\pi/2-\varphi>\beta$, not right angles. The other junctions
+are tangent-continuous or have larger interior angles. Rotating the local
+charts avoids the loss from measuring a steep smooth arc as a vertical graph.
+Write $h=\beta/2$. In a radius-$\rho$ disk, the part of this sector at distance
+at least $r$ from both sides has area
+\begin{equation}\label{eq:quant-sector-area}
+ \rho^2 F_h(r/\rho),\qquad
+ F_h(u)=h-\arcsin u-u\sqrt{1-u^2}+u^2\cot h,
+ \quad 0\le u<\sin h.
+\end{equation}
+For example, integrate in polar coordinates: the allowable half-angle is
+$h-\arcsin u$ and the inner radial boundary is
+$r/\sin(h-|\theta|)$. This proves \cref{eq:quant-sector-area} exactly,
+without replacing the sector by one smaller disk.
+
+If $p\in\Gs$ had no point of $S$ within $\rho$, this entire eroded sector
+would lie in $U\setminus S$, provided $\rho+r$ is below the chart radius.
+Use $r=\sqrt2k\sqrt e$ and $\rho=C\sqrt\eps$. With
+$z=e/\eps$, $u=\sqrt2k\sqrt z/C$, and $q=\lambda/(2k^2)$, the excess of
+available area over the missing-area allowance, divided by $\eps$, is
+\[
+ C^2\bigl(F_h(u)+qu^2\bigr)-\lambda.
+\]
+The minimum occurs at
+$u_*=(1+(\cot h+q)^2)^{-1/2}$ and its parenthesized value is
+\begin{equation}\label{eq:quant-sector-minimum}
+ L=h-\arctan\frac1{\cot h+q}
+  =\arctan\frac{q\tan^2h}{1+q\tan h+\tan^2h}.
+\end{equation}
+Differentiating gives
+$2u(\cot h+q)-2\sqrt{1-u^2}$; at its unique zero the algebraic terms
+cancel. Thus it suffices to check $C^2L>\lambda$ and
+$C\sin h>\sqrt2k$.
+
+For $C=23/10$ these strict comparisons use only rational Taylor enclosures.
+Put $x=153/200$ and
+\[
+ s_-=x-x^3/6+x^5/120-x^7/5040,\qquad
+ c_+=1-x^2/2+x^4/24-x^6/720+x^8/40320,\qquad t_-=s_-/c_+.
+\]
+Then $t_-\le\tan h$. The function
+$Z(t)=qt^2/(1+qt+t^2)$ increases for $t>0$, so
+\[
+ L\ge Z(t_-)-\frac{Z(t_-)^3}{3}
+       +\frac{Z(t_-)^5}{5}-\frac{Z(t_-)^7}{7}.
+\]
+Substitution gives a positive margin greater than $0.0005885$ in
+$C^2L-\lambda$, and $C^2s_-^2>2k^2$. All these quantities are rational.
+This proves the reverse directed-distance coefficient $23/10$ uniformly
+over the whole deficit split, not just at sampled $e/\eps$.
+
+\subsubsection{Normal rather than vertical displacement}
+
+On the reference core write $x'=-a u_t+b v_t$, $a,b>0$, and
+$n=(b u_t+a v_t)/\sqrt{a^2+b^2}$. For $p=x(t)+dw$, choose the test angle
+\[
+ s=t+d\frac{\langle w,v_t\rangle-\langle w,u_t\rangle}{a+b}.
+\]
+At $d=0$ both inner-wall slack derivatives equal
+\[
+ \frac{\sqrt{a^2+b^2}}{a+b}\langle w,n\rangle.
+\]
+At a regular nearest point $w=-n$. At the two roof junctions, the incident
+inward normals make angle less than $\pi/2$, so one of them has
+$-\langle w,n\rangle\ge1/\sqrt2$. Since
+$\sqrt{a^2+b^2}/(a+b)\ge1/\sqrt2$, a uniform coefficient $49/100<1/2$
+survives on a sufficiently small neighborhood. Tail witnesses use their active
+wall and a strict inactive-wall margin. The outer-cap layer is controlled
+separately by the reference outer margin.
+
+Consequently the forward distance is at most
+\[
+ \frac{100}{49}(\delta+B\alpha)
+ \le\frac{1001}{490}\sqrt e+\frac{310B}{49}(\eps-e)
+\]
+for a fixed hallway-slack constant $B$. The leading coefficient is below
+$23/10$; reduce the positive entry threshold to absorb the linear remainder.
+Only the fixed reference is differentiated. No boundary smoothness is imposed
+on the competing sofa.
+
+\subsubsection{Symmetric difference and the angle}
+
+The direct cap-layer and niche-band comparison, with
+$A_0=62307/2500$, gives
+\[
+ \abs{S_c\triangle\Gs}
+ \le 2A_0k\sqrt e+3\eps-2e+8k^2e
+ \le49.8954456\sqrt\eps+11.016008\eps.
+\]
+For $\sqrt\eps\le1/200$ this is less than $50\sqrt\eps$.
+The angle assertion follows from \cref{eq:quant-complementary-budget}.
+Combining the reference geometry and these estimates with the qualitative
+entry theorem in Appendix~F gives \cref{thm:quant-explicit-stability}.
+
+\quantstatus{The exact budget, orthogonal erosion, sector slicing and scalar
+sector optimization have proof source. The uniform sectors and normal witnesses
+for Gerver, the refined terminal geometry, and their final original-sofa
+assembly remain separate obligations. A generic theorem assuming these inputs
+does not yet prove \quantcode{Targets.ExplicitLocalStability}.}
+
+\subsection{Sharpness: three different questions}
+\label{sec:quant-sharpness}
+
+\begin{corollary}[a necessary global coefficient]
+\label{cor:quant-sofa-lower}
+Any universal local square-root Hausdorff estimate for original sofas,
+even allowing an arbitrary orientation-preserving rigid alignment of each
+sofa, has coefficient at least $1/\sqrt\pi$.
+\end{corollary}
+\begin{proof}
+For the punctured family in \cref{thm:stability-exponent:family},
+$\eps=\pi r^2$ and distance from the rigid orbit is $r$. Thus
+$r\le C\sqrt\pi\,r$ for arbitrarily small positive $r$, and cancellation
+gives the assertion.
+\end{proof}
+
+\begin{theorem}[sharp centered cap-residual coefficient]
+\label{thm:quant-centered-sharpness}
+For every $C<\sec\varphi$ and every $\eta>0$, there is an actual normalized
+cap $K$ with $d_H(K,\KG)\le\eta$ and positive cap residual energy such that
+\[
+ d_{\rm tr}(K,\KG)>C\sqrt{E_{\rm cap}(\KG,K)},
+ \qquad d_{\rm tr}(K,\KG)=\inf_s d_H(K,\KG+(s,0)).
+\]
+\end{theorem}
+\begin{proof}[Construction and limiting argument]
+The covariance profile $C(t)$ above has energy $A^2$, value $2A^2$ at zero,
+and zero values at $\pi/2$ and $\pi$. Its raw positive ray gives a negative
+endpoint face height, while its negative ray gives negative curvature atoms
+at $\varphi$ and $T$. It is not itself a feasible cap perturbation.
+
+Smooth only toward the positive-curvature side of those cuts: on
+$[\varphi,\varphi+\eta']$ and $[T-\eta',T]$ use cubic Hermite interpolation
+matching the values and the exterior one-sided derivatives. Call the result
+$C_{\eta'}$. The reference curvature density on those sides is at least
+$1/2$. The smoothed profile has no curvature atom at the cuts, is unchanged
+on the zero-curvature endpoint gaps, and has bounded second derivative for
+fixed $\eta'>0$. Hence $h_{\KG}-\tau C_{\eta'}$, with the usual lower-half
+floor support and sufficiently small $\tau>0$, has nonnegative curvature
+measure, positive floor width, and unchanged height. It is an actual cap.
+
+The profile changes by $O(\eta')$ and its first derivative by $O(1)$ only
+on intervals of length $\eta'$. Therefore its residuals converge in the
+four-arc $L^2$ sum and its energy converges to $A^2$. For every translation,
+the two endpoint supports give an error at least $\tau A^2$. The ratio is
+therefore at least $A^2/\sqrt{E(C_{\eta'})}\to A$. First choose $\eta'$
+for the requested strict ratio, then $\tau$ for feasibility and proximity.
+\end{proof}
+\quantstatus{The puncture corollary has unconditional proof source.
+The actual-cap realization and smoothing convergence in the second theorem
+still require their Lean construction. This is sharpness for cap residual
+energy, not for $M-\cQ$ or the original sofa-area deficit.}
+
+\subsection{The full deficit supplies additional coercivity}
+\label{sec:quant-full-q}
+
+The translation quotient admits an exact two-point formula:
+\begin{equation}\label{eq:quant-translation-pairs}
+ \inf_s\|f-s\cos\|_\infty
+ =\sup_{t,u\in[0,\pi]}
+ \frac{|f(t)\cos u-f(u)\cos t|}{|\cos t|+|\cos u|}.
+\end{equation}
+A zero denominator contributes zero. Pairing a zero-weight point with a
+nonzero-weight point still detects its value. For a candidate radius, the
+intervals of allowed translations intersect precisely when every pair does;
+boundedness and one nonzero weight give attainment. Thus
+\cref{eq:quant-translation-pairs} is a continuum formula, not a sampled
+least-squares alignment.
+
+Put $c=\pi/2-\theta$, $d=\pi/2+\theta$, and
+\[
+ J_B=\tan c-\tan\varphi,\qquad
+ J_D=\cot(T-d)-\tan\varphi.
+\]
+On the zero-first-variation face, the auxiliary support differences equal
+$-f$ on their active contact arcs. Integrating their residuals and using
+Cauchy--Schwarz supplies two further penalties:
+\[
+ 2\Delta\ge \|r\|^2+rac{\ell_B(r)^2}{J_B}
+                       +\frac{\ell_D(r)^2}{J_D},
+\]
+where
+\[
+ \ell_B=\frac{f(\varphi)}{\cos\varphi}-\frac{f(c)}{\cos c},\qquad
+ \ell_D=\frac{f(d)}{\sin(T-d)}-J_Df(T).
+\]
+Write $v_B,v_D$ for their exact residual-space representers and
+$S=\operatorname{diag}(J_B,J_D)+(\langle v_i,v_j\rangle)_{i,j}$.
+For a pair kernel $k_{t,u}=\cos u\,H_t-\cos t\,H_u$, the corrected squared
+norm is
+\begin{equation}\label{eq:quant-corrected-gram}
+ 2\left(\|k_{t,u}\|^2-w^{\mathsf T}S^{-1}w\right),
+ \qquad w_i=\langle k_{t,u},v_i\rangle.
+\end{equation}
+It is a two-dimensional matrix inverse of exact continuum integrals.
+
+\begin{theorem}[critical-face estimate]
+\label{thm:quant-critical-face}
+Every feasible wide triple with zero first-variation slack satisfies
+\[
+ d_{\rm tr}(K,\KG)\le\frac{93}{100}\sqrt\Delta.
+\]
+\end{theorem}
+\begin{proof}[Reduction to the finite certificate]
+The operator certificate bounds \cref{eq:quant-corrected-gram} by
+$(93/100)^2(|\cos t|+|\cos u|)^2$ for every pair. Apply the augmented
+Cauchy--Schwarz inequality and \cref{eq:quant-translation-pairs}.
+The proof must include the exact kernel/primitive identification and the
+complete parameter-box coverage described below.
+\end{proof}
+
+\begin{theorem}[finite full-deficit estimate]
+\label{thm:quant-full-q}
+For every feasible wide triple with $0<\Delta\le1/512$,
+\[
+ d_{\rm tr}(K,\KG)
+ \le\frac{93}{100}\sqrt\Delta+8\Delta^{2/3}.
+\]
+\end{theorem}
+\begin{proof}[Endpoint slack and the operator reduction]
+The first-variation density bounds the integral of each nonnegative wall gap
+by $8\Delta$. Its derivative has squared integral at most $64\Delta$ on
+the appropriate one-sided endpoint interval. Averaging over length
+$w=\Delta^{1/3}\le1/8$ gives
+\[
+ \text{endpoint gap}\le 8\Delta/w+8\sqrt{w\Delta}
+                       =16\Delta^{2/3}.
+\]
+The operator certificate bounds the total sensitivity to the two endpoint
+gaps by $(|\cos t|+|\cos u|)/2$. Inserting them in the augmented energy
+estimate and taking the quotient gives the remainder $8\Delta^{2/3}$.
+\end{proof}
+
+\begin{corollary}\label{cor:quant-full-q-094}
+For $0\le\Delta\le10^{-18}$,
+$d_{\rm tr}(K,\KG)\le(94/100)\sqrt\Delta$.
+\end{corollary}
+\begin{proof}
+For positive $\Delta$, write
+$\Delta^{2/3}=\sqrt\Delta\,\Delta^{1/6}$ and use
+$\Delta^{1/6}\le1/1000$. The zero case follows from cap rigidity.
+\end{proof}
+
+\begin{theorem}[uniformly feasible lower mode]
+\label{thm:quant-critical-lower}
+There is a fixed $L>461/500$ such that for every $\eta>0$ there exists
+an actual feasible zero-slack triple with $0<\Delta<\eta$ and
+\[
+ L\sqrt\Delta\le d_{\rm tr}(K,\KG).
+\]
+\end{theorem}
+\begin{proof}[Construction to be realized in the proof source]
+Use the explicit piecewise support perturbation and its two auxiliary
+perturbations recorded with the trial certificate. Their contacts are exact,
+the curvature measures remain nonnegative at a sufficiently small positive
+amplitude, and the continuous wall inequalities hold on each phase. Thus the
+first variation is exactly zero and $\Delta=\tau^2E_{\rm trial}$.
+An endpoint-pair width obstruction gives distance at least $\tau$.
+The energy certificate gives $E_{\rm trial}<147/125$.
+Since
+$(9221/10000)^2(147/125)<1$, the fixed choice
+$L=9221/10000>461/500$ works at every sufficiently small amplitude.
+This fixed margin is essential: ratios merely greater than $461/500$ at
+each scale would not prove strictness of the asymptotic coefficient.
+\end{proof}
+
+Define $C_Q^*$ as the infimum of the nonnegative coefficients valid uniformly
+for all feasible triples on some positive deficit neighborhood. The set of
+such coefficients is nonempty by the pinned certificate.
+\begin{corollary}\label{cor:quant-intrinsic-interval}
+\[
+ \frac{461}{500}<C_Q^*\le\frac{93}{100}.
+\]
+\end{corollary}
+\begin{proof}
+Every coefficient greater than $93/100$ absorbs the $\Delta^{2/3}$
+remainder on a sufficiently small neighborhood. The fixed lower margin
+in \cref{thm:quant-critical-lower} excludes all coefficients below $L$.
+\end{proof}
+
+\quantstatus{The actual augmented-energy and endpoint-slack reductions have
+proof source. The final continuum certificate must still be instantiated
+against those actual kernels; the interval checker alone is insufficient.
+The continuously feasible trial family also remains a construction obligation.
+The finite and asymptotic consequences are written as explicit transfers until
+these inputs are supplied.}
+
+\subsection{Numerical certificates and their scope}
+\label{sec:quant-certificates}
+
+The numerical inequalities use rational intervals, with outward enclosures
+for trigonometric functions, and finite binary covers of parameter rectangles.
+The reconstruction kernels are finite sums of pieces of the form
+$A\sec u$, $A$, $A\csc(T-u)$, or $A\csc u+B\cot u$.
+Their Gram entries are exact primitive differences. Possible empty or changing
+overlap intervals must be enclosed, not selected by a midpoint test.
+The angle endpoints, where an integrating factor would be singular, are
+handled by the endpoint support identities rather than an improper integral.
+
+A certificate for a root rectangle must prove coverage of the entire root,
+the validity of every local interval bound, positivity of every denominator
+used, and the final rational comparison. The analytic model links those
+expressions to the actual residual-space Gram entries. Python is permitted
+to generate subdivisions and data; the intended final formal theorem uses
+only the soundness theorem of the Lean checker and accepted certificate data.
+
+The research replay of the all-pairs $0.93$ estimate has 21 region-pair roots
+and 145306 accepted leaf rectangles. These counts and the generated-data hashes
+are reproducibility metadata, not a substitute for a theorem. They do not
+establish feasibility of the lower trial family or the geometry used by the
+original-sofa stability theorem.
+
+\subsection{An explicit, deliberately conservative entry cutoff}
+\label{sec:quant-effective-cutoff}
+
+The effective argument is independent of the sharp local theorem whose entry
+it supplies. A penalized maximizing-cap construction gives a comparison cap
+with explicit curvature error. A robust arm bootstrap places that comparison
+cap in the injective class, and its penalty transfers the cap estimate back
+to the specified input. The incomplete-turn version first controls the
+remaining angle and then transfers actual-set distance.
+
+\begin{proposition}[coarse global entry]
+\label{prop:quant-effective-entry}
+If $0\le\eps\le10^{-144}$, then
+\[
+ d_H(S_c,\Gs)\le3000000\,\eps^{1/12}.
+\]
+\end{proposition}
+\begin{proposition}[coarse angle entry]
+\label{prop:quant-effective-angle}
+For $0<\eps\le10^{-30}$ and every admissible reduced motion,
+\[
+ 0\le\pi/2-\omega<500\,\eps^{1/6}.
+\]
+\end{proposition}
+
+The relevant explicit reference scales are upper-support error $10^{-40}$
+for the local cap certificate, angle error $10^{-20}$ for the terminal
+comparison, sector radius $10^{-20}$, normal displacement depth $10^{-8}$,
+and allowed support-plus-hallway slack $10^{-10}$. They arise from finite
+support-difference estimates, a separate treatment of the reference top face,
+fixed visited-angle floor witnesses, and curvature-controlled rotated charts.
+The nonconvex reference does not contain its entire bounding rectangle;
+only the four actual corner points are used where a convex-hull width
+comparison suffices.
+
+\quantstatus{The penalized polygon variation and limiting estimates, the
+transfer to an arbitrary original sofa, and these explicit geometric radii
+are still to be completed in Lean source. Existing exact-arithmetic receipts
+check scalar/reference inequalities, not those analytic implications. These
+two entry propositions are retained as obligations, not assumed inputs hidden
+inside the final proposition.}
+
+\begin{proposition}[effective sharp-coefficient cutoff; quantitative draft]
+\label{prop:quant-explicit-cutoff}
+For every original moving sofa with $0\le\eps=M-\abs S\le10^{-600}$,
+\[
+ d_H(S_c,\Gs)\le\frac{23}{10}\sqrt\eps,\qquad
+ \abs{S_c\triangle\Gs}\le50\sqrt\eps.
+\]
+Every admissible reduced motion also satisfies
+$0\le\pi/2-\omega\le(31/10)\eps$.
+\end{proposition}
+\begin{proof}[Assembly, with the preceding obligations explicit]
+The coarse entry propositions give
+\[
+ d_H(S_c,\Gs)\le3\cdot10^{-44}<10^{-40},\qquad
+ \pi/2-\omega<5\cdot10^{-98}<10^{-20}.
+\]
+The numerical local cap and terminal certificates now apply. They refine the
+cap error to $\delta\le(1001/1000)\sqrt e$ and give
+\cref{eq:quant-complementary-budget}. All remaining normal, sector, and
+area-remainder scales follow from $\sqrt\eps\le10^{-300}$.
+The two directed-distance and symmetric-difference arguments above yield
+the displayed inequalities. At zero deficit use the existing uniqueness
+and normalization theorem. The statement is over the original sofa, not
+an already-local cap, and contains no existential radius.
+\end{proof}
+\quantstatus{The mandatory exact contract is
+\quantcode{MovingSofaQuantitative.Targets.ExplicitCutoff}.
+It is not yet an unconditional Lean theorem. The displayed exponent 600 is
+only a conservative effectivity bound, not an optimal cutoff or a useful
+optimizer tolerance. It must remain labelled as a draft until the entry,
+reference-radius, and final statement dependencies are complete.}
