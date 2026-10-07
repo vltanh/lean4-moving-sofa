@@ -376,6 +376,73 @@ theorem gerver_D_roof_monotone {P : GerverParams}
   have hy:=(env_D₂_strictMono henv).monotoneOn ht hs hts
   exact ⟨hx,by rw [hγt,hγs]; exact hy⟩
 
+/-- The right tail's roof is antitone as a function of its actual
+horizontal coordinate, not merely along sampled parameters. -/
+theorem gerver_B_roof_antitone_x {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ) :
+    AntitoneOn γ
+      (Icc (envB P.path P.gs_α (π/2-P.θ)).1
+        (envB P.path P.gs_α (π/2)).1) := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hΓ:=gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbds : ∀z∈gerverEnvelope P,
+      z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧ 0≤z.2 := by
+    intro z hz
+    have h:=envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz
+    exact ⟨h.1,h.2.1⟩
+  have hgraph : ∀t∈Icc (π/2-P.θ) (π/2),
+      γ (envB P.path P.gs_α t).1=(envB P.path P.gs_α t).2 := by
+    intro t ht
+    apply roof_value_of_envelope hroof hΓ hSlope hbds
+    unfold gerverEnvelope
+    exact Or.inl (Or.inl ⟨t,ht,rfl⟩)
+  exact antitone_graph_of_parametric_arc
+    (by linarith [henv.ht.2.2.2.1,henv.ht.2.2.2.2])
+    (env_B_cont henv).fst
+    (env_B₁_strictMono henv)
+    ((env_B₂_strictAnti henv).antitoneOn)
+    hgraph
+
+/-- The left tail's roof is monotone in its horizontal coordinate. -/
+theorem gerver_D_roof_monotone_x {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox)
+    {H L : ℝ} {γ : ℝ→ℝ}
+    (hroof : CapRoofData P.cap (gerverRoofLeft P)
+      (gerverRoofRight P) H L γ) :
+    MonotoneOn γ
+      (Icc (envD P.path P.gs_β 0).1
+        (envD P.path P.gs_β P.θ).1) := by
+  have hB:=romik_bounds hP hbox
+  have henv:=gn_envHyp hP hB
+  have hΓ:=gerver_niche_envelope hP hbox
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbds : ∀z∈gerverEnvelope P,
+      z.1∈Icc (gerverRoofLeft P) (gerverRoofRight P) ∧ 0≤z.2 := by
+    intro z hz
+    have h:=envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP hB ht.1 ht.2) z hz
+    exact ⟨h.1,h.2.1⟩
+  have hgraph : ∀t∈Icc (0:ℝ) P.θ,
+      γ (envD P.path P.gs_β t).1=(envD P.path P.gs_β t).2 := by
+    intro t ht
+    apply roof_value_of_envelope hroof hΓ hSlope hbds
+    unfold gerverEnvelope
+    exact Or.inr ⟨t,ht,rfl⟩
+  exact monotone_graph_of_parametric_arc
+    (by linarith [henv.ht.1,henv.ht.2.1])
+    (env_D_cont henv).fst
+    (env_D₁_strictMono henv)
+    ((env_D₂_strictMono henv).monotoneOn)
+    hgraph
+
 /-- Horizontal support width, shared by the area and effectivity modules. -/
 def horizontalWidth (K : Set Point) : ℝ := supp K 0+supp K π
 
