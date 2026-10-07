@@ -101,7 +101,8 @@ def rootBox (lo hi : Q) : Box :=
 def polygons (lo hi : Q) (box : Box) : List Polygon :=
   (interTangents.zipIdx.foldl (fun Ps rn =>
     let n:=normal rn.1
-    let j:=4*rn.2
+    -- Each intermediate normal contributes two coordinates: normal and tangent.
+    let j:=2*rn.2
     hallway Ps n
       (box[j]!).1 (box[j]!).2 (box[j+1]!).1 (box[j+1]!).2)
     (baseButterfly lo hi))
