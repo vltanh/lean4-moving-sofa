@@ -96,20 +96,21 @@ theorem gerver_roof_slack_explicit {P : GerverParams}
   exact integrate_reference_slack_to_roof_margin hP hbox hroof hlead hrem
     (by norm_num [explicitRoofClip])
 
-/-- Explicit normal-slack depth and error reserve. -/
+/-- Explicit 49/100 inner-wall violation for points in the *reference niche*.
+Outer-cap points are handled separately by the outer support margin; it
+would be false to impose a common inner-wall violation on every point outside
+Gerver's sofa. -/
 theorem gerver_normal_slack_explicit {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox) :
-    ∀p∉gerverSofa P,∀q∈gerverSofa P,
-      euclideanDist p q=infDist p (gerverSofa P) →
-      0<euclideanDist p q →
-      euclideanDist p q≤explicitNormalDepth →
-      ∃t∈Ioo (0:ℝ) (π/2),
-        innerSlackU P.cap t p≤-(49/100)*euclideanDist p q ∧
-        innerSlackV P.cap t p≤-(49/100)*euclideanDist p q := by
-  intro p hp q hq hnear hd hd0
-  have hbase:=nearest_direction_reference_normal hP hbox hp q hq hnear
-  exact explicit_normal_remainder hP hbox hbase hd hd0
-    (by norm_num [explicitNormalDepth])
+    ∀ p ∈ niche P.cap (π/2),
+      0 < infDist p (gerverSofa P) →
+      infDist p (gerverSofa P) ≤ explicitNormalDepth →
+      ∃ t ∈ Ioo (0:ℝ) (π/2),
+        innerSlackU P.cap t p ≤ -(49/100)*infDist p (gerverSofa P) ∧
+        innerSlackV P.cap t p ≤ -(49/100)*infDist p (gerverSofa P) := by
+  intro p hp hd hdepth
+  exact gerver_niche_normal_slack_explicit hP hbox p hp hd
+    (by simpa [explicitNormalDepth] using hdepth)
 
 /-- With total support/hallway error at most 1e-10, forward recovery has the
 100/49 coefficient. -/
