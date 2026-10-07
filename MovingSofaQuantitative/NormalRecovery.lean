@@ -204,8 +204,140 @@ theorem nearest_point_frontier {K : Set Point} (hK : IsCompact K)
   rw [←hnear] at hmin
   exact (not_lt_of_ge hmin) hcloser
 
-/-- For a point in the open niche, a nearest point of the sofa lies on the
-niche envelope. -/
+/-- A nearest point of the complement of a removed region in a convex body
+belongs to the closure of the removed region. Otherwise a short step from the
+nearest point toward the deleted point remains in the complement but is
+strictly closer. -/
+theorem nearest_cap_complement_mem_closure {K N G : Set Point}
+    (hK : IsConvexBody K) (hN : N⊆K) (hG : G=K\N)
+    {p q : Point} (hp : p∈N) (hq : q∈G)
+    (hnear : euclideanDist p q=infDist p G) :
+    q∈closure N := by
+  by_contra hn
+  have hqopen : q∈(closure N)ᶜ := hn
+  obtain ⟨r,hr,hball⟩ :=
+    Metric.isOpen_iff.mp isClosed_closure.isOpen_compl q hqopen
+  have hpk : p∈K := hN hp
+  have hqk : q∈K := by rw [hG] at hq; exact hq.1
+  have hpG : p∉G := by
+    rw [hG]
+    exact fun h => h.2 hp
+  have hd : 0<euclideanDist p q := by
+    exact euclideanDist_pos_of_ne (by
+      intro he
+      subst q
+      exact hpG hq)
+  let t:=min (r/(2*euclideanDist p q)) (1/2:ℝ)
+  have ht : 0<t ∧ t<1 := by
+    dsimp [t]
+    exact ⟨lt_min (by positivity) (by norm_num),
+      (min_le_right _ _).trans_lt (by norm_num)⟩
+  let z:Point:=q+t•(p-q)
+  have hzK : z∈K := by
+    dsimp [z]
+    exact hK.2.2.add_smul_sub_mem hqk hpk ⟨ht.1.le,ht.2.le⟩
+  have hqz : euclideanDist q z=t*euclideanDist p q := by
+    dsimp [z,euclideanDist]
+    rw [show q-(q+t•(p-q))=-t•(p-q) by
+      ext <;> simp [Prod.fst_add,Prod.snd_add,Prod.fst_smul,
+        Prod.snd_smul] <;> ring]
+    rw [norm2_smul,norm2_neg,abs_of_pos ht.1]
+  have hznear : euclideanDist q z<r := by
+    rw [hqz]
+    have htR:t≤r/(2*euclideanDist p q):=min_le_left _ _
+    have hmul:=mul_le_mul_of_nonneg_right htR hd.le
+    nlinarith
+  have hzOutside : z∉closure N := by
+    have hzball : z∈Metric.ball q r := by
+      simpa [Metric.mem_ball,dist_eq] using hznear
+    exact hball hzball
+  have hzNotN : z∉N := fun hzN => hzOutside (subset_closure hzN)
+  have hzG : z∈G := by
+    rw [hG]
+    exact ⟨hzK,hzNotN⟩
+  have hpz : euclideanDist p z=(1-t)*euclideanDist p q := by
+    dsimp [z,euclideanDist]
+    rw [show p-(q+t•(p-q))=(1-t)•(p-q) by
+      ext <;> simp [Prod.fst_add,Prod.snd_add,Prod.fst_smul,
+        Prod.snd_smul] <;> ring]
+    rw [norm2_smul,abs_of_nonneg (by linarith [ht.2])]
+  have hm:=infDist_le_of_mem hzG
+  rw [←hnear,hpz] at hm
+  nlinarith [ht.1,hd]
+
+/-- A point lying both in the closure of Gerver's niche and in the sofa
+must lie on the true envelope graph. The graph identity is from the integrated
+regular-closed proof, and the graph's uniqueness comes from its vertical
+slope estimate, rather than any Jordan curve assumption. -/
+theorem gerver_closure_niche_inter_shape_subset_envelope {P : GerverParams}
+    (hP : P.IsSolution) (hbox : P.InBox) :
+    closure (niche P.cap (π/2)) ∩ gerverSofa P ⊆
+      gerverEnvelope P := by
+  classical
+  let a:=gerverRoofLeft P
+  let b:=gerverRoofRight P
+  obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
+  have hΓ:=gerver_niche_envelope hP hbox
+  have henv:=gn_envHyp hP (romik_bounds hP hbox)
+  obtain ⟨LΓ,hLΓ,hSlope⟩:=envelope_slope_bound henv
+    (by linarith [henv.ht.2.2.1]) (by linarith [henv.ht.2.2.1])
+  have hbounds : ∀z∈gerverEnvelope P,
+      z.1∈Icc a b ∧ 0≤z.2 := by
+    intro z hz
+    obtain ⟨hx,hy⟩:=envelope_bounds_of_path_height henv
+      (fun t ht=>path_snd_lt_one hP (romik_bounds hP hbox)
+        ht.1 ht.2) z hz
+    exact ⟨hx,hy.1⟩
+  let γc : ℝ→ℝ := fun x=>γ (max a (min x b))
+  have hγc : Continuous γc :=
+    continuous_clamped_roof hroof.order.le hroof.slope_nonneg
+      hroof.roof_lipschitz
+  let C : Set Point :=
+    {z | z.1∈Icc a b ∧ 0≤z.2 ∧ z.2≤γc z.1}
+  have hCclosed : IsClosed C := by
+    have hx : IsClosed {z : Point | z.1∈Icc a b} :=
+      isClosed_Icc.preimage continuous_fst
+    have hy0 : IsClosed {z : Point | 0≤z.2} :=
+      isClosed_le continuous_const continuous_snd
+    have hy : IsClosed {z : Point | z.2≤γc z.1} :=
+      isClosed_le continuous_snd (hγc.comp continuous_fst)
+    exact (hx.inter hy0).inter hy
+  have hNsub : niche P.cap (π/2)⊆C := by
+    intro p hp
+    rw [hroof.niche_eq] at hp
+    have hcl : max a (min p.1 b)=p.1 := by
+      have hlo:=hp.1.1
+      have hhi:=hp.1.2
+      simp [min_eq_left hhi,max_eq_right hlo]
+    exact ⟨hp.1,hp.2.1,by simpa [C,γc,hcl] using hp.2.2.le⟩
+  intro q hq
+  have hqc : q∈C :=
+    hCclosed.closure_subset (closure_mono hNsub hq.1)
+  obtain ⟨hx,hy0,hyup⟩ := hqc
+  have hcl : max a (min q.1 b)=q.1 := by
+    simp [min_eq_left hx.2,max_eq_right hx.1]
+  have hge : γ q.1≤q.2 := by
+    by_contra hn
+    have hqn : q∈niche P.cap (π/2) := by
+      rw [hroof.niche_eq]
+      exact ⟨hx,hy0,lt_of_not_ge hn⟩
+    have hG:=gerver_shape_eq hP hbox
+    rw [hG] at hq
+    exact hq.2 hqn
+  have heq : q.2=γ q.1 := by
+    simpa [C,γc,hcl] using le_antisymm hyup hge
+  obtain ⟨z,hz,hzx⟩ := env_exists_curve_fst henv hx
+  have hzheight:=roof_value_of_envelope hroof hΓ hSlope hbounds hz
+  have hqz : q=z := by
+    apply Prod.ext
+    · exact hzx.symm
+    · rw [heq,hzx,hzheight]
+  rw [hqz]
+  exact hz
+
+/-- From any point of the open Gerver niche, a nearest sofa point belongs
+to the envelope. This is now an immediate consequence of the two generic
+closure facts, without phantom frontier/segment-crossing lemmas. -/
 theorem nearest_from_niche_lands_on_envelope {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {p q : Point}
@@ -214,21 +346,15 @@ theorem nearest_from_niche_lands_on_envelope {P : GerverParams}
     (hqfront : q∈frontier (gerverSofa P))
     (hnear : euclideanDist p q=infDist p (gerverSofa P)) :
     q∈gerverEnvelope P := by
-  have hB:=romik_bounds hP hbox
-  have hreg:=gerver_regularClosed hP hbox
-  have hN:=gerver_niche_envelope hP hbox
-  have hshape:=gerver_shape_eq hP hbox
-  have houter : frontier (gerverSofa P)\gerverEnvelope P⊆frontier P.cap := by
-    exact frontier_shape_off_envelope hreg hN hshape
-  by_contra hn
-  have hqOuter:=houter ⟨hqfront,hn⟩
-  have hseg:=segment_from_niche_to_outer_crosses_envelope hP hbox hp hqOuter
-  obtain ⟨z,hzEnv,hzBetween,hzStrict⟩:=hseg
-  have hzG : z∈gerverSofa P:=envelope_subset_shape hP hbox hzEnv
-  have hdist:=segment_point_closer hp hqG hzBetween hzStrict
-  have hmin:=infDist_le_of_mem hzG
-  rw [←hnear] at hmin
-  exact (not_lt_of_ge hmin) hdist
+  have hK:=gm_isConvexBody_cap hP hbox
+  have hN⊆ : niche P.cap (π/2)⊆P.cap :=
+    (theorem2_5_9 (gm_isCap hP hbox)).1
+      ⟨gerverSofa P,gm_isMonotone hP hbox,rfl⟩
+  have hG:=gerver_shape_eq hP hbox
+  have hqclosure := nearest_cap_complement_mem_closure hK hN⊆
+    hG hp hqG hnear
+  exact gerver_closure_niche_inter_shape_subset_envelope hP hbox
+    ⟨hqclosure,hqG⟩
 
 /-- Orthogonality to the core tangent determines the magnitude of the dot
 product with the perpendicular normal. -/
