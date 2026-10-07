@@ -199,3 +199,66 @@ Finally the exact identity \( |E(B)|=|B|-\mathscr R(B)\) turns HS.6 and HS.7 int
 Indeed for \(K=K_\tau\), the numerator is \(O(\tau^{3/2})\), while the denominator is \((m^2/2)\tau+O(\tau^{3/2})>0\), making their ratio tend to zero. This conclusion does not refute the **sign-only** conjecture HS.4; it shows that proving it must use a sharp first-order cancellation, just as the successful TC reference-tail comparison did.
 
 This is a pen-and-paper consequence of exact reference formulas and the already stated RB/MCA results. Neither a fresh computer certificate nor an independent continuum review is claimed.
+
+
+## 8. Linear unit-span loss despite only three-halves-order area loss
+
+The qualitative span obstruction HS.5 can be sharpened to an **explicit first-order bound**. Keep the double-tip cut family \(K_\tau\), and write \(b=m/2>1/2\) for the right endpoint of the reference horizontal top face. Let \(B_\tau=(K_\tau+JK_\tau)/2\), and \(E_\tau=E(B_\tau)\). By Section 7,
+\[
+M-O(\tau^{3/2})\le |E_\tau|\le M.
+\]
+
+**Theorem HS4 (linear span deficit).** For all sufficiently small \(\tau>0\),
+\[
+\boxed{\min_{E_\tau}y\ge b\tau/4,\qquad
+\max_{E_\tau}y\le1-b\tau/4,}
+\tag{HS.9}
+\]
+and hence
+\[
+\boxed{\operatorname{span}_y(E_\tau)\le1-b\tau/2.}
+\tag{HS.10}
+\]
+Thus a symmetrized-hull envelope may have an incoming span defect of order \(\tau\) although its area deficit from \(M\) is only of order \(\tau^{3/2}\).
+
+**Proof.** Fix \(\delta=\arctan\tau\) and the upper-right normal \(n=(\sin\delta,\cos\delta)\). The cut plane of \(K_\tau\) is
+\[
+\tau x+y\le1-\tau b,
+\]
+so
+\[
+h_{K_\tau}(n)\le\cos\delta-b\sin\delta.
+\]
+For \(\delta\) small, the original reference's right-upper tail has the exact support
+\[
+h_{K_*}(n)=\tfrac12+b\sin\delta+\tfrac12\cos\delta.
+\]
+The horizontally reflected cut hull \(JK_\tau\) is contained in \(K_*\), since \(K_*\) is J-invariant. Support additivity therefore gives the **exact support bound**
+\[
+h_{B_\tau}(n)
+=\tfrac12\bigl(h_{K_\tau}(n)+h_{JK_\tau}(n)\bigr)
+\le\tfrac14+\tfrac34\cos\delta.
+\tag{HS.11}
+\]
+Every point \((x,y)\in B_\tau\) with \(x\ge b/2\) consequently satisfies
+\[
+y\le \frac{1/4+(3/4)\cos\delta-x\sin\delta}{\cos\delta}
+=\tfrac34+\tfrac14\sec\delta-x\tau,
+\]
+so, using \(\sec(\arctan\tau)-1=\sqrt{1+\tau^2}-1\le\tau^2/2\),
+\[
+1-y\ge x\tau-\tfrac18\tau^2
+\ge \tfrac b2\tau-\tfrac18\tau^2
+\ge\tfrac b4\tau
+\]
+for all sufficiently small positive \(\tau\). Horizontal symmetry gives the same estimate whenever \(x\le-b/2\).
+
+It remains to examine the *central* interval \(|x|\le b/2\). The reference lower positive niche roof \(n_*(x)\) is strictly positive throughout the interior of its nondegenerate top-face interval \((-b,b)\); this is the explicit reference geometry (or CW's strict baseline-sweep statement under curvature domination and width \(2m>2\)). On the compact interval \([-b/2,b/2]\) its lower bound is positive. More precisely, at every \(x\) choose an interior turn angle witnessing strictly positive lower niche height; continuity of the corresponding two wall bounds in \(x\) and in the support function gives a neighborhood and a fixed positive clearance. Finitely many such neighborhoods cover the compact interval. Since \(B_\tau\to K_*\) in Hausdorff distance and the cap supports converge uniformly, there exists \(\eta>0\), independent of sufficiently small \(\tau\), such that
+\[
+n_{B_\tau}(x)\ge\eta\quad (|x|\le b/2).
+\]
+Here \(n_{B_\tau}\) denotes the **actual full** lower forbidden roof of the convex hull \(B_\tau\), not a clipped niche. Because \(B_\tau\) is invariant under reflection \(\rho(x,y)=(x,1-y)\), any point of its full canonical two-turn envelope has \(y\le1-\eta\) on that central interval. For \(\tau\) sufficiently small, \(\eta\ge b\tau/4\).
+
+Combining the central forbidden-roof estimate with the external supporting-line estimate proves \(\max_{E_\tau}y\le1-b\tau/4\). The envelope \(E_\tau\) is itself \(\rho\)-invariant, so its minimum ordinate is at least \(b\tau/4\) as well. It is nonempty by HS.7, and compact, so the extrema are attained. QED.
+
+**Scope of the obstruction.** HS.9 does **not** disprove the sign-only hull-symmetrization conjecture HS.4. It does rule out assigning a negligible (e.g. \(O(\tau^{3/2})\)) cost to restoring exact unit vertical span by a generic width-preserving operation: the geometric span defect is order \(\tau\), while the original area deficit is smaller order. AN2 separately gives an exact low-area full-turn counterexample to the simplest determinant-one affine normalization. A successful full-turn symmetry proof would have to establish both an area comparison *and* a compatible sharp symmetric area theorem or genuinely feasible normalization, rather than invoke RS2 at the wrong span.
