@@ -13,6 +13,7 @@ public import MovingSofaQuantitative.Certificates.CriticalExpression
 public import MovingSofaQuantitative.Certificates.Expression
 public import MovingSofaQuantitative.Certificates.Interval
 public import MovingSofaQuantitative.Certificates.KernelExpression
+public import MovingSofaQuantitative.Certificates.Sinc
 public import MovingSofaQuantitative.Certificates.Trig
 public import MovingSofaQuantitative.Certificates.TrigExpression
 public import MovingSofaQuantitative.ClosedCriticalModel
