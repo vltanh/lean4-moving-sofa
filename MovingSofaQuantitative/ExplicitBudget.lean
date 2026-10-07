@@ -22,7 +22,7 @@ namespace MovingSofaQuantitative
 theorem missing_area_identity {S U : Set Point} (hS : MeasurableSet S)
     (hU : MeasurableSet U) (hSf : volume S ≠ ⊤) (hUf : volume U ≠ ⊤) (M : ℝ) :
     area (U \ S) = (M - area S) - (M - area U) + area (S \ U) := by
-  have he := area_sdiff_balance hS hU hSf hUf M
+  have he := area_sdiff_balance hS hU hSf hUf
   linarith
 
 /-- A terminal loss and an endpoint-wedge gain give the complementary budget.
