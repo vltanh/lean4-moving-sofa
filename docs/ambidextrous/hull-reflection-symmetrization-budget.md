@@ -131,3 +131,71 @@ This provides an exact counterexample to the premise that **hull symmetrization 
 Neither statement is established here. The earlier RA failure of averaging actual nonconvex sets is not being recycled: \(B_\tau\) is a convex hull average, and its envelope correctly **deletes** the forbidden central top and bottom points instead of assuming they survive.
 
 The top-face and retained-flank calculations are exact and use no numerical sampling. This example also explains why numerical area improvement after hull symmetrization, by itself, is not a proof of full-turn optimality.
+
+
+## 7. The hull gain is almost entirely spent on forbidden material near the reference
+
+A *quantitative obstruction* to a coarse proof of HS.4 can be obtained without any numerical computation. In the same double-tip cut family \(K_\tau\) from Section 6, denote its upper downward cap by \(U_\tau\), the reference cap by \(U_*\), and the symmetric average cap by \(C_\tau=(U_\tau+JU_\tau)/2\). Let \(B_\tau=(K_\tau+JK_\tau)/2\). The reference's central face interval has length \(m\).
+
+**Lemma HS2 (linear hull gain, smaller surviving-area change).** As \(\tau\downarrow0\),
+\[
+\boxed{|B_\tau|-|K_\tau|=\frac{m^2}{2}\tau+O(\tau^{3/2}),}
+\tag{HS.6}
+\]
+while both fully saturated full-turn envelope areas satisfy
+\[
+\boxed{|E(K_\tau)|=M+O(\tau^{3/2}),\qquad
+|E(B_\tau)|=M+O(\tau^{3/2}).}
+\tag{HS.7}
+\]
+In HS.7 the deviations are *nonpositive*, by the already proved reference-belt bound RB1. Consequently
+\[
+\boxed{\mathscr R(B_\tau)-\mathscr R(K_\tau)
+=\frac{m^2}{2}\tau+O(\tau^{3/2}).}
+\tag{HS.8}
+\]
+Thus the removed-area increase asymptotically consumes the **entire leading convex-hull gain**. No assertion of strict improvement, nor a fixed positive fraction of the hull gain remaining as sofa area, follows from HS.1 alone.
+
+**Proof of HS.6.** Over the old horizontal face \([a,b]=[-m/2,m/2]\), the one-sided upper cut lowers the reference roof exactly by \(\tau(x-a)\), whose integral is \(\tau m^2/2\). The reference circular outer tail has a quadratic height deficit near its former top tip, so the additional loss on the right neighboring flank is \(O(\tau^{3/2})\); the cut is inactive on the left flank. Therefore
+\[
+|U_*|-|U_\tau|=\frac{m^2}{2}\tau+O(\tau^{3/2}).
+\]
+The exact mirrored-cap support calculation MCA.9 proves
+\[
+|U_*|-|C_\tau|=\frac{m^2}{4}\tau+O(\tau^{3/2}).
+\]
+Both \(K_\tau\) and \(B_\tau\) are vertically symmetric convex hulls with projection of width \(2m\), so their convex areas are \(2|U_\tau|-2m\) and \(2|C_\tau|-2m\), respectively. Subtract to obtain HS.6. QED.
+
+**Proof of HS.7.** For sufficiently small \(\tau>0\), both \(K_\tau\) and \(JK_\tau\) are convex subsets of \(K_*\) that contain the entire central reference belt
+\[
+K_*\cap\{1/101\le y\le100/101\}.
+\]
+Their Minkowski midpoint \(B_\tau\) contains that belt as well (each point in the belt is the midpoint of itself in the two summands), and \(B_\tau\subseteq K_*\) by convexity and x-symmetry of \(K_*\). RB1 therefore gives
+\[
+|E(K_\tau)|\le M,\qquad |E(B_\tau)|\le M.
+\]
+For the first lower bound, the actual retained double-cut body \(S_\tau\subseteq E(K_\tau)\) has
+\(|S_\tau|=M-O(\tau^{3/2})\) by MCA.4.
+
+For the second lower bound, the intersection \(S_\tau\cap JS_\tau\) lies in \(K_\tau\cap JK_\tau\subseteq B_\tau\). Every point of that intersection belongs to the original reference sofa \(\Sigma\), whose canonical forbidden quadrants contain those of \(B_\tau\) because \(B_\tau\subseteq K_*\). Thus
+\[
+S_\tau\cap JS_\tau\subseteq E(B_\tau).
+\]
+Since \(\Sigma\) is J-invariant,
+\[
+|\Sigma\setminus(S_\tau\cap JS_\tau)|
+\le|\Sigma\setminus S_\tau|+|\Sigma\setminus JS_\tau|
+=O(\tau^{3/2}).
+\]
+Hence \(|E(B_\tau)|\ge M-O(\tau^{3/2})\). This proves both statements of HS.7. QED.
+
+Finally the exact identity \( |E(B)|=|B|-\mathscr R(B)\) turns HS.6 and HS.7 into HS.8.
+
+**Corollary HS3 (no uniform retained-energy fraction).** There is no positive constant \(c\) such that *every* genuinely full-turn, reference-belt-admitted hull K satisfies
+\[
+|E((K+JK)/2)|-|E(K)|
+\ge c\bigl(|(K+JK)/2|-|K|\bigr).
+\]
+Indeed for \(K=K_\tau\), the numerator is \(O(\tau^{3/2})\), while the denominator is \((m^2/2)\tau+O(\tau^{3/2})>0\), making their ratio tend to zero. This conclusion does not refute the **sign-only** conjecture HS.4; it shows that proving it must use a sharp first-order cancellation, just as the successful TC reference-tail comparison did.
+
+This is a pen-and-paper consequence of exact reference formulas and the already stated RB/MCA results. Neither a fresh computer certificate nor an independent continuum review is claimed.
