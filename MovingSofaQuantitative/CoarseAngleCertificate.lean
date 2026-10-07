@@ -602,7 +602,7 @@ theorem coarse_half_angle_upper {ω : ℝ}
     mul_lt_mul_of_pos_right hsquare hcos2pos
   have hlower : (4/5:ℝ)^2*(25/41)≤(4/5)^2*cos x^2 :=
     mul_le_mul_of_nonneg_left hcosLower (by norm_num)
-  rw [hquadratic] at hprod
+  rw [←hquadratic] at hprod
   nlinarith [hprod,hlower,hsinUpper]
 
 theorem coarse_area_separation {S : Set Point} {ω : ℝ}
