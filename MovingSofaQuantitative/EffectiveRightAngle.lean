@@ -123,31 +123,54 @@ theorem center_shift_le_21_of_penalty {K C : Set Point}
   have hmul := mul_nonneg (sub_nonneg.mpr hsq) pi_pos.le
   nlinarith [hpen,hint,hmul,hpi]
 
-/-- The comparison cap stays uniformly bounded even though the penalty target
-is not centered at its own midpoint. -/
+/-- The penalized comparison cap stays within radius 26 of the *input
+cap's midpoint*.  An origin-centred statement would contradict horizontal
+translation invariance. -/
 theorem penalized_cap_radius_bound {P : GerverParams}
     (hP : P.IsSolution) (hbox : P.InBox)
     {K C : Set Point} (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
     {e : ℝ} (he : 0<e) (he4 : e≤1/(10:ℝ)^4)
     (hA : sofaArea (π/2) C≥area (gerverSofa P)-e)
     (hpen : supportL2Penalty K C≤65536*e^(3/2:ℝ)) :
-    ∀p∈C,norm2 p<26 := by
+    ∀p∈C,norm2 (p-(horizontalMidpoint K,0))<26 := by
   have hCpos : 0<sofaArea (π/2) C := by
-    have hM: (22/10:ℝ)<area (gerverSofa P):=(gerverSofa_area_mem hP hbox).1.trans (by norm_num)
+    have hM : (22/10:ℝ)<area (gerverSofa P) :=
+      (gerverSofa_area_mem hP hbox).1.trans (by norm_num)
     nlinarith
   have hW:=positive_cap_width_lt_nine hC hCpos
-  let m:=horizontalMidpoint C
-  have hm : |m|<21 := by
-    have hL2:=center_shift_L2_lower hK hC
-    have hroot:=sqrt_le_sqrt hpen
-    have hpi:=pi_gt_three
-    nlinarith [hL2,hroot]
+  have hs : sqrt e≤1/100 := by
+    nlinarith [sq_sqrt he.le,sqrt_nonneg e,he4]
+  have hpow : e^(3/2:ℝ)=e*sqrt e := by
+    rw [show (3/2:ℝ)=1+1/2 by norm_num,rpow_add he,Real.rpow_one,sqrt_eq_rpow]
+  have hsmall : 65536*e^(3/2:ℝ)≤1/10 := by
+    rw [hpow]
+    have hbound : e*sqrt e≤1/1000000 := by
+      calc
+        _ ≤ (1/10000:ℝ)*sqrt e :=
+          mul_le_mul_of_nonneg_right (by simpa using he4) (sqrt_nonneg e)
+        _ ≤ (1/10000:ℝ)*(1/100) :=
+          mul_le_mul_of_nonneg_left hs (by norm_num)
+        _ = _ := by norm_num
+    nlinarith
+  have hm : |horizontalMidpoint C-horizontalMidpoint K|<21 :=
+    center_shift_le_21_of_penalty hK hC hKpos hCpos (hpen.trans hsmall)
   intro p hp
-  have hx:=cap_fst_centered_bound hC hW p hp
+  have hx := cap_fst_centered_bound hC hW p hp
+  have hcx : |p.1-horizontalMidpoint K|<51/2 := by
+    calc
+      _ = |(p.1-horizontalMidpoint C)+
+            (horizontalMidpoint C-horizontalMidpoint K)| := by ring
+      _ ≤ |p.1-horizontalMidpoint C|+
+            |horizontalMidpoint C-horizontalMidpoint K| := abs_add_le _ _
+      _ < 9/2+21 := add_lt_add hx hm
+      _ = 51/2 := by ring
   have hy0:=hC.snd_nonneg hp
   have hy1:=hC.snd_le_one hp
-  unfold norm2 dot
-  nlinarith
+  have hsq := norm2_sq (p-(horizontalMidpoint K,0))
+  have hnon := norm2_nonneg (p-(horizontalMidpoint K,0))
+  simp only [Prod.fst_sub,Prod.snd_sub,sub_zero] at hsq
+  nlinarith [sq_abs (p.1-horizontalMidpoint K)]
 
 /-- Cubic support control from the comparison penalty. -/
 theorem penalized_support_sup {P : GerverParams}
