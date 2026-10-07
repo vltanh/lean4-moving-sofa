@@ -751,9 +751,12 @@ theorem directed_to_gerver_normal {P : GerverParams}
       DirectedClose ((100/49)*(δ+ζ)) S (gerverSofa P) := by
   obtain ⟨H,L,γ,hroof⟩:=gerver_roof_data hP hbox
   obtain ⟨douter,hdouter,houter⟩:=hroof.outer_margin
-  let δ₀:=min (douter/2) ((49/200)*normalRecoveryDepth)
-  let ζ₀:=(49/200)*normalRecoveryDepth
-  refine ⟨δ₀,ζ₀,lt_min (by positivity) (by positivity),by positivity,?_⟩
+  obtain ⟨τ,hτ,hroofSlack⟩:=gerver_explicit_roof_slack hP hbox hroof
+  let smallNormal:ℝ:=(5/204)*normalRecoveryDepth
+  let δ₀:=min (douter/2) (min smallNormal (τ/4))
+  let ζ₀:=min smallNormal (τ/4)
+  refine ⟨δ₀,ζ₀,lt_min (by positivity) (lt_min (by positivity) (by positivity)),
+    lt_min (by positivity) (by positivity),?_⟩
   intro K hK δ hδ hδsmall hclose S hSK ζ hζ hζsmall hhall p hp
   by_cases hp0 : p∈P.cap
   · by_cases hpG : p∈gerverSofa P
@@ -768,12 +771,32 @@ theorem directed_to_gerver_normal {P : GerverParams}
         (ms_isCompact_of_isMovingSofaWithAngle (gm_movingSofa_std hP hbox).1)
         hpG
       by_cases hdbig : normalRecoveryDepth<d
-      · have hsum : δ+ζ<(49/100)*d := by
-          have hδb:=δsmall.trans (min_le_right _ _)
-          dsimp [ζ₀] at ζsmall
-          nlinarith
-        obtain ⟨t,ht,hU,hV⟩:=gerver_niche_normal_slack_explicit hP hbox p hpN hd
-          (by linarith [hdbig])
+      · obtain ⟨t,ht,hU,hV⟩:=hroofSlack p hpN
+        have hpRoof:=by
+          rw [hroof.niche_eq] at hpN
+          exact hpN
+        let v:=γ p.1-p.2
+        have hvpos : 0<v:=by dsimp [v]; linarith [hpRoof.2.2]
+        have hroofPoint : (p.1,γ p.1)∈gerverSofa P := by
+          rw [←gerver_shape_eq hP hbox]
+          refine ⟨hroof.rectangle ⟨hpRoof.1,hroof.roof_nonneg _ hpRoof.1,
+            (hroof.roof_le _ hpRoof.1).trans hroof.height.le⟩,?_⟩
+          rw [hroof.niche_eq]
+          simp [hpRoof.1,hroof.roof_nonneg _ hpRoof.1]
+        have hdv : d≤v := by
+          dsimp [d,v]
+          exact (infDist_le_of_mem hroofPoint).trans_eq (by
+            unfold euclideanDist norm2 dot
+            simp [abs_of_pos hvpos])
+        have hδb:=δsmall.trans ((min_le_right _ _).trans (min_le_left _ _))
+        have hδτ:=δsmall.trans ((min_le_right _ _).trans (min_le_right _ _))
+        have hζb:=ζsmall.trans (min_le_left _ _)
+        have hζτ:=ζsmall.trans (min_le_right _ _)
+        have hsum : δ+ζ<min ((5/51)*v) τ := by
+          dsimp [smallNormal] at hδb hζb
+          constructor
+          · nlinarith [hdbig,hdv]
+          · nlinarith [hδτ,hζτ,hτ]
         exact False.elim (normal_violation_excludes ht hclose hU hV hsum
           (by
             have hf:=hhall p hp t ht
