@@ -67,12 +67,13 @@ therefore forces \`|m| < 21\`.
 
 An absolute bound on the midpoint of C would be false, since translating
 K and C together preserves the hypotheses. -/
-theorem center_shift_le_21_of_penalty {K C : Set Point}
+theorem center_shift_energy_control {K C : Set Point}
     (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
     (hKpos : 0<sofaArea (π/2) K)
     (hCpos : 0<sofaArea (π/2) C)
-    (hpen : supportL2Penalty K C≤1/10) :
-    |horizontalMidpoint C-horizontalMidpoint K|<21 := by
+    :
+    (horizontalMidpoint C-horizontalMidpoint K)^2*(π/2) ≤
+      2*supportL2Penalty K C+200*π := by
   let m : ℝ := horizontalMidpoint C-horizontalMidpoint K
   let r : ℝ→ℝ := fun t =>
     supp (centeredCopy C) t-supp (centeredCopy K) t
@@ -116,6 +117,43 @@ theorem center_shift_le_21_of_penalty {K C : Set Point}
     convert hmono using 1 <;>
       simp [supportL2Penalty,pow_mul,hcos,
         intervalIntegral.integral_add,intervalIntegral.integral_const] <;> ring
+  simpa [m] using hint
+
+/-- The common-midpoint drift is controlled quantitatively by any
+nonnegative upper bound on the continuous support penalty. Unlike a bound on
+the absolute midpoint, this is invariant under translating both caps. -/
+theorem center_shift_le_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    {R : ℝ} (hR : 0≤R)
+    (hpen : supportL2Penalty K C≤R) :
+    |horizontalMidpoint C-horizontalMidpoint K|≤21+2*sqrt R := by
+  let m:=horizontalMidpoint C-horizontalMidpoint K
+  have hint:=center_shift_energy_control hK hC hKpos hCpos
+  have hpi : 3<π:=pi_gt_three
+  have hrroot : 0≤sqrt R:=sqrt_nonneg R
+  have hsqroot : (sqrt R)^2=R:=sq_sqrt hR
+  by_contra hn
+  have hm : 21+2*sqrt R<|m|:=lt_of_not_ge hn
+  have hsq : 441+4*R<m^2 := by
+    have h := sq_nonneg (|m|-(21+2*sqrt R))
+    nlinarith [sq_abs m,hrroot]
+  have hprod:=mul_pos (sub_pos.mpr hsq) (half_pos pi_pos)
+  have hnonneg:=mul_nonneg hR (le_of_lt hpi)
+  dsimp [m] at hint hm hsq
+  nlinarith [hpen,hprod,hnonneg]
+
+/-- A penalty at most one tenth gives an absolute 21-unit bound on the
+relative midpoint, used only for the very-small-deficit cap radius. -/
+theorem center_shift_le_21_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    (hpen : supportL2Penalty K C≤1/10) :
+    |horizontalMidpoint C-horizontalMidpoint K|<21 := by
+  let m:=horizontalMidpoint C-horizontalMidpoint K
+  have hint:=center_shift_energy_control hK hC hKpos hCpos
   have hpi : 3<π := pi_gt_three
   by_contra hn
   have hm : 21≤|m| := le_of_not_gt hn
