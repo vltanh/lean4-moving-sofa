@@ -172,7 +172,47 @@ Take the supremum over *every* convex \(K\) and both terminal angles. This prove
 
 **Nothing has been proved about the numerical value of the right-hand supremum.** The equivalence is exact, not a hidden assertion that all partial motions can be completed to \(90^\circ\).
 
-## 4. Why this genuinely changes the research program
+## 4. A monotone repair to genuinely admissible hulls, **at fixed terminal angles**
+
+OS1 can be strengthened from an equality of suprema to a **pointwise nonlinear hull repair**. This directly resolves a potential concern about using an enlarged convex interpolation domain even when the supporting hull is not itself feasible.
+
+**Proposition OS2 (signed-admission repair).** Fix \((\alpha,\gamma)\in[\pi/4,\pi/2]^2\) and any \(K\in\mathcal K_B\). There exists \(K^\sharp\in\mathcal K_B\), possibly of smaller horizontal width and vertical span, such that:
+
+1. \(K^\sharp\) is the **actual hull** of a compact connected sofa following the same prescribed *partial* turning intervals **and both outgoing terminal strips**;
+2. Its signed joint objective **does not decrease**:
+   \[
+   \boxed{\mathscr V(K^\sharp,\alpha,\gamma)\ge
+   \mathscr V(K,\alpha,\gamma).}\tag{OS.10}
+   \]
+3. Every signed vertical fiber for \(K^\sharp\) is nonnegative, so
+   \[
+   \mathscr V(K^\sharp,\alpha,\gamma)=
+   |E_{\alpha,\gamma}(K^\sharp)|.
+   \tag{OS.11}
+   \]
+
+**Proof.** First suppose \(T=E_{\alpha,\gamma}(K)\) is nonempty. Every vertical section of \(T\) is interval or empty. It is a subset of the unit incoming strip and of the two prescribed continuous canonical hallway families and the two **whole-body** terminal strips. As in the proof of OS1, apply GC4 to obtain a compact connected body \(S^\sharp\) with **the same ordinary area as \(T\)**, satisfying the same angular intervals and terminal outgoing strips.
+
+Let \(K^\sharp=\operatorname{conv}S^\sharp\). The horizontal gap compression can only decrease the horizontal projection length, so \(K^\sharp\) has width at most that of \(K\), which is at most five. Translate it horizontally to center its projection on zero; then \(K^\sharp\in\mathcal K_B\). The translation does not change feasibility or \(\mathscr V\). Its outgoing widths are at most one in both terminal normals because \(S^\sharp\) fits both outgoing strips.
+
+Canonical support tightening gives \(S^\sharp\subseteq E_{\alpha,\gamma}(K^\sharp)\). Since \(S^\sharp\) is connected and has the same x-projection as its hull, **every** fiber of \(E_{\alpha,\gamma}(K^\sharp)\) is nonempty. The envelope is itself compact and connected by the interval-fiber argument, has actual hull \(K^\sharp\), and inherits the same two continuous motions and terminal strips. Consequently
+\[
+\begin{aligned}
+\mathscr V(K^\sharp,\alpha,\gamma)
+&=|E_{\alpha,\gamma}(K^\sharp)|\\
+&\ge|S^\sharp|=|E_{\alpha,\gamma}(K)|\\
+&\ge\mathscr V(K,\alpha,\gamma),
+\end{aligned}
+\]
+where the last inequality is exactly the *positive-part identity* OS.5, not an unproved signed-roof bound.
+
+If \(E_{\alpha,\gamma}(K)\) is empty, then \(\ell_{K;\alpha,\gamma}(x)<0\) at every x, so \(\mathscr V(K,\alpha,\gamma)\le0\). Take \(K^\sharp=\{(0,1/2)\}\), which is a compact connected zero-area body and fits both full turns and outgoing strips for *every* \(\alpha,\gamma\). Its projection has measure zero and \(\mathscr V(K^\sharp,\alpha,\gamma)=0\). This covers the degenerate case and proves all claims. \(\square\)
+
+**Consequence:** For *every fixed* pair \((\alpha,\gamma)\), the supremum of the signed functional over **all** compact convex \(K\subseteq B\) equals its supremum over **actual compatible connected sofa hulls** (the latter domain is not Minkowski-convex by FH1). The price of restoring admission is a potentially nonlinear change of width, span, and four axis supports. OS2 therefore does *not* permit concavity or fixed-axis Euler equations to be transferred from one domain to the other without paying those changes.
+
+In particular this is **not** the false claim that a Minkowski average of two feasible sofas remains feasible. The average may fail extreme-point retention or lose its full unit span, as FH1 demonstrates. OS2 replaces the averaged hull by a *different* actual hull, proves a signed-area comparison, and preserves the terminal angles of the prescribed partial motions.
+
+## 5. Why this genuinely changes the research program
 
 The previous full-turn signed reduction [SJ1](signed-joint-convex-domain-global-value.md) eliminated the positive-part penalty **at the level of suprema**, but explicitly left the original partial-turn problem separate. OS1 now handles **the full original motion class** by making the independent outgoing angles part of the variational domain. It does not invoke the missing two-cap interaction inequality \(G\le\Delta_U+\Delta_V\) anywhere.
 
