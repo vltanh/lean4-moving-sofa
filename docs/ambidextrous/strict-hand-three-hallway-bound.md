@@ -221,7 +221,7 @@ But **any** placement of an \(L\)-hallway with those frame normals that contains
 \[
 |S|>2\sqrt2-1-10^{-9}.
 \]
-Every part of this proof is a finite hand inequality. Connectivity is used only to rule out the completely separated two-square case \(P,Q\ge2\) away from \(P=Q=2\).
+Every part of this proof is a finite hand inequality. Connectivity is used only to rule out the completely separated two-square case **\(P>2\) and \(Q>2\)**. When either width is exactly two, zero-area connector lines are retained and controlled through area estimates rather than discarded.
 
 ## 4. From the three hallways to arbitrary ambidextrous motions
 
