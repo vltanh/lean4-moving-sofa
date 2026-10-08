@@ -9,6 +9,20 @@ Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
 
+## New exact local theorem for the still-missing full-turn 1.65 premise (NL1)
+
+Read [full statement, hand reduction and directed-integer certificate](one-sixth-fullturn-near-reference-certificate.md), [source](computer-assisted/certified_near_reference_165.py), and [record](computer-assisted/near-reference-165-checks.json).
+
+Let \(A_F\) be the complete-two-quarter-turn supremum. **The global premise \(A_F\le33/20=1.65\) is still UNPROVED.** However we now exclude **every** full-turn sofa with actual hull within Hausdorff distance \(7/10000\) of Romik's normalized centered hull \(K_*\), measured in one common incoming unit-strip frame, with no competitor symmetry/smoothness/curvature or aligned-face hypotheses:
+\[
+\boxed{|S|\le
+\frac{412456005949545207}{250000000000000000}
+=1.649824023798180828\ldots<1.65.}
+\]
+The argument samples **511 rational angles per complete turn** \((\cos t,\sin t)=((512^2-j^2)/(512^2+j^2),2\cdot512j/(512^2+j^2))\), uses exact interval radicals to enclose the reference supports from the cubic root, and then bounds **all real x**, not just sampled abscissas, with 100,000 cells of exact directed integer wall heights. The proof derives actual lower and upper full-turn support-depth constraints and their robust reflected counterparts even for asymmetric bodies. The resulting *integer* slice-length sum is **70,505,300,162,315,420**, with exact cell width \(23,400,000/10^{12}\). The final fraction is an *upper* Riemann sum and proves the local theorem. Independent fine-grid and original reference-support diagnostics are sanity checks only. The checker ran in about 0.57 seconds under a five-second cap; its exact executed SHA-256 is \`1133b23716ed9579107b53c4923b7bb3461ea83f7e8a8cebc8db9721371e24f3\`, Git blob \`aadd12d6d0bfa59187e869325cf0c42d2bf3ad7c\`, matching the committed source. No Lean build/CI/optimizer or long certificate was run. Finite proof arithmetic remains self-reviewed, not independently kernel verified.
+
+**Consequence for the global premise:** The separate analytic AW result already excludes incoming horizontal width \(\le2\) by \(41/25=1.64\). NL1 also excludes the **whole 0.0007 reference-hull neighborhood**. An area-\(>1.65\) full-turn counterexample must have width \(>2\), a nonreference support distance \(>7/10000\), and is not in the already solved aligned-positive-face class FAS. That remaining compact, nonaligned/point-face outer domain must still receive a **complete global proof**, e.g. certified finite-angle upper boxes with CP support pruning and V virtual hallway constraints. A finite or local optimizer alone is not a proof. Once the missing \(A_F\le1.65\) is genuinely established, the existing JT comparison yields \(\mu_A\le1.66172<2\sqrt2-7/6\). None of these local statements makes that conditional conclusion unconditional.
+
 ## Stronger coupled hand bound JD1: the complete \(1/51\) deficit, with both clipping cases
 
 **Read [the full hand argument](two-sided-clipping-dual-hand-bound.md).** Every compact connected common-starting-position ambidextrous sofa admits the computer-free bound
