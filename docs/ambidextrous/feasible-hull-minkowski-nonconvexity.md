@@ -91,6 +91,58 @@ If a compact sofa \(S\) had \(\operatorname{conv}S=K\), then \(O\) would necessa
 
 The assertion is stronger than the elementary fact that the convex midpoint **body itself** fails feasibility. Here the midpoint **cannot be the hull of any feasible nonconvex body either**. Saturating it by deleting its forbidden points may produce a connected two-turn body with a larger area, but its *actual hull* must differ from \(K\) because the unique lowest point is lost. No ordinary-area monotonicity, or failure thereof, is claimed.
 
+### Quantitative loss of vertical span after mandatory saturation
+
+The obstruction is not confined to the single point \(O\). Every vertex \(p=(x,y)\) of the input \(P\) obeys the exact wedge inequality
+\[
+\bigl|x+1493/10000\bigr|\le\frac65\,y.
+\tag{FH.11}
+\]
+(The largest nontrivial ratio is \((3/4+1493/10000)/(409/500)=8993/8180<6/5\).)
+By convexity, FH.11 holds throughout \(P\). Any midpoint of \(p\in P\) and \(Jq\in JP\) therefore satisfies
+\[
+|x_{\mathrm{mid}}|
+=\frac12|p_x-q_x|
+\le\frac35(p_y+q_y)
+=\frac65y_{\mathrm{mid}}.
+\]
+Hence the entire averaged convex hull \(K\) lies in the **double cone** \(|x|\le6y/5\).
+
+Consider any \(p=(x,y)\in K\) with \(0\le y\le1/50\). At the same rational orthogonal frame \(u=(3/5,4/5)\), \(v=(-4/5,3/5)\), FH.11 gives
+\[
+p\cdot u\le\frac{38}{25}y\le\frac{38}{1250},
+\qquad
+p\cdot v\le\frac{39}{25}y\le\frac{39}{1250}.
+\]
+Using the already established support witnesses in FH.9,
+\[
+\begin{aligned}
+h_K(u)-p\cdot u&\ge
+2581/2500-38/1250=\boxed{501/500>1},\\
+h_K(v)-p\cdot v&\ge
+648/625-39/1250=\boxed{1257/1250>1}.
+\end{aligned}\tag{FH.12}
+\]
+Thus **every point in the entire bottom strip** \(K\cap\{y\le1/50\}\) is forbidden by one and the same full-turn frame, with uniform rational margins.
+
+Meanwhile \(K\) contains the full vertical segment \(\{0\}\times[0,1]\), because the exposed bottom and top Minkowski faces contain respectively \((0,0)\) and \((0,1)\). At \(p=(0,1/2)\) its support depth in *any* unit normal is at most
+\[
+\frac34|n_x|+\frac12|n_y|\le\frac{\sqrt{13}}4<1
+\]
+using only \(K\subset[-3/4,3/4]\times[0,1]\). Consequently \(p\) survives **both entire turns**, so the saturated full-turn envelope \(E(K)\) is nonempty.
+
+We have proved the **quantitative** claim
+\[
+\boxed{
+\varnothing\ne E(K)\subset K\cap\{y>1/50\},
+\qquad
+\operatorname{span}_y E(K)<49/50.
+}\tag{FH.13}
+\]
+The strict final inequality follows from compactness of \(E(K)\) and its exclusion of the closed band \(y\le1/50\), while its top never exceeds one. Thus even mandatory canonical saturation after averaging cannot preserve incoming **unit span** here. No assertion is made that \(E(K)\) itself remains connected; any connectedification from GC preserves the smaller span.
+
+This gives a second explicit, fully rational check on the vertical-span caveat in the [HS/SEC hull-reflection program](hull-reflection-symmetrization-budget.md), now starting from an **already convex and fully feasible** source body. It is still far below competitive area and does not disprove area monotonicity of the saturated envelope.
+
 ## 3. Implication for the new signed-area strategy
 
 A proposed Jensen proof cannot assert that Minkowski interpolation between *actual feasible hull support functions* stays in that same class, then use area optimality or Euler equations at every interpolant. FH1 supplies an exact counterexample to this indispensable convex-domain premise. One can still consider **all** normalized convex hulls and their canonical envelopes as a larger interpolation domain, or use the [raw offset variation](full-turn-unconstrained-envelope-variation.md), whose comparison is valid despite hull loss. But then the pinching and clipping terms must remain in the objective, and a sharp area theorem on that larger domain is entirely unproved.
