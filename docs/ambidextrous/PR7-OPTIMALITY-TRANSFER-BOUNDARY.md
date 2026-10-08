@@ -70,6 +70,61 @@ Consequently merely solving the *same*
 second-order interior ODE does **not**
 prove the two-handed optimum.
 
+### The PR #7 "reverse" class at 90 degrees is actually a low-area wrong-way class
+
+This is a second, independent exact obstruction
+to interpreting **both ambidextrous handed turns**
+as PR #7's forward and reverse classes of
+one right-angle hallway.
+
+At the physical right-angle bend \(\beta=\pi/2\),
+PR #7's *reverse* orientation interval
+has signed rotation \(\beta-\pi=-\pi/2\).
+It therefore necessarily visits the
+**wrong-way** frame \(t=-\pi/4\)
+in the incoming-strip coordinates.
+For that frame the two wall normals have
+the **same positive horizontal component**
+\[
+u_{-\pi/4}=(1,-1)/\sqrt2,\qquad
+v_{-\pi/4}=(1,1)/\sqrt2.
+\]
+
+The elementary wrong-way midpoint lemma
+[GH Section 2](midpoint-bound-general-motions.md)
+shows that the hallway's intersection
+with an incoming strip of height H≤1
+has horizontal section width at most \(\sqrt2\),
+at *every* height. Fubini therefore gives
+\[
+\boxed{
+|S|\le\sqrt2\,H\le\sqrt2<M
+}
+\tag{PTB.W}
+\]
+for any sofa that follows the PR #7
+reverse 90-degree orientation interval.
+
+Hence **no competitive ambidextrous
+sofa** can use this reverse class as
+one of its handed turns. A left-handed
+*proper forward turn in a mirrored
+right-angle hallway* is **not**
+the PR #7 reverse class in the
+unmirrored physical hallway.
+This explains the sign confusion behind
+the suggestion that going backward
+through one elbow automatically supplies
+the other handed turning constraint.
+
+The **methods** developed for PR #7's
+reverse class (canonical supports,
+area/curve integration and stability)
+are still candidates for transfer,
+but not its literal reverse class,
+optimizer or global value at a
+different physical bend angle.
+
 ## 2. The central PR #7 *area majorant* does not transfer as written
 
 PR #7's successful reverse-bend upper
