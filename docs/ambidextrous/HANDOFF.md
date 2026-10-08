@@ -1,6 +1,6 @@
 # Ambidextrous sofa research — current handoff
 
-**The sharp value M is not proved for general full-turn or partial-turn bodies.** The new three-hallway hand argument improves the earlier computer-free global upper bound strictly to \(2\sqrt2-1-10^{-9}\). The stronger external computer-certified \(353/200=1.765\) remains available, and neither is the sharp Romik value. The supporting finite-to-continuum and box-area results remain separate.
+**The sharp value M is not proved for general full-turn or partial-turn bodies.** The new **coupled three-hallway** hand theorem JH1 now gives the substantive global computer-free bound \(2\sqrt2-1-1/90\), superseding the tiny \(10^{-9}\) and intermediate \(1/175\) improvements. The stronger external computer-certified \(353/200=1.765\) remains available; neither is the sharp Romik value. The finite-to-continuum and box-area results remain separate.
 
 Repository: `vltanh/lean4-moving-sofa`.
 Branch: `research/ambidextrous-pen-and-paper`.
@@ -8,6 +8,35 @@ Draft PR: #3; base `main`.
 Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
+
+## Latest substantial hand improvement — an explicit \(1/90\) three-hallway deficit
+
+Read the complete new [JH1 paper proof](coupled-three-hallway-hand-bound.md). **The hand-proved global ambidextrous upper bound has improved to**
+\[
+\boxed{\mu_{\rm ambi}\le 2\sqrt2-1-\frac1{90}<1.817317}
+\]
+for **all common-starting-position ambidextrous sofas**, including arbitrary continuous partial or nonmonotone turns, as well as for the full-turn subclass. The proof is **without computer assistance**: two \(45^\circ\) hallways and one earlier \(36.87^\circ\) lower hallway; no numerical optimizer, finite-angle certificate, assumed curvature, cap regularity or reference-proximity input. It improves the original tiny TH \(10^{-9}\) gain by over **eleven million times**, and supersedes both TH and the intermediate independent QT \(1/175\) result.
+
+**Exact structure.** If a sofa's area lies within \(\epsilon=1/90\) of the two-midpoint maximum \(B=2\sqrt2-1\), the \(45^\circ\) geometry forces an exact quadratic area-loss identity
+\[
+B-|F|=\frac{(P-2)^2+(Q-2)^2}{2}
+ +2\left(c-\frac{P+Q}{2}\right)^2.
+\]
+A *careful* preliminary estimate establishes its domain, including when one width equals 2 and a zero-area connector links the two lobes. The true sofa must leave two tip triangles, of areas \(s_A^2/14,s_D^2/14\), unfilled. Actual retained support points determine \(s_A,s_D\) and force a central forbidden third-hallway wedge of area \(N^2/700\), less at most an **explicit** under-band clipping term \((\Delta_+)^2/16\). The exact algebraic relation
+\[
+C=N+x-7y+7s_A+s_D,\quad C=62-40\sqrt2
+\]
+and weighted Cauchy--Schwarz give the deficit
+\[
+B-|S|\ge\frac{C^2}{1500}-\frac{(\Delta_+)^2}{16}
+>
+\frac{39667}{3528000}>\frac1{90},
+\]
+a contradiction. The rational comparison margin is \(467/3528000\). In the near-maximal region, \(\Delta_+<11/30\). The earlier error of omitting necessary connectedness at a zero-area join is **not repeated**: the disconnected shortcut is used only if both outer rectangle dimensions strictly exceed two.
+
+**Validation:** [rational checker](computer-assisted/check_coupled_three_hallway.py) and [run record](computer-assisted/coupled-three-hallway-checks.json) report **21 exact rational inequalities and 27 independent polynomial identity instances**, 48 successful checks, in about **0.0008 seconds** under a five-second cap. Executed source Git blob is \`5043e06dbeda5e73e766bf313e47286a3bd5c0a7\`, SHA-256 \`a2b1ff44b79a3c12b079826c0a96d8001515698d61739dfa427b060713062973\`, matching the committed source. The earlier exact local stability identity was independently tested on **76** finite polygon configurations. None of these finite checks replaces the continuum hand proof or an independent referee.
+
+**Critical limitation:** This remains numerically weaker than Devin O'Keefe's external computer-certified \(\mu_{\rm ambi}\le353/200=1.765\), and **does not prove** Romik's sharp \(M\approx1.6449552184\), nor uniqueness. It *does* show a materially stronger hand-proof mechanism: pay the actual missing material in **all three** geometric regions jointly, instead of charging the same entire area-loss allowance to each isolated witness. No CI, Lean/Lake compilation, installation, manuscript build or long search was performed. PR #3 remains open and draft.
 
 ## New general computer-free bound: three hallways eliminate the 45° equality shape
 
