@@ -2,6 +2,25 @@
 
 **The exact optimum M is not proved for full or partial turns.** The latest hand proofs give a global bound 2 sqrt(2)-1 for both motion classes, a height-sensitive version, and a compact finite-offset reduction with certified angular approximation. They do not identify the limit of the finite problems as M. Read [HANDOFF.md](HANDOFF.md) before continuing.
 
+## Concrete improvement to external computer-assisted method: canonical-support pruning
+
+[CP1](canonical-support-certificate-pruning.md) is a **lossless global search-domain reduction** for the same eight-offset four-angle connected-component relaxation used in O'Keefe's certified \(353/200\) bound. For any connected component of a finite hallway intersection, first translate its attained left/bottom extrema to zero and **tighten every hallway outer wall to the actual support of that component**. The old inner disjunction remains satisfied, so every original connected competitor has a canonical counterpart of no smaller area. The reduction needs no extra sofa curvature or full-turn assumption. It changes the *search representation*, not the mathematical value being optimized.
+
+In the original 3–4–5 hallway coordinate order, a support-tight competitor's offsets must lie in the rational root intervals
+\[
+[-1,18/5],[-1,-1/5],[-1,14/5],[-1,-2/5],
+[-2/5,18/5],[-1,-1/5],[-1/5,14/5],[-1,-2/5].
+\]
+The product volume fraction relative to the source's original root is exactly
+\[
+\boxed{10925/118013952\approx9.25738\cdot10^{-5}.}
+\]
+Further linear **joint support-subadditivity** inequalities among all eight angles yield cheap branch rejections. A bounded exact regression gives **405** potentially compatible boxes out of **65,536** boxes at a uniform four-piece-per-coordinate subdivision; this is necessary-condition pruning, not an area certification of those 405 boxes. [Checker](computer-assisted/check_canonical_offset_pruning.py); [exact run record](computer-assisted/canonical-offset-pruning-checks.json) (executed Git blob \`9fd13ef92be9bf9201b761aa27721c4edd56e471\`, about 0.0125 seconds, no CI/Lean or large certificate).
+
+**Practical checker architecture:** (1) prove CP1 as a reduction from arbitrary *connected components* to support-tight placements; (2) search the small canonical rectangle, rejecting rationally impossible support cells before polygon clipping; (3) on remaining cells, reuse exact **whole-box hallway unions**, valid rational polygon-area bounds, and degenerate-aware component checks as in the external checker; (4) for partial turns at target area below \(5/3\), keep the **motion-angle reach case** explicit. A useful conditional strengthening uses incoming height \(H\) and outgoing span \(q\): proper \(53.13^\circ\) reach follows if \(|S|>\max(\sqrt2 H,5Hq/3)\), so a hypothetical \(|S|>M\) reaches it whenever \(Hq\le49/50\).
+
+**Important limits:** root-box *volume* is not elapsed time; we have not rerun the external 436-million-leaf proof, produced a new \(<1.765\) upper certificate, or proved sharp \(M\). The same four-angle relaxation contains a connected rational configuration with area \(\approx1.73172>M\). No amount of support pruning removes **that genuine finite configuration** from the global maximum. A sharp theorem still needs more angles and/or a continuum residual comparison.
+
 ## Externally certified global bound: O'Keefe's 3–4–5 four-hallway certificate
 
 [Full methodological/provenance review](external-four-hallway-certified-bound-review.md). Devin O'Keefe's [ambidextrous-sofa-bounds](https://github.com/devinokeefe/ambidextrous-sofa-bounds) accompanies a September 2026 paper reporting a complete, computer-assisted global theorem
