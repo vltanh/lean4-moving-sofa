@@ -140,7 +140,7 @@ theorem center_shift_le_of_penalty {K C : Set Point}
     have h := sq_nonneg (|m|-(21+2*sqrt R))
     nlinarith [sq_abs m,hrroot]
   have hprod:=mul_pos (sub_pos.mpr hsq) (half_pos pi_pos)
-  have hnonneg:=mul_nonneg hR (le_of_lt hpi)
+  have hnonneg : 0≤R*(π-1) := mul_nonneg hR (by linarith [hpi])
   dsimp [m] at hint hm hsq
   nlinarith [hpen,hprod,hnonneg]
 
