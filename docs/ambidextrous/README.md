@@ -1,6 +1,8 @@
 # Ambidextrous sofa research
 
-**Start with [HANDOFF.md](HANDOFF.md), then [ROADMAP.md](ROADMAP.md). Unrestricted optimality is not proved.** The written chain now covers the weighted one-turn value, all full-turn aligned positive faces, and the left-right reflection-symmetric common incoming unit-span class. The remaining asymmetric end-face and partial-turn cases are open. Unrestricted uniqueness is deferred.
+**START HERE: [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md)** for the authoritative status, theorem dependency boundaries, retained negative controls, and exact remaining global obstacle. For the next independent session, use **[FRESH-SESSION-PROMPT.md](FRESH-SESSION-PROMPT.md)**. **Unrestricted Romik optimality, uniqueness, and a counterexample are all unproved.**
+
+The older [HANDOFF.md](HANDOFF.md), [ROADMAP.md](ROADMAP.md) and topical handoffs are **chronological archives**. They remain available for mathematical provenance, but their dated “latest” sections should not be mistaken for current research priorities. The condensed handoff supersedes their project management, not their proofs or counterexamples. The written chain now covers the weighted one-turn value, all full-turn aligned positive faces, and the left-right reflection-symmetric common incoming unit-span class. The remaining asymmetric end-face and partial-turn cases are open. Unrestricted uniqueness is deferred.
 
 Branch: `research/ambidextrous-pen-and-paper`; draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3), base `main`. All research changes remain under this directory. The mathematical chain is self-reviewed, not independently refereed or kernel-verified.
 
