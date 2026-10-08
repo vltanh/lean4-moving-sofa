@@ -9,6 +9,16 @@ Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
 
+## Latest bounded runtime benchmark of CP search-space trimming
+
+[Measured A/B benchmark](canonical-pruning-bounded-benchmark.md): the same independently implemented floating-point four-hallway polygon/component evaluator, original vs CP1 canonical root vs CP1 root plus CP9--CP11 support pruning. **Both searches complete at loose thresholds:**
+- at T=2.6, original 15,905 nodes/2.3103s vs trimmed 255/0.04635s, **approximately 50x search-loop speedup**;
+- at T=2.5, original 21,009 nodes/3.1417s vs trimmed 407/0.07471s, **approximately 42x**.
+- Full Python process wall time at T=2.6 (including Shapely import) is **2.98s original versus 0.72s trimmed**, only about **4.1x**; separate import startup dominates tiny trimmed workloads.
+- **At T=1.765 no variant completed under the 2.4-second cap**. The released 436-million-leaf proof was not rerun. Neither 42x nor 50x is a benchmark at that difficult threshold.
+
+The independent evaluator was checked against O'Keefe's rational connected four-hallway witness: area \(29\,092\,957\,301/16\,800\,000\,000\) reproduced to floating roundoff, seven nonempty pieces. An initial affine-coefficient bug was caught by this test and fixed **before** recorded benchmark timings. The delivered \`canonical_pruning_benchmark.zip\` provides the corrected reproducible script, output record, README and SHA-256 hashes. **No leaf was exact-certified**, so the completed trees are discovery results, not mathematical improvements to the global 1.765 bound. The CP1 hand theorem justifies normalization, but a future certificate checker must explicitly verify that reduction and all exact box leaves.
+
 ## Latest verified mathematical improvement: canonical-support certificate pruning
 
 [CP1 and the exact pruning test](canonical-support-certificate-pruning.md) give an **exhaustive but far smaller** search region for the global eight-offset four-angle finite relaxation of O'Keefe, *without* assuming full turns, cap regularity or reference proximity. Normalize each connected component of a placed-hallway intersection so its left and bottom extrema are at zero, with \(W\le5\) and height \(H\le1\), then reset every hallway's two offsets to **its actual component support minus one**. The component remains in all four newly tightened hallways, so the maximum possible connected-component area is unchanged. These new canonical offsets obey eight explicit rational ranges whose 8D product volume is **exactly \(10925/118013952\approx0.00925738\%\)** of the original free-offset root box. Convex-support subadditivity, opposite-normal widths and reflection-paired support inequalities give further rational box rejection.
