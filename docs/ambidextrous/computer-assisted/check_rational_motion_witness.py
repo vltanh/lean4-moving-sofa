@@ -200,6 +200,35 @@ def certify_ambidextrous(cells, motions, margin, max_boxes=50000,
     return True, area, boxes
 
 
+
+def romik_rational_upper(j):
+    """Provable rational upper bound decreasing to Romik's candidate area.
+
+    Bisect 4Y^3+3Y-1=0 on [0,1/3], then use an even-index
+    upper truncation of the alternating atan series at the upper endpoint.
+    """
+    assert isinstance(j, int) and j >= 0
+    low, high = Q(0), Q(1,3)
+    for _ in range(max(16,4*j)):
+        mid = (low+high)/2
+        if 4*mid**3 + 3*mid - 1 > 0:
+            high = mid
+        else:
+            low = mid
+    value = 1+4*high**2
+    for k in range(2*j+1):
+        value += (-1)**k * high**(2*k+1)/Q(2*k+1)
+    return value
+
+
+def certify_strict_counterexample(cells, motions, margin, j=16,
+                                  max_boxes=50000, max_depth=72):
+    """True proves both complete paths and rational area > a rigorous M upper."""
+    certified, area, boxes = certify_ambidextrous(
+        cells, motions, margin, max_boxes, max_depth)
+    return certified and area > romik_rational_upper(j), area, boxes
+
+
 def self_test():
     h = Q(1,10)
     cells = [(-h,h,-h,h)]
@@ -213,6 +242,8 @@ def self_test():
     }
     passed, area, boxes = certify_ambidextrous(cells, motions, Q(1,4))
     assert passed and area == Q(1,25)
+    assert Q(8,5)<romik_rational_upper(8)<Q(329,200)
+    assert not certify_strict_counterexample(cells, motions, Q(1,4), j=8)[0]
     print("PASS: two continuous rational motions with common start")
     print("area =", area, "; certified rational boxes =", boxes)
     # A larger square would collide with the outer wall halfway through
