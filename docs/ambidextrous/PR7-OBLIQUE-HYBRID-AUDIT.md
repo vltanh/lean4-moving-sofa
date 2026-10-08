@@ -189,6 +189,47 @@ boundary grafting, and intersection with
 other one-turn surviving sets remain
 **outside** its scope.
 
+### A more general similarity exclusion principle
+
+The diameter proof actually gives a useful statement
+independent of the PR #7 formulas:
+
+**Lemma OB2.** Let A be any compact planar set of
+ordinary area \(a>0\) lying in some straight strip
+of width at most one. If any Euclidean similarity
+image \(B=\lambda R A+t\) is a *connected*
+ambidextrous sofa with arbitrary full/partial
+continuous turning motions through both right-angle
+bends, then
+
+\[
+\boxed{|B|\le\max\{\sqrt2,\;9/a\}.}
+\tag{OB.5}
+\]
+
+Indeed, if its area does not exceed
+\(\sqrt2 H\), with H≤1 its actual
+incoming vertical span, the first term
+applies. Otherwise PTW1 gives diameter(B)≤3.
+The original A has diameter at least
+its strip-longitudinal projection width,
+which by Fubini is ≥a.
+Thus \(\lambda\le3/a\), and
+\(|B|=\lambda^2 a\le9/a\).
+This proof allows **every rotation** of A.
+
+In particular a unit-strip shape with
+area \(a>9/M\) can never be turned into
+a Romik counterexample by a similarity:
+both bounds in OB.5 are then **strictly
+below M**. The explicit reverse-turn
+shapes of PR #7 satisfy \(a>191/32>9/M\)
+in the stated range, which recovers OB1.
+This is a general geometric obstruction
+to using very elongated, high-area
+single-bend sofas as direct two-handed
+quarter-turn competitors.
+
 ## 3. Reverse PR #7 curved bodies compressed horizontally and retested
 
 To test a non-similarity construction, sample
