@@ -96,6 +96,21 @@ def main():
     d1,d2=hu-dot(z,u),hv-dot(z,v)
     assert (hu,hv)==(F(148,113),F(0))
     assert d1==d2==F(27084,27007)>1
+    # Horizontal Steiner rearrangement of P, in CCW order:
+    hpoly=((-F(45,226),F(0)),(F(45,226),F(0)),
+           (F(90,113),F(90,113)),(F(0),F(100,113)),
+           (-F(90,113),F(90,113)))
+    def polygon_area(vs):
+        return abs(sum(dot((a[0],a[1]),(b[1],-b[0]))
+                       for a,b in zip(vs,vs[1:]+vs[:1])))/2
+    assert polygon_area(P)==polygon_area(hpoly)==F(11025,12769)
+    # The horizontal rearrangement also contains the spike tip (0,1).
+    hs=hpoly+((F(0),F(1)),)
+    for n in ((F(1),F(1)),(-F(1),F(1))):
+        raw_support=max(dot(z,n) for z in hs)
+        assert raw_support==F(180,113)
+        assert raw_support**2>2  # h(unit n) = raw_support/sqrt(2) > 1
+    print('horizontal_Steiner_midturn_depth_squared=',F(180,113)**2/2)
     print('diameter_squared=',diameter_sq)
     print('centered_forbidden_depth=',d1,'excess=',d1-1)
     print('PASS: exact full-turn certificate and centered failure')
