@@ -1,6 +1,6 @@
 # Ambidextrous sofa research — current handoff
 
-**The sharp value M is not proved for general full-turn or partial-turn bodies.** The new **coupled three-hallway** hand theorem JH1 now gives the substantive global computer-free bound \(2\sqrt2-1-1/90\), superseding the tiny \(10^{-9}\) and intermediate \(1/175\) improvements. The stronger external computer-certified \(353/200=1.765\) remains available; neither is the sharp Romik value. The finite-to-continuum and box-area results remain separate.
+**The sharp value M is not proved for general full-turn or partial-turn bodies.** The new coupled support-clipping hand bound is \(2\sqrt2-1-1/51\) for arbitrary continuous ambidextrous turns. This supersedes our intermediate \(1/90\), \(1/175\), and \(10^{-9}\) hand gaps but remains numerically weaker than O'Keefe's externally certified \(353/200=1.765\). Romik's sharp value remains open. The other finite-to-continuum and box-area results are independent.
 
 Repository: `vltanh/lean4-moving-sofa`.
 Branch: `research/ambidextrous-pen-and-paper`.
@@ -8,6 +8,40 @@ Draft PR: #3; base `main`.
 Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
+
+## Stronger coupled hand bound JD1: the complete \(1/51\) deficit, with both clipping cases
+
+**Read [the full hand argument](two-sided-clipping-dual-hand-bound.md).** Every compact connected common-starting-position ambidextrous sofa admits the computer-free bound
+\[
+\boxed{|S|\le2\sqrt2-1-\frac1{51}\approx1.8088192816.}
+\]
+This includes arbitrary continuous nonmonotone **partial turns** via the earlier proper-angle reach theorem, and the conventional complete-quarter subclass. It supersedes JH1's \(1/90\) and QT1's \(1/175\). It remains **weaker than the external certified 1.765 bound** and does not prove optimality of \(M=1.644955\ldots\).
+
+The key algebra is the exact near-equality geometry of the two opposing \(45^\circ\) hallways. For \(x=P-2,y=Q-2,h=c-2\), where \(P,Q\) are their enclosing rectangle widths and c the incoming diagonal-band center,
+\[
+B-|F|=\frac{x^2+y^2}{2}+2(h-(x+y)/2)^2,\quad B=2\sqrt2-1.
+\]
+JD rigorously derives the domain for this identity whenever \(|S|>B-1/51\), including zero-area connectors at exactly width two. The third proper lower hallway at \(\arcsin(3/5)\) forces disjoint missing tip areas \((s_A^2+s_D^2)/14\) plus a central forbidden wedge of full area \(N^2/700\). **Both** potential losses of wedge material outside the incoming band are retained: the lower-band correction \(\Delta_+^2/16\), and the above-\(y=1\) correction \(\Theta_+^2/14\).
+
+For \(C=62-40\sqrt2=N+x-7y+7s_A+s_D\), the combined positive quadratic is
+\[
+Q_0=N^2/700+(x^2+y^2)/2+(s_A^2+s_D^2)/14+2\omega^2,\quad
+\omega=h-(x+y)/2.
+\]
+Weighted orthogonal projection supplies the **identity**, not just an inequality,
+\[
+Q_0=C^2/1500+\|z-z_*\|^2_{\rm weighted}.
+\]
+The lower-band error is **automatically paid by this variance**: its affine functional's squared dual norm is \(31/2<16\), and its value at the quadratic minimizer is strictly negative. If the upper clipping \(\Theta_+\) is inactive, \(B-|S|\ge C^2/1500>(38/7)^2/1500>1/51\). If \(\Theta_+>0\), its minimizer value is \(<-29/20\), forcing extra variance at least \(841/45600\); combined with separate explicit bounds \(\Delta_+<2/5,\Theta_+<17/50\) yields
+\[
+B-|S|>\frac{1107821}{55860000}
+=\frac1{51}+\frac{212957}{949620000}.
+\]
+If the wedge's width \(N\le0\), the two actual tip-score losses alone already exceed the threshold. All cases contradict \(|S|>B-1/51\). No numerical optimization or computer premise enters.
+
+**Exact checks and trust boundary.** The [byte-matched checker](computer-assisted/check_two_sided_clipping_dual.py) and [run record](computer-assisted/two-sided-clipping-dual-checks.json) passed **33 rational comparisons and 96 polynomial-identity cases (129 total)** under a five-second cap, taking about **0.002475 seconds**. The executed SHA-256 is \`eb935ecb52f5808dff06e6fe83a7ae72312a9c1af10b76c8695d26cd2bf0aa49\`, Git blob \`1ae2a7cb3f01f5f13e0a2e184914504ba620344e\`, matching the committed source. The first checker draft incorrectly demanded *strict* inequality for two exact rational endpoint equalities; those were corrected before the passing run. These **finite tests do not verify the continuum hand proof**. No CI, Lean/Lake build, manuscript build, installs or long search was run.
+
+**Remaining mathematical frontier:** JD1 excludes a broader near-maximal three-hallway region than JH, but does not control the full continuously rotating envelope near Romik's candidate. The known connected finite four-hallway witness of area 1.73172...>M and the general partial-turn angle-reach limit remain. Do not present JD1 as optimality or as outperforming the externally certified 1.765.
 
 ## Latest substantial hand improvement — an explicit \(1/90\) three-hallway deficit
 
