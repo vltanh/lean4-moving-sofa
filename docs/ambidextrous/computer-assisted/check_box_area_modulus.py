@@ -122,7 +122,9 @@ def run():
     witness_enlarged,_=envelope_area(witness_box)
     hand_upper=witness_area+Q(168,5)*delta
     assert witness_area<=witness_enlarged<=hand_upper<Q(7,4)
-    checks+=3
+    assert witness_enlarged==Q(4159492073,2400000000)
+    assert witness_enlarged<Q(87,50)
+    checks+=5
     raw=Path(__file__).read_bytes()
     return dict(result='exact_rational_regression_passed',cases=32,checks=checks,
                 strict_enlargements=strict,largest_realized_penalty_fraction=float(largest_ratio),
