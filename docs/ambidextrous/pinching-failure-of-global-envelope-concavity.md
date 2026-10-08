@@ -236,6 +236,8 @@ for every sufficiently small positive \(\varepsilon\). Therefore
 
 Numerical integration of the explicit PM.7 formula and the corner pinch formula provides a consistency check: \(r_c\approx0.4878679656\), and already at \(\varepsilon=0.001\) the midpoint concavity defect is approximately \(-1.12\times10^{-5}\). These floating values are **not part of the proof**.
 
+**Reproducibility:** [The exact algebra audit](computer-assisted/check_pinching_exact_algebra.py) independently checks the critical radius, its simplified Q(√2) values, and all rational derivative margins used in PM.12. It requires only Python's standard library. The calculus and global niche-activity arguments above are the mathematical proof; the checker is not an all-angle area certificate.
+
 ## 6. Implication for a fresh sharp strategy
 
 A proof based on unconstrained stationarity [FV1] **cannot** add the assertion that its entire raw envelope objective is globally Minkowski-concave merely because the *signed* quarter functional is strictly concave. The smooth signed component \(Q\) is concave in this family; the physical ordinary-area **pinch correction \(P\)** changes the variational geometry.
