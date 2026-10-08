@@ -276,7 +276,77 @@ be substituted for DGL.9, because it optimizes
 a much larger set and omits both the reversibility
 constraint and the shared-width penalty.
 
-## 6. Research decision
+## 6. The **positive** connection: Romik's sharp one-turn cap has a literal rectangle summand
+
+The user's proposed “curved Gerver wings plus a filled center”
+is **not merely an analogy**. The repository's earlier
+[HF2 rectangular-core theorem](one-turn-half-width-top-face.md)
+proves the following for **every attained maximizer of the
+signed width-penalized one-turn cap objective**:
+
+\[
+\boxed{
+U=V+([0,T]\times[0,1/2]),\qquad
+T=W(U)/2>1,
+}
+\tag{DGL.10}
+\]
+
+where the convex core V has horizontal width T,
+vertical height 1/2 and a *point* top face.
+This includes the Romik reference cap, subject to
+the written HF and WV dependency chain.
+It is **not** claimed for every feasible cap or
+for the cap of an arbitrary ambidextrous maximizing sofa.
+
+Vertical Minkowski filling of the **convex cap** by one unit
+now has the exact algebraic expression
+
+\[
+\boxed{
+U+I_1=V+([0,T]\times[0,3/2]).
+}
+\tag{DGL.11}
+\]
+
+So a potentially meaningful width-two construction
+would search among **two distinct curved cores plus
+explicit rectangular summands**, with their different
+one-turn motions, and enforce an *actual-area* inequality
+on their surviving intersection.
+
+Two precautions are essential:
+
+* The convex cap U is not its one-turn sofa survivor
+  \(T_U=U\setminus N(U)\). In general
+  \((U\setminus N(U))+I_1\) is **not** the same as
+  \((U+I_1)\setminus N(U+I_1)\). Changing the corridor
+  width changes the forbidden niche; it cannot be
+  translated or scaled without proof.
+* In general
+  \[
+  (A\cap B)+R\subsetneq(A+R)\cap(B+R)
+  \]
+  for nontrivial rectangles R. An intersection of
+  independently rectangle-filled **convex caps**
+  can contain “ghost middle” material not belonging
+  to the filled intersection of the original survivors.
+  DGL.4 shows how exact erosion removes such material,
+  but **does not prove** the remaining eroded shape
+  is width-one feasible when A,B were only required
+  to be width-two feasible.
+
+The **true open geometric step** is to promote
+the rectangular-core structure from *one-turn
+weighted maximizers* to a **comparison or
+transformation for arbitrary competing two-turn
+sofas**, or directly bound the surplus intersection
+material for two independently chosen core-plus-rectangle
+caps. Without this step, calling the two width-two
+halves “Gerver” would silently replace an interacting
+two-turn optimization by two incompatible one-turn optima.
+
+## 7. Research decision
 
 **Promising:** formulate a sharp overlap/area bound on the
 reversibly extruded width-two class directly in the
