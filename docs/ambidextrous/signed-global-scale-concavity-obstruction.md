@@ -52,6 +52,36 @@ However, a proof reducing every actual or signed maximizing body to exactly unit
 
 Thus one cannot dismiss SCX1 by silently restricting SJ1/OS1 to height-one bodies. Such a restriction may be legitimate for **global area maximizers**, but would require a separate theorem.
 
+### A precise fixed-height theorem for the *outer convex area only*
+
+**Lemma SCX2 (fixed-height convex-hull area concavity).** Let \(K_0,K_1\) be any nonempty compact convex planar bodies of the same positive vertical span \(H\). Vertically translate them so their lower and upper extrema are both at \(0,H\). For \(K_t=(1-t)K_0+tK_1\),
+\[
+\boxed{|K_t|\ge(1-t)|K_0|+t|K_1|\qquad(0\le t\le1).}\tag{SCX.5}
+\]
+This statement is true even without equal horizontal projections.
+
+**Proof.** Let \(h_0,h_1\) be their support functions, \(v=h_1-h_0\). The planar support-area identity, valid for nonsmooth convex bodies by polygon approximation, is
+\[
+|K_t|=\frac12\int_0^{2\pi}(h_t^2-h_t'^2)\,d\theta,
+\quad h_t=h_0+t v.
+\]
+Thus
+\[
+\frac{d^2}{dt^2}|K_t|
+=\int_0^{2\pi}(v^2-v'^2)\,d\theta.
+\]
+The common vertical extrema imply
+\(v(\pi/2)=v(3\pi/2)=0\). Apply the sharp Dirichlet Poincaré inequality separately on the two semicircles of length \(\pi\):
+\[
+\int_{\pi/2}^{3\pi/2}v^2\le
+\int_{\pi/2}^{3\pi/2}v'^2,\qquad
+\int_{3\pi/2}^{5\pi/2}v^2\le
+\int_{3\pi/2}^{5\pi/2}v'^2.
+\]
+Their sum makes the second derivative nonpositive, proving SCX.5. Equality along a nontrivial Minkowski segment requires \(v\) to be a scalar multiple of \(\cos\theta\) on **each** semicircle (possibly with different multiples), so it includes changes by horizontal segments and horizontal translations. \(\square\)
+
+This is a classical support-function/Wirtinger consequence, **not** a moving-sofa theorem. It isolates the only problematic part of a fixed-height signed-area Jensen strategy: the **two effective turning-niche costs and outgoing-strip terms**. It does not bound them or prove the sharp value.
+
 For reference, the convex-hull area alone is concave along a Minkowski segment with a *fixed vertical span and fixed vertical extrema*: the planar support-area formula gives a second derivative \(\int(v^2-v'^2)\,d\theta\), where \(v=h_1-h_0\) vanishes at the two vertical normals. The Dirichlet Wirtinger inequality on the two semicircles (each of length \(\pi\)) gives \(\int v^2\le\int v'^2\). This **does not** prove that *signed surviving sofa area* is concave on that slice—the moving inner-wall sweeps must still be accounted for.
 
 **Research consequence.** A genuinely universal joint-area proof must find a sharp **nonconcave global calibration**, a separate rigorously admissible height normalization followed by a suitable fixed-height theorem, or another monotonicity/duality principle. Merely appealing to a “convex hull parameter domain,” to ordinary Brunn–Minkowski, or to the earlier signed support functional's concavity under stronger fixed traces does not establish SCX.4 with the opposite sign. The sharp Romik value and arbitrary partial-turn upper bound remain unproved.
