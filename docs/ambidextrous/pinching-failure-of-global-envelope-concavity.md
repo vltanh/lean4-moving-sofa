@@ -131,7 +131,7 @@ H(r)=a+(1-r)(1-\sqrt2)
 \]
 Define
 \[
-\boxed{r_c=\frac{17/10-\sqrt2}{2-\sqrt2}.}\tag{PM.10}
+\boxed{r_c=\frac{17/10-\sqrt2}{2-\sqrt2}=\frac7{10}-\frac{3\sqrt2}{20}.}\tag{PM.10}
 \]
 Rational square comparisons yield \(12/25<r_c<1/2\). By PM.9, \(H(r_c)=1/2\); for every \(r\ge r_c\), every niche point lies below \(1/2\), so
 \[
@@ -166,6 +166,48 @@ P(r_c-\varepsilon)
 \]
 
 This nonnegative correction is **order at least \(\varepsilon^{3/2}\)**, while the smooth signed-area second difference is only order \(\varepsilon^2\).
+
+### The exact leading pinching coefficient
+
+The lower bound PM.13 can be sharpened to an **exact asymptotic**, without invoking the signed-area formula or a numerical quadrature. Put \(u=t-L/2\). The corner functions PM.6 satisfy
+\[
+x_r(L/2+u)=-\beta_r u+O(u^3),\qquad
+y_r(L/2+u)=H(r)-\tfrac12\gamma_r u^2+O(u^4),
+\]
+uniformly for \(r\) near \(r_c\), where
+\[
+\beta_r=2a-\sqrt2(1-r)>0,\qquad
+\gamma_r=4a-\sqrt2(1-r)>0.
+\]
+Both expansions follow directly by expanding \(\sin2u\) and \(\cos u\); \(x\) is odd and \(y\) even in \(u\). At the critical radius, the constants simplify **exactly** to
+\[
+\boxed{\beta_c=\frac7{10},\qquad
+\gamma_c=\frac{17+3\sqrt2}{10}.}\tag{PM.15}
+\]
+Invert the strictly monotone corner-x map to obtain the active central roof
+\[
+n_r(x)=H(r)-\frac{\gamma_r}{2\beta_r^2}x^2+O(x^4)
+\]
+with remainders uniform for \(r\) near \(r_c\). The explicit global niche graph PM.7 shows that at \(r_c\), the unique point where \(n_{r_c}(x)=1/2\) is \(x=0\); on the remaining compact part of the top face the roof is strictly below \(1/2\). By continuity, the positive pinch support is therefore entirely within this central chart for sufficiently small \(\varepsilon>0\).
+
+For \(r=r_c-\varepsilon\), \(H(r)=1/2+\kappa\varepsilon\), \(\kappa=2-\sqrt2\). Substitute \(x=\sqrt{\varepsilon}\,\xi\) in the exact positive-part integral PM.4. The central Taylor expansion and dominated convergence give
+\[
+\begin{aligned}
+\lim_{\varepsilon\downarrow0}
+\frac{P(r_c-\varepsilon)}{\varepsilon^{3/2}}
+&=\int_{\mathbb R}
+\left(2\kappa-\frac{\gamma_c}{\beta_c^2}\xi^2\right)_+\,d\xi\\
+&=\boxed{
+\frac83\sqrt2\,\frac{\beta_c}{\sqrt{\gamma_c}}\,
+(2-\sqrt2)^{3/2}
+}>0.
+\end{aligned}\tag{PM.16}
+\]
+The integral is elementary: integrate the parabola over
+\(|\xi|\le\beta_c\sqrt{2\kappa/\gamma_c}\).
+The coefficient is approximately \(0.8120569493\), but its exact algebraic form is the theorem. The limiting statement strengthens PM.13 and confirms that **pinching dominates the smooth Jensen deficit** by one half power of \(\varepsilon\).
+
+
 
 ## 5. Exact failure of ordinary-envelope concavity
 
