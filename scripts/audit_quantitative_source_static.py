@@ -12,6 +12,7 @@ Run from any directory:
 from __future__ import annotations
 
 import argparse
+import ast
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -303,6 +304,37 @@ def strip_lean_comments(source: str) -> str:
     return "".join(out)
 
 
+def duplicate_gate_keys(source: str) -> list[str]:
+    """Detect duplicate dict-literal keys before Python overwrites them.
+
+    The regularization L2/anchor guards and the integral-selector guard once
+    appeared under the same PROOF_REVIEW_GATES file key; the second silently
+    replaced the first. Checking the source AST prevents that regression.
+    """
+    tree = ast.parse(source)
+    for node in tree.body:
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        if isinstance(node, ast.Assign):
+            targets = node.targets
+        else:
+            targets = [node.target]
+        if not any(isinstance(t, ast.Name) and t.id == "PROOF_REVIEW_GATES"
+                   for t in targets):
+            continue
+        if not isinstance(node.value, ast.Dict):
+            continue
+        seen: set[str] = set()
+        repeated: list[str] = []
+        for key in node.value.keys:
+            if isinstance(key, ast.Constant) and isinstance(key.value, str):
+                if key.value in seen:
+                    repeated.append(key.value)
+                seen.add(key.value)
+        return repeated
+    return ["<PROOF_REVIEW_GATES mapping not found>"]
+
+
 def source_audit(root: Path) -> dict:
     lean_files = sorted(root.rglob("*.lean"))
     # Skip vendored dependencies (not project source).
@@ -313,6 +345,10 @@ def source_audit(root: Path) -> dict:
     quant_decls: dict[str, list[str]] = defaultdict(list)
     errors: list[dict] = []
     warnings: list[dict] = []
+    for duplicate in duplicate_gate_keys(Path(__file__).read_text(encoding="utf-8")):
+        errors.append({"kind": "duplicate_proof_review_gate_key",
+                       "file": "scripts/audit_quantitative_source_static.py",
+                       "key": duplicate})
     for path, src in contents.items():
         for name in DECL.findall(src):
             short = name.rsplit(".", 1)[-1]
