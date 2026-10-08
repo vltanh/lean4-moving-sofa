@@ -139,7 +139,7 @@ The external checker uses the maximal-component area of inflated boxes, not nece
 \]
 where the suprema are taken with the usual harmless horizontal translations/normalization into the \(5\times1\) window. The distinction is important: BH.11 compares **global suprema**, and does not assert that a disconnected \(C(u)\) is connected or has the same area as its own largest component.
 
-**Corollary BH3 (completeness of strict finite-center certification).** For every real threshold \(T>G\), there exists a **finite rational midpoint certificate** of the form BH.10. An exhaustive dyadic subdivision/checking procedure therefore terminates whenever the proposed upper bound is strictly greater than the actual four-angle relaxation optimum.
+**Corollary BH3 (completeness of strict finite-center certification).** For every **rational** threshold \(T>G\), there exists a **finite, exactly checkable rational midpoint certificate** of the form BH.10. For arbitrary real \(T>G\), choose a rational threshold strictly between \(G\) and \(T\). An exhaustive dyadic subdivision/checking procedure therefore terminates whenever the proposed upper bound is strictly greater than the actual four-angle relaxation optimum.
 
 **Proof.** Every midpoint placement has \(|C(m)|\le G\) by BH.11. Choose a positive rational mesh width
 \[
@@ -239,8 +239,8 @@ Thus **every one of the uncountably many eight-offset placements in this entire 
 
 ## 9. Exact regression and verification limits
 
-The independent [rational regression](computer-assisted/check_box_area_modulus.py) ran 32 prescribed boxes, checking their exact enlarged-versus-midpoint polygon areas, individual-width penalty, and uniform bound: **96 rational assertions passed, 28 strict enlargements**. All polygon coordinates and shoelace areas used Python fractions.Fraction. Under an external five-second cap, it used approximately **0.0702 seconds** internally. Executed source SHA-256:
-fbac8a51bb8d9c521ace85206bbda3497d3df1c71a83d18de723894b116b8ced, Git blob 4f66e600f8dfbcd886afe980e8896609de548742; the committed source matches the executed bytes. Its complete [record](computer-assisted/box-area-modulus-checks.json) explicitly says finite tests **do not** verify the continuum theorem or prove the global conjectured value \(M\).
+The independent [rational regression](computer-assisted/check_box_area_modulus.py) ran 32 prescribed boxes, checking their exact enlarged-versus-midpoint polygon areas, individual-width penalty, and uniform bound: **99 rational assertions passed, 28 strict enlargements**, including the exact seven-polygon witness and the complete rational box from BH.15--BH.17. All polygon coordinates and shoelace areas used Python fractions.Fraction. Under an external five-second cap, it used approximately **0.0686 seconds** internally. Executed source SHA-256:
+2d1f37c2e1b88a0dd959ae46f6f6e118a7eb81d0854b9c11b39b200e93a4be3d, Git blob 4a653732d4b9e45c19cf5489fa96ba1d1754ce4a; the committed source matches the executed bytes. Its complete [record](computer-assisted/box-area-modulus-checks.json) explicitly says finite tests **do not** verify the continuum theorem or prove the global conjectured value \(M\).
 
 The rational seven-polygon decomposition in BH.16 was independently computed with the same elementary clipping primitives after shifting the source's exact rational offsets. This checks a **single prescribed exact configuration**, not a 436-million-leaf global certificate. The universal area-overcount estimate (BH.7) and rational-space completeness corollary are hand proofs and do not rest on these finite tests.
 
