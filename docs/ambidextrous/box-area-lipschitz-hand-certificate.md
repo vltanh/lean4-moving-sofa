@@ -187,3 +187,61 @@ The new self-contained hand theorem is BH1; BH2 depends additionally on our earl
 **What this closes:** a precise, rigorous answer to whether the faster search can become a proof *method*: rational samples plus the explicit BH penalty can certify global four-angle area bounds, and any strict threshold above the true four-angle optimum is certifiable in finitely many steps. The full-turn value can in principle be approximated by a finite exact procedure with an explicit rate.
 
 **What this does not close:** Romik's sharp inequality \(A_F\le M\), the absolute value of \(G\), the larger-angle reach of arbitrary partial turns just above \(M\), a practical search bound or a new certified numeric upper value below \(353/200\). Do not convert a fast floating benchmark into a numerical area theorem without an exact certificate.
+
+
+## 8. Worked exact eight-dimensional certificate below \(7/4\)
+
+The main theorem has a concrete application directly around the high-area *finite-hallway* configuration reported in O'Keefe's paper, even though the published global upper bound remains \(353/200\). This is not a near-Romik shape claim; it is a **neighborhood bound in the eight independent placement parameters**.
+
+In the \(5\times1\) window, after the harmless horizontal translation \(x\mapsto x+3\), take the rational midpoint offsets
+\[
+m=\bigl(\tfrac{1263}{500},-\tfrac{543}{400},
+\tfrac{9661}{5000},-\tfrac{18603}{10000},
+\tfrac{1263}{500},-\tfrac{543}{400},
+\tfrac{9661}{5000},-\tfrac{18603}{10000}\bigr).
+\tag{BH.15}
+\]
+These are exactly O'Keefe's original four-angle example with the right/left offset pairs equal, translated into our common window. At this midpoint, the four-hallway intersection decomposes into seven nonempty rational convex polygon pieces with disjoint interiors, whose shoelace areas are
+\[
+\begin{array}{c|l}
+\text{piece}&\text{exact area}\\\hline
+0&8922371/10500000\\
+1,2&41795297/4800000000\quad\text{each}\\
+3&1885129/75000000\\
+4,5&4616080201/33600000000\quad\text{each}\\
+6&379449901/672000000
+\end{array}
+\]
+Their **exact sum**, independently reconstructed by rational clipping, agrees with the source:
+\[
+\boxed{|C(m)|=\frac{29\,092\,957\,301}{16\,800\,000\,000}.}
+\tag{BH.16}
+\]
+The polygon decomposition can be reproduced with the separate standard-library rational checker; it is a finite exact-arithmetic input, not a continuum optimization claim.
+
+Let
+\[
+E_*=\prod_{i=1}^8[m_i-\tfrac1{4000},\,m_i+\tfrac1{4000}].
+\]
+Every coordinate interval has width \(\delta=1/2000\). The **hand theorem BH1** gives
+\[
+\begin{aligned}
+|C(E_*)|
+&\le \frac{29\,092\,957\,301}{16\,800\,000\,000}
+ +\frac{168}{5}\cdot\frac1{2000}\\
+&=\boxed{\frac{29\,375\,197\,301}{16\,800\,000\,000}}
+=\frac74-\frac{24\,802\,699}{16\,800\,000\,000}
+<\frac74.
+\end{aligned}
+\tag{BH.17}
+\]
+Thus **every one of the uncountably many eight-offset placements in this entire explicit rational box** has **total surviving area**, and hence largest connected-component area, strictly below \(7/4\). No subdivision or connected-component graph calculation is needed for this particular neighborhood. This is a genuine short exact box certificate at a threshold **below 1.765 on one local region**, not a new global bound.
+
+## 9. Exact regression and verification limits
+
+The independent [rational regression](computer-assisted/check_box_area_modulus.py) ran 32 prescribed boxes, checking their exact enlarged-versus-midpoint polygon areas, individual-width penalty, and uniform bound: **96 rational assertions passed, 28 strict enlargements**. All polygon coordinates and shoelace areas used Python fractions.Fraction. Under an external five-second cap, it used approximately **0.0702 seconds** internally. Executed source SHA-256:
+fbac8a51bb8d9c521ace85206bbda3497d3df1c71a83d18de723894b116b8ced, Git blob 4f66e600f8dfbcd886afe980e8896609de548742; the committed source matches the executed bytes. Its complete [record](computer-assisted/box-area-modulus-checks.json) explicitly says finite tests **do not** verify the continuum theorem or prove the global conjectured value \(M\).
+
+The rational seven-polygon decomposition in BH.16 was independently computed with the same elementary clipping primitives after shifting the source's exact rational offsets. This checks a **single prescribed exact configuration**, not a 436-million-leaf global certificate. The universal area-overcount estimate (BH.7) and rational-space completeness corollary are hand proofs and do not rest on these finite tests.
+
+**Outcome:** a clean analytic box-area bound, an explicit \(<7/4\) certified rational neighborhood of a hard finite witness, and an exact-in-principle way to certify every strict upper threshold for a fixed finite relaxation. None is a proof that the four-angle global optimum is \(<7/4\), and none solves Romik's sharp full-turn or partial-turn frontiers.
