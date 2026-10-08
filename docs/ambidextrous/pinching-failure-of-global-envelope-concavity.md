@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-08. **Status:** An exact, self-contained negative control on a genuinely global proof mechanism. Even after fixing *all four axis supports*, restricting to convex hulls with **upper/lower quarter curvature strictly below one**, and using **both complete conventional 90° turns**, the **total ordinary area** of the canonical envelope is not concave along Minkowski segments. The counterexample is symbolic; no finite-angle or floating-point integration enters its proof.
 
-This does **not** refute Romik optimality: all example values are below the reference, and a source envelope on the nonconcave side has **empty central fibers and is disconnected**. The [horizontal gap-compression theorem](horizontal-gap-compression.md) converts that disconnected envelope into a different connected full-turn sofa of identical total area, which is why disconnected raw envelopes legitimately occur in the [unconstrained maximal-envelope variation](full-turn-unconstrained-envelope-variation.md). The theorem does not refute a concavity assertion restricted to actual hulls of connected two-turn bodies with nonempty surviving fibers.
+This does **not** establish any counterexample to Romik optimality: no rigorous area excess over the reference is certified here (the illustrative numerical areas are around 1.60), and a source envelope on the nonconcave side has **empty central fibers and is disconnected**. The [horizontal gap-compression theorem](horizontal-gap-compression.md) converts that disconnected envelope into a different connected full-turn sofa of identical total area, which is why disconnected raw envelopes legitimately occur in the [unconstrained maximal-envelope variation](full-turn-unconstrained-envelope-variation.md). The theorem does not refute a concavity assertion restricted to actual hulls of connected two-turn bodies with nonempty surviving fibers.
 
 ## 1. A true Minkowski segment with fixed axis supports
 
@@ -95,7 +95,7 @@ Its derivative satisfies \(x_r'(t)=p(t)\cos t-q(t)\sin t<0\) on \([t_a,t_b]\), u
 
 For \(t\in[t_a,t_b]\), the corner lies between its two wall-tangency abscissae: \(D_x(t)\le x_r(t)\le B_x(t)\). At \(x=x_r(t)\), every earlier second-wall roof is at most the current one (because \(D_x\) increases), and every later first-wall roof is at most the current one (because \(B_x\) increases). Hence the inner corner is the **global**, not merely stationary, roof maximizer at that \(x\).
 
-For \(x\in[b_r,a]\), where \(b_r=B_x(t_a)=a-d_0\cos t_a>0\), the first-wall roof has its unique global maximum at the parameter \(t\ge t_a\) with \(B_x(t)=x\). The companion wall is strictly above it because \(p(t)\le0\); hence the resulting positive niche roof is
+For \(x\in[b_r,a]\), where \(b_r=B_x(t_a)=a-d_0\cos t_a>0\), the first-wall roof has its unique global maximum at the parameter \(t\ge t_a\) with \(B_x(t)=x\). The companion wall is at least as high because \(p(t)\le0\) (strictly higher for \(t>t_a\)); hence the resulting positive niche roof is
 \[
 n_r(x)=d_0-\sqrt{d_0^2-(a-x)^2}.
 \]
