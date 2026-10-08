@@ -16,6 +16,12 @@ downward-closed normalized one-turn caps, each satisfying
    \]
    (The niches need not be convex, have interval
    horizontal sections, or share their contact patterns.)
+4. there are explicit ceilings \(h_U,h_V<1/2\) such that
+   \(N(U)\subseteq\{y\le h_U\}\) and
+   \(N(V)\subseteq\{y\le h_V\}\).
+   This uniform separation from height \(1/2\) is a
+   genuine assumption; triangular containment alone
+   is not a substitute.
 
 Put \(T_U=U\setminus N(U)\),
 \(T_V=V\setminus N(V)\), and
@@ -122,23 +128,21 @@ the full niche sections satisfy
 \(N_X(y)\subseteq[-(b-y),b-y]\)
 and are empty at heights \(y\ge h_X\),
 for some \(h_X<1/2\).
-Compactness of the explicit triangular
-containment with strict \(y<1/2\)
-alone does not force a uniform
-\(h_X<1/2\) for an arbitrary cap,
-so **assume** here the stronger explicit
-ceiling
+The uniform niche ceilings required
+in hypothesis 4 above are essential:
+triangular containment with strict
+\(y<1/2\) alone would not establish
+a fixed quantitative \(h_X<1/2\).
+The stated ceiling is
 \[
 \boxed{\sup\{y:(x,y)\in N(X)\}<1/2,
 \quad X=U,V.}
 \tag{TCS.5}
 \]
-For the Romik cap this follows from
-the explicit support formulas; for
-a general cap it is a genuine
-admission condition. It can be added
-to hypothesis 3 above without any
-curvature assumption.
+For the Romik cap this follows from the
+explicit support formulas; for general
+caps it is a separate admission
+requirement, not a curvature assumption.
 
 For centered intervals of radii
 \(a\ge c\), let \(D_{a,c}(d)\) be
