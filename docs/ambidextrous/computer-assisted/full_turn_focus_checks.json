@@ -1,0 +1,21 @@
+{
+  "status": "exact_regressions_passed",
+  "quarter_frame_cases": 6561,
+  "both_turns_checked": true,
+  "switching_identity_cases": 10000,
+  "negative_controls": [
+    "overwide diagonal thickening rejected",
+    "mixed-cross-deficit strict mismatch detected"
+  ],
+  "width": "49/20",
+  "area": "1/20",
+  "scope": "finite rational regressions, not continuum full-turn verification",
+  "unrestricted_full_turn_optimality_proved": false,
+  "python": "3.13.5",
+  "source_sha256": "b147acda025d11110dd3fb87218ea375a53dace69ec87a45188b4a4933cf3bfc",
+  "internal_seconds": 0.38690724999923987,
+  "ci_or_lean_used": false,
+  "source_git_blob_sha": "ee4843d19f357b315050f84f7f036d568cb61edc",
+  "executed_source_matches_committed_blob": true,
+  "external_timeout_seconds": 5
+}

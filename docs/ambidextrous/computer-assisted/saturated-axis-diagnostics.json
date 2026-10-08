@@ -1,0 +1,61 @@
+{
+  "status": "diagnostics_passed",
+  "is_proof_certificate": false,
+  "scope": "Specified axis-cut family only; no global optimality inference",
+  "python": "3.13.5",
+  "candidate_root": 0.29803581899166076,
+  "face_length": 1.1670498165503096,
+  "predicted_limit": 1.6089154491442044,
+  "observations": [
+    {
+      "z": 0.04,
+      "tau": 0.0003369264379068556,
+      "upper_loss": 1.0396124425547189e-05,
+      "lower_gain": 4.575687129173462e-07,
+      "deficit": 9.938555712629842e-06,
+      "scaled_deficit": 1.6070176284449167,
+      "absolute_formula_discrepancies": [9.605353621863766e-19, 2.946299286696861e-16]
+    },
+    {
+      "z": 0.02,
+      "tau": 8.495538756377609e-05,
+      "upper_loss": 1.316310013629437e-06,
+      "lower_gain": 5.7192241027318613e-08,
+      "deficit": 1.2591177726021183e-06,
+      "scaled_deficit": 1.6079774941053706,
+      "absolute_formula_discrepancies": [8.703263533037936e-20, 1.4142647069486996e-16]
+    },
+    {
+      "z": 0.01,
+      "tau": 2.132997513572585e-05,
+      "upper_loss": 1.6559914484580337e-07,
+      "lower_gain": 7.148909883252105e-09,
+      "deficit": 1.5845023496255127e-07,
+      "scaled_deficit": 1.6084492544573443,
+      "absolute_formula_discrepancies": [1.241432663319584e-20, 1.13832361561992e-15]
+    },
+    {
+      "z": 0.005,
+      "tau": 5.343925454392551e-06,
+      "upper_loss": 2.076650204799429e-08,
+      "lower_gain": 8.936099778312126e-10,
+      "deficit": 1.9872892070163078e-08,
+      "scaled_deficit": 1.6086830541030173,
+      "absolute_formula_discrepancies": [1.992479572293231e-19, 2.0010704441081043e-15]
+    },
+    {
+      "z": 0.0025,
+      "tau": 1.3374128505413694e-06,
+      "upper_loss": 2.599986240841092e-09,
+      "lower_gain": 1.1170112985419336e-10,
+      "deficit": 2.4882851109868987e-09,
+      "scaled_deficit": 1.6087994280656386,
+      "absolute_formula_discrepancies": [7.549842886893994e-20, 3.2915204577567306e-15]
+    }
+  ],
+  "source_sha256": "a077b25e8437f649b72ea056b97bfa8b8ac3321b2c29e90a9d4e93e35e14232e",
+  "source_git_blob_sha": "15a0cfeb51a854ee05498cbb766620a912157694",
+  "executed_source_matches_committed_blob": true,
+  "ci_or_lean_used": false,
+  "independent_mathematical_review": false
+}

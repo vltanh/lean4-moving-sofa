@@ -1,0 +1,38 @@
+{
+  "status": "exact_identities_passed",
+  "identity_count": 16,
+  "identities": [
+    "core terminal f",
+    "core terminal g",
+    "outward half-gap boundary formula",
+    "inward half-gap boundary formula",
+    "H2 coefficients",
+    "H2 second LDL pivot",
+    "H2 completed-square identity",
+    "H3 coefficients",
+    "H3 final LDL pivot",
+    "finite minimizer stationarity",
+    "H3 completed-square identity",
+    "slack remainder factorization",
+    "zero-slack regression",
+    "symmetric negative quadratic control value",
+    "linear slack absorption identity",
+    "right first-variation width coefficient"
+  ],
+  "negative_controls_rejected": [
+    "incorrect fixed-cut coefficient detected",
+    "wrong inward-cut sign detected",
+    "interchanged sine/cosine in core detected"
+  ],
+  "arithmetic": "SymPy exact rational functions in indeterminates; no floats",
+  "sympy_version": "1.14.0",
+  "python_version": "3.13.5",
+  "analytic_domain": "0 < y < 1; each cut slack in [0,1]; both wings span [0,1]",
+  "geometric_admission_verified": false,
+  "unrestricted_optimality_proved": false,
+  "lean_or_ci_used": false,
+  "scope": "Finite identities in CS2/SQ1, not the complete geometric proof",
+  "source_sha256": "b5db8e84245fe045c0ffa7059b5767c8e9b6e4192979f58c9247831b882ab3b8",
+  "source_git_blob_sha": "9d73671276b36136fadc304d9df174b6ce9155b5",
+  "executed_source_matches_committed_blob": true
+}

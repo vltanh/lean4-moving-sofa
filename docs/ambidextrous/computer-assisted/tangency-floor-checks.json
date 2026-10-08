@@ -1,0 +1,42 @@
+{
+  "status": "exact_checks_passed",
+  "named_checks": [
+    "beta comparison numerator",
+    "beta strict comparison",
+    "sqrt2 upper bound",
+    "reciprocal sqrt2 lower bound",
+    "reference Q0 upper bound",
+    "reference Q0 lower bound",
+    "sqrt2 Q0 lower bound",
+    "test time rational upper bound",
+    "test time below pi/6 via sine bound",
+    "reference q exact margin",
+    "reference q margin positive",
+    "reference p upper value",
+    "reference p below minus one half",
+    "test remains above p=-1",
+    "stationary area identity on rational cases",
+    "half-width perimeter cancellation 5/2",
+    "half-width perimeter cancellation 8/3",
+    "half-width perimeter cancellation 14/5"
+  ],
+  "named_check_count": 18,
+  "rational_area_identity_cases": 54,
+  "negative_controls": [
+    "balance does not imply local-bound saturation",
+    "perimeter simplification needs half-width top"
+  ],
+  "q_reference_margin": "46588123/128000000000",
+  "sine_comparison_margin": "1728914054233/1250000000000000",
+  "arithmetic": "Python unbounded integers and fractions.Fraction",
+  "elapsed_seconds": 0.000802639000085037,
+  "python_version": "3.13.5",
+  "source_sha256": "9e22c429153069db83f9790e333967d8d73427fd0c113cbdaf6bbc6fb91a727f",
+  "source_git_blob_sha": "c526fa787c63dc234f8a66e3dfc7c249d2b5fedc",
+  "executed_source_matches_committed_blob": true,
+  "script_wall_clock_cap_seconds": 5,
+  "unrestricted_optimality_proved": false,
+  "geometric_dependencies_independently_verified": false,
+  "scope": "Finite TF rational constants and HF algebra; not the continuum comparison proof",
+  "ci_or_lean_used": false
+}

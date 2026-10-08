@@ -1,0 +1,73 @@
+{
+  "result": "Complete exact covering for the width-at-most-two gate; unrestricted proof remains open",
+  "bound": "411/250",
+  "directions": [["4/5", "3/5"], ["481/769", "600/769"]],
+  "parameter_domain": "[0,1]^8, independent lower and upper placements",
+  "search": {
+    "visited": 11697975,
+    "splits": 5848987,
+    "area_leaves": 5448929,
+    "template_leaves": 400059,
+    "unresolved_depth": 0,
+    "seconds": 89.35293960571289,
+    "open_stack": 0,
+    "complete": true,
+    "target": "411/250",
+    "template_maximum": "189405071954415/116319753199426"
+  },
+  "verification": {
+    "complete": true,
+    "target": "411/250",
+    "tree_sha256": "e41b83a31344e04b591b6d3f23473d3a8411a392b6647d7661aca8bac4d9e119",
+    "visited": 11697975,
+    "splits": 5848987,
+    "area_leaves": 5448929,
+    "template_leaves": 400059,
+    "maximum_coordinate_depth": 8,
+    "template_maximum": "189405071954415/116319753199426",
+    "seconds": 34.08404207229614,
+    "mode": "guarded_int64",
+    "independently_reviewed": false,
+    "lean_or_ci_used": false
+  },
+  "checks": {
+    "integer_cross_checks": 1200,
+    "independent_polygon_checks": 500,
+    "negative_controls_rejected": 14,
+    "exact_finite_position_witness_area": "189405071954415/116319753199426",
+    "candidate_area_rational_lower": "269855742767652239353/164062500000000000000",
+    "target": "411/250",
+    "seconds": 3.484905242919922,
+    "all_passed": true,
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "inputs_are_not_continuous_motion_witnesses": true
+  },
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "numpy": "2.3.5",
+    "scipy_discovery_only": "1.17.0",
+    "numba": "0.65.1"
+  },
+  "source_git_blob_sha": {
+    "exact_width.py": "8e4ee21afc9d50b8bebe7f6dc0387a5184f0a71f",
+    "fast_exact.py": "9446cc8f5947c23b3ea335cfb85000d406384ad5",
+    "search_width.py": "0b8b06d2f5b123db163e446d026a2f29c9665bef",
+    "verify_width_complete.py": "4617f7bb28c9129d819bf07947ffaf9f1d9e937f",
+    "check_width.py": "5dc9ac75f0574d75f6400a863145a193faab780d"
+  },
+  "certificate": {
+    "tree.bin": {
+      "bytes": 11697975,
+      "sha256": "e41b83a31344e04b591b6d3f23473d3a8411a392b6647d7661aca8bac4d9e119"
+    },
+    "tree.bin.gz": {
+      "bytes": 1494626,
+      "sha256": "1f9c7e50f1eae9ba2a87418eb657e1229b9ff1b031b7bfef2a3969389c34d946"
+    }
+  },
+  "ci_used": false,
+  "lean_or_lake_invoked": false,
+  "numba_local_jit_used": true,
+  "all_leaves_replayed_with_arbitrary_precision_python": false,
+  "independent_mathematical_review": false
+}
