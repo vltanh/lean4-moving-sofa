@@ -134,3 +134,14 @@ Our earlier FR3 establishes the broader geometric obstruction: any **fixed finit
 **Import into the roadmap:** the externally certified **global bound \(353/200\)**, the four-3–4–5-hallway root box, its exact union-of-offset-box leaf enclosure, the component-aware checker, and the motion-angle reduction. **Do not infer:** global sharpness \(M\), a completed partial-to-full motion, curvature domination of a maximizer, area monotonicity of symmetrization, or a rigorous new numerical proof run in our repository.
 
 All statements here are either credited externally or proved by the displayed elementary algebra; no CI, Lean/Lake build, large checker execution, or manuscript build was performed during this review.
+
+## 5. Independent short exact replay of the four-angle obstruction
+
+The source's constructive lower bound (EX.7) was also recomputed with a **separately written**, standard-library \`fractions.Fraction\` polygon clipping routine, not by importing its Python checker. Choose its exact decimal-rational original offsets
+\[
+u_{\alpha_1}=v_{\alpha_1}=(1260/10000,4425/10000),\quad
+u_{\alpha_2}=v_{\alpha_2}=(1322/10000,5397/10000).
+\]
+Shift x by +3 into \([0,5]\times[0,1]\), changing offsets for each angle by \((u_1,u_2)\mapsto(u_1+3\cos a,u_2-3\sin a)\). For each of four frames, clip every retained polygon by \(f\le u_1+1,g\le u_2+1\), then split it into the **interior-disjoint** parts \(\{g\ge u_2\}\) and \(\{g\le u_2,f\ge u_1\}\). Use exact shoelace areas and an exact segment-intersection/containment contact graph, including degenerate pieces. This independent replay gave **7 nonempty polygons, 1 connected component, area exactly \(29\,092\,957\,301/16\,800\,000\,000\)**, matching the paper's rational witness, in about **0.0114 seconds** under an external five-second limit.
+
+The first scratch implementation inserted line-clipping intersections in the wrong vertex order; it produced nonsensical self-crossing polygons and failed the expected fraction check. Reordering intersections before the entering vertex corrected it and yielded the exact match. This is a documented **small rational witness verification**, **not** an independent validation of the 436-million-leaf upper-bound certificate or of the paper's general continuum motion reduction.
