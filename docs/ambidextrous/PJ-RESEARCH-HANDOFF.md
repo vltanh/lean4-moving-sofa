@@ -81,6 +81,46 @@ continuum inequality. No byte-identity claim about the committed
 file's execution, numerical upper-bound certificate, or CI run
 is made.
 
+
+## October 8 correction: the zero-slack class was already covered for value
+
+[PJ-ZS1](spatial-half-partition-zero-slack-admission.md) isolates
+two explicit sufficient support barriers and a centered top-face
+condition that imply \(n_U=0\) outside \(J\) and \(A_U=1\) on \(J\).
+By the already proved **algebraic identity** SPB.5,
+\(P_J(U)=\Psi(U)\), and hence the written weighted-cap theorem
+WV2 (subject to its independent review) gives
+\(P_J(U)\le M/2\) for this class, even without curvature or
+contact regularity.
+
+This is a significant **priority correction**:
+the small, curvature-safe middle-arc variations covered by PJ-MID
+and PJ-COUP retain these zero-slack features, so their *sharp value*
+was not a new missing case. Their second-variation formulas give
+quantitative local stability, but cannot replace a theorem
+controlling **top-face displacement and positive niche leakage**.
+
+[PJ-ADM](spatial-half-partition-middle-arc-explicit-admissibility.md)
+provides a conservative, exact curvature safety range
+\(|\varepsilon|\le1/2000\) for the explicit compact
+sin-fourth-power bumps. This is not by itself a global contact
+visibility proof. The untouched reference arcs include
+**zero-curvature portions**; do not upgrade global nonnegative
+curvature to a strict lower bound.
+
+The new research target should therefore be the precise
+nonnegative error
+\[
+R(U)=\int_J(1-A_U)+\int_{I\setminus J}n_U,
+\]
+especially for positive opposite-end faces where the
+top-face endpoints can jump even as support functions converge.
+One must pay \(R(U)\) using a proved sharp weighted deficit
+or exploit *coupled* cap-pair compatibility and SPB's slack.
+No theorem in the current notes establishes that payment
+universally. The exact global sharp value and the
+partial-motion bridge remain open.
+
 ## Exact remaining gates for the sharp-value strategy
 
 **A. Audit the new local identities independently.**
