@@ -24,6 +24,11 @@ def run():
         ),
         "witness_inside_A": F(103, 100) > F(2) + F(1, 50) - 1,
         "witness_inside_diagonal_band": F(22, 100) < F(1, 2),
+        "boundary_width_two_line_connector": (
+            F(6, 5) < F(5, 2) and F(1) == F(2) - 1
+            and not (F(3, 2) <= F(6, 5) <= F(5, 2))
+            and not (F(0) <= F(6, 5) <= F(1))
+        ),
     }
     assert all(checks.values()), checks
     return checks
@@ -32,4 +37,4 @@ def run():
 if __name__ == "__main__":
     for name, passed in run().items():
         print(f"{name}: {'PASS' if passed else 'FAIL'}")
-    print("ALL_PASS: True checks: 10")
+    print("ALL_PASS: True checks: 11")
