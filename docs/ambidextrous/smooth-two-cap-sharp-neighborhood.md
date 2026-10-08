@@ -379,7 +379,80 @@ Thus equality in the area bound
 occurs exactly for the two identical
 reference parents. QED.
 
-## 5. What this improves and what it does not
+## 5. Explicit nontrivial families inside the theorem
+
+The allowed support class is not empty beyond \(U_*\), and
+it genuinely contains competitors with **independently moving
+left and right top-face endpoints**, not merely deformations
+with unchanged flat faces.
+
+Use the reference phase formulas: on
+\(L-\beta<t<L\), the first-quarter curvature is
+\(\rho_{*,f}=1/2\), and on \(0<t<\beta\), the
+second-quarter curvature is \(\rho_{*,g}=1/2\).
+Put \(t_0=L-\beta/2\), \(t_1=\beta/2\), and
+\[
+\phi_R(t)=
+\begin{cases}(t-t_0)^3(L-t),&t_0\le t\le L,\\
+0,&0\le t<t_0,\end{cases}
+\]
+\[
+\phi_L(t)=
+\begin{cases}t(t_1-t)^3,&0\le t\le t_1,\\
+0,&t_1<t\le L.\end{cases}
+\]
+Both belong to \(W^{2,\infty}\), have zero endpoint
+values, and match the unchanged support in \(C^2\)
+at their interior patch boundaries. But
+\[
+\phi_R'(L)=-(\beta/2)^3,\qquad
+\phi_L'(0)=(\beta/2)^3.
+\]
+
+For arbitrary sufficiently small independent real
+parameters \(\lambda_j,\mu_j\), define cap quarter
+supports by
+\[
+f_j=f_*+\lambda_j\phi_R,\qquad
+g_j=g_*+\mu_j\phi_L
+\quad(j=1,2).
+\tag{S2C.19}
+\]
+The perturbation curvature is supported only
+where the reference density is *strictly*
+\(1/2\), so choosing the coefficients small
+retains nonnegative curvature; the top-normal
+atom remains positive, and the axis-normal
+end edges are unchanged. The resulting global
+support is therefore a genuine compact
+convex downward one-turn cap. Its two end
+roof heights remain \(1/2\); concavity of
+the roof gives \(A_j(x)\ge1/2\) over the
+whole projection.
+
+The top-face endpoints move **independently**:
+\[
+\boxed{
+a_j=a_*-\mu_j(\beta/2)^3,\quad
+b_j=b_*+\lambda_j(\beta/2)^3.
+}
+\tag{S2C.20}
+\]
+The face length therefore changes by
+\((\lambda_j+\mu_j)(\beta/2)^3\),
+and its center changes by
+\((\lambda_j-\mu_j)(\beta/2)^3/2\).
+With all four parameters small enough that
+S2C.2 holds, S2C.3 applies to these
+**actual two-turn bodies**. They may have
+unequal face lengths, displaced opposite
+faces and independent nonsymmetric outer
+curvatures, proving the theorem is a
+substantive shape-family result rather
+than a statement whose hypotheses
+force both caps to equal the reference.
+
+## 6. What this improves and what it does not
 
 Unlike SCR1 (which treated one
 two-parameter family of fixed curved
