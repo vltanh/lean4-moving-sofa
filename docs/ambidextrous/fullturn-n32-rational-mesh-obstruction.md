@@ -107,7 +107,7 @@ The checker obtains uniform bounds \(U(x)\ge1/2,\ N(x)\le1/2\) over the entire r
 
 Let \(L_i\) be the exact nonnegative integer lower bound on Q times the fiber length on cell i. The integer evaluator gives
 \[
-\sum_iL_i=:\mathcal L_{32}.
+\sum_iL_i=:\mathcal L_{32}=70693133446052728.
 \tag{MW.9}
 \]
 Since every cell has the exact width \(23340980/Q\), the lower area certificate is
