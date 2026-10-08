@@ -321,3 +321,48 @@ The static source audit now rejects the unsupported selector pattern.
 \`effective-entry\`, \`effective-angle-entry\`, and \`explicit-cutoff\`
 remain \`blocked_source\`. This is a mathematical/source audit result,
 not a Lean compilation result. No Lean, Lake, or CI was run.
+
+
+## October 7 source-only consolidation: coercive L² sublevels and audit integrity
+
+This pass adds a quantitative bound for **any** nonnegative continuous
+support-penalty upper bound `R`, without assuming a small deficit:
+
+[
+m=h_C^{\mathrm{mid}}-h_K^{\mathrm{mid}},\qquad
+m^2\,\frac{\pi}{2}\le
+2\int_0^\pi (h_C(t)-h_K(t))^2\,dt+200\pi,
+\qquad |m|\le21+2\sqrt R.
+]
+
+Here `h^mid` denotes the horizontal midpoint of a cap (not a support
+value). Both caps are required to have positive sofa area, so their
+individually midpoint-centred copies have radius below five. The
+consequence
+
+[
+\forall p\in C:\quad
+\|p-(m_K,0)\|\le26+2\sqrt R
+]
+
+is a genuine coercive **common-midpoint box** for the superlevel sets
+of the integral-penalized objective. The source is now centralized in
+`EffectiveRegularizationSupport.lean`; the small-penalty `21`-unit
+specialization stays in `EffectiveRightAngle.lean`. The proofs remain
+**uncompiled source**.
+
+This does **not** prove existence of a maximizer of the continuous
+integral-penalized functional. That still requires an upper-semicontinuous
+maximizing-sequence argument with exactly that objective; the existing
+dyadic selector optimizes a different, atomic objective. Accordingly,
+the effective-entry and `10^{-600}` blockers remain.
+
+The source-only audit had a duplicate `PROOF_REVIEW_GATES` key for
+`EffectiveRegularizationSupport.lean`, silently dropping the earlier
+L²-anchor and bounded-one-sided-interval regressions. All three
+regularization guards are now retained under one key, the audit inspects
+its own dictionary literal for duplicates, and a dedicated Python
+regression-test file was committed. This is audit/test infrastructure,
+**not** mathematical proof evidence.
+
+No Lean/Lake/CI, TeX build, or closed finite Lean certificate was run.
