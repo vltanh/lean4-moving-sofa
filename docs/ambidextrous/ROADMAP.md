@@ -2,6 +2,21 @@
 
 **The exact optimum M is not proved for full or partial turns.** The latest hand proofs give a global bound 2 sqrt(2)-1 for both motion classes, a height-sensitive version, and a compact finite-offset reduction with certified angular approximation. They do not identify the limit of the finite problems as M. Read [HANDOFF.md](HANDOFF.md) before continuing.
 
+## Externally certified global bound: O'Keefe's 3–4–5 four-hallway certificate
+
+[Full methodological/provenance review](external-four-hallway-certified-bound-review.md). Devin O'Keefe's [ambidextrous-sofa-bounds](https://github.com/devinokeefe/ambidextrous-sofa-bounds) accompanies a September 2026 paper reporting a complete, computer-assisted global theorem
+\[
+\boxed{\mu_{\mathrm{ambi}}\le353/200=1.765},
+\]
+**for arbitrary continuous full or partial turns from one shared incoming position**. Its four hallways have rational angle data \((\cos,\sin)=(4/5,3/5),(3/5,4/5)\) and their reflections. It normalizes all **connected components** into an exhaustive eight-dimensional rational offset box and certifies a complete binary covering by exact upper enclosures of hallway unions. Leaf tests sum rational polygon areas or, when necessary, use the maximal contact-graph component; degenerate touching polygons are retained. The authors provide three separate checker implementations; the included Lean soundness theorem is conditional on checker acceptance and a recorded compiled Lean run accepts the 436,160,442-leaf release certificate. **We have inspected code and logs but not run or independently verified that huge certificate.**
+
+This is a major **global upper bound** improvement from our \(2\sqrt2-1\), but **not sharp**: the desired value is \(M\approx1.644955\). Two exact limits prohibit superficial attempts at closure:
+
+1. The same four-angle relaxation admits a **connected finite-hallway configuration of area \(29\,092\,957\,301/16\,800\,000\,000\approx1.73172>M\)**. Therefore further subdividing the existing eight-dimensional root box cannot prove \(G\le M\); more angles or additional continuum geometry are essential.
+2. The general-motions angle-reach reduction requires \(T\ge5/3\) to guarantee the larger angle \(53.13^\circ\). But \(M<83/50<5/3\). At the sharp threshold, an arbitrary partial turn may not reach that angle by this argument. Full turns do visit it, but still confront obstruction 1.
+
+**Actionable transfer:** borrow the exact overapproximation \(\widehat X_j(E)=\cup_{u\in E}X_j(u)\) (retains both outer and inner wall constraints), component-aware rational leaf checks, and untrusted-search/trusted-checker separation for D3/FR. Do not copy code from a repository without an explicit reviewed source license; cite it and derive the needed formulas. A prospective exact proof of \(M\) requires a **hybrid**: certified finite-box exclusion of a complement, plus a complete sharp *continuum* area theorem on the residual neighborhood, including rough/asymmetric facets and positive clipping. Our existing TC/MT/ME results do not yet cover that entire residual class.
+
 ## 1. Acceptance criterion and rules
 
 The desired value is
