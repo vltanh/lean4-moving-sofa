@@ -10,7 +10,7 @@ We are investigating the **sharp unrestricted ambidextrous moving-sofa problem**
 M=1+4Y^2+\arctan Y\approx1.6449552184,\qquad 4Y^3+3Y-1=0.
 \]
 
-My research lives at [vltanh/lean4-moving-sofa, draft PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3), branch \`research/ambidextrous-pen-and-paper\`. Read **[CONSOLIDATED-RESEARCH-HANDOFF.md](https://github.com/vltanh/lean4-moving-sofa/blob/research/ambidextrous-pen-and-paper/docs/ambidextrous/CONSOLIDATED-RESEARCH-HANDOFF.md)** FIRST. The previous exploratory commits were squashed; the branch contains the full retained source archive but this handoff, not the chronological notes, is authoritative for the status.
+My research lives at [vltanh/lean4-moving-sofa, draft PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3), branch `research/ambidextrous-pen-and-paper`. Read **[CONSOLIDATED-RESEARCH-HANDOFF.md](https://github.com/vltanh/lean4-moving-sofa/blob/research/ambidextrous-pen-and-paper/docs/ambidextrous/CONSOLIDATED-RESEARCH-HANDOFF.md)** FIRST. The previous exploratory commits were squashed; the branch contains the full retained source archive but this handoff, not the chronological notes, is authoritative for the status.
 
 **Unrestricted optimality and uniqueness are NOT proved; no counterexample area above M has been verified.** The central unsolved issue for full-turn sofas with compatible downward one-turn caps U,V is the true ordinary-area clipping correction:
 
@@ -26,7 +26,7 @@ G(U,V)\le(M/2-\Psi(U))+(M/2-\Psi(V))
 
 for all **actual compatible** cap pairs, including nonsmooth/asymmetric cases, with precise normalizations. Arbitrary partial-turn motions remain an additional unresolved obligation. Read the exact OT1 formula and its **nonempty vertical-fiber condition** before using this expression.
 
-We have already tried and hit barriers with: simply reflecting/averaging arbitrary sofas; maximizing two original Gerver sofas independently; width-two filling/squeezing; two-cap weighted-objective interpolation without clipping; false global Minkowski concavity of the old \`P_J\` functional; three-anchor or forbidden-triple-only area LPs; local/smooth shears, far-width bounds, and long numerical searches; importing PR #7's *different physical hallway bend*. Explicit counterexamples to naive versions are in the handoff.
+We have already tried and hit barriers with: simply reflecting/averaging arbitrary sofas; maximizing two original Gerver sofas independently; width-two filling/squeezing; two-cap weighted-objective interpolation without clipping; false global Minkowski concavity of the old `P_J` functional; three-anchor or forbidden-triple-only area LPs; local/smooth shears, far-width bounds, and long numerical searches; importing PR #7's *different physical hallway bend*. Explicit counterexamples to naive versions are in the handoff.
 
 **Please do NOT** resume the pattern of many small restricted lemmas, small improvements to nonsharp numerical bounds, or increasingly fine near-Romik optimization. Do not call a local conditional result a global breakthrough. No Lean formalization yet, and do not alter the project's original Lean libraries or PR #7.
 
