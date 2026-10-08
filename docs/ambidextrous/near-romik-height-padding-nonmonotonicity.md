@@ -58,7 +58,31 @@ Perform the proposed simplest normalization:
 =B_{\varepsilon,s}+[-s/2,s/2]e_y
 =kK_\varepsilon+[0,s]e_y.}\tag{NH.6}
 \]
-This has exact vertical span \([0,1]\), the same horizontal projection as \(B_{\varepsilon,s}\), and both reflection symmetries. Its full canonical envelope \(F^+_{\varepsilon,s}=E(B^+_{\varepsilon,s})\) is again **connected and full-turn feasible** for sufficiently small \(s\). Indeed at \(s=0\) the original entire positive niche has the **strict whole-angle ceiling** NH.2; the support and ambient-roof changes under the centered scaling and vertical padding are \(O(s)\) uniformly in angle, and the vertical midline is in each outer hull. So for \(s\) small the lower sweep stays strictly below \(y=1/2\), and the reflected upper sweep stays strictly above it. This supplies a common surviving midline and nonempty interval fibers over the entire horizontal projection. (One can obtain an explicit margin using NH.2 and the corner formula; no qualitative generic-position premise is needed.)
+This has exact vertical span \([0,1]\), the same horizontal projection as \(B_{\varepsilon,s}\), and both reflection symmetries. Its full canonical envelope \(F^+_{\varepsilon,s}=E(B^+_{\varepsilon,s})\) is again **connected and full-turn feasible** for sufficiently small \(s\). The strict midline clearance follows directly from the **whole-angle inner-corner formula** rather than an unjustified uniform bound after dividing by \(\sin t\) near an endpoint. For \(u_t=(\cos t,\sin t)\), \(v_t=(-\sin t,\cos t)\), write
+\[
+c_K(t)=(h_K(u_t)-1)u_t+(h_K(v_t)-1)v_t.
+\]
+With \(c_\varepsilon=c_{K_\varepsilon}\), and using
+\((u_t\cdot e_y)u_t+(v_t\cdot e_y)v_t=e_y\), the exact centered-shrink identity is
+\[
+\begin{aligned}
+c_{B_{\varepsilon,s}}(t)
+ &=k\,c_\varepsilon(t)-s(u_t+v_t)+(s/2)e_y,\\
+c_{B^+_{\varepsilon,s}}(t)
+ &=c_{B_{\varepsilon,s}}(t)+(s/2)e_y.
+\end{aligned}
+\]
+Therefore, since \((u_t+v_t)_y=\sin t+\cos t\ge0\), the lower sweep's entire inner-corner height is bounded by
+\[
+c_{B^+_{\varepsilon,s},y}(t)
+\le k\,(223/480)+s
+\le223/480+s<1/2
+\quad(0<s\le1/100).
+\tag{NH.6a}
+\]
+Every point of a lower forbidden quadrant lies *below its own inner corner*, so this is a uniform strict ceiling for the whole angular continuum, including the endpoint limits. By the hull's vertical reflection symmetry the upper forbidden sweep lies strictly above the midline.
+
+Both hulls contain the entire midline over their horizontal projections, because \(K_\varepsilon\) does and centered shrink/padding preserve it. Hence the full envelopes have nonempty interval fibers meeting that segment and are connected. The *same* argument works for \(B_{\varepsilon,s}\), whose corner heights are even lower.
 
 Write \(n_{\varepsilon,s}(x)\) for the lower *ambient* complete forbidden-sweep roof of \(B_{\varepsilon,s}\), and \(b_{\varepsilon,s}(x)\) for its lower convex-hull boundary. The exact vertical-padding formula [VP.2](vertical-padding-ordinary-area-obstruction.md), now with padding amount \(s\), gives
 \[
