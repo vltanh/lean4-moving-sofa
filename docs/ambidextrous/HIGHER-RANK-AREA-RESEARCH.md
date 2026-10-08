@@ -40,6 +40,31 @@ These are methodological advances in **sound
 geometric constraints**, not new absolute upper
 bounds for ordinary sofa area.
 
+## Width-uniform zigzag obstruction
+
+[ZZ1/ZZ2](parametric-zigzag-four-point-exclusion.md) extends
+the four-cell theorem to every \(W\ge2\): four alternating
+points at horizontal offsets \(0,W/3,2W/3,W\) cannot have
+any three simultaneously present in a complete-two-turn sofa.
+The exact point obstruction holds already for span \(W>15/8\).
+
+The positive-area version uses square side \(1/64\) for
+all \(W\ge2\) (minimum exact margin \(31/960\)),
+or square side \(1/12\) for all \(W\ge23/10\)
+(minimum exact margin \(1/58\)).
+Both ranges were certified by
+[the exact parametric checker](computer-assisted/check_parametric_zigzag_rank.py),
+which proves the required rectangle dot-product minima have
+strictly positive affine slopes as functions of W.
+Committed checker Git blob:
+0f981847c17f2c37a7c8d40dfff15c64d413c970.
+
+This strengthens the geometric cut at widths near Romik's
+candidate, but it does **not** improve the current coarse
+LP area objective. The new acceptance gate remains
+a rigorous global *area aggregation*, not a fourth
+isolated configuration lemma.
+
 ## Numerical controls: why the new inequalities do not yet close an area gap
 
 A bounded exploratory diagnostic on a uniform
