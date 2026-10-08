@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-08.  
 **Repository:** [vltanh/lean4-moving-sofa](https://github.com/vltanh/lean4-moving-sofa).  
-**Research branch:** \`research/ambidextrous-pen-and-paper\`.  
+**Research branch:** `research/ambidextrous-pen-and-paper`.  
 **Draft pull request:** [#3](https://github.com/vltanh/lean4-moving-sofa/pull/3).  
 **Separate relevant projects:** [#7 — changing the physical hallway bend](https://github.com/vltanh/lean4-moving-sofa/pull/7); [#4 — prescribed net rotation in the usual 90° hallway](https://github.com/vltanh/lean4-moving-sofa/pull/4).  
 **Research only. No Lean formalization requested or performed.**
