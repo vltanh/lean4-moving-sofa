@@ -39,7 +39,7 @@ To establish its **unproved premise**, combine:
 - AW-W's purely hand upper bound \(<41/25=1.64\) for incoming horizontal width \(\le2\);
 - FAS1's sharp \(|S|\le M\) for both full turns with aligned positive top and bottom hull faces;
 - NL1's uniform 1.65 bound in the entire 0.0007 reference-hull neighborhood;
-- a **still missing** global 1.65 area exclusion on all remaining width-\(>2\), nonaligned/point-face, reference-separated hulls.
+- a **still missing** global 1.65 area exclusion on all remaining width-\(>2\), reference-separated hulls—including subunit-span hulls, plus the nonaligned/point-face unit-span class. The height-sensitive GH estimate excludes \(H\le41/50\), but it does **not** imply \(H=1\).
 
 Candidate global verification architecture: normalize connected actual supports to the compact FR1 box; use the exact CP support polytope and V subadditive intermediate-angle lower supports to bound allowed regions; branch across the **whole** remaining compact set, not just chosen reference placements; discharge each rational box by a proved area upper bound \(<33/20\), a structural geometric theorem, or exact impossibility; check every leaf and covering. Alternatively, a single completely certified finite full-turn relaxation with \(A_n\le33/20\) suffices directly. No such global certificate has been produced; this note does not assume it exists for any particular n.
 
