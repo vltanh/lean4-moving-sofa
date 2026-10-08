@@ -135,6 +135,111 @@ Averaging two parents and invoking the one-turn weighted
 value theorem is not a legitimate universal proof. The
 counterexample does **not** beat M; it refutes the bridge.
 
+## October 8 follow-up: admission correction and an infinite-dimensional sharp theorem
+
+**Critical geometric correction: horizontal-core admission is automatic.**
+[UHCD1](universal-horizontal-core-decomposition.md)
+proves by horizontal slicing that **every** compact
+downward convex cap U with upper face length \(T\ge0\)
+has a unique canonical decomposition
+
+\[
+\boxed{U=C(U)+[0,T]e_x,\qquad
+|U|=|C(U)|+T,}
+\]
+
+where the core C(U) has a singleton top face.
+If U has a complete bottom rectangle of height h, it
+even decomposes as
+\[
+U=V(U,h)+([0,T]\times[0,h]).
+\]
+The previous HF2 proof did not need maximizing-specific
+arguments for the decomposition: those arguments were
+needed to force \(h=1/2\) and \(T=W/2\).
+The presence of a horizontal rectangular summand
+is therefore **not** a global admission obstacle.
+For full-turn ordinary-area comparisons, UHCD.6 gives
+the exact effective-niche identity for two point-top
+cores of *arbitrary and unequal top-face lengths*,
+without assuming a common midline.
+The old global obstacle is that this effective-niche
+inequality has not been proved at the sharp constant.
+
+**Exact filler-to-forbidden-triangle tradeoff.**
+[FAP1](rectangular-filling-exact-angle-penalty.md)
+shows that filling a curved core by
+\([0,T]\times[0,h]\) raises the inner forbidden corner
+at every conventional turn angle t by the exact vector
+\((T\cos^2t,T\sin t\cos t+h)\), and the
+area of its single-angle forbidden triangle is
+\[
+\tfrac12\sin t\cos t\,
+\bigl(B_{\rm core}(t)+T+h/(\sin t\cos t)\bigr)_+^2.
+\]
+This is a real geometric turning cost of the center
+filler, not two independent Gerver areas. But
+overlap between different angle triangles makes
+their **union** the real remaining optimization.
+
+**New full-turn near-reference sharp theorem.**
+[UFC1](general-unequal-face-cubic-clipping.md)
+extends the analytic cubic clipping estimate to unequal
+top-face lengths: for curvature gap \(\eta\), the
+pairwise clipping is at most
+\[
+\boxed{G\le\bigl(|a_U-a_V|^3+
+|b_U-b_V|^3\bigr)/(3\eta)}
+\]
+when the endpoint discrepancies are at most \(\eta\)
+and the niches stay below half-height.
+
+The new [ASS1](actual-sofa-smooth-sharp-neighborhood.md)
+then proves an **ordinary-area sharp inequality for
+actual connected full-turn sofas** whose hull has the
+reference horizontal projection \([-m,m]\), vertical
+span one, and whose two canonical cap supports differ
+from Romik's by at most \(10^{-3}\) in open-quarter
+\(L^\infty\) **second derivative** norm:
+\[
+\boxed{|S|\le M-\frac{100}{3}
+\sum_{j\in\{U,V\}}
+(|a_j+m/2|^3+|b_j-m/2|^3)\le M.}
+\]
+There is **no** artificial midline-rectangle assumption
+on S, no imposed symmetry, no matched top-face position
+or length, and no assumption that the two caps have
+a fixed contact chart. Equal-area rigidity follows from
+the existing fixed-width strict concavity.
+[S2C1](smooth-two-cap-sharp-neighborhood.md)
+gives the synthetic actual-body construction and
+explicit nonzero independent perturbations of both
+top-face endpoints, demonstrating the neighborhood
+is not vacuous.
+
+**Exact reason this still does NOT close the conjecture.**
+The hypothesis of ASS1 is **much stronger** than
+Hausdorff closeness: it rules out arbitrarily thin
+new facets, moving curvature jumps with order-one
+density contrast, and arbitrary width variation.
+No theorem forces a global area maximizer into
+this regularity neighborhood or shows all
+competitive partial-turn motions can be completed.
+The fixed-width AF/SD/SR mathematical dependencies
+also remain self-reviewed rather than independently
+refereed. Consequently the new sharp local theorem
+is a strict and meaningful enlargement of the
+previous finite-mode results, but is **not**
+a global optimality or uniqueness proof.
+
+**Revised priority:** prove global/near-reference
+geometric admission to a norm compatible with the
+trace-energy/clipping absorption (or prove that
+absorption directly without second-derivative
+smallness), rather than continuing to rederive
+Minkowski rectangle decompositions or sample
+distant finite-angle upper bounds.
+
 ## Precisely what would close the idea
 
 Prove the **effective niche lower bound in RC-H.1** for every
