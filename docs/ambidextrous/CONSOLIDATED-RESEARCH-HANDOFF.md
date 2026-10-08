@@ -91,6 +91,7 @@ All new written arguments are **self-reviewed drafts**, not independently refere
 | Clearance-free exact full-motion validation | Every rational polygonal motion piece has a **degree-at-most-five univariate polynomial collision decision** for all real intermediate times; handles wall tangencies, nonmonotone rotations and edge-only collisions without angular sampling | [UV](univariate-rational-motion-certificate.md), [checker](computer-assisted/check_univariate_rational_motions.py) |
 | Global raw-envelope Minkowski concavity is **false**, even at fixed width and height | An exact rounded-rectangle Minkowski segment of width 12/5, unit height, aligned faces and constant quarter curvature <1/2 develops a pinching correction of order epsilon^(3/2), overpowering the smooth signed Jensen deficit of order epsilon². One endpoint envelope is **disconnected**, so actual connected-hull concavity is not addressed | [PM](pinching-failure-of-global-envelope-concavity.md) |
 | Actual compatible full-turn hulls are **not Minkowski-convex** | Two exact rational **convex** sofas each perform both entire turns with the same axis supports and vertical span one, yet their horizontal-reflection Minkowski midpoint has a forbidden **unique bottom extreme point** and loses at least 1/50 of vertical span on canonical saturation. The continuum admission criterion is: all extreme points survive **and** no vertical fiber is empty. No area-above-M counterexample | [FH1–FH2](feasible-hull-minkowski-nonconvexity.md), [exact checker](computer-assisted/check_feasible_hull_minkowski_nonconvexity.py) |
+| **Original arbitrary-motion optimum equals one signed joint convex-domain supremum** | For **any** compact convex hull (K\subset[-5/2,5/2]\times[0,1]) and independent terminal angles (\alpha,\gamma\in[\pi/4,\pi/2]), integrate the *signed* surviving fiber height after both visited turning sweeps **and outgoing whole-body strips**. Its supremum is **exactly** the original ambidextrous sofa value, conditional on the established proper-angle and gap-compression proofs. No sharp value or concavity proved; arbitrary partial/backtracking motions covered at *value-reduction* level | [OS1–OS2](original-motion-signed-convex-domain.md), [full-turn case SJ1](signed-joint-convex-domain-global-value.md) |
 | Local fully certified \(<1.65\) area exclusion | **Only** full-turn hulls within Hausdorff \(7/10000\) of the Romik hull | [NL1](one-sixth-fullturn-near-reference-certificate.md) |
 
 The branch records an external computer-assisted universal upper bound \(353/200=1.765\), stronger than its own computer-free \(1.80882\) estimate; independently check the external source before citing it as a published verified theorem. Neither bound approaches the exact candidate sufficiently.
@@ -130,6 +131,26 @@ A new proof must give a **universal** ordinary-area comparison for *every actual
 Then handle **partial turns** by exact completion of the *same sofa*, or prove that partial competitors cannot beat M by another genuine theorem. A computer-assisted proof must cover the *entire* remaining configuration space with checked interval errors; optimizer success, finite pose samples and local stability are not substitutes.
 
 A potential counterexample instead needs (i) an explicit compact connected shape, (ii) two valid continuous left/right motions with terminal strips, and (iii) a **rigorous** ordinary-area lower bound >M. Even area ≥329/200=1.645 is sufficient but still requires rigorous geometry. No such example was found in the exploratory work.
+
+### New principal sharp-proof formulation: joint signed fiber value (October 8)
+
+The previous two-cap inequality is no longer the only global target. Two new **exact value-equivalence** drafts now provide a fundamentally different optimization domain:
+
+- [SJ1](signed-joint-convex-domain-global-value.md): the **full conventional two-turn supremum** equals a single *signed total-fiber* objective maximized over **all** convex hulls in a fixed rectangle. Negative fibers may occur in intermediate hulls; the ordinary envelope's positive-part correction is never dropped as an area identity.
+- **[OS1](original-motion-signed-convex-domain.md)**: the **original unrestricted ambidextrous supremum** (including partial/nonmonotone/backtracking motions) equals a joint signed-fiber objective maximized over the Minkowski-convex hull domain \(K\subset[-5/2,5/2]\times[0,1]\) and **two independent terminal-angle variables** \( \alpha,\gamma\in[\pi/4,\pi/2]\). Crucially, the full-body outgoing **straight-arm strips** are explicit constraints; leaving them out would give a false converse. Its proof imports Note 8/10's high-area proper-angle reduction and GC4's exact-area connectedification. These historical inputs remain research drafts requiring independent review.
+- **[OS2](original-motion-signed-convex-domain.md)**: every arbitrary hull and fixed pair of terminal angles can be replaced by a **genuinely admissible actual hull with no smaller signed value**, via ordinary canonical saturation, gap compression, and support-tightening, although axis supports, width and incoming span may change. This repairs the *global value* domain, not the convexity of the actual-hull subset.
+
+The resulting **still-unproved sharp theorem**, which alone would close the full original problem, is
+\[
+\boxed{
+\mathscr V(K,\alpha,\gamma)\le M
+\quad\forall\,K\subset[-5/2,5/2]\times[0,1]\text{ compact convex},\
+\alpha,\gamma\in[\pi/4,\pi/2].
+}
+\]
+Conversely one strictly larger *signed* value would, by OS2, produce a genuine connected area-\(>M\) counterexample. This is an exact biconditional global target, *not* a proof that \(M\) is optimal. Neither global concavity of \(\mathscr V\) nor a calibration at Romik is established. [FH1](feasible-hull-minkowski-nonconvexity.md) and [PM1](pinching-failure-of-global-envelope-concavity.md) remain barriers to naive Jensen arguments, but neither invalidates these signed **supremum equalities**.
+
+The most productive next step is to **prove or falsify concavity/global calibration of this single signed functional** on the full fixed-box domain, explicitly retaining terminal-angle strips. Do not revert to estimating separate \(G\) and \(\Delta_U,\Delta_V\) terms merely by changing symbols. Low-area and pinched test hulls should be treated as adversarial controls before any claimed universal theorem.
 
 ### New independent research branch: exact falsification (October 8)
 
