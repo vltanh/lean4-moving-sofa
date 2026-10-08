@@ -237,10 +237,27 @@ Every coordinate interval has width \(\delta=1/2000\). The **hand theorem BH1** 
 \]
 Thus **every one of the uncountably many eight-offset placements in this entire explicit rational box** has **total surviving area**, and hence largest connected-component area, strictly below \(7/4\). No subdivision or connected-component graph calculation is needed for this particular neighborhood. This is a genuine short exact box certificate at a threshold **below 1.765 on one local region**, not a new global bound.
 
+A separate **direct rational clipping** of the *inflated box itself* gives an even tighter exact value. Its seven nonempty polygon pieces have shoelace areas
+\[
+\frac{571491719}{672000000},\quad
+2\times\frac{42057227}{4800000000},\quad
+\frac{40252707}{1600000000},\quad
+2\times\frac{4626977561}{33600000000},\quad
+\frac{108401371}{192000000}.
+\]
+Their sum is
+\[
+\boxed{|C(E_*)|=\frac{4\,159\,492\,073}{2\,400\,000\,000}
+=\frac{87}{50}-\frac{16\,507\,927}{2\,400\,000\,000}<1.74.}
+\tag{BH.18}
+\]
+This sharper bound is a *finite exact seven-polygon calculation*, independently checked with Python rational arithmetic; BH.17 is the shorter **fully hand-derived analytic bound** that requires only one center area and the universal strip estimate.
+
+
 ## 9. Exact regression and verification limits
 
-The independent [rational regression](computer-assisted/check_box_area_modulus.py) ran 32 prescribed boxes, checking their exact enlarged-versus-midpoint polygon areas, individual-width penalty, and uniform bound: **99 rational assertions passed, 28 strict enlargements**, including the exact seven-polygon witness and the complete rational box from BH.15--BH.17. All polygon coordinates and shoelace areas used Python fractions.Fraction. Under an external five-second cap, it used approximately **0.0686 seconds** internally. Executed source SHA-256:
-2d1f37c2e1b88a0dd959ae46f6f6e118a7eb81d0854b9c11b39b200e93a4be3d, Git blob 4a653732d4b9e45c19cf5489fa96ba1d1754ce4a; the committed source matches the executed bytes. Its complete [record](computer-assisted/box-area-modulus-checks.json) explicitly says finite tests **do not** verify the continuum theorem or prove the global conjectured value \(M\).
+The independent [rational regression](computer-assisted/check_box_area_modulus.py) ran 32 prescribed boxes, checking their exact enlarged-versus-midpoint polygon areas, individual-width penalty, and uniform bound: **101 rational assertions passed, 28 strict enlargements**, including the exact seven-polygon witness and the complete rational box from BH.15--BH.17. All polygon coordinates and shoelace areas used Python fractions.Fraction. Under an external five-second cap, it used approximately **0.0731 seconds** internally. Executed source SHA-256:
+5fbf3e129d446d6d16f88e25af7853e147ca4be3206a3a9724d7b8978a1fda65, Git blob a1d54a46d0ea0c90bead358e7bf1d9d1ca2e61d3; the committed source matches the executed bytes. Its complete [record](computer-assisted/box-area-modulus-checks.json) explicitly says finite tests **do not** verify the continuum theorem or prove the global conjectured value \(M\).
 
 The rational seven-polygon decomposition in BH.16 was independently computed with the same elementary clipping primitives after shifting the source's exact rational offsets. This checks a **single prescribed exact configuration**, not a 436-million-leaf global certificate. The universal area-overcount estimate (BH.7) and rational-space completeness corollary are hand proofs and do not rest on these finite tests.
 
