@@ -1,6 +1,6 @@
 # Ambidextrous sofa research — current handoff
 
-**The sharp value M is not proved for general full-turn or partial-turn bodies.** The latest continuation proves a complete global midpoint-hallway upper bound, extends it to arbitrary handed motions and actual incoming heights, and gives a compact finite-offset reduction with an explicit finite-to-continuum error bound. This is not another special reference family, but its constant is still larger than M.
+**The sharp value M is not proved for general full-turn or partial-turn bodies.** The new three-hallway hand argument improves the earlier computer-free global upper bound strictly to \(2\sqrt2-1-10^{-9}\). The stronger external computer-certified \(353/200=1.765\) remains available, and neither is the sharp Romik value. The supporting finite-to-continuum and box-area results remain separate.
 
 Repository: `vltanh/lean4-moving-sofa`.
 Branch: `research/ambidextrous-pen-and-paper`.
@@ -8,6 +8,20 @@ Draft PR: #3; base `main`.
 Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
+
+## New general computer-free bound: three hallways eliminate the 45° equality shape
+
+[TH1](strict-hand-three-hallway-bound.md) proves, by hand and **without a finite-angle certificate search**, that **every** compact connected common-starting-position ambidextrous sofa—including arbitrary continuous partial motions—satisfies
+\[
+\boxed{|S|\le2\sqrt2-1-10^{-9}.}
+\]
+The same bound holds for full-turn sofas. This is a strictly better **pure hand bound** than the earlier \(2\sqrt2-1\), but remains far weaker than the **externally computer-certified** \(353/200=1.765\) and does not establish Romik's \(M\approx1.644955\). It is not presented as a new best numerical world bound.
+
+The proof uses the two opposite proper 45° hallways to enclose every candidate in a rectangle with two opposing forbidden corners, intersected with a diagonal band. If a *connected* sofa had area greater than \(B-10^{-9}\), \(B=2\sqrt2-1\), the exact triangular density of the unit-square sum coordinate forces both rectangle widths within \(1/50\) of two and the band center within \(1/100\) of two. Three explicit **positive-area rational rectangles** must each contain some sofa point, because omitting any would lose more area than the presumed \(10^{-9}\) deficit. The first two points force **both actual support depths** at the third to exceed one for the rational normal pair \((4/5,3/5),(-3/5,4/5)\). No proper \(36.87^\circ\) hallway can contain that sofa. Every ambidextrous motion of area above this threshold must visit both proper 45° frames by GH/O'Keefe's wrong-way-angle argument, and the lower motion crosses the intermediate 36.87° angle by continuity.
+
+**Critical audited edge case:** when one of the two 45° rectangle widths equals **exactly 2**, a *zero-area connector line* can join the two corner lobes. The final TH proof explicitly retains it; only the case **both widths strictly above 2** gives separated components. The connector has zero area, so the quantitative corner-square mass argument covers the equality-width case without falsely discarding it.
+
+The companion [ten-plus-one exact rational arithmetic checks](computer-assisted/check_strict_hand_three_hallway.py) are supplementary; **the proof is the displayed hand geometry**, not those checks. TH is a useful example of incorporating CP actual-support obstructions and BH-style **area stability** into a global hand exclusion, rather than a claim that BH's box modulus alone makes the four-angle problem sharp. The known connected four-angle area witness \(1.73172\ldots>M\) still prevents any four-angle-only route to Romik optimality.
 
 ## New original hand bound for exact four-hallway certificates (BH)
 
