@@ -23,7 +23,7 @@ def run():
     test("upper_sqrt_epsilon",Q(141,1000)**2>E)
     test("min_width_loss",Q(2)-up > Q(1,2))
     test("t_smaller_than_one_fifth",2*E<Q(1,5)**2)
-    test("outer_square_deficit",Q(49,200)+Q(7,10)*Q(29,100)-Q(9,200)>Q(403,1000))
+    test("outer_square_deficit",Q(49,200)+Q(7,10)*Q(29,100)-Q(9,200)==Q(403,1000))
     test("alpha_below_outer_deficit",E+2*Q(141,1000)<Q(403,1000))
     test("square_deficit_parabola_first",Q(1,5)*Q(29,100)**2>0)
     test("square_deficit_parabola_last",-Q(3,10)*Q(7,10)**2+Q(29,100)*Q(7,10)-Q(1,2)*Q(3,10)**2>0)
@@ -38,7 +38,7 @@ def run():
     test("lower_wedge_inside_square",Q(2)-Q(1,5)-1>Q(21,40))
     test("upper_band_covers_wedge",-Q(43,250)+low/2 > Q(3,20))
     test("C_greater_38_7",Q(62)-40*up>=Q(38,7))
-    test("eta_positive",5*low-7>Q(71,1000))
+    test("eta_positive",5*low-7==Q(71,1000))
     test("quadratic_dual_denominator",sum([700,2,98,686,14])==1500)
     test("Delta_dual_norm", Q(1,2)+Q(1,2)+14+Q(1,2)==Q(31,2)<16)
     test("Theta_dual_norm",2+98+14==114)
@@ -60,7 +60,6 @@ def run():
       for x in (Q(-1,7),Q(1,11)):
        for y in (Q(-1,5),Q(1,13)):
         for sa in (Q(0),Q(1,3)):
-         sd=N+x-7*y+7*sa-C # wait: solve C=N+x-7y+7sa+sd => sd=C-N-x+7y-7sa
          sd=C-N-x+7*y-7*sa
          for omega in (Q(0),Q(1,9)):
           z=(N,x,y,sa,sd,omega)
