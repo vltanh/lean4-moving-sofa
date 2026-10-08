@@ -15,7 +15,7 @@ optimality.
 **Summary.** The unmodified PR #7 near-reversal
 extremizer cannot outperform Romik after *any*
 uniform scaling and rotation compatible with
-both complete quarter turns: Theorem OB1 below
+both handed turns, even partially/nonmonotonically: Theorem OB1 below
 proves a strict bound **288/191 < 1.508 < M**.
 Nonuniformly compressed reverse-turn shapes
 and independently grafted reverse arcs were
@@ -74,8 +74,9 @@ reverse-turn sofa constructed in PR #7's
 If **any Euclidean similarity image**
 \(B=\lambda R S_e+t\), with \(\lambda>0\)
 and \(R\) orthogonal, is a compact connected
-sofa following both **complete conventional**
-90° turns from one unit-width incoming strip,
+ambidextrous sofa with **arbitrary continuous
+possibly partial or nonmonotone motions**
+through both handed 90° hallway bends,
 then
 
 \[
@@ -130,18 +131,29 @@ D_e\ge W_e\ge|S_e|=V(e).
 \tag{OB.3}
 \]
 
-Independently, the elementary
-[three-point switching width bound TSW1]
-(three-point-switching-fiber-width.md)
-for **any connected complete-two-turn sofa**
-gives horizontal width at most \(2\sqrt2\)
-in its own common incoming unit strip.
-Its vertical height is at most one,
-so its Euclidean diameter is at most
+Independently, the
+[partial-turn three-point width theorem PTW1]
+(partial-turn-three-point-width.md)
+applies to **any compact connected ambidextrous
+sofa with arbitrary continuous motions**.
+Write H≤1 for the actual incoming vertical
+span of the proposed similarity image B.
+If \(|B|\le\sqrt2\,H\), then
 \[
-\boxed{\sqrt{(2\sqrt2)^2+1}=3.}
+|B|\le\sqrt2<288/191
+\]
+and the claim is immediate. Otherwise
+\(|B|>\sqrt2 H\), and PTW1 forces
+its common-incoming horizontal width
+\(W_B\le2\sqrt2\). The same body lies in
+a rectangle of height H≤1, so its
+Euclidean diameter is at most
+\[
+\boxed{\sqrt{(2\sqrt2)^2+H^2}\le3.}
 \tag{OB.4}
 \]
+This step **does not require completing
+both original turning motions**.
 This diameter conclusion is *rotation-invariant*;
 no assumption is made about how S_e was
 originally oriented before attempting to
@@ -168,14 +180,14 @@ optimization or geometric assumptions
 on the similarity orientation. QED.
 
 **Boundary.** The theorem applies to an
-*entire PR #7 reverse shape under similarities*.
+*entire PR #7 reverse shape under similarities*
+and now covers **every genuinely ambidextrous
+motion type**, including partial/nonmonotone
+turns, through the area-dependent PTW width gate.
 Horizontal-only compression, nonlinear
-boundary grafting, intersection with
-other one-turn surviving sets, and
-partial-turn ambidextrous competitors
-are **not** excluded by OB1. The last
-class does not automatically inherit
-the complete-turn width gate.
+boundary grafting, and intersection with
+other one-turn surviving sets remain
+**outside** its scope.
 
 ## 3. Reverse PR #7 curved bodies compressed horizontally and retested
 
