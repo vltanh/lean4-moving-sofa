@@ -161,6 +161,37 @@ theorem center_shift_le_21_of_penalty {K C : Set Point}
   have hmul := mul_nonneg (sub_nonneg.mpr hsq) pi_pos.le
   nlinarith [hpen,hint,hmul,hpi]
 
+/-- General coercive radius bound for the continuous-penalty sublevel
+sets. A maximizing-sequence argument can therefore use one compact horizontal
+box once the penalty is bounded; no false origin-centred bound is needed. -/
+theorem cap_radius_about_target_midpoint_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    {R : ℝ} (hR : 0≤R)
+    (hpen : supportL2Penalty K C≤R) :
+    ∀p∈C,
+      norm2 (p-(horizontalMidpoint K,0))≤26+2*sqrt R := by
+  let m:=horizontalMidpoint C-horizontalMidpoint K
+  have hm : |m|≤21+2*sqrt R :=
+    center_shift_le_of_penalty hK hC hKpos hCpos hR hpen
+  intro p hp
+  let q : Point := (p.1-horizontalMidpoint C,p.2)
+  have hq : q∈centeredCopy C := by
+    rw [centeredCopy_mem_iff]
+    simpa [q] using hp
+  have hqr : norm2 q<5 :=
+    arbitrary_positive_cap_radius_five hC hCpos q hq
+  have hdecomp : p-(horizontalMidpoint K,0)=q+(m,0) := by
+    ext <;> simp [q,m] <;> ring
+  calc
+    norm2 (p-(horizontalMidpoint K,0))
+        =norm2 (q+(m,0)) := by rw [hdecomp]
+    _ ≤norm2 q+norm2 (m,0) := norm2_add_le q (m,0)
+    _ =norm2 q+|m| := by simp [norm2,Real.sqrt_sq_eq_abs]
+    _ ≤5+(21+2*sqrt R) := add_le_add hqr.le hm
+    _ =26+2*sqrt R := by ring
+
 /-- The penalized comparison cap stays within radius 26 of the *input
 cap's midpoint*.  An origin-centred statement would contradict horizontal
 translation invariance. -/
