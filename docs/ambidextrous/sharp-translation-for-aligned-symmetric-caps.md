@@ -229,7 +229,50 @@ nondecreasing argument at larger t
 preserves this deficit. This proves
 STC.2.
 
-## 5. Why this does not settle arbitrary sofas
+## 5. The shifted intersections are actual connected full-turn sofas
+
+The theorem's translated intersections are not merely
+disconnected area relaxations. For each cap X,
+every one-turn surviving vertical fiber is the
+interval \([n_X(x),A_X(x)]\), and the hypotheses
+give \(n_X(x)\le1/2\le A_X(x)\).
+Consequently at each common projected abscissa
+\(x\in I\cap(I+d)\), the fiber of
+\(E_d=T_U\cap(\rho T_V+(d,0))\) is the
+intersection of two nonempty intervals,
+**each containing height 1/2**. It is
+therefore a nonempty interval containing
+height 1/2. The horizontal projection is
+the full interval \(I\cap(I+d)\).
+For \(|d|<2m\) this proves E_d is compact
+and connected (indeed it contains the
+entire common midline segment); at
+\(|d|=2m\) it is a degenerate connected
+fiber; for larger shifts it is empty.
+
+Every point of E_d belongs to the lower
+complete one-turn survivor \(T_U\) and
+the translated/reflected upper survivor
+\(\rho T_V+(d,0)\), so the **same body**
+admits both entire conventional turning
+families. The common incoming body
+orientation and width-one strip are
+unaltered by the horizontal translation.
+The canonical outer-support hallway
+positions are continuous in angle;
+their straight incoming corridor
+motions can be joined at an arbitrarily
+remote common starting point.
+
+Thus for \(|d|<2m\) these are genuine
+connected **ambidextrous sofas**,
+not merely pairs of formally compatible
+one-turn cap profiles. This class
+contains asymmetric near-reference
+bodies with opposite positive exposed
+horizontal faces, as in RH.14.
+
+## 6. Why this does not settle arbitrary sofas
 
 No result here transforms an arbitrary
 convex hull into **two independently
