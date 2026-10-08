@@ -1,6 +1,23 @@
 # Active roadmap: identify the sharp value inside a now bounded global problem
 
-**The exact optimum M is not proved for full or partial turns.** A new direct hand proof gives the strict global bound \(2\sqrt2-1-10^{-9}\) for both motion classes, weaker than O'Keefe's externally computer-certified 1.765. The height-sensitive midpoint theorem and finite-offset convergence remain useful but do not identify the sharp value M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+**The exact optimum M is not proved for full or partial turns.** The new coupled-support JH1 hand proof gives the meaningful strict global bound \(2\sqrt2-1-1/90\) for both motion classes, still weaker than O'Keefe's externally computer-certified 1.765. The height-sensitive midpoint theorem and finite-offset convergence remain useful but do not identify M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+
+## Current strongest computer-free global upper bound: JH's coupled three-hallway proof
+
+[JH1](coupled-three-hallway-hand-bound.md) improves the previous extremely small strict hand gap to a substantive explicit value:
+\[
+\boxed{|S|\le2\sqrt2-1-\frac1{90}<1.817317.}
+\]
+It holds for **all compact connected ambidextrous sofas with arbitrary continuous partial turns**, and hence for the complete full-turn subclass, using the no-sideways-motion intermediate-angle theorem already in GH/O'Keefe's paper. It is **strictly weaker numerically** than the external independently computer-certified \(353/200=1.765\); it is not the optimality proof.
+
+**New technique beyond TH/QT.** The two \(45^\circ\) constraints admit an exact positive-definite **near-optimal envelope-area identity** for rectangle widths \(P,Q\) and diagonal-band center c. The proof includes the case of point-like zero-area connectors at exactly unit-square contact. A third **rational \(36.87^\circ\) hallway** pays for *two* separately absent tip triangles of areas \(s_A^2/14,s_D^2/14\) plus a disjoint central forbidden wedge of area \(N^2/700\), with an explicit at-most \((\Delta_+)^2/16\) portion lost below the incoming band. Rather than forcing *each* region's area independently above an entire assumed deficit, **weighted Cauchy--Schwarz couples all three losses**:
+\[
+B-|S|\ge\frac{(62-40\sqrt2)^2}{1500}-\frac{(\Delta_+)^2}{16}
+>\frac{39667}{3528000}>\frac1{90}.
+\]
+There is no numerical optimization, curvature hypothesis, hidden support-feasibility assumption, or rounding argument in the proof. [Checker](computer-assisted/check_coupled_three_hallway.py) and [exact check record](computer-assisted/coupled-three-hallway-checks.json) preserve **48 passing elementary tests** under a five-second cap; these do not establish the continuum theorem on their own.
+
+**Strategy lesson:** JH gives a useful way to incorporate the exact BH/CP *area-and-support* mechanisms into a genuine global hand result. The new metric is the **joint squared loss** of visible support witnesses and forbidden area; one-off isolated rectangle witnesses throw away nearly all this budget. The analytic three-hallway bound still cannot approach Romik's \(M\) by refinement of only these orientations, because the four-angle source relaxation contains an actual connected finite configuration with area \(1.73172\ldots>M\). A sharp continuum structural step remains indispensable.
 
 ## Completed general hand upper bound using the 45° stability and one 3–4–5 hallway
 
