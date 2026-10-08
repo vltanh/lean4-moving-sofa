@@ -143,7 +143,34 @@ The strict final inequality follows from compactness of \(E(K)\) and its exclusi
 
 This gives a second explicit, fully rational check on the vertical-span caveat in the [HS/SEC hull-reflection program](hull-reflection-symmetrization-budget.md), now starting from an **already convex and fully feasible** source body. It is still far below competitive area and does not disprove area monotonicity of the saturated envelope.
 
-## 3. Implication for the new signed-area strategy
+## 3. A universal exact admission criterion for actual full-turn hulls
+
+The example suggests distinguishing **two independent barriers** rather than treating the word “compatible” as a black box. The following equivalence makes the domain of a hull-based global proof precise.
+
+**Proposition FH2 (actual-hull admission).** Let \(K\) be any nonempty compact convex subset of an incoming unit horizontal strip, with horizontal projection \(I\). Let \(E(K)\) be its **complete two-handed canonical envelope**. The following are equivalent:
+
+1. There exists a compact **connected** sofa \(S\), completing both conventional full turns in that incoming orientation, whose actual convex hull is exactly \(K\).
+2. Both of these conditions hold:
+   - Every extreme point of \(K\) survives: \(\operatorname{ext}(K)\subseteq E(K)\).
+   - **Every** vertical fiber of \(E(K)\) over \(I\) is nonempty.
+
+**Proof.** If \(S\) exists, canonical support tightening gives \(S\subseteq E(K)\). Every extreme point of the convex hull of a compact planar set belongs to the set itself: by Carathéodory, an extreme point expressed as a convex combination of at most three points of \(S\) forces all these points to equal the extreme point. Thus \(\operatorname{ext}(K)\subseteq S\subseteq E(K)\). Also, connectedness of \(S\) makes its horizontal projection an interval, necessarily \(I=\operatorname{proj}_x K\), and every fiber of \(S\), hence of \(E(K)\), is nonempty.
+
+Conversely, suppose both conditions in (2) hold. A lower canonical hallway has an interval section on every vertical line: its outer walls bound \(y\) from above and its inner-wall disjunction is a union of upward rays, hence an upward ray. The opposite handed hallway has an interval section as well, and \(K\) has convex interval fibers. Their intersection \(E(K)\) therefore has interval vertical fibers. It is compact, and by the second condition its projection is the *whole interval* \(I\). If it were disconnected into two disjoint nonempty compact sets, each connected interval fiber would lie entirely in one piece, giving two disjoint compact projections partitioning \(I\), impossible. Hence \(E(K)\) is connected.
+
+By the planar Krein–Milman/Minkowski theorem, the convex hull of all extreme points of \(K\) is \(K\); in finite dimensions its closure is unnecessary after taking the hull of the compact \(E(K)\). Since \(E(K)\subseteq K\) and it contains \(\operatorname{ext}(K)\), we have
+\(\operatorname{conv}(E(K))=K\). Thus the canonical support data of \(E(K)\) are *exactly* those of \(K\), so the already satisfied pointwise hallway inequalities provide continuous full canonical motions. Their incoming and terminal straight arms append at the axis endpoints. Taking \(S=E(K)\) proves (1). \(\square\)
+
+This is the **continuum converse** to the same-hull saturation construction [SAT.1](saturation-does-not-rescue-repair.md). It holds without smoothness, curvature domination, reflection symmetry or a positive-area hypothesis. It is *not* an optimal-area comparison; it only characterizes whether a proposed convex hull is genuinely the hull of a connected body with both full turns.
+
+The two tests are logically distinct:
+
+- The present Minkowski midpoint \(K\) violates **extreme-point retention**: its unique bottom extreme \(O\) is forbidden on a whole rationally bounded bottom neighborhood, regardless of whether its envelope has interval projection.
+- The exact \(2\times1\) rectangle in [CI](candidate-functionals-disconnected-cap-pairs.md) retains its four extreme vertices but loses its entire central vertical fiber, violating **fiber nonemptiness**.
+
+These are exactly the two ways in which a support interpolation can fail admission *before* any ordinary-area or signed-area Jensen inequality is applied.
+
+## 4. Implication for the new signed-area strategy
 
 A proposed Jensen proof cannot assert that Minkowski interpolation between *actual feasible hull support functions* stays in that same class, then use area optimality or Euler equations at every interpolant. FH1 supplies an exact counterexample to this indispensable convex-domain premise. One can still consider **all** normalized convex hulls and their canonical envelopes as a larger interpolation domain, or use the [raw offset variation](full-turn-unconstrained-envelope-variation.md), whose comparison is valid despite hull loss. But then the pinching and clipping terms must remain in the objective, and a sharp area theorem on that larger domain is entirely unproved.
 
