@@ -1,0 +1,48 @@
+{
+  "result": "exact_rational_regression_passed",
+  "cases": 32,
+  "checks": 96,
+  "strict_enlargements": 28,
+  "largest_realized_penalty_fraction": 0.04512305805016784,
+  "sample": [
+    {
+      "seed": 0,
+      "center_area": "153/3025",
+      "enlarged_area": "245699/1452000",
+      "exact_penalty": "1897/375",
+      "pieces": 2,
+      "area_over_penalty": 0.023451965260502663
+    },
+    {
+      "seed": 7,
+      "center_area": "0",
+      "enlarged_area": "0",
+      "exact_penalty": "271/75",
+      "pieces": 0,
+      "area_over_penalty": 0
+    },
+    {
+      "seed": 16,
+      "center_area": "0",
+      "enlarged_area": "0",
+      "exact_penalty": "1897/450",
+      "pieces": 0,
+      "area_over_penalty": 0
+    },
+    {
+      "seed": 31,
+      "center_area": "153/3025",
+      "enlarged_area": "4613533/31363200",
+      "exact_penalty": "1897/450",
+      "pieces": 2,
+      "area_over_penalty": 0.022896552201944687
+    }
+  ],
+  "execution_seconds": 0.070186,
+  "external_timeout_seconds": 5,
+  "source_sha256": "fbac8a51bb8d9c521ace85206bbda3497d3df1c71a83d18de723894b116b8ced",
+  "source_git_blob_sha": "4f66e600f8dfbcd886afe980e8896609de548742",
+  "executed_source_matches_committed_blob": true,
+  "hand_proof_verified_by_finite_tests": false,
+  "global_area_M_proved": false
+}
