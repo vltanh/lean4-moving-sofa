@@ -1,0 +1,40 @@
+{
+  "status": "certified_local_area_upper_passed",
+  "scope": "full conventional two-turn feasible sofas in a common incoming strip whose convex hull lies within Hausdorff support radius 7/10000 of centered Romik reference convex hull",
+  "global_A_F_le_33_20_proved": false,
+  "sample_angles_each_turn": 511,
+  "rational_half_angle_mesh_n": 512,
+  "horizontal_cells": 100000,
+  "coordinate_scale": 1000000000000,
+  "support_radius": "7/10000",
+  "reference_m_interval_scaled": [
+    1167049816544,
+    1167049816555
+  ],
+  "reference_R_interval_scaled": [
+    1302051691595,
+    1302051691636
+  ],
+  "slice_upper_integer_sum": "70505300162315420",
+  "slice_cell_width_scaled": "23400000",
+  "area_exact_upper": "412456005949545207/250000000000000000",
+  "area_decimal_upper": 1.649824023798181,
+  "margin_to_33_20_exact": "43994050454793/250000000000000000",
+  "complete_cell_cover": true,
+  "exact_rational_reference_root_isolation": true,
+  "exact_integer_slice_bounds": true,
+  "numpy_integer_products_safe_by_size_bounds": true,
+  "source_git_blob_sha": "aadd12d6d0bfa59187e869325cf0c42d2bf3ad7c",
+  "executed_source_git_blob_matches_commit": true,
+  "source_sha256": "1133b23716ed9579107b53c4923b7bb3461ea83f7e8a8cebc8db9721371e24f3",
+  "execution_time_seconds": 0.5698035200000504,
+  "external_timeout_seconds": 5,
+  "extra_exact_grid_check": {
+    "cells": 200000,
+    "area_decimal_upper": 1.649800674720464
+  },
+  "independent_reference_formula_check": "126 floating values agreed with rigorous intervals within 3e-12; float test is not part of theorem",
+  "continuum_argument": "NL.4-NL.5 two-turn support-depth inclusion and monotone wall interval bounds",
+  "CI_or_Lean_used": false,
+  "independent_math_review": false
+}
