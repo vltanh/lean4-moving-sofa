@@ -121,6 +121,57 @@ No theorem in the current notes establishes that payment
 universally. The exact global sharp value and the
 partial-motion bridge remain open.
 
+## Exact full-turn gap ledger (the proof still missing)
+
+For the two downward caps \(U,V\) of an **actual connected
+complete-turn body**, with nonempty canonical-envelope fibers,
+let
+
+\[
+\begin{aligned}
+\Delta_U&=M/2-\Psi(U)\ge0,\quad
+\Delta_V=M/2-\Psi(V)\ge0,\\
+R_U&=P_J(U)-\Psi(U)
+=\int_J(1-A_U)+\int_{I\setminus J}n_U\ge0,\\
+R_V&=P_J(V)-\Psi(V)\ge0,\\
+\Lambda&=P_J(U)+P_J(V)-|E|\ge0,
+\end{aligned}
+\]
+
+where \(\Lambda\) is **exactly** the four positive-part
+spatial-partition terms of SPB.4, and
+\(S\subseteq E\) is the canonical full-turn envelope.
+Then pure algebra gives
+
+\[
+\boxed{M-|E|=\Delta_U+\Delta_V+\Lambda-R_U-R_V.}
+\tag{PJ-LEDGER.1}
+\]
+
+Thus the sufficient ordinary-area inequality for
+complete-turn optimality is
+
+\[
+\boxed{R_U+R_V\le\Delta_U+\Delta_V+\Lambda.}
+\tag{PJ-LEDGER.2}
+\]
+
+This criterion is *equivalent* to the desired
+\(|E|\le M\) for the indicated actual full-turn data, not a
+newly proved global estimate. Using only WV2
+(\(\Delta_U,\Delta_V\ge0\)) is insufficient because
+the two \(R\) terms may be positive. The stronger
+separate-cap inequality \(R_U\le\Delta_U\) for every
+admissible cap would suffice, but may be more than needed;
+the nonnegative pairwise slack \(\Lambda\) can pay a
+scalar violation. Crucially, this exact accounting retains
+the spatial clipping interaction instead of silently
+dropping it.
+
+Any honest claim of unrestricted sharp optimality must
+also supply a **separate partial-turn argument**; this
+ledger uses complete full turning niches.
+
 ## Exact remaining gates for the sharp-value strategy
 
 **A. Audit the new local identities independently.**
