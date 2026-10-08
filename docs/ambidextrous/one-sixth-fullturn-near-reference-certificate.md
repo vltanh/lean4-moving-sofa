@@ -12,6 +12,8 @@ then
 \]
 **This is not the general full-turn bound.** It is a local ordinary-area certificate valid for *arbitrary nonsmooth, asymmetric, disconnected-fiber, point-face or clipping perturbations* satisfying the stated support-distance premise. A full-turn body with area \(>1.65\) must lie **outside** this neighborhood. Combined with the earlier analytic AW bound \(|S|<41/25=1.64\) for incoming horizontal width \(\le2\), such a counterexample must have both width \(>2\) and Hausdorff distance \(>7/10000\) from \(K_*\). Nonalignment/degenerate-face configurations remain.
 
+**Finite-support strengthening.** The argument in fact assumes only that S lies in \([-117/100,117/100]\times[0,1]\) and that, at the four exact normal directions of each of the 511 frames (the two normals and their vertical reflections), the actual support of K differs from the reference support by at most \(7/10000\). Uniform Hausdorff nearness is a sufficient condition, **not an additional needed regularity hypothesis**. This formulation lets a global canonical-support branch checker discharge an entire block of finite-support offsets without controlling unsampled directions.
+
 The hand proof of the reduction and the deterministic integer certificate are below. The checker is self-reviewed, not Lean-kernel verified or independently refereed; no global optimizer is used. Labels NL are local.
 
 ## 1. Reference support data as exact algebraic intervals
