@@ -53,8 +53,9 @@ g_\varepsilon=g_*+\varepsilon\sigma\psi,\quad
 \sigma\in\{-1,0,1\},
 \]
 
-has strictly positive open-quarter curvature and strictly less than
-unit curvature everywhere. In particular the perturbation is a
+has curvature strictly between zero and one **on each changed
+middle-arc interval**, and preserves the reference's globally valid
+nonnegative curvature measure. In particular the perturbation is a
 genuine convex-cap support, retains the reference's axis and top-face
 data, and stays inside the curvature-only hypotheses needed for the
 local graph analysis. This is a **necessary geometric safety check**,
@@ -93,7 +94,8 @@ curvature is \(<257/2000<13/100\), so
 
 on each affected interval. Outside the supports, the curvatures
 are exactly those of Romik's reference, whose open-quarter values
-lie strictly between zero and one. Since the perturbed support is
+lie in the closed interval [0,1] (including segments of zero
+curvature). Since the perturbed support is
 \(C^1\) across the patch boundaries and has nonnegative
 curvature measure everywhere, it is a convex support. The
 vertical and horizontal support axes are unchanged. QED.
