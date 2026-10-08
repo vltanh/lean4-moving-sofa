@@ -13,11 +13,10 @@ downward-closed one-turn caps in
 2. each has its whole top horizontal
    face **exactly** \(J\times\{1\}\);
 3. each full positive-height turning niche
-   lies inside \(J\times[0,h_X]\), with its
-   own ceiling \(h_U,h_V<1/2\).
-   No triangular shrinkage, symmetry
-   of niche sections, curvature bound
-   or common active contact pattern is assumed.
+   lies inside \(J\times[0,1/2]\).
+   No strict half-height margin, triangular shrinkage,
+   symmetry of niche sections, curvature bound, or
+   common active contact pattern is assumed.
 
 Let \(T_X=X\setminus N(X)\) and
 \(\rho(x,y)=(x,1-y)\).
@@ -99,8 +98,8 @@ R_X(1-y)\ge b+Ky.
 
 Below \(y=1/2\), the survivor's
 section is \(I\setminus N_X(y)\).
-The niche is empty for y≥h_X<1/2
-and is contained in I_b for y<h_X.
+The niche is empty for y>1/2 and
+is contained in I_b for all y≤1/2.
 The exact Fubini decomposition of the
 area of the translated cross intersection
 has two ordinary outer interval overlaps,
@@ -124,8 +123,8 @@ connected.) Consequently
 \Phi(0)-\Phi(d)\ge&
 \int_{1/2}^{1}
 [D_{m,R_U(z)}(t)+D_{m,R_V(z)}(t)]\,dz\\
-&-\int_0^{h_U}D_{R_V(1-y),b}(t)\,dy
--\int_0^{h_V}D_{R_U(1-y),b}(t)\,dy,
+&-\int_0^{1/2}D_{R_V(1-y),b}(t)\,dy
+-\int_0^{1/2}D_{R_U(1-y),b}(t)\,dy,
 \end{aligned}
 \tag{STC.5}
 \]
@@ -162,8 +161,9 @@ overlap-loss derivatives contribute
 exactly 1/2, for a total of 1,
 while both niche contributions
 have total measure at most
-\(h_U+h_V<1\). Thus the derivative
-is strictly positive.
+\(1/2+1/2=1\). Thus the derivative
+is nonnegative, even when a niche
+approaches height 1/2.
 For \(t\ge m+b\), no niche term
 is active (both radii sum to at
 most m+b), so the derivative
@@ -178,9 +178,9 @@ of STC.1 for both signs of d.
 ## 3. At zero shift the old weighted bound applies *exactly*
 
 The half-height rectangle implies
-the cap roofs A_U,A_V are at least 1/2;
-the strict niche ceilings imply
-n_U,n_V<1/2. The two survivors
+the cap roofs \(A_U,A_V\) are at least 1/2;
+the niche ceiling in hypothesis 3 implies
+\(n_U,n_V\le1/2\). The two survivors
 and their reflected pairing have
 nonempty vertical interval sections
 containing height 1/2.
