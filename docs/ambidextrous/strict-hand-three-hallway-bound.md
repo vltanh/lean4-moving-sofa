@@ -60,17 +60,31 @@ If \(\min(P,Q)\le1\), integrating the diagonal band across the thinner of the tw
 \]
 so this case cannot occur.
 
-If \(P,Q\ge2\), the two inner/outer disjunctions in (TH.2) restrict \(F\) to the two unit corner squares
+If \(P,Q\ge2\), **every positive-area part** of \(F\) lies in the two unit corner squares
 \[
 A=[P-1,P]\times[0,1],\qquad
 D=[0,1]\times[Q-1,Q].
 \tag{TH.7}
 \]
-If either \(P>2\) or \(Q>2\), these two squares are disjoint closed sets. A connected \(S\) must lie entirely in one; by (TH.5), its area is at most \(H_1<B-\varepsilon\). Therefore in the case \(P,Q\ge2\) we must have \(P=Q=2\). Their two unit squares each capture at most \(H_1\), and if \(|S|>2H_1-\varepsilon\) both capture at least \(H_1-\varepsilon\). By (TH.5),
+There can, however, be additional **zero-area connecting lines**: if \(P=2\), all points on \(u=1\) satisfying the band/rectangle constraints are allowed; if \(Q=2\), the same is true for \(v=1\). These lines must **not** be dropped when reasoning about connectedness.
+
+If **both** \(P>2\) and \(Q>2\), neither connecting line exists, and \(F\) is the disjoint union of the two corner squares (intersected with the band). A connected \(S\) then lies in one corner square, of area at most \(H_1<B-\varepsilon\). Hence \(\min(P,Q)=2\) whenever \(P,Q\ge2\) and \(|S|>B-\varepsilon\).
+
+Now the zero-area lines do not affect the area estimate:
 \[
-|z+d/2-2|\le\sqrt\varepsilon<1/100.
+|F|\le J_A+J_D,
 \]
-This proves (TH.6) in that case.
+where \(J_A,J_D\le H_1\) are the two complete corner-square band areas. From \(|S|>2H_1-\varepsilon\) both satisfy \(J_A,J_D>H_1-\varepsilon\). Applying (TH.5), and noting \(\varepsilon<k^2\), shows
+\[
+|z+d/2-P|<\sqrt\varepsilon,\quad
+|z+d/2-Q|<\sqrt\varepsilon.
+\]
+Since \(\min(P,Q)=2\), we obtain
+\[
+\max(|P-2|,|Q-2|)<2\sqrt\varepsilon<1/50,
+\qquad |z+d/2-2|<\sqrt\varepsilon<1/100.
+\]
+This proves (TH.6) for **all** \(P,Q\ge2\), including the degenerate connected-line cases, without claiming that a measure-zero connector cannot join two positive-area lobes.
 
 It remains to consider \(1<\min(P,Q)<2\). By symmetry interchange u and v if necessary so \(1<Q\le P\), and write
 \[
