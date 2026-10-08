@@ -105,6 +105,8 @@ FORBIDDEN_FINITE_PROOF_ORACLES = re.compile(
 # Source-shape blockers which cannot be resolved by finding an identifier.
 # These require an actual proof rewrite; removing or renaming the marker without
 # supplying the missing argument must not be counted as progress.
+# Keep each file key unique: Python dict literals silently overwrite earlier
+# entries and would otherwise drop source-blocker regressions from this audit.
 PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
     "MovingSofaQuantitative/CoarseAngleCertificate.lean": (
         (
@@ -147,6 +149,16 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "is false for a nonzero constant function. An anchored zero "
             "of the support difference is required.",
         ),
+        (
+            r"theorem\s+exists_integral_penalized_limit[\s\S]*?"
+            r"exists_dyadic_penalizedMax[\s\S]*?"
+            r"integral_penalty_limsup_of_dyadic",
+            "The existing dyadic selector maximizes a persistent discrete "
+            "sample penalty, not the lambda-weighted Lebesgue L2 penalty "
+            "claimed by PenalizedCapMax. A real integral-penalized "
+            "maximization/limit theorem needs its own matching objective, "
+            "coercive radius control and upper-semicontinuity proof.",
+        ),
     ),
     "MovingSofaQuantitative/NormalRecovery.lean": (
         (
@@ -181,18 +193,7 @@ PROOF_REVIEW_GATES: dict[str, tuple[tuple[str, str], ...]] = {
             "requires the point's minimizing property.",
         ),
     ),
-    "MovingSofaQuantitative/EffectiveRegularizationSupport.lean": (
-        (
-            r"theorem\s+exists_integral_penalized_limit[\s\S]*?"
-            r"exists_dyadic_penalizedMax[\s\S]*?"
-            r"integral_penalty_limsup_of_dyadic",
-            "The existing dyadic selector maximizes a persistent discrete "
-            "sample penalty, not the lambda-weighted Lebesgue L2 penalty "
-            "claimed by PenalizedCapMax. A real integral-penalized "
-            "maximization/limit theorem needs its own matching objective, "
-            "coercive radius control and upper-semicontinuity proof.",
-        ),
-    ),
+
     "MovingSofaQuantitative/EffectiveRightAngle.lean": (
         (
             r"theorem\s+penalized_cap_radius_bound[\s\S]{0,600}"
