@@ -1,71 +1,97 @@
-# Active roadmap after trying four directions
+# Active roadmap: identify the sharp value inside a now bounded global problem
 
-**General full-turn and partial-turn optimality remain unproved.** The latest user request was to commit the different directions and try all of them. The first pass is documented in [four-direction-first-pass-review.md](four-direction-first-pass-review.md); the original plan is [four-direction-research-plan.md](four-direction-research-plan.md). This roadmap replaces the previous default of extending the most recent conditional family.
+**The exact optimum M is not proved for full or partial turns.** The latest hand proofs give a global bound 2 sqrt(2)-1 for both motion classes, a height-sensitive version, and a compact finite-offset reduction with certified angular approximation. They do not identify the limit of the finite problems as M. Read [HANDOFF.md](HANDOFF.md) before continuing.
 
-## 1. Goal and rules
+## 1. Acceptance criterion and rules
 
-The goal is ordinary area at most the explicit reference value
+The desired value is
 
 $$M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.$$
 
-A new result should eliminate a possible maximizing configuration, give a correctly oriented universal area comparison on its domain, or reduce the target to a complete smaller class. A special-case margin is not global admission, and rewriting the target as a clipping inequality does not establish it.
+The target is ordinary area, not just another auxiliary maximum. A new result should establish a universal comparison, eliminate a possible maximizing configuration, or completely reduce an unresolved class. Keep exact and sampled claims separate. Prefer hand proofs; bound every script by five/ten seconds where practical, never over 30 seconds without new authorization. Commit substantive findings with `[skip ci]`. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Uniqueness is deferred; keep the PR draft while the sharp value is open.
 
-Prefer hand proofs. Keep each computation under an external five/ten-second cap where practical, never over 30 seconds without new authorization. Commit substantive positive and negative findings frequently with `[skip ci]` under docs/ambidextrous. **No CI, Lean/Lake compilation, dependency installation or manuscript build.** Preserve concurrent work. All written arguments and historical dependencies remain self-reviewed rather than independently verified. Unrestricted uniqueness stays deferred.
+## 2. Completed global coarse comparison
 
-## 2. Results and decisions
+[MH](midpoint-hallways-global-bound.md) solves the entire two-midpoint-hallway placement problem by hand. In rotated coordinates its allowed set is a rectangle with two opposite forbidden quadrants, intersected with a diagonal band. An exhaustive three-case decomposition and the exact band concentration of a 1-by-q rectangle give
 
-| Direction | First attempt produced | Decision and next gate |
-|---|---|---|
-| D1: actual maximizer structure | Exact second-order rejection of feasible balanced saddles; finite critical-face candidates for bounded rational quadratic charts. | Continue on actual unresolved geometric charts. Do not re-derive the already known first-order balance or drop its normal cone. The continuum curvature/injectivity theorem is still missing. |
-| D2: coupled dual | An overlap-safe dual, and an exact counterexample to sharpness with one constant weight per quadrant. | Stop that unsplit-weight version. Continue spatial allocation valid across parameter boxes. No globally sharp allocation yet. |
-| D3: finite-angle exclusion | One complete eight-offset box has upper area 709/480<M. Two independent rational methods and a hand integration agree. A larger box was not excluded. | Combine exact boxes with D1 critical faces. Record every residual region; no claim of complete global covering or improved global constant. |
-| D4: area versus angle | Exact allowance Lambda(p,q;e) using actual strip widths; zero allowance when arccos(p)+arccos(q)>=e. | Insert into genuine partial-endpoint branches. Positive allowances still require a deficit. No automatic minimum-width/slack relation or connected deletion. |
+$$\sup |E_{45,45}|=2\sqrt2-1.$$
 
-The notes are [D1](direction-1-critical-face-reduction.md), [D2](direction-2-overlap-safe-duality.md), [D3](direction-3-robust-finite-angle-box.md), and [D4](direction-4-width-aware-completion.md).
+There is no unprocessed offset box in this calculation. The extremizer belongs to the finite relaxation, not automatically to the continuous-motion class. The proof makes no curvature, symmetry, connectedness or maximizing-cap assumption.
 
-## 3. Concrete next experiment
+[GH](midpoint-bound-general-motions.md) gives for common incoming height H<=1
 
-Use one precisely stated finite-angle placement region, with rational normals and a proved bounding box. The robust forbidden-union method first gives an upper bound for every placement in that region. If inconclusive, subdivide into actual line-arrangement charts and apply the exact critical-face candidate reduction. Keep all candidates at chart boundaries and all actual connectedness/hull-retention constraints if optimizing the connected class.
+$$\boxed{|S|\le2\sqrt2 H-H^2.}$$
 
-This combines Directions 1 and 3 with the spatial accounting retained from Direction 2. It avoids two unproved substitutions: treating arbitrary caps as weighted maximizers and pretending that a hull-area gain survives niche deletion. It also avoids the fractional occupancy barrier by evaluating the finite geometric envelope rather than only pair/triple occupancy constraints.
+If a body exceeds sqrt(2)H, its continuous motion cannot pass through the wrong-way midpoint; the incoming/outgoing strip area test forces the proper midpoint in each turn. Therefore this bound covers arbitrary partial as well as full motions. No completion-by-deletion is used.
 
-**What would count as a decisive next result:** a complete exclusion of a genuinely unresolved compact configuration region, an explicit surviving critical configuration with a valid analytic improving direction, or a sharp residual theorem covering all remaining branches. A growing list of individually successful boxes is not complete coverage. The number of finite charts can be large; the abstract finite-candidate theorem is not a runtime guarantee.
+A potential counterexample above M must have H>sqrt(2)-sqrt(2-M) in every justified common incoming representation. The lower-height class is closed by this inequality. The remaining high-height class still needs a sharp comparison, not a favorable sign assumption on minimum-width clipping.
 
-For a branch with partial endpoint angles, use Direction 4's actual incoming/outgoing widths. It reduces the worst-case CC cost and can sometimes supply a zero-loss bridge. Do not choose a more favorable incoming frame unless the actual body has a proved motion to it.
+## 3. The complete finite-to-full reduction
 
-## 4. The global equality that is still not paid
+[FR](full-turn-compact-finite-reduction.md) uses one rational hallway frame and GC to put every relevant connected representative inside [0,5] times [0,1]. This proves attainment of the unpenalized full-turn maximum A_F and removes parameter escape.
 
-For compatible full-turn cap pairs with nonempty surviving fibers,
+For even n use the rational-angle grid
 
-$$|E|=\Psi(U)+\Psi(V)+G,\qquad
-\Delta(U)+\Delta(V)-G=M-|E|.$$
+`Theta_n={2 atan(j/n):0<=j<=n} union {pi/4}`
 
-Thus G<=Delta(U)+Delta(V) is the desired full-turn theorem itself. The weighted value in the existing written WV chain does not pay G. AS's adaptive aggregate upper bound is a stronger sufficient target and is also unproved globally.
+in both turn families. All finite offset lists can be reduced without loss to the explicit compact box in FR Section 3. Let A_n be its **global** maximum. The objective is continuous and piecewise quadratic on a finite polyhedral arrangement; D1's critical-face method applies in principle, with all boundary faces retained.
 
-In the valid minimum-width frame, the identity instead reads
+GC gives actual connected sampled competitors. The rational normal identity and the diameter bound show that shrinking by `(1+6/n)^(-1)` supplies every missing angle. Therefore
 
-$$G_s=T_s+C_s-sW.$$
+$$\boxed{A_n/(1+6/n)^2\le A_F\le A_n\le2\sqrt2-1.}$$
 
-The universal shortcut G_s<=0 is **false**. MS proves G_s/s -> 2T-W on a regular scaling family, with an explicit positive stadium example. NR gives positive G_s arbitrarily near M from below. These are in `minimum-width-positive-slack-counterexample.md` and `near-reference-positive-minwidth-slack.md`. Retain cap deficits; do not reopen the false sign-only strategy.
+These are analytic inequalities. No global solve of A_n was run, and a local optimizer value is not a certified upper bound on A_n. Along dyadic meshes the A_n decrease to A_F, and shrunk connected maximizing polygons have subsequences approaching an actual full-turn maximizer.
 
-MF's same-body face overlap, FO's conditional overhang budget, and SM/SB's reference-scale margin and exact bridge remain useful scoped results. They do not place arbitrary competitors in their domains. The current four attempts do not independently audit the entire WV/SR/AF continuum chain.
+This now specifies a complete finite problem and a rigorous continuum link; it is not an arbitrary family of test polygons.
 
-## 5. Partial-turn bookkeeping
+## 4. The essential warning for computer assistance
 
-CC gives the unit-strip allowance lambda(e)=tan(e/2)-e/2 and the exact relation between visited and signed full fibers. Direction 4 replaces each lambda by a no-larger Lambda using actual endpoint widths. For p,q<=1 and a=arccos p, b=arccos q:
+FR3 proves **A_n>M for every finite orientation-only grid**. A curved retained reference boundary has points on none of the finitely many sampled wall lines; a small disk at one such point fits all sampled constraints and adds positive area. The finite relaxation is therefore strictly loose even when all its placements are globally optimized.
 
-$$\Lambda=0\quad\text{if }a+b\ge e,$$
+Do not launch a refinement loop waiting for a finite orientation-only upper optimum to fall to M. It cannot do so. Closing the exact value requires one of:
 
-and otherwise
+- an analytic inequality on the finite problems uniform in n, with a limit forcing A_F<=M;
+- a complete global finite exclusion together with a genuinely sharp continuum theorem on the residual class;
+- a structural theorem for the actual continuum maximizer followed by an admitted sharp area comparison.
 
-$$\Lambda=\frac12\left[\frac{2pq-\cos(e)(p^2+q^2)}{\sin(e)}-p\sqrt{1-p^2}-q\sqrt{1-q^2}-e+a+b\right].$$
+The current material establishes none of those final sharp steps. It makes their input domains and approximation error explicit.
 
-The signed full length may be negative on some fibers. Its integral is not the area of a connected full-turn body; the empty-fiber correction and possibly disconnected components cannot be ignored. If both allowances vanish the same body completes; otherwise a genuine area margin or another feasible construction remains necessary.
+## 5. The structural route after GC/FV
 
-## 6. Reproduction and stop rules
+[GC](horizontal-gap-compression.md) and [FV](full-turn-unconstrained-envelope-variation.md) allow perturbations whose total envelope is disconnected or loses proposed hull witnesses. Those are no longer invalid competitors for the unpenalized value. FR supplies attainment and a legitimate finite maximizing sequence.
 
-The committed `computer-assisted/check_four_directions.py` passed all prescribed tests in about 0.01055 seconds internally and 0.605 seconds including subprocess startup, under a five-second cap. D1--D3 use exact rational arithmetic. D4's numerical integration is diagnostic, with its theorem proved in the note. Source and result identities are in `computer-assisted/four-direction-checks.json`.
+At a differentiable free-offset finite maximum, the equality is **visible outer length = visible inner length**. Full convex-hull edge length is not interchangeable with visible length. Positive-length wall coincidences, hidden hull facets and the continuum source measure still need control. The new reduction does not prove curvature domination or injectivity by itself.
 
-No untrusted optimizer output or unsupported external ambidextrous bound is a premise. Negative results from earlier repair, averaging, midline, face-matching, span and occupancy tests remain active controls. Stop a proposed mechanism when one of them refutes it; do not spend another pass improving constants on an already adequate obstruction.
+This is a concrete remaining implication. Re-deriving the same formal first-order equation without resolving those issues is not closure.
 
-The research has not reached a general proof. Keep PR #3 draft and preserve that distinction in every status report.
+## 6. Earlier directions retained
+
+Read [four-direction-first-pass-review.md](four-direction-first-pass-review.md) and [four-direction-research-plan.md](four-direction-research-plan.md) for the previous first pass.
+
+D1: finite critical-face enumeration is now applicable to the complete compact FR offset domain. No uniform tractable chart count or continuum curvature theorem is supplied.
+
+D2: spatially allocated forbidden unions are valid. One constant weight per entire quadrant is too weak because of overlap; do not reopen that rejected version.
+
+D3: robust boxes can exclude whole parameter regions, but a list of successful boxes is not complete coverage. FR supplies a common bounded root domain and a principled angular approximation error.
+
+D4: the width-aware completion allowance Lambda(p,q;e) is available for partial turns. Its positive cost still requires a margin. GC resolves the disconnected-completed-envelope obstacle by a new body construction, not by pretending the old envelope was connected. GH's coarse global bound bypasses completion but does not prove the sharp M value.
+
+## 7. Mandatory negative controls
+
+The exact full-turn identity remains
+
+$$|E|=\Psi(U)+\Psi(V)+G,\qquad\Delta(U)+\Delta(V)-G=M-|E|.$$
+
+The desired clipping inequality is equivalent to full-turn optimality, not an established technical lemma. WV's long written weighted-cap chain and SR/AF's calibration retain their independent-review and admission limitations. AS is a stronger upper relaxation and is not known to be globally <=M.
+
+CF5's proposed global concavity of the spatial one-cap functional is false, even on positive-face caps with widths just above two. The separate value conjecture is not refuted by that example. Do not conflate a false concavity method with a disproof of the target value.
+
+Minimum-width G_s<=0 is false, including high-area subcritical examples with regular aligned symmetric faces. Keep the actual cap deficits. Body/cap averaging, curvature repair, common-face/half-height admission and affine span normalization have earlier exact counterexamples. GC does not erase those different failures.
+
+## 8. Executed checks and current review boundary
+
+The exact midpoint checker passed 1,296 offset/band cases, six sharp equalities and 30 concentration checks in about 0.132 seconds. The finite-to-full checker passed 124 rational normal cases and 60 diameter checks in about 0.0054 seconds. Both had external five-second caps and matching committed-source blobs. Their combined record is `computer-assisted/global-midpoint-and-mesh-checks.json`.
+
+These checks are not global finite-optimizer solves or independent verification of continuum theorems. The new positive area and approximation results are hand proofs. No CI or Lean/Lake compilation was used.
+
+The next decisive result must reduce the remaining interval from M to 2 sqrt(2)-1 by a sharp global argument, rather than relabeling its upper endpoint or another sample maximum as closure.
