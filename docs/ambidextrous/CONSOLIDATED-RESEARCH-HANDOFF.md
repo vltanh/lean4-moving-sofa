@@ -87,6 +87,7 @@ All new written arguments are **self-reviewed drafts**, not independently refere
 | Sharp near-reference comparisons | Asymmetric sheared parents; infinite-dimensional strong-regularity neighborhood, **not** all near-optimal shapes | [SCR](sheared-romik-core-sharp-local-theorem.md), [ASS](actual-sofa-smooth-sharp-neighborhood.md) |
 | Pair-to-identical Minkowski averaging | Only when parent support-curvature gap and difference conditions pay the clipping correction | [MSY](two-cap-minkowski-symmetrization-sharp-hand.md) |
 | Reflection-equivariant gap compression | Every x-reflection-symmetric full canonical envelope, even disconnected, has a connected **symmetric** feasible replacement of the same area and vertical span; does not prove hull-symmetrization area monotonicity or unit-span restoration | [SEC](reflection-equivariant-connectedification.md) |
+| Exact counterexample witness completeness | Any hypothetical **larger** sofa, including arbitrary partial/backtracking motions, has a connected **rational polyomino** counterpart with two **piecewise-rational continuous motions** and finite exact positive-clearance certificates; does not find a larger sofa or bound the optimum | [RP](rational-polyomino-motion-witness-completeness.md), [exact verifier](computer-assisted/check_rational_motion_witness.py) |
 | Local fully certified \(<1.65\) area exclusion | **Only** full-turn hulls within Hausdorff \(7/10000\) of the Romik hull | [NL1](one-sixth-fullturn-near-reference-certificate.md) |
 
 The branch records an external computer-assisted universal upper bound \(353/200=1.765\), stronger than its own computer-free \(1.80882\) estimate; independently check the external source before citing it as a published verified theorem. Neither bound approaches the exact candidate sufficiently.
@@ -122,6 +123,14 @@ A new proof must give a **universal** ordinary-area comparison for *every actual
 Then handle **partial turns** by exact completion of the *same sofa*, or prove that partial competitors cannot beat M by another genuine theorem. A computer-assisted proof must cover the *entire* remaining configuration space with checked interval errors; optimizer success, finite pose samples and local stability are not substitutes.
 
 A potential counterexample instead needs (i) an explicit compact connected shape, (ii) two valid continuous left/right motions with terminal strips, and (iii) a **rigorous** ordinary-area lower bound >M. Even area ≥329/200=1.645 is sufficient but still requires rigorous geometry. No such example was found in the exploratory work.
+
+### New independent research branch: exact falsification (October 8)
+
+The user asked to **deprioritize the two-cap clipping-deficit inequality as the principal route**. The inequality remains a correct equivalent sharp-value target in its stated full-turn domain, but repeatedly bounding its individual terms has not produced a universal comparison. Do not misrepresent another rearrangement of it as a new mechanism.
+
+[RP1–RP3](rational-polyomino-motion-witness-completeness.md) instead proves a *counterexample-complete* reduction for the **original arbitrary-motion problem**: if some connected sofa has area strictly exceeding Romik's candidate, another one has rational grid-square geometry, two common-starting piecewise-rational **continuous** physical motions with positive clearance, and rational area above the candidate. Exact rational interval subdivisions, or real-algebraic quantifier elimination, certify its entire motions. This adds rational motion witnesses and a verifiable semidecision procedure to the earlier polygonal density [Note 33](33-rounding-and-perimeter.md). No actual larger sofa has been found. The complementary sharp-proof direction remains a genuinely **nonseparable joint motion/area calibration**, not separate one-turn cap deficits.
+
+Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
 ### Proposed research reset
 
