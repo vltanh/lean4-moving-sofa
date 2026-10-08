@@ -448,6 +448,127 @@ theorem arbitrary_positive_cap_radius_five {K : Set Point}
   unfold norm2 dot
   nlinarith [Real.sq_sqrt (by positivity : 0≤p.1^2+p.2^2)]
 
+/-- Translation-invariant control of the relative horizontal midpoint.
+
+Both positive-area caps have centered radius below five.  Subtract their
+centered support functions: the remainder is uniformly bounded by ten, while
+the difference of original supports contains the harmonic
+\`(midpoint C - midpoint K) * cos t\`.  Squaring and integrating gives
+\`m^2 * (π/2) ≤ 2 * penalty + 200 * π\`.  A penalty at most 1/10
+therefore forces \`|m| < 21\`.
+
+An absolute bound on the midpoint of C would be false, since translating
+K and C together preserves the hypotheses. -/
+theorem center_shift_energy_control {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    :
+    (horizontalMidpoint C-horizontalMidpoint K)^2*(π/2) ≤
+      2*supportL2Penalty K C+200*π := by
+  let m : ℝ := horizontalMidpoint C-horizontalMidpoint K
+  let r : ℝ→ℝ := fun t =>
+    supp (centeredCopy C) t-supp (centeredCopy K) t
+  have hKC : ∀t,|supp (centeredCopy K) t|≤5 := by
+    intro t
+    exact abs_supp_le_radius (centeredCopy_isCap hK).2.1
+      (fun p hp=>(arbitrary_positive_cap_radius_five hK hKpos p hp).le) t
+  have hCC : ∀t,|supp (centeredCopy C) t|≤5 := by
+    intro t
+    exact abs_supp_le_radius (centeredCopy_isCap hC).2.1
+      (fun p hp=>(arbitrary_positive_cap_radius_five hC hCpos p hp).le) t
+  have hr : ∀t,|r t|≤10 := by
+    intro t
+    dsimp [r]
+    nlinarith [hKC t,hCC t,abs_sub_le_iff.2
+      ⟨by nlinarith [hKC t,hCC t],by nlinarith [hKC t,hCC t]⟩]
+  have hdecomp : ∀t,supp C t-supp K t=m*cos t+r t := by
+    intro t
+    unfold r m centeredCopy
+    rw [supp_translate_horizontal hC.2.1 (-horizontalMidpoint C) t,
+        supp_translate_horizontal hK.2.1 (-horizontalMidpoint K) t]
+    ring
+  have hpoint : ∀t,(m*cos t)^2≤
+      2*(supp C t-supp K t)^2+200 := by
+    intro t
+    have hbound:=hr t
+    have heq:=hdecomp t
+    have hsq : (r t)^2≤100 := by
+      nlinarith [abs_le.mp hbound,sq_abs (r t)]
+    nlinarith [sq_nonneg ((supp C t-supp K t)+r t)]
+  have hcos : (∫ t in (0:ℝ)..π,(cos t)^2)=π/2 := by
+    simp
+  have hint : m^2*(π/2)≤2*supportL2Penalty K C+200*π := by
+    have hmono:=intervalIntegral.integral_mono_on pi_pos.le
+      (by fun_prop :
+        IntervalIntegrable (fun t=>(m*cos t)^2) volume 0 π)
+      (by fun_prop :
+        IntervalIntegrable (fun t=>
+          2*(supp C t-supp K t)^2+200) volume 0 π)
+      (fun t ht=>hpoint t)
+    convert hmono using 1 <;>
+      simp [supportL2Penalty,pow_mul,hcos,
+        intervalIntegral.integral_add,intervalIntegral.integral_const] <;> ring
+  simpa [m] using hint
+
+/-- The common-midpoint drift is controlled quantitatively by any
+nonnegative upper bound on the continuous support penalty. Unlike a bound on
+the absolute midpoint, this is invariant under translating both caps. -/
+theorem center_shift_le_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    {R : ℝ} (hR : 0≤R)
+    (hpen : supportL2Penalty K C≤R) :
+    |horizontalMidpoint C-horizontalMidpoint K|≤21+2*sqrt R := by
+  let m:=horizontalMidpoint C-horizontalMidpoint K
+  have hint:=center_shift_energy_control hK hC hKpos hCpos
+  have hpi : 3<π:=pi_gt_three
+  have hrroot : 0≤sqrt R:=sqrt_nonneg R
+  have hsqroot : (sqrt R)^2=R:=sq_sqrt hR
+  by_contra hn
+  have hm : 21+2*sqrt R<|m|:=lt_of_not_ge hn
+  have hsq : 441+4*R<m^2 := by
+    have h := sq_nonneg (|m|-(21+2*sqrt R))
+    nlinarith [sq_abs m,hrroot]
+  have hprod:=mul_pos (sub_pos.mpr hsq) (half_pos pi_pos)
+  have hnonneg : 0≤R*(π-1) := mul_nonneg hR (by linarith [hpi])
+  dsimp [m] at hint hm hsq
+  nlinarith [hpen,hprod,hnonneg]
+
+
+/-- General coercive radius bound for the continuous-penalty sublevel
+sets. A maximizing-sequence argument can therefore use one compact horizontal
+box once the penalty is bounded; no false origin-centred bound is needed. -/
+theorem cap_radius_about_target_midpoint_of_penalty {K C : Set Point}
+    (hK : IsCap K (π/2)) (hC : IsCap C (π/2))
+    (hKpos : 0<sofaArea (π/2) K)
+    (hCpos : 0<sofaArea (π/2) C)
+    {R : ℝ} (hR : 0≤R)
+    (hpen : supportL2Penalty K C≤R) :
+    ∀p∈C,
+      norm2 (p-(horizontalMidpoint K,0))≤26+2*sqrt R := by
+  let m:=horizontalMidpoint C-horizontalMidpoint K
+  have hm : |m|≤21+2*sqrt R :=
+    center_shift_le_of_penalty hK hC hKpos hCpos hR hpen
+  intro p hp
+  let q : Point := (p.1-horizontalMidpoint C,p.2)
+  have hq : q∈centeredCopy C := by
+    rw [centeredCopy_mem_iff]
+    simpa [q] using hp
+  have hqr : norm2 q<5 :=
+    arbitrary_positive_cap_radius_five hC hCpos q hq
+  have hdecomp : p-(horizontalMidpoint K,0)=q+(m,0) := by
+    ext <;> simp [q,m] <;> ring
+  calc
+    norm2 (p-(horizontalMidpoint K,0))
+        =norm2 (q+(m,0)) := by rw [hdecomp]
+    _ ≤norm2 q+norm2 (m,0) := norm2_add_le q (m,0)
+    _ =norm2 q+|m| := by simp [norm2,Real.sqrt_sq_eq_abs]
+    _ ≤5+(21+2*sqrt R) := add_le_add hqr.le hm
+    _ =26+2*sqrt R := by ring
+
+
 def PenalizedCapMax (target C : Set Point) (λ : ℝ) : Prop :=
   IsCap C (π/2) ∧
   ∀D,IsCap D (π/2) →
