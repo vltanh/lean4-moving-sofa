@@ -1,6 +1,18 @@
 # Active roadmap: identify the sharp value inside a now bounded global problem
 
-**The exact optimum M is not proved for full or partial turns.** The latest hand proofs give a global bound 2 sqrt(2)-1 for both motion classes, a height-sensitive version, and a compact finite-offset reduction with certified angular approximation. They do not identify the limit of the finite problems as M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+**The exact optimum M is not proved for full or partial turns.** A new direct hand proof gives the strict global bound \(2\sqrt2-1-10^{-9}\) for both motion classes, weaker than O'Keefe's externally computer-certified 1.765. The height-sensitive midpoint theorem and finite-offset convergence remain useful but do not identify the sharp value M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+
+## Completed general hand upper bound using the 45° stability and one 3–4–5 hallway
+
+[TH1: three-hallway strict bound](strict-hand-three-hallway-bound.md) establishes a **fully analytic** global area theorem
+\[
+\boxed{\mu_{\rm ambi}\le2\sqrt2-1-10^{-9}}
+\]
+for the same shared-incoming-position ambidextrous definition as the external paper, **including nonmonotone partial turns**. Thus the pure hand upper bound is now *strictly* below the previously saturated \(2\sqrt2-1\) finite relaxation. This is weaker than the external exact **computer-assisted 1.765** upper theorem and remains above Romik's \(M\).
+
+Mechanism: the exact two-45° envelope area bound has a rigid near-equality structure; area within \(10^{-9}\) of equality forces both rectangle dimensions within \(1/50\) of 2 and the diagonal band center within \(1/100\) of 2. Three disjoint positive-area rational witness boxes then all meet the sofa, and their selected points yield opposing 3–4–5 support-depth violations at the same point. **A necessary third hallway at angle \(\arcsin(3/5)\)** is forbidden. The wrong-way-angle argument forces proper 45° passage in both motions above \(\sqrt2\), so 36.87° is visited by the lower motion without requiring that it be a full quarter turn.
+
+**Pitfall corrected in self-review:** a zero-area line at a 45° rectangle width *exactly 2* can connect the two otherwise separate corner squares; do not discard it. TH uses *connectedness only when both widths exceed two* and otherwise controls areas of the full corner squares. A small exact arithmetic regression is supplementary, not a computational premise. This route provides a template for how BH-style box area stability and actual support depths can yield hand results, **but it does not prove \(A_F=M\)**. Any attempt to use a fixed finite number of hallways alone confronts FR3 and the external connected four-hallway example of area \(>M\): a sharp proof still requires continuum geometry, a paid clipping budget or a genuinely complete local structural theorem.
 
 ## New hand theorem: midpoint area certificates with a uniform rational error
 
