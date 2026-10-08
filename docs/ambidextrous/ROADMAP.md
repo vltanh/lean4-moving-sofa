@@ -1,6 +1,25 @@
 # Active roadmap: identify the sharp value inside a now bounded global problem
 
-**The exact optimum M is not proved for full or partial turns.** The new coupled-support JH1 hand proof gives the meaningful strict global bound \(2\sqrt2-1-1/90\) for both motion classes, still weaker than O'Keefe's externally computer-certified 1.765. The height-sensitive midpoint theorem and finite-offset convergence remain useful but do not identify M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+**The exact optimum M is not proved for full or partial turns.** JD1 now gives the global computer-free bound \(2\sqrt2-1-1/51\approx1.808819\) for both motion classes, superseding the intermediate JH1 \(1/90\) and QT1 \(1/175\) improvements, though still weaker than O'Keefe's externally computer-certified 1.765. The other finite-offset results do not identify M. Read [HANDOFF.md](HANDOFF.md) before continuing.
+
+## New strongest hand upper bound: JD1's exact two-sided clipping dual
+
+[**JD1 — global \(1/51\) gap**](two-sided-clipping-dual-hand-bound.md) improves the hand inequality to
+\[
+\boxed{\mu_{\mathrm{ambi}}\le2\sqrt2-1-\frac1{51}\approx1.8088192816}
+\]
+for **all** compact connected common-starting-position ambidextrous sofas, including arbitrary continuous partial turns, and hence for complete full turns. It remains weaker than O'Keefe's externally verified \(353/200=1.765\) and does not establish Romik optimality \(M\approx1.644955\).
+
+This is a genuine **new joint deficit proof**, not constant tuning of the original tiny-area witness: exact positive-definite two-\(45^\circ\) stability + disjoint missing actual-support tip triangles + the central wedge from one \(36.87^\circ\) lower hallway. JD keeps **both** lower incoming-band and top \(v=1\) clipping errors. The weighted quadratic constrained by \(C=N+x-7y+7s_A+s_D=62-40\sqrt2\) has explicit orthogonal minimizer and variance. The lower clipping's dual norm \(31/2<16\) and negative value at that minimizer mean it is paid without a penalty. If the top clipping is active, its negative minimizer value \(<-29/20\) forces extra variance that pays the two crude remaining bounds. Together,
+\[
+B-|S|>\frac{1107821}{55860000}
+=\frac1{51}+\frac{212957}{949620000}.
+\]
+The \(N\le0\) case is discharged separately by tip and base losses. The preliminary near-equality proof **retains measure-zero connector lines** at width exactly two.
+
+[Code](computer-assisted/check_two_sided_clipping_dual.py) and [record](computer-assisted/two-sided-clipping-dual-checks.json): the **byte-matched committed checker** passed **129 exact rational arithmetic and polynomial-identity tests** under a five-second limit, in ~0.0025 seconds. These are checks of constants only; the continuum proof is the hand argument and remains subject to independent mathematical review. Nothing was built or optimized at scale.
+
+**What should count as further progress:** either a *substantial* additional numerical improvement with a short complete analytic proof, or a structural bridge from finite-hallway stability and actual support-depth inequalities to the full continuum clipped-area comparison. The fixed four-angle relaxation admits a connected configuration above \(M\), so no pure four-angle bound can be sharp. Do not mistake more small constants for closure, or claim 1.808819 beats the external 1.765 theorem.
 
 ## Current strongest computer-free global upper bound: JH's coupled three-hallway proof
 
