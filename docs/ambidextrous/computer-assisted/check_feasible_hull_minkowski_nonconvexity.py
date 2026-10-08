@@ -94,6 +94,20 @@ def main():
     v=(-u[1],u[0])
     assert dot(R,u)-dot(O,u) == Q(2581,2500) > 1
     assert dot(L,v)-dot(O,v) == Q(648,625) > 1
+    # Quantitative saturation loss: every vertex is in a wedge about B;
+    # the Minkowski average lies in |x| <= (6/5)y, so at y<=1/50
+    # both forbidden-wall depths remain strictly greater than 1.
+    bottom_x=P[1][0]
+    assert all(abs(x-bottom_x)<=Q(6,5)*y for x,y in P)
+    first_depth=Q(2581,2500)-Q(38,1250)
+    second_depth=Q(648,625)-Q(39,1250)
+    assert first_depth==Q(501,500)>1
+    assert second_depth==Q(1257,1250)>1
+    # The average also contains (0,1/2), which survives every normal
+    # since the hull is inside the (3/2) by 1 incoming rectangle.
+    assert Q(3,4)**2+Q(1,2)**2==Q(13,16)<1
+    print("excluded_bottom_band_through_y=",Q(1,50),
+          "support_depth_margins=",first_depth-1,second_depth-1)
     print("diameter_squared=",diameter2,"exact_area=",area)
     print("mean_hull_forbidden_support_lower_bounds=",dot(R,u),dot(L,v))
     print("PASS: genuine convex two-full-turn body; reflection-mean hull is inadmissible")
