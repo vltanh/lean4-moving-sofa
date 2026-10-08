@@ -111,10 +111,22 @@ def run():
                                enlarged_area=str(expanded),
                                exact_penalty=str(penalty),
                                pieces=pieces,area_over_penalty=float(ratio)))
+    # Published rational four-hallway near-extremizer, translated by +3 in x.
+    witness_center=[Q(1263,500),Q(-543,400),Q(9661,5000),Q(-18603,10000)]*2
+    witness_point=[(a,a) for a in witness_center]
+    witness_area,witness_pieces=envelope_area(witness_point)
+    assert witness_pieces==7
+    assert witness_area==Q(29092957301,16800000000)
+    delta=Q(1,2000)
+    witness_box=[(a-delta/2,a+delta/2) for a in witness_center]
+    witness_enlarged,_=envelope_area(witness_box)
+    hand_upper=witness_area+Q(168,5)*delta
+    assert witness_area<=witness_enlarged<=hand_upper<Q(7,4)
+    checks+=3
     raw=Path(__file__).read_bytes()
     return dict(result='exact_rational_regression_passed',cases=32,checks=checks,
                 strict_enlargements=strict,largest_realized_penalty_fraction=float(largest_ratio),
-                sample=values,execution_seconds=round(perf_counter()-start,6),
+                sample=values,witness=dict(center_area=str(witness_area),exact_enlarged_area=str(witness_enlarged),hand_upper=str(hand_upper),strict_below=str(Q(7,4)-hand_upper)),execution_seconds=round(perf_counter()-start,6),
                 source_sha256=sha256(raw).hexdigest(),
                 source_git_blob_sha=sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest(),
                 hand_proof_verified_by_finite_tests=False,global_area_M_proved=False)
