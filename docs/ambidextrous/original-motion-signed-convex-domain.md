@@ -170,6 +170,13 @@ It follows that
 \]
 Take the supremum over *every* convex \(K\) and both terminal angles. This proves OS.8. \(\square\)
 
+**Exact calibration at the known feasible candidate.** Let \(K_*=\operatorname{conv}\Sigma_*\) be Romik's explicit two-handed reference hull, translated into the box \(B\). It has both complete conventional turns and a connected canonical envelope equal to the reference body. Therefore the *signed* fibers are all nonnegative and the formula yields
+\[
+\boxed{\mathscr V(K_*,\pi/2,\pi/2)=|\Sigma_*|
+=1+4Y_*^2+\arctan(Y_*)=M.}\tag{OS.8a}
+\]
+So any prospective global calibration of \(\mathscr V\) has the **correct equality witness**. This is an input from the explicit reference construction, **not** evidence that no larger maximizer exists.
+
 **Nothing has been proved about the numerical value of the right-hand supremum.** The equivalence is exact, not a hidden assertion that all partial motions can be completed to \(90^\circ\).
 
 ## 4. A monotone repair to genuinely admissible hulls, **at fixed terminal angles**
