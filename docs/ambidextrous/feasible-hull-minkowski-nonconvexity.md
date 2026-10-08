@@ -170,7 +170,35 @@ The two tests are logically distinct:
 
 These are exactly the two ways in which a support interpolation can fail admission *before* any ordinary-area or signed-area Jensen inequality is applied.
 
-## 4. Implication for the new signed-area strategy
+## 4. One-step ordinary-area repair of inadmissible interpolated hulls
+
+The nonconvexity in FH1 is an obstacle to **treating interpolants as actual hull data**, but not to comparing their **total ordinary envelope areas**. Here is the precise, general repair; it is a useful corollary of the already proved [GC4](horizontal-gap-compression.md) and [SAT.1](saturation-does-not-rescue-repair.md), rather than a new sharp inequality.
+
+**Proposition FH3 (area-monotone hull-admission repair).** For every nonempty compact convex \(K\) in an incoming strip of vertical span at most one, if the complete two-turn envelope \(E(K)\) is nonempty, there exists a compact convex hull \(K^\sharp\) satisfying **both** admission tests of FH2 such that
+\[
+\boxed{|E(K^\sharp)|\ge |E(K)|.}\tag{FH.14}
+\]
+The body \(E(K^\sharp)\) is connected and has actual hull \(K^\sharp\). Its horizontal width may decrease, and its vertical span may be smaller than that of \(K\).
+
+If \(E(K)\) already has **nonempty vertical fibers over its entire horizontal projection**, then the repair is *one step without any coordinate compression*:
+\[
+K^\sharp=\operatorname{conv}E(K)\subseteq K,\qquad
+E(K)\subseteq E(K^\sharp),\qquad
+\operatorname{conv}E(K^\sharp)=K^\sharp.
+\tag{FH.15}
+\]
+
+**Proof.** Write \(T=E(K)\). It is compact and has interval-or-empty vertical fibers. Apply [GC4](horizontal-gap-compression.md) to \(T\) using the two complete canonical hallway families: horizontal gap compression followed by vertical filling produces a **compact connected** body \(S^\sharp\) that follows both full turns, with ordinary area
+\(|S^\sharp|=|T|\). Set \(K^\sharp=\operatorname{conv}S^\sharp\). Canonical support tightening gives
+\(S^\sharp\subseteq E(K^\sharp)\). The latter is compact with interval vertical fibers, nonempty over the full interval \(\operatorname{proj}_x K^\sharp=\operatorname{proj}_x S^\sharp\), hence connected. Since it contains \(S^\sharp\) and lies in \(K^\sharp\), it has actual hull \(K^\sharp\). Its area is at least \(|S^\sharp|=|E(K)|\), proving FH.14 and both admission tests.
+
+When \(E(K)\) already projects to an interval, it is itself connected by the same interval-fiber argument; take \(S^\sharp=E(K)\) without compression. Then \(K^\sharp=\operatorname{conv}E(K)\subseteq K\). Since \(h_{K^\sharp}\le h_K\), every already surviving point \(p\in E(K)\) remains protected by whichever canonical inner wall protected it before, because **both support depths weakly decrease**, and it lies inside the new convex hull by construction. This gives \(E(K)\subseteq E(K^\sharp)\). The hull of the larger envelope is \(K^\sharp\) because
+\(E(K)\subseteq E(K^\sharp)\subseteq\operatorname{conv}E(K)\).
+This proves FH.15. \(\square\)
+
+**Scope.** The repair is globally valid for *ordinary total-envelope area* and needs no curvature or contact-order premise. It **does not preserve the four axis supports, fixed horizontal width, exact unit vertical span, or an arbitrary signed total-fiber functional**: the signed functional and ordinary envelope area differ whenever fibers pinch. Thus FH3 does **not** establish Minkowski concavity, nor make a fixed-axis-support Jensen proof legal by assuming its repaired midpoint still has the same axes. In the FH1 example the repair necessarily loses the bottom unit-span witness; FH.13 quantifies that loss.
+
+## 5. Implication for the new signed-area strategy
 
 A proposed Jensen proof cannot assert that Minkowski interpolation between *actual feasible hull support functions* stays in that same class, then use area optimality or Euler equations at every interpolant. FH1 supplies an exact counterexample to this indispensable convex-domain premise. One can still consider **all** normalized convex hulls and their canonical envelopes as a larger interpolation domain, or use the [raw offset variation](full-turn-unconstrained-envelope-variation.md), whose comparison is valid despite hull loss. But then the pinching and clipping terms must remain in the objective, and a sharp area theorem on that larger domain is entirely unproved.
 
