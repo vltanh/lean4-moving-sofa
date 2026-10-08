@@ -122,7 +122,7 @@ For a compact set with interval fibers (S_x=[b(x),a(x)]), define its centered-fi
 \]
 This operation preserves ordinary area by Fubini. It also preserves fiber connectedness in this example.
 
-Because (P\subset S), every centered interval of (P) is contained in the centered interval of (S) with the same abscissa. Thus
+Because $P\subset S$, every centered interval of $P$ is contained in the centered interval of $S$ with the same abscissa. Thus
 \[
 \mathfrak C P\subseteq\mathfrak C S.
 \]
@@ -152,6 +152,56 @@ Support monotonicity and (\mathfrak C P\subseteq\mathfrak C S) make **both** dep
 
 **US1 (exact negative control).** Area-preserving vertical-fiber centering does **not** preserve complete supporting two-turn feasibility in the inherited incoming frame, even when the original connected body has interval fibers, exact incoming vertical span one, and genuine complete turns of both handedness.
 
-This result rules out a direct sharp proof that first vertically Steiner-symmetrizes every actual unit-span two-turn sofa, then invokes the branch's reflection-symmetric theorem. It does **not** establish that the centered image has no other possible incoming orientation; no such statement is required to reject preservation of the original canonical constraints. It also does not rule out a special theorem at maximal-area bodies. The example has area below one, far from Romik's (M).
+Vertical-fiber centering enforces **up–down** reflection symmetry, not the **left–right** reflection assumed in RS2. This counterexample rules out its unconditional use as a two-cap balancing operation, not a direct application of RS2. It does **not** establish that the centered image has no other possible incoming orientation; no such statement is required to reject preservation of the original canonical constraints. It also does not rule out a special theorem at maximal-area bodies. The example has area below one, far from Romik's $M$.
 
 No new area bound, counterexample above (M), or Lean formalization is claimed. The exact-arithmetic checker certifies the interior-angle inequalities, diameter, and offending rational support depths; the endpoint comparison and the general canonical-motion implication remain explicit pen-and-paper proof steps.
+
+## 4. Horizontal Steiner symmetrization fails too — this time directly for left–right symmetry
+
+The same certified full-turn body furnishes a simpler, exact obstruction to the **horizontal** Steiner operation that might otherwise reduce unrestricted competitors to the left–right symmetric class RS2.
+
+For a body with measurable horizontal sections, replace the section at each ordinate $y$ by the **centered interval of the same one-dimensional measure**; retain a centered point if its original section is nonempty but has zero length. Denote this horizontal rearrangement by $\mathfrak H S$. Fubini gives $|\mathfrak H S|=|S|$. The operation preserves the incoming vertical projection $[0,1]$ and produces left–right reflection symmetry.
+
+The section of $P$ at height $y$ has right endpoint $180/113$, and its left endpoint equals
+\[
+x_{\mathrm L}(y)=
+\begin{cases}
+135/113-\frac32y,&0\le y\le90/113,\\
+18(y-90/113),&90/113\le y\le100/113.
+\end{cases}
+\]
+Therefore its horizontal Steiner image is the convex pentagon
+\[
+\boxed{\mathfrak H P=
+\operatorname{conv}\left\{
+(\pm45/226,0),\
+(\pm90/113,90/113),\
+(0,100/113)\right\}.}\tag{US2.1}
+\]
+The added vertical segment $[F,Q]$ has zero horizontal-sectional measure. Thus its rearrangement merely extends the central top point vertically:
+\[
+\boxed{\mathfrak H S=\mathfrak H P\ \cup\
+(\{0\}\times[100/113,1]).}\tag{US2.2}
+\]
+This is a **compact connected** unit-span body, is left–right symmetric, and has exactly the original area $11025/12769$. In particular the rearrangement fails for geometric, not connectedness or area, reasons.
+
+At the genuine quarter-turn midpoint choose $u=(1,1)/\sqrt2$, $v=(-1,1)/\sqrt2$, and $z=(0,0)\in\mathfrak H S$. The two top vertices $(\pm90/113,90/113)$ yield
+\[
+h_{\mathfrak H S}(u)\ge\frac{180}{113\sqrt2},
+\qquad
+h_{\mathfrak H S}(v)\ge\frac{180}{113\sqrt2}.
+\]
+Since
+\[
+180^2=32400>25538=2\cdot113^2,
+\]
+both depths at $z$ are **strictly larger than one**:
+\[
+\boxed{h_{\mathfrak H S}(u)-z\cdot u>1,\qquad
+h_{\mathfrak H S}(v)-z\cdot v>1.}\tag{US2.3}
+\]
+No placement with these fixed orthogonal normals can contain $\mathfrak H S$, by the canonical support-tightening necessity. Thus $\mathfrak H S$ cannot perform a complete conventional lower quarter turn in the inherited incoming frame. The original $S$ does perform **both** such full turns.
+
+**US2 (exact universal-operator obstruction).** Horizontal Steiner symmetrization cannot be used as an area-preserving, complete-turn-feasibility-preserving reduction to RS2, **even with exact unit incoming span and connected vertically convex source fibers**. This also identifies the correct left–right symmetry axis: US1's vertical-fiber centering addresses up–down balance, while US2's horizontal-fiber centering addresses RS2 directly.
+
+Neither theorem excludes a **competitive-area or maximizing-body-only** symmetrization theorem: $|S|<1$. Neither proves unrestricted Romik optimality, supplies a larger sofa, or restricts possible alternative incoming orientations of the transformed sets.
