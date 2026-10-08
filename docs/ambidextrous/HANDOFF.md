@@ -9,6 +9,20 @@ Baseline of this continuation: `47fdd36ffffc54207e3c96a4cd268ac7e84eb3eb`.
 Current substantive source/check checkpoint before this handoff: `e2a30cf22ae9041827132438172235e6e38c9c38`.
 Query the live tip before continuing and preserve intervening work.
 
+## New original hand bound for exact four-hallway certificates (BH)
+
+Read [box-area-lipschitz-hand-certificate.md](box-area-lipschitz-hand-certificate.md). **Neither sharp frontier is closed.** The user requested turning CP's measured pruning into a hand theorem. The response is a self-contained analytic bound: for any 8D rational or real offset box \(E\) and its midpoint \(m\), the original external four 3–4–5 hallways in \([0,5]\times[0,1]\) satisfy
+\[
+\boxed{0\le |C(E)|-|C(m)|\le\tfrac{168}{5}\max_i\operatorname{width}(E_i).}
+\]
+The **full exact weighted bound** BH.7 uses four coefficients \(19/5\) and four \(23/5\). The proof observes that newly allowed points lie in one-sided strips adjacent to the two outer and two inner wall lines of at least one hallway, then slices these strips in orthonormal coordinates. No contact classification, connectedness hypothesis, curvature bound, or numerical quadrature is needed. It is a global theorem about the **finite-hallway relaxation**, not a new global bound on the sofa constant.
+
+**Finite rational certificate rule:** if the canonical-support root from CP1 is covered by boxes whose midpoint total intersection areas plus exact BH width penalties are all \(\le T\), then *every* connected four-hallway competitor has area \(\le T\). Thanks to our GC4 result equating the global total-area supremum with the connected-component supremum for actual fixed hallway placements, such a finite certificate necessarily exists for every **strict rational** \(T>G\). It may involve an impractically large grid; \(T=G\) is not guaranteed. For full conventional turns, the earlier FR2+D1 finite-mesh proof similarly gives a computable real optimum, with rigorous interval width \(<24/n\) from a finite exact \(n\)-mesh optimization in \(\mathbb Q(\sqrt2)\). This is **computability in principle**, not a claim that the Romik value M is correct.
+
+**Nontrivial concrete eight-dimensional region:** the original four-hallway rational witness has midpoint area \(29092957301/16800000000\). On the box in which **every offset varies independently by at most \(1/4000\)**, BH bounds the entire inflated envelope by \(29375197301/16800000000<7/4\); independent exact clipping computes it as \(4159492073/2400000000<87/50\). This is local, not a global bound below 1.765; the same four-hallway global relaxation has configurations with area above M.
+
+**Validation:** [rational checker](computer-assisted/check_box_area_modulus.py) and [record](computer-assisted/box-area-modulus-checks.json), **101 exact rational assertions** including 32 general boxes, 7-polygon witness and full-box fraction; a short five-second-capped run took 0.0731s internally. Executed source matches Git blob \`a1d54a46d0ea0c90bead358e7bf1d9d1ca2e61d3\`. The continuum BH1 inequality is a hand proof; finite runs do not verify it for all boxes. No long computation, CI, Lean/Lake compilation, dependency installation or manuscript build.
+
 ## Latest bounded runtime benchmark of CP search-space trimming
 
 [Measured A/B benchmark](canonical-pruning-bounded-benchmark.md): the same independently implemented floating-point four-hallway polygon/component evaluator, original vs CP1 canonical root vs CP1 root plus CP9--CP11 support pruning. **Both searches complete at loose thresholds:**
