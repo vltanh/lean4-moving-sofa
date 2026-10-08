@@ -2,6 +2,30 @@
 
 **The exact optimum M is not proved for full or partial turns.** The latest hand proofs give a global bound 2 sqrt(2)-1 for both motion classes, a height-sensitive version, and a compact finite-offset reduction with certified angular approximation. They do not identify the limit of the finite problems as M. Read [HANDOFF.md](HANDOFF.md) before continuing.
 
+## New hand theorem: midpoint area certificates with a uniform rational error
+
+[BH1--BH3](box-area-lipschitz-hand-certificate.md) turn the canonical-offset speed improvement into a **strictly proved finite-box certification rule**, not just a timing claim. For the four \((3,4,5)\)-normal hallway pairs in \(B=[0,5]\times[0,1]\), let \(E\) be an eight-offset box, \(m=\mathrm{mid}(E)\), and \(C(E)\) the intersection of the **unions of every hallway placement within each parameter interval**. Then
+\[
+\boxed{0\le|C(E)|-|C(m)|\le\frac{168}{5}\,\max_i \operatorname{width}(E_i).}
+\]
+The hand proof places every newly allowed point in one of the four **one-sided thin wall strips** per hallway and integrates their maximum possible area across the \(5\times1\) window. The precise coefficient-weighted bound is (BH.7), with four weights \(19/5\) and four \(23/5\). It holds for all real translations and all contact topologies.
+
+Consequently a finite rational partition of CP's exhaustive trimmed root gives a **fully hand-justified global connected-component bound** \(G\le T\) if every center's exactly computed **total** polygon area plus its BH strip penalty is at most \(T\). No polygon connectivity test is needed for **this more conservative** certificate type. GC connectedification proves that the *global* supremum of total actual placement area equals \(G\), hence **for every rational \(T>G\) such a finite exact midpoint certificate exists**; the algorithm terminates in principle. This is a completeness theorem for *strict* thresholds, not an assertion that \(G=M\) or that a practical search is fast at \(T=1.765\).
+
+**Concrete exact local application:** around O'Keefe's high-area rational offset witness (after shifting x by +3), take every offset within \(1/4000\) of the center. BH1 bounds **every placement in this entire eight-dimensional region** by
+\[
+|C(E)|\le29375197301/16800000000<7/4.
+\]
+An independent seven-polygon exact rational clipping goes further and computes the entire inflated box area
+\[
+|C(E)|=4159492073/2400000000<87/50=1.74.
+\]
+This is a **local box certificate only**; the four-angle **global** optimum remains \(>M\).
+
+[BH4](box-area-lipschitz-hand-certificate.md) combines the earlier FR2 exact finite-angle enclosure and D1 finite critical-face enumeration to make the unrestricted **full conventional two-turn value a computable real in principle**: for even \(n\), exact finite maxima \(A_n\in\mathbb Q(\sqrt2)\) satisfy \(A_n/(1+6/n)^2\le A_F\le A_n\) with bracket width \(<24/n\). Finite termination is proved mathematically, but the time required can be astronomical. This does not automatically extend to arbitrary partial turns or prove Romik's exact conjecture.
+
+The [source](computer-assisted/check_box_area_modulus.py) and [record](computer-assisted/box-area-modulus-checks.json) passed **101 exact rational assertions** (32 general boxes plus the exact rational witness/local-box checks), in **0.0731 s** internally under a five-second timeout; executed bytes match the committed Git blob \`a1d54a46d0ea0c90bead358e7bf1d9d1ca2e61d3\`. These finite checks support arithmetic only. No large optimizer, Lean compilation, or published certificate rerun.
+
 ## Concrete improvement to external computer-assisted method: canonical-support pruning
 
 [CP1](canonical-support-certificate-pruning.md) is a **lossless global search-domain reduction** for the same eight-offset four-angle connected-component relaxation used in O'Keefe's certified \(353/200\) bound. For any connected component of a finite hallway intersection, first translate its attained left/bottom extrema to zero and **tighten every hallway outer wall to the actual support of that component**. The old inner disjunction remains satisfied, so every original connected competitor has a canonical counterpart of no smaller area. The reduction needs no extra sofa curvature or full-turn assumption. It changes the *search representation*, not the mathematical value being optimized.
