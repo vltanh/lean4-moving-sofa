@@ -21,6 +21,30 @@ The \(N\le0\) case is discharged separately by tip and base losses. The prelimin
 
 **What should count as further progress:** either a *substantial* additional numerical improvement with a short complete analytic proof, or a structural bridge from finite-hallway stability and actual support-depth inequalities to the full continuum clipped-area comparison. The fixed four-angle relaxation admits a connected configuration above \(M\), so no pure four-angle bound can be sharp. Do not mistake more small constants for closure, or claim 1.808819 beats the external 1.765 theorem.
 
+## A rigorous local 1.65 exclusion and exact global-proof target
+
+[NL1](one-sixth-fullturn-near-reference-certificate.md) proves **without any assumption on a competitor's symmetry or curvature** that every full-turn sofa whose convex hull is within \(7/10000\) in Hausdorff support distance of the centered Romik hull has ordinary area at most
+\[
+\boxed{412456005949545207/250000000000000000
+=1.649824023798\ldots<33/20.}
+\]
+This is an exact, auditable **rational computer-assisted local** result: 511 rational hallway samples per handed quarter turn; rigorous nested-radical enclosures for the exact reference support; 100,000 exhaustive rational x-cells, each with a directed integer upper slice-length bound. The integer slice-length sum is \(70505300162315420\). It ran under a five-second cap in about 0.57s; [checker](computer-assisted/certified_near_reference_165.py), [record](computer-assisted/near-reference-165-checks.json). This is **not** a global \(A_F\le1.65\) proof or a Lean verification.
+
+**Explicit outer frontier for the \(1/6\) request.** The existing JT lemma gives
+\[
+A_F\le33/20\ \Longrightarrow\ \mu_A\le41543/25000=1.66172
+<2\sqrt2-7/6.
+\]
+To establish its **unproved premise**, combine:
+- AW-W's purely hand upper bound \(<41/25=1.64\) for incoming horizontal width \(\le2\);
+- FAS1's sharp \(|S|\le M\) for both full turns with aligned positive top and bottom hull faces;
+- NL1's uniform 1.65 bound in the entire 0.0007 reference-hull neighborhood;
+- a **still missing** global 1.65 area exclusion on all remaining width-\(>2\), nonaligned/point-face, reference-separated hulls.
+
+Candidate global verification architecture: normalize connected actual supports to the compact FR1 box; use the exact CP support polytope and V subadditive intermediate-angle lower supports to bound allowed regions; branch across the **whole** remaining compact set, not just chosen reference placements; discharge each rational box by a proved area upper bound \(<33/20\), a structural geometric theorem, or exact impossibility; check every leaf and covering. Alternatively, a single completely certified finite full-turn relaxation with \(A_n\le33/20\) suffices directly. No such global certificate has been produced; this note does not assume it exists for any particular n.
+
+The reference-neighborhood theorem eliminates the need for a sharp local second-variation proof **at the relaxed 1.65 threshold**. It says nothing about the more difficult exact \(A_F=M\) or the far region. Even a powerful numerical local optimizer cannot replace whole-domain coverage.
+
 ## Current strongest computer-free global upper bound: JH's coupled three-hallway proof
 
 [JH1](coupled-three-hallway-hand-bound.md) improves the previous extremely small strict hand gap to a substantive explicit value:
