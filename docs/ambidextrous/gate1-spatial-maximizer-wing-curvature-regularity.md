@@ -181,6 +181,84 @@ where \(a_c,a_t\ge0\) represent at most **two** permitted facet atoms. When \(\t
 
 The result is **existential**: an uncanonicalized score maximizer could have gratuitous interior roof curvature which does not change the charged objective, so there is no claim that *every* maximizer shares RG.15. No upper unit-curvature domination \(\rho\le1\), endpoint balance equality, signed roof formula, or candidate contact chart has been inferred.
 
+## 5b. A *sharp-form* nonlinear bound on the wing densities
+
+The coarse absolute bound RG.15 can be strengthened to exactly the **velocity-dependent geometric upper function** appearing in the independently established one-turn neighboring-wall inequality, *without assuming this spatial maximizer also maximizes the different weighted objective*.
+
+On the two upper normal quarters, put
+\[
+f(t)=h_{U_*}(u_t),\quad g(t)=h_{U_*}(v_t),\quad
+p(t)=f'(t)-g(t)+1,\quad q(t)=g'(t)+f(t)-1.
+\]
+The selected canonical cap is \(W^{2,\infty}\) on compact subintervals of the open quarters away from the **one central-facet atom** (and from their axis endpoints); thus \(p,q\) and the curvature densities
+\[
+\rho_f=f+f'',\qquad\rho_g=g+g''
+\]
+are defined almost everywhere, with possible point jumps of derivatives only at the explicitly allowed facet normals.
+
+Write
+\[
+\boxed{\kappa(z)=\max\left\{|z|,\frac{1+|z|}{2}\right\}.}\tag{RG.16}
+\]
+
+**Theorem RG3 (universal wing source-curvature constraint at a global P maximizer).** At almost every open-quarter angle whose corresponding exposed outer normal is not the central facet normal,
+\[
+\boxed{
+0\le\rho_f(t)\le\kappa(q(t)),\qquad
+0\le\rho_g(t)\le\kappa(p(t)).
+}\tag{RG.17}
+\]
+There are no singular-continuous source curvatures on those same intervals; RG.17 is a **pointwise necessary condition of a global score optimizer**, not an extra assumed smoothness or corridor curvature domination.
+
+**Proof.** For the first quarter, use [WR, Section 4](one-turn-weighted-regularity.md) solely as a **polygonal geometric inequality**. Every grid facet of every selected U_n obeys
+\[
+\tau^{\rm full}_{n,j}\le
+\tan\delta\bigl(|q^+_{n,j}|+\tan(\delta/2)\bigr)
++\bigl(2\tan(\delta/2)-\ell_{n,j}\bigr)_+,
+\tag{RG.18}
+\]
+where \(q^+_{n,j}=h_n(\theta_j)+
+[h_n(\theta_{j+n+1})-\cos\delta\,h_n(\theta_{j+n})]/\sin\delta-1\).
+This is the neighboring *companion* wall bound for the first source, not a stationary-flux equality.
+
+Combine RG.18 with the **spatial** finite maximality inequality
+\(
+\ell_{n,j}\le \tau^{\rm middle}_{n,j}+b_{n,j}
++\ell^{\rm mid}_{n,j}
+\)
+and \(\tau^{\rm middle}\le\tau^{\rm full}\).
+If \(\ell_{n,j}\ge 2\tan(\delta/2)\), the positive part vanishes and the result is
+\[
+\ell_{n,j}\le\ell^{\rm mid}_{n,j}
++\delta|q^+_{n,j}|+O(\delta^2)+b_{n,j}.
+\]
+If \(\ell_{n,j}<2\tan(\delta/2)\), move its \(-\ell_{n,j}\) from the positive-part expression to the left to obtain
+\[
+2\ell_{n,j}\le\ell^{\rm mid}_{n,j}
++\delta(1+|q^+_{n,j}|)+O(\delta^2)+b_{n,j}.
+\]
+The two cases combine, with the larger harmless middle term, to give the exact uniform inequality
+\[
+\boxed{
+\ell_{n,j}\le
+\kappa(q^+_{n,j})\delta+C_1\delta^2
++b_{n,j}+\ell^{\rm mid}_{n,j}.
+}\tag{RG.19}
+\]
+The \(O(\delta^2)\) coefficient \(C_1\) is independent of n,j because all U_n lie in the fixed artificial R-box and all their supports are uniformly bounded and Lipschitz.
+
+On a compact source-angle interval avoiding \(\theta_c\) and the top normal, RG1 proves the sum of the \(\ell^{\rm mid}\) contributions vanishes. The penalty sum also tends to zero. The companion one-sided grid derivatives \(q^+_{n,j}\) converge in \(L^1_{\rm loc}\) to \(q(t)\): for convex supports, uniform convergence implies their a.e. first derivatives converge at all differentiability points; uniform boundedness gives dominated \(L^1\) convergence. The function \(\kappa\) is 1-Lipschitz, so Riemann summation of RG.19 over any such source interval yields the measure inequality
+\[
+\sigma_f(E)\le\int_E\kappa(q(t))\,dt
+\quad\text{for every interval }E
+\text{ avoiding the exceptional normals}.
+\]
+RG2 has already proved absolute continuity there, giving its pointwise density bound.
+
+For the second quarter, reverse horizontal x and interchange the two source normal families in the same elementary neighboring-wall argument. Its geometric companion velocity is \(p\), yielding \(\rho_g\le\kappa(p)\). Countably many compact intervals exhaust the nonexceptional portions of both quarters. \(\square\)
+
+**The sharp-wall threshold remains missing:** \(\kappa(z)\le1\) if \(|z|\le1\), but \(\kappa(z)>1\) when \(|z|>1\). RG3 does **not** establish \(|p|,|q|\le1\) for the global spatial maximizer. The previous weighted \(\Psi\) proof obtained such control using a **different** global balance and a niche-height bound; those facts do not automatically transfer to the spatial P objective. In particular the permitted central affine facet may have a genuine jump in source velocity, changing the matching/flux equations. This is now the explicit **remaining global value theorem** to attack.
+
 ## 6. Why Gate 1 is **not** yet passed
 
 The curvature bound \(6(R+1)+6\) is only a compactness/regularity bound, **not the sharp physical corridor bound one**. To prove \(\mathcal P_{\max}=M/2\), one still must:
