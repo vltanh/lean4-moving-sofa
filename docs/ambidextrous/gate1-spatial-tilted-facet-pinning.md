@@ -129,6 +129,70 @@ We may choose \(A(x_0)<1\). Indeed if \(s<0\), values to the right decrease stri
 
 Any continuation of the affine facet into either exterior wing would give the corresponding one-sided derivative equality, which is impossible. Thus the facet's maximal x-projection is exactly J. If a global maximizer were differentiable at either endpoint, both one-sided derivatives there would equal the inside slope s, contradicting TF.10 unless \(s=0\). Finally, a downward cap of exact height one with a **horizontal** upper face on J has \(A|_J\equiv1\), because a concave roof with a horizontal segment has its global maximum at the height of that segment and its global maximum is exactly one. \(\square\)
 
+## 4. Exact rational check on a full-width tilted facet (no angle sampling)
+
+The simplest possible cap has the entire roof tilted:
+\[
+U=\operatorname{conv}\{(-1,0),(-1,1),(1,0)\},\quad
+A_U(x)=\frac{1-x}{2},\qquad I=[-1,1],\ J=[-1/2,1/2].
+\tag{TF.12}
+\]
+Its upper middle facet has slope \(s=-1/2\) and extends into **both** charged wings. For any rational
+\(0<\varepsilon\le1/100\), add the real upper point
+\[
+p_\varepsilon=(3/4,\,1/8+\varepsilon),\qquad
+U_\varepsilon=\operatorname{conv}(U\cup\{p_\varepsilon\}).
+\tag{TF.13}
+\]
+This is again a downward-closed height-one cap with the identical projection I. Its piecewise-affine upper roof is the old roof plus
+\[
+A_{U_\varepsilon}(x)-A_U(x)=
+\begin{cases}
+\frac{4\varepsilon}{7}(x+1),&-1\le x\le3/4,\\
+4\varepsilon(1-x),&3/4\le x\le1.
+\end{cases}
+\tag{TF.14}
+\]
+Thus its *charged exterior-wing area* is larger by the **exact** value
+\[
+\int_{[-1,-1/2]\cup[1/2,1]}
+(A_{U_\varepsilon}-A_U)dx
+=\left(\frac1{14}+\frac{13}{56}+\frac18\right)\varepsilon
+=\frac{3\varepsilon}{7}.
+\tag{TF.15}
+\]
+
+The **entire full-continuum positive niche roof on J is unchanged**. Here is an explicit angular proof: in the upper semicircle a new support point \(p_\varepsilon\) can only beat the old right tip \((1,0)\) for a positive-x normal \(n=(c,s)\) if
+\[
+\tan t=\frac{s}{c}>
+\frac{1/4}{1/8+\varepsilon}
+=\frac2{1+8\varepsilon}>\frac32 .
+\tag{TF.16}
+\]
+For every such source normal \(u_t=(c,s)\) one has
+\(c<2/\sqrt{13}\). At **every** baseline abscissa \(x\in J\), the first inner-wall support numerator
+\(h_{U_\varepsilon}(u_t)-1-xc\) is negative **for each of the three possible maximizing vertices separately**:
+\[
+\begin{aligned}
+(1-x)c-1&\le 3/\sqrt{13}-1<0,\\
+s-(1+x)c-1&<0,\\
+(3/4-x)c+(1/8+\varepsilon)s-1
+&\le(5/2)/\sqrt{13}+27/200-1<0.
+\end{aligned}\tag{TF.17}
+\]
+(The third comparison follows already from \(\sqrt{13}>7/2\): \(5/7+27/200<1\).)
+Because both lower-turn normals have nonnegative vertical component, the inequality remains negative for every \(y\ge0\). New \(p_\varepsilon\) cannot improve the **second** upper-quarter support \(h(v_t)\) at all, since \(p_\varepsilon-(-1,1)=(7/4,-7/8+\varepsilon)\) has **negative** projection onto every \(v_t=(-\sin t,\cos t)\), \(0<t<\pi/2\).
+
+Thus in every angle where any support has changed, the *first wall* excludes positive-height niche points throughout J; all other angles have literally identical two-ray constraints. Hence
+\[
+\boxed{
+n_{U_\varepsilon}(x)=n_U(x)\ \text{on J},\qquad
+\mathcal P(U_\varepsilon)-\mathcal P(U)
+=\frac{3\varepsilon}{7}>0.
+}\tag{TF.18}
+\]
+This is an **exact all-angle rational perturbation**, not an approximate grid or a feasibility claim about ambidextrous sofas. It independently checks the support-locality mechanism behind TF1–TF3 against a concrete tilted affine roof.
+
 ### Connection to the current Gate 1 value theorem — and strict limit
 
 TF3 **globally** eliminates **all smooth tilted middle-facet candidates** and all tilted facets extending beyond the uncharged central half. The *only* possible canonical tilted global maximizers are therefore those with **two genuine roof corners pinned at the moving middle-window endpoints**, a geometrically narrow but nonempty theoretical class. To pass Gate 1 one must still either:
