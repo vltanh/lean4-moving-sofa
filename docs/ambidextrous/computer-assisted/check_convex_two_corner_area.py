@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact Fraction certificate: convex two-45-degree sofa area <= 3/2.
+"""Exact Fraction certificate: convex two-45-degree sofa area <= 10/7.
 
 Hand geometric reduction: a convex body avoiding the two opposed open
 inner corner quadrants can be separated from each by a half-plane
@@ -18,7 +18,7 @@ from bisect import bisect_right
 from time import monotonic
 
 D=F(283,200)  # > sqrt(2), because 283**2 > 2*200**2
-TARGET=F(3,2)
+TARGET=F(10,7)
 
 def clip_polygon(poly, a,b,c):
     """Keep exact rational halfspace ax+by<=c."""
@@ -120,15 +120,35 @@ def prove(target=TARGET, verbose=True, max_nodes=1000000):
         P1=box[0][1];Q1=box[1][1]
         if D*min(P1,Q1)<=target:
             leaves+=1;continue
+        # Valid symmetry reductions, applied only to parameter boxes
+        # lying wholly on one side of the appropriate diagonal:
+        # (u,v) -> (v,u) exchanges (P,Q) and maps weights to
+        # (1-lambda,1-mu), without changing the incoming-band area.
+        if P1<box[1][0]:
+            leaves+=1;continue
+        # (u,v) -> (P-u,Q-v) interchanges lower/upper quadrants
+        # and their separating weights, while moving the band by
+        # translation. So lambda<mu can be covered via lambda>mu.
+        if box[2][1]<box[3][0]:
+            leaves+=1;continue
+        # With actual (not merely auxiliary) outer support widths,
+        # both P,Q>2 would disconnect the two safe corner squares.
+        if box[0][0]>2 and box[1][0]>2:
+            leaves+=1;continue
         poly=enclosure(box)
+        if len(poly)<3:
+            leaves+=1;continue
+        xs=[p[0] for p in poly]
+        ys=[p[1] for p in poly]
+        # Actual extrema U=0,U=P,V=0,V=Q must all be attained.
+        # If even the enclosing polygon fails any support witness,
+        # the parameter box contains no admissible true convex hull.
+        if (min(xs)>0 or min(ys)>0 or
+            max(xs)<box[0][0] or max(ys)<box[1][0]):
+            leaves+=1;continue
         ub=area(poly)
-        if ub>target and len(poly)>=3:
-            xs=[p[0] for p in poly]
-            ys=[p[1] for p in poly]
-            # A band of sum-coordinate width d has extent <=d
-            # in either coordinate when the other one is fixed.
-            # Therefore d times either projection length is an
-            # exact (sometimes sharper) whole-band area upper bound.
+        if ub>target:
+            # Exact projection-width bound for ANY translated band.
             ub=min(ub,D*min(max(xs)-min(xs),max(ys)-min(ys)))
         if ub>target:
             ub=max_band_area(poly)
@@ -144,7 +164,7 @@ def prove(target=TARGET, verbose=True, max_nodes=1000000):
         pending.append((tuple(child2),n+1))
         pending.append((tuple(child1),n+1))
     assert 283**2>2*200**2
-    assert 3*5 < 8*2  # 3/2 < 8/5 < Romik M
+    assert 10*5 < 8*7  # 10/7 < 8/5 < Romik M
     assert target == TARGET
     if verbose:
         print('PASS: exact rational exhaustive certificate: convex two-midpoint area <=',target)
