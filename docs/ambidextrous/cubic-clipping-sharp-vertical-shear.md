@@ -74,6 +74,22 @@ h_{T_aK_*}(u_{L-v})
 =1+(b+\tfrac12a)v-\frac14v^2+O_a(v^3).
 \tag{SH.6}
 \]
+**Exact support verification (no asymptotic contact guess).** For the actual reference terminal support, every positive vector \(n=(c,s)\) sufficiently close to \(e_y\) satisfies the homogeneous formula
+\[
+h_{K_*}(c,s)=b c+\frac{s}{2}+\frac12\sqrt{c^2+s^2}.
+\]
+The shear's dual action is \(T_a^T(c,s)=(c,s+ac)\) and its centering translation contributes \(-ac/2\). Consequently the interpolation's terminal support is *exactly*
+\[
+\boxed{
+h_{K_\lambda}(u_{L-v})
+=b\sin v+\frac{\cos v}{2}
++\frac{1-\lambda}{2}
++\frac{\lambda}{2}
+\sqrt{1+2a\sin v\cos v+a^2\sin^2v}.
+}\tag{SH.6a}
+\]
+The square-root factor expands as \(1+av+O_a(v^3)\), **with no quadratic term**, because the \(a^2v^2\) terms cancel. This proves SH.7 directly for *every* \(\lambda\), and makes the exact unit-flank curvature at the top face independently auditable.
+
 The original terminal support has the same quadratic coefficient \(-1/4\). Minkowski linearity of support functions therefore gives
 \[
 \boxed{
