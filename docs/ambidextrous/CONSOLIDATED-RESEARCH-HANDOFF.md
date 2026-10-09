@@ -167,6 +167,24 @@ The user asked to **deprioritize the two-cap clipping-deficit inequality as the 
 
 Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). [UV2](univariate-rational-motion-certificate.md) now reduces each full-path hallway check for rational square cells to univariate polynomial sign conditions of degree at most five, **without positive clearance**. This improves verification, not the search for an actual area excess. Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
+**New strongest audited result (later October 8):** The convex two-corner area theorem has now been upgraded **again**, to the certified
+\(\boxed{|S_{\rm convex}|\le10/7=1.428571\ldots}\).
+The final **from-scratch, Fraction-only** [rational checker](computer-assisted/check_convex_two_corner_area.py) discharged **378,771** boxes with **189,376** terminal leaves, maximum depth **32**, no unresolved cases. It maximizes over all actual incoming-strip placements and uses only exact polygon clipping/integration, plus proved coordinate-exchange and opposite-corner symmetries and exact actual-hull extreme support attainment. The largest accepted area upper was
+\(1307684518073/915379200000<10/7\).
+This supersedes the previous \(31/20\) and \(3/2\) convex results; the proof still applies only when **the actual sofa itself is convex**.
+
+By the same fully general homothetic forbidden-hull argument, [NC4](mandatory-competitive-convex-hull-niche.md) now proves that **every genuine, connected ambidextrous sofa with \(|S|\ge M\)** (without convexity or full-turn assumptions) must have a point \(q\) of its actual hull and a genuinely visited proper \(45^\circ\) frame with **both** support depths strictly greater than \(1073/1000\); its ordinary missing convex-hull area satisfies
+\[
+\boxed{|K\setminus S|\ge\frac{5329}{9000000}|K|>\frac1{1030}},
+\]
+and every convex body fitting the two opposite \(45^\circ\) frames stays at Hausdorff distance **at least \(73/2000\)** from that hull in the common incoming orientation. The general continuous hull-versus-niche area law NC2 also has the updated certified constant \(C=10/7\):
+\[
+|K\setminus S|\ge
+\frac{|K|}{\operatorname{diam}(K)^2}
+\left(\sqrt{\frac{|K|}{10/7}}-1\right)_+^2.
+\]
+These are **unrestricted structural necessities**, not a sharp global area upper bound. They remain far below Romik's complete inner-wall swept niche cost. No verified area-\(>M\) sofa exists and no proof of \(|S|\le M\) has been completed.
+
 **Strengthened checkpoint:** The initially proved \(31/20=1.55\) convex theorem has since been upgraded to the **exact rational \(3/2=1.5\)** area bound, using [the same verified checker](computer-assisted/check_convex_two_corner_area.py) with a sound extra projection-width enclosure. Its stronger exhaustive replay has **100,161 visited boxes, 50,079 leaves, maximum depth 24, and no unresolved cells**, independently re-executed locally. Consequently [NC3](mandatory-competitive-convex-hull-niche.md) strengthens the unrestricted necessary carving: every \(|S|\ge M\) sofa has a real \(45^\circ\) corner with both support depths \(>1047/1000\), and an ordinary missing convex-hull area **\(>1/2500\)**, with a \(47/2000\) Hausdorff gap from any convex two-pose-compatible shape. These are self-reviewed computational/analytic research results, **not** the sharp unrestricted upper bound.
 
 ### New area breakthrough for a nontrivial class: all convex sofas \( \le3/2 \), and a mandatory niche for every competitive sofa
