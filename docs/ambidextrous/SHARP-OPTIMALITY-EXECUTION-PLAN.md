@@ -93,18 +93,18 @@ making every cap of width \(W\ge6\) too low-valued to reach \(M/2\); the trivial
 =\sup_{\substack{\text{height-one caps}\\A|_J\ {\rm affine}}}\mathcal P.}
 \tag{G1.SD-MID2 — PASS}
 \]
-The candidate is fixed by this transformation. **This does not establish \(\mathcal P_{\max}=M/2\) or pass Gate 1**, but is a genuine global maximizer-domain reduction within the ONE current proof claim. The middle facet may be **tilted**, with its height-one maximum on an exterior wing. Do not silently assume it is flat, centered, or admits a candidate contact chart. The **current mathematically necessary next step** is to derive the complete *first-variation and niche-exposure balance of the two charged exterior wings* on this canonical domain, and use it to force the *sharp global value*, not another local no-gain family.
+The candidate is fixed by this transformation. **This does not establish \(\mathcal P_{\max}=M/2\) or pass Gate 1**, but is a genuine global maximizer-domain reduction within the ONE current proof claim. The middle facet may be **tilted**; MID2 alone does not locate its top. The subsequent TF4 top-insertion theorem below places the height-one maximum at its higher J endpoint. Do not assume the facet is flat, centered, or admits a candidate contact chart. The necessary next step is to turn the complete *first-variation and niche-exposure balance of the two charged exterior wings* into the *sharp global value*.
 
-**NEW FINITE GLOBAL-MAXIMIZER EXPOSURE LAWS (FE1, not yet the continuum sharp theorem):** [gate1-spatial-exposure-moving-window-variation.md](gate1-spatial-exposure-moving-window-variation.md) derives **exact first-order stationarity** for the finite-angle *spatial P* maximizing polygon, not the older weighted \(\Psi\) optimizer. Pushing a floating facet gives charged **exterior-only** facet length \(\ell_j^{\rm wing}\le\tau_j^{\rm middle}+o(1)\), where the inner-wall measure is exposed **inside J**, not over the whole ambient niche. Moving an axis wall moves J's endpoints and yields the **correct nonconstant** side-face pressures
+**FINITE GLOBAL-MAXIMIZER EXPOSURE LAWS (FE1, corrected for zero end faces):** [gate1-spatial-exposure-moving-window-variation.md](gate1-spatial-exposure-moving-window-variation.md) derives the finite-angle *spatial P* conditions. Pushing a floating facet gives charged **exterior-only** facet length \(\ell_j^{\rm wing}\le\tau_j^{\rm middle}+o(1)\), where the inner-wall measure is exposed **inside J**. The original unconditional axis derivative was false: at a zero end face the axis wall is redundant, and moving it does not change the actual width or J. Two exact examples are now recorded in FE. For positive end faces the moving-window derivatives remain valid; the unconditional finite inequalities require positive parts:
 \[
-e_R\le\tfrac34(A+n)(j_+)-\tfrac14(A+n)(j_-)+o(1),\qquad
-e_L\le\tfrac34(A+n)(j_-)-\tfrac14(A+n)(j_+)+o(1).
+e_R\le\bigl(\tfrac34(A+n)(j_+)-\tfrac14(A+n)(j_-)+o(1)\bigr)_+,\qquad
+e_L\le\bigl(\tfrac34(A+n)(j_-)-\tfrac14(A+n)(j_+)+o(1)\bigr)_+.
 \]
 At the reference these are tight equalities \(1/2=3/4-1/4\), but for arbitrary caps they are **not** the constant one-half width-penalty terms of the separately solved \(\Psi\) problem. Summing exposed graph **horizontal projections** gives the finite polygon restriction
 \(
 |\{x\in J:n_n(x)=0\}|\le T_{\rm wing}+o(1)
 \),
-where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. A real *full-continuum exposure/curvature and zero-level projection* theorem, incorporating the affine middle roof MID2, is still missing. This is the precisely identified Gate 1 obstruction on the active scalar proof route, not a new named-shape class.
+where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. EP1–EP3 below now supply exact continuum endpoint complementarity and limiting exposure moments; identifying those limits with the **actual positive niche graph**, and proving the sharp value, remain open.
 
 **NEW GLOBAL MAXIMIZER WING-REGULARITY (RG2–RG3, written proof, Oct 9):** [gate1-spatial-maximizer-wing-curvature-regularity.md](gate1-spatial-maximizer-wing-curvature-regularity.md) upgrades MID2 and finite charged-exposure FE1 into a **selection theorem for an actual global maximizer of \(\mathcal P\)**. A grid-polygon penalized selection targeting the chosen affine-middle global maximizer gives convergence despite arbitrary initial irregular support. The neighboring-inner-ray bound plus exterior-only facet stationarity yields
 \[
@@ -115,7 +115,7 @@ As the limit's entire middle roof is affine, middle lengths of facets with norma
 \boxed{\rho_f(t)\le\kappa(q(t)),\quad\rho_g(t)\le\kappa(p(t)),\quad
 \kappa(z)=\max\{|z|,(1+|z|)/2\}.}
 \]
-The **sharp corridor bound \(\rho\le1\) does NOT follow** until a genuinely *spatial-score*-valid global balance forces \(|p|,|q|\le1\); old weighted \(\Psi\) conditions (including constant half-length end faces) **cannot be imported**. The central affine facet may be tilted and may coexist with a top face away from J. **The exact remaining sharp Gate 1 step is a whole-angle, window-weighted niche exposure/equality plus the global maximizer value, not another cap-class exclusion.** No improvement of the unrestricted upper bound or Gate 1 PASS is claimed.
+The **sharp corridor bound \(\rho\le1\) does NOT follow** until a genuinely *spatial-score*-valid global balance forces \(|p|,|q|\le1\); old weighted \(\Psi\) conditions (including constant half-length end faces) **cannot be imported**. The central affine facet may be tilted; TF4 now forces its top to meet J at the higher endpoint. EP1–EP3 below refine the window-weighted limiting exposure balance but do not provide the missing visibility/velocity/value estimate. No improvement of the unrestricted upper bound or Gate 1 PASS is claimed.
 
 **NEW GLOBAL MAXIMIZER FACET-PINNING LAW (TF3, Oct 9; Gate 1 still OPEN):** [gate1-spatial-tilted-facet-pinning.md](gate1-spatial-tilted-facet-pinning.md) proves that any chosen maximizer of \(\mathcal P\) after MID2, whose middle roof \(A(x)=a+s x\) has \(s\ne0\), **must have two strict slope jumps exactly at the moving middle-window endpoints**:
 \[
@@ -124,6 +124,17 @@ The **sharp corridor bound \(\rho\le1\) does NOT follow** until a genuinely *spa
 The proof is global-in-caps and uses **all real inner-wall ray angles**, not a local Romik contact phase: the tilted central facet's outer normal \(n_c=(-s,1)/\sqrt{1+s^2}\) has its *inner shifted wall strictly below the entire baseline on J*, by margin \(1-1/\sqrt{1+s^2}>0\). A small outer-wing bump changing support only in a safe normal arc leaves \(n_U|_J\) **exactly unchanged** while increasing charged wing area. Thus a tilted central facet cannot extend into a charged wing or meet either wing tangentially. **A \(C^1\) junction at either middle-window endpoint forces \(s=0\) and \(A\equiv1\) on J.** The global proof includes the exact all-angle rational triangle check \(\mathcal P(U_\varepsilon)-\mathcal P(U)=3\varepsilon/7>0\). 
 
 This is a new necessary condition at the **global scalar maximizer**, not another candidate-neighborhood exclusion. **It does NOT exclude possible tilted facets with two genuine pinned corners**; such caps and arbitrary smooth wing exposure remain. No bound \(\mathcal P\le M/2\), improvement of the unrestricted upper bound or Gate 1 PASS is inferred. **Next:** determine whether pinned tilted extrema can be excluded *by the true spatial exposure balance*, and characterize the horizontal-facet case without importing \(\Psi\)'s different stationarity law.
+
+**GLOBAL ENDPOINT AND EXPOSURE UPDATE (EP1–EP3; sharp VALUE still open):** [gate1-global-endpoint-complementarity.md](gate1-global-endpoint-complementarity.md) repairs FE's zero-face error by actual inward trimming and proves, at every height-one global score maximizer,
+\[
+e_R=(C_R)_+,\quad e_L=(C_L)_+,\qquad
+C_R=(3q_+-q_-)/4,\quad C_L=(3q_--q_+)/4,\quad q_\pm=(A+n)(j_\pm).
+\]
+Horizontal erosion \(U\cap(U\mp\varepsilon e_x)\), admissible even with a point top, then proves exact cosine-weighted **limiting finite-exposure defects** \(\int\cos\theta\,d(\nu_R-\omega_R)=(-C_R)_+\), \(\int(-\cos\theta)\,d(\nu_L-\omega_L)=(-C_L)_+\), with \(\nu_Q\ge\omega_Q\). Here \(\omega\) is charged outer-wing curvature; \(\nu\) is a weak limit of finite middle-niche exposures, **not automatically the arclength of the actual positive full niche**. Every nonnegative-pressure quarter has exact limiting measure equality.
+
+The exact [TF4](gate1-spatial-tilted-facet-pinning.md) map inserts a height-one point at the nearer J endpoint when the top is disjoint from J; it **strictly increases exterior reward without changing any charged niche**, so every maximizer's top meets J. A tilted canonical maximizer reaches height one at its higher endpoint. EP3 consequently forces both pressures positive in the horizontal-middle case and the higher-side pressure positive in the tilted case. A remaining negative-pressure defect can only be on the lower side, whose end face is zero and whose \(q_{\rm low}<1/2\).
+
+**Precise remaining obligation:** pay that possible defect and prove the full global visibility/velocity/value inequality. Even when both limiting exposure measures match, zero-height loss of exposure, \(|p|,|q|\le1\), and the sharp value have not been proved. This closes a global variational dependency; it does **not** pass Gate 1 or activate Gate 2.
 
 **Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
 
@@ -287,7 +298,7 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 | Gate | Status | Concrete missing step |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
-| 1 — coupled full-turn loss | **ACTIVE: G1.1 passed; G1.2 sharp charge unproved** | Full physical facet-triangle audit and actual-feasible polygonal value-density in PG1 are complete as written; the **universal finite-polygon facet union area inequality PG.12 / G1.5** is still missing |
+| 1 — coupled full-turn loss | **ACTIVE: SD2 sharp cap value unproved** | EP1–EP3 give exact endpoint complementarity and limiting exposure defects; the global sharp value, including possible low-side negative pressure and full-niche visibility, is still missing. The coupled PG.12 / G1.5 inequality remains the original acceptance target. |
 | 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 

@@ -2,9 +2,11 @@
 
 **Date October 9, 2026. Status:** A global-domain **necessary variational condition for finite angular polygonal maximizers** of the *one active* Gate 1 spatial score, not a proof of its sharp value. It does not prescribe a Romik contact chart, bound curvature by one, assume convexity of the spatial functional, or claim genuine feasible two-handed sofas are closed under arbitrary cap variations.
 
-This note fixes a crucial difference from the branch's existing weighted one-turn maximizer proof: the moving spatial interval \(J=[l+W/4,r-W/4]\) generates **nonconstant end-face pressures involving both the outer roof and the true niche** at J's moving endpoints. Replacing them by the old width-penalty coefficient \(1/2\) is wrong away from Romik. Every displayed variational formula here is exact for a **finite-angle** cap polygon. A separate uniform passage to the complete angular continuum is still required before using them to characterize any global continuum maximizer. Gate 1 remains **ACTIVE and UNPROVED**.
+This note fixes a crucial difference from the branch's existing weighted one-turn maximizer proof: the moving spatial interval \(J=[l+W/4,r-W/4]\) generates **nonconstant end-face pressures involving both the outer roof and the true niche** at J's moving endpoints. Replacing them by the old width-penalty coefficient \(1/2\) is wrong away from Romik. **The October 9 endpoint audit corrects a second issue:** the isolated outward axis-wall formulas require a **positive-length end face**. A zero-length end face makes that axis constraint redundant, so relaxing it leaves the actual cap, width and window unchanged. The exact counterexamples and corrected finite laws are below. Gate 1 remains **ACTIVE and UNPROVED**.
 
 The new [MID2 global chord reduction](gate1-global-middle-chord-canonicalization.md) independently guarantees that the active scalar value can be realized by a height-one cap with a **single affine central half-width roof**. The calculations here concern the two arbitrary exterior wings of selected finite polygons and do not convert this affine roof into an assumed horizontal top facet.
+
+**Subsequent global consequence:** [EP1–EP3](gate1-global-endpoint-complementarity.md) combines these corrected outward laws with actual inward trimming and horizontal erosion. It proves exact continuum endpoint complementarity and the limiting exposure defect moments, while retaining the distinction between finite exposure limits and the actual positive niche graph. The sharp value remains unproved.
 
 ## 1. Finite-polygon spatial objective; keep the center interval moving
 
@@ -33,6 +35,7 @@ The finite spatial score is
 All three integrals use true ordinary vertical heights; no signed-curve formula, candidate contact phases, or sampled-angle area assumption enters FE.3.
 
 For a non-top source normal \(\theta_j\), \(j\notin\{0,n,2n\}\), let
+
 - \(\ell^{\rm wing}_j\) be the total **actual outer facet arclength** lying over the charged exterior quarters \(I\setminus J\);
 - \(\tau^{\rm middle}_j\) be the arclength of positive-height **exposed inner-wall boundary pieces** of the full finite union, supported by the inner wall of that source normal and having horizontal abscissa within \(J\).
 
@@ -60,9 +63,9 @@ Moving the outer facet gains an area strip of first-order area \(\varepsilon\ell
 \]
 A zero-length facet has \(\ell^{\rm wing}_j=0\), and needs no differentiability claim. In particular *the weighted one-turn exposure measure is not the right one here*: it counts the **entire** niche and the **entire** outer facet, while FE.5 counts only the two **charged spatial portions**.
 
-## 3. Move the rightmost vertical wall: an **exact moving-J boundary term**
+## 3. Move a positive-length vertical end face: an **exact moving-J boundary term**
 
-Move only the side \(x\le r\) to \(x\le r+\varepsilon\), retaining **all** non-axis grid halfplanes. The finite niche function \(n_n(x)\) remains **identically unchanged at every fixed x**, since none of its source supporting normals is an axis normal. The old polygon is retained, and the added rightmost sliver has area \(\varepsilon e_R+O(\varepsilon^2)\).
+**First assume \(e_R>0\).** Move only the side \(x\le r\) to \(x\le r+\varepsilon\), retaining **all** non-axis grid halfplanes. A relative-interior point of the positive vertical face has strict slack against the finitely many other nonparallel sides. Thus the actual right projection endpoint is \(r+\varepsilon\) for sufficiently small positive \(\varepsilon\). The finite niche function \(n_n(x)\) remains **identically unchanged at every fixed x**, since none of its source supporting normals is an axis normal: each old attaining point remains, and each old non-axis halfplane is retained. The added rightmost sliver has area \(\varepsilon e_R+O(\varepsilon^2)\).
 
 But W increases by \(\varepsilon\), so both endpoints of the **middle** window move:
 \[
@@ -79,7 +82,7 @@ Differentiate FE.3 using continuity of A and \(n_n\) at the moving window endpoi
 \]
 The terms \(q_\pm\) are **A+n**, not A-n. The + sign on n is forced by subtracting the integral over the moving central interval.
 
-Similarly moving only the **left** side \(x\ge l\) to \(x\ge l-\varepsilon\) yields
+Similarly, **when \(e_L>0\)**, moving only the **left** side \(x\ge l\) to \(x\ge l-\varepsilon\) yields
 \[
 j_-(\varepsilon)=j_--3\varepsilon/4,\qquad
 j_+(\varepsilon)=j_+-\varepsilon/4,
@@ -92,7 +95,53 @@ and therefore
 =e_L-\frac34q_-+\frac14q_+.
 }\tag{FE.7}
 \]
-These are actual derivatives of a finite polygonal ordinary-area score, including the **width-dependent moving J**. They hold without symmetry and whether or not the full niche is connected at any horizontal level.
+These are actual **outward** derivatives of a finite polygonal ordinary-area score, including the **width-dependent moving J**, under the respective positive-face hypothesis. They hold without symmetry and whether or not the finite niche is connected at any horizontal level. They are not automatically inward derivatives: an inward cut can remove the sole attaining point of another sampled support, even if the vertical face has positive length.
+
+### 3a. Zero end faces: the axis wall does not move the body
+
+Suppose \(e_R=0\), with U of positive area. Its last upper roof segment meets the floor at \((r,0)\), so one of the retained upper halfplanes has the form
+\[
+a(x-r)+b y\le0,\qquad a,b>0.
+\]
+Together with \(y\ge0\), this halfplane already implies \(x\le r\). Relaxing only the redundant vertical constraint therefore leaves **the entire polygon unchanged for every \(\varepsilon>0\)**. Its actual width and J are constant; the derivative is zero. Reflection gives the same conclusion when \(e_L=0\).
+
+With \(\chi_R=1_{\{e_R>0\}}\), \(\chi_L=1_{\{e_L>0\}}\), and
+\[
+C_R=\tfrac34q_+-\tfrac14q_-,\qquad
+C_L=\tfrac34q_--\tfrac14q_+,
+\tag{FE.7a}
+\]
+the universally valid isolated-outward-wall derivatives are
+\[
+\boxed{D_R^+P_n=\chi_R(e_R-C_R),\qquad
+D_L^+P_n=\chi_L(e_L-C_L).}
+\tag{FE.7b}
+\]
+An axis-wall *parameter* is not the actual support coordinate when its constraint has become redundant.
+
+**Exact rational-vertex counterexample to the former unconditional FE.6.** Let
+\[
+U=\operatorname{conv}\{(0,0),(0,1),(1,1),(2,0)\},\qquad n=2.
+\]
+The sole proper turning angle is \(\pi/4\); its supports are \(f=\sqrt2\), \(g=1/\sqrt2\), and its positive niche is
+\[
+n_2(x)=\bigl[\min(2-\sqrt2-x,\,1-\sqrt2+x)\bigr]_+.
+\]
+Here \(J=[1/2,3/2]\), \(e_R=0\), \(q_-=5/2-\sqrt2\), and \(q_+=1/2\). The former FE.6 would give
+\[
+e_R+q_-/4-3q_+/4=(1-\sqrt2)/4<0.
+\]
+The actual derivative is **zero**: the retained roof constraint \(x+y\le2\) and floor already imply \(x\le2\).
+
+The omitted coefficient need not even have a fixed sign. For the \(n=3\) grid take
+\[
+U=\operatorname{conv}\{(0,0),(0,1),(\sqrt3,0)\}.
+\]
+Its upper facet normal is \(\pi/3\), and \(J=[\sqrt3/4,3\sqrt3/4]\). At \(t=\pi/6\) the two roofs are \(1-\sqrt3x\) and \(1-2/\sqrt3+x/\sqrt3\); the \(t=\pi/3\) first roof is nonpositive for \(x\ge0\). Thus \(q_-=2-2/\sqrt3\), \(q_+=1/4\), \(e_R=0\), and the formerly claimed derivative is
+\[
+5/16-1/(2\sqrt3)>0,
+\]
+whereas relaxing the redundant right wall again leaves the cap unchanged. These examples refute the **unconditional derivative claim**; neither example is asserted to be a global maximizer or a counterexample to the sharp score bound.
 
 ## 4. First-order constraints at a globally selected finite maximizer
 
@@ -110,18 +159,26 @@ At a maximizer, a permitted outward variation has nonpositive objective derivati
 \boxed{\begin{aligned}
 \ell^{\rm wing}_j&\le\tau^{\rm middle}_j+b_{n,j}
 && (j\notin\{0,n,2n\}),\\
-e_R&\le\frac34q_+-\frac14q_-+b_{n,0},\\
-e_L&\le\frac34q_--\frac14q_++b_{n,2n}.
+e_R&\le\chi_R(C_R+b_{n,0}),\\
+e_L&\le\chi_L(C_L+b_{n,2n}).
 \end{aligned}}\tag{FE.9}
 \]
-Consequently
+In particular, the two **unconditional** axis bounds are
+\[
+e_R\le(C_R+b_{n,0})_+,\qquad
+e_L\le(C_L+b_{n,2n})_+.
+\tag{FE.9a}
+\]
+**When both end faces have positive length**, adding the two axis bounds gives
 \[
 \boxed{
 e_R+e_L\le\frac12(q_-+q_+)+b_{n,0}+b_{n,2n}.
 }\tag{FE.10}
 \]
 
-**Proof.** Outward variations are available for sufficiently small \(\varepsilon\) when the artificial box sides are inactive. Positive-length facet source supports change in exactly one penalized coordinate. At zero length, the first inequality is trivial. The two axis variations change only their own sampled support coordinates, since every other halfplane is kept. The explicit derivative formulas FE.5–FE.7 and the bounded penalty derivatives give the inequalities. Add the last two for FE.10. \(\square\)
+For arbitrary end faces, the valid summed bound is instead the sum of FE.9a's two positive parts. The original FE.10 is not inferred when an end face vanishes.
+
+**Proof.** When the artificial box sides are inactive, each positive-length floating or axis facet admits an outward variation changing exactly its own sampled support coordinate. FE.5–FE.7 and the bounded penalty derivatives give the corresponding inequalities. At zero floating length the first inequality is trivial. At zero axis length the actual polygon and every actual support stay fixed by Section 3a, so the indicator form reads \(0\le0\). This proves FE.9 and hence FE.9a. Add the two positive-face inequalities for the stated conditional FE.10. \(\square\)
 
 **Sharp reference calibration:** Romik's cap has right and left end heights \(e_R=e_L=1/2\), and at the central-half face endpoints \(A(j_\pm)=1\), \(n(j_\pm)=0\). The limiting (unpenalized) axis formulas therefore read \(1/2=3/4-1/4\) at both ends. This is the precise replacement for the old constant \(1/2\) weighted-one-turn endpoint condition, but **only at the reference** do its two moving-window pressures collapse to that constant.
 
@@ -154,11 +211,11 @@ This is a nontrivial **whole-upper-profile, whole-finite-niche projection restri
 
 **Mandatory limit warning:** It is **invalid** to pass FE.13 to the angular continuum by merely using uniform convergence of niche roofs. The indicator of \(\{n_n=0\}\) is not continuous under uniform convergence; arbitrarily shallow positive roofs can converge uniformly to a roof that is zero on a long interval. The weighted half-face proof [HF](one-turn-half-width-top-face.md) needed a separate endpoint support-derivative estimate to control precisely this loss of niche projection. Such a theorem for the **different** spatial P maximizer has *not* yet been proved here. Thus FE.13 is a rigorously proved **finite** structural condition, **not** a claim that an actual infinite-angle maximizer has a fully exposed central niche.
 
-A viable Gate 1 proof must extract uniform geometry/curvature control from FE.9, justify an exact limiting exposure balance on the **spatially charged** portions, and then prove the global sharp scalar inequality. **None of those missing steps is silently inferred from FE.13.**
+The subsequent RG regularity theorem and [EP1–EP3](gate1-global-endpoint-complementarity.md) establish uniform wing control and exact limiting finite-exposure moments using additional arguments. Identifying the actual positive continuum niche geometry and proving the global sharp scalar inequality remain open. **Neither follows from FE.13 by uniform roof convergence.**
 
 ## 6. Why this is part of the active global Gate 1 proof, not a separate class
 
-FE1 applies to **every finite global maximizer** of the exact **spatial objective** over a fixed broad support grid, with no candidate-neighborhood restriction. It identifies the right contact pressure system for the *only active* G1.SD2 claim. Its most important new feature is that the two side-face pressures are functions of **actual outer and niche heights at the moving central-window endpoints**; the signed width penalty's constant half-face formula **does not transfer**.
+The corrected FE1 applies to **every finite global maximizer** of the exact **spatial objective** over a fixed broad support grid, with no candidate-neighborhood restriction. Its floating-facet inequality, used by RG2–RG3 and FE.13, is unchanged. The axis inequalities now retain the necessary positive-face indicators or positive parts. The two side-face pressures are functions of **actual outer and niche heights at the moving central-window endpoints**; the signed width penalty's constant half-face formula **does not transfer**.
 
 The new global chord reduction MID2 says the true scalar maximizer can be chosen with a complete affine middle roof. In future finite selections one must retain that canonical form or prove it is inherited in the relevant limit, and carry FE.9's moving-window terms consistently. Without the full sharp \(P\le M/2\) value proof, **Gate 1 is still ACTIVE** and no improved unrestricted area upper bound is obtained.
 

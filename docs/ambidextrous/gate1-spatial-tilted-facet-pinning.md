@@ -2,7 +2,7 @@
 
 **Date:** October 9, 2026. **Status:** A **global-domain necessary condition** for every maximizer of the *active* spatial one-cap score [SD.2](gate1-spatial-dual-height-width-compactness.md) after the value-preserving [MID2](gate1-global-middle-chord-canonicalization.md) normal form. This is a written hand proof for arbitrary convex downward caps, with no support curvature cap, candidate proximity, numerical sample, chosen inner-ray contact chart or polygon complexity assumption.
 
-**Conclusion:** At a genuine global maximizer with **tilted** affine middle-half upper roof, that facet must terminate at the *two artificial middle-window endpoints* in **strict geometric corners**; it cannot extend into either charged exterior wing or even join either wing tangentially. Equivalently, a canonical spatial-score maximizer that is \(C^1\) at either middle-window endpoint must have a **horizontal** middle facet. This is a nonlocal restriction on the **whole global maximizing class**, not a reference-neighborhood perturbation theorem. It does **not** prove the sharp scalar value \(\mathcal P_{\max}=M/2\), and **Gate 1 remains ACTIVE**.
+**Conclusion:** At a genuine global maximizer with **tilted** affine middle-half upper roof, that facet must terminate at the *two artificial middle-window endpoints* in **strict geometric corners**; it cannot extend into either charged exterior wing or even join either wing tangentially. **The global top-insertion argument in Section 3a further proves that the higher of those two endpoints has height exactly one.** It works on every cap, without an infinitesimal variation or a regularity assumption: a top face disjoint from J can be extended to the nearer J endpoint with strictly larger score and exactly the same full niche on J. A canonical spatial-score maximizer that is \(C^1\) at either middle-window endpoint must have a **horizontal** middle facet. These are restrictions on the **whole global maximizing class**, not a reference-neighborhood argument. They do **not** prove \(\mathcal P_{\max}=M/2\), and **Gate 1 remains ACTIVE**.
 
 ## 1. A whole-angle **support-inactivity neighborhood** for any tilted middle facet
 
@@ -129,6 +129,52 @@ We may choose \(A(x_0)<1\). Indeed if \(s<0\), values to the right decrease stri
 
 Any continuation of the affine facet into either exterior wing would give the corresponding one-sided derivative equality, which is impossible. Thus the facet's maximal x-projection is exactly J. If a global maximizer were differentiable at either endpoint, both one-sided derivatives there would equal the inside slope s, contradicting TF.10 unless \(s=0\). Finally, a downward cap of exact height one with a **horizontal** upper face on J has \(A|_J\equiv1\), because a concave roof with a horizontal segment has its global maximum at the height of that segment and its global maximum is exactly one. \(\square\)
 
+### 3a. A global top-insertion map, with exactly zero charged niche cost
+
+**Theorem TF4 (top localization for every global spatial maximizer).** Let U be any positive-area downward compact convex cap of height \(H\le1\), with projection I and middle-half window J as above. If its top face \([a,b]\times\{H\}\) is disjoint from J, there is a downward convex cap \(\widehat U\supset U\) of the **same height and projection**, whose top face meets J, such that
+\[
+\boxed{n_{\widehat U}|_J=n_U|_J,\qquad
+\mathcal P(\widehat U)>\mathcal P(U).}
+\tag{TF.10a}
+\]
+Consequently the top face of **every** global maximizer meets J. For a height-one MID2-canonical maximizer with nonzero central slope,
+\[
+\boxed{s>0\Longrightarrow A(j_+)=1,\qquad
+s<0\Longrightarrow A(j_-)=1.}
+\tag{TF.10b}
+\]
+
+**Proof.** Suppose first that the top face lies to the right, so \(a>j_+\). Put
+\[
+p=(j_+,H),\qquad
+\widehat U=\operatorname{conv}\bigl(U\cup(\{j_+\}\times[0,H])\bigr).
+\tag{TF.10c}
+\]
+This cap has the same projection and height. For an upper unit normal \(n=(n_x,n_y)\), its support is \(\max(h_U(n),p\cdot n)\). If \(n_x\ge0\), the old top point \((a,H)\) dominates p, so the support is unchanged. If a support **does** change, then \(n_x<0\) and \(h_{\widehat U}(n)=p\cdot n\). At every \(x\in J\) and \(y\ge0\),
+\[
+h_{\widehat U}(n)-1-(x,y)\cdot n
+=(j_+-x)n_x+(H-y)n_y-1\le0.
+\tag{TF.10d}
+\]
+Thus this changed source wall excludes the entire positive-height forbidden quadrant over J, for both the old and new cap. Every angle whose two source supports are unchanged has exactly the same quadrant. Taking the union over **all real turning angles** proves equality of the two positive niche roofs on J.
+
+The new roof is H on \([j_+,a]\). The old roof is strictly below H on \((j_+,a)\), by the definition of a. This interval lies in the charged right wing, and the new roof does not decrease anywhere. Hence
+\[
+\mathcal P(\widehat U)-\mathcal P(U)
+\ge\int_{j_+}^{a}(H-A(x))\,dx>0.
+\tag{TF.10e}
+\]
+If the old top lies left of J, reflect the construction and insert \((j_-,H)\). This proves the global map and excludes a disjoint top face at any maximizer. On a tilted affine central segment the only point that can have the global maximum height is its higher endpoint, proving TF.10b. \(\square\)
+
+**Exact elementary check.** For \(A(x)=(x+1)/2\) on \([-1,1]\), the top point is \((1,1)\) and \(J=[-1/2,1/2]\). Inserting \((1/2,1)\) gives the roof \(2(x+1)/3\) up to \(x=1/2\), then height one. The all-angle argument just given proves the charged niche is unchanged, and direct rational integration gives
+\[
+\Delta\mathcal P=\frac1{48}+\frac1{16}=\frac1{12}>0.
+\tag{TF.10f}
+\]
+This construction does not claim the cap itself is a feasible ambidextrous sofa. It is a globally score-improving map on the exact auxiliary domain of SD.3.
+
+**Limit of the conclusion.** A tilted central facet can still have a low endpoint below one and a strict corner at each J endpoint. TF4 places its top at the higher endpoint; it does not flatten that facet or establish the sharp value.
+
 ## 4. Exact rational check on a full-width tilted facet (no angle sampling)
 
 The simplest possible cap has the entire roof tilted:
@@ -195,7 +241,8 @@ This is an **exact all-angle rational perturbation**, not an approximate grid or
 
 ### Connection to the current Gate 1 value theorem — and strict limit
 
-TF3 **globally** eliminates **all smooth tilted middle-facet candidates** and all tilted facets extending beyond the uncharged central half. The *only* possible canonical tilted global maximizers are therefore those with **two genuine roof corners pinned at the moving middle-window endpoints**, a geometrically narrow but nonempty theoretical class. To pass Gate 1 one must still either:
+TF3 **globally** eliminates **all smooth tilted middle-facet candidates** and all tilted facets extending beyond the uncharged central half. TF4 places the top at their higher endpoint. The remaining canonical tilted alternative therefore has **two genuine roof corners pinned at the moving middle-window endpoints, with the higher endpoint at height one**. To pass Gate 1 one must still either:
+
 - prove those pinned tilted candidates have score at most Romik's value (or are not maximizing), and control the general smooth exterior wing contact/curvature system; or
 - establish directly the sharp score bound \(\mathcal P(U)\le M/2\) for all caps, including these pinned alternatives.
 
