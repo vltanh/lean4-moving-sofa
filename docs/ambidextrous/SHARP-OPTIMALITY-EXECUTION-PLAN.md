@@ -56,7 +56,40 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 ## Gate 1 — global sharp FULL-TURN area (THE FIRST UNRESOLVED PROOF GATE)
 
-**Status: ACTIVE — no sharp global full-turn bound has been proved.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
+**Status: ACTIVE — sharp global full-turn bound UNPROVED. CURRENT focus: G1.SD2 spatial one-cap dual value theorem; historical facet oracle is verification only.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
+
+### CURRENT REORIENTATION (October 9): Gate 1's **one active claim** is a sharp spatial one-cap value theorem
+
+The earlier G1.2 approach "enumerate and integrate all polygonal facet sweeps" has **a calculation oracle but no global inequality**, and unrestricted polygon facet counts have no finite cutoff. It is now a **verification resource**, **not** the active proof mechanism. Merely extending the exact evaluator will not move the sharp area bound.
+
+The [new Gate 1 spatial-dual note](gate1-spatial-dual-height-width-compactness.md) proves a globally sharp-at-Romik **ordinary-fiber upper relaxation**: for any actual connected full-turn hull with upper and vertically reflected lower caps U,V, of common horizontal projection I=[l,r], W=r-l, choose the width-dependent middle half \(J=[l+W/4,r-W/4]\), and put
+\[
+\mathcal P(U)=\int_{I\setminus J}A_U(x)\,dx-\int_J n_U(x)\,dx.
+\]
+Here \(A_U\) is the true upper convex cap roof, and \(n_U\) is the **complete continuous-angle inner-wall two-ray niche roof**, not a chosen one-angle shadow. Pointwise dropping **outer** deficits on J and **niche** deficits outside J gives
+\[
+\boxed{|S|\le\mathcal P(U)+\mathcal P(V),\qquad
+\mathcal P(U_*)=M/2.}\tag{G1.SD1}
+\]
+Both niches are charged once, all clipped portions are handled by the original max/min fiber bounds, and the relaxation has **exact equality** at Romik.
+
+**The ONE ACTIVE universal lemma to prove or falsify is**
+\[
+\boxed{\mathcal P(U)\stackrel{?}{\le}M/2
+\quad\text{for every downward convex height-one one-turn cap }U.}
+\tag{G1.SD2 — ACTIVE, NOT PROVED}
+\]
+It is **strictly stronger than** the necessary coupled G1.2 inequality. If valid, G1.SD1 immediately **passes Gate 1 for all genuine complete turns**, including arbitrary height/asymmetry/many-facet hulls; no global separate \(G\) clipping inequality is needed. If an **exact** convex cap with \(\mathcal P(U)>M/2\) is proved, abandon this **one-cap dual** immediately and return to the actual joint max G1.2—such a cap alone is **not** an area-\(>M\) sofa. An inconclusive screen is not a counterexample or a PASS.
+
+**Global reduction already proved, not the value:** upward cap Minkowski extrusion increases exterior score by \(\varepsilon W/2\) and increases middle niche by at most \(\varepsilon W/2\), so only height **one** needs testing. A real inner-corner witness at \(t=\pi/4\) gives
+\[
+\boxed{n_U(x)\ge(W/2-\sqrt2-|x-x_{\mathrm{mid}}|)_+,}
+\]
+making every cap of width \(W\ge6\) too low-valued to reach \(M/2\); the trivial exterior bound excludes \(W\le8/5\). The spatial score is Hausdorff-continuous on the remaining bounded downward-cap class, so its **global maximum is attained** by a cap with \(8/5<W<6\), of possibly nonsmooth boundary. See SD2–SD3 for the full proofs, not an assumed compactness or curvature cap.
+
+**Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
+
+**Hard stopping rule:** If the global maximizer cannot be characterized, state the exact unresolved first-variation/exposure inequality—not another infinite series of local shape cases. Gate 1 remains **ACTIVE** until G1.SD2 is fully proved or the *original* coupled G1.2 is otherwise settled. The exact finite polygon oracle and facet-triangle reduction stay available only for mathematically meaningful adversarial verification.
 
 ### G1.0 Fix the objective and the domain; don't mix actual and auxiliary hulls
 
@@ -129,9 +162,9 @@ If the audited facet identity passes, it gives
 
 **G1.1 PASS:** independently checked geometry and measurability of G1.3–G1.4 for every genuine full-turn hull, including multi-peak/disconnected angular activity and oblique supporting facets. **A failed hypothesis or wrong sign must be corrected now, not buried in later assumptions.**
 
-### G1.2 ACTIVE: prove one GLOBAL SUPPORT → FACET-SWEEP AREA CHARGE
+### Historical G1.2 support → facet-sweep target (PAUSED as proof mechanism; still the exact necessary full-turn bound)
 
-The entire task after G1.1 is to prove, for **all actual feasible K**,
+The exact original Gate 1 coupled acceptance inequality remains, for **all actual feasible K**,
 \[
 \boxed{
 \sum_{F\in\mathcal F_-}\int_{I_F}n_F(x)\,dx
