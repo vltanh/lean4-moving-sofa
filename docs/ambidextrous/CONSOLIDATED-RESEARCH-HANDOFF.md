@@ -187,6 +187,31 @@ These are **unrestricted structural necessities**, not a sharp global area upper
 
 **Strengthened checkpoint:** The initially proved \(31/20=1.55\) convex theorem has since been upgraded to the **exact rational \(3/2=1.5\)** area bound, using [the same verified checker](computer-assisted/check_convex_two_corner_area.py) with a sound extra projection-width enclosure. Its stronger exhaustive replay has **100,161 visited boxes, 50,079 leaves, maximum depth 24, and no unresolved cells**, independently re-executed locally. Consequently [NC3](mandatory-competitive-convex-hull-niche.md) strengthens the unrestricted necessary carving: every \(|S|\ge M\) sofa has a real \(45^\circ\) corner with both support depths \(>1047/1000\), and an ordinary missing convex-hull area **\(>1/2500\)**, with a \(47/2000\) Hausdorff gap from any convex two-pose-compatible shape. These are self-reviewed computational/analytic research results, **not** the sharp unrestricted upper bound.
 
+### Endpoint geometry from the user's "why move to the other wall?" observation
+
+[IW1](initial-corner-activation-and-face-asymmetry.md) directly distinguishes the **initial rigid translations** (free in the straight incoming arm and not a compulsory sideways traverse) from the real two-handed **inner-wall area loss**. Romik's 2016 paper explicitly assumes initial *outer-wall contact* \(A(0)=(1,1/2)\) for his ambidextrous ansatz, whereas Gerver's one-hand contact is \(A(0)=(1,0)\) (Sections 4–5). The two sharp inner corners of the separate canonical handed hallways at angle zero appear at opposite strip boundary heights \(0,1\), but their forbidden quadrants do **not** remove any incoming-strip area at angle zero. There is no physical requirement that one sofa slide sideways between these two corner positions.
+
+For a general compact convex **unit-height actual hull** with horizontal projection \([l,r]\), top exposed face interval \([a,b]\times\{1\}\) and bottom exposed face interval \([c,d]\times\{0\}\), **all four one-sided moving physical inner-corner height slopes** are exactly
+\[
+\begin{array}{c|cc}
+&\text{start}&\text{finish}\\\hline
+\text{lower hand}&r-a-1&b-l-1\\
+\text{upper hand (reflected height)}&r-c-1&d-l-1
+\end{array}
+\]
+(the expansions are \(\sigma t+o(t)\) for angular distance t from the respective endpoint). These follow directly from *one-sided support directional derivatives at top/bottom faces*, without smoothness. The initial lower forbidden baseline interval tends to \((a,r-1)\); when the top and bottom faces **align over a common rectangle** its ordinary one-angle niche area grows as \(\frac12(r-a-1)^2t+o(t)\), not as a compulsory pre-turn travel time.
+
+**Key unresolved class:** the existing full-turn face dichotomy FD1 says competitive positive **opposite-end** top/bottom face configurations satisfy, e.g.,
+\([a,b]\subset[l,l+1]\), \([c,d]\subset[r-1,r]\), \(W=r-l>2\). Then the startup/end slope sign pattern is
+\[
+\begin{array}{c|cc}
+&0&\pi/2\\\hline
+\text{lower}&\ge W-2&\le0\\
+\text{upper}&\le0&\ge W-2
+\end{array}
+\]
+so **one handed corner may avoid the early ambient niche but the opposite hand pays later**. Unlike the aligned reference's early wedge, these ambient positive corner tents can fall *outside* the actual displaced lower/upper hull faces and incur **no ordinary-area removal**. This is the real geometric possibility behind the user's "wasted space" intuition, and it coincides with the [PD3 full-turn value-dense, as-yet-unbounded class](full-turn-positive-face-density.md). The next decisive task should be a **global ordinary-area bound for opposite-end-face actual sofas**, explicitly paying for outer-face disalignment and all clipped moving ray sweeps, **not** further convex-only or Romik-contact-local perturbation exclusions. No new sharp bound or counterexample is claimed.
+
 ### Latest area theorem: four independent middle arcs plus **independent top/bottom cap cuts**, with ordinary clipping restored
 
 [AC1–AC2](four-arc-plus-top-normal-cut-area-calibration.md) extends the four-independent-ray full-turn strict upper theorem to **arbitrary inward convex cuts near the vertical top-normal support**, independently on the upper and vertically reflected lower caps. The cut caps remain downward closed, contain the common half-height horizontal strip, and agree with their middle-perturbed parent supports outside a short vertical-normal angular interval. **Unit incoming vertical span, horizontal top/bottom face preservation, hull-retention after cutting, reflection symmetry, new contact-chart stability and a new curvature upper bound are not assumed.**
