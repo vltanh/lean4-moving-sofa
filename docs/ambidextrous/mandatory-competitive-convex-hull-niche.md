@@ -117,7 +117,77 @@ h_C(n_i)-q'\cdot n_i
 \]
 This violates its claimed canonical hallway feasibility. Therefore the Hausdorff distance cannot be smaller than \(3/200\). Translation invariance of the support-depth definition permits the same proof for any translate \(C+a\). This proves NC.3.
 
-## 5. Scope and next task
+## 5. An exact **continuous outer-hull-versus-niche area penalty**, not just a fixed lower margin
+
+The numerical constants in NC1 can be replaced by a **general coercive inequality**. This expresses the area-cost of nonconvexity as an explicit function of the **outer hull's area and diameter**, without any reference to Romik's contact phases.
+
+**Theorem NC2 (two-corner convexity-defect coercivity).** Let \(S\) be any compact measurable body in a common incoming strip of height at most one, fitting the **two opposite proper \(45^\circ\) canonical hallway positions** after support tightening to its true convex hull \(K=\operatorname{conv}S\). The body itself need *not* be convex or connected. Put
+\[
+A_K=|K|,\qquad D=\operatorname{diam}(K),
+\qquad C=\frac{31}{20}.
+\]
+For positive area \(A_K>0\), the ordinary convexity deficit satisfies
+\[
+\boxed{
+|K\setminus S|\ge
+\frac{A_K}{D^2}
+\left(\sqrt{\frac{A_K}{C}}-1\right)_+^{\!2}.
+}\tag{NC.9}
+\]
+For \(A_K\le C\) the right side is zero by convention. In equivalent area-majorant form,
+\[
+\boxed{
+|S|\le A_K-
+\frac{A_K}{D^2}
+\left(\sqrt{\frac{A_K}{31/20}}-1\right)_+^{\!2}.
+}\tag{NC.10}
+\]
+This is valid for **every** pair of opposite \(45^\circ\) poses and every compact sofa geometry, not just near Romik. For an original above-\(\sqrt2\) ambidextrous sofa, the existing motion reach theorem supplies the required two poses automatically.
+
+**Proof.** For either handed frame \(d=\pm\), write its two actual outer unit normals \(n_{d,1},n_{d,2}\), and define
+\[
+\Lambda_d(K)=\max_{q\in K}
+\min\{h_K(n_{d,1})-q\cdot n_{d,1},
+       h_K(n_{d,2})-q\cdot n_{d,2}\},\quad
+\Lambda=\max(\Lambda_-,\Lambda_+).
+\]
+Both maxima exist because \(K\) is compact. Every support depth lies in \([0,D]\), so \(0\le\Lambda\le D\).
+
+If \(\Lambda\le1\), the **entire convex hull** fits both of the canonical hallway positions, since every point has at least one safe inner-wall inequality at each frame. It also fits the incoming strip. CV1's exact **two-position** theorem gives \(A_K\le C\), so the claimed inequality has zero right side and is trivial.
+
+If \(\Lambda>1\), shrink the **convex hull itself** uniformly by \(1/\Lambda\). All canonical depths scale by that factor, so the shrunk compact convex body fits both opposite frames and the incoming strip, whence CV1 yields
+\[
+\boxed{A_K/\Lambda^2\le C,\qquad
+\Lambda\ge\sqrt{A_K/C}.}\tag{NC.11}
+\]
+
+Choose a frame \(d\) and \(q\in K\) attaining \(\Lambda\). **Both** depths of \(q\) in that frame are at least \(\Lambda>1\). For each
+\[
+0<t<\frac{\Lambda-1}{D}<1,
+\]
+the homothetic copy \(K_{q,t}=q+t(K-q)\) lies inside \(K\) by convexity. For every \(p\in K\) and either normal \(n_{d,i}\),
+\[
+h_K(n_{d,i})-\bigl(q+t(p-q)\bigr)\cdot n_{d,i}
+\ge \Lambda-tD>1.
+\]
+Thus the **entire** positive-area copy \(K_{q,t}\) lies inside one **open forbidden quadrant** of the actual support-tightened hallway, and so it is disjoint from the genuine sofa S. Its area is \(t^2A_K\), yielding
+\[
+|K\setminus S|\ge t^2A_K.
+\]
+Take \(t\uparrow(\Lambda-1)/D\) to obtain
+\[
+|K\setminus S|\ge\frac{A_K}{D^2}(\Lambda-1)^2.
+\]
+Combine with NC.11; if \(A_K\le C\) the positive-part bound remains trivial, and if \(A_K>C\) then
+\(\Lambda-1\ge\sqrt{A_K/C}-1>0\).
+This proves NC.9. Since \(S\subseteq K\) and both are measurable,
+\(|S|=A_K-|K\setminus S|\), proving NC.10. \(\square\)
+
+**Interpretation.** The inequality supplies exactly the type of **outer-area growth must create inner-wall shadow area** charge suggested by the user's geometric strategy, but presently only relative to the best *convex* two-corner bound \(C=31/20\), not yet relative to the sharp Romik candidate \(M\). It accounts for **actual carved ordinary area**, rather than two separate one-turn signed deficits; it tolerates any forbidden-region overlap and arbitrarily partial or backtracking histories when the two midpoint poses are visited.
+
+The original fixed numerical NC1 is an easy strong rational specialization when \(A_K\ge M\), combined with \(D\le3\). NC2 gives a continuous, scale-sensitive inequality for every hull, including ones far above or below the reference area. It **does not** imply \(|S|\le M\) because high-area convex hulls can pay the relatively small compulsory niche budget and still leave an area larger than \(M\).
+
+## 6. Scope and next task
 
 The combined CV1/NC1 result *quantitatively excludes the convex or almost-convex branch of the original unrestricted problem*: any sofa area at least Romik's candidate must carve a **fixed positive ordinary-area portion** of its own hull, already forced at one proper diagonal angle. This is a global theorem across arbitrary original motions, not only fully turning or reference-symmetric ones.
 
