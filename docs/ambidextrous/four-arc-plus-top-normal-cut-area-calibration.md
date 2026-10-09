@@ -131,6 +131,20 @@ The key advance over [TC2](tail-paired-cut-deficit.md) is that **the parent is a
 \(|E(K)|=(|U|-N(U))+(|V|-N(V))-|I|\)
 is valid for the *uncut parent* but **need not hold after the cuts**. No proof may count a forbidden region outside its actual outer hull as missing sofa area.
 
+**An exact reference counterexample to the discarded identity.** Take the unperturbed parent \(U_0=V_0=U_*\), choose a small \(\delta>0\), cut **only the upper cap** by the horizontal line \(y=1-\delta\), and leave the reflected lower cap V unchanged. This is allowed by AC.2–AC.3 for sufficiently small \(\delta\) and fixed \(\eta>0\): all changed supporting normals cluster around the vertical normal. On the old central face \(J_*\), the *cut* upper roof is \(A_U=1-\delta\), while the **uncut upper-handed niche** has height \(n_V(x)=n_*(x)\).
+
+If one falsely subtracted that entire upper niche from the cut outer hull, it would assign top survivor height \(1-\delta-n_*(x)\). The **true** top survivor height is
+\[
+\min(1-\delta,1-n_*(x))
+=1-\max(\delta,n_*(x)).
+\]
+The difference, which was previously omitted, is exactly
+\[
+\boxed{\min(\delta,n_*(x))>0}
+\]
+on every interior central-face point with positive old niche. In particular the reference circular terminal tail obeys
+\(n_*(b-z)=q(z)>0\) for every \(0<z<\tfrac12\sin\beta\), so this is a **positive-area clipping correction**, not an isolated boundary artifact. It can have fractional-power size near the face endpoints. The corrected proof below handles it with the pointwise max, rather than assuming it is zero.
+
 The correct comparison is **pointwise in the ordinary surviving vertical fibers** and pays the clipping without making any global \(G\)-estimate.
 
 Let \(a_0^U(x),a_0^V(x)\) be the two parent's downward convex roof heights, and \(n_0^U(x),n_0^V(x)\) its complete positive lower/upper-turn niche roofs. For the cuts write
