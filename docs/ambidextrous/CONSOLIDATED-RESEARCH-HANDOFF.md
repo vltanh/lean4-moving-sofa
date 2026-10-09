@@ -165,6 +165,31 @@ The user asked to **deprioritize the two-cap clipping-deficit inequality as the 
 
 Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). [UV2](univariate-rational-motion-certificate.md) now reduces each full-path hallway check for rational square cells to univariate polynomial sign conditions of degree at most five, **without positive clearance**. This improves verification, not the search for an actual area excess. Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
+### Current direction: construct the outer convex hull, then charge inner-wall carving
+
+The user proposed separating the **outer supporting-wall hull** from the **inner forbidden niche carving**. The exact [OH1–OH3](outer-hull-first-carving-audit.md) study confirms this is a valid *parametrization* and a natural framework for a future **nonseparable** comparison, but **not** a way to maximize the outer hull separately:
+
+- Any width-\(W\), height-one rectangle supports continuous outer-wall placements for both complete turns and fits the incoming and outgoing endpoint strips; hence the outer-only area supremum is **infinite**.
+- After adding just the two canonical \(45^\circ\) *inner-wall* carve-outs, the rectangle's surviving ordinary area is exactly
+  \[
+  A_{45}(W)=
+  \begin{cases}
+    W,&W\le2(\sqrt2-1),\\
+    W-2[W/2-(\sqrt2-1)]^2,&2(\sqrt2-1)\le W\le2\sqrt2-1,\\
+    2\sqrt2-\tfrac32,&W\ge2\sqrt2-1.
+  \end{cases}
+  \]
+  In particular the **larger** rectangle \(K_3\supset K_*\) has *smaller* completed-envelope area than Romik's actual \(K_*\): \(|E(K_3)|\le2\sqrt2-3/2<M=|E(K_*)|\).
+- **Exact universal nested-hull gain/loss law:** for \(K_0\subseteq K_1\) with the *same* two visited angle intervals **and both full outgoing strips**, inner forbidden sets are nested. The ordinary envelope-area difference equals
+  \[
+  \boxed{|(K_1\setminus K_0)\setminus F(K_1)|
+  -|E(K_0)\cap(F(K_1)\setminus F(K_0))|.}
+  \]
+  This counts **new surviving outer material minus old sofa material newly shadowed by the enlarged inner niches** without separately introducing \(G\). Both signs can occur globally. An actual quantitative payment is already proved along horizontally enlarged reference hulls: \(|K_\delta|-|K_*|=\delta\), \(|E(K_\delta)|\le M-9\delta^2/20\) for \(0<\delta\le1/16\), imported from the existing self-reviewed [NR.12](near-reference-positive-minwidth-slack.md).
+- When the resulting canonical envelope has full horizontal projection, the **one-step retightening** \(K^\sharp=\operatorname{conv}E(K)\) makes an actual connected full-turn sofa hull with **no decrease** in envelope area; if there are empty fibers, [GC4](horizontal-gap-compression.md) is required and may change width/span.
+
+**The sharp open challenge in this language:** construct a *global*, mathematically justified charge/transport from newly surviving outer material to newly forbidden old material for **all** competitor hull changes. Charging only inclusion-enlargements from Romik would still leave incomparable hulls and genuinely partial motions. No full sharp area certificate exists, and outer-hull maximizing before carving is invalid.
+
 ### Proposed research reset
 
 - **Stop:** accumulating restricted sharp subclasses, increasing weak numerical bounds, rerunning near-Romik perturbation searches, invoking false global \(P_J\) concavity, or treating arbitrary-bend shapes as 90° sofas.
