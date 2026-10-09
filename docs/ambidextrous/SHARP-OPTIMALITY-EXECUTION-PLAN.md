@@ -106,6 +106,17 @@ At the reference these are tight equalities \(1/2=3/4-1/4\), but for arbitrary c
 \),
 where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. A real *full-continuum exposure/curvature and zero-level projection* theorem, incorporating the affine middle roof MID2, is still missing. This is the precisely identified Gate 1 obstruction on the active scalar proof route, not a new named-shape class.
 
+**NEW GLOBAL MAXIMIZER WING-REGULARITY (RG2–RG3, written proof, Oct 9):** [gate1-spatial-maximizer-wing-curvature-regularity.md](gate1-spatial-maximizer-wing-curvature-regularity.md) upgrades MID2 and finite charged-exposure FE1 into a **selection theorem for an actual global maximizer of \(\mathcal P\)**. A grid-polygon penalized selection targeting the chosen affine-middle global maximizer gives convergence despite arbitrary initial irregular support. The neighboring-inner-ray bound plus exterior-only facet stationarity yields
+\[
+\ell_{n,j}\le (6B+6)\delta+b_{n,j}+\ell^{\rm middle}_{n,j}.
+\]
+As the limit's entire middle roof is affine, middle lengths of facets with normals outside its normal \(\theta_c\) vanish. Thus all wing curvature singular-continuous parts and wing atoms vanish: the chosen optimizer has a \(W^{2,\infty}\) upper support on open-quarter arcs away from the central facet and top normal. Moreover the sharper *globally necessary nonlinear* source-curvature constraints hold a.e.:
+\[
+\boxed{\rho_f(t)\le\kappa(q(t)),\quad\rho_g(t)\le\kappa(p(t)),\quad
+\kappa(z)=\max\{|z|,(1+|z|)/2\}.}
+\]
+The **sharp corridor bound \(\rho\le1\) does NOT follow** until a genuinely *spatial-score*-valid global balance forces \(|p|,|q|\le1\); old weighted \(\Psi\) conditions (including constant half-length end faces) **cannot be imported**. The central affine facet may be tilted and may coexist with a top face away from J. **The exact remaining sharp Gate 1 step is a whole-angle, window-weighted niche exposure/equality plus the global maximizer value, not another cap-class exclusion.** No improvement of the unrestricted upper bound or Gate 1 PASS is claimed.
+
 **Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
 
 **Hard stopping rule:** If the global maximizer cannot be characterized, state the exact unresolved first-variation/exposure inequality—not another infinite series of local shape cases. Gate 1 remains **ACTIVE** until G1.SD2 is fully proved or the *original* coupled G1.2 is otherwise settled. The exact finite polygon oracle and facet-triangle reduction stay available only for mathematically meaningful adversarial verification.
