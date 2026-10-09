@@ -48,7 +48,7 @@ B(x)=m_tx+c_t\qquad (x\in J_t).
 \tag{PG.3}
 \]
 
-The end horizontal-extreme points of K belong to S, so \(J_t\Subset(l,r)\) in the sense that its closure lies in the projection interior and ends at zeros of \(q_t-B\). Each finite exposed lower facet's endpoints also belong to S and cannot lie in \(J_t\). The two linear pieces of \(q_t-B\) must consequently form **a positive tent**, with the increasing second ray on the left and the decreasing first ray on the right; a single affine piece could not be positive between two zero endpoints.
+The end horizontal-extreme points and the endpoints of every exposed facet of K belong to S. Therefore they cannot lie **inside** the positive set \(J_t\); however, its **base zeros may coincide** with an outer projection endpoint or an exposed facet endpoint. By continuity of B (including one-sided continuity at endpoints, forced by compactness of K), the affine lower boundary extends to the two base-zero limits. The two linear pieces of \(q_t-B\) must form **a positive tent**, with the increasing second ray on the left and the decreasing first ray on the right; a single affine piece cannot be positive between two zero endpoints. No false positive distance from the base to a facet endpoint is required.
 
 The tent's apex occurs where the physical two inner-wall rays meet, at their actual sharp corner
 \[
@@ -131,6 +131,8 @@ More strongly, for any compact connected full-turn S and every \(\varepsilon>0\)
 \tag{PG.9}
 \]
 No assumption that the original hull K is polygonal, has bounded curvature, a finite ray-contact chart, aligned top/bottom faces, or an area-near-Romik contact pattern is used.
+
+**Zero-area convention.** If the input sofa has area zero, the stated approximation inequality is trivial: choose a sufficiently small positive-area rectangle of Euclidean diameter less than one inside the incoming strip. It fits both complete turns by a single-wall width bound and has a polygonal actual hull. In the proof below assume the input area is positive, so the selected interior rectangles are nonempty for sufficiently fine partitions.
 
 **Proof: Step A, saturate and obtain continuous interval roofs.** For the actual S let \(K=\operatorname{conv}S\). Canonical support tightening supplies the compact full envelope \(E=E_{\rm full}(K)\supseteq S\). By the downward/upward one-sided nature of the full turned quadrants and connected x-projection of S,
 \[
