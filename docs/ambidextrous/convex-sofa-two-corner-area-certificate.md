@@ -1,10 +1,10 @@
-# A certified \(31/20\) upper bound for every **convex** ambidextrous sofa
+# A certified \(3/2\) upper bound for every **convex** ambidextrous sofa
 
 **Date:** October 8, 2026. **Status:** A complete self-contained pen-and-paper geometric reduction plus a **finite exact rational certificate**, not independently refereed or Lean-verified. It improves the preceding moving-inner-corner program from **feasibility-only restrictions** to a quantitative **ordinary-area theorem on a large geometric class**. No global sharp theorem, assertion that arbitrary sofas are convex, or new above-Romik sofa is claimed.
 
 **Main theorem CV1.** Every compact convex planar sofa that can pass through both left- and right-handed unit-width right-angle corridors, from the same incoming orientation and by arbitrary continuous motions (including partial turns, rotations with backtracking, and nonmonotone paths), has
 \[
-\boxed{|S|\le\frac{31}{20}=1.55<1.6449552184\ldots=M.}\tag{CV.1}
+\boxed{|S|\le\frac{31}{20}=1.5<1.6449552184\ldots=M.}\tag{CV.1}
 \]
 In fact, every compact convex body satisfying the **common incoming unit strip plus just the two canonical opposite \(45^\circ\) hallway positions** already obeys CV.1. The last stronger statement needs neither continuous motion data nor terminal strip conditions. For the original sofa conclusion, the independently established *proper \(45^\circ\) reach for area \(>\sqrt2\)* from [GH](midpoint-bound-general-motions.md) supplies those two positions.
 
@@ -52,13 +52,13 @@ for some \(z\), which may be unknown. It follows that C is contained in the inte
 
 ## 2. An elementary **compact** parameter domain
 
-We only need consider a hypothetical C with \(|C|>31/20\).
+We only need consider a hypothetical C with \(|C|>3/2\).
 
 At a fixed U (or V), the incoming diagonal band intersects the line in length at most \(\sqrt2\). Thus Fubini gives
 \[
 |C|\le\sqrt2\min(P,Q).
 \]
-Since \(31/20>\sqrt2\), both actual widths satisfy \(P,Q>1\).
+Since \(3/2>\sqrt2\), both actual widths satisfy \(P,Q>1\).
 
 If both \(P,Q>2\), distributing the two safe-wall disjunctions in CV.3 leaves only the two **positively separated unit squares**
 \[
@@ -148,42 +148,42 @@ The maximum is thus at a breakpoint or at the unique interior zero of that affin
 
 ## 4. Complete exhaustive rational certificate
 
-The [self-contained exact checker](computer-assisted/check_convex_two_corner_area.py) subdivides the whole root box CV.7 by repeatedly bisecting the coordinate with the largest **normalized width**:
+The stronger (3/2) bound supersedes the earlier (31/20) certificate; the geometric reduction and parameter domain are unchanged. The [self-contained exact checker](computer-assisted/check_convex_two_corner_area.py) subdivides the whole root box CV.7 by repeatedly bisecting the coordinate with the largest **normalized width**:
 \[
 \frac{P_1-P_0}{3},\
 \frac{Q_1-Q_0}{3},\
 \lambda_1-\lambda_0,\
 \mu_1-\mu_0.
 \]
-At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(31/20\). Otherwise it bisects and covers the box by its two children. **Every accepted box is a sound upper-area enclosure for every parameter tuple inside it.**
+At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(3/2\). Otherwise it bisects and covers the box by its two children. **Every accepted box is a sound upper-area enclosure for every parameter tuple inside it.**
 
 The independent, executed standard-library Python Fraction replay gave:
 \[
 \boxed{
 \begin{array}{l|r}
-\text{Total visited parameter boxes}&40\,165\\
-\text{Certified terminal boxes}&20\,083\\
-\text{Maximum subdivision depth}&23\\
+\text{Total visited parameter boxes}&100\,161\\
+\text{Certified terminal boxes}&50\,079\\
+\text{Maximum subdivision depth}&24\\
 \text{Unresolved leaves}&0\\
 \text{Largest computed accepted exact upper}&
-2510243489/1619520000<31/20.
+3/2.
 \end{array}}\tag{CV.11}
 \]
-There is no optimizer, no random search, no geometric interpolation without a proved error term, and no need for CI or Lean. A finite tree of rational area inequalities covers **every** real point of the root parameter domain. The code includes independent closed-form regression tests for a unit square, a \(1\times3\) rectangle, an isosceles right triangle, and a symmetric double-corner polygon to guard against missed band-position maxima.
+There is no optimizer, no random search, no geometric interpolation without a proved error term, and no need for CI or Lean. A finite tree of rational area inequalities covers **every** real point of the root parameter domain. The code additionally uses the sound strip bound (d\min(\operatorname{width}_U\mathcal P,\operatorname{width}_V\mathcal P)) before the exact band maximization. It includes independent closed-form regression tests for a unit square, a \(1\times3\) rectangle, an isosceles right triangle, and a symmetric double-corner polygon to guard against missed band-position maxima.
 
-With CV.6 and CV.10–CV.11, assuming \(|C|>31/20\) gives
+With CV.6 and CV.10–CV.11, assuming \(|C|>3/2\) gives
 \[
-31/20<|C|\le\Phi_d(\mathcal P_{\mathcal B})\le31/20
+3/2<|C|\le\Phi_d(\mathcal P_{\mathcal B})\le3/2
 \]
 for the leaf containing its actual parameter tuple, a contradiction. This proves the **two-\(45^\circ\) finite-position convex-body theorem**.
 
-Finally, if a genuinely ambidextrous **convex** sofa had area \(>31/20\), then its area would exceed \(\sqrt2\). The valid actual-motion wrong-way exclusion and terminal-strip reach argument in [GH Section 3](midpoint-bound-general-motions.md) forces both proper \(45^\circ\) hallway positions to have been visited, without assuming monotone or complete turns. The just-proved finite-position inequality then yields a contradiction. **This proves CV1.**
+Finally, if a genuinely ambidextrous **convex** sofa had area \(>3/2\), then its area would exceed \(\sqrt2\). The valid actual-motion wrong-way exclusion and terminal-strip reach argument in [GH Section 3](midpoint-bound-general-motions.md) forces both proper \(45^\circ\) hallway positions to have been visited, without assuming monotone or complete turns. The just-proved finite-position inequality then yields a contradiction. **This proves CV1.**
 
-For the comparison with Romik, [Note 10](10-wrong-angle-exclusion.md) establishes \(M>8/5>31/20\) directly from the positive cubic root bounds; no numerical approximation to \(M\) is needed.
+For the comparison with Romik, [Note 10](10-wrong-angle-exclusion.md) establishes \(M>8/5>3/2\) directly from the positive cubic root bounds; no numerical approximation to \(M\) is needed.
 
 ## 5. What this does and does not establish
 
-**Established:** Every true convex ambidextrous sofa has area **strictly less** than Romik's existing feasible nonconvex candidate, with a comfortable rational gap \(M-31/20>1/20\). The result applies to *all original motion histories*, not just globally maximized convex shapes. It is an honest **ordinary-area** theorem from the same moving corner and outer-wall contact geometry proposed by the user.
+**Established:** Every true convex ambidextrous sofa has area **strictly less** than Romik's existing feasible nonconvex candidate, with a comfortable rational gap \(M-3/2>1/20\). The result applies to *all original motion histories*, not just globally maximized convex shapes. It is an honest **ordinary-area** theorem from the same moving corner and outer-wall contact geometry proposed by the user.
 
 **Not established:** The **convex hull of a nonconvex sofa need not itself avoid the forbidden inner quadrants**. Indeed Romik's actual corner lies strictly inside his convex hull at the \(45^\circ\) frame. Therefore CV1 cannot be applied to the convex hull of Romik or to a hypothetical larger sofa. No convexification, symmetrization, or patching argument is offered to turn the original unrestricted optimality problem into the convex case; doing so would falsely eliminate the reference. The original global sharp upper bound \(M\) remains open.
 
