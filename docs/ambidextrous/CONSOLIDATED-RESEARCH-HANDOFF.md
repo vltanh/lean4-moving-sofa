@@ -69,6 +69,32 @@ G(U,V)\stackrel{?}{\le}
 
 for every **actual compatible full-turn two-cap pair** in the relevant normalization, including nonsmooth and asymmetric cases. A proof of this, with the required geometric admission, would settle the *full-turn* value. Handling unrestricted **partial turns** is a separate obligation. The inequality is not asserted for arbitrary incompatible abstract caps.
 
+### Oct 9 global-directional sharp research advance: **cubic** (not linear/quadratic) clipping from Romik toward *every* unit-height hull
+
+[MC1–MC3](global-directional-romik-clipping-vanishes.md) proves a genuinely **global-in-directions** ordinary-area inequality. Let \(K_*\) be Romik's reference common convex hull; let **any** compact convex unit-height \(K\subseteq B=[-5/2,5/2]\times[0,1]\) be an arbitrary far or inadmissible hull, including asymmetric **opposite-end top/bottom faces**, nonsmooth supports, curvature atoms, and point faces. Along the exact Minkowski chord
+\[
+K_\lambda=(1-\lambda)K_*+\lambda K,
+\]
+the two downward upper/reflected lower caps interpolate under Minkowski addition, and their entire **full-turn** clipping credit \(G(U_\lambda,V_\lambda)\) is supported only in strips of combined width \(O(\lambda)\) adjacent to Romik's top-face endpoints. The **strict reference curvature gap** \(f_*+f_*'',g_*+g_*''\le393/400<1\) improves the height of every inner-ray roof on those strips to \(O(\lambda^2)\). This yields the **explicit, exact all-angle, all-hull** estimate
+\[
+\boxed{0\le G(U_\lambda,V_\lambda)\le500000\lambda^3,\qquad0<\lambda\le10^{-4}.}
+\]
+No curvature or contact hypothesis is imposed on the far endpoint **K**, only vertical span one; no finite angular sampling is used. This strengthens the initial \(O(\lambda^{3/2})\) estimate from merely Lipschitz supports. It implies the clipping interaction gives **neither first- nor second-order positive gains** at Romik along *any* such Minkowski chord.
+
+**Conditional on the separate self-reviewed long proof WV2** of \(\Psi(U)\le M/2\) for every normalized full one-turn cap, the exact **signed**, *not positive-part ordinary*, two-turn identity
+\(\mathscr S(K)=\Psi(U)+\Psi(V)+G(U,V)\) yields
+\[
+\boxed{\mathscr S(K_\lambda)\le M+500000\lambda^3}.
+\]
+This gives Romik a **global first- and second-order upper support in every height-one Minkowski direction**, **NOT a global maximum theorem**. The new *one-inequality* sharp target is the as-yet-unproved **unit-height star-concavity from Romik**
+\[
+\boxed{\mathscr S((1-\lambda)K_*+\lambda K)
+\stackrel{?}{\ge}(1-\lambda)M+\lambda\mathscr S(K)}
+\]
+for every height-one K in B. Combined with MC3, WV2 and the PD3 unit-height full-turn value-density reduction, it would prove the **full-turn** sharp area bound; original **partial turns remain a separate obligation**. Existing SCX1 disproves global Minkowski concavity with varying vertical span; it does **not** settle the fixed-height star case. Neither star-concavity nor unrestricted optimality is asserted, and preliminary numerical screens cannot certify the missing inequality.
+
+This has more global relevance than another near-Romik class exclusion. The sharp proof boundary is still the unknown nonlinear **finite-\(\lambda\) behavior** along arbitrary far hull directions, plus full-to-partial coverage. No Lean/CI was run.
+
 ## 2. Substantive mathematical achievements — but with their exact scopes
 
 All new written arguments are **self-reviewed drafts**, not independently refereed or Lean-kernel verified. Several computational certificates use exact rational arithmetic but their geometric premises and implementation still require independent audit.
