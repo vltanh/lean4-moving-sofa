@@ -187,6 +187,26 @@ These are **unrestricted structural necessities**, not a sharp global area upper
 
 **Strengthened checkpoint:** The initially proved \(31/20=1.55\) convex theorem has since been upgraded to the **exact rational \(3/2=1.5\)** area bound, using [the same verified checker](computer-assisted/check_convex_two_corner_area.py) with a sound extra projection-width enclosure. Its stronger exhaustive replay has **100,161 visited boxes, 50,079 leaves, maximum depth 24, and no unresolved cells**, independently re-executed locally. Consequently [NC3](mandatory-competitive-convex-hull-niche.md) strengthens the unrestricted necessary carving: every \(|S|\ge M\) sofa has a real \(45^\circ\) corner with both support depths \(>1047/1000\), and an ordinary missing convex-hull area **\(>1/2500\)**, with a \(47/2000\) Hausdorff gap from any convex two-pose-compatible shape. These are self-reviewed computational/analytic research results, **not** the sharp unrestricted upper bound.
 
+### Latest area theorem: four independent middle arcs plus **independent top/bottom cap cuts**, with ordinary clipping restored
+
+[AC1–AC2](four-arc-plus-top-normal-cut-area-calibration.md) extends the four-independent-ray full-turn strict upper theorem to **arbitrary inward convex cuts near the vertical top-normal support**, independently on the upper and vertically reflected lower caps. The cut caps remain downward closed, contain the common half-height horizontal strip, and agree with their middle-perturbed parent supports outside a short vertical-normal angular interval. **Unit incoming vertical span, horizontal top/bottom face preservation, hull-retention after cutting, reflection symmetry, new contact-chart stability and a new curvature upper bound are not assumed.**
+
+The proof is a *true ordinary-area* slice comparison: after cuts, the two positive niches may lie **partly outside the new shared convex hull**. An initial draft erroneously subtracted their entire areas; that false identity has been **explicitly corrected and replaced**. On the central face J, the cut survivor's vertical length is at most the parent survivor's length plus the sum of the two genuine saved-niche heights. Outside J, there are no niches, so its loss is the sum of the outer cap roof losses. Every saved terminal inner-ray niche slice is paired **one-to-one** with lost *outer* circular-flank material under the same old reference supporting normal, at an abscissa outside the face. This yields
+\[
+\boxed{
+|E_{\rm full}(U\cap\rho V)|
+\le M-\frac12(1-|J_0|/\pi)\mathcal E_4
+-\int_{I\setminus(J\cup F_{\rm out})}
+   [(A_{U_0}-A_U)+(A_{V_0}-A_V)]\,dx
+\le M .
+}
+\]
+Here \(F_{\rm out}\) is the union of the two explicit small outer-flank pairing intervals. The **entire actual clipping** is handled pointwise, not discarded, and no universal pairwise clipping-deficit theorem is invoked. The correction removes an initially claimed (invalid) extra **central-face** loss term; it does not weaken the verified no-gain conclusion \(\le M\) for this whole local-and-cut class.
+
+The [EP4–EP5](romik-terminal-angle-outgoing-strip-rigidity.md) partial-turn result extends all the way to independent final angles \(\alpha,\gamma\ge \pi/2-\beta\approx73.4^\circ\) with no cap cuts: the necessary whole-body outgoing strips cause \(\Omega(\delta^{3/2})\) **ordinary** loss, whereas the skipped terminal niche tail saves only \(O(\delta^3)\). **Combining independent arbitrary top-normal cuts and early terminal exit is still open** because a cut can move the whole-body outgoing supporting line. Do not silently add the two exclusions.
+
+Two low-dimensional falsification screens directly attempted **above-\(M\)** variations of Romik's hull by uniform vertical contraction and by independent top/bottom horizontal-strip shaving together with early terminal exits. None improved upon the unmodified reference in the tested grids/parameter optimization; this is only a diagnostic, **not** a certified global no-counterexample claim. No universal sharp area bound or larger connected sofa has been proved.
+
 ### Further October 8 advance: full-ray **above-\(M\)** exclusion on four asymmetric hull supports and genuine **partial** exits
 
 The latest rigorous work focuses on the user's **outer-wall contacts + moving physical corner + complete inner-ray sweep** rather than continuing the convex-sofa certificate.
