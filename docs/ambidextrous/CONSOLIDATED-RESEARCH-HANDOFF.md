@@ -165,6 +165,24 @@ The user asked to **deprioritize the two-cap clipping-deficit inequality as the 
 
 Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). [UV2](univariate-rational-motion-certificate.md) now reduces each full-path hallway check for rational square cells to univariate polynomial sign conditions of degree at most five, **without positive clearance**. This improves verification, not the search for an actual area excess. Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
+### Stronger complementary-angle width restrictions, for all angles
+
+[CD1](complementary-corner-width-continuum.md) proves a new extension of the previously isolated **45-degree** diagonal gate: if a lower normal pair at \(t\) and an upper-handed pair at complementary magnitude \(s=\pi/2-t\) are actually visited, the common hull obeys
+\[
+\boxed{\min\{w_K(u_t),w_K(v_t)\}\le2.}
+\]
+After reflecting the upper hallway, its outer normals are precisely the **negatives** of the lower perpendicular normals, so both sharp inner corners carve **opposite corners of the same rotated support rectangle**. If both perpendicular widths were \(>2\), the entire surviving set would lie in two positively separated unit squares in that rotated coordinate system, contradicting connectedness and actual support widths. This has a complete elementary proof, not a numerical bound. For **both full turns** it holds for *every* \(t\in[0,\pi/2]\). For an arbitrary **hypothetical above-\(M\) partial/backtracking competitor**, the existing proper-angle/two-strip reduction guarantees it for at least the uniform interval
+\[
+t\in[\pi/2-\arccos(5/8),\arccos(5/8)]
+\quad(\text{roughly }38.68^\circ\ldots51.32^\circ).
+\]
+The old DU.2 is just \(t=\pi/4\). This is a global support-only, physical-corner consequence; it **does not prove the sharp area bound**.
+
+[CD Section 4](complementary-corner-width-continuum.md) gives a separate **independence example**: a convex rational hexagon with outer area exactly \(1902703/10^6>M\) has
+\(\min\{w_K(u_t),w_K(v_t)\}<2\) **for every real complementary angle** (proved with a 257-direction Fraction calculation plus a rigorous \(3\)-Lipschitz continuum margin), and every extreme hull point survives each of two chosen **noncomplementary** snapshots. Indeed each snapshot individually has connected nonempty interval fibers and retains the same hull. Yet the **joint** two-corner tent test CP1 produces an exact empty-fiber violation \(2431/262500>0\). Thus the true two-variable corner packing condition is demonstrably **stronger than the entire continuum of complementary width gates**. Neither hexagon nor its area is a feasible sofa or a counterexample to Romik.
+
+The geometrically missing proof ingredient is still a **sharp ordinary-area charge** from outer contact growth to the complete union of attached inner-wall ray sweeps, not mere feasibility/nonpinching. At Romik itself the corner-pair packing constraints have strict slack \(>2/15\), so they cannot alone supply its equality ODE or optimality.
+
 ### New complete corner-pair feasibility constraints (October 8, later)
 
 [CP1–CP2](two-moving-corner-packing.md) derives exact **two-handed corner packing** from the user's outer-wall-plus-moving-corner perspective. Each visited lower corner \(c^-(t)=(\xi_t,\eta_t)\) and reflected upper corner \(c^+(s)=(\zeta_s,\theta_s)\) carries a two-sided tent-shaped forbidden region determined by its attached inner-wall rays. Since a connected sofa occupies **every horizontal column** of its actual convex hull, the tents cannot cover an entire column. When their x-abscissae lie in the projection, this gives the explicit **necessary support-only inequality**
