@@ -1,10 +1,10 @@
-# Global **first-order** Romik calibration along every unit-height Minkowski chord: the clipping credit is sublinear
+# Global **first-order** Romik calibration along every unit-height Minkowski chord: the clipping credit is cubically small
 
 **Date:** October 9, 2026. **Scope:** This is a sharp-reference, but **globally directional**, geometric theorem: the perturbation endpoint is **any** compact convex hull of vertical span exactly one in a fixed bounded box, not merely a smooth or Hausdorff-near reference hull and not merely a specified face/contact class. The positive clipping credit in the exact two-handed signed area identity is **\(O(\lambda^{3/2})\)** on the entire Minkowski chord from Romik's reference hull. There is no assumption that the interpolated hull is itself an admissible sofa hull, has nonempty fibers, or retains any of Romik's active contacts.
 
 Combining the new unconditional clipping estimate with the branch's **self-reviewed** [WV2 sharp weighted one-cap inequality](one-turn-weighted-value.md) gives a **global one-sided first-variation inequality** for the signed *two-handed full-turn* area functional: Romik has no positive first-order direction toward **any** unit-height hull, even an asymmetric far competitor with opposite-end top/bottom faces. This is much wider in directional scope than the local frozen-ray calibration. **It is not a proof of global optimality**: first-order stationarity does not imply a global maximum without an additional comparison such as the explicitly stated **star-concavity** inequality. The existing [fixed-height signed-concavity problem](signed-joint-convex-domain-global-value.md) remains open. Original partial terminal turns also remain open.
 
-The central geometric proof, Sections 1–4, depends only on the reference support bounds from [RH.7](romik-horizontal-misalignment-sharp-bound.md), general support-function geometry, and Fubini. It does **not** depend on WV2's longer variational proof chain.
+The central geometric proof, Sections 1–4b, depends only on the reference support bounds from [RH.7](romik-horizontal-misalignment-sharp-bound.md), general support-function geometry, and Fubini. It does **not** depend on WV2's longer variational proof chain.
 
 ## 1. A Minkowski chord toward an arbitrary hull, with no support-pattern restrictions
 
@@ -190,6 +190,124 @@ n_{U_\lambda},n_{V_\lambda}
 There are **two** possible clipping terms, of combined horizontal measure at most \(20\lambda\). Integrate their pointwise height bound to obtain \(G\le20\lambda\cdot18\sqrt\lambda=360\lambda^{3/2}\).
 
 This is a deliberately conservative **all-angle, all-hull** geometric certificate, not a claimed sharp bound on G or the area of any sofa.
+
+## 4b. **Strict reference curvature improves the global rate to \(O(\lambda^3)\)**
+
+The square-root-height bound in MC.13 is deliberately generic: it uses only Lipschitz continuity of arbitrary supports. Romik's reference satisfies a **strictly stronger terminal quadratic wall-margin**. This improves the clipping credit by an entire factor \(\lambda^{3/2}\), *uniformly over every far endpoint hull*.
+
+Set
+\[
+\boxed{\kappa=\frac7{400}>0.}
+\]
+In every smooth open quarter of the reference support the curvature densities satisfy
+\[
+0\le f_*+f_*''\le\frac{393}{400}=1-\kappa,\qquad
+0\le g_*+g_*''\le\frac{393}{400}=1-\kappa.
+\tag{MC.18}
+\]
+Indeed the two terminal phases have densities \(0\) or \(1/2\), while the middle phase has densities bounded by \(3R_0/4<3(131/100)/4=393/400\), by [RH.2–RH.3](romik-horizontal-misalignment-sharp-bound.md). The reference pieces join in \(C^1\) at their switching angles, so no curvature atoms are omitted.
+
+Let
+\[
+e_g(t)=1+b\sin t-g_*(t),\qquad
+e_f(t)=1+b\cos t-f_*(t).
+\]
+The exact endpoint value/derivative conditions are
+\[
+e_g(0)=e_g'(0)=0,\qquad
+e_f(L)=e_f'(L)=0,\quad L=\pi/2.
+\]
+Solving the forced scalar support ODE using the strictly positive Green kernels, MC.18 gives
+\[
+\boxed{
+\begin{aligned}
+e_g(t)&=\int_0^t\sin(t-s)(1-\rho_g(s))\,ds
+\ge\kappa(1-\cos t),\\
+e_f(t)&=\int_t^L\sin(s-t)(1-\rho_f(s))\,ds
+\ge\kappa(1-\sin t).
+\end{aligned}}\tag{MC.19}
+\]
+
+**Theorem MC3 (uniform cubic clipping, all unit-height hull directions).** In the *fixed original-motion hull search box* \(B=[-5/2,5/2]\times[0,1]\), for every nonempty compact convex \(K\subseteq B\) with vertical span exactly one,
+\[
+\boxed{
+0\le G(U_\lambda,V_\lambda)\le
+500000\,\lambda^3
+\qquad(0<\lambda\le 1/10000).
+}\tag{MC.20}
+\]
+No curvature, smoothness, feasibility, horizontal-face order, or contact-chart assumption is placed on the **arbitrary target K**.
+
+**Proof.** By MC.9, each clipping term is supported on at most two short horizontal intervals about \(x=\pm b\). Across either interval,
+\[
+\boxed{|x+b|\le\tfrac72\lambda\quad\text{(left)},\qquad
+|x-b|\le\tfrac72\lambda\quad\text{(right)}.}
+\tag{MC.21}
+\]
+Each clipping term has *total* horizontal support measure at most \(10\lambda\), by the root-box extent \(R=5/2\).
+
+First take a clipping abscissa near the **left endpoint**, \(|x+b|\le 7\lambda/2\). For any one of the interpolated caps \(C_\lambda=(1-\lambda)U_*+\lambda C\), with lower endpoint \(l_C\in[-5/2,5/2]\), the arbitrary-cap rectangle support bound MC.5 and the strict reference gap MC.19 give
+\[
+\begin{aligned}
+h_{C_\lambda}(v_t)-1+x\sin t
+&\le A\sin t-k(1-\cos t),\\
+A&=(1-\lambda)(x+b)+\lambda(x-l_C),\\
+k&=(1-\lambda)\kappa+\lambda\ \ge\ \kappa/2=7/800,
+\end{aligned}\tag{MC.22}
+\]
+where \(|A|\le9\lambda\) follows from \(|x+b|\le7\lambda/2\), \(|x-l_C|\le5\) and \(\lambda\le1\).
+
+The second-wall roof is the left-hand side of MC.22 divided by \(\cos t>0\). If it is positive, then necessarily \(A>0\) and
+\[
+\tan(t/2)<A/k\le9\lambda/k\le \frac9{10000}\frac{800}7<\frac12.
+\]
+Using \(\tan t=2\tan(t/2)/(1-\tan^2(t/2))\), **every** possible positive second-wall roof at that x satisfies
+\[
+\frac{h_{C_\lambda}(v_t)-1+x\sin t}{\cos t}
+\le A\tan t
+\le\frac{8A^2}{3k}
+\le\frac{216}{k}\lambda^2.
+\tag{MC.23}
+\]
+But the *full physical inner-quadrant roof* is the **minimum** of the two wall roofs. Hence the complete **all-angle** niche height at this left clipping abscissa is bounded by \(216\lambda^2/k\).
+
+At a clipping abscissa near the **right endpoint**, \(|x-b|\le7\lambda/2\), the symmetric calculation uses the *first* wall and the second strict reference gap:
+\[
+h_{C_\lambda}(u_t)-1-x\cos t
+\le A'\cos t-k(1-\sin t),\qquad
+A'=(1-\lambda)(b-x)+\lambda(r_C-x)\le9\lambda.
+\]
+If the first-wall roof is positive then
+\(\tan((L-t)/2)<A'/k<1/2\), and therefore its height, after dividing by \(\sin t\), is at most \(216\lambda^2/k\) by the same calculation.
+
+Thus on *both* clipping intervals, **each** whole-turn niche satisfies
+\[
+\boxed{n_{C_\lambda}(x)\le\frac{216}{k}\lambda^2}
+\tag{MC.24}
+\]
+without tracking any maximizing angle. Each clipping integrand is bounded by that niche roof. The two clipping terms together have horizontal support measure at most \(20\lambda\). Thus
+\[
+G(U_\lambda,V_\lambda)
+\le20\lambda\frac{216}{k}\lambda^2
+\le\frac{4320\cdot800}{7}\lambda^3
+<500000\lambda^3.
+\]
+The displayed estimate holds for every angle \(t\in(0,L)\); it does not discretize or assume any particular wall exposure. \(\square\)
+
+**Consequences.** The positive ordinary two-turn clipping credit now vanishes to **second order as well as first order** along every unit-height Minkowski ray from Romik:
+\[
+\boxed{G(U_\lambda,V_\lambda)/\lambda^2\longrightarrow0}
+\quad\text{uniformly over all height-one }K\subseteq B.
+\tag{MC.25}
+\]
+Taking the branch's separately self-reviewed one-turn inequality WV2 as a dependency strengthens MC.16 to
+\[
+\boxed{
+\mathscr S(K_\lambda)\le M+500000\,\lambda^3
+\quad(0<\lambda\le1/10000).
+}\tag{MC.26}
+\]
+This eliminates any **linear or quadratic positive area contribution from cross-handed clipping** in *arbitrary far* hull directions, even those whose top and bottom faces are at opposite ends. **It does not eliminate all such competitors globally**: the overall signed objective could still increase at finite \(\lambda\) because star-concavity MC.17 remains unproved. Nor does MC.26 alone prove that \(\mathscr S\) has an existing nonpositive second derivative, since the one-cap terms may be nonsmooth; it proves the displayed one-sided cubic **upper envelope** only.
 
 ## 5. A global directional first variation — conditional on the written one-cap sharp theorem
 
