@@ -453,7 +453,71 @@ This strengthens the previous **\(C^2\)-small exact-branch** two-arc result [PJ-
 
 **The precise remaining global obstruction:** This does not cover supports modified near the reference switching angles or axis normals, changes of the actual incoming top/bottom face or horizontal projection, arbitrary far-away support charts, or partial terminal angles. It uses the **reference** global exposure decomposition only to supply the initial frozen-ray comparison. A universal sharp proof requires a calibration that replaces that reference chart with a global principle valid for *every* possible candidate hull and both independently turning motions.
 
-## 7. What changes in the global optimality proof
+## 7. From **\(C^1\)-small** to **Hausdorff-small** — and curvature atoms
+
+The hypothesis that the two source perturbations be small in their **first derivatives** is not an independent constraint on a *genuine convex support function* sufficiently close to the smooth reference. Convexity itself upgrades local uniform support closeness to first-derivative closeness, even with atoms in the support curvature. This extends VC3 to a natural **Hausdorff topology**, rather than the substantially stronger \(C^1\)-topology, on its stated compact middle-source support subspace.
+
+**Lemma VC4 (uniform derivative control from convex support, including jumps).** Let \(J_0\Subset J_1\Subset T\), and let \(h_*\) denote the \(C^2\) Romik upper support on \(J_1\). Let \(h\) be **any** planar convex-body support function (possibly nonsmooth, with support-curvature atoms) satisfying
+\[
+\|h-h_*\|_{L^\infty(J_1)}\le\varepsilon,
+\qquad h''+h\ge0\quad\text{in the distribution sense}.
+\]
+Put \(w=h-h_*\) and \(C_0=\sup_{J_1}(h_*''+h_*)+\varepsilon\). Then \(w''\ge-C_0\,dt\) on \(J_1\). If \(r>0\) is less than the distance from \(J_0\) to the complement of \(J_1\), the one-sided angular derivatives (which exist because \(w\) is semiconvex) satisfy
+\[
+\boxed{
+-\,\frac{2\varepsilon}{r}-\frac{C_0r}{2}
+\ \le\ w'_-(t)\le w'_+(t)\
+\le\frac{2\varepsilon}{r}+\frac{C_0r}{2},
+\quad t\in J_0.
+}\tag{VC.30}
+\]
+In particular, for sufficiently small \(\varepsilon\) choose \(r=2\sqrt{\varepsilon/C_0}\) and obtain the **uniform** estimate
+\[
+\boxed{
+\|w'_\pm\|_{L^\infty(J_0)}\le2\sqrt{C_0\varepsilon}
+=O(\sqrt\varepsilon).
+}\tag{VC.31}
+\]
+
+**Proof.** The support-curvature positivity gives \(h''\ge-h\) as distributions, hence
+\(w''\ge-h-h_*''=-(h_*''+h_*+w)\ge-C_0\). Therefore
+\[
+G(t)=w(t)+\tfrac12C_0t^2
+\]
+is convex on \(J_1\). Its one-sided derivatives are bounded above by its forward chord slope over length \(r\), and below by its backward chord slope, exactly as for every one-dimensional convex function:
+\[
+G'_+(t)\le\frac{G(t+r)-G(t)}r,\qquad
+G'_-(t)\ge\frac{G(t)-G(t-r)}r.
+\]
+Subtract \(C_0t\) and use \(|w|\le\varepsilon\) to obtain the displayed upper and lower estimates. Convexity gives \(w'_-\le w'_+\) at every point. Optimize the chord length to get VC.31. \(\square\)
+
+**Theorem VC5 (strict Hausdorff-local maximality on independent compact middle support arcs, without curvature regularity).** Fix compact intervals \(J_0\Subset J_1\Subset(\beta,\pi/2-\beta)\) satisfying VC3's strict Romik reference contact margins. There exists \(\varepsilon_*>0\) such that **every compact convex hull** \(K\) with:
+1. vertical-reflection symmetry about \(y=1/2\);
+2. upper-quarter supports agreeing with Romik's outside \(J_0\);
+3. uniform support distance \(\sup_{\theta}|h_K(\theta)-h_{K_*}(\theta)|<\varepsilon_*\);
+
+has a **genuine connected, canonically saturated two-full-turn envelope** whose actual hull remains \(K\), and
+\[
+\boxed{
+|E_{\rm full}(K)|
+\le M-\left(1-\frac{|J_0|}{\pi}\right)
+\int_{J_0}\bigl(|(f_K-f_*)'|^2+
+                |(g_K-g_*)'|^2\bigr)\,dt.
+}\tag{VC.32}
+\]
+The angular derivatives are interpreted almost everywhere. Equality forces \(h_K=h_{K_*}\). Neither left-right symmetry nor any **upper** curvature density bound, absolute continuity of curvature, absence of exposed outer-edge atoms, or smoothness of \(h_K\) is assumed.
+
+**Proof.** Apply Lemma VC4 separately to the first and second upper-quarter support arcs (each has strictly positive smooth Romik reference curvature on \(J_1\)). Uniform support closeness makes their derivative differences uniformly small, including the one-sided traces at every possible curvature atom; outside \(J_0\) the differences vanish. It thus supplies the *geometric* \(C^1\)-smallness premise of VC3 without requiring the new support derivatives to be continuous.
+
+The new corner abscissa is a **Lipschitz** function of the two support values and the rotating normals, with one-sided or almost-everywhere derivative obtained from VC.25; the small derivative bound makes its x-map strictly decreasing and bi-Lipschitz on the fixed reference chart. Consequently its true one-angle corner-height lower bound may be integrated by the ordinary absolutely continuous change-of-variables formula. Both frozen stationary-wall lower bounds use only the **values** of the new support, with no differentiability requirement. The resulting corner product \(y_c(-x_c')\) is integrable and its integration by parts is valid for Lipschitz perturbations.
+
+The planar convex support-area identity is valid for \(W^{1,\infty}\) support functions by approximation or directly by polygonal curvature measures; the exact polarization VC.28 remains valid. The same Dirichlet estimate therefore proves VC.32. All full-angle feasibility, core face retention, connectedness and actual hull retention follow from the strict contact and baseline-intercept margins by the now uniformly small \(C^0/C^1\) perturbations, exactly as in VC3.
+
+Finally the right-hand integral vanishes only when both support differences are a.e. constant on their respective compact support intervals; since they vanish outside \(J_0\), both are identically zero, and so is their vertical-reflection extension. Hence equality forces \(K=K_*\). \(\square\)
+
+**Scope caution:** Hausdorff-smallness here is combined with the **fixed compact source-angle support** premise. This is not the claim that *every* hull close to Romik in Hausdorff distance lies in VC5: a generic nearby hull changes supports at the reference **switches, axis normals, horizontal face endpoints and different angular pieces**. Those degrees of freedom remain the principal missing global perturbation modes. VC5 is nevertheless a genuine **ordinary-area** strict maximum in an infinite-dimensional, nonsmooth support class, not a \(C^2\)-stable contact-chart calculation.
+
+## 8. What changes in the global optimality proof
 
 VC1 is stronger than a local second-variation calculation: it is a true **ordinary-area** comparison for a whole infinite-dimensional vertical-corner perturbation class, including O(1) **curvature spikes** and radical changes of the new niche's active contacts. The proof succeeds by **calibrating the complete new swept rays from fixed reference rays** (VC.8–VC.11), while the exact quadratic outer-area penalty \(\|\varphi'\|_2^2\) pays for any deviation. This is directly aligned with the user's outer-wall-plus-moving-corner-first approach and avoids the old pairwise clipping-deficit inequality.
 
