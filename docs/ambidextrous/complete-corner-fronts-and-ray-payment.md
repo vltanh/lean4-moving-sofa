@@ -368,7 +368,85 @@ Then
 \]
 This is a decisive **negative control**: a proposed globally sharp calibration which counts *only vertical corner trajectories*, even for perfectly regular symmetric supports, already **fails to attain equality at Romik**. The **full attached inner-wall ray envelopes** must be quantitatively charged. The correct user's outer-wall/corner-first strategy must include *both* contributions, not return to corner points alone.
 
-## 7. Next genuinely sharp inequality
+## 7. The corner's height superlevels genuinely disconnect on **fully feasible, saturated** sofas
+
+The arbitrary-angular-component clause of CF1 is **not** a technical generality needed only for nonsensical support data. The following rational six-vertex body shows that the moving-corner **height itself need not have one peak**, even for a compact connected full-two-turn sofa with its **actual** convex hull retained.
+
+Let
+\[
+\boxed{
+K_{\rm mp}=\operatorname{conv}\left\{
+\begin{array}{lll}
+(-7761/10000,\ 1/2),&(-141/1000,\ 0),&
+(7761/10000,\ 1/2),\\
+(6409/10000,\ 8956/10000),&
+(439/10000,\ 1),&
+(-5523/10000,\ 8306/10000)
+\end{array}\right\}.
+}\tag{CF.34}
+\]
+The listed vertices are in counterclockwise order with all six successive determinants positive. Its horizontal width is \(W=7761/5000\), vertical span exactly one, and it contains the entire segment \([-W/2,W/2]\times\{1/2\}\).
+
+**Whole-angle midline survival.** For *every* lower-turn angle, use the bounding rectangle \([-W/2,W/2]\times[0,1]\) to estimate the height of the actual inner corner:
+\[
+\eta_K(t)
+\le W\sin t\cos t+1-\sin t-\cos t.
+\]
+Writing \(z=\sin t+\cos t\in[1,\sqrt2]\), the right side is
+\[
+\frac W2(z^2-1)+1-z,
+\]
+a convex quadratic in \(z\). Its maximum on this interval is
+\(\max\{0,1+W/2-\sqrt2\}<1/2\), because the **exact rational inequality**
+\((W+1)^2<8\) is true. The same bound holds after vertically reflecting the hull. Therefore neither complete forbidden sweep reaches the midline at *any* x. Since that midline segment lies in \(K_{\rm mp}\), the canonical two-handed envelope
+\[
+S_{\rm mp}=E_{\rm full}(K_{\rm mp})
+\]
+has nonempty interval fibers for its **full** horizontal projection, all meeting the same midline. It is compact, connected and completes both full conventional quarter turns.
+
+**Its actual hull is retained at every corner.** For each of the six vertices, check its support depths in every lower and vertically reflected upper frame. The exact rational [checker](computer-assisted/check_multipeak_fullturn_corner.py) evaluates, at all \(q=k/1024\), the perpendicular unit normals
+\[
+u_q=\left(\frac{1-q^2}{1+q^2},\frac{2q}{1+q^2}\right),
+\qquad v_q=(-u_{q,y},u_{q,x}).
+\]
+The largest \(\min(\text{two support depths})\) over **all vertices and samples** is exactly
+\[
+\frac{159570959}{164440625}
+\quad\text{(lower turn)},\qquad
+\frac{3847331}{4181690}
+\quad\text{(vertically reflected upper turn)}.
+\tag{CF.35}
+\]
+Since \(W^2+1<4\), the polygon's diameter is **strictly less than two**. Each support-depth function, hence its minimum at a fixed vertex, is therefore 2-Lipschitz in turning angle. Every real angle in \([0,\pi/2]\) is within \(1/1024\) of a rational sample (use \(t=2\arctan q\) and \(dt/dq\le2\)). Both displayed exact rational maxima plus \(2/1024\) remain **strictly below one**. Therefore all six extreme vertices survive the **whole angular continuum of both complete turns**, proving
+\[
+\boxed{\operatorname{conv}S_{\rm mp}=K_{\rm mp}.}\tag{CF.36}
+\]
+This is a genuine sofa with **its own** hull, not merely an auxiliary support profile.
+
+**Its positive corner heights have separated peaks.** At the three rational half-angle parameters \(q=k/32\), \(k=15,17,18\), direct support maxima give
+\[
+\boxed{
+\begin{aligned}
+\eta_{K_{\rm mp}}(2\arctan(15/32))
+&=\frac{369409793}{7800005000}>\frac{43}{1000},\\
+\eta_{K_{\rm mp}}(2\arctan(17/32))
+&=\frac{87276483}{2154961250}<\frac{43}{1000},\\
+\eta_{K_{\rm mp}}(2\arctan(18/32))
+&=\frac{6228683}{141961250}>\frac{43}{1000}.
+\end{aligned}}\tag{CF.37}
+\]
+By continuity, the **positive-height** superlevel set
+\[
+\boxed{\{t\in(0,\pi/2):\eta_{K_{\rm mp}}(t)>43/1000\}}
+\tag{CF.38}
+\]
+has at least **two disjoint connected components**.
+
+**Theorem CF3 (no universal one-peak reduction from actual full-turn feasibility).** The complete full-two-turn, compact connected, canonically saturated, actual-hull class does **not** imply unimodality of the moving inner corner's height, or connectedness of all its positive-height angular superlevel sets, even at exact unit incoming vertical span. Thus the all-component interval union in CF1 cannot universally be replaced by a single pair of front endpoints merely from feasibility, convexity of the **outer hull**, connectedness of the sofa, or exact horizontal-fiber survival.
+
+This specific example has relatively small area and does **not** refute a one-peak theorem confined to globally maximizing or necessarily **area-\(>M\)** hulls. The stronger near-reference version, involving smooth support perturbations while keeping the reference outer contacts, is considered separately; it cannot be inferred from this finite-vertex example.
+
+## 8. Next genuinely sharp inequality
 
 CF1 is an exact universal decomposition of the entire **ordinary swept inner niche** into horizontal front components. CF2 provides a truly geometric ray surcharge over and above the corner shadow. CF.20–CF.23 give a new **explicit exact reference calibration** of the part caused by the moving corner itself, and CF.30 gives a substantial **certified strictly positive reference payment by its attached inner rays**.
 
