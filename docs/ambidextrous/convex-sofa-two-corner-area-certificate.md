@@ -1,10 +1,10 @@
-# A certified \(3/2\) upper bound for every **convex** ambidextrous sofa
+# A certified \(10/7\) upper bound for every **convex** ambidextrous sofa
 
 **Date:** October 8, 2026. **Status:** A complete self-contained pen-and-paper geometric reduction plus a **finite exact rational certificate**, not independently refereed or Lean-verified. It improves the preceding moving-inner-corner program from **feasibility-only restrictions** to a quantitative **ordinary-area theorem on a large geometric class**. No global sharp theorem, assertion that arbitrary sofas are convex, or new above-Romik sofa is claimed.
 
 **Main theorem CV1.** Every compact convex planar sofa that can pass through both left- and right-handed unit-width right-angle corridors, from the same incoming orientation and by arbitrary continuous motions (including partial turns, rotations with backtracking, and nonmonotone paths), has
 \[
-\boxed{|S|\le\frac{31}{20}=1.5<1.6449552184\ldots=M.}\tag{CV.1}
+\boxed{|S|\le\frac{31}{20}=1.428571429<1.6449552184\ldots=M.}\tag{CV.1}
 \]
 In fact, every compact convex body satisfying the **common incoming unit strip plus just the two canonical opposite \(45^\circ\) hallway positions** already obeys CV.1. The last stronger statement needs neither continuous motion data nor terminal strip conditions. For the original sofa conclusion, the independently established *proper \(45^\circ\) reach for area \(>\sqrt2\)* from [GH](midpoint-bound-general-motions.md) supplies those two positions.
 
@@ -52,13 +52,13 @@ for some \(z\), which may be unknown. It follows that C is contained in the inte
 
 ## 2. An elementary **compact** parameter domain
 
-We only need consider a hypothetical C with \(|C|>3/2\).
+We only need consider a hypothetical C with \(|C|>10/7\).
 
 At a fixed U (or V), the incoming diagonal band intersects the line in length at most \(\sqrt2\). Thus Fubini gives
 \[
 |C|\le\sqrt2\min(P,Q).
 \]
-Since \(3/2>\sqrt2\), both actual widths satisfy \(P,Q>1\).
+Since \(10/7>\sqrt2\), both actual widths satisfy \(P,Q>1\).
 
 If both \(P,Q>2\), distributing the two safe-wall disjunctions in CV.3 leaves only the two **positively separated unit squares**
 \[
@@ -146,44 +146,74 @@ is affine on every interval cut out by the finitely many breakpoints
 \]
 The maximum is thus at a breakpoint or at the unique interior zero of that affine derivative, if present; where the derivative vanishes identically the endpoints suffice. **All** these candidate band positions and all integrated areas are **rational**. The checker evaluates them **exactly**, so no angular or strip-position sampling enters the certificate. Lower-dimensional clipped polygons have zero area.
 
+### Two exact symmetries and the nonnegotiable actual-hull support gate
+
+The strengthened certificate uses three further **mathematically sound** eliminations, which substantially reduce the number of exact area checks.
+
+**First symmetry: exchange the two diagonal coordinates.** The map \((U,V)\mapsto(V,U)\) preserves the area, the incoming diagonal-band direction \(U+V\), and **both** L-shaped corner disjunctions. It sends
+\[
+(P,Q,\lambda,\mu)\mapsto(Q,P,1-\lambda,1-\mu).
+\]
+Thus it is sufficient to verify the half-domain \(P\ge Q\); a parameter box wholly within \(P<Q\), i.e. \(P_1<Q_0\), has a reflected counterpart in the retained half-domain. This is a *symmetry pruning* of the parameter **supremum**, not an assertion that the eliminated individual box has small area.
+
+**Second symmetry: exchange the two sharp inner corners.** The central half-turn \((U,V)\mapsto(P-U,Q-V)\) maps the lower forbidden southwest quadrant to the upper forbidden northeast quadrant and vice versa, interchanging their convex-separating weights:
+\[
+(P,Q,\lambda,\mu)\mapsto(P,Q,\mu,\lambda).
+\]
+It maps a diagonal incoming band to another translated diagonal band **of the same width**. Since the strip translation is maximized over in CV.9, we may also restrict to \(\lambda\ge\mu\). Again, a whole parameter box with \(\lambda_1<\mu_0\) is covered by the retained symmetrical counterpart.
+
+**Actual support extrema:** The values \(P,Q\) are not arbitrary outer-rectangle dimensions; they must be the **actual** diagonal widths of the compact convex sofa. After translating its minima to zero, it must contain at least one point on each of \(U=0\), \(V=0\), \(U=P\), \(V=Q\). A rational box with lower endpoints \(P_0,Q_0\) can therefore be rejected if its enclosing relaxed polygon fails
+\[
+\min_{\mathcal P}U=0,\quad\min_{\mathcal P}V=0,\quad
+\max_{\mathcal P}U\ge P_0,\quad\max_{\mathcal P}V\ge Q_0.
+\]
+The polygon is known to contain **every** possible actual sofa in that parameter box, so this is a sound *infeasibility* gate. Also, when \(P_0>2\) and \(Q_0>2\), the disconnected two-corner geometry CV.3 already proves there is no connected actual-hull candidate.
+
+Finally, before the exact band-position optimizer CV.9, the checker uses the elementary valid area upper
+\[
+|\mathcal P\cap\{a\le U+V\le a+d\}|
+\le d\min\{w_U(\mathcal P),w_V(\mathcal P)\},
+\]
+where \(w_U,w_V\) are the two coordinate projection lengths. At each fixed \(U\) the band has \(V\)-length at most \(d\), and conversely at fixed \(V\); integrate either set of sections. Every pruning decision is therefore exact and sound.
+
 ## 4. Complete exhaustive rational certificate
 
-The stronger (3/2) bound supersedes the earlier (31/20) certificate; the geometric reduction and parameter domain are unchanged. The [self-contained exact checker](computer-assisted/check_convex_two_corner_area.py) subdivides the whole root box CV.7 by repeatedly bisecting the coordinate with the largest **normalized width**:
+The stronger (10/7) bound supersedes the earlier (31/20) certificate; the geometric reduction and parameter domain are unchanged. The [self-contained exact checker](computer-assisted/check_convex_two_corner_area.py) subdivides the whole root box CV.7 by repeatedly bisecting the coordinate with the largest **normalized width**:
 \[
 \frac{P_1-P_0}{3},\
 \frac{Q_1-Q_0}{3},\
 \lambda_1-\lambda_0,\
 \mu_1-\mu_0.
 \]
-At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(3/2\). Otherwise it bisects and covers the box by its two children. **Every accepted box is a sound upper-area enclosure for every parameter tuple inside it.**
+At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(10/7\). Otherwise it bisects and covers the box by its two children. **Every accepted box is a sound upper-area enclosure for every parameter tuple inside it.**
 
 The independent, executed standard-library Python Fraction replay gave:
 \[
 \boxed{
 \begin{array}{l|r}
-\text{Total visited parameter boxes}&100\,161\\
-\text{Certified terminal boxes}&50\,079\\
-\text{Maximum subdivision depth}&24\\
+\text{Total visited parameter boxes}&378\,771\\
+\text{Certified terminal boxes}&189\,376\\
+\text{Maximum subdivision depth}&32\\
 \text{Unresolved leaves}&0\\
 \text{Largest computed accepted exact upper}&
-3/2.
+1307684518073/915379200000<10/7.
 \end{array}}\tag{CV.11}
 \]
 There is no optimizer, no random search, no geometric interpolation without a proved error term, and no need for CI or Lean. A finite tree of rational area inequalities covers **every** real point of the root parameter domain. The code additionally uses the sound strip bound (d\min(\operatorname{width}_U\mathcal P,\operatorname{width}_V\mathcal P)) before the exact band maximization. It includes independent closed-form regression tests for a unit square, a \(1\times3\) rectangle, an isosceles right triangle, and a symmetric double-corner polygon to guard against missed band-position maxima.
 
-With CV.6 and CV.10–CV.11, assuming \(|C|>3/2\) gives
+With CV.6 and CV.10–CV.11, assuming \(|C|>10/7\) gives
 \[
-3/2<|C|\le\Phi_d(\mathcal P_{\mathcal B})\le3/2
+10/7<|C|\le\Phi_d(\mathcal P_{\mathcal B})\le10/7
 \]
 for the leaf containing its actual parameter tuple, a contradiction. This proves the **two-\(45^\circ\) finite-position convex-body theorem**.
 
-Finally, if a genuinely ambidextrous **convex** sofa had area \(>3/2\), then its area would exceed \(\sqrt2\). The valid actual-motion wrong-way exclusion and terminal-strip reach argument in [GH Section 3](midpoint-bound-general-motions.md) forces both proper \(45^\circ\) hallway positions to have been visited, without assuming monotone or complete turns. The just-proved finite-position inequality then yields a contradiction. **This proves CV1.**
+Finally, if a genuinely ambidextrous **convex** sofa had area \(>10/7\), then its area would exceed \(\sqrt2\). The valid actual-motion wrong-way exclusion and terminal-strip reach argument in [GH Section 3](midpoint-bound-general-motions.md) forces both proper \(45^\circ\) hallway positions to have been visited, without assuming monotone or complete turns. The just-proved finite-position inequality then yields a contradiction. **This proves CV1.**
 
-For the comparison with Romik, [Note 10](10-wrong-angle-exclusion.md) establishes \(M>8/5>3/2\) directly from the positive cubic root bounds; no numerical approximation to \(M\) is needed.
+For the comparison with Romik, [Note 10](10-wrong-angle-exclusion.md) establishes \(M>8/5>10/7\) directly from the positive cubic root bounds; no numerical approximation to \(M\) is needed.
 
 ## 5. What this does and does not establish
 
-**Established:** Every true convex ambidextrous sofa has area **strictly less** than Romik's existing feasible nonconvex candidate, with a comfortable rational gap \(M-3/2>1/20\). The result applies to *all original motion histories*, not just globally maximized convex shapes. It is an honest **ordinary-area** theorem from the same moving corner and outer-wall contact geometry proposed by the user.
+**Established:** Every true convex ambidextrous sofa has area **strictly less** than Romik's existing feasible nonconvex candidate, with a comfortable rational gap \(M-10/7>1/20\). The result applies to *all original motion histories*, not just globally maximized convex shapes. It is an honest **ordinary-area** theorem from the same moving corner and outer-wall contact geometry proposed by the user.
 
 **Not established:** The **convex hull of a nonconvex sofa need not itself avoid the forbidden inner quadrants**. Indeed Romik's actual corner lies strictly inside his convex hull at the \(45^\circ\) frame. Therefore CV1 cannot be applied to the convex hull of Romik or to a hypothetical larger sofa. No convexification, symmetrization, or patching argument is offered to turn the original unrestricted optimality problem into the convex case; doing so would falsely eliminate the reference. The original global sharp upper bound \(M\) remains open.
 
