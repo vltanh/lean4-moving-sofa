@@ -157,6 +157,40 @@ G(U_\lambda,V_\lambda)/\lambda=0}
 
 The key geometric mechanism is **not** reference contact-pattern stability. A Minkowski interpolation from a height-one reference with a positive horizontal top face leaves an almost-full common face for the two independent cap directions, whereas any possible protrusion of the complete swept inner-wall niche past that face is at most **linearly narrow**. Its height tends to zero uniformly. This controls exactly the clipping error that invalidated naive addition of the two weighted one-turn values.
 
+### A fully explicit uniform bound in the project's fixed search box
+
+The argument does not rely on unspecified uniformity constants. For the [OS1 fixed hull search box](original-motion-signed-convex-domain.md)
+\[
+B=[-5/2,5/2]\times[0,1],\qquad b=m/2<1,
+\]
+the following concrete estimate is valid:
+\[
+\boxed{
+0\le G(U_\lambda,V_\lambda)\le360\,\lambda^{3/2}
+\quad\text{for every }K\subseteq B\text{ of vertical span one,
+and }0<\lambda\le1/16 .
+}\tag{MC.13a}
+\]
+
+Here are all constants. Every upper-cap support (including U*,U,V and their interpolations) has \(|h|\le3\) and angular Lipschitz constant at most \(3\), because every generating point lies in B and has norm less than \(3\). Consequently its inner-corner height \(\eta(t)\) is 14-Lipschitz and vanishes at both endpoints, so all endpoint-angle tents have roof at most \(14\delta\) for angles within \(\delta\) of either endpoint. The support difference from U* is at most \(6\lambda\); for angles between \(\delta\) and \(L-\delta\), with \(\sin\delta\ge\delta/2\), the change in each wall-height fraction is at most \(12\lambda/\delta\). Choose \(\delta=\sqrt\lambda\le1/4\), giving
+\[
+n_{U_\lambda}(x),n_{V_\lambda}(x)
+\le n_*(x)+14\sqrt\lambda
+\quad\text{for every real }x.
+\tag{MC.13b}
+\]
+Each overlap term in MC.12 occupies at most \(4R\lambda=10\lambda\) of horizontal width, and lies at distance at most \((R+b)\lambda<\tfrac72\lambda\) from one of the original reference face endpoints. Thus the triangular reference bound MC.2 makes
+\(n_*(x)\le\tfrac72\lambda\) on these strips. At each contributing abscissa,
+\[
+n_{U_\lambda},n_{V_\lambda}
+\le14\sqrt\lambda+\tfrac72\lambda
+\le\tfrac{35}{2}\sqrt\lambda
+<18\sqrt\lambda.
+\]
+There are **two** possible clipping terms, of combined horizontal measure at most \(20\lambda\). Integrate their pointwise height bound to obtain \(G\le20\lambda\cdot18\sqrt\lambda=360\lambda^{3/2}\).
+
+This is a deliberately conservative **all-angle, all-hull** geometric certificate, not a claimed sharp bound on G or the area of any sofa.
+
 ## 5. A global directional first variation — conditional on the written one-cap sharp theorem
 
 Define the **signed** full-two-handed fiber value for arbitrary compact convex K by
