@@ -193,4 +193,112 @@ The full reference shape with \(\alpha=\gamma=L\) is the only equality hull and 
 
 The theorem is an *explicitly delimited local exclusion*. It neither establishes global optimality nor asserts that arbitrary above-\(M\) original motions can be reduced to this support neighborhood. Correct-handed motions with much smaller terminal angles remain a separate global challenge.
 
+## 5. Stronger: the **entire Romik terminal circular phase** \(\delta\le\beta\)
+
+The \(1/100\)-radian restriction of EP1–EP2 arose only from using the convenient interval
+\(0<u<\sqrt{mc}/4\) and very conservative pointwise constants. An elementary wider interval permits an improvement covering the **whole reference last contact phase** \(0\le\delta\le\beta=\arctan Y\), i.e.
+\[
+\boxed{L-\beta\le\alpha,\gamma\le L},
+\]
+where \(L-\beta\approx73.404^\circ\). The analysis still uses the **true outgoing strip** and the actual stationary inner-ray tail.
+
+**Lemma EP3 (uniform outer-flank outgoing loss).** Let \(\delta\in(0,\beta]\), \(c=\sin\delta,\ s=\cos\delta\), \(m=1/(3\sin\beta)\) and
+\[
+\boxed{r_\delta=\frac15\sqrt{m c}.}\tag{EP.12}
+\]
+Since \(c\le\sin\beta<3/10\) and \(m\sin\beta=1/3\),
+\[
+r_\delta\le\frac1{5\sqrt3}<\frac18
+<\frac12\sin\beta.
+\]
+The last inequality uses the exact bound \(\sin\beta>1/4\). Thus all \(a-u\), \(0<u<r_\delta\), lie on the same **unchanged outer circle** EP.1, and
+\[
+q(u)\le2u^2\le\frac2{25}mc.
+\tag{EP.13}
+\]
+The outgoing inner line EP.2 obeys
+\[
+e_{L-\delta}(a-u)
+\ge mc-\frac{c^2}{2},
+\qquad
+e_{L-\delta}(a-u)-q(u)
+\ge\left(\frac{23}{25}-\frac{c}{2m}\right)mc
+>\frac34 mc.
+\tag{EP.14}
+\]
+Here \(m>1\) and \(c<3/10\) give the final strict margin. Also \(e_{L-\delta}(a-u)<1/2\): use \(c<3/10\), \(m<117/100\), \(u<1/8\), \(s\ge\cos\beta>19/20\). Thus the removed lower region lies **entirely in the true full reference sofa**, below its midline and outside both full-turn positive niches. Its area is at least
+\[
+\boxed{
+\operatorname{Loss}_-(\delta)
+>\frac34mc\cdot r_\delta
+=\frac3{20}m^{3/2}(\sin\delta)^{3/2}.
+}\tag{EP.15}
+\]
+The vertically reflected upper outgoing loss is disjoint and has the same estimate, with its own \(\delta_+\).
+
+The omitted **late inner-ray contact tail** remains bounded exactly as in EP.3, because \(\delta\le\beta\):
+\[
+\operatorname{Saved}_-(\delta)\le(\sin\delta)^3/12,
+\tag{EP.16}
+\]
+and likewise for the upper hand.
+
+Consequently, the net area penalty per early-stopped hand satisfies
+\[
+\begin{aligned}
+\operatorname{Loss}-\operatorname{Saved}
+&\ge(\sin\delta)^{3/2}
+\left(\frac3{20}m^{3/2}
+-\frac{(\sin\delta)^{3/2}}{12}\right)\\
+&>\frac2{15}(\sin\delta)^{3/2}
+>\frac18\delta^{3/2}.
+\end{aligned}\tag{EP.17}
+\]
+For the first lower estimate, \(m>1\) and \(c<3/10\) imply
+\(c^{3/2}<1/5\), hence \(\frac3{20}-\frac1{60}=\frac2{15}\).
+For the second, \(\sin\delta\ge\delta-\delta^3/6>
+(49/50)\delta\) on \((0,3/10)\), while the exact squared comparison
+\((49/50)^3>(24/25)^2\) gives
+\((\sin\delta)^{3/2}>(24/25)\delta^{3/2}\).
+Thus the coefficient is at least
+\((2/15)(24/25)=16/125>1/8\). All inequalities are strict for \(\delta>0\).
+
+**Theorem EP4 (both terminal angles: full terminal-phase rigidity on the fixed reference hull).**
+For all \(\delta_-,\delta_+\in[0,\beta]\),
+\[
+\boxed{
+|E_{L-\delta_-,L-\delta_+}(K_*)|
+\le M-\frac18(\delta_-^{3/2}+\delta_+^{3/2}).
+}\tag{EP.18}
+\]
+
+**Theorem EP5 (the above-\(M\) exclusion with four independent moving outer-wall paths).**
+Retain FA2's independent four source arc perturbations on a sufficiently small middle interval \(J_0\ni\pi/4\), with its actual support differences supported there and its positive Hausdorff-small radius. Choose \(J_0\) small enough that **every middle-source reference wall** on \(J_0\) has a strictly negative height at the entire *terminal inner tail* abscissa range
+\[
+x\in[b-\tfrac12\sin\beta,b].
+\]
+This is possible: at the reference midpoint \(t=\pi/4\) the whole corner tent is
+\(H_*-|x|\), and its right baseline endpoint \(H_*=R+1/2-\sqrt2\) lies strictly **to the left of** \(b-\tfrac12\sin\beta\) by Romik's exact support and root bounds. Shrinking \(J_0\) and the Hausdorff perturbation radius preserves a strict margin uniformly.
+
+All four modified support normals belong to \(J_0\), so the terminal *outer circular arcs* and **outgoing supports** on \([L-\beta,L]\) are unchanged. The same frozen-ray exclusion at the tail means the *full and truncated niche saving* there is still bounded by EP.16, even when the new middle contact geometry is arbitrarily complicated or the new support curvature has atoms. Outside \(J_*\) the complete envelope contains the old exterior lower and upper circular flanks, since both full niches remain confined to \(J_*\). Therefore EP.15–EP.17 apply to the actual new full envelope **uniformly**, once for each independent handed final strip.
+
+Combining with the four-arc ordinary-area theorem FA2 gives
+\[
+\boxed{
+\begin{aligned}
+|E_{L-\delta_-,L-\delta_+}(K)|
+&\le M-\frac12\left(1-\frac{|J_0|}{\pi}\right)
+\int_{J_0}\bigl(
+|\phi_U'|^2+|\psi_U'|^2+
+|\phi_V'|^2+|\psi_V'|^2
+\bigr)dt\\
+&\hspace{22mm}-\frac18(\delta_-^{3/2}+\delta_+^{3/2}),
+\quad\delta_\pm\in[0,\beta].
+\end{aligned}}\tag{EP.19}
+\]
+There is **no symmetry restriction**, no upper support-curvature assumption, no assertion that the new middle inner-ray contact chart is stable, and no unearned completion of partial turns. Equality within this domain requires **both full conventional angles and exactly Romik's outer supports**.
+
+This is a strictly **stronger original partial-turn local theorem** than EP2: it excludes a genuine full \(16.6^\circ\) angular interval of independent right/left early stops, rather than a \(0.57^\circ\) interval. It is still a fixed-neighborhood result and does **not** prove that an arbitrary area-\(>M\) counterexample can be brought into this domain.
+
+
 No CI, Lean/Lake build, finite-angle numerical area certificate, or formal kernel check enters the mathematical argument.
