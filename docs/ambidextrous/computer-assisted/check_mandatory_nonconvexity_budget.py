@@ -39,3 +39,15 @@ assert new_t*3==new_depth-1
 assert F(41,25)*new_t**2==F(90569,225000000)>F(1,2500)
 assert (new_depth-1)/2==F(47,2000)
 print("PASS: NC3 stronger 4.7% corner violation, ordinary gap > 1/2500, Hausdorff >= 47/2000")
+
+
+# NC4: completed independent rational 10/7 convex certificate.
+convex_C=F(10,7)
+robust_depth=F(1073,1000)
+homothety=F(73,3000)
+assert convex_C*robust_depth**2==F(1151329,700000)
+assert M_lower>convex_C*robust_depth**2
+assert 3*homothety==robust_depth-1
+assert F(41,25)*homothety**2==F(218489,225000000)>F(1,1030)
+assert 2*F(73,2000)==robust_depth-1
+print("PASS: NC4 certified 10/7 convex target, 7.3% corner depth, missing area >1/1030")
