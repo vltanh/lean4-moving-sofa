@@ -165,6 +165,27 @@ The user asked to **deprioritize the two-cap clipping-deficit inequality as the 
 
 Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). [UV2](univariate-rational-motion-certificate.md) now reduces each full-path hallway check for rational square cells to univariate polynomial sign conditions of degree at most five, **without positive clearance**. This improves verification, not the search for an actual area excess. Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
+### New complete corner-pair feasibility constraints (October 8, later)
+
+[CP1–CP2](two-moving-corner-packing.md) derives exact **two-handed corner packing** from the user's outer-wall-plus-moving-corner perspective. Each visited lower corner \(c^-(t)=(\xi_t,\eta_t)\) and reflected upper corner \(c^+(s)=(\zeta_s,\theta_s)\) carries a two-sided tent-shaped forbidden region determined by its attached inner-wall rays. Since a connected sofa occupies **every horizontal column** of its actual convex hull, the tents cannot cover an entire column. When their x-abscissae lie in the projection, this gives the explicit **necessary support-only inequality**
+\[
+\boxed{
+\eta_t+\theta_s\le1+
+\begin{cases}
+\min(\cot t,\tan s)(\zeta_s-\xi_t),&\xi_t\le\zeta_s,\\
+\min(\tan t,\cot s)(\xi_t-\zeta_s),&\zeta_s\le\xi_t.
+\end{cases}}
+\]
+For arbitrary abscissae, replace the horizontal mismatch penalty by the **minimum of a convex piecewise-affine tent-cost on the hull projection**, obtained exactly by testing at most its endpoints and the two corner abscissae. This applies to **partial** turns whenever the two angles have actually been visited; no quarter-turn completion is imported. At both \(45^\circ\) angles it **recovers the previously known** diagonal width gate DU2 (not a new bound).
+
+**A genuinely new off-diagonal exact obstruction:** The rational pentagon
+\(\operatorname{conv}\{(-13/10,4/5),(-19/20,0),(-7/10,0),(13/10,3/4),(13/20,1)\}\)
+has height one, passes the diagonal width necessary test, and each of the separate rational hallway snapshots with lower frame \((20/29,21/29)\), reflected upper frame \((4/5,3/5)\) leaves a connected full-projection one-pose survivor with the same actual convex hull. **Nevertheless their combined tents eliminate a whole horizontal neighborhood of one interior column**: the exact two-corner maximum-height violation is \(103/2000>0\). This is a pure *joint opposite-handed* obstruction invisible to either static snapshot separately. Independent [Fraction calculations](computer-assisted/check_two_corner_packing.py) give all support values, vertex safety margins, and piecewise roof comparisons; these are not global sofa upper-bound certificates.
+
+[CP2](two-moving-corner-packing.md) gives a converse **full-two-turn hull admission** description entirely through (i) corner-vs-outer-top tent inequalities, (ii) reflected corner-vs-outer-bottom inequalities, (iii) all corner-pair packing inequalities, **plus extreme-point retention**. For partial turns both outgoing straight-arm strips must also be included. This repackages the earlier FH2 admission theorem into geometric corner tests.
+
+**Important negative finding:** These corner-pair inequalities have uniform **slack \(>2/15\) at Romik** because its complete inner-corner heights are strictly below \(13/30\). They can exclude distant disconnections and tighten a global support search, but **cannot alone identify the sharp candidate or pay its outer-vs-niche area budget**. Closure still requires a global quantitative bound on the area removed by the *complete continuum of attached inner-wall rays*, as a function of the outer contact curves, including asymmetric and partial turns. Do not call the pairwise necessary conditions a sharp area certificate.
+
 ### Essential interpretation correction: outer supporting contacts **plus the moving inner corner**
 
 The user's intended construction was **outer wall and physical corner first**, **then** carve the inner-wall niche. An earlier assistant response incorrectly discussed **outer walls alone**. See the [corrected geometry and rigorous example](outer-wall-and-moving-corner-first.md).
