@@ -1,5 +1,8 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+**Controlling next-step roadmap (October 9, 2026):** [SHARP-OPTIMALITY-EXECUTION-PLAN.md](SHARP-OPTIMALITY-EXECUTION-PLAN.md). This handoff remains the authoritative historical/technical proof ledger. The controlling plan alone governs **priorities and completion gates**: audit original-motion reduction, prove the coupled complete-turn sharp area charge globally, extend that *same* charge to the two actual partial turns with outgoing strips, then examine equality and uniqueness. All other exploratory programs are parked; no global sharp upper bound or larger sofa has been certified.
+
+
 **Date:** 2026-10-08.  
 **Repository:** [vltanh/lean4-moving-sofa](https://github.com/vltanh/lean4-moving-sofa).  
 **Research branch:** `research/ambidextrous-pen-and-paper`.  
