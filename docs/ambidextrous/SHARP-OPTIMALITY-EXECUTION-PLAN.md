@@ -95,6 +95,17 @@ making every cap of width \(W\ge6\) too low-valued to reach \(M/2\); the trivial
 \]
 The candidate is fixed by this transformation. **This does not establish \(\mathcal P_{\max}=M/2\) or pass Gate 1**, but is a genuine global maximizer-domain reduction within the ONE current proof claim. The middle facet may be **tilted**, with its height-one maximum on an exterior wing. Do not silently assume it is flat, centered, or admits a candidate contact chart. The **current mathematically necessary next step** is to derive the complete *first-variation and niche-exposure balance of the two charged exterior wings* on this canonical domain, and use it to force the *sharp global value*, not another local no-gain family.
 
+**NEW FINITE GLOBAL-MAXIMIZER EXPOSURE LAWS (FE1, not yet the continuum sharp theorem):** [gate1-spatial-exposure-moving-window-variation.md](gate1-spatial-exposure-moving-window-variation.md) derives **exact first-order stationarity** for the finite-angle *spatial P* maximizing polygon, not the older weighted \(\Psi\) optimizer. Pushing a floating facet gives charged **exterior-only** facet length \(\ell_j^{\rm wing}\le\tau_j^{\rm middle}+o(1)\), where the inner-wall measure is exposed **inside J**, not over the whole ambient niche. Moving an axis wall moves J's endpoints and yields the **correct nonconstant** side-face pressures
+\[
+e_R\le\tfrac34(A+n)(j_+)-\tfrac14(A+n)(j_-)+o(1),\qquad
+e_L\le\tfrac34(A+n)(j_-)-\tfrac14(A+n)(j_+)+o(1).
+\]
+At the reference these are tight equalities \(1/2=3/4-1/4\), but for arbitrary caps they are **not** the constant one-half width-penalty terms of the separately solved \(\Psi\) problem. Summing exposed graph **horizontal projections** gives the finite polygon restriction
+\(
+|\{x\in J:n_n(x)=0\}|\le T_{\rm wing}+o(1)
+\),
+where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. A real *full-continuum exposure/curvature and zero-level projection* theorem, incorporating the affine middle roof MID2, is still missing. This is the precisely identified Gate 1 obstruction on the active scalar proof route, not a new named-shape class.
+
 **Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
 
 **Hard stopping rule:** If the global maximizer cannot be characterized, state the exact unresolved first-variation/exposure inequality—not another infinite series of local shape cases. Gate 1 remains **ACTIVE** until G1.SD2 is fully proved or the *original* coupled G1.2 is otherwise settled. The exact finite polygon oracle and facet-triangle reduction stay available only for mathematically meaningful adversarial verification.
