@@ -69,6 +69,22 @@ G(U,V)\stackrel{?}{\le}
 
 for every **actual compatible full-turn two-cap pair** in the relevant normalization, including nonsmooth and asymmetric cases. A proof of this, with the required geometric admission, would settle the *full-turn* value. Handling unrestricted **partial turns** is a separate obligation. The inequality is not asserted for arbitrary incompatible abstract caps.
 
+### Oct 9 focused star-concavity audit: exact cubic shear obstruction, global inequality still OPEN
+
+A targeted [exact shear calculation](cubic-clipping-sharp-vertical-shear.md), beyond finite numerical interpolation tests, now establishes that MC3's \(O(\lambda^3)\) *positive clipping* bound is **optimal in order**. Let \(T_a(x,y)=(x+a(y-1/2),y)\) with sufficiently small fixed \(a>0\), and let
+\(K_\lambda=(1-\lambda)K_*+\lambda T_aK_*\), of exact unit vertical span. The downward upper and reflected-lower top faces shift **oppositely** by \(\pm a\lambda/2\); on each interval of length \(\Delta=a\lambda\), the true one-turn inner niche and the opposite cap's outer roof deficit have respective local values \((\Delta-s)^2+O(\Delta^3)\) and \(s^2+O(\Delta^3)\). The complete clipped ordinary-area interaction therefore satisfies
+\[
+\boxed{G(U_\lambda,V_\lambda)
+=\underbrace{2\int_0^\Delta\min(s^2,(\Delta-s)^2)ds}_{=\Delta^3/6}
++O_a(\lambda^4)
+=\frac{a^3}{6}\lambda^3+O_a(\lambda^4).}
+\]
+This is a **positive** third-order clipping contribution for a far-endpoint hull which can be chosen arbitrarily close to Romik (and does not need to be a feasible sofa). It must be paid by *two weighted one-turn deficits* in any sharp comparison; replacing \(O(\lambda^3)\) by \(o(\lambda^3)\) or deleting G is **provably invalid**.
+
+The **one proposed global sharp lemma**, unit-height **star-concavity** of the signed full-turn functional \(\mathscr S\) along every ray from \(K_*\), is STILL **UNPROVED**. Exploratory screens checked thousands of arbitrary polygonal endpoints, targeted elongated/opposite-face shapes, vertical shears, horizontal pad directions, and thousands of unit-height polygon pairs, with no robust numerical negative Jensen gap; finite approximate screens are **not** evidence of a theorem. The existing published/branch results also do **not** establish unit-height global signed concavity; global signed concavity is false if the vertical span varies. No global ordinary area upper bound improved and no sofa of verified area above \(M\) was found. The actual original problem also includes subunit incoming vertical spans and partially completed terminal angles, neither supplied by star-concavity alone.
+
+**Do not resume small local class exclusions or randomly expand these screens.** To close, either prove an actual *global* deficit-versus-clipping estimate including \(G>0\) at finite Minkowski interpolation, or rigorously falsify star-concavity and seek a different universal mechanism. A sharp area proof cannot follow from global first-order stationarity plus MC3's cubic estimate alone.
+
 ### Oct 9 global-directional sharp research advance: **cubic** (not linear/quadratic) clipping from Romik toward *every* unit-height hull
 
 [MC1–MC3](global-directional-romik-clipping-vanishes.md) proves a genuinely **global-in-directions** ordinary-area inequality. Let \(K_*\) be Romik's reference common convex hull; let **any** compact convex unit-height \(K\subseteq B=[-5/2,5/2]\times[0,1]\) be an arbitrary far or inadmissible hull, including asymmetric **opposite-end top/bottom faces**, nonsmooth supports, curvature atoms, and point faces. Along the exact Minkowski chord
