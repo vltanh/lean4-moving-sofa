@@ -124,7 +124,7 @@ The numerical constants in NC1 can be replaced by a **general coercive inequalit
 **Theorem NC2 (two-corner convexity-defect coercivity).** Let \(S\) be any compact measurable body in a common incoming strip of height at most one, fitting the **two opposite proper \(45^\circ\) canonical hallway positions** after support tightening to its true convex hull \(K=\operatorname{conv}S\). The body itself need *not* be convex or connected. Put
 \[
 A_K=|K|,\qquad D=\operatorname{diam}(K),
-\qquad C=\frac32.
+\qquad C=\frac{10}{7}.
 \]
 For positive area \(A_K>0\), the ordinary convexity deficit satisfies
 \[
@@ -139,7 +139,7 @@ For \(A_K\le C\) the right side is zero by convention. In equivalent area-majora
 \boxed{
 |S|\le A_K-
 \frac{A_K}{D^2}
-\left(\sqrt{\frac{A_K}{3/2}}-1\right)_+^{\!2}.
+\left(\sqrt{\frac{A_K}{10/7}}-1\right)_+^{\!2}.
 }\tag{NC.10}
 \]
 This is valid for **every** pair of opposite \(45^\circ\) poses and every compact sofa geometry, not just near Romik. For an original above-\(\sqrt2\) ambidextrous sofa, the existing motion reach theorem supplies the required two poses automatically.
@@ -241,7 +241,63 @@ Finally, the support function is 1-Lipschitz in Hausdorff distance and each witn
 
 This improvement is a **strictly stronger global quantitative theorem** than NC1 and requires no convexity of the actual sofa. Nonetheless its compulsory missing-hull area \(\approx0.0004\) remains far below the real Romik niches: it cannot replace the full continuous swept-ray area analysis required for sharp optimality.
 
-## 7. Scope and next task
+## 7. Further strengthening from the certified \(10/7\) convex bound
+
+The final independent exhaustive rational [CV1](convex-sofa-two-corner-area-certificate.md) replay improves the convex two-corner bound again, from \(3/2\) to
+\[
+C=\frac{10}{7}=1.428571\ldots
+\]
+with **378,771** parameter boxes, **189,376** certified leaves, maximum depth **32**, no unresolved boxes. This yields the strongest unconditional **actual-sofa** nonconvexity budget obtained here.
+
+**Theorem NC4 (7.3%-depth; mandatory missing ordinary area \(>1/1030\)).** Every genuine compact connected ambidextrous sofa \(S\) with \(|S|\ge M\) has actual convex hull \(K\) satisfying
+\[
+\boxed{
+\begin{gathered}
+\exists\text{ a genuinely visited proper }45^\circ\text{ frame and }q\in K:\
+h_K(n_1)-q\cdot n_1>\frac{1073}{1000},\quad
+h_K(n_2)-q\cdot n_2>\frac{1073}{1000};\\[3pt]
+|K\setminus S|\ge\frac{5329}{9000000}|K|
+>\boxed{\frac1{1030}};\\[3pt]
+d_{\mathrm H}(K,C)\ge\frac{73}{2000}
+\quad\text{for every compact convex two-45-degree-compatible }C
+\text{ (including its translates).}
+\end{gathered}}\tag{NC.14}
+\]
+
+**Proof.** The lower rational root bracket \(Y>149/500\) and alternating arctangent lower bound in NC.4 give the *exact* strict inequality
+\[
+M >
+1+4(149/500)^2+\left[(149/500)-(149/500)^3/3
++(149/500)^5/5-(149/500)^7/7\right]
+>
+\frac{10}{7}\left(\frac{1073}{1000}\right)^2
+=\frac{1151329}{700000}.
+\tag{NC.15}
+\]
+The final comparison is checked exactly by the [Fraction replay](computer-assisted/check_mandatory_nonconvexity_budget.py), with no rounded value of \(M\) used.
+
+Both proper \(45^\circ\) frames must be visited since \(|S|\ge M>\sqrt2\). If the maxima over \(q\in K\) of both-wall minimum support depth in *each* frame were at most \(1073/1000\), then the *entire convex hull* scaled by \(1000/1073\) would fit the incoming strip and both diagonal hallway positions. Its area would be at least
+\(M(1000/1073)^2>10/7\), contradicting the certified convex CV1 theorem. Hence at least one visited frame contains a point \(q\in K\) with both support depths \(>1073/1000\).
+
+The established competitive-width theorem PTW1 gives \(D=\operatorname{diam}K\le3\). Use the exact homothety ratio
+\(t=73/3000\). Every \(p\in K\) produces a retained-hull point
+\(q+t(p-q)\in K\) whose two depths both exceed
+\[
+\frac{1073}{1000}-tD
+\ge\frac{1073}{1000}-\frac{73}{1000}=1.
+\]
+Thus the entire copy \(q+t(K-q)\) is **strictly forbidden at one actual hallway position** and is disjoint from \(S\). Its ordinary area is \(t^2|K|=(5329/9000000)|K|\). Since \(M>41/25\), we have
+\[
+|K\setminus S|>
+\frac{5329}{9000000}\frac{41}{25}
+=\frac{218489}{225000000}
+>\frac1{1030},
+\]
+where the last strict rational comparison is \(218489\cdot1030=225043670>225000000\). The Hausdorff bound follows as in NC3 from the 1-Lipschitz support function and a matching hull point: a convex compatible body within \(73/2000\) would have a point with both unsafe depths exceeding \(1073/1000-2(73/2000)=1\). \(\square\)
+
+This is roughly six times the former \(1/6250\) area-gap constant, and it improves the mandatory worst-depth excess from 3% to 7.3%. The more informative continuous all-area penalty NC.9–NC.10 also now uses \(C=10/7\) rather than the older \(31/20\) or \(3/2\). These are genuine **unrestricted necessary inequalities**; they still do **not** imply the Romik sharp upper bound because actual sofas may have convex hulls of substantially larger area and can lose much more area to their continuous inner-corner sweep.
+
+## 8. Scope and next task
 
 The combined CV1/NC1 result *quantitatively excludes the convex or almost-convex branch of the original unrestricted problem*: any sofa area at least Romik's candidate must carve a **fixed positive ordinary-area portion** of its own hull, already forced at one proper diagonal angle. This is a global theorem across arbitrary original motions, not only fully turning or reference-symmetric ones.
 
