@@ -95,7 +95,53 @@ yet
 \]
 The last equality is the reference construction, *not* an optimality assertion. Enlarging the convex hull can enlarge its canonical inner forbidden quadrants so much that the **carved** area goes down. The area of the outer hull is therefore the wrong objective.
 
-## 3. A correct self-consistent hull-first procedure
+## 3. A globally exact nested-hull gain-versus-shadow-loss law
+
+The previous rectangle comparison is not just a special numerical phenomenon. It has a universal and useful set-theoretic expression, independent of smoothness, contact charts or convex-hull curvature.
+
+For a hull \(K\) and **fixed** visited proper turning-angle intervals \([0,\alpha]\), \([0,\gamma]\), let \(F_{\alpha,\gamma}(K)\) be the **union of all ambient forbidden inner regions**: both families of canonical inner-wall quadrants **and both lower-bound violations of the entire outgoing straight-arm strips**. The latter are important for genuine partial turns. We do not include the outer supporting half-plane bounds in \(F\), since every point of its own convex hull satisfies those automatically. Write
+\[
+E_{\alpha,\gamma}(K)=K\setminus F_{\alpha,\gamma}(K).
+\]
+For complete turns set \(\alpha=\gamma=\pi/2\). Axis limiting-wall conventions make no difference to the following exact set identity when all angular endpoints are included.
+
+**Lemma OH2 (nested forbidden shadows).** If \(K_0\subseteq K_1\) are two nonempty compact convex bodies in the common incoming horizontal strip, and the **terminal angles are the same** for both, then
+\[
+\boxed{F_{\alpha,\gamma}(K_0)\subseteq F_{\alpha,\gamma}(K_1).}\tag{OH.13}
+\]
+Consequently
+\[
+\boxed{E_{\alpha,\gamma}(K_1)\cap K_0
+\subseteq E_{\alpha,\gamma}(K_0).}\tag{OH.14}
+\]
+
+**Proof.** For every unit normal \(n\), \(h_{K_0}(n)\le h_{K_1}(n)\). Each inner quadrant is defined by a conjunction of strict inequalities \(p\cdot u<h_K(u)-1\), \(p\cdot v<h_K(v)-1\), so it grows under the support increase. The outgoing-strip *inner* violation \(p\cdot u_\alpha<h_K(u_\alpha)-1\) grows likewise, as does its correctly reflected counterpart. Taking unions over all visited angles preserves inclusion. If \(p\in E(K_1)\cap K_0\), it avoids the larger forbidden union, hence the smaller, and so survives \(K_0\). \(\square\)
+
+**Theorem OH3 (exact ordinary-area outer-gain minus old-material loss).** For the same nested hulls and fixed turning endpoints,
+\[
+\boxed{\begin{aligned}
+|E_{\alpha,\gamma}(K_1)|-|E_{\alpha,\gamma}(K_0)|
+={}&\left|(K_1\setminus K_0)\setminus F_{\alpha,\gamma}(K_1)\right|\\
+&-\left|E_{\alpha,\gamma}(K_0)
+   \cap\big(F_{\alpha,\gamma}(K_1)\setminus
+           F_{\alpha,\gamma}(K_0)\big)\right|.
+\end{aligned}}\tag{OH.15}
+\]
+The first term counts **genuinely surviving newly added outer-hull material**; the second counts **previously surviving material rendered forbidden by the enlarged hull's shifted inner walls**.
+
+**Proof.** By OH.14 the new survivor's portion inside the old hull is a subset of the old survivor. Decompose the new survivor disjointly into its portion inside \(K_0\) and outside \(K_0\), and subtract the old survivor's area. The inside difference is exactly the old survivor intersected with the enlarged forbidden set. Because the old survivor avoids \(F(K_0)\), this equals the second displayed region. The outside portion is exactly the first displayed region. All sets are measurable, with no assumption that either survivor is connected or has nonempty fibers. This is ordinary set-area accounting, not a signed-niche approximation. \(\square\)
+
+**What would make this an optimality proof?** To show that a given candidate hull \(K_*\) cannot be improved by *every inclusion-enlargement* \(K\supseteq K_*\), it would suffice to construct a **global charge/injection** proving that the old-material shadow-loss term in OH.15 always dominates the newly surviving outer mass:
+\[
+\left|E(K_*)\cap(F(K)\setminus F(K_*))\right|
+\ge\left|(K\setminus K_*)\setminus F(K)\right|.
+\tag{OH.16, unproved}
+\]
+Even that inequality, if true, would settle only **inclusion-comparable outer enlargements**, not arbitrary competing hulls which intersect or lie partly inside \(K_*\). A global sharp comparison would need a broader transport or an integration along deformations whose area change is controlled; no such theorem is claimed.
+
+The advantage of OH.15 as a research language is that the difficult mixed-niche credit \(G\) does not appear at all: newly forbidden lower and upper regions are **one union**, so overlap is automatically charged once. The distinction between old and newly attached material also prevents treating an outer hull increase as a sofa area increase. This is a strictly exact, universally valid gain/loss identity; by itself it is not stronger than the unsolved global area bound.
+
+## 4. A correct self-consistent hull-first procedure
 
 For a proposed compact convex hull \(K\) in the incoming strip, define the complete canonical survivor
 \[
@@ -127,7 +173,7 @@ This is the one-step support-tightening repair from [FH3](feasible-hull-minkowsk
 
 For a globally maximizing body, the chosen hull may therefore be taken **self-consistent**, and no candidate needs to credit disconnected components as a connected sofa.
 
-## 4. The precise remaining optimality obligation
+## 5. The precise remaining optimality obligation
 
 The geometric sequence **outer hull → canonical inner niches → ordinary area → support retightening** is correct and globally covers complete conventional turns. The true target is not
 \(\max |K|\), but rather the *coupled* functional OH.11. A sharp proof would require a universal comparison showing
