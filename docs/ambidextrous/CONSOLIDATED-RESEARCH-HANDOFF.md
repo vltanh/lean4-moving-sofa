@@ -93,6 +93,12 @@ This gives Romik a **global first- and second-order upper support in every heigh
 \]
 for every height-one K in B. Combined with MC3, WV2 and the PD3 unit-height full-turn value-density reduction, it would prove the **full-turn** sharp area bound; original **partial turns remain a separate obligation**. Existing SCX1 disproves global Minkowski concavity with varying vertical span; it does **not** settle the fixed-height star case. Neither star-concavity nor unrestricted optimality is asserted, and preliminary numerical screens cannot certify the missing inequality.
 
+**Exponent optimality in the very opposite-end domain:** [MC4](global-directional-romik-clipping-vanishes.md) constructs one explicit unit-height **parallelogram \(P\) with strictly disjoint, positive-length, opposite-end top/bottom faces**, of width \(9/4\) and lying in B. Along the chord \(K_\lambda=(1-\lambda)K_*+\lambda P\), the ordinary two-cap clipping correction actually satisfies
+\[
+\boxed{G(U_\lambda,V_\lambda)\ge\frac9{32}\frac{\lambda^3}{1+\lambda}>0}
+\]
+for all sufficiently small positive \(\lambda\). The proof pairs the **actual** right terminal inner-ray circular wall envelope of the upper cap with the **outer** top circular flank of the reflected lower cap. Their small competing quadratic heights overlap on a horizontal interval of length \(3\lambda/2\); exact square-root geometry gives the displayed lower bound. Thus **the exponent three in MC3 is sharp even toward strict opposite-end faces**—we cannot remove the clipping credit entirely or upgrade the uniform theorem to \(o(\lambda^3)\). This is a **far hull interpolation example, not an area-\(>M\) feasible sofa**. A numerical signed-area star-segment screen at this same P showed no robust star-concavity failure; its small-\(\lambda\) values have finite polygon/angle discretization bias and are **not** proof evidence.
+
 This has more global relevance than another near-Romik class exclusion. The sharp proof boundary is still the unknown nonlinear **finite-\(\lambda\) behavior** along arbitrary far hull directions, plus full-to-partial coverage. No Lean/CI was run.
 
 ## 2. Substantive mathematical achievements — but with their exact scopes
