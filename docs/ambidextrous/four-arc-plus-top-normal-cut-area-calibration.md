@@ -125,19 +125,85 @@ But \(|U_0|-|U|=\int_I d\), and all d are nonnegative. Subtract the saved niche 
 
 The key advance over [TC2](tail-paired-cut-deficit.md) is that **the parent is an independently middle-perturbed, potentially high-curvature and asymmetric cap**, rather than exactly Romik's cap. The proof remains valid because it uses the **unchanged terminal exposed reference ray and its corresponding outer tangent**; it never needs the parent to have the complete original reference contact chart in the middle.
 
-## 3. Two independent top/bottom cuts plus four support arcs
+## 3. **Ordinary-fiber proof** for two independent top/bottom cuts; clipping is not discarded
 
-The actual convex hull K in AC.4 contains the entire half-height midline, and both cut full niches stay below/above it. Their ordinary removed areas are contained inside K, separated in the vertical direction. Therefore its complete two-handed canonical envelope satisfies the **exact area identity**
+**Crucial correction to the initial research draft:** It is **false** that all of the cut caps' positive niches necessarily lie inside the **new** common convex hull \(K=U\cap\rho V\). Even though the niches lie below/above the common midline, the independently raised new bottom and lowered new top can **clip** them. Consequently the tempting identity
+\(|E(K)|=(|U|-N(U))+(|V|-N(V))-|I|\)
+is valid for the *uncut parent* but **need not hold after the cuts**. No proof may count a forbidden region outside its actual outer hull as missing sofa area.
+
+The correct comparison is **pointwise in the ordinary surviving vertical fibers** and pays the clipping without making any global \(G\)-estimate.
+
+Let \(a_0^U(x),a_0^V(x)\) be the two parent's downward convex roof heights, and \(n_0^U(x),n_0^V(x)\) its complete positive lower/upper-turn niche roofs. For the cuts write
+\[
+a^U=a_0^U-d_U,\quad a^V=a_0^V-d_V,\qquad
+n^U=n_0^U-e_U,\quad n^V=n_0^V-e_V,
+\]
+where \(d_U,d_V,e_U,e_V\ge0\).
+
+On the common middle face \(J_*=[a,b]\), the *parent* has
+\[
+a_0^U=a_0^V=1
+\]
+by preserved reference face endpoints and the full core rectangle. Its ordinary canonical two-turn fiber has length
+\[
+\ell_0(x)=1-n_0^U(x)-n_0^V(x)\qquad(x\in J_*),
+\tag{AC.9}
+\]
+where the two parent niches do not overlap because they lie strictly below/above the midline.
+
+The cut's **true ordinary surviving fiber**, with both outer losses and both inner niches, has length exactly
+\[
+\ell(x)=
+\Big[\,1-\max(d_U(x),n^V(x))
+           -\max(d_V(x),n^U(x))\,\Big]_+
+\quad(x\in J_*).
+\tag{AC.10}
+\]
+Because both cut caps contain the full midline, and their new niches are subsets of the parent's strictly sub-midline niches, this fiber is actually **nonempty**: its raw length is nonnegative and the outer positive part may be dropped. In particular,
 \[
 \boxed{
-|E_{L,L}(K)|=(|U|-N(U))+(|V|-N(V))-|I|.
-}\tag{AC.9}
+\ell(x)\le 1-n^U(x)-n^V(x)
+=\ell_0(x)+e_U(x)+e_V(x).
+}\tag{AC.11}
 \]
-The envelope is compact, has nonempty interval fibers meeting the common midline, and hence is connected and supports **two complete conventional quarter-turn motions**. **Its actual convex hull need not equal K** after a severe cut: some newly exposed top/bottom cap points may be forbidden by the opposite turn. This does not affect the area **upper comparison for any actual sofa** with proposed hull K. One must not silently assume extreme-point retention.
+This inequality already includes **all clipping by the changed upper/lower caps**, with no fictional subtraction of niche area lying outside K.
 
-Combine the independent cap cut comparisons AC.5 and the fully nonsymmetric four-source area inequality FA.10 for the parent K_0.
+**Outside** \(J_*\), both original and cut positive niches vanish identically by support monotonicity and the parent's central-niche enclosure. The ordinary canonical fiber is just the actual convex outer fiber, so
+\[
+\boxed{
+\ell(x)=\ell_0(x)-d_U(x)-d_V(x)
+\qquad(x\in I\setminus J_*).
+}\tag{AC.12}
+\]
+Integrate AC.11–AC.12:
+\[
+\boxed{
+|E_{L,L}(K)|-|E_{L,L}(K_0)|
+\le\int_{J_*}(e_U+e_V)\,dx
+-\int_{I\setminus J_*}(d_U+d_V)\,dx.
+}\tag{AC.13}
+\]
 
-**Theorem AC2 (four middle arcs + two arbitrary top-normal cuts).** Under the precise parent/cut hypotheses AC.1–AC.4,
+Now apply the **full-ray tail/outer-flank pairing from AC1** separately to both hands. Every positive saved-niche height occurs within \(J_*\), and the combined savings are bounded by outer flank roof losses on the explicit interval union
+\[
+F_{\rm out}=(a-D,a)\cup(b,b+D)\ \subseteq I\setminus J_*:
+\quad
+\int_{J_*}(e_U+e_V)\,dx
+\le\int_{F_{\rm out}}(d_U+d_V)\,dx.
+\tag{AC.14}
+\]
+Therefore
+\[
+\boxed{
+|E_{L,L}(K)|
+\le |E_{L,L}(K_0)|
+-\int_{I\setminus(J_*\cup F_{\rm out})}
+(d_U+d_V)\,dx
+\le |E_{L,L}(K_0)|.
+}\tag{AC.15}
+\]
+
+**Theorem AC2 (four independent middle support arcs plus two arbitrary top-normal cuts, corrected).** Under the precise parent/cut hypotheses AC.1–AC.4,
 \[
 \boxed{
 \begin{aligned}
@@ -147,19 +213,21 @@ Combine the independent cap cut comparisons AC.5 and the fully nonsymmetric four
 \int_{J_0}
  (|\phi_U'|^2+|\psi_U'|^2+
   |\phi_V'|^2+|\psi_V'|^2)\,dt\\
-&-\int_a^b
- \Big[(A_{U_0}-A_U)+(A_{V_0}-A_V)\Big]dx.
-\end{aligned}}\tag{AC.10}
+&-\int_{I\setminus(J_*\cup F_{\rm out})}
+(d_U+d_V)\,dx .
+\end{aligned}}\tag{AC.16}
 \]
-In particular **no** actual connected full-two-turn sofa whose hull has this decomposed independently perturbed-and-cut representation can have area \(>M\).
+In particular no actual compact connected full-two-turn sofa whose actual hull is of this four-middle-arc-perturbed-and-two-cap-cut form can have area \(>M\).
 
-The conclusion requires **no left-right/vertical reflection symmetry of the resulting sofa**, no fixed vertical span or horizontal top/bottom face lengths, no upper support-curvature domination, no stability of the new full moving-wall exposure chart, and no outer-hull extreme-point-retention premise after the cuts. The caps may contain genuinely new exposed edges and polygonal facets. The cuts can be large subject to their specified angular support and the retained half-height strip.
+**Proof.** Apply the exact ordinary-fiber inequality AC.13, the geometrically disjoint saved-tail payment AC.14, and the parent full-turn coercivity FA.10. **Do not invoke the false full-niche subtraction identity for the cut hull.** \(\square\)
 
-**Exact scope:** This does **not** cover arbitrary convex hulls near Romik if their upper/lower support changes mix **non-monotone outward/inward moves near the vertical axis**, if their middle and top-normal variations cannot be separated as specified, if their supports change at the reference switching angles, or if their original physical motions stop early. The unproved *global* area bound remains a separate task.
+The resulting canonical envelope is compact, has interval vertical fibers meeting the common midline, is connected and follows both complete conventional quarter turns. Its **actual convex hull need not equal** the proposed K after severe cap cuts, because some newly exposed top/bottom extreme points may be lost. This does not affect the comparison for a genuine sofa with hull K: canonical tightening gives \(S\subseteq E(K)\), and hence \(|S|\le|E(K)|\le M\).
+
+This is a true ordinary-area accounting argument in the class considered: no formal signed deficit, globally unknown cap-interaction budget, or assumption that all swept niches lie inside the *new* hull occurs. Asymmetry and possible subunit vertical span are allowed.
 
 ## 4. Why this is not just another below-reference example
 
-AC2 proves an *entire class* of above-\(M\) geometries is impossible, even after axis-normal cuts destroy the unit-vertical-span assumption. The estimate is a genuine **outer-area versus complete niche-sweep inequality**, with the cut's old saved tail area paired to a **disjoint** lost exterior portion of the convex cap, and with the middle perturbation's complete ray/outer-area imbalance paid by a Dirichlet energy. It applies to all relevant real angles, not a finite sample or a local stationary heuristic.
+AC2 proves an *entire class* of above-\(M\) geometries is impossible, even after axis-normal cuts destroy the unit-vertical-span assumption. The estimate is a genuine **outer-area versus complete niche-sweep inequality**, with the cut's saved terminal niche area paired to a **disjoint** lost exterior portion of the convex cap, and with the middle perturbation's complete ray/outer-area imbalance paid by a Dirichlet energy. It applies to all relevant real angles, not a finite sample or a local stationary heuristic.
 
 This is still only a reference-neighborhood **support decomposition theorem**, not an admissible global normal form for all competitors. A possible next extension would combine the cut budget with the outgoing-strip cost for \(\alpha,\gamma<L\) when the cuts also change the terminal strip support, or establish an **area-improving** canonicalization which moves far competitor supports into this reference-normal form. Neither statement is proved or inferred here.
 
