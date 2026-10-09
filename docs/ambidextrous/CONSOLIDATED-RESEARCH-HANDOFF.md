@@ -183,6 +183,13 @@ about the depth-violating point \(q\) stays **strictly inside one open forbidden
 \]
 Also every convex body itself fitting the two \(45^\circ\) corner frames is at least \(3/200\) Hausdorff distance from the actual hull \(K\) in the common incoming frame. These are quantitative statements **about every Romik-competitive nonconvex sofa**, including arbitrary partial/backtracking motions; no global sharp optimality claim is made. The rational cubic/atan comparisons are replayed in [a tiny exact checker](computer-assisted/check_mandatory_nonconvexity_budget.py).
 
+**Sharper continuous theorem [NC2](mandatory-competitive-convex-hull-niche.md):** For *any* compact measurable shape \(S\) satisfying the two opposite canonical 45-degree hallway positions (no convexity or connectedness of \(S\) needed), with actual hull \(K=\operatorname{conv}S\), outer area \(A_K>0\), diameter \(D\), and \(C=31/20\), the **ordinary missing hull area** obeys
+\[
+\boxed{|K\setminus S|\ge\frac{A_K}{D^2}
+\left(\sqrt{\frac{A_K}{C}}-1\right)_+^2.}
+\]
+To prove this, write \(\Lambda\) for the largest of the two canonical midpoint frames' worst minimum-wall depths on \(K\). Uniformly shrinking \(K\) by \(1/\Lambda\) when \(\Lambda>1\) yields a *convex* two-midpoint feasible hull, hence CV1 forces \(\Lambda\ge\sqrt{A_K/C}\). At a witness point \(q\) both wall depths are at least \(\Lambda\). Every homothetic copy \(q+t(K-q)\) with \(t<(\Lambda-1)/D\) lies in one actual forbidden quadrant, forcing area loss \(t^2A_K\); pass to the limit. This is the **first global continuous outer-convex-area versus actual inner-wall loss coercivity bound** in this direction, but its mandatory loss is far too small to settle Romik's \(M\). For arbitrary original motions it applies when both proper 45-degree orientations are guaranteed, e.g. for area \(>\sqrt2\) by GH.
+
 **Research pivot:** The strict convex-only area upper proves any sharp candidate is **essentially nonconvex**: one of its actual moving inner corners must carve a robust positive-area chunk of the hull. A global proof must now control how the *two complete moving inner-wall ray sweeps* interact with all convex-hull support contacts, rather than trying to convexify the full sofa or discarding the niche. The tiny \(1/6250\) mandatory deficit is not itself sufficient to show \(|S|\le M\).
 
 ### Stronger complementary-angle width restrictions, for all angles
