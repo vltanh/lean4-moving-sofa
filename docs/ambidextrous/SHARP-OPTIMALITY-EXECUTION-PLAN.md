@@ -149,6 +149,14 @@ By the passed global PG1 reduction, **one may and should first prove this for al
 
 **Alternative equivalent syntax, not a second project:** The exact signed identity \(\mathscr S=\Psi(U)+\Psi(V)+G\) makes the same requirement \((M/2-\Psi(U))+(M/2-\Psi(V))\ge G\) for genuine full-turn compatible cap pairs. The \(\Psi\le M/2\) theorem has a long self-reviewed dependency chain. This equivalence may be used to **audit a proposed transport proof**; it is **not** a license to assume the missing clipping budget or re-start a separate weighted one-turn optimization.
 
+### G1.2 finite whole-angle algebraic oracle (PASS as a calculation theorem; **NOT** the sharp area charge)
+
+[EO1–EO6](gate12-exact-whole-angle-polygonal-niche-oracle.md) now provide a **globally quantified exact continuous-angle calculation** for any rational polygonal hull: the positive one-turn niche at any x is the maximum of at most \(8(2N+1)\) candidates, arising from actual outer-support vertex switches, unit-circle inner-ray tangencies or **physical sharp-corner ties**. The last satisfy a quartic polynomial in \(\tan(t/2)\), including folded corner paths. The complete two-hand envelope (including empty-fiber corrections) has a finite semialgebraic decomposition, and its exact **ordinary area** is a finite elementary combination of algebraic numbers and algebraic coefficients times arctangents of algebraic numbers. This eliminates any need to approximate turning angles when **evaluating one polygon's true niche union**.
+
+EO3 strengthens the existing actual-feasible polygonal density to **rational** finite-vertex bodies. EO6 adds the first explicit **uniform shape-independent polygonal approximation error**: for every full-turn sofa S in the audited fixed hull box and every n, there is an *actual feasible* rational polygon-hull sofa with at most \(4n\) vertices and area \(\ge |S|-21/n-230\sqrt{5/n}\). This holds with high curvature, asymmetry, arbitrary contact switches, and even subunit incoming height; it is an exact direct application of both true all-angle sweeps and monotone gap compression.
+
+**THIS DOES NOT PASS G1.2.** The exact finite evaluator has **not** supplied the required uniform positive lower bound G1.5 on the carved area for *every n and every admissible rational polygon*. An unbounded enumeration of exact polygon checks cannot establish the inequality. The only active proof target remains G1.5/PG.12; no claim of a new numerical upper bound or candidate optimality is made.
+
 ### G1.3 Adversarial verification and exhaustive case coverage (before any PASS)
 
 Every claimed candidate for G1.5 must survive at least:
