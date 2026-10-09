@@ -425,6 +425,22 @@ Integrate the minimum of the two continuous limits to get
 =\frac9{32}>0.
 }\tag{MC.34}
 \]
+In fact, this argument also gives a **strict finite-\(\lambda\) bound** without relying on limits. The rationalized square-root identity gives
+\[
+q_r(z)=\frac{z^2}{r+\sqrt{r^2-z^2}}
+\ge\frac{z^2}{2r}.
+\]
+Since \(2r_{\rm in}=1+\lambda\) and \(2r_{\rm out}=1-\lambda<1+\lambda\), both circular contributions in MC.33 are bounded below by their squared arguments divided by \(1+\lambda\). Consequently, for all sufficiently small positive \(\lambda\) for which the previously verified terminal charts are exposed,
+\[
+\boxed{
+G(U_\lambda,V_\lambda)
+\ge\frac{\lambda^3}{1+\lambda}
+\int_0^{3/2}\min\{(3/2-s)^2,s^2\}\,ds
+=\frac9{32}\frac{\lambda^3}{1+\lambda}>0.
+}\tag{MC.34a}
+\]
+The limiting statement MC.34 follows at once. This explicit lower bound is **ordinary positive clipping area**, not a signed-area difference or a sampled-angle estimate.
+
 **Theorem MC4 (optimal cubic exponent in the universal height-one class).** MC3's cubic estimate is of the **best possible power** over *all* unit-height convex-hull directions, **even with the far endpoint restricted to strict positive opposite-end top/bottom faces**. No uniform \(G=o(\lambda^3)\) estimate is possible on the stated full convex search box.
 
 The example isolates exactly how **face misalignment** creates a tiny but real positive clipping credit: one inner circular ray tail extends beyond the other cap's horizontal top face, while that other cap's circular outer flank supplies an equally quadratic obstacle. Their overlap has horizontal width \(O(\lambda)\) and two quadratic heights \(O(\lambda^2)\), producing the sharp cubic exponent.
