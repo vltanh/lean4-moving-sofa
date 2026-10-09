@@ -318,7 +318,142 @@ Their physical lower-corner **horizontal** path agrees *pointwise* with Romik's,
 
 This disproves **any high-but-subcritical-area threshold**, even together with vertical and horizontal symmetry, unit-height span, actual hull retention, full-turn feasibility and canonical saturation, as a justification for replacing the actual complete moving-corner ray sweep by a **single angular peak/front**. It does not rule out a one-peak theorem specifically for a hypothetical **global maximizer or area \(>M\)**; it is a sharp near-reference negative control, not an unrestricted sharp-value theorem.
 
-## 6. What changes in the global optimality proof
+## 6. Stronger: **independent two-source support perturbations**, only \(C^1\)-small, with unrestricted new curvature
+
+The vertical-corner direction VC.1 is not the full scope of the frozen-ray method. Here is a stronger result which permits **independent changes of the two upper source quarters**—and therefore both horizontal and vertical displacements of the moving inner corner—while retaining a strict **actual ordinary-area** inequality. In contrast to the older [PJ-COUP1](spatial-half-partition-coupled-middle-variation.md), the **new** support need *not* be \(C^2\)-close to Romik, have curvature density bounded by one, or retain Romik's stationary-wall exposure pattern.
+
+Fix any sufficiently small compact middle interval \(J_0=[a,b]\Subset T=(\beta,L-\beta)\), containing \(t_0=\pi/4\), on which all three original reference pieces (first-wall stationary, second-wall stationary, and standard moving corner) are **strictly exposed**, with
+\[
+p_*<0<q_*,\quad0<\rho_{f,*},\rho_{g,*}<1,\quad
+x_{c,*}'<0
+\]
+uniformly. The old exposed x-images of the three branch families are pairwise disjoint, and the unmodified reference exposes the rest of its niche outside these images.
+
+For arbitrary
+\(\phi,\psi\in C_c^2(\operatorname{int}J_0)\), independently replace
+\[
+\boxed{f=f_*+\phi,\qquad g=g_*+\psi,}\tag{VC.23}
+\]
+and extend to the lower support semicircle by reflection about \(y=1/2\). Assume only that the resulting full support is convex and
+\[
+\|\phi\|_{C^1}+\|\psi\|_{C^1}<\varepsilon_0
+\tag{VC.24}
+\]
+for a sufficiently small **fixed** positive constant depending on \(J_0\) and the strict reference outer/niche margins. There is **no condition** on \(\|\phi''\|_\infty,\|\psi''\|_\infty\) except convexity of the resulting hull. The perturbations may have **either sign** and need not preserve left-right reflection symmetry.
+
+The finite strict reference margins and the \(C^1\) bound guarantee that the new outer hull \(K_{\phi,\psi}\) retains the core rectangle and horizontal extreme midline points, while the positive swept niches remain strictly inside its central face window, separated above/below \(y=1/2\). Its canonical full-turn envelope is again a genuine compact connected ambidextrous sofa with **actual hull** \(K_{\phi,\psi}\), by the same interval-fiber and extreme-point arguments as in Section 2. In particular
+\[
+|E(K_{\phi,\psi})|=|K_{\phi,\psi}|-2N_{\phi,\psi}.
+\]
+
+### 6a. The new corner still supplies a valid roof lower bound when its old x-graph moves
+
+At any reference corner angle t, the perturbation of its **physical** position is
+\[
+\boxed{
+\delta c(t)=\phi(t)u_t+\psi(t)v_t,\quad
+\delta x_c=\phi\cos t-\psi\sin t,\quad
+\delta y_c=\phi\sin t+\psi\cos t.
+}\tag{VC.25}
+\]
+The reference corner x-velocity is uniformly strictly negative on \(J_0\). By VC.24, the **new** corner x-velocity also remains negative everywhere on \(J_0\). Because \(\phi,\psi\) vanish near its endpoints, the old and new corner x-graphs have **exactly the same x-projection interval**.
+
+For every x in that interval, let \(t_{\rm new}(x)\) be the unique angle with \(x_{c,\rm new}(t_{\rm new})=x\). The two inner rays meet there; therefore the **new actual niche** has height at least \(y_{c,\rm new}(t_{\rm new}(x))\), whether or not the **new** corner arc is globally exposed. The contribution to the new niche area is bounded **below** by
+\[
+\int_{J_0}(y_{c,*}+\delta y_c)
+(-x_{c,*}'-\delta x_c')\,dt.
+\]
+Subtracting the old *actual exposed* corner-area contribution, the exact linear part is
+\[
+\int_{J_0}(q_*\phi-p_*\psi)\,dt,
+\]
+by integrating the compactly supported terms by parts. The **exact quadratic contribution to this lower bound** is
+\[
+\begin{aligned}
+Q_{\rm corner}(\phi,\psi)
+&=-\int_{J_0}(\phi\sin t+\psi\cos t)
+(\phi'\cos t-\phi\sin t-\psi'\sin t-\psi\cos t)\,dt\\
+&=\boxed{
+\frac12\int_{J_0}(\phi^2+\psi^2)\,dt
++\int_{J_0}\phi\psi'\,dt.
+}
+\end{aligned}\tag{VC.26}
+\]
+The last identity follows by integration by parts, with **no missing boundary terms** because of compact support. The sign of the oriented cross term \(\int\phi\psi'\) is essential.
+
+### 6b. Both stationary inner-ray flanks retain rigorous **frozen-reference** lower bounds
+
+At the original strictly exposed first-wall stationary abscissa \(x_{Z_f,*}(t)\) for \(t\in J_0\), the reference companion wall lies strictly above the first wall. Its gap has a **positive minimum on \(J_0\)**. By the small \(C^0\) bound in VC.24, that same first wall remains the *smaller* of the two walls at the **old** abscissa and **old** parameter, even if the true new global maximizing angle changes. Therefore the new niche roof at the old stationary x is at least
+\[
+n_*(x)+\frac{\phi(t)}{\sin t}.
+\]
+Since \(x_{Z_f,*}'=(1-\rho_{f,*})\sin t>0\), integrating over its fixed x-image gives a **linear lower contribution** \(\int_{J_0}(1-\rho_{f,*})\phi\,dt\).
+
+Likewise, on the old strictly exposed second-wall stationary x-image the new roof is bounded below by the old height plus \(\psi(t)/\cos t\), giving the linear contribution \(\int_{J_0}(1-\rho_{g,*})\psi\,dt\). These two x-images are disjoint from one another and from the moving-corner x-image; elsewhere, an unmodified reference angle still attains the old roof, so \(n_{\phi,\psi}\ge n_*\).
+
+Add the stationary and newly parametrized moving-corner **lower bounds**. The exact result is
+\[
+\begin{aligned}
+N_{\phi,\psi}-N_*
+&\ge\int_{J_0}\bigl[
+(1-\rho_{f,*}+q_*)\phi+
+(1-\rho_{g,*}-p_*)\psi\bigr]dt+
+Q_{\rm corner}(\phi,\psi)\\
+&=\boxed{
+\int_{J_0}(\rho_{f,*}\phi+\rho_{g,*}\psi)\,dt
++Q_{\rm corner}(\phi,\psi),
+}
+\end{aligned}\tag{VC.27}
+\]
+where the second equality uses the **explicit** Romik identities \(q_*=2\rho_{f,*}-1,\ p_*=1-2\rho_{g,*}\).
+
+The proof compares with **actual complete swept niche roofs**. It never replaces them by a signed formula with unknown clipping, assumes an inner ray of the new hull is exposed, or assumes its new support curvature is \(\le1\). The only corner orientation condition is \(C^1\)-stable monotonicity of **that one original moving-corner chart**, which is a strict property of the reference and of the perturbation's first derivatives.
+
+### 6c. The outer area cancels all linear costs; a strictly coercive quadratic remains
+
+The **exact** planar convex-support area polarization, accounting for both vertically reflected support halves, gives
+\[
+\boxed{
+\begin{aligned}
+|K_{\phi,\psi}|-|K_*|
+={}&2\int_{J_0}(\rho_{f,*}\phi+\rho_{g,*}\psi)dt\\
+&+\int_{J_0}(\phi^2+\psi^2-\phi'^2-\psi'^2)dt .
+\end{aligned}}\tag{VC.28}
+\]
+Subtract twice the niche lower bound VC.27. The linear terms cancel, leaving
+\[
+\boxed{
+\begin{aligned}
+|E(K_{\phi,\psi})|-M
+&\le-\int_{J_0}\bigl(\phi'^2+\psi'^2+2\phi\psi'\bigr)dt\\
+&\le-\left(1-\frac{|J_0|}{\pi}\right)
+\int_{J_0}(\phi'^2+\psi'^2)dt.
+\end{aligned}}\tag{VC.29}
+\]
+For the second inequality the Dirichlet Poincaré inequality on the support interval, of length \(\ell=|J_0|\), says
+\(\|\phi\|_2\le(\ell/\pi)\|\phi'\|_2\). Thus
+\[
+2\left|\int_{J_0}\phi\psi'\right|
+\le2\ell/\pi\,\|\phi'\|_2\|\psi'\|_2
+\le(\ell/\pi)(\|\phi'\|_2^2+\|\psi'\|_2^2).
+\]
+Because \(J_0\subset(0,\pi/2)\), the coercivity factor is **strictly greater than \(1/2\)**.
+
+**Theorem VC3 (two independent middle-support arcs: ordinary-area strong maximality without a new curvature cap).** Under the explicit hypotheses VC.23–VC.24, the *actual full-two-turn ordinary area* obeys
+\[
+\boxed{
+|E(K_{\phi,\psi})|
+\le M-\left(1-\frac{|J_0|}{\pi}\right)
+\bigl(\|\phi'\|_2^2+\|\psi'\|_2^2\bigr)<M
+}
+\]
+for any nonzero perturbation pair. The genuine sofa may be nonsymmetric left–right, have source curvature greater than one, and possess arbitrarily complicated **new** stationary inner-ray exposure charts.
+
+This strengthens the previous **\(C^2\)-small exact-branch** two-arc result [PJ-COUP1](spatial-half-partition-coupled-middle-variation.md): the quantitative constant is weaker, but this inequality controls a **much larger class** of actual convex-support perturbations, including curvature spikes which invalidate the old chart's stability. It also includes the vertical-corner family VC1 as the special case \((\phi,\psi)=(\varphi\sin t,\varphi\cos t)\), for which the quadratic form simplifies *exactly* to \(\int\varphi'^2\).
+
+**The precise remaining global obstruction:** This does not cover supports modified near the reference switching angles or axis normals, changes of the actual incoming top/bottom face or horizontal projection, arbitrary far-away support charts, or partial terminal angles. It uses the **reference** global exposure decomposition only to supply the initial frozen-ray comparison. A universal sharp proof requires a calibration that replaces that reference chart with a global principle valid for *every* possible candidate hull and both independently turning motions.
+
+## 7. What changes in the global optimality proof
 
 VC1 is stronger than a local second-variation calculation: it is a true **ordinary-area** comparison for a whole infinite-dimensional vertical-corner perturbation class, including O(1) **curvature spikes** and radical changes of the new niche's active contacts. The proof succeeds by **calibrating the complete new swept rays from fixed reference rays** (VC.8–VC.11), while the exact quadratic outer-area penalty \(\|\varphi'\|_2^2\) pays for any deviation. This is directly aligned with the user's outer-wall-plus-moving-corner-first approach and avoids the old pairwise clipping-deficit inequality.
 
