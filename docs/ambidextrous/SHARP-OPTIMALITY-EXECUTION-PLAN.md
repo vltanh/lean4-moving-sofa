@@ -88,7 +88,13 @@ Here the two \(\mathcal N\) are clipped to K, and nonempty fibers ensure they do
 
 **Coverage logic:** If G1.2 holds for all actual feasible K, it bounds every genuine full-turn body. Conversely any arbitrary auxiliary K has a possibly disconnected canonical envelope with ordinary area \(|E_{\rm full}(K)|\ge\mathscr S(K)\). Gate 0's area-preserving gap compression converts that envelope to an actual connected full-turn sofa, so **G1.2 for all feasible actual hulls bounds the signed full-turn supremum too**. This is not a claim that the auxiliary K itself retains its exposed extreme points. Do not assume actual-hull theorems for incompatible auxiliary hulls.
 
-### G1.1 First required audit: full-ray facet-triangle identity
+### G1.1 PASSED in written audit: full-ray facet triangles and globally feasible polygonal-hull density
+
+[PG.1–PG.12](gate1-facet-audit-and-feasible-polygon-density.md) independently checks the **actual-hull** one-angle oblique triangle, including both physical moving inner rays, correct upper-roof clipping, and a concrete **genuinely feasible oblique-facet** test with exact positive area. The audit corrects one overstrong claim in FT: a cut cannot *contain* a facet endpoint but its base **can terminate there** at zero height; this needs no strict endpoint clearance. Crucially, **PG1 proves every connected full-turn sofa is area-approximable from below by an actual connected full-turn sofa built from finitely many rectangles plus vertical joining segments, whose **actual convex hull is a finite polygon**. It uses true entire-ray survivor fibers, finite horizontal-gap compression and vertical filling; smoothing an arbitrary hull is not claimed feasible. Therefore the sharp full-turn value theorem is **equivalent** to the exact facet-sweep inequality PG.12 for **all finite genuine polygonal hulls**, without separately handling singular boundaries, countably many facets or a curvature cap.
+
+**G1.1 status: PASS as a self-reviewed written derivation, external mathematical review pending. G1.2 remains ACTIVE and UNPROVED.** The polygonal coverage reduction does **not** itself bound area and gives no uniform upper bound on polygon complexity.
+
+### Historical original G1.1 statement (retained for exact definitions)
 
 The recent [FT1–FT8 facet-triangle argument](global-facet-triangle-niche-decomposition.md) supplies the intended **global geometric input**, subject to an independent adversarial audit. At each proper lower angle t, the roof
 \[
@@ -123,7 +129,7 @@ If the audited facet identity passes, it gives
 
 **G1.1 PASS:** independently checked geometry and measurability of G1.3–G1.4 for every genuine full-turn hull, including multi-peak/disconnected angular activity and oblique supporting facets. **A failed hypothesis or wrong sign must be corrected now, not buried in later assumptions.**
 
-### G1.2 The single active discovery obligation: a GLOBAL SUPPORT → FACET-SWEEP AREA CHARGE
+### G1.2 ACTIVE: prove one GLOBAL SUPPORT → FACET-SWEEP AREA CHARGE
 
 The entire task after G1.1 is to prove, for **all actual feasible K**,
 \[
@@ -135,7 +141,7 @@ The entire task after G1.1 is to prove, for **all actual feasible K**,
 \tag{G1.5 — UNPROVED}
 \]
 
-Build **one quantitative outer-support-to-carved-facet charge**, using the *actual* moving corners and both attached rays. Outer curvature/face support data determine their trajectories; the resulting **union** of triangular cuts is charged exactly once on each exposed facet. A valid certificate must quantify the gained hull material against lost true niche area, including oblique facets, all contact switches, positive curvature atoms, and unknown facet count.
+By the passed global PG1 reduction, **one may and should first prove this for all actual polygonal full-turn hulls** with finitely many faces; the resulting sharp inequality would pass to all full-turn bodies by area density, without assuming polygonal circumscription preserves feasibility. There is no uniform bound on the number or slopes of the faces. Build **one quantitative outer-support-to-carved-facet charge**, using the *actual* moving corners and both attached rays. Outer curvature/face support data determine their trajectories; the resulting **union** of triangular cuts is charged exactly once on each exposed facet. A valid certificate must quantify the gained hull material against lost true niche area, including oblique facets, all contact switches, positive curvature atoms, and unknown facet count.
 
 **Necessary calibration:** At Romik's exact hull both sides of G1.5 are equal. The same certificate must remain valid for the *genuinely asymmetric value-dense opposite-end-face class*; one cannot assume both horizontal faces align, that the niche is confined to the center, or that the outer support has curvature <=1. A universal fixed-price-per-triangle lemma that loses Romik equality or double-counts overlapping angular cuts is not a candidate.
 
@@ -194,7 +200,7 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 | Gate | Status | Concrete missing step |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
-| 1 — coupled full-turn loss | **ACTIVE: G1.1 audit → G1.2 proof** | Exact entire-ray facet-union loss is available as a proposed input; **global quantitative support-to-facet charge G1.5 is unproved** |
+| 1 — coupled full-turn loss | **ACTIVE: G1.1 passed; G1.2 sharp charge unproved** | Full physical facet-triangle audit and actual-feasible polygonal value-density in PG1 are complete as written; the **universal finite-polygon facet union area inequality PG.12 / G1.5** is still missing |
 | 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
