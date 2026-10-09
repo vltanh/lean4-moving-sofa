@@ -185,7 +185,7 @@ The stronger (10/7) bound supersedes the earlier (31/20) certificate; the geomet
 \lambda_1-\lambda_0,\
 \mu_1-\mu_0.
 \]
-At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(10/7\). Otherwise it bisects and covers the box by its two children. **Every accepted box is a sound upper-area enclosure for every parameter tuple inside it.**
+At each box, it accepts the box if either its trivial band-area bound \(d\min(P_1,Q_1)\), its whole enclosing polygon area, or the **exact rational maximum** CV.9 is at most \(10/7\). Otherwise it bisects and covers the box by its two children. **Every area-certified leaf** upper-bounds every parameter tuple inside it; **other leaves** are discharged by a proved impossibility of actual support attainment or by an exact symmetry mapping to the retained half-domain, as explained above. Symmetry-pruned boxes are not independently asserted to have low area.
 
 The independent, executed standard-library Python Fraction replay gave:
 \[
@@ -199,7 +199,7 @@ The independent, executed standard-library Python Fraction replay gave:
 1307684518073/915379200000<10/7.
 \end{array}}\tag{CV.11}
 \]
-There is no optimizer, no random search, no geometric interpolation without a proved error term, and no need for CI or Lean. A finite tree of rational area inequalities covers **every** real point of the root parameter domain. The code additionally uses the sound strip bound (d\min(\operatorname{width}_U\mathcal P,\operatorname{width}_V\mathcal P)) before the exact band maximization. It includes independent closed-form regression tests for a unit square, a \(1\times3\) rectangle, an isosceles right triangle, and a symmetric double-corner polygon to guard against missed band-position maxima.
+There is no optimizer, no random search, no geometric interpolation without a proved error term, and no need for CI or Lean. A finite tree of rational area inequalities, necessary actual-hull conditions, and exact parameter symmetries covers **every** real point of the root parameter domain. The code additionally uses the sound strip bound \(d\min(\operatorname{width}_U\mathcal P,\operatorname{width}_V\mathcal P)\) before the exact band maximization. It includes independent closed-form regression tests for a unit square, a \(1\times3\) rectangle, an isosceles right triangle, and a symmetric double-corner polygon to guard against missed band-position maxima.
 
 With CV.6 and CV.10–CV.11, assuming \(|C|>10/7\) gives
 \[
