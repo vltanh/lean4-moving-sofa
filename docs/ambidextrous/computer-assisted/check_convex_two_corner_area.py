@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact Fraction certificate: convex two-45-degree sofa area <= 31/20.
+"""Exact Fraction certificate: convex two-45-degree sofa area <= 3/2.
 
 Hand geometric reduction: a convex body avoiding the two opposed open
 inner corner quadrants can be separated from each by a half-plane
@@ -18,7 +18,7 @@ from bisect import bisect_right
 from time import monotonic
 
 D=F(283,200)  # > sqrt(2), because 283**2 > 2*200**2
-TARGET=F(31,20)
+TARGET=F(3,2)
 
 def clip_polygon(poly, a,b,c):
     """Keep exact rational halfspace ax+by<=c."""
@@ -122,6 +122,14 @@ def prove(target=TARGET, verbose=True, max_nodes=1000000):
             leaves+=1;continue
         poly=enclosure(box)
         ub=area(poly)
+        if ub>target and len(poly)>=3:
+            xs=[p[0] for p in poly]
+            ys=[p[1] for p in poly]
+            # A band of sum-coordinate width d has extent <=d
+            # in either coordinate when the other one is fixed.
+            # Therefore d times either projection length is an
+            # exact (sometimes sharper) whole-band area upper bound.
+            ub=min(ub,D*min(max(xs)-min(xs),max(ys)-min(ys)))
         if ub>target:
             ub=max_band_area(poly)
         if ub<=target:
@@ -136,7 +144,7 @@ def prove(target=TARGET, verbose=True, max_nodes=1000000):
         pending.append((tuple(child2),n+1))
         pending.append((tuple(child1),n+1))
     assert 283**2>2*200**2
-    assert 31*5 < 8*20  # 31/20 < 8/5 < Romik M
+    assert 3*5 < 8*2  # 3/2 < 8/5 < Romik M
     assert target == TARGET
     if verbose:
         print('PASS: exact rational exhaustive certificate: convex two-midpoint area <=',target)
