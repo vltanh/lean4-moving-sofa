@@ -40,7 +40,9 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 ## Gate 0 — independently audit the bridge to original motions
 
-**Status: ACTIVE.** Before invoking the global variational target as a final proof, independently rederive and check:
+**Status: PASS (October 9, 2026; written mathematical audit, externally unrefereed).** The standalone [Gate 0 end-to-end proof](original-motion-global-bridge-gate0-audit.md) rederives the genuine wrong-way angular reach, exact two outgoing strips, common-hull tightening, empty-fiber signed correction, width-five compact box, and area-preserving horizontal gap compression for **both independent partial turns**. It proves the complete supremum equality \(\mu_{\mathrm{amb}}=\sup_{K,\alpha,\gamma}\mathscr V(K,\alpha,\gamma)\) on the planned parameter domain. It also gives a genuine unit-height high-area tilted top-cut family with **positive ambient clipping**, confirming the max/min accounting is indispensable. Note 9's older niche subtraction was **correct** because it had already defined both niches as **\(K\)-clipped** sets; an earlier suspicion of an error in that identity was a notation misunderstanding, not a discovered counterexample. The new independent proof is self-reviewed and open to external mathematical scrutiny.
+
+**Gate 0 is no longer the active workstream. The next active proof obligation is Gate 1, the global full-turn sharp ordinary-area charge.** Before invoking the global variational target as a final proof, independently rederive and check:
 
 - the correct-handed and terminal-angle reduction for arbitrary motions with area near or above M, including **the two actual outgoing strip normals** (GH / Note 10);
 - canonical supporting-hallway tightening and both positive niche envelopes, including all end-angle conventions (OS1);
@@ -54,7 +56,7 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 ## Gate 1 — global sharp FULL-TURN area, using one joint loss mechanism
 
-**Status: BLOCKED.** First prove PLAN.3 with \(\alpha=\gamma=\pi/2\) (outgoing barriers redundant):
+**Status: ACTIVE (October 9, 2026).** Gate 0's original-motion bridge has passed written audit. The full-turn global charge remains **UNPROVED**, with the actual clipped union of both inner-ray sweeps the key mathematical barrier. First prove PLAN.3 with \(\alpha=\gamma=\pi/2\) (outgoing barriers redundant):
 \[
 \boxed{
 \int_I\big[\max(d_V,n_-)+\max(d_U,n_+)\big]\,dx
@@ -94,12 +96,12 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 6. **No deferred work promise:** perform current-session work and report the result; never assert background progress or promise a delivery date.
 7. **Repository discipline:** [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3), branch research/ambidextrous-pen-and-paper; all research commits marked [skip ci]; no CI, Lean/Lake, or original Lean library changes.
 
-## Gate status at adoption (2026-10-09)
+## Current gate status (updated October 9, 2026)
 
 | Gate | Status | Concrete missing step |
 |---|---|---|
-| 0 — original-motion bridge | **ACTIVE** | Independent scrutiny of OS1, GH/Note 10, GC4 and terminal-strip normalization |
-| 1 — coupled full-turn loss | **BLOCKED** | No global transport from arbitrary outer-support area to entire union of two swept inner-ray losses, especially opposite-end faces |
+| 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
+| 1 — coupled full-turn loss | **ACTIVE** | Need global transport from arbitrary outer-support area to complete union of two swept inner-ray losses, especially opposite-end faces |
 | 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
