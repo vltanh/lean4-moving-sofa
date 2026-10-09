@@ -165,6 +165,26 @@ The user asked to **deprioritize the two-cap clipping-deficit inequality as the 
 
 Key acceptance test for a numerical counterexample: connected rational body; explicit entire motion paths with exact hallway inequalities and true outgoing arms; **exact rational area** exceeding some rigorous rational upper enclosure of \(M\). [UV2](univariate-rational-motion-certificate.md) now reduces each full-path hallway check for rational square cells to univariate polynomial sign conditions of degree at most five, **without positive clearance**. This improves verification, not the search for an actual area excess. Finite pose sampling, approximate area, or a fixed threshold \(329/200\) alone are not a complete search. The exact witness theorem supplies existential completeness, **not** a tractable search schedule or a proof of the conjecture if the search does not halt.
 
+### Essential interpretation correction: outer supporting contacts **plus the moving inner corner**
+
+The user's intended construction was **outer wall and physical corner first**, **then** carve the inner-wall niche. An earlier assistant response incorrectly discussed **outer walls alone**. See the [corrected geometry and rigorous example](outer-wall-and-moving-corner-first.md).
+
+For each conventional angle, if the outer walls support a proposed convex hull \(K\), their perpendicular normals \(u_t,v_t\) and supports \(f=h_K(u_t),g=h_K(v_t)\) force the physical inside-corner trajectory:
+\[
+c_K(t)=(f(t)-1)u_t+(g(t)-1)v_t.
+\]
+The two attached inner-wall rays bound an exact tent-shaped forbidden quadrant with roof
+\[
+w_t(x)=c_y(t)-
+\begin{cases}
+(c_x(t)-x)\tan t,&x<c_x(t),\\
+(x-c_x(t))\cot t,&x\ge c_x(t).
+\end{cases}
+\]
+This is Romik's Section 2 rotation-path/contact-point parameterization, not a separate novel formula. The crucial detail: at Romik's 45-degree midpoint, \(c_{K_*}=(0,H_*)\) with \(0.28<H_*<0.41\), **strictly inside the actual outer convex hull**. The single-angle inner-wall rays carve a triangle of area \(H_*^2\) on each hand, total \(2H_*^2\), from the reference's central rectangle. Thus insisting **the convex hull** avoids the point corner would exclude the desired reference. One must allow the **hull** to cover the corner and require only the *carved sofa* to avoid the forbidden wedges.
+
+An additional exact negative control shows that if one keeps **auxiliary** outer walls and only avoids the moving point-corner trajectory, while omitting the attached inner-wall rays and actual-hull consistency, connected central rectangles of area \(W-4\) survive for arbitrarily large \(W\). This does **not** refute a self-consistent hull-plus-corner/contact program; it establishes why the inner **rays** and geometric admission are essential. The promising reformulation is to jointly optimize the *corner path and outer supporting envelope*, then subtract the complete union of moving wedges. This still needs a sharp global area comparison, including partial terminal angles.
+
 ### Current direction: construct the outer convex hull, then charge inner-wall carving
 
 The user proposed separating the **outer supporting-wall hull** from the **inner forbidden niche carving**. The exact [OH1–OH3](outer-hull-first-carving-audit.md) study confirms this is a valid *parametrization* and a natural framework for a future **nonseparable** comparison, but **not** a way to maximize the outer hull separately:
