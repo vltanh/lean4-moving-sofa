@@ -1,3 +1,5 @@
+> **ARCHIVED ROADMAP (October 9, 2026).** This chronological document is no longer the active research plan. For the ONE governing sharp-proof target, acceptance tests, stop rules, and current gate statuses, use [SHARP-OPTIMALITY-EXECUTION-PLAN.md](SHARP-OPTIMALITY-EXECUTION-PLAN.md). Continue using [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) for the complete technical ledger. The numerical upper bounds below are historical; no new unrestricted sharp bound is claimed.
+
 # Active roadmap: identify the sharp value inside a now bounded global problem
 
 **The exact optimum M is not proved for full or partial turns.** JD1 now gives the global computer-free bound \(2\sqrt2-1-1/51\approx1.808819\) for both motion classes, superseding the intermediate JH1 \(1/90\) and QT1 \(1/175\) improvements, though still weaker than O'Keefe's externally computer-certified 1.765. The other finite-offset results do not identify M. Read [HANDOFF.md](HANDOFF.md) before continuing.
