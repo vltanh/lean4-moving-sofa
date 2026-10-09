@@ -211,7 +211,32 @@ Finally, if a genuinely ambidextrous **convex** sofa had area \(>10/7\), then it
 
 For the comparison with Romik, [Note 10](10-wrong-angle-exclusion.md) establishes \(M>8/5>10/7\) directly from the positive cubic root bounds; no numerical approximation to \(M\) is needed.
 
-## 5. What this does and does not establish
+## 5. Exact **finite-position lower witness** and remaining gap
+
+The certified \(10/7\) bound is not merely a huge overestimate of the two-corner **convex finite-position relaxation**: there is a simple exact lower witness of area \(\sqrt2\).
+
+In the physical incoming-strip coordinates, let
+\[
+\boxed{C_\diamond=
+\{(x,y):0\le y\le1,\quad0\le x+y\le\sqrt2\}.}\tag{CV.12}
+\]
+This is a compact convex parallelogram. At every \(y\in[0,1]\) its horizontal fiber is
+\([-y,\sqrt2-y]\), length exactly \(\sqrt2\), so
+\[
+\boxed{|C_\diamond|=\sqrt2.}\tag{CV.13}
+\]
+
+At either proper \(45^\circ\) canonical frame, the two opposed hallway normals include respectively \(u=(1,1)/\sqrt2\) and \(-u\). The **full convex body's directional width** in \(u\) is exactly one. At the lower \(45^\circ\) placement the \(u\)-inner-wall safety alternative protects *every point* because its full support depth is \(\le1\); at the upper-handed \(45^\circ\) placement the corresponding \(-u\)-inner-wall alternative does the same. Its vertical incoming span is one. Therefore \(C_\diamond\) satisfies **both** selected corner positions with true canonical supporting offsets and needs no removal of inner-corner material at those positions.
+
+Thus the exact optimum \(A_{\rm convex,2pos}\) of this **two-angle finite-position relaxation** lies in the rigorous interval
+\[
+\boxed{\sqrt2\le A_{\rm convex,2pos}\le\frac{10}{7}.}\tag{CV.14}
+\]
+The upper endpoint exceeds the lower by only about \(1.02\%\) of the lower value. The numerical minimax screens consistently selected a one-unit diagonal strip of this type, suggesting that the exact relaxation value may be \(\sqrt2\), but **that equality is not proved**. Nor is \(C_\diamond\) claimed to complete both continuous quarter turns; it is an exact lower witness for **just the two prescribed poses**, not a counterexample to any full-turn area theorem.
+
+This sharpness check explains why merely refining the two static midpoint corners cannot turn CV1 into the Romik area theorem for arbitrary **nonconvex** sofas. The essential additional ingredient remains the **full continuum of moving corner/ray sweeps and the geometry of the surviving nonconvex branches**.
+
+## 6. What this does and does not establish
 
 **Established:** Every true convex ambidextrous sofa has area **strictly less** than Romik's existing feasible nonconvex candidate, with a comfortable rational gap \(M-10/7>1/20\). The result applies to *all original motion histories*, not just globally maximized convex shapes. It is an honest **ordinary-area** theorem from the same moving corner and outer-wall contact geometry proposed by the user.
 
