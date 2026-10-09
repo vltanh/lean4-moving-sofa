@@ -141,6 +141,13 @@ Even that inequality, if true, would settle only **inclusion-comparable outer en
 
 The advantage of OH.15 as a research language is that the difficult mixed-niche credit \(G\) does not appear at all: newly forbidden lower and upper regions are **one union**, so overlap is automatically charged once. The distinction between old and newly attached material also prevents treating an outer hull increase as a sofa area increase. This is a strictly exact, universally valid gain/loss identity; by itself it is not stronger than the unsolved global area bound.
 
+**Both signs actually occur.** For nested concentric disks \(K_{1/8}\subset K_{1/4}\) centered at height \(1/2\), both complete motions are feasible throughout the larger disk because its diameter is below one. Thus \(F(K_{1/4})\cap K_{1/4}=\varnothing\): the shadow-loss term is zero and OH.15 gives the strictly **positive** gain
+\[
+|E(K_{1/4})|-|E(K_{1/8})|
+=\pi[(1/4)^2-(1/8)^2]=3\pi/64>0.
+\]
+By contrast, for the nested pair \(K_*\subset K_3\) of OH.9 the **net** change is strictly negative. Hence no bare inclusion principle \(|E(K_0)|\le|E(K_1)|\), or its reverse, can be valid on all convex hulls. A sharp reference comparison must use the *quantitative geometry* of the exact positive and negative terms of OH.15.
+
 ## 4. A correct self-consistent hull-first procedure
 
 For a proposed compact convex hull \(K\) in the incoming strip, define the complete canonical survivor
