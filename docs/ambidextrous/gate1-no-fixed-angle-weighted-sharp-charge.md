@@ -28,6 +28,17 @@ J\Subset(\beta,\pi/2-\beta),\quad\beta=\arctan Y,
 \]
 on which the contact velocities are strictly \(p=f_*'-g_*+1<0<q=g_*'+f_*-1\), the moving-corner x-coordinate \(\xi_t\) is strictly decreasing and \(\eta_t>0\). These inequalities follow from the explicit reference support formulas ([RH.2](romik-horizontal-misalignment-sharp-bound.md), [PJ-MID](spatial-half-partition-middle-arc-variation.md)). Shrink J to preserve strict margins; its image \(X=\xi(J)\) has positive length.
 
+For an explicit interior witness requiring no plotted reference chart, put \(R=\cos\beta/\sin(3\beta/2+\pi/8)\) in the middle support formula. At \(t=\pi/4\),
+\[
+\boxed{
+p(\pi/4)=1-\frac{3R}{2\sqrt2}<0,\qquad
+q(\pi/4)=\frac{3R}{2\sqrt2}-1>0,\qquad
+\xi_{\pi/4}=0,\quad
+\eta_{\pi/4}=R+\frac12-\sqrt2>0.
+}
+\]
+The documented strict reference bounds \(1.28<R<1.31\) verify the displayed inequalities by rational square comparisons. Since \(\xi'(\pi/4)=\sqrt2\,p(\pi/4)<0\) and the support pieces are analytic on the middle phase, they persist on a compact nondegenerate interval \(J\) about \(\pi/4\). This explicitly proves the existence of the positive-length chart X used below, rather than inferring it from a drawing.
+
 **Lemma ANG1 (unique global angular exposure).** For every \(t\in J\), the *entire continuum* roof \(s\mapsto q_s(\xi_t)\) has a **strict unique global maximum** at \(s=t\):
 \[
 \boxed{
