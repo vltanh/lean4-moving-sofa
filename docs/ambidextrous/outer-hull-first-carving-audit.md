@@ -180,7 +180,37 @@ This is the one-step support-tightening repair from [FH3](feasible-hull-minkowsk
 
 For a globally maximizing body, the chosen hull may therefore be taken **self-consistent**, and no candidate needs to credit disconnected components as a connected sofa.
 
-## 5. The precise remaining optimality obligation
+## 5. A genuine paid-shadow comparison for the reference's horizontal enlargement
+
+The outer-minus-inner accounting is **not merely diagnostic** in every direction. The already established near-reference [NR.11–NR.12](near-reference-positive-minwidth-slack.md), based on the self-reviewed regular one-turn calibration, gives a **sharp ordinary-area comparison** for a one-parameter family of true full-turn envelopes.
+
+Take the actual Romik reference hull \(K_*\) of vertical span one and, for \(0<\delta\le1/16\), form
+\[
+K_\delta=K_*+[-\delta/2,\delta/2]e_x.
+\tag{OH.17}
+\]
+The area of the **outer convex hull** increases by exactly \(\delta\): every nonempty horizontal section is extended by a segment of length \(\delta\), and the y-projection has length one. Thus
+\[
+\boxed{|K_\delta|-|K_*|=\delta.}\tag{OH.18}
+\]
+But the fully canonically carved full-two-turn envelopes obey the already proved (subject to its cited regular-calibration dependencies)
+\[
+\boxed{|E(K_\delta)|\le M-\frac9{20}\delta^2<M
+=|E(K_*)|.}\tag{OH.19}
+\]
+Define the **ordinary removed-inner-sweep area within the hull**
+\(\mathcal R(K)=|K|-|E(K)|\); it counts the actual union of the two forbidden sweeps inside the hull and handles their overlap *once*. Subtract OH.18 and OH.19 to obtain the exact lower **payment**:
+\[
+\boxed{
+\mathcal R(K_\delta)-\mathcal R(K_*)
+\ge\delta+\frac9{20}\delta^2.
+}\tag{OH.20}
+\]
+So every unit of new hull area is paid by **at least** one unit of newly removed inner-sweep area, with an additional explicit quadratic loss. This is a rigorous instance of the proposed hull-first proof mechanism at an actual analytic candidate, not a claim that the payment holds for *all* outward perturbations or arbitrary hulls.
+
+In terms of the exact nested-shadow identity OH.15, the change in surviving ordinary area is at most \(-9\delta^2/20\); therefore the **old safe material made newly unsafe** outweighs the genuinely surviving new outer material by at least that amount. Extending this *sign* to all nested enlargements, and then to nonnested competitor hulls, remains an independent global research task.
+
+## 6. The precise remaining optimality obligation
 
 The geometric sequence **outer hull → canonical inner niches → ordinary area → support retightening** is correct and globally covers complete conventional turns. The true target is not
 \(\max |K|\), but rather the *coupled* functional OH.11. A sharp proof would require a universal comparison showing
