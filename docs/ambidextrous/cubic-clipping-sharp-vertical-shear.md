@@ -166,6 +166,35 @@ G(U_\lambda,V_\lambda)
 \]
 Thus the global bound MC3 cannot be improved to \(o(\lambda^3)\) uniformly over unit-height hull directions, and the cubic term cannot simply be dropped from the global signed-area comparison.
 
+## 4. A global star-concavity shortcut that is **provably false**
+
+A tempting proof decomposition is to seek concavity of each *weighted one-turn* functional \(\Psi\) and separately demand a Jensen lower bound on the positive clipping interaction:
+\[
+\boxed{G(U_\lambda,V_\lambda)\stackrel{?}{\ge}
+(1-\lambda)G(U_*,U_*)+\lambda G(U^{(a)},V^{(a)})
+=\lambda G(U^{(a)},V^{(a)}).}\tag{SH.12, FALSE}
+\]
+Such an inequality would make the full signed area star-concavity follow by adding the three purportedly concave terms. But SH.12 fails **on the exact vertical shear family just constructed**.
+
+For each fixed sufficiently small positive a, the terminal outer-flank and stationary-ray expansions above also hold along the *entire* interpolation \(0\le\lambda\le1\) (the small fixed shear preserves the strict reference curvature gap, after reducing a if necessary). Taking \(\lambda=1\) and letting a tend to zero gives
+\[
+G(U^{(a)},V^{(a)})=\frac{a^3}{6}+O(a^4)>0
+\qquad(0<a\ll1).
+\]
+For this same fixed a, however,
+\[
+\frac{G(U_\lambda,V_\lambda)}{\lambda}
+=\frac{a^3}{6}\lambda^2+O_a(\lambda^3)\longrightarrow0
+\quad(\lambda\downarrow0).
+\]
+Thus for all sufficiently small positive \(\lambda\),
+\[
+\boxed{G(U_\lambda,V_\lambda)
+<\lambda G(U^{(a)},V^{(a)}).}\tag{SH.13}
+\]
+
+**Consequences:** Even if one succeeded in proving that the two individual \(\Psi\)-terms are Minkowski-concave on the unit-height cap class, the positive cross-handed clipping credit is **not** Minkowski-star-concave and cannot be added term by term. The combined star-concavity proof must exploit a **quantitative extra Jensen gain** from the cap terms large enough to pay the missing clipping Jensen mass. This is exactly the nontrivial *global deficit-versus-clipping charge* that remains unresolved. The false SH.12 inequality is excluded rigorously by real, smooth, unit-height convex hulls, with no random numerical optimizer.
+
 **What this does *not* imply:** The signed full-turn sofa-area functional is
 \(
 \mathscr S(K_\lambda)
