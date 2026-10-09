@@ -193,7 +193,51 @@ Thus the off-diagonal corner test detects a **pure two-handed interior-fiber obs
 
 The [exact Fraction checker](computer-assisted/check_two_corner_packing.py) computes CP.10–CP.12, the polygon's convexity, and the diagonal rational comparisons. The proof of CP1 itself is elementary and independent of the checker.
 
-## 5. How this might enter a sharp proof
+## 5. All corner–outer-wall and corner–corner tests give an exact admission criterion
+
+The paired condition CP.3 is necessary but does not, by itself, make the proposed convex hull a genuine full-turn sofa hull. There is a clean **exact converse when every relevant outer boundary and every corner pair is checked**.
+
+For arbitrary compact convex \(K\subset\mathbb R\times[0,1]\), let \(I=[l,r]\), let \(a_K(x),b_K(x)\) be its upper/lower vertical hull roofs, and let \(T_t^-,T_s^+\) be the two moving-corner tent roofs defined by CP.1–CP.2, for **all** \(t,s\in(0,\pi/2)\). Make the following three families of inequalities:
+\[
+\begin{array}{lll}
+\text{lower corner vs. outer top:}
+&T_t^-(x)\le a_K(x)&\forall x\in I,\ \forall t,\\
+\text{upper corner vs. outer bottom:}
+&T_s^+(x)\le1-b_K(x)&\forall x\in I,\ \forall s,\\
+\text{lower corner vs. upper corner:}
+&T_t^-(x)+T_s^+(x)\le1
+&\forall x\in I,\ \forall t,s.
+\end{array}\tag{CP.13}
+\]
+
+**Proposition CP2 (complete no-pinch criterion).** The full two-handed canonical envelope \(E(K)\) has a nonempty interval fiber over **every** \(x\in I\) if and only if **all three** inequalities in CP.13 hold. In that case \(E(K)\) is connected. Furthermore \(K\) is itself the *actual convex hull of some compact connected full-two-turn sofa* if and only if CP.13 holds **and every extreme point of \(K\)** survives both complete families of corner/ray constraints.
+
+**Proof.** Write \(F(x)=\max(0,\sup_t T_t^-(x))\) and \(G(x)=\max(0,\sup_s T_s^+(x))\). Since \(0\le b_K\le a_K\le1\), the canonical fiber is precisely
+\[
+E(K)_x=[\max\{b_K(x),F(x)\},
+          \min\{a_K(x),1-G(x)\}]
+\]
+when the left endpoint is no greater than the right, and empty otherwise. If CP.13 holds, its first two families give \(F\le a_K\) and \(G\le1-b_K\). The third gives \(F+G\le1\): when both suprema are positive this follows by taking their double supremum, and when one is zero it follows from \(F\le a_K\le1\), \(G\le1-b_K\le1\). Together these three facts force the displayed lower endpoint to be at most its upper endpoint. Conversely, if a fiber is nonempty, choosing one of its actual points between the two boundaries proves all three inequalities at that \(x\).
+
+Compactness and full interval projection imply connectedness by the standard interval-fiber argument. For the final assertion, a connected feasible body with hull \(K\) must contain all extreme points and occupy every abscissa, so both conditions are necessary. Conversely when both hold, \(E(K)\) is connected, contains every extreme point of \(K\), and has \(\operatorname{conv}E(K)=K\) by the finite-dimensional extreme-point hull theorem; its canonical supporting motions are continuous and its full-quarter endpoint strips are automatic. This is the previously proved hull-admission result [FH2](feasible-hull-minkowski-nonconvexity.md), now written entirely as **outer-wall–corner and corner–corner** geometric tests. \(\square\)
+
+For **partial** terminal turns the same proof works only after adding the two complete outgoing **straight-arm strip barriers** as additional lower/upper affine gates, exactly as in [OS1](original-motion-signed-convex-domain.md). Omitting them invalidates the converse.
+
+### Crucial limitation at the Romik reference: corner pairs have uniform slack
+
+Let \(K_*\) be Romik's actual convex hull. The existing explicit whole-angle corner-ceiling proof [ME/NR](near-reference-positive-minwidth-slack.md) gives
+\(\eta_t,\theta_s<13/30\) for **every** pair of complete turning angles, due to the candidate's height-reflection symmetry. Hence
+\[
+\boxed{
+\eta_t+\theta_s<13/15<1
+\quad\text{for all }t,s;
+\qquad
+1+d_{t,s}^I-\eta_t-\theta_s>\frac2{15}.
+}\tag{CP.14}
+\]
+Thus the **pair-corner packing inequality is not even asymptotically active at the proposed optimizer**. It can exclude distant, pinched or asymmetric hulls and supply useful necessary support restrictions, but it cannot *by itself* generate Romik's sharp Euler–Lagrange contact equations or certify area \(M\). A complete proof must also quantitatively charge the movement of the attached **inner-wall ray envelopes** against the gain on the **outer-wall contact curves**. The full ordinary-area niche carving remains indispensable.
+
+## 6. How this might enter a sharp proof
 
 The corner-pair constraints **couple the two turns before any niche area is integrated**. For any candidate maximizing hull, all selected pairs \((t,s)\) in its *actual visited intervals* satisfy CP.3. The constraints depend **only on four support values** (two for each corner), and the support values are affine under Minkowski interpolation. For rational Pythagorean normal pairs they are exactly rational on rational polygonal hulls. They therefore supply inexpensive, continuum-valid rejection inequalities for a future area certificate or for restricting global variational contact paths.
 
