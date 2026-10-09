@@ -4,6 +4,8 @@
 
 **This does not prove** Romik's unrestricted optimality. It shows in exact ordinary area why the moving **corner trajectory by itself** is not sufficient: at Romik, the inner-wall rays remove more than \(729/40000\) additional area **per handed turn** outside every vertical corner shadow, and the true additional amount is about \(0.03844029048\) per turn. No unproved full/partial completion, convexification of the sofa, or \(G\)-inequality is used.
 
+A further sharp near-reference calibration for the **complete inner rays** is now established in [VC1–VC3](vertical-corner-frozen-ray-calibration.md). It controls two independently perturbed upper support arcs with (C^1)-smallness but *no new curvature upper bound*, by combining the actual geometric corner/front graphs with the old reference exposure witnesses; it gives a strict coercive ordinary-area deficit and constructs fully feasible near-(M) two-peaked corner paths. This does not solve unrestricted optimality.
+
 Related existing results: [OC](outer-wall-and-moving-corner-first.md) establishes the corner and individual tent formulas; [DC2](pr7-double-crossing-area-transfer.md) handles horizontal-slice connectivity **only under a single-peak angular hypothesis**; [SR1](curvature-only-signed-roof.md) handles signed niche area **under curvature domination**; [FV1](full-turn-unconstrained-envelope-variation.md) permits disconnected full-turn envelopes for global variational comparisons. The construction here is an **unconditional geometric area identity**, with exact components even when the superlevel angle set has arbitrarily many components. It does not claim these familiar coarea/Fubini principles to be inventions.
 
 ## 1. The outer support fixes the moving corner and its attached inner rays
@@ -42,7 +44,7 @@ For any \(0<y<H\), let
 \mathcal T_y=\{t\in T_-:\eta_t>y\}.
 \tag{CF.3}
 \]
-Because the actual support function and corner path are continuous, this is open in the angular interval. It is a **countable disjoint union of open intervals** \(\mathcal T_y=\bigcup_j J_j(y)\), with no one-peak or finite-switch assumption.
+Because the actual support function and corner path are continuous, this is open in the angular interval. If an original visited interval is closed, we may take its relative interior: every point in an endpoint's **open** forbidden quadrant remains strictly forbidden for some sufficiently nearby interior angle, by continuity of the moving outer supports. Thus neither the ambient open sweep nor its ordinary planar area changes by omitting its two isolated endpoint parameters. This endpoint reduction does **not** assert that an outgoing **whole-body straight-arm strip** may be omitted for a partial turn. It is a **countable disjoint union of open intervals** \(\mathcal T_y=\bigcup_j J_j(y)\), with no one-peak or finite-switch assumption.
 
 For each connected component \(J=J_j(y)\), define
 \[
