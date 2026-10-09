@@ -1,5 +1,16 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+**October 9 Gate 1 global one-dimensional physical-ray reduction (VALUE UNPROVED):** [HT1–HT15](gate1-top-segment-core-full-niche-intervals.md) shows every downward convex height-one cap with positive top-face length \(T\) has an **exact** point-top convex core \(V=U\ominus[0,T]e_x\) with \(U=V+[0,T]e_x\). For *every* physical turning angle and positive height \(y\), the attached two-inner-ray forbidden section is exactly the interval
+\((a^V_t(y),b^V_t(y)+T)\): the left endpoint is independent of T and the right moves by exactly T. Thus the **whole continuous niche** is the union of these intervals, with any possible countable disconnection/overlap retained, and the entire spatial one-cap score SD.2 becomes the exact level-by-level equation
+\[
+\mathcal P(V+[0,T]e_x)
+=\int_0^1 E_{V,T}(y)\,dy
+-\int_0^\infty\left|J_T\cap\bigcup_t(a_t^V(y),b_t^V(y)+T)\right|dy.
+\]
+Point-top caps are limits of caps with \(T>0\), so this is a **globally value-exhaustive**, not contact-local, description. A universal consequence is
+\(|N(V+[0,T]e_x)|\ge|N(V)|+T H_N(V)\), but this is **not sharp at Romik** and does *not* prove SD.3, the full-turn sharp inequality, or any partial-turn bound. The required global 1D interval-union area charge HT.15 remains **OPEN**. This is one supporting structural transformation within the existing active Gate 1 global maximizer proof, **not a passed gate or a new numerical upper bound**.
+
+
 **October 9 Gate 1 all-angle tilted-facet pinning (VALUE STILL OPEN):** [TF1–TF3](gate1-spatial-tilted-facet-pinning.md) adds an unconditional support-locality argument **at any global maximizer** of the active spatial one-cap score \(\mathcal P\), after the global affine-middle normal form MID2. If its middle facet slope \(s\ne0\), the inner wall at its outer normal \(n_c=(-s,1)/\sqrt{1+s^2}\) misses the entire positive central niche with **strict margin** \(\delta_s=1-1/\sqrt{1+s^2}>0\). Any charged exterior wing point whose normal cone falls inside that inactivity neighborhood can be lifted by a genuinely convex downward-preserving bump: the **whole continuous-angle middle niche stays exactly unchanged** while the charged exterior area strictly increases. Thus no global maximizer has a tilted middle facet extending beyond J or tangentially meeting either wing; it necessarily has
 \[
 \boxed{A'_-(j_-)>s>A'_+(j_+).}
