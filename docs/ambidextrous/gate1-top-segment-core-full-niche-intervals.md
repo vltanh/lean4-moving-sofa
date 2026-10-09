@@ -97,6 +97,34 @@ Let \(H_N(V)=\sup\{y>0:N_y(V)\ne\varnothing\}\) (zero for empty niche). The down
 \]
 This is not claimed sharp at Romik; the niche of a point-top core can have zero positive height even though adding T creates a substantial new niche. It does **not** prove the sharp Gate 1 spatial bound.
 
+### Critical **sharpness obstruction**: Romik's point-top core has **no positive niche**
+
+One must **not** replace the exact union formula HT.8 by the coarse Minkowski-growth bound HT.10 in an attempted sharp proof. At the known equality cap \(U_*\), that lower bound pays **none** of its actual niche.
+
+Indeed the Romik cap has top face \([-b,b]\) of length \(T=m=2b\). Let \(V_*=U_*\ominus([0,m]e_x)\) be its exact point-top core. On the two proper source quarters, horizontal Minkowski addition gives
+\[
+f_{U_*}(t)=f_{V_*}(t)+m\cos t,\qquad
+g_{U_*}(t)=g_{V_*}(t).
+\]
+The homogeneous cosine mode has \((D^2+1)\cos t=0\). Hence the **open-quarter support-curvature densities** of \(V_*\) are precisely those of \(U_*\), and the explicit reference formulas prove
+\[
+0\le f_{V_*}''+f_{V_*}\le1,\qquad
+0\le g_{V_*}''+g_{V_*}\le1
+\]
+on the full open proper source quarters, with no interior curvature atoms.
+
+The all-angle [SR Section S.1–S.2](curvature-only-signed-roof.md) one-turn confinement lemma places the **projection of every positive niche point** of a height-one downward convex cap under those curvature bounds inside its *actual top-face interval*. The core \(V_*\) has only the one-point top face \(\{-b\}\times\{1\}\), so a positive niche of nonempty planar interior would require a nontrivial positive x-projection, which is impossible. Equivalently,
+\[
+\boxed{N(V_*)=\varnothing,\qquad H_N(V_*)=0.}\tag{HT.10a}
+\]
+But the explicit Romik reference has
+\[
+\boxed{|N(U_*)|>0}
+\]
+(the exact ordinary positive area is approximately \(0.184193197089\), and the nonzero 45-degree corner is an independent analytic witness). Thus **all** the candidate's actual forbidden niche is **newly created by the top horizontal segment**, not obtained by translating/dilating a preexisting positive core niche.
+
+Consequently HT.10 is *strictly non-sharp at the equality witness* and **cannot possibly imply the Gate 1 sharp inequality alone**. The full one-dimensional **birth, merger and overlap** of the intervals \((a_t,b_t+T)\) in HT.8 must be paid in the global estimate. This is a precise mathematical stop-rule, not another unproved conjecture.
+
 ## 3. Exact **one-dimensional Gate 1** formula, without clipping mistakes
 
 Let the point-top core V have horizontal projection \([l,l+w]\), height one, and sections \(V_y=[L(y),R(y)]\). The cap \(U_T=V+[0,T]e_x\) has width \(W=w+T\), projection \([l,l+w+T]\) and moving central middle-half interval
