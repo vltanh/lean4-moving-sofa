@@ -69,6 +69,20 @@ G(U,V)\stackrel{?}{\le}
 
 for every **actual compatible full-turn two-cap pair** in the relevant normalization, including nonsmooth and asymmetric cases. A proof of this, with the required geometric admission, would settle the *full-turn* value. Handling unrestricted **partial turns** is a separate obligation. The inequality is not asserted for arbitrary incompatible abstract caps.
 
+### Exact falsification of **general fixed-height signed Minkowski concavity** (Oct 9, later)
+
+[RCX1](exact-unit-height-signed-concavity-failure.md) is a new explicit, **fully analytic counterexample** on **genuine connected full-two-turn sofas with their actual hulls**. For width \(W\in(2(\sqrt2-1),1]\) let \(K_W=[-W/2,W/2]\times[0,1]\) and \(S_W\) its canonically saturated complete two-turn envelope. Every \(S_W\) is connected, feasible, has full unit vertical span and *actual hull* \(K_W\), with no empty fibers or cross-cap clipping. The complete lower swept-niche roof is the reverse moving-corner graph
+\(n_W(x)=(W\sin t\cos t+1-\sin t-\cos t)_+\) at the unique t solving \(x=\tfrac W2\cos2t+\sin t-\cos t\).
+Its exact area near \(W=1^-\) is
+\[
+\boxed{\mathscr S(K_W)=|S_W|
+=\frac\pi4W^2-W+\pi-2-2R_N(W),\quad
+0\le R_N(W)\le90(1-W)^3.}
+\]
+With \(W_-=4999/5000,\ W_0=9999/10000,\ W_+=1\), the hulls satisfy the **exact** Minkowski midpoint relation, but the signed full two-turn area satisfies the opposite of concavity, with a strictly **positive Jensen violation** greater than \(678/(1000\cdot10000^2)\). This uses just \(\pi>3\), Taylor bounds and whole-angle monotonicity, no sampling, no CI or Lean. It also refutes Minkowski concavity of the separate *weighted one-turn* objective \(\Psi\) on all height-one normalized caps.
+
+**Do not attempt to close the sharp proof by asserting generic Minkowski concavity of signed full-turn area on the whole unit-height domain. It is FALSE, even without pinching.** This does **not** refute the weaker star-concavity claim anchored at Romik's support, or a concavity assertion restricted to *competitive horizontal widths \(W>2\)*, or any sharp upper bound \(M\). Those remain unknown, and the true original problem still includes partial turns. RCX is a rigorous **stop-rule for an invalid global proof mechanism**, not a claimed advance in the optimal area value.
+
 ### Oct 9 focused star-concavity audit: exact cubic shear obstruction, global inequality still OPEN
 
 A targeted [exact shear calculation](cubic-clipping-sharp-vertical-shear.md), beyond finite numerical interpolation tests, now establishes that MC3's \(O(\lambda^3)\) *positive clipping* bound is **optimal in order**. Let \(T_a(x,y)=(x+a(y-1/2),y)\) with sufficiently small fixed \(a>0\), and let
