@@ -187,6 +187,30 @@ These are **unrestricted structural necessities**, not a sharp global area upper
 
 **Strengthened checkpoint:** The initially proved \(31/20=1.55\) convex theorem has since been upgraded to the **exact rational \(3/2=1.5\)** area bound, using [the same verified checker](computer-assisted/check_convex_two_corner_area.py) with a sound extra projection-width enclosure. Its stronger exhaustive replay has **100,161 visited boxes, 50,079 leaves, maximum depth 24, and no unresolved cells**, independently re-executed locally. Consequently [NC3](mandatory-competitive-convex-hull-niche.md) strengthens the unrestricted necessary carving: every \(|S|\ge M\) sofa has a real \(45^\circ\) corner with both support depths \(>1047/1000\), and an ordinary missing convex-hull area **\(>1/2500\)**, with a \(47/2000\) Hausdorff gap from any convex two-pose-compatible shape. These are self-reviewed computational/analytic research results, **not** the sharp unrestricted upper bound.
 
+### Further October 8 advance: full-ray **above-\(M\)** exclusion on four asymmetric hull supports and genuine **partial** exits
+
+The latest rigorous work focuses on the user's **outer-wall contacts + moving physical corner + complete inner-ray sweep** rather than continuing the convex-sofa certificate.
+
+- [FA2](four-independent-corner-ray-local-calibration.md) extends the **frozen-reference complete-ray calibration** to **four independently varied middle source support arcs** (two each from the upper actual hull and the vertically reflected lower hull). **Neither left-right nor vertical reflection symmetry is assumed.** Convexity turns Hausdorff-smallness into one-sided derivative closeness even with curvature atoms, so no **upper** new curvature bound, \(C^2\)-smallness or new active-contact-chart assumption is needed. The complete ordinary two-full-turn area of the genuine connected, exact-hull canonical saturation satisfies
+  \[
+  \boxed{|E_{L,L}(K)|\le M-
+  \tfrac12(1-|J_0|/\pi)\int_{J_0}
+  (|\phi_U'|^2+|\psi_U'|^2+
+   |\phi_V'|^2+|\psi_V'|^2)\,dt.}
+  \]
+  This **excludes area-\(>M\)** competitors in an open Hausdorff neighborhood *within the fixed-outside-\(J_0\) support subspace*. It is stronger than constructing arbitrarily near-reference shapes **from below**; every nonzero perturbation in the specified whole class is uniformly below \(M\).
+- [EP4–EP5](romik-terminal-angle-outgoing-strip-rigidity.md) adds the **genuine whole-body outgoing endpoint strips** and expands the sharp-sign angular comparison across the **entire Romik terminal circular phase**, not just infinitesimal rotation deficits. For independent early-stop angles \(\alpha=L-\delta_-,\gamma=L-\delta_+\), \(0\le\delta_\pm\le\beta=\arctan Y\) (i.e. each angle **at least about \(73.4^\circ\)**), the exact ordinary partial-turn envelope obeys
+  \[
+  \boxed{
+  |E_{\alpha,\gamma}(K)|\le
+  M-\tfrac12(1-|J_0|/\pi)\mathcal E_4(K)
+  -\tfrac18(\delta_-^{3/2}+\delta_+^{3/2}).
+  }
+  \]
+  The real geometric mechanism is that an **outgoing strip** removes old reference material along a *curved exterior flank* at order \(\delta^{3/2}\), while deleting the terminal inner-ray angles can save **only a circular niche tail of order \(\delta^3\)**. The outgoing lower and upper removals live in disjoint vertical strips. This provides an original **partial-turn exclusion** for a non-symmetric Hausdorff-small support neighborhood, without an unjustified completion to full turns.
+
+The two theorems are self-reviewed and have strict domain limitations. They do **not** cover changed supports near the reference switching angles or axis normals, shifted/misaligned horizontal faces, far global competitors, or smaller partial terminal angles. They therefore do **not prove unrestricted sharp optimality**, but directly exclude genuine *above-\(M\)* possibilities within a larger joint **support × terminal-angle** region than previously considered.
+
 ### New area breakthrough for a nontrivial class: all convex sofas \( \le3/2 \), and a mandatory niche for every competitive sofa
 
 [CV1–CV2](convex-sofa-two-corner-area-certificate.md) is an **ordinary-area theorem**, not merely another compatibility or width test: **every compact convex ambidextrous sofa, with arbitrary original motions, has area at most \(3/2=1.5<M\)**. In fact the same bound holds for every convex body fitting just the incoming strip and the **two opposite canonical \(45^\circ\) hallway positions**. The argument uses the user's **outer supporting walls plus forced physical corners** and the attached inner-wall rays. For a convex *sofa itself* (not the hull of a nonconvex sofa), avoidance of each open corner quadrant yields, by convex separation, a supporting halfplane through that sharp corner. In area-preserving diagonal coordinates \((U,V)\), the resulting convex body is in a rectangle of its two actual support widths \(P,Q\), between two weighted corner support lines, and inside one strip \(z\le U+V\le z+\sqrt2\).
