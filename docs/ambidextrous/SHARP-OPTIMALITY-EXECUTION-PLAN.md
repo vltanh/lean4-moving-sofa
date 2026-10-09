@@ -149,6 +149,14 @@ By the passed global PG1 reduction, **one may and should first prove this for al
 
 **Alternative equivalent syntax, not a second project:** The exact signed identity \(\mathscr S=\Psi(U)+\Psi(V)+G\) makes the same requirement \((M/2-\Psi(U))+(M/2-\Psi(V))\ge G\) for genuine full-turn compatible cap pairs. The \(\Psi\le M/2\) theorem has a long self-reviewed dependency chain. This equivalence may be used to **audit a proposed transport proof**; it is **not** a license to assume the missing clipping budget or re-start a separate weighted one-turn optimization.
 
+### G1.2 rejected sharp-charge mechanism: **finite fixed-angle packing loses positive area at Romik**
+
+[ANG1–ANG3](gate1-no-fixed-angle-weighted-sharp-charge.md) proves an exact negative control on a natural proposed support-to-facet transport: at Romik's middle exposed-corner chart there is a **positive-length** interval of abscissae with a **strict unique globally maximizing physical inner-ray angle**. Every finite collection of angles therefore misses positive ordinary niche area *at the exact equality candidate*. More generally, for any **finite fixed nonnegative measure** \(\mu\) over angles whose pointwise cut multiplicity satisfies \(\int1_{\{p\in Q_t\}}d\mu(t)\le1\) almost everywhere, Tonelli and the unique-contact graph give
+\[
+\boxed{\int |K_*\cap Q_t|\,d\mu(t)<|N_*(K_*)|.}
+\]
+Thus a **position-independent, pointwise no-overcounting weighted average of one-angle facet-triangle areas cannot give a sharp Gate 1 certificate**. This does **not** disprove any x-dependent or contact-dependent transport, nor any genuinely global coupled loss inequality. **Gate 1 remains ACTIVE, not passed**. The proof's only use is to reject a specifically false route to exact Romik equality; do not count it as an improved upper bound or a new excluded sofa class.
+
 ### G1.2 finite whole-angle algebraic oracle (PASS as a calculation theorem; **NOT** the sharp area charge)
 
 [EO1–EO6](gate12-exact-whole-angle-polygonal-niche-oracle.md) now provide a **globally quantified exact continuous-angle calculation** for any rational polygonal hull: the positive one-turn niche at any x is the maximum of at most \(8(2N+1)\) candidates, arising from actual outer-support vertex switches, unit-circle inner-ray tangencies or **physical sharp-corner ties**. The last satisfy a quartic polynomial in \(\tan(t/2)\), including folded corner paths. The complete two-hand envelope (including empty-fiber corrections) has a finite semialgebraic decomposition, and its exact **ordinary area** is a finite elementary combination of algebraic numbers and algebraic coefficients times arctangents of algebraic numbers. This eliminates any need to approximate turning angles when **evaluating one polygon's true niche union**.
