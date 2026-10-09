@@ -54,25 +54,116 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 **Gate 0 PASS:** short, stand-alone checked proof of the actual-geometry-to-PLAN.3 value implication, or an exact counterexample and corrected theorem. **Gate 0 FAIL:** an essential implication is false and no valid replacement exists. This becomes the immediate research priority, not an invitation to switch to another local sofa class.
 
-## Gate 1 — global sharp FULL-TURN area, using one joint loss mechanism
+## Gate 1 — global sharp FULL-TURN area (THE FIRST UNRESOLVED PROOF GATE)
 
-**Status: ACTIVE (October 9, 2026).** Gate 0's original-motion bridge has passed written audit. The full-turn global charge remains **UNPROVED**, with the actual clipped union of both inner-ray sweeps the key mathematical barrier. First prove PLAN.3 with \(\alpha=\gamma=\pi/2\) (outgoing barriers redundant):
+**Status: ACTIVE — no sharp global full-turn bound has been proved.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
+
+### G1.0 Fix the objective and the domain; don't mix actual and auxiliary hulls
+
+For a **genuine compact connected both-full-turn sofa** \(S\), put \(K=\operatorname{conv}S\), its horizontal projection \(I=[l,r]\) of width \(W\), its actual upper/lower convex roofs \(A_K,B_K\), their downward-cap deficits
 \[
-\boxed{
-\int_I\big[\max(d_V,n_-)+\max(d_U,n_+)\big]\,dx
-\ge W-M.
-}\tag{PLAN.4 — UNPROVED}
+d_U(x)=1-A_K(x),\qquad d_V(x)=B_K(x),
+\]
+and the complete lower/upper two-ray forbidden roofs \(n_-(x),n_+(x)\). Each niche uses the **supremum over every real angle \(0<t<\pi/2\)**, with both attached rays of the **physical moving sharp inner corner**; do not replace it with a corner shadow, one selected ray, a finite-angle grid, or a signed untruncated niche.
+
+The exact surviving full-turn fiber has length
+\[
+\ell(x)=1-\max\{d_V(x),n_-(x)\}-\max\{d_U(x),n_+(x)\}\ge0
+\]
+because every x in I occurs in connected S. Hence, with the **actual ordinary-area** niche removals
+\[
+\mathcal N_-(K)=\int_I(n_-(x)-B_K(x))_+dx,\quad
+\mathcal N_+(K)=\int_I(n_+(x)-(1-A_K(x)))_+dx,
+\]
+we have **exactly**
+\[
+\boxed{|E_{\rm full}(K)|=|K|-\mathcal N_-(K)-\mathcal N_+(K).}\tag{G1.1}
+\]
+Here the two \(\mathcal N\) are clipped to K, and nonempty fibers ensure they do not overlap inside K. No need for unit vertical span, reflection symmetry, or an assumed face arrangement. The **one sharp objective** is
+\[
+\boxed{\mathcal N_-(K)+\mathcal N_+(K)\ge |K|-M
+\qquad\text{for EVERY genuine feasible both-full-turn }K.}
+\tag{G1.2 — OPEN}
 \]
 
-**New globally valid structural input (FT1–FT2, October 9):** [global-facet-triangle-niche-decomposition.md](global-facet-triangle-niche-decomposition.md) proves that **every individual physical lower-turn inner-wall quadrant intersected with the actual connected fullturn sofa hull is one triangle, based on one exposed straight lower hull facet**, with apex at the moving sharp inner corner; the upper hand gives an upper-facet triangle. The proof combines concavity of each two-ray tent minus the convex lower hull graph, extreme-point retention, and nonempty vertical fibers. The entire ordinary area loss is exactly the **two disjoint unions** of these facet-based angular triangles. This is a genuine global gate-relevant reduction: smooth outer flanks determine the corner supports but cannot directly carry carved niche material. **It does NOT pass Gate 1**: those angle triangles overlap heavily on their supporting facet, and no global sharp lower bound on the **union** has been proved. The next mathematical task is to construct the quantitative **outer-support-to-facet-triangle union charge**, not to add per-angle triangle areas or study only one contact chart.
+**Coverage logic:** If G1.2 holds for all actual feasible K, it bounds every genuine full-turn body. Conversely any arbitrary auxiliary K has a possibly disconnected canonical envelope with ordinary area \(|E_{\rm full}(K)|\ge\mathscr S(K)\). Gate 0's area-preserving gap compression converts that envelope to an actual connected full-turn sofa, so **G1.2 for all feasible actual hulls bounds the signed full-turn supremum too**. This is not a claim that the auxiliary K itself retains its exposed extreme points. Do not assume actual-hull theorems for incompatible auxiliary hulls.
 
-**One chosen mechanism:** construct a **joint spatial charge/transport certificate** for the *actual max of the entire moving inner-ray sweeps and outer-wall deficits*. Every piece of material removed from a horizontal fiber must be paid once; any clipped or overlapping niche must stay inside the max. Seek a global inequality connecting these actual disjoint area losses to the outer support geometry. The whole continuum of actual corner positions, stationary ray envelopes and switches is in scope. An allocation that assumes candidate contact phases, single-peak corners or positive-width central rectangles in every competitor is inadmissible.
+### G1.1 First required audit: full-ray facet-triangle identity
 
-**One decisive reduction to audit:** [PD3](full-turn-positive-face-density.md) says unit-height full-turn sofas with positive top/bottom faces at **opposite ends** are area-value dense. If its whole rounding/shaving/strip-reorientation chain passes audit, a uniform sharp inequality on that class plus a legitimate limiting argument would settle the complete-turn value. This is the most relevant adversarial class, **not** something to exclude by a fixed positive gap: it already contains bodies approaching M from below. If PD3 fails, use the original full hull domain rather than treating the class as exhaustive.
+The recent [FT1–FT8 facet-triangle argument](global-facet-triangle-niche-decomposition.md) supplies the intended **global geometric input**, subject to an independent adversarial audit. At each proper lower angle t, the roof
+\[
+q_t(x)=\min\left\{
+\frac{h_K(u_t)-1-x\cos t}{\sin t},
+\frac{h_K(v_t)-1+x\sin t}{\cos t}
+\right\}
+\]
+is concave. Since the lower hull roof \(B_K\) is convex, \(\{x:q_t(x)>B_K(x)\}\) is an interval. Every lower extreme point of K survives the actual motions and therefore cannot be inside a forbidden cut. The proposed lemma says **every nonempty one-angle cut is one true triangle with its base on a straight exposed lower hull facet and apex at the moving physical sharp corner**. The upper hand is its vertical reflection.
 
-**Falsification protocol:** Before promoting *any* proposed area-transfer lemma, test it on exact polygonal opposite-end shapes, nonsmooth high-curvature cases, the reference (must admit equality), arbitrarily near-reference cut caps, pinched/disconnected auxiliary envelopes and the known unit-height rectangular signed-concavity counterexamples. A false lemma is discarded with an **exact mathematical counterexample**, not rescued by adding endless special hypotheses.
+For a base facet \(B_K(x)=mx+c\), at apex \((\xi_t,\eta_t)\) and gap \(h_t=\eta_t-m\xi_t-c>0\), the exact proposed one-angle area is
+\[
+\boxed{|K\cap Q_t|=\frac{h_t^2}{2}
+\left(\frac1{\tan t-m}+\frac1{\cot t+m}\right)}
+\tag{G1.3}
+\]
+when \(-\cot t<m<\tan t\). The identity must be checked at exposed-face endpoints, upper-roof clipping, zero-area limits and nonsmooth junctions **before** it is a proof dependency.
 
-**Gate 1 PASS:** a real global full-turn sharp upper bound with exact ordinary/signed corrections and verified class coverage. **NOT PASS:** another near-Romik no-gain family, a small quantitative nonconvexity statement, a better convex-only bound, new contact classification, random numerical Jensen tests, or conditional star-concavity.
+Crucially we **never sum G1.3 over angles**: those triangles can overlap arbitrarily. Write \(\mathcal F_-\) and \(\mathcal F_+\) for the at-most-countable exposed **lower** and **upper** facets of the actual hull. The full union of all t-rays on one lower facet F has the exact fiber height
+\[
+n_F(x)=\left[\sup_{0<t<\pi/2}
+(q_t(x)-B_F(x))\right]_+,
+\quad x\in I_F.
+\]
+If the audited facet identity passes, it gives
+\[
+\boxed{\mathcal N_-(K)=\sum_{F\in\mathcal F_-}\int_{I_F}n_F(x)dx,
+\qquad
+\mathcal N_+(K)=\sum_{F\in\mathcal F_+}\int_{I_F}n_F^+(x)dx.}
+\tag{G1.4}
+\]
+
+**G1.1 PASS:** independently checked geometry and measurability of G1.3–G1.4 for every genuine full-turn hull, including multi-peak/disconnected angular activity and oblique supporting facets. **A failed hypothesis or wrong sign must be corrected now, not buried in later assumptions.**
+
+### G1.2 The single active discovery obligation: a GLOBAL SUPPORT → FACET-SWEEP AREA CHARGE
+
+The entire task after G1.1 is to prove, for **all actual feasible K**,
+\[
+\boxed{
+\sum_{F\in\mathcal F_-}\int_{I_F}n_F(x)\,dx
++\sum_{F\in\mathcal F_+}\int_{I_F}n_F^+(x)\,dx
+\ge
+\int_I[A_K(x)-B_K(x)]\,dx-M.}
+\tag{G1.5 — UNPROVED}
+\]
+
+Build **one quantitative outer-support-to-carved-facet charge**, using the *actual* moving corners and both attached rays. Outer curvature/face support data determine their trajectories; the resulting **union** of triangular cuts is charged exactly once on each exposed facet. A valid certificate must quantify the gained hull material against lost true niche area, including oblique facets, all contact switches, positive curvature atoms, and unknown facet count.
+
+**Necessary calibration:** At Romik's exact hull both sides of G1.5 are equal. The same certificate must remain valid for the *genuinely asymmetric value-dense opposite-end-face class*; one cannot assume both horizontal faces align, that the niche is confined to the center, or that the outer support has curvature <=1. A universal fixed-price-per-triangle lemma that loses Romik equality or double-counts overlapping angular cuts is not a candidate.
+
+**Proof target:** derive an explicit nonnegative **integrated remainder or dual transport certificate** for the *difference* between the left and right sides of G1.5. A rearrangement based on a single stationary Romik contact chart is not enough. Whether a transport can be made without active-contact regularity is the first real open mathematical question. We do not promote a heuristic lower bound as G1.5.
+
+**Alternative equivalent syntax, not a second project:** The exact signed identity \(\mathscr S=\Psi(U)+\Psi(V)+G\) makes the same requirement \((M/2-\Psi(U))+(M/2-\Psi(V))\ge G\) for genuine full-turn compatible cap pairs. The \(\Psi\le M/2\) theorem has a long self-reviewed dependency chain. This equivalence may be used to **audit a proposed transport proof**; it is **not** a license to assume the missing clipping budget or re-start a separate weighted one-turn optimization.
+
+### G1.3 Adversarial verification and exhaustive case coverage (before any PASS)
+
+Every claimed candidate for G1.5 must survive at least:
+- **Romik equality**, with complete true niche and exact outer hull; any strictly positive reference deficit invalidates a supposedly sharp certificate.
+- **Opposite-end positive top/bottom faces** including the exact fully feasible diagonal parallelogram and **arbitrarily near-M** opposite-face approximants. A fixed positive penalty for asymmetric face displacement is known to be impossible.
+- **Oblique exposed lower/upper facets**, high-curvature outer flanks and multifold/multipeak moving-corner trajectories; one-angle facet cuts need not have horizontal bases.
+- **Tilted top/bottom shavings of Romik**, whose **ambient** niches partly lie *outside* their new outer hulls. Use only truly K-clipped ordinary areas.
+- **Full-turn rectangular hulls** with reverse moving-corner activation and exact width-dependent niche areas; distinguish actual feasible unit-height rectangles from an incompatible width-two auxiliary rectangle with empty central fibers.
+- **Subunit-height actual sofas** (do not invoke unsupported height padding), and **point/edge atoms**. Any appeal to a value-dense class needs a legitimate limiting theorem.
+
+**Coverage shortcut permitted only with proof:** [PD3](full-turn-positive-face-density.md) claims all full-turn values can be approached by unit-height actual full-turn sofas with positive **opposite-end** horizontal faces, after rounding, shaving and justified reorientation. Independently audit its full chain *if* G1.5 is proved for that class alone. A uniform sharp bound on that genuinely value-dense class would then pass G1 through the limit. Otherwise **prove G1.5 on all actual full-turn hulls directly**; do not let the PD3 audit become an unrelated research line.
+
+The [SD3/SD6 signed-continuity and smooth-auxiliary-density theorem](global-signed-fiber-continuity-and-smooth-density.md) is available for justified limits on the **auxiliary signed hull domain**. Its smooth hulls need *not* be feasible, so **do not apply G1.3's actual-hull facet theorem to arbitrary smooth auxiliary hulls**. This prevents mixing two incompatible quantifier domains.
+
+### G1.4 Closure criterion, exact result required to change the gate
+
+**Gate 1 PASS if and only if** we have a complete independently auditable derivation \(|S|\le M\) for **every** genuine connected two-full-turn sofa, including all incoming heights, asymmetries, nonsmooth facets and positive/negative empty-fiber distinctions; or a proved sharp inequality on a rigorously area-value-dense class plus its limiting argument. Show exact Romik equality. The conditional statement “if G1.5 holds then Gate 1 passes” **does not count**.
+
+**Gate 1 FAIL/BLOCKED:** If a proposed payment lemma is false, exhibit the exact counterexample and repair or change the one chosen charge while retaining G1.2; do not claim progress from a false universal claim. If no payment is proved, report specifically which outer-support increment cannot be charged to which full facet-sweep union. No return to convex-only upper bounds, candidate-local classes, tangency samples or global Jensen shortcuts already disproved.
+
+**After—and ONLY after—Gate 1 PASS:** activate Gate 2, restoring independent partial terminal angles and outgoing *whole-body* strips in PLAN.1. Passing Gate 1 does not silently complete partial turns and is not the final unrestricted sofa proof.
 
 ## Gate 2 — original PARTIAL turns with their two outgoing strips
 
@@ -103,7 +194,7 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 | Gate | Status | Concrete missing step |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
-| 1 — coupled full-turn loss | **ACTIVE** | Need global transport from arbitrary outer-support area to complete union of two swept inner-ray losses, especially opposite-end faces |
+| 1 — coupled full-turn loss | **ACTIVE: G1.1 audit → G1.2 proof** | Exact entire-ray facet-union loss is available as a proposed input; **global quantitative support-to-facet charge G1.5 is unproved** |
 | 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
