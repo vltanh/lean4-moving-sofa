@@ -91,12 +91,11 @@ Define the **vertical corner shadow** below the actual inner-corner trajectory
 \{(\xi_t,y):t\in T_-,\ 0\le y<\eta_t\}.
 }\tag{CF.8}
 \]
-At the same \(x=\xi_t\), the two inner-wall normal differences are
+At the same \(x=\xi_t\), the vector from the moving corner to the shadow point is exactly \((\xi_t,y)-c^-(t)=(0,y-\eta_t)\). Its two inner-wall normal differences are
 \[
-(\xi_t,y-c^-(t)_y)\cdot u_t=(y-\eta_t)\sin t<0,\quad
-(0,y-\eta_t)\cdot v_t=(y-\eta_t)\cos t<0.
-\]
-(Here the first vector simply denotes \((0,y-\eta_t)\).) Thus **every point of the vertical corner shadow lies inside an actual open inner forbidden quadrant**:
+((\xi_t,y)-c^-(t))\cdot u_t=(y-\eta_t)\sin t<0,\qquad
+((\xi_t,y)-c^-(t))\cdot v_t=(y-\eta_t)\cos t<0.
+\] Thus **every point of the vertical corner shadow lies inside an actual open inner forbidden quadrant**:
 \[
 \boxed{\mathcal C_-\subseteq W_- .}\tag{CF.9}
 \]
