@@ -6,7 +6,7 @@
 \[
 M=1+4Y^2+\arctan Y\approx1.64495521842544,\qquad 4Y^3+3Y-1=0.
 \]
-Unrestricted optimality, uniqueness, and exclusion of above-M bodies **are not proved** by the branch. Local stability, convex-only bounds, support classifications and numerical screens are not global sharp progress. The externally established bound \(353/200=1.765\) remains stronger than the branch's own coarse global bound.
+Unrestricted optimality, uniqueness, and exclusion of above-M bodies with arbitrary partial turns **are not proved** by the branch. **Gate 1's complete-turn sharp bound is now proved at the written-proof level**, with its ordinary one-turn dependency explicit. Gate 2's partial-turn joint charge remains the first unresolved theorem. Local stability, convex-only bounds, support classifications and numerical screens do not settle that theorem.
 
 ## One non-negotiable final theorem
 
@@ -42,7 +42,7 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 **Status: PASS (October 9, 2026; written mathematical audit, externally unrefereed).** The standalone [Gate 0 end-to-end proof](original-motion-global-bridge-gate0-audit.md) rederives the genuine wrong-way angular reach, exact two outgoing strips, common-hull tightening, empty-fiber signed correction, width-five compact box, and area-preserving horizontal gap compression for **both independent partial turns**. It proves the complete supremum equality \(\mu_{\mathrm{amb}}=\sup_{K,\alpha,\gamma}\mathscr V(K,\alpha,\gamma)\) on the planned parameter domain. It also gives a genuine unit-height high-area tilted top-cut family with **positive ambient clipping**, confirming the max/min accounting is indispensable. Note 9's older niche subtraction was **correct** because it had already defined both niches as **\(K\)-clipped** sets; an earlier suspicion of an error in that identity was a notation misunderstanding, not a discovered counterexample. The new independent proof is self-reviewed and open to external mathematical scrutiny.
 
-**Gate 0 is no longer the active workstream. The next active proof obligation is Gate 1, the global full-turn sharp ordinary-area charge.** Before invoking the global variational target as a final proof, independently rederive and check:
+**Gates 0 and 1 have passed their written-proof acceptance conditions. Gate 2 is now the first unresolved proof obligation.** The following Gate 0 audit requirements record the accepted bridge and remain relevant when using it. Before invoking the global variational target as a final proof, independently rederive and check:
 
 - the correct-handed and terminal-angle reduction for arbitrary motions with area near or above M, including **the two actual outgoing strip normals** (GH / Note 10);
 - canonical supporting-hallway tightening and both positive niche envelopes, including all end-angle conventions (OS1);
@@ -54,11 +54,15 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 **Gate 0 PASS:** short, stand-alone checked proof of the actual-geometry-to-PLAN.3 value implication, or an exact counterexample and corrected theorem. **Gate 0 FAIL:** an essential implication is false and no valid replacement exists. This becomes the immediate research priority, not an invitation to switch to another local sofa class.
 
-## Gate 1 — global sharp FULL-TURN area (THE FIRST UNRESOLVED PROOF GATE)
+## Gate 1 — global sharp FULL-TURN area
 
-**Status: ACTIVE — sharp global full-turn bound UNPROVED. CURRENT focus: wider tilted canonical maximizers with first-wing curvature above one; the entire horizontal branch and every first-unit tilted branch are proved. Historical facet oracle is verification only.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
+**Status: PASS (October 10, 2026; written mathematical proof, external review and Lean verification outstanding).** The [complete Gate 1 theorem](gate1-sharp-full-turn-closure.md) proves the universal scalar value \(\mathcal P(U)\le M/2\) and deduces \(|S|\le M\) for every genuine connected both-full-turn sofa, with exact Romik equality. The signed full-turn charge is also bounded on the entire auxiliary convex-hull domain. The [dependency and coverage audit](gate1-dependency-coverage-audit.md) checks all case boundaries and the order of the geometric and ordinary-area inputs.
 
-### ACTIVE CLAIM (introduced October 9; proof status updated October 10): Gate 1's **one active claim** is a sharp spatial one-cap value theorem
+The final [reflected-tail projection](gate1-tilted-reflected-tail-and-projection.md) proves \(T>0\) and \(n(-C)=0\) without either whole-wing unit-curvature premise. The [height reduction](gate1-tilted-final-height-reduction.md) forces \(h<1/20\); the [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes every \(0<h\le509/10000\), with overlap. Together with the complete horizontal theorem and earlier width cuts, these exhaust the selected canonical global maximizer. The external ordinary one-turn theorem and the existing exact Gerver enclosure \(G_0=22199/10000\) remain explicit dependencies.
+
+**Gate 1 is closed. Gate 2's independent partial turns and outgoing strips remain unproved.** The full-turn theorem does not imply a no-loss completion of an arbitrary partial turn, unrestricted ambidextrous optimality, or uniqueness.
+
+### Completed scalar theorem (introduced October 9; proved October 10)
 
 The earlier G1.2 approach "enumerate and integrate all polygonal facet sweeps" has **a calculation oracle but no global inequality**, and unrestricted polygon facet counts have no finite cutoff. It is now a **verification resource**, **not** the active proof mechanism. Merely extending the exact evaluator will not move the sharp area bound.
 
@@ -73,13 +77,17 @@ Here \(A_U\) is the true upper convex cap roof, and \(n_U\) is the **complete co
 \]
 Both niches are charged once, all clipped portions are handled by the original max/min fiber bounds, and the relaxation has **exact equality** at Romik.
 
-**The ONE ACTIVE universal lemma to prove or falsify is**
+**The completed universal scalar theorem is**
 \[
-\boxed{\mathcal P(U)\stackrel{?}{\le}M/2
+\boxed{\mathcal P(U)\le M/2
 \quad\text{for every downward convex height-one one-turn cap }U.}
-\tag{G1.SD2 — ACTIVE, NOT PROVED}
+\tag{G1.SD2 — PROVED}
 \]
-It is **strictly stronger than** the necessary coupled G1.2 inequality. If valid, G1.SD1 immediately **passes Gate 1 for all genuine complete turns**, including arbitrary height/asymmetry/many-facet hulls; no global separate \(G\) clipping inequality is needed. If an **exact** convex cap with \(\mathcal P(U)>M/2\) is proved, abandon this **one-cap dual** immediately and return to the actual joint max G1.2—such a cap alone is **not** an area-\(>M\) sofa. An inconclusive screen is not a counterexample or a PASS.
+This theorem is **strictly stronger than** the necessary coupled G1.2 inequality. Height extrusion extends it to every cap of height at most one. The completed scalar proof and G1.SD1 **pass Gate 1 for all genuine complete turns**, including arbitrary height, asymmetry and nonsmooth or many-facet hulls. The original coupled niche-loss inequality follows without an additional separate clipping estimate. See G1C1–G1C2 for the exact proof and scope.
+
+### Historical development of Gate 1
+
+The dated progress notes and original acceptance-route discussion below retain the intermediate obligations as they stood when written. Statements that a subtheorem alone did not pass Gate 1 describe those earlier checkpoints. **The completed proof and current status above supersede every earlier ACTIVE, OPEN, or remaining-obligation description in this Gate 1 history.** The mathematical arguments remain linked for audit.
 
 **Global reduction already proved, not the value:** upward cap Minkowski extrusion increases exterior score by \(\varepsilon W/2\) and increases middle niche by at most \(\varepsilon W/2\), so only height **one** needs testing. A real inner-corner witness at \(t=\pi/4\) gives
 \[
@@ -225,7 +233,7 @@ Here the two \(\mathcal N\) are clipped to K, and nonempty fibers ensure they do
 \[
 \boxed{\mathcal N_-(K)+\mathcal N_+(K)\ge |K|-M
 \qquad\text{for EVERY genuine feasible both-full-turn }K.}
-\tag{G1.2 — OPEN}
+\tag{G1.2 — PROVED VIA G1C1–G1C2}
 \]
 
 **Coverage logic:** If G1.2 holds for all actual feasible K, it bounds every genuine full-turn body. Conversely any arbitrary auxiliary K has a possibly disconnected canonical envelope with ordinary area \(|E_{\rm full}(K)|\ge\mathscr S(K)\). Gate 0's area-preserving gap compression converts that envelope to an actual connected full-turn sofa, so **G1.2 for all feasible actual hulls bounds the signed full-turn supremum too**. This is not a claim that the auxiliary K itself retains its exposed extreme points. Do not assume actual-hull theorems for incompatible auxiliary hulls.
@@ -280,7 +288,7 @@ The exact original Gate 1 coupled acceptance inequality remains, for **all actua
 +\sum_{F\in\mathcal F_+}\int_{I_F}n_F^+(x)\,dx
 \ge
 \int_I[A_K(x)-B_K(x)]\,dx-M.}
-\tag{G1.5 — UNPROVED}
+\tag{G1.5 — PROVED VIA G1C1–G1C2}
 \]
 
 By the passed global PG1 reduction, **one may and should first prove this for all actual polygonal full-turn hulls** with finitely many faces; the resulting sharp inequality would pass to all full-turn bodies by area density, without assuming polygonal circumscription preserves feasibility. There is no uniform bound on the number or slopes of the faces. Build **one quantitative outer-support-to-carved-facet charge**, using the *actual* moving corners and both attached rays. Outer curvature/face support data determine their trajectories; the resulting **union** of triangular cuts is charged exactly once on each exposed facet. A valid certificate must quantify the gained hull material against lost true niche area, including oblique facets, all contact switches, positive curvature atoms, and unknown facet count.
@@ -321,7 +329,9 @@ Every claimed candidate for G1.5 must survive at least:
 
 The [SD3/SD6 signed-continuity and smooth-auxiliary-density theorem](global-signed-fiber-continuity-and-smooth-density.md) is available for justified limits on the **auxiliary signed hull domain**. Its smooth hulls need *not* be feasible, so **do not apply G1.3's actual-hull facet theorem to arbitrary smooth auxiliary hulls**. This prevents mixing two incompatible quantifier domains.
 
-### G1.4 Closure criterion, exact result required to change the gate
+### G1.4 Closure criterion — met October 10, 2026
+
+The [completed theorem and exact reference equality](gate1-sharp-full-turn-closure.md) meet the criterion below. The [audit](gate1-dependency-coverage-audit.md) records the complete quantifier domain, all boundary cases, and the explicit ordinary one-turn dependency.
 
 **Gate 1 PASS if and only if** we have a complete independently auditable derivation \(|S|\le M\) for **every** genuine connected two-full-turn sofa, including all incoming heights, asymmetries, nonsmooth facets and positive/negative empty-fiber distinctions; or a proved sharp inequality on a rigorously area-value-dense class plus its limiting argument. Show exact Romik equality. The conditional statement “if G1.5 holds then Gate 1 passes” **does not count**.
 
@@ -331,7 +341,7 @@ The [SD3/SD6 signed-continuity and smooth-auxiliary-density theorem](global-sign
 
 ## Gate 2 — original PARTIAL turns with their two outgoing strips
 
-**Status: BLOCKED.** Extend the **same joint charge** to all independent \((\alpha,\gamma)\) in the original OS1 domain, including any subunit height; alternatively prove a valid no-loss reduction from *every* original partial motion to a class controlled by Gate 1.
+**Status: ACTIVE — UNPROVED; first unresolved gate after the completed Gate 1 theorem.** Extend the **same joint charge** to all independent \((\alpha,\gamma)\) in the original OS1 domain, including any subunit height; alternatively prove a valid no-loss reduction from *every* original partial motion to a class controlled by Gate 1.
 
 **Must not assume** a partial turn can always be extended to \(90^\circ\) in the same orientation. Exact counterexamples show zero-loss in-place completion fails. Saved early or late niche area must be compared with actual outgoing-strip losses in the **joint max**, not as independent signed deficits.
 
@@ -358,8 +368,8 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 | Gate | Status | Concrete missing step |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
-| 1 — coupled full-turn loss | **ACTIVE: SD2 sharp cap value unproved** | LH removes nonpositive pressures and proves the stationary wing identity. HW closes every horizontal canonical maximizer. The tilted canonical value, including the second quarter, top overhang and wider widths, remains unproved. The coupled PG.12 / G1.5 inequality remains the original acceptance target. |
-| 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
+| 1 — coupled full-turn loss | **PASS** (written proof) | G1C1 proves the universal cap value; G1C2 gives the complete-turn sharp area and exact reference equality. Dependency and coverage audit accepted; external review and Lean verification outstanding. |
+| 2 — complete original partial motions | **ACTIVE, UNPROVED** | No sharp charge for both independent outgoing strips together with visited partial niches; full-turn completion cannot be assumed |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
 **Definition of meaningful progress:** a passed gate, a global theorem that removes an indispensable gap, or a correct falsification requiring a documented change in the global strategy. Everything else is supporting research.

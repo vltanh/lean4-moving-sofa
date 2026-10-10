@@ -1,10 +1,10 @@
-# Gate 1 pivot: a sharp spatial **one-cap** dual, with global height saturation and compactness
+# Gate 1 spatial one-cap dual, height saturation, and compactness
 
-**October 9, 2026. Status: a single NEW ACTIVE global proof target, not a sharp bound.** The previous G1.2 polygonal contact oracle evaluates individual exact niche unions but has no uniform inequality for unbounded facet counts. We retain it only for falsification/auditing. The chosen *candidate* universal sharp certificate is the single-cap spatial objective below. It is mathematically **stronger than necessary**, so it must first survive falsification and cannot be assumed true from Romik calibration, local Hessian stability, or finite checks.
+**Original reduction: October 9, 2026. Sharp value completed: October 10, 2026.** The [Gate 1 closure](gate1-sharp-full-turn-closure.md) now proves SD.3 and the resulting sharp complete-turn theorem. This note supplies the original whole-domain spatial partition, height extrusion, width coercivity, continuity, and attainment arguments used by that proof. External mathematical review and Lean verification remain outstanding.
 
-**Independent global results proved here:** (i) spatial loss assignment removes all cross-handed clipping without requiring an arbitrary-hull feasible/contact-pattern assumption; (ii) vertical Minkowski extrusion **never decreases** the spatial cap objective, so only height-one caps need be optimized; (iii) the relevant cap width lies in a **compact numerical interval \(8/5<W<6\)**; (iv) the spatial cap objective is continuous and attains a global maximum, including nonsmooth bodies. The sharp value of that maximum is **UNKNOWN**. Neither the unrestricted upper area bound nor Gate 1 is proved.
+**Results proved here:** (i) spatial loss assignment bounds the joint full-turn functional directly; (ii) vertical Minkowski extrusion never decreases the cap score; (iii) every competitive cap has \(8/5<W<6\); (iv) the scalar maximum is attained, including nonsmooth caps. The later closure computes that maximum as \(M/2\). **Gate 1 is passed at the written-proof level; Gate 2's independent partial turns remain unproved.**
 
-## 1. The one theorem which would **pass Gate 1**, with exact equality at Romik
+## 1. The sharp scalar theorem and its full-turn implication
 
 Let \(U\subset\mathbb R\times[0,1]\) be a compact convex **downward closed** cap whose horizontal projection \(I_U=[l,r]\) has width \(W=r-l>0\). Write \(A_U(x)=\max\{y:(x,y)\in U\}\). For \(0<t<L=\pi/2\), put \(u_t=(\cos t,\sin t)\), \(v_t=(-\sin t,\cos t)\) and define the **entire attached-two-ray** forbidden roof
 \[
@@ -24,16 +24,16 @@ and the scalar spatial score
 \int_{I_U\setminus J(U)}A_U(x)\,dx
 -\int_{J(U)}n_U(x)\,dx.}\tag{SD.2}
 \]
-The theorem to **prove or rigorously falsify** is
+The scalar theorem, proved in [G1C1](gate1-sharp-full-turn-closure.md), is
 \[
-\boxed{\mathcal P(U)\ \stackrel{?}{\le}\ M/2
+\boxed{\mathcal P(U)\le M/2
 \quad\text{for every normalized height-one downward convex cap }U.}
-\tag{SD.3 — OPEN}
+\tag{SD.3 — PROVED}
 \]
 Here \(M=1+4Y^2+\arctan Y\), \(4Y^3+3Y-1=0\), \(Y>0\).
 
 **Theorem SD1 (sharp spatial dual implies the full Gate 1 theorem).**
-If SD.3 is proved, then \(|S|\le M\) for **every compact connected full-conventional-two-turn sofa**, without restrictions on vertical span, curvature, symmetry, face order, contact changes or polygon complexity.
+The completed scalar bound SD.3 implies \(|S|\le M\) for **every compact connected full-conventional-two-turn sofa**, without restrictions on vertical span, curvature, symmetry, face order, contact changes or polygon complexity.
 
 **Proof.** For such a genuine sofa put \(K=\operatorname{conv}S\), and let \(U,V\) be its downward upper and reflected-lower convex caps. Their horizontal projections are the same I. Write \(d_U=1-A_U\), \(d_V=1-A_V\), and let \(n_U,n_V\) be their full positive niches. By the completely audited Gate 0 fiber formula, at each x
 \[
@@ -52,9 +52,9 @@ Integrate and use \(|J|=|I\setminus J|=W/2\) to cancel constants:
 \]
 No unearned subtraction of **untruncated** niches from K occurs: the two upper relaxations hold pointwise precisely because of the max operation.
 
-The same inequalities hold for *signed* fibers of an arbitrary auxiliary convex K. Thus SD.3 would also give \(\mathscr S(K)\le M\) on the whole Gate 0 signed convex-hull domain, without applying facet triangles to incompatible hulls. \(\square\)
+The same inequalities hold for *signed* fibers of an arbitrary auxiliary convex K. Thus SD.3 also gives \(\mathscr S(K)\le M\) on the whole Gate 0 signed convex-hull domain, without applying facet triangles to incompatible hulls. \(\square\)
 
-**Sharpness, not evidence of a global maximum:** For Romik's reference cap \(U_*\), its full niche is supported in the central interval \(J(U_*)\), the upper roof is exactly one there, and the spatial upper relaxation SD.4 is **equality**. The explicit reference area identity therefore gives
+**Exact sharpness:** For Romik's reference cap \(U_*\), its full niche is supported in the central interval \(J(U_*)\), the upper roof is exactly one there, and the spatial upper relaxation SD.4 is **equality**. The explicit reference area identity therefore gives
 \[
 \boxed{\mathcal P(U_*)=M/2.}\tag{SD.5}
 \]
@@ -145,12 +145,12 @@ Choosing \(\delta=\sqrt\eta\) (for small \(\eta\)) makes the right side tend to 
 
 Finally the endpoints of the *moving* middle-half J(U_j) converge because their widths converge. The outer-roof L1 convergence, uniform niche convergence and uniformly bounded roof heights imply \(\mathcal P(U_j)\to\mathcal P(U)\). The limit therefore attains the maximum. Apply height extrusion if needed (it is already height one here). \(\square\)
 
-This establishes an honest compact infinite-dimensional **single** optimization problem rather than an unbounded list of facet counts. It does **not** compute its maximum. The sole next proof step is to show **every global maximizer of \(\mathcal P\) has value at most \(M/2\)** (or exhibit a cap with value \(>M/2\) and reject this scalar dual).
+This establishes the compact infinite-dimensional scalar problem used by the [completed Gate 1 proof](gate1-sharp-full-turn-closure.md). That proof applies canonicalization and the audited spatial source laws to a selected attained maximizer, bounds its horizontal branch, and excludes every tilted branch. It thereby computes the maximum as \(M/2\) and extends the bound to the entire cap domain by SD2.
 
-## 5. Non-negotiable strategy boundary
+## 5. Scope of the completed argument
 
 - The spatial partition SD1 is **global and sharp at the reference**, not a near-reference slice bound or an averaging of finitely many angle-tents. Every cap's niche uses its **whole continuous angle** family and both attached inner rays.
-- SD.3 is **strictly stronger than the actual coupled full-turn loss** G1.2. A counterexample to SD.3 would **not** imply a sofa larger than Romik. It would only invalidate this decoupled certificate and return the work to the true coupled inequality.
-- The historical P_J **global concavity conjecture is false** by an exact counterexample, and is not being reintroduced. The new task is an upper **value** theorem at the *global maximizer* of this nonconcave score, perhaps by direct feasible cap variations and complete niche exposure balance.
+- SD.3 is **strictly stronger than the actual coupled full-turn loss** G1.2. Its completed proof implies that original acceptance inequality through the pointwise partition SD1.
+- The historical P_J **global concavity conjecture is false** by an exact counterexample. The completed proof uses actual cap variations and spatial source balances at a selected global maximizer; it does not use that concavity conjecture.
 - The finite polygonal oracle from the previous G1.2 route is now only an **adversarial exact verification** tool. No amount of finite checking over an unbounded number of facets replaces SD.3.
-- No CI or Lean/Lake; no purported area >M, no new unrestricted upper bound, and **Gate 1 remains ACTIVE, NOT PASSED**.
+- **Gate 1 is passed as a written proof.** The ordinary one-turn theorem and its existing exact Gerver enclosure are explicit dependencies. No CI, Lean/Lake build, external refereeing, or new Lean formalization is claimed. **The sharp independent-partial-turn theorem of Gate 2 remains unproved.**

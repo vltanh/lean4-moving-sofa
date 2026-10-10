@@ -1,5 +1,31 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+
+## Current result — Gate 1 closed, October 10, 2026
+
+**Gate 1: PASS as a written mathematical proof.** The [complete closure theorem](gate1-sharp-full-turn-closure.md) proves
+\[
+\boxed{\mathcal P(U)\le M/2
+\quad\text{for every downward compact convex cap of height at most one},}
+\]
+using each cap's own middle-half window and the full positive continuous-angle two-wall niche. Consequently every genuine compact connected body making both complete conventional quarter turns satisfies
+\[
+\boxed{|S|\le M=1+4Y^2+\arctan Y,\qquad4Y^3+3Y-1=0,\quad Y>0.}
+\]
+Romik's reference attains equality. The same scalar partition also bounds the signed full-turn functional on arbitrary auxiliary convex hulls, without identifying negative signed fibers with ordinary area.
+
+The final [reflected-tail and projection theorem](gate1-tilted-reflected-tail-and-projection.md) proves \(T>0\) and \(n(-C)=0\) at every remaining wider tilted selected maximizer, without either whole-wing unit-curvature premise. The [final height reduction](gate1-tilted-final-height-reduction.md) excludes every \(h\ge1/20\): below \(C=73/100\) the initial-energy criterion gives the already excluded first-unit branch; above it the actual full-triangle estimate gives \(\mathcal P<7550393/9240000<41/50\).
+
+The [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes the overlapping interval \(0<h\le509/10000\). If both initial-energy inequalities hold, the first-unit theorem applies. Failure of either inequality forces the already proved genuine one-turn survivor to exceed the exact ordinary bound \(G_0=22199/10000\). Together with HW's complete horizontal theorem, CH7, and the earlier global width cuts, this exhausts the selected attained canonical maximizer and proves the universal scalar bound. The [dependency and coverage audit](gate1-dependency-coverage-audit.md) records every joining boundary and the noncircular order of the source, projection, feasibility, and energy arguments.
+
+**Verification and dependencies:** the written arguments received separate mathematical checks within this research session. The [fixed exact checker](computer-assisted/check_gate1_final_scalar_exact.py) passes 74 rational arithmetic checks using Fraction alone. Its arithmetic checks do not verify the geometric proofs. Baek's ordinary one-turn theorem and the existing exact Gerver area enclosure remain explicit dependencies; the relevant source declarations and parameter premises were inspected. **No external refereeing, Lean/Lake build, CI run, or new Lean formalization is claimed.**
+
+**The remaining theorem is Gate 2.** Independent partial terminal angles and their two actual outgoing whole-body strips are not yet controlled by a sharp joint charge. Unrestricted ambidextrous optimality, exclusion of all area-above-M partial-turn bodies, equality classification, and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) now marks Gate 2 as the first unresolved gate.
+
+## Historical progress ledger
+
+The dated entries below preserve their original intermediate proof boundaries. **The current result above supersedes all earlier Gate 1 OPEN/ACTIVE and remaining-tilted-branch descriptions.** Their mathematical arguments remain part of the dependency record.
+
 **October 10 Gate 1: the entire first-unit tilted branch is excluded; only wider first-wing excess remains (GATE 1 STILL OPEN).** The new [GF.1–GF.17 theorem](gate1-tilted-first-wing-exclusion.md) excludes every tilted canonical global maximizer with first regular-wing curvature at most one, throughout the remaining width and height domain. The companion wing may have arbitrary bounded curvature folds, measurable contact ties, and later returns below the floor. The [structural lemmas](gate1-tilted-first-wing-structure.md) establish the exact positive-niche interval and finite-source projection. The [independent joint-source audit](gate1-tilted-folded-source-occupations.md) retains both source angle and graph position and proves the common fractional corner occupation; it does not assume ordinary continuum-niche arclength convergence.
 
 The decisive improvement uses the **first** companion-floor crossing rather than assuming it is the global niche minimum. Its displacement S satisfies S>=T, where T is the high-side top overhang. The exact energy calculation acquires the favorable term `(S-T)((S+T)/2-3C)`. Every remaining folded-curvature defect is paid explicitly, giving the contradiction `6CT <= 97T/48 < 3T`. Thus [CH7](gate1-spatial-maximizer-curvature-and-horizontal-value.md) now excludes **all tilted widths C<=2/3**. The stronger [initial-floor energy criterion](gate1-tilted-initial-floor-energy.md) also excludes `2/3<C<=18/25` with `3/100<=h<17/50`.

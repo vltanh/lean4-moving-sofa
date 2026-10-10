@@ -3,6 +3,8 @@
 **Before pursuing any mathematics:** Read [SHARP-OPTIMALITY-EXECUTION-PLAN.md](SHARP-OPTIMALITY-EXECUTION-PLAN.md) and work **only its currently ACTIVE gate**. The chronological note below is historical background and does not supersede the controlling plan. No additional local class exclusions, convex-bound refinements or exploratory screens may be promoted as proof progress. Apply the plan's global-inequality, falsification, and commit acceptance rules.
 
 
+**October 10 update:** [Gate 1 is passed at the written-proof level](gate1-sharp-full-turn-closure.md); [Gate 2](SHARP-OPTIMALITY-EXECUTION-PLAN.md) is the first unresolved gate. The copied historical prompt below predates that closure. Its full-turn clipping obligation is now discharged; its unrestricted partial-turn and uniqueness obligations remain. Start from the current consolidated handoff and plan.
+
 Paste the following into a new ChatGPT session (preferably with the repository's GitHub connection available). This prompt is a **new research instruction**, not a claim that a proof already exists.
 
 ---

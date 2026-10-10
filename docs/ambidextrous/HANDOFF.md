@@ -1,5 +1,11 @@
 # Ambidextrous sofa research — current handoff
 
+**Current status, October 10, 2026:** [Gate 1 is closed as a written mathematical proof](gate1-sharp-full-turn-closure.md), with the universal cap value and exact complete-turn area bound. Gate 2's independent partial turns remain unproved. Read the [consolidated handoff](CONSOLIDATED-RESEARCH-HANDOFF.md) and [controlling plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) for the current proof boundary, explicit dependencies, and verification scope.
+
+## Historical handoff below
+
+The remaining contents are an older research checkpoint. Their full-turn OPEN statements and then-missing premises are superseded by the current Gate 1 closure.
+
 **The sharp value M is not proved for general full-turn or partial-turn bodies.** The new coupled support-clipping hand bound is \(2\sqrt2-1-1/51\) for arbitrary continuous ambidextrous turns. This supersedes our intermediate \(1/90\), \(1/175\), and \(10^{-9}\) hand gaps but remains numerically weaker than O'Keefe's externally certified \(353/200=1.765\). Romik's sharp value remains open. The other finite-to-continuum and box-area results are independent.
 
 Repository: `vltanh/lean4-moving-sofa`.
