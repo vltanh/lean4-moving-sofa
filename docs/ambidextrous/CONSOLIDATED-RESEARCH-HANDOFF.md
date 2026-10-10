@@ -22,6 +22,12 @@ The [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes the 
 
 **The remaining theorem is Gate 2.** Independent partial terminal angles and their two actual outgoing whole-body strips are not yet controlled by a sharp joint charge. Unrestricted ambidextrous optimality, exclusion of all area-above-M partial-turn bodies, equality classification, and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) now marks Gate 2 as the first unresolved gate.
 
+## Gate 2 reorientation — October 10, 2026
+
+The [Gate 2 roadmap](GATE2-ROADMAP.md) fixes the next active sufficient theorem: bound \(\mathcal P_\alpha(U)\), with the same moving middle half as Gate 1 and charged roof equal to the maximum of the visited positive niche and the **actual whole first outgoing wall**, by \(M/2\) for every cap and independent partial angle. The exact spatial partition then gives the original joint target for arbitrary upper and reflected-lower caps. A four-line support cancellation already excludes the entire scalar interval \(\pi/4\le\alpha\le\arctan(5/4)\), without a stationarity or contact-chart premise.
+
+Universal integrated domination of the full niche by the partial niche plus outgoing wall is **false**, as the roadmap's exact polygon shows. This falsifies that transfer shortcut, not the sharp partial-cap value. The remaining global proof must handle free terminal angles, their possible first-support facet atoms and exposed positions, and both middle-slope signs. The roadmap orders the domain, source, value and original-motion audits explicitly. **Gate 2 remains ACTIVE and UNPROVED; no unrestricted sharp value or uniqueness is claimed.**
+
 ## Historical progress ledger
 
 The dated entries below preserve their original intermediate proof boundaries. **The current result above supersedes all earlier Gate 1 OPEN/ACTIVE and remaining-tilted-branch descriptions.** Their mathematical arguments remain part of the dependency record.

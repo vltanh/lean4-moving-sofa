@@ -343,6 +343,8 @@ The [completed theorem and exact reference equality](gate1-sharp-full-turn-closu
 
 **Status: ACTIVE — UNPROVED; first unresolved gate after the completed Gate 1 theorem.** Extend the **same joint charge** to all independent \((\alpha,\gamma)\) in the original OS1 domain, including any subunit height; alternatively prove a valid no-loss reduction from *every* original partial motion to a class controlled by Gate 1.
 
+**October 10 reorientation:** the [Gate 2 roadmap](GATE2-ROADMAP.md) selects one sufficient global lemma: \(\mathcal P_\alpha(U)\le M/2\) for every downward convex cap and every \(\alpha\in[\pi/4,\pi/2]\), where the charged middle roof is the maximum of zero, the visited two-wall niche, and the **whole first outgoing wall**. Its exact spatial partition implies PLAN.3 for independent caps and angles. The roadmap proves the scalar interval \(\alpha\le\arctan(5/4)\) lies strictly below \(M/2\), and records an exact counterexample to universal integrated comparison with the full niche. The remaining proof must rederive the terminal source/angle conditions, including terminal facets and both signs of the central tilt; Gate 1's maximizer laws do not transfer automatically.
+
 **Must not assume** a partial turn can always be extended to \(90^\circ\) in the same orientation. Exact counterexamples show zero-loss in-place completion fails. Saved early or late niche area must be compared with actual outgoing-strip losses in the **joint max**, not as independent signed deficits.
 
 **Gate 2 PASS:** PLAN.3 or equivalent for the entire original motion domain and a complete deduction \(\mu_{\rm amb}\le M\). **NOT PASS:** only turns near \(90^\circ\), the known rough endpoint-angle exclusions, or results requiring a Romik-neighborhood support chart.
@@ -369,7 +371,7 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
 | 1 — coupled full-turn loss | **PASS** (written proof) | G1C1 proves the universal cap value; G1C2 gives the complete-turn sharp area and exact reference equality. Dependency and coverage audit accepted; external review and Lean verification outstanding. |
-| 2 — complete original partial motions | **ACTIVE, UNPROVED** | No sharp charge for both independent outgoing strips together with visited partial niches; full-turn completion cannot be assumed |
+| 2 — complete original partial motions | **ACTIVE, UNPROVED** | GATE2-ROADMAP.md selects the universal partial-cap value with its actual outgoing wall; the interval above atan(5/4) needs new terminal source/angle control and a sharp global value proof |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
 **Definition of meaningful progress:** a passed gate, a global theorem that removes an indispensable gap, or a correct falsification requiring a documented change in the global strategy. Everything else is supporting research.
