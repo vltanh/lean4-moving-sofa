@@ -1,6 +1,6 @@
 # Sharp ambidextrous moving-sofa optimality — controlling execution plan
 
-**ACTIVE plan · October 9, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the priorities for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved.
+**ACTIVE plan · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the priorities for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved.
 
 **Honest baseline.** Romik's construction has proven area
 \[
@@ -56,9 +56,9 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 ## Gate 1 — global sharp FULL-TURN area (THE FIRST UNRESOLVED PROOF GATE)
 
-**Status: ACTIVE — sharp global full-turn bound UNPROVED. CURRENT focus: G1.SD2 spatial one-cap dual value theorem; historical facet oracle is verification only.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
+**Status: ACTIVE — sharp global full-turn bound UNPROVED. CURRENT focus: the tilted canonical maximizer in G1.SD2; the entire horizontal branch is now proved. Historical facet oracle is verification only.** Gate 0 was marked PASS after a *self-reviewed* end-to-end written audit; external checking is still required. Gate 2 (arbitrary partial angles/outgoing strips) remains blocked. We are working on **Gate 1 only** until its exact acceptance condition is met or a mathematically decisive obstruction forces a documented revision.
 
-### CURRENT REORIENTATION (October 9): Gate 1's **one active claim** is a sharp spatial one-cap value theorem
+### ACTIVE CLAIM (introduced October 9; proof status updated October 10): Gate 1's **one active claim** is a sharp spatial one-cap value theorem
 
 The earlier G1.2 approach "enumerate and integrate all polygonal facet sweeps" has **a calculation oracle but no global inequality**, and unrestricted polygon facet counts have no finite cutoff. It is now a **verification resource**, **not** the active proof mechanism. Merely extending the exact evaluator will not move the sharp area bound.
 
@@ -104,7 +104,7 @@ At the reference these are tight equalities \(1/2=3/4-1/4\), but for arbitrary c
 \(
 |\{x\in J:n_n(x)=0\}|\le T_{\rm wing}+o(1)
 \),
-where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. EP1–EP3 below now supply exact continuum endpoint complementarity and limiting exposure moments; identifying those limits with the **actual positive niche graph**, and proving the sharp value, remain open.
+where \(T_{\rm wing}\) is the horizontal top-face length outside J. **DO NOT pass this to the full niche by naive uniform roof convergence:** zero sets of nonnegative functions are not semicontinuous in the required direction. EP1–EP3 below supply exact continuum endpoint complementarity and limiting exposure moments. The new LH/CH results use those weak measures directly, prove positive pressures, and exclude excess curvature at nonpositive corner height without assuming ordinary continuum arclength convergence. The tilted sharp value remains open.
 
 **NEW GLOBAL MAXIMIZER WING-REGULARITY (RG2–RG3, written proof, Oct 9):** [gate1-spatial-maximizer-wing-curvature-regularity.md](gate1-spatial-maximizer-wing-curvature-regularity.md) upgrades MID2 and finite charged-exposure FE1 into a **selection theorem for an actual global maximizer of \(\mathcal P\)**. A grid-polygon penalized selection targeting the chosen affine-middle global maximizer gives convergence despite arbitrary initial irregular support. The neighboring-inner-ray bound plus exterior-only facet stationarity yields
 \[
@@ -132,9 +132,34 @@ C_R=(3q_+-q_-)/4,\quad C_L=(3q_--q_+)/4,\quad q_\pm=(A+n)(j_\pm).
 \]
 Horizontal erosion \(U\cap(U\mp\varepsilon e_x)\), admissible even with a point top, then proves exact cosine-weighted **limiting finite-exposure defects** \(\int\cos\theta\,d(\nu_R-\omega_R)=(-C_R)_+\), \(\int(-\cos\theta)\,d(\nu_L-\omega_L)=(-C_L)_+\), with \(\nu_Q\ge\omega_Q\). Here \(\omega\) is charged outer-wing curvature; \(\nu\) is a weak limit of finite middle-niche exposures, **not automatically the arclength of the actual positive full niche**. Every nonnegative-pressure quarter has exact limiting measure equality.
 
-The exact [TF4](gate1-spatial-tilted-facet-pinning.md) map inserts a height-one point at the nearer J endpoint when the top is disjoint from J; it **strictly increases exterior reward without changing any charged niche**, so every maximizer's top meets J. A tilted canonical maximizer reaches height one at its higher endpoint. EP3 consequently forces both pressures positive in the horizontal-middle case and the higher-side pressure positive in the tilted case. A remaining negative-pressure defect can only be on the lower side, whose end face is zero and whose \(q_{\rm low}<1/2\).
+The exact [TF4](gate1-spatial-tilted-facet-pinning.md) map inserts a height-one point at the nearer J endpoint when the top is disjoint from J; it **strictly increases exterior reward without changing any charged niche**, so every maximizer's top meets J. A tilted canonical maximizer reaches height one at its higher endpoint. EP3 initially forced both pressures positive in the horizontal-middle case and the higher-side pressure positive in the tilted case. The October 10 LH1 exclusion below now removes the possible low-side nonpositive-pressure branch as well.
 
-**Precise remaining obligation:** pay that possible defect and prove the full global visibility/velocity/value inequality. Even when both limiting exposure measures match, zero-height loss of exposure, \(|p|,|q|\le1\), and the sharp value have not been proved. This closes a global variational dependency; it does **not** pass Gate 1 or activate Gate 2.
+### October 10: positive pressures and the complete horizontal value theorem
+
+[**LH1–LH3**](gate1-global-positive-pressure-and-wing-identity.md) prove that every canonical cap with lower middle-endpoint height at most one half has
+\[
+\mathcal P<31233/39200<4/5<M/2.
+\]
+Thus every canonical global maximizer has **both endpoint pressures and both end heights strictly positive**. EP gives exact limiting source equality on both quarters, \(\nu=\omega\). A finite-graph Green identity, with the moving-window boundary terms retained, then proves the stationary law
+\[
+\boxed{2\mathcal P=L_{\rm wing},\qquad\max_J n\le(e_R+e_L)/2.}
+\]
+Here \(L_{\rm wing}\) includes any horizontal top segment outside J and excludes vertical end faces. No identification of weak finite exposure with ordinary positive niche arclength is assumed.
+
+[**CH1–CH7**](gate1-spatial-maximizer-curvature-and-horizontal-value.md) remove the nonpositive-height excess-curvature obstruction, transfer same-sign shadowing to the actual spatial maximizer, and prove that a horizontal maximizer of width \(W\ge2\) has top face exactly J. In that branch, **one globally unit-curvature quarter forces both**, by a spatial-window-valid visible-source flux argument. The general signed-roof identity and AF calibration then give the sharp value through
+\[
+W_H=\frac4{35}\sqrt{523+2\sqrt{701}}.
+\]
+For a tilted maximizer with \(W\le8/3\), CH7 proves unit curvature on the entire quarter without the central-facet atom, with the facet's exact derivative jump included.
+
+[**HW1 — complete horizontal theorem**](gate1-horizontal-maximizer-sharp-value.md) now proves
+\[
+\boxed{A|_J\text{ horizontal at a canonical global maximizer}
+\quad\Longrightarrow\quad\mathcal P\le M/2.}
+\]
+All horizontal widths are covered. [SW1](gate1-horizontal-short-width-exclusion.md) excludes \(W\le2\) by three actual angles. HW first excludes \(C=W/4\ge13/15\), then proves full one-turn feasibility in the remaining range. Exact kernel estimates and a seven-row rational certificate exclude \(8571/12500\le C\le4/5\), using only the previously recorded Gerver bound \(G\le22199/10000\). Two disjoint extra niche half-triangles at \(\pi/8,3\pi/8\) exclude \(4/5\le C\le13/15\). The overlap with CH is exact, so no horizontal width is omitted. The finite checker evaluates the displayed rational inequalities only; it is not a sampled-angle or numerical-search premise.
+
+**Precise remaining obligation:** prove the sharp spatial value for a **tilted canonical global maximizer**. After reflection it has \(A(j_+)=1\), \(1/2<A(j_-)<1\), two strict corners exactly at the endpoints of J, positive end faces and source-measure equality, and \(2\mathcal P=L_{\rm wing}\). A horizontal top overhang on the high wing remains possible. For \(W\le8/3\), one regular quarter is controlled; the other quarter and the exact value comparison with the middle-window clipping still require proof. Wider tilted caps also remain. This is the only remaining alternative for an above-reference scalar maximizer; it does **not** pass Gate 1 or activate Gate 2.
 
 **Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
 
@@ -293,12 +318,12 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 6. **No deferred work promise:** perform current-session work and report the result; never assert background progress or promise a delivery date.
 7. **Repository discipline:** [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3), branch research/ambidextrous-pen-and-paper; all research commits marked [skip ci]; no CI, Lean/Lake, or original Lean library changes.
 
-## Current gate status (updated October 9, 2026)
+## Current gate status (updated October 10, 2026)
 
 | Gate | Status | Concrete missing step |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
-| 1 — coupled full-turn loss | **ACTIVE: SD2 sharp cap value unproved** | EP1–EP3 give exact endpoint complementarity and limiting exposure defects; the global sharp value, including possible low-side negative pressure and full-niche visibility, is still missing. The coupled PG.12 / G1.5 inequality remains the original acceptance target. |
+| 1 — coupled full-turn loss | **ACTIVE: SD2 sharp cap value unproved** | LH removes nonpositive pressures and proves the stationary wing identity. HW closes every horizontal canonical maximizer. The tilted canonical value, including the second quarter, top overhang and wider widths, remains unproved. The coupled PG.12 / G1.5 inequality remains the original acceptance target. |
 | 2 — complete original partial motions | **BLOCKED** | No sharp charge for both independent outgoing strips together with visited partial niches |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
