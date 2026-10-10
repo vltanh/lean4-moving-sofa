@@ -1,0 +1,28 @@
+{
+  "status": "exact_identities_passed",
+  "identity_count": 8,
+  "identities": [
+    "3x3 Hessian equals WS/SQ matrix",
+    "2x2 Hessian equals WS.6 matrix",
+    "general height-cut-mixed decomposition",
+    "zero-slack regression (WS.10)",
+    "zero-height regression (SQ.9)",
+    "shared-bottom regression (NH.8)",
+    "GH.5 absorption identity",
+    "WS.11 copositive factorisation"
+  ],
+  "negative_controls_rejected": [
+    "mixed term with A and C0 roles exchanged rejected",
+    "lost reflected bottom trace rejected",
+    "sign of gamma flipped rejected"
+  ],
+  "mixed_term": "-sd*(2*A - B0*(y - 1) + 2*C0)/2 + sr*(A*(y - 1) - 2*B0 + C0*(y - 1))/2 + (ed + er)*(y - 1)*(A + B0 - C0)/4",
+  "analytic_domain": "0<y<1; A,B0,C0>=0; 0<=s_R,s_D<=1; |e_R|<=s_R, |e_D|<=s_D",
+  "geometric_admission_verified": false,
+  "unrestricted_optimality_proved": false,
+  "arithmetic": "SymPy exact rational functions; no floating-point decisions",
+  "python_version": "3.13.16",
+  "sympy_version": "1.14.0",
+  "lean_or_ci_used": false,
+  "source_sha256": "77eae99b3d4858e1add69054398d98c3b91607e84a5ebd30a48a15a1a5a4b5fa"
+}

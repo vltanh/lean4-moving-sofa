@@ -1,0 +1,30 @@
+{
+  "status": "exact_regressions_passed",
+  "midpoint": {
+    "offset_band_cases": 1296,
+    "sharp_equalities": 6,
+    "corner_concentration_checks": 30,
+    "negative_controls": ["forgetting_forbidden_rectangles_rejected"],
+    "internal_seconds": 0.13242002699996647,
+    "source_sha256": "20db4f6bb4494e631f0e6a55c80b6c12f7d6bf957e8b00c2b7e3527b7a94559e",
+    "source_git_blob_sha": "602bf6ddd50775b134f27dc654dcda9dbfa449ee",
+    "executed_source_matches_committed_blob": true,
+    "external_timeout_seconds": 5
+  },
+  "finite_to_full": {
+    "normal_checks": 124,
+    "diameter_point_checks": 60,
+    "internal_seconds": 0.0054036550000091665,
+    "source_sha256": "bec8aac330b9c11b49d75cada55698b4ee8a4f34eef6222f1ac4e55f7f1bab29",
+    "source_git_blob_sha": "1640af659cbe89c07d169cf4f03b76c2fff216db",
+    "executed_source_matches_committed_blob": true,
+    "external_timeout_seconds": 5
+  },
+  "initial_checker_failure": "The first midpoint checker invocation terminated with TypeError after using the Fraction constructor Q in P-Q. It was corrected to P-R before the successful runs. The failed run produced no mathematical result.",
+  "arithmetic": "Python unbounded integers and Fraction; all finite polygon clipping is exact",
+  "continuum_verified_by_code": false,
+  "global_finite_mesh_optima_computed": false,
+  "sharp_romik_bound_proved": false,
+  "ci_or_lean_used": false,
+  "scope": "The universal midpoint theorem and the finite-to-full conversion are separate hand proofs. These tests check exact finite instances and displayed algebra; they do not replace the continuum arguments or determine the full-turn optimum."
+}
