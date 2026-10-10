@@ -1,5 +1,21 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+## Gate 3 reorientation — equality and uniqueness active
+
+The [Gate 3 roadmap](GATE3-ROADMAP.md) now governs the next work. Its
+exact nonnegative deficit identity proves that every original area-M
+body has two original partial-cap scores M/2, zero spatial partition
+remainder, and zero area omitted from its canonical envelope. The
+remaining target is to classify every such equality cap, including
+reversing canonicalization and treating proper angles without an
+unjustified largest-angle quantifier. Actual-hull recovery and regular
+closedness must then establish exact compact-body uniqueness.
+
+Gate 3 also requires one manuscript exposing all indispensable reduction
+proofs for independent mathematical review. **Gate 3 is ACTIVE, not
+passed.** The exact area value from Gate 2 is unchanged; equality
+classification and uniqueness are the new obligations.
+
 ## Current result — Gate 2 closed, October 10, 2026
 
 **Gate 2: PASS as a written mathematical proof.** The
@@ -64,7 +80,7 @@ enclosure remain dependencies. **External refereeing, Lean verification,
 equality classification and uniqueness remain outstanding.** No
 Lean/Lake command, CI run or original Lean source change was made for
 this gate. Gates 0, 1 and 2 have passed the project's written-proof
-acceptance conditions; Gate 3 is unstarted. The
+acceptance conditions; Gate 3 is now active under the roadmap above. The
 [completed roadmap](GATE2-ROADMAP.md) records the progression from the
 initial sufficient theorem to this closure.
 
@@ -87,7 +103,7 @@ The [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes the 
 
 **Verification and dependencies:** the written arguments received separate mathematical checks within this research session. The [fixed exact checker](computer-assisted/check_gate1_final_scalar_exact.py) passes 74 rational arithmetic checks using Fraction alone. Its arithmetic checks do not verify the geometric proofs. Baek's ordinary one-turn theorem and the existing exact Gerver area enclosure remain explicit dependencies; the relevant source declarations and parameter premises were inspected. **No external refereeing, Lean/Lake build, CI run, or new Lean formalization is claimed.**
 
-The Gate 1 theorem controls complete turns. The separate Gate 2 closure above now controls independent partial angles and their actual outgoing whole-body strips. Equality classification and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) records Gates 0–2 as passed and Gate 3 as unstarted.
+The Gate 1 theorem controls complete turns. The separate Gate 2 closure above now controls independent partial angles and their actual outgoing whole-body strips. Equality classification and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) records Gates 0–2 as passed and Gate 3 as active.
 
 ## Gate 2 reorientation — initial roadmap, October 10, 2026
 

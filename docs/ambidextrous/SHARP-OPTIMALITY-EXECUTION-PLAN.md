@@ -1,6 +1,6 @@
 # Sharp ambidextrous moving-sofa optimality — controlling execution plan
 
-**Gates 0–2 completed as written proofs · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the proof requirements for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved. Gate 3 is unstarted.
+**Gates 0–2 completed as written proofs · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the proof requirements for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved. Gate 3 is active under its [equality roadmap](GATE3-ROADMAP.md).
 
 **Honest baseline.** Romik's construction has proven area
 \[
@@ -355,7 +355,7 @@ G2C.23–24 join two arbitrary independent caps of the actual common hull, prese
 
 ## Gate 3 — equality, uniqueness and independent review
 
-**Status: UNSTARTED.** Only after the unrestricted sharp value is proved, analyze whether every equality sofa has Romik's hull, complete terminal angles and actual area. Equality in any signed/support interpolation is not enough without connectedness and actual-hull retention. Prove uniqueness **separately**, if it is true.
+**Status: ACTIVE.** The [Gate 3 roadmap](GATE3-ROADMAP.md) fixes the exact equality target and begins with a nonnegative deficit identity for every actual body. The active scalar lemma must classify every original equality cap, reverse the middle-chord and height reductions, and exclude proper terminal angles without relying only on a selected largest-angle maximizer. Then recover Romik's actual hull, complete terminal angles and literal compact body. Equality in any signed/support interpolation is not enough without connectedness and actual-hull retention. Prove uniqueness **separately**, if it is true.
 
 Compile one self-contained manuscript, with all key equations and reduction proofs exposed for independent mathematical review. No claim of Lean verification, automated kernel proof, or externally accepted publication.
 
@@ -376,6 +376,6 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
 | 1 — coupled full-turn loss | **PASS** (written proof) | G1C1 proves the universal cap value; G1C2 gives the complete-turn sharp area and exact reference equality. Dependency and coverage audit accepted; external review and Lean verification outstanding. |
 | 2 — complete original partial motions | **PASS** (written proof) | G2C1 proves the universal partial-cap value; G2C2/G2C.24 give the sharp original-motion area and signed joint target. Full dependency/coverage audit accepted; external review and Lean verification outstanding. |
-| 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
+| 3 — equality/uniqueness | **ACTIVE** | Classify every equality cap and proper terminal angle; recover the actual hull/body; compile and audit one self-contained manuscript |
 
 **Definition of meaningful progress:** a passed gate, a global theorem that removes an indispensable gap, or a correct falsification requiring a documented change in the global strategy. Everything else is supporting research.
