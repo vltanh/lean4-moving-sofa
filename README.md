@@ -146,11 +146,10 @@ in CI compares the results that each formal proof uses with those that Baek's pr
 The ambidextrous variant of the problem asks for the largest shape that can be moved around the corner of
 a unit-width hallway that turns right and also, from the same starting position, around one that turns
 left. Romik constructed a candidate of area `1 + 4Y² + arctan Y = 1.64495…` in 2016, where `4Y³ + 3Y = 1`.
-[docs/ambidextrous/](docs/ambidextrous) keeps the research notes on this variant, written by ChatGPT Pro 6,
-ending with the manuscript [*Sharp area and exact uniqueness for the ambidextrous moving sofa problem*](docs/ambidextrous/GATE3-MANUSCRIPT.md):
-Romik's ambidextrous sofa is optimal, and it is the only optimal shape up to rotations and translations. Its
-Lean formalization is a repository of its own,
-[lean4-ambidextrous-sofa](https://github.com/vltanh/lean4-ambidextrous-sofa), which uses this repository's
+[lean4-ambidextrous-sofa](https://github.com/vltanh/lean4-ambidextrous-sofa) proves in Lean that Romik's
+ambidextrous sofa is optimal and that it is the only optimal shape up to rotations and translations,
+formalizing a manuscript written by ChatGPT Pro 6 from research notes that began in this repository (pull
+request #3); that repository keeps the final manuscript in its archive. It uses this repository's
 `MovingSofaOptimality` for Baek's theorem: every moving sofa has area at most 2.2199.
 
 ## Prior work
@@ -185,8 +184,7 @@ MovingSofaUniqueness/           the uniqueness, and the second proof of optimali
 MovingSofaBridge/               the bridge to formal-conjectures, and the definitions the Challenges copy
 MovingSofaStability/            the stability
 MovingSofaExtremal/             the certificate route, and the proofs of version 5
-docs/                           these pages, the credits and the manuscript; docs/ambidextrous/ holds
-                                the research notes on the ambidextrous sofa
+docs/                           these pages, the credits and the manuscript
 scripts/                        the audits, the documentation tools and the figures
 ```
 
