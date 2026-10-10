@@ -28,6 +28,55 @@ The [Gate 2 roadmap](GATE2-ROADMAP.md) fixes the next active sufficient theorem:
 
 Universal integrated domination of the full niche by the partial niche plus outgoing wall is **false**, as the roadmap's exact polygon shows. This falsifies that transfer shortcut, not the sharp partial-cap value. The remaining global proof must handle free terminal angles, their possible first-support facet atoms and exposed positions, and both middle-slope signs. The roadmap orders the domain, source, value and original-motion audits explicitly. **Gate 2 remains ACTIVE and UNPROVED; no unrestricted sharp value or uniqueness is claimed.**
 
+## Gate 2 global proof checkpoint — October 10, 2026
+
+The partial-cap domain and variational prerequisites are now proved in
+[PD](gate2-partial-cap-domain-reductions.md),
+[PS](gate2-partial-endpoint-source-and-green.md), and
+[TV](gate2-terminal-angle-variations.md). They give joint attainment,
+height-one affine-middle canonicalization for both slope signs, saturation
+of unused normals, positive endpoint pressures, the exact wing/source and
+Green balances, and both one-sided terminal-angle derivatives. A first
+terminal facet may carry source mass; the companion terminal facet cannot.
+Terminal ties remain in the angle law. No common fractional occupation for
+independent shape and angle variations is asserted.
+
+The [all-width angle certificate](gate2-all-width-terminal-angle-exclusion.md)
+proves the genuinely universal bound
+\(\mathcal P_\alpha(U)<5259/6400<M/2\) for
+\(\pi/4\le\alpha\le\arctan(8/3)\). The
+[three-angle width cut](gate2-three-angle-width-cut.md) applies to either
+middle-slope sign with the actual partial endpoint pressures, without a
+full-niche endpoint-box assumption. Together with the transferred short
+and tilt estimates in [TP](gate2-terminal-facet-and-prefix-reduction.md),
+it restricts any hypothetical above-reference selected maximizer to
+\(1001/2000<C<37/50\), \(0\le h<17/50\).
+
+TP proves the all-sign terminal bounds
+\(m\le w_H<\cos\alpha/2\) and \(T_L+2T_R\le d\), with the actual
+lower terminal tail height retained in the negative-tilt case. The
+[reflected companion-prefix theorem](gate2-small-deficit-companion-prefix.md)
+uses the exact energy of the terminal impulse to exclude every
+largest-angle joint maximizer with \(0<\cos\alpha\le1/25\). This is a
+maximizer exclusion in the universal scalar proof; it is not a standalone
+pointwise bound for every cap at those angles.
+
+For positive tilt, [PU](gate2-positive-tilt-first-unit-exclusion.md) excludes
+the entire first-unit branch, and [IM](gate2-initial-mask-energy.md) proves
+that branch covers all \(C\le2/3\), as well as giving an exact additional
+initial masking-energy criterion. The
+[negative-tilt completion theorem](gate2-negative-tilt-completion.md) pays
+that sign unless \(h<1-\sin\alpha\) and its central normal is unvisited.
+
+**Remaining precise target:** a largest-angle joint maximizer with
+\(1/25<\cos\alpha<3/\sqrt{73}\) in the width/tilt domain above. Positive
+tilt requires \(C>2/3\) and first-wing curvature excess; horizontal middle
+and the stated small negative tilt are still included. The new arguments
+have separate written mathematical checks within the session. **Gate 2
+is still OPEN.** No unrestricted sharp area theorem, external refereeing,
+Lean/Lake verification, CI run, or uniqueness conclusion follows from
+this checkpoint.
+
 ## Historical progress ledger
 
 The dated entries below preserve their original intermediate proof boundaries. **The current result above supersedes all earlier Gate 1 OPEN/ACTIVE and remaining-tilted-branch descriptions.** Their mathematical arguments remain part of the dependency record.

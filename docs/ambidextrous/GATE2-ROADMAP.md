@@ -111,7 +111,23 @@ genuine connected body, Gate 0 gives \(|S|\le\int_I\ell\). Consequently
 G2.4 for independent caps and angles proves PLAN.3, and Gate 0 plus Romik
 then gives \(\mu_{\rm amb}=M\). No separate symmetric-angle case is enough.
 
-## 3. A whole terminal-angle interval is already closed
+## 3. Angle exclusions and the current maximizer domain
+
+The initial support cancellation below is now strengthened by
+[AT](gate2-all-width-terminal-angle-exclusion.md):
+
+\[
+\boxed{\pi/4\le\alpha\le\arctan(8/3)
+\quad\Longrightarrow\quad
+\mathcal P_\alpha(U)<\frac{5259}{6400}<\frac M2}
+\tag{G2.7a}
+\]
+
+for every cap and every width. AT retains the whole outgoing wall, the
+45-degree tent, all window and floor clips, and the compatibility of
+their actual support parameters. Its piecewise quadratic relaxation has
+an exact supporting-plane certificate; it is not an angular sampling
+bound. The elementary cancellation is retained here as its first case.
 
 This elementary estimate applies to the **entire** cap domain; it needs no
 stationarity or prescribed contact geometry. Center \(I=[-2C,2C]\), so
@@ -154,18 +170,105 @@ The last exact reference comparison is recorded in the Gate 1 closure.
 This closes an initial interval of the **scalar** problem. It does not by
 itself bound the companion cap at an arbitrary larger terminal angle.
 
+### 3a. The attained-maximizer reduction is proved
+
+[PD](gate2-partial-cap-domain-reductions.md) proves height extrusion,
+middle-chord reduction, width coercivity, joint continuity and attainment,
+top insertion for both middle-slope signs, and saturation of the unused
+outer normals. If G2.4 fails, choose a joint global maximizer with the
+largest terminal angle and put it in this canonical form. Its middle is
+affine and its height is one.
+
+[PS](gate2-partial-endpoint-source-and-green.md) rederives its finite-source
+limit, actual endpoint complementarity, positive pressures, wing/source
+identity and Green balance for the partial barrier. It keeps the possible
+first terminal facet atom, proves the absence of a companion terminal
+atom, and supplies the bounded regular-curvature inequalities on the used
+arcs. [TV](gate2-terminal-angle-variations.md) gives both one-sided angle
+derivatives, including historical ties. A common fractional occupation
+for separate shape and angle variations has not been assumed.
+
+The three visited-angle comparisons and the endpoint identities yield
+the all-sign bounds
+
+\[
+\frac{1001}{2000}<C=\frac W4<\frac{37}{50},\qquad
+0\le h=|A(C)-A(-C)|<\frac{17}{50}.
+\tag{G2.8}
+\]
+
+The lower width and tilt cuts are transferred explicitly in
+[TP](gate2-terminal-facet-and-prefix-reduction.md). The upper width cut
+is the new [WC](gate2-three-angle-width-cut.md), which replaces the
+unavailable full-niche endpoint boxes by the exact partial endpoint
+pressures. It is valid throughout the remaining angle interval.
+
+### 3b. Terminal geometry and the excluded maximizer cases
+
+Write \(c=\cos\alpha\), \(s=\sin\alpha\). The
+[negative-tilt completion theorem](gate2-negative-tilt-completion.md)
+already pays every negative middle with \(h\ge1-s\), and every negative
+middle whose central normal has been visited. In the remaining cases,
+write \(H=1\) for positive or horizontal middle and \(H=1-h>s\) for
+negative middle, and put
+
+\[
+d=\frac{1-Hs}{c},\qquad w_H=c-d.
+\]
+
+If \(m\) is the charged horizontal length of the first terminal facet,
+and \(T_L,T_R\) are the left and right height-one top overhangs, TP proves
+
+\[
+m\le w_H<\frac c2,\qquad T_L+2T_R\le d.
+\tag{G2.9}
+\]
+
+The [reflected prefix theorem](gate2-small-deficit-companion-prefix.md)
+then excludes every such largest-angle joint maximizer with
+\(0<c\le1/25\), for all three signs of the middle slope. It controls the
+terminal impulse in the reflected arm energy, bounds the companion
+curvature on precisely the initial interval needed for the argument,
+and makes the strict outgoing exposure longer than the entire available
+terminal facet. This is a **maximizer exclusion**, not a separate claim
+that every cap at these angles is bounded without solving the remaining
+global maximizer cases.
+
+For positive tilt, [PU](gate2-positive-tilt-first-unit-exclusion.md)
+excludes every selected maximizer with first regular-wing curvature at
+most one. [IM](gate2-initial-mask-energy.md) proves that bound whenever
+\(C\le2/3\), and gives an additional exact initial floor/outgoing-strip
+energy criterion for wider caps.
+
+Thus the remaining contradiction target is a selected joint maximizer
+in
+
+\[
+\boxed{\frac1{25}<\cos\alpha<\frac3{\sqrt{73}},\qquad
+\frac{1001}{2000}<C<\frac{37}{50},\qquad 0\le h<\frac{17}{50}.}
+\tag{G2.10 -- OPEN}
+\]
+
+For positive tilt it must also have \(C>2/3\) and a genuine first-wing
+curvature excess; for negative tilt it must satisfy \(0<h<1-s\) and have
+an unvisited central normal. Horizontal middle remains in the target.
+These restrictions apply to the chosen scalar maximizer. They are not
+individual angle restrictions on the two caps of an arbitrary original
+sofa. Gate 2 remains open until this entire target is excluded or sharply
+bounded.
+
 ## 4. Ordered proof tasks and acceptance checks
 
-| Stage | Required result | What it resolves |
+| Stage | Current result or required theorem | Status |
 |---|---|---|
-| A: domain reduction | Prove height extrusion, middle-chord canonicalization, width coercivity and joint continuity in \((U,\alpha)\); select an attained canonical maximizer | Arbitrary heights, nonsmooth caps and variable angles; no finite facet cutoff |
-| B: used-support structure | Locate the top relative to \(J\), retaining both signs of the middle slope; saturate unused outer normals while preserving all used supports | Removes freely improvable outer geometry, without assuming a reference contact chart |
-| C: terminal source law | Rederive the spatial facet, endpoint and source balances for G2.2, including a possible atom at \(\mu_\alpha\), its exposed graph positions and free-angle variations | The genuine new boundary condition absent from Gate 1 |
-| D: sharp global value | Exclude or sharply bound every attained proper-partial maximizer with \(\arctan(5/4)<\alpha<L\), for both slope signs and every allowed width | The unresolved substance of G2.4 |
-| E: original-domain closure | Join all angle boundaries, invoke G2.5 for independent caps and angles, use the Gate 0 original-motion bridge, and check exact reference equality | Passes Gate 2 only when all preceding universal claims are proved |
+| A: domain reduction | PD proves height extrusion, middle-chord canonicalization, width coercivity, joint continuity and attained maximizer selection | Proved |
+| B: used-support structure | PD locates the top for both middle-slope signs and saturates unused normals; PS keeps the terminal facet and excludes the companion atom | Proved |
+| C: terminal source law | PS proves spatial and endpoint balances and regular-curvature bounds; TV proves both one-sided free-angle laws with their actual tie terms | Proved as stated; no stronger common-occupation law assumed |
+| D: sharp global value | Exclude or sharply bound every selected maximizer in G2.10, with the additional sign-specific restrictions above | Open |
+| E: original-domain closure | Join all boundaries, invoke G2.5 for independent caps and angles, use Gate 0, and check exact reference equality | Pending D |
 
-Stages A and B use elementary domain transformations where valid. Stages C
-and D require new proofs. In particular:
+The new source and terminal proofs respect the following distinctions,
+which remain mandatory in Stage D:
 
 - Horizontal reflection is **not** a symmetry of a fixed partial objective:
   it changes which wall supplies the outgoing barrier. A negative middle
