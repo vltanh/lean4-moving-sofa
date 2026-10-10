@@ -8,11 +8,11 @@ received separate mathematical checks within this research session. They
 have not been externally refereed or verified by a Lean kernel.
 
 The ordinary one-turn area theorem and its exact numerical enclosure are
-explicit dependencies, recorded in Section 6. **Gate 2, concerning two
-independent partial turns and their actual outgoing strips, remains
-unproved.** The present result establishes the sharp value for complete
-conventional turns; it does not establish unrestricted ambidextrous
-optimality, equality classification, or uniqueness.
+explicit dependencies, recorded in Section 6. The present result
+establishes the sharp value for complete conventional turns. The later
+[Gate 2 closure](gate2-sharp-partial-turn-closure.md) now covers independent
+partial turns and their actual outgoing strips, proving the unrestricted
+sharp area value. Equality classification and uniqueness remain separate.
 
 ## 1. Exact statements
 
@@ -449,9 +449,10 @@ is exactly \(M\), and the original coupled ordinary niche-loss inequality
 G1.2 / G1.5 follows as well. This meets the controlling plan's Gate 1
 acceptance condition.
 
-The unresolved theorem is now Gate 2: the sharp joint charge with
-independent terminal angles \(\alpha,\gamma\in[\pi/4,\pi/2]\) and
-their two actual outgoing whole-body strips. The proof above uses both
-full angle intervals. It supplies no no-loss completion theorem for
-partial turns. The research branch therefore continues to distinguish
-**Gate 1 passed** from **unrestricted ambidextrous optimality unproved**.
+The proof above uses both full angle intervals and supplies no arbitrary
+no-loss completion theorem for partial turns. The separate
+[Gate 2 proof](gate2-sharp-partial-turn-closure.md) now establishes the sharp
+joint charge with independent terminal angles
+\(\alpha,\gamma\in[\pi/4,\pi/2]\) and their two actual outgoing
+whole-body strips. That later theorem, with its own source and weighted
+terminal arguments, provides the unrestricted sharp area value.

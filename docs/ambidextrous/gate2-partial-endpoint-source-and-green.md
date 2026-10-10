@@ -1,10 +1,10 @@
 # Gate 2: endpoint pressures, terminal source mass, and the stationary wing identity
 
 **October 10, 2026. Written mathematical theorem, independently reviewed
-within this research session. Gate 2 remains open.** This is a
+within this research session.** This is a
 fixed-terminal-angle variational theorem for the partial cap objective.
-It does not prove the sharp partial cap value or an angle stationarity
-law.
+It does not by itself prove the sharp partial cap value or an angle
+stationarity law; [the Gate 2 closure](gate2-sharp-partial-turn-closure.md) assembles the later inputs.
 
 The domain and canonical reductions are those of
 [the partial cap domain reductions](gate2-partial-cap-domain-reductions.md)
@@ -947,5 +947,5 @@ pressures, exact charged source equality with its permitted terminal
 atom, a pinned nonhorizontal middle facet, and the full stationary
 wing-length and height identities. Both middle tilt orientations are
 included by direct fixed-angle variations. The universal value
-\(\mathcal P_\alpha\le M/2\), the remaining terminal angle/shape
-interaction, and Gate 2 are still open.
+\(\mathcal P_\alpha\le M/2\) and the terminal angle/shape interaction
+require the additional arguments assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).

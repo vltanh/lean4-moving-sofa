@@ -227,5 +227,6 @@ every positive tilted selected joint maximizer in
 The whole terminal facet remains counted by PS and is bounded by
 PU's angle variation; IM18 neither removes that atom nor bounds its
 curvature by a Lebesgue density. Horizontal and negative tilts, lower
-angles, wider caps and failure of IM8 still require their own global
-arguments. Gate 2 is not a conclusion of this note alone.
+angles, wider caps and failure of IM8 lie outside this note's scope.
+Gate 2 is not a conclusion of this lemma alone; the full argument is
+assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).

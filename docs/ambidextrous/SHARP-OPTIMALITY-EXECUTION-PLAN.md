@@ -1,18 +1,18 @@
 # Sharp ambidextrous moving-sofa optimality — controlling execution plan
 
-**ACTIVE plan · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the priorities for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved.
+**Gates 0–2 completed as written proofs · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the proof requirements for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved. Gate 3 is unstarted.
 
 **Honest baseline.** Romik's construction has proven area
 \[
 M=1+4Y^2+\arctan Y\approx1.64495521842544,\qquad 4Y^3+3Y-1=0.
 \]
-Unrestricted optimality, uniqueness, and exclusion of above-M bodies with arbitrary partial turns **are not proved** by the branch. **Gate 1's complete-turn sharp bound is now proved at the written-proof level**, with its ordinary one-turn dependency explicit. Gate 2's partial-turn joint charge remains the first unresolved theorem. Local stability, convex-only bounds, support classifications and numerical screens do not settle that theorem.
+**The unrestricted sharp area value is now proved at the written-proof level.** The [Gate 2 closure](gate2-sharp-partial-turn-closure.md) proves the universal partial-cap bound, the signed joint target below, and exclusion of above-M compact connected bodies with arbitrary original partial motions. Its [dependency and coverage audit](gate2-dependency-coverage-audit.md) is accepted. Gate 1's ordinary one-turn dependency remains explicit. **Uniqueness and equality classification remain unproved; external refereeing and Lean verification remain outstanding.**
 
 ## One non-negotiable final theorem
 
-We must prove the sharp bound for **one connected physical shape** negotiating the *two distinct unit right-angle corridors*, from a common incoming orientation, with arbitrary continuous rotations including backtracking, subunit vertical height and **two independently partially completed turns**, using the actual outgoing straight-arm strips. No assumed reflection symmetry, contact pattern, curvature cap or full-turn completion.
+The completed theorem bounds **one connected physical shape** negotiating the *two distinct unit right-angle corridors*, from a common incoming orientation, with arbitrary continuous rotations including backtracking, subunit vertical height and **two independently partially completed turns**, using the actual outgoing straight-arm strips. It assumes no reflection symmetry, contact pattern, global curvature cap or arbitrary full-turn completion.
 
-The [OS1 original-motion signed formulation](original-motion-signed-convex-domain.md), *subject to Gate 0's independent audit*, converts that task to a single compact parameter domain. For every compact convex \(K\subset B=[-5/2,5/2]\times[0,1]\), write its projection \(I=[l,r]\), width \(W=r-l\), its two downward cap upper roofs \(A_U,A_V\), their outer deficits \(d_U=1-A_U,\ d_V=1-A_V\), and the exact positive swept-niche roofs \(n_{K;\alpha},n_{\rho K;\gamma}\) at independently visited angles \(\alpha,\gamma\). The true lower/upper whole-body outgoing strip barriers are \(e_{K;\alpha},e_{\rho K;\gamma}\).
+The [OS1 original-motion signed formulation](original-motion-signed-convex-domain.md), with its completed Gate 0 audit, converts that task to a single compact parameter domain. For every compact convex \(K\subset B=[-5/2,5/2]\times[0,1]\), write its projection \(I=[l,r]\), width \(W=r-l\), its two downward cap upper roofs \(A_U,A_V\), their outer deficits \(d_U=1-A_U,\ d_V=1-A_V\), and the exact positive swept-niche roofs \(n_{K;\alpha},n_{\rho K;\gamma}\) at independently visited angles \(\alpha,\gamma\). The true lower/upper whole-body outgoing strip barriers are \(e_{K;\alpha},e_{\rho K;\gamma}\).
 
 Define the **complete joint ordinary-loss charge**
 \[
@@ -32,9 +32,9 @@ For auxiliary hulls with empty fibers, ordinary envelope area is the integral of
 
 **The sole target theorem**, for all \(K\subset B\) and independently \(\alpha,\gamma\in[\pi/4,\pi/2]\), is
 \[
-\boxed{\mathcal L(K,\alpha,\gamma)\ge W-M.}\tag{PLAN.3 — UNPROVED}
+\boxed{\mathcal L(K,\alpha,\gamma)\ge W-M.}\tag{PLAN.3 — PROVED by G2C.24}
 \]
-Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\le M\); Romik supplies the reverse inequality, hence equality. A direct bound for every physically admissible sofa is an equally acceptable substitute, but must actually cover arbitrary original motions rather than a named subclass.
+Gate 0 and the complete G2C.23–24 deduction now prove unrestricted \(\mu_{\rm amb}\le M\); Romik supplies the reverse inequality, hence equality. The signed bound applies to every auxiliary hull in the displayed domain, while the actual-body implication uses connectedness exactly as recorded in Gate 0.
 
 **No shortcut is presumed.** General signed Minkowski concavity has a rigorous counterexample even with height one, one-turn weighted concavity fails on known rectangular families, unrestricted curvature domination is not established, and no reference perturbation theorem controls distant opposite-end hulls. Do not use those false or unproved global premises.
 
@@ -42,7 +42,7 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 **Status: PASS (October 9, 2026; written mathematical audit, externally unrefereed).** The standalone [Gate 0 end-to-end proof](original-motion-global-bridge-gate0-audit.md) rederives the genuine wrong-way angular reach, exact two outgoing strips, common-hull tightening, empty-fiber signed correction, width-five compact box, and area-preserving horizontal gap compression for **both independent partial turns**. It proves the complete supremum equality \(\mu_{\mathrm{amb}}=\sup_{K,\alpha,\gamma}\mathscr V(K,\alpha,\gamma)\) on the planned parameter domain. It also gives a genuine unit-height high-area tilted top-cut family with **positive ambient clipping**, confirming the max/min accounting is indispensable. Note 9's older niche subtraction was **correct** because it had already defined both niches as **\(K\)-clipped** sets; an earlier suspicion of an error in that identity was a notation misunderstanding, not a discovered counterexample. The new independent proof is self-reviewed and open to external mathematical scrutiny.
 
-**Gates 0 and 1 have passed their written-proof acceptance conditions. Gate 2 is now the first unresolved proof obligation.** The following Gate 0 audit requirements record the accepted bridge and remain relevant when using it. Before invoking the global variational target as a final proof, independently rederive and check:
+**Gates 0, 1 and 2 have passed their written-proof acceptance conditions.** The following Gate 0 audit requirements record the accepted bridge and the checks retained in the final original-motion deduction:
 
 - the correct-handed and terminal-angle reduction for arbitrary motions with area near or above M, including **the two actual outgoing strip normals** (GH / Note 10);
 - canonical supporting-hallway tightening and both positive niche envelopes, including all end-angle conventions (OS1);
@@ -60,7 +60,7 @@ Given a fully audited OS1 equivalence, this proves unrestricted \(\mu_{\rm amb}\
 
 The final [reflected-tail projection](gate1-tilted-reflected-tail-and-projection.md) proves \(T>0\) and \(n(-C)=0\) without either whole-wing unit-curvature premise. The [height reduction](gate1-tilted-final-height-reduction.md) forces \(h<1/20\); the [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes every \(0<h\le509/10000\), with overlap. Together with the complete horizontal theorem and earlier width cuts, these exhaust the selected canonical global maximizer. The external ordinary one-turn theorem and the existing exact Gerver enclosure \(G_0=22199/10000\) remain explicit dependencies.
 
-**Gate 1 is closed. Gate 2's independent partial turns and outgoing strips remain unproved.** The full-turn theorem does not imply a no-loss completion of an arbitrary partial turn, unrestricted ambidextrous optimality, or uniqueness.
+**Gate 1 is closed, and the separate Gate 2 closure now covers independent partial turns and outgoing strips.** The full-turn theorem alone does not imply a no-loss completion of an arbitrary partial turn or uniqueness. The intermediate Gate 1 progress sections below retain their historical proof boundaries; the current closure theorems and status table supersede those earlier remaining-case descriptions.
 
 ### Completed scalar theorem (introduced October 9; proved October 10)
 
@@ -341,17 +341,17 @@ The [completed theorem and exact reference equality](gate1-sharp-full-turn-closu
 
 ## Gate 2 — original PARTIAL turns with their two outgoing strips
 
-**Status: ACTIVE — UNPROVED; first unresolved gate after the completed Gate 1 theorem.** Extend the **same joint charge** to all independent \((\alpha,\gamma)\) in the original OS1 domain, including any subunit height; alternatively prove a valid no-loss reduction from *every* original partial motion to a class controlled by Gate 1.
+**Status: PASS (October 10, 2026; written mathematical proof, external review and Lean verification outstanding).** The [complete Gate 2 theorem](gate2-sharp-partial-turn-closure.md) proves the universal partial-cap value with the **whole outgoing first wall**, then proves PLAN.3 and the sharp original-motion area with both independent terminal angles. The [dependency and coverage audit](gate2-dependency-coverage-audit.md) is accepted.
 
-**October 10 reorientation and proof checkpoint:** the [Gate 2 roadmap](GATE2-ROADMAP.md) selects one sufficient global lemma: \(\mathcal P_\alpha(U)\le M/2\) for every downward convex cap and every \(\alpha\in[\pi/4,\pi/2]\), where the charged middle roof is the maximum of zero, the visited two-wall niche, and the **whole first outgoing wall**. Its exact spatial partition implies PLAN.3 for independent caps and angles. PD now proves the global domain/attainment and canonical reductions; PS rederives the partial source, endpoint and Green identities, including the terminal facet; TV proves the one-sided angle derivatives with ties. These are proofs for the partial objective, not automatic transfers of Gate 1 maximizer laws.
+The [roadmap](GATE2-ROADMAP.md) first fixed the sufficient scalar theorem and the exact two-cap implication. PD rederived the joint domain and canonical maximizer; PS established the actual partial source and endpoint laws; TV retained ties in the terminal derivatives. AT excludes all angles through atan(8/3), and WC gives C<37/50 for every remaining middle-slope sign using the actual partial endpoint pressures.
 
-The [all-width angle certificate](gate2-all-width-terminal-angle-exclusion.md) proves \(\mathcal P_\alpha(U)<5259/6400<M/2\) for every cap when \(\alpha\le\arctan(8/3)\). For a hypothetical above-reference **largest-angle joint maximizer**, TP and the [reflected prefix theorem](gate2-small-deficit-companion-prefix.md) exclude \(0<\cos\alpha\le1/25\) for every middle-slope sign. The [three-angle width theorem](gate2-three-angle-width-cut.md) and TP give \(1001/2000<C<37/50\) and \(0\le h<17/50\). PU and IM exclude positive tilt with \(C\le2/3\), or with a first regular wing bounded by unit curvature. Negative tilt is already completed unless \(h<1-\sin\alpha\) and its central normal is unvisited.
+The final weighted companion theorem MP needs only an early curvature-excess payment. RX makes that error zero when cot(alpha)<=1/8. AC retains the terminal facet as an exact reflected impulse and, when cot(alpha)>=1/8, bounds the error by 6517/6400000, strictly below the terminal allowance. The two angle ranges overlap; Gate 1 covers alpha=pi/2, and the negative completion subcase retains its exact hypotheses. The strict terminal exposure would exceed the entire available facet mass, so no above-reference joint maximizer exists.
 
-**Exact remaining obligation:** exclude or sharply bound the selected joint maximizer with \(1/25<\cos\alpha<3/\sqrt{73}\) in that width/tilt domain. Positive tilt must have \(C>2/3\) and first-wing curvature excess; horizontal middle and the stated small negative tilt remain. The near-full result is a maximizer exclusion, not a universal individual-cap angle bound. No common fractional occupation for separate shape and angle variations, full-niche domination, or no-loss arbitrary completion has been assumed. **Gate 2 remains open.**
+G2C.23–24 join two arbitrary independent caps of the actual common hull, preserving the signed-fiber max terms and both outgoing strips. Gate 0 supplies the bound for every original compact connected body, including subunit height and backtracking. Romik gives the exact matching lower value M. The [fixed Fraction checker](computer-assisted/check_gate2_final_exact.py) passes 83 exact arithmetic checks; those checks do not replace the continuum proofs.
 
-**Must not assume** a partial turn can always be extended to \(90^\circ\) in the same orientation. Exact counterexamples show zero-loss in-place completion fails. Saved early or late niche area must be compared with actual outgoing-strip losses in the **joint max**, not as independent signed deficits.
+**No arbitrary in-place completion or universal full-niche domination has been assumed.** Their recorded counterexamples remain valid. No common fractional occupation for independent shape and angle variations, whole-wing unit bound, or symmetry of the two angles is required.
 
-**Gate 2 PASS:** PLAN.3 or equivalent for the entire original motion domain and a complete deduction \(\mu_{\rm amb}\le M\). **NOT PASS:** only turns near \(90^\circ\), the known rough endpoint-angle exclusions, or results requiring a Romik-neighborhood support chart.
+**Gate 2 PASS:** G2C1 proves the sufficient universal scalar theorem; G2C2 and G2C.24 prove PLAN.3 and the sharp original-domain area. Equality classification and uniqueness are outside this passed gate.
 
 ## Gate 3 — equality, uniqueness and independent review
 
@@ -375,7 +375,7 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
 | 1 — coupled full-turn loss | **PASS** (written proof) | G1C1 proves the universal cap value; G1C2 gives the complete-turn sharp area and exact reference equality. Dependency and coverage audit accepted; external review and Lean verification outstanding. |
-| 2 — complete original partial motions | **ACTIVE, UNPROVED** | Partial domain/source/angle laws proved; exclude the selected maximizer with 1/25<cos(alpha)<3/sqrt(73), 1001/2000<C<37/50, retaining horizontal middle and the stated positive/negative tilt restrictions |
+| 2 — complete original partial motions | **PASS** (written proof) | G2C1 proves the universal partial-cap value; G2C2/G2C.24 give the sharp original-motion area and signed joint target. Full dependency/coverage audit accepted; external review and Lean verification outstanding. |
 | 3 — equality/uniqueness | **UNSTARTED** | Requires unrestricted area theorem first |
 
 **Definition of meaningful progress:** a passed gate, a global theorem that removes an indispensable gap, or a correct falsification requiring a documented change in the global strategy. Everything else is supporting research.

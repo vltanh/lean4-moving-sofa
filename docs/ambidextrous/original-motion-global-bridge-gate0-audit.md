@@ -1,5 +1,11 @@
 # Gate 0 audit: original ambidextrous motions equal the sharp signed joint-fiber program
 
+**Subsequent value theorem, October 10, 2026:** the
+[Gate 2 closure](gate2-sharp-partial-turn-closure.md) now proves the sharp
+signed value and uses this bridge for the original-motion upper bound.
+The audit below records the independently completed bridge itself; its
+historical value-status row does not describe the later closure.
+
 **Status: GATE 0 PASS (self-contained pen-and-paper audit, October 9, 2026).** This note independently checks the *bridge*, not the conjectured upper value: every genuine compact connected ambidextrous sofa of area above \(\sqrt2\) contributes at most the exact signed two-angle value of its actual outer hull, and every auxiliary signed two-angle value is bounded above by the area of a **different genuine compact connected** ambidextrous sofa. The two directions give exact equality of **suprema** in the original unrestricted problem. The outgoing whole-body strips and upper/lower reflection signs are retained. The proof works for subunit-height, partial, nonmonotone, nonsymmetric motions and auxiliary hulls with empty fibers.
 
 The audit corrects one subtle historical **notation misunderstanding**: [Note 9, equation (9.5)](09-separation-from-connectedness.md) correctly defines its \(N_\pm\) as **\(K\)-clipped** swept quadrants, so its connected-hull subtraction is **not false**. Subtracting **ambient untruncated** niches instead would be false, and a near-Romik, **unit-height**, actual high-area counterexample is proved in Section 6. This distinction explains why [OT1](one-turn-reduction.md) carries the positive clipping term \(G\). The newer signed objective in [OS1](original-motion-signed-convex-domain.md) retains precisely the right max/min operation and is valid for auxiliary hulls even when their signed fibers are negative.

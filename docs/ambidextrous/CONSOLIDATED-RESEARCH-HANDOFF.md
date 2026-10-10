@@ -1,7 +1,74 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+## Current result — Gate 2 closed, October 10, 2026
 
-## Current result — Gate 1 closed, October 10, 2026
+**Gate 2: PASS as a written mathematical proof.** The
+[complete partial-turn closure](gate2-sharp-partial-turn-closure.md)
+proves
+
+\[
+\boxed{\mathcal P_\alpha(U)\le M/2
+\quad\text{for every compact downward convex cap of height at most one
+and every }\alpha\in[\pi/4,\pi/2],}
+\]
+
+where the middle-half charge retains the actual whole outgoing first
+wall as well as the visited two-wall niche. The exact two-cap signed
+partition and the completed Gate 0 original-motion bridge then give
+
+\[
+\boxed{\mu_{\rm amb}=M=1+4Y^2+\arctan Y,
+\qquad4Y^3+3Y-1=0,\quad Y>0.}
+\]
+
+The upper bound covers compact connected bodies with arbitrary original
+continuous motions, backtracking, subunit incoming height, and two
+independent partial terminal angles. Romik's genuine reference supplies
+the matching lower bound. The signed joint bound also holds on the
+entire auxiliary convex-hull domain, including negative signed fibers.
+
+The decisive [weighted companion theorem MP](gate2-companion-moment-prefix-exclusion.md)
+requires only an early weighted curvature-excess payment. The
+[near-full reflected theorem RX](gate2-reflected-tail-cot-one-eighth.md)
+makes that excess zero for cot(alpha)<=1/8. The
+[all-angle reflected envelope AC](gate2-all-angle-reflected-cubic-exclusion.md)
+retains the terminal facet's exact impulse and bounds the remaining
+error by
+
+\[
+\mathcal E_\theta<\frac{6517}{6400000}
+<\frac{117}{110000}<\frac{39\cos\alpha}{4400}
+\quad\text{when }\cot\alpha\ge1/8.
+\]
+
+The middle strict gap is \(3193/70400000\). MP then forces more strict
+outgoing exposure than the terminal facet's entire source mass. Both
+angle ranges overlap at 1/8; AT handles the smaller turns and Gate 1
+the full-turn endpoint. The proof retains all three middle-slope signs,
+the permitted terminal atom and historical contact ties. It assumes no
+whole-wing unit curvature, common shape/angle terminal occupation,
+arbitrary zero-loss completion, or equal-angle symmetry.
+
+**Audit and reproducibility.** The
+[dependency and coverage audit](gate2-dependency-coverage-audit.md)
+records the noncircular proof order, every boundary and the final
+original-motion implication. The final source-envelope and weighted
+payment were checked separately by root and two audit streams within
+this research session; the assembled closure was also independently
+reviewed. The [fixed exact checker](computer-assisted/check_gate2_final_exact.py)
+passes **83 Fraction arithmetic checks**. Those checks certify the
+displayed rational and squared comparisons, not the continuum geometry.
+
+Gate 1's documented external ordinary one-turn theorem and Gerver area
+enclosure remain dependencies. **External refereeing, Lean verification,
+equality classification and uniqueness remain outstanding.** No
+Lean/Lake command, CI run or original Lean source change was made for
+this gate. Gates 0, 1 and 2 have passed the project's written-proof
+acceptance conditions; Gate 3 is unstarted. The
+[completed roadmap](GATE2-ROADMAP.md) records the progression from the
+initial sufficient theorem to this closure.
+
+## Gate 1 foundation — closed October 10, 2026
 
 **Gate 1: PASS as a written mathematical proof.** The [complete closure theorem](gate1-sharp-full-turn-closure.md) proves
 \[
@@ -20,15 +87,15 @@ The [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes the 
 
 **Verification and dependencies:** the written arguments received separate mathematical checks within this research session. The [fixed exact checker](computer-assisted/check_gate1_final_scalar_exact.py) passes 74 rational arithmetic checks using Fraction alone. Its arithmetic checks do not verify the geometric proofs. Baek's ordinary one-turn theorem and the existing exact Gerver area enclosure remain explicit dependencies; the relevant source declarations and parameter premises were inspected. **No external refereeing, Lean/Lake build, CI run, or new Lean formalization is claimed.**
 
-**The remaining theorem is Gate 2.** Independent partial terminal angles and their two actual outgoing whole-body strips are not yet controlled by a sharp joint charge. Unrestricted ambidextrous optimality, exclusion of all area-above-M partial-turn bodies, equality classification, and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) now marks Gate 2 as the first unresolved gate.
+The Gate 1 theorem controls complete turns. The separate Gate 2 closure above now controls independent partial angles and their actual outgoing whole-body strips. Equality classification and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) records Gates 0–2 as passed and Gate 3 as unstarted.
 
-## Gate 2 reorientation — October 10, 2026
+## Gate 2 reorientation — initial roadmap, October 10, 2026
 
 The [Gate 2 roadmap](GATE2-ROADMAP.md) fixes the next active sufficient theorem: bound \(\mathcal P_\alpha(U)\), with the same moving middle half as Gate 1 and charged roof equal to the maximum of the visited positive niche and the **actual whole first outgoing wall**, by \(M/2\) for every cap and independent partial angle. The exact spatial partition then gives the original joint target for arbitrary upper and reflected-lower caps. A four-line support cancellation already excludes the entire scalar interval \(\pi/4\le\alpha\le\arctan(5/4)\), without a stationarity or contact-chart premise.
 
-Universal integrated domination of the full niche by the partial niche plus outgoing wall is **false**, as the roadmap's exact polygon shows. This falsifies that transfer shortcut, not the sharp partial-cap value. The remaining global proof must handle free terminal angles, their possible first-support facet atoms and exposed positions, and both middle-slope signs. The roadmap orders the domain, source, value and original-motion audits explicitly. **Gate 2 remains ACTIVE and UNPROVED; no unrestricted sharp value or uniqueness is claimed.**
+Universal integrated domination of the full niche by the partial niche plus outgoing wall is **false**, as the roadmap's exact polygon shows. This falsifies that transfer shortcut, not the sharp partial-cap value. The roadmap therefore required new arguments for free terminal angles, possible first-support facet atoms and exposed positions, and both middle-slope signs. Those ordered domain, source, value and original-motion tasks are completed by the closure above; the false shortcut remains excluded.
 
-## Gate 2 global proof checkpoint — October 10, 2026
+## Gate 2 first proof checkpoint — October 10, 2026
 
 The partial-cap domain and variational prerequisites are now proved in
 [PD](gate2-partial-cap-domain-reductions.md),
@@ -68,18 +135,18 @@ initial masking-energy criterion. The
 [negative-tilt completion theorem](gate2-negative-tilt-completion.md) pays
 that sign unless \(h<1-\sin\alpha\) and its central normal is unvisited.
 
-**Remaining precise target:** a largest-angle joint maximizer with
+**Target remaining at that checkpoint:** a largest-angle joint maximizer with
 \(1/25<\cos\alpha<3/\sqrt{73}\) in the width/tilt domain above. Positive
 tilt requires \(C>2/3\) and first-wing curvature excess; horizontal middle
 and the stated small negative tilt are still included. The new arguments
-have separate written mathematical checks within the session. **Gate 2
-is still OPEN.** No unrestricted sharp area theorem, external refereeing,
-Lean/Lake verification, CI run, or uniqueness conclusion follows from
-this checkpoint.
+have separate written mathematical checks within the session. This
+checkpoint alone left Gate 2 open. The subsequent MP/RX/AC argument
+above closes that target and proves the unrestricted sharp area value.
+External refereeing, Lean verification and uniqueness remain separate.
 
 ## Historical progress ledger
 
-The dated entries below preserve their original intermediate proof boundaries. **The current result above supersedes all earlier Gate 1 OPEN/ACTIVE and remaining-tilted-branch descriptions.** Their mathematical arguments remain part of the dependency record.
+The dated entries below preserve their original intermediate proof boundaries. **The current result above supersedes all earlier Gate 1/Gate 2 OPEN/ACTIVE and remaining-case descriptions.** Their mathematical arguments remain part of the dependency record.
 
 **October 10 Gate 1: the entire first-unit tilted branch is excluded; only wider first-wing excess remains (GATE 1 STILL OPEN).** The new [GF.1–GF.17 theorem](gate1-tilted-first-wing-exclusion.md) excludes every tilted canonical global maximizer with first regular-wing curvature at most one, throughout the remaining width and height domain. The companion wing may have arbitrary bounded curvature folds, measurable contact ties, and later returns below the floor. The [structural lemmas](gate1-tilted-first-wing-structure.md) establish the exact positive-niche interval and finite-source projection. The [independent joint-source audit](gate1-tilted-folded-source-occupations.md) retains both source angle and graph position and proves the common fractional corner occupation; it does not assume ordinary continuum-niche arclength convergence.
 

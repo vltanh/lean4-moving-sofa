@@ -1,10 +1,12 @@
 # Gate 2 roadmap: partial turns with the actual outgoing strips
 
-**October 10, 2026. Status: ACTIVE, UNPROVED.** Gate 0's original-motion
-bridge and Gate 1's sharp full-turn value are completed written arguments.
-This roadmap fixes the next global theorem, its exact implication for the
-original problem, and the proof obligations that cannot be imported from
-Gate 1. It does not assert unrestricted optimality.
+**October 10, 2026. Status: COMPLETED — Gate 2 PASS as a written proof.**
+The [closure theorem](gate2-sharp-partial-turn-closure.md) proves the
+universal partial-cap value and the original-motion sharp area, with the
+[dependency and coverage audit](gate2-dependency-coverage-audit.md)
+accepted. This roadmap records the chosen global theorem, the reductions
+developed for it, and the final argument that closes the remaining
+maximizer domain. External review and Lean verification remain separate.
 
 The controlling documents remain
 [the execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) and
@@ -37,7 +39,7 @@ outgoing strips. It also supplies the signed-fiber correction and the
 area-value reduction to a compact convex-hull domain. Thus the exact final
 target is still PLAN.3, without symmetry, unit-span, or completion premises.
 
-## 2. The one active sufficient theorem
+## 2. The universal partial-cap theorem
 
 Let \(U\subset\mathbb R\times[0,1]\) be a nonempty compact downward convex
 cap with roof \(A\), projection \(I=[l,r]\), width \(W=r-l>0\), and
@@ -73,12 +75,12 @@ is \(h_U(e_y)-1\le0\), so it is redundant. Set
 \tag{G2.3}
 \]
 
-**Active global lemma, not yet proved:**
+**Global lemma, now proved as G2C1 in the closure:**
 
 \[
 \boxed{\mathcal P_\alpha(U)\le M/2
 \quad\text{for every such cap and every }\alpha\in[\pi/4,L].}
-\tag{G2.4 -- OPEN}
+\tag{G2.4 -- PROVED}
 \]
 
 This is a sufficient separated inequality. It is stronger than the
@@ -240,13 +242,13 @@ most one. [IM](gate2-initial-mask-energy.md) proves that bound whenever
 \(C\le2/3\), and gives an additional exact initial floor/outgoing-strip
 energy criterion for wider caps.
 
-Thus the remaining contradiction target is a selected joint maximizer
-in
+At the first proof checkpoint, the remaining contradiction target was a
+selected joint maximizer in
 
 \[
 \boxed{\frac1{25}<\cos\alpha<\frac3{\sqrt{73}},\qquad
 \frac{1001}{2000}<C<\frac{37}{50},\qquad 0\le h<\frac{17}{50}.}
-\tag{G2.10 -- OPEN}
+\tag{G2.10 -- checkpoint domain}
 \]
 
 For positive tilt it must also have \(C>2/3\) and a genuine first-wing
@@ -254,8 +256,43 @@ curvature excess; for negative tilt it must satisfy \(0<h<1-s\) and have
 an unvisited central normal. Horizontal middle remains in the target.
 These restrictions apply to the chosen scalar maximizer. They are not
 individual angle restrictions on the two caps of an arbitrary original
-sofa. Gate 2 remains open until this entire target is excluded or sharply
-bounded.
+sofa. The final argument below excludes this entire domain without
+requiring the first wing or the whole companion wing to have unit
+curvature.
+
+### 3c. The final weighted payment closes every remaining angle
+
+[MP](gate2-companion-moment-prefix-exclusion.md) improves the terminal
+comparison: only the weighted excess before
+\(\theta=\arcsin(C-T_L)\) needs to be paid. Its exact terminal margin
+is greater than \(39\cos\alpha/4400\). If the weighted excess is
+at most this amount, the strict outgoing exposure is longer than the
+whole terminal facet, contradicting PS and TP.
+
+[RX](gate2-reflected-tail-cot-one-eighth.md) proves that this excess is
+zero throughout \(0<\cot\alpha\le1/8\). For the complementary range
+\(1/8\le\cot\alpha<3/8\),
+[AC](gate2-all-angle-reflected-cubic-exclusion.md) retains the terminal
+facet as an exact reflected impulse and proves
+
+\[
+(v(t)-1)_+\le\frac{19}{25}
+\bigl(t-(\pi/2-91/100)\bigr)_+.
+\]
+
+The weighted kernel and this envelope give
+
+\[
+\mathcal E_\theta<\frac{6517}{6400000}
+<\frac{117}{110000}<\frac{39\cos\alpha}{4400}.
+\]
+
+The middle strict gap is \(3193/70400000\). The two angle ranges
+overlap at cot(alpha)=1/8, AT includes cot(alpha)=3/8, and Gate 1
+handles alpha=pi/2. All three middle-slope signs are included with
+their actual terminal tail heights. Attainment therefore proves G2.4
+for every cap. G2.5 and Gate 0 then give the sharp original-motion
+area \(M\), with the genuine reference supplying equality.
 
 ## 4. Ordered proof tasks and acceptance checks
 
@@ -264,11 +301,11 @@ bounded.
 | A: domain reduction | PD proves height extrusion, middle-chord canonicalization, width coercivity, joint continuity and attained maximizer selection | Proved |
 | B: used-support structure | PD locates the top for both middle-slope signs and saturates unused normals; PS keeps the terminal facet and excludes the companion atom | Proved |
 | C: terminal source law | PS proves spatial and endpoint balances and regular-curvature bounds; TV proves both one-sided free-angle laws with their actual tie terms | Proved as stated; no stronger common-occupation law assumed |
-| D: sharp global value | Exclude or sharply bound every selected maximizer in G2.10, with the additional sign-specific restrictions above | Open |
-| E: original-domain closure | Join all boundaries, invoke G2.5 for independent caps and angles, use Gate 0, and check exact reference equality | Pending D |
+| D: sharp global value | MP's terminal margin is paid by RX for cot(alpha)<=1/8 and AC for cot(alpha)>=1/8; no proper-angle above-reference maximizer remains | Proved |
+| E: original-domain closure | G2C.23–24 join the two independent caps and angles; Gate 0 supplies the actual-body inequality and Romik the exact lower bound | Proved — Gate 2 PASS |
 
 The new source and terminal proofs respect the following distinctions,
-which remain mandatory in Stage D:
+which are retained in the completed Stage D proof:
 
 - Horizontal reflection is **not** a symmetry of a fixed partial objective:
   it changes which wall supplies the outgoing barrier. A negative middle
@@ -286,7 +323,7 @@ which remain mandatory in Stage D:
   the existing appropriate connectedification theorem. A signed cap score
   alone is not ordinary area.
 
-## 5. Routes already ruled out, and the permitted fallback
+## 5. Rejected shortcuts and the original-domain link
 
 **Universal integrated niche domination is false.** One cannot prove G2.4
 by replacing \(q_{U,\alpha}\) with the full niche pointwise or in its
@@ -319,14 +356,18 @@ incoming normal, [SI3](strip-interval-completion.md) completes both turns
 after reorientation, and Gate 1 gives \(|S|\le M\). Individual safe incoming
 and outgoing directions do not supply that entire interval.
 
-If G2.4 is falsified, exhibit an exact cap and its true continuous-angle
-score, then return to the unchanged joint target PLAN.3. The replacement
-must retain the common hull, both independent strips and the max/min
-clipping terms. A maximizer-only paid completion is allowed only with a
-proved global payment; no new candidate-local program substitutes for
-this obligation.
+The roadmap allowed a return to the unchanged joint target PLAN.3 if
+G2.4 were falsified by an exact continuous-angle cap score. That fallback
+is not needed in the completed proof: MP, RX and AC prove G2.4 directly.
+The rejected full-niche domination and arbitrary completion shortcuts
+remain false; the closure does not restore or assume either one.
 
 ## 6. PASS criterion and reporting discipline
+
+**The criterion is now met by G2C1–G2C2.** The final coverage audit is
+accepted and the fixed Fraction checker passes 83 exact arithmetic
+checks. The result is a written mathematical proof with its external
+dependencies stated, not a new Lean formalization.
 
 **Gate 2 passes only with a complete, auditable proof of PLAN.3 or an
 equivalent sharp bound for every original admissible body, together with

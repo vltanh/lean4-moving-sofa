@@ -1,7 +1,8 @@
 # Gate 2: exact one-sided terminal-angle variations
 
 Written proof, independently checked within the research session,
-October 10, 2026. Gate 2 remains open. All statements below use the
+October 10, 2026. This derivative note is one input to
+[the Gate 2 closure](gate2-sharp-partial-turn-closure.md). All statements below use the
 actual partial one-cap spatial objective from
 [PD](gate2-partial-cap-domain-reductions.md), including its whole first
 outgoing wall. They do not differentiate the earlier weighted support
@@ -162,4 +163,5 @@ uses TV3 together with fixed-angle terminal mass and full occupation on
 its terminal-only interval. Its proof requires no additional joint
 moment identity. The universal partial-cap sharp value, the full
 independent-angle spatial charge, and Gate 2 are not conclusions of
-this terminal derivative note.
+this terminal derivative note alone; their complete dependency chain is
+assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).

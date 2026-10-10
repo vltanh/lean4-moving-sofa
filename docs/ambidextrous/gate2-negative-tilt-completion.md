@@ -1,6 +1,7 @@
 # Gate 2: exact completion for the larger negative middle tilts
 
-**October 10, 2026. Written mathematical reduction; Gate 2 remains open.**
+**October 10, 2026. Written mathematical reduction.** The complete
+angle and tilt coverage is assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 This note closes a whole branch of the selected partial-cap maximizer
 domain using the completed Gate 1 value. It uses the exact
 [used-support saturation](gate2-partial-cap-domain-reductions.md), not an
@@ -160,7 +161,7 @@ explicit right-hand subinterval of \(J\); it is not asserted to vanish
 there.
 
 The remaining small negative tilt, the horizontal middle, and every
-positive middle tilt still require the terminal-source sharp value
-argument. NT1 removes the other negative-tilt cases from that global
+positive middle tilt lie outside this completion lemma and use the
+terminal-source argument assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md). NT1 removes the other negative-tilt cases from that global
 obligation without assuming endpoint pressure, a curvature cap, or
 ordinary survivor feasibility.

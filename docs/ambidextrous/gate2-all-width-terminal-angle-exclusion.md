@@ -30,7 +30,8 @@ including its **whole outgoing first wall**. In particular, any cap with
 score at least \(M/2\) has \(\alpha>\arctan(8/3)\). This is an
 individual scalar-cap exclusion; it does not close Gate 2's remaining
 partial-angle interval or by itself impose this lower bound separately
-on the two angles of a common-hull competitor.
+on the two angles of a common-hull competitor. The full scalar and
+common-hull implications are assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 
 ## 1. Reduction and the three actual supports
 
@@ -592,10 +593,8 @@ score, not an additional hypothesis on the input cap. The only finite
 angles used are the actual 45-degree niche angle and the actual outgoing
 angle; no finite-angle approximation of the remaining niche is asserted.
 
-The remaining sufficient scalar inequality is still
-\(\mathcal P_\alpha(U)\le M/2\) for
-\(\arctan(8/3)<\alpha<\pi/2\). Gate 1 supplies the endpoint
-\(\alpha=\pi/2\). Gate 2 remains open until all remaining partial
-angles and their implications for the original common-hull problem are
-proved. This note is a written argument, without Lean/Lake execution or
-CI verification.
+The interval \(\arctan(8/3)<\alpha<\pi/2\) requires a separate
+scalar argument, while Gate 1 supplies the endpoint \(\alpha=\pi/2\).
+Those arguments and the original common-hull implication are assembled
+in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md). This note is a written argument, without
+Lean/Lake execution or CI verification.

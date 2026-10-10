@@ -337,5 +337,5 @@ The final strict rational gap is \(18763/31500000\). This proves
 WC.5 and excludes WC.3. Combining with WC.1 gives WC.2 for every
 remaining sign of the middle roof and every remaining terminal angle.
 In particular, the width conclusion requires no small-terminal-deficit
-hypothesis. The sharp partial-cap comparison remains a separate
-obligation on the smaller width interval.
+hypothesis. The sharp partial-cap comparison on the smaller width
+interval uses the separate arguments assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).

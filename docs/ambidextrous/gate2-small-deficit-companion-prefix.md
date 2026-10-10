@@ -15,7 +15,8 @@ not assert reflection invariance of the partial spatial objective.
 For reviewability, Section 1 lists the exact modular hypotheses.
 TP supplies all of them for an above-reference largest-angle
 maximizer with `0<cos(a)<=1/25`. This proves that entire terminal
-angle branch, while Gate 2 still requires the remaining angles.
+angle branch. The other angles and the original-motion implication
+are assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 
 ## 1. Geometric hypotheses for the three middle orientations
 
@@ -386,5 +387,5 @@ prefix, and the terminal occupation contradiction then applies.
 
 The proof uses no full barrier contact chart, global unit first wing,
 global unit companion wing, terminal first-moment law, or hypothetical
-full-turn completion. The remaining Gate 2 problem has larger
-terminal deficit; this note does not assert the entire gate.
+full-turn completion. Larger terminal deficits lie outside this
+note's scope; [the Gate 2 closure](gate2-sharp-partial-turn-closure.md) assembles the complete angle coverage.

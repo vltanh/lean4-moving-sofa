@@ -5,7 +5,8 @@ extend the domain reductions behind [Gate 1](gate1-sharp-full-turn-closure.md)
 to a partial niche with its **actual whole-body outgoing strip**. They
 prove attainment, a canonical middle facet, top localization from either
 side, and a complete low-terminal-angle exclusion on the enlarged cap
-domain. They do not prove the remaining sharp scalar value or Gate 2.
+domain. They do not alone prove the sharp scalar value;
+[the Gate 2 closure](gate2-sharp-partial-turn-closure.md) assembles the subsequent arguments.
 
 Labels PD are local. The geometric bridge and signed-fiber convention are
 those of [Gate 0](original-motion-global-bridge-gate0-audit.md). No
@@ -88,11 +89,12 @@ Consequently the universal bound
 \[
 \mathcal P_\alpha(U)\le M/2
 \qquad\text{for every such cap and every }\alpha\in[\pi/4,L]
-\tag{PD.5 — OPEN}
+\tag{PD.5 — scalar target}
 \]
 
-would pass Gate 2. It is a sufficient scalar theorem. Gate 1 proves its
-endpoint \(\alpha=L\), and the results below reduce the remaining domain.
+is sufficient for Gate 2 by PD.4. Gate 1 proves its endpoint
+\(\alpha=L\), and the results below reduce the proper-angle domain.
+The full dependency chain is assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 
 ## 2. Height extrusion and the middle chord
 
@@ -425,5 +427,6 @@ direction. Neither a first-unit curvature bound, a positive-pressure
 law, a full-turn exposure identity, nor a derivative formula ignoring
 terminal ties has been imported into this domain.
 
-Bounding this remaining scalar maximum would suffice for Gate 2 via
-PD.4. The reductions themselves do not supply that bound.
+Bounding this scalar maximum suffices for Gate 2 via PD.4. The
+reductions themselves do not supply that bound; the additional
+arguments are assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).

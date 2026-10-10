@@ -9,8 +9,9 @@ a terminal first-moment law, or a full-turn completion.
 The fixed-angle inputs are [PD](gate2-partial-cap-domain-reductions.md)
 and [PS](gate2-partial-endpoint-source-and-green.md). The exact one-sided
 angle derivative is [TV1–TV3](gate2-terminal-angle-variations.md).
-The first-unit hypothesis below is a remaining curvature theorem, not a
-consequence asserted by this note.
+The first-unit hypothesis below is a separate curvature input, not a
+consequence asserted by this note. The complete proof is assembled in
+[the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 
 ## 1. Statement and normalization
 
@@ -720,10 +721,10 @@ and no terminal first spatial moment. The only terminal stationarity
 input is the accepted one-sided right derivative TV3, with its positive
 tie term retained.
 
-The remaining external task for applying this theorem is to establish
-the width/angle prerequisites and u<=1, or to exclude the complementary
-first-curvature-excess branch by an additional argument. Horizontal
+Applying this theorem requires the width/angle prerequisites and u<=1,
+or a separate treatment of the complementary first-curvature-excess
+branch. These are scope conditions of this lemma. Horizontal
 middle roofs have a second possible top overhang and are not covered
 by this positive-tilt normalization. Negative tilt requires its own
 outgoing-strip analysis. Accordingly this note alone does not pass
-Gate 2.
+Gate 2; see [the Gate 2 closure](gate2-sharp-partial-turn-closure.md) for the full argument.

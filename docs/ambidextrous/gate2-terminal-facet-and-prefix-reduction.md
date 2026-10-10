@@ -4,8 +4,8 @@ Written mathematical reduction, October 10, 2026. This note treats all
 three signs of the affine middle roof. It retains the actual outgoing
 wall and does not assume a common terminal occupation for shape and
 angle variations. Its final exclusion is conditional on an explicitly
-stated initial companion-curvature bound; that bound is a separate
-proof obligation.
+stated initial companion-curvature bound, supplied by separate
+curvature arguments in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
 
 The inputs are [PD](gate2-partial-cap-domain-reductions.md),
 [PS](gate2-partial-endpoint-source-and-green.md),
@@ -13,7 +13,8 @@ The inputs are [PD](gate2-partial-cap-domain-reductions.md),
 [negative-tilt completion theorem](gate2-negative-tilt-completion.md).
 The all-width [angle exclusion](gate2-all-width-terminal-angle-exclusion.md)
 supplies the three visited angles used in Section 1. Gate 2 is not
-asserted by this note alone.
+asserted by this note alone; [the Gate 2 closure](gate2-sharp-partial-turn-closure.md) records the complete
+dependency chain.
 
 Labels TP are local. Suppose an above-reference joint partial-cap
 maximum exists. Select one with the largest terminal angle, then apply
@@ -351,5 +352,5 @@ give full terminal occupation on strict exposure and total occupation
 **Conclusion TP1.** No above-reference largest-angle partial maximizer
 can satisfy TP.15. The argument covers positive, horizontal, and the
 remaining negative middle tilt, and uses only an initial bound on
-the companion curvature. Establishing that prefix bound is separate
-from the proved terminal mass reduction.
+the companion curvature. The separate curvature bounds and complete
+angle coverage are assembled in [the Gate 2 closure](gate2-sharp-partial-turn-closure.md).
