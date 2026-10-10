@@ -159,7 +159,34 @@ For a tilted maximizer with \(W\le8/3\), CH7 proves unit curvature on the entire
 \]
 All horizontal widths are covered. [SW1](gate1-horizontal-short-width-exclusion.md) excludes \(W\le2\) by three actual angles. HW first excludes \(C=W/4\ge13/15\), then proves full one-turn feasibility in the remaining range. Exact kernel estimates and a seven-row rational certificate exclude \(8571/12500\le C\le4/5\), using only the previously recorded Gerver bound \(G\le22199/10000\). Two disjoint extra niche half-triangles at \(\pi/8,3\pi/8\) exclude \(4/5\le C\le13/15\). The overlap with CH is exact, so no horizontal width is omitted. The finite checker evaluates the displayed rational inequalities only; it is not a sampled-angle or numerical-search premise.
 
-**Precise remaining obligation:** prove the sharp spatial value for a **tilted canonical global maximizer**. After reflection it has \(A(j_+)=1\), \(1/2<A(j_-)<1\), two strict corners exactly at the endpoints of J, positive end faces and source-measure equality, and \(2\mathcal P=L_{\rm wing}\). A horizontal top overhang on the high wing remains possible. For \(W\le8/3\), one regular quarter is controlled; the other quarter and the exact value comparison with the middle-window clipping still require proof. Wider tilted caps also remain. This is the only remaining alternative for an above-reference scalar maximizer; it does **not** pass Gate 1 or activate Gate 2.
+### October 10: the remaining tilted width and height domain
+
+[**TS1/GAP1 and TW2**](gate1-tilted-width-exclusions.md) now prove the strict score bound \(\mathcal P<41/50<M/2\) for all canonical caps with \(W\le1001/500\), and for all canonical positive-pressure caps with \(16/5\le W<6\). The short theorem requires no endpoint law or curvature bound. The wide theorem uses only the already proved positive-pressure endpoint equations. Three actual niche angles, their genuine companion walls, and ordinary exterior deficit triangles supply the payment; the entire niche and its window clipping are retained.
+
+The same note's **INT1–INT3** prove the exact intermediate bound. Put \(a=W/2=2C\), \(h=1-A(j_-)\), and \(k=\sqrt2-1\), after reflection. Then
+\[
+\mathcal P\le1-\frac{(a-\sqrt2)^2}{2}
+-\frac{2a}{4a-h}(k+h/2)^2.
+\]
+The proof maximizes a globally concave two-support relaxation, including the mandatory tilted exterior deficit and all \(45^\circ\) window-clipping terms. Its critical point is proved interior and unclipped. Thus every remaining tilted canonical global maximizer obeys
+\[
+\boxed{\frac{1001}{2000}<C<\frac45,\qquad0<h<\frac{17}{50},}
+\qquad
+\boxed{(2C-\sqrt2)^2+\frac{8C}{8C-h}(k+h/2)^2\le\frac9{25}.}
+\]
+
+### October 10: no tilted maximizer with two unit-curvature wings
+
+[**TU.1–TU.24**](gate1-tilted-unit-wing-exclusion.md) now excludes the entire tilted stationary branch under the two regular-wing bounds \(u,v\le1\). The ordered contacts and positive graph are deduced from those bounds. A separate no-ghost proof establishes the exact finite-source projection law through the low-side zero-height gap, and positivity of the limiting source measures upgrades the local graph flux bounds to equalities. The proof retains every possible ordering of the floor and window crossings; it imposes no candidate contact chart.
+
+If T is the high-side top overhang, \(\epsilon=1-A(j_-)\), and \(z=n(j_+)\), the resulting contact-energy identity and bounds are
+\[
+6CT=\frac{(z-\epsilon)(2-\epsilon-z)}4+R_B-R_D,
+\qquad R_D\ge0,\quad R_B\le2T/3,\quad z\le4T/3.
+\]
+Positive tilt forces T>0. The right side is at most \(4T/3\), contradicting \(6CT>3T\) for \(C>1/2\). Hence **every remaining above-reference global scalar maximizer must have a nonunit regular wing**. A hypothesis of this theorem is not a conclusion about all maximizers.
+
+**Precise remaining obligation:** exclude or sharply bound a **tilted canonical global maximizer with nonunit wing curvature in the reduced domain above**. After reflection it has \(A(j_+)=1\), \(33/50<A(j_-)<1\), two strict corners exactly at the endpoints of J, positive end faces and source-measure equality, and \(2\mathcal P=L_{\rm wing}\). A horizontal top overhang on the high wing remains possible. For \(C\le2/3\), CH7 controls one regular quarter; the other quarter remains the possible source of excess curvature. The range \(2/3<C<4/5\) also remains. Proving both unit bounds would now complete the scalar implication, but a direct sharp value estimate for the nonunit branch would suffice as well. This is the only remaining alternative for an above-reference scalar maximizer; it does **not** pass Gate 1 or activate Gate 2.
 
 **Research method within this exact active claim:** work **directly at a global maximizer of \(\mathcal P\)** using cap-support variations and the **full** niche exposure balance. Try to derive necessary global contact/curvature/face conditions that force \(\mathcal P\le M/2\), without assuming the Romik phase chart. Test any claimed structure immediately on exact adversarial caps. The known \(\mathcal P\) **Minkowski concavity** conjecture is false ([CN](candidate-functional-concavity-counterexample.md)): do **not** try Jensen or a generic interpolation tangent argument. Existing curvature repair proofs for the *different* weighted \(\Psi\) objective cannot be copied without rechecking the spatial exposure weights and moving J endpoints.
 

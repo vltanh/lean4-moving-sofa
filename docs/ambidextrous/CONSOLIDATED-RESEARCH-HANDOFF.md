@@ -1,5 +1,29 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
+**October 10 Gate 1: every tilted maximizer with two unit-curvature wings is excluded (NONUNIT BRANCH STILL OPEN).** The new [TU.1–TU.24 theorem](gate1-tilted-unit-wing-exclusion.md) proves that no tilted canonical global maximizer in the remaining width range can have both regular charged-wing curvature densities at most one. It deduces the ordered contact geometry from those two bounds, proves the exact finite-source projection law through the zero-height gap, and then derives the full source equations for every order of the floor and window crossings. In particular the high-side top overhang T equals the width of the low-side zero-niche interval; this is proved without assuming continuity of zero-set lengths or ordinary niche arclength.
+
+Writing \(\epsilon=1-A(j_-)\) and \(z=n(j_+)\), an exact contact-energy calculation gives
+\[
+6CT=\frac{(z-\epsilon)(2-\epsilon-z)}4+R_B-R_D,
+\qquad R_D\ge0,\quad R_B\le2T/3,\quad z\le4T/3.
+\]
+The right side is at most \(4T/3\), whereas \(C>1/2\) and positive tilt force \(6CT>3T>0\). This contradiction excludes the entire two-unit tilted branch. The [complete horizontal theorem](gate1-horizontal-maximizer-sharp-value.md) already handles horizontal maximizers, so **any remaining above-reference scalar maximizer must be tilted and have a regular wing with curvature above one**. For \(C\le2/3\), [CH7](gate1-spatial-maximizer-curvature-and-horizontal-value.md) controls the other quarter. A proof excluding or bounding the nonunit branch is still required; the unit hypothesis cannot be silently imported. **Gate 1 remains ACTIVE; Gate 2 remains blocked.** The full proof received independent adversarial written checks within this session, not external refereeing or Lean verification. This entry supersedes the earlier statement that the two-unit tilted value itself remained open.
+
+**October 10 Gate 1: global tilted-width exclusions and an exact width–height restriction (SHARP TILTED VALUE STILL OPEN).** The new [TS1/GAP1, TW2, and INT1–INT3](gate1-tilted-width-exclusions.md) exclude every canonical cap of width \(W\le1001/500=2.002\), without an endpoint law or curvature assumption, and exclude every canonical positive-pressure cap with \(16/5\le W<6\). Both exclusions prove \(\mathcal P<41/50<M/2\) using three actual niche angles and exact ordinary exterior-area payments. They retain both attached walls, moving tent zeros, and all relevant middle-window clipping. The short argument explicitly raises the lower wing as a bookkeeping device; it does not assert that this transformation improves the spatial score.
+
+Write \(a=W/2=2C\), let \(h=1-A(j_-)\) after reflecting the higher endpoint to the right, and put \(k=\sqrt2-1\). On the entire intermediate range, the mandatory tilted exterior cut and the complete clipped \(45^\circ\) tent give
+\[
+\boxed{\mathcal P\le B_*(a,h)
+=1-\frac{(a-\sqrt2)^2}{2}
+-\frac{2a}{4a-h}(k+h/2)^2.}
+\]
+The two-support relaxation is globally concave and its maximizer is proved to be unclipped; clipping is not discarded as an assumption. Consequently every remaining tilted canonical global maximizer satisfies
+\[
+\boxed{\frac{1001}{2000}<C<\frac45,\qquad0<h<\frac{17}{50},\qquad
+(2C-\sqrt2)^2+\frac{8C}{8C-h}(k+h/2)^2\le\frac9{25}.}
+\]
+The [horizontal theorem](gate1-horizontal-maximizer-sharp-value.md) already handles the complete horizontal branch. The **remaining exact obligation** is the sharp value on this tilted region, including a possible top overhang and any regular-wing curvature above one. [CH7](gate1-spatial-maximizer-curvature-and-horizontal-value.md) controls the quarter without the central-facet atom for \(C\le2/3\), but neither a bound for the other quarter nor the needed full spatial value follows from it. **Gate 1 remains ACTIVE; Gate 2 remains blocked; no new unrestricted ambidextrous upper bound is claimed.** All four new proofs received independent adversarial written checks within the session, not external refereeing or Lean verification. This entry supersedes the earlier descriptions of remaining tilted widths and endpoint heights below.
+
 **October 10 Gate 1: positive pressures and the complete horizontal branch (TILTED VALUE STILL OPEN).** The new [LH1–LH3](gate1-global-positive-pressure-and-wing-identity.md) prove a global exclusion for every canonical cap whose lower middle endpoint has height at most one half: \(\mathcal P<31233/39200<4/5\). Thus every canonical global maximizer has **both endpoint pressures and both end faces positive**, removing the low-side defect left open in the October 9 EP entry below. The limiting finite niche-source measures equal the charged outer-wing measures on both quarters. A finite-graph Green identity with all moving-window boundary terms gives
 \[
 \boxed{2\mathcal P=L_{\rm wing},\qquad\max_J n\le(e_R+e_L)/2.}
