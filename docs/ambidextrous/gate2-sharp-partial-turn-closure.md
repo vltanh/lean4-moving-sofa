@@ -13,7 +13,10 @@ slope, and both independent terminal angles. It uses the completed
 [Gate 1 theorem](gate1-sharp-full-turn-closure.md) at the full-turn
 boundary and in an explicitly proved negative-tilt completion subcase.
 Gate 1's external ordinary one-turn dependency remains part of the chain.
-Equality classification and uniqueness are separate questions.
+The separate [Gate 3 closure](gate3-sharp-equality-and-uniqueness.md)
+now classifies every original equality cap and proves literal
+compact-body uniqueness, with its complete manuscript and accepted
+dependency review.
 
 ## 1. Exact statements
 

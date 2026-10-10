@@ -1,0 +1,1064 @@
+{
+  "title": "Sharp area and exact uniqueness for the ambidextrous moving sofa problem",
+  "scope": "Written proof; internal mathematical review; external refereeing and Lean verification outstanding.",
+  "assembly_policy": "Explicit heading ranges; selected proofs retained; local preludes and every editorial replacement recorded; headings and relative reference destinations adjusted.",
+  "compiler_sha256": "9e39457ecf9278d98159418f72b53ce76c388b37d03cc8ceda754403cc2ec52d",
+  "manuscript_sha256": "0d1b8a41f3684c9eade825678bca13aaef3350a50799302f2aef8fa604c9015f",
+  "manuscript_characters": 650760,
+  "manuscript_words": 83574,
+  "section_count": 52,
+  "sections": [
+    {
+      "anchor": "main-introduction",
+      "title": "The theorem, construction and external inputs",
+      "source": "gate3-manuscript-introduction.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "5a805638ae68fdd7d4a06919a65c978fcf04e8dede52d5bb82a14e83e860aa48",
+      "excerpt_sha256": "2990f78ca8fbf01f94dd0a2058ceeceaecedde217de8d6c8582bde90ebe330a6",
+      "excerpt_characters": 14278,
+      "excerpt_words": 1844,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "2990f78ca8fbf01f94dd0a2058ceeceaecedde217de8d6c8582bde90ebe330a6"
+    },
+    {
+      "anchor": "main-motions",
+      "title": "Original continuous motions and actual-hull reduction",
+      "source": "original-motion-global-bridge-gate0-audit.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 6."
+        }
+      ],
+      "source_sha256": "82e2776ef59c2be1e898afc86789921dc5b3d421cfa70fcbcf490f76b03b70e9",
+      "excerpt_sha256": "d457e4817d47c62f2daf891d0648f9249bcd65cd515b1b0a44c3bbeb332df0e1",
+      "excerpt_characters": 13831,
+      "excerpt_words": 1837,
+      "prelude": "",
+      "editorial_replacements": [
+        {
+          "before": " That triangle has the prescribed partial lower/full upper motions yet fails a late orientation; no in-place zero-loss completion is being smuggled into GA.8.",
+          "after": " The displayed support and strip equalities are all that this example uses."
+        }
+      ],
+      "edited_excerpt_sha256": "9a8c1584cb26be2bde8d3f95b7900cebbb9a733802c1638d7be02d67cf8c1ee9"
+    },
+    {
+      "anchor": "main-full-turn",
+      "title": "Integrated full-turn value and equality proof",
+      "source": "gate3-manuscript-full-turn.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "9d77fb99fa1b4202953de313ac525f2e4163ceaf8050c812040dcbac0819ad24",
+      "excerpt_sha256": "fdb93ae4dc9554e6055d283b00cb834b574b60b8fdfa8399bb9a4137b9d98502",
+      "excerpt_characters": 25093,
+      "excerpt_words": 3138,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "fdb93ae4dc9554e6055d283b00cb834b574b60b8fdfa8399bb9a4137b9d98502"
+    },
+    {
+      "anchor": "main-partial-turn",
+      "title": "Integrated partial-turn and strict-angle proof",
+      "source": "gate3-manuscript-partial-turn.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "86ac28b024f029b32442c5e6692903bb6a6c6790c048c36b83f1c03901d5853c",
+      "excerpt_sha256": "bc8663f697dae32f5f49299f09c2420409f5edcf346be4b806a24cc043927019",
+      "excerpt_characters": 20476,
+      "excerpt_words": 2616,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "bc8663f697dae32f5f49299f09c2420409f5edcf346be4b806a24cc043927019"
+    },
+    {
+      "anchor": "main-equality",
+      "title": "Original equality caps, actual hull and exact body",
+      "source": "gate3-sharp-equality-and-uniqueness.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 6."
+        }
+      ],
+      "source_sha256": "13601c68a8ad52d506e43fe107841ae2a79bd5d3188d096a3029e0edd3dbc4bb",
+      "excerpt_sha256": "d168a2344af0b401f110686e7c2921549394f4e93ce69ef5ad88824fdc07f60d",
+      "excerpt_characters": 8607,
+      "excerpt_words": 1138,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "d168a2344af0b401f110686e7c2921549394f4e93ce69ef5ad88824fdc07f60d"
+    },
+    {
+      "anchor": "proof-reference-matching",
+      "title": "Reference matching, stationarity and exact value (Note 14)",
+      "source": "14-sharp-quadratic-calibration.md",
+      "ranges": [
+        {
+          "start": "## 14.1",
+          "end": "## 14.4"
+        }
+      ],
+      "source_sha256": "aee709ed96d4b86ab6050ab966fa14a618ef9e074dfaa9e0f444c9c5f3870b0b",
+      "excerpt_sha256": "fd30379d74273c0916729399f1d82e75f5484d9360a5d86fb579292b4fee8a33",
+      "excerpt_characters": 6031,
+      "excerpt_words": 738,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "fd30379d74273c0916729399f1d82e75f5484d9360a5d86fb579292b4fee8a33"
+    },
+    {
+      "anchor": "proof-reference-height",
+      "title": "The exact global reference corner-height ceiling (Note 4)",
+      "source": "04-romik-candidate.md",
+      "ranges": [
+        {
+          "start": "## 4.2",
+          "end": "## 4.4"
+        }
+      ],
+      "source_sha256": "80b3864e68db5308e12290356a296f8e92035a94c07451d622b8b50fb163ef83",
+      "excerpt_sha256": "58cf3bac38af7d7238f30d256068fd6ca2d96ef1c1aa158b8c5f2d5787bc7e25",
+      "excerpt_characters": 3016,
+      "excerpt_words": 367,
+      "prelude": "**Local notation and derivation.** In this chapter only, write\n\\(s=\\sin\\beta\\), \\(c=\\cos\\beta\\), \\(\\beta=\\beta_*=\\arctan Y\\),\nand \\(L=\\pi/4-\\beta\\). Thus this local \\(L\\) is not the full-turn endpoint.\nThe root bound MS.2 gives \\(2/7<Y<1/3\\); also\n\\(2-\\sqrt3<2/7\\), because \\(3>144/49\\). Consequently\n\\(\\pi/12<\\beta<\\arctan(1/3)\\), the bound labeled (4.2) below.\nThe path ordinate \\(q(t)\\) in (4.6) is the vertical coordinate of the\ncanonical corner\n\\((f_*(t)-1)\\mu_t+(g_*(t)-1)\\nu_t\\) from MS.11.\nHorizontal centering does not change this ordinate. Thus the following\nheight proof uses the explicit construction in this manuscript and has\nno additional external path or feasibility premise.",
+      "editorial_replacements": [
+        {
+          "before": "For Romik's specified path, the vertical coordinate q(t) is",
+          "after": "For the canonical corner of the explicit reference support, the vertical coordinate q(t) is"
+        },
+        {
+          "before": "Here is the reduction from the cited path formulas. Multiplying (SOL1) by the rotation matrix with \\(a_2=0\\) and \\(\\kappa_{1,2}=1/2\\) gives the first line directly. The vertical part of (SOL6) is\n\n\\[\n\\tfrac12+f_1\\sin(3t/2)-f_2\\cos(3t/2)-\\sin t-\\cos t.\n\\]\n\nSince \\(f_2=(1-\\sqrt2)f_1\\), its first two trigonometric terms equal\n\\(R\\cos(3(t-\\pi/4)/2)\\), with \\(R=f_1/\\cos(\\pi/8)>0\\). The matching of the vertical coordinates at t=beta gives the simpler expression (4.5): the first line of (4.6) has value \\(1/2-s\\), while the middle line has value \\(1/2+R\\cos(3L/2)-s-c\\). (SOL5), \\(e_1=a\\), \\(e_2=0\\), and \\(\\kappa_{5,2}=1/2\\) give the reflected last phase. This calculation avoids needing a radical expression for f_1.\n\nWe have only rewritten the given path; this is not an independent verification of all its vector matching equations or its contact pattern.",
+          "after": "Direct substitution from MS.11 proves (4.6). In the first phase,\n\\[\n(f_*-1)\\sin t+(g_*-1)\\cos t\n=\\tfrac12+a\\sin(2t)-\\sin t-\\tfrac12\\cos t.\n\\]\nIn the middle phase the \\(k\\)-terms cancel, and the result is\n\\[\n\\tfrac12+R\\sin(3t/2+\\pi/8)-\\sin t-\\cos t\n=\\tfrac12+R\\cos(3(t-\\pi/4)/2)-\\sqrt2\\cos(t-\\pi/4).\n\\]\nThe last phase is the reflected first expression. Matching at\n\\(t=\\beta\\) gives \\(R\\cos(3L/2)=c\\), exactly (4.5).\nThus every identity required for the height proof follows from the\ndisplayed reference support."
+        }
+      ],
+      "edited_excerpt_sha256": "1e5885d9812fda5fe4649733de1897bce382467c7728f6d45fd5daa9715a3944"
+    },
+    {
+      "anchor": "proof-contact-identity",
+      "title": "The contact integral and its boundary identity (Note 13)",
+      "source": "13-contact-quadratic.md",
+      "ranges": [
+        {
+          "start": "## 13.1",
+          "end": "## 13.3"
+        }
+      ],
+      "source_sha256": "c63d501639746b607991ee02c0eb8d021055592585b5c2bf5c3039b0a78982f1",
+      "excerpt_sha256": "61efb6d1cf8828b81d618acbcc752313174dfd41d7256377bcde5e68ff2ea5c7",
+      "excerpt_characters": 2169,
+      "excerpt_words": 290,
+      "prelude": "**Local notation.** For a normalized support \\(h\\), put \\(L=\\pi/2\\),\n\\(h^\\rho(\\theta)=h(-\\theta)+\\sin\\theta\\), and\n\\[\nC(h)=\\frac12\\int_0^L(f^2-f'^2+g^2-g'^2)\\,dt,\\qquad\nI(h)=\\frac12\\int_0^L\\det(c(t),c'(t))\\,dt,\n\\]\nwhere \\(f=h(t)\\), \\(g=h(t+L)\\), and\n\\(c(t)=(f-1)\\mu_t+(g-1)\\nu_t\\). These are the quantities \\(C,I\\)\nused in AR.2 and AF.1. For a convex body \\(K\\) in the normalized unit\nstrip, AR1 identifies \\(C(h)\\) and \\(C(h^\\rho)\\) with the upper and\nreflected-lower cap areas. Their fibers sum to one plus the hull fiber,\nso\n\\[\nC(h)+C(h^\\rho)-h(0)-h(\\pi)=|K|.\n\\]\nThis proves the identity called (12.5) in the historical notation below.\nFor general \\(H^1\\) profiles, \\(C,I,h^\\rho\\) retain the displayed\nalgebraic definitions; no convexity claim is made for those profiles.",
+      "editorial_replacements": [
+        {
+          "before": "Keep the normalized support-function notation of Note 12 and put L=pi/2.",
+          "after": "Use the normalized support-function notation just defined and put L=pi/2."
+        }
+      ],
+      "edited_excerpt_sha256": "71aa64355cf72dd6d96e931fa8e38e748709f2e319e3966aa079d613cbb72ed6"
+    },
+    {
+      "anchor": "proof-adaptive",
+      "title": "The unrestricted H1 calibration and all equality cases (AF)",
+      "source": "adaptive-functional-global-calibration.md",
+      "ranges": [
+        {
+          "start": "## A.1",
+          "end": "## A.8"
+        }
+      ],
+      "source_sha256": "bf9160347796d792c316f14a241401c73a481001ef7cf51679d3442817d18a2d",
+      "excerpt_sha256": "d0a401c6be1dbae4d2a88ffaa36d9f45bb215ae355017aedb8f6371cddfedddd",
+      "excerpt_characters": 13706,
+      "excerpt_words": 1923,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "d0a401c6be1dbae4d2a88ffaa36d9f45bb215ae355017aedb8f6371cddfedddd"
+    },
+    {
+      "anchor": "proof-signed-roof",
+      "title": "Unit-curvature signed-roof identity (SR)",
+      "source": "curvature-only-signed-roof.md",
+      "ranges": [
+        {
+          "start": "## S.1",
+          "end": "## S.4"
+        }
+      ],
+      "source_sha256": "e56782e94e0ee4ce66b247fba7063e39c0ed88d38719e883cd235a87735d4593",
+      "excerpt_sha256": "8295077298afa05a69f501b629a77a598efdd188c5e5032635038456ca26a9a4",
+      "excerpt_characters": 6996,
+      "excerpt_words": 1001,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "8295077298afa05a69f501b629a77a598efdd188c5e5032635038456ca26a9a4"
+    },
+    {
+      "anchor": "proof-arm",
+      "title": "Support area, reference cap and local arm geometry (AR)",
+      "source": "one-turn-arm-reduction.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 5."
+        },
+        {
+          "start": "**Discrete lemma.**",
+          "end": "**Proof of AR7.**"
+        }
+      ],
+      "source_sha256": "888b0eb5107d22462891a166047e982ea0ba5eb30e99920ccac85a493e889657",
+      "excerpt_sha256": "554c1afb1910ccc9b97cbed9ec056a257bed832c28339f351784aec434081cf2",
+      "excerpt_characters": 7741,
+      "excerpt_words": 1041,
+      "prelude": "**Scope and notation.** The domain used here consists of compact\ndownward convex caps in \\(0\\le y\\le1\\), normalized to height one.\nLet \\(N(U)\\) be the full positive two-wall niche,\n\\(\\mathcal A(U)=|U|-|N(U)|\\), and\n\\(\\Psi(U)=\\mathcal A(U)-W/2\\). The notation PA.1 below refers to this\nexplicit domain, not to an additional attainment theorem.\nThe selected material proves the support-area identity, its\nunit-curvature comparison, the reference value, and an elementary\nfinite neighboring-wall lemma. Weighted-maximizer propagation results\nfrom the intervening historical sections are not used.",
+      "editorial_replacements": [
+        {
+          "before": "For every maximizer, WR1 gives height one, W^(2,infinity) supports on each open quarter, and\n\n$$\np(0)=\\tfrac12,\\qquad q(L)=-\\tfrac12,\\qquad \\rho_f\\le\\kappa(q),\\qquad \\rho_g\\le\\kappa(p)\\quad\\text{a.e.},\n\\qquad \\kappa(z)=\\max\\{|z|,(1+|z|)/2\\}.\n$$\n\nThese are WR.4 and WR.5. In particular p and q are Lipschitz on (0,L) with one-sided traces at both ends, and",
+          "after": "Whenever the quarter supports are in W^(2,infinity), p and q are Lipschitz with one-sided traces and satisfy the kinematic identities"
+        },
+        {
+          "before": "Use the grid polygons of WP1 with spacing delta",
+          "after": "Use any grid caps with spacing delta"
+        },
+        {
+          "before": "the exposed length tau_j of WP2 is zero.",
+          "after": "the exposed length tau_j of the finite first-wall ray is zero."
+        }
+      ],
+      "edited_excerpt_sha256": "ab91efa6585d4e4c7d33b9e155226a1f9f28d1640b8d6e9c5cb9529888ee62d9"
+    },
+    {
+      "anchor": "proof-neighboring-walls",
+      "title": "Neighboring-wall geometry and exact threshold identities (WR)",
+      "source": "one-turn-weighted-regularity.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 2."
+        },
+        {
+          "start": "## 4.",
+          "end": "Put kappa(z)"
+        }
+      ],
+      "source_sha256": "6a0f13a4c23993ff8243c58154c142f9d87115607c190b4ad1e7f19a09a89a32",
+      "excerpt_sha256": "835b744b69755f8418d84ddd18e95d241d98cef77b26e7173fc926554f55dadf",
+      "excerpt_characters": 1939,
+      "excerpt_words": 235,
+      "prelude": "**Scope.** This excerpt contains only the geometric adjacent-wall\nestimate WR.1 and its exact threshold refinements. It does not import\nthe historical weighted first variation or its limiting curvature\nargument. RG3 supplies the full spatial limit with the uncharged\nmiddle-facet errors accounted for, and PS supplies the partial spatial\nlimit with its actual-versus-circumscribed facet comparison. Those\ncomplete proofs are included separately.",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "856bd78e171a9d988b2118a45252662816729ef3ea4df721e8f888f45db966d1"
+    },
+    {
+      "anchor": "proof-visible-flux",
+      "title": "Actual visible-source flux and its finite limit (VE)",
+      "source": "one-turn-visible-exposure-bound.md",
+      "ranges": [
+        {
+          "start": "## 3.",
+          "end": "## 4."
+        }
+      ],
+      "source_sha256": "ec9ca829c40cc8ffcd1b5ffadca690a828c9b6413601e0b733fcc5dada47805c",
+      "excerpt_sha256": "baf59564b8f2abf265f00d09beebe19c614fff0796e1305892febf5dde165a02",
+      "excerpt_characters": 4740,
+      "excerpt_words": 696,
+      "prelude": "**Local visible-graph hypotheses.** Use the finite source sequences\nfrom FE/RG with LH, or from PS: their first- and second-wall exposed\nlength measures converge weakly on the interval in question to\n\\(u(t)\\,dt\\), \\(v(t)\\,dt\\). Supports converge uniformly and are uniformly\nbounded and Lipschitz. Set \\(L=\\pi/2\\), \\(u=f''+f\\), \\(v=g''+g\\),\n\\(p=f'-g+1\\), \\(q=g'+f-1\\), and\n\\[\nc=(f-1)\\mu_t+(g-1)\\nu_t,\\qquad D=c-q\\mu_t.\n\\]\nThen \\(c'=p\\mu_t+q\\nu_t\\), \\(D'=(1-v)\\mu_t\\).\nThe local application assumes positive-height Lipschitz roof graphs:\nthe corner graph has \\(p<0<q\\) and a unique maximizing angle;\nthe second-wall tangency graph has \\(0\\le v\\le1\\), a strict companion\ngap, and a unique maximizing angle outside the images of its constant\nparameter intervals. Each graph piece lies compactly inside the\ncharged middle window \\(J\\), and its source angles lie in a compact\nregular visited interval avoiding omitted, terminal and exceptional\nfacet normals. Thus its physical exposure is counted by the spatial\nsource measures. The two graph images are disjoint when their\ncontributions are added. CH proves these visibility and separation\nhypotheses in its application, as do the specified later local source\narguments. The following section proves the finite tangent-flux limit\nunder these stated hypotheses; it does not assert global visibility\nfor an arbitrary cap.",
+      "editorial_replacements": [
+        {
+          "before": "Let U_n be the WP sequence and let n_n be its finite positive niche roof. Denote by nu_n^f and nu_n^g the measures that assign to each grid angle the total exposed first- or second-wall length. EB1 gives weak convergence to u(t)dt and v(t)dt, respectively.",
+          "after": "Let U_n be a sequence satisfying the stated local hypotheses and let n_n be its finite positive niche roof. Denote by nu_n^f and nu_n^g the measures that assign to each grid angle the total exposed first- or second-wall length. By hypothesis they converge weakly to u(t)dt and v(t)dt, respectively."
+        },
+        {
+          "before": "The following local facts justify reading part of those limiting measures from VE1.",
+          "after": "The following local facts justify reading part of those limiting measures from the positive unique-source graphs specified in the prelude."
+        }
+      ],
+      "edited_excerpt_sha256": "75388b1b6999768803b47def8ef8dcec45b17a5b1460bdb264ee3cfb1e8b3757"
+    },
+    {
+      "anchor": "proof-full-domain",
+      "title": "Full-cap height, width, continuity and attainment (SD)",
+      "source": "gate1-spatial-dual-height-width-compactness.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 5."
+        }
+      ],
+      "source_sha256": "652713a487964bef74e0c0fbf2b576ea22039146b7858203a05974f3e9619fec",
+      "excerpt_sha256": "7b03168d2b653dc4a123b74fbb0d10367b863bc03618c6221d1bd57c0bf238a2",
+      "excerpt_characters": 9485,
+      "excerpt_words": 1227,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "7b03168d2b653dc4a123b74fbb0d10367b863bc03618c6221d1bd57c0bf238a2"
+    },
+    {
+      "anchor": "proof-middle-chord",
+      "title": "The exact middle-chord and height reduction (MID)",
+      "source": "gate1-global-middle-chord-canonicalization.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 5."
+        }
+      ],
+      "source_sha256": "d8a7ed808b57ac367fcd8db5f14a6f11203e8d6e8fdaa41ef2a1fbca988eee8a",
+      "excerpt_sha256": "6b6698d8e5566735310d2e57d1e30845394721302edfbfb73f3342b9bdd7e1cf",
+      "excerpt_characters": 6401,
+      "excerpt_words": 815,
+      "prelude": "",
+      "editorial_replacements": [
+        {
+          "before": "\\{U:\\ U\\text{ is downward compact convex, has height 1, width }W>0,\\ \n",
+          "after": "\\{U:\\ U\\text{ is downward compact convex, has height 1, width }W>0,\\,\n"
+        }
+      ],
+      "edited_excerpt_sha256": "4959e98e08efa847a1ddc297f3c5703415497d07b5f9ba79fb8ec5b6a9c6e817"
+    },
+    {
+      "anchor": "proof-finite-exposure",
+      "title": "Finite exposure and the moving spatial window (FE)",
+      "source": "gate1-spatial-exposure-moving-window-variation.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 6."
+        }
+      ],
+      "source_sha256": "4afa2284cf40fe243070e4ca57e99163ed0b6724bc95d460f10b93bdfc4a3fd1",
+      "excerpt_sha256": "c1c3957de8dc05c5e36252d72da6f2dbe3842d202f16bb304b30b86004c0bef6",
+      "excerpt_characters": 12860,
+      "excerpt_words": 1638,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "c1c3957de8dc05c5e36252d72da6f2dbe3842d202f16bb304b30b86004c0bef6"
+    },
+    {
+      "anchor": "proof-prescribed-regularity",
+      "title": "Prescribed-cap approximation and wing regularity (RG)",
+      "source": "gate1-spatial-maximizer-wing-curvature-regularity.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 6."
+        }
+      ],
+      "source_sha256": "3bcded1cb06f178c5f9c9238a6b5b3a96e1f21b1291499e31e2fcace19f61277",
+      "excerpt_sha256": "c2c84dd41a580de654e96f3cb9f31bf14fcb82f57529f1b54d2b43e25d89647f",
+      "excerpt_characters": 15785,
+      "excerpt_words": 1937,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "c2c84dd41a580de654e96f3cb9f31bf14fcb82f57529f1b54d2b43e25d89647f"
+    },
+    {
+      "anchor": "proof-full-endpoints",
+      "title": "Actual full-cap endpoint complementarity (EP)",
+      "source": "gate1-global-endpoint-complementarity.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 7."
+        }
+      ],
+      "source_sha256": "b2c08af644d65ad05f2695853375598acd8cf3a8676984e8cd6805da5c27d085",
+      "excerpt_sha256": "ce05721cae126510ab7e22c6362ec9992fe4f89f0a9b144e306a25518340475b",
+      "excerpt_characters": 15784,
+      "excerpt_words": 1953,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "ce05721cae126510ab7e22c6362ec9992fe4f89f0a9b144e306a25518340475b"
+    },
+    {
+      "anchor": "proof-full-pressures",
+      "title": "Positive endpoint pressures, source balance and Green identity (LH)",
+      "source": "gate1-global-positive-pressure-and-wing-identity.md",
+      "ranges": [
+        {
+          "start": "## Theorem LH1",
+          "end": "## 9."
+        }
+      ],
+      "source_sha256": "f975c7231a333ee9239e04d3f15c699efefd7550684d54d20d24384272bb1694",
+      "excerpt_sha256": "6060848d8a760cc8f1202edeecd72c1cf0306b31e631b0fc0085d5c743853fc9",
+      "excerpt_characters": 11924,
+      "excerpt_words": 1543,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "6060848d8a760cc8f1202edeecd72c1cf0306b31e631b0fc0085d5c743853fc9"
+    },
+    {
+      "anchor": "proof-facet-pinning",
+      "title": "Pinning the affine middle facet (TF)",
+      "source": "gate1-spatial-tilted-facet-pinning.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 4."
+        }
+      ],
+      "source_sha256": "bc0455088d026981bf344b70bf4108887f55dbcbaadb0eafa69d31a7e926f5c0",
+      "excerpt_sha256": "16aeae71b83f8b2a4704f7e1c1fc65a169d8fee04f7a2516c675e79ebea9d8bb",
+      "excerpt_characters": 10807,
+      "excerpt_words": 1470,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "16aeae71b83f8b2a4704f7e1c1fc65a169d8fee04f7a2516c675e79ebea9d8bb"
+    },
+    {
+      "anchor": "proof-full-curvature",
+      "title": "Spatial source curvature and the horizontal calibration (CH)",
+      "source": "gate1-spatial-maximizer-curvature-and-horizontal-value.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 9."
+        }
+      ],
+      "source_sha256": "a1844b33b8d75fe3f68494464b722d8cc6980f16001fc2d61b08c579ff8cfa9d",
+      "excerpt_sha256": "389a23850ca35c5676e70eed9ac51093d5a856dc7611d1cd15b03bf9b6c5c8e4",
+      "excerpt_characters": 20366,
+      "excerpt_words": 2593,
+      "prelude": "**Local width threshold.** The constant labeled CH.1 is\n\\[\nW_H=\\frac4{35}\\sqrt{523+2\\sqrt{701}},\\qquad C_H=W_H/4.\n\\tag{CH.1}\n\\]\nThe source laws below concern a prescribed canonical global maximizer\nof the full spatial score. The horizontal value conclusion CH6 has\nthe stated hypothesis \\(W\\le W_H\\); the later HW proof covers the\ncomplement.",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "206dea2a2ab2e49b343ce91aa8e52b93182bafc96c00de6051c57e48dc7be23e"
+    },
+    {
+      "anchor": "proof-horizontal-short",
+      "title": "Strict short-width horizontal bound (SW)",
+      "source": "gate1-horizontal-short-width-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "c23b1870a20539461d44922be169ee9938608b2f517bdf0eb5011a72232ca7c2",
+      "excerpt_sha256": "1af4959ab222ca180db2abf4a4b40d34fb301f4bd0f435f32594492b1a3f2a61",
+      "excerpt_characters": 8298,
+      "excerpt_words": 1012,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "1af4959ab222ca180db2abf4a4b40d34fb301f4bd0f435f32594492b1a3f2a61"
+    },
+    {
+      "anchor": "proof-horizontal-complete",
+      "title": "Complete horizontal width coverage and exact certificates (HW)",
+      "source": "gate1-horizontal-maximizer-sharp-value.md",
+      "ranges": [
+        {
+          "start": "## Part I.",
+          "end": "## Conclusion"
+        }
+      ],
+      "source_sha256": "7ee4b9b7e6e4b456d13b6708e4f50aece87740d47bd3d77fad3b2155a27f22a8",
+      "excerpt_sha256": "9889a85a512e1bcf220c361fdff8a2cea041e7bfd939ebc84e66b858452402f8",
+      "excerpt_characters": 18181,
+      "excerpt_words": 2362,
+      "prelude": "**Scope.** The cap is a horizontal, middle-chord-canonical global\nmaximizer of the full spatial score, as defined in FTM and CH.\nThis chapter excludes the remaining widths for such a maximizer.",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "9c3eb55cf520814cd4432c37f25113d6aecafe2a8148b3aae40360450dbab713"
+    },
+    {
+      "anchor": "proof-tilted-width",
+      "title": "Tilted short, wide and intermediate width exclusions",
+      "source": "gate1-tilted-width-exclusions.md",
+      "ranges": [
+        {
+          "start": "## Part A.",
+          "end": "## Remaining"
+        }
+      ],
+      "source_sha256": "0ed0df755839d4097a1ab3e0b52f1f765a3e82c22548fc0789a5453ba596c641",
+      "excerpt_sha256": "ccc4c0ab62cb533dee62220b4b6b11693c6060e55f7b9a06f47f91396995cf88",
+      "excerpt_characters": 33728,
+      "excerpt_words": 4067,
+      "prelude": "",
+      "editorial_replacements": [
+        {
+          "before": "does not close the remaining tilted comparison.",
+          "after": "is joined with the subsequent tilted source analysis in the integrated full-turn chapter."
+        }
+      ],
+      "edited_excerpt_sha256": "e38960bd0e428630e8c70b3fb40d67e7df264a558b11496e671b3d85963f9129"
+    },
+    {
+      "anchor": "proof-full-triangle",
+      "title": "The full three-triangle tilted width cut (FT)",
+      "source": "gate1-tilted-full-triangle-width-cut.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "25f43e49fd9a7ff28247d7f3691df383e1715394a6e497397f4ce19a7c49d43d",
+      "excerpt_sha256": "71bdf895836b870899977108711e095bddd60fabeac686dc953900bd5a54fce2",
+      "excerpt_characters": 13863,
+      "excerpt_words": 1694,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "71bdf895836b870899977108711e095bddd60fabeac686dc953900bd5a54fce2"
+    },
+    {
+      "anchor": "proof-first-wing-structure",
+      "title": "The tilted first-wing structure and projection",
+      "source": "gate1-tilted-first-wing-structure.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "453c1fccbd5de6fe9abf7ecb6758547a3754337aea0e952031000a673ed7649f",
+      "excerpt_sha256": "1c837ee762ab7bc695327a0eb8dd445da9c15083da54b84fb1e88f1eb5654f00",
+      "excerpt_characters": 11383,
+      "excerpt_words": 1591,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "1c837ee762ab7bc695327a0eb8dd445da9c15083da54b84fb1e88f1eb5654f00"
+    },
+    {
+      "anchor": "proof-fold-occupations",
+      "title": "Fractional occupations for folded sources",
+      "source": "gate1-tilted-folded-source-occupations.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": "## Verdict"
+        }
+      ],
+      "source_sha256": "38364ecc00747a6d6ce3942bc657ec8eace340f32cd340ecccf652583b96d1e9",
+      "excerpt_sha256": "56ccccdfc4c22da05d0947decda4d1ac8a24fa20658f776763e162bfc95f7b00",
+      "excerpt_characters": 10020,
+      "excerpt_words": 1446,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "56ccccdfc4c22da05d0947decda4d1ac8a24fa20658f776763e162bfc95f7b00"
+    },
+    {
+      "anchor": "proof-two-unit-wings",
+      "title": "The two-unit-wing energy identities used in the first-wing argument",
+      "source": "gate1-tilted-unit-wing-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": "## 9."
+        }
+      ],
+      "source_sha256": "218a79250d91d18a00b2b1e2bf0b1857cfb7bca5c2fc5b1f84e612733a9523fb",
+      "excerpt_sha256": "9ea06eac9a5797098a924d0c9f209f8b0d236148a191883d44b4e7dd051369d4",
+      "excerpt_characters": 16668,
+      "excerpt_words": 2177,
+      "prelude": "",
+      "editorial_replacements": [
+        {
+          "before": "**October 10, 2026. Written proof, independently audited within this research session. Gate 1 remains open.**",
+          "after": "**Written two-unit-wing lemma, independently audited within the research session.**"
+        }
+      ],
+      "edited_excerpt_sha256": "497155bb3edb89f65c6c5560c83de6d0f51bce1e8162a7d154b1dcb9624a73e2"
+    },
+    {
+      "anchor": "proof-first-unit",
+      "title": "The complete tilted first-unit-wing contradiction (GF)",
+      "source": "gate1-tilted-first-wing-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "d8c638779555cd6392ab54dd16ce27a6ed09dbd31e9169ec214c7b04aa83394d",
+      "excerpt_sha256": "7b429063d3b49b8a3bda62d5113f98c2d9fbd305681a6faac91b4aa7f4f71b19",
+      "excerpt_characters": 14249,
+      "excerpt_words": 1813,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "7b429063d3b49b8a3bda62d5113f98c2d9fbd305681a6faac91b4aa7f4f71b19"
+    },
+    {
+      "anchor": "proof-initial-energy",
+      "title": "The tilted initial-floor energy conditions (IE)",
+      "source": "gate1-tilted-initial-floor-energy.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "b60bd5b14199291a59039b8676e24703ac3ff7f6b7be4b3b54112019efa50227",
+      "excerpt_sha256": "ebcecdf5f9c7fb060b114abb37c99617a0d241c814d4d570ab09dd1fc4d844ab",
+      "excerpt_characters": 7464,
+      "excerpt_words": 1000,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "ebcecdf5f9c7fb060b114abb37c99617a0d241c814d4d570ab09dd1fc4d844ab"
+    },
+    {
+      "anchor": "proof-corner-confinement",
+      "title": "Constructing a genuine feasible one-turn survivor (CG)",
+      "source": "gate1-tilted-corner-confinement.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "be81589a22af36cbe3e516dec80050eb853d0285e9fd64941b07e52b4ecce272",
+      "excerpt_sha256": "5673d769c19c6b8b66a3790edfaf91e72c545e495e2650f59f38cd6fdad8dd85",
+      "excerpt_characters": 7502,
+      "excerpt_words": 949,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "5673d769c19c6b8b66a3790edfaf91e72c545e495e2650f59f38cd6fdad8dd85"
+    },
+    {
+      "anchor": "proof-early-excess",
+      "title": "Forward curvature excess and endpoint leakage (ET)",
+      "source": "gate1-tilted-first-excess-ends-early.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "e99bc532a2de89c4bc973bf7a14c8c301f61d7226c0a9fe52b16ead892b36b8c",
+      "excerpt_sha256": "9c46403d5094531fb707281caaa71aad0061fe74b9830dbfa9776d4670609151",
+      "excerpt_characters": 7909,
+      "excerpt_words": 948,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "9c46403d5094531fb707281caaa71aad0061fe74b9830dbfa9776d4670609151"
+    },
+    {
+      "anchor": "proof-reflected-projection",
+      "title": "Reflected tail and exact zero-height projection (RT)",
+      "source": "gate1-tilted-reflected-tail-and-projection.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "944a272a0953cb7cfc2141e94ac5f5c06c612fb7bf4aedef1fea36df9ddd3b14",
+      "excerpt_sha256": "393cf47aad70b72fa2e300f87eb107fca62853a0d7716f3021c3287f985d9027",
+      "excerpt_characters": 9411,
+      "excerpt_words": 1150,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "393cf47aad70b72fa2e300f87eb107fca62853a0d7716f3021c3287f985d9027"
+    },
+    {
+      "anchor": "proof-final-height",
+      "title": "The final tilted height reduction (FR)",
+      "source": "gate1-tilted-final-height-reduction.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "cdf634104532cfdee335aa011bfa39c924104af106c6352d22ed9ebbc61d98b1",
+      "excerpt_sha256": "9e180dbc3a60167c715c6cc9020b4b090620f6836ae3351dc6a27580a859061e",
+      "excerpt_characters": 8983,
+      "excerpt_words": 1024,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "9e180dbc3a60167c715c6cc9020b4b090620f6836ae3351dc6a27580a859061e"
+    },
+    {
+      "anchor": "proof-small-height",
+      "title": "The last small-height alternatives (SH)",
+      "source": "gate1-tilted-small-height-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "84f1854af38fe3e6ef76146072b6110f884888503d2669126f8ecd4b81d9cd02",
+      "excerpt_sha256": "72f0a9574099277ffe978a8d8e7d2b33fb87d58b4d8ac8fe2df45c5c73a4dd8e",
+      "excerpt_characters": 9942,
+      "excerpt_words": 1095,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "72f0a9574099277ffe978a8d8e7d2b33fb87d58b4d8ac8fe2df45c5c73a4dd8e"
+    },
+    {
+      "anchor": "proof-full-closure",
+      "title": "Full-turn assembly and explicit external input record (G1C)",
+      "source": "gate1-sharp-full-turn-closure.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": null
+        }
+      ],
+      "source_sha256": "eb9105656771278862771a76fb66653cd80ae989f579a91046782dc30efb51fd",
+      "excerpt_sha256": "b4907d0c984e4c9e5485289e99a36801ae8356133295be38aa5a35aa065326c0",
+      "excerpt_characters": 15179,
+      "excerpt_words": 1850,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "b4907d0c984e4c9e5485289e99a36801ae8356133295be38aa5a35aa065326c0"
+    },
+    {
+      "anchor": "proof-partial-domain",
+      "title": "Actual partial-cap domain and used-support saturation (PD)",
+      "source": "gate2-partial-cap-domain-reductions.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 7."
+        }
+      ],
+      "source_sha256": "837c4a68b199f14d15f589da940e941e02182472aa9a842e2e7898b736f6efd6",
+      "excerpt_sha256": "a0ebc57e062625563e88296f2ef77cc6dc41f224f40aafd2ee96de04fe9fed73",
+      "excerpt_characters": 13577,
+      "excerpt_words": 1825,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "a0ebc57e062625563e88296f2ef77cc6dc41f224f40aafd2ee96de04fe9fed73"
+    },
+    {
+      "anchor": "proof-partial-sources",
+      "title": "Prescribed partial-cap source theorem and terminal mass (PS)",
+      "source": "gate2-partial-endpoint-source-and-green.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 10."
+        }
+      ],
+      "source_sha256": "ad748b9bd4ea9fad268970a04b9ede7160734b2cff7ba83343f2a6955c79b77f",
+      "excerpt_sha256": "d933ef74eb5cec67f0ba03a46468a23a7c4767fb54c63a35c62444d1d2690a73",
+      "excerpt_characters": 31511,
+      "excerpt_words": 4024,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "d933ef74eb5cec67f0ba03a46468a23a7c4767fb54c63a35c62444d1d2690a73"
+    },
+    {
+      "anchor": "proof-negative-completion",
+      "title": "Same-cap completion of the negative-tilt alternatives (NT)",
+      "source": "gate2-negative-tilt-completion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "620db2aaa8c2e1231a77bb3a1777337d2c77be3c93111773f070370cf921e218",
+      "excerpt_sha256": "07a6e427309385ac3171449d74c93b6410a5e6db85f36cd4c5304511c3283460",
+      "excerpt_characters": 5276,
+      "excerpt_words": 702,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "07a6e427309385ac3171449d74c93b6410a5e6db85f36cd4c5304511c3283460"
+    },
+    {
+      "anchor": "proof-angle-variation",
+      "title": "Exact one-sided angle derivatives with contact ties (TV)",
+      "source": "gate2-terminal-angle-variations.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": "## 2."
+        }
+      ],
+      "source_sha256": "3102566ce3708b6aa59339e8d16b5fa417e04813b900b2cfc5a6c63d23c672bf",
+      "excerpt_sha256": "076ea080cf346f8f46f03fd56b476ab962e850bff081cc9fcc23508c7c974843",
+      "excerpt_characters": 3878,
+      "excerpt_words": 527,
+      "prelude": "**Local definitions.** Let \\(U\\) be a compact downward convex cap\nof height at most one, with roof \\(A\\), projection \\(I\\), and middle\nhalf \\(J\\). Put \\(L=\\pi/2\\), \\(f(t)=h_U(\\mu_t)\\),\n\\(g(t)=h_U(\\nu_t)\\), and use the wall functions \\(R_t,D_t\\) from MS.5.\nFor \\(\\pi/4\\le a<L\\), define\n\\[\nn_a(x)=\\max\\{0,\\sup_{0<t<a}\\min(R_t(x),D_t(x))\\},\\quad\nN_a=\\max(n_a,R_a),\\quad\n\\mathcal P_a(U)=\\int_{I\\setminus J}A-\\int_JN_a.\n\\]\nThus \\(n_a\\) excludes the terminal whole wall, while \\(N_a\\) includes it,\nas in PT.3. Horizontal reflection at fixed \\(a\\) is not assumed.",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "c3b195221ed82a9b3302342fbaf7a6e88cc166740e0e53b2e6b05280d961f21e"
+    },
+    {
+      "anchor": "proof-initial-angle",
+      "title": "The all-width initial-angle certificate (AT)",
+      "source": "gate2-all-width-terminal-angle-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": "## 8."
+        }
+      ],
+      "source_sha256": "f789311751e509a4146c1cd2693ff2aab5743027e1e1c42bfa1ec42145f6bbe5",
+      "excerpt_sha256": "1e55be64dc3c6966cbb8ba2eaaa141b85ed45696a4fe70aa6d2ac713ca3a7aa4",
+      "excerpt_characters": 16073,
+      "excerpt_words": 1924,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "1e55be64dc3c6966cbb8ba2eaaa141b85ed45696a4fe70aa6d2ac713ca3a7aa4"
+    },
+    {
+      "anchor": "proof-terminal-geometry",
+      "title": "Terminal facet geometry, width cuts and projection (TP)",
+      "source": "gate2-terminal-facet-and-prefix-reduction.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "1179d37957d430138e1a3453d93f52878745ee4d1b5dd51aec7798fa2a36f1f0",
+      "excerpt_sha256": "b7af98466166f3206f09ef177bcba3b364053d3fea6da7e94ef44515db4bbfd5",
+      "excerpt_characters": 11416,
+      "excerpt_words": 1509,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "b7af98466166f3206f09ef177bcba3b364053d3fea6da7e94ef44515db4bbfd5"
+    },
+    {
+      "anchor": "proof-partial-width",
+      "title": "The all-sign partial three-angle width cut (WC)",
+      "source": "gate2-three-angle-width-cut.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "889798231428eb0fd84761604a725298792d6c822871ae8bad3cbb7e736bf37a",
+      "excerpt_sha256": "dbc0d84f722999ca5de2ed9a8da460984bbdc9e4368d6ed56eb0d2b607cdfa05",
+      "excerpt_characters": 9336,
+      "excerpt_words": 1131,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "dbc0d84f722999ca5de2ed9a8da460984bbdc9e4368d6ed56eb0d2b607cdfa05"
+    },
+    {
+      "anchor": "proof-positive-local-laws",
+      "title": "Local positive-tilt source and support laws (PU)",
+      "source": "gate2-positive-tilt-first-unit-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": "## 5."
+        }
+      ],
+      "source_sha256": "c762d422797174faf563f88d8cdefb02ab5479bf6302c97700666a94ac098ce4",
+      "excerpt_sha256": "74bed0a5830d21296dd8e2ecfe1591267e8a2a347ff199be80138c53985b5abe",
+      "excerpt_characters": 12622,
+      "excerpt_words": 1784,
+      "prelude": "",
+      "editorial_replacements": [
+        {
+          "before": "Combine the bound with PS.11 and pass to the limit exactly\nas in WR.5.",
+          "after": "Write \\(T_n=\\tan(\\delta_n/2)\\), and let \\(\\ell_{n,j}\\) be the\ncharged facet length at a paired first-source grid normal. The retained\nWR threshold identities give\n\\[\n\\tau_{n,j}\\le\n\\tan(\\delta_n)(|q^+_{n,j}|+T_n)+(2T_n-L^{\\rm circ}_{n,j})_+\n\\le\\tan(\\delta_n)(|q^+_{n,j}|+T_n)+(2T_n-\\ell_{n,j})_+.\n\\]\nHere \\(q^+_{n,j}\\) uses the forward companion secant support derivative.\nCombining with PS.11 and separating\n\\(\\ell_{n,j}\\ge2T_n\\) from \\(\\ell_{n,j}<2T_n\\) gives\n\\[\n\\ell_{n,j}\\le\n\\kappa(q^+_{n,j})\\delta_n+O(\\delta_n^2)+b_{n,j}\n\\]\nuniformly on each compact regular interval. Outer-only normals have\ncharged length at most \\(b_{n,j}\\). Semiconvexity, uniform support\nconvergence and the \\(C^1\\) limit on that interval make these secant\nderivatives converge locally to the companion derivative, in particular\nin \\(L^1\\). Sum the estimate against nonnegative continuous angular\ntests. The summed \\(O(\\delta_n^2)\\) and \\(b\\)-errors vanish, while PS\nidentifies the weak charged-curvature limit. This proves\n\\(u\\le\\kappa(q)\\). Interchanging the paired normal families proves\n\\(v\\le\\kappa(p)\\)."
+        }
+      ],
+      "edited_excerpt_sha256": "0f15ffdd22d61e40493fe6fd60f28f68c1b77af144f1572283dc12f597a76d3f"
+    },
+    {
+      "anchor": "proof-reflected-local-laws",
+      "title": "The all-sign reflected source system and energy calculation (RP)",
+      "source": "gate2-small-deficit-companion-prefix.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": "## 5."
+        }
+      ],
+      "source_sha256": "2230523217973ec8c32c43e22c3f64db2580180bb28efc9a9e9c7a4d0f60a920",
+      "excerpt_sha256": "ffa07361f1e7644c6bfd220e4f78bdf083e5392a2aeb323fe6c5cd29718ecf12",
+      "excerpt_characters": 10715,
+      "excerpt_words": 1374,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "ffa07361f1e7644c6bfd220e4f78bdf083e5392a2aeb323fe6c5cd29718ecf12"
+    },
+    {
+      "anchor": "proof-weighted-moment",
+      "title": "The weighted companion moment and exact terminal margin (MP)",
+      "source": "gate2-companion-moment-prefix-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "f86f44b5f491d5ba9b0437dc7880e42db8b9622b5afa97bfa5bc83787ce06d04",
+      "excerpt_sha256": "637adc667b0930b35aaf34d541d15867d6d251ed633d0fa73e5ba8208f0daaa7",
+      "excerpt_characters": 12875,
+      "excerpt_words": 1510,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "637adc667b0930b35aaf34d541d15867d6d251ed633d0fa73e5ba8208f0daaa7"
+    },
+    {
+      "anchor": "proof-near-full",
+      "title": "The near-full reflected-tail estimate (RX)",
+      "source": "gate2-reflected-tail-cot-one-eighth.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "76071c858b3a1194718632abba02893a57f444f8e4efaac62868024e33bd9444",
+      "excerpt_sha256": "87ba44d14674fce5f0fb7e74d596c855a7d6a669eb17b11ba877457d7381add4",
+      "excerpt_characters": 7501,
+      "excerpt_words": 927,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "87ba44d14674fce5f0fb7e74d596c855a7d6a669eb17b11ba877457d7381add4"
+    },
+    {
+      "anchor": "proof-cubic-payment",
+      "title": "The complementary reflected envelope and cubic payment (AC)",
+      "source": "gate2-all-angle-reflected-cubic-exclusion.md",
+      "ranges": [
+        {
+          "start": null,
+          "end": null
+        }
+      ],
+      "source_sha256": "f87bb6b5d6529b8026b0241088c8122d45896779294acaf3d9d700272c387fce",
+      "excerpt_sha256": "56c2b472e489b3500059c7d089cdf5ff1b0acbacb39debfa78396ef83bf0e870",
+      "excerpt_characters": 13606,
+      "excerpt_words": 1644,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "56c2b472e489b3500059c7d089cdf5ff1b0acbacb39debfa78396ef83bf0e870"
+    },
+    {
+      "anchor": "proof-partial-closure",
+      "title": "Universal partial-cap value and original-motion deduction (G2C)",
+      "source": "gate2-sharp-partial-turn-closure.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": null
+        }
+      ],
+      "source_sha256": "64b324b00bc545699085ca6161f7ab6ff60520667ddcbac773d705d6d1b921a7",
+      "excerpt_sha256": "3a90c1fdca58274c4b4e022c719dbf3240a8275fc595294ff5b502a67629b7fb",
+      "excerpt_characters": 14966,
+      "excerpt_words": 1881,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "3a90c1fdca58274c4b4e022c719dbf3240a8275fc595294ff5b502a67629b7fb"
+    },
+    {
+      "anchor": "proof-full-equality",
+      "title": "Every original full-turn equality cap and inverse canonicalization (CE)",
+      "source": "gate3-full-turn-cap-equality.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": null
+        }
+      ],
+      "source_sha256": "c11675186ca2f68469ebe55481f524f6f84753fcd32656f677ec5d522f5a6de7",
+      "excerpt_sha256": "0b60be15ac21ae27759f466560d761e7b85e6781bab8780c843e54baaae9d033",
+      "excerpt_characters": 11259,
+      "excerpt_words": 1474,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "0b60be15ac21ae27759f466560d761e7b85e6781bab8780c843e54baaae9d033"
+    },
+    {
+      "anchor": "proof-terminal-equality",
+      "title": "Strict proper angles and literal compact-body recovery (TB)",
+      "source": "gate3-terminal-and-body-rigidity.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": null
+        }
+      ],
+      "source_sha256": "a91646d6b2279ab287697c8f57388ad5590b3da5b65a70ce6ce155cf2f03ca76",
+      "excerpt_sha256": "043521970fc55fc786cd3541411c85c356383f78c66227f046b2ba734368a902",
+      "excerpt_characters": 17202,
+      "excerpt_words": 2384,
+      "prelude": "**Local maximizer convention.** A joint global maximizer means a pair\n\\((U,a)\\) maximizing the full cap-and-angle objective over all compact\ndownward caps of height at most one and all\n\\(\\pi/4\\le a\\le L=\\pi/2\\). Its value is \\(M/2\\) by G2C.\nNo largest-angle selection is assumed in this equality chapter.",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "42e6a794358be3d0a34ae71f470902b65714672aece0a92d563577bd442dbf35"
+    },
+    {
+      "anchor": "proof-equality-audit",
+      "title": "Exact body deficits, equality dependencies and counterexamples (ED)",
+      "source": "gate3-equality-dependency-audit.md",
+      "ranges": [
+        {
+          "start": "## 1.",
+          "end": null
+        }
+      ],
+      "source_sha256": "9e055298ea2329102090770ae11e83541268a4244c16ac65bce700313d8e2b49",
+      "excerpt_sha256": "ce2385e87474e1b1d8516bc12dc845ae9ef00b9317d61f938675383fac0bf457",
+      "excerpt_characters": 17648,
+      "excerpt_words": 2349,
+      "prelude": "",
+      "editorial_replacements": [],
+      "edited_excerpt_sha256": "ce2385e87474e1b1d8516bc12dc845ae9ef00b9317d61f938675383fac0bf457"
+    }
+  ],
+  "unresolved_relative_links": {},
+  "historical_context_links": {
+    "original-motion-global-bridge-gate0-audit.md": [
+      {
+        "destination": "midpoint-bound-general-motions.md",
+        "reason": "The required motion coverage is rederived in GA.1--3."
+      },
+      {
+        "destination": "08-common-hull-tightening.md",
+        "reason": "Actual-hull tightening is proved in GA.1--2."
+      },
+      {
+        "destination": "10-wrong-angle-exclusion.md",
+        "reason": "Wrong-angle exclusion is proved in the original-motion chapter."
+      },
+      {
+        "destination": "exact-in-place-completion-obstruction.md",
+        "reason": "Only the displayed, directly checked triangle support calculation is retained."
+      }
+    ],
+    "gate1-spatial-dual-height-width-compactness.md": [
+      {
+        "destination": "candidate-functional-concavity-counterexample.md",
+        "reason": "Historical warning about a discarded functional; no step uses it."
+      }
+    ],
+    "gate1-spatial-exposure-moving-window-variation.md": [
+      {
+        "destination": "one-turn-half-width-top-face.md",
+        "reason": "Historical zero-set warning; FE proves the required source variation independently."
+      }
+    ],
+    "gate3-terminal-and-body-rigidity.md": [
+      {
+        "destination": "romik-terminal-angle-outgoing-strip-rigidity.md",
+        "reason": "Historical comparison of auxiliary cuts, after the direct reference-width proof."
+      }
+    ],
+    "gate3-equality-dependency-audit.md": [
+      {
+        "destination": "01-two-motion-envelopes.md",
+        "reason": "Attribution for the envelope idea; ED4 and TB4 reproduce the required actual-body deduction."
+      }
+    ]
+  },
+  "broken_internal_links": [],
+  "local_link_count": 291
+}

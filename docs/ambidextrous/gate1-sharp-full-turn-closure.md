@@ -12,7 +12,10 @@ explicit dependencies, recorded in Section 6. The present result
 establishes the sharp value for complete conventional turns. The later
 [Gate 2 closure](gate2-sharp-partial-turn-closure.md) now covers independent
 partial turns and their actual outgoing strips, proving the unrestricted
-sharp area value. Equality classification and uniqueness remain separate.
+sharp area value. The separate
+[Gate 3 closure](gate3-sharp-equality-and-uniqueness.md) now proves the
+complete equality classification and literal compact-body uniqueness;
+its self-contained manuscript and dependency review are accepted.
 
 ## 1. Exact statements
 

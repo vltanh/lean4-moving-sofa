@@ -1,22 +1,94 @@
 # Ambidextrous moving-sofa research — consolidated handoff
 
-## Gate 3 reorientation — equality and uniqueness active
+## Current result — Gate 3 closed, October 10, 2026
 
-The [Gate 3 roadmap](GATE3-ROADMAP.md) now governs the next work. Its
-exact nonnegative deficit identity proves that every original area-M
-body has two original partial-cap scores M/2, zero spatial partition
-remainder, and zero area omitted from its canonical envelope. The
-remaining target is to classify every such equality cap, including
-reversing canonicalization and treating proper angles without an
-unjustified largest-angle quantifier. Actual-hull recovery and regular
-closedness must then establish exact compact-body uniqueness.
+**Gate 3: PASS under the written-proof and self-contained-manuscript
+criteria. All four gates are complete.** The
+[assembled equality and uniqueness theorem](gate3-sharp-equality-and-uniqueness.md)
+and [complete manuscript](GATE3-MANUSCRIPT.md) prove
+\[
+\boxed{|S|\le M=1+4Y^2+\arctan Y,\quad 4Y^3+3Y-1=0,\quad Y>0,}
+\]
+with equality if and only if the original compact connected
+ambidextrous body is congruent to Romik's construction. Equality is
+literal equality of compact sets. It forces the actual reference hull,
+unit incoming height, and full correct-handed angular reach for both
+independent passages.
 
-Gate 3 also requires one manuscript exposing all indispensable reduction
-proofs for independent mathematical review. **Gate 3 is ACTIVE, not
-passed.** The exact area value from Gate 2 is unchanged; equality
-classification and uniqueness are the new obligations.
+The stronger scalar classification is
+\[
+\boxed{\mathcal P_\alpha(U)=M/2
+\quad\Longleftrightarrow\quad
+\alpha=\pi/2,\quad U=U_*+(a,0).}
+\]
+It holds for every original compact downward cap of height at most one,
+including nonsymmetric and nonsmooth inputs. Every individual cap at a
+proper terminal angle has strictly smaller score.
 
-## Current result — Gate 2 closed, October 10, 2026
+The [full-turn equality proof CE](gate3-full-turn-cap-equality.md)
+first checks that the finite penalized source construction targets any
+prescribed canonical maximizer. The strict calibration then identifies
+the reference support. The exact extrusion deficit
+\[
+\mathcal P(U_*)-\mathcal P(V)
+=\int_J(\varepsilon-n_*)_+\,dx,
+\qquad U_*=V+[0,\varepsilon]e_y,
+\]
+forces \(\varepsilon=0\), because the continuous reference niche
+vanishes at the window endpoints. The height-one ceiling reverses the
+middle-chord cut as well.
+
+The [proper-angle proof TB](gate3-terminal-and-body-rigidity.md)
+repairs the equality quantifier left by Gate 2's largest-angle
+selection. If the terminal facet were too long, the same cap would
+extend to a larger angle with unchanged score. The old facet would
+then be a positive charged curvature atom at an interior visited normal,
+contradicting the partial source theorem at that same maximizing pair.
+This supplies the terminal mass bound for every individual equality
+cap; the strict Gate 2 exposure estimates exclude all remaining proper
+angles.
+
+The exact original-body deficit retains the two original cap scores,
+the spatial partition remainder and the unfilled envelope area as
+nonnegative terms. Their vanishing identifies both original reference
+caps; the common projection aligns them and recovers the actual hull.
+Containment in the reference envelope and its proved regular
+closedness then give exact body equality. Motion time parametrizations
+and translation paths are not classified.
+
+**Manuscript and review.** Five integrated chapters and 47 essential
+technical sections include the direct reference construction, original
+motion bridge, source laws, all value branches and equality arguments.
+The [equality audit](gate3-equality-dependency-audit.md), the separate
+reviews of the assembled chapters, and the
+[final manuscript dependency audit](gate3-manuscript-dependency-audit.md)
+are accepted. The audit restored local hypotheses lost at extraction
+boundaries and retained the distinction between total and charged
+facet lengths. Unused weighted-objective branches are not premises.
+
+The [manifest](gate3-manuscript-manifest.json) and
+[deterministic compiler](computer-assisted/build_gate3_manuscript.py)
+record exact source hashes, extraction ranges, local preludes and
+editorial replacements. Independent comparison passes for the accepted
+83,574-word manuscript, with 291 internal links and zero unresolved
+relative references or broken internal anchors. This is text integrity
+verification; the separate mathematical reviews address the proofs.
+
+The exact area value is unchanged from Gate 2. Gate 3 adds complete
+equality classification, strict proper-angle cap values and literal
+compact-body uniqueness. Baek's ordinary one-turn theorem and the
+retained rational Gerver enclosure remain explicit external inputs,
+used only in strict full-turn branch exclusions after genuine
+feasibility. **External refereeing and Lean verification remain
+outstanding.** No Lean/Lake, CI, numerical campaign or original Lean
+source modification was used for Gate 3.
+
+The [completed Gate 3 roadmap](GATE3-ROADMAP.md) records how each
+original acceptance item was met. The current result here and the
+[execution-plan status table](SHARP-OPTIMALITY-EXECUTION-PLAN.md)
+supersede earlier open-gate descriptions in the historical ledger.
+
+## Gate 2 foundation — closed October 10, 2026
 
 **Gate 2: PASS as a written mathematical proof.** The
 [complete partial-turn closure](gate2-sharp-partial-turn-closure.md)
@@ -76,11 +148,12 @@ passes **83 Fraction arithmetic checks**. Those checks certify the
 displayed rational and squared comparisons, not the continuum geometry.
 
 Gate 1's documented external ordinary one-turn theorem and Gerver area
-enclosure remain dependencies. **External refereeing, Lean verification,
-equality classification and uniqueness remain outstanding.** No
+enclosure remain dependencies. **External refereeing and Lean
+verification remain outstanding.** The Gate 3 closure above now proves
+equality classification and exact compact-body uniqueness. No
 Lean/Lake command, CI run or original Lean source change was made for
 this gate. Gates 0, 1 and 2 have passed the project's written-proof
-acceptance conditions; Gate 3 is now active under the roadmap above. The
+acceptance conditions; Gate 3 is also complete under the roadmap above. The
 [completed roadmap](GATE2-ROADMAP.md) records the progression from the
 initial sufficient theorem to this closure.
 
@@ -103,7 +176,7 @@ The [small-height theorem](gate1-tilted-small-height-exclusion.md) excludes the 
 
 **Verification and dependencies:** the written arguments received separate mathematical checks within this research session. The [fixed exact checker](computer-assisted/check_gate1_final_scalar_exact.py) passes 74 rational arithmetic checks using Fraction alone. Its arithmetic checks do not verify the geometric proofs. Baek's ordinary one-turn theorem and the existing exact Gerver area enclosure remain explicit dependencies; the relevant source declarations and parameter premises were inspected. **No external refereeing, Lean/Lake build, CI run, or new Lean formalization is claimed.**
 
-The Gate 1 theorem controls complete turns. The separate Gate 2 closure above now controls independent partial angles and their actual outgoing whole-body strips. Equality classification and uniqueness remain unproved. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) records Gates 0–2 as passed and Gate 3 as active.
+The Gate 1 theorem controls complete turns. The separate Gate 2 closure above controls independent partial angles and their actual outgoing whole-body strips. The Gate 3 closure proves equality classification and literal compact-body uniqueness. The [controlling execution plan](SHARP-OPTIMALITY-EXECUTION-PLAN.md) records Gates 0–3 as passed under their written-proof criteria.
 
 ## Gate 2 reorientation — initial roadmap, October 10, 2026
 

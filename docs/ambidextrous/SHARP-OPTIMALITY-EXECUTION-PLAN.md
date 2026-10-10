@@ -1,12 +1,12 @@
 # Sharp ambidextrous moving-sofa optimality — controlling execution plan
 
-**Gates 0–2 completed as written proofs · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the proof requirements for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved. Gate 3 is active under its [equality roadmap](GATE3-ROADMAP.md).
+**Gates 0–3 completed under the written-proof criteria · October 10, 2026.** This document, not the historical [ROADMAP.md](ROADMAP.md), sets the proof requirements for draft [PR #3](https://github.com/vltanh/lean4-moving-sofa/pull/3). The [CONSOLIDATED-RESEARCH-HANDOFF.md](CONSOLIDATED-RESEARCH-HANDOFF.md) remains the authoritative record of what has and has not been proved. The [Gate 3 closure](gate3-sharp-equality-and-uniqueness.md) and [complete manuscript](GATE3-MANUSCRIPT.md) finish the equality roadmap and its separate review requirements.
 
 **Honest baseline.** Romik's construction has proven area
 \[
 M=1+4Y^2+\arctan Y\approx1.64495521842544,\qquad 4Y^3+3Y-1=0.
 \]
-**The unrestricted sharp area value is now proved at the written-proof level.** The [Gate 2 closure](gate2-sharp-partial-turn-closure.md) proves the universal partial-cap bound, the signed joint target below, and exclusion of above-M compact connected bodies with arbitrary original partial motions. Its [dependency and coverage audit](gate2-dependency-coverage-audit.md) is accepted. Gate 1's ordinary one-turn dependency remains explicit. **Uniqueness and equality classification remain unproved; external refereeing and Lean verification remain outstanding.**
+**The unrestricted sharp area value and exact compact-body uniqueness are proved at the written-proof level.** The [Gate 2 closure](gate2-sharp-partial-turn-closure.md) proves the universal partial-cap bound, the signed joint target below, and exclusion of above-M compact connected bodies with arbitrary original partial motions. Its [dependency and coverage audit](gate2-dependency-coverage-audit.md) is accepted. The [Gate 3 closure](gate3-sharp-equality-and-uniqueness.md) classifies every equality cap, excludes every proper equality angle, and recovers the original hull and literal compact body. The [manuscript dependency review](gate3-manuscript-dependency-audit.md) is accepted. Gate 1's ordinary one-turn dependency remains explicit. **External refereeing and Lean verification remain outstanding.**
 
 ## One non-negotiable final theorem
 
@@ -355,9 +355,33 @@ G2C.23–24 join two arbitrary independent caps of the actual common hull, prese
 
 ## Gate 3 — equality, uniqueness and independent review
 
-**Status: ACTIVE.** The [Gate 3 roadmap](GATE3-ROADMAP.md) fixes the exact equality target and begins with a nonnegative deficit identity for every actual body. The active scalar lemma must classify every original equality cap, reverse the middle-chord and height reductions, and exclude proper terminal angles without relying only on a selected largest-angle maximizer. Then recover Romik's actual hull, complete terminal angles and literal compact body. Equality in any signed/support interpolation is not enough without connectedness and actual-hull retention. Prove uniqueness **separately**, if it is true.
+**Status: PASS under the written-proof and manuscript criteria.** The
+[completed roadmap](GATE3-ROADMAP.md) begins with the exact nonnegative
+original-body deficit. [CE](gate3-full-turn-cap-equality.md) classifies
+every full-turn equality cap and reverses the middle-chord and height
+maps. [TB](gate3-terminal-and-body-rigidity.md) excludes every proper
+equality angle using an unchanged-cap extension whose old terminal
+facet becomes a forbidden interior charged curvature atom. This
+argument applies to each prescribed maximizing pair, without a
+largest-angle selection.
 
-Compile one self-contained manuscript, with all key equations and reduction proofs exposed for independent mathematical review. No claim of Lean verification, automated kernel proof, or externally accepted publication.
+The [assembled theorem G3C](gate3-sharp-equality-and-uniqueness.md)
+retains both original caps and the actual hull. Their common projection
+aligns the reference caps, and containment plus regular closedness
+proves literal compact-set uniqueness. Both independently extracted
+terminal magnitudes are full. This classifies bodies and necessary
+angular reach; it does not classify time parametrizations or translation
+paths.
+
+The [self-contained manuscript](GATE3-MANUSCRIPT.md) exposes the
+integrated proof and all essential domestic technical arguments in
+52 sections. The [equality audit](gate3-equality-dependency-audit.md)
+and [manuscript dependency audit](gate3-manuscript-dependency-audit.md)
+are accepted. The deterministic source/manifest comparison passes,
+with no unresolved proof references or broken internal anchors.
+The ordinary one-turn theorem and its rational enclosure remain explicit
+external inputs. No claim of Lean verification, automated kernel proof,
+external referee acceptance or externally accepted publication is made.
 
 ## Rules for every subsequent research turn
 
@@ -371,11 +395,11 @@ Compile one self-contained manuscript, with all key equations and reduction proo
 
 ## Current gate status (updated October 10, 2026)
 
-| Gate | Status | Concrete missing step |
+| Gate | Status | Completion evidence and review scope |
 |---|---|---|
 | 0 — original-motion bridge | **PASS** (written audit) | End-to-end audit in original-motion-global-bridge-gate0-audit.md; still subject to external review |
 | 1 — coupled full-turn loss | **PASS** (written proof) | G1C1 proves the universal cap value; G1C2 gives the complete-turn sharp area and exact reference equality. Dependency and coverage audit accepted; external review and Lean verification outstanding. |
 | 2 — complete original partial motions | **PASS** (written proof) | G2C1 proves the universal partial-cap value; G2C2/G2C.24 give the sharp original-motion area and signed joint target. Full dependency/coverage audit accepted; external review and Lean verification outstanding. |
-| 3 — equality/uniqueness | **ACTIVE** | Classify every equality cap and proper terminal angle; recover the actual hull/body; compile and audit one self-contained manuscript |
+| 3 — equality/uniqueness | **PASS** (written proof and manuscript) | G3C1 classifies every original equality cap and excludes proper angles; G3C2 proves exact compact-body uniqueness. Complete 52-section manuscript, equality audit and dependency/extraction audit accepted; external review and Lean verification outstanding. |
 
 **Definition of meaningful progress:** a passed gate, a global theorem that removes an indispensable gap, or a correct falsification requiring a documented change in the global strategy. Everything else is supporting research.
