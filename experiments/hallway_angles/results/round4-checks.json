@@ -1,0 +1,92 @@
+{
+  "format": "hallway-round4-checks-v1",
+  "starting_commit": "69d0b5f15b4497c4ef4bcac265acb80706083b4f",
+  "source_checkpoint": "9d492ed3832a4c83a93e6abca92a07f768b0f748",
+  "proof_status": "Analytic theorem drafts, not independently reviewed or Lean checked. Scalar interval success does not verify geometric proofs.",
+  "environment": {"python": "3.13.5", "numpy_regression_only": "2.3.5", "scipy_regression_only": "1.17.0", "shapely_regression_only": "2.1.2"},
+  "validation": {
+    "command": "python -m unittest -v test_round4 test_flat_alignment",
+    "run": 37, "passed": 37, "ci_run": false, "lean_build": false, "full_repository_suite_run": false,
+    "dependencies": "Original parameter_certificate.py, width_certificate.py, and reverse_exact.py were copied from fetched source and their Git blob hashes checked against GitHub before the final test run."
+  },
+  "verified_dependency_blob_hashes": {
+    "parameter_certificate.py": "d823a8937a550c72a1f596785d9de4c1b8d9de8e",
+    "width_certificate.py": "6fbfc4643eb0e00769e5eb010d626a36ab698bb1",
+    "reverse_exact.py": "be73f2032da918913f7d8ed34edc99909fff701e"
+  },
+  "extended_width": {
+    "format": "reverse-extended-width-proof-v1", "status": "all cells strictly positive",
+    "precision_bits": 96, "denominator": 79228162514264337593543950336, "cells": 256,
+    "epsilon_over_pi_interval": ["0", "1/2"],
+    "inequalities": ["qV-cos(e/2)>0", "(1-R)m(6d+7)-R(6d^2+13d-2)>0", "(1-R)m(2d+1)-R(2d-1)(d+2)>0"],
+    "minimum_lower_numerators": [25178496541777040522007515019, 67832792591447232690970091872, 45395837978126266814465716191],
+    "trust": "Python exact integer/rational arithmetic and isqrt; no floating-point proof"
+  },
+  "monotonicity": {
+    "format": "reverse-monotonicity-proof-v1", "cells": 512, "epsilon_over_pi_interval": ["0", "1/2"],
+    "denominator": 79228162514264337593543950336,
+    "maximum_upper_numerator": -30179811709438911048880625011,
+    "status": "V'(e)<0 for all 0<e<pi/2"
+  },
+  "early_exclusion": {
+    "format": "reverse-early-exclusion-proof-v1", "cells": 512,
+    "epsilon_over_pi_interval": ["1/3", "1/2"], "scale": "983/1000",
+    "minimum_lower_numerator": 7922463834798427710274435490,
+    "denominator": 79228162514264337593543950336,
+    "status": "scaled reverse bound below semicircle"
+  },
+  "comparison_roots": {
+    "lower": {
+      "kind": "lower", "bend_degrees": ["33411086593/250000000", "133644346373/1000000000"],
+      "left_positive_lower_numerator": 291239493791267847,
+      "right_negative_upper_numerator": -2099923502793029733,
+      "denominator": 79228162514264337593543950336,
+      "interpretation": "root of an explicit bound comparison, NOT beta_c"
+    },
+    "upper": {
+      "kind": "upper", "bend_degrees": ["8881148911/62500000", "142098382577/1000000000"],
+      "left_positive_lower_numerator": 27559993872455279,
+      "right_negative_upper_numerator": -2828677441226844975,
+      "denominator": 79228162514264337593543950336,
+      "interpretation": "root of an explicit bound comparison, NOT beta_c"
+    }
+  },
+  "laurent_coefficients": {
+    "format": "near-reversal-coefficients-v1", "denominator": 79228162514264337593543950336,
+    "T0": [53784406720814275653341710209, 53784406720814275653341710231],
+    "leading_area": [107475675010811933534080369049, 107475675010811933534080369097],
+    "next_area": [7508714869906133189691424802, 7508714869906133189691424821],
+    "limit_contact_length": [22733137521169145712471112850, 22733137521169145712471112874],
+    "trust": "Python exact integer arithmetic and isqrt; no floating arithmetic"
+  },
+  "negative_certificate_fixtures": [
+    {"certificate": "width", "cells": 8, "outcome": "rejected as inconclusive", "message": "inconclusive width cell 1: [14789123582694732947274436807, -52710065945865939541682318139, 20161375329251803734395453616]"},
+    {"certificate": "width", "cells": 32, "outcome": "rejected as inconclusive", "message": "inconclusive width cell 18: [21095382760162261965424341148, -323947507705479083010399244, 53291513524374554304983087199]"},
+    {"certificate": "monotonicity", "cells": 8, "outcome": "rejected as inconclusive", "message": "inconclusive monotonicity cell 4: 10097101202706661680347177282"},
+    {"certificate": "early_exclusion", "cells": 8, "outcome": "rejected as inconclusive", "message": "inconclusive early exclusion cell 0"}
+  ],
+  "floating_profile_regression": [
+    {"epsilon_radians": 0.2, "matched_boundary_max_error": 0.00393940097120371, "error_over_epsilon_squared": 0.09848502428009275},
+    {"epsilon_radians": 0.1, "matched_boundary_max_error": 0.0009793480241557795, "error_over_epsilon_squared": 0.09793480241557793},
+    {"epsilon_radians": 0.05, "matched_boundary_max_error": 0.000244498020992967, "error_over_epsilon_squared": 0.0977992083971868},
+    {"epsilon_radians": 0.025, "matched_boundary_max_error": 0.00006110338622822287, "error_over_epsilon_squared": 0.09776541796515657},
+    {"epsilon_radians": 0.0125, "matched_boundary_max_error": 0.00001527452721011846, "error_over_epsilon_squared": 0.09775697414475813}
+  ],
+  "generated_full_output_hashes": {
+    "extended-width.json": "aeb6ef650aaec69c7d182d8cfba79d761637f6ef6436ac65033885c1c9e7d07c",
+    "branch-comparisons.json": "2fc52cb17a228d0aee54ad8d9d45307f342800807c4aa6d8b0e8143ce83bd341",
+    "tests.log": "e6571fbb1e762401a7a8efb66fde2812961be55cbe398f18dc3d89ea86ed6534"
+  },
+  "reproduction": [
+    "python extended_width_certificate.py --cells 256 --output extended-width.json",
+    "python branch_comparison_certificate.py --cells 512 --output branch-comparisons.json",
+    "python near_reversal_coefficients.py",
+    "python -m unittest -v test_round4 test_flat_alignment"
+  ],
+  "limitations": [
+    "The exact unrestricted near-reversal theorem has an existential positive angle range; no numerical global cutoff is certified.",
+    "No unique aligned-class crossing or exact beta_c is proved.",
+    "Uniform Hausdorff constants and the flat-contact alignment theorem are analytic proof drafts, not established by the floating-point tests.",
+    "Old numerical results and their weaker or historical scope remain in separate files."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "format": "closed-form-research-checks-v1",
+  "starting_commit": "267ba93548d58c23f10e6b8793b952099acdc5b2",
+  "scope": "Contact-model equation only; global beta_c not identified; no elementary nonexistence theorem claimed.",
+  "environment": {"python": "3.13.5", "mpmath": "1.3.0", "sympy": "1.14.0"},
+  "source_blobs": {
+    "closed_form_search.py": "f3a0a17097ec83aa2461812eff2c22349af72338",
+    "test_closed_form_obstructions.py": "dd0e7eaf6f37a69fc0c5f0d1ec813b7d02855d01"
+  },
+  "tests": {
+    "command": "python -m unittest -v test_closed_form_obstructions",
+    "run": 11, "passed": 11, "skipped": 0, "ci": false, "lean": false
+  },
+  "recognition": {
+    "format": "contact-closed-form-recognition-v1",
+    "meaning": "bounded heuristic recognition; not proof of transcendence or absence of elementary closed form",
+    "precision_decimal_digits": 180, "crosscheck_digits": 260,
+    "pslq_tolerance": "1.0e-140", "height": 1000000, "maxsteps": 3000,
+    "equations_source_commit": "267ba93548d58c23f10e6b8793b952099acdc5b2",
+    "residual": "4.8198397e-181", "precision_agreement": "5.7292499e-187",
+    "mpmath_version": "1.3.0"
+  },
+  "recognition_summary": {
+    "calls": 67, "candidate_relations_returned": 0,
+    "polynomial_targets": ["beta", "beta_over_pi", "cos_beta", "tan_beta_half", "alpha_over_pi", "cos_alpha", "T", "T_over_beta"],
+    "degrees": [1, 2, 3, 4, 5, 6, 7, 8],
+    "linear_bases": {
+      "quadratic_constants": ["beta", "1", "pi", "sqrt2", "sqrt3", "sqrt5", "sqrt6", "sqrt7"],
+      "elementary_constants": ["beta", "1", "pi", "sqrt2", "sqrt3", "sqrt5", "log2", "log3", "log5"],
+      "pi_products": ["beta", "1", "pi", "pi2", "pi_sqrt2", "pi_sqrt3", "pi_sqrt5"]
+    },
+    "all_call_outcomes": "no_relation_returned_NOT_AN_EXCLUSION_CERTIFICATE",
+    "full_search_record_sha256": "e6c3750dbf690549f249eda11a093c9c35511284727c29e4a13a426497e7c70c"
+  },
+  "symbolic_checks": {
+    "normal_form": "2*z*(w+1)*F = P(z)*w+Q(z)",
+    "resultant": "8192*c^2*(c^2-1)^2*(4*c^2-1)*(2*c^2-1)/(4*c^2-3)^3",
+    "domain": "0<c<1/2; resultant never zero",
+    "monodromy_factor": "exp(4*pi*mu), positive and greater than one",
+    "role": "Verifies symbolic identities, not the invoked transcendence theorems."
+  },
+  "negative_results": [
+    "No numerical recognition result was found; a bounded PSLQ search is not exhaustive exclusion.",
+    "First local run failed a syntactic equality assertion comparing expanded and factored identical polynomials. Replacing it with exact expansion-of-difference comparison made the 11-test run pass. Mathematical equations and coefficients were unchanged.",
+    "The paired algebraic-direction obstruction cannot rule out a closed form for beta alone: the contact equation has a solution at beta=3*pi/4.",
+    "Failure of direct algebraic exponential substitution does not exclude all Lambert-W transformations.",
+    "Neither a non-elementary function nor a transcendental constant automatically lacks a finite elementary expression."
+  ]
+}

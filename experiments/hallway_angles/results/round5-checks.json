@@ -1,0 +1,89 @@
+{
+  "format": "hallway-round5-checks-v1",
+  "status": "Proof draft; not independently reviewed or Lean checked",
+  "starting_commit": "ce09bb5910d86cd2f233ce52d2c3f3279a610836",
+  "source_blobs": {
+    "parameter_certificate.py": "d823a8937a550c72a1f596785d9de4c1b8d9de8e",
+    "width_certificate.py": "6fbfc4643eb0e00769e5eb010d626a36ab698bb1",
+    "reverse_exact.py": "be73f2032da918913f7d8ed34edc99909fff701e",
+    "explicit_cutoff_certificate.py": "27137dabfcb6f487521c3001f6c988164cc79636",
+    "explicit_motion_rigidity.py": "b0c42790dc222edbb66f74776fb34138b0269d31",
+    "test_explicit_cutoff.py": "d5c4f8900f15dc97f56cdda39c87a36c8aa4e737",
+    "test_explicit_motion_rigidity.py": "cd0759989e34cbfaf4b9da6d4b6a9932cac85a54",
+    "round5_check.py": "5c312558bbd80e79fd4ee1b99bd4676f01875129"
+  },
+  "environment": {"python": "3.13.5", "numpy": "2.3.5", "shapely": "2.1.2"},
+  "tests": {
+    "command": "python -m unittest -v test_explicit_cutoff test_explicit_motion_rigidity",
+    "run": 22, "passed": 22, "skipped": 0, "ci": false, "lean": false
+  },
+  "scalar_certificate": {
+    "format": "explicit-cutoff-scalars-v1", "status": "all interval bounds proved",
+    "epsilon_interval": ["0", "1/10"], "cells": 256, "bits": 96,
+    "denominator": 79228162514264337593543950336,
+    "rational_bounds": {
+      "eV": ["27/20", "34/25"], "ell": ["143/500", "1/3"],
+      "endpoint": ["59/250", "1/4"], "width_slope": ["1/10", "1"],
+      "width_half_slope": ["1/10", "1"], "narrow_gap": ["1/3", "1/2"],
+      "jacobi_y": ["0", "16/25"], "width_x": ["0", "7/20"],
+      "jacobi_x_monotone": ["0", "2"], "width_y_monotone": ["0", "1"]
+    },
+    "enclosure_numerators": {
+      "eV": [107475289736898073261471469903, 107561161365611075724832590152],
+      "ell": [22732985476939482736133394478, 22816985535820512433852290494],
+      "endpoint": [18740152289901953738536325264, 18887198525668126375013499321],
+      "width_slope": [22732263856868558098347608915, 22826581968546120728514082082],
+      "width_half_slope": [8606804983956580076878082657, 8645338178936025106700220354],
+      "narrow_gap": [28246808179554256499959317271, 28300235068032790337665138103],
+      "jacobi_y": [50186780874736497778037735936, 50282893487099091349624437384],
+      "width_x": [25650847792657584370818386066, 25955901142388582820737300743],
+      "jacobi_x_monotone": [88475807564620667736568145037, 88903940625938948273750914242],
+      "width_y_monotone": [24189915214362857027566611658, 24725967617526426399986221836]
+    },
+    "trust": "Exact Python integer arithmetic; inherited Taylor remainders; no floating point"
+  },
+  "full_scalar_record_sha256": "290c133a02b9d0c1ff6ae7c846a9f67ce06e8d5c853feeca200e38736d12536b",
+  "propagation": {
+    "format": "explicit-cutoff-propagation-v1", "status": "all rational inequalities positive",
+    "epsilon_cutoff": "1/19", "trace_coefficients_squared": ["4135701/2498000", "1320/1249"],
+    "path_constants": ["5/2", "17/10"], "minimum_core_size": ["241379/1444000", "13233/14440"],
+    "rational_slacks": {
+      "matrix_determinant": "1249/2304", "trace_x_slack": "52631141/147382000",
+      "trace_y_slack": "718939/7369100", "sqrt_deficit_slack": "1/3600",
+      "sqrt_triangle_slack": "1/40000", "normal_mismatch_slack": "2957/345600",
+      "sinc_mismatch_slack": "1/16000", "cos_mismatch_slack": "23/3200",
+      "reverse_class_area_slack": "393/40", "small_deficit_slack": "288341/866400",
+      "core_width": "241379/1444000", "core_height": "13233/14440",
+      "triangle_horizontal_slack": "55259797819359/4170272000000000",
+      "triangle_vertical_slack": "5773182237/10425680000",
+      "alignment_contradiction_slack": "166189/7125000"
+    }
+  },
+  "motion_rigidity": {
+    "format": "explicit-motion-rigidity-v1", "status": "all rational inequalities positive",
+    "epsilon_max": "1/100", "normalized_deficit_max": "1/10000", "mismatch_constant": "40",
+    "actual_width_constant": "11", "aligned_path_constants": ["3", "2"], "deficit_ratio": "659/625",
+    "rational_slacks": {
+      "global_cutoff_inclusion": "81/1900", "normal_mismatch": "1468909/172787200",
+      "reverse_class": "12899/200", "deficit_is_small": "7997141/24000000",
+      "deficit_root_bound": "119/16000000", "core_width": "31329/8000000",
+      "core_height": "8447/800000", "triangle_vertical": "4764247/8000000",
+      "horizontal_failure_coefficient": "919/80000", "horizontal_failure_absorption": "47909/50000",
+      "horizontal_failure_conclusion": "3959/100", "square_root_direction_bound": "1/64",
+      "triangle_error_coefficient": "1/10", "triangle_absorption": "31801/200000",
+      "actual_width": "57/125", "aligned_deficit_root": "13/2000",
+      "aligned_path_x": "6064/15625", "aligned_path_y": "4907/25000"
+    }
+  },
+  "global_cutoff_degrees": {"lower": "176.984432657", "upper": "176.984432658"},
+  "exact_optimum_values": [
+    {"bend_degrees": 177, "optimum": {"lower": "25.912848797", "upper": "25.912848798"}, "interval_numerators": [2053027395707876028645349878208, 2053027395707876028645349881086], "denominator": 79228162514264337593543950336},
+    {"bend_degrees": 178, "optimum": {"lower": "38.865137208", "upper": "38.865137209"}, "interval_numerators": [3079213406887165980615747029381, 3079213406887165980615747035153], "denominator": 79228162514264337593543950336},
+    {"bend_degrees": 179, "optimum": {"lower": "77.725311765", "upper": "77.725311766"}, "interval_numerators": [6158033631995296457529293031639, 6158033631995296457529293052604], "denominator": 79228162514264337593543950336}
+  ],
+  "negative_checks": {
+    "coarse_single_cell": {"rejected": true, "message": "inconclusive cell 0 for eV: margins -16179360658421562614846280032, -28581587567629737139527702451"},
+    "cutoff_53_over_1000": {"rejected": true, "message": "sufficient estimates do not certify this cutoff: {'alignment_contradiction_slack': '-2032897/127200000'}"}
+  },
+  "reproduction": "python round5_check.py --output results/round5-checks.json"
+}

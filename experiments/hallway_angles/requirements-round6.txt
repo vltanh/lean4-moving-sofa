@@ -1,0 +1,4 @@
+# Optional dependencies for the sixth-round regression tests and diagnostics.
+# The exact scalar proof commands use only the Python standard library.
+-r requirements.txt
+mpmath==1.3.0

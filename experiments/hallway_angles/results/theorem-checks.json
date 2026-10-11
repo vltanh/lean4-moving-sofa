@@ -1,0 +1,57 @@
+{
+  "format": "reverse-theorem-checks-v1",
+  "source_commit": "c3543c5b20d239d49be0411250d53f21fb8793a8",
+  "proof_status": "Analytic proof draft with exact-integer scalar lemmas; not independently reviewed or Lean checked.",
+  "environment": {"python": "3.13.5", "numpy_for_regression_tests_only": "2.3.5"},
+  "local_tests": {
+    "command": "python -m unittest -v test_parameter_certificates test_reverse_exact test_reverse_value_certificate",
+    "run": 31, "passed": 31, "ci_run": false, "lean_build": false
+  },
+  "parameter_certificate": {
+    "format": "reverse-parameter-proof-v1", "status": "all cells strictly positive",
+    "precision_bits": 96, "denominator": 79228162514264337593543950336, "cells": 64,
+    "epsilon_over_pi_interval": ["1/6", "4/9"],
+    "pi_lower_numerator": 248902613312231085230521944622,
+    "pi_upper_numerator": 248902613312231085230521944623,
+    "minimum_R_lower_numerator": 48388930390231442065028770330,
+    "minimum_X_lower_numerator": 34642355288035711332871047320,
+    "trust": "Python exact integer arithmetic, Fraction and isqrt; no floating-point arithmetic"
+  },
+  "width_certificate": {
+    "format": "reverse-width-proof-v1", "status": "all cells strictly positive",
+    "precision_bits": 96, "denominator": 79228162514264337593543950336, "cells": 64,
+    "epsilon_over_pi_interval": ["0", "1/3"],
+    "inequalities": ["sin(e)*V(e)-cos(e/2)>0", "F_e(1)-F_e(1/2)>0 (positive scaling)", "negative half-height derivative at l=1/2 (positive scaling)"],
+    "minimum_lower_numerators": [23172850600039274287811796018, 111880110042026045307900843906, 76062297632410042492716222696],
+    "trust": "Python exact integer arithmetic, Fraction and isqrt; no floating-point arithmetic"
+  },
+  "forward_exclusion_certificate": {
+    "format": "reverse-forward-exclusion-v1", "cells": 64,
+    "epsilon_over_pi_interval": ["0", "37/180"],
+    "positive_expression": "sin(e)*V(e)-4*sin(e/2)",
+    "denominator": 79228162514264337593543950336,
+    "minimum_lower_numerator": 1396502628427865649654462596,
+    "status": "all cells strictly positive"
+  },
+  "asymptotic_constant": {"lower": "1.356533732452", "upper": "1.356533732453"},
+  "exact_scalar_enclosures": [
+    {"bend_degrees": 120, "reverse_optimum": {"lower": "1.399979511", "upper": "1.399979512"}, "unrestricted_lower": "1.399979", "unrestricted_upper": "2.417655"},
+    {"bend_degrees": 135, "reverse_optimum": {"lower": "1.803764167", "upper": "1.803764168"}, "unrestricted_lower": "1.803764", "unrestricted_upper": "2.280270"},
+    {"bend_degrees": 137, "reverse_optimum": {"lower": "1.880508238", "upper": "1.880508239"}, "unrestricted_lower": "1.880508", "unrestricted_upper": "2.265875"},
+    {"bend_degrees": 143, "reverse_optimum": {"lower": "2.163006742", "upper": "2.163006743"}, "unrestricted_lower": "2.163006", "unrestricted_upper": "2.278587"},
+    {"bend_degrees": 150, "reverse_optimum": {"lower": "2.641025081", "upper": "2.641025082"}, "unrestricted_lower": "2.641025", "unrestricted_upper": "2.735686"},
+    {"bend_degrees": 170, "reverse_optimum": {"lower": "7.788929081", "upper": "7.788929082"}, "unrestricted_lower": "7.788929", "unrestricted_upper": "7.821026"},
+    {"bend_degrees": 179, "reverse_optimum": {"lower": "77.725311765", "upper": "77.725311766"}, "unrestricted_lower": "77.725311", "unrestricted_upper": "77.728529"}
+  ],
+  "reproduction": [
+    "python parameter_certificate.py --cells 64 --output parameter-proof.json",
+    "python width_certificate.py --cells 64 --output width-proof.json",
+    "python reverse_value_certificate.py > value-proof.json"
+  ],
+  "negative_results": [
+    "Parameter proof with 8 cells was inconclusive and rejected, not treated as a theorem failure.",
+    "A too-narrow decimal bracket in the pi regression test was corrected to allow outward dyadic rounding; checker arithmetic was unchanged.",
+    "The corrected quadratic bound by itself does not select actual width one; the separate midpoint bound is essential.",
+    "No claim of a unique global phase transition or unrestricted fixed-angle equality M=V."
+  ]
+}

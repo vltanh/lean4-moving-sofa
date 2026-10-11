@@ -1,0 +1,53 @@
+{
+  "format": "hallway-interval-manifest-v1",
+  "controls_file": "pressure-candidates.json",
+  "controls_file_sha256": "e22398e47c84bf9abe1c543ef642531ff4896de2452ef47ba2aec1d4a5924bb8",
+  "checker": "../interval_verify.py",
+  "checker_sha256": "368f4056530a4c4a18d514fbb79b4074152cd65d47fd48c94f41abe64828e4aa",
+  "trust": "Integer/rational arithmetic and IEEE-754 binary64 operations with outward nextafter; not Lean verified. Areas are for connected continuously feasible rectangle unions, not global optima.",
+  "default_command": "python replay_pressure.py --candidate ID --skip-enclosure --certificate results/certificates/ID.json --rows ROWS --inset INSET --proposal-subdivisions 16 --verify --max-depth 8 --output results/certificates/ID-report.json",
+  "results": [
+    {
+      "candidate": "30-forward",
+      "certificate_sha256": "a0358768eeed0b584482d278d9d9bb3737bc29a3bbef9df291de03ecd2194227",
+      "proposal": {"rows": 2048, "inset": 0.0003, "subdivisions": 16, "polygon_area_untrusted": 5.326881049559464},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 4115, "verified_rectangles": 4115, "connected_rectangles": 4115, "area_numerator": 767241857144843765, "area_denominator": 144115188075855872, "area_float_display": 5.323809845364817, "interval_nodes": 23440, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "5.323809"}
+    },
+    {
+      "candidate": "60-forward",
+      "certificate_sha256": "a84b1ca535dc530c5c7b3cf890c761a723744e5c99fa3ab88e90febb73a77e13",
+      "proposal": {"rows": 2048, "inset": 0.0002, "subdivisions": 16, "polygon_area_untrusted": 2.8940974582358256},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 4083, "verified_rectangles": 4083, "connected_rectangles": 4083, "area_numerator": 1667576630976062867, "area_denominator": 576460752303423488, "area_float_display": 2.8927843297444893, "interval_nodes": 32252, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "2.892784"}
+    },
+    {
+      "candidate": "90-forward",
+      "certificate_sha256": "de38ee0c9f63f607bed0f35340a83df7bbb684a504f8f1614b12c9c8c93fcf69",
+      "proposal": {"rows": 4096, "inset": 0.00015, "subdivisions": 16, "polygon_area_untrusted": 2.218241884523514},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 8206, "verified_rectangles": 8206, "connected_rectangles": 8206, "area_numerator": 639251196359751815, "area_denominator": 288230376151711744, "area_float_display": 2.217848114743042, "interval_nodes": 46130, "max_depth_reached": 6, "max_depth_limit": 8, "area_decimal_floor_6": "2.217848"}
+    },
+    {
+      "candidate": "120-forward",
+      "certificate_sha256": "b1c10985f78491b33cf3de0ec68fac850c4c10071b5807d905084c7d01c3f637",
+      "proposal": {"rows": 2048, "inset": 0.0002, "subdivisions": 16, "polygon_area_untrusted": 1.9492142414511182},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 4084, "verified_rectangles": 4084, "connected_rectangles": 4083, "area_numerator": 1123175912807658049, "area_denominator": 576460752303423488, "area_float_display": 1.9483996235991239, "interval_nodes": 32176, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "1.948399"}
+    },
+    {
+      "candidate": "135-forward",
+      "certificate_sha256": "e776862e2833096e4bc16459af61cc945c378156468c78d1001667ff8e15d153",
+      "proposal": {"rows": 2048, "inset": 0.0002, "subdivisions": 16, "polygon_area_untrusted": 1.8729084535152833},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 4112, "verified_rectangles": 4112, "connected_rectangles": 4111, "area_numerator": 539472680409239243, "area_denominator": 288230376151711744, "area_float_display": 1.8716718467080813, "interval_nodes": 31972, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "1.871671"}
+    },
+    {
+      "candidate": "137-reverse",
+      "certificate_sha256": "0de208bef47c7f3eac9d3e1d5d27a821cdfae438853b6d35c1fa76cb8056719c",
+      "proposal": {"rows": 2048, "inset": 0.0002, "subdivisions": 16, "polygon_area_untrusted": 1.879084124658203},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 2048, "verified_rectangles": 2048, "connected_rectangles": 2048, "area_numerator": 1082645550954774107, "area_denominator": 576460752303423488, "area_float_display": 1.8780906534030912, "interval_nodes": 16488, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "1.878090"}
+    },
+    {
+      "candidate": "150-reverse",
+      "certificate_sha256": "40843e4642261f0d0d5c2c2eef442b2380d5f779480afa2aac52cd1de6911302",
+      "proposal": {"rows": 2048, "inset": 0.0002, "subdivisions": 16, "polygon_area_untrusted": 2.639032361022632},
+      "interval": {"status": "interval checked under documented binary64/integer assumptions", "proposed_rectangles": 2048, "verified_rectangles": 2048, "connected_rectangles": 2048, "area_numerator": 190058468799968251, "area_denominator": 72057594037927936, "area_float_display": 2.637591101084084, "interval_nodes": 16198, "max_depth_reached": 5, "max_depth_limit": 8, "area_decimal_floor_6": "2.637591"}
+    }
+  ]
+}

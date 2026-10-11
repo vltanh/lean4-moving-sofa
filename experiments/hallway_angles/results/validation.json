@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-05",
+  "execution": "local Python only; no CI, workflow dispatch, workflow rerun, or Lean build",
+  "environment": {"python": "3.13.5", "numpy": "2.3.5", "scipy": "1.17.0", "shapely": "2.1.2"},
+  "tests": {"command": "python -m unittest discover -v", "run": 30, "failures": 0, "errors": 0, "result": "OK"},
+  "saved_enclosure_audits": {"file": "enclosures.csv", "rows": 72, "maximum_audit_outside_area": 0.0, "audit": "whole retained polygon minus intersection at twice the angular sampling density"},
+  "motion_paths": {"nine_knot_angle_scan": 14, "seventeen_knot_refinement": 1},
+  "limitations": [
+    "Zero dense-audit discrepancy is a floating-point test, not an exact collision certificate.",
+    "The continuous-motion enclosure arguments are pen-and-paper derivations, not Lean-checked proofs.",
+    "Numerical areas use NumPy and GEOS without directed rounding or exact Boolean geometry.",
+    "Both searched motion families and the coordinate bounds are restrictions, not an exhaustive reduction.",
+    "Successful local optimizer termination does not certify continuous feasibility or global optimality.",
+    "No sharp arbitrary-angle version of Baek's Q functional has been obtained."
+  ]
+}

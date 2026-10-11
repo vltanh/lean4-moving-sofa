@@ -1,0 +1,5 @@
+# Requires Python >= 3.11; experiments tested with Python 3.13.5.
+# Install in an isolated environment; no Lean or CI dependencies.
+numpy==2.3.5
+scipy==1.17.0
+shapely==2.1.2
