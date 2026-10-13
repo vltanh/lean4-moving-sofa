@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Negative Results and Rejected Shortcuts}
+\author{}\date{October 5, 2026 --- paper proofs}
+\begin{document}\maketitle
+
+\section{The relaxed functional does not majorize every feasible sofa}
+Fix $0<\omega<\pi/2$, let $u_t=(\cos t,\sin t)$, $v_t=(-\sin t,\cos t)$, and put
+\[
+ c=\sec\omega-\tan\omega,\qquad o=(c,1),\qquad
+ F=\{z:z_y\ge0,\ \ip z{u_\omega}\ge0\}.
+\]
+Thus $0<c<1$, $\ip o{u_\omega}=1$, and $\ip o{v_\omega}=c$.
+
+\begin{theorem}[An explicit convex counterexample]\label{thm:counterexample}
+The quadrilateral
+\[
+ B_\omega=\operatorname{conv}\{O,c u_0,o,c v_\omega\}
+ =F\cap\{x\le c\}\cap\{\ip z{v_\omega}\le c\}
+\]
+is a normalized cap and a feasible convex monotone sofa of net angle $\omega$. Its niche is empty and
+\[
+ |B_\omega|=c,\qquad I(x_{B_\omega})=\omega+c-1>0,
+ \qquad \mathcal A_1(B_\omega)=1-\omega<c=\mathcal A_\omega(B_\omega).
+\]
+Thus neither convexity, feasibility, nor positive area suffices for $\mathcal A_\omega\le\mathcal A_1$.
+\end{theorem}
+\begin{proof}
+The half-plane description gives the four displayed vertices. Its two upper endpoint supports are one, at $o$, and its two lower endpoint supports are zero, at $O$. Its defining upper normals are $0$ and $\pi/2+\omega$, both allowed for a cap. On the two active normal intervals its supports are
+\[
+ p(t)=\ip o{u_t},\qquad k(t)=\ip o{v_t},\qquad0\le t\le\omega.
+\]
+Its canonical corner therefore is $\gamma(t)=o-u_t-v_t$. If a point lies strictly below both inner walls at an interior angle, its ordinate is strictly below
+\[
+ \sin t\,(p(t)-1)+\cos t\,(k(t)-1)
+ =1-\sin t-\cos t<0.
+\]
+It cannot lie in $F$. Hence the niche is empty.
+
+The explicit admissible motion is
+\[
+ z\longmapsto R_{-t}(z-o)+(1,1),\qquad0\le t\le\omega.
+\]
+Both coordinates are at most one by the support formulas. They cannot both be negative, by the empty-niche argument. At the initial angle the second coordinate is in $[0,1]$, and at the final angle the first coordinate is in $[0,1]$, so the motion starts and ends in the required strips. The cap equals its cap-minus-niche envelope, proving monotonicity. It is nonempty, compact and connected because it is a convex quadrilateral.
+
+The two nonzero terms in its doubled shoelace area are $c$ and $c$, giving $|B_\omega|=c$. Since $\gamma'=u_t-v_t$,
+\[
+ \gamma\times\gamma'=2-(c+1)\cos t+(c-1)\sin t.
+\]
+Integration and $c\cos\omega+\sin\omega=1$ yield
+\[
+ I(\gamma)=\omega-\tfrac12(c+1)\sin\omega
+              +\tfrac12(c-1)(1-\cos\omega)=\omega+c-1.
+\]
+The function $r(\omega)=\omega+c-1$ vanishes at zero and has derivative $(1-c^2)/2>0$. Thus $I(\gamma)>0$. Subtracting from the area gives $\mathcal A_1(B_\omega)=1-\omega$, proving the strict failure of majorization.
+\end{proof}
+
+\begin{remark}[Why the endpoint proof matters]
+On the open parameter interval these caps have $f=k-p'=0$ and $g=p+k'=0$. Their corner moves strictly to the right, not to the left. Each cap has a boundary-length atom of mass one at normal $0$ and at normal $\pi/2+\omega$. Consequently the curvature bound that includes these endpoints fails. It would be an error to prove only an interior curvature estimate and then assert the endpoint identities $f(0)=g(\omega)=1$ for the continuous interior arms. The no-atom part of \texttt{fixed-angle-curvature.tex} is indispensable.
+\end{remark}
+
+\section{Logical shortcuts that remain invalid}
+\begin{remark}[Changing the feasible class]
+Extending a fixed-angle maximizer's motion to a right-angle motion does not make it a right-angle maximizer. Right-angle equality rigidity cannot be applied without a separate equality of optimum values.
+\end{remark}
+\begin{remark}[Normalization versus uniqueness]
+The two endpoint upper supports uniquely fix a translation when $\cos\omega>0$. This says nothing about equality of two different caps or about reflection symmetry of an optimizer.
+\end{remark}
+\begin{remark}[Injectivity versus fan containment]
+Checking injectivity alone does not justify invoking a theorem whose assumptions also include fan containment. The new horizontal-monotonicity majorization proves the area inequality directly and keeps the missing endpoint corrections; it is not an omission of the older theorem's hypothesis.
+\end{remark}
+
+\paragraph{Status.}
+The counterexample above is an exact paper calculation, not a numerical counterexample. It does not contradict the maximizing-cap majorization, since $B_\omega$ has area $c<1$ whereas the feasible family in \texttt{relaxation.tex} has area greater than one for $0<\omega\le1$. No CI or Lean compilation was run.
+\end{document}

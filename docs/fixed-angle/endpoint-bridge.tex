@@ -1,0 +1,98 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{fact}[theorem]{Computer-assisted lemma}
+\title{A Regular Contact Branch Covers the Entire Right-Angle Tail}
+\author{}\date{October 5, 2026 --- computer-assisted paper-proof draft}
+\begin{document}\maketitle
+
+\section{Use the last wall gap, not the angle, as parameter}
+Let $h=w-c$ and take $(\phi,b,w)$ as the three shooting unknowns. The last contact ordering is
+\[
+ 0\le h<\phi<w-b<w/2<b<w-\phi<c=w-h\le w.
+\]
+The indicator propagation and midpoint conditions still define the algebraic supports $p,k$ and arms $f,g$. At this stage they are not assumed to define an admissible cap; in particular the enclosing boxes may extend to $w>\pi/2$. Write $p_0=p(0)$ and $d=g(0)-p_0$.
+
+After $c$ both the core and right-envelope indicators vanish, so $p''+p=0$ on $[c,w]$. Reflection and the midpoint shooting conditions give $p(w)=1$ and $p'(w)=-d$. Thus the last contact equation is exactly
+\begin{equation}\label{eq:floor}
+ e(c)_y=\sin w-\sin(w-h)-d\cos w
+       =2\cos(w-h/2)\sin(h/2)-d\cos w=0.
+\end{equation}
+This formula avoids a cancellation that occurs when directly evaluating the floor residual close to $c=w$. It also explains why the parameter $h$ removes the degeneracy of angle continuation at the endpoint. The first two equations remain $e(b)=\gamma(\phi)$.
+
+\begin{fact}[Finite endpoint certificate]\label{fact:certificate}
+For every $h\in[0,1/32]$ there is a solution $(\phi(h),b(h),w(h))$ of these three equations. The solutions form a continuous branch satisfying the ordering above and
+\[
+ 0<\phi\le1/12,\quad 3/2<w<8/5,\quad
+ 1<p_0<5/3,\quad 1/2<d<1,\quad p''<0
+\]
+on every open coefficient interval. For $h>0$, all order inequalities involving $c<w$ are strict.
+\end{fact}
+
+This is the endpoint part of \texttt{validated-contact-cover.tex}. The executable certificate uses sixteen closed parameter intervals $[j/512,(j+1)/512]$. On each, a parameter-uniform contraction supplies a unique root in its root box and verifies the stated support inequalities. Fifteen additional fixed-parameter root boxes lie inside the intersections of successive root boxes. These joining certificates identify the two neighboring roots at every shared endpoint, giving one continuous branch rather than sixteen unrelated local choices. The verification checks actual box containment, not merely proximity of floating-point roots.
+
+\section{The certified branch stays on the correct side of the endpoint}
+\begin{lemma}[Exact angle and overlap bounds]\label{lem:angles}
+The branch of Lemma~\ref{fact:certificate} satisfies
+\[
+ w(0)=\pi/2,\qquad 0<h\le1/32\Longrightarrow w(h)<\pi/2,
+\]
+and
+\[
+ w(1/32)<\pi/2-1/4096<7853/5000=1.5706.
+\]
+\end{lemma}
+\begin{proof}
+At $h=0$, equation~\eqref{eq:floor} is $-d\cos w=0$. Since $d>1/2$ and $3/2<w<8/5$, it forces $w=\pi/2$ exactly. No decimal approximation to $\pi$ is being substituted for this endpoint identity.
+
+At positive $h$, rearrange the same equation as
+\[
+ \sin w(1-\cos h)=\cos w(d-\sin h),\qquad
+ \cot w=\frac{1-\cos h}{d-\sin h}>0.
+\]
+The denominator is positive because $d>1/2$ and $\sin h\le h\le1/32$. Also $\sin w>0$ on the certified angle box. Thus $\cos w>0$, which puts the actual root strictly below $\pi/2$, even if its interval enclosure crosses that value.
+
+At $h=1/32$, the same denominator is less than one, so $\cot w>1-\cos h$. For $0<h\le1/32$, alternating Taylor bounds give
+\[
+ 1-\cos h\ge h^2/2-h^4/24>h^2/3,
+\]
+and
+\[
+ \arctan(h^2/3)\ge h^2/3-h^6/81>h^2/4.
+\]
+Since $w\in(3/2,\pi/2)$, it follows that
+\[
+ \pi/2-w=\arctan(\cot w)>h^2/4=1/4096.
+\]
+For the final rational comparison it suffices that $\pi<3927/1250=3.1416$. One elementary certificate is Machin's identity and the alternating arctangent bounds:
+\[
+ \pi<16\left(\frac15-\frac1{3\cdot5^3}+\frac1{5\cdot5^5}
+             -\frac1{7\cdot5^7}+\frac1{9\cdot5^9}\right)
+       -4\left(\frac1{239}-\frac1{3\cdot239^3}\right)
+       <\frac{3927}{1250}.
+\]
+The last comparison is rational arithmetic. Subtracting $1/4096$ from half this bound gives a number strictly below $7853/5000$.
+\end{proof}
+
+\begin{theorem}[The endpoint branch covers every remaining angle]
+For every
+\[
+ 7853/5000\le w<\pi/2,
+\]
+there is an admissible exact contact solution, and its sofa is the unique normalized unrestricted optimum at angle $w$.
+\end{theorem}
+\begin{proof}
+The continuous function $h\mapsto w(h)$ starts at $\pi/2$ and ends strictly below $7853/5000$. Its image therefore contains the entire stated interval by the intermediate value theorem. No monotonicity of this parameterization is assumed.
+
+For a chosen angle below $\pi/2$, its preimage has $h>0$. The certified ordering gives
+$0<\phi<b<\min(c,w-\phi)$, $c<w$, and $\phi\le1/12$. The support inequalities in Lemma~\ref{fact:certificate} are exactly the sufficient tests in \texttt{finite-admissibility-tests.tex}. The order-independent contact certificate consequently proves actual feasibility, equality with the global lifted bound, and uniqueness among all normalized sofas.
+\end{proof}
+
+\paragraph{The right-angle endpoint itself.}
+The argument above uses $h=0$ as an algebraic continuity anchor. It does not use strict concavity at $w=\pi/2$, where the two endpoint strips cease to fix horizontal translation. Optimality and uniqueness up to congruence at the endpoint are supplied separately by the companion Gerver theorem. An approximate resemblance of the endpoint shooting constants to Gerver's constants is not used as a proof of identity.
+
+\paragraph{Verification boundary.}
+The sixteen parameter boxes and fifteen joining boxes have been generated and replayed with the outward-rounded checker in \texttt{checks/endpoint\_contact.py}. The analytic consequences above are separate from those finite inequalities. The result is a computer-assisted paper proof, not a Lean/kernel certificate or an independently refereed theorem. No CI, Lean compilation, or TeX compilation was used.
+\end{document}

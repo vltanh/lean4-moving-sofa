@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{Horizontal Monotonicity Suffices for Niche Majorization}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Fix $0<\omega<\pi/2$, put $u_t=(\cos t,\sin t)$, $v_t=(-\sin t,\cos t)$, and
+\[
+ F=\{(x,y):y\ge0,\ x\cos\omega+y\sin\omega\ge0\}
+   =\{(x,y):y\ge\ell(x)\},\quad \ell(x)=\max\{0,-x\cot\omega\}.
+\]
+For normalized cap supports $p(t)=h_K(t)$ and $k(t)=h_K(t+\pi/2)$, so $p(\omega)=k(0)=1$, define
+\[
+ \gamma(t)=(p(t)-1)u_t+(k(t)-1)v_t,
+\]
+\[
+ N=F\cap\bigcup_{0<t<\omega}
+ \{z:\ip z{u_t}<p(t)-1,\ \ip z{v_t}<k(t)-1\},\qquad
+ I(\gamma)=\frac12\int_0^\omega\gamma(t)\times\gamma'(t)\,dt.
+\]
+For a real number $a$ write $a_- =\max\{-a,0\}$ and $a_+=\max\{a,0\}$.
+
+\begin{theorem}[Monotone-corner majorization]
+Suppose $\gamma$ is continuously differentiable and $\gamma_x'(t)<0$ for $0<t<\omega$. Then $|N|\ge I(\gamma)$. No assumption that $\gamma$ lies in $F$ is needed.
+
+More precisely, write $\alpha=p(0)-1$, $\beta=k(\omega)-1$ and $a=-\beta\sin\omega<b=\alpha$. Parameterize the curve as the continuous graph $y=Y(x)$ on $[a,b]$. Then
+\begin{align*}
+ |N|-I(\gamma)\ \ge\
+ &\int_a^b(\ell(x)-Y(x))_+\,dx\\
+ &+\frac12\cot\omega\,\alpha_-^2
+  +\frac12\sin\omega\cos\omega\,\beta_-^2.
+\end{align*}
+In particular $|K|-|N|\le\mathcal A_1(K):=|K|-I(\gamma)$.
+\end{theorem}
+\begin{proof}
+The endpoint normalization gives $\gamma(0)=(\alpha,0)$ and $\gamma(\omega)=\beta v_\omega=(a,\beta\cos\omega)$. Strict decrease of the first coordinate gives the graph representation and $a<b$.
+
+For $x\in(a,b)$ let $t\in(0,\omega)$ be its unique parameter. If $\ell(x)\le y<Y(x)$, put $d=Y(x)-y>0$. Then $z=(x,y)=\gamma(t)-(0,d)$ belongs to $F$, and
+\[
+ \ip z{u_t}=p(t)-1-d\sin t<p(t)-1,\qquad
+ \ip z{v_t}=k(t)-1-d\cos t<k(t)-1.
+\]
+Both inequalities are strict because $0<t<\omega<\pi/2$. Thus the vertically truncated subgraph belongs to $N$, and Fubini gives
+\begin{equation}\label{eq:subgraph}
+ |N|\ge\int_a^b(Y(x)-\ell(x))_+\,dx.
+\end{equation}
+
+Integration by parts along the continuously differentiable curve gives
+\[
+ I(\gamma)=\frac12[\gamma_x\gamma_y]_0^\omega-\int_0^\omega\gamma_y\gamma_x'\,dt
+ =\int_a^bY(x)\,dx-\frac12\beta^2\sin\omega\cos\omega.
+\]
+This change of variable can equally be justified by a primitive of the continuous function $Y$, so no differentiability of its inverse parameterization is assumed. Also
+\[
+ \int_a^b\ell(x)\,dx
+ =\frac12\cot\omega\,(a_-^2-b_-^2)
+ =\frac12\sin\omega\cos\omega\,\beta_+^2
+  -\frac12\cot\omega\,\alpha_-^2.
+\]
+Consequently
+\[
+ I(\gamma)=\int_a^b(Y-\ell)\,dx
+ -\frac12\cot\omega\,\alpha_-^2
+ -\frac12\sin\omega\cos\omega\,\beta_-^2.
+\]
+Subtract this identity from \eqref{eq:subgraph} and use $q_+-q=(-q)_+$. This proves the stronger assertion and the majorization. The argument never replaces the fan by the cap or assumes $N\subset K$.
+\end{proof}
+
+\begin{corollary}[Equality supplies fan containment]
+Under the theorem's hypotheses, if $|N|=I(\gamma)$, then $\alpha,\beta\ge0$ and the entire corner curve lies in $F$.
+\end{corollary}
+\begin{proof}
+The two endpoint coefficients in the defect bound are strictly positive. Equality therefore forces $\alpha_-=\beta_-=0$. It also forces $\int_a^b(\ell-Y)_+=0$. The integrand is continuous and nonnegative, so it vanishes everywhere. Thus $Y\ge\ell$ on the entire interval, proving fan containment including the endpoints.
+\end{proof}
+
+\begin{corollary}[Arm criterion]
+Suppose $p,k$ have continuous one-sided derivatives on their closed intervals, the canonical curve is continuously differentiable, and $f=k-p'>1$, $g=p+k'>1$ for $0<t<\omega$. Then the theorem applies, since
+\[
+ \gamma_x'=-(f-1)\cos t-(g-1)\sin t<0.
+\]
+\end{corollary}
+
+\begin{remark}[A rejected shortcut and its replacement]
+It is not valid to infer fan containment just from injectivity, or to invoke Baek's earlier injectivity-and-fan theorem after checking only one of its hypotheses. The theorem here proves the required area comparison directly. Its nonnegative endpoint corrections account for portions of a horizontally monotone curve outside the fan, and equality recovers fan containment afterwards. Applying it to unrestricted maximizing caps still requires a proved fixed-angle curvature estimate and arm bootstrap; this note alone does not assert those inputs.
+\end{remark}
+\end{document}

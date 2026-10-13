@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{Three Strict Support Tests Suffice for Contact Admissibility}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+Use the unique reflected shooting solution and exact contact equations of \texttt{order-independent-contact-certificate.tex}, with
+\[
+ 1<w<\pi/2,\quad0<\phi\le1/12,\quad
+ \phi<b<\min\{c,w-\phi\},\quad c<w.
+\]
+Write $p_0=p(0)$ and $d=g(0)-p_0$.
+
+\begin{theorem}[Sufficient admissibility tests]
+Suppose
+\[
+ \boxed{p''(t)<0\ \hbox{on every open coefficient interval},\qquad
+ p_0<5/3,\qquad d<1.}
+\]
+Then all the geometric hypotheses in the order-independent contact certificate hold. The resulting sofa is therefore the unique normalized unrestricted optimum at this angle.
+\end{theorem}
+\begin{proof}
+The shooting theorem gives continuous support derivatives and $p'(0)=0$. Strict negativity of $p''$ on each interval implies $p'(t)<0$ for $t>0$. Since $p(w)=1$, one has $p(t)>1$ for $t<w$, in particular $p_0>1$. Reflection gives $k(t)=p(w-t)>1$ for $t>0$. Also $p'(w)=k(w)-f(w)=p_0-g(0)=-d$, so $d>0$.
+
+The active curvature measures are nonnegative by the arm theorem. Extend the supports over the upper normal gap by the fixed vertex $o_w=(\sec w-\tan w,1)$, over the two outer quarter-period gaps by the cosine supports of $p_0u_0$ and $p_0v_w$, and over the bottom gap by the origin. The support is continuous and periodic. At the two upper pinned normals its derivative jumps by $\sec w-\tan w+d>0$. At the two outer active endpoints the derivatives match at zero. The two bottom edges have positive length $p_0$. Thus the full circular distribution $h+h''$ is a nonnegative measure. The planar support-function criterion makes this extension the support of a normalized convex cap. This also verifies the normal-gap atoms, rather than inferring cap validity from active curvature alone.
+
+For the corner, both orthogonal coordinates $p-1,k-1$ lie in $[0,p_0-1]$. Consequently
+\[
+ \|\gamma(t)\|^2\le2(p_0-1)^2<8/9<1.
+\]
+The contact equations and strict arm inequalities imply $r_p<1$ on $[b,w]$, by the sign-change lemma in the contact certificate. On the wall interval,
+\[
+ \frac{d}{dt}\bigl((p-1)^2+p'^2\bigr)=2p'(r_p-1)>0.
+\]
+The largest norm of $e(t)=(p-1)u_t+p'v_t$ on $[b,c]$ is therefore its norm at $c$. The contact equation gives $e(c)_y=0$, and $p(c)>1$ gives $e(c)_x>0$. Furthermore
+\[
+ e_x'=(1-r_p)\sin t>0\quad(c<t<w),\qquad
+ e(w)_x=-p'(w)\sin w=d\sin w.
+\]
+Thus $\|e(c)\|=e(c)_x<d\sin w<d<1$. Reflection gives the same bound on the other wall arc. A common radius $\rho<1$ therefore bounds all the required arcs. The contact certificate applies.
+\end{proof}
+
+\paragraph{Use in a validated continuation.}
+A rigorous root enclosure can verify the ordering and the two endpoint inequalities by outward-rounded scalar intervals. Negativity of $p''=r_p-p$ can be checked over finitely many subintervals of each exact constant-coefficient piece, using interval enclosures of the elementary propagation formulas. Such a check concerns the entire subinterval, not sampled point values. A claimed all-angle continuation must provide coverage in the angle parameter as well as these checks. No numerical continuation alone is declared a proof here, and no CI or Lean compilation is used.
+\end{document}

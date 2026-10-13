@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\title{A Feasible Recovery Sequence at the One-Radian Transition}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Throughout, $\omega=1+\delta$ and $\delta\downarrow0$. Big-$O$ constants are uniform for sufficiently small positive $\delta$. Write $p_\delta^*,k_\delta^*$ for Baek's relaxed supports and $M_\delta=1+\omega^2/2$ for their relaxed value. The star on these supports names the relaxed candidate, not the unknown larger-angle optimizer.
+
+\section*{An admissible endpoint repair}
+Let $v_*$ be the exact minimizer of \texttt{transition-model.tex}. Define
+\[
+ v_\delta(s)=\begin{cases}
+ -3s/(16\delta),&0\le s\le\delta,\\
+ v_*(s),&s\ge\delta,
+ \end{cases}\qquad
+ P_\delta(s)=-\int_s^2v_\delta(u)\,du\quad(0\le s\le2),
+\]
+and put $P_\delta=0$ after two. For $\delta<1$, the two definitions of $v_\delta$ agree at $s=\delta$. Set
+\[
+ F_\delta(t)=\delta^3P_\delta(t/\delta),\quad
+ p_\delta(t)=p_\delta^*(t)+F_\delta(t),\quad
+ k_\delta(t)=k_\delta^*(t)+F_\delta(\omega-t).
+\]
+The supports are reflected copies of one another. The derivative repair occupies physical angular width $\delta^2$, thinner than the main width $\delta$.
+
+\paragraph{Circular extension.}
+Put $d_\delta=F_\delta(0)\ge0$. The active supports must be extended to the circle as follows. On $[-\pi/2,0]$, add $d_\delta\cos t$ to the old support. On $[\pi/2+\omega,\pi+\omega]$, add $d_\delta\cos(t-\pi/2-\omega)$. On the gap $[\omega,\pi/2]$ and the remaining gap supported at the origin, leave the support unchanged. Angles are understood modulo $2\pi$. In particular the two adjacent quarter-period gaps are \emph{not} left unchanged when $p(0)$ and $k(\omega)$ change.
+
+\begin{lemma}[These are cap supports of an actual feasible sofa]
+For all sufficiently small $\delta>0$ the active supports with the circular extension just specified define a normalized cap $K_\delta$. Its niche lies in a fixed disk of radius $\rho<1$ inside the fan, and $S_\delta=K_\delta\setminus N_\omega(K_\delta)$ is a compact path-connected feasible monotone sofa. Its canonical arms satisfy $f\ge1+t$, $g\ge1+\omega-t$.
+\end{lemma}
+\begin{proof}
+The perturbation is nonnegative, $P_\delta'=v_\delta\le0$, and $P_\delta'(0)=0$. It and its derivative vanish at two. Thus the four pinned support values and the derivatives at the upper pinned normals are unchanged; at the two outer endpoints one still has $p_\delta'(0)=0$ and $k_\delta'(\omega)=0$. The unpinned values $p_\delta(0)$ and $k_\delta(\omega)$ increase by $d_\delta$, which is why the circular extensions are required.
+
+On the first active arc the new curvature density is
+\[
+ p_\delta+p_\delta''=\omega-t+\delta v_\delta'(t/\delta)+\delta^3P_\delta(t/\delta).
+\]
+On $0<t<\delta^2$ the middle term is $-3/16$. On the remaining support of the perturbation it is either zero or nonnegative. The density is therefore nonnegative for small $\delta$, and is unchanged elsewhere. The reflected assertion holds on the other arc.
+
+On each modified normal gap the added support solves $h+h''=0$. Its value and first derivative match at the active endpoint. At the lower pinned normal it has value zero and adds a nonnegative derivative jump of size $d_\delta$; thus it only increases the length of a lower fan edge. The upper pinned atoms are unchanged. The entire circular function is continuous and has nonnegative curvature measure. The support criterion $h+h''\ge0$ therefore gives a convex cap, with the same permitted normal set and pinned values. There is no new atom at either outer active endpoint.
+
+The signs of the perturbations give
+\[
+ f=k-p'\ge1+t,\qquad g=p+k'\ge1+\omega-t.
+\]
+All interior thresholds $p-1,k-1$ remain positive. At angle one, the unperturbed fan quadrilaterals are bounded by radius $\sqrt2c_1<1/2$, where $c_1=\sec1-\tan1$. Their four vertices depend continuously on the angle and active supports, with denominators $\cos t,\cos(\omega-t)$ bounded away from zero near angle one. The perturbations tend uniformly to zero. Hence the union of the new quadrilaterals lies in a fixed disk of radius $\rho<1$.
+
+The cap contains the unit fan sector because every active support is at least one. The niche is relatively open in the fan, contains the origin, and is star-shaped there because all interior thresholds are positive. Its complement in the cap is compact and joins radially to the surviving unit fan arc, hence is path-connected. The canonical motion $z\mapsto R_{-t}(z-\gamma(t))$ satisfies the outer-wall inequalities by the supports and the inner-wall condition by deletion of the niche. Its unchanged endpoint strip supports place the initial and final positions in the required strips. Thus the area difference is the area of an actual feasible sofa.
+\end{proof}
+
+\section*{Only a smaller interior region is omitted by the tail functional}
+Let $D_\delta$ be the radial core bounded by the corner curve and the two fan segments, and let $R_\delta,L_\delta$ be the endpoint tails defined in \texttt{endpoint-tail-functional.tex}.
+
+\begin{lemma}[Core-excess localization]
+For the recovery family,
+\[
+ |N_\omega(K_\delta)|-I(\gamma_\delta)
+ =|R_\delta|+|L_\delta|+O(\delta^6).
+\]
+The same assertion holds for the unperturbed relaxed family $F_\delta=0$.
+\end{lemma}
+\begin{proof}
+Use $q=f-1$, $r=g-1$, and write $r_p=p+p''$. The preceding formulas show, uniformly,
+\[
+ q(t)\ge t,\qquad q(t)\le t+C\delta^2\quad(0\le t\le2\delta),\qquad r(t)\le C,
+\]
+\[
+ 1-r_p(t)\ge-C\delta\quad(0\le t\le2\delta),\qquad
+ 1-r_p(t)\ge0\quad(2\delta\le t\le\omega).
+\]
+These bounds also hold for the unperturbed family. For $s\le t$ put
+\[
+ E_b(s,t)=\gamma(s)\cdot u_t-(p(t)-1).
+\]
+Its initial data at $t=s$ are $E_b=0$, $\partial_tE_b=q(s)$, and its differential equation is $\partial_t^2E_b+E_b=1-r_p(t)$. Consequently
+\[
+ E_b(s,t)=q(s)\sin(t-s)+\int_s^t(1-r_p(u))\sin(t-u)\,du
+ \ge(s-C_0\delta^2)\sin(t-s).
+\]
+The negative part of the integral has length at most $2\delta$ and height at most $C\delta$, and $\sin(t-u)\le\sin(t-s)$ because all differences lie in $[0,\omega]\subset[0,\pi/2)$. The differential identity holds piecewise and its integral solution holds across the joins by absolute continuity.
+
+Choose $h=C_0\delta^2$. If $s\ge h$, the corner point $\gamma(s)$ lies on or above every later inner $b$-wall. Reflection shows that if $s\le\omega-h$, it lies on or above every earlier inner $d$-wall. Thus $\gamma(s)\notin N$ for $h\le s\le\omega-h$.
+
+The corner curve is a strictly increasing radial graph by the positive-threshold and positive-arm lemma. If a point of the niche lay radially beyond $\gamma(s)$ at a middle parameter, its strict radial contraction to $\gamma(s)$ would still satisfy both niche inequalities, a contradiction. Thus every point of $N\setminus D_\delta$ has radial direction from one of the endpoint curve intervals of length $h$.
+
+Near the right endpoint, $\gamma_x(0)=\alpha$ tends to $c_1>0$. The derivative formula gives
+\[
+ 0\le\alpha-\gamma_x(s)\le C(s^2+\delta^2s)=O(\delta^4),\qquad
+ 0\le\gamma_y(s)\le Cs=O(\delta^2)\quad(0\le s\le h).
+\]
+All niche points have uniformly bounded norm. In these radial directions their ordinates are therefore $O(\delta^2)$. A point outside the core on such a ray has abscissa at least $\gamma_x(s)\ge\alpha-C\delta^4$. Unless it belongs to $R_\delta$, it lies in a rectangle of width $O(\delta^4)$ and height $O(\delta^2)$, hence area $O(\delta^6)$. Reflection gives the other endpoint bound.
+
+The tails are disjoint for small $\delta$: at the limiting cap any point in both tail half-planes has ordinate at least one, whereas the niche lies in a disk of radius less than one half. This strict separation persists. The core is disjoint from the tails and has area $I(\gamma_\delta)$. Adding the error rectangles proves the lemma.
+\end{proof}
+
+\section*{The recovered coefficient}
+\begin{lemma}[Tail scaling]
+For the recovery family,
+\[
+ \frac{|R_\delta|}{\delta^5}\longrightarrow\frac{229}{7680},\qquad
+ \frac{|L_\delta|}{\delta^5}\longrightarrow\frac{229}{7680}.
+\]
+For the unperturbed relaxed family each limit is $229/1920$.
+\end{lemma}
+\begin{proof}
+Let $\alpha=p_\delta(0)-1$ and $W(t)=(p_\delta(t)-1)/\cos t$. On compact $s$ intervals,
+\[
+ \frac{W(\delta s)-\alpha}{\delta^3}
+ \longrightarrow q_*(s)+s^2/2-s^3/6,
+\]
+where $q_*=\int_0^s v_*$. Use the exact relaxed intercept identity
+\[
+ W^*(t)-(p_\delta^*(0)-1)=\frac{\delta(1-\cos t)+\sin t-t}{\cos t}
+\]
+and $P_\delta\to P_*=-\int_s^2v_*$ uniformly. In the tail formula set $z=\delta^3X$ and $t=\delta s$. The scaled tent height converges to $(q_*(s)+s^2/2-s^3/6-X)/s$.
+
+For tightness, monotonicity and boundedness of $P_\delta$ give
+\[
+ W(t)-\alpha\le W^*(t)-(p_\delta^*(0)-1)+C\delta^3(\sec t-1).
+\]
+For small $t$ this is at most $C\delta t^2-c t^3$ for fixed $c>0$; away from zero it is strictly negative for small $\delta$. Positive tail height is therefore possible only at $t\le C_1\delta$. The maximum positive intercept excess is $O(\delta^3)$ and the maximum height is $O(\delta^2)$. These give common compact $X$ support and a dominating constant for the scaled height.
+
+On $s\ge\varepsilon>0$ the scaled expressions converge uniformly on compact $(s,X)$ sets. On $0<s<\varepsilon$, the difference $P_\delta(s)-P_\delta(0)$ is nonpositive, so the positive scaled height is at most $C\varepsilon+o(1)$. Letting $\varepsilon\downarrow0$ controls the singular endpoint. Dominated convergence yields the model envelope integral $229/7680$. Reflection handles the other endpoint. With $P_\delta=0$ the same argument gives the unperturbed envelope integral $229/1920$.
+\end{proof}
+
+\begin{theorem}[A feasible sharp upper bound on the transition deficit]
+The constructed sofas satisfy
+\[
+ |S_\delta|=1+\frac{(1+\delta)^2}{2}-\frac{229}{1920}\delta^5+o(\delta^5).
+\]
+In particular the unrestricted deficit below the relaxed value, divided by $\delta^5$, has upper limit at most $229/1920$.
+\end{theorem}
+\begin{proof}
+The two active support perturbations have disjoint angular supports. Their exact quadratic gap therefore has no mixed term and equals
+\[
+ \mathcal A_1(K_\delta^*)-\mathcal A_1(K_\delta)=\delta^5\int_0^2v_\delta(s)^2\,ds.
+\]
+The integral tends to $229/3840$. The gap identity still applies after the corrected circular extension: on a quarter-period gap a support multiple of cosine has zero integral of $h^2-h'^2$, so the cap support-area formula is unchanged. The niche correction has the same limiting coefficient $229/3840$, by the two tail limits and the $O(\delta^6)$ core error. Their sum is $229/1920$. The area is that of a feasible sofa by the construction above.
+\end{proof}
+
+\paragraph{Correction record.}
+The first version incorrectly said to leave all complementary normal intervals unchanged. Since $F_\delta(0)>0$, that would create a discontinuity of the circular support at the outer active endpoints. The explicit cosine extensions above repair continuity and curvature, changing only the two lower-edge lengths. They contribute zero to the normal-gap area integrals and do not change the asserted coefficient.
+
+\paragraph{Scope.}
+This is the feasible recovery bound. The matching upper-area bound for arbitrary maximizing caps is in \texttt{transition-asymptotics.tex}. No CI, Lean compilation, or TeX compilation was run.
+\end{document}

@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\title{A Contact Certificate That Survives Reflected-Interval Crossings}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+
+\section{Explicit conditions of the certificate}
+Fix $1<w<\pi/2$ and
+\[
+ 0<\phi\le1/12,\qquad \phi<b<\min\{c,w-\phi\},\qquad c<w.
+\]
+Use the indicator balance equations and unique reflected shooting solution of \texttt{order-independent-shooting.tex}. Put
+\[
+ \gamma=(p-1)u_t+(k-1)v_t,\qquad e(t)=(p(t)-1)u_t+p'(t)v_t.
+\]
+Assume the three exact contact equations
+\[
+ e(b)=\gamma(\phi),\qquad e(c)_y=0
+\]
+hold. For geometric admissibility assume additionally:
+\begin{enumerate}
+\item the full support extension defines a normalized cap $K$;
+\item $p(t)>1$ and $k(t)>1$ for $0<t<w$, with $p(0)>1$ and $k(w)>1$;
+\item the corner arc $\gamma([0,w])$ and wall arc $e([b,c])$ have norm at most some $\rho<1$.
+\end{enumerate}
+These are hypotheses to be verified for a root, not consequences asserted from numerical shooting. No ordering among the reflected intervals, or relative to $w/2$, is assumed.
+
+\begin{theorem}[Global certificate at a specified angle]\label{thm:main}
+Under the preceding conditions, $K\setminus N_w(K)$ is the unique normalized unrestricted optimal sofa at angle $w$. Its area is the cap area minus the Green area bounded by the right wall arc traversed from $c$ to $b$, the corner arc from $\phi$ to $w-\phi$, the reflected wall arc, and the two fan-ray segments.
+\end{theorem}
+
+\section{Curvature and contact geometry without a near-transition expansion}
+\begin{lemma}[One sign change]
+There is a unique $\tau\in(\phi,b)$ with $g(\tau)=2$. On $[\phi,b]$ the function $1-r_p=2-g$ is strictly increasing and changes sign there. On $[b,w]$ one has $r_p<1$ almost everywhere.
+\end{lemma}
+\begin{proof}
+The arm theorem gives $f,g>1$, $f'>0$, $g'<0$. On $(\phi,b)$, $C=1$ and $B=0$, so $r_p=g-1$, irrespective of $D$. Set
+\[
+ E(t)=\gamma(\phi)\cdot u_t-(p(t)-1).
+\]
+The two contact equations at $b$ give $E(b)=E'(b)=0$, while $E(\phi)=0$. Therefore
+\[
+ 0=E(\phi)=\int_\phi^b(2-g(u))\sin(u-\phi)\,du.
+\]
+The weight is positive and $g$ strictly decreases. Thus $g(\phi)>2>g(b)$ and the unique crossing follows. For $t\ge b$, $g(t)<2$; every balance formula $r_p=(C(g-1)+B)/(1+B)$ is then strictly below one.
+\end{proof}
+
+\begin{lemma}[The joining point satisfies every later inner $b$-wall]
+For $\phi\le t\le w$, $\gamma(\phi)\cdot u_t\ge p(t)-1$.
+\end{lemma}
+\begin{proof}
+For $t\ge b$, the sine-kernel formula for $E''+E=1-r_p$, with zero value and derivative at $b$, is nonnegative. For $\phi<t<b$ it is
+\[
+ E(t)=\int_t^b(2-g(u))\sin(u-t)\,du.
+\]
+It is positive if $t\ge\tau$. If $\phi<t<\tau$, the ratio $\sin(u-t)/\sin(u-\phi)$ is increasing in $u$. Comparing it with its value at $\tau$ on the negative and positive parts of $2-g$ bounds this integral below by a positive constant times
+$\int_t^b(2-g(u))\sin(u-\phi)\,du$. The latter is positive: extending it down to $\phi$ gives zero, and the omitted portion is strictly negative. This proves the assertion. No linear formula for $g$ on $(\phi,b)$ is used.
+\end{proof}
+
+The tangent angle $\theta$ of $\gamma'$ is strictly increasing, because with $q=f-1$, $r=g-1$,
+\[
+ \theta'=1+\frac{rq'-qr'}{q^2+r^2}>0.
+\]
+Also $\gamma_x'<0$ and $\gamma\times\gamma'=(p-1)r+(k-1)q>0$. These statements hold piecewise and by absolute continuity on compact interior intervals.
+
+\begin{lemma}[The proposed boundary is outside every excluded quarter-plane]\label{lem:exposure}
+Every point of $\gamma([\phi,w-\phi])$, $e([b,c])$, and the reflected wall arc avoids every open quarter-plane defining the niche.
+\end{lemma}
+\begin{proof}
+For a core point $\gamma(s)$ and a later parameter $t\ge s$, the projection $\gamma(r)\cdot u_t$ on the relevant core interval has its minimum at an endpoint. Its derivative is the speed times $\cos(\theta(r)-t)$, and $0<\theta(r)-t<\pi$; monotonicity of $\theta$ allows only a positive-to-negative sign change. At the initial endpoint the preceding lemma applies; at $r=t$ the projection is $p(t)-1$. If $t>w-\phi$, the second endpoint also satisfies the inequality: its forward sine-kernel formula starts with value zero and derivative $f(w-\phi)-1>0$, and has nonnegative forcing $1-r_p$. Reflection handles earlier parameters via the inner $d$-wall.
+
+For a wall point $e(t)$, $b\le t\le c$, the inequality $e(t)\cdot u_s\ge p(s)-1$ holds for every $s\ge b$ by the forward or backward sine-kernel formula and $r_p\le1$ on $[b,w]$. For $\phi\le s\le b$, it holds at $t=b$ by the joining lemma. Its increment is the integral of $(r_p(u)-1)\sin(s-u)\ge0$, so it remains valid. These parameters cannot exclude the wall point.
+
+We check the early parameters $0<s<\phi$ exactly, replacing the small-angle slope estimate in the earlier local theorem. Here $p(s)=p(0)\cos s$. Put $\alpha=p(0)-1$. If a wall point has $x\ge\alpha$, its nonnegative ordinate makes its inner $b$-inequality impossible. For $\gamma_x(\phi)\le x<\alpha$, let $u\in(0,\phi]$ be the unique initial-corner parameter with $\gamma_x(u)=x$.
+
+At this abscissa the $b$-branch of the excluded tent decreases with $s$, since its derivative is
+\[
+ \frac{x-z_b(s)}{\sin^2s},\qquad z_b(s)=p(0)-\cos s\ge\alpha.
+\]
+The $d$-branch increases: its derivative is $(x-z_d(s))/\cos^2s$, with
+\[
+ z_d(s)=-k'(s)\cos s-(k(s)-1)\sin s,\quad z_d'=(1-r_k)\cos s>0.
+\]
+Before $\phi$, $C=0$ and $r_k=D/(1+D)\le1/2$. Thus
+$z_d(s)\le z_d(\phi)=\gamma_x(\phi)-(g(\phi)-1)\cos\phi< x$.
+The smaller tent branch changes from $d$ to $b$ at $s=u$; its maximum is therefore precisely $\gamma_y(u)$.
+
+The wall graph is above this initial corner graph. Indeed $\gamma(\phi)\cdot u_b=\gamma(b)\cdot u_b$, while the projection derivative has at most one change from positive to negative and is strictly negative at $b$. It is consequently strictly positive at $\phi$. Equivalently $\theta(\phi)<b+\pi/2$. Every initial corner graph slope is therefore strictly less than $-\cot b$, whereas every wall graph slope is $-\cot t\ge-\cot b$. Starting at their common joining point and integrating toward larger abscissae gives the asserted order. The wall cannot reach the floor before $x=\alpha$, since the corner graph is positive before that abscissa; the same slope comparison would contradict a premature zero. This covers the whole required interval. No early tent contains a wall point. Reflection completes the proof.
+\end{proof}
+
+\section{From the exposed arcs to the global theorem}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+The right wall arc satisfies $e'=(r_p-1)v_t$ and $e\times e'=(p-1)(r_p-1)<0$. Traversed from $c$ to $b$, its polar angle increases from zero to that of $\gamma(\phi)$. The core has strictly increasing polar angle, and reflection supplies the last portion. The wall is in the fan: its ordinate decreases to zero as $t$ increases to $c$, and its projection on $u_w$ decreases to the positive value at that floor endpoint. The three arcs form a positive continuous radial graph in the fan.
+
+Every strict radial contraction of a core point is in its own quarter-plane because both thresholds are positive. For a wall point, the first wall coordinate is $p-1>0$ and the second is $p'=k-f<k-1$, with $k-1>0$. Its strict radial contractions are likewise in that quarter-plane, including when $p'$ is negative. Thus the radial interior belongs to the niche. Conversely the niche is star-shaped about the origin. A niche point outside the displayed radial region could be contracted onto its boundary, contradicting Lemma~\ref{lem:exposure}. The niche therefore has exactly this area.
+
+By the assumed norm bound it lies strictly inside the unit fan sector, which the cap contains because all active supports are at least one. Removing this relatively open star-shaped niche gives a compact path-connected set: every surviving point joins radially to the unit fan arc. The canonical supporting-hallway motion verifies feasibility, and all active cap support points survive because their norms are at least one.
+
+Define the right lifted support as $\gamma(\phi)\cdot u_t$ on $[\phi,b]$, $p(t)-1$ on $[b,c]$, and the floor-intercept cosine on $[c,\pi/2]$, with its reflection on the other side. Values and derivatives match by the contact equations. The joining lemma verifies the first obstacle; the final obstacle follows from the forward sine-kernel formula and $r_p\le1$ after $c$. Envelope curvature is zero off contact and $r_p-1<0$ on contact. The balance equations cancel the first variation of $Q$ on every interval, regardless of reflected-contact ordering. The strict-concavity certificate therefore makes this tuple the unique lifted maximizer.
+
+Every global maximizing cap at this angle admits this same lift, by \texttt{vertical-core-lifting.tex}, since $\phi\le1/12$. The candidate's actual area equals its lifted value by the proved complete niche description. This sandwiches the unrestricted and cap maxima to the candidate value. Strict concavity identifies the active supports of every maximizing cap. Finally the candidate is regular closed: its radial niche boundary lies strictly inside the unit fan sector, and outward radial perturbations followed by interior cap approximation approach every surviving boundary point. A closed subset of this regular-closed set with equal area must equal it. Applying this to the original sofa inside its monotone envelope proves unrestricted uniqueness.
+\end{proof}
+
+\paragraph{Remaining verification problem.}
+This theorem eliminates the need to redo the exposure argument at crossings of the reflected wall intervals. It does not assert that the three contact equations have an admissible solution for every $w$. The nonlinear root, cap extension, positive-threshold and norm hypotheses must still be certified on the desired angle range. Floating-point roots and a sampled boundary do not discharge them. No CI or compilation was used.
+\end{document}

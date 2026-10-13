@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\title{A Convex Endpoint-Tail Correction, and Why It Is Not the Whole Correction}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+For $0<\omega<\pi/2$ and a continuous function $p$ define the extended-real convex functional
+\[
+ \mathcal R_\omega(p)=\int_0^\infty\left[
+ \sup_{0<t<\omega}\left(\frac{p(t)-1}{\cos t}-p(0)+1-z\right)\cot t
+ \right]_+dz.
+\]
+The integrand is a supremum of affine functions of $p$, followed by maximum with zero. Thus the functional is convex on its entire domain; this assertion does not depend on a contact pattern.
+
+Let $K$ be a normalized cap with $C^1$ active supports $p(t),k(t)$. Suppose $p,k>1$ on $(0,\omega)$, the canonical arms $f=k-p'$, $g=p+k'$ exceed one there, and the endpoint corner lengths $\alpha=p(0)-1$, $\beta=k(\omega)-1$ are positive. Put
+\[
+ \gamma=(p-1)u_t+(k-1)v_t,\quad N=N_\omega(K),\quad
+ R=N\cap\{x>\alpha\},\quad L=N\cap\{z\cdot v_\omega>\beta\}.
+\]
+Write $\widehat k(t)=k(\omega-t)$.
+
+\begin{lemma}[Radial core and exact tail areas]
+The curve $\gamma$ together with its two radial endpoint segments bounds a star-shaped region $D$ with
+\[
+ \operatorname{int}D\subset N,\qquad |D|=I(\gamma),\qquad
+ D\subset\{x\le\alpha,\ z\cdot v_\omega\le\beta\}.
+\]
+Moreover $|R|=\mathcal R_\omega(p)$ and $|L|=\mathcal R_\omega(\widehat k)$.
+\end{lemma}
+\begin{proof}
+Write $a=p-1$, $b=k-1$, $q=f-1$, $r=g-1$. The curve lies strictly in the fan except at its endpoints because $a,b>0$ in the interior. Its cross product with its derivative is
+\[
+ \gamma\times\gamma'=ar+bq>0.
+\]
+Its polar angle therefore increases strictly from zero to $\pi/2+\omega$. It is a radial graph, giving the region $D$. Every strict radial contraction of an interior curve point satisfies both strict niche inequalities because both thresholds are positive. Hence the interior of $D$ belongs to $N$, and the two radial segments have zero Green integral, giving its area.
+
+The derivative formulas give $\gamma_x'=-q\cos t-r\sin t<0$ and $(\gamma\cdot v_\omega)'=q\sin(\omega-t)+r\cos(\omega-t)>0$. The two asserted half-plane bounds follow for the curve and its radial hull.
+
+For $x=\alpha+z$, $z\ge0$, one has $x\ge\gamma_x(t)$ at every angle. The smaller branch of the vertical tent is therefore always the inner $b$-wall branch. Since $x\ge0$, the fan floor is zero. The exact envelope formula in \texttt{vertical-envelope.tex} now gives the formula for $|R|$. Reflection in the fan bisector exchanges $p$ with $\widehat k$ and the two tail regions, giving the other formula.
+\end{proof}
+
+\begin{theorem}[A stronger majorant, with an explicit separation premise]
+Under the preceding hypotheses, if $R\cap L$ has area zero, then
+\[
+ |N|-I(\gamma)\ge\mathcal R_\omega(p)+\mathcal R_\omega(\widehat k),
+\]
+so
+\[
+ \mathcal A_\omega(K)\le\mathcal A_1(K)-\mathcal R_\omega(p)-\mathcal R_\omega(\widehat k).
+\]
+The right side is strictly concave on every convex cap subclass with $\omega<\pi/2$: it is the strictly concave quadratic relaxation minus two convex functionals.
+\end{theorem}
+\begin{proof}
+The core, right tail, and left tail are disjoint up to null boundaries. Their areas may therefore be added inside the niche. Convexity of the tail functionals was proved directly from their definition. Strict concavity of $\mathcal A_1$ on normalized caps follows from the coercive quadratic gap for support differences, as proved in \texttt{beyond-one-radian.tex}; the same quadratic Hessian is independent of its base point. Subtracting convex functionals preserves strict concavity.
+\end{proof}
+
+\begin{theorem}[Endpoint tails alone cannot make this bound sharp]
+Under the same hypotheses and separation premise, if either tail has positive area, the preceding niche-area inequality is strict.
+\end{theorem}
+\begin{proof}
+Suppose $R$ has positive area. Some interior angle has positive tent height at an abscissa greater than $\alpha$, and therefore also has positive height at $x=\alpha$. Thus the point $\gamma(0)=(\alpha,0)$ satisfies both of that angle's strict inner-wall inequalities. A small rectangle above the floor and to the left of $\alpha$ consequently lies in the niche. By continuity of the corner graph, its height tends to zero as $x\uparrow\alpha$ along the core; a smaller positive-area rectangle lies above that graph, hence outside $D$, while remaining to the left of $\alpha$, hence outside $R$. It can also be kept outside $L$, since $(\alpha,0)\cdot v_\omega=-\alpha\sin\omega<\beta$. This is additional positive niche area not counted by the three regions. Reflection handles a positive left tail.
+\end{proof}
+
+\begin{remark}[Separation is not assumed for arbitrary angles or caps]
+For caps sufficiently close in $C^1$ active supports to $K_{1,1}$ and angles sufficiently close to one, the hypotheses and separation hold. Its endpoint lengths at angle one are $c_1=\sec1-\tan1>0$; any point satisfying both strict tail half-plane inequalities has ordinate greater than one. Its niche lies in a disk of radius at most $\sqrt2c_1<1/2$. These are separated by a strict margin, which persists under small support and angle perturbations. Positivity of the interior thresholds near the pinned endpoints follows from the nonzero inward support derivatives of this candidate. No universal separation statement for the full angle interval is asserted.
+\end{remark}
+
+\paragraph{Research consequence.}
+This supplies a convex, explicitly defined improvement to the old majorant near the transition. It also proves a negative result: retaining only the endpoint tails discards a strictly positive part of the niche whenever a tail is present. Optimizing this simpler strictly concave functional is therefore not, by itself, a proof of exact larger-angle sofa optimality. The endpoint model in \texttt{transition-model.tex} is relevant to leading asymptotics, not an excuse to omit this interior correction.
+\end{document}

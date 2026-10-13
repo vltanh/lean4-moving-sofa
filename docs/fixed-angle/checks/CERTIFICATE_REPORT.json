@@ -1,0 +1,108 @@
+{
+  "status": "all root, geometry, joining, and coverage checks passed",
+  "verification_mode": "saved records replayed in five batches; coverage and joining containment then checked together",
+  "compact_boxes": 750,
+  "endpoint_parameter_boxes": 16,
+  "endpoint_joining_boxes": 15,
+  "total_boxes_replayed": 781,
+  "coverage": {
+    "compact_angle_interval": ["101/100", "7853/5000"],
+    "endpoint_parameter_interval": ["0", "1/32"],
+    "no_parameter_gaps": true
+  },
+  "maximum_contraction": 0.43826051481140554,
+  "maximum_p_second": -0.09301801905179706,
+  "maximum_p0": 1.6143607677873673,
+  "maximum_d": 0.9047313489468399,
+  "files": [
+    {
+      "file": "compact-1.json",
+      "sha256": "fe8221780f1fbb30ebd0096251ff38ad30ff64f66ce4522156ba4cb080f4390a",
+      "parameter_boxes": 189,
+      "joining_boxes": 0,
+      "maximum_contraction": 0.18568430858880852,
+      "maximum_p_second": -0.23107563892188085,
+      "maximum_p0": 1.3406872672737729,
+      "maximum_d": 0.761375037428634,
+      "maximum_event_orders": 1
+    },
+    {
+      "file": "compact-2.json",
+      "sha256": "c73343f0cd00a3c69bf7b02d01ec3397bf65dac140a5ce492b2e6327a4d0f48d",
+      "parameter_boxes": 157,
+      "joining_boxes": 0,
+      "maximum_contraction": 0.16906464157688478,
+      "maximum_p_second": -0.1262389604291043,
+      "maximum_p0": 1.4462229976875793,
+      "maximum_d": 0.8594116814699507,
+      "maximum_event_orders": 1
+    },
+    {
+      "file": "compact-3.json",
+      "sha256": "6f9512bafaf7fbe9b72115098cdb5a251a2e41c291c1b94a0cb99d6d6cfd173a",
+      "parameter_boxes": 203,
+      "joining_boxes": 0,
+      "maximum_contraction": 0.3866025457564672,
+      "maximum_p_second": -0.09301801905179706,
+      "maximum_p0": 1.5665136438554323,
+      "maximum_d": 0.9047313489468399,
+      "maximum_event_orders": 2
+    },
+    {
+      "file": "compact-4.json",
+      "sha256": "51cb6447fc59842c55cdc0e8be2c2d201c17ca3e7e431d93bd0b93736ed59b0f",
+      "parameter_boxes": 166,
+      "joining_boxes": 0,
+      "maximum_contraction": 0.38558075351384247,
+      "maximum_p_second": -0.10785444397893638,
+      "maximum_p0": 1.610704544608471,
+      "maximum_d": 0.9017910192857422,
+      "maximum_event_orders": 2
+    },
+    {
+      "file": "compact-5.json",
+      "sha256": "390557298044b4bc4c83243d5d8996997264b147c6f9153d16aa89ca63292246",
+      "parameter_boxes": 35,
+      "joining_boxes": 0,
+      "maximum_contraction": 0.43826051481140554,
+      "maximum_p_second": -0.18362404417686481,
+      "maximum_p0": 1.6143607677873673,
+      "maximum_d": 0.8507062063416803,
+      "maximum_event_orders": 2
+    },
+    {
+      "file": "endpoint.json",
+      "sha256": "df9b5522dbd8aadc0ea1d858474774f2afb7f82a5c6ea125d8a53ec83b3dafef",
+      "parameter_boxes": 16,
+      "joining_boxes": 15,
+      "maximum_contraction": 0.008739590195753115,
+      "maximum_p_second": -0.19238843177674123,
+      "maximum_p0": 1.613858786056426,
+      "maximum_d": 0.8225986068735086,
+      "maximum_event_orders": 1
+    }
+  ],
+  "source_sha256": {
+    "contact_core.py": "de9175b2f134da720d92cc18409ef6e459786c0e21e08e82b26d7cc353d60ecf",
+    "interval_contact.py": "ca7e84df048e1c5dc36389c9bc172c3674393cf564d126a4c34716a46817b289",
+    "jet_contact.py": "fb6e776df3c2ddc5bd8288668cff53b67d2640ed71b9e5408860469f29e3c072",
+    "endpoint_contact.py": "c4b8d8523394a268d02d26811484b4f47edb6939d704c0997576ad9e19b9cbaa",
+    "verify_contact_cover.py": "73cc89b60e8ec0c8aea818f95556183d6f38c8fddd93121cc5b59c255e4ca68d"
+  },
+  "source_git_blob_sha": {
+    "contact_core.py": "9555114d54f82cdc99d51b6e4aac9df5e11de6e7",
+    "interval_contact.py": "c743065bd19da949f1476403bb18868001ae04fe",
+    "jet_contact.py": "a43bc3ecb490b4aa7d01ce102d15e73e9cd61180",
+    "endpoint_contact.py": "462b87f46e0778f14187f986963f7912b3cb4c20",
+    "verify_contact_cover.py": "8549964a85f850736260e76f40f04dcca4c631d9",
+    "build_contact_cover.py": "021e0896db5c88d1cdab42e3e05e4b4b0abd3d75"
+  },
+  "generator_sha256": "a86bc36a59b0aee28bc7346149fbdd1e5e1c5c5851081140525ac6fe29f989f0",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "arithmetic_assumptions": "IEEE-754 binary64 basic arithmetic and nextafter; interval Taylor trigonometry, not libm sin/cos, for verification",
+  "not_performed": ["CI", "Lean compilation", "TeX compilation", "independent referee review"],
+  "trust_boundary": "This is a computer-assisted proof certificate, not a Lean/kernel certificate. Floating Newton proposals are not trusted.",
+  "primitive_regression": "Passed 49 interval-pair cases, 1640 rational conversions, mixed Hessian division, and all eight flow pieces.",
+  "primitive_regression_source_sha256": "ff6ded38d73f48c5b1becdddd98ed90be7a46212dd5449ad62d565be43cfb24e"
+}

@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\title{A Rational Arm Certificate Covering Every Physical Angle}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Use $m(z)=3z/2-1$ on $[0,1]$, $m(z)=z/2$ on $[1,2]$, and $m(z)=1$ on $[2,\infty)$.
+
+\begin{theorem}[Uniform bootstrap up to $8/5$]
+Let $0<L\le8/5$. Suppose continuous nonnegative functions $f,g$ on $[0,L]$ satisfy
+\[
+ f(t)\ge1+\int_0^t m(g(s))\,ds,\qquad
+ g(t)\ge1+\int_t^L m(f(s))\,ds.
+\]
+Then $f(t)\ge1+t/2$ and $g(t)\ge1+(L-t)/2$.
+\end{theorem}
+\begin{proof}
+We give an exact finite rational certificate, not a floating-point iteration. Subdivide the parameter interval into twelve equal cells. An integer row $B=(B_0,\ldots,B_{11})$, with $0\le B_i\le1000$, is a lower certificate if
+\[
+ f(t)\ge B_i/1000\quad(iL/12\le t\le(i+1)L/12),
+\]
+and $g$ satisfies the reflected bounds. The zero row is valid.
+
+Given a valid row, put $H_0=15000$ and, for $1\le i\le12$,
+\[
+ H_i=15000-2000i+3\sum_{j=0}^{i-1}B_{11-j}.
+\]
+At length $R=8/5$, the lower bound obtained by integrating $m$ of the reflected step function has value $H_i/15000$ at the $i$th grid point. It is linear on each cell. At a shorter length $L$, its value at the same relative position is $1+(L/R)(H/15000-1)$, which is at least $\min\{1,H/15000\}$. Monotonicity of $m$ justifies replacing the actual functions by these lower step functions. Therefore the new row
+\[
+ B_i^{\rm new}=\min\left\{1000,\max\left\{B_i,0,
+ \left\lfloor\frac{\min(H_i,H_{i+1})}{15}\right\rfloor\right\}\right\}
+\]
+is valid simultaneously for every $0<L\le8/5$. At shared cell endpoints both bounds follow by continuity.
+
+Eight applications of this integer recurrence give the following table. Every entry is rounded down, never to nearest, and the recurrence above permits direct verification of every entry.
+\[
+\setlength{\arraycolsep}{3pt}\scriptsize
+\begin{array}{c|rrrrrrrrrrrr}
+ j\backslash i&0&1&2&3&4&5&6&7&8&9&10&11\\\hline
+0&0&0&0&0&0&0&0&0&0&0&0&0\\
+1&866&733&600&466&333&200&66&0&0&0&0&0\\
+2&866&733&600&466&333&213&119&53&13&0&0&12\\
+3&869&735&602&471&348&239&148&81&41&28&28&41\\
+4&874&747&619&494&377&273&187&124&85&72&72&85\\
+5&883&764&645&529&420&325&246&188&153&144&144&160\\
+6&898&794&689&586&491&407&338&289&261&257&257&276\\
+7&921&839&758&676&601&535&483&448&432&432&436&462\\
+8&959&912&866&819&775&738&712&699&699&701&719&753
+\end{array}
+\]
+Thus $f,g\ge699/1000>2/3$. Since $m(2/3)=0$, the integral inequalities give $f,g\ge1$. One further substitution, using $m(1)=1/2$, gives the asserted linear bounds.
+\end{proof}
+
+\begin{corollary}[Every fixed-angle maximizer admits the majorant]
+For every $0<\omega<\pi/2$, every positive-area global cap maximizer satisfies
+\[
+ \mathcal A_\omega(K)\le\mathcal A_1(K).
+\]
+Its canonical corner is continuously differentiable and has strictly decreasing first coordinate.
+\end{corollary}
+\begin{proof}
+The fixed-angle curvature theorem supplies the integral inequalities and continuous nonnegative arms, with $L=\omega$. Since $\pi/2<8/5$, the certificate applies. The corner derivative is $-(f-1)u_t+(g-1)v_t$, whose first coordinate is strictly negative in the interior. Apply the horizontal-monotonicity majorization theorem, which needs no prior fan-containment hypothesis.
+\end{proof}
+
+\paragraph{Scope and verification.}
+This extends the elementary three-step proof for $L\le1$ in \texttt{arm-bootstrap.tex}; it is not needed for the already proved theorem on $[0,1]$. It supplies the structural majorization for larger fixed angles, not an explicit optimizer there. The table was checked using both integer arithmetic and Python's exact \texttt{Fraction} arithmetic. The finite recurrence and all certificate entries are part of the paper proof; the script is an optional reproducibility aid, not an unstated numerical hypothesis. No CI or Lean compilation was used.
+\end{document}

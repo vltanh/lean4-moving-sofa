@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\title{Vertical Core Slices Remove the Interior-Threshold Hypothesis}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+
+Fix $0<w<\pi/2$, $0<a<w/2$, $b=w-a$. Use the support functions $p,k$, corner $\gamma=(p-1)u_t+(k-1)v_t$, fan $F_w$, and functional $Q$ from \texttt{lifted-contact-certificate.tex}. Put $A=p-1$, $B=k-1$ and
+\[
+ H_R=\{z:z\cdot u_a\ge A(a)\},\qquad
+ H_L=\{z:z\cdot v_b\ge B(b)\}.
+\]
+The earlier lifting proof assumes every interior threshold is positive to justify radial contractions. This note replaces that step by vertical slices. No positivity of $A(t),B(t)$ away from the two selected cuts is required.
+
+\begin{theorem}[Lifting with exactly the available geometry]\label{thm:lift}
+Suppose $K$ is a normalized cap, its corner is continuously differentiable, $f=k-p'>1$, $g=p+k'>1$ on $(0,w)$, and $\gamma([0,w])\subset F_w$. Suppose also
+\[
+ A(a)>0,\quad B(b)>0,\qquad |N_w(K)\cap H_R\cap H_L|=0.
+\]
+Then there are admissible lifted functions $\beta,\eta$ in the obstacle domain of \texttt{lifted-contact-certificate.tex} such that
+\[
+ \mathcal A_w(K)\le Q(p,k,\beta,\eta).
+\]
+\end{theorem}
+
+\begin{proof}
+The arm formula gives
+\[
+ \gamma_x'=-(f-1)\cos t-(g-1)\sin t<0.
+\]
+The right cut meets the floor at $R=(A(a)/\cos a,0)$; the left cut meets the other fan ray at $L=B(b)v_w/\cos a$. These points have respectively positive and negative abscissae. Furthermore
+\[
+ R_x-\gamma_x(a)=\gamma_y(a)\tan a\ge0,
+\]
+and $\gamma(b)-L$ is a nonnegative multiple of $u_b$, because its scalar product with $u_w$ is nonnegative. Thus
+\[
+ R_x\ge\gamma_x(a)>\gamma_x(b)\ge L_x.
+\]
+The piecewise curve from $R$ to $\gamma(a)$ along the cut, then along $\gamma$ to $\gamma(b)$, then along the other cut to $L$, is a continuous graph $y=Y(x)$ over $[L_x,R_x]$. Degenerate end segments can be omitted. It lies in the fan: the end segments join fan points and the middle curve is in the fan by hypothesis. The fan's lower graph is
+\[
+ \ell(x)=\max\{0,-x\cot w\}.
+\]
+Let $D_{a,b}$ be the region between $Y$ and $\ell$.
+
+We verify its inclusion in the niche by three kinds of vertical slice. For $\gamma_x(b)<x<\gamma_x(a)$ choose the unique $t\in(a,b)$ with $\gamma_x(t)=x$. Every point $z=(x,y)$ with $\ell(x)\le y<\gamma_y(t)$ is obtained by moving vertically down from $\gamma(t)$. Both wall coordinates decrease strictly, since $\sin t,\cos t>0$, so $z\in Q^-_K(t)\cap F_w$.
+
+For $\gamma_x(a)\le x<R_x$, the right cut graph has height
+$Y(x)=\gamma_y(a)-(x-\gamma_x(a))\cot a\le\gamma_y(a)$.
+A point strictly below this graph satisfies $z\cdot u_a<A(a)$ and
+\[
+ (z-\gamma(a))\cdot v_a
+ =-(x-\gamma_x(a))\sin a+(y-\gamma_y(a))\cos a<0.
+\]
+It therefore belongs to the niche at angle $a$, even if $B(a)$ is negative. On the left end segment $x\le\gamma_x(b)$ and
+$Y(x)=\gamma_y(b)+(x-\gamma_x(b))\tan b\le\gamma_y(b)$.
+Points below it have $z\cdot v_b<B(b)$ and $(z-\gamma(b))\cdot u_b<0$, so belong to the niche at angle $b$. Thus $D_{a,b}\subset N_w(K)$ up to its graph and fan boundary, all of which have area zero.
+
+This core lies below both cuts. On the middle curve $\gamma(t)\cdot u_a$ decreases for $t\ge a$, while $\gamma(t)\cdot v_b$ increases for $t\le b$, by the arm formula. The right floor point satisfies $R\cdot v_b\le0<B(b)$, and the left fan point satisfies $L\cdot u_a<0<A(a)$. Hence both end segments satisfy the other cut inequality as well. Lowering the ordinate decreases both cut projections. The entire core consequently avoids the interiors of $H_R,H_L$.
+
+For completeness the exterior construction requires no removed hypothesis. Set
+\[
+ W_R=\{y\ge0,z\cdot u_a\ge A(a)\},\quad
+ E_R=W_R\cap\bigcap_{a\le t\le w}\{z:z\cdot u_t\ge p(t)-1\}.
+\]
+Its infimum support $\beta(t)=\inf_{z\in E_R}z\cdot u_t$ on $[a,\pi/2]$ is finite and Lipschitz, satisfies $\beta(a)=A(a)$, $\beta(\pi/2)=0$, and majorizes $p(t)-1$ for $a\le t\le w$. Indeed the floor intersects $E_R$ at a finite abscissa, and its cut line intersects $E_R$ at a finite height: on that line the required later heights are bounded using the Lipschitz bound on $p$ and $\sin(t-a)/(t-a)\to1$. The lower boundary between these intersections is compact and supplies all these infimum supports.
+
+The wedge lies in $F_w$. If $z\in W_R\setminus E_R$ violates the inequality at $s>a$, write $z-\gamma(s)=Xu_s+Yv_s$. Then $X<0$. Since $\gamma(s)\cdot u_a\le A(a)\le z\cdot u_a$, one has $X\cos(s-a)-Y\sin(s-a)\ge0$, whence $Y<0$. Thus $W_R\setminus E_R\subset N_w(K)\cap H_R$. Reflection gives $\eta$ and the analogous left region. The cut-separation assumption makes these two regions disjoint up to null sets, and they are disjoint from the core.
+
+The Green area formula for the core graph and its two straight end segments is
+\[
+ |D_{a,b}|=I(\gamma|_{[a,b]})+\frac12[A(a)B(a)+A(b)B(b)]
+ +\frac12[A(a)^2+B(b)^2]\tan a.
+\]
+This is a graph area identity; the mixed products need not individually be positive. The exterior area formula is
+\[
+ |W_R\setminus E_R|=-\frac12\int_a^{\pi/2}(\beta^2-\beta'^2)-\frac12A(a)^2\tan a,
+\]
+with its reflected analogue. This is the same bounded convex-boundary support-area identity as in the original lift. Adding the three disjoint areas cancels the tangent-square terms and gives the niche lower bound defining $Q$. Subtract it from the cap support-area formula to obtain the theorem.
+\end{proof}
+
+\begin{corollary}[The lift covers every larger-angle maximizer]
+For every $1\le w<\pi/2$, every positive global maximizing cap and every $0<a\le1/12$ admit the bound in Theorem~\ref{thm:lift}.
+\end{corollary}
+\begin{proof}
+The fixed-angle curvature and arm certificates give the corner regularity and strict arm inequalities. \texttt{global-cut-geometry.tex} gives fan containment, the cut thresholds at least $13/192$, and empty intersection of the niche with the two cut half-planes. These are exactly the hypotheses above.
+\end{proof}
+
+\paragraph{Scope.}
+This closes a hypothesis mismatch in the all-angle use of the lift. It does not prove that the relaxed lifted maximum is attained by a feasible sofa, nor that the inequality is sharp for an arbitrary cut. Those are separate contact/exposure obligations. In particular, cut separation alone is not a proof of an all-angle optimizer theorem. No CI, Lean compilation, or TeX compilation was used.
+\end{document}

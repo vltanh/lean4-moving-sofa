@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\title{The Linear Shooting Problem Is Nonsingular in Every Contact Ordering}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+Fix $0<w<\pi/2$, $0<\phi<w/2$, and $\phi<b<c<w$. Use
+\[
+ C=\mathbf1_{(\phi,w-\phi)},\quad B=\mathbf1_{(b,c)},\quad D(t)=B(w-t).
+\]
+No ordering between $b,c,w/2,w-b,w-c$ is imposed. The contact-balance equations from \texttt{contact-equations.tex} are
+\[
+ r_p=\frac{C(g-1)+B}{1+B},\qquad r_k=\frac{C(f-1)+D}{1+D},
+ \qquad f'=g-r_p,\quad g'=r_k-f.
+\]
+
+\begin{theorem}[Existence, uniqueness, and positivity before nonlinear shooting]
+There is exactly one absolutely continuous pair of arms solving these equations with $f(0)=g(w)=1$. It satisfies
+\[
+ f(t)\ge1+t/2,\qquad g(t)\ge1+(w-t)/2,
+ \quad f'>0,\quad g'<0\quad\hbox{almost everywhere}.
+\]
+It is reflected: $g(t)=f(w-t)$. Its resulting densities $r_p,r_k$ are nonnegative. In particular the linear equation determining the unknown initial arm $g(0)$ by $f(w/2)=g(w/2)$ is nonsingular for every one of these parameter triples, not only near $w=1$.
+\end{theorem}
+\begin{proof}
+Write $q=f-1$, $r=g-1$, and put
+\[
+ \alpha=1-\frac{C}{1+B},\quad\gamma=1-\frac{C}{1+D},\quad
+ c_B=\frac1{1+B},\quad d_D=\frac1{1+D}.
+\]
+Here $0\le\alpha,\gamma\le1$ and $1/2\le c_B,d_D\le1$. The boundary-value equations become
+\[
+ q(t)=\int_0^t[\alpha(s)r(s)+c_B(s)]\,ds,\qquad
+ r(t)=\int_t^w[\gamma(s)q(s)+d_D(s)]\,ds.
+\]
+Both one-ended integration operators have $L^2$ operator norm at most $2w/\pi$. Indeed their outputs have one zero endpoint, and the one-ended Poincare inequality bounds the output norm by $2w/\pi$ times the derivative norm. Multiplication by $\alpha$ or $\gamma$ has norm at most one. Thus the linear part of this affine map is a contraction on $L^2(0,w)^2$, equipped with the maximum of its two component norms, because $2w/\pi<1$.
+
+The unique fixed point is the convergent Neumann series applied to the nonnegative inhomogeneous pair. Every term is nonnegative, so $q,r\ge0$ almost everywhere. The integral formulas provide continuous absolutely continuous representatives, and then give $q(t)\ge t/2$, $r(t)\ge(w-t)/2$ pointwise. Substituting them in the differential equations gives $q'\ge1/2$ and $r'\le-1/2$ almost everywhere. The densities in the statement are now visibly nonnegative.
+
+Reflection and interchange of the two arms preserve the equations and endpoint conditions, so uniqueness proves symmetry. Conversely a solution propagated to the midpoint with equal arms extends by reflection to the boundary-value solution. The scalar midpoint shooting equation is affine in the unknown $g(0)$; if its coefficient vanished, it would have either no solution or more than one, contradicting the existence and uniqueness just established.
+\end{proof}
+
+\begin{corollary}[The support shooting equation is also nonsingular]
+For these arms there is exactly one solution of
+\[
+ p'=k-f,\quad k'=g-p,\qquad k(0)=p(w)=1.
+\]
+It is reflected and satisfies $p'(0)=k'(w)=0$. The second scalar shooting equation, $p(w/2)=k(w/2)$, has coefficient $\cos(w/2)+\sin(w/2)>0$ in the unknown initial support $p(0)$.
+\end{corollary}
+\begin{proof}
+With $k(0)=1$, the difference of two solutions is $(\Delta p,\Delta k)=h(\cos t,-\sin t)$. The condition at $w$ uniquely determines $h$ because $\cos w>0$. Reflection preserves the boundary-value equations, giving the symmetry. The derivative endpoints follow from the pinned values and arm endpoints. At the midpoint the difference of supports has coefficient $\cos(w/2)+\sin(w/2)$, proving the asserted stable shooting form.
+\end{proof}
+
+\paragraph{Consequences and limits.}
+The six indicator coefficients remain valid as contact intervals cross or overlap. Thus changes such as $c=w/2$, $b+c=w$, or $b=w/2$ do not invalidate linear propagation. Only the three nonlinear contact-position equations remain to be solved. Their root existence and continuation are not consequences of this theorem.
+
+Nonnegative curvature on the active arcs is proved here, but nonnegative atoms on the complementary normal gaps and positive endpoint fan-edge lengths must still be checked before calling the supports a cap. Likewise strict arms do not by themselves establish positive thresholds, fan containment, or exposure of the proposed niche arcs. Those distinctions are not bypassed by the shooting calculation. No CI or compilation was used.
+\end{document}

@@ -1,0 +1,98 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\title{A Three-Angle Contact System for the Remaining Interval}
+\author{}\date{October 5, 2026 --- candidate construction, not an optimality certificate}
+\begin{document}\maketitle
+
+\section*{The explicit hypothesis behind the equations}
+Fix $1<\omega<\pi/2$. The following construction assumes a candidate niche boundary with one corner-curve core, at parameters $[\phi,\omega-\phi]$, one right inner-wall envelope, at parameters $[b,c]$, and its reflected left envelope, at $[\omega-c,\omega-b]$. Here $0<\phi<\omega/2$ and $\phi<b<c<\omega$. This contact description is an ansatz; it has not been proved for every larger-angle maximizer.
+
+Let $p,k$ be the active supports and $f=k-p'$, $g=p+k'$ the arms. Write
+\[
+ C(t)=\mathbf1_{(\phi,\omega-\phi)}(t),\quad
+ B(t)=\mathbf1_{(b,c)}(t),\quad D(t)=B(\omega-t).
+\]
+The endpoints of these intervals may change order as $\omega$ varies. In particular the initial ordering $c<\omega/2$ cannot be imposed on the whole interval.
+
+\begin{proposition}[Local area-balance calculation]
+Suppose the asserted core and envelope arcs really are exposed boundary arcs, join at the stated contact points, and have no additional boundary pieces. On smooth subintervals the first variation of niche area with respect to support perturbations $\dot p,\dot k$ has density
+\[
+ [C(g-1)+B(1-r_p)]\dot p+[C(f-1)+D(1-r_k)]\dot k,
+ \qquad r_p=p+p'',\quad r_k=k+k''.
+\]
+Consequently vanishing of the corresponding cap-minus-niche first variation is achieved by
+\[
+ r_p=\frac{C(g-1)+B}{1+B},\qquad
+ r_k=\frac{C(f-1)+D}{1+D}.
+\]
+These formulas are not a proof that the assumed arcs are exposed or that a stationary candidate is globally optimal.
+\end{proposition}
+\begin{proof}
+On a corner-curve arc, $\gamma'=-(f-1)u_t+(g-1)v_t$ and $\dot\gamma=\dot p\,u_t+\dot k\,v_t$. Thus the variation of its signed area has interior density $\dot\gamma\times\gamma'=(g-1)\dot p+(f-1)\dot k$. On an exposed inner $b$-envelope the support is $p-1$ and its boundary is traversed opposite to increasing normal angle; its curvature magnitude is $1-r_p$. Its area variation density is therefore $(1-r_p)\dot p$. The other envelope is analogous. Boundary terms cancel at joined endpoints, and the radial floor segments contribute zero. The cap-area variation has density $r_p\dot p+r_k\dot k$. Equating the coefficients gives the displayed balance equations.
+\end{proof}
+
+\section*{A finite-dimensional shooting system}
+The balance equations give a piecewise constant-coefficient affine ODE:
+\begin{align*}
+ p'&=k-f,&k'&=g-p,\\
+ f'&=\left(1-\frac{C}{1+B}\right)g+\frac{C-B}{1+B},&
+ g'&=\left(-1+\frac{C}{1+D}\right)f+\frac{D-C}{1+D}.
+\end{align*}
+Use $k(0)=f(0)=1$, with $p(0)$ and $g(0)$ initially unknown. Propagate to $m=\omega/2$ and impose $p(m)=k(m)$ and $f(m)=g(m)$. Because the ODE is affine linear, these are two linear equations for the two unknown initial values. Their nonsingularity must be checked; it holds near the transition by the explicit formulas below. Reflect the solution about $m$ to obtain $k(t)=p(\omega-t)$.
+
+Let $\gamma=(p-1)u_t+(k-1)v_t$ and $e_b(t)=(p(t)-1)u_t+p'(t)v_t$. The remaining three equations are
+\[
+ \boxed{\gamma(\phi)\cdot u_b=p(b)-1,\qquad
+ \gamma(\phi)\cdot v_b=p'(b),\qquad
+ (p(c)-1)\sin c+p'(c)\cos c=0.}
+\]
+The first two say $\gamma(\phi)=e_b(b)$; the third puts the other end of the right envelope on the floor. Reflection supplies the left-side joins. Solving these equations identifies a candidate, but does not replace verification of the entire niche or of a global upper bound.
+
+\section*{Explicit formulas in the first contact ordering}
+When $0<\phi<b<c<\omega/2$, put $L=c-b$ and define
+\[
+ g_0=\frac{\omega-\{(-\sin\phi+\phi)(1-L/2)-\cos\phi+\phi+L+(c^2-b^2)/4\}}
+ {\cos\phi(1-L/2)-\sin\phi},
+\]
+\[
+ A=g_0\cos\phi-\sin\phi+\phi,\quad
+ B_0=\cos\phi+g_0\sin\phi-\phi,\quad
+ \Delta=(A/2-1)L-(c^2-b^2)/4.
+\]
+On the first half of the interval, the cap curvature density is zero before $\phi$, then $A-1-t$ on $(\phi,b)$, $(A-t)/2$ on $(b,c)$, and $A-1-t$ on $(c,\omega/2)$. Denote this density by $r(t)$. The support is
+\[
+ p(t)=p_0\cos t+\int_0^t r(s)\sin(t-s)\,ds,
+\]
+where
+\[
+ p_0=\frac{\omega/2+B_0+\Delta+
+ \int_0^{\omega/2}r(s)[\cos(\omega/2-s)-\sin(\omega/2-s)]\,ds}
+ {\cos(\omega/2)+\sin(\omega/2)}.
+\]
+The arm is $f=\cos t+g_0\sin t$ before $\phi$, then $B_0+t$ until $b$, then
+$B_0+b+A(t-b)/2-(t^2-b^2)/4$ until $c$, then $B_0+t+\Delta$. Set $k=p'+f$. These elementary formulas supply a version of the shooting system requiring no ODE solver.
+
+\section*{Exploratory continuation, not validated enclosures}
+Floating-point roots of the piecewise-linear system gave the following illustrative values. The last column is the integral along the \emph{assumed} boundary; it is not by itself a certified sofa area or optimum.
+\[
+\begin{array}{c|ccc|c}
+\omega&\phi&b&c&\text{candidate boundary-integral value}\\\hline
+1.05&0.000449275&0.074779388&0.100079857&1.551249962473\\
+1.30&\multicolumn{4}{c}{\text{between the sampled values at }1.29\text{ and }1.31}\\
+1.32&0.014900906&0.468469392&0.657192784&1.870740290174\\
+1.40&0.021677722&0.576864374&0.848194131&1.978493160130\\
+1.50&0.030693565&0.747630962&1.146637327&2.119519936099\\
+1.57&0.038908896&0.887970848&1.534556540&2.218479894336
+\end{array}
+\]
+The first ordering ceases when $c$ crosses $\omega/2$, between the sampled angles $1.32$ and $1.325$. Later the reflected inner-wall intervals change order again. The general indicator ODE handles these changes; applying the first-ordering formula beyond its hypothesis gave an incorrect continuation and was rejected.
+
+\paragraph{Outstanding obligations.}
+A rigorous larger-angle theorem would need existence and uniqueness of the relevant roots over a specified parameter range, convexity and feasibility of the resulting cap-minus-niche shape, proof that the listed arcs form the entire niche boundary, and a sharp global majorant with a rigid equality case covering all maximizers. Numerical continuation addresses none of those quantifiers by itself. In particular this note does not close the interval $(1,\pi/2)$.
+
+\paragraph{Attribution and validation.}
+The support/contact first-variation method follows the approach of Romik's \emph{Differential equations and exact solutions in the moving sofa problem}, arXiv:1606.08111, and Baek's \emph{Optimality of Gerver's Sofa}, arXiv:2411.19826v1, Section 8.4. The specific three-angle system here is a fixed-angle candidate construction. Only local floating-point linear propagation, root finding and quadrature were used for the exploratory table. No CI, Lean compilation, or TeX compilation was run.
+\end{document}

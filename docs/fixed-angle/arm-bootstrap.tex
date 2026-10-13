@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+\title{A Short-Interval Bootstrap for the Canonical Arms}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Define, for $z\ge0$,
+\[
+ \kappa(z)=\max\{|z-1|,(|z-1|+1)/2\},\qquad m(z)=z-\kappa(z).
+\]
+Equivalently,
+\[
+ m(z)=\begin{cases}3z/2-1,&0\le z\le1,\\z/2,&1\le z\le2,\\1,&z\ge2.\end{cases}
+\]
+Thus $m$ is nondecreasing, $m\ge-1$, $m(2/3)=0$, and $m(1)=1/2$.
+
+\begin{theorem}[Three bootstrap steps]
+Let $0<\omega\le1$. Suppose $f,g:[0,\omega]\to[0,\infty)$ are continuous and
+\[
+ f(t)\ge1+\int_0^t m(g(s))\,ds,\qquad
+ g(t)\ge1+\int_t^\omega m(f(s))\,ds.
+\]
+Then
+\[
+ f(t)\ge1+t/2,\qquad g(t)\ge1+(\omega-t)/2.
+\]
+If, in addition, $f,g$ are absolutely continuous with
+$f'\ge m(g)$ and $g'\le-m(f)$ almost everywhere, then
+$f'\ge1/2$ and $g'\le-1/2$ almost everywhere.
+\end{theorem}
+\begin{proof}
+First, $m\ge-1$ gives $f(t)\ge1-t$ and $g(t)\ge1-\omega+t$. The latter lower bound lies in $[0,1]$. Monotonicity of $m$ therefore gives
+\[
+ f(t)\ge1+\int_0^t\bigl(\tfrac32(1-\omega+s)-1\bigr)\,ds
+ =1+(\tfrac12-\tfrac32\omega)t+\tfrac34t^2
+ \ge1-t+\tfrac34t^2\ge\tfrac23.
+\]
+The last quadratic has global minimum $2/3$ at $t=2/3$. Reversing the interval gives the same lower bound for $g$. Since $m(2/3)=0$, the integral inequalities now give $f,g\ge1$. Substitution once more, using $m(1)=1/2$, gives the stated linear bounds. The derivative assertion follows immediately from its additional hypotheses.
+\end{proof}
+
+\begin{remark}[What this proves and what it does not]
+For cap supports $p(t)=h_K(t)$ and $k(t)=h_K(t+\pi/2)$, the canonical arms are $f=k-p'$ and $g=p+k'$. A curvature estimate $p+p''\le\kappa(g)$, $k+k''\le\kappa(f)$, together with the endpoint values $f(0)=g(\omega)=1$, supplies the hypotheses above. Extending the polygon curvature argument to these fixed-angle caps is a separate obligation; it is not assumed proved by this note.
+
+The inequalities $f,g>1$ in the interior imply strict decrease of the first coordinate of the canonical corner curve, because $x_K'=-(f-1)u_t+(g-1)v_t$. They do not, without another argument, establish containment of that curve in the endpoint fan. Injectivity and fan containment are separate hypotheses in Baek's conditional majorization. This distinction must survive the theorem assembly.
+\end{remark}
+
+\begin{remark}[Attribution and verification]
+The functions $\kappa,m$ are the curvature-bound functions used in Baek's optimality argument and in the companion manuscript, Section 7. The short-interval bootstrap above replaces the longer right-angle iteration for this particular range of $\omega$. This is a paper argument; no Lean compilation or CI was run.
+\end{remark}
+\end{document}

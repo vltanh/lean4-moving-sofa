@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\title{The Quadratic Relaxation Is Sharp Exactly Up to One Radian}
+\author{}\date{October 5, 2026 --- paper-proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+The fixed-angle maximizing-cap majorization extends to every $0<\omega<\pi/2$. We extend the strict quadratic equality argument to that whole interval, but prove that the relaxed cap has a strictly larger niche than its signed corner region as soon as $\omega>1$. Consequently the unrestricted optimum is strictly below $1+\omega^2/2$ for $1<\omega<\pi/2$. Together with the exact small-angle theorem, this locates the end of the sharp regime at exactly one radian. It does not identify the maximizing sofa in the remaining interval.
+\end{abstract}
+
+\section{The relaxed cap at arbitrary angle}
+Let $0<\omega<\pi/2$, $u_t=(\cos t,\sin t)$, $v_t=(-\sin t,\cos t)$,
+\[
+ c=\sec\omega-\tan\omega,\quad o=(c,1),\quad r=\omega+c-1,
+\]
+and use the usual fan $F_\omega$. Retain the formulas
+\begin{align*}
+ p_*(t)&=\omega-t+\ip o{u_t},&k_*(t)&=t+\ip o{v_t},\\
+ A(t)&=o+(\omega-t)u_t-v_t,&C(t)&=o+t v_t-u_t.
+\end{align*}
+Let $K_1=\operatorname{conv}(\{O,o\}\cup A([0,\omega])\cup C([0,\omega]))$. This is Baek's cap $K_{\omega,1}$; the subscript here names the relaxation, not the rotation angle.
+
+\begin{lemma}[The same support formulas remain valid]\label{lem:cap}
+$K_1$ is a normalized cap with active supports $p_*,k_*$. These supports are at least one. Its canonical corner
+\[
+ \gamma(t)=o+(\omega-t-1)u_t+(t-1)v_t
+\]
+bounds, together with the two radial fan segments, a convex region $D$ satisfying
+\[
+ \operatorname{int}D\subset N_\omega(K_1),\quad |D|=I(\gamma),\quad
+ \mathcal A_1(K_1)=1+\omega^2/2.
+\]
+\end{lemma}
+\begin{proof}
+The support calculation in \texttt{relaxation.tex} extends beyond one radian. Its only angle-restricted cross-arc estimate can be replaced by the following. For $s<t\le\omega<\pi/2$,
+\[
+ s\tan(t-s)\le s\cot s\le1,
+\]
+where the endpoint $s=0$ is handled directly and $\tan s\ge s$ is used for positive $s$. Thus
+$\ip{C(s)-o}{u_t}=s\sin(t-s)-\cos(t-s)\le0$. When $t\le s$ the same inequality is immediate from the signs. The self-arc inequality follows by integrating $A'(t)=(\omega-t)v_t$, and reflection gives the other support interval. Also $p_*'=-1+\cos t-c\sin t\le0$ and $p_*(\omega)=1$, so $p_*\ge1$, and likewise $k_*\ge1$. The same boundary chain and pinned edges therefore describe the cap.
+
+The corner derivative is $\gamma'=-t u_t+(\omega-t)v_t$. Its first coordinate strictly decreases, and its tangent angle increases from $\pi/2$ to $\pi+\omega$, with derivative $1+\omega/(t^2+(\omega-t)^2)>0$. Its ordinate is strictly concave, since
+\[
+ \gamma_y''=-(t+1)\cos t-(\omega-t+1)\sin t<0.
+\]
+The endpoint ordinates are $0$ and $r\cos\omega>0$, so the curve lies above the floor. Reflection gives the other fan inequality. Together with the two radial segments it forms the convex region $D$, as in the earlier note.
+
+Both thresholds $p_*(t)-1,k_*(t)-1$ are positive in the interior. Every interior point of $D$ is a strict radial contraction of some $\gamma(t)$ with $0<t<\omega$, and therefore satisfies both strict niche inequalities. This proves the inclusion. Green's formula gives $|D|=I(\gamma)$. The boundary integration proving $|K_1|-I(\gamma)=1+\omega^2/2$ in \texttt{relaxation.tex} is algebraic and uses no restriction $\omega\le1$, proving the last assertion.
+\end{proof}
+
+\section{Strict relaxation rigidity on the full open angle interval}
+\begin{lemma}[The one-ended Poincare inequality]\label{lem:poincare}
+For $f\in H^1([0,\omega])$ with $f(\omega)=0$,
+\[
+ \int_0^\omega f^2\le\frac{4\omega^2}{\pi^2}\int_0^\omega f'^2.
+\]
+\end{lemma}
+\begin{proof}
+Put $\lambda=\pi/(2\omega)$ and $\phi(t)=\cos(\lambda t)$. For continuously differentiable $f$ vanishing at $\omega$, expansion and integration by parts give
+\[
+ \int_0^\omega(f'^2-\lambda^2f^2)
+ =\int_0^\omega\phi^2\bigl((f/\phi)'\bigr)^2\ge0.
+\]
+The boundary term is zero at $0$ because $\phi'(0)=0$, and at $\omega$ by the first-order zeros of $\phi$ and $f$. The identity may first be taken on truncated intervals and then passed to the endpoint. Approximation in $H^1$, preserving the zero endpoint trace, proves the inequality for the stated class.
+\end{proof}
+
+\begin{theorem}[Unique normalized relaxed maximizer]\label{thm:relaxation}
+For every $0<\omega<\pi/2$, the unique normalized cap maximizing $\mathcal A_1$ is $K_1$, with value $1+\omega^2/2$. If $f=p-p_*$ and $g=k-k_*$, then
+\[
+ \mathcal A_1(K_1)-\mathcal A_1(K)
+ \ge\frac12\left(1-\frac{4\omega^2}{\pi^2}\right)\int_0^\omega f'^2
+       +\frac12\int_0^\omega(g'+f)^2.
+\]
+\end{theorem}
+\begin{proof}
+The support-coordinate formula and stationary-point calculation of \texttt{relaxation.tex} apply at every such angle; they use only $f(\omega)=g(0)=0$ and the candidate's endpoint derivative conditions. They give the exact identity
+\[
+ \mathcal A_1(K_1)-\mathcal A_1(K)
+ =\frac12\int_0^\omega\bigl(f'^2+(g'+f)^2-f^2\bigr).
+\]
+Apply Lemma~\ref{lem:poincare}. Its first resulting coefficient is strictly positive when $\omega<\pi/2$. Equality forces $f'=0$, hence $f=0$ by its endpoint value, then $g'=0$ and $g=0$. The active supports determine the cap. The value follows from Lemma~\ref{lem:cap}.
+\end{proof}
+
+\section{An exact negative result beyond one radian}
+\begin{theorem}[Extra niche area appears immediately]\label{thm:tails}
+For every $1<\omega<\pi/2$,
+\[
+ |N_\omega(K_1)|>I(\gamma),\qquad
+ \mathcal A_\omega(K_1)<\mathcal A_1(K_1)=1+\omega^2/2.
+\]
+\end{theorem}
+\begin{proof}
+The intercept of the inner $b$-wall on the horizontal fan ray is
+\[
+ W(t)=\frac{p_*(t)-1}{\cos t}.
+\]
+A direct rearrangement gives
+\[
+ W(t)-r=\frac{(\omega-1)(1-\cos t)+\sin t-t}{\cos t}.
+\]
+The numerator divided by $t^2$ tends to $(\omega-1)/2>0$ as $t\downarrow0$. Thus $W(t)>r$ for some sufficiently small interior $t$.
+
+Choose $x$ strictly between $r$ and $W(t)$. The point $(x,0)$ satisfies the first niche inequality by $x<W(t)$, and the second because $-x\sin t<k_*(t)-1$, whose right side is positive. A small positive-area rectangle above this point, with all first coordinates greater than $r$, therefore lies in the niche. But $D\subset\{x\le r\}$: the first coordinate of $\gamma$ decreases from $r$, and both radial segments have first coordinates at most $r$. The rectangle misses $D$.
+
+Lemma~\ref{lem:cap} gives $\operatorname{int}D\subset N_\omega(K_1)$ and $|D|=I(\gamma)$. The extra rectangle proves a strictly positive area excess. Subtracting from the cap area yields the second inequality.
+\end{proof}
+
+\begin{corollary}[Exact end of the sharp regime]\label{cor:strict}
+For the unrestricted fixed-net-angle problem,
+\[
+ m(\omega)=1+\omega^2/2\quad(0\le\omega\le1),\qquad
+ m(\omega)<1+\omega^2/2\quad(1<\omega<\pi/2).
+\]
+\end{corollary}
+\begin{proof}
+The equality and uniqueness statement on $[0,1]$ is \texttt{optimality-uniqueness.tex}. For every $0<\omega<\pi/2$, compactness and a positive competitor give a global cap maximizer $K$. The certificate in \texttt{all-angle-bootstrap.tex}, the fixed-angle curvature theorem and the horizontal-monotonicity majorization give
+\[
+ \mathcal A_\omega(K)\le\mathcal A_1(K)\le1+\omega^2/2.
+\]
+If equality held at $\omega>1$, Theorem~\ref{thm:relaxation} would force $K=K_1$, contradicting Theorem~\ref{thm:tails}. Thus the cap maximum is strictly below the relaxed value. Every sofa is contained in its fixed-angle monotone envelope, whose area is a cap's area functional. The sofa supremum is therefore bounded by this strict cap maximum. Attainment at the cap level is what makes the strict supremal conclusion valid.
+\end{proof}
+
+\begin{remark}[What the negative result does not say]
+Non-sharpness of the relaxed value does not by itself prove that the actual cap-minus-niche sofa from $K_1$ is suboptimal; it proves that its area is smaller than the relaxed value. Nor does it identify a new optimal contact regime. An explicit optimizer and its uniqueness for $1<\omega<\pi/2$ require an additional sharp argument. The all-maximizer majorization and strict relaxation kernel are now available, but the positive tail-area correction cannot be discarded.
+\end{remark}
+\end{document}

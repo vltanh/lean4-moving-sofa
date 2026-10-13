@@ -1,0 +1,259 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{fact}[theorem]{Imported fact}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\area}[1]{\lvert #1\rvert}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\N}{\mathcal N}
+\newcommand{\Aone}{\mathcal A_1}
+\title{A Feasible Small-Angle Relaxation and Its Strict Equality Case}
+\author{}
+\date{October 5, 2026 --- research draft}
+\begin{document}
+\maketitle
+\begin{abstract}
+Baek's earlier conditional-bound paper already gives a fixed-angle quadratic relaxation and an explicit maximizing cap with relaxed value $1+\omega^2/2$. We give a direct feasibility proof for this cap's associated sofa when $0<\omega\le1$ radian, and an elementary strict quadratic gap identifying the normalized cap uniquely. With Baek's explicitly stated injectivity hypothesis, these yield optimality and uniqueness among injective monotone sofas in this angle range. Without that hypothesis, feasibility gives the unconditional lower bound $m(\omega)\ge1+\omega^2/2$, but the matching exact upper bound for the full fixed-angle problem is not proved here. No Lean compilation or formal verification is claimed.
+\end{abstract}
+
+\section{Scope, attribution, and the remaining hypothesis}
+Throughout, $0<\omega\le1$, with angles in radians. This is net rotation in the usual right-angled hallway, not the angle of a different hallway. Use
+\[
+ u_t=(\cos t,\sin t),\quad v_t=(-\sin t,\cos t),\quad
+ F=\{p:p_y\ge0,\ \ip p{u_\omega}\ge0\},\quad
+ P=\{p:0\le p_y\le1,\ 0\le\ip p{u_\omega}\le1\}.
+\]
+Let $J=[0,\omega]\cup[\pi/2,\pi/2+\omega]$. A normalized cap is a nonempty compact convex set $K$ with the pinned supports $h_K(\omega)=h_K(\pi/2)=1$, $h_K(\omega+\pi)=h_K(3\pi/2)=0$, determined by its supporting half-planes on $J$ and the two lower half-planes of $F$. Its niche and canonical inner-corner curve are
+\begin{align*}
+ N(K)&=F\cap\bigcup_{0<t<\omega}\{p:\ip p{u_t}<h_K(t)-1,\ \ip p{v_t}<h_K(t+\pi/2)-1\},\\
+ x_K(t)&=(h_K(t)-1)u_t+(h_K(t+\pi/2)-1)v_t.
+\end{align*}
+For a Lipschitz curve $x:[0,\omega]\to\R^2$ put
+\[
+ I(x)=\frac12\int_0^\omega x(t)\times x'(t)\,dt,\qquad
+ \Aone(K)=\area K-I(x_K),
+\]
+where $(a,b)\times(c,d)=ad-bc$. The support function of a compact convex set is Lipschitz, so these integrals are well-defined.
+
+The functional $\Aone$, its fixed-angle maximizer $K_{\omega,1}$, and the value $1+\omega^2/2$ are already in \cite[Definition 5.1, Definition 5.12, Theorems 5.30 and 5.32]{BaekConditional}. They are not discoveries of this note. The point here is to check feasibility in a concrete angle range and to supply a strict equality argument. In particular, it would be incorrect to describe the task as finding a fixed-angle quadratic relaxation from scratch.
+
+\begin{fact}[Baek's conditional majorization]\label{fact:majorization}
+Let $S$ be a monotone sofa with angle $\omega$ and cap $K$. If $x_K$ is injective and $x_K([0,\omega])\subset F$, then
+\[
+ \area S=\area K-\area{N(K)}\le\Aone(K).
+\]
+This is \cite[Theorem 5.5]{BaekConditional}. Both injectivity and containment in the fan are retained as hypotheses.
+\end{fact}
+
+This fact is the only imported sofa-area majorization in the present note. No assertion that every fixed-angle maximizer satisfies its hypotheses is made. The paper's elementary construction below does not use this fact; its restricted-class optimality theorem does.
+
+\section{The cap and its boundary}
+Put
+\[
+ c=\sec\omega-\tan\omega=\tan(\pi/4-\omega/2),\quad o=(c,1),\quad r=\omega+c-1.
+\]
+Thus $\ip o{u_\omega}=o_y=1$. All coordinates below use this endpoint-strip normalization. Define
+\begin{align*}
+ p_*(t)&=\omega-t+\ip o{u_t},& k_*(t)&=t+\ip o{v_t},\\
+ A(t)&=o+(\omega-t)u_t-v_t,& C(t)&=o+t v_t-u_t,\qquad0\le t\le\omega,
+\end{align*}
+and let $K_*$ be the convex hull of $O,o,A([0,\omega]),C([0,\omega])$.
+
+\begin{lemma}[Support and boundary description]\label{lem:cap}
+$K_*$ is a normalized cap, with
+\[
+ h_{K_*}(t)=p_*(t),\qquad h_{K_*}(t+\pi/2)=k_*(t),\qquad0\le t\le\omega.
+\]
+Its counterclockwise boundary consists of the segment from $O$ to $A(0)$, the arc $A$, the segment from $A(\omega)$ to $o$, the segment from $o$ to $C(0)$, the arc $C$, and the segment from $C(\omega)$ to $O$. In particular its two pinned upper edges have length one and its floating curvature densities are $\omega-t$ and $t$. It is therefore Baek's cap $K_{\omega,1}$ in this normalization.
+\end{lemma}
+\begin{proof}
+Differentiate to obtain $A'(t)=(\omega-t)v_t$ and $C'(t)=-t u_t$. For fixed $t$, the identity
+\[
+ \ip{A(s)-A(t)}{u_t}=\int_t^s(\omega-q)\sin(t-q)\,dq\le0
+\]
+holds for either order of $s,t$. Thus $A(t)$ supports its entire arc in direction $u_t$, with support $p_*(t)$. The point $o$ has no larger support. The other arc satisfies
+\[
+ \ip{C(s)-o}{u_t}=s\sin(t-s)-\cos(t-s)<0.
+\]
+For $t<s$ this is immediate. For $t\ge s$, the first term is at most $s(t-s)\le t^2/4\le1/4$, whereas $\cos(t-s)\ge\cos1\ge1/2$. Also $p_*'(t)=-1+\cos t-c\sin t\le0$, and $p_*(\omega)=1$, so $p_*(t)\ge1$ and the support of $O$ is smaller.
+
+The reflection
+\[
+ M(x,y)=(-x\sin\omega+y\cos\omega,\ x\cos\omega+y\sin\omega)
+\]
+fixes $o$ and exchanges $A(t)$ with $C(\omega-t)$. It yields the assertion for the second normal interval. The arc $A$ lies in $F$: its ordinate increases from zero, and $\ip{A(t)}{u_\omega}$ increases from $\ip{A(0)}{u_\omega}\ge0$ to one, by the derivative formula. Reflection gives the same for $C$. Here $A(0)=(\omega+c,0)$ and $C(\omega)=(\omega+c)v_\omega$. Thus $K_*\subset F$, and both lower supports are zero because $O\in K_*$.
+
+The supports just verified, together with the supporting fan edges, give precisely the boundary chain stated above. At $\omega$ and $\pi/2$ the segments have displacement $v_\omega$ and $-u_0$, respectively. Their intermediate normal directions support at $o$; the remaining normal gaps support at the two bottom endpoints or at $O$. Hence $K_*$ is determined by the required half-planes. The derivative formulas give the claimed curvature densities. The boundary-measure characterization in \cite[Definition 5.12]{BaekConditional} identifies the cap.
+\end{proof}
+
+\section{The niche is exactly the corner-curve region}
+Let
+\[
+ a(t)=p_*(t)-1,\quad b(t)=k_*(t)-1,\quad
+ \gamma(t)=x_{K_*}(t)=o+(\omega-t-1)u_t+(t-1)v_t.
+\]
+The numbers $a(t),b(t)$ are positive for $0<t<\omega$. Moreover $a$ decreases from $r$ to zero, $b(t)=a(\omega-t)$, and
+\begin{equation}\label{eq:gamma-prime}
+ \gamma'(t)=-t u_t+(\omega-t)v_t,\qquad
+ \gamma(0)=r u_0,\quad\gamma(\omega)=r v_\omega.
+\end{equation}
+
+\begin{lemma}[A convex region inside the unit fan sector]\label{lem:region}
+The simple closed curve consisting of the segment $O$ to $\gamma(0)$, the arc $\gamma$, and the segment $\gamma(\omega)$ to $O$ bounds a convex region $D$. The arc is injective and lies in $F$. Also
+\[
+ 0<r\le1/3,\qquad D\subset F\cap\{p:\lVert p\rVert\le\sqrt2 r\},\qquad\sqrt2 r<1.
+\]
+\end{lemma}
+\begin{proof}
+As a function of $\omega$, $r$ vanishes at zero and has derivative $(1-c^2)/2>0$ at positive angles. Thus $0<r\le r(1)=c(1)$. Since $\sin1\ge5/6$ and $\cos1\ge1/2$, $c(1)=(1-\sin1)/\cos1\le1/3$.
+
+For $0<t<\omega$, \eqref{eq:gamma-prime} gives $\gamma_x'(t)<0$, proving injectivity. Furthermore
+\[
+ \gamma_y''(t)=-(t+1)\cos t-(\omega-t+1)\sin t<0.
+\]
+Its endpoint ordinates are $0$ and $r\cos\omega>0$, so $\gamma_y(t)>0$ in the interior. Reflection in $M$ gives $\ip{\gamma(t)}{u_\omega}>0$ there too. Thus the arc is strictly inside the fan except at its endpoints, and the closed curve is simple.
+
+The tangent angle of $\gamma'$ increases from $\pi/2$ to $\pi+\omega$, with derivative
+\[
+ 1+\frac{\omega}{t^2+(\omega-t)^2}>0.
+\]
+The two fan-edge segments complete the boundary with nonnegative turns: the turns at the arc endpoints are $\pi/2$, and the turn at $O$ is $\pi/2-\omega$. Hence this simple closed curve bounds a convex region. Finally $\gamma=a u_t+b v_t$ and $0\le a,b\le r$, so the arc lies in the disk of radius $\sqrt2 r$. Convexity of that disk and of the fan proves the claimed containment of $D$.
+\end{proof}
+
+\begin{lemma}[No additional niche tails when $\omega\le1$]\label{lem:no-tail}
+Writing $N_*=N(K_*)$, one has
+\[
+ \operatorname{int}D\subset N_*\subset D,\qquad \area{N_*}=I(\gamma).
+\]
+\end{lemma}
+\begin{proof}
+For $0<t<\omega$, the closure in $F$ of the quarter-plane contributing to $N_*$ is the quadrilateral with vertices
+\[
+ O,\quad W(t)=\frac{a(t)}{\cos t}u_0,\quad\gamma(t),\quad
+ Z(t)=\frac{b(t)}{\cos(\omega-t)}v_\omega.
+\]
+Both denominators are positive; the intersection point $\gamma(t)$ is in the interior of the fan by Lemma~\ref{lem:region}. A direct calculation gives
+\[
+ \frac{a(t)}{\cos t}-r
+ =\frac{(\omega-1)(1-\cos t)+\sin t-t}{\cos t}\le0.
+\]
+This is where $\omega\le1$ is used. Thus $W(t)$ lies between $O$ and $r u_0$, and reflection gives the corresponding assertion for $Z(t)$. All four vertices lie in the convex region $D$, so the quadrilateral lies in $D$. Taking the union gives $N_*\subset D$.
+
+Every interior point of $D$ lies strictly between $O$ and a point $\gamma(t)$ for an interior parameter $t$: the two other boundary segments are the fan edges, and $D$ is convex. Write it as $\lambda\gamma(t)$, $0\le\lambda<1$. Both thresholds $a(t),b(t)$ are positive, so this point satisfies both strict quarter-plane inequalities. This proves the reverse interior inclusion. The boundary of $D$ is a finite union of smooth arcs and line segments and has area zero. Green's formula gives $\area D=I(\gamma)$ because the two radial segments contribute zero.
+\end{proof}
+
+\begin{theorem}[A feasible exact-area family]\label{thm:feasible}
+The set $S_*=K_*\setminus N_*$ is a compact path-connected monotone sofa of angle $\omega$, with cap $K_*$, and
+\[
+ \area{S_*}=1+\frac{\omega^2}{2}.
+\]
+Its canonical corner curve is injective and contained in the fan. In particular the unrestricted fixed-angle problem satisfies $m(\omega)\ge1+\omega^2/2$ for $0<\omega\le1$.
+\end{theorem}
+\begin{proof}
+Every support on $J$ is at least one, by Lemma~\ref{lem:cap} and reflection. Since $K_*$ is determined by those half-planes and the fan, it contains the unit disk sector in $F$. Lemmas~\ref{lem:region} and \ref{lem:no-tail} show $N_*\subset D\subset K_*$ and that the unit fan arc misses $N_*$. The niche is relatively open in $F$ and star-shaped about $O$: each contributing quarter-plane has positive thresholds and its intersection with $F$ is convex and contains $O$. The origin is in the niche. Thus $S_*$ is compact, and every point joins radially to the unit fan arc inside $S_*$. For expansion along a ray use star-shapedness of the removed niche; for contraction from outside the unit disk use $N_*\subset\{\lVert p\rVert<1\}$. Convexity of $K_*$ keeps these radial segments in the cap. The arc connects them, proving path-connectedness.
+
+The explicit motion is $p\mapsto R_{-t}(p-\gamma(t))$, $0\le t\le\omega$. The support inequalities make both coordinates at most one, and deletion of the niche prevents both being negative. At $t=0$, $b(0)=0$ gives the horizontal starting strip; at $t=\omega$, $a(\omega)=0$ gives the vertical ending strip. The trajectory is continuous. The supporting points $A(t),C(t)$ have norm at least one because their respective support values are at least one. They survive removal of the niche. Hence $h_{S_*}=h_{K_*}$ on $J$, its cap is $K_*$, and $S_*$ equals its supporting-hallway envelope. This verifies monotonicity as well as feasibility, rather than assuming either from the cap construction. Injectivity and fan containment follow from Lemma~\ref{lem:region}.
+
+For the area calculation put
+\[
+ R=\ip o{\int_0^\omega(\omega-t)u_t\,dt}.
+\]
+Reflection gives the same value for $\int_0^\omega t\ip o{v_t}\,dt$. Integrating $p\times dp$ along the boundary in Lemma~\ref{lem:cap}, the two pinned edges contribute one each to the doubled area, the radial edges contribute zero, and the two arcs give
+\[
+ \area{K_*}=1+R+\frac{\omega^3}{3}.
+\]
+Using \eqref{eq:gamma-prime} in Green's formula gives
+\[
+ I(\gamma)=R+\frac12\int_0^\omega\bigl((\omega-t)^2+t^2-\omega\bigr)\,dt
+ =R+\frac{\omega^3}{3}-\frac{\omega^2}{2}.
+\]
+Lemma~\ref{lem:no-tail} permits subtracting this actual niche area, proving the theorem.
+\end{proof}
+
+\section{A strict quadratic gap}
+We next prove uniqueness for the relaxation, not merely that its candidate is specified uniquely by a chosen boundary measure.
+
+\begin{lemma}[Support-coordinate formula]\label{lem:functional}
+For any normalized cap set $p(t)=h_K(t)$ and $k(t)=h_K(t+\pi/2)$, $0\le t\le\omega$. Then $p,k\in H^1([0,\omega])$, $p(\omega)=k(0)=1$, and
+\begin{align}
+ \area K&=c+\frac12\int_0^\omega(p^2+k^2-p'^2-k'^2)\,dt,\label{eq:area}\\
+ \Aone(K)&=c+\int_0^\omega(p+k-1)\,dt\notag\\
+ &\hspace{4mm}-\frac12\int_0^\omega\bigl(p'^2+k'^2+(p-1)k'-(k-1)p'\bigr)\,dt.\label{eq:functional}
+\end{align}
+\end{lemma}
+\begin{proof}
+We use the classical support-area identity
+\[
+ \area K=\frac12\int_0^{2\pi}(h_K^2-h_K'^2)\,dt.
+\]
+For a smooth strictly convex body it follows from the boundary parameterization $h u+h'v$ and integration by parts. For a general convex body, convolve its support function on the circle with smooth nonnegative approximate identities and add a positive constant tending to zero. The resulting smooth strictly convex support functions converge uniformly and in $H^1$ to $h_K$; their bodies converge in Hausdorff distance and area. This proves the identity, including degenerate limits.
+
+The standard cap endpoint geometry gives $O,o\in K$, the endpoint support points $h_K(0)u_0$ and $h_K(\omega+\pi/2)v_\omega$, and support at $o$ on the normal gap $[\omega,\pi/2]$. These facts are proved for the same cap definition in \cite[Section 2, lemmas on cap vertices and boundary ends]{Companion}. On this gap $h=\ip o{u_t}$, and
+\[
+ \int_\omega^{\pi/2}(h^2-h'^2)\,dt=-[hh']_\omega^{\pi/2}=2c.
+\]
+The remaining normal gaps support at $O$ or one of the two endpoint support points. Each contributes zero: its support is zero, or a multiple of a sine or cosine on a quarter-period, for which $-[hh']$ has zero endpoints. The two intervals in $J$ contribute the integral in \eqref{eq:area}. This proves that formula with all normal-gap terms included.
+
+For $x=(p-1)u_t+(k-1)v_t$, compute almost everywhere
+\[
+ x\times x'=(p-1)^2+(k-1)^2+(p-1)k'-(k-1)p'.
+\]
+Subtracting half its integral from \eqref{eq:area} gives \eqref{eq:functional}.
+\end{proof}
+
+\begin{theorem}[Exact gap and strict rigidity]\label{thm:gap}
+Let $K$ be any normalized cap, and put $f=p-p_*$, $g=k-k_*$. Then
+\begin{align*}
+ \Aone(K_*)-\Aone(K)
+ &=\frac12\int_0^\omega\bigl(f'^2+g'^2+f g'-g f'\bigr)\,dt\\
+ &=\frac12\int_0^\omega\bigl(f'^2+(g'+f)^2-f^2\bigr)\,dt\\
+ &\ge\frac12\left(1-\frac{\omega^2}{2}\right)\int_0^\omega f'^2\,dt
+       +\frac12\int_0^\omega(g'+f)^2\,dt.
+\end{align*}
+Consequently $\Aone(K)\le1+\omega^2/2$, with equality if and only if $K=K_*$.
+\end{theorem}
+\begin{proof}
+The pinned supports give $f(\omega)=0$ and $g(0)=0$. The candidate satisfies
+\[
+ p_*''=k_*'-1,\quad k_*''=-p_*'-1,\quad p_*'(0)=0,\quad k_*'(\omega)=0.
+\]
+Expanding \eqref{eq:functional} and integrating its linear terms by parts gives zero. The interior terms vanish by the two differential equations. The free endpoint terms vanish because $k_*(0)=p_*(\omega)=1$ and the displayed derivative conditions hold; the other endpoints have $g(0)=f(\omega)=0$. The remaining quadratic terms give the first identity. Integration by parts gives $\int(-g f')=\int f g'$, because $fg$ vanishes at both endpoints, proving the second identity.
+
+Finally $f(t)=-\int_t^\omega f'(s)\,ds$, so Cauchy--Schwarz and integration imply
+\[
+ \int_0^\omega f(t)^2\,dt
+ \le\int_0^\omega\int_t^\omega(\omega-t)f'(s)^2\,ds\,dt
+ \le\frac{\omega^2}{2}\int_0^\omega f'(s)^2\,ds.
+\]
+This yields the bound. Its first coefficient is positive since $\omega\le1$. A zero gap therefore forces $f'=0$ almost everywhere, whence $f=0$ by its endpoint value, and then $g'=0$, whence $g=0$. Absolute continuity gives pointwise equality of the support functions on $J$. The cap definition then gives $K=K_*$. The converse and the value follow from Theorem~\ref{thm:feasible} and $\area{N_*}=I(\gamma)$.
+\end{proof}
+
+\section{Optimality and uniqueness in the class where majorization applies}
+\begin{theorem}[Injective monotone class]\label{thm:conditional}
+Among normalized monotone sofas $S$ of angle $0<\omega\le1$ whose canonical corner curve $x_K$ is injective and contained in $F$, the unique area maximizer is $S_*=K_*\setminus N_*$, and its area is $1+\omega^2/2$.
+\end{theorem}
+\begin{proof}
+Theorem~\ref{thm:feasible} supplies a member of the class with this area. For every other member, Imported fact~\ref{fact:majorization} and Theorem~\ref{thm:gap} give
+\[
+ \area S\le\Aone(K)\le\Aone(K_*)=\area{S_*}.
+\]
+If equality holds, the strict gap forces $K=K_*$. A monotone sofa equals its cap minus its niche, so $S=S_*$. Thus no separate compactness or existence theorem for this restricted class is needed.
+\end{proof}
+
+\begin{remark}[The unresolved step is precisely stated]
+This theorem is not the unrestricted fixed-angle theorem. To derive the global area upper bound by this route, it would suffice to show that some global fixed-angle maximizing monotone envelope satisfies the two hypotheses of Imported fact~\ref{fact:majorization}, using fixed-angle existence separately. To derive global uniqueness by the same route, those hypotheses must hold for every maximizing envelope, and the original sofa must be recovered from its envelope by an appropriate equality/regular-closedness argument. Neither assertion is proved in this note. Penalized selection from the companion manuscript is a possible route to the all-maximizer statement, not a substitute for proving it.
+\end{remark}
+
+\begin{remark}[The angle range is not a claimed phase diagram]
+For $\omega>1$, the numerator in the intercept identity of Lemma~\ref{lem:no-tail} is positive for sufficiently small positive $t$, since it is $(\omega-1)t^2/2-t^3/6+O(t^4)$. Thus that no-tail proof ceases to apply. We do not infer an optimal-shape transition or a complete classification for larger angles from this observation.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{BaekConditional} J. Baek, \emph{A Conditional Upper Bound for the Moving Sofa Problem}, arXiv:2406.10725, version 1 (2024), especially Definition 5.1, Theorem 5.5, Definition 5.12, and Theorems 5.30 and 5.32.
+\bibitem{Companion} \emph{Moving-sofa uniqueness companion manuscript}, repository \texttt{vltanh/lean4-moving-sofa}, branch \texttt{paper/uniqueness-arxiv}, commit \texttt{1ade045936f32cf76572ee668ed8aa1627772bde}; especially \texttt{docs/paper/sections/02-setting.tex} for cap endpoint geometry and \texttt{04-selection.tex} for arbitrary-maximizer selection.
+\end{thebibliography}
+\end{document}

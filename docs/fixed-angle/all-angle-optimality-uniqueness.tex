@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\title{Optimality and Uniqueness at Every Fixed Net Rotation Angle}
+\author{}\date{October 5, 2026 --- computer-assisted proof draft}
+\begin{document}\maketitle
+\begin{abstract}
+We assemble a proof of optimality and uniqueness for every prescribed net rotation angle $0\le w\le\pi/2$ in the usual unit-width right-angled hallway. Through one radian the optimum is $1+w^2/2$, attained by Baek's relaxed-cap sofa. Above one radian the unique optimizer is specified by a three-contact system with an elementary piecewise-linear shooting equation. Its validity is established by an analytic bridge through $1.01$ radians, a parameter-uniform interval certificate through $1.5706$, and a regular endpoint parameter covering every remaining angle below $\pi/2$. The global upper bound and equality rigidity are analytic and apply to every maximizing cap, not just to symmetric trial shapes. The right-angle endpoint uses the companion Gerver theorem. The finite computation has been executed and replayed, but neither the new proofs nor the checker have been independently refereed or verified in Lean.
+\end{abstract}
+
+\section{Problem, normalization, and theorem}
+Let
+\[
+ H=(-\infty,1]\times[0,1],\quad V=[0,1]\times(-\infty,1],\quad L=H\cup V.
+\]
+A feasible sofa at angle $w$ is a nonempty compact connected set $S$ admitting continuous $\theta:[0,1]\to\R$ and $c:[0,1]\to\R^2$ with
+\[
+ \theta(0)=0,\quad\theta(1)=-w,\quad
+ S+c(0)\subset H,\quad R_{\theta(t)}S+c(t)\subset L,\quad
+ R_{-w}S+c(1)\subset V.
+\]
+Here $R_t$ is counterclockwise rotation. The motion may backtrack; $w$ is its prescribed net rotation, not the least rotation associated to a shape and not a change to the hallway corner angle. Write $m(w)$ for the supremum of feasible areas.
+
+Put $u_t=(\cos t,\sin t)$ and $v_t=(-\sin t,\cos t)$. For $0<w<\pi/2$, the two upper supports $h_S(w)=h_S(\pi/2)=1$ uniquely fix a translation. The normalized sofa lies in
+\[
+ P_w=\{z:0\le z_y\le1,\ 0\le z\cdot u_w\le1\}.
+\]
+The cap class, fan $F_w=\{z:z_y\ge0,z\cdot u_w\ge0\}$, niche $N_w(K)$ and cap area $\mathcal A_w(K)=|K|-|N_w(K)|$ are those of the companion manuscript. In particular the niche is defined in the fan, not silently truncated to the cap.
+
+\begin{theorem}[All-angle optimality and uniqueness]\label{thm:main}
+For every $0\le w\le\pi/2$, the fixed-net-angle optimum is attained and is unique up to congruence. More precisely:
+\begin{enumerate}
+\item At $w=0$, the unique normalized optimizer is the unit square and $m(0)=1$.
+\item For $0<w\le1$, the unique normalized optimizer is the cap-minus-niche sofa of Baek's cap $K_{w,1}$, and
+\[
+ m(w)=1+w^2/2.
+\]
+\item For $1<w<\pi/2$, the unique normalized optimizer is the contact sofa specified below. Its support functions and contact parameters are exact, defined by the uniquely admissible contact system, not by rounded values from a numerical optimizer.
+\item At $w=\pi/2$, the optimum and uniqueness up to congruence are those of Gerver's sofa, by the companion theorem. Horizontal translation is no longer fixed by the two coincident endpoint support directions, so literal uniqueness under that normalization is not asserted at this endpoint.
+\end{enumerate}
+The open-angle conclusions use the analytic arguments and finite interval certificate stated in this paper and its supporting notes. Their computational component is not a claim of Lean verification.
+\end{theorem}
+
+\section{Exact description above one radian}
+For a fixed $1<w<\pi/2$, choose parameters satisfying
+\[
+ 0<\phi\le1/12,\quad \phi<b<\min\{c,w-\phi\},\quad c<w.
+\]
+Let
+\[
+ C=\mathbf1_{(\phi,w-\phi)},\quad B=\mathbf1_{(b,c)},\quad D(t)=B(w-t).
+\]
+Determine the reflected arms and supports by
+\begin{align*}
+ r_p&=\frac{C(g-1)+B}{1+B},&r_k&=\frac{C(f-1)+D}{1+D},\\
+ f'&=g-r_p,&g'&=r_k-f,\\
+ p'&=k-f,&k'&=g-p,
+\end{align*}
+with $f(0)=k(0)=1$, $f(w/2)=g(w/2)$ and $p(w/2)=k(w/2)$. The two remaining initial values are uniquely determined by these midpoint conditions. Reflection gives $k(t)=p(w-t)$ and $g(t)=f(w-t)$.
+
+Define
+\[
+ \gamma(t)=(p(t)-1)u_t+(k(t)-1)v_t,\qquad
+ e(t)=(p(t)-1)u_t+p'(t)v_t.
+\]
+The three exact contact equations are
+\begin{equation}\label{eq:contacts}
+ e(b)=\gamma(\phi),\qquad e(c)_y=0.
+\end{equation}
+The admissible solution is selected by the strict support conditions
+\begin{equation}\label{eq:admissible}
+ p''<0\text{ on each open coefficient interval},\qquad
+ p(0)<5/3,\qquad g(0)-p(0)<1.
+\end{equation}
+They imply the other geometric requirements, including positivity of the interior thresholds and all normal-gap atoms, by \texttt{finite-admissibility-tests.tex}.
+
+Extend $p,k$ to the full circular support of the normalized cap: on $[w,\pi/2]$ use the fixed vertex $(\sec w-\tan w,1)$, on the two outer quarter-period gaps use the endpoint cosine supports, and on the bottom normal gap use the origin. Let $K_w$ be this cap and $S_w=K_w\setminus N_w(K_w)$.
+
+The optimal value has the exact boundary-integral expression
+\begin{align}\label{eq:value}
+ m(w)={}&\sec w-\tan w+\frac12\int_0^w(p^2+k^2-p'^2-k'^2)\,dt\notag\\
+ &-\frac12\int_\phi^{w-\phi}\bigl[(p-1)^2+(k-1)^2+(p-1)k'-(k-1)p'\bigr]\,dt\notag\\
+ &-\int_b^c(p-1)(1-r_p)\,dt.
+\end{align}
+Every piece of the shooting system has elementary sine, cosine and polynomial solutions. Thus this is an exact finite implicit description and an evaluable area formula. It does not claim that the value above one radian remains quadratic.
+
+\section{Why an admissible contact solution is globally optimal}
+We record the logical chain to distinguish global proof from candidate discovery.
+
+First, the cap class at fixed $w<\pi/2$ is Hausdorff compact inside $P_w$, and $\mathcal A_w$ is upper semicontinuous. The proof in \texttt{optimality-uniqueness.tex} uses the support-area measure for cap closedness and strict niche witnesses for lower semicontinuity of niche area. A positive feasible competitor gives a positive global cap maximizer.
+
+Second, the companion's penalized selection and floating first variation reach every prescribed positive maximizer. The fixed-angle curvature theorem, arm certificate, pinned endpoint estimates and global cut geometry prove for every such maximizer: a continuously differentiable corner with strict arms, fan containment, and disjoint niche portions beyond any two cuts at $a$ and $w-a$ with $0<a\le1/12$. The strengthened lifting theorem in \texttt{vertical-core-lifting.tex} uses vertical core slices, so does not assume the missing positivity of every interior threshold for an unknown maximizing cap.
+
+Third, this lift gives $\mathcal A_w(K)\le Q$ for every global maximizing cap, over a convex obstacle domain. The functional $Q$ is strictly concave on its affine trace space for $w<\pi/2$. A candidate satisfying \eqref{eq:contacts} and \eqref{eq:admissible} has exactly the niche boundary consisting of the corner core, the reversed wall arc and its reflection. The proof in \texttt{order-independent-contact-certificate.tex} applies even when the reflected contact intervals cross or overlap. Its balance equations make the first variation of $Q$ nonpositive against every feasible lifted competitor. Its actual sofa area equals this lifted value.
+
+Consequently an admissible candidate sandwiches the unrestricted and cap maxima to its area. Strict concavity identifies the active supports of every maximizing cap. The candidate sofa is regular closed; an original compact sofa is a closed subset of its monotone envelope and has the same area in the equality case. The closed-subset equality lemma therefore recovers the entire candidate, not merely its cap or its area. This proves unrestricted uniqueness without assuming symmetry of the unknown optimizer.
+
+\section{Existence at every angle, with no continuation gap}
+\begin{lemma}[Complete contact coverage]\label{lem:coverage}
+For every $1<w<\pi/2$ there is a solution of \eqref{eq:contacts} satisfying all the parameter and support inequalities above.
+\end{lemma}
+\begin{proof}
+The three parts are deliberately overlapping.
+
+For $1<w\le101/100$, \texttt{explicit-first-regime.tex} supplies a hand-proved analytic construction. It solves the first two contacts explicitly in terms of $L=b-\phi$, brackets a unique scalar floor contact, proves the support inequalities by rational Taylor bounds, and uses continuity of the resulting angle to cover the entire interval. No unspecified small interval remains at this end.
+
+For $101/100\le w\le7853/5000$, the 750 parameter boxes in \texttt{validated-contact-cover.tex} certify a root for every angle in their respective closed intervals. All admissibility inequalities are checked on whole coefficient intervals. The verifier includes every reflected contact ordering allowed by a box, so the crossings are covered rather than skipped. Exact dyadic-to-rational comparisons establish gap-free coverage.
+
+For $7853/5000\le w<\pi/2$, \texttt{endpoint-bridge.tex} uses $h=w-c\in[0,1/32]$. Sixteen parameter certificates and fifteen joining certificates produce a continuous branch. Its exact floor equation proves $w(0)=\pi/2$, $w(h)<\pi/2$ for $h>0$, and $w(1/32)<7853/5000$. The intermediate value theorem covers every remaining angle. This does not require a monotonicity assertion based on sampled roots.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+The zero-angle and through-one-radian conclusions are proved in \texttt{paper.tex} and \texttt{optimality-uniqueness.tex}. For $1<w<\pi/2$, Lemma~\ref{lem:coverage} supplies an admissible candidate. The global contact certificate gives optimality and uniqueness as explained in the preceding section. The Green formula for its complete niche gives \eqref{eq:value}. The right-angle endpoint is the companion Gerver theorem, used only for that endpoint.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the admissible contact parameters]
+For a fixed $1<w<\pi/2$, exactly one parameter triple satisfies the contact ordering, equations and support inequalities used here. This is not a claim that the unconstrained transcendental system has no other roots.
+\end{corollary}
+\begin{proof}
+Any two such triples give the same normalized cap by the global certificate. Their active supports, arms and curvature density $r_p$ therefore agree. Before $\phi$, $r_p=0$; immediately after $\phi$, $r_p=g-1>1$ by the contact sign-change lemma. Thus $\phi$ is determined by the first onset of nonzero curvature. With $C$ known, the identity
+\[
+ B=\frac{r_p-C(g-1)}{1-r_p}
+\]
+determines $B$ almost everywhere. The denominator can vanish only at the unique point before $b$ where $g=2$; after $b$ it is strictly positive. Equality of the nondegenerate open-interval indicators determines $b,c$.
+\end{proof}
+
+\begin{corollary}[Qualitative stability at every fixed open angle]
+For each fixed $0<w<\pi/2$, any normalized sequence of feasible sofas with areas tending to $m(w)$ converges in Hausdorff distance to $S_w$. Their caps converge to $K_w$ as well. No uniform rate as $w$ varies is asserted.
+\end{corollary}
+\begin{proof}
+The proof in \texttt{stability.tex} only needs cap compactness, upper semicontinuity, uniqueness of the maximizing cap, and regular closedness of its sofa. Those inputs now hold at every fixed open angle. Any subsequential sofa limit lies in the unique cap, avoids its niche by persistence of strict witnesses, and has at least the limiting area by upper semicontinuity of compact-set area. It is therefore an equal-area closed subset of the regular-closed optimizer and equals it. Compactness gives convergence of the whole sequence.
+\end{proof}
+
+\section{Attribution, scope, and verification status}
+Baek's \emph{A Conditional Upper Bound for the Moving Sofa Problem}, arXiv:2406.10725v1, supplies the relaxed functional $\mathcal A_1$, cap $K_{w,1}$ and relaxed value $1+w^2/2$. The support/contact approach follows the work of Romik and Baek. The imported companion inputs are the fixed-angle cap and monotonization identities, penalized selection and first variations at commit \texttt{1ade045936f32cf76572ee668ed8aa1627772bde}; the right-angle Gerver theorem is a separate endpoint input.
+
+The new continuation does not apply $\mathcal A_1$ to arbitrary feasible caps, an assertion disproved in \texttt{negative-results.tex}. Nor does it continue Baek's relaxed candidate above one radian: \texttt{redundant-angle-improvement.tex} proves that candidate strictly suboptimal there. The new contact system accounts for the exposed niche-wall arcs.
+
+The full angle interval is covered in this proof draft, but the final continuation is computer-assisted. Its acceptance criterion, outward arithmetic, event-order handling, source hashes and performed replay are documented in \texttt{validated-contact-cover.tex} and \texttt{checks/CERTIFICATE\_REPORT.json}. The checker is ordinary Python, not a proof-assistant kernel. Independent review of the analytic arguments and implementation, followed by any desired formalization, remains necessary before treating this as a vetted theorem. No CI, Lean compilation, or TeX compilation was run.
+\end{document}

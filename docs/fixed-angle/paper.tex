@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\area}[1]{\lvert #1\rvert}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\N}{\mathcal N}
+\title{Fixed Rotation Angle: Elementary Bounds and a Proof Interface}
+\author{}
+\date{October 5, 2026 --- research draft}
+\begin{document}
+\maketitle
+\begin{abstract}
+We study the moving sofa problem with a prescribed net rotation angle in the usual right-angled hallway. We give an explicit feasible family, a quantitative strict improvement over the endpoint-strip area bound, and the exact zero-angle equality case. These arguments are elementary and do not invoke Gerver optimality. A separate note, \texttt{small-angle.tex}, develops the small-angle expansion and its asymptotic equality case. No positive-angle optimizer or positive-angle uniqueness theorem is asserted here. These are paper proofs, not Lean-checked results.
+\end{abstract}
+
+\section{The fixed-angle problem}
+Let
+\[
+ H_L=(-\infty,1]\times[0,1],\qquad V_L=[0,1]\times(-\infty,1],\qquad L=H_L\cup V_L.
+\]
+Write $u_t=(\cos t,\sin t)$, $v_t=(-\sin t,\cos t)$, and let $R_t$ be counterclockwise rotation by $t$.
+A feasible sofa at angle $\omega$ is a nonempty compact connected set $S$ for which there are continuous maps $\theta:[0,1]\to\R$, $c:[0,1]\to\R^2$ with $\theta(0)=0$, $\theta(1)=-\omega$, and
+\[
+ R_{\theta(0)}S+c(0)\subset H_L,\quad R_{\theta(s)}S+c(s)\subset L\quad(0\le s\le1),\quad R_{\theta(1)}S+c(1)\subset V_L.
+\]
+We put $m(\omega)=\sup_S\area S$ over this class. The angle is a prescribed net rotation of an admissible motion, not a minimal angle intrinsic to the shape. Motions may backtrack. This is the convention used in the companion manuscript and in the fixed-angle reduction of \cite{Baek}; the proofs below handle backtracking by the intermediate value theorem.
+
+For $0<\omega<\pi/2$ put
+\begin{align*}
+ P_\omega&=\{p:0\le p_y\le1,\ 0\le\ip p{u_\omega}\le1\},\\
+ F_\omega&=\{p:p_y\ge0,\ \ip p{u_\omega}\ge0\},\\
+ J_\omega&=[0,\omega]\cup[\pi/2,\pi/2+\omega].
+\end{align*}
+The vertices of $P_\omega$, in boundary order, are
+\[
+ O=(0,0),\quad B=(\sec\omega,0),\quad o=(\sec\omega-\tan\omega,1),\quad D=(-\tan\omega,1).
+\]
+It has area $\sec\omega$. The fan $F_\omega$ consists of the rays with polar angles in $[0,\pi/2+\omega]$.
+For a nonempty compact set let $h_S(t)=\max_{p\in S}\ip p{u_t}$.
+
+\begin{lemma}[Normalization and forbidden corners]\label{lem:normal}
+Every feasible sofa at $0<\omega<\pi/2$ has a unique translate satisfying $h_S(\omega)=h_S(\pi/2)=1$. This translate lies in $P_\omega$. For every $t\in[0,\omega]$ it avoids
+\[
+ Q^-_{S,t}=\{p:\ip p{u_t}<h_S(t)-1,\ \ip p{v_t}<h_S(t+\pi/2)-1\}.
+\]
+\end{lemma}
+\begin{proof}
+The initial and final positions imply that the widths of $S$ in the directions $u_{\pi/2}$ and $u_\omega$ are at most one. The two equations for the translation have determinant $\cos\omega\ne0$, so have a unique solution. After this translation the upper supports are one and both lower supports are at least zero; hence $S\subset P_\omega$.
+
+The continuous angular lift of any motion with endpoints $0$ and $-\omega$ visits $-t$. In the frame of $S$, the hallway at that instant has outer-wall inequalities $\ip p{u_t}\le a$, $\ip p{v_t}\le b$, and excludes the open quarter-plane where both coordinates are strictly below $a-1,b-1$. Since it contains $S$, $a\ge h_S(t)$ and $b\ge h_S(t+\pi/2)$. Thus the smaller quarter-plane $Q^-_{S,t}$ is excluded as well. Translation of the original sofa does not change this argument.
+\end{proof}
+
+\begin{theorem}[Zero angle]\label{thm:zero}
+$m(0)=1$. In the fixed initial orientation every area-one feasible sofa at net angle zero is a translate of $[0,1]^2$.
+\end{theorem}
+\begin{proof}
+The initial horizontal strip and final vertical strip, with the same net orientation, bound both coordinate widths by one. Thus a translate lies in $[0,1]^2$ and has area at most one. The square itself is feasible by translations. If a closed subset $S$ of the square is proper, choose a point of the square outside $S$. A sufficiently small ball about that point misses $S$ and meets the square in positive area. Hence a proper closed subset cannot have area one. This also handles boundary points of the square.
+\end{proof}
+
+\section{An explicit family}
+For $0\le\omega\le\pi/2$ retain the definitions of $F_\omega,J_\omega$ above and define
+\[
+ C_\omega=F_\omega\cap\bigcap_{t\in J_\omega}\{p:\ip p{u_t}\le1\}.
+\]
+\begin{theorem}[Rotation about the inner corner]\label{thm:competitor}
+$C_\omega$ is a compact convex feasible sofa, with the motion $p\mapsto R_{-t}p$, $0\le t\le\omega$. Moreover
+\[
+ \area{C_\omega}=\omega+\tan\left(\frac\pi4-\frac\omega2\right).
+\]
+In particular this expression is a lower bound for $m(\omega)$.
+\end{theorem}
+\begin{proof}
+The set is closed, convex and contains $O$. Its radial description below proves boundedness and nonempty interior. For $p\in C_\omega$, both coordinates of $R_{-t}p$, namely $\ip p{u_t}$ and $\ip p{v_t}$, are at most one. They cannot both be negative, since
+\[
+ p_y=\sin t\,\ip p{u_t}+\cos t\,\ip p{v_t}\ge0.
+\]
+At every $t\in[0,\pi/2]$ at least one coefficient is positive, so two negative coordinates would contradict this inequality. Thus $R_{-t}C_\omega\subset L$. At $t=0$ the set lies in $H_L$; at $t=\omega$ its first coordinate lies in $[0,1]$, so it lies in $V_L$.
+
+For polar angles $\alpha\in[0,\pi/2+\omega]$ the radial function is
+\[
+ r(\alpha)=\begin{cases}
+ 1,&\alpha\in[0,\omega]\cup[\pi/2,\pi/2+\omega],\\
+ \sec\!\bigl(\min\{\alpha-\omega,\pi/2-\alpha\}\bigr),&\alpha\in[\omega,\pi/2].
+ \end{cases}
+\]
+Indeed the largest scalar product with a unit normal in $J_\omega$ is the cosine of the distance to the nearest such normal. Writing $\delta=\pi/4-\omega/2$, polar integration gives
+\[
+ \area{C_\omega}=\frac12\left(2\omega+2\int_0^\delta\sec^2 s\,ds\right)=\omega+\tan\delta.
+\]
+This also proves all asserted geometric properties, including the endpoint cases. Each $u_t$, $t\in J_\omega$, belongs to $C_\omega$, so its support on $J_\omega$ is exactly one. Consequently its cap niche is empty.
+\end{proof}
+
+\begin{remark}
+$C_0$ is the unit square and $C_{\pi/2}$ is the upper unit semicircle. For positive angles this construction is only a competitor. In particular its empty niche is not an optimality or equality-case certificate.
+\end{remark}
+
+\section{A quantitative strict upper bound}
+The elementary bound $m(\omega)\le\sec\omega$ follows from Lemma~\ref{lem:normal}. We next subtract an explicit positive quantity. This avoids the invalid inference that a strict inequality for each individual sofa automatically gives a strict inequality for their supremum.
+
+For $0<\omega<\pi/2$ define
+\[
+ \beta=\omega/2,\qquad a=\frac{\cos\beta}{\cos\omega},\qquad
+ \eta=\min\left\{\frac{a-1}{2},\frac12\right\},\qquad
+ d(\omega)=\eta^2\min\left\{\cot\omega,\frac\pi4+\frac\omega2\right\}.
+\]
+\begin{theorem}[Strict endpoint-strip deficit]\label{thm:strict}
+For every $0<\omega<\pi/2$,
+\[
+ \omega+\tan\left(\frac\pi4-\frac\omega2\right)
+ \ \le\ m(\omega)\ \le\ \sec\omega-d(\omega)\ <\ \sec\omega.
+\]
+\end{theorem}
+\begin{proof}
+The lower bound is Theorem~\ref{thm:competitor}. Normalize a feasible sofa $S\subset P_\omega$. Directly from the vertices,
+\[
+ h_{P_\omega}(\beta)=h_{P_\omega}(\beta+\pi/2)=a.
+\]
+Put $b=\sec\omega\sin\beta$. The identity
+\[
+ a-b=\frac1{\cos\beta+\sin\beta}\le1
+\]
+implies $\eta\le(a-1)/2\le b$; also $\eta\le a$.
+
+If $h_S(\beta)\le a-\eta$, the missing slice of $P_\omega$ at $B$ has area $\eta^2\cot\omega$. To see this, its intersections with the two adjacent edges are at distances $\eta/\cos\beta$ and $\eta/\sin\beta$ from $B$. Both distances are at most $\sec\omega$ by the preceding inequalities. The sine of the angle between these edges is $\cos\omega$, so the triangle area is
+\[
+ \frac12\frac{\eta}{\cos\beta}\frac{\eta}{\sin\beta}\cos\omega=\eta^2\cot\omega.
+\]
+If instead $h_S(\beta+\pi/2)\le a-\eta$, the same estimate holds at $D$. Formally, the isometry
+\[
+ M_\omega(x,y)=(-x\sin\omega+y\cos\omega,\ x\cos\omega+y\sin\omega)
+\]
+preserves $P_\omega$ and exchanges $u_\beta$ and $v_\beta$. No symmetry of $S$ is assumed.
+
+In the remaining case both supports exceed $a-\eta$. Then both inner-wall thresholds at $\beta$ exceed $a-1-\eta\ge\eta$. Therefore Lemma~\ref{lem:normal} excludes from $S$ the sector
+\[
+ E=F_\omega\cap\{p:\lVert p\rVert<\eta\}.
+\]
+This sector lies in $P_\omega$, since $\eta\le1/2$, and has area $(\pi/2+\omega)\eta^2/2$. In all cases the missing area is at least $d(\omega)$, proving the upper bound uniformly over $S$. Finally $a>1$, $\eta>0$ and $\cot\omega>0$, so $d(\omega)>0$.
+\end{proof}
+
+\begin{corollary}[An initial small-angle estimate]
+As $\omega\downarrow0$,
+\[
+ m(\omega)=1+\frac{\omega^2}{2}+O(\omega^3),\qquad \lim_{\omega\downarrow0}m(\omega)=m(0)=1.
+\]
+\end{corollary}
+\begin{proof}
+Taylor expansion gives
+\[
+ \omega+\tan(\pi/4-\omega/2)=1+\frac{\omega^2}{2}-\frac{\omega^3}{3}+O(\omega^4),\qquad
+ \sec\omega=1+\frac{\omega^2}{2}+O(\omega^4).
+\]
+Apply the two elementary bounds. The separate small-angle note sharpens the error to $o(\omega^4)$ using a different feasible family and a matching upper argument.
+\end{proof}
+
+\section{What would prove optimality and uniqueness?}
+The following abstract statement isolates a useful proof interface. It does not supply its problem-specific hypotheses.
+
+\begin{proposition}[A sharp-majorant interface]\label{prop:interface}
+Let $\mathcal X$ be a feasible class with a real objective $A$ whose maximum is attained. Let $X_*$ be feasible. Suppose a class $\mathcal M\subset\mathcal X$ contains every maximizer, and there is a map $j:\mathcal M\to\mathcal Y$, with a distinguished $y_*\in\mathcal Y$, and a functional $Q$ such that
+\[
+ A(X)\le Q(j(X))\le Q(y_*)=A(X_*)\qquad(X\in\mathcal M).
+\]
+Then $X_*$ is optimal. If every maximizer satisfying equality throughout this chain is equivalent to $X_*$ under a specified symmetry relation, then all maximizers are equivalent to $X_*$.
+\end{proposition}
+\begin{proof}
+Choose a maximizer $X$. Feasibility of $X_*$ gives $A(X)\ge A(X_*)$, forcing equality in the displayed chain. Thus its value is the maximum. Apply the equality hypothesis to each maximizer. The second conclusion is a classification only because the equality hypothesis is separately proved, not because optimality alone implies uniqueness.
+\end{proof}
+
+For the cap formulation at a fixed angle, the companion manuscript's polygon selection section already treats a prescribed positive-area maximizing cap at arbitrary $\omega\in(0,\pi/2]$. Fixed-angle existence and comparison come from the corrected versions of Baek's Theorems 3.5.2--3.5.6. These ingredients do not identify a candidate or construct a sharp $Q_\omega$.
+
+There are two important obstructions to simply reusing the right-angle uniqueness proof. First, extending a fixed-angle maximizer's motion to a right-angle motion does not make it a maximizer over the right-angle class. It cannot therefore be inserted into a right-angle equality argument as though it had Gerver's area. Second, the unique translation furnished by Lemma~\ref{lem:normal} only fixes a coordinate normalization; it does not eliminate noncongruent maximizers or prove that reflection fixes an optimizer. No uniqueness assumption enters any of the bounds above.
+
+\begin{thebibliography}{9}
+\bibitem{Baek} J. Baek, \emph{Optimality of Gerver's Sofa}, arXiv:2411.19826, version 1. The theorem numbering here refers to that version.
+\bibitem{Companion} \emph{Moving-sofa uniqueness companion manuscript}, repository \texttt{vltanh/lean4-moving-sofa}, branch \texttt{paper/uniqueness-arxiv}, commit \texttt{1ade045936f32cf76572ee668ed8aa1627772bde}; especially \texttt{docs/paper/sections/02-setting.tex} and \texttt{04-selection.tex}. This is a dependency reference, not a claim of machine verification of the present note.
+\end{thebibliography}
+\end{document}

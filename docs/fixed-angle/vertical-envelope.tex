@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\title{The Exact Vertical Niche Envelope}
+\author{}\date{October 5, 2026 --- paper-proof continuation}
+\begin{document}\maketitle
+Fix $0<\omega<\pi/2$ and a normalized cap $K$. Put $p(t)=h_K(t)$, $k(t)=h_K(t+\pi/2)$, $a=p-1$, $b=k-1$, and $\ell(x)=\max\{0,-x\cot\omega\}$. Thus the fan is $F_\omega=\{(x,y):y\ge\ell(x)\}$. For $0<t<\omega$ define the tent
+\[
+ T_t(x)=\min\left\{\frac{a(t)-x\cos t}{\sin t},\frac{b(t)+x\sin t}{\cos t}\right\},\qquad
+ H_K(x)=\sup_{0<t<\omega}T_t(x).
+\]
+
+\begin{theorem}[Exact area, without a signed-area relaxation]
+The niche is exactly
+\[
+ N_\omega(K)=\{(x,y):\ell(x)\le y<H_K(x)\}.
+\]
+In particular
+\[
+ |N_\omega(K)|=\int_{\mathbb R}(H_K(x)-\ell(x))_+\,dx,
+\]
+and the cap functional is its ordinary cap area minus this integral. These identities do not assume injectivity, symmetry, fan containment of the corner, or niche containment in the cap.
+\end{theorem}
+\begin{proof}
+For a fixed interior angle, the two strict inner-wall inequalities are equivalent to $y<T_t(x)$ because $\sin t,\cos t>0$. At a fixed abscissa, their intersection with the fan is therefore the interval $[\ell(x),T_t(x))$, understood to be empty if its upper endpoint is at most its lower endpoint. Taking the union over angles gives exactly $[\ell(x),\sup_tT_t(x))$: whenever $y<\sup_tT_t(x)$, some angle has $y<T_t(x)$ by the definition of supremum. Conversely no strict inequality can hold if $y\ge\sup_tT_t(x)$.
+
+The tents depend continuously on the interior angle, so the supremum may be taken over a countable dense subset; it is measurable. The niche is bounded for each fixed angle range. Indeed, all cap supports are bounded by the diameter of the fixed endpoint parallelogram. For a point of the fan, the maximum of its scalar products with $u_t,v_t$ is at least $\min\{\cos\omega,1/\sqrt2\}$ times its norm. Membership in a contributing quarter-plane therefore bounds its norm uniformly. Fubini now gives the finite area integral.
+\end{proof}
+
+\begin{lemma}[Stationary exposed walls]
+Suppose $p,k$ are twice differentiable. Write $\gamma=(p-1)u_t+(k-1)v_t$, $f=k-p'$, and $g=p+k'$. The two affine branches of the tent obey
+\begin{align*}
+ \partial_t\frac{a(t)-x\cos t}{\sin t}
+ &=\frac{x-z_b(t)}{\sin^2t},&z_b(t)&=\gamma_x(t)+(f(t)-1)\sin t,\\
+ \partial_t\frac{b(t)+x\sin t}{\cos t}
+ &=\frac{x-z_d(t)}{\cos^2t},&z_d(t)&=\gamma_x(t)-(g(t)-1)\cos t.
+\end{align*}
+Moreover
+\[
+ z_b'=(1-p-p'')\sin t,\qquad z_d'=(1-k-k'')\cos t.
+\]
+At a stationary point, a negative second angle derivative on the first branch is equivalent to $p+p''<1$; on the second it is equivalent to $k+k''<1$. At a degenerate local maximum the corresponding non-strict inequalities are necessary, but they are not a sufficient local-maximum test.
+\end{lemma}
+\begin{proof}
+Differentiate the displayed affine branches. They give $z_b=a\cos t-a'\sin t$ and $z_d=-b'\cos t-b\sin t$, which are the claimed arm expressions. In particular
+\[
+ (a\cos t-a'\sin t)'=-(a+a'')\sin t=(1-p-p'')\sin t.
+\]
+This explicit line fixes the sign: the derivative is not $(p+p''-1)\sin t$. At a stationary angle the second angle derivatives are respectively $-z_b'/\sin^2t$ and $-z_d'/\cos^2t$. The claims follow. An isolated strict maximum may have zero second derivative and is not excluded by the nondegenerate test.
+\end{proof}
+
+\begin{lemma}[A one-angle area is not a convex quadratic]
+Fix $t\in(0,\omega)$. If $a,b>0$ and $a u_t+b v_t$ lies strictly in the fan, the fan-truncated quarter-plane with these two thresholds has area
+\[
+ B_t(a,b)=ab+\frac12a^2\tan t+\frac12b^2\tan(\omega-t).
+\]
+Its Hessian is indefinite for $\omega<\pi/2$.
+\end{lemma}
+\begin{proof}
+The closure of the region is the quadrilateral with vertices $O$, $(a/\cos t)u_0$, $a u_t+b v_t$, and $(b/\cos(\omega-t))v_\omega$. Applying the determinant area formula gives the displayed expression. Its Hessian is
+\[
+ \begin{pmatrix}\tan t&1\\1&\tan(\omega-t)\end{pmatrix},
+\]
+whose determinant is negative: since $t+(\omega-t)<\pi/2$, the product of the two tangents is strictly less than one. The hypotheses on the thresholds and corner define an open set, so the negative direction genuinely disproves convexity locally there.
+\end{proof}
+
+\begin{remark}[What has and has not been reduced]
+The exact envelope replaces sampled unions by one explicit one-dimensional upper envelope, but it does not make the full problem convex. For each fixed angle the tent is a minimum of two affine functions of the supports. A supremum of such minima cannot be exchanged with a minimum, and the one-angle area calculation prevents claiming convexity merely by integrating a quadratic. These observations neither prove nor disprove convexity of the complete correction $|N|-I(\gamma)$ on a suitably restricted cap class. That remains a separate obligation.
+\end{remark}
+
+\paragraph{Correction record.}
+The first version of this note reversed the sign of $z_b'$ and consequently reversed the first-branch curvature test. The explicit derivative calculation above corrects both. It also distinguishes a nondegenerate maximum from a strict maximum with zero second derivative. No earlier optimum or perturbation theorem used this new local-wall test.
+
+\paragraph{Validation.}
+All formulas above are elementary exact identities. No CI, Lean compilation, TeX compilation, or sampled geometry is used as a proof premise.
+\end{document}

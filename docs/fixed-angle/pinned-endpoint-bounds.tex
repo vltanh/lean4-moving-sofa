@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Pinned Endpoint Bounds for Every Fixed-Angle Maximizer}
+\author{}\date{October 5, 2026 --- paper proof}
+\begin{document}\maketitle
+Fix $0<w<\pi/2$, and put $c_w=\sec w-\tan w$. For a positive global maximizing cap let $p(t)=h_K(t)$, $k(t)=h_K(t+\pi/2)$ and $f=k-p'$, $g=p+k'$. The fixed-angle curvature and arm results already give $f(0)=g(w)=1$, $f,g\ge1$, and
+\[
+ f'\ge\min\{g/2,1\},\qquad -g'\ge\min\{f/2,1\}
+\]
+almost everywhere. The first derivatives of the active supports have continuous interior-sided endpoint traces.
+
+\section{Passing the pinned variation to the prescribed maximizer}
+\begin{theorem}[Pinned edge inequalities]\label{thm:pinned}
+Every such maximizing cap satisfies
+\[
+ \boxed{g(0)+c_w\le2p(0),\qquad f(w)+c_w\le2k(w).}
+\]
+\end{theorem}
+\begin{proof}
+Use the same penalized polygon sequence $K_j\to K$ as in \texttt{fixed-angle-curvature.tex}. The companion manuscript's pinned-defect estimate, Proposition \texttt{prop:pinned} in \texttt{05-variations.tex}, gives
+\[
+ \sigma_{K_j}(\pi/2)\le\tau_{K_j}(\pi/2)+e_j,\qquad e_j\to0.
+\]
+The constant in that estimate depends on the fixed angle and a diameter bound, which are fixed along this sequence. Its polygon floor identity, Fact \texttt{fact:sides:floor} in \texttt{02-setting.tex}, gives
+\[
+ \tau_{K_j}(\pi/2)\le\sigma_{K_j}(3\pi/2)=h_{K_j}(0).
+\]
+Thus $\limsup\sigma_{K_j}(\pi/2)\le p(0)$.
+
+We justify passage of the pinned atom, rather than infer it from weak convergence alone. The floating-atom estimates and their reflected versions show that the total mass of floating normals within distance $\varepsilon$ of either upper pinned normal is at most $C(\varepsilon+\delta_j)+E_j$, where $E_j\to0$ is the total penalty defect and $C$ is uniform in $j$. The other side of the pinned normal is a fixed normal gap. For small fixed $\varepsilon$, a smooth nonnegative test function supported in that neighborhood and equal to one at the pinned normal therefore has integral at most $\sigma_{K_j}(\pi/2)+C\varepsilon+o(1)$. The boundary measures converge weakly, by the identity $\sigma=h+h''$ and uniform support convergence. Taking a lower bound by the limiting atom and then letting $\varepsilon\downarrow0$ gives
+\[
+ \sigma_K(\pi/2)\le\limsup_j\sigma_{K_j}(\pi/2)\le p(0).
+\]
+In particular, no mass concentration in adjacent floating normals has been overlooked.
+
+The upper pinned edge runs from $o_w=(c_w,1)$ to $(-k'(0),1)$, so its length is $c_w+k'(0)$. As $g(0)=p(0)+k'(0)$, the first inequality follows. Apply the same argument to the reflected maximizing cap to obtain the second. Reflection invariance of the problem is used only to transfer the estimate, not to assume the original cap is symmetric.
+\end{proof}
+
+\section{An explicit lower comparison for the arms}
+Let $\mu(z)=\min\{z/2,1\}$ for $z\ge1$.
+\begin{lemma}[The minimal integral solution]\label{lem:minimal}
+There is a unique pair $(F_w,G_w)$ of continuous functions taking values at least one with
+\[
+ F_w(t)=1+\int_0^t\mu(G_w(s))\,ds,\qquad
+ G_w(t)=1+\int_t^w\mu(F_w(s))\,ds.
+\]
+Every maximizing cap has $f\ge F_w$, $g\ge G_w$ pointwise. The solution is reflected: $G_w(t)=F_w(w-t)$.
+\end{lemma}
+\begin{proof}
+The integral operator is a contraction on the closed subset of $C([0,w])^2$ consisting of functions at least one, with contraction constant $w/2<1$ in the maximum norm. It maps this set into itself. Iteration starting from the constant pair $(1,1)$ is pointwise increasing and remains below any pair satisfying the two integral inequalities. Contraction gives uniform convergence to the unique fixed point. Reflection and interchange of the two functions commute with the operator, hence preserve its unique fixed point.
+\end{proof}
+
+Put $w_0=4\arctan(1/3)$.
+\begin{theorem}[Explicit initial arm bound]\label{thm:initial}
+For $0<w\le w_0$,
+\[
+ G_w(0)=\sec(w/2)+\tan(w/2).
+\]
+For $w_0\le w<\pi/2$, let $s\in[0,1)$ be the unique solution of
+\[
+ w=2s+4\arctan\frac{1-s}{3+s}.
+\]
+Then
+\[
+ G_w(0)=2+s/2+s^2/4.
+\]
+Moreover $G_w(0)+c_w$ is increasing on $[w_0,\pi/2)$ and has value $15/7$ at $w_0$.
+\end{theorem}
+\begin{proof}
+If $G_w(0)\le2$, the whole fixed-point solution remains in $[1,2]$ and solves $F'=G/2$, $G'=-F/2$ with $F(0)=G(w)=1$. Solving this two-point linear system gives the first formula. Its initial value reaches two exactly when $w=4\arctan(1/3)$.
+
+For larger $w$, start with $F(t)=1+t$ and $G(t)=G(0)-t/2-t^2/4$ until the time $s$ at which $G=2$. Thereafter both arms lie below two until the reflected final interval; on the middle interval their vector rotates at angular speed one half. It must carry $(1+s,2)$ to $(2,1+s)$ in length $w-2s$. This is exactly the displayed equation for $s$, and the initial piece gives $G(0)=2+s/2+s^2/4$. Reflection completes a solution of the fixed-point equations, so uniqueness identifies it with $(F_w,G_w)$.
+
+The right side of the equation for $w$ has derivative
+\[
+ \frac{2(1+s)^2}{(1+s)^2+4}>0,
+\]
+starts at $w_0$, and reaches two when $s=1$. Thus it has a unique solution for every $w\in[w_0,\pi/2)$. Differentiation gives
+\[
+ \frac{dG_w(0)}{dw}=\frac{1+s}{4}+\frac1{1+s}\ge1,
+\]
+while $c_w'=-(1+c_w^2)/2>-1$. Their sum is strictly increasing. At $w_0$, the half-angle identities give $\sin w_0=24/25$, $\cos w_0=7/25$, hence $c_{w_0}=1/7$ and $G_{w_0}(0)=2$.
+\end{proof}
+
+\begin{corollary}[Uniformly positive endpoint corner lengths in the large-angle range]
+For every positive global maximizing cap with $w_0\le w<\pi/2$,
+\[
+ p(0)-1\ge\frac1{14},\qquad k(w)-1\ge\frac1{14}.
+\]
+Consequently its canonical corner lies in the fan for its whole motion.
+\end{corollary}
+\begin{proof}
+Combine Theorems~\ref{thm:pinned} and \ref{thm:initial}. For fan containment, write $q=f-1$, $r=g-1$. In the open interval both are positive, $q'>0$ and $r'<0$ almost everywhere. The tangent angle of $\gamma'=-q u_t+r v_t$ is strictly increasing: its derivative is $1+(rq'-qr')/(q^2+r^2)>0$ almost everywhere. It runs from $\pi/2$ to $w+\pi$ in the endpoint limits. Hence the ordinate of $\gamma$ first increases and then decreases, and so has its minimum at one of the endpoints. Those ordinates are $0$ and $(k(w)-1)\cos w\ge0$. Similarly the scalar product $\gamma\cdot u_w$ first increases and then decreases, and has nonnegative endpoint values. Thus both fan inequalities hold throughout. The argument uses absolute continuity of the tangent angle on compact interior intervals and continuity at the endpoints, not a smoothness assumption on the maximizing cap.
+\end{proof}
+
+\paragraph{Dependencies and scope.}
+The new input beyond the existing floating-variation proof is the companion's pinned-defect estimate and floor identity at the same fixed angle. The bounds hold for every global maximizing cap; they do not assert a contact pattern or reflection symmetry. The lower bound alone does not prove positivity of every interior threshold $p(t)-1$ or $k(t)-1$, nor the disjointness of the two cut regions in the lifted functional. Those are separate geometric questions. No CI or compilation was run.
+\end{document}
