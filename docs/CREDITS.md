@@ -416,7 +416,7 @@ How it was made:
   read the new text, one against the Lean and the repository, the other for its prose. Their findings were applied,
   among them a sign error in the description of Mamikon's term in Section 2. The manuscript grew from 70 to 91
   pages; its README records the round.
-- Version 2.1.1 of the formalize-math-paper skill (commit `06ae331`) adds the pitfall that Lean 4 leaves out of a
+- Version 2.1.1 of the formalize-math-paper skill (commit `7014b28`) adds the pitfall that Lean 4 leaves out of a
   statement the section variables that it does not mention, with the check and the fix.
 
 Figures, from 07:08 to 09:49:

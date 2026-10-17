@@ -217,7 +217,7 @@ automation:
         and three compared every changed proof with the LaTeX source. Three statements changed to
         match the paper (Theorem 8.5.2 regained its hypothesis b < a + pi; Lemma 6.2.4 lost an unused
         hypothesis; Theorem 8.4.3 (2) gained the curve-area equalities of "as oriented curves").
-        What's next: the same session, with version 2.1.0 of the skill (commit 397f71c) and 3
+        What's next: the same session, with version 2.1.0 of the skill (commit 873c5b3) and 3
         sub-agents, one at a time, wrote the report's What's next section from a literature search,
         moved the run log to CREDITS.md, added to the audit the twelve findings of another
         formalization's notes that it had missed, and restored two statements (Lemma 7.1.6, Theorem
